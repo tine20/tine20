@@ -173,7 +173,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const USERBACKENDTYPE = 'Tinebase_User_BackendType';
-    
+
+    /**
+     * cron_disabled
+     *
+     * @var string
+     */
+    const CRON_DISABLED = 'cron_disabled';
+
     /**
      * cronjob user id
      * 
@@ -1416,6 +1423,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => 'user role'
         ),
+        self::CRON_DISABLED => [
+            //_('Cronjob Disabled')
+            'label'                 => 'Cronjob Disabled',
+            //_('triggerAsyncEvents does not do anything and monitoringCheckCron does not alert')
+            'description'           => 'triggerAsyncEvents does not do anything and monitoringCheckCron does not alert',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => false,
+        ],
         self::CRONUSERID => array(
                                    //_('Cronuser ID')
             'label'                 => 'Cronuser ID',

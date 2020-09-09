@@ -15,8 +15,8 @@
       <template v-if="!transferingPoll && !askPassword && showPoll">
         <div class="row">
           <div class="col-md-8 col-sm-12">
-            <h1>{{poll.event_summary}}</h1>
-            <h2 v-if="poll.name.length > 0">{{poll.name}}</h2>
+            <h1 class="poll-event">{{poll.event_summary}}</h1>
+            <h2 class="poll-name" v-if="poll.name.length > 0">{{poll.name}}</h2>
           </div>
           <div class="col-md-4 col-sm-12 text-right">
             <a :href="poll.config.brandingWeburl">
@@ -101,7 +101,7 @@
         </div>
         <div class="row">
           <div class="col-md-12" v-if="showChangeButtons()">
-            <b-button-group>
+            <b-button-group class="change-buttons">
               <b-btn @click="onCancelChanges" variant="secondary">{{formatMessage('Cancel')}}</b-btn>
               <b-btn @click="onApplyChanges" variant="primary">{{formatMessage('Save')}}</b-btn>
             </b-button-group>

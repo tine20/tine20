@@ -3,10 +3,10 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  LDAP
+ * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        make default quota configurable
  */
@@ -28,9 +28,9 @@
  * @property string emailUserId
  * @property string emailLastLogin
  * @property string emailPassword
- * @property string emailForwards
  * @property string emailForwardOnly
- * @property string emailAliases
+ * @property Tinebase_Record_RecordSet emailAliases (Tinebase_Model_EmailUser_Alias)
+ * @property Tinebase_Record_RecordSet emailForwards (Tinebase_Model_EmailUser_Forward)
  * @property string emailAddress
  * @property string emailUsername
  * @property string emailHost
@@ -40,7 +40,6 @@
  */
 class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract 
 {
-   
     protected $_identifier = 'emailUserId';
     
     /**
@@ -110,9 +109,22 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
      */
     public function setFromArray(array &$_data)
     {
-        foreach (array('emailForwards', 'emailAliases') as $arrayField) {
-            if (isset($_data[$arrayField]) && ! is_array($_data[$arrayField])) {
-                $_data[$arrayField] = explode(',', preg_replace('/ /', '', $_data[$arrayField]));
+        foreach ([
+                    'emailForwards' => Tinebase_Model_EmailUser_Forward::class,
+                    'emailAliases' => Tinebase_Model_EmailUser_Alias::class
+                 ] as $arrayField => $model) {
+            if (isset($_data[$arrayField])) {
+                $data = ! is_array($_data[$arrayField])
+                    ? explode(',', preg_replace('/ /', '', $_data[$arrayField]))
+                    : $_data[$arrayField];
+                foreach ($data as $index => $value) {
+                    if (! isset($value['email'])) {
+                        $data[$index] = [
+                            'email' => $value
+                        ];
+                    }
+                }
+                $_data[$arrayField] = new Tinebase_Record_RecordSet($model, $data);
             }
         }
 
@@ -128,12 +140,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
      */
     public function getAliasesAsEmails()
     {
-        $result = [];
-        foreach ($this->emailAliases as $alias) {
-            $result[] = is_array($alias) ? $alias['email'] : $alias;
-        }
-
-        return $result;
+        return $this->emailAliases->{Tinebase_Model_EmailUser_Alias::FLDS_EMAIL};
     }
 
     /**

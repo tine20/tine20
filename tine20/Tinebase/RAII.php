@@ -30,6 +30,19 @@ class Tinebase_RAII
         ($this->closure)();
     }
 
+    public function wrapClosure(Closure $closure)
+    {
+        $this->closure = static::_getWrap($this->closure, $closure);
+    }
+
+    protected static function _getWrap($oldClosure, $newClosure)
+    {
+        return function() use ($oldClosure, $newClosure) {
+            $oldClosure();
+            $newClosure();
+        };
+    }
+
     public function setReleaseFunc(Closure $closure)
     {
         $this->releaseFunc = $closure;
@@ -49,9 +62,9 @@ class Tinebase_RAII
             if (null !== $transactionId) {
                 Tinebase_TransactionManager::getInstance()->rollBack();
             }
-        }))->setReleaseFunc(function () use (&$transactionId) {
+        }))->setReleaseFunc(function() use (&$transactionId) {
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transId = null;
+            $transactionId = null;
         });
     }
 }

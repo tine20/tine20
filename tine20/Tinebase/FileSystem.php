@@ -252,7 +252,22 @@ class Tinebase_FileSystem implements
         
         return $result;
     }
-    
+
+    /**
+     * tries to get a node from the stat cache by id, on cache miss normal get() is invoked
+     *
+     * @param string $_id
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getFromStatCache($_id)
+    {
+        if (isset($this->_statCacheById[$_id])) {
+            return $this->_statCacheById[$_id];
+        }
+        return $this->get($_id);
+    }
+
     /**
      * Get one tree node (by id)
      *
@@ -545,8 +560,8 @@ class Tinebase_FileSystem implements
                 $this->_updateDeletedNodeName($deletedNode);
             }
 
-            if ($destinationNode->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
-                $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName);
+            if ($destinationNode->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName, $destinationNode->type);
                 $this->_updateFileObject($parentNode, $createdNode, null, $destinationNode->hash);
                 $createdNode = $this->get($createdNode->getId());
             } else {
@@ -645,8 +660,8 @@ class Tinebase_FileSystem implements
                     Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                     $transactionId = null;
 
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Writing to file : ' .
-                        $options['tine20']['path'] . ' successful.');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                        . __LINE__ . ' Writing to file : ' . $options['tine20']['path'] . ' successful.');
                 } finally {
                     if (null !== $transactionId) {
                         Tinebase_TransactionManager::getInstance()->rollBack();
@@ -656,8 +671,8 @@ class Tinebase_FileSystem implements
                 break;
                 
             default:
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got mode : ' .
-                    $options['tine20']['mode'] . ' - nothing to do.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' Got mode : ' . $options['tine20']['mode'] . ' - nothing to do.');
         }
         
         fclose($handle);
@@ -1405,11 +1420,7 @@ class Tinebase_FileSystem implements
             return false;
         }
         
-        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-            return false;
-        }
-        
-        return true;
+        return $node->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
     }
     
     /**
@@ -1428,11 +1439,7 @@ class Tinebase_FileSystem implements
             return false;
         }
     
-        if ($node->type != Tinebase_Model_Tree_FileObject::TYPE_FILE) {
-            return false;
-        }
-    
-        return true;
+        return $node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE;
     }
     
     /**
@@ -2712,9 +2719,10 @@ class Tinebase_FileSystem implements
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Scanning database for deleted files ...');
 
-        // get all file objects (thus, no folders) from db and check filesystem existence
+        // get all file objects (thus, no folders or links) from db and check filesystem existence
         $filter = new Tinebase_Model_Tree_FileObjectFilter([
-            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER]
+            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
+            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_LINK]
         ]);
         $start = 0;
         $limit = 500;

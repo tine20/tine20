@@ -164,7 +164,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             }
 
             if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && !fieldDefinition.shy) {
-                if (fieldType === 'text' || fieldType === 'json') {
+                if (_.indexOf(['text', 'json', 'fulltext'], fieldType) >= 0) {
                     Ext.apply(field, {
                         flex: 1,
                         cls: 'x-ux-display-background-border',

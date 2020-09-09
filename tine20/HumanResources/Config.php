@@ -18,12 +18,6 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const APP_NAME = 'HumanResources';
 
     /**
-     * FreeTime Type
-     * @var string
-     */
-    const FREETIME_TYPE = 'freetimeType';
-
-    /**
      * Vacation Status
      * @var string
      */
@@ -96,22 +90,6 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
-        self::FREETIME_TYPE => array(
-            //_('Freetime Type')
-            'label'                 => 'Freetime Type',
-            //_('Possible free time definitions')
-            'description'           => 'Possible free time definitions',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeType'),
-            'clientRegistryInclude' => TRUE,
-            'default'               => array(
-                'records' => array(
-                    array('id' => 'SICKNESS',             'value' => 'Sickness',           'icon' => 'images/icon-set/icon_sick.svg',  'system' => TRUE),  //_('Sickness')
-                    array('id' => 'VACATION',             'value' => 'Vacation',           'icon' => 'images/icon-set/icon_vacation.svg', 'system' => TRUE),  //_('Vacation')
-                ),
-                'default' => 'VACATION'
-            )
-        ),
         self::VACATION_STATUS => array(
             //_('Vacation Status')
             'label'                 => 'Vacation Status',

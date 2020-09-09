@@ -324,10 +324,24 @@ class Tinebase_Server_HttpTests extends TestCase
 
     public function testExportContactDownloadReturnFileLocationXls()
     {
+        $out = $this->_exportInternalContacts();
+        $this->assertTrue(!empty($out), 'request should not be empty');
+        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+        // check download filename in Tempfile
+        if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
+            $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
+            self::assertEquals('export_addressbook_contact_excel_all_data.xlsx', $tempfile->name);
+        } else {
+            self::fail('could not extract tempfile_id');
+        }
+    }
+
+    protected function _exportInternalContacts($definitionName = 'adb_xls')
+    {
         $server = new Tinebase_Server_Http();
         $request = $this->_getRequest();
 
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_xls');
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
 
         $options = [
             'definitionId' => $definition->getId(),
@@ -345,15 +359,14 @@ class Tinebase_Server_HttpTests extends TestCase
         $server->handle($request);
         $out = ob_get_clean();
 
-        $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
-        // check download filename in Tempfile
-        if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
-            $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
-            self::assertEquals('export_addressbook_contact_excel_all_data.xlsx', $tempfile->name);
-        } else {
-            self::fail('could not extract tempfile_id');
-        }
+        return $out;
+    }
+
+    public function testExportContactPdf()
+    {
+        $out = $this->_exportInternalContacts('adb_pdf');
+        self::assertNotContains('Exception', $out);
+        self::assertContains('%PDF-1.4', $out);
     }
 
     /**

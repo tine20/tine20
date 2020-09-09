@@ -303,6 +303,9 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     conditionsRenderer: function(value) {
         var result = '';
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get('Felamimail');
+        }
         
         // show only first condition
         if (value && value.length > 0) {

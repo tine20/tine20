@@ -65,20 +65,6 @@ Tine.HumanResources.ExtraFreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPa
             'account_id':  this.editDialog.record.data
         };
         Tine.HumanResources.ExtraFreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, plugins);
-    },
-
-    /**
-     * called when the store gets updated, e.g. from editgrid
-     * 
-     * @param {Ext.data.store} store
-     * @param {Tine.Tinebase.data.Record} record
-     * @param {String} operation
-     */
-    onStoreUpdate: function(store, record, operation) {
-        if (Ext.isObject(record.get('account_id'))) {
-            record.set('account_id', record.get('account_id').id)
-        }
-        Tine.HumanResources.ExtraFreeTimeGridPanel.superclass.onStoreUpdate.call(this, store, record, operation);
     }
 });
 

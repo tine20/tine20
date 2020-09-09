@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      AirMike <airmike23@gmail.com>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -107,6 +107,7 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
                     Tinebase_Model_Tree_FileObject::TYPE_FILE,
                     Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                     Tinebase_Model_Tree_FileObject::TYPE_PREVIEW,
+                    Tinebase_Model_Tree_FileObject::TYPE_LINK,
                 ], Zend_Filter_Input::ALLOW_EMPTY => true,],
             ],
             'description'                   => [

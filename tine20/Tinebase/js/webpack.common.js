@@ -106,6 +106,7 @@ module.exports = {
             {test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'],  enforce: "pre", use: [{loader: "script-loader"}]},
             {test: /\.jsb2$/, use: [{loader: "./jsb2-loader"}]},
             {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
+            {test: /\.scss$/, use: ['vue-style-loader','css-loader','sass-loader']},
             {test: /\.less$/, use: [{loader: "style-loader"}, {loader: "css-loader"}, {loader: "less-loader", options: {noIeCompat: true,}}]},
             {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000}}]},
             {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000}}]},

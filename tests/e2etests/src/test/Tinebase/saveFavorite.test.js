@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Adressbuch', 'Kontakte');
 });
 
-describe.skip('Mainpage', () => {
+describe('Mainpage', () => {
 
     test('save favorite', async () => {
         try {
@@ -21,6 +21,7 @@ describe.skip('Mainpage', () => {
         await page.type('.x-form-text.x-form-field.x-form-invalid', 'favorite');
         await page.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked');
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
+        await page.waitFor(1000); //wait for save the favorite
     });
 
     test('save shared favorite', async () => {
@@ -36,7 +37,7 @@ describe.skip('Mainpage', () => {
         await page.click('.x-form-checkbox.x-form-field');
         await page.waitFor(() => !document.querySelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked'));
         await expect(page).toClick('.x-btn-image.action_saveAndClose');
-        await page.waitFor(1000);
+        await page.waitFor(1000); //wait for save the favorite
     });
 
     test('edit favorite', async () => {

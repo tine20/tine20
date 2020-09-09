@@ -437,6 +437,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_CustomField_Value::class,
                 Tinebase_Model_Department::class,
                 Tinebase_Model_EmailUser::class,
+                Tinebase_Model_EmailUser_Alias::class,
+                Tinebase_Model_EmailUser_Forward::class,
                 Tinebase_Model_FilterSyncToken::class,
                 Tinebase_Model_FullTag::class,
                 Tinebase_Model_FullUser::class,

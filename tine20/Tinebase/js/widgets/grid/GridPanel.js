@@ -1218,7 +1218,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.pagingToolbar.refresh.disable();
                 }
                 // don't save these records. Add them to the parents' record store
-                if (this.editDialog) {
+                if (this.editDialog && this.editDialogRecordProperty) {
                     var items = [];
                     store.each(function(item) {
                         items.push(item.data);
@@ -1439,7 +1439,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (defaultFavorite && favoritesPanel) {
             favoritesPanel.selectFilter(defaultFavorite);
         } else {
-            if (! this.editDialog) {
+            if (! (this.editDialog && this.editDialogRecordProperty)) {
                 this.store.load.defer(10, this.store, [ typeof this.autoLoad == 'object' ? this.autoLoad : undefined]);
             } else {
                 // editDialog exists, so get the records from there.
@@ -2324,7 +2324,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             // sort new/edited record
             store.remoteSort = false;
-            store.sort(store.sortInfo.field, store.sortInfo.direction)
+            store.sort(
+                _.get(store, 'sortInfo.field', this.recordClass.getMeta('titleField')),
+                _.get(store, 'sortInfo.direction', 'ASC')
+            );
             store.remoteSort = this.storeRemoteSort;
 
             if (isSelected) {
@@ -2476,7 +2479,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.store.remove(record);
             });
             // if nested in an editDialog, just change the parent record
-            if (this.editDialog) {
+            if (this.editDialog && this.editDialogRecordProperty) {
                 var items = [];
                 this.store.each(function(item) {
                     items.push(item.data);

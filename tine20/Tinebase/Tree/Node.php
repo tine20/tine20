@@ -46,6 +46,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
     protected $_revision = null;
 
+    protected $_beforeCreateHook = [];
+    protected $_beforeUpdateHook = [];
+    protected $_afterUpdateHook = [];
+
     /**
      * NOTE: returns fake tree controller
      *       needed by Tinebase_Core::getApplicationInstance('Tinebase_Model_Tree_Node')
@@ -84,6 +88,21 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
 
         parent::__construct($_dbAdapter, $_options);
+    }
+
+    public function registerBeforeCreateHook($key, $hook)
+    {
+        $this->_beforeCreateHook[$key] = $hook;
+    }
+
+    public function registerBeforeUpdateHook($key, $hook)
+    {
+        $this->_beforeUpdateHook[$key] = $hook;
+    }
+
+    public function registerAfterUpdateHook($key, $hook)
+    {
+        $this->_afterUpdateHook[$key] = $hook;
     }
 
     /**
@@ -185,6 +204,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     public function create(Tinebase_Record_Interface $_record)
     {
         $this->_checkRecordName($_record);
+        foreach ($this->_beforeCreateHook as $hook) {
+            call_user_func($hook, $_record);
+        }
+
         return parent::create($_record);
     }
 
@@ -201,6 +224,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $this->_checkRecordName($_record);
 
         $oldRecord = $this->get($_record->getId(), true);
+        foreach ($this->_beforeUpdateHook as $hook) {
+            call_user_func($hook, $_record, $oldRecord);
+        }
+
         $newRecord = parent::update($_record);
 
         if (true === $_doModLog) {
@@ -208,6 +235,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             if (null !== $currentMods && $currentMods->count() > 0) {
                 Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             }
+        }
+
+        foreach ($this->_afterUpdateHook as $hook) {
+            call_user_func($hook, $newRecord, $oldRecord);
         }
 
         /** @var Tinebase_Model_Tree_Node $newRecord */

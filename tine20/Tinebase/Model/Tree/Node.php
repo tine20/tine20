@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_ModelConfiguration_Const as TMCC;
@@ -42,6 +42,7 @@ use Tinebase_ModelConfiguration_Const as TMCC;
  * @property    string                      path
  * @property    Tinebase_DateTime           lastavscan_time
  * @property    boolean                     is_quarantined
+ * @property    Tinebase_Record_RecordSet   metadata
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -151,6 +152,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Tinebase_Model_Tree_FileObject::TYPE_FILE,
                     Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                     Tinebase_Model_Tree_FileObject::TYPE_PREVIEW,
+                    Tinebase_Model_Tree_FileObject::TYPE_LINK,
                 ], Zend_Filter_Input::ALLOW_EMPTY => true,],
             ],
             'description'                   => [
@@ -234,16 +236,24 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
-            'lastavscan_time'            => [
+            'lastavscan_time'               => [
                 'type'                          => 'datetime',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'modlogOmit'                    => true,
             ],
-            'is_quarantined'            => [
+            'is_quarantined'                => [
                 'type'                          => 'boolean',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'default'                       => 0,
                 'modlogOmit'                    => true,
+            ],
+            'metadata'                      => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => Tinebase_Model_BLConfig::MODEL_NAME_PART,
+                    self::STORAGE                   => self::TYPE_JSON
+                ],
             ],
 
             // not persistent

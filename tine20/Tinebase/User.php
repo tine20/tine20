@@ -607,15 +607,16 @@ class Tinebase_User implements Tinebase_Controller_Interface
     {
         $currentUser = Tinebase_User::getInstance()->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
 
-        $fieldsToSync = array('accountLoginName', 'accountLastPasswordChange', 'accountExpires', 'accountPrimaryGroup',
+        $fieldsToSync = ['accountLoginName', 'accountLastPasswordChange', 'accountExpires', 'accountPrimaryGroup',
             'accountDisplayName', 'accountLastName', 'accountFirstName', 'accountFullName', 'accountEmailAddress',
-            'accountHomeDirectory', 'accountLoginShell');
+            'accountHomeDirectory', 'accountLoginShell', 'visibility'];
+        $nonEmptyFields = ['visibility'];
         if (isset($options['syncAccountStatus']) && $options['syncAccountStatus']) {
             $fieldsToSync[] = 'accountStatus';
         }
         $recordNeedsUpdate = false;
         foreach ($fieldsToSync as $field) {
-            if ($currentUser->{$field} !== $user->{$field}) {
+            if ($currentUser->{$field} !== $user->{$field} && (! empty($user->{$field}) || ! in_array($field, $nonEmptyFields))) {
                 $currentUser->{$field} = $user->{$field};
                 $recordNeedsUpdate = true;
             }
@@ -627,7 +628,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $currentUser->visibility = Tinebase_Model_FullUser::VISIBILITY_DISPLAYED;
             $currentUser->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'undelete');
-            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
+            Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
             $recordNeedsUpdate = false;
         }
 

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -79,6 +79,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _generateExport(&$export, $_controller, $_filter, &$format, &$switchFormat, &$pdfOutput, $_options)
     {
+        $result = null;
+
         try {
             switch ($switchFormat) {
                 case 'pdf':
@@ -127,7 +129,6 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             if ($e->getMessage() === 'Format ' . $format . ' not supported.') {
                 throw $e;
             }
-            $result = null;
             $export = new Tinebase_Export_ErrorReport($e, $_options);
             $format = 'txt';
             $switchFormat = 'error';
@@ -135,7 +136,6 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             if (strpos(get_class($e), 'Zend_Db') === 0) {
                 throw $e;
             }
-            $result = null;
             $export = new Tinebase_Export_ErrorReport($e, $_options);
             $format = 'txt';
             $switchFormat = 'error';

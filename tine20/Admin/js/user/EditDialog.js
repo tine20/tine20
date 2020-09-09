@@ -680,8 +680,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             })
             cm.push(this.aliasesDispatchCheckColumn);
             gridPlugins.push(this.aliasesDispatchCheckColumn);
-        } else {
-            commonConfig = Ext.apply({dataField: 'email',}, commonConfig);
         }
 
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
@@ -749,7 +747,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }),
                     editor: new Ext.form.TextField({allowBlank: false})
                 }])
-            }, Ext.apply({dataField: 'email',}, commonConfig))
+            }, commonConfig)
         );
         this.forwardsGrid.render(document.body);
     },

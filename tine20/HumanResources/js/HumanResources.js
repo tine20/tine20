@@ -65,14 +65,6 @@ Tine.widgets.grid.RendererManager.register('HumanResources', 'Contract', 'workin
     return sum/3600;
 });
 
-Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'account_id', function(v) {
-    if (! v) {
-        return '';
-    }
-    
-    return v.year;
-});
-
 // working time schema translations
 Tine.widgets.grid.RendererManager.register('HumanResources', 'WorkingTimeScheme', 'type', function(v) {
     var i18n = Tine.Tinebase.appMgr.get('HumanResources').i18n;

@@ -106,6 +106,7 @@
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
     "twig/twig": "v1.42.4pl1",
+    "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "1.*",
     "zendframework/zend-diactoros": "^1.6",

@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -1777,5 +1777,49 @@ class Felamimail_Controller_MessageTest extends TestCase
         $message = $this->_getController()->getCompleteMessage($cachedMessage, null, Zend_Mime::TYPE_TEXT);
 
         $this->assertContains('welche Private Krankenversicherung ist für mich die beste', $message->body);
+    }
+
+    public function testRewriteMessageSubject()
+    {
+        $cachedMessage = $this->messageTestHelper('24706.eml');
+        $newSubject = 'i like my new subject';
+        $rewrittenMessage = $this->_getController()->rewriteMessageSubject($cachedMessage, $newSubject);
+        self::assertEquals($newSubject, $rewrittenMessage->subject);
+        self::assertNotEquals($cachedMessage->messageuid, $rewrittenMessage->messageuid);
+    }
+
+    public function testRewriteMessageSubject2()
+    {
+        $message = new Felamimail_Model_Message([
+            'account_id' => $this->_account->getId(),
+            'folder_id' => $this->_folder,
+            'subject' => 'SPAM? (15) *** test rewrite with standard headers',
+            'to' => [
+                Tinebase_Core::getUser()->accountEmailAddress,
+            ],
+            'body' => 'test body',
+            'headers' => [
+                'return-path' => "<tine20admin@mail.test>",
+                'delivered-to' => '8228db4c5a04c3515f482afa83163f3e5b01c39c@tine.test',
+                'received' =>[
+                    'from 826c75cbbb35.localdomain ([172.118.0.4]) by 639732083f37 with LMTP id uMaCA2azUF+lAQAAsP0Baw (envelope-from <tine20admin@mail.test>) for <8228db4c5a04c3515f482afa83163f3e5b01c39c@tine.test>; Thu, 03 Sep 2020 09:12:06 +0000',
+                    'from localhost (tine20.tine20docker_default [172.118.0.5]) by 826c75cbbb35.localdomain (Postfix) with ESMTP id 080A3AC3EAA for <tine20admin@mail.test>; Thu,  3 Sep 2020 09:12:06 +0000 (UTC)',
+                ],
+                'subject' => 'SPAM? (15) *** test rewrite with standard headers',
+                'from' => 'Tine 2.0 Admin Account" <tine20admin@mail.test>',
+                'to' => 'tine20admin@mail.test',
+                'user-agent' => 'Tine 2.0 Email Client (version : 0 () - none)',
+                'message-id' => '<5483c57c54a34da2e6bf5b56230010a114870238@mail.test>',
+                'x-mailgenerator' => 'Tine 2.0',
+                'date' => 'Thu, 03 Sep 2020 09:12:05 +0000',
+                'content-type' => 'multipart/alternative; boundary="=_b7fd53536a7a1a8e490855862b2bb4c7"',
+                'mime-version' => '1.0',
+            ]
+        ]);
+
+        $newSubject = 'i like your new subject';
+        $rewrittenMessage = $this->_getController()->rewriteMessageSubject($message, $newSubject);
+        self::assertEquals($newSubject, $rewrittenMessage->subject);
+        self::assertNotEquals($message->messageuid, $rewrittenMessage->messageuid);
     }
 }

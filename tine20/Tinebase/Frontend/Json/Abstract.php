@@ -146,6 +146,27 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         }
     }
 
+    protected function _getRequestContextHeaders()
+    {
+        $clientData = [];
+        if ($request = Tinebase_Core::getRequest()) {
+            foreach ($request->getHeaders() as $header) {
+                if (strpos(($name = $header->getFieldName()), 'X-TINE20-REQUEST-CONTEXT-') === 0) {
+                    $name = strtolower(substr($name, strlen('X-TINE20-REQUEST-CONTEXT-')));
+                    $clientData[$name] = $header->getFieldValue();
+                }
+            }
+        }
+        return $clientData;
+    }
+
+    protected function _setRequestContext(Tinebase_Controller_Abstract $controller)
+    {
+        $context = $controller->getRequestContext() ?: [];
+        $context['clientData'] = $this->_getRequestContextHeaders();
+        $controller->setRequestContext($context);
+    }
+
     /**
      * @param string $_uid
      * @param Tinebase_Controller_Record_Interface $_controller
@@ -154,6 +175,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _get($_uid, Tinebase_Controller_Record_Interface $_controller)
     {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
         $record = $_controller->get($_uid);
         if (! $record) {
             throw new Tinebase_Exception_NotFound('record not found');
@@ -172,6 +197,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _getAll(Tinebase_Controller_Record_Interface $_controller)
     {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
         $records = $_controller->getAll();
 
         return array(
@@ -193,6 +222,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
         $filter = $this->_decodeFilter($_filter, $_filterModel);
         $decodedPagination = $this->_prepareParameter($_paging);
         if (null !== $this->_paginationModel) {
@@ -225,6 +258,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
     {
+        if ($controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($controller);
+        }
+
          if (   $totalCountMethod === self::TOTALCOUNT_CONTROLLER
             && $pagination->limit
             && ($pagination->start != 0 || $resultCount == $pagination->limit)
@@ -281,6 +318,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _save($_recordData, Tinebase_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id', $_additionalArguments = array())
     {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
         $modelClass = (preg_match('/_Model_/', $_modelName)) ? $_modelName : $this->_applicationName . "_Model_" . $_modelName;
         $record = $this->_jsonToRecord($_recordData, $modelClass);
 
@@ -346,6 +387,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _updateMultiple($_filter, $_data, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
         $this->_longRunningRequest();
         $decodedData   = $this->_prepareParameter($_data);
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
@@ -387,6 +432,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _updateProperties($_id, $_data, Tinebase_Controller_Record_Interface $_controller)
     {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
         $record = $_controller->get($_id);
 
         // merge with new properties
@@ -409,6 +458,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _delete($_ids, Tinebase_Controller_Record_Interface $_controller, $additionalArguments = array())
     {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
         if (! is_array($_ids) && strpos($_ids, '[') !== false) {
             $_ids = $this->_prepareParameter($_ids);
         }
@@ -462,6 +515,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _deleteByFilter($_filter, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
         
         // extend execution time to 30 minutes

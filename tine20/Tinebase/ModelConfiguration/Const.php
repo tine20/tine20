@@ -18,6 +18,7 @@
 
 class Tinebase_ModelConfiguration_Const {
     const ADD_FILTERS = 'addFilters';
+    const APPLICATION = 'application';
     const APP_NAME = 'appName';
     const ASSOCIATIONS = 'associations';
     const AVAILABLE_MODELS = 'availableModels';
@@ -55,7 +56,10 @@ class Tinebase_ModelConfiguration_Const {
     const HAS_CUSTOM_FIELDS = 'hasCustomFields';
     const HAS_DELETED_TIME_UNIQUE = 'hasDeletedTimeUnique';
     const HAS_NOTES = 'hasNotes';
+    const CONTAINER_PROPERTY = 'containerProperty';
     const HAS_PERSONAL_CONTAINER = 'hasPersonalContainer';
+    const CONTAINER_NAME = 'containerName';
+    const CONTAINERS_NAME = 'containersName';
     const HAS_RELATIONS = 'hasRelations';
     const HAS_SYSTEM_CUSTOM_FIELDS = 'hasSystemCustomFields';
     const HAS_TAGS = 'hasTags';

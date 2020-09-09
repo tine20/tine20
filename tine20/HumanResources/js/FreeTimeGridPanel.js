@@ -29,26 +29,14 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     
     editDialogRecordProperty: null,
     editDialog: null,
-    storeRemoteSort: false,
+    storeRemoteSort: true,
     defaultSortInfo: {field: 'firstday_date', direction: 'DESC'},
-    /**
-     * if a vacation record gets deleted, this is needed to calculate
-     * the remaining vacation days in the freetime edit dialog (vacation)
-     * 
-     * @type array
-     */
-    removedVacationDays: null,
-    removedSicknessDays: null,
-    
-    localSicknessDays: null,
-    localVacationDays: null,
+
     /**
      * set type before to diff vacation/sickness
-     * @type 
+     * @type
      */
     freetimeType: null,
-    
-    usePagingToolbar: false,
     
     /**
      * inits this cmp
@@ -57,6 +45,8 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     initComponent: function() {
         this.bbar = [];
+        
+        this.cls = 'tine-hr-freetimegrid-type-' + this.freetimeType;
         
         this.action_bookSicknessAsVacation = new Ext.Action({
             text: this.app.i18n._('Book as vacation'),
@@ -80,16 +70,16 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             }
         }
         
-        this.removedSicknessDays = {};
-        this.removedVacationDays = {};
-        this.localSicknessDays   = null;
-        this.localVacationDays   = null;
-        
         this.i18nEmptyText = this.i18nEmptyText || String.format(this.app.i18n._("There could not be found any {0}. Please try to change your filter-criteria or view-options."), this.i18nRecordsName);        
         
         Tine.HumanResources.FreeTimeGridPanel.superclass.initComponent.call(this);
         
         this.fillBottomToolbar();
+    },
+
+    onStoreBeforeload: function(store, options) {
+        Tine.HumanResources.FreeTimeGridPanel.superclass.onStoreBeforeload.apply(this, arguments);
+        options.params.filter.push({field: 'type', operator: 'equals', value: this.freetimeType});
     },
     
     /**
@@ -143,22 +133,10 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         this.store.remove(record);
         record.set('type', 'vacation');
         record.set('status', 'ACCEPTED');
-        this.editDialog.vacationGridPanel.getStore().add(record);
         
-        // set sickness of parent record (employee)
-        var sickness = [];
-        this.getGrid().getStore().each(function(item) {
-            sickness.push(item.data);
+        Tine.HumanResources.saveFreeTime(record.data).then((response) => {
+            this.editDialog.vacationGridPanel.getStore().reload();
         });
-        this.editDialog.record.set('sickness', sickness);
-        
-        // set vacation of parent record (employee)
-        var vacation = [];
-        this.editDialog.vacationGridPanel.getStore().each(function(item) {
-            vacation.push(item.data);
-        });
-        
-        this.editDialog.record.set('vacation', vacation);
     },
     
     /**
@@ -201,39 +179,19 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         // the name 'button' should be changed as this can be called in other ways also
         button.fixedFields = {
             'employee_id': this.editDialog.record.data,
-            'type':        this.freetimeType
+            'type':        this.freetimeType.toLowerCase() // we need the type obj here
         };
         
-        // collect free days not saved already
-        var localVacationDays = {}, localSicknessDays = {};
-        
-        this.editDialog.vacationGridPanel.store.each(function(record) {
-                var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
-                if (! localVacationDays.hasOwnProperty(accountId)) {
-                    localVacationDays[accountId] = [];
-                }
-                localVacationDays[accountId] = localVacationDays[accountId].concat(record.data.freedays ? record.data.freedays : []);
-        }, this);
-        
-        this.editDialog.sicknessGridPanel.store.each(function(record) {
-                var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
-                if (! localSicknessDays.hasOwnProperty(accountId)) {
-                    localSicknessDays[accountId] = [];
-                }
-                localSicknessDays[accountId] = localSicknessDays[accountId].concat(record.data.freedays ? record.data.freedays : []);
-        });
-        
-        var additionalConfig = {
-            localVacationDays: localVacationDays,
-            localSicknessDays: localSicknessDays,
-            removedVacationDays: this.removedVacationDays,
-            removedSicknessDays: this.removedSicknessDays
-        };
-        
-        this.editDialogClass = (this.freetimeType == 'SICKNESS') ? Tine.HumanResources.SicknessEditDialog : Tine.HumanResources.VacationEditDialog;
-        
-        Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, plugins, additionalConfig);
+        Tine.HumanResources.FreeTimeGridPanel.superclass.onEditInNewWindow.call(this, button, record, plugins);
     },
+
+    createNewRecord: function() {
+        const record = Tine.HumanResources.FreeTimeGridPanel.superclass.createNewRecord.call(this);
+        record.set('type', this.freetimeType.toLowerCase());
+        record.set('status', this.freetimeType === 'VACATION' ? 'ACCEPTED' : 'EXCUSED' );
+        return record;
+    },
+    
     /**
      * overwrites the default function, no refactoring needed, this file will be deleted in the next release
      */
@@ -246,7 +204,7 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      * @param {Tine.HumanResources.Model.FreeTime} record
      */
     renderStatus: function(value, row, record) {
-        if (record.get('type') == 'sickness') {
+        if (_.get(record, 'data.type.id', _.get(record, 'data.type')) === 'sickness') {
             if (! this.sicknessStatusRenderer) {
                 this.sicknessStatusRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'sicknessStatus');
             }
@@ -257,59 +215,6 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             }
             return this.vacationStatusRenderer(value, row, record);
         }
-    },
-    /**
-     * renders the type
-     * @param {String} value
-     * @param {Object} b
-     * @param {Tine.HumanResources.Model.FreeTime} record
-     */
-    renderType: function(value, row, record) {
-        if (! this.app) {
-            this.app = Tine.Tinebase.appMgr.get('HumanResources');
-        }
-        
-        if (record.get('type') == 'sickness') {
-            return this.app.i18n._('Sickness');
-        } else {
-            return this.app.i18n._('Vacation');
-        }
-    },
-    
-    /**
-     * delete records
-     * 
-     * @param {SelectionModel} sm
-     * @param {Array} records
-     */
-    deleteRecords: function(sm, records) {
-        
-        if (! this.removedVacationDays) {
-            this.removedVacationDays = {};
-        }
-        
-        // collect freetimes deleted locally but not persisted already
-        Ext.each(records, function(record) {
-            
-            if (record.get('id').length > 13) {
-            
-                var accountId = Ext.isObject(record.get('account_id')) ? record.get('account_id').id : record.get('account_id');
-                
-                if (record.get('type') == 'vacation') {
-                    if (! this.removedVacationDays.hasOwnProperty(accountId)) {
-                        this.removedVacationDays[accountId] = [];
-                    }
-                    this.removedVacationDays[accountId] = this.removedVacationDays[accountId].concat(record.get('freedays'));
-                } else {
-                    if (! this.removedSicknessDays.hasOwnProperty(accountId)) {
-                        this.removedSicknessDays[accountId] = [];
-                    }
-                    this.removedSicknessDays[accountId] = this.removedSicknessDays[accountId].concat(record.get('freedays'));
-                }
-            }
-        }, this);
-        
-        Tine.HumanResources.FreeTimeGridPanel.superclass.deleteRecords.call(this, sm, records);
     },
     
     /**
@@ -329,4 +234,3 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
 });
 
 Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'status', Tine.HumanResources.FreeTimeGridPanel.prototype.renderStatus);
-Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'type', Tine.HumanResources.FreeTimeGridPanel.prototype.renderType);

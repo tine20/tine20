@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 const { retryAllRejectedPromises } = require('promises-to-retry');
@@ -160,7 +160,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     updateToolbars: Ext.emptyFn,
 
-    //private
+    // private
     initComponent: function () {
         this.autoSave = Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('autoSaveDrafts');
         let me = this;
@@ -609,7 +609,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     accountId = (activeAccount) ? activeAccount.id : null;
                 }
 
-                this.from = fromAccount;
+                if (! this.replyTo) {
+                    this.from = fromAccount;
+                }
                 this.accountId = accountId;
             }
             

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "afb680d76a76a6181bf11e65335e1b34",
+    "content-hash": "882164672bcd4dfb96041445135e8555",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -641,7 +641,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": ""
+                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -1343,7 +1343,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2163,7 +2163,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": ""
+                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
             },
             "require": {
                 "ext-ctype": "*",
@@ -3020,7 +3020,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -3155,6 +3155,69 @@
                 "templating"
             ],
             "time": "2020-01-21T16:04:48+00:00"
+        },
+        {
+            "name": "validator/livr",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:WebbyLab/php-validator-livr.git",
+                "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WebbyLab/php-validator-livr/zipball/6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
+                "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Validator": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viktor Turskyi",
+                    "email": "koorchik@gmail.com",
+                    "homepage": "http://koorchik.blogspot.com/",
+                    "role": "Author"
+                },
+                {
+                    "name": "Danil Greben",
+                    "email": "greben.danil@gmail.com",
+                    "homepage": "http://wanderer.in.ua",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anton Morozov",
+                    "email": "anton@webbylab.com",
+                    "homepage": "https://webbylab.com/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Konstantin Dvornik",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Lightweight PHP validator supporting Language Independent Validation Rules Specification (LIVR) ",
+            "homepage": "https://github.com/WebbyLab/php-validator-livr",
+            "keywords": [
+                "livr",
+                "validator"
+            ],
+            "time": "2017-09-25T14:02:44+00:00"
         },
         {
             "name": "webimpress/composer-extra-dependency",
@@ -4529,6 +4592,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-12-04T08:55:13+00:00"
         },
         {
@@ -5427,7 +5491,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "ezyang/htmlpurifier": 20,
-        "jumbojett/openid-connect-php": 20
+        "jumbojett/openid-connect-php": 20,
+        "validator/livr": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

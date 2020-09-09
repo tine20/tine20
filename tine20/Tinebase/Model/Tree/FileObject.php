@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -58,13 +58,19 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      */
     const TYPE_FILE   = 'file';
 
-
     /**
      * object type: preview
      *
      * @var string
      */
     const TYPE_PREVIEW = 'preview';
+
+    /**
+     * object type: link
+     *
+     * @var string
+     */
+    const TYPE_LINK = 'link';
     
     /**
      * this filter get used when validating user generated content with Zend_Input_Filter
@@ -108,7 +114,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
             'presence' => 'required',
-            array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW))
+            array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW, self::TYPE_LINK))
         ),
         'lastavscan_time'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'is_quarantined'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),

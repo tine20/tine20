@@ -104,6 +104,6 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             $db->quoteInto('name = ?', 'dbClickAction')
         );
         
-        $this->addApplicationUpdate('Tinebase', '13.4', self::RELEASE013_UPDATE004);
+        $this->addApplicationUpdate('Tinebase', '13.4', self::RELEASE013_UPDATE005);
     }
 }

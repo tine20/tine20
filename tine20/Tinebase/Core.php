@@ -1787,6 +1787,19 @@ class Tinebase_Core
     }
 
     /**
+     * @param string $variable
+     * @param Zend_Db_Adapter_Abstract $db
+     * @return false|mixed|string
+     */
+    public static function getDbVariable($variable, Zend_Db_Adapter_Abstract $db = null)
+    {
+        if ($db === null) {
+            $db = self::getDb();
+        }
+        return $db->query('SHOW VARIABLES LIKE "' . $variable . '"')->fetchColumn(1);
+    }
+
+    /**
      * get db name
      *
      * @return string
@@ -1852,11 +1865,12 @@ class Tinebase_Core
      * returns requested url part
      *
      * @param string $part
+     * @param boolean $useConfig Tinebase_Config::TINE20_URL (if set)
      * @return string
      */
-    public static function getUrl($part = self::GET_URL_FULL)
+    public static function getUrl($part = self::GET_URL_FULL, $useConfig = true)
     {
-        if (empty($url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL))) {
+        if (! $useConfig || empty($configUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL))) {
             if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
@@ -1870,9 +1884,9 @@ class Tinebase_Core
                 $protocol = $request->getScheme();
             }
         } else {
-            $protocol = parse_url($url, PHP_URL_SCHEME);
-            $hostname = parse_url($url, PHP_URL_HOST);
-            $pathname = rtrim(str_replace($protocol . '://' . $hostname, '', $url), '/');
+            $protocol = parse_url($configUrl, PHP_URL_SCHEME);
+            $hostname = parse_url($configUrl, PHP_URL_HOST);
+            $pathname = rtrim(str_replace($protocol . '://' . $hostname, '', $configUrl), '/');
         }
 
         switch ($part) {

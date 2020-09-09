@@ -90,6 +90,13 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Name', // _('Name')
             ],
+//            // @TODO: have type color in modelconfig
+//            'color' => [
+//                self::TYPE              => self::TYPE_STRING,
+//                self::LENGTH            => 7,
+//                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+//                self::LABEL             => 'Color', // _('Color')
+//            ],
             'description' => [
                 self::TYPE              => self::TYPE_FULLTEXT,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],

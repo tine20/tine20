@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -87,6 +87,8 @@ class Tinebase_FileSystem_RecordAttachments
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && count($record->attachments) > 0) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Found ' . count($record->attachments) . ' attachment(s).');
+
+        $record->attachments->sort('name');
         
         return $record->attachments;
     }
@@ -95,9 +97,7 @@ class Tinebase_FileSystem_RecordAttachments
      * fetches attachments for multiple records at once
      * 
      * @param Tinebase_Record_RecordSet $records
-     * @return Tinebase_Record_RecordSet
-     *
-     * @todo maybe this should be improved
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
     public function getMultipleAttachmentsOfRecords($records)
     {
@@ -105,11 +105,12 @@ class Tinebase_FileSystem_RecordAttachments
             $records = new Tinebase_Record_RecordSet(get_class($records), array($records));
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' Fetching attachments for ' . $records->count() . ' record(s)');
         if ($records->count() === 0) {
             return new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Fetching attachments for ' . $records->count() . ' record(s)');
 
         $recordNodeMapping = array();
         $className = $records->getRecordClassName();
@@ -117,10 +118,8 @@ class Tinebase_FileSystem_RecordAttachments
         
         foreach ($records as $record) {
             $recordIds[] = $record->getId();
-            
             $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
-        
 
         $classPathName = $this->_fsController->getApplicationBasePath($record->getApplication(),
                 Tinebase_FileSystem::FOLDER_TYPE_RECORDS) . '/' . $className;
@@ -128,7 +127,6 @@ class Tinebase_FileSystem_RecordAttachments
         // top folder for record attachments
         try {
             $classPathNode = $this->_fsController->stat($classPathName);
-
         } catch (Tinebase_Exception_NotFound $tenf) {
             return new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
@@ -155,8 +153,8 @@ class Tinebase_FileSystem_RecordAttachments
             $recordNodeMapping[$recordNode->getId()] = $recordNode->name;
         }
 
-        // get attachments
         $attachmentNodes = $this->_fsController->getTreeNodeChildren($recordNodes);
+        $attachmentNodes->sort('name');
 
         // add attachments to records
         foreach ($attachmentNodes as $attachmentNode) {

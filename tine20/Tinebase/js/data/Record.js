@@ -219,6 +219,10 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         return Ext.encode(this.data);
     },
     
+    toJSON: function() {
+        return this.data;
+    },
+    
     /**
      * returns true if given record obsoletes this one
      * 
