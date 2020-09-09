@@ -452,6 +452,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     public function testUpdatePasswordOfSharedAccount()
     {
         $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
+        $sharedAccount->resolveCredentials(false);
+        self::assertEquals('123', $sharedAccount->password);
 
         $emailUser = Felamimail_Controller_Account::getInstance()->getSharedAccountEmailUser($sharedAccount);
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
@@ -461,16 +463,19 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $pw = $userInBackend['password'];
 
         $sharedAccountArray = $sharedAccount->toArray();
-        $sharedAccountArray['password'] = 'someupdatedPW';
-        // FE might send empty user
-        $sharedAccountArray['user'] = '';
+        $newPw = 'someupdatedPW';
+        $sharedAccountArray['password'] = $newPw;
         $this->_json->saveEmailAccount($sharedAccountArray);
         // test imap login
         $sharedAccount = Felamimail_Controller_Account::getInstance()->get($sharedAccount);
+        self::assertEquals($sharedAccount->credentials_id, $sharedAccount->smtp_credentials_id);
         Felamimail_Backend_ImapFactory::factory($sharedAccount->getId());
-        $sharedAccount->resolveCredentials();
+        $sharedAccount->resolveCredentials(false);
         self::assertNotEmpty($sharedAccount->user, 'username should not be empty/overwritten! '
             . print_r($sharedAccount->toArray(), true));
+        self::assertEquals($newPw, $sharedAccount->password);
+        $sharedAccount->resolveCredentials(false, false, true);
+        self::assertEquals($newPw, $sharedAccount->smtp_password);
 
         // check if pw was changed
         $userInBackend = $emailUserBackend->getRawUserById($emailUser);

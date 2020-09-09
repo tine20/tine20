@@ -920,21 +920,24 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $newUsername = ($_record->user) ? $_record->user : $credentials->username;
 
             $_record->credentials_id = $this->_createSharedCredentials($newUsername, $newPassword);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Created new credentials (id ' . $_record->credentials_id . ')');
+
             $imapCredentialsChanged = true;
         } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Credentials did not change');
             $imapCredentialsChanged = false;
         }
 
         if ($_record->smtp_user && $_record->smtp_password) {
+            // NOTE: this is currently not possible to set via the FE - maybe we should remove it?
             // create extra smtp credentials
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
             $_record->smtp_credentials_id = $this->_createSharedCredentials($_record->smtp_user, $_record->smtp_password);
 
-        } else if (
-            $imapCredentialsChanged
-            && (! $_record->smtp_credentials_id || $_record->smtp_credentials_id == $_oldRecord->credentials_id)
-        ) {
+        } else if ($imapCredentialsChanged) {
             // use imap credentials for smtp auth as well
             $_record->smtp_credentials_id = $_record->credentials_id;
         }
