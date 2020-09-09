@@ -165,7 +165,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
         $this->_controller = ($_controller !== NULL) ? $_controller : Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = $this->_getExportConfig($_additionalOptions);
-        $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $this->_locale = Tinebase_Core::getLocale();
         if (isset($_additionalOptions['sortInfo'])) {
             if (isset($_additionalOptions['sortInfo']['field'])) {
                 $this->_sortInfo['sort'] = $_additionalOptions['sortInfo']['field'];
@@ -238,8 +238,15 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
      * @param string $_format
      * @return string
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
+        if (! $_appName) {
+            $_appName = $this->_applicationName;
+        }
+        if (! $_format) {
+            $_format = $this->_format;
+        }
+
         return 'export_' . strtolower($_appName) . '.' . $_format;
     }
 
@@ -268,7 +275,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
         $this->_onAfterExportRecords($result);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Exported ' . $result['totalcount'] . ' records.');
+            . ' Exported ' . (is_array($result) ? $result['totalcount'] : 0) . ' records.');
     }
     
     /**
@@ -383,9 +390,10 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
             }
             
             // get export definition by name / model
-            $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
                 array('field' => 'model', 'operator' => 'equals', 'value' => $this->_modelName),
                 array('field' => 'name',  'operator' => 'equals', 'value' => $exportName),
+                array('field' => 'type',  'operator' => 'equals', 'value' => 'export'),
             ));
             $definitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
             if (count($definitions) == 0) {
@@ -704,5 +712,43 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
             }
         }
         return null;
+    }
+
+    /**
+     * @return bool
+     *
+     * TODO remove code duplication with \Tinebase_Export_Abstract::isDownload
+     */
+    public function isDownload()
+    {
+        return !$this->_config->returnFileLocation;
+    }
+
+    /**
+     * @param null|string $filename
+     * @return Tinebase_Model_Tree_FileLocation
+     * @throws Tinebase_Exception_NotImplemented
+     *
+     * TODO remove code duplication with \Tinebase_Export_Abstract::getTargetFileLocation
+     */
+    public function getTargetFileLocation($filename = null)
+    {
+        if ($filename === null) {
+            if (method_exists($this, 'write')) {
+                ob_start();
+                $this->write();
+                $output = ob_get_clean();
+                $filename = Tinebase_TempFile::getTempPath();
+                file_put_contents($filename, $output);
+            } else {
+                throw new Tinebase_Exception_NotImplemented('Not implemented for this export');
+            }
+        }
+
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($filename, $this->getDownloadFilename());
+        return new Tinebase_Model_Tree_FileLocation([
+            Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
+            Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
+        ]);
     }
 }

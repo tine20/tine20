@@ -5,13 +5,14 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\Common\Persistence\Mapping\MappingException;
+use Tinebase_ModelConfiguration_Const as MCC;
 
 /**
  * Tinebase_Record_DoctrineMappingDriver
@@ -26,26 +27,25 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
      * @var array modelConfigType => Doctrine2Type
      */
     protected static $_typeMap = array(
-        'string'        => 'string',
-        'stringAutocomplete' => 'string',
-        'text'          => 'text',
-        'fulltext'      => 'text',
-        'datetime'      => 'datetime',
-        'date'          => 'datetime',
-        // TODO use datetime here?
-        'time'          => 'time',
-        'integer'       => 'integer',
-        'bigint'        => 'bigint',
-        'numberableInt' => 'integer',
-        'numberableStr' => 'string',
-        'float'         => 'float',
-        'json'          => 'text',
-        'container'     => 'string',
-        'record'        => 'string',
-        'keyfield'      => 'string',
-        'user'          => 'string',
-        'boolean'       => 'boolean',
-        'money'         => 'float',
+        MCC::TYPE_STRING                => 'string',
+        MCC::TYPE_STRING_AUTOCOMPLETE   => 'string',
+        MCC::TYPE_TEXT                  => 'text',
+        MCC::TYPE_FULLTEXT              => 'text',
+        MCC::TYPE_DATETIME              => 'datetime',
+        MCC::TYPE_DATE                  => 'datetime',
+        MCC::TYPE_TIME                  => 'time',
+        MCC::TYPE_INTEGER               => 'integer',
+        MCC::TYPE_BIGINT                => 'bigint',
+        MCC::TYPE_NUMBERABLE_INT        => 'integer',
+        MCC::TYPE_NUMBERABLE_STRING     => 'string',
+        MCC::TYPE_FLOAT                 => 'float',
+        MCC::TYPE_JSON                  => 'text',
+        MCC::TYPE_CONTAINER             => 'string',
+        MCC::TYPE_RECORD                => 'string',
+        MCC::TYPE_KEY_FIELD             => 'string',
+        MCC::TYPE_USER                  => 'string',
+        MCC::TYPE_BOOLEAN               => 'boolean',
+        MCC::TYPE_MONEY                 => 'float',
         // TODO replace that with a single type 'datetime_separated'?
 //        'datetime_separated' => 'date',
         'datetime_separated_date' => 'date',
@@ -79,11 +79,15 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         $table['name'] = SQL_TABLE_PREFIX . $table['name'];
 
         // mysql supports full text for InnoDB as of 5.6.4 for everybody else: remove full text index
-        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') ) {
+        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') ||
+                ! Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX)) {
             $this->_removeFullTextIndex($table);
         }
 
         $metadata->setPrimaryTable($table);
+        if (isset($table[Tinebase_ModelConfiguration_Const::ID_GENERATOR_TYPE])) {
+            $metadata->setIdGeneratorType($table[Tinebase_ModelConfiguration_Const::ID_GENERATOR_TYPE]);
+        }
 
         $this->_mapAssociations($modelConfig, $metadata);
         $this->_mapFields($modelConfig, $metadata);
@@ -122,6 +126,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
     protected function _mapFields(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
     {
         $virtualFields = array_keys($modelConfig->getVirtualFields());
+        $mappedFields = [];
         foreach ($modelConfig->getFields() + $modelConfig->getDbColumns() as $fieldName => $config) {
             if (in_array($fieldName, $virtualFields, true)) {
                 continue;
@@ -130,21 +135,25 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
             self::mapTypes($config);
 
             if (! $config['doctrineIgnore']) {
-                try {
-
-                    $metadata->mapField($config);
-                } catch (\Doctrine\ORM\Mapping\MappingException $dome) {
-                    // TODO ignore or fix exceptions like
-                    //  "Property "id" in "Timetracker_Model_Timeaccount" was already declared,
-                    //   but it must be declared only once"
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' ' . $dome->getMessage());
-
-                    if (!isset($config['columnName'])) {
-                        $config['columnName'] = $config['fieldName'];
-                    }
-                    $metadata->addInheritedFieldMapping($config);
+                if (!isset($config['columnName'])) {
+                    $config['columnName'] = $config['fieldName'];
                 }
+                if ($config['columnName'] === 'default') {
+                    // TODO what about quoting?
+                    throw new Tinebase_Exception_InvalidArgument('it is not allowed to name a column "default" as it is a keyword');
+                }
+
+                if (isset($mappedFields[$config['fieldName']])) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('field ' . $config['fieldName'] .
+                        ' already mapped');
+                }
+
+                if ($metadata->hasAssociation($config['fieldName'])) {
+                    $metadata->addInheritedFieldMapping($config);
+                } else {
+                    $metadata->mapField($config);
+                }
+                $mappedFields[$config['fieldName']] = true;
             }
         }
     }
@@ -193,6 +202,10 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
                 }
                 $config[self::OPTIONS][self::UNSIGNED] = $config[self::UNSIGNED];
             }
+        } elseif (self::TYPE_RECORDS === $config[self::TYPE] && isset($config[self::CONFIG][self::STORAGE]) &&
+                self::TYPE_JSON === $config[self::CONFIG][self::STORAGE]) {
+            $config[self::TYPE] = self::$_typeMap[self::TYPE_JSON];
+            $config['doctrineIgnore'] = $defaultDoctrineIgnore;
         }
     }
 
@@ -206,7 +219,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         $result = [];
 
         /** @var Tinebase_Record_Interface $model */
-        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications() as $model) {
+        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications(true) as $model) {
             if ($this->isTransient($model)) {
                 $result[] = $model;
             }

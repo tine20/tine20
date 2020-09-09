@@ -1,8 +1,8 @@
-firstname,lastname,loginname,password,email
-Simon,Rattle,s.rattle,1234,s.rattle@harmonie.de
-Sven,Fruehauf,s.fruehauf,1234,s.fruehauf@harmonie.de
-Tanja,Bar,t.bar,1234,t.bar@harmonie.de
-Jens,Baum,j.baum,1234,j.baum@harmonie.de
-Julia,Metzger,j.metzger,1234,j.metzger@schloss.de
-Eric,Eichmann,e.eichmann,1234,e.eichmann@schloss.de
-Martina,Schreiber,m.schreiber,1234,m.schreiber@schloss.de
+firstname,lastname,loginname,password,pin,email
+Simon,Rattle,s.rattle,1234,12345,
+Sven,Fruehauf,s.fruehauf,1234,12345,
+Tanja,Bar,t.bar,1234,12345,
+Jens,Baum,j.baum,1234,12345,
+Julia,Metzger,j.metzger,1234,12345,
+Eric,Eichmann,e.eichmann,1234,12345,
+Martina,Schreiber,m.schreiber,1234,12345,

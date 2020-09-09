@@ -31,7 +31,7 @@
  *     protected $_applicationName = 'myapp';
  *     protected $_filterModel = array (
  *         'name'       => array('filter' => 'Tinebase_Model_Filter_Text'),
- *         'container'  => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'myApp')),
+ *         'container'  => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('modelName' => 'myModel')),
  *         'created_by' => array('filter' => 'Tinebase_Model_Filter_User'),
  *         'some_id'    => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Someapp_Model_SomeFilter', 'controller' => 'Myapp_Controller_Some')),
  *         'custom'     => array('custom' => true),  // will be ignored and you must handle this filter your own!
@@ -182,6 +182,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @var Tinebase_Model_Filter_FilterGroup|null reference to parent group
      */
     protected $_parent = null;
+
+    protected $_isInSetFromUser = false;
     
     /******************************** functions ********************************/
     
@@ -244,6 +246,24 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
 
     /**
+     * @param bool|null $bool
+     * @return bool
+     */
+    public function doIgnoreAcl($bool = null)
+    {
+        $oldValue = $this->_ignoreAcl;
+        if (null !== $bool) {
+            foreach ($this->_filterObjects as $filter) {
+                if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
+                    $filter->doIgnoreAcl($bool);
+                }
+            }
+            $this->_ignoreAcl = (bool)$bool;
+        }
+        return $oldValue;
+    }
+
+    /**
      * @param Tinebase_Model_Filter_FilterGroup $_parent
      */
     public function setParent($_parent)
@@ -264,7 +284,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function getRootParent()
     {
-        if (null != $this->_parent) {
+        if (null !== $this->_parent) {
             return $this->_parent->getRootParent();
         }
         return $this;
@@ -277,6 +297,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function setFromArray($_data)
     {
+        if (! $_data) {
+            // sanitize data
+            $_data = array();
+        }
+
         $this->_filterObjects = array();
         
         foreach ($_data as $key => $filterData) {
@@ -322,8 +347,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _createForeignRecordFilterFromArray($_filterData)
     {
+        if (! isset($_filterData['value']['filters'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__
+                . ' Skipping filter (foreign record filter syntax problem) -> '
+                . static::class . ' with filter data: ' . print_r($_filterData, TRUE));
+            return;
+        }
+
         $filterData = $_filterData;
-                
+
         $filterData['value'] = $_filterData['value']['filters'];
         $filterData['options'] = array(
             'isGeneric'         => TRUE
@@ -359,7 +392,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 //                }
                 break;
             default:
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (foreign record filter syntax problem) -> ' 
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__
+                    . ' Skipping filter (foreign record filter syntax problem) -> '
                     . static::class . ' with filter data: ' . print_r($_filterData, TRUE));
                 return;
         }
@@ -598,7 +633,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 // special handling for foreign record filtering: creates a subfilter with CONDITION_AND
                 // NOTE: maybe this should be fixed in the client / this is just sanitizing here
                 // equals is also valid (for Tinebase_Model_Filter_ForeignId)
-                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND, 'equals'])) {
+                // TODO this needs to go away!
+                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND, 'equals', 'in', 'not', 'notin', 'notDefinedBy:AND'])) {
                     // add a sub-query filter
                     $data['value'] = [
                         ['field' => 'query', 'operator' => $data['operator'], 'value' => $data['value']]
@@ -862,7 +898,17 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function setFromArrayInUsersTimezone($_data)
     {
         $this->_options['timezone'] = Tinebase_Core::getUserTimezone();
-        $this->setFromArray($_data);
+        try {
+            $this->_isInSetFromUser = true;
+            $this->setFromArray($_data);
+        } finally {
+            $this->_isInSetFromUser = false;
+        }
+    }
+
+    public function isInSetFromUser()
+    {
+        return $this->_isInSetFromUser;
     }
     
     /**
@@ -1068,6 +1114,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
 
         return $filter;
+    }
+
+    public function filterWalk(callable $func) {
+        foreach ($this->_filterObjects as $filter) {
+            $func($filter);
+        }
     }
     
     ###### iterator interface ###########

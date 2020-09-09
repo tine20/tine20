@@ -6,7 +6,7 @@
  * @subpackage  Fulltext
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,6 +18,8 @@
  */
 class Tinebase_Fulltext_Indexer
 {
+    protected $_maxBlobSize = 0;
+
     /**
      * holds the instance of the singleton
      *
@@ -67,6 +69,21 @@ class Tinebase_Fulltext_Indexer
         if ('Sql' !== $fulltextConfig->{Tinebase_Config::FULLTEXT_BACKEND}) {
             throw new Tinebase_Exception_NotImplemented('only Sql backend is implemented currently');
         }
+
+        $db = Tinebase_Core::getDb();
+        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $logFileSize = (int) Tinebase_Core::getDbVariable('innodb_log_file_size', $db);
+            if ($logFileSize > 0) {
+                $this->_maxBlobSize = round($logFileSize / 10);
+            }
+            $maxPacketSize = (int) Tinebase_Core::getDbVariable('max_allowed_packet', $db);
+            if ($maxPacketSize > 0 && ($this->_maxBlobSize === 0 || $maxPacketSize < $this->_maxBlobSize)) {
+                $this->_maxBlobSize = $maxPacketSize;
+            }
+            if ($this->_maxBlobSize > 0) {
+                $this->_maxBlobSize -= 64*1024;
+            }
+        }
     }
 
     /**
@@ -80,10 +97,21 @@ class Tinebase_Fulltext_Indexer
         if (false === ($blob = file_get_contents($_fileName))) {
             throw new Tinebase_Exception_InvalidArgument('could not get file contents of: ' . $_fileName);
         }
+        $blob = Tinebase_Core::filterInputForDatabase($blob);
 
+        $blobsize = strlen($blob);
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Blob size (max): '
+            . $blobsize . ' (' . $this->_maxBlobSize . ')');
+        if ($this->_maxBlobSize > 0 && $blobsize > $this->_maxBlobSize) {
+            if (Tinebase_Core::isLogLevel(Tinebase_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Truncating full text blob for id '
+                . $_id . ' to max blob size');
+            $blob = mb_substr($blob, 0, $this->_maxBlobSize);
+        }
+        
         $db = Tinebase_Core::getDb();
         $db->delete(SQL_TABLE_PREFIX . 'external_fulltext', $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $_id));
-        $blob = Tinebase_Core::filterInputForDatabase($blob);
         $db->insert(SQL_TABLE_PREFIX . 'external_fulltext', array('id' => $_id, 'text_data' => $blob));
     }
 

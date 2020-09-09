@@ -89,15 +89,27 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
     getEventData: Ext.emptyFn,
 
     onButtonCancel: function() {
-        this.fireEvent.apply(this, ['cancel'].concat(this.getEventData('cancel')));
-        this.purgeListeners();
-        this.window.close();
+        this.fireEvent.apply(this, ['cancel', this.getEventData('cancel')]);
+        if (this.window.closeAction !== 'hide') {
+            this.purgeListeners();
+            this.window.close();
+        } else {
+            this.window.hide();
+        }
+
     },
 
     onButtonApply: function() {
-        this.fireEvent.apply(this, ['apply'].concat(this.getEventData('apply')));
-        this.purgeListeners();
-        this.window.close();
+        var eventData = this.getEventData('apply');
+        this.fireAsyncEvent.apply(this, ['beforeapply', eventData]).then(() => {
+            this.fireEvent.apply(this, ['apply', eventData]);
+            if (this.window.closeAction !== 'hide') {
+                this.purgeListeners();
+                this.window.close();
+            } else {
+                this.window.hide();
+            }
+        }).catch(() => {});
     },
 
     getCanonicalPathSegment: function () {

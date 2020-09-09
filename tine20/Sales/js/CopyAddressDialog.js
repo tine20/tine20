@@ -134,10 +134,11 @@ Tine.Sales.CopyAddressDialog = Ext.extend(Ext.FormPanel, {
  * @return {Ext.ux.Window}
  */
 Tine.Sales.CopyAddressDialog.openWindow = function(config) {
-    var window = Tine.WindowFactory.getExtWindow({
+    var window = Tine.WindowFactory.getWindow({
         title: config.winTitle,
-        width : 290,
-        height : 225,
+        modal: true,
+        width: 290,
+        height: 225,
         contentPanelConstructor : 'Tine.Sales.CopyAddressDialog',
         contentPanelConstructorConfig : config
     });

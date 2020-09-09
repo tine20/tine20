@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -21,12 +21,73 @@ class Tinebase_ControllerServerTest extends ServerTestCase
     public function testValidLogin()
     {
         $request = $this->_getTestRequest();
-        
+
         $credentials = $this->getTestCredentials();
-        
+
         $result = Tinebase_Controller::getInstance()->login($credentials['username'], $credentials['password'], $request);
-        
+
         $this->assertTrue($result);
+    }
+
+    /**
+     * @group ServerTests
+     * @group nogitlabci
+     * gitlabci: PHPUnit_Framework_Exception: Tine 2.0 can't setup the configured logger! The Server responded: Zend_Log_Exception: "php://stdout" cannot be opened with mode "a"
+     */
+    public function testRoleChangeLogin()
+    {
+        // needed for committing email user - otherwise creation of system folders in system email account would fail
+        $this->_testNeedsTransaction();
+
+        $request = $this->_getTestRequest();
+
+        $credentials = $this->getTestCredentials();
+        $uid = Tinebase_Record_Abstract::generateUID(16);
+        Admin_Controller_User::getInstance()->create(TestCase::getTestUser([
+            'accountLoginName'       => $uid,
+            'accountEmailAddress'    => $uid . '@' . TestServer::getPrimaryMailDomain(),
+        ]), $uid, $uid, true);
+        $this->_usernamesToDelete[] = $uid;
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ROLE_CHANGE_ALLOWED, [$credentials['username'] => [$uid]]);
+        $result = Tinebase_Controller::getInstance()->login($uid . '*' . $credentials['username'], $credentials['password'], $request);
+
+        $this->assertTrue($result);
+        $this->assertEquals($uid, Tinebase_Core::getUser()->accountLoginName);
+    }
+
+    /**
+     * @group ServerTests
+     *
+     * @param boolean $byEmail
+     */
+    public function testEmailLogin($byEmail = true)
+    {
+        $oldAuthByEmail = Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL};
+        $oldSplit = Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit;
+        try {
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit = false;
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} = $byEmail;
+            $request = $this->_getTestRequest();
+            $credentials = $this->getTestCredentials();
+            $account = $this->getAccountByName($credentials['username']);
+
+            $result = Tinebase_Controller::getInstance()->login($account->accountEmailAddress, $credentials['password'],
+                $request);
+
+            static::assertEquals($byEmail, $result);
+        } finally {
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} = $oldAuthByEmail;
+            Tinebase_Config::getInstance()->{Tinebase_Config::AUTHENTICATIONBACKEND}->tryUsernameSplit = $oldSplit;
+        }
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testInvalidEmailLogin()
+    {
+        $this->testEmailLogin(false);
     }
 
     /**
@@ -124,5 +185,32 @@ EOS
 
         $result = Tinebase_Controller::getInstance()->login($credentials['username'], $credentials['password'], $request);
         $this->assertTrue($result, 'account should be unblocked now');
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testOpenIdConnectLogin()
+    {
+        $request = $this->_getTestRequest();
+
+        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ACTIVE} = true;
+        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_PROVIDER_URL} = 'https://myoidcprovider.org';
+        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_CLIENT_SECRET} = 'abc12';
+        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_CLIENT_ID} = 'abc12';
+        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ADAPTER} = 'OpenIdConnectMock';
+
+        $credentials = $this->getTestCredentials();
+        $user = Tinebase_User::getInstance()->getFullUserByLoginName($credentials['username']);
+        $user->openid = 'test@example.org';
+        Tinebase_User::getInstance()->updateUser($user);
+
+        $oidcResponse = 'access_token=somethingabcde12344';
+
+        $result = Tinebase_Controller::getInstance()->loginOIDC($oidcResponse, $request);
+
+        self::assertTrue($result);
+        self::assertTrue(Tinebase_Core::isRegistered(Tinebase_Core::USER));
+        self::assertEquals($user->accountLoginName, Tinebase_Core::getUser()->accountLoginName);
     }
 }

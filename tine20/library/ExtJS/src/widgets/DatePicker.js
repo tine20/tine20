@@ -123,6 +123,10 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
      * Maximum allowable date (JavaScript date object, defaults to null)
      */
     /**
+     * @cfg {Object} dateClss
+     * {datestr: clssString} additional css cls classes for given dates
+     */
+    /**
      * @cfg {Array} disabledDays
      * An array of days to disable, 0-based. For example, [0, 6] disables Sunday and Saturday (defaults to null).
      */
@@ -159,6 +163,8 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
         this.value = this.value ?
                  this.value.clearTime(true) : new Date().clearTime();
 
+        this.setSelected(_.isArray(this.selections) ? this.selections : []);
+        
         this.addEvents(
             /**
              * @event select
@@ -166,13 +172,20 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
              * @param {DatePicker} this DatePicker
              * @param {Date} date The selected date
              */
-            'select'
+            'select',
+            /**
+             * @event beforeselect
+             * Fires before a date is selected. return false to abort selection
+             * @param {DatePicker} this DatePicker
+             * @param {Date} date The date to select
+             */
+            'beforeselect'
         );
 
         if(this.handler){
             this.on('select', this.handler,  this.scope || this);
         }
-
+        
         this.initDisabledDays();
     },
 
@@ -237,6 +250,15 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
         this.update(this.value, true);
     },
 
+    /** 
+     * Replaces any existing {@link #dateClss} with the new clss and refreshes the DatePicker.
+     * @param {Object} datestr: clssString cls classes for given dates
+     */
+     setDateClss : function(clss){
+         this.dateClss = clss;
+         this.update(this.value, true);
+     },
+    
     /**
      * Sets the value of the date field
      * @param {Date} value The date to set
@@ -246,6 +268,27 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
         this.update(this.value);
     },
 
+    setSelected: function(selections) {
+        this.selections = [];
+        _.each(selections, (selection) => {
+            if (_.isString(selection)) {
+                selection = Date.parseDate(selection, this.format);
+            }
+            if (_.isDate(selection)) {
+                selection = selection.getTime();
+            }
+            if (_.isNumber(selection)) {
+                this.selections.push(selection);
+            }
+        });
+        this.selections.sort();
+        this.update(this.value);
+    },
+    
+    getSelected: function() {
+        return _.map(this.selections, (ts) => {return new Date(ts);});
+    },
+    
     /**
      * Gets the current selected value of the date field
      * @return {Date} The selected date
@@ -611,7 +654,19 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
         e.stopEvent();
         if(!this.disabled && t.dateValue && !Ext.fly(t.parentNode).hasClass('x-date-disabled')){
             this.cancelFocus = this.focusOnSelect === false;
-            this.setValue(new Date(t.dateValue));
+            const date = new Date(t.dateValue);
+            if (_.indexOf(this.selections, t.dateValue) >=0) {
+                if (this.fireEvent('beforedeselect', this, date, this.value) !== false) {
+                    _.pull(this.selections, t.dateValue);
+                }
+            } else {
+                if (this.fireEvent('beforeselect', this, date, this.value) !== false) {
+                    this.selections.push(t.dateValue);
+                    this.selections.sort();
+                }
+            }
+            
+            this.setValue(date);
             delete this.cancelFocus;
             this.fireEvent('select', this, this.value);
         }
@@ -620,8 +675,11 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
     // private
     selectToday : function(){
         if(this.todayBtn && !this.todayBtn.disabled){
-            this.setValue(new Date().clearTime());
-            this.fireEvent('select', this, this.value);
+            const today = new Date().clearTime();
+            if (this.fireEvent('beforeselect', this, today) !== false) {
+                this.setValue(today, false);
+                this.fireEvent('select', this, this.value);
+            }
         }
     },
 
@@ -634,14 +692,21 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
 	            var t = date.getTime();
 	            if(vd.getMonth() == date.getMonth() && vd.getFullYear() == date.getFullYear()){
 	                this.cells.removeClass('x-date-selected');
+	                // this.cells.removeClass('x-date-multiselect');
 	                this.cells.each(function(c){
-	                   if(c.dom.firstChild.dateValue == t){
-	                       c.addClass('x-date-selected');
-	                       if(vis && !this.cancelFocus){
-	                           Ext.fly(c.dom.firstChild).focus(50);
-	                       }
-	                       return false;
-	                   }
+	                    if (this.allowMultiSelection) {
+                            if (_.indexOf(this.selections, c.dom.firstChild.dateValue) >= 0) {
+                                c.addClass('x-date-selected');
+                            }
+                        } else {
+                            if (c.dom.firstChild.dateValue == t) {
+                                c.addClass('x-date-selected');
+                                if (vis && !this.cancelFocus) {
+                                    Ext.fly(c.dom.firstChild).focus(50);
+                                }
+                                return false;
+                            }
+                        }
 	                }, this);
 	                return;
 	            }
@@ -672,6 +737,9 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
 	            ddaysText = this.disabledDaysText,
 	            format = this.format;
 	
+	        const oldStartDate = this.startDate;
+	        this.startDate = d.clone();
+	        
 	        if(this.showToday){
 	            var td = new Date().clearTime(),
 	                disable = (td < min || td > max ||
@@ -692,12 +760,18 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
 	                cell.className += ' x-date-today';
 	                cell.title = cal.todayText;
 	            }
-	            if(t == sel){
-	                cell.className += ' x-date-selected';
-	                if(vis){
-	                    Ext.fly(cell.firstChild).focus(50);
-	                }
-	            }
+	            if (cal.allowMultiSelection) {
+                    if (_.indexOf(cal.selections, t) >=0) {
+                        cell.className += ' x-date-selected';
+                    }
+                } else {
+                    if (t == sel) {
+                        cell.className += ' x-date-selected';
+                        if (vis) {
+                            Ext.fly(cell.firstChild).focus(50);
+                        }
+                    }
+                }
 	            // disabling
 	            if(t < min) {
 	                cell.className = ' x-date-disabled';
@@ -722,6 +796,11 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
 	                    cell.className = ' x-date-disabled';
 	                }
 	            }
+	            // apply dateClss
+                const dateClss = _.get(this.dateClss, t);
+                if(dateClss) {
+                    cell.className += ' ' + dateClss;
+                }
 	        };
 	
 	        var i = 0;
@@ -763,6 +842,14 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
 	                this.update.defer(10, this, [date]);
 	            }
 	        }
+	        
+	        if (!oldStartDate || oldStartDate.getTime() !== this.startDate.getTime()) {
+	            _.defer(() => {
+                    this.getPeriod().then((period) => {
+                        this.fireEvent('periodchange', this, period);
+                    });
+                });
+            }
         }
     },
 
@@ -782,8 +869,31 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
             delete this.textNodes;
             delete this.cells.elements;
         }
-    }
+    },
 
+    getPeriod: async function(){
+        await this.afterIsRendered();
+        return {
+            from: this.startDate,
+            until: this.startDate.add(Date.DAY, 42)
+        };
+    },
+    
+    showLoadMask: async function(){
+        await this.afterIsRendered();
+        if (! this.loadMask) {
+            this.loadMask = new Ext.LoadMask(this.getEl());
+        }
+        this.loadMask.show.defer(100, this.loadMask);
+    },
+
+    hideLoadMask: async function() {
+        if (this.loadMask) {
+            this.loadMask.hide.defer(100, this.loadMask);
+        }
+        return Promise.resolve();
+    },
+    
     /**
      * @cfg {String} autoEl @hide
      */

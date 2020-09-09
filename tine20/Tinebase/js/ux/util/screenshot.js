@@ -32,25 +32,29 @@ Ext.ux.screenshot.get = function(win, options) {
 
                 Ext.ux.screenshot.setDPI(canvas, options.dpi);
 
+                // Ext.getBody().addClass('x-html2canvas');
+
                 html2canvas(win.document.body, {
                     canvas: canvas,
                     grabMouse: options.grabMouse,
-                    onrendered: function (canvas) {
-                        var mimeType = 'image/' + options.type,
-                            dataUrl = canvas.toDataURL(mimeType);
+                }).then(function(canvas) {
 
-                        if (options.download) {
-                            var downloadLink = document.createElement("a");
+                    // Ext.getBody().removeClass('x-html2canvas');
+                    
+                    var mimeType = 'image/' + options.type,
+                        dataUrl = canvas.toDataURL(mimeType);
 
-                            downloadLink.href = dataUrl.replace("image/png", "image/octet-stream");
-                            downloadLink.download = options.filename + '.' + options.type;
-                            win.document.body.appendChild(downloadLink);
-                            downloadLink.click();
-                            win.document.body.removeChild(downloadLink);
-                        }
+                    if (options.download) {
+                        var downloadLink = document.createElement("a");
 
-                        fulfill(dataUrl);
+                        downloadLink.href = dataUrl.replace("image/png", "image/octet-stream");
+                        downloadLink.download = options.filename + '.' + options.type;
+                        win.document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        win.document.body.removeChild(downloadLink);
                     }
+
+                    fulfill(dataUrl);
                 });
             }, 'Tinebase/js/html2canvas');
     });

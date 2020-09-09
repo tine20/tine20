@@ -47,18 +47,19 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $uri = preg_replace('/\/+$/', '', $uri);
 
         // if the tine20 server is located in a subdir, we need to remove the server path from the uri
-        $serverPath = Tinebase_Core::getUrl('path');
+        $serverPath = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
         $uri = preg_replace('/^' . preg_quote($serverPath, '/') . '/', '', $uri);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' FastRoute dispatching on method: ' . $request->getMethod() . ' and uri: '
-            . $uri);
+            . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), function($headers, $name) use ($request)  {
+                return $headers .= "\n$name: {$request->getHeaderLine($name)}";
+            }, ''));
 
         $routeInfo = $dispatcher->dispatch($request->getMethod(), $uri);
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . ' returning 404 not found');
+                    . __LINE__ . ' returning 404 method not found');
 
                 // 404 not found
                 return new Response('php://memory', 404);
@@ -90,8 +91,12 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
      */
     protected function _getDispatcher()
     {
-        $enabledApplications = Tinebase_Application::getInstance()->getApplications()
-            ->filter('status', Tinebase_Application::ENABLED);
+        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+            $enabledApplications = new Tinebase_Record_RecordSet(Tinebase_Model_Application::class);
+        } else {
+            $enabledApplications = Tinebase_Application::getInstance()->getApplications()
+                ->filter('status', Tinebase_Application::ENABLED);
+        }
         $apps = array_combine(
             $enabledApplications->id,
             $enabledApplications->version

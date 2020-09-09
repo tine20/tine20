@@ -77,7 +77,31 @@ class Tinebase_Twig
             return json_encode($string);
         });
 
+        $this->_twigEnvironment->addExtension(new Twig_Extensions_Extension_Intl());
+
         $this->_addTwigFunctions();
+
+        $this->_addGlobals();
+    }
+
+    protected function _addGlobals()
+    {
+        $tbConfig = Tinebase_Config::getInstance();
+
+        $globals = [
+            'branding'          => [
+                'logo'              => Tinebase_Core::getInstallLogo(),
+                'title'             => $tbConfig->{Tinebase_Config::BRANDING_TITLE},
+                'description'       => $tbConfig->{Tinebase_Config::BRANDING_DESCRIPTION},
+                'weburl'            => $tbConfig->{Tinebase_Config::BRANDING_WEBURL},
+            ],
+            'user'              => [
+                'locale'            => Tinebase_Core::getLocale(),
+                'timezone'          => Tinebase_Core::getUserTimezone(),
+            ],
+            'currencySymbol'    => $tbConfig->{Tinebase_Config::CURRENCY_SYMBOL},
+        ];
+        $this->_twigEnvironment->addGlobal('app', $globals);
     }
 
     /**
@@ -165,7 +189,9 @@ class Tinebase_Twig
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('keyField', function ($appName, $keyFieldName, $key, $locale = null) {
             $config = Tinebase_Config::getAppConfig($appName)->$keyFieldName;
-            $keyFieldRecord = $config && $config->records instanceof Tinebase_Record_RecordSet ? $config->records->getById($key) : false;
+            $keyFieldRecord = ($config && $config->records instanceof Tinebase_Record_RecordSet && is_string($key))
+                ? $config->records->getById($key)
+                : false;
 
             if ($locale !== null) {
                 $locale = Tinebase_Translation::getLocale($locale);
@@ -181,6 +207,22 @@ class Tinebase_Twig
             
             return implode(', ', $tags->getTitle());
         }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('findBySubProperty',
+            function ($records, $property, $subProperty, $value) {
+                return $records instanceof Tinebase_Record_RecordSet ?
+                    $records->find(function($record) use($property, $subProperty, $value) {
+                        return $record->{$property} instanceof Tinebase_Record_Interface &&
+                            $record->{$property}->{$subProperty} === $value;
+                }, null) : null;
+        }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('filterBySubProperty',
+            function ($records, $property, $subProperty, $value) {
+                return $records instanceof Tinebase_Record_RecordSet ?
+                    $records->filter(function($record) use($property, $subProperty, $value) {
+                        return $record->{$property} instanceof Tinebase_Record_Interface &&
+                            $record->{$property}->{$subProperty} === $value;
+                    }, null) : null;
+            }));
     }
 
     public function addExtension(Twig_ExtensionInterface $extension)

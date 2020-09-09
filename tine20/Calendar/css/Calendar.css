@@ -13,16 +13,20 @@
     background-image:url(../../images/icon-set/icon_calender_today_action.svg) !important;
 }
 
+.cal-split-view {
+    background-image:url(../../images/icon-set/icon_column.svg) !important;
+}
+
 .cal-sheet-view-type {
-    background-image:url(../../images/icon-set/icon_calendar_week.svg) !important;
+    background-image:url(../../images/icon-set/icon_calendar_week_transparent.svg) !important;
 }
 
 .cal-grid-view-type {
-    background-image:url(../../images/icon-set/icon_calendar_list.svg) !important;
+    background-image:url(../../images/icon-set/icon_calendar_list_transparent.svg) !important;
 }
 
 .cal-timeline-view-type {
-    background-image:url(../../images/icon-set/icon_calendar_strahl.svg) !important;
+    background-image:url(../../images/icon-set/icon_calendar_strahl_transparent.svg) !important;
 }
 
 .cal-print-loose-leaf {
@@ -41,18 +45,20 @@
     background-image:url(../../images/icon-set/icon_calendar_month.svg) !important;
 }
 
+.cal-year-view {
+    background-image: url(../../images/icon-set/icon_calendar_365.svg) !important;
+}
+
+.cal-customperiod-view {
+    background-image:url(../../images/icon-set/icon_calendar_custom_period.svg) !important;
+}
+
 .cal-resource, .CalendarResource {
     background-image:url(../../images/icon-set/icon_resource.svg) !important;
 }
 
-.cal-year-view {
-    background-image:url(../../images/oxygen/16x16/actions/view-calendar-workweek.png) !important;
-}
-.x-btn-medium .cal-year-view {
-    background-image:url(../../images/oxygen/22x22/actions/view-calendar-workweek.png) !important;
-}
-.x-btn-large .cal-year-view {
-    background-image:url(../../images/oxygen/32x32/actions/view-calendar-workweek.png) !important;
+.cal-calendartree-resource-icon .x-tree-node-icon {
+    background-image: none;
 }
 
 .cal-action_fretimesearch {
@@ -179,12 +185,14 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 
 /**** status icons ****/
 .cal-status-icon {
+    background-size: 13px 13px;
     background-repeat:no-repeat;
-    background-position: 0px -2px;
+    background-position: 0px -1px;
     margin: 0px -1px 0px -1px;
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     cursor: pointer;
+
 }
 
 .cal-recurring {
@@ -194,6 +202,7 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     height: 12px;
     padding: 0 2px;
     vertical-align: text-bottom;
+    background-size: 13px 13px;
 }
 
 .cal-recurring.exception {
@@ -226,6 +235,14 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     font-style: italic !important;
 }
 
+.cal-status-CANCELED,
+.cal-status-CANCELED .cal-daysviewpanel-event-body,
+.cal-status-CANCELED .cal-daysviewpanel-event-header-inner,
+.cal-status-CANCELED .x-grid3-cell-inner {
+    text-decoration: line-through !important;
+    opacity: 0.7;
+}
+
 .inline {
     height: 24px;
     padding: 0;
@@ -247,6 +264,7 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     min-width: 16px;
     min-height: 16px;
     background-repeat: no-repeat;
+    background-size: 14px 14px;
     opacity: 0.8;
 }
 

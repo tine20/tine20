@@ -219,10 +219,10 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             $lastInterval = array_shift($intervals);
             foreach ($intervals as $interval) {
                 // check overlapping
-                if (($interval['stop'] == NULL) ? FALSE
-                    : ($lastInterval['stop'] == $interval['stop']) ? TRUE
-                    : ($lastInterval['stop'] > $interval['start']) ? TRUE 
-                    : FALSE) {
+                if ($interval['stop'] == NULL ? FALSE
+                    : ($lastInterval['stop'] == $interval['stop'] ? TRUE
+                    : ($lastInterval['stop'] > $interval['start'] ? TRUE
+                    : FALSE))) {
                         throw new HumanResources_Exception_ContractOverlap();
                 }
                 $lastInterval = $interval;
@@ -266,18 +266,20 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         
         parent::_deleteLinkedObjects($_record);
     }
-    
-    
+
+
     /**
      * Returns a set of records identified by their id's
      *
-     * @param   array $_ids       array of record identifiers
-     * @param   bool  $_ignoreACL don't check acl grants
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @param   array $_ids array of record identifiers
+     * @param   bool $_ignoreACL don't check acl grants
+     * @param null|Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        $records = parent::getMultiple($_ids, $_ignoreACL, $_expander);
+        $records = parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
         $this->_doPrivateCleanup($records);
         return $records;
     }
@@ -498,16 +500,16 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         
         if (isset($contractData['workingTimeModelId'])) {
             try {
-                $workingTimeModel = HumanResources_Controller_WorkingTime::getInstance()->get($contractData['workingTimeModelId']);
+                $workingTimeModel = HumanResources_Controller_WorkingTimeScheme::getInstance()->get($contractData['workingTimeModelId']);
             } catch (Exception $e) {
                 if ($cliCall) {
-                    die('The Working Time Model with the id ' . $contractData['workingTimeModelId'] . ' could not be found!' . chr(10));
+                    die('The Working Time Schema with the id ' . $contractData['workingTimeModelId'] . ' could not be found!' . chr(10));
                 } else {
                     throw $e;
                 }
             }
             if ($cliCall) {
-                echo 'Found Working Time Model "' . $workingTimeModel->title . '"' . chr(10);
+                echo 'Found Working Time Schema "' . $workingTimeModel->title . '"' . chr(10);
             }
         } else {
             $workingTimeModel = NULL;
@@ -517,6 +519,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             'feast_calendar_id'  => $feastCalendar ? $feastCalendar->toArray() : NULL,
             'vacation_days'      => isset($contractData['vacationDays']) ? $contractData['vacationDays'] : NULL,
             'workingtime_json'   => $workingTimeModel ? $workingTimeModel->json : '',
+            'working_time_scheme'=> $workingTimeModel->getId(),
             'start_date'         => $contractData['startDate']
         );
     }

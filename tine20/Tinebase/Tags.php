@@ -75,15 +75,18 @@ class Tinebase_Tags
      * Searches tags according to filter and paging
      * The Current user needs to have the given right, unless $_ignoreAcl is true
      * 
-     * @param  Tinebase_Model_TagFilter $_filter
-     * @param  Tinebase_Model_Pagination  $_paging
+     * @param Tinebase_Model_TagFilter $_filter
+     * @param Tinebase_Model_Pagination  $_paging
+     * @param boolean $_ignoreAcl
      * @return Tinebase_Record_RecordSet  Set of Tinebase_Model_Tag
      */
-    public function searchTags($_filter, $_paging = NULL)
+    public function searchTags($_filter, $_paging = NULL, $_ignoreAcl = false)
     {
         $select = $_filter->getSelect();
-        
-        Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
+
+        if (!$_ignoreAcl) {
+            Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
+        }
         
         if (isset($_filter->application)) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($_filter->application);
@@ -156,12 +159,13 @@ class Tinebase_Tags
      * Returns tags count of a tag search
      * @todo automate the count query if paging is active!
      *
-     * @param  Tinebase_Model_TagFilter $_filter
+     * @param Tinebase_Model_TagFilter $_filter
+     * @param boolean $_ignoreAcl
      * @return int
      */
-    public function getSearchTagsCount($_filter)
+    public function getSearchTagsCount($_filter, $_ignoreAcl = false)
     {
-        $tags = $this->searchTags($_filter);
+        $tags = $this->searchTags($_filter, null, $_ignoreAcl);
         return count($tags);
     }
 
@@ -535,13 +539,7 @@ class Tinebase_Tags
 
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' ' . $select);
-
         $queryResult = $this->_db->fetchAll($select);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r($queryResult, TRUE));
 
         // build array with tags (record_id => array of Tinebase_Model_Tag)
         $tagsOfRecords = array();
@@ -549,8 +547,10 @@ class Tinebase_Tags
             $tagsOfRecords[$result['record_id']][] = new Tinebase_Model_Tag($result, true);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && count($tagsOfRecords) > 0) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
+        }
 
         $result = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class);
         foreach ($_records as $record) {

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -128,5 +128,23 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
     static public function convertRoleIdToInt($_roleId)
     {
         return self::convertId($_roleId, 'Tinebase_Model_Role');
+    }
+
+    public function runConvertToRecord()
+    {
+        if (isset($this->_properties['deleted_time']) && $this->_properties['deleted_time'] == '1970-01-01 00:00:00') {
+            unset($this->_properties['deleted_time']);
+        }
+
+        parent::runConvertToRecord();
+    }
+
+    public function runConvertToData()
+    {
+        if (array_key_exists('deleted_time', $this->_properties) && null === $this->_properties['deleted_time']) {
+            unset($this->_properties['deleted_time']);
+        }
+
+        parent::runConvertToData();
     }
 }

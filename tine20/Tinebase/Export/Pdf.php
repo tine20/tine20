@@ -318,7 +318,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * 
      * @todo remove this when we extend Tinebase_Export_Abstract
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         return 'export_' . strtolower($_appName) . '.' . $_format;
     }
@@ -526,5 +526,15 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' icon file not found or unsupported format: ' . $iconFilename);
         }
+    }
+
+    /**
+     * @return bool
+     *
+     * pdf export only supports download
+     */
+    public function isDownload()
+    {
+        return true;
     }
 }

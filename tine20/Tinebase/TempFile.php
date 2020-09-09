@@ -6,7 +6,7 @@
  * @subpackage  File
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -153,8 +153,22 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ' . print_r($uploadedFile, true));
             }
         }
+
+        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($fh = fopen($path, 'r'));
+            fclose($fh);
+            if ($avResult->result === Tinebase_FileSystem_AVScan_Result::RESULT_FOUND) {
+                unlink($path);
+                throw new Tinebase_Exception_Backend('av scan found: ' . $avResult->message);
+            }
+        }
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $path);
+        finfo_close($finfo);
         
-        return $this->createTempFile($path, $name, $type, $size, $error);
+        return $this->createTempFile($path, $name, $mimeType ?: $type, $size, $error);
     }
     
     /**
@@ -234,8 +248,26 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             }
             fclose($fChunk);
         }
+
+        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($fJoin);
+            if ($avResult->result === Tinebase_FileSystem_AVScan_Result::RESULT_FOUND) {
+                fclose($fJoin);
+                unlink($path);
+                foreach ($_tempFiles as $tempFile) {
+                    $this->deleteTempFile($tempFile);
+                }
+                throw new Tinebase_Exception_Backend('av scan found: ' . $avResult->message);
+            }
+        }
         
         fclose($fJoin);
+
+        // delete chunk tempfiles after join
+        foreach ($_tempFiles as $tempFile) {
+            $this->deleteTempFile($tempFile);
+        }
         
         return $this->createTempFile($path, $name, $type, $size);
     }
@@ -266,7 +298,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             if (file_exists($file->path)) {
                 unlink($file->path);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' File no longer found: ' . $file->path);
             }
 
@@ -279,7 +311,11 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
 
         $result = 0;
         foreach (new DirectoryIterator(Tinebase_Core::getTempDir()) as $directoryIterator) {
-            if ($directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime()))) {
+            $filename = $directoryIterator->getFilename();
+            // preserve directories and dot-files
+            if (strpos($filename, '.') !== 0 && $directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime()))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Deleting file ' . $filename);
                 unlink($directoryIterator->getPathname());
                 ++$result;
             }
@@ -303,7 +339,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     {
         $path = self::getTempPath();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Opening temp file ' . $path);
         
         $handle = fopen($path, 'w+');
@@ -316,5 +352,41 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         }
         
         return $handle;
+    }
+
+    public function createTempFileFromNode(Tinebase_Model_Tree_Node $node)
+    {
+        $path = self::getTempPath();
+        if (!copy($node->getFilesystemPath(), $path)) {
+            Tinebase_Core::getLogger()->err('could not copy node ' . $node->getId() . ' ' . $node->getFilesystemPath()
+                . ' to temppath ' . $path);
+            throw new Tinebase_Exception_Backend('could not copy node to tempPath');
+        }
+
+        return $this->createTempFile($path, $node->name, $node->contenttype, $node->size);
+    }
+
+    public function createTempFileFromStream($stream)
+    {
+        $content = stream_get_contents($stream);
+        $path = self::getTempPath();
+        file_put_contents($path, $content);
+        return $this->createTempFile($path);
+    }
+
+    /**
+     * @param $id
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function deleteTempFile($id)
+    {
+        $tempfile = $id instanceof Tinebase_Model_TempFile ? $id : $this->get($id);
+        if (file_exists($tempfile->path)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Deleting temp file ' . $tempfile->path);
+            unlink($tempfile->path);
+        }
+        return $this->delete($id);
     }
 }

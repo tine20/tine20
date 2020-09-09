@@ -19,6 +19,98 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
  */
 class Tinebase_Export_XlsxTest extends TestCase
 {
+    protected function _assertTemplateVersionHandling($template, $expectedString)
+    {
+        /** @var Addressbook_Export_Xls $export */
+        $export = Tinebase_Export::factory(new Addressbook_Model_ContactFilter(),
+            [
+                'format'             => 'xls',
+                'definitionFilename' => dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_xls.xml',
+                'template'           => $template,
+                'recordData'         => [
+                    'n_given'       => 'testName',
+                    'n_family'      => 'moreTest',
+                    'bday'          => '2000-01-02'
+                ]
+            ], Addressbook_Controller_Contact::getInstance());
+        $export->generate();
+        $tmpFile = Tinebase_TempFile::getTempPath();
+        $export->write($tmpFile);
+        $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(uniqid()));
+
+        try {
+            $reader = IOFactory::createReader('Xlsx');
+            $doc = $reader->load($tmpFile);
+
+            $arrayData = $doc->getActiveSheet()->rangeToArray('A1:A2');
+            static::assertEquals($expectedString, $arrayData[0][0]);
+        } finally {
+            @unlink($tmpFile);
+        }
+    }
+
+    public function testExportTemplateVersionHandlingNoConstraintGiven()
+    {
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.0.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling1.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.1.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling2.xlsx'));
+
+        $this->_assertTemplateVersionHandling(
+            'tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit.xlsx', 'handling2');
+    }
+
+    public function testExportTemplateVersionHandlingWithConstraints1()
+    {
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.0.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling1.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.1.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling2.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v2.0.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling3.xlsx'));
+
+        $this->_assertTemplateVersionHandling(
+            'tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v^1.xlsx', 'handling2');
+    }
+
+    public function testExportTemplateVersionHandlingWithConstraints2()
+    {
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.0.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling1.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.1.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling2.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v2.0.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling3.xlsx'));
+
+        $this->_assertTemplateVersionHandling(
+            'tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v^1.0.xlsx', 'handling2');
+    }
+
+    public function testExportTemplateVersionHandlingWithConstraints3()
+    {
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.0.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling1.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.1.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling2.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v2.0.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling3.xlsx'));
+
+        $this->_assertTemplateVersionHandling(
+            'tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v~1.0.0.xlsx', 'handling1');
+    }
+
+    public function testExportTemplateVersionHandlingWithConstraints4()
+    {
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.0.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling1.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.1.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling2.xlsx'));
+        file_put_contents('tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v1.2.xlsx',
+            file_get_contents(dirname(__DIR__) . '/files/export/versionHandling3.xlsx'));
+
+        $this->_assertTemplateVersionHandling(
+            'tine20:///Tinebase/folders/shared/export/templates/Addressbook/unit-v ~1.0 | ~3.0 .xlsx', 'handling3');
+    }
 
     public function testXlsxTwigFunctions()
     {
@@ -67,6 +159,10 @@ class Tinebase_Export_XlsxTest extends TestCase
      */
     public function testAddressbookCustomFieldRelations()
     {
+        if (Tinebase_Application::getInstance()->isInstalled('WebUntis')) {
+            self::markTestSkipped('does not work with WebUntis app');
+        }
+
         $cfController = Tinebase_CustomField::getInstance();
         $contactController = Addressbook_Controller_Contact::getInstance();
 
@@ -126,7 +222,7 @@ class Tinebase_Export_XlsxTest extends TestCase
         ]);
         $export = new Addressbook_Export_Xls($filter, null,
             [
-                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => 'Addressbook_Model_Contact',
                     'name' => 'adb_xls'
                 ]))->getFirstRecord()->getId()
@@ -223,7 +319,7 @@ class Tinebase_Export_XlsxTest extends TestCase
         ]);
         $export = new Addressbook_Export_Xls($filter, null,
             [
-                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => 'Addressbook_Model_Contact',
                     'name' => 'adb_xls'
                 ]))->getFirstRecord()->getId()
@@ -245,5 +341,40 @@ class Tinebase_Export_XlsxTest extends TestCase
         static::assertArrayHasKey('Telefon', $flippedArrayData, $msg);
         static::assertArrayHasKey('Raum', $flippedArrayData, $msg);
         static::assertArrayHasKey('Vorname', $flippedArrayData, $msg);
+    }
+
+    public function testConvertToPdf()
+    {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} != true
+            || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_VERSION}  < 2
+        ) {
+            $this->markTestSkipped('no docservice configured');
+        }
+
+        /** @var Addressbook_Export_Xls $export */
+        $export = Tinebase_Export::factory(new Addressbook_Model_ContactFilter(),
+            [
+                'format'             => 'xls',
+                'definitionFilename' => dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_xls.xml',
+                'template'           => dirname(__DIR__) . '/files/export/addressbook_contact_twigFunctions.xlsx',
+                'recordData'         => [
+                    'n_given'       => 'testName',
+                    'n_family'      => 'moreTest',
+                    'bday'          => '2000-01-02'
+                ]
+            ], Addressbook_Controller_Contact::getInstance());
+
+        $export->generate();
+
+        $file = null;
+        try {
+            $file = $export->convert(Tinebase_Export_Convertible::PDF);
+            $this->assertEquals('application/pdf', mime_content_type($file));
+
+        } finally {
+            if ($file) {
+                unlink($file);
+            }
+        }
     }
 }

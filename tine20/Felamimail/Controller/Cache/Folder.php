@@ -137,7 +137,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     {
         $imap = Felamimail_Backend_ImapFactory::factory($_account);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Get subfolders of root for account ' . $_account->getId());
         $result = $imap->getFolders('', '%');
         
@@ -236,18 +236,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param Felamimail_Backend_Imap|boolean $_imap
      * @return Felamimail_Model_Folder
      */
-    public function updateFolderStatus(Felamimail_Model_Folder $_folder, $_imap)
-    {
-        return Felamimail_Controller_Cache_Message::getInstance()->updateCache($_folder, 1);
-    }
-    
-    /**
-     * get folder status/values from imap server and update folder cache record in database
-     * 
-     * @param Felamimail_Model_Folder $_folder
-     * @param Felamimail_Backend_Imap|boolean $_imap
-     * @return Felamimail_Model_Folder
-     */
     public function getIMAPFolderCounter(Felamimail_Model_Folder $_folder)
     {
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
@@ -282,19 +270,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         
         return $result;
     }
-    
-    /**
-     * get folder status/values from imap server and update folder cache record in database
-     * 
-     * @param Felamimail_Model_Folder $_folder
-     * @param Felamimail_Backend_Imap|boolean $_imap
-     * @return Felamimail_Model_Folder
-     */
-    public function updateFolderCounters(Felamimail_Model_Folder $_folder, $_imap)
-    {
-        return Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 1);
-    }
-    
     
     /**
      * clear all folders of account

@@ -180,10 +180,48 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 if ($costCenter) {
                     $contract['products'][$i]['product_id'] = $costCenter->toArray();
                 }
+                if (Tinebase_Application::getInstance()->isInstalled('WebAccounting')) {
+                    if (isset($contract['products'][$i]['json_attributes']['assignedAccountables'])) {
+                        $contract['products'][$i]['json_attributes']['assignedAccountables'] =
+                            $this->_resolveAssignedAccountables(
+                                $contract['products'][$i]['json_attributes']['assignedAccountables']);
+                    }
+                }
             }
         }
         
         return $contract;
+    }
+
+    /**
+     * @param array $assignedAccountables
+     * @return array
+     *
+     * TODO support other models + make this generic
+     */
+    protected function _resolveAssignedAccountables(&$assignedAccountables)
+    {
+        $model = 'WebAccounting_Model_ProxmoxVM';
+        $assignedAccountableIds = [];
+        foreach ($assignedAccountables as $accountable) {
+            $assignedAccountableIds[] = $accountable['id'];
+        }
+        if (count($assignedAccountableIds) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' resolving accountables: '
+                . print_r($assignedAccountableIds, true));
+            $accountables = WebAccounting_Controller_ProxmoxVM::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+                    ['field' => 'id', 'operator' => 'in', 'value' => $assignedAccountableIds]
+                ]));
+            foreach ($assignedAccountables as $key => $accountableArray) {
+                $accountable = $accountables->getById($accountableArray['id']);
+                if ($accountable) {
+                    $assignedAccountables[$key]['id'] = $accountable->toArray();
+                }
+            }
+        }
+        return $assignedAccountables;
     }
 
     /**
@@ -700,7 +738,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $resolvedProducts = new Tinebase_Record_RecordSet('Sales_Model_Product');
         $productController = Sales_Controller_Product::getInstance();
         
-        foreach($invoice['relations'] as &$relation) {
+        foreach ($invoice['relations'] as &$relation) {
             if ($relation['related_model'] == "Sales_Model_ProductAggregate") {
                 if (! $product = $resolvedProducts->getById($relation['related_record']['product_id'])) {
                     $product = $productController->get($relation['related_record']['product_id']);
@@ -708,6 +746,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 $relation['related_record']['product_id'] = $json->fromTine20Model($product);
             }
+        }
+
+        if (is_array($invoice['positions']) && count($invoice['positions']) > 500) {
+            // limit invoice positions to 500 to make sure browser storage quota is not exceeded
+            // TODO add paging
+            $invoice['positions'] = array_slice($invoice['positions'], 0, 499);
         }
         
         return $invoice;
@@ -720,6 +764,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  boolean $duplicateCheck
      *
      * @return array created/updated record
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function saveInvoice($recordData, $duplicateCheck = TRUE)
     {
@@ -765,7 +810,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         if (! $foundCustomer) {
-            throw new Tinebase_Exception_Data('You have to set a customer!');
+            $translation = Tinebase_Translation::getTranslation('Sales');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('You have to set a customer!'));
         }
         
         if (isset($recordData['address_id']) && is_array($recordData["address_id"])) {

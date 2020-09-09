@@ -31,7 +31,8 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Address();
         $this->_modelName = 'Sales_Model_Address';
@@ -124,14 +125,14 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
      *
      * @param array $_ids
      * @return array of ids to actually delete
+     * @throws Sales_Exception_DeleteUsedBillingAddress
      */
     protected function _inspectDelete(array $_ids)
     {
         $cc = Sales_Controller_Contract::getInstance();
-    
-        $filter = new Sales_Model_ContractFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'billing_address_id', 'operator' => 'in', 'value' => $_ids)));
-    
+
+        $filter = new Sales_Model_ContractFilter(array(array('field' => 'billing_address_id', 'operator' => 'in', 'value' => $_ids)));
+
         $contracts = $cc->search($filter);
     
         if ($contracts->count()) {

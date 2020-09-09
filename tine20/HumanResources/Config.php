@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,11 +15,7 @@
  */
 class HumanResources_Config extends Tinebase_Config_Abstract
 {
-    /**
-     * FreeTime Type
-     * @var string
-     */
-    const FREETIME_TYPE = 'freetimeType';
+    const APP_NAME = 'HumanResources';
 
     /**
      * Vacation Status
@@ -52,35 +48,48 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const EXTRA_FREETIME_TYPE = 'extraFreetimeType';
-    
+
+    /**
+     * calculate daily reports
+     *
+     * @var string
+     */
+    const FEATURE_CALCULATE_DAILY_REPORTS = 'calculateDailyRepots';
+
+    /**
+     * enable working time tracking
+     *
+     * @string
+     */
+    const FEATURE_WORKING_TIME_ACCOUNTING = 'workingTimeAccounting';
+
     /**
      * id of (filsystem) container for vacation templates
      *
      * @var string
      */
     const REPORT_TEMPLATES_CONTAINER_ID = 'reportTemplatesContainerId';
+
+    /**
+     * id of timeaccount for workingtime timesheets
+     */
+    const WORKING_TIME_TIMEACCOUNT = 'workingTimeTimeAccount';
+
+    /**
+     * key field for streams interval (week, month, quarter, year)
+     */
+    const STREAM_INTERVAL = 'streamInterval';
+
+    /**
+     * key field for stream types (velocity stream, working stream, etc.)
+     */
+    const STREAM_TYPE = 'streamType';
     
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
-        self::FREETIME_TYPE => array(
-            //_('Freetime Type')
-            'label'                 => 'Freetime Type',
-            //_('Possible free time definitions')
-            'description'           => 'Possible free time definitions',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeType'),
-            'clientRegistryInclude' => TRUE,
-            'default'               => array(
-                'records' => array(
-                    array('id' => 'SICKNESS',             'value' => 'Sickness',           'icon' => 'images/icon-set/icon_sick.svg',  'system' => TRUE),  //_('Sickness')
-                    array('id' => 'VACATION',             'value' => 'Vacation',           'icon' => 'images/icon-set/icon_vacation.svg', 'system' => TRUE),  //_('Vacation')
-                ),
-                'default' => 'VACATION'
-            )
-        ),
         self::VACATION_STATUS => array(
             //_('Vacation Status')
             'label'                 => 'Vacation Status',
@@ -120,12 +129,41 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         self::DEFAULT_FEAST_CALENDAR => array(
             // _('Default Feast Calendar')
             'label'                 => 'Default Feast Calendar',
-            // _('Here you can define the default feast calendar used to set feast days and other free days in datepicker')
-            'description'           => 'Here you can define the default feast calendar used to set feast days and other free days in datepicker',
+            // _('Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker')
+            'description'           => 'Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
         ),
+        self::ENABLED_FEATURES => [
+            //_('Enabled Features')
+            self::LABEL                 => 'Enabled Features',
+            //_('Enabled Features in HumanResources Application.')
+            self::DESCRIPTION           => 'Enabled Features in HumanResources Application.',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::CONTENT               => [
+                self::FEATURE_CALCULATE_DAILY_REPORTS => [
+                    self::LABEL                 => 'Calculate Daily Reports',
+                    //_('Calculate Daily Reports')
+                    self::DESCRIPTION           => 'Activate to calculate daily reports with a nightly scheduler job',
+                    //_('Activate to calculate daily reports with a nightly scheduler job')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
+                self::FEATURE_WORKING_TIME_ACCOUNTING => [
+                    self::LABEL                 => 'Enable Working Time Tracking',
+                    //_('Enable Working Time Tracking')
+                    self::DESCRIPTION           => 'Activate to enable working time tracking and reporting',
+                    //_('Activate to enable working time tracking and reporting')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
+
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::EXTRA_FREETIME_TYPE => array(
             //_('Extra freetime type')
             'label'                 => 'Extra freetime type',
@@ -161,6 +199,46 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
+        self::WORKING_TIME_TIMEACCOUNT => array(
+            //_('Timetracker Timeaccount for Workingtime Tracking')
+            'label'                 => 'Timetracker Timeaccount for Workingtime Tracking',
+            'description'           => 'Timetracker Timeaccount for Workingtime Tracking',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+        ),
+        self::STREAM_INTERVAL => [
+            //_('Stream Intervals available')
+            self::LABEL                     => 'Stream Intervals available',
+            self::DESCRIPTION               => 'Stream Intervals available',
+            self::TYPE                      => 'keyFieldConfig',
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => false,
+            self::DEFAULT_STR               => [
+                self::RECORDS                   => [
+                    ['system' => 1, 'id' => HumanResources_Model_StreamModality::INT_WEEKLY,      'value' => 'Weekly'], //_('Weekly')
+                    ['system' => 1, 'id' => HumanResources_Model_StreamModality::INT_MONTHLY,     'value' => 'Monthly'], //_('Monthly')
+                    ['system' => 1, 'id' => HumanResources_Model_StreamModality::INT_QUARTERLY,   'value' => 'Quarterly'], //_('Quarterly')
+                    ['system' => 1, 'id' => HumanResources_Model_StreamModality::INT_YEARLY,      'value' => 'Yearly'], //_('Yearly')
+                ],
+            ],
+        ],
+        self::STREAM_TYPE => [
+            //_('Stream Types available')
+            self::LABEL                     => 'Stream Types available',
+            self::DESCRIPTION               => 'Stream Types available',
+            self::TYPE                      => 'keyFieldConfig',
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => [
+                self::RECORDS                   => [
+                    ['id' => 'velocity stream',     'value' => 'Velocity Stream'], //_('Velocity Stream')
+                    ['id' => 'working stream',      'value' => 'Working Stream'], //_('Working Stream')
+                    ['id' => 'daily business',      'value' => 'Daily Business'], //_('Daily Business')
+                ],
+            ],
+        ],
     );
 
     /**

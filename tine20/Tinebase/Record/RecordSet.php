@@ -127,8 +127,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $recordId = $_record->getId();
 
         if ($recordId && isset($this->_idMap[$recordId]) && isset($this->_listOfRecords[$this->_idMap[$recordId]])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Record (id ' . $recordId . ') already in set - we don\'t want duplicates)');
             return $this->_idMap[$recordId];
         }
 
@@ -178,6 +176,18 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         foreach ($_records as $record) {
             $this->removeRecord($record);
+        }
+    }
+
+    /**
+     * remove records from set
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    public function removeRecordsById(Tinebase_Record_RecordSet $_records)
+    {
+        foreach ($_records as $record) {
+            $this->removeById($record->getId());
         }
     }
     
@@ -482,6 +492,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $this->offsetUnset(key($this->_listOfRecords));
         }
     }
+
+    public function removeLast()
+    {
+        if (count($this->_listOfRecords) > 0) {
+            end($this->_listOfRecords);
+            $this->offsetUnset(key($this->_listOfRecords));
+        }
+    }
+
     /**
      * required by ArrayAccess interface
      */
@@ -536,7 +555,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * filter recordset and return subset
      *
-     * @param string $_field
+     * @param string|callable $_field
      * @param string $_value
      * @return Tinebase_Record_RecordSet
      */
@@ -544,9 +563,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         $matchingRecords = $this->_getMatchingRecords($_field, $_value, $_valueIsRegExp);
         
-        $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
-        
-        return $result;
+        return new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
     }
 
     /**
@@ -615,9 +632,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function getFirstRecord()
     {
         if (count($this->_listOfRecords) > 0) {
-            foreach ($this->_listOfRecords as $idx => $record) {
-                return $record;
-            }
+            reset($this->_listOfRecords);
+            return current($this->_listOfRecords);
         } else {
             return NULL;
         }
@@ -931,5 +947,38 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         /** @var Tinebase_ModelConfiguration $modelConfig */
         $modelConfig = $modelName::getConfiguration();
         return $modelConfig;
+    }
+
+    /**
+     * @param string $_field
+     * @return integer|null
+     */
+    public function sum($_field)
+    {
+        $result = null;
+        foreach ($this->_listOfRecords as $record) {
+            $result += $record->{$_field};
+        }
+
+        return $result;
+    }
+
+    public function unshiftRecord($record)
+    {
+        if (null !== ($id = $record->getId()) && isset($this->_idMap[$id])) {
+            $this->removeById($id);
+        }
+
+        $this->_idLess = [];
+        $this->_idMap = [];
+        array_unshift($this->_listOfRecords, $record);
+
+        foreach ($this->_listOfRecords as $idx => $rec) {
+            if (null !== ($id = $rec->getId())) {
+                $this->_idMap[$id] = $idx;
+            } else {
+                $this->_idLess[] = $idx;
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ Ext.ns('Tine.widgets.grid');
 
 Tine.widgets.grid.FilterPanel = function(config) {
     this.filterToolbarConfig = config;
+    Ext.copyTo(this, config, 'useQuickFilter,quickFilterConfig');
 
     // the plugins won't work there
     delete this.filterToolbarConfig.plugins;
@@ -72,7 +73,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      * @type Number
      */
     criteriaCount: 0,
-    
+
+    useQuickFilter: true,
+
     cls: 'tw-ftb-filterpanel',
     layout: 'border',
     border: false,
@@ -117,10 +120,12 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         Tine.widgets.grid.FilterPanel.superclass.initComponent.call(this);
 
-        this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
-            syncFields: false
-        });
-        this.quickFilterPlugin.init(this);
+        if (this.useQuickFilter) {
+            this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
+                syncFields: false,
+            }, this.quickFilterConfig));
+            this.quickFilterPlugin.init(this);
+        }
     },
     
     /**
@@ -247,7 +252,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
         }
         
-        // NOTE: always trigger a OR condition, otherwise we sould loose inactive FilterPanles
+        // NOTE: always trigger an OR condition, otherwise we could lose inactive FilterPanels
         return [{'condition': 'OR', 'filters': filters, id: 'FilterPanel'}];
     },
 
@@ -275,11 +280,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             }
         }, this);
         
-        
         if (! alternateCriterias) {
             // reset criterias
-//            this.criteriaCount = 0;
-//            this.activeFilterPanel.setTitle(String.format(i18n._('Criteria {0}'), ++this.criteriaCount));
             this.activeFilterPanel.setTitle(this.activeFilterPanel.generateTitle());
             for (var id in this.filterPanels) {
                 if (this.filterPanels.hasOwnProperty(id)) {
@@ -333,7 +335,6 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                     this.removeFilterPanel(id);
                 }
             }
-            
         }
     }
 });

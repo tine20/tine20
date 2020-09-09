@@ -9,7 +9,7 @@
 Ext.ns('Tine.widgets.form');
 
 /**
- * Upload Button
+ * FileSelectionArea - no upload, just selection here atm.
  *
  * @namespace   Tine.widgets.form
  * @class       Tine.widgets.form.FileSelectionArea
@@ -29,7 +29,9 @@ Tine.widgets.form.FileSelectionArea = Ext.extend(Tine.widgets.form.FileUploadBut
     initComponent: function () {
         this.events = [
             /**
+             * @event fileSelected
              * Fires when a file was selected
+             * @param {FileList}
              */
             'fileSelected'
         ];
@@ -46,13 +48,9 @@ Tine.widgets.form.FileSelectionArea = Ext.extend(Tine.widgets.form.FileUploadBut
      * @param {Ext.EventObject} event
      */
     onFileSelect: function (fileSelector, event) {
-        this.fireEvent('fileSelected', fileSelector, event);
-    },
-
-    getTempFileId: function () {
-        return this.fileRecord ? this.fileRecord.get('tempFile').id : null;
+        this.fileList = fileSelector.getFileList();
+        this.fireEvent('fileSelected', this.fileList);
     }
-
 });
 
 Ext.reg('tw.uploadarea', Tine.widgets.form.FileSelectionArea);

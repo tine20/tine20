@@ -22,7 +22,9 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
      *
      * @var array
      */
-    protected $_additionalOptions = array();
+    protected $_additionalOptions = array(
+        'dates' => array('employment_begin','employment_end')
+    );
 
     protected $_costCenter;
 
@@ -54,26 +56,39 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
 
     protected function _inspectAfterImport($importedRecord)
     {
-        foreach (Tinebase_Container::getInstance()->getAll() as $constainer)
+        try
         {
-            if($constainer['name'] == 'Events')
-            {
-                $event_id = $constainer['id'];
-            }
+            $event_id = Tinebase_Container::getInstance()->getContainerByName('Calendar_Model_Event', 'Events','shared')['event_id'];
+            $contract_Model = new HumanResources_Model_Contract(array(
+                'start_date' => Tinebase_DateTime::now(),
+                'employee_id' => $importedRecord['id'],
+                'feast_calendar_id' => $event_id,
+                'vacation_days' => '27',
+                'workingtime_json' => '{"days":[8,8,8,8,8,0,0]}'
+            ));
+            HumanResources_Controller_Contract::getInstance()->create($contract_Model);
+        }catch(Exception $e)
+        {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Dont exist Calendar Container: Events');
         }
-        
+
+        $translate = Tinebase_Translation::getTranslation('HumanResources');
+
         $contract_Model = new HumanResources_Model_Contract(array(
             'start_date' => Tinebase_DateTime::now(),
             'employee_id' => $importedRecord['id'],
             'feast_calendar_id' => $event_id,
             'vacation_days' => '27',
-            'workingtime_json' => '{"days":[8,8,8,8,5.5,0,0]}'
+            'working_time_scheme' => HumanResources_Controller_WorkingTimeScheme::getInstance()->search(
+                new HumanResources_Model_WorkingTimeSchemeFilter([
+                    ['field' => 'title', 'operator' => 'equals', 'value' => $translate->_('Full-time 40 hours')]
+                ]))->getFirstRecord()->getId(),
         ));
         
         HumanResources_Controller_Contract::getInstance()->create($contract_Model);
         
-        
-        
+
         foreach (Sales_Controller_CostCenter::getInstance()->getAll() as $costCenter)
         {
             if($costCenter['remark'] == $this->_costCenter )
@@ -112,6 +127,7 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
                 'bday' => $contact['bday'],
                 'profession' => $contact['title'],
                 'position' => $contact['org_unit'],
+                'dfcom_id' => ($result['dfcom_id']) ? $result['dfcom_id'] : Tinebase_Record_Abstract::generateUID(20),
             );
             $result = array_merge($conctact_data, $result);
         }

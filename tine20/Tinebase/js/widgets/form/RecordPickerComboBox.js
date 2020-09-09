@@ -10,6 +10,8 @@
 
 Ext.ns('Tine.Tinebase.widgets.form');
 
+import{expandFilter} from 'util/filterSpec';
+
 /**
  * @namespace   Tine.Tinebase.widgets.form
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -98,7 +100,17 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      * @type {Array}
      */
     additionalFilters: null,
-    
+
+    /**
+     * config spec for additionalFilters
+     *
+     * @type: {object} e.g.
+     * additionalFilterConfig: {config: { 'name': 'configName', 'appName': 'myApp'}}
+     * additionalFilterConfig: {preference: {'appName': 'myApp', 'name': 'preferenceName}}
+     * additionalFilterConfig: {favorite: {'appName': 'myApp', 'id': 'favoriteId', 'name': 'optionallyuseaname'}}
+     */
+    additionalFilterSpec: null,
+
     triggerAction: 'all',
     pageSize: 50,
     minChars: 3,
@@ -132,7 +144,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.on('beforequery', this.onBeforeQuery, this);
         this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
         this.initTemplate();
-        
+
+        this.additionalFilters = expandFilter(this.additionalFilterSpec, this.additionalFilters);
+
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
     

@@ -15,6 +15,8 @@
  *
  * @package     HumanResources
  * @subpackage  Model
+ *
+ * @property Tinebase_Record_RecordSet freedays
  */
 class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
 {
@@ -93,9 +95,11 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
             ),
             'type'            => array(
                 'label' => 'Type', // _('Type')
-                'type'  => 'keyfield',
-                'name'  => HumanResources_Config::FREETIME_TYPE,
-                'queryFilter' => TRUE,
+                'type'  => self::TYPE_RECORD,
+                'config' => array(
+                    'appName'     => HumanResources_Config::APP_NAME,
+                    'modelName'   => HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
+                ),
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
             ),
@@ -131,7 +135,6 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 'type'         => 'integer',
                 'nullable'     => true,
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'        => NULL,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             

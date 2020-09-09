@@ -218,7 +218,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             rendered = _.get(this, 'activeRuleCard.rendered', false),
             rrule = rendered ? this.activeRuleCard.getRule() : this.rrule;
         
-        if (! this.rrule && rrule) {
+        if (rrule && (! this.rrule || !this.record.data.creation_time)) {
             // mark as new rule to avoid series confirm dlg
             rrule.newrule = true;
         }
@@ -323,10 +323,10 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         this.count = new Ext.form.NumberField({
             requiredGrant : 'editGrant',
             style         : 'text-align:right;',
-            //fieldLabel    : this.intervalBeforeString,
             width         : 40,
             minValue      : 1,
             disabled      : true,
+            allowDecimals : false,
             allowBlank    : false
         });
         

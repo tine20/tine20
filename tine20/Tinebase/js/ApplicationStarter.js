@@ -90,7 +90,6 @@ Tine.Tinebase.ApplicationStarter = {
                     break;
                 case 'record':
                 case 'records':
-                    fieldDefinition.config.modelName = fieldDefinition.config.modelName.replace(/_/, '');
                     field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
                     field.getRecordClass = function() {
                         return Tine.Tinebase.data.RecordMgr.get(field.type);
@@ -132,8 +131,10 @@ Tine.Tinebase.ApplicationStarter = {
                             gridRenderer = function (value, row, record) {
                                 var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
                                 if (foreignRecordClass) {
-                                    var titleProperty = foreignRecordClass.getMeta('titleProperty');
-                                    return record && record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
+                                    const titleProperty = foreignRecordClass.getMeta('titleProperty');
+                                    let value = record ? record.get(field) : '';
+                                    value = _.isFunction(_.get(value, 'getTitle')) ? value.getTitle() : _.get(value, titleProperty, '');
+                                    return Ext.util.Format.htmlEncode(value);
                                 } else {
                                     return value;
                                 }
@@ -168,9 +169,23 @@ Tine.Tinebase.ApplicationStarter = {
                                     return Tine.Tinebase.common.percentRenderer(value, config.type);
                                 };
                                 break;
+                            case 'durationSec':
+                                gridRenderer = function(value, cell, record) {
+                                    return Ext.ux.form.DurationSpinner.durationRenderer(value, {
+                                        baseUnit: 'seconds'
+                                    });
+                                };
+                                break;
                             default:
                                 gridRenderer = Ext.util.Format.htmlEncode;
                         }
+
+                        gridRenderer = gridRenderer.createSequence(function(value, metadata, record) {
+                            if (metadata) {
+                                metadata.css = 'tine-gird-cell-number';
+                            }
+                        });
+
                     }
                     break;
                 case 'user':
@@ -199,6 +214,15 @@ Tine.Tinebase.ApplicationStarter = {
                     gridRenderer = Tine.Tinebase.common.booleanRenderer;
                     break;
                 case 'money':
+                    if (config.hasOwnProperty('specialType')) {
+                        if (config.specialType == 'zeroMoney') {
+                            // if this option is set, zero values are hidden in the grid
+                            gridRenderer = function (value) {
+                                return Ext.util.Format.money(value, {zeroMoney: true});
+                            };
+                            break;
+                        }
+                    }
                     gridRenderer = Ext.util.Format.money;
                     break;
                 case 'attachments':
@@ -207,18 +231,13 @@ Tine.Tinebase.ApplicationStarter = {
                 case 'image':
                     gridRenderer = Tine.widgets.grid.imageRenderer;
                     break;
+                case 'json':
+                    gridRenderer = Tine.widgets.grid.jsonRenderer;
+                    break;
                 case 'relation':
-                    var cc = config.config;
-                    
-                    if (cc && cc.type && cc.appName && cc.modelName) {
-                        gridRenderer = new Tine.widgets.relation.GridRenderer({
-                            appName: appName,
-                            type: cc.type,
-                            foreignApp: cc.appName,
-                            foreignModel: cc.modelName
-                        });
-                        break; 
-                    }
+                    // moved to renderer manager
+                    gridRenderer = null;
+                    break;
                 default:
                     gridRenderer = Ext.util.Format.htmlEncode;
             }
@@ -290,10 +309,16 @@ Tine.Tinebase.ApplicationStarter = {
             case 'datetime_separated_date':
                 filter.valueType = 'date';
                 break;
+            case 'time':
+                filter.valueType = 'time';
+                break;
+            case 'money':
+                filter.valueType = 'money';
+                break;
             case 'float':
             case 'integer':
-            case 'money':
                 filter.valueType = 'number';
+                break;
         }
         return filter;
     },
@@ -332,22 +357,25 @@ Tine.Tinebase.ApplicationStarter = {
         if (fieldconfig && (fieldconfig.type == 'record' || fieldconfig.type == 'records')) {
             var opt = fieldconfig.config;
             
-            if (opt && (! opt.doNotCheckModuleRight) && (! Tine.Tinebase.common.hasRight('view', opt.appName, opt.modelName.toLowerCase()))) {
+            if (opt && (! opt.doNotCheckModuleRight) && (! Tine.Tinebase.common.hasRight('view', opt.appName, _.lowerCase(opt.modelName)))) {
                 return null;
             }
         }
         
         var fieldTypeKey = (fieldconfig && fieldconfig.type) ? fieldconfig.type : (filterconfig && filterconfig.type) ? filterconfig.type : 'default',
             label = (filterconfig && filterconfig.hasOwnProperty('label')) ? filterconfig.label : (fieldconfig && fieldconfig.hasOwnProperty('label')) ? fieldconfig.label : null,
-            globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
+            globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation'))),
+            i18n = globalI18n ? window.i18n : app.i18n;
         
         if (! label) {
             return null;
         }
         // prepare filter
         var filter = {
-            label: globalI18n ? i18n._(label) : app.i18n._(label),
-            field: fieldKey
+            label: i18n._hidden(label),
+            field: fieldKey,
+            gender: i18n._hidden('GENDER_' + label),
+            specialType: fieldconfig ? fieldconfig.specialType : null
         };
         
         if (filterconfig) {
@@ -388,7 +416,33 @@ Tine.Tinebase.ApplicationStarter = {
             var appName = app.name;
             Tine.log.info('ApplicationStarter::createStructure for app ' + appName);
             Ext.namespace('Tine.' + appName);
-            
+
+            if (! Tine[appName].AdminPanel) {
+                Tine[appName].AdminPanel = Ext.extend(Ext.TabPanel, {
+                    border: false,
+                    activeTab: 0,
+                    appName: appName,
+                    initComponent: function () {
+                        this.app = Tine.Tinebase.appMgr.get(this.appName);
+                        this.items = [
+                            new Tine.Admin.config.GridPanel({
+                                configApp: this.app
+                            })
+                        ];
+                        this.supr().initComponent.call(this);
+                    }
+                });
+                Tine[appName].AdminPanel.openWindow = function (config) {
+                    return Tine.WindowFactory.getWindow({
+                        width: 600,
+                        height: 470,
+                        name: 'Tine.' + appName + '.AdminPanel',
+                        contentPanelConstructor: 'Tine.' + appName + '.AdminPanel',
+                        contentPanelConstructorConfig: config
+                    });
+                };
+            }
+
             var models = Tine[appName].registry ? Tine[appName].registry.get('models') : null;
             
             if (models) {
@@ -412,8 +466,11 @@ Tine.Tinebase.ApplicationStarter = {
                     }
 
                     var containerProperty = modelConfig.hasOwnProperty('containerProperty') ? modelConfig.containerProperty : null;
-                    
-                    modelName = modelName.replace(/_/, '');
+
+                    // NOTE: we need to preserve original modelName.
+                    //       - otherwise we can't referece
+                    //       - otherwise we can't compute phpClassName
+                    // modelName = modelName.replace(/_/, '');
                     
                     Ext.namespace('Tine.' + appName, 'Tine.' + appName + '.Model');
                     
@@ -468,36 +525,36 @@ Tine.Tinebase.ApplicationStarter = {
                             modelArray.push(this.getField(field, field.key));
                         }, this);
                     }
-                    
-                    // collect the filterModel
-                    var filterModel = [];
-                    Ext.iterate(modelConfig.filterModel, function(key, filter) {
-                        var f = this.getFilter(key, filter, modelConfig);
-                        
-                        if (f) {
-                            Tine.widgets.grid.FilterRegistry.register(appName, modelName, f);
-                        }
-                    }, this);
-                    
-                    // TODO: registry loses info if gridpanel resides in an editDialog
-                    // delete filterModel as all filters are in the filter registry now
-                    // delete modelConfig.filterModel;
-                    
+
                     Tine[appName].Model[modelArrayName] = modelArray;
                     
                     // create model
                     if (! Tine[appName].Model.hasOwnProperty(modelName)) {
                         Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], 
                             Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
-                               'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group,copyOmitFields')
+                               'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
+                                'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle')
                         );
-                        Tine[appName].Model[modelName].getFilterModel = function() {
-                            return filterModel;
+
+                        // NOTE: no constructor, super magic here
+                        if (Tine[appName].Model.hasOwnProperty(modelName + 'Mixin')) {
+                            Ext.override(Tine[appName].Model[modelName], Tine[appName].Model[modelName + 'Mixin']);
+                            Ext.apply(Tine[appName].Model[modelName], _.get(Tine[appName].Model[modelName + 'Mixin'], 'statics', {}));
                         }
+                        
+                        // called from legacy code - but all filters should come from registy (see below)
+                        Tine[appName].Model[modelName].getFilterModel = function() { return [];};
                     }
-                    
-                    Ext.namespace('Tine.' + appName);
-                    
+
+                    // register filters
+                    Ext.iterate(modelConfig.filterModel, function(key, filter) {
+                        var f = this.getFilter(key, filter, modelConfig);
+
+                        if (f) {
+                            Tine.widgets.grid.FilterRegistry.register(appName, modelName, f);
+                        }
+                    }, this);
+
                     // create recordProxy
                     var recordProxyName = modelName.toLowerCase() + 'Backend';
                     if (! Tine[appName].hasOwnProperty(recordProxyName)) {
@@ -583,7 +640,8 @@ Tine.Tinebase.ApplicationStarter = {
                                 var id = cfg.recordId ? cfg.recordId : ( (cfg.record && cfg.record.id) ? cfg.record.id : 0 );
                                 var window = Tine.WindowFactory.getWindow({
                                     width: edp.windowWidth ? edp.windowWidth : 600,
-                                    height: edp.windowHeight ? edp.windowHeight : 230,
+                                    height: edp.windowHeight ? edp.windowHeight :
+                                        Tine.widgets.form.RecordForm.getFormHeight(Tine[appName].Model[modelName]),
                                     name: edp.windowNamePrefix + id,
                                     contentPanelConstructor: 'Tine.' + appName + '.' + editDialogName,
                                     contentPanelConstructorConfig: cfg

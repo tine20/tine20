@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import './FileLocationType/FilemanagerPluginFactory';
+
 Ext.ns('Tine.Filemanager');
 
 /**
@@ -89,6 +91,12 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
  */
 Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Node'
+});
+
+Tine.Filemanager.NodeFilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
+    app: 'Filemanager',
+    contentType: 'Node',
+    filter: [{field: 'model', operator: 'equals', value: 'Filemanager_Model_Node'}]
 });
 
 /**

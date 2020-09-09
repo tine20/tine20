@@ -35,6 +35,7 @@ class Crm_Import_DemoDataTest extends TestCase
         $importer = new Tinebase_Setup_DemoData_Import('Crm_Model_Lead', [
             'container_id' => $this->_importContainer->getId(),
             'definition' => 'crm_demo_import_csv',
+            'file' => 'lead.csv',
         ]);
         $importer->importDemodata();
 

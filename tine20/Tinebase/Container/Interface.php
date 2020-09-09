@@ -48,7 +48,7 @@ interface Tinebase_Container_Interface
      * returns the shared container for a given application accessible by the current user
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   string|Tinebase_Model_Application   $recordClass
+     * @param   string|Tinebase_Record_Interface    $recordClass
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @param   bool                                $_andGrants

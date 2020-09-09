@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -154,7 +154,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @type Boolean
      */
     disableCfs: false,
-    
+
+    /**
+     * check for unsaved changes before closing
+     * @type Boolean
+     */
+    checkUnsavedChanges: true,
+
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
      */
@@ -302,12 +308,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (Ext.isString(this.additionalConfig)) {
             Ext.apply(this, Ext.decode(this.additionalConfig));
         }
-        
-        if (Ext.isString(this.fixedFields)) {
-            var decoded = Ext.decode(this.fixedFields);
-            this.fixedFields = new Ext.util.MixedCollection();
-            this.fixedFields.addAll(decoded);
-        }
+
+        var fixedFieldsData = Ext.isString(this.fixedFields) ? Ext.decode(this.fixedFields) : [];
+        this.fixedFields = new Ext.util.MixedCollection();
+        this.fixedFields.addAll(fixedFieldsData);
         
         if (! this.recordClass && this.modelName) {
             this.recordClass = Tine[this.appName].Model[this.modelName];
@@ -361,7 +365,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.disableCfs !== true) {
             this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
         }
-        
+        Ext.ux.pluginRegistry.addRegisteredPlugins(this);
+
         // init actions
         this.initActions();
         // init buttons and tbar
@@ -527,6 +532,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     /**
+     * allows to fetch record form fields
+     *
+     * @param name
+     * @returns {*}
+     */
+    getRecordFormField: function(name) {
+        return this.recordForm['formfield_' + name];
+    },
+
+    /**
      * fix fields (used for preselecting form fields when called in dependency to another record)
      * @return {Boolean}
      */
@@ -562,6 +577,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * call checkState for every field
      */
     checkStates: function() {
+        if(this.loadRequest){
+            return _.delay(_.bind(this.checkStates, this), 250);
+        }
         this.onRecordUpdate();
         this.getForm().items.each(function (item) {
             if (Ext.isFunction(item.checkState)) {
@@ -883,7 +901,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 for (var index = 0; index < r.length; index++) {
                     Ext.each(properties,
                         function(prop) {
-                            r[index][prop] = null;
+                            r[index][prop] = prop == 'id' ?  Tine.Tinebase.data.Record.generateUID() : null;
                         }
                     );
                 }
@@ -902,8 +920,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }
         });
-
-        if (! omitCopyTitle) {
+        if (! omitCopyTitle && !(recordClass.getMeta('copyNoAppendTitle'))) {
             recordData[titleProperty] = String.format(i18n._('{0} (copy)'), recordData[titleProperty]);
         }
 
@@ -925,6 +942,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
         }
+
+        this.fixedFields.eachKey(function(field, value) {
+            this.record.set(field, value);
+        }, this);
         
         if (this.copyRecord) {
             this.doCopyRecord();
@@ -972,15 +993,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }, this);
         }
+
+        this.loadRequest = null;
         
         (function() {
             this.checkStates();
             this.record.commit();
         }).defer(100, this);
         
-        if (this.loadMask && !this.saving) {
-            this.loadMask.hide();
-        }
+        this.hideLoadMask();
     },
     
     /**
@@ -1023,11 +1044,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }
         ]);
-        
-        if (this.loadMask !== false && this.i18nRecordName) {
-            this.loadMask = new Ext.LoadMask(ct, {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
-            this.loadMask.show();
-        }
+
+        this.showLoadMask();
 
         // init change event
         var form = this.getForm().items.each(function(item) {
@@ -1035,6 +1053,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }, this);
         this.on('change', this.checkStates, this, {buffer: 100});
         this.on('select', this.checkStates, this, {buffer: 100});
+        this.window.on('beforeclose', this.onBeforeClose, this);
     },
     
     /**
@@ -1078,14 +1097,26 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     isMultipleValid: function() {
         return true;
     },
-    
+
+    onBeforeClose: function() {
+        if (this.checkUnsavedChanges && this.window.confirmLeavSite && this.record) {
+            this.checkStates();
+            if (_.keys(this.record.getChanges()).length) {
+                console.warn('this changes would be lost:');
+                console.warn(this.record.getChanges());
+                return false;
+            }
+        }
+        this.purgeListeners();
+    },
     /**
      * @private
      */
-    onCancel : function(){
-        this.fireEvent('cancel');
-        this.purgeListeners();
-        this.window.close();
+    onCancel : function(force){
+        if(force===true || this.fireEvent('beforecancel', this) !== false) {
+            this.fireEvent('cancel', this);
+            this.window.close(force);
+        }
     },
     
     /**
@@ -1106,7 +1137,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         this.saving = true;
 
-        this.loadMask.show();
+        this.showLoadMask();
 
         var ticketFn = this.doApplyChanges.deferByTickets(this, [closeWindow]),
             wrapTicket = ticketFn();
@@ -1145,33 +1176,34 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     success: function (record) {
                         // override record with returned data
                         me.record = record;
-                        if (!Ext.isFunction(me.window.cascade)) {
-                            // update form with this new data
-                            // NOTE: We update the form also when window should be closed,
-                            //       cause sometimes security restrictions might prevent
-                            //       closing of native windows
-                            me.afterIsRendered().then(me.onRecordLoad.bind(me));
-                        }
-                        var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
-                            wrapTicket = ticketFn();
+                        me.afterIsRendered()
+                            .then(me.onRecordLoad.bind(me))
+                            .then(() => {
+                                let ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]);
+                                let wrapTicket = ticketFn();
 
-                        me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
-                        wrapTicket();
+                                me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
+                                wrapTicket();
+                            });
+
                     },
                     failure: me.onRequestFailed,
                     timeout: 300000 // 5 minutes
                 }, me.getAdditionalSaveParams(me));
             } else {
-                me.afterIsRendered().then(me.onRecordLoad.bind(me));
-                var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
-                    wrapTicket = ticketFn();
+                me.afterIsRendered().then(function() {
+                    me.onRecordLoad();
+                    var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
+                        wrapTicket = ticketFn();
 
-                me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
-                wrapTicket();
+                    me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
+                    wrapTicket();
+                }.bind(me));
+
             }
         }, function (message) {
             me.saving = false;
-            me.loadMask.hide();
+            me.hideLoadMask();
             Ext.MessageBox.alert(i18n._('Errors'), message);
         });
     },
@@ -1194,10 +1226,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         if (closeWindow) {
             this.window.fireEvent('saveAndClose');
-            this.purgeListeners();
-            this.window.close();
+            this.window.close(true);
         } else {
-            this.loadMask.hide();
+            this.hideLoadMask();
         }
     },
     
@@ -1207,9 +1238,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {String}
      */
     getValidationErrorMessage: function() {
-        return i18n._('Please fix the errors noted.');
+        return i18n._('Please review the fields marked red. They contain invalid values.');
     },
-    
+
     /**
      * generic delete handler
      */
@@ -1222,7 +1253,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 this.recordProxy.deleteRecords(this.record, {
                     scope: this,
                     success: function() {
-                        this.purgeListeners();
                         this.window.close();
                     },
                     failure: function () {
@@ -1312,7 +1342,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
 
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     /**
@@ -1349,5 +1379,39 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.attachmentsPanel = new Tine.widgets.dialog.AttachmentsGridPanel({ anchor: '100% 100%', editDialog: this }); 
             this.items.items.push(this.attachmentsPanel);
         }
+    },
+
+    showLoadMask: async function() {
+        return this.afterIsRendered().then(() => {
+            if (this.loadMask !== false && this.i18nRecordName) {
+                if (!this.loadMask) {
+                    this.loadMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
+                }
+                this.loadMask.show();
+            }
+        });
+    },
+
+    hideLoadMask: async function() {
+        let me = this;
+        return this.afterIsRendered().then(() => {
+            if (this.loadMask) {
+                return new Promise((resolve) => {
+                    _.defer(() => {
+                        me.loadMask.hide();
+                        resolve();
+                    });
+                })
+            }
+            return Promise.resolve();
+        });
     }
 });
+
+Tine.widgets.dialog.EditDialog.getConstructor = function(recordClass) {
+    var appName = recordClass.getMeta('appName'),
+        modelName = recordClass.getMeta('modelName'),
+        editDialogClass = Tine[appName][modelName + 'EditDialog'];
+
+    return editDialogClass;
+};

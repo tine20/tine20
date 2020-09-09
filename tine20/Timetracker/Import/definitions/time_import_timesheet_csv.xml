@@ -2,7 +2,7 @@
 <config>
     <name>time_import_timesheet_csv</name>
     <model>Timetracker_Model_Timesheet</model>
-    <plugin>Timetracker_Import_Csv</plugin>
+    <plugin>Timetracker_Import_Timesheet_Csv</plugin>
     <type>import</type>
     <headline>1</headline>
     <dryrun>0</dryrun>

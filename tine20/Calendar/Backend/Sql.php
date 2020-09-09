@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -156,6 +156,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  Tinebase_Model_Pagination            $_pagination
      * @param  boolean                              $_onlyIds
      * @return Tinebase_Record_RecordSet|array
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
@@ -189,41 +190,50 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         // remove grantsfilter here as we do grants computation in PHP
-        $grantsFilter = $_filter->getFilter('grants');
-        if ($grantsFilter) {
-            $_filter->removeFilter('grants');
-        }
+        $translate = Tinebase_Translation::getTranslation('Calendar');
+        $grantsFilter = null;
+        // make sure $func is not yet set at this point
+        $func = function($filter) use (/*yes & !*/&$func, &$grantsFilter, $translate) {
+            if ($filter instanceof Calendar_Model_EventFilter) {
+                $filter->filterWalk($func);
+            } elseif ($filter instanceof Calendar_Model_GrantFilter) {
+                if ($grantsFilter !== null) {
+                    throw new Tinebase_Exception_SystemGeneric($translate->_('You can not have more than one grants filter'));
+                }
+                $grantsFilter = $filter;
+                $filter->getParent()->removeFilter($filter);
+            }
+        };
+        $_filter->filterWalk($func);
+
         
         // clone the filter, as the filter is also used in the json frontend
         // and the calendar filter is used in the UI to
         $clonedFilters = clone $_filter;
         
-        $calendarFilter = null;
-        foreach ($clonedFilters as $filter) {
-            if ($filter instanceof Calendar_Model_CalendarFilter) {
-                $calendarFilter = $filter;
-                $clonedFilters->removeFilter($filter);
-                break;
+        // sort filters, roleFilter und statusFilter need to be processed after attenderFilter
+        unset($func); // !!! very important, don't separate this and the next line
+        $tempFilters = [];
+        $func = function($filter) use (/*yes & !*/&$func, &$tempFilters) {
+            if ($filter instanceof Calendar_Model_EventFilter) {
+                $filter->filterWalk($func);
+            } elseif ($filter instanceof Calendar_Model_AttenderRoleFilter || $filter instanceof
+                    Calendar_Model_AttenderStatusFilter) {
+                $tempFilters[] = $filter;
             }
+        };
+        $clonedFilters->filterWalk($func);
+        foreach ($tempFilters as $tempFilter) {
+            $parent = $tempFilter->getParent();
+            $parent->removeFilter($tempFilter);
+            $parent->addFilter($tempFilter);
         }
+
         
         $this->_addFilter($select, $clonedFilters);
         
         $select->group($this->_tableName . '.' . 'id');
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
-        if ($calendarFilter) {
-            $select1 = clone $select;
-            $select2 = clone $select;
-            
-            $calendarFilter->appendFilterSql1($select1, $this);
-            $calendarFilter->appendFilterSql2($select2, $this);
-            
-            $select = $this->getAdapter()->select()->union(array(
-                $select1,
-                $select2
-            ));
-        }
         
         $_pagination->appendPaginationSql($select);
         
@@ -271,20 +281,30 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     . ' Required grants not set in grants filter: ' . print_r($grantsFilter->toArray(), true));
             }
         }
-        
+
+        /** @var Calendar_Model_Event $event */
         foreach ($events as $event) {
             $containerId = $event->container_id instanceof Tinebase_Model_Container
                 ? $event->container_id->getId()
                 : $event->container_id;
-            
+
             // either current user is organizer or has admin right on container
-            if (   $event->organizer === $currentContact
-                || (isset($containerGrants[$containerId]) && $containerGrants[$containerId]->account_grants[Tinebase_Model_Grants::GRANT_ADMIN])
-            ) {
+            if ($event->organizer === $currentContact) {
                 foreach ($this->_recordBasedGrants as $grant) {
                     $event->{$grant} = true;
                 }
                 
+                // has all rights => no need to filter
+                continue;
+            }
+            if (isset($containerGrants[$containerId]) && $containerGrants[$containerId]
+                    ->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]) {
+                foreach ($this->_recordBasedGrants as $grant) {
+                    if (Calendar_Model_EventPersonalGrants::GRANT_PRIVATE !== $grant) {
+                        $event->{$grant} = true;
+                    }
+                }
+
                 // has all rights => no need to filter
                 continue;
             }
@@ -310,7 +330,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                             if (   $attendee->displaycontainer_id instanceof Tinebase_Model_Container
                                 && $attendee->displaycontainer_id->account_grants 
                                 && (    $attendee->displaycontainer_id->account_grants[$grant]
-                                     || $attendee->displaycontainer_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]
+                                     || ($attendee->displaycontainer_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]
+                                        && Calendar_Model_EventPersonalGrants::GRANT_PRIVATE !== $grant)
                                    )
                             ) {
                                 $event->{$grant} = true;
@@ -684,7 +705,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     ));
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                       . ' Exdate needs to be an object:' . var_export($exdate, TRUE));
+                       . ' Exdate needs to be an object: type ' . gettype($exdate) . ' found');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' ' . var_export($exdate, TRUE));
                 }
             }
         }
@@ -976,6 +999,46 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param array $eventIds
      * @return array
      */
+    public function resolveToBaseEventsEventually(array $eventIds, $containerId)
+    {
+        if (count($eventIds) === 0) {
+            return array();
+        }
+
+        $containerId = (string)$containerId;
+        array_walk($eventIds, function (&$val) { if (!is_string($val)) { $val = (string)$val; }});
+
+        // we might want to return is_deleted = true here! so no condition to filter deleted events!
+        // select e.id, e.base_event_id, be.container_id, at.display_container_id
+        // from tine20_cal_events as e left join tine20_cal_events as be on e.base_event_id = be.id
+        // left join tine20_cal_attende as at on be.id = at.calid and at.display_contain_id = ?
+        $events = $this->_db->query('SELECT e.id, e.base_event_id, be.container_id, at.displaycontainer_id FROM ' .
+            $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) . ' AS e LEFT JOIN ' .
+            $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) .
+            ' AS be ON e.base_event_id = be.id LEFT JOIN ' .
+            $this->_db->quoteIdentifier($this->_tablePrefix . Calendar_Backend_Sql_Attendee::TABLENAME) .
+            ' AS at ON be.id = at.cal_event_id and at.displaycontainer_id = "' . $this->_db->quote($containerId) . '" '
+            . $this->_db->quoteInto('WHERE e.id IN (?)', $eventIds))->fetchAll(Zend_Db::FETCH_NUM);
+
+        $result = [];
+        foreach ($events as $event) {
+            // be.container_id or at.displaycontainer_id
+            if ($event[2] === $containerId || $event[3] === $containerId) {
+                $result[$event[1]] = $event[1];
+            } else {
+                $result[$event[0]] = $event[0];
+            }
+        }
+
+        return array_values($result);
+    }
+
+    /**
+     * takes event ids, filters out recuring events and returns only the uids of the base events of those event ids.
+     *
+     * @param array $eventIds
+     * @return array
+     */
     public function getUidOfBaseEvents(array $eventIds)
     {
         if (count($eventIds) === 0) {
@@ -985,9 +1048,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         array_walk($eventIds, function (&$val) { if (!is_string($val)) { $val = (string)$val; }});
 
         // we might want to return is_deleted = true here! so no condition to filter deleted events!
-        $select = $this->_db->select()
+        $select = $this->_db->select()->distinct(true)
             ->from($this->_tablePrefix . $this->_tableName, 'uid')
-            ->where($this->_db->quoteIdentifier('id') . ' IN (?) AND ' . $this->_db->quoteIdentifier('recurid') . ' IS NULL', $eventIds);
+            ->where($this->_db->quoteIdentifier('id') . ' IN (?)', $eventIds);
 
         $stmt = $this->_db->query($select);
 

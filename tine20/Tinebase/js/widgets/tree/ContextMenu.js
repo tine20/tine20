@@ -27,9 +27,10 @@ Tine.widgets.tree.ContextMenu = {
      * create new Ext.menu.Menu with actions
      * 
      * @param {} config has the node name, actions, etc.
+     * @param [] additional menu plugins
      * @return {}
      */
-    getMenu: function(config) {
+    getMenu: function(config, plugins) {
         
         this.config = config;
                 
@@ -86,6 +87,12 @@ Tine.widgets.tree.ContextMenu = {
             menu: new Ext.menu.ColorMenu({
                 scope: this,
                 listeners: {
+                    show: function (cmp) {
+                        const colorPalette = cmp.items.get(0)
+                        colorPalette.suspendEvents()
+                        colorPalette.select(this.scope.ctxNode.attributes.color)
+                        colorPalette.resumeEvents()
+                    },
                     select: this.changeNodeColor,
                     scope: this.config
                 }
@@ -163,16 +170,21 @@ Tine.widgets.tree.ContextMenu = {
                 Tine.log.warn('Tine.widgets.tree.ContextMenu.getMenu: can\'t cope with action :');
                 Tine.log.warn(action);
             }
-
         }
 
         /******************* return menu **********************/
+
+        var menuPlugins = [{
+            ptype: 'ux.itemregistry',
+            key:   'Tinebase-MainContextMenu'
+        }];
+
+        if (plugins) {
+            menuPlugins = menuPlugins.concat(plugins);
+        }
         
         return new Ext.menu.Menu({
-            plugins: [{
-                ptype: 'ux.itemregistry',
-                key:   'Tinebase-MainContextMenu'
-            }],
+            plugins: menuPlugins,
             items: items
         });
     },
@@ -208,6 +220,7 @@ Tine.widgets.tree.ContextMenu = {
                     params.application = this.scope.app.appName || this.scope.appName;
                     params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
                     params.modelName = this.scope.app.getMainScreen().getActiveContentType();
+                    if(params.modelName == '') params.modelName = this.scope.contextModel;
                 } 
                 else if (this.backendModel == 'Folder') {
                     var parentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(parentNode.attributes.folder_id);

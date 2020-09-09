@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -29,7 +29,7 @@
  * TODO are these all strings?!? guess not
  * @property string             $created_by
  * @property Tinebase_DateTime  $creation_time
- * @property Tinebase_DateTime  $last_modified_by
+ * @property string             $last_modified_by
  * @property Tinebase_DateTime  $last_modified_time
  * @property string $is_deleted
  * @property Tinebase_DateTime  $deleted_time
@@ -68,6 +68,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * resetConfiguration
      */
     public static function resetConfiguration();
+
+    /**
+     * @param array $_defintiion
+     */
+    public static function inheritModelConfigHook(array &$_defintion);
 
     /**
      * sets identifier of record
@@ -355,6 +360,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param array $_validators
      */
     public function setValidators(array $_validators);
+
+    /**
+     * @return string
+     */
+    public function getNotesTranslatedText();
 
     /**
      * @return bool

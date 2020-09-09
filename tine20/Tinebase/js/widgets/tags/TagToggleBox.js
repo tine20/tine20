@@ -21,7 +21,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
 
     layout : 'fit',
     border : false,
-    cls : 'tw-editdialog',
+    cls : 'tw-editdialog tw-tagtogglebox',
     store : null,
     buttonAlign : 'right',
     win: null,
@@ -46,7 +46,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
 
         Tine.widgets.tags.TagToggleBox.superclass.initComponent.call(this);
     },
-
+    
     initActions : function() {
         this.action_update = new Ext.Action({
                     text : (this.mode == 'detach') ? i18n._('Detach Tags') : i18n._('Attach Tags'),
@@ -106,9 +106,10 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">', 
                 '<div class="x-combo-list-item">',
-                    '<input class="tagcheckel" type="checkbox" style="margin-right:3px;float:left" id="{values.id}" /><div class="tb-grid-tags" style="margin-top:2px;background-color:{values.color};">&#160;</div>',
-                    '<div class="x-widget-tag-tagitem-text" style="margin-top:1px" ext:qtip="', 
-                        '{[this.encode(values.name)]}', 
+                    '<input class="tagcheckel" type="checkbox" style="margin-right:5px" id="{values.id}" />' +
+                    '<div class="tb-grid-tags" style="margin-top:2px;background-color:{values.color};">&#160;</div>',
+                    '<div class="x-widget-tag-tagitem-text" style="margin-top:1px" ext:qtip="',
+                        '{[this.encode(values.name)]}',
                         '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                         '</i>&nbsp;[{occurrence}]',
                         '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',

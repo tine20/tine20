@@ -1,0 +1,275 @@
+include:
+  - local: '/ci/abstract_jobs.yml'
+  - local: '/ci/ci-config.yml'
+
+stages:
+  - build_docker_images
+  - build_and_source_test
+  - built_test_and_deploy
+  - deploy
+
+workflow:
+  rules:
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+      when: never
+    - when: always
+
+# this or the next job "docker: build base, dependency, source and test-source image" should be uses
+# "cache" using job
+"docker: build source and test-source image":
+  extends: .abstract_jobs.docker
+  stage: build_docker_images
+  script:
+    - tag_major_as_commit_image base
+    - tag_major_as_commit_image dependency
+    - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
+    - build_and_push source
+    - build_and_push test-source
+  rules:
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - changes:
+        - ci/dockerimage/**/**
+        - tine20/library/**/***
+        - tine20/composer.json
+        - tine20/composer.lock
+        - tine20/Tinebase/js/package.json
+        - tine20/Tinebase/js/npm-shrinkwrap.json
+      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
+      when: never
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
+      when: never
+    - when: on_success
+  timeout: 40m
+
+# "cache" updating job
+"docker: build base, dependency, source and test-source image":
+  extends: .abstract_jobs.docker
+  stage: build_docker_images
+  script:
+    - build_and_push base
+    - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
+    - build_and_push dependency
+    - build_and_push source
+    - build_and_push test-source
+  rules:
+    # reverse of "docker: build source and test-source image"
+    - changes:
+        - ci/dockerimage/**/**
+        - tine20/library/**/***
+        - tine20/composer.json
+        - tine20/composer.lock
+        - tine20/Tinebase/js/package.json
+        - tine20/Tinebase/js/npm-shrinkwrap.json
+      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: on_success
+    # reverse of "docker: build source and test-source image"
+    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
+      when: on_success
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
+      when: on_success
+    - when: never
+  timeout: 60m
+
+"php unit: all tests source":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-source-commit
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  stage: build_and_source_test
+  timeout: 45m
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
+      when: on_success
+    - when: never
+
+"php unit: all tests source, parallel":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-source-commit
+  stage: build_and_source_test
+  timeout: 45m
+  parallel: 5
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "false"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
+      when: on_success
+    - when: never
+
+"php unit: servertests source":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-source-commit
+    ARG_TEST: AllServerTests
+  stage: build_and_source_test
+  timeout: 30m
+  rules:
+    - if: $PHP_UNIT_SERVERTESTS == "true"
+      when: on_success
+    - when: never
+
+"phpstan: code analyses":
+  stage: build_and_source_test
+  image:
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
+  script:
+    - cd $TINE20ROOT
+    - composer require phpstan/phpstan
+    - php -d memory_limit=2G $TINE20ROOT/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=prettyJson --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json
+  artifacts:
+    reports:
+      codequality: code-quality-report.json
+    paths:
+      - code-quality-report.json
+    expire_in: 1 days
+  rules:
+    - if: $PHP_STAN_ANALYSES == "true"
+      when: on_success
+    - when: never
+  allow_failure: true
+  timeout: 20m # time run: 4m
+
+"docker: build dev, build, built and test-built image":
+  extends: .abstract_jobs.docker
+  stage: build_and_source_test
+  script:
+    - build_and_push build
+    - build_and_push built
+    - build_and_push test-built
+    - build_and_push dev
+  rules:
+    - if: $DOCKER_BUILD_BUILD == "true"
+      when: on_success
+    - when: never
+  timeout: 60m # time run: 28m
+
+"php unit: all tests built":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-built-commit
+  stage: built_test_and_deploy
+  parallel: 5
+  timeout: 45m
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
+      when: on_success
+    - when: never
+
+"php unit: nogitlabci tests built":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-built-commit
+    ARG_EXCLUDE_GROUP: ""
+    ARG_GROUP: "nogitlabci"
+  stage: built_test_and_deploy
+  parallel: 5
+  allow_failure: true
+  timeout: 30m
+  rules:
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
+      when: on_success
+    - when: never
+
+"php unit: all tests built with ldap":
+  extends: .abstract_jobs.php_unit_ldap
+  variables:
+    ARG_IMAGE: test-built-commit
+  stage: built_test_and_deploy
+  parallel: 5
+  timeout: 30m
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
+      when: on_success
+    - when: never
+
+"docker: push base and dependency image":
+  extends: .abstract_jobs.docker
+  stage: built_test_and_deploy
+  script:
+    - tag_commit_as_branch_image base
+    - tag_commit_as_branch_image dependency
+  rules:
+    - if: $NO_PUSH == "true"
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $MAJOR_COMMIT_REF_NAME
+      when: never
+    # reverse of "docker: build source and test-source image"
+    - changes:
+        - ci/dockerimage/**/**
+        - tine20/library/**/***
+        - tine20/composer.json
+        - tine20/composer.lock
+        - tine20/Tinebase/js/package.json
+        - tine20/Tinebase/js/npm-shrinkwrap.json
+      if: $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: on_success
+    # reverse of "docker: build source and test-source image"
+    - if: $DOCKER_BUILD_BASE_IMAGE == "true"
+      when: on_success
+    # reverse of "docker: build base, dependency, source and test-source image"
+    - if: $DOCKER_BUILD_DEPENDENCY_IMAGE == "true"
+      when: on_success
+    - when: never
+  timeout: 20m # time run: 3m
+
+"docker: push built and dev image":
+  extends: .abstract_jobs.docker
+  stage: deploy
+  script:
+    - tag_commit_as_branch_image built
+    - tag_commit_as_branch_image dev
+  rules:
+    - if: $NO_PUSH == "true"
+      when: never
+    - if: $DOCKER_BUILD_BUILD == "true"
+      when: on_success
+    - when: never
+  timeout: 20m # time run: 3m
+
+"docker push built and dev image to gitlab":
+  extends: .abstract_jobs.docker
+  stage: deploy
+  script:
+    - tag_commit_as_gitlab_image built
+    - tag_commit_as_gitlab_image dev
+  rules:
+    - if: $NO_PUSH == "true"
+      when: never
+    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $DOCKER_BUILD_BUILD == "true"
+      when: on_success
+    - when: never
+  timeout: 20m
+
+"docker push built image to dockerhub":
+  extends: .abstract_jobs.docker
+  stage: deploy
+  script:
+    - tag_commit_as_dockerhub_image built tine20
+    - tag_commit_as_dockerhub_image dev dev
+  rules:
+    - if: $NO_PUSH == "true"
+      when: never
+    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $DOCKER_BUILD_BUILD != "true"
+      when: never
+    - if: $PUSH_TO_DOCKERHUB == "true"
+      when: on_success
+    - when: never
+  timeout: 20m

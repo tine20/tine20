@@ -212,6 +212,9 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
      * testImportTwice (forceUpdateExisting)
      * 
      * @see 0008652: Import von .ics-Dateien in Kalender schlägt fehl
+     *
+     * @group nogitlabci
+     * gitlabci: Events were not imported Array
      */
     public function testImportTwice()
     {
@@ -318,5 +321,19 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $dtstart = $event->dtstart;
         $dtstart->setTimezone(Tinebase_Core::getUserTimezone());
         self::assertEquals('20171006T150001', $dtstart->format('Ymd\THis'));
+    }
+
+    public function testImportWithBadEncoding()
+    {
+        $importEvents = $this->_importHelper('bad_encoding.ics', 15, false, array(
+            'onlyBasicData' => true
+        ));
+        $uebungen = 0;
+        foreach ($importEvents as $event) {
+            if (preg_match('/^Übung/', $event->summary)) {
+                $uebungen++;
+            }
+        }
+        self::assertEquals(4, $uebungen, print_r($importEvents->summary, true));
     }
 }

@@ -94,7 +94,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                
             $result = TRUE;
         } else {
-            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not handle param $applicationNames: ' . $decodedNames);
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' $applicationNames is not an array: ' . $applicationNames);
             $result = FALSE;
         }
         
@@ -323,6 +323,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      */
     public function getAllRegistryData()
     {
+        // clear cache to make sure we have current data...
+        Setup_Controller::getInstance()->clearCache();
+
         $registryData['Setup'] = $this->getRegistryData();
         
         // setup also need some core tinebase regdata

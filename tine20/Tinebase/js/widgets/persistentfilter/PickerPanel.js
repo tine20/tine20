@@ -61,6 +61,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initComponent : function() {
+        this.app = _.isString(this.app) ? Tine.Tinebase.appMgr.get(this.app) : this.app;
+
         this.stateId = 'widgets-persistentfilter-pickerpanel_' + this.app.name + '_' + this.contentType;
 
         this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore();

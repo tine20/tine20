@@ -46,7 +46,12 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @cfg {Bool} useBBar
      */
     useBBar: false,
-    
+
+    /**
+     * @cfg {Bool} readOnly
+     */
+    readOnly: false,
+
     /**
      * @private
      */
@@ -142,7 +147,8 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 // convert string cols
                 _.each(me.columns, function(col, idx) {
                     if (_.isString(col)) {
-                        var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog');
+                        var addConfig = _.get(me, 'columnsConfig.' + col, {});
+                        var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog', addConfig);
                         // NOTE: in editor grids we need a type based certain min-width
                         if (config) {
                             me.columns[idx] = config;
@@ -194,7 +200,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             newRecord.set(key, val);
         });
 
-        this.store.insert(0 , [newRecord]);
+        if (this.fireEvent('beforeaddrecord', newRecord, this) !== false) {
+            this.store.insert(0 , [newRecord]);
+        }
 
         return true;
     },

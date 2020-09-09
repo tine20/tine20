@@ -5,7 +5,7 @@
  * @package     ActiveSync
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -25,64 +25,111 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
-        $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
-        $this->_body    = $this->_getBody($body);
-        
         try {
-            list($loginName, $password) = $this->_getAuthData($this->_request);
-            
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-            header('HTTP/1.1 401 Unauthorized');
-            
-            return;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' is ActiveSync request.');
-        
-        Tinebase_Core::initFramework();
-        
-        try {
-            $authResult = $this->_authenticate(
-                $loginName,
-                $password,
-                $this->_request
-            );
+            $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+            $this->_body = $this->_getBody($body);
 
-        } catch (Tinebase_Exception_MaintenanceMode $temm) {
-            header('HTTP/1.1 503 Service Unavailable');
-            return;
-        } catch (Exception $e) {
+            try {
+                $authData = $this->_getAuthData($this->_request);
+                if (count($authData) === 2) {
+                    list($loginName, $password) = $authData;
+                } else {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' auth data: '
+                        . print_r($authData, true));
+                    throw new Tinebase_Exception_NotFound('loginname or password not set');
+                }
+
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
+                header('HTTP/1.1 401 Unauthorized');
+
+                return;
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' is ActiveSync request.');
+            }
+
+            Tinebase_Core::initFramework();
+
+            try {
+                $authResult = $this->_authenticate(
+                    $loginName,
+                    $password,
+                    $this->_request
+                );
+
+            } catch (Tinebase_Exception_MaintenanceMode $temm) {
+                Tinebase_Server_Abstract::setHttpHeader(503);
+                return;
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                $authResult = false;
+            }
+
+            if ($authResult !== true) {
+                header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
+                header('HTTP/1.1 401 Unauthorized');
+                return;
+            }
+
+            if (!$this->_checkDenyList()) {
+                return;
+            }
+
+            if (!$this->_checkUserPermissions($loginName)) {
+                return;
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting to handle ActiveSync request ('
+                    . 'PID: ' . getmypid() . ')');
+            }
+
+            $this->_initializeRegistry();
+
+            $request = new Zend_Controller_Request_Http();
+            $request->setRequestUri($this->_request->getRequestUri());
+
+            $syncFrontend = new Syncroton_Server(Tinebase_Core::getUser()->accountId, $request, $this->_body);
+
+            $syncFrontend->handle();
+
+            Tinebase_Controller::getInstance()->logout();
+        } catch (Throwable $e) {
+            $this->_handleException($e);
+        }
+    }
+
+    /**
+     * @param Throwable $e
+     * @throws Throwable
+     */
+    protected function _handleException(Throwable $e)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' ActiveSync Request failed: ' . $e->getMessage());
+
+        if ($e instanceof Tinebase_Exception_NotFound) {
+            Tinebase_Server_Abstract::setHttpHeader(404);
+        } else {
             Tinebase_Exception::log($e);
-            $authResult = false;
+            throw $e;
         }
-        
-        if ($authResult !== true) {
-            header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-            header('HTTP/1.1 401 Unauthorized');
-            return;
-        }
-        
-        if (!$this->_checkUserPermissions($loginName)) {
-            return;
+    }
+
+    protected function _checkDenyList()
+    {
+        $denyList = ActiveSync_Config::getInstance()->get(ActiveSync_Config::USER_AGENT_DENY_LIST);
+        foreach ($denyList as $deny) {
+            if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User agent blocked: ' . $_SERVER['HTTP_USER_AGENT']);
+                header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
+                return false;
+            }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting to handle ActiveSync request ('
-                . 'PID: ' . getmypid() . ')');
-        }
-        
-        $this->_initializeRegistry();
-        
-        $request = new Zend_Controller_Request_Http();
-        $request->setRequestUri($this->_request->getRequestUri());
-        
-        $syncFrontend = new Syncroton_Server(Tinebase_Core::getUser()->accountId, $request, $this->_body);
-        
-        $syncFrontend->handle();
-        
-        Tinebase_Controller::getInstance()->logout();
+        return true;
     }
     
     /**
@@ -209,11 +256,11 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             ->get(ActiveSync_Config::DEFAULT_POLICY));
 
         Syncroton_Registry::set(Syncroton_Registry::SLEEP_CALLBACK, function() {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' closing db connection');
+            }
             Tinebase_Core::getDb()->closeConnection();
-            Tinebase_Core::set(Tinebase_Core::DB, null);
-        });
-        Syncroton_Registry::set(Syncroton_Registry::WAKEUP_CALLBACK, function() {
-            Tinebase_Core::setupDatabaseConnection();
+            Tinebase_User_Plugin_Abstract::disconnectDbConnections();
         });
     }
 }

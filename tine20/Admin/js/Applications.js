@@ -138,9 +138,9 @@ Tine.Admin.Applications.Main = {
             return;
         }
         
-        this._action_enable.setText(this.translation.gettext('enable application'));
-        this._action_disable.setText(this.translation.gettext('disable application'));
-        this._action_settings.setText(this.translation.gettext('settings'));
+        this._action_enable.setText(this.translation.gettext('Enable Application'));
+        this._action_disable.setText(this.translation.gettext('Disable Application'));
+        this._action_settings.setText(this.translation.gettext('Settings'));
     
         var ApplicationsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'ApplicationsAdminQuickSearchField',
@@ -217,14 +217,14 @@ Tine.Admin.Applications.Main = {
         
         switch(_value) {
             case 'disabled':
-                gridValue = this.translation.gettext('disabled');
+                gridValue = this.translation.gettext('Disabled');
                 break;
             case 'enabled':
-              gridValue = this.translation.gettext('enabled');
+              gridValue = this.translation.gettext('Enabled');
               break;
               
             default:
-              gridValue = String.format(this.translation.gettext('unknown status ({0})'), value);
+              gridValue = String.format(this.translation.gettext('Unknown status ({0})'), value);
               break;
         }
         

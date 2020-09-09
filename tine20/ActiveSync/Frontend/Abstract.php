@@ -137,6 +137,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         'playbook',
         'blackberry',
         'bb10',
+        // android supports multiple folders since 4.4
         Syncroton_Model_Device::TYPE_ANDROID
     );
     
@@ -147,6 +148,14 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     public function __construct(Syncroton_Model_IDevice $_device, DateTime $_syncTimeStamp)
     {
+        $denyList = ActiveSync_Config::getInstance()->get(ActiveSync_Config::DEVICE_MODEL_DENY_LIST);
+        foreach ($denyList as $deny) {
+            if (preg_match($deny, $_device->model)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Device model blocked: ' . $_device->model);
+                throw new Tinebase_Exception_ProgramFlow(' Device model blocked: ' . $_device->model);
+            }
+        }
+
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
         }
@@ -471,7 +480,10 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
             $containerIds = array($_containerId);
         }
 
-        $_filter->addFilter($_filter->createFilter('container_id', 'in', $containerIds));
+        if (!empty($containerIds)) {
+            $_filter->removeFilter('container_id');
+            $_filter->addFilter($_filter->createFilter('container_id', 'in', $containerIds));
+        }
     }
     
     /**
@@ -499,7 +511,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     protected function _getSyncableFolders()
     {
-        $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
+        $containers = Tinebase_Container::getInstance()->getContainerByACL(Tinebase_Core::getUser(), $this->_applicationName . '_Model_' . $this->_modelName, Tinebase_Model_Grants::GRANT_SYNC);
         
         return $containers;
     }
@@ -579,14 +591,9 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     protected function _deviceSupportsMultipleFolders()
     {
-        if (strtolower($this->_device->devicetype) === Syncroton_Model_Device::TYPE_ANDROID) {
-            // android supports multiple folders since 4.4 (we assume >= 5.0)
-            return version_compare($this->_device->getMajorVersion(), '5', '>=');
-        } else if (in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders())) {
-            return true;
-        } else {
-            return false;
-        }
+        // NOTE: android is quite a devicetype zoo. we tired to enable all devices having 'android' in the
+        //       OS string. But it didn't work - e.g. samsungsma310f (Samsung A3 (6)) has no folder support
+        return in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders());
     }
     
     /**
@@ -604,12 +611,17 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         // check if contentfilter has a container limitation
         $filter = $this->_getContentFilter(0);
         
-        // @TODO work with multiple container filters?
-        $containerFilter = $filter->getFilter('container_id', FALSE, TRUE);
-        if ($containerFilter && $containerFilter instanceof Tinebase_Model_Filter_Container) {
-            $containerFilter->setRequiredGrants(array(Tinebase_Model_Grants::GRANT_SYNC));
-            $wantedFolders = $containerFilter->getContainerIds();
-            
+        $containerFilters = $filter->getFilter('container_id', TRUE, TRUE);
+        if ($containerFilters) {
+            $wantedFolders = [];
+            foreach ($containerFilters as $containerFilter) {
+                if ($containerFilter instanceof Tinebase_Model_Filter_Container) {
+                    $containerFilter->setRequiredGrants(array(Tinebase_Model_Grants::GRANT_SYNC));
+                    $wantedFolders = array_merge($wantedFolders,$containerFilter->getContainerIds());
+                }
+            }
+            $wantedFolders = array_unique($wantedFolders);
+
             foreach($allowedFolders as $allowedFolder) {
                 if (! in_array($allowedFolder->getId(), $wantedFolders)) {
                     $allowedFolders->removeRecord($allowedFolder);
@@ -774,5 +786,26 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
     {
         return empty($value) && $value != '0'
             || is_array($value) && count($value) === 0;
+    }
+
+    /**
+     * TODO do this for all fields (in toTineModel)? this is a generic problem with the sync...
+     *
+     * we might fetch the field length from MCV2 when available
+     *
+     * @param Tinebase_Record_Interface $record
+     * @param string $fieldName
+     * @param string $syncrotonValue
+     * @param int $fieldLength
+     */
+    protected function _truncateField($record, $fieldName, $syncrotonValue, $fieldLength = 255)
+    {
+        if ($fieldLength && mb_strlen($syncrotonValue) > $fieldLength) {
+            $record->$fieldName = mb_substr($syncrotonValue, 0, $fieldLength);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' field truncated: ' . $fieldName . ' / was: ' . $syncrotonValue . ' / truncated value: ' . $record->$fieldName);
+        } else {
+            $record->$fieldName = $syncrotonValue;
+        }
     }
 }

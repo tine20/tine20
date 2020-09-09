@@ -143,7 +143,7 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
         var allrecs = this.response.totalcount + this.response.failcount;
         
         var rn = (allrecs>1) ? this.i18nRecordsName : this.i18nRecordName;
-        var summary = String.format( (allrecs>1) ? i18n._('You edited {0} {1}.') : i18n._('You edited {0} {1}.'), allrecs, rn);
+        var summary = String.format( i18n._('You edited {0} {1}.'), allrecs, rn);
         summary += '<br />';
         rn = (this.response.totalcount>1) ? this.i18nRecordsName : this.i18nRecordName;
         summary += String.format( (this.response.totalcount>1) ? i18n._('{0} {1} have been updated properly.') : i18n._('{0} {1} has been updated properly.'), this.response.totalcount, rn);

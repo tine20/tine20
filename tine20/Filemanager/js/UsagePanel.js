@@ -48,7 +48,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
         this.quotaField = Ext.ComponentMgr.create({
             hidden: !showQuotaUi,
             fieldLabel: this.app.i18n.gettext('Quota'),
-            emptyText: this.app.i18n.gettext('no quota set'),
+            emptyText: this.app.i18n.gettext('No quota set (examples: 10 GB, 900 MB)'),
             name: 'quota',
             xtype: 'extuxbytesfield'
         });
@@ -61,9 +61,9 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
         this.hasOwnQuotaDescription = new Ext.form.Label({
             hidden: !showQuotaUi,
             columnWidth: 1,
-            text: this.app.i18n._("The Quota applies recursively for files and subfolders. Please note, the Effective Quota differs wehn a parent folder has set a lower quota.")
+            text: this.app.i18n._("The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota.")
         });
-
+        
         this.byTypeStore = new Ext.data.ArrayStore({
             fields: [
                 {name: 'type'},

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Converter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -24,20 +24,20 @@ class Tinebase_Model_Converter_Json implements Tinebase_Model_Converter_Interfac
      * @param $blob
      * @return mixed
      */
-    static public function convertToRecord($blob)
+    public function convertToRecord($record, $key, $blob)
     {
-        return Tinebase_Helper::jsonDecode($blob);
+        return is_array($blob) ? $blob : json_decode($blob, true);
     }
 
     /**
      * @param $fieldValue
      * @return string
      */
-    static public function convertToData($fieldValue)
+    public function convertToData($record, $key, $fieldValue)
     {
         if (is_null($fieldValue)) {
             return $fieldValue;
         }
-        return Zend_Json::encode($fieldValue);
+        return json_encode($fieldValue);
     }
 }

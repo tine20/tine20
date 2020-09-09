@@ -68,6 +68,17 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     protected $_requestContext = null;
 
+    /**
+     * enable Maintenance Mode state
+     *
+     * null if unknown
+     *
+     * @var boolean|null
+     */
+    protected $_maintenanceMode = null;
+
+    const APP_STATE_MAINTENANCE = 'maintenance';
+
 
     public function setRequestContext(array $context)
     {
@@ -215,7 +226,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
 
         // no default model defined, using first model of app...
         $models = $this->getModels();
-        return (count($models) > 0) ? $models[0] : null;
+        return (is_array($models) && count($models) > 0) ? $models[0] : null;
     }
 
     /**
@@ -253,7 +264,11 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
 
         if ($containerModel === 'Tinebase_Model_Container') {
             if ('' === $model) {
-                $model = static::$_defaultModel;
+                if ($this instanceof Tinebase_Controller_Record_Abstract) {
+                    $model = $this->getModel();
+                } else {
+                    $model = static::$_defaultModel;
+                }
             }
             // attention, currently everybody who has admin rights on a personal container is the owner of it
             // even if multiple users have admin rights on that personal container! (=> multiple owners)
@@ -431,4 +446,45 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     {
 
     }
+
+    /**
+     * enable Maintenance Mode
+     */
+    public function goIntoMaintenanceMode()
+    {
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
+
+        Tinebase_Application::getInstance()->setApplicationState($this->_applicationName, self::APP_STATE_MAINTENANCE, '1');
+        $this->_maintenanceMode = true;
+
+        $raii->release();
+    }
+
+    /**
+     * returns Maintenance Mode
+     *
+     * @return boolean
+     */
+    public function isInMaintenanceMode()
+    {
+        if (null === $this->_maintenanceMode) {
+            $this->_maintenanceMode = '1' === Tinebase_Application::getInstance()
+                    ->getApplicationState($this->_applicationName, self::APP_STATE_MAINTENANCE);
+        }
+        return $this->_maintenanceMode;
+    }
+
+    /**
+     * disable Maintenance Mode
+     */
+    public function leaveMaintenanceMode()
+    {
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
+
+        Tinebase_Application::getInstance()->setApplicationState($this->_applicationName, self::APP_STATE_MAINTENANCE, '0');
+        $this->_maintenanceMode = false;
+
+        $raii->release();
+    }
+
 }

@@ -1,5 +1,8 @@
-.x-btn-icon .x-btn-small .x-btn-text {
-    background-position: -1px -1px !important;
+.x-html-editor-tb .x-btn-icon .x-btn-text {
+    background-image: none;
+}
+
+.x-btn-icon .x-btn-small .x-btn-image {
     background-size: 18px 18px !important;
 }
 

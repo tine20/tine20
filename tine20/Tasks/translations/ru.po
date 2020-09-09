@@ -5,12 +5,13 @@
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 # Артур Мудрых <arturmon82@gmail.com>, 2012
+# Артур Мудрых <arturmon82@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 12:08+0000\n"
-"Last-Translator: Aleksey <aleksdem@aleksdem.com>\n"
+"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,45 +22,61 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:102
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s личные задачи"
+#: Model/Task.php:37
+msgid "GENDER_Task"
+msgid_plural "GENDER_Tasks"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
-#: Acl/Rights.php:97
-msgid "manage shared task lists"
-msgstr "управление списками общих задач"
+#: Model/Task.php:38 js/Models.js:66
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Задачи"
+msgstr[1] "Задачи"
+msgstr[2] "Задач"
+msgstr[3] "Задач"
 
-#: Acl/Rights.php:98
-msgid "Create new shared tasks lists"
-msgstr "Создать новый список общих задач"
+#: Model/Task.php:76 Model/Task.php:312 js/TaskGridPanel.js:138
+msgid "Percent"
+msgstr "Процент"
 
-#: Acl/Rights.php:101
-msgid "manage shared tasks favorites"
-msgstr "управлять избранным в общих задачах"
+#: Model/Task.php:82 js/TaskEditDialog.js:235 js/TaskGridPanel.js:167
+#: Config.php:48 Setup/Update/Release5.php:75
+msgid "Completed"
+msgstr "Закончено"
 
-#: Acl/Rights.php:102
-msgid "Create or update shared tasks favorites"
-msgstr "Создание или обновление избранных в общих задачах"
-
-#: Model/Task.php:207
+#: Model/Task.php:87 Model/Task.php:307
 msgid "Due"
 msgstr "Окончание"
 
-#: Model/Task.php:208 js/TaskEditDialog.js:204
-msgid "Organizer"
-msgstr "Организатор"
+#: Model/Task.php:92
+msgid "Class"
+msgstr ""
 
-#: Model/Task.php:209
+#: Model/Task.php:100 Model/Task.php:309
 msgid "Description"
 msgstr "Описание"
 
-#: Model/Task.php:210 js/TaskEditDialog.js:196 js/TaskGridPanel.js:119
+#: Model/Task.php:106
+msgid "Geo"
+msgstr ""
+
+#: Model/Task.php:111
+msgid "Location"
+msgstr ""
+
+#: Model/Task.php:116 Model/Task.php:308 js/TaskEditDialog.js:204
+msgid "Organizer"
+msgstr "Организатор"
+
+#: Model/Task.php:310 js/TaskEditDialog.js:196 js/TaskGridPanel.js:122
 msgid "Priority"
 msgstr "Приоритет"
 
-#: Model/Task.php:211 js/TaskEditDialog.js:226 js/TaskGridPanel.js:148
-#: js/Models.js:110 js/Models.js:168
+#: Model/Task.php:311 js/TaskEditDialog.js:226 js/Models.js:110
+#: js/Models.js:168 js/TaskGridPanel.js:151
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Состояние"
@@ -67,19 +84,15 @@ msgstr[1] "Состояния"
 msgstr[2] "Состояния"
 msgstr[3] "Состояния"
 
-#: Model/Task.php:212 js/TaskGridPanel.js:135
-msgid "Percent"
-msgstr "Процент"
-
-#: Model/Task.php:219
+#: Model/Task.php:319
 msgid "Lead"
 msgstr "Предложение"
 
-#: Model/Task.php:225
+#: Model/Task.php:325
 msgid "Telephone"
 msgstr "Телефон"
 
-#: Model/Task.php:226
+#: Model/Task.php:326
 msgid "Email"
 msgstr "Электронная почта"
 
@@ -91,7 +104,7 @@ msgstr "Добавить новую задачу"
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "Вы должны поставить дату для оповещения!"
 
-#: js/TaskEditDialog.js:185 js/TaskGridPanel.js:97 js/Models.js:107
+#: js/TaskEditDialog.js:185 js/Models.js:107 js/TaskGridPanel.js:100
 msgid "Summary"
 msgstr "Сводка"
 
@@ -115,55 +128,6 @@ msgstr "Введите описание..."
 msgid "Percentage"
 msgstr "Процентное отношение"
 
-#: js/TaskEditDialog.js:235 js/TaskGridPanel.js:171 Config.php:48
-#: Setup/Update/Release5.php:75
-msgid "Completed"
-msgstr "Закончено"
-
-#: js/TaskGridPanel.js:54
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Вы действительно хотите удалить выбранную задачу"
-msgstr[1] "Вы действительно хотите удалить выбранную задачу"
-msgstr[2] "Вы действительно хотите удалить выбранные задачи"
-msgstr[3] "Вы действительно хотите удалить выбранные задачи"
-
-#: js/TaskGridPanel.js:82
-msgid "Tags"
-msgstr "Теги"
-
-#: js/TaskGridPanel.js:87
-msgid "Lead name"
-msgstr "Название предложения"
-
-#: js/TaskGridPanel.js:101
-msgid "Add a task..."
-msgstr "Добавить задачу..."
-
-#: js/TaskGridPanel.js:105 js/Models.js:108
-msgid "Due Date"
-msgstr "Дата завершения"
-
-#: js/TaskGridPanel.js:164 js/Models.js:122
-msgid "Creation Time"
-msgstr "Время создания"
-
-#: js/TaskGridPanel.js:178 js/Models.js:118
-msgid "Responsible"
-msgstr "Ответственный"
-
-#: js/Tasks.js:39
-msgid "New Task"
-msgstr "Новая задача"
-
-#: js/Models.js:66
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Задачи"
-msgstr[1] "Задачи"
-msgstr[2] "Задач"
-msgstr[3] "Задач"
-
 #: js/Models.js:66
 msgid "Tasks"
 msgstr "Задачи"
@@ -184,6 +148,14 @@ msgstr "списки работ"
 msgid "Quick Search"
 msgstr "Быстрый поиск"
 
+#: js/Models.js:108 js/TaskGridPanel.js:108
+msgid "Due Date"
+msgstr "Дата завершения"
+
+#: js/Models.js:118 js/TaskGridPanel.js:174
+msgid "Responsible"
+msgstr "Ответственный"
+
 #: js/Models.js:120
 msgid "Last Modified Time"
 msgstr "Время последнего изменения"
@@ -192,13 +164,41 @@ msgstr "Время последнего изменения"
 msgid "Last Modified By"
 msgstr "Последнее изменение"
 
+#: js/Models.js:122
+msgid "Creation Time"
+msgstr "Время создания"
+
 #: js/Models.js:123
 msgid "Created By"
 msgstr "Создана"
 
-#: Controller/Task.php:202
-msgid "Notification for Task "
-msgstr "Напоминание для задачи "
+#: js/Tasks.js:39
+msgid "New Task"
+msgstr "Новая задача"
+
+#: js/TaskGridPanel.js:54
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Вы действительно хотите удалить выбранную задачу"
+msgstr[1] "Вы действительно хотите удалить выбранную задачу"
+msgstr[2] "Вы действительно хотите удалить выбранные задачи"
+msgstr[3] "Вы действительно хотите удалить выбранные задачи"
+
+#: js/TaskGridPanel.js:83
+msgid "Attachments"
+msgstr ""
+
+#: js/TaskGridPanel.js:84
+msgid "Tags"
+msgstr "Теги"
+
+#: js/TaskGridPanel.js:90
+msgid "Lead name"
+msgstr "Название предложения"
+
+#: js/TaskGridPanel.js:104
+msgid "Add a task..."
+msgstr "Добавить задачу..."
 
 #: Preference.php:24
 msgid "All my tasks"
@@ -267,6 +267,31 @@ msgstr "высокий"
 #: Config.php:68 Setup/Update/Release5.php:170
 msgid "urgent"
 msgstr "неотложный"
+
+#: Acl/Rights.php:97
+msgid "manage shared task lists"
+msgstr "управление списками общих задач"
+
+#: Acl/Rights.php:98
+msgid "Create new shared tasks lists"
+msgstr "Создать новый список общих задач"
+
+#: Acl/Rights.php:101
+msgid "manage shared tasks favorites"
+msgstr "управлять избранным в общих задачах"
+
+#: Acl/Rights.php:102
+msgid "Create or update shared tasks favorites"
+msgstr "Создание или обновление избранных в общих задачах"
+
+#: Controller.php:102
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s личные задачи"
+
+#: Controller/Task.php:211
+msgid "Notification for Task %1$s"
+msgstr ""
 
 #: Setup/Initialize.php:38 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"

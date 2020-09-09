@@ -48,8 +48,6 @@ Tine.Addressbook.ListRoleMemberFilterModel = Ext.extend(Tine.widgets.grid.Filter
             blurOnSelect: true,
             recordClass: Tine.Addressbook.Model.ListRole,
             filter: filter,
-            width: this.filterValueWidth,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el
         });

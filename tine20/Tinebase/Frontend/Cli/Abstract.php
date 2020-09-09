@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -58,18 +58,16 @@ class Tinebase_Frontend_Cli_Abstract
      * update or create import/export definition
      * 
      * @param Zend_Console_Getopt $_opts
-     * @return boolean
+     * @return int
      */
     public function updateImportExportDefinition(Zend_Console_Getopt $_opts)
     {
+        $this->_checkAdminRight();
+        
         $defs = $_opts->getRemainingArgs();
         if (empty($defs)) {
             echo "No definition given.\n";
-            return FALSE;
-        }
-        
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
+            return 1;
         }
         
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
@@ -79,7 +77,7 @@ class Tinebase_Frontend_Cli_Abstract
             echo "Imported " . $definitionFilename . " successfully.\n";
         }
         
-        return TRUE;
+        return 0;
     }
 
     /**
@@ -93,14 +91,12 @@ class Tinebase_Frontend_Cli_Abstract
      */
     public function createContainer(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $data = $this->_parseArgs($_opts, array('name', 'type', 'model'), array('owner', 'color'));
 
         if ($data['type'] !== 'shared') {
-            die ('only shared containers supported');
+            die('only shared containers supported');
         }
 
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
@@ -120,17 +116,16 @@ class Tinebase_Frontend_Cli_Abstract
      * set container grants
      * 
      * example usages: 
-     * (1) $ php tine20.php --method=Calendar.setContainerGrants containerId=3339 accountId=15 accountType=group grants=readGrant
-     * (2) $ php tine20.php --method=Timetracker.setContainerGrants namefilter="timeaccount name" accountId=15,30 accountType=group grants=book_own,manage_billable overwrite=1
-     * 
+     * (1) $ php tine20.php --method=Calendar.setContainerGrants id=3339 accountId=15 accountType=group grants=readGrant
+     * (2) $ php tine20.php --method=Timetracker.setContainerGrants name="timeaccount name" accountId=15,30 accountType=group grants=book_own,manage_billable overwrite=1
+     * (3) $ php tine20.php --method=Addressbok.setContainerGrants type=personal accountId=15 accountType=group grants=readGrant [-d]
+     *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean
+     * @return integer
      */
     public function setContainerGrants(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
         
@@ -138,18 +133,22 @@ class Tinebase_Frontend_Cli_Abstract
         if (count($containers) == 0) {
             echo "No matching containers found.\n";
         } else {
-            Admin_Controller_Container::getInstance()->setGrantsForContainers(
-                $containers, 
-                $data['grants'],
-                $data['accountId'], 
-                ((isset($data['accountType']) || array_key_exists('accountType', $data))) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                ((isset($data['overwrite']) || array_key_exists('overwrite', $data)) && $data['overwrite'] == '1')
-            );
-            
-            echo "Updated " . count($containers) . " container(s).\n";
+            if ($_opts->d) {
+                echo "Setting " . print_r($data['grants'], true) . ' for ' . count($containers) . " containers(s).\n";
+            } else {
+                Admin_Controller_Container::getInstance()->setGrantsForContainers(
+                    $containers,
+                    $data['grants'],
+                    $data['accountId'],
+                    ((isset($data['accountType']) || array_key_exists('accountType', $data))) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    ((isset($data['overwrite']) || array_key_exists('overwrite', $data)) && $data['overwrite'] == '1')
+                );
+
+                echo "Updated " . count($containers) . " container(s).\n";
+            }
         }
         
-        return TRUE;
+        return 0;
     }
 
     /**
@@ -165,14 +164,12 @@ class Tinebase_Frontend_Cli_Abstract
      *
      * @param Zend_Console_Getopt $_opts
      * @param boolean $checkDependencies
-     * @return boolean
+     * @return int
      */
     public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
         // just admins can perform this action
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $data = $this->_parseArgs($_opts);
         if (! isset($data['demodata'])) {
@@ -196,7 +193,7 @@ class Tinebase_Frontend_Cli_Abstract
                 $this->_createPhpDemoData($_opts, $checkDependencies);
                 $this->_createImportDemoData();
         }
-        return true;
+        return 0;
     }
 
     /**
@@ -286,8 +283,9 @@ class Tinebase_Frontend_Cli_Abstract
                 ] : [];
             $importer = new Tinebase_Setup_DemoData_Import($model, $options);
             try {
+                echo 'Importing Demo Data for ' . $model . "\n";
                 $importer->importDemodata();
-                echo 'Csv Demo Data was created successfully' . chr(10) . chr(10);
+                echo 'Csv Demo Data was created successfully' . "\n";
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // model has no import files
             }
@@ -329,18 +327,18 @@ class Tinebase_Frontend_Cli_Abstract
         $containerFilterData = array(
             array('field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()),
         );
-        
-        if ((isset($_params['containerId']) || array_key_exists('containerId', $_params))) {
-            $containerFilterData[] = array('field' => 'id', 'operator' => 'equals', 'value' => $_params['containerId']);
-        } else if ((isset($_params['namefilter']) || array_key_exists('namefilter', $_params))) {
-            $containerFilterData[] = array('field' => 'name', 'operator' => 'contains', 'value' => $_params['namefilter']);
-        } else {
-            throw new Timetracker_Exception_UnexpectedValue('Parameter containerId or namefilter missing!');
+
+        foreach (['id', 'name', 'type'] as $field) {
+            if (isset($_params[$field])) {
+                $containerFilterData[] = [
+                    'field' => $field,
+                    'operator' => $field === 'name' ? 'contains' : 'equals',
+                    'value' => $_params[$field]
+                ];
+            }
         }
-        
-        $containers = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter($containerFilterData));
-        
-        return $containers;
+
+        return Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter($containerFilterData));
     }
     
     /**
@@ -349,10 +347,13 @@ class Tinebase_Frontend_Cli_Abstract
      * @param Zend_Console_Getopt $_opts
      * @param array $_requiredKeys
      * @param string $_otherKey use this key for arguments without '='
+     * @param boolean $_splitSubArgs
      * @throws Tinebase_Exception_InvalidArgument
      * @return array
+     *
+     * @todo remove $_splitSubArgs and detect, if it is a json encoded value
      */
-    protected function _parseArgs(Zend_Console_Getopt $_opts, $_requiredKeys = array(), $_otherKey = 'other')
+    protected function _parseArgs(Zend_Console_Getopt $_opts, $_requiredKeys = array(), $_otherKey = 'other', $_splitSubArgs = true)
     {
         $args = $_opts->getRemainingArgs();
         
@@ -360,10 +361,12 @@ class Tinebase_Frontend_Cli_Abstract
         foreach ($args as $idx => $arg) {
             if (strpos($arg, '=') !== false) {
                 list($key, $value) = explode('=', $arg);
-                if (strpos($value, ',') !== false) {
-                    $value = explode(',', $value);
+                if ($_splitSubArgs) {
+                    if (strpos($value, ',') !== false) {
+                        $value = explode(',', $value);
+                    }
+                    $value = str_replace('"', '', $value);
                 }
-                $value = str_replace('"', '', $value);
                 $result[$key] = $value;
             } else {
                 $result[$_otherKey][] = $arg;
@@ -384,17 +387,24 @@ class Tinebase_Frontend_Cli_Abstract
     /**
      * check admin right of application
      * 
+     * @param boolean $exitOnNoPermission
      * @return boolean
      */
-    protected function _checkAdminRight()
+    protected function _checkAdminRight($exitOnNoPermission = true)
     {
-        // check if admin for tinebase
+        // check if admin for app
         if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Tinebase_Acl_Rights::ADMIN)) {
             echo "No admin right for application " . $this->_applicationName . "\n";
-            return FALSE;
+            if ($exitOnNoPermission) {
+                // 126 = Command invoked cannot execute / Permission problem or command is not an executable
+                // @see http://tldp.org/LDP/abs/html/exitcodes.html
+                exit(126);
+            } else {
+                return false;
+            }
         }
         
-        return TRUE;
+        return true;
     }
     
     /**
@@ -623,5 +633,96 @@ class Tinebase_Frontend_Cli_Abstract
         }
 
         return $cronuser;
+    }
+
+    /**
+     * exports containers as ICS, VCF, ...
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @param string $_model
+     * @param string $_exportClass
+     * @return boolean
+     *
+     * TODO use Calendar_Export_VCalendarReport / Addressbook_Export_VCardReport here
+     */
+    protected function _exportVObject(Zend_Console_Getopt $_opts, $_model, $_exportClass)
+    {
+        $args = $this->_parseArgs($_opts);
+
+        // @todo implement
+        //   - allow to export all shared containers
+
+        if (isset($args['type']) && $args['type'] === 'personal') {
+            // get all containers of given type
+            $containers = Tinebase_Container::getInstance()->getPersonalContainer(
+                Tinebase_Core::getUser(),
+                $_model,
+                Tinebase_Core::getUser()
+            )->getArrayOfIds();
+        } else if (isset($args['container_id'])) {
+            $containers = explode(',', $args['container_id']);
+        }
+
+        foreach ($containers as $containerId) {
+            $this->_exportContainerAsVObject($containerId, $args, $_model, $_exportClass);
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param Tinebase_Model_Container $container
+     * @param array $args
+     * @param string $extension
+     * @return string
+     *
+     * @todo add container name (need to strip spaces, special chars, ...)?
+     * @todo create subdir for each user?
+     *
+     * TODO remove code replication with \Calendar_Export_VCalendarReport::_getExportFilename
+     */
+    protected function _getVObjectExportFilename($container, $args, $extension)
+    {
+        $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
+        return $path . DIRECTORY_SEPARATOR . Tinebase_Core::getUser()->accountLoginName
+            // . '_' . $container->name
+            . '_' . substr($container->getId(), 0, 8) . '.' . $extension;
+    }
+
+    /**
+     * @param $containerId
+     * @param $options
+     * @param $model
+     * @param $exportClass
+     *
+     * TODO add more filters as param
+     */
+    protected function _exportContainerAsVObject($containerId, $options, $model, $exportClass)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Exporting calendar ' . $containerId);
+        }
+
+        if (! isset($options['stdout']) || $options['stdout'] != 1) {
+            if (! isset($options['filename'])) {
+                $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+                $extension = $exportClass === Addressbook_Export_VCard::class ? 'vcf' : 'ics';
+                $options['filename'] = $this->_getVObjectExportFilename($container, $options, $extension);
+            }
+        } else {
+            unset($options['filename']);
+        }
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
+        ]);
+        $export = new $exportClass($filter, null, $options);
+        $filename = $export->generate();
+        if (! $filename) {
+            // TODO refactor function signature - write does not write content to file but to stdout/browser
+            $export->write();
+        } else {
+            echo 'Exported container ' . $containerId . ' into file ' . $filename . "\n";
+        }
     }
 }

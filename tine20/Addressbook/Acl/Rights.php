@@ -48,6 +48,13 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_CORE_DATA_LIST_ROLES = 'manage_core_data_list_roles';
 
     /**
+     * the right to manage list email options
+     *
+     * @staticvar string
+     */
+    const MANAGE_LIST_EMAIL_OPTIONS = 'manage_list_email_options';
+
+    /**
      * holds the instance of the singleton
      *
      * @var Addressbook_Acl_Rights
@@ -102,6 +109,7 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_SHARED_CONTACT_FAVORITES,
             self::MANAGE_CORE_DATA_LISTS,
             self::MANAGE_CORE_DATA_LIST_ROLES,
+            self::MANAGE_LIST_EMAIL_OPTIONS,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -133,6 +141,10 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CORE_DATA_LIST_ROLES => array(
                 'text'          => $translate->_('Manage list functions in CoreData'),
                 'description'   => $translate->_('View, create, delete or update list functions in CoreData application'),
+            ),
+            self::MANAGE_LIST_EMAIL_OPTIONS => array(
+                'text'          => $translate->_('Manage list email options'),
+                'description'   => $translate->_('Manage list email options like mailing lists'),
             ),
         );
         

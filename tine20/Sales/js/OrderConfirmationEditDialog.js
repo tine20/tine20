@@ -71,7 +71,6 @@ Tine.Sales.OrderConfirmationEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             activeTab: 0,
             border: false,

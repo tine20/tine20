@@ -511,8 +511,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
        
         foreach ($candidates as $candidate) {
             try {
-                $exceptions = $_events->filter('recurid', "/^{$candidate->uid}-.*/", TRUE);
-                
+                $exceptions = self::getExceptionsByCandidate($_events, $candidate);
                 $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($candidate, $exceptions, $_from, $_until);
                 foreach ($recurSet as $event) {
                     $_events->addRecord($event);
@@ -530,6 +529,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                continue;
             }
         }
+    }
+
+    public static function getExceptionsByCandidate($_events, $_candidate)
+    {
+        return $_events->filter('recurid', "/^".preg_quote($_candidate->uid, '/')."-.*/", TRUE);
     }
     
     /**
@@ -635,7 +639,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         if (! isset($freqMap[$rrule->freq])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Invalid RRULE:' . print_r($rrule->toArray(), true));
-            throw new Calendar_Exception('Invalid freq in RRULE: ' . $rrule->freq);
+            throw new Tinebase_Exception_InvalidArgument('Invalid freq in RRULE: ' . $rrule->freq);
         }
         $rangeDate->add($interval, $freqMap[$rrule->freq]);
         $attempts = 0;
@@ -659,10 +663,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 
             $recurSet->merge(self::computeRecurrenceSet($_event, $exceptions, $from, $until));
             $attempts++;
-            
-            // NOTE: computeRecurrenceSet also returns events during $from in some cases, but we need 
+
+            // NOTE: computeRecurrenceSet also returns events during $from in some cases, but we need
             // to events later than $from.
-            $recurSet = $recurSet->filter(function($event) use ($from) {return $event->dtstart >= $from;});
+            $recurSet = $recurSet->filter(function($event) use ($from) {
+                return $event->dtstart >= $from;
+            });
             
             if (count($recurSet) >= abs($_which)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -680,7 +686,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $until->add($interval, $freqMap[$rrule->freq]);
         }
         
-        $recurSet->sort('dtstart', $_which > 0 ? 'ASC' : 'DESC');
+        $recurSet->sort('dtstart', ($_which > 0 && $attempts == 1) ? 'ASC' : 'DESC');
         $nextOccurrence = $recurSet[abs($_which)-1];
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' $nextOccurrence->dtstart = ' . $nextOccurrence->dtstart->toString());
@@ -710,7 +716,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         $exceptionRecurIds = self::getExceptionsRecurIds($_event, $_exceptions);
         $recurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        
+
+        $_until = ($_event->rrule_until instanceof DateTime
+            && $_until->isLater($_event->rrule_until))
+            ? $_event->rrule_until
+            : $_until;
+
         switch ($rrule->freq) {
             case self::FREQ_DAILY:
                 

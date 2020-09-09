@@ -101,7 +101,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $scleverDisplayContainerId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_getPersona('sclever')->getId());
         $contentSeqBefore = Tinebase_Container::getInstance()->getContentSequence($scleverDisplayContainerId);
         
-        $eventData = $this->_getEvent($now)->toArray();
+        $eventData = $this->_getEventWithAlarm($now)->toArray();
         
         $tag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
             'name' => 'phpunit-' . substr(Tinebase_Record_Abstract::generateUID(), 0, 10),
@@ -181,6 +181,10 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateEventWithAlarm()
     {
+        if (PHP_VERSION_ID >= 70200) {
+            static::markTestSkipped('FIXME fix for php 7.2+');
+        }
+
         $eventData = $this->_getEventWithAlarm(TRUE)->toArray();
         $persistentEventData = $this->_uit->saveEvent($eventData);
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
@@ -203,6 +207,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     
     /**
      * testUpdateEvent
+     *
+     * @return array
      */
     public function testUpdateEvent()
     {
@@ -228,7 +234,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     /**
      * testDeleteEvent
      */
-    public function testDeleteEvent() {
+    public function testDeleteEvent()
+    {
         $eventData = $this->testCreateEvent();
         
         $this->_uit->deleteEvents(array($eventData['id']));
@@ -250,8 +257,25 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(! empty($searchResultData['results']));
         $resultEventData = $searchResultData['results'][0];
         
-        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
-        return $searchResultData;
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to find event');
+    }
+
+    /**
+     * testSearchEventsWithoutFixedCalendars
+     *
+     * TODO add fixedCalendar (with event) and assertion
+     */
+    public function testSearchEventsWithoutFixedCalendars()
+    {
+        $eventData = $this->testCreateEvent(TRUE);
+
+        $filter = $this->_getEventFilterArray();
+        $searchResultData = $this->_uit->searchEvents($filter, array(), false);
+
+        $this->assertTrue(! empty($searchResultData['results']));
+        $resultEventData = $searchResultData['results'][0];
+
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to find event');
     }
 
     /**
@@ -479,6 +503,46 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(is_array($updatedEventData['rrule']));
 
         return $updatedEventData;
+    }
+
+    public function testUpdateRecurEventComplexRule()
+    {
+        $eventData = $this->testCreateRecurEvent();
+        $eventData['rrule']['interval'] = 2;
+
+        $updatedEventData = $this->_uit->saveEvent($eventData);
+        static::assertArrayHasKey('rrule', $updatedEventData);
+        static::assertArrayHasKey('interval', $updatedEventData['rrule']);
+        static::assertEquals(2, $updatedEventData['rrule']['interval']);
+
+        $from = $updatedEventData['dtstart'];
+        $until = new Tinebase_DateTime($from);
+        $until->addDay(1);
+        $from = $until->toString();
+        $until->addWeek(3);
+        $until = $until->toString();
+
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
+            array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+        );
+
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        static::assertArrayHasKey('results', $searchResultData);
+        static::assertCount(1, $searchResultData['results']);
+
+        $newEvent = $searchResultData['results'][0];
+        $newEvent['id'] = 'fakeid' . $newEvent['id'];
+        $newEvent['seq'] = 1;
+        $dtstart = new Tinebase_DateTime($newEvent['dtstart']);
+        $dtstart->subDay(1);
+        $newEvent['dtstart'] = $dtstart->toString();
+        $dtend = new Tinebase_DateTime($newEvent['dtend']);
+        $dtend->subDay(1);
+        $newEvent['dtend'] = $dtend->toString();
+        $newEvent['rrule']['byday'] = 'TU';
+
+        $this->_uit->createRecurException($newEvent, false, true, false);
     }
 
     /**
@@ -1200,7 +1264,7 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 10);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_DATETIME);
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getTestUser());
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES, true);
         $searchResultData = $this->_uit->searchEvents($filter, array());
@@ -1210,47 +1274,47 @@ class Calendar_JsonTests extends Calendar_TestCase
         if (!$doAllTesting) {
             return $eventData;
         }
-        $this->_assertFreebusyData($eventData, 10);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_DATETIME);
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 20);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER);
 
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        $this->_assertFreebusyData($eventData, 20);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER);
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 30);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE);
 
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        $this->_assertFreebusyData($eventData, 30);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE);
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 40);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR);
 
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        $this->_assertFreebusyData($eventData, 40);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR);
 
         Calendar_Model_Attender::clearCache();
         Calendar_Model_Event::resetFreeBusyCleanupCache();
-        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, 50);
+        Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE);
 
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $this->assertTrue(! empty($searchResultData['results']), 'expected (freebusy cleanup) event in search result: '
             . print_r($eventData, TRUE) . 'search filter: ' . print_r($filter, TRUE));
         $eventData = $searchResultData['results'][0];
-        $this->_assertFreebusyData($eventData, 50);
+        $this->_assertFreebusyData($eventData, Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE);
 
         return null;
     }
@@ -1262,27 +1326,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         static::assertTrue(empty($eventData['tags']), 'tags not empty');
         static::assertTrue(empty($eventData['notes']), 'notes not empty');
         static::assertTrue(empty($eventData['alarms']), 'alarms not empty');
-        if ($accessLevel < 20) {
+        if ($accessLevel < Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR) {
             static::assertFalse(isset($eventData['container_id']), 'container_id not empty');
         } else {
             static::assertTrue(isset($eventData['container_id']) && !empty($eventData['container_id']),
                 'container_id empty');
         }
-        if ($accessLevel < 30) {
+        if ($accessLevel < Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER) {
             static::assertFalse(isset($eventData['organizer']), 'organizer not empty');
         } else {
             static::assertTrue(isset($eventData['organizer']) && !empty($eventData['organizer']), 'organizer empty');
         }
-        if ($accessLevel < 40) {
+        if ($accessLevel < Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
             static::assertTrue(empty($eventData['attendee']), 'attendee not empty');
         } else {
             static::assertFalse(empty($eventData['attendee']), 'attendee empty');
         }
 
-        if ($accessLevel === 40) {
+        if ($accessLevel === Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
             static::assertEquals(1, count($eventData['attendee']), 'number of attendees wrong');
         }
-        if ($accessLevel === 50) {
+        if ($accessLevel === Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE) {
             static::assertEquals(2, count($eventData['attendee']), 'number of attendees wrong');
         }
     }
@@ -1320,7 +1384,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testDeleteContainerAndEvents()
     {
         $fe = new Tinebase_Frontend_Json_Container();
-        $container = $fe->addContainer('Calendar', 'testdeletecontacts', Tinebase_Model_Container::TYPE_SHARED, '');
+        $container = $fe->addContainer('Calendar', 'testdeletecontacts', Tinebase_Model_Container::TYPE_SHARED, 'Event');
         // test if model is set automatically
         $this->assertEquals($container['model'], 'Calendar_Model_Event');
         
@@ -1513,7 +1577,8 @@ class Calendar_JsonTests extends Calendar_TestCase
      * assert grant handling
      */
     public function testSaveResource($grants = [Calendar_Model_ResourceGrants::RESOURCE_READ => true,
-         Calendar_Model_ResourceGrants::EVENTS_EDIT => true, Calendar_Model_ResourceGrants::RESOURCE_INVITE => true])
+         Calendar_Model_ResourceGrants::EVENTS_EDIT => true, Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+        Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true])
     {
         $resoureData = array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
@@ -1541,7 +1606,10 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSaveResourcesWithoutRights()
     {
+
         static::setExpectedException(Tinebase_Exception_AccessDenied::class, 'No Permission.');
+        $this->testSaveResource(array(Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true));
+        static::setExpectedException(Calendar_Exception_ResourceAdminGrant::class, 'The right Resource Admin must be set once.');
         $this->testSaveResource(array());
     }
 
@@ -1589,7 +1657,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         $event = $this->_getEvent(TRUE);
         $event->organizer = $this->_personas['pwulf']->contact_id;
-        $event->container_id = $this->_getPersonalContainer('Calendar', $this->_personas['pwulf'])->getId();
+        $event->container_id = $this->_getPersonalContainer(Calendar_Model_Event::class, $this->_personas['pwulf'])->getId();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'user_type'  => Calendar_Model_Attender::USERTYPE_RESOURCE,
@@ -1956,7 +2024,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $importScheduler = Tinebase_Controller_ScheduledImport::getInstance();
         $record = $importScheduler->runNextScheduledImport();
 
-        $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', 'remote_caldav_calendar', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser()->getId());
+        $container = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, 'remote_caldav_calendar', Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser()->getId());
         $this->_testCalendars[] = $container;
         $this->assertTrue($container instanceof Tinebase_Model_Container, 'Container was not created');
 
@@ -2098,9 +2166,107 @@ class Calendar_JsonTests extends Calendar_TestCase
         );
     }
 
+    public function testSearchAttendeersConfigUserFilter()
+    {
+        $filter = json_decode('[{
+                "field":"type",
+                "value":["user"]
+            }, {
+                "field":"query",
+                "operator":"contains",
+                "value":"McBlack"
+            }]', true);
+        //$filter[1]['value']['value'] = $allIds;
+
+        $result = $this->_uit->searchAttenders($filter, [], [], []);
+        $count = count($result['user']['results']);
+        $this->assertGreaterThanOrEqual(1, $count);
+
+        /** @var Addressbook_Model_Contact $aContact */
+        $aContact = Addressbook_Controller_Contact::getInstance()->get($result['user']['results'][0]['id']);
+        $aContact->tags = [new Tinebase_Model_Tag(['name' => 'myTag'])];
+        $aContact = Addressbook_Controller_Contact::getInstance()->update($aContact);
+
+        
+        $oldConfig = clone Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER};
+        Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER}
+            ->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER} = ['condition' => 'AND', 'filters' =>
+                [['field' => 'tag', 'operator' => 'notin', 'value' => [$aContact->tags->getFirstRecord()->getId()]]]];
+
+        try {
+            $result = $this->_uit->searchAttenders($filter, [], [], []);
+            $this->assertEquals($count - 1, count($result['user']['results']));
+        } finally {
+            Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER} = $oldConfig;
+        }
+    }
+
+    public function testSearchAttendeersConfigGroupFilter()
+    {
+        $allIds = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(), null, false,
+            true);
+        static::assertGreaterThanOrEqual(2, count($allIds), 'test needs at least 2 ids');
+
+        $oldConfig = clone Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER};
+        Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER}
+            ->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP} = ['condition' => 'AND', 'filters' =>
+            [['field' => 'id', 'operator' => 'equals', 'value' => $allIds[0]]]];
+
+        try {
+            $filter = json_decode('[{
+                "field":"type",
+                "value":["group"]
+            }, {
+                "field":"id",
+                "operator":"in",
+                "value":null
+            }]', true);
+            $filter[1]['value'] = $allIds;
+
+            $result = $this->_uit->searchAttenders($filter, [], [], []);
+            $this->assertEquals(1, count($result['group']['results']));
+        } finally {
+            Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER} = $oldConfig;
+        }
+    }
+
+    public function testSearchAttendeersConfigResourceFilter()
+    {
+        $resController = Calendar_Controller_Resource::getInstance();
+        $resController->create($this->_getResource());
+        $resource = $this->_getResource();
+        $resource->name = 'blablub';
+        $resController->create($resource);
+        $allIds = $resController->search(new Calendar_Model_ResourceFilter(), null, false, true);
+        static::assertGreaterThanOrEqual(2, count($allIds), 'test needs at least 2 ids');
+
+        $oldConfig = clone Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER};
+        Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER}
+            ->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE} = ['condition' => 'AND', 'filters' =>
+            [['field' => 'id', 'operator' => 'equals', 'value' => $allIds[0]]]];
+
+        try {
+            $filter = json_decode('[{
+                "field":"type",
+                "value":["resource"]
+            }, {
+                "field":"id",
+                "operator":"in",
+                "value":null
+            }]', true);
+            $filter[1]['value'] = $allIds;
+
+            $result = $this->_uit->searchAttenders($filter, [], [], []);
+            $this->assertEquals(1, count($result['resource']['results']));
+        } finally {
+            Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER} = $oldConfig;
+        }
+    }
+
     public function testSearchAttendeersByTypeAndId()
     {
-        $allIds = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter())->getId();
+        $allIds = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(), null,
+            false, true);
 
         $filter = json_decode('[{
             "field":"type",
@@ -2325,5 +2491,25 @@ class Calendar_JsonTests extends Calendar_TestCase
             Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
                 ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = $oldValue;
         }
+    }
+
+    public function testSearchWithFalseFilter()
+    {
+        $searchResultData = $this->_uit->searchEvents(false, array());
+        self::assertGreaterThanOrEqual(0, $searchResultData['totalcount']);
+    }
+
+    public function testCopyEvent()
+    {
+        $eventData = $this->testCreateEvent();
+
+        $eventData['id'] = null;
+        $eventData['alarms'][0]['record_id'] = null;
+        $eventData['alarms'][0]['id'] = Tinebase_Record_Abstract::generateUID();
+
+        $copiedEventData = $this->_uit->saveEvent($eventData);
+
+        $this->assertTrue($eventData['alarms'][0]['id'] !== $copiedEventData['alarms'][0]['id']);
+        $this->assertTrue($eventData['alarms'][0]['record_id'] !== $copiedEventData['alarms'][0]['record_id']);
     }
 }

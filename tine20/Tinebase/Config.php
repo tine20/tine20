@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -20,6 +20,15 @@
  */
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'Tinebase';
+
+    /**
+     * the current Tinebase version
+     *
+     * @var int
+     */
+    const TINEBASE_VERSION = 13;
+
     /**
      * access log rotation in days
      *
@@ -49,6 +58,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
 
     /**
+     * allow authentication by email as optional replacement for username too
+     *
+     * @var string
+     */
+    const AUTHENTICATION_BY_EMAIL = 'authenticationByEmail';
+
+    /**
      * save automatic alarms when creating new record
      *
      * @var string
@@ -63,11 +79,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AVAILABLE_LANGUAGES = 'availableLanguages';
 
     /**
+     * build type
+     *
+     * @const string
+     */
+    const BUILD_TYPE = 'buildtype';
+
+    /**
      * CACHE
      *
      * @var string
      */
     const CACHE = 'caching';
+    const CREDENTIAL_CACHE_SHARED_KEY = 'credentialCacheSharedKey';
+    const DBLOGGER = 'dblogger';
 
     /**
      * DEFAULT_LOCALE
@@ -87,6 +112,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
     /**
+     * emailUserIdInXprops
+     */
+    const EMAIL_USER_ID_IN_XPROPS = 'emailUserIdInXprops';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -99,6 +129,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const IMAP = 'imap';
+
+    const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
 
     /**
      * trusted proxy config
@@ -141,7 +173,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const USERBACKENDTYPE = 'Tinebase_User_BackendType';
-    
+
+    /**
+     * cron_disabled
+     *
+     * @var string
+     */
+    const CRON_DISABLED = 'cron_disabled';
+
     /**
      * cronjob user id
      * 
@@ -164,11 +203,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
 
     /**
-     * FEATURE_CONTAINER_CUSTOM_SORT
+     * FEATURE_SHOW_ADVANCED_SEARCH
      *
-     * @var string
+     * @const string
      */
-    const FEATURE_CONTAINER_CUSTOM_SORT = 'featureContainerCustomSort';
+    const FEATURE_CREATE_PREVIEWS = 'featureCreatePreviews';
 
     /**
      * FEATURE_SHOW_ACCOUNT_EMAIL
@@ -185,11 +224,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_REMEMBER_POPUP_SIZE = 'featureRememberPopupSize';
 
     /**
+     * FEATURE_FULLTEXT_INDEX
+     *
+     * @var string
+     */
+    const FEATURE_FULLTEXT_INDEX = 'featureFullTextIndex';
+
+    /**
      * FEATURE_PATH
      *
      * @var string
      */
     const FEATURE_SEARCH_PATH = 'featureSearchPath';
+
+    const FEATURE_AUTODISCOVER = 'autodiscover';
+
+    const FEATURE_AUTODISCOVER_MAILCONFIG = 'autodiscoverMailConfig';
 
     /**
      * user defined page title postfix for browser page title
@@ -225,7 +275,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ALLOWEDJSONORIGINS = 'allowedJsonOrigins';
-    
+
+    /**
+     * Config key for configuring allowed health check ips
+     *
+     * @var string
+     */
+    const ALLOWEDHEALTHCHECKIPS = 'allowedHealthCheckIPs';
+
     /**
      * Config key for acceptedTermsVersion
      * @var string
@@ -268,6 +325,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SENTRY_LOGLEVL = 'sentryLoglevel';
+
+    /**
+     * configure if user account status data should be synced from sync backend, default no
+     *
+     * @var string
+     */
+    const SYNC_USER_ACCOUNT_STATUS = 'syncUserAccountStatus';
 
     /**
      * configure hook class for user sync
@@ -649,14 +713,36 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
     const FILESYSTEM_PREVIEW_SERVICE_VERSION = 'previewServiceVersion';
     const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
+    const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
+    const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X = 'previewThumbnailSizeX';
+    const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y = 'previewThumbnailSizeY';
+    const FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_X = 'previewDocumentPreviewSizeX';
+    const FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_Y = 'previewDocumentPreviewSizeY';
+    const FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_X = 'previewImagePreviewSizeX';
+    const FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_Y = 'previewImagePreviewSizeY';
+    const FILESYSTEM_PREVIEW_IGNORE_PROXY = 'previewPreviewIgnoreProxy';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
+    const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
+    const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
+    const FILESYSTEM_AVSCAN_URL = 'avscanURL';
 
     const ACTIONQUEUE = 'actionqueue';
-    const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_ACTIVE = 'active';
+    const ACTIONQUEUE_BACKEND = 'backend';
     const ACTIONQUEUE_HOST = 'host';
+    const ACTIONQUEUE_LONG_RUNNING = 'longRunning';
     const ACTIONQUEUE_PORT = 'port';
     const ACTIONQUEUE_NAME = 'queueName';
+    const ACTIONQUEUE_MONITORING_DURATION_WARN = 'durationWarn';
+    const ACTIONQUEUE_MONITORING_LASTUPDATE_WARN = 'lastUpdateWarn';
+    const ACTIONQUEUE_MONITORING_DURATION_CRIT = 'durationCrit';
+    const ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT = 'lastUpdateCrit';
+    const ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT = 'daemonStructSizeCrit';
+    const ACTIONQUEUE_LR_MONITORING_DURATION_WARN = 'LRdurationWarn';
+    const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN = 'LRlastUpdateWarn';
+    const ACTIONQUEUE_LR_MONITORING_DURATION_CRIT = 'LRdurationCrit';
+    const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT = 'LRlastUpdateCrit';
+    const ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT = 'LRdaemonStructSizeCrit';
 
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
@@ -666,6 +752,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_SOFT_QUOTA = 'softQuota';
     const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
     const QUOTA_SKIP_IMAP_QUOTA = 'skipImapQuota';
+
+    const SSO = 'sso';
+    const SSO_ACTIVE = 'active';
+    const SSO_PROVIDER_URL = 'providerUrl';
+    const SSO_CLIENT_ID = 'clientId';
+    const SSO_CLIENT_SECRET = 'clientSecret';
+    const SSO_REDIRECT_URL = 'redirectUrl';
+    const SSO_ADAPTER = 'adapter';
 
     const TINE20_URL = 'tine20URL';
 
@@ -740,6 +834,40 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ),
         /**
+         * One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE
+         */
+        self::BUILD_TYPE => array(
+            //_('Build Type')
+            'label' => 'Build Type',
+            //_('One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE')
+            'description' => 'One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE',
+            'type' => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule' => false,
+            'setBySetupModule' => false,
+            'default' => 'DEVELOPMENT',
+        ),
+        self::DBLOGGER => [
+            //_('DB logger configuration')
+            'label'                 => 'DB logger configuration',
+            'description'           => 'DB logger configuration',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'content'               => [
+                'active' => [
+                    'type' => Tinebase_Config::TYPE_BOOL,
+                ],
+                // values from '0' to '7' are supported - see Tinebase_Log
+                'priority' => [
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => '5',
+                ],
+            ]
+        ],
+        /**
          * for example: 'de'
          */
         self::DEFAULT_LOCALE => array(
@@ -796,16 +924,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
-        self::TRUSTED_PROXIES => array(
-            //_('Trusted Proxies')
-            'label'                 => 'Trusted Proxies',
-            //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
-            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
-            'type'                  => 'array',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-        ),
+        /**
+         * config keys:
+         *
+         * "backend":"postfix" (string)
+         * "hostname":"smtphost" (string)
+         * "port":"25" (integer)
+         * "ssl":"none" (string)
+         * "auth":"none" (string)
+         * "primarydomain":"mail.test" (string)
+         * "secondarydomains":"second.test,third.test" (string - comma separated)
+         * "additionaldomains":"another.test,onemore.test" (string - comma separated)
+         * "instanceName":"tine.test" (string)
+         * "onlyemaildestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
+         */
         self::SMTP => array(
                                    //_('System SMTP')
             'label'                 => 'System SMTP',
@@ -824,6 +956,29 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'System SIEVE server configuration.',
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        // TODO remove this config and all old code in 2021.11
+        self::EMAIL_USER_ID_IN_XPROPS => [
+            //_('Use record XPROPS to save email user id')
+            'label'                 => 'Use record XPROPS to save email user id',
+            //_('Use record XPROPS to save email user id')
+            'description'           => 'Use record XPROPS to save email user id',
+            'type'                  => 'bool',
+            // we need this to disable any convert actions in the GUI
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => true,
+        ],
+        self::TRUSTED_PROXIES => array(
+            //_('Trusted Proxies')
+            'label'                 => 'Trusted Proxies',
+            //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
+            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
+            'type'                  => 'array',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
@@ -849,6 +1004,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::AUTHENTICATION_BY_EMAIL => [
+            self::LABEL                 => 'Authentication by Email',
+            self::DESCRIPTION           => 'Authentication by Email', // _('Authentication by Email')
+            self::TYPE                  => self::TYPE_BOOL,
+            self::DEFAULT_STR           => false,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::USERBACKENDTYPE => array(
                                    //_('User Backend')
             'label'                 => 'User Backend',
@@ -930,7 +1094,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'                           => array()
         ),
-        self::ACTIONQUEUE => array(
+        self::ACTIONQUEUE => [
             //_('Action queue configuration')
             'label'                 => 'Action queue configuration',
             //_('Action queue configuration.')
@@ -940,30 +1104,74 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
-            'content'               => array(
-                self::ACTIONQUEUE_BACKEND       => array(
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'Direct'
-                ),
-                self::ACTIONQUEUE_ACTIVE       => array(
+            'content'               => [
+                self::ACTIONQUEUE_ACTIVE        => [
                     'type'                              => Tinebase_Config::TYPE_BOOL,
-                    'default'                           => false
-                ),
-                self::ACTIONQUEUE_HOST       => array(
+                    'default'                           => false,
+                ],
+                self::ACTIONQUEUE_BACKEND       => [
                     'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'localhost'
-                ),
-                self::ACTIONQUEUE_PORT       => array(
+                    'default'                           => 'Direct',
+                ],
+                self::ACTIONQUEUE_HOST          => [
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => 'localhost',
+                ],
+                self::ACTIONQUEUE_LONG_RUNNING  => [
+                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    'default'                           => '',
+                ],
+                self::ACTIONQUEUE_PORT          => [
                     'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 6379
-                ),
-                self::ACTIONQUEUE_NAME       => array(
+                    'default'                           => 6379,
+                ],
+                self::ACTIONQUEUE_NAME          => [
                     'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'TinebaseQueue'
-                ),
-            ),
-            'default'                           => array()
-        ),
+                    'default'                           => 'TinebaseQueue',
+                ],
+                self::ACTIONQUEUE_MONITORING_DURATION_WARN       => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 60,
+                ],
+                self::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN     => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 180,
+                ],
+                self::ACTIONQUEUE_MONITORING_DURATION_CRIT       => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600,
+                ],
+                self::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT     => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600,
+                ],
+                self::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT   => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 30,
+                ],
+                self::ACTIONQUEUE_LR_MONITORING_DURATION_WARN       => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 360,
+                ],
+                self::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN     => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 1000,
+                ],
+                self::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT       => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600,
+                ],
+                self::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT     => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3600,
+                ],
+                self::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT=> [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 3,
+                ],
+            ],
+            'default'                           => [],
+        ],
         self::USERBACKEND => array(
                                    //_('User Configuration')
             'label'                 => 'User Configuration',
@@ -1111,6 +1319,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             'setBySetupModule'      => FALSE,
                             'default'               => TRUE
                         ),
+                        self::SYNC_USER_ACCOUNT_STATUS => array(
+                            //_('Sync user account status from sync backend')
+                            'label'                 => 'Sync user account status from sync backend',
+                            //_('Sync user account status from sync backend')
+                            'description'           => 'Sync user account status from sync backend',
+                            'type'                  => 'bool',
+                            'clientRegistryInclude' => FALSE,
+                            'setByAdminModule'      => FALSE,
+                            'setBySetupModule'      => FALSE,
+                            'default'               => FALSE
+                        ),
                     ),
                     'default'                   => array(),
                 ),
@@ -1132,14 +1351,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),
-                self::FEATURE_CONTAINER_CUSTOM_SORT => array(
-                    self::LABEL                         => 'Container Custom Sort', //_('Container Custom Sort')
-                    self::DESCRIPTION                   =>
-                        'Allows to sort containers by setting the sort order in Admin/Container',
-                    //_('Allows to sort containers by setting the sort order in Admin/Container')
-                    self::TYPE                          => self::TYPE_BOOL,
-                    self::DEFAULT_STR                   => true,
-                ),
                 self::FEATURE_SHOW_ACCOUNT_EMAIL    => array(
                     self::LABEL                         => 'Show Account Email Address',
                     //_('Show Account Email Address')
@@ -1155,12 +1366,40 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),
+                self::FEATURE_CREATE_PREVIEWS => [
+                    self::LABEL                         => 'Create File Previews', // _('Create File Previews')
+                    self::DESCRIPTION                   => 'Create File Previews',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+                self::FEATURE_FULLTEXT_INDEX              => [
+                    self::LABEL                         => 'Create FullText Indices', // _('Create FullText Indices')
+                    self::DESCRIPTION                   => 'Create FullText Indices',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => true,
+                ],
                 self::FEATURE_SEARCH_PATH           => array(
                     self::LABEL                         => 'Search Paths',
                     self::DESCRIPTION                   => 'Search Paths',
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),
+                self::FEATURE_AUTODISCOVER  => [
+                    self::LABEL                 => 'Autodiscover',
+                    //_('Autodiscover')
+                    self::DESCRIPTION           => 'Autodiscover',
+                    //_('Autodiscover')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
+                self::FEATURE_AUTODISCOVER_MAILCONFIG  => [
+                    self::LABEL                 => 'Autodiscover mail config',
+                    //_('Autodiscover mail config')
+                    self::DESCRIPTION           => 'Autodiscover mail config',
+                    //_('Autodiscover mail config')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => true,
+                ],
             ],
             self::DEFAULT_STR => [],
         ],
@@ -1184,6 +1423,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => 'user role'
         ),
+        self::CRON_DISABLED => [
+            //_('Cronjob Disabled')
+            'label'                 => 'Cronjob Disabled',
+            //_('triggerAsyncEvents does not do anything and monitoringCheckCron does not alert')
+            'description'           => 'triggerAsyncEvents does not do anything and monitoringCheckCron does not alert',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => false,
+        ],
         self::CRONUSERID => array(
                                    //_('Cronuser ID')
             'label'                 => 'Cronuser ID',
@@ -1210,7 +1460,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Redirect to this URL after logout.')
             'description'           => 'Redirect to this URL after logout.',
             'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1230,7 +1480,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Redirect to configured redirect URL also for login.')
             'description'           => 'Redirect to configured redirect URL also for login.',
             'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1241,8 +1491,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status',
             'type'                  => 'bool',
             'default'               => false,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
             'setBySetupModule'      => TRUE,
         ),
         self::ALLOWEDJSONORIGINS => array(
@@ -1251,9 +1501,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Allowed Origins for the JSON API.')
             'description'           => 'Allowed Origins for the JSON API.',
             'type'                  => 'array',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
+        ),
+        self::ALLOWEDHEALTHCHECKIPS => array(
+            //_('Allowed Health Check IPs')
+            'label'                 => 'Allowed Health Check IPs',
+            //_('Hosts that are allowed to access the TINEURL/health API')
+            'description'           => 'Hosts that are allowed to access the TINEURL/health API',
+            'type'                  => 'array',
+            'default'               => ['127.0.0.1'],
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
         ),
         self::ACCEPTEDTERMSVERSION => array(
                                    //_('Accepted Terms Version')
@@ -1485,7 +1746,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     //_('Minimum length')
                     'label'                 => 'Minimum length',
                     //_('Minimum password length')
-                    'description'           => 'Minimum password length.',
+                    'description'           => 'Minimum password length',
                     'type'                  => 'int',
                     'clientRegistryInclude' => TRUE,
                     'setByAdminModule'      => FALSE,
@@ -1771,8 +2032,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::MAINTENANCE_MODE => array(
             //_('Maintenance mode enabled')
             'label'                 => 'Maintenance mode enabled',
-            //_('Set Tine 2.0 maintenance mode. Possible values: "off", "normal" (only users having the maintenance right can login) and "all"')
-            'description'           => 'Set Tine 2.0 maintenance mode. Possible values: "off", "normal" (only users having the maintenance right can login) and "all"',
+            //_('Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"')
+            'description'           => 'Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"',
             'type'                  => 'string',
             'default'               => '',
             'clientRegistryInclude' => FALSE,
@@ -2093,6 +2354,128 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => FALSE,
                     'default'               => 51904512, // == 49.5 * 1024 * 1024,
                 ),
+                self::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT => array(
+                    //_('Max per preview preview service error count, for trying to generate preview.')
+                    'label'                 => 'Max perp review preview service error count, for trying to generate preview.',
+                    //_('Max per preview preview service error count, for trying to generate preview.')
+                    'description'           => 'Max per preview preview service error count, for trying to generate preview.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 5,
+                ),
+                self::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X => array(
+                    //_('X size of thumbnail images.')
+                    'label'                 => 'X size of thumbnail images.',
+                    //_('X size of thumbnail images.')
+                    'description'           => 'X size of thumbnail images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 142,
+                ),
+                self::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y => array(
+                    //_('Y size of thumbnail images.')
+                    'label'                 => 'Y size of thumbnail images.',
+                    //_('Y size of thumbnail images.')
+                    'description'           => 'Y size of thumbnail images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 200,
+                ),
+                self::FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_X => array(
+                    //_('X size of preview images.')
+                    'label'                 => 'X size of preview images for documents.',
+                    //_('X size of preview images.')
+                    'description'           => 'X size of preview images for documents.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 1416,
+                ),
+                self::FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_Y => array(
+                    //_('Y size of preview images.')
+                    'label'                 => 'Y size of preview images for documents.',
+                    //_('Y size of preview images.')
+                    'description'           => 'Y size of preview images for documents.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 2000,
+                ),
+                self::FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_X => array(
+                    //_('X size of preview images.')
+                    'label'                 => 'X size of preview images for images.',
+                    //_('X size of preview images.')
+                    'description'           => 'X size of preview images for images.',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 708,
+                ),
+                self::FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_Y => array(
+                    //_('Y size of preview images.')
+                    'label'                 => 'Y size of preview images for images..',
+                    //_('Y size of preview images.')
+                    'description'           => 'Y size of preview images for images..',
+                    'type'                  => self::TYPE_INT,
+                    'clientRegistryInclude' => FALSE,
+                    'setByAdminModule'      => FALSE,
+                    'setBySetupModule'      => FALSE,
+                    'default'               => 1000,
+                ),
+                self::FILESYSTEM_PREVIEW_IGNORE_PROXY => array(
+                    //_('Ignore Proxy config for preview service')
+                    'label'                 => 'Ignore Proxy config for preview service',
+                    //_('Ignore Proxy config for preview service')
+                    'description'           => 'Ignore Proxy config for preview service',
+                    'type'                  => self::TYPE_BOOL,
+                    'clientRegistryInclude' => false,
+                    'setByAdminModule'      => false,
+                    'setBySetupModule'      => false,
+                    'default'               => false,
+                ),
+                self::FILESYSTEM_AVSCAN_MAXFSIZE => [
+                    //_('Antivirus Scan Max File Size')
+                    self::LABEL                 => 'Antivirus Scan Max File Size',
+                    //_('Antivirus Scan Max File Size')
+                    self::DESCRIPTION           => 'Antivirus Scan Max File Size',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                    self::DEFAULT_STR           => 25 * 1024 * 1024,
+                ],
+                self::FILESYSTEM_AVSCAN_MODE => [
+                    //_('Antivirus Scan Mode')
+                    self::LABEL                 => 'Antivirus Scan Mode',
+                    //_('Antivirus Scan Mode')
+                    self::DESCRIPTION           => 'Antivirus Scan Mode',
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                    // possible values: 'off', 'quahog'
+                    self::DEFAULT_STR           => 'off', // don't use constant here, we would just include more source
+                                                          // files in the bootstrap of everything
+                ],
+                self::FILESYSTEM_AVSCAN_URL => [
+                    //_('Antivirus Scan URL')
+                    self::LABEL                 => 'Antivirus Scan URL',
+                    //_('Antivirus Scan URL')
+                    self::DESCRIPTION           => 'Antivirus Scan URL',
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                ],
             ),
             'default'               => array(),
         ),
@@ -2234,6 +2617,45 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'               => array(),
         ),
+        self::SSO => array(
+            //_('SSO client settings')
+            'label'                 => 'SSO client settings',
+            //_('SSO client settings')
+            'description'           => 'SSO client settings',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'content'               => array(
+                self::SSO_ACTIVE => array(
+                    'type' => Tinebase_Config::TYPE_BOOL,
+                    'default' => false
+                ),
+                self::SSO_ADAPTER => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => 'OpenIdConnect'
+                ),
+                // for example 'https://accounts.google.com/'
+                self::SSO_PROVIDER_URL => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => ''
+                ),
+                self::SSO_CLIENT_ID => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => ''
+                ),
+                self::SSO_CLIENT_SECRET => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => ''
+                ),
+                self::SSO_REDIRECT_URL => array(
+                    'type' => Tinebase_Config::TYPE_STRING,
+                    'default' => ''
+                ),
+            ),
+            'default'               => array(),
+        ),
         self::TINE20_URL  => array(
             //_('Tine20 URL')
             'label' => 'Tine20 URL',
@@ -2245,6 +2667,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule' => true,
             'setBySetupModule' => true,
         ),
+        self::CREDENTIAL_CACHE_SHARED_KEY => [
+            //_('shared credential cache cryptographic key')
+            self::LABEL                 => 'shared credential cache cryptographic key',
+            //_('shared credential cache cryptographic key')
+            self::DESCRIPTION           => 'shared credential cache cryptographic key',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => null,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+        ]
     );
 
     /**
@@ -2315,7 +2748,34 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     {
         return self::$_properties;
     }
-    
+
+    public static function resolveRecordValue($val, $definition)
+    {
+        if ($val && isset($definition['type']) && Tinebase_Config::TYPE_RECORD === $definition['type']) {
+            if (isset($definition[Tinebase_Config::TYPE_RECORD_CONTROLLER])) {
+                try {
+                    $val = $definition[Tinebase_Config::TYPE_RECORD_CONTROLLER]::getInstance()->get($val);
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e);
+                }
+            } elseif (isset($definition[Tinebase_Config::OPTIONS][Tinebase_Config::APPLICATION_NAME]) &&
+                isset($definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME])) {
+                $ctrlName = $definition[Tinebase_Config::OPTIONS][Tinebase_Config::APPLICATION_NAME] .
+                    '_Controller_' .
+                    $definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME];
+                if (class_exists($ctrlName)) {
+                    try {
+                        $val = $ctrlName::getInstance()->get($val);
+                    } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
+                    }
+                }
+            }
+        }
+
+        return $val;
+    }
+
     /**
      * get config for client registry
      * 
@@ -2342,8 +2802,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         try {
                             $type = isset($definition['type']) ? $definition['type'] : null;
                             if ($type) {
+                                $val = static::resolveRecordValue($config->{$name}, $definition);
                                 $configRegistryItem = new Tinebase_Config_Struct(array(
-                                    'value' => $config->{$name},
+                                    'value' => $val,
                                     'definition' => new Tinebase_Config_Struct($definition),
                                 ), null, null, array(
                                     'value' => array('type' => $definition['type']),

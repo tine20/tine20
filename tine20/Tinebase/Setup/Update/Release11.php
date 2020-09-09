@@ -5,9 +5,10 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
 class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**
@@ -185,7 +186,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
         Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
         Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
-        if (! $scheduler->hasTask('Tinebase_AclTablesCleanup')) {
+        if (!$scheduler->hasTask('Tinebase_AclTablesCleanup')) {
             Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
         }
 
@@ -230,9 +231,9 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                 ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
                 : Tinebase_Group::DEFAULT_ANONYMOUS_GROUP;
         $anonymousGroup = new Tinebase_Model_Group(array(
-            'name'          => $defaultAnonymousGroupName,
-            'description'   => 'Group of anonymous user accounts',
-            'visibility'    => Tinebase_Model_Group::VISIBILITY_HIDDEN
+            'name' => $defaultAnonymousGroupName,
+            'description' => 'Group of anonymous user accounts',
+            'visibility' => Tinebase_Model_Group::VISIBILITY_HIDDEN
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($anonymousGroup, 'create');
         /** @var Tinebase_Model_Group $group */
@@ -280,7 +281,8 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
             }
             try {
                 $relationBackend->updateRelation($relation);
-            } catch (Tinebase_Exception_Record_NotDefined $e) {}
+            } catch (Tinebase_Exception_Record_NotDefined $e) {
+            }
         }
 
         $this->setApplicationVersion('Tinebase', '11.15');
@@ -322,7 +324,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
             $this->_backend->dropCol('tree_nodes', 'pin_protected');
         }
 
-        if (! $this->_backend->columnExists('pin_protected_node', 'tree_nodes')) {
+        if (!$this->_backend->columnExists('pin_protected_node', 'tree_nodes')) {
             $this->_backend->addCol('tree_nodes', new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>pin_protected_node</name>
@@ -363,14 +365,14 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     {
         // fetch current pw policy config and save it in new struct
         $configs = array(
-            Tinebase_Config::PASSWORD_POLICY_ACTIVE              => 0,
-            Tinebase_Config::PASSWORD_POLICY_ONLYASCII           => 0,
-            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH          => 0,
-            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS      => 0,
+            Tinebase_Config::PASSWORD_POLICY_ACTIVE => 0,
+            Tinebase_Config::PASSWORD_POLICY_ONLYASCII => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS => 0,
             Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => 0,
-            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS   => 0,
-            Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS         => 0,
-            Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER        => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS => 0,
+            Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS => 0,
+            Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER => 0,
         );
 
         foreach ($configs as $config => $default) {
@@ -394,7 +396,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $quotedField = $this->_db->quoteIdentifier('pin_protected_node');
         $this->_db->update(SQL_TABLE_PREFIX . 'tree_nodes', ['pin_protected_node' => null],
             $quotedField . ' IS NOT NULL AND char_length(' . $quotedField . ') < 2');
-        
+
         $this->setApplicationVersion('Tinebase', '11.21');
     }
 
@@ -405,7 +407,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_21()
     {
-        if (! $this->_backend->columnExists('ntlmv2hash', 'accounts')) {
+        if (!$this->_backend->columnExists('ntlmv2hash', 'accounts')) {
             $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>ntlmv2hash</name>
@@ -444,7 +446,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_23()
     {
-        if (! $this->_backend->tableExists('application_states')) {
+        if (!$this->_backend->tableExists('application_states')) {
             $this->_backend->createTable(new Setup_Backend_Schema_Table_Xml('<table>
                 <name>application_states</name>
                 <version>1</version>
@@ -480,12 +482,17 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                 </declaration>
             </table>'), 'Tinebase', 'application_states');
 
-            $appController = Tinebase_Application::getInstance();
-            /** @var Tinebase_Model_Application $application */
-            foreach ($appController->getApplications() as $application) {
-                foreach ($application->xprops('state') as $name => $value) {
-                    $appController->setApplicationState($application, $name, $value);
+            $tmpApp = new Tinebase_Model_Application([], true);
+            if ($tmpApp->has('state')) {
+                $appController = Tinebase_Application::getInstance();
+                /** @var Tinebase_Model_Application $application */
+                foreach ($appController->getApplications() as $application) {
+                    foreach ($application->xprops('state') as $name => $value) {
+                        $appController->setApplicationState($application, $name, $value);
+                    }
                 }
+            } else {
+                Setup_Core::getLogger()->err(Tinebase_Model_Application::class . ' does not have property state!');
             }
         }
 
@@ -552,28 +559,8 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_27()
     {
-        $models = [];
-        $containers = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container', ['id', 'application_id'])
-            ->where($this->_db->quoteIdentifier('model') . ' IS NULL OR ' . $this->_db->quoteIdentifier('model')
-                . ' = ' . $this->_db->quote(''))->query()->fetchAll(Zend_DB::FETCH_ASSOC);
-
-        foreach ($containers as $container) {
-            if (!isset($models[$container['application_id']])) {
-                $models[$container['application_id']] = Tinebase_Core::getApplicationInstance(
-                    Tinebase_Application::getInstance()->getApplicationById($container['application_id'])->name, '',
-                    true)->getDefaultModel();
-            }
-
-            if ($models[$container['application_id']]) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Setting model ' . $models[$container['application_id']] . ' for container ' . $container['id']);
-                $this->_db->update(SQL_TABLE_PREFIX . 'container', ['model' => $models[$container['application_id']]],
-                    $this->_db->quoteInto('id = ?', $container['id']));
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' Could not find default model for app id ' . $container['application_id']);
-            }
-        }
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->setContainerModels();
 
         $this->setApplicationVersion('Tinebase', '11.28');
     }
@@ -593,7 +580,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
             $calendarUpdate->update_9(false);
         }
 
-        if (! $this->_backend->columnExists('hierarchy', 'container')) {
+        if (!$this->_backend->columnExists('hierarchy', 'container')) {
             $this->_backend->addCol('container', new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>hierarchy</name>
@@ -667,7 +654,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     public function update_31()
     {
         $obsoleteNames = ['adb_default_xls', 'adb_ods', 'lead_excel5_xls'];
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter([
+        $filter =Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
             ['field' => 'name', 'operator' => 'in', 'value' => $obsoleteNames]
         ]);
         Tinebase_ImportExportDefinition::getInstance()->deleteByFilter($filter);
@@ -778,7 +765,6 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.39');
     }
-
     public function addIsSystemToCustomFieldConfig()
     {
         if (!$this->_backend->columnExists('is_system', 'customfield_config')) {
@@ -797,7 +783,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 11.38
+     * update to 11.40
      *
      * update filterSyncToken table
      */
@@ -808,10 +794,216 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '11.40');
     }
 
+    public function update_40()
+    {
+        $note_types = array('note', 'telephone', 'email', 'created', 'changed');
+        foreach ($note_types as $note_type) {
+            $note = Tinebase_Notes::getInstance()->getNoteTypeByName($note_type);
+            $icon = '';
+            switch ($note_type) {
+                case 'note':
+                    $icon = 'images/icon-set/icon_note.svg';
+                    break;
+                case 'telephone':
+                    $icon = 'images/icon-set/icon_phone.svg';
+                    break;
+                case 'email':
+                    $icon = 'images/icon-set/icon_email.svg';
+                    break;
+                case 'created':
+                    $icon = 'images/icon-set/icon_star_out.svg';
+                    break;
+                case 'changed':
+                    $icon = 'images/icon-set/icon_doc_file.svg';
+                    break;
+            }
+            $note['icon'] = $icon;
+            if ($note['icon'] != '') {
+                Tinebase_Notes::getInstance()->updateNoteType($note);
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.40');
+    }
+
+    /**
+     * update to 11.42
+     *
+     * ensure tree_filerevision exist for all fileobjects
+     */
+    public function update_41()
+    {
+        $db = $this->getDb();
+        $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+        foreach ($db->query('SELECT fo.id, fo.revision from ' . SQL_TABLE_PREFIX . 'tree_fileobjects AS fo LEFT JOIN ' .
+            SQL_TABLE_PREFIX . 'tree_filerevisions AS fr ON fo.id = fr.id AND fo.revision = fr.revision ' .
+            'WHERE fr.id IS NULL AND fo.type = "folder"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+            $db->insert(SQL_TABLE_PREFIX . 'tree_filerevisions', [
+                'id' => $row['id'],
+                'revision' => $row['revision'] + 1,
+                'hash' => Tinebase_Record_Abstract::generateUID(),
+                'size' => 0,
+                'created_by' => $user->getId(),
+                'creation_time' => new Zend_Db_Expr('NOW()'),
+                'preview_count' => 0,
+            ]);
+
+            $db->update(SQL_TABLE_PREFIX . 'tree_fileobjects', [
+                'revision' => $row['revision'] + 1,
+                'last_modified_by' => $user->getId(),
+                'last_modified_time' => new Zend_Db_Expr('NOW()'),
+            ], 'id = "' . $row['id'] . '"');
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.42');
+    }
+
+    /**
+     * update to 11.43
+     *
+     * fix role name unique key
+     */
+    public function update_42()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_58();
+        $this->setApplicationVersion('Tinebase', '11.43');
+    }
+
+    /**
+     * update to 11.44
+     *
+     * add lastavscan_time and is_quarantined to tree_filerevisions
+     * add scheduler task to av scan fs once a day
+     */
+    public function update_43()
+    {
+        $this->fsAVupdates();
+
+        Tinebase_Scheduler_Task::addFileSystemAVScanTask(Tinebase_Core::getScheduler());
+
+        $this->setApplicationVersion('Tinebase', '11.44');
+    }
+
+    public function fsAVupdates()
+    {
+        if (!$this->_backend->columnExists('lastavscan_time', 'tree_filerevisions')) {
+            $this->_backend->addCol('tree_filerevisions', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>lastavscan_time</name>
+                    <type>datetime</type>
+                </field>'));
+        }
+
+        if (!$this->_backend->columnExists('is_quarantined', 'tree_filerevisions')) {
+            $this->_backend->addCol('tree_filerevisions', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>is_quarantined</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('tree_filerevisions') < 3) {
+            $this->setTableVersion('tree_filerevisions', 3);
+        }
+    }
+
+    /**
+     * update to 11.45
+     *
+     * reimport templates
+     */
+    public function update_44()
+    {
+        $setupController = Setup_Controller::getInstance();
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $setupController->createImportExportDefinitions($application, Tinebase_Core::isReplicationSlave());
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.45');
+    }
+
+    /**
+     * update history Icon
+     */
+    public function update_45()
+    {
+        $note = Tinebase_Notes::getInstance()->getNoteTypeByName('changed');
+        if ($note !== null) {
+            $note['icon'] = 'images/icon-set/icon_file.svg';
+            Tinebase_Notes::getInstance()->updateNoteType($note);
+        }
+        $this->setApplicationVersion('Tinebase', '11.46');
+    }
+
+    /**
+     * update foreign key on delete cascade
+     */
+    public function update_46()
+    {
+        try {
+            $this->_backend->dropForeignKey('group_members', 'group_members::account_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('group_members', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>group_members::account_id--accounts::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                    </reference>
+                </index>'));
+
+        try {
+            $this->_backend->dropForeignKey('import', 'import::user_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('import', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>import::user_id--accounts::id</name>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                    </reference>
+                </index>'));
+
+        try {
+            $this->_backend->dropForeignKey('openid_sites', 'openid_sites::account_id--accounts::id');
+        } catch (Exception $e) {}
+
+        $this->_backend->addForeignKey('openid_sites', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>openid_sites::account_id--accounts::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>accounts</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <!-- add onupdate/ondelete? -->
+                    </reference>
+                </index>'));
+
+        $this->setApplicationVersion('Tinebase', '11.47');
+    }
+
     /**
      * update to 12.0
      */
-    public function update_40()
+    public function update_47()
     {
         $this->setApplicationVersion('Tinebase', '12.0');
     }

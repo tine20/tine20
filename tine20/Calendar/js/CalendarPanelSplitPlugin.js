@@ -154,8 +154,10 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                 this.attendeeViews.add('main', view);
                 
                 this.calPanel.add({
+                    layout: 'fit',
                     border: false,
                     flex: 1,
+                    height: this.calPanel.getHeight(), // <- initialHeight
                     items: view
                 });
             } else {
@@ -170,7 +172,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             
             this.attendeeViews.removeKey('main');
         }
-        
+
         this.calPanel.doLayout();
     },
     
@@ -204,6 +206,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             attendee: attendee,
             plain: true,
             flex: 1,
+            height: this.calPanel.getHeight(), // <- initialHeight
             activeItem: 0,
             items: view
         });
@@ -284,10 +287,10 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
      * @param {Object} e Event
      */
     onScroll: function(activeView, e) {
-        if (! (activeView && activeView.scroller && activeView.scroller.dom)) {
+        if (! (activeView && activeView.scroller && activeView.scroller.dom && activeView.getHeight() > 100)) {
             return;
         }
-        
+
         var scrollTop = activeView.scroller.dom.scrollTop;
 
         this.attendeeViews.each(function(view) {
@@ -460,7 +463,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.SplitBtn = Ext.extend(Ext.Button, {
     disabled: true,
     scale: 'medium',
     rowspan: 2,
-    icon: 'images/icon-set/icon_column.svg',
+    iconCls: 'cal-split-view',
     iconAlign: 'top',
     text: 'Split',
     stateful: true,
@@ -496,6 +499,8 @@ Tine.Calendar.Printer.SplitViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
             me = this,
             _ = window.lodash;
 
+        me.rendererArray = [];
+        me.viewArray = [];
         me.paperHeight = viewRenderer.paperHeight;
         me.useHtml2Canvas = me.printMode == 'sheet' && splitView.calPanel.view.cls != "cal-monthview";
         
@@ -503,6 +508,8 @@ Tine.Calendar.Printer.SplitViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
             return promise.then(function() {
                 var renderer = new view.printRenderer({printMode: me.printMode});
 
+                me.rendererArray.push(renderer);
+                me.viewArray.push(view);
                 renderer.extraTitle = view.title + ' // ';
                 renderer.titleStyle = i > 0 ? 'page-break-before:always' : '';
                 return renderer.generateBody(view);

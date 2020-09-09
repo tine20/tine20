@@ -39,10 +39,23 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      * use modulePanel (defaults to null -> autodetection)
      */
     useModuleTreePanel: null,
-
+    /**
+     * @cfg {Number} northHeight
+     */
+    northHeight: 44,
+    /**
+     * @cfg {Number} westWidth
+     */
+    westWidth: 200,
+    
     layout: 'border',
+    border: false,
+    stateful: true, 
 
     initComponent: function() {
+        var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + this.app.appName, []);
+        this.contentTypes = (this.contentTypes || []).concat(registeredContentTypes);
+
         this.useModuleTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
         this.initLayout();
         this.initMessageBus();
@@ -53,7 +66,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             this.cls = 't-app-' + this.app.appName.toLowerCase();
         }
         
-
+        this.stateId = this.app.appName + '-mainScreen';
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
     },
 
@@ -96,6 +109,18 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         }
     },
 
+    getState: function() {
+        return {
+            westWidth: this.westRegionPanel.getWidth(),
+            northHeight: this.northCardPanel.getHeight()
+        };
+    },
+    
+    applyState: function(state) {
+        this.westRegionPanel.setWidth(state.westWidth);
+        this.northCardPanel.setHeight(state.northHeight);
+    },
+    
     /**
      * @private
      */
@@ -106,7 +131,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             region: 'north',
             layout: 'card',
             activeItem: 0,
-            height: 59,
+            height: this.northHeight,
             border: false,
             items: []
         }, {
@@ -128,7 +153,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             //id: 'west',
             stateful: false,
             split: true,
-            width: 200,
+            width: this.westWidth,
             minSize: 100,
             border: false,
             collapsible:true,
@@ -136,6 +161,8 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             header: false,
             layout: 'fit',
             listeners: {
+                scope: this,
+                resize: this.saveState,
                 afterrender: function() {
                     // add to scrollmanager
                     if (arguments[0] && arguments[0].hasOwnProperty('body')) {
@@ -379,7 +406,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     showWestCardPanel: function() {
         // add save favorites button to toolbar if favoritesPanel exists
         var westPanel = this.getWestPanel(),
-            favoritesPanel = Ext.isFunction(westPanel.getFavoritesPanel) ? westPanel.getFavoritesPanel() : false,
+            favoritesPanel = westPanel.hasFavoritesPanel ? westPanel.getFavoritesPanel() : false,
             westPanelToolbar = this.westRegionPanel.getTopToolbar();
 
         westPanelToolbar.removeAll();
@@ -395,11 +422,13 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 }
             });
 
-            westPanelToolbar.show();
+            // westPanelToolbar.show();
+            // flat design
+            westPanelToolbar.hide();
         } else {
             westPanelToolbar.hide();
         }
-        
+
         westPanelToolbar.doLayout();
 
         this.setActiveTreePanel(westPanel, true);
@@ -498,3 +527,20 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         }
     }
 });
+
+/**
+ * content type registry
+ *
+ * @param {String} appName
+ * @param {Collection} contentType
+ *   contentType:   {String}
+ *   text:          {String}
+ *   group:         {String} (optional)
+ *   xtype:         {String} (optional)
+ */
+Tine.widgets.MainScreen.registerContentType = function(appName, contentType) {
+    var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + appName, []);
+    registeredContentTypes.push(contentType);
+
+    _.set(Tine.widgets.MainScreen.registerContentType, 'registry.' + appName, registeredContentTypes);
+};

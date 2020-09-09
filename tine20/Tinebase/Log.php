@@ -138,14 +138,48 @@ class Tinebase_Log extends Zend_Log
             return;
         }
 
-        if (empty($loggerConfig->filename)) {
-            throw new Tinebase_Exception_NotFound('filename missing in logger config');
+        if ($loggerConfig->database || $loggerConfig->formatter === 'db') {
+            // config not allowed here
+            return;
         }
-
-        $filename = $loggerConfig->filename;
-        $writer = new Zend_Log_Writer_Stream($filename);
         
+        $writer = $this->getWriter($loggerConfig);
         $writer->setFormatter($this->getFormatter($loggerConfig));
+        
+        $this->addWriter($writer);
+    }
+
+    /**
+     * Chose writer from logger config stream or db
+     * 
+     * @param $loggerConfig
+     * @return null|Tinebase_Log_Writer_Db|Zend_Log_Writer_Stream
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getWriter($loggerConfig)
+    {
+        if ($loggerConfig->database) {
+            // TODO we should move the db logger conf to the normal logger configuration flow
+            //      (maybe it should only be allowed as additional logger?)
+            if ($loggerConfig->formatter !== 'db') {
+                // we only support db formatter for db log writer
+                throw new Tinebase_Exception_NotFound(
+                    'formatter missing or not supported in logger config: ' . $loggerConfig->formatter);
+            }
+            if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+                $db = Tinebase_Core::getDb();
+                $writer = new Tinebase_Log_Writer_Db($db, SQL_TABLE_PREFIX . 'logentries');
+            } else {
+                return null;
+            }
+        } else {
+            if (empty($loggerConfig->filename)) {
+                throw new Tinebase_Exception_NotFound('filename missing in logger config');
+            }
+
+            $filename = $loggerConfig->filename;
+            $writer = new Zend_Log_Writer_Stream($filename);
+        }
 
         $priority = ($loggerConfig->priority) ? (int)$loggerConfig->priority : Zend_Log::EMERG;
         $filter = new Zend_Log_Filter_Priority($priority);
@@ -159,7 +193,7 @@ class Tinebase_Log extends Zend_Log
             $writer->addFilter(new Zend_Log_Filter_Message($loggerConfig->filter->message));
         }
         
-        $this->addWriter($writer);
+        return $writer;
     }
     
     /**
@@ -232,10 +266,11 @@ class Tinebase_Log extends Zend_Log
      * @param float $time_start
      * @param string $method
      * @param int $pid
+     * @param bool $asJson
      *
      * @todo we could make $time_start optional and use Tinebase_Core::STARTTIME if set
      */
-    public static function logUsageAndMethod($file, $time_start, $method, $pid = null)
+    public static function logUsageAndMethod($file, $time_start, $method, $pid = null, $asJson = true)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             // log profiling information
@@ -243,12 +278,25 @@ class Tinebase_Log extends Zend_Log
             $time = $time_end - $time_start;
             $pid = $pid === null ? getmypid() : $pid;
 
+            if ($asJson) {
+                $message = json_encode([
+                    'file' => $file,
+                    'method' => $method,
+                    'time' => Tinebase_Helper::formatMicrotimeDiff($time),
+                    'memory' => Tinebase_Core::logMemoryUsage(),
+                    'cache' => Tinebase_Core::logCacheSize(),
+                    'pid' => $pid,
+                ]);
+            } else {
+                $message = 'FILE: ' . $file
+                    . ' METHOD: ' . $method
+                    . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
+                    . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
+                    . ' / PID: ' . $pid;
+            }
+
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' FILE: ' . $file
-                . ' METHOD: ' . $method
-                . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
-                . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
-                . ' / PID: ' . $pid
+                . ' ' . $message
             );
         }
     }

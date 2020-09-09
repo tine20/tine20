@@ -70,6 +70,13 @@ Tine.Calendar.EventSelectionModel = Ext.extend(Ext.tree.MultiSelectionModel, {
         
         Tine.Calendar.EventSelectionModel.superclass.select.apply(this, arguments);
     },
+
+    selectRecords: function(records) {
+        this.clearSelections();
+        _.each(records, (record) => {
+            this.select(record, Ext.EventObject,true);
+        });
+    },
     
     onKeyDown: Ext.emptyFn
 });

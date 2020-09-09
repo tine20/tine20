@@ -26,7 +26,7 @@ describe('EditDialog', () => {
   })
 
   it('copies relations of tasks', () => {
-    require('../../../../../../tine20/Tasks/js/Models')
+    require('Tasks/js/Models')
     var record = new Tine.Tasks.Model.Task({
       summary: 'some task',
       relations: [{

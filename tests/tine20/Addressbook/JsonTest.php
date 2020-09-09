@@ -4,10 +4,9 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
- * @todo        add testSetImage (NOTE: we can't test the upload yet, so we needd to simulate the upload)
  */
 
 /**
@@ -81,7 +80,7 @@ class Addressbook_JsonTest extends TestCase
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'),
-            'Addressbook',
+            Addressbook_Model_Contact::class,
             Zend_Registry::get('currentAccount'),
             Tinebase_Model_Grants::GRANT_EDIT
         );
@@ -100,6 +99,11 @@ class Addressbook_JsonTest extends TestCase
             'dir' => 'ASC',
         );
 
+        // disable "short name" feature as this messes with some tests
+        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::ENABLED_FEATURES);
+        $enabledFeatures[Addressbook_Config::FEATURE_SHORT_NAME] = false;
+        Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
+
         parent::setUp();
     }
 
@@ -112,8 +116,10 @@ class Addressbook_JsonTest extends TestCase
     protected function tearDown()
     {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
-        
-        $this->_uit->deleteContacts($this->_contactIdsToDelete);
+
+        if ($this->_uit) {
+            $this->_uit->deleteContacts($this->_contactIdsToDelete);
+        }
 
         if ($this->_makeSCleverVisibleAgain) {
             $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
@@ -225,6 +231,21 @@ class Addressbook_JsonTest extends TestCase
             }
         }
         $this->assertTrue($found);
+    }
+
+    public function testGetListWithAccountOnlyField()
+    {
+        $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
+        $list = $this->_uit->getList($adminListId);
+        self::assertTrue(isset($list['account_only']), 'account_only field missing from list ' . print_r($list, true));
+
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
+        ) {
+            self::assertEquals('0', $list['account_only']);
+        } else {
+            self::assertEquals('1', $list['account_only']);
+        }
     }
     
     /**
@@ -385,6 +406,81 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * Test getting a Contact with and without the PrivateDataGrant
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function testGetPrivateContactData() {
+        $originalUser = Tinebase_Core::getUser();
+        $contact = $this->_addContact();
+
+        $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+        $this->assertArrayHasKey('tel_cell_private', $contact);
+        
+        $this->_setPersonaGrantsForTestContainer($contact['container_id'], 'sclever');
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+
+        $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
+        $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
+
+        Tinebase_Core::setUser($originalUser);
+    }
+
+    /**
+     * sclever has no PrivateData Grant or Admin Grant for InternalContacts
+     * But still sees her own Contacts private data
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function testGetPrivateContactDataOfOwnContact()
+    {
+        $originalUser = Tinebase_Core::getUser();
+        $internalContainer = Tinebase_Container::getInstance()->getContainerByName(
+            Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($internalContainer->getId(), Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($internalContainer->getId(), Tinebase_Model_Grants::GRANT_ADMIN));
+
+
+        $contactWithoutPrivate = $this->_uit->getContact(Tinebase_Core::getUser()->contact_id);
+        $this->assertArrayHasKey('tel_cell_private', $contactWithoutPrivate);
+
+        Tinebase_Core::setUser($originalUser);
+    }
+
+    /**
+     * Test seraching for a contact with and without the privateDataGrant
+     * 
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function testSearchPrivateContactData() {
+        $originalUser = Tinebase_Core::getUser();
+        $contact = $this->_addContact();
+
+        $paging = $this->objects['paging'];
+
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'contains', 'value' => 'PHPUNIT')
+        );
+        $contacts = $this->_uit->searchContacts($filter, $paging);
+
+        $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+        $this->assertArrayHasKey('tel_cell_private', $contacts['results'][0]);
+
+        $this->_setPersonaGrantsForTestContainer($contact['container_id'], 'sclever');
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+
+        $contactWithoutPrivate = $this->_uit->searchContacts($filter, $paging);
+        $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate['results'][0]);
+        
+        Tinebase_Core::setUser($originalUser);
+    }
+    
+    /**
      * this test is for Tinebase_Frontend_Json updateMultipleRecords with contact data in the addressbook app
      */
     public function testUpdateMultipleRecords()
@@ -518,7 +614,8 @@ class Addressbook_JsonTest extends TestCase
             'sort' => array('note_type_id', 'creation_time')
         ));
         $this->assertEquals($_changedNoteNumber, $history['totalcount'], print_r($history, TRUE));
-        $changedNote = $history['results'][$_changedNoteNumber - 1];
+        $changedNote = preg_replace('/\s*GDPR_DataProvenance \([^)]+\)/', '',
+            $history['results'][$_changedNoteNumber - 1]);
         foreach ((array) $_expectedText as $text) {
             $this->assertContains($text, $changedNote['note'], print_r($changedNote, TRUE));
         }
@@ -569,6 +666,8 @@ class Addressbook_JsonTest extends TestCase
         )));
         list(,$sharedTagId) = $this->_createAndAttachTag($filter, $type);
         $this->_checkChangedNote($contact['id'], array('tags ( ->  0: ' . $sharedTagId));
+
+        return $contact;
     }
     
     /**
@@ -615,7 +714,7 @@ class Addressbook_JsonTest extends TestCase
         
         $contact = $this->_uit->getContact($contact['id']);
         
-        $this->assertTrue(! isset($contact['tags']) || count($contact['tags'] === 0), 'record should not have any tags');
+        $this->assertTrue(! isset($contact['tags']) || count($contact['tags']) === 0, 'record should not have any tags');
     }
     
     /**
@@ -687,8 +786,91 @@ class Addressbook_JsonTest extends TestCase
 
         // check if industry is resolved in contact
         $this->assertTrue(is_array($contact['industry']), 'Industry not resolved: ' . print_r($contact, true));
+
+        $result = $this->_uit->searchContacts([
+            ['field' => 'industry', 'operator' => 'AND', 'value' => [
+                ['field' => 'name', 'operator' => 'equals', 'value' => $industry['name']]
+            ]]
+        ], null);
+
+        static::assertCount(1, $result['results']);
+
+        $result = $this->_uit->searchContacts([
+            ['field' => 'industry', 'operator' => 'AND', 'value' => [
+                ['field' => 'name', 'operator' => 'equals', 'value' => 'shalalala']
+            ]]
+        ], null);
+
+        static::assertCount(0, $result['results']);
     }
 
+    /**
+     * Test automatic Short Name Creation
+     */
+    public function testContactShortName()
+    {
+        $this->markTestSkipped('FIXME: does not work with de locale ...');
+
+        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::ENABLED_FEATURES);
+        $enabledFeatures[Addressbook_Config::FEATURE_SHORT_NAME] = true;
+
+        Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
+        $this->assertTrue(Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME));
+
+        $newContactData = $this->_getContactData();
+        $newContactData['n_given'] = 'Li';
+        $newContactData['n_middle'] = '1';
+        $newContactData['n_family'] = 'Wun';
+        $contact = $this->_uit->saveContact($newContactData);
+
+        $this->assertEquals('LWU', $contact['n_short'], 'Short Name should be LWU ');
+
+        try {
+            $newContactData['n_given'] = 'Lee';
+            $contact = $this->_uit->saveContact($newContactData);
+            $this->assertEquals('LEWU', $contact['n_short'], 'Short Name should be LEWU ');
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertEquals('This Short Name already exists. How about LEWU?', $e->getMessage(), 'Short Name should be LEWU');
+        }
+
+        try {
+            $newContactData['n_given'] = 'Len';
+            $contact = $this->_uit->saveContact($newContactData);
+            $this->assertEquals('LEWUN', $contact['n_short'], 'Short Name should be LEWUN ');
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertEquals('This Short Name already exists. How about LEWUN?', $e->getMessage(), 'Short Name should be LEWUN');
+        }
+
+        try {
+            $newContactData['n_given'] = 'Lena';
+            $contact = $this->_uit->saveContact($newContactData);
+            $this->assertEquals('LENWUN', $contact['n_short'], 'Short Name should be LENWUN ');
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertEquals('This Short Name already exists. How about LENWUN?', $e->getMessage(), 'Short Name should be LENWUN');
+        }
+
+        // set manually
+        $newContactData['n_given'] = 'Leander';
+        $newContactData['n_short'] = 'XXX';
+        $contact = $this->_uit->saveContact($newContactData);
+        $this->assertEquals('XXX', $contact['n_short'], 'Short Name should be XXX ');
+        $newContactData['n_short'] = NULL;
+
+        // Leonard wants to be XXX (set manually) but Leander already is XXX
+        try {
+            $newContactData['n_given'] = 'Leonard';
+            $newContactData['n_short'] = 'XXX';
+            $this->_uit->saveContact($newContactData);
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertEquals('This Short Name already exists. How about LEOWUN?', $e->getMessage(), 'Sry but Leander should be XXX already!');
+        }
+
+        $enabledFeatures = Addressbook_Config::getInstance()->get(Addressbook_Config::FEATURE_SHORT_NAME);
+        $enabledFeatures[Addressbook_Config::FEATURE_SHORT_NAME] = false;
+
+        Addressbook_Config::getInstance()->set(Addressbook_Config::ENABLED_FEATURES, $enabledFeatures);
+    }
+    
     /**
      * test updating of a contact (including geodata)
      *
@@ -1677,13 +1859,17 @@ class Addressbook_JsonTest extends TestCase
         $contact = $this->_addContact();
         try {
             $this->_addContact($contact['org_name'], $_duplicateCheck);
-            $this->assertFalse($_duplicateCheck, 'duplicate detection failed');
+            self::assertFalse($_duplicateCheck, 'duplicate detection failed');
         } catch (Tinebase_Exception_Duplicate $ted) {
-            $this->assertTrue($_duplicateCheck, 'force creation failed');
+            self::assertTrue($_duplicateCheck, 'force creation failed');
             $exceptionData = $ted->toArray();
-            $this->assertEquals(1, count($exceptionData['duplicates']), print_r($exceptionData['duplicates'], TRUE));
-            $this->assertEquals($contact['n_given'], $exceptionData['duplicates'][0]['n_given']);
-            $this->assertEquals($contact['org_name'], $exceptionData['duplicates'][0]['org_name']);
+            self::assertEquals(1, count($exceptionData['duplicates']), print_r($exceptionData['duplicates'], TRUE));
+            $duplicateContact = $exceptionData['duplicates'][0];
+            self::assertEquals($contact['n_given'], $duplicateContact['n_given']);
+            self::assertEquals($contact['org_name'], $duplicateContact['org_name']);
+            self::assertTrue(is_array($duplicateContact['container_id']), print_r($duplicateContact, true));
+            self::assertTrue(isset($duplicateContact['container_id']['account_grants']), print_r($duplicateContact, true));
+            self::assertTrue(is_array($duplicateContact['container_id']['account_grants']), print_r($duplicateContact, true));
         }
     }
     
@@ -1760,10 +1946,12 @@ class Addressbook_JsonTest extends TestCase
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
         $this->assertTrue(is_array($registryData['importDefinitions']['results']));
 
-        $options = $registryData['defaultImportDefinition']['plugin_options'];
+        $options = $registryData['defaultImportDefinition']['plugin_options_json'];
         $this->assertTrue(is_array($options));
         $this->assertEquals('Addressbook_Model_Contact', $options['model']);
         $this->assertTrue(is_array($options['autotags']));
+        $this->assertTrue(isset($options['autotags'][0]['name']), 'autotag missing: '
+            . print_r($options['autotags'], true));
         $this->assertEquals('Import list (###CURRENTDATE###)', $options['autotags'][0]['name']);
     }
 
@@ -1787,6 +1975,7 @@ class Addressbook_JsonTest extends TestCase
             'color' => '#009B31',
         ));
         $tag = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
+        self::assertNotNull($tag);
 
         $filter = array(array(
             'field'    => 'tag',
@@ -1797,8 +1986,6 @@ class Addressbook_JsonTest extends TestCase
 
         $this->assertTrue($allContactsWithoutTheTag['totalcount'] > 0);
         $this->assertEquals($allContacts['totalcount']-1, $allContactsWithoutTheTag['totalcount']);
-
-        $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
     }
     
     /**
@@ -2022,6 +2209,7 @@ Steuernummer 33/111/32212";
 
     /**
      * @see 0011584: allow to set group member roles
+     * @return array
      */
     public function testCreateListWithMemberAndRole($listRoleName = 'my test role')
     {
@@ -2042,7 +2230,8 @@ Steuernummer 33/111/32212";
             'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
         ));
 
-        $this->assertEquals(array($contact['id']), $list['members'], 'members are not saved/returned in list: ' . print_r($list, true));
+        static::assertCount(1, $list['members'], 'expect one member');
+        $this->assertEquals($contact['id'], $list['members'][0]['id'], 'members are not saved/returned in list: ' . print_r($list, true));
         $this->assertTrue(isset($list['memberroles']), 'memberroles missing from list');
         $this->assertEquals(1, count($list['memberroles']), 'member roles are not saved/returned in list: ' . print_r($list, true));
         $this->assertTrue(isset($list['memberroles'][0]['list_role_id']['id']), 'list roles should be resolved');
@@ -2124,6 +2313,28 @@ Steuernummer 33/111/32212";
         }
     }
 
+    public function testAddNonAccountContactToList()
+    {
+        $this->_skipIfLDAPBackend();
+
+        $contact = $this->_getContactData();
+        $newContact = $this->_uit->saveContact($contact);
+
+        // get admin list, try to add non-account-contact, expect exception
+        $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
+        $list = $this->_uit->getList($adminListId);
+        $list['members'][] = $newContact['id'];
+        try {
+            $updatedlist = $this->_uit->saveList($list);
+            self::fail('should throw exception - it is not allowed to add non-account contact to admin list! '
+                . print_r($updatedlist, true));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translate = Tinebase_Translation::getTranslation('Addressbook');
+            self::assertEquals($translate->_('It is not allowed to add non-account contacts to this list'),
+               $tesg->getMessage());
+        }
+    }
+
     public function testUpdateListWithRelation()
     {
         $list = $this->testCreateListWithMemberAndRole();
@@ -2146,6 +2357,66 @@ Steuernummer 33/111/32212";
         //Save the list again...
         $list = $this->_uit->saveList($list);
         self::assertEquals(1, count($list['relations']), 'relation missing from list');
+    }
+
+    public function testUpdateListEmail()
+    {
+        $list = $this->testCreateListWithMemberAndRole();
+        $list['email'] = 'somelistemail@' . TestServer::getPrimaryMailDomain();
+        // client sends empty memberroles like that ...
+        $list['memberroles'] = '';
+        $updatedList = $this->_uit->saveList($list);
+        self::assertEquals($list['email'], $updatedList['email']);
+        $updatedList['email'] = 'somelistemailupdated@' . TestServer::getPrimaryMailDomain();
+        $updatedListAgain = $this->_uit->saveList($updatedList);
+        self::assertEquals($updatedList['email'], $updatedListAgain['email']);
+    }
+
+    public function testUpdateListEmailOfSystemGroup()
+    {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend');
+        }
+
+        $lists = $this->_uit->searchLists([[
+            'field'    => 'type',
+            'operator' => 'equals',
+            'value'    => Addressbook_Model_List::LISTTYPE_GROUP,
+        ]], []);
+        self::assertGreaterThan(0, $lists['totalcount'], 'no system groups found');
+        $list = $lists['results'][0];
+
+        $systemGroupEmail = $list['email'];
+        // try to overwrite it with jsmith
+        $jsmith = Tinebase_User::getInstance()->getFullUserByLoginName('jsmith');
+        Tinebase_Core::setUser($jsmith);
+        $list['email'] = Tinebase_Record_Abstract::generateUID(10) . '@' . TestServer::getPrimaryMailDomain();
+        try {
+            $this->_uit->saveList($list);
+            self::fail('jsmith should not be able to update the record');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            self::assertContains('permission', $tead->getMessage());
+        }
+
+        // give jsmith edit grant
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $container = Tinebase_Container::getInstance()->getContainerById($list['container_id']['id']);
+        $this->_setPersonaGrantsForTestContainer(
+            $container,
+            'jsmith',
+            false,
+            true,
+            [],
+            true
+        );
+        Tinebase_Core::setUser($jsmith);
+        try {
+            $this->_uit->saveList($list);
+            self::fail('jsmith should not be able to update the record');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            self::assertContains('ACCOUNTS', $tead->getMessage());
+        }
     }
 
     public function testSearchListsByMember()
@@ -2290,7 +2561,7 @@ Steuernummer 33/111/32212";
 
         static::assertGreaterThan(0, $result['totalcount'], 'no results found');
         static::assertTrue(isset($result['results'][count($result['results'])-1]['emails']),
-            'last entry should be a list that has emails: ' . print_r($result['results'][count($result['results'])-1],
+            'last entry should be a list that has emails: ' . print_r($result['results'],
                 true));
         foreach ($result['results'] as $entry) {
             // only lists have 'emails' key
@@ -2298,6 +2569,33 @@ Steuernummer 33/111/32212";
                 self::fail('empty lists should not be returned - list: ' . print_r($entry, true));
             }
         }
+    }
+
+    /**
+     * test with maillinglist
+     */
+    public function testSearchEmailAddresssWithMailinglist()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $list = $this->_createMailinglist();
+        $result = $this->_uit->searchEmailAddresss([
+            ["condition" => "AND", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "email", "operator" => "equals", "value" => $list['email']]
+            ]]]
+            ]], []);
+
+        static::assertEquals(1, $result['totalcount'], 'no results found');
+        static::assertEquals($list['email'], $result['results'][0]['emails'][0]);
+
+        // Felamimail searchAccounts should not return mailinglist
+        $ffj = new Felamimail_Frontend_Json();
+        $result = $ffj->searchAccounts([], []);
+        $listaccounts = array_filter($result['results'], function($account) {
+            return $account['type'] === Felamimail_Model_Account::TYPE_ADB_LIST;
+        });
+        self::assertEquals(0, count($listaccounts), 'found adb list account(s): '
+            . print_r($listaccounts, true));
     }
 
     /**
@@ -2333,5 +2631,65 @@ Steuernummer 33/111/32212";
         self::assertEquals(1, count($contactWithUnlockedProjectSaved['relations']),'project relation should not be removed!');
         self::assertTrue(isset($contactWithUnlockedProjectSaved['relations'][0]['related_record']));
         self::assertEquals('blabla', $contactWithUnlockedProjectSaved['relations'][0]['related_record']['description']);
+    }
+
+    public function testSetImage()
+    {
+        $contact = $this->_getContactWithImage();
+        $savedContactWithImage = $this->_uit->saveContact($contact);
+
+        // save contact again
+        $savedContactWithImageAgain = $this->_uit->saveContact($savedContactWithImage);;
+
+        // check if image is still there
+        self::assertTrue(isset($savedContactWithImageAgain['jpegphoto']));
+        self::assertEquals($savedContactWithImage['jpegphoto'], $savedContactWithImageAgain['jpegphoto'],
+            'image should not change!');
+        return $savedContactWithImageAgain;
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getContactWithImage()
+    {
+        // create tempfile
+        $tempFileBackend = new Tinebase_TempFile();
+        $image = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/images/favicon.png';
+        $tempFile = $tempFileBackend->createTempFile($image);
+
+        // save contact with tempfile
+        $contact = $this->_getContactData();
+        $contact['jpegphoto'] = 'index.php?method=Tinebase.getImage&application=Tinebase&location=tempFile&id='
+            . $tempFile->getId() . '&width=88&height=118&ratiomode=0&mtime=1546880445806';
+        return $contact;
+    }
+
+    public function testSetImageCreateDuplicateContact()
+    {
+        $contact = $this->_getContactWithImage();
+        // let's throw a duplicate exception
+        $contact['email'] = Tinebase_Core::getUser()->accountEmailAddress;
+        try {
+            $result = $this->_uit->saveContact($contact);
+            self::fail('duplicate exception expected');
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            try {
+                $jsonResponse = json_encode($ted->toArray());
+            } catch (Throwable $e) {
+                // pre php 7.2
+                $jsonResponse = false;
+            }
+            self::assertNotFalse($jsonResponse);
+        }
+
+    }
+
+    public function testRemoveImage()
+    {
+        $contact = $this->testSetImage();
+        $contact['jpegphoto'] = '';
+        $savedContactToRemoveImage = $this->_uit->saveContact($contact);
+        self::assertEquals('images/icon-set/icon_undefined_contact.svg', $savedContactToRemoveImage['jpegphoto'], 'image not removed');
     }
 }

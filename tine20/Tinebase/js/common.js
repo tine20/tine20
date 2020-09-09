@@ -46,6 +46,8 @@ Tine.Tinebase.common = {
      * @param {Object} options
      *      {Boolean} keepRegistry
      *      {Boolean} clearCache
+     *      {Boolean} redirectAlways
+     *      {String} redirectUrl
      */
     reload: function(options) {
         options = options || {};
@@ -55,10 +57,19 @@ Tine.Tinebase.common = {
             Tine.Tinebase.tineInit.clearRegistry();
         }
 
-        // give browser some time to clear registry
-        window.setTimeout(function () {
-            window.location.reload(!!options.clearCache);
-        }, 500);
+        if (! options.redirectAlways && options.redirectUrl && options.redirectUrl != '') {
+            // redirect only after logout (redirectAlways == false) - we can't wait for the browser here...
+            // @todo how can we move that to the server?
+            // @see https://github.com/tine20/tine20/issues/6236
+            window.setTimeout(function () {
+                window.location = options.redirectUrl;
+            }, 500);
+        } else {
+            // give browser some time to clear registry
+            window.setTimeout(function () {
+                window.location.reload(!!options.clearCache);
+            }, 500);
+        }
     },
 
     showDebugConsole: function () {
@@ -89,7 +100,11 @@ Tine.Tinebase.common = {
      * @see Ext.util.Format.date
      * @return {String} localised date and time
      */
-    dateTimeRenderer: function ($_iso8601) {
+    dateTimeRenderer: function ($_iso8601, metadata) {
+        if (metadata) {
+            metadata.css = 'tine-gird-cell-datetime';
+        }
+
         var dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
         
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium'));
@@ -102,7 +117,11 @@ Tine.Tinebase.common = {
      * @see Ext.util.Format.date
      * @return {String} localised date
      */
-    dateRenderer: function (date) {
+    dateRenderer: function (date, metadata) {
+        if (metadata) {
+            metadata.css = metadata.css + ' tine-gird-cell-date';
+        }
+
         var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
         
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium'));
@@ -157,7 +176,11 @@ Tine.Tinebase.common = {
      * @see Ext.util.Format.date
      * @return {String} localised time
      */
-    timeRenderer: function (date) {
+    timeRenderer: function (date, metadata) {
+        if (metadata) {
+            metadata.css = 'tine-gird-cell-time';
+        }
+
         var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
         
         return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', 'medium'));
@@ -840,6 +863,46 @@ Tine.Tinebase.common = {
             return Math.floor(x);
         }
         return Math.ceil(x);
+    },
+
+    /**
+     * check valid email domain (if email domain is set in config)
+     *
+     * @param {String} email
+     * @return {Boolean}
+     */
+    checkEmailDomain: function(email) {
+        Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - email: ' + email);
+
+        if (! Tine.Tinebase.registry.get('primarydomain') || ! email) {
+            Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no primarydomain config found or no mail given');
+            return true;
+        }
+
+        var allowedDomains = [Tine.Tinebase.registry.get('primarydomain')],
+            emailDomain = email.split('@')[1];
+
+        if (Ext.isString(Tine.Tinebase.registry.get('secondarydomains'))) {
+            allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('secondarydomains').split(','));
+        }
+
+        if (Ext.isString(Tine.Tinebase.registry.get('additionaldomains'))) {
+            allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('additionaldomains').split(','));
+        }
+
+        Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - allowedDomains:');
+        Tine.log.debug(allowedDomains);
+
+        return (allowedDomains.indexOf(emailDomain) !== -1);
+    },
+
+    getMimeIconCls: function(mimeType) {
+        return 'mime-content-type-' + mimeType.replace(/\/.*$/, '') +
+            ' mime-suffix-' + (mimeType.match(/\+/) ? mimeType.replace(/^.*\+/, '') : 'none') +
+            ' mime-type-' + mimeType
+                .replace(/\//g, '-slash-')
+                .replace(/\./g, '-dot-')
+                .replace(/\+/g, '-plus-');
     }
 };
 

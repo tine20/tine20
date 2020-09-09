@@ -30,12 +30,13 @@ class Tinebase_AccountTest extends TestCase
                 'accountPrimaryGroup' => Tinebase_Core::getUser()->accountPrimaryGroup,
                 'accountLastName'     => 'Tine 2.0',
                 'accountFirstName'    => 'PHPUnit',
-                'accountEmailAddress' => 'phpunit@' . $this->_getMailDomain()
+                'accountEmailAddress' => 'phpunit@' . TestServer::getPrimaryMailDomain()
             )
         ));
         
         $this->assertNotEmpty($account->accountId);
-        
+        $this->assertEquals(0, $account->is_deleted);
+
         return $account;
     }
     
@@ -287,7 +288,7 @@ class Tinebase_AccountTest extends TestCase
                 'accountPrimaryGroup' => Tinebase_Core::getUser()->accountPrimaryGroup,
                 'accountLastName'     => 'Tine 2.0 noid',
                 'accountFirstName'    => 'PHPUnit noid',
-                'accountEmailAddress' => 'phpunit@tine20.org'
+                'accountEmailAddress' => 'phpunit@' . TestServer::getPrimaryMailDomain(),
             )
         );
         

@@ -93,7 +93,8 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
                         path: path + '/' + coreData.application_id.id,
                         id: coreData.application_id.id,
                         text: coreDataApp.i18n._(coreData.application_id.name),
-                        attributes: coreData.application_id
+                        attributes: coreData.application_id,
+                        singleClickExpand: true
                     });
                 }
 
@@ -129,7 +130,20 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
             Tine.log.debug('Tine.CoreData.TreePanel::onClick');
             Tine.log.debug(node);
 
-            var mainscreen = this.app.getMainScreen();
+            var mainscreen = this.app.getMainScreen(),
+                coreData = node.attributes.attributes;
+
+            // autoregister grid
+            if (! Tine.CoreData.Manager.isRegistered('grid', coreData.id)) {
+                var recordClass = Tine.Tinebase.data.RecordMgr.get(coreData.model),
+                    appName = recordClass ? recordClass.getMeta('appName') : null,
+                    modelName = recordClass ? recordClass.getMeta('modelName') : null;
+
+                if (appName && modelName && Tine[appName] && Tine[appName][modelName + 'GridPanel']) {
+                    Tine.CoreData.Manager.registerGrid(coreData.id, Tine[appName][modelName + 'GridPanel']);
+                }
+
+            }
 
             mainscreen.setActiveContentType(node.attributes.attributes.id);
             mainscreen.getCenterPanel().getStore().reload();

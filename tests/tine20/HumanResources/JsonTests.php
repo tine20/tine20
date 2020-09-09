@@ -4,7 +4,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -29,9 +29,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_json = new HumanResources_Frontend_Json();
+        $this->_uit = $this->_json = new HumanResources_Frontend_Json();
     }
-    
+
     /**
      * Creates an employee with contracts and contact, account etc.
      * tests auto end_date of old contract
@@ -55,13 +55,14 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertArrayHasKey('costcenters', $savedEmployee);
         
         $this->assertEquals(1, count($savedEmployee['contracts']));
+        static::assertTrue(is_array($savedEmployee['contracts'][0]['working_time_scheme']));
         $this->assertEquals(1, count($savedEmployee['costcenters']));
 
         // check if accounts has been created properly on aftercreate
         $filter = new HumanResources_Model_AccountFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id'])));
         $result = HumanResources_Controller_Account::getInstance()->search($filter);
-        $this->assertEquals(2, $result->count());
+        $this::assertGreaterThanOrEqual(2, $result->count(), 'should find 2 or more accounts: ' . print_r($result->toArray(), true));
        
         $date->addMonth(2);
         $costCenter2 = $this->_getCostCenter($date);
@@ -125,6 +126,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         ));
         
         $vacation = HumanResources_Controller_FreeTime::getInstance()->create($vacation);
+
+        $testSearchFT = $this->_json->searchFreeTimes([['field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id']]], []);
+        $testSearchFT = $testSearchFT['results'][0];
+        $msg = print_r($testSearchFT, true);
+        static::assertArrayHasKey('freedays', $testSearchFT, $msg);
+        static::assertGreaterThan(0, count($testSearchFT['freedays']), $msg);
+        static::assertArrayHasKey('id', $testSearchFT['freedays'][0], $msg);
         
         $employee = $this->_json->getEmployee($savedEmployee['id']);
         
@@ -136,8 +144,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $employee = $this->_json->saveEmployee($employee);
         
-        $this->assertEquals(5, $employee['vacation'][0]['days_count']);
-        $this->assertEquals(17, count($employee['vacation'][0]));
         $this->assertEquals(3, count($employee['costcenters']));
         
         // @see: 0010050: Delete last dependent record fails
@@ -274,7 +280,25 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         }
         $this->_json->deleteEmployees($eIds);
     }
-    
+
+    public function testContractDirect()
+    {
+        $e = $this->_getEmployee('rwright');
+        $e = $this->_json->saveEmployee($e->toArray());
+
+        $contract = $this->_getContract();
+        $contract->employee_id = $e['id'];
+
+        $savedContract = $this->_json->saveContract($contract->toArray(true));
+        static::assertTrue(is_array($savedContract[0]['working_time_scheme']));
+
+        HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->delete($savedContract[0]['working_time_scheme']['id']);
+
+        $savedContract = $this->_json->getContract($savedContract[0]['id']);
+        static::assertTrue(is_array($savedContract[0]['working_time_scheme']), 'expect deleted WTS to be resolved');
+    }
+
     /**
      * test employee creation/update with contracts
      */
@@ -292,14 +316,17 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $nextMonth->addMonth(1); 
         
         $fcId = $this->_getFeastCalendar();
-        
+
+        $wtscheme = $this->_getWorkingTimeScheme40();
+        self::assertNotNull($wtscheme);
         $contracts = array(array(
             'start_date' => clone $sdate,
             'end_date'   => clone $edate,
             'vacation_days' => 23,
             'feast_calendar_id' => $fcId,
             'creation_time' => $now,
-            'id' => 1234567891
+            'id' => 1234567891,
+            'working_time_scheme' =>$wtscheme->getId(),
         ));
         
         $sdate->addMonth(1);
@@ -311,7 +338,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'vacation_days' => 27,
             'feast_calendar_id' => $fcId,
             'creation_time' => $now,
-            'id' => 1234567890
+            'id' => 1234567890,
+            'working_time_scheme' => $wtscheme->getId(),
         );
         
         $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName)->toArray();
@@ -348,6 +376,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'feast_calendar_id' => $fcId,
             'creation_time' => $now->toString(),
             'number' => 1,
+            'working_time_scheme' => $wtscheme->getId(),
         );
         
         // doing this manually, this won't be the last assertion, and more assertions are needed
@@ -374,6 +403,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'vacation_days' => 22,
             'feast_calendar_id' => $fcId,
             'creation_time' => $now->toString(),
+            'working_time_scheme' => $wtscheme->getId(),
         );
 
         try {
@@ -392,10 +422,29 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      */
     public function testWorkingTimeTemplate()
     {
-         $recordData = array('title' => 'lazy worker', 'type' => 'static', 'json' => '{"days":[1,1,1,1,1,0,0]}', 'working_hours' => 5);
-         $savedWT = $this->_json->saveWorkingTime($recordData);
+        $recordData = [
+            HumanResources_Model_WorkingTimeScheme::FLDS_TITLE     => 'lazy worker',
+            HumanResources_Model_WorkingTimeScheme::FLDS_TYPE      =>
+                HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE,
+            HumanResources_Model_WorkingTimeScheme::FLDS_JSON      => '[3600,3600,3600,3600,3600,0,0]',
+            HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE    => '[{"' .
+                Tinebase_Model_BLConfig::FLDS_CLASSNAME . '":"' .
+                HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class . '","' .
+                Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD . '":{"' .
+                HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::FLDS_START_TIME . '":"07:30","' .
+                HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::FLDS_END_TIME . '":"16:25"}}]'
+        ];
+        $savedWT = $this->_json->saveWorkingTime($recordData);
 
-         $this->assertEquals($savedWT['title'], 'lazy worker');
+        static::assertSame($savedWT[HumanResources_Model_WorkingTimeScheme::FLDS_TITLE], 'lazy worker');
+        static::assertSame($savedWT[HumanResources_Model_WorkingTimeScheme::FLDS_TYPE],
+            HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE);
+        static::assertSame($savedWT[HumanResources_Model_WorkingTimeScheme::FLDS_JSON],
+            '[3600,3600,3600,3600,3600,0,0]');
+        $blpipe = $savedWT[HumanResources_Model_WorkingTimeScheme::FLDS_BLPIPE];
+        static::assertTrue(isset($blpipe[0][Tinebase_Model_BLConfig::FLDS_CLASSNAME]), print_r($blpipe, true));
+        static::assertSame($blpipe[0][Tinebase_Model_BLConfig::FLDS_CLASSNAME],
+            HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class);
 
          // test duplicate exception
          $this->setExpectedException('Tinebase_Exception_Duplicate');
@@ -423,13 +472,16 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $contract1 = $this->_getContract();
         $contract1->start_date = $employmentBegin;
-        $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
         $contract1->vacation_days = 25;
         
         $contract2 = $this->_getContract();
         $contract2->start_date = $employmentChange;
         $contract2->end_date = $employmentEnd;
-        $contract2->workingtime_json = '{"days": [4,4,4,4,4,4,4]}';
+        $contract2->working_time_scheme = HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->create(new HumanResources_Model_WorkingTimeScheme([
+                HumanResources_Model_WorkingTimeScheme::FLDS_TITLE  => '7x4',
+                HumanResources_Model_WorkingTimeScheme::FLDS_JSON   => ['days' => [4,4,4,4,4,4,4]],
+            ]))->getId();
     
         $rs = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
         $rs->addRecord($contract1);
@@ -563,8 +615,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'days_count' => 3
         );
         
-        $refdate = clone $referenceDate;
-        
         $freetime['freedays'] = array(
             array('duration' => '1', 'date' => $referenceDate->toString()),
             array('duration' => '1', 'date' => $referenceDate->addDay(1)->toString()),
@@ -591,8 +641,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $res = $result['results'];
         $this->assertEquals(27, $res['remainingVacation']);
         $this->assertEquals(5, $res['extraFreeTimes']['remaining']);
-        $this->assertEquals(6, count($res['vacationDays']));
-        $this->assertEquals(0, count($res['sicknessDays']));
+//        $this->assertEquals(6, count($res['vacationDays'])); // not used in client
+//        $this->assertEquals(0, count($res['sicknessDays'])); // not used in client
         $this->assertEquals(104, count($res['excludeDates']));
         $this->assertEquals(NULL, $res['ownFreeDays']);
         $this->assertEquals(11, count($res['feastDays']));
@@ -623,7 +673,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-        $this->assertEquals(9, count($res['vacationDays']));
+//        $this->assertEquals(9, count($res['vacationDays'])); // not used in client
         $this->assertEquals(24, $res['remainingVacation']);
         
         // overwrite last 2 days of previous vacation with sickness
@@ -648,8 +698,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-        $this->assertEquals(7, count($res['vacationDays']));
-        $this->assertEquals(2, count($res['sicknessDays']));
+//        $this->assertEquals(7, count($res['vacationDays'])); // not used in client
+//        $this->assertEquals(2, count($res['sicknessDays'])); // not used in client
         $this->assertEquals(26, $res['remainingVacation']);
     }
     
@@ -670,23 +720,23 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * @see 0009168: HR saving sickness days days_count failure
      *      https://forge.tine20.org/mantisbt/view.php?id=9168
      */
-    public function testFirstAndLastDayOfFreetime() {
+    public function testFirstAndLastDayOfFreetime()
+    {
         $employmentBegin  = new Tinebase_DateTime('2012-12-15');
         $employmentEnd    = new Tinebase_DateTime('2014-06-30');
     
-        $referenceDate = new Tinebase_DateTime('2013-10-10');
-        
-        $contractController = HumanResources_Controller_Contract::getInstance();
         $employeeController = HumanResources_Controller_Employee::getInstance();
-        $contractBackend = new HumanResources_Backend_Contract();
-    
+
         $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         $employee->employment_begin = $employmentBegin;
         $employee->employment_end = $employmentEnd;
+
+        $wtscheme = $this->_getWorkingTimeScheme40();
+        self::assertNotNull($wtscheme);
         
         $contract1 = $this->_getContract();
         $contract1->start_date = $employmentBegin;
-        $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
+        $contract1->working_time_scheme = $wtscheme->getId();
         $contract1->vacation_days = 25;
         
         $rs = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
@@ -741,7 +791,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $contract = $this->_getContract();
         $contract->start_date = $employmentBegin;
-        $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
         $contract->vacation_days = 25;
         
         $employee->contracts = array($contract->toArray());
@@ -787,7 +836,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $contract1 = $this->_getContract();
             $contract1->start_date = $employmentBegin;
             $contract1->end_date = $employmentEnd;
-            $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
             $contract1->vacation_days = 25;
             $contract1->feast_calendar_id = $this->_getFeastCalendar()->getId();
             
@@ -808,8 +856,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $res = $result['results'];
             $this->assertEquals(2, $res['remainingVacation']);
             $this->assertEquals(0, $res['extraFreeTimes']['remaining']);
-            $this->assertEquals(0, count($res['vacationDays']));
-            $this->assertEquals(0, count($res['sicknessDays']));
+//            $this->assertEquals(0, count($res['vacationDays'])); // not used in client
+//            $this->assertEquals(0, count($res['sicknessDays'])); // not used in client
             $this->assertEquals(8, count($res['excludeDates']));
             $this->assertEquals(NULL, $res['ownFreeDays']);
             
@@ -844,7 +892,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $contract1 = $this->_getContract();
         $contract1->start_date = $employmentBegin;
         $contract1->end_date = $employmentEnd;
-        $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
         $contract1->vacation_days = 25;
         
         $recordData = $employee->toArray();
@@ -874,7 +921,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employeeController = HumanResources_Controller_Employee::getInstance();
         $employee = $employeeController->create($employee);
         $contract = $this->_getContract($sdate);
-        $contract->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
         $contract->employee_id = $employee->getId();
         
         $feastCalendar = $this->_getFeastCalendar();
@@ -891,24 +937,16 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $accountController->createMissingAccounts(2013, $employee);
         $account = $accountController->getAll()->getFirstRecord();
         
-        $employeeJson['vacation'] = array(array(
-            'account_id' => $account->getId(),
-            'type' => 'vacation',
-            'status' => 'ACCEPTED',
-            'freedays' => array(array('duration' => '1', 'date' => '2013-01-11 00:00:00')),
-        ));
-        
-        $employeeJson = $this->_json->saveEmployee($employeeJson);
-        
-        $this->assertEquals(1, count($employeeJson['vacation']));
-        
+        $wtscheme = $this->_getWorkingTimeScheme40();
+        self::assertNotNull($wtscheme);
+
         // manually set the end date and add a new contract
         $employeeJson['contracts'][0]['end_date'] = '2013-05-31 00:00:00';
         $employeeJson['contracts'][1] = array(
-            'start_date' => '2013-06-01 00:00:00', 
-            'workingtime_json' => '{"days": [8,8,8,8,8,0,0]}',
+            'start_date' => '2013-06-01 00:00:00',
             'vacation_days' => 27,
-            'feast_calendar_id' => $feastCalendar->getId()
+            'feast_calendar_id' => $feastCalendar->getId(),
+            'working_time_scheme' => $wtscheme->getId(),
         );
         
         // no exception should be thrown
@@ -917,16 +955,23 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
         $endDate = '2013-05-30 00:00:00';
         $employeeJson['contracts'][0]['end_date'] = $endDate;
-        $employeeJson['contracts'][0]['workingtime_json'] = '{"days": [8,8,8,8,8,0,0]}';
         $recordData = $this->_json->saveEmployee($employeeJson);
         $this->assertEquals($endDate, $recordData['contracts'][0]['end_date']);
+
+        HumanResources_Controller_FreeTime::getInstance()->create(new HumanResources_Model_FreeTime([
+            'employee_id' => $employeeJson['id'],
+            'account_id' => $account->getId(),
+            'type' => 'vacation',
+            'status' => 'ACCEPTED',
+            'freedays' => [['duration' => '1', 'date' => '2013-01-11 00:00:00']],
+        ]));
         
         $employeeJson['contracts'][0]['vacation_days'] = 31;
         try {
             $employeeJson = $this->_json->saveEmployee($employeeJson);
             $this->fail('an exception should be thrown');
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable);
+            $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable, $e->getMessage());
         }
     }
     
@@ -944,12 +989,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $contract1->start_date = clone $date; // 1.1.2014
         $date->addMonth(7)->subDay(1); 
         $contract1->end_date = clone $date; // 31.7.2014 
-        $contract1->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
         $contract1->vacation_days = 27;
         $date->addDay(1); // 1.8.2014
         $contract2 = $this->_getContract();
         $contract2->start_date = clone $date;
-        $contract2->workingtime_json = '{"days": [8,8,8,8,8,0,0]}';
         $contract2->vacation_days = 30;
         
         $recordData = $employee->toArray();
@@ -1138,7 +1181,45 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employeeJson = $this->_json->saveEmployee($employeeJson);
         $this->assertEquals($id, $employeeJson['contracts'][0]['id']);
     }
-    
+
+    public function testDailyWtReportApi($delete = true)
+    {
+        $e = HumanResources_Controller_Employee::getInstance()->create($this->_getEmployee());
+        $mwtr = HumanResources_Controller_MonthlyWTReport::getInstance()->create(new HumanResources_Model_MonthlyWTReport([
+            HumanResources_Model_MonthlyWTReport::FLDS_MONTH => '2018-08',
+            HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID => $e->getId(),
+        ]));
+        $dwtr = HumanResources_Controller_DailyWTReport::getInstance()->create(new HumanResources_Model_DailyWTReport([
+            'employee_id' => $e->getId(),
+            'monthlywtreport' => $mwtr->getId(),
+            'date' => '2018-08-01',
+        ]));
+        return $this->_testSimpleRecordApi(
+            'DailyWTReport',
+            null,
+            null,
+            $delete,
+            [
+                'id' => $dwtr->getId(),
+                'employee_id' => $e->toArray(),
+                'monthlywtreport' => $mwtr->toArray(),
+                'date' => '2018-08-01',
+            ],
+            false
+        );
+    }
+
+    /**
+     * disallow to edit clearance
+     */
+    public function testUpdateClearedDailyWtReport()
+    {
+        $report = $this->testDailyWtReportApi(false);
+        $report['is_cleared'] = 1;
+        $saved_report = $this->_json->saveDailyWtReport($report);
+        static::assertFalse((bool) $saved_report['is_cleared'], 'is_cleared should not be set');
+    }
+
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10176
      */

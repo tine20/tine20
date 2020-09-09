@@ -236,8 +236,8 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * Creates new entry
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
+     * @param   Tinebase_Model_Path $_record
+     * @return  Tinebase_Model_Path
      * @throws  Tinebase_Exception_InvalidArgument
      * @throws  Tinebase_Exception_UnexpectedValue
      */
@@ -256,7 +256,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $identifier = $_record->getIdProperty();
         // set uid if id is empty
         if (empty($_record->$identifier)) {
-            $_record->setId($_record->generateUID());
+            $_record->setId($_record::generateUID());
         }
 
         $this->_addToModelStore($_record);

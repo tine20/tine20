@@ -71,8 +71,6 @@ Tine.Admin.Tags.Main = {
                         tagIds.push(selectedRows[i].id);
                     }
                     
-                    tagIds = tagIds;
-                    
                     Ext.Ajax.request({
                         url: 'index.php',
                         params: {
@@ -224,6 +222,7 @@ Tine.Admin.Tags.Main = {
                 resizable: true
             },
             columns: [
+                { id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', hidden: true, width: 40 },
                 { id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function (color,meta,record) {
                     return '<div style="margin-top:1px;width: 8px; height: 8px; background-color:' + color + '; border-radius:5px;border: 1px solid black;" title="' + record.get('name') + ' (' +  i18n._('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
                 }},
@@ -255,7 +254,6 @@ Tine.Admin.Tags.Main = {
             }
         }, this);
         
-        // the gridpanel
         this.gridPanel = new Ext.grid.GridPanel({
             canonicalName: ['Tag', 'Grid'].join(Tine.Tinebase.CanonicalPath.separator),
             store: dataStore,
@@ -271,7 +269,9 @@ Tine.Admin.Tags.Main = {
                 forceFit: true,
                 ignoreAdd: true,
                 emptyText: this.translation.gettext('No tags to display')
-            })            
+            }),
+            enableHdMenu: false,
+            plugins: [new Ext.ux.grid.GridViewMenuPlugin()]
         });
         
         this.gridPanel.on('rowcontextmenu', function (grid, rowIndex, eventObject) {

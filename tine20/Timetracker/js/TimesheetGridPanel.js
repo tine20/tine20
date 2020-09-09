@@ -42,7 +42,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     gridConfig: {
         autoExpandColumn: 'description'
     },
-    copyEditAction: true,
     multipleEdit: true,
 
     /**
@@ -160,7 +159,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     data.sum = data.sum + parseInt(record.data.duration);
                     if (record.data.is_billable_combined == '1') {
                         data.countbillable++;
-                        data.sumbillable = data.sumbillable + parseInt(record.data.duration);
+                        data.sumbillable = data.sumbillable + parseInt(record.data.accounting_time);
                     }
                 });
                 data.sum = Tine.Tinebase.common.minutesRenderer(data.sum);

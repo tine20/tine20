@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -42,7 +42,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'install-s'                 => 'Install applications [all if nothing installed yet] or comma separated list (use "all" as parameter to install all available apps);'
                     . ' To specify the login name and login password of the admin user that is created during installation, append \' -- adminLoginName="admin" adminPassword="password"\''
                     . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
-                'update-s'                  => 'Update applications [All] or comma separated list',
+                'update-s'                  => 'Update applications [All] or comma separated list - supports verbose mode (-v)',
+                'update_needed'             => 'returns "Update required" and return code 1 if update is required',
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
                 'install_dump'              => 'Install Tine from a backup
                          Examples:
@@ -66,7 +67,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                            setup.php --updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com',
                 'backup'                    => 'backup config and data
                          Examples:
-                           setup.php --backup -- config=1 db=1 files=1 backupDir=/backup/tine20 noTimestamp=1',
+                           setup.php --backup -- config=1 db=1 files=1 backupDir=/backup/tine20 noTimestamp=1 novalidate=1',
                 'restore'                   => 'restore config and data
                          Examples:
                            setup.php --restore -- config=1 db=1 files=1 backupDir=/backup/tine20',
@@ -87,7 +88,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                             setup.php --migrateUtf8mb4',
                 'maintenance_mode'          => 'set systems maintenance mode state
                         Examples:
-                           setup.php --maintenance_mode -- state=[on|all|off]',
+                           setup.php --maintenance_mode -- state=[normal|all|off]',
+                'config_from_env'           => 'generates config from environment variables like TINE20__<application>_<propertiy>',
+                'is_installed'           => 'Checks if tine20 is installed, otherwise returns 1.',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -100,6 +103,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             (empty($opts->install) && 
             empty($opts->install_dump) &&
             empty($opts->update) &&
+            empty($opts->update_needed) &&
             empty($opts->uninstall) &&
             empty($opts->list) && 
             empty($opts->sync_accounts_from_ldap) && 
@@ -119,7 +123,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->upgradeMysql564) &&
             empty($opts->migrateUtf8mb4) &&
             empty($opts->pgsqlMigration) &&
-            empty($opts->maintenance_mode)))
+            empty($opts->maintenance_mode) &&
+            empty($opts->config_from_env) &&
+            empty($opts->is_installed)))
         {
             echo $opts->getUsageMessage();
             exit;
@@ -137,7 +143,15 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             . ' Is cli request. method: ' . $this->getRequestMethod());
 
         $setupServer = new Setup_Frontend_Cli();
-        return $setupServer->handle($opts);
+        try {
+            $result = $setupServer->handle($opts);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            echo $e . "\n";
+            $result = 1;
+        }
+
+        exit($result);
     }
     
     /**

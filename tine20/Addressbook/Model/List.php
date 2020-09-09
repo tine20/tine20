@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -40,6 +40,21 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     const LISTTYPE_GROUP = 'group';
 
     /**
+     * mailinglist xprops
+     */
+    const XPROP_SIEVE_ALLOW_EXTERNAL = 'sieveAllowExternal';
+    const XPROP_SIEVE_ALLOW_ONLY_MEMBERS = 'sieveAllowOnlyMembers';
+    const XPROP_SIEVE_FORWARD_ONLY_SYSTEM = 'sieveForwardOnlySystem';
+    const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
+    const XPROP_USE_AS_MAILINGLIST = 'useAsMailinglist';
+
+    /**
+     * external email user ids (for example in dovecot/postfix sql)
+     */
+    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
+
+    /**
      * name of fields which require manage accounts to be updated
      *
      * @var array list of fields which require manage accounts to be updated
@@ -72,6 +87,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'modlogActive'      => true,
         'hasAttachments'    => false,
         'createModule'      => true,
+        self::HAS_XPROPS    => true,
 
         'containerProperty' => 'container_id',
 
@@ -99,11 +115,25 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'label'             => null,
                 'options'           => array()
             ),
+            'container_id'      => array(
+                'filter'  => Tinebase_Model_Filter_Container::class,
+                'options' => array('modelName' => Addressbook_Model_Contact::class),
+            ),
+            'name_email_query'       => [
+                'filter'            => Tinebase_Model_Filter_Query::class,
+                'title'             => 'Name/Email', // _('Name/Email')
+                'options'           => [
+                    'fields'            => [
+                        'name',
+                        'email',
+                    ]
+                ],
+            ],
         ),
 
         'fields'            => array(
             'name'              => array(
-                'label'             => 'Name', //_('Percent')
+                'label'             => 'Name', //_('Name')
                 'type'              => 'string',
                 'queryFilter'       => true,
                 'validators'        => array('presence' => 'required'),
@@ -121,7 +151,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'email'             => array(
-                'label'             => 'Email', //_('Email')
+                'label'             => 'E-Mail', //_('E-Mail')
                 'type'              => 'string',
                 'queryFilter'       => true,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -144,6 +174,12 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'label'             => null, // TODO fill this?
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'account_only'          => array(
+                'label'             => null, // TODO fill this?
+                'type'              => 'boolean',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'virtual'           => true,
             ),
             'emails'            => array(
                 'label'             => null, // TODO fill this?
@@ -242,36 +278,34 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     {
         $result = parent::getPathNeighbours();
 
+        $members = [];
         if (!empty($this->members)) {
-            foreach(Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true) as $member) {
+            if ($this->members instanceof Tinebase_Record_RecordSet) {
+                $tmp = $this->members;
+            } else {
+                $tmp = Addressbook_Controller_Contact::getInstance()->getMultiple($this->members, true);
+            }
+            foreach($tmp as $member) {
                 $members[$member->getId()] = $member;
             }
-        } else {
-            $members = array();
         }
 
-        if (!empty($this->memberroles)) {
+        if (!is_object($this->memberroles)) {
+            $this->memberroles = Addressbook_Controller_List::getInstance()->getMemberRoles($this);
+        }
 
-            $listRoles = array();
+        if ($this->memberroles->count() > 0) {
+
+            $pathController = Tinebase_Record_Path::getInstance();
             /** @var Addressbook_Model_ListMemberRole $role */
             foreach($this->memberroles as $role)
             {
-                $listRoles[$role->list_role_id] = $role->list_role_id;
                 if (isset($members[$role->contact_id])) {
                     unset($members[$role->contact_id]);
                 }
+                $pathController->addToRebuildQueue($role);
+                $members[] = $role;
             }
-
-            $pathController = Tinebase_Record_Path::getInstance();
-            $pathController->addAfterRebuildQueueHook(array(array('Addressbook_Model_ListRole', 'setParent')));
-            Addressbook_Model_ListRole::setParent($this);
-
-            $memberRoles = Addressbook_Controller_ListRole::getInstance()->getMultiple($listRoles, true)->asArray();
-            foreach($memberRoles as $memberRole) {
-                $pathController->addToRebuildQueue($memberRole);
-                $members[] = $memberRole;
-            }
-
         }
 
         $result['children'] = array_merge($result['children'], $members);

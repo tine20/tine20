@@ -1,5 +1,6 @@
-# 
+#
 # Translators:
+# Aleksey <aleksdem@aleksdem.com>, 2014
 # Aleksey Kovalev <alexey.kovaliov@gmail.com>, 2017
 # Aleksey <aleksdem@aleksdem.com>, 2014
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
@@ -11,26 +12,54 @@ msgstr ""
 "PO-Revision-Date: 2017-12-02 18:45+0000\n"
 "Last-Translator: Aleksey Kovalev <alexey.kovaliov@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Phone.js:100
+#: js/Phone.js:102
 msgid "Incoming call"
 msgstr "Входящий звонок"
 
-#: js/Phone.js:104
+#: js/Phone.js:106
 msgid "Outgoing call"
 msgstr "Исходящий звонок"
 
-#: js/Phone.js:112
+#: js/Phone.js:114
 msgid "unknown number"
 msgstr "неизвестный номер"
+
+#: js/DialerPanel.js:54 Model/MyPhone.php:32
+msgid "Phone"
+msgstr "Телефон"
+
+#: js/DialerPanel.js:77 Model/Call.php:60
+msgid "Line"
+msgstr "Линия"
+
+#: js/DialerPanel.js:86
+msgid "Number"
+msgstr "Номер"
+
+#: js/DialerPanel.js:95
+msgid "Cancel"
+msgstr "Отменить"
+
+#: js/DialerPanel.js:105
+msgid "Dial"
+msgstr "Набрать"
+
+#: js/DialerPanel.js:125
+msgid "Error"
+msgstr "Ошибка"
+
+#: js/DialerPanel.js:126
+msgid "Not possible to dial."
+msgstr "Не возможно набрать."
 
 #: js/AddressbookGridPanelHook.js:40
 msgid "Call contact"
@@ -52,61 +81,65 @@ msgstr "Мобильный"
 msgid "Cell private"
 msgstr "Мобильный личный"
 
-#: js/CallGridPanel.js:54
+#: js/CallGridPanel.js:56
 msgid "Edit phone settings"
 msgstr "Изменить настройки телефона"
 
-#: js/CallGridPanel.js:68
+#: js/CallGridPanel.js:70
 msgid "Dial number"
 msgstr "Наберите номер"
 
-#: js/CallGridPanel.js:69
+#: js/CallGridPanel.js:71
 msgid "Initiate a new outgoing call"
 msgstr "Начните новый исходящий звонок"
 
-#: js/CallGridPanel.js:167 Model/MyPhone.php:33
+#: js/CallGridPanel.js:176 Model/MyPhone.php:33
 msgid "Phones"
 msgstr "Телефоны"
 
-#: js/CallGridPanel.js:216
+#: js/CallGridPanel.js:225
 msgid "No phone selected"
 msgstr "Телефон не выбран"
 
-#: js/CallGridPanel.js:217
+#: js/CallGridPanel.js:226
 msgid "Please select the desired phone in the tree!"
 msgstr "Пожалуйста, выберите нужный номер в дереве!"
 
-#: js/DialerPanel.js:53 Model/MyPhone.php:32
-msgid "Phone"
-msgstr "Телефон"
+#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr "Звонки на этой неделе"
 
-#: js/DialerPanel.js:76 Model/Call.php:60
-msgid "Line"
-msgstr "Линия"
+#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Звонки на прошлой неделе"
 
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Номер"
+#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Звонки в этом месяце"
 
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Отменить"
+#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Звонки в прошлом месяце"
 
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Набрать"
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Входящие и исходящие звонки на этой неделе"
 
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Ошибка"
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Входящие и исходящие звонки на прошлой неделе"
 
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "Не возможно набрать."
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Входящие и исходящие звонки в этом месяце"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Входящие и исходящие звонки в прошлом месяце"
 
 #: Config.php:44 Config.php:46
-msgid "local prefix for outgoing calls"
-msgstr "Локальный префикс для исходящих вызовов"
+msgid "Local prefix for outgoing calls"
+msgstr ""
 
 #: Config.php:53 Config.php:55
 msgid "telephone area code"
@@ -117,8 +150,7 @@ msgid "regex for local calls"
 msgstr ""
 
 #: Config.php:63
-msgid ""
-"identifies if a calling number is a local call without leading area code"
+msgid "Identifies if a calling number is a local call without leading area code."
 msgstr ""
 
 #: Config.php:70
@@ -126,20 +158,8 @@ msgid "own telephone number"
 msgstr "Свой телефонный номер"
 
 #: Config.php:72
-msgid "own telephone number to prefix to internal calls"
+msgid "Own telephone number to prefix to internal calls."
 msgstr ""
-
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "Настройки"
-
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Линии"
-
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Описание"
 
 #: Model/Call.php:43
 msgid "Call"
@@ -185,34 +205,21 @@ msgstr "Источник"
 msgid "Destination"
 msgstr "Назначение"
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "Звонки на этой неделе"
+#: Model/Call.php:125
+msgid "resolved destination"
+msgstr ""
 
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "Звонки на прошлой неделе"
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "Настройки"
 
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "Звонки в этом месяце"
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Линии"
 
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "Звонки в прошлом месяце"
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Описание"
 
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Входящие и исходящие звонки на этой неделе"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Входящие и исходящие звонки на прошлой неделе"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Входящие и исходящие звонки в этом месяце"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Входящие и исходящие звонки в прошлом месяце"
+#~ msgid "local prefix for outgoing calls"
+#~ msgstr "Локальный префикс для исходящих вызовов"

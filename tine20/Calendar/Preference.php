@@ -58,6 +58,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
 
     /**
+     * send notifications of tentative events
+     */
+    const SEND_NOTIFICATION_FOR_TENTATIVE = 'sendnotificationsfortentative';
+
+    /**
      * send alarm notifications
      */
     const SEND_ALARM_NOTIFICATIONS = 'sendalarmnotifications';
@@ -124,6 +129,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
+            self::SEND_NOTIFICATION_FOR_TENTATIVE,
             self::SEND_ALARM_NOTIFICATIONS,
             self::DEFAULTALARM_ENABLED,
             self::DEFAULTALARM_MINUTESBEFORE,
@@ -184,6 +190,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
                 'label'         => $translate->_('Send Notifications Emails of own Actions'),
                 'description'   => $translate->_('Get notifications emails for actions you did yourself'),
+            ),
+            self::SEND_NOTIFICATION_FOR_TENTATIVE => array(
+                'label'         => $translate->_('Send Notifications Emails of tentative events'),
+                'description'   => $translate->_('Get notifications emails of tentative events'),
             ),
             self::SEND_ALARM_NOTIFICATIONS => array(
                 'label'         => $translate->_('Send Alarm Notifications Emails'),
@@ -335,6 +345,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
+            case self::SEND_NOTIFICATION_FOR_TENTATIVE:
+                $preference->value      = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
             case self::SEND_ALARM_NOTIFICATIONS:
                 $preference->value      = 1;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
@@ -418,15 +435,16 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::FIRSTDAYOFWEEK:
+                $translate = Tinebase_Translation::getTranslation($this->_application);
                 $preference->value = 1;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <option>
-                            <label>Sunday</label>
+                            <label>' . $translate->_('Sunday'). '</label>
                             <value>0</value>
                         </option>
                         <option>
-                            <label>Monday</label>
+                            <label>' . $translate->_('Monday') . '</label>
                             <value>1</value>
                         </option>
                     </options>';

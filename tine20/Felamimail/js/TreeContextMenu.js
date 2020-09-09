@@ -19,7 +19,7 @@ Ext.namespace('Tine.Felamimail');
 Tine.Felamimail.setTreeContextMenus = function() {
     
     // define additional actions
-    var emptyFolderAction = {
+    const emptyFolderAction = {
         text: this.app.i18n._('Empty Folder'),
         iconCls: 'action_folder_emptytrash',
         scope: this,
@@ -55,7 +55,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     };
     
     // we need this for adding folders to account (root level)
-    var addFolderToRootAction = {
+    const addFolderToRootAction = {
         text: this.app.i18n._('Add Folder'),
         iconCls: 'action_add',
         scope: this,
@@ -95,8 +95,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
             }, this);
         }
     };
-    
-    var editAccountAction = {
+
+    const editAccountAction = {
         text: this.app.i18n._('Edit Account'),
         iconCls: 'FelamimailIconCls',
         scope: this,
@@ -106,25 +106,28 @@ Tine.Felamimail.setTreeContextMenus = function() {
             var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
                 record: record,
                 listeners: {
-                    scope: this,
-                    'update': function(record) {
-                        var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
+                    'update': _.bind(function(record) {
+                        var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record)),
+                            selectedNode = this.getSelectionModel().getSelectedNode();
                         
                         // update tree node + store
                         this.ctxNode.setText(account.get('name'));
-                        this.accountStore.reload();
-                        
+                                                
                         // reload tree node + remove all folders of this account from store ?
                         this.folderStore.resetQueryAndRemoveRecords('parent_path', '/' + this.ctxNode.attributes.account_id);
-                        this.ctxNode.reload(function(callback) {
-                        });
-                    }
+                        this.ctxNode.reload(_.bind(function(callback) {
+                            let nodeToSelct = this.getNodeById(_.get(selectedNode, 'id'), '');
+                            if (nodeToSelct) {
+                                this.getSelectionModel().select(nodeToSelct);
+                            }
+                        }, this));
+                    }, this)
                 }
             });
         }
     };
 
-    var editVacationAction = {
+    const editVacationAction = {
         text: this.app.i18n._('Edit Vacation Message'),
         iconCls: 'action_email_replyAll',
         scope: this,
@@ -139,8 +142,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
             });
         }
     };
-    
-    var editRulesAction = {
+
+    const editRulesAction = {
         text: this.app.i18n._('Edit Filter Rules'),
         iconCls: 'action_email_forward',
         scope: this,
@@ -154,7 +157,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
         }
     };
 
-    var editNotificationAction = {
+    const editNotificationAction = {
         text: this.app.i18n._('Notifications'),
         iconCls: 'felamimail-action-sieve-notification',
         scope: this,
@@ -170,7 +173,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
         }
     };
 
-    var markFolderSeenAction = {
+    const markFolderSeenAction = {
         text: this.app.i18n._('Mark Folder as read'),
         iconCls: 'action_mark_read',
         scope: this,
@@ -207,7 +210,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
         }
     };
 
-    var updateFolderCacheAction = {
+    const updateFolderCacheAction = {
         text: this.app.i18n._('Update Folder List'),
         iconCls: 'action_update_cache',
         scope: this,
@@ -244,9 +247,37 @@ Tine.Felamimail.setTreeContextMenus = function() {
             }
         }
     };
-    
+
+    const approveMigrationAction = {
+        text: this.app.i18n._('Approve Migration'),
+        iconCls: 'action_approve_migration',
+        scope: this,
+        handler: function() {
+            if (this.ctxNode) {
+                let accountId = this.ctxNode.attributes.account_id;
+                let account = this.app.getAccountStore().getById(accountId);
+                this.ctxNode.getUI().addClass("x-tree-node-loading");
+                Ext.Ajax.request({
+                    params: {
+                        method: 'Felamimail.approveAccountMigration',
+                        accountId: accountId
+                    },
+                    scope: this,
+                    success: function(result, request){
+                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                        account.set('migration_approved', 1);
+                    },
+                    failure: function(exception) {
+                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                        Tine.Felamimail.folderBackend.handleRequestException(exception);
+                    }
+                });
+            }
+        }
+    };
+
     // mutual config options
-    var config = {
+    const config = {
         nodeName: this.app.i18n.n_('Folder', 'Folders', 1),
         scope: this,
         backend: 'Felamimail',
@@ -266,17 +297,23 @@ Tine.Felamimail.setTreeContextMenus = function() {
     this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // account ctx menu
+    let accountActions = [
+        addFolderToRootAction,
+        updateFolderCacheAction,
+        editVacationAction,
+        editRulesAction,
+        editNotificationAction,
+        editAccountAction,
+        'delete'
+    ];
+    if (Tine.Tinebase.registry.get('manageImapEmailUser')
+        && Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMigration')
+    ) {
+        accountActions.push(approveMigrationAction);
+    }
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
-        actions: [
-            addFolderToRootAction,
-            updateFolderCacheAction,
-            editVacationAction,
-            editRulesAction,
-            editNotificationAction,
-            editAccountAction,
-            'delete'
-        ],
+        actions: accountActions,
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'

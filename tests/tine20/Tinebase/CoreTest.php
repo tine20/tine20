@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -153,5 +153,83 @@ class Tinebase_CoreTest extends TestCase
         $requestFromContainer2 = $container->get(\Psr\Http\Message\RequestInterface::class);
 
         static::assertTrue($requestFromContainer1 === $requestFromContainer2, 'container did not return same instance');
+    }
+
+    public function testUniqueKeys()
+    {
+        $db = Tinebase_Core::getDb();
+        if (! $db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            static::markTestSkipped('only a mysql test'); // TODO remove this in release 13 once pgsql got dropped
+        }
+
+        // TODO we should fix most of them! either the index should not be unique or we need to fix it
+        $whiteListed = [
+            SQL_TABLE_PREFIX . 'tree_nodes' => [
+                'parent_id',
+            ],
+            SQL_TABLE_PREFIX . 'timemachine_modlog' => [
+                'seq',
+                'modified_attribute',
+                'record_type',
+                'record_id',
+            ],
+            SQL_TABLE_PREFIX . 'snom_phones' => [
+                'http_client_user',
+            ],
+            SQL_TABLE_PREFIX . 'snom_lines' => [
+                'linenumber',
+            ],
+            SQL_TABLE_PREFIX . 'record_observer' => [
+                'observable_identifier',
+            ],
+            SQL_TABLE_PREFIX . 'preferences' => [
+                'account_id',
+            ],
+            SQL_TABLE_PREFIX . 'numberable' => [
+                'bucket',
+            ],
+            SQL_TABLE_PREFIX . 'inventory_item' => [
+                'inventory_id',
+                'deleted_time',
+            ],
+            SQL_TABLE_PREFIX . 'groups' => [
+                'deleted_time',
+            ],
+            SQL_TABLE_PREFIX . 'felamimail_cache_message' => [
+                'messageuid',
+            ],
+            SQL_TABLE_PREFIX . 'asterisk_sip_peers' => [
+                'name',
+            ],
+            SQL_TABLE_PREFIX . 'acsync_device' => [
+                'owner_id',
+            ],
+            SQL_TABLE_PREFIX . 'accounts' => [
+                'openid',
+            ],
+            SQL_TABLE_PREFIX . 'role_accounts' => [
+                'account_id',
+            ],
+            // this is 2017.11 only, can be ignored
+            SQL_TABLE_PREFIX . 'async_job' => [
+                'name',
+                'seq',
+            ],
+        ];
+
+        $result = [];
+        foreach ($db->query('SHOW TABLES')->fetchAll(Zend_Db::FETCH_COLUMN, 0) as $table) {
+            if (strpos($table, SQL_TABLE_PREFIX) !== 0) {
+                continue;
+            }
+
+            $result = array_merge($result,
+                $db->query('SHOW INDEX FROM `' . $table . '` WHERE `non_unique` = 0 AND `null` = "Yes"' .
+                    (isset($whiteListed[$table]) ? ' AND Column_name NOT IN ("' . join('", "', $whiteListed[$table])
+                        . '")' : ''))->fetchAll(Zend_Db::FETCH_ASSOC));
+        }
+
+        static::assertCount(0, $result,
+            'not all index fields are nullable = false: ' . print_r($result, true));
     }
 }

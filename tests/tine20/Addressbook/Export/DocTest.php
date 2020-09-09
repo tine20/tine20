@@ -62,6 +62,15 @@ class Addressbook_Export_DocTest extends TestCase
         static::assertEquals($contentHashToBe, $contentHashIs, 'generated document does not match expectation');
     }
 
+    public function testTableWithPOSTPmarkers()
+    {
+        $this->_genericExportTest(array(
+            'definition' => __DIR__ . '/definitions/adb_doc_tableWithPOSTPmarkers.xml',
+            'template' => 'file://' . __DIR__ . '/templates/tableWithPOSTPmarkers.docx',
+            'filename' => __METHOD__ . '_'
+        ));
+    }
+
     public function testRecordBlock()
     {
         $this->_genericExportTest(array(
@@ -120,7 +129,7 @@ class Addressbook_Export_DocTest extends TestCase
     public function testContactFromFEData()
     {
         if (null === ($definition = Tinebase_ImportExportDefinition::getInstance()->search(
-                new Tinebase_Model_ImportExportDefinitionFilter([
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => Addressbook_Model_Contact::class,
                     'name' => 'adb_doc'
                 ]))->getFirstRecord())) {
@@ -190,7 +199,7 @@ class Addressbook_Export_DocTest extends TestCase
         ]);
         $export = new Addressbook_Export_Doc($filter, null,
             [
-                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => 'Addressbook_Model_Contact',
                     'name' => 'adb_letter_doc'
                 ]))->getFirstRecord()->getId()
@@ -254,7 +263,7 @@ class Addressbook_Export_DocTest extends TestCase
         
         $export = new Addressbook_Export_Doc($filter, null,
             [
-                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => Addressbook_Model_Contact::class,
                     'format' => 'docx',
                     'label' => 'Word details'
@@ -273,12 +282,12 @@ class Addressbook_Export_DocTest extends TestCase
     public function testFactoryNoFilter()
     {
         $export = Tinebase_Export::factory(null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()
-            ->search(new Tinebase_Model_ImportExportDefinitionFilter([
+            ->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                 'model' => Addressbook_Model_Contact::class,
                 'format' => 'docx',
                 'label' => 'Word details'
             ]))->getFirstRecord()->getId()]);
-
+        
         static::assertInstanceOf(Addressbook_Export_Doc::class, $export);
         static::assertSame($export->getFilter()->hash(), (new Addressbook_Model_ContactFilter())->hash());
         $export->registerTwigExtension(

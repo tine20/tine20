@@ -44,12 +44,12 @@ describe('configManager', () => {
   })
 
   it('can get nested values by path', () => {
-    uit.set('one', {'two': 'three'})
+    uit.set('one', { 'two': 'three' })
     expect(uit.get('one.two')).to.equal('three')
   })
 
   it('can set nested values by path', () => {
     uit.set('do.did', 'done')
-    expect(uit.get('do')).to.deep.equal({'did': 'done'})
+    expect(uit.get('do')).to.deep.equal({ 'did': 'done' })
   })
 })

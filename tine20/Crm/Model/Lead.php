@@ -95,6 +95,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'mute'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
 
     /**
@@ -205,14 +206,22 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
         // TODO should be removed as we already have generic relation handling
         if (isset($_data['relations'])) {
             foreach ((array)$_data['relations'] as $key => $relation) {
-                if ((! isset($relation['type']) || empty($relation['type'])) && isset($relation['related_record']) && isset($relation['related_record']['n_fileas'])) {
+                if (empty($relation['related_model'])) {
+                    // related_model might be missing for contact relations
+                    $relation['related_model'] = Addressbook_Model_Contact::class;
+                }
+                if (! isset($relation['type']) || empty($relation['type']) && isset($relation['related_model'])
+                    && $relation['related_model'] === Addressbook_Model_Contact::class)
+                {
                     // relation type might be missing for contact relations
                     $relation['type'] = 'CUSTOMER';
                 }
                 
                 if (! isset($relation['id'])) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . ' Setting new relation of type ' . $relation['type']);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && isset($relation['type'])) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Setting new relation of type ' . $relation['type']);
+                    }
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                         . ' ' . print_r($relation, TRUE));
                     
@@ -237,13 +246,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                     $relation['type'] = strtoupper($relation['type']);
                     switch ($relation['type']) {
                         case 'RESPONSIBLE':
-                            $data['related_model'] = 'Addressbook_Model_Contact';
-                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                            break;
                         case 'CUSTOMER':
-                            $data['related_model'] = 'Addressbook_Model_Contact';
-                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                            break;
                         case 'PARTNER':
                             $data['related_model'] = 'Addressbook_Model_Contact';
                             $data['related_backend'] = Addressbook_Backend_Factory::SQL;
@@ -265,7 +268,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         if (! isset($relation['related_record']['container_id']) || empty($relation['related_record']['container_id'])) {
                             // use default container for app
                             $data['related_record']['container_id'] = Tinebase_Container::getInstance()->getDefaultContainer(
-                                ($relation['type'] == 'TASK') ? 'Tasks' : 'Addressbook',
+                                ($relation['type'] == 'TASK') ? Tasks_Model_Task::class : Addressbook_Model_Contact::class,
                                 NULL,
                                 ($relation['type'] == 'TASK') ? Tasks_Preference::DEFAULTTASKLIST : Addressbook_Preference::DEFAULTADDRESSBOOK
                             )->getId();
@@ -308,17 +311,33 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     }
 
     /**
-     * get all responsible contacts of lead
+     * old function for Responsibles
      *
      * @return Tinebase_Record_RecordSet
      */
     public function getResponsibles()
     {
+        return $this->getRelations(['RESPONSIBLE']);
+    }
+
+
+    /**
+     * get all Relation for type.
+     *
+     * @param $relationTypes array
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    public function getRelations($relationTypes)
+    {
         $responsibles = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
 
-        foreach ($this->relations as $relation) {
-            if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == 'RESPONSIBLE') {
-                $responsibles->addRecord($relation->related_record);
+        foreach ($relationTypes as $relationType) {
+            foreach ($this->relations as $relation) {
+                if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == $relationType) {
+                    $responsibles->addRecord($relation->related_record);
+                }
             }
         }
 

@@ -56,6 +56,21 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         this.addListener("beforeedit", this.onBeforeEdit, this);
         this.addListener("afteredit", this.onAfterEdit, this);
 
+        // add specific search combo to be able to switch "userOnly" for system groups
+        this.searchCombo = new Tine.Addressbook.SearchCombo({
+            accountsStore: this.store,
+            emptyText: i18n._('Search for members ...'),
+            newRecordClass: this.recordClass,
+            newRecordDefaults: this.recordDefaults,
+            recordPrefix: this.recordPrefix,
+            userOnly: false,
+            blurOnSelect: true,
+            listeners: {
+                scope: this,
+                select: this.onAddRecordFromCombo
+            }
+        });
+
         Tine.Addressbook.ListMemberRoleGridPanel.superclass.initComponent.call(this);
     },
 
@@ -91,7 +106,20 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         };
 
         this.memberroles = this.record.get("memberroles");
-        this.store.load(options)
+
+        // NOTE: load with option add can't cope with duplicates
+        options.loadCb = options.loadCb.createInterceptor(function() {
+            // add members with limited acl
+            Ext.each(this.record.get("members"), function(member) {
+                if (member.n_fn) {
+                    if (! this.store.getById(member.id)) {
+                        this.store.add([new Tine.Addressbook.Model.Contact(member)]);
+                    }
+                }
+            }, this);
+        }, this);
+
+        this.store.load(options);
     },
 
     onBeforeLoad: function (store, options) {
@@ -148,7 +176,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         this.store.each(function(contact) {
             if (contact.get('id')) {
                 result.push(contact.get('id'));
-                if (contact.get('memberroles').length > 0) {
+                if (contact.get('memberroles') && contact.get('memberroles').length > 0) {
                     roles = contact.get('memberroles');
                     Ext.each(roles, function (role) {
                         role.contact_id = contact.get('id');
@@ -197,7 +225,13 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
      * @return {Array}
      */
     getColumns: function() {
-        return Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n).concat([
+        var _ = window.lodash,
+            baseCols = Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n);
+
+        // NOTE: contact grid basecols have memberroles with different data layout
+        baseCols = _.filter(baseCols, function(c) {return c.id != 'memberroles'});
+
+        return baseCols.concat([
             { id: 'memberroles', header: this.app.i18n._('List Roles'), dataIndex: 'memberroles', renderer: this.listMemberRoleRenderer }
         ]);
     },

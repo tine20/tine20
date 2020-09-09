@@ -10,6 +10,8 @@
  
 Ext.namespace('Tine.Voipmanager');
 
+require('../CallForwardPanel');
+
 /**
  * Asterisk SipPeer Edit Dialog
  */

@@ -70,6 +70,10 @@ Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {
             timeout: this.timeout
         });
 
+        // NOTE: success callback (iframe load) is not triggered with content-disposition: 'attachment' 
+        //       as the iframe technically is not loaded
+        _.delay(_.bind(this.onSuccess, this), 2000);
+
         return this;
     },
     
@@ -101,3 +105,12 @@ Ext.extend(Ext.ux.file.Download, Ext.util.Observable, {
     }
     
 });
+
+Ext.ux.file.Download.start = function(config) {
+    return new Promise((resolve, reject) => {
+        const dl = new Ext.ux.file.Download(config);
+        dl.on('success', resolve);
+        dl.on('fail', reject);
+        dl.start();
+    });
+};

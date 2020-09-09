@@ -22,7 +22,7 @@ Ext.ns('Tine.CoreData');
  */
 Tine.CoreData.WestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
     
-    //cls: 'cal-tree',
+    hasFavoritesPanel: false,
     
     getAdditionalItems: function() {
         return [

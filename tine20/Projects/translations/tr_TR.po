@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # demiveo <mail@demiveo.de>, 2012
 # demiveo <mail@demiveo.de>, 2012
@@ -9,48 +9,108 @@ msgstr ""
 "PO-Revision-Date: 2017-09-19 12:27+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/tine20/tine20/language/tr_TR/)\n"
+"Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: tr_TR\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's Projeleri"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Projelerim"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr ""
+
+#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "Katılımcı"
+
+#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
+msgid "Role"
+msgstr "Rol"
+
+#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+"one: Proje\n"
+"\n"
+"other: Projeler"
+msgstr[1] ""
+"one: Proje\n"
+"\n"
+"other: Projeler"
+
+#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "Başlık"
+
+#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "Sayı"
+
+#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "Durum"
+
+#: js/ProjectEditDialog.js:188 js/Model.js:76
+msgid "Description"
+msgstr "Açıklama"
+
+#: js/ProjectEditDialog.js:202
+msgid "Enter description"
+msgstr "Açıklama Giriniz"
 
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projeler"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
 msgstr ""
 
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr ""
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Katılımcının Rolünü Berlirtiniz"
 
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
-msgid "Number"
-msgstr "Sayı"
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Proje Seçiniz"
 
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
-msgid "Title"
-msgstr "Başlık"
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Rol Seçiniz"
 
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
-msgid "Status"
-msgstr "Durum"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "one: Proje\n\nother: Projeler"
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "{0} Kişi Projeye Eklenmiştir"
 
 #: js/Model.js:39
 msgid "Project list"
 msgid_plural "Project lists"
-msgstr[0] "one: Proje Listesi\n\nother: Proje Listeleri"
+msgstr[0] ""
+"one: Proje Listesi\n"
+"\n"
+"other: Proje Listeleri"
+msgstr[1] ""
+"one: Proje Listesi\n"
+"\n"
+"other: Proje Listeleri"
 
 #: js/Model.js:42
 msgid "Project lists"
@@ -59,10 +119,6 @@ msgstr "Proje Listeleri"
 #: js/Model.js:73
 msgid "Quick Search"
 msgstr ""
-
-#: js/Model.js:76 js/ProjectEditDialog.js:178
-msgid "Description"
-msgstr "Açıklama"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -80,104 +136,17 @@ msgstr "Oluşturma Vakti"
 msgid "Created By"
 msgstr "Oluşturan"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Katılımcı"
-
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr "Katılımcının Rolü"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
 msgstr ""
 
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Katılımcının Rolünü Berlirtiniz"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Proje Seçiniz"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Rol"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Rol Seçiniz"
-
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "{0} Kişi Projeye Eklenmiştir"
-
-#: js/ProjectEditDialog.js:192
-msgid "Enter description"
-msgstr "Açıklama Giriniz"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Projelerim"
-
-#: Preference.php:60
-msgid "Default Favorite"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
 msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr ""
-
-#: Config.php:38
-msgid "Project Status Available"
-msgstr ""
-
-#: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
-msgstr ""
-
-#: Config.php:47
-msgid "On hold"
-msgstr "Beklemekte"
-
-#: Config.php:48
-msgid "Completed"
-msgstr "Tamamlanmıştır"
-
-#: Config.php:49
-msgid "Cancelled"
-msgstr "İptal Edilmiştir"
-
-#: Config.php:50
-msgid "In process"
-msgstr "İşlemde"
-
-#: Config.php:56
-msgid "Project Attendee Role Available"
-msgstr "Katılımcı Rolleri"
-
-#: Config.php:58
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
-msgstr ""
-
-#: Config.php:65
-msgid "Coworker"
-msgstr "İş Arkadaşları"
-
-#: Config.php:66
-msgid "Responsible"
-msgstr "Tönetici"
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's Projeleri"
 
 #: Setup/Initialize.php:36
 msgid "All my open projects"
@@ -199,6 +168,46 @@ msgstr "İşlemde Olan Projelerim"
 msgid "My projects that are on hold"
 msgstr "İşlemde Olan Projelerim"
 
+#: Config.php:38
+msgid "Available Project Status"
+msgstr ""
+
+#: Config.php:40
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:47
+msgid "On hold"
+msgstr "Beklemekte"
+
+#: Config.php:48
+msgid "Completed"
+msgstr "Tamamlanmıştır"
+
+#: Config.php:49
+msgid "Cancelled"
+msgstr "İptal Edilmiştir"
+
+#: Config.php:50
+msgid "In process"
+msgstr "İşlemde"
+
+#: Config.php:56
+msgid "Available Project Attendee Role"
+msgstr ""
+
+#: Config.php:58
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:65
+msgid "Coworker"
+msgstr "İş Arkadaşları"
+
+#: Config.php:66
+msgid "Responsible"
+msgstr "Tönetici"
+
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"
 msgstr ""
@@ -206,3 +215,6 @@ msgstr ""
 #: Acl/Rights.php:91
 msgid "Create new shared project favorites"
 msgstr ""
+
+#~ msgid "Project Attendee Role Available"
+#~ msgstr "Katılımcı Rolleri"

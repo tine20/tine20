@@ -56,19 +56,25 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
      */
     public function testNumberableConfigByContainer()
     {
-        $container = $this->_getTestContainer('ExampleApplication', 'ExampleApplication_Model_ExampleRecord');
+        Tinebase_Numberable::clearCache();
+
+        $container = $this->_getTestContainer(ExampleApplication_Config::APP_NAME,
+            ExampleApplication_Model_ExampleRecord::class);
         // add xprops to container
         $container->xprops()[Tinebase_Numberable::CONFIG_XPROPS] = [
             Tinebase_Numberable::STEPSIZE => 10,
             // TODO create this automatically?
-            Tinebase_Numberable::BUCKETKEY => 'ExampleApplication_Model_ExampleRecord#number_int#' . $container->getId(),
+            Tinebase_Numberable::BUCKETKEY => ExampleApplication_Model_ExampleRecord::class .
+                '#number_int#' . $container->getId(),
             Tinebase_Numberable::START => 100,
         ];
         $updatedContainer = Tinebase_Container::getInstance()->update($container);
         self::assertTrue(isset($updatedContainer->xprops()[Tinebase_Numberable::CONFIG_XPROPS]), 'xprops not set'
             . print_r($updatedContainer->xprops(), true));
+        self::assertSame(100, $updatedContainer->xprops()[Tinebase_Numberable::CONFIG_XPROPS][Tinebase_Numberable::START], 'xprops not set right '
+            . print_r($updatedContainer->xprops(), true));
         $exampleRecord = $this->_getExampleRecord();
-        $exampleRecord->container_id = $container->getId();
+        $exampleRecord->container_id = $updatedContainer->getId();
         $savedExampleRecord = $this->_json->saveExampleRecord($exampleRecord->toArray());
         self::assertGreaterThanOrEqual(100, $savedExampleRecord['number_int'], 'number_int should be greater than 100'
             . print_r($savedExampleRecord, true));

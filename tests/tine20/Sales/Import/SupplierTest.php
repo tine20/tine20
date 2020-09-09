@@ -31,6 +31,7 @@ class Sales_Import_SupplierTest extends TestCase
         $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_Supplier', [
             'definition' => 'sales_import_supplier_csv',
+            'file' => 'supplier.csv',
         ]);
         $importer->importDemodata();
         $filter = Sales_Model_SupplierFilter::getFilterForModel('Sales_Model_Supplier', [

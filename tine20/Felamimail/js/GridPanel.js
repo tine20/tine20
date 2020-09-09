@@ -4,10 +4,12 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.namespace('Tine.Felamimail');
+
+require('./MessageFileButton');
 
 /**
  * Message grid panel
@@ -64,11 +66,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     filterSelectionDelete: true,
     // autoRefresh is done via onUpdateFolderStore
     autoRefreshInterval: false,
-    
+
+    // needed for refresh after file messages
+    listenMessageBus: true,
+
     /**
      * @private grid cfg
      */
-    defaultSortInfo: {field: 'received', direction: 'DESC'},
+    defaultSortInfo: {field: 'sent', direction: 'DESC'},
     gridConfig: {
         autoExpandColumn: 'subject',
         // drag n dropfrom
@@ -77,7 +82,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     // we don't want to update the preview panel on context menu
     updateDetailsPanelOnCtxMenu: false,
-    
+
+    /**
+     * needed to apply second grid state for send folders
+     */
+    sendFolderGridStateId: null,
+
     /**
      * Return CSS class to apply to rows depending upon flags
      * - checks Flagged, Deleted and Seen
@@ -125,6 +135,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
         
         this.initPagingToolbar();
+
+        this.sendFolderGridStateId = this.gridConfig.stateId + '-SendFolder';
     },
     
     /**
@@ -301,16 +313,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'action_move'
         });
 
-        this.action_fileRecord = new Ext.Action({
-            requiredGrant: 'readGrant',
+        this.action_copyRecord = new Ext.Action({
+            requiredGrant: 'editGrant',
             allowMultiple: true,
-            text: this.app.i18n._('File Message'),
-            handler: this.onFileRecords,
+            text: this.app.i18n._('Copy'),
             disabled: true,
-            hidden: ! (Tine.Tinebase.common.hasRight('run', 'MailFiler') || Tine.Tinebase.common.hasRight('run', 'Filemanager')),
-            iconCls: 'action_file',
-            scope: this
+            actionType: 'edit',
+            handler: this.onCopyRecords,
+            scope: this,
+            iconCls: 'action_editcopy'
         });
+
+        this.action_fileRecord = new Tine.Felamimail.MessageFileButton({});
 
         this.action_addAccount = new Ext.Action({
             text: this.app.i18n._('Add Account'),
@@ -352,6 +366,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_addAccount,
             this.action_print,
             this.action_printPreview,
+            this.action_copyRecord,
             this.action_moveRecord
         ]);
         
@@ -366,6 +381,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_forward,
                 this.action_flag,
                 this.action_markUnread,
+                this.action_copyRecord,
                 this.action_moveRecord,
                 this.action_deleteRecord,
                 this.action_fileRecord
@@ -507,6 +523,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 24,
             sortable: true,
             dataIndex: 'flags',
+            align: 'center',
             renderer: this.flagRenderer
         },{
             id: 'subject',
@@ -546,7 +563,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 100,
             sortable: true,
             dataIndex: 'sent',
-            hidden: true,
             renderer: Tine.Tinebase.common.dateTimeRenderer
         },{
             id: 'received',
@@ -554,6 +570,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 100,
             sortable: true,
             dataIndex: 'received',
+            hidden: true,
             renderer: Tine.Tinebase.common.dateTimeRenderer
         },{
             id: 'folder_id',
@@ -602,28 +619,40 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     flagRenderer: function(value, metadata, record) {
         var icons = [],
-            result = '';
+            result = '',
+            i18n = Tine.Tinebase.appMgr.get('Felamimail').i18n;
             
         if (record.hasFlag('\\Answered')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(i18n._('Answered'))});
+            icons.push({src: 'images/icon-set/icon_email_answer.svg', qtip: i18n._('Answered')});
         }   
         if (record.hasFlag('Passed')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(i18n._('Forwarded'))});
+            icons.push({src: 'images/icon-set/icon_email_forward.svg', qtip: i18n._('Forwarded')});
         }   
         if (record.hasFlag('Tine20')) {
-            icons.push({src: 'images/favicon.png', qtip: Ext.util.Format.htmlEncode(i18n._('Tine20'))});
+            const icon = record.getTine20Icon();
+            icons.push({src: icon, qtip: i18n._('Tine20')});
         }
-//        if (record.hasFlag('\\Recent')) {
-//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: i18n._('Recent')});
-//        }   
-        
+        if (record.get('content_type') === 'multipart/encrypted') {
+            icons.push({src: 'images/icon-set/icon_lock.svg', qtip: i18n._('Encrypted Message')});
+        }
+
         Ext.each(icons, function(icon) {
-            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + Tine.Tinebase.common.doubleEncode(icon.qtip) + '">';
+            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + Ext.util.Format.htmlEncode(icon.qtip) + '">';
         }, this);
-        
+
+        let fileLocations = record.get('fileLocations');
+        if (_.isArray(fileLocations) && fileLocations.length) {
+            const fileLocationText = Tine.Felamimail.MessageFileButton.getFileLocationText(fileLocations, '<br>');
+
+            result +=  fileLocationText ? ('<img class="FelamimailFlagIcon MessageFileIcon" src="images/icon-set/icon_download.svg" ' +
+                'ext:qtitle="' + Ext.util.Format.htmlEncode(i18n._('Filed as:')) + '"' +
+                'ext:qtip="' + Ext.util.Format.htmlEncode(fileLocationText) + '"' +
+            '>') : '';
+        }
+
         return result;
     },
-    
+
     /**
      * returns account and folder globalname
      * 
@@ -645,14 +674,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return (result) ? result : record.get('name');
             }
         }
-            
+
         result += '/';
         if (folder) {
             result += folder.get('globalname');
-        } else {
-            result += folderId;
         }
-            
+
         return result;
     },
     
@@ -694,7 +721,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * delete messages handler
      * 
-     * @return {void}
+     * @return {Boolean}
      */
     onDeleteRecords: function() {
         var account = this.app.getActiveAccount(),
@@ -702,22 +729,44 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             trash = trashId ? this.app.getFolderStore().getById(trashId) : null,
             trashConfigured = (account.get('trash_folder'));
             
-        return (trash && ! trash.isCurrentSelection()) || (! trash && trashConfigured) ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
+        return (trash && ! trash.isCurrentSelection())
+            || (! trash && trashConfigured)
+                ? this.moveSelectedMessages(trash, true, false)
+                : this.deleteSelectedMessages();
     },
 
     /**
-     * delete messages handler
+     * move messages handler
      *
      * @return {void}
      */
     onMoveRecords: function() {
         var selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
-            account: this.app.getActiveAccount(),
+            allAccounts: true,
             listeners: {
                 scope: this,
                 folderselect: function(node) {
                     var folder = new Tine.Felamimail.Model.Folder(node.attributes, node.attributes.id);
-                    this.moveSelectedMessages(folder, false);
+                    this.moveSelectedMessages(folder, false, false);
+                    selectPanel.close();
+                }
+            }
+        });
+    },
+
+    /**
+     * copy messages handler
+     *
+     * @return {void}
+     */
+    onCopyRecords: function() {
+        var selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
+            allAccounts: true,
+            listeners: {
+                scope: this,
+                folderselect: function(node) {
+                    var folder = new Tine.Felamimail.Model.Folder(node.attributes, node.attributes.id);
+                    this.moveSelectedMessages(folder, false, true);
                     selectPanel.close();
                 }
             }
@@ -729,7 +778,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onFileRecords: function() {
         var filePicker = new Tine.Filemanager.FilePickerDialog({
-            windowTitle: this.app.i18n._('Select Save Location'),
+            windowTitle: this.app.i18n._('Select Message File Location'),
             singleSelect: true,
             requiredGrants: ['addGrant'],
             constraint: 'folder'
@@ -750,14 +799,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     fileRecords: function(appName, path) {
         var sm = this.getGrid().getSelectionModel(),
-            filter = sm.getSelectionFilter(),
-            msgsIds = [];
-
-        if (sm.isFilterSelect) {
-            var msgs = this.getStore();
-        } else {
-            var msgs = sm.getSelectionsCollection();
-        }
+            filter = sm.getSelectionFilter();
 
         this.fileMessagesLoadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Filing Messages')});
         this.fileMessagesLoadMask.show();
@@ -814,14 +856,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * @param {Tine.Felamimail.Model.Folder} folder
      * @param {Boolean} toTrash
+     * @param {Boolean} keepOriginalMessages
      */
-    moveSelectedMessages: function(folder, toTrash) {
+    moveSelectedMessages: function(folder, toTrash, keepOriginalMessages) {
         if (folder && folder.isCurrentSelection()) {
             // nothing to do ;-)
             return;
         }
         
-        this.moveOrDeleteMessages(folder, toTrash);
+        this.moveOrDeleteMessages(folder, toTrash, keepOriginalMessages);
     },
     
     /**
@@ -829,8 +872,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * @param {Tine.Felamimail.Model.Folder} folder
      * @param {Boolean} toTrash
+     * @param {Boolean} keepOriginalMessages
      */
-    moveOrDeleteMessages: function(folder, toTrash) {
+    moveOrDeleteMessages: function(folder, toTrash, keepOriginalMessages) {
         
         // this is needed to prevent grid reloads while messages are moved or deleted
         this.movingOrDeleting = true;
@@ -869,7 +913,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
            
             msgsIds.push(msg.id);
-            this.getStore().remove(msg);
+            if (! keepOriginalMessages) {
+                this.getStore().remove(msg);
+            }
         },  this);
         
         if (folder && increaseUnreadCountInTargetFolder > 0) {
@@ -886,9 +932,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - update message cache for "pending" folders');
             this.app.checkMailsDelayedTask.delay(1000);
         }
-        
-        this.deleteQueue = this.deleteQueue.concat(msgsIds);
-        this.pagingToolbar.refresh.disable();
+
+        if (! keepOriginalMessages) {
+            this.deleteQueue = this.deleteQueue.concat(msgsIds);
+        }
         if (nextRecord !== null) {
             sm.selectRecords([nextRecord]);
         }
@@ -898,7 +945,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (folder !== null || toTrash) {
             // move
             var targetFolderId = (toTrash) ? '_trash_' : folder.id;
-            this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, targetFolderId, {
+            this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, targetFolderId, keepOriginalMessages, {
                 callback: callbackFn
             });
         } else {
@@ -973,7 +1020,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Ext.each(affectedMsgs, function(msg) {
                 if (['reply', 'forward'].indexOf(action) !== -1) {
                     msg.addFlag(action === 'reply' ? '\\Answered' : 'Passed');
-                } else if (action == 'senddraft') {
+                } else if (action === 'senddraft') {
                     this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(msg.id, '\\Deleted', {
                         callback: this.onAfterDelete.createDelegate(this, [[msg.id]])
                     });
@@ -1055,7 +1102,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             msg = sm.getSelected();
             
-        var win = Tine.Felamimail.MessageEditDialog.openWindow({
+        Tine.Felamimail.MessageEditDialog.openWindow({
             replyTo : Ext.encode(msg.data),
             replyToAll: toAll,
             listeners: {
@@ -1085,11 +1132,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (sm.getCount() == 1 && sm.isIdSelected(record.id) && !record.hasFlag('\\Seen')) {
             Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Selected unread message');
             Tine.log.debug(record);
-            
-            record.addFlag('\\Seen');
-            record.mtime = new Date().getTime();
-            Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
-            this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+
+            if (Tine.Felamimail.registry.get('preferences').get('markEmailRead') === 1) {
+                record.addFlag('\\Seen');
+                record.mtime = new Date().getTime();
+                Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
+                this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+            }
             
             if (record.get('headers')['disposition-notification-to']) {
                 Ext.Msg.confirm(
@@ -1105,7 +1154,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
     },
-    
+
+    /**
+     * open first file location when file icon is clicked
+     */
+    onRowClick: function(grid, row, e) {
+        if (e.getTarget('.MessageFileIcon')) {
+            let record = this.getStore().getAt(row);
+            let fileLocation = record.get('fileLocations')[0];
+            Tine.Felamimail.MessageFileButton.locationClickHandler(fileLocation.model, fileLocation.record_id);
+
+            e.stopEvent();
+        }
+
+        Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
+    },
+
     /**
      * row doubleclick handler
      * 
@@ -1180,24 +1244,27 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Event} e
      */
     onKeyDown: function(e) {
-        if (e.ctrlKey) {
-            switch (e.getKey()) {
-                case e.N:
-                case e.M:
-                    this.onMessageCompose();
-                    e.preventDefault();
-                    break;
-                case e.R:
-                    this.onMessageReplyTo();
-                    e.preventDefault();
-                    break;
-                case e.L:
-                    this.onMessageForward();
-                    e.preventDefault();
-                    break;
-            }
+        // no keys for quickadds etc.
+        if (e.getTarget('input') || e.getTarget('textarea')) return;
+
+        switch (e.getKey()) {
+            case e.N:
+            case e.M:
+                this.onMessageCompose();
+                e.preventDefault();
+                break;
+            case e.R:
+                this.onMessageReplyTo();
+                e.preventDefault();
+                break;
+            case e.L:
+                this.onMessageForward();
+                e.preventDefault();
+                break;
         }
-        
+
+        // TODO add keys to "help" message box of generic grid onKeyDown()
+
         Tine.Felamimail.GridPanel.superclass.onKeyDown.call(this, e);
     },
     
@@ -1261,12 +1328,120 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onStoreBeforeload: function(store, options) {
         this.supr().onStoreBeforeload.apply(this, arguments);
-        
+
+        // make sure, our handler is called just before the request is sent
+        this.store.on('beforeload', _.bind(this.onStoreBeforeLoadFolderChange, this), this, {single: true});
+
         if (! Ext.isEmpty(this.deleteQueue)) {
             options.params.filter.push({field: 'id', operator: 'notin', value: this.deleteQueue});
         }
     },
-    
+
+    onStoreBeforeLoadFolderChange: function (store, options) {
+
+        const isSendFolderPath = this.isSendFolderPathInFilterParams(options.params);
+
+        if (isSendFolderPath) {
+            this.changeFilterInParams(options.params, 'query', 'to');
+            this.changeGridState(this.sendFolderGridStateId);
+
+        } else {
+            this.changeFilterInParams(options.params, 'to', 'query');
+            this.changeGridState(this.gridConfig.stateId);
+        }
+    },
+
+    isSendFolderPathInFilterParams: function (params) {
+        const pathFilter = _.find(_.get(params, 'filter[0].filters[0].filters', {}), {
+            field: 'path'
+        });
+        const operator = _.get(pathFilter, 'operator', '');
+        const value = operator.match(/equals|in/) ? _.get(pathFilter, 'value', null) : null;
+        const pathFilterValue =  value && _.isArray(value) ? value[0] : value;
+
+        const pathParts = _.isString(pathFilterValue) ? pathFilterValue.split('/') : null;
+        if (! pathParts || pathParts.length < 3) {
+            return false;
+        }
+        const composerAccount = this.app.getAccountStore().getById(pathParts[1]);
+
+        const sendFolderIds = composerAccount ? [
+            composerAccount.getSendFolderId(),
+            composerAccount.getSpecialFolderId('templates_folder'),
+            composerAccount.getSpecialFolderId('drafts_folder')
+        ]: null;
+
+        return (-1 !== sendFolderIds.indexOf(pathParts[2]));
+    },
+
+    /**
+     * @param params
+     * @param from
+     * @param to
+     *
+     * TODO just change the field??
+     */
+    changeFilterInParams: function (params, from, to) {
+        const queryFilter =_.remove(params.filter[0].filters[0].filters, {
+            field: from
+        });
+        if (queryFilter.length > 0) {
+            params.filter[0].filters[0].filters =
+                params.filter[0].filters[0].filters.concat({
+                    field: to,
+                    operator: 'contains',
+                    value: queryFilter[0].value
+                });
+        }
+    },
+
+    /**
+     * // if send, draft, template folders are selected, do the following:
+     * // - hide from email + name columns from grid
+     * // - show to column in grid
+     * // - save this state
+     * // - if grid state is changed by user, do not change columns by user
+     *
+     * // if switched from send, draft, template to "normal" folder
+     * // - switch to default state
+     *
+     * TODO make it work with current state / set/apply from existing state
+     *
+     * @param stateId
+     */
+    changeGridState: function (stateId) {
+
+        this.stateId = stateId;
+
+        // if (! Ext.state.Manager.get(stateId)) {
+
+        const cm = this.grid.getColumnModel();
+        const from_email_index = cm.getIndexById('from_email');
+        const from_name_index = cm.getIndexById('from_name');
+        const to_index = cm.getIndexById('to');
+
+        if (stateId === this.sendFolderGridStateId) {
+            // - hide from email + name columns from grid
+            // - show to column in grid
+
+            cm.setHidden(from_email_index, true);
+            cm.setHidden(from_name_index, true);
+            cm.setHidden(to_index, false);
+        } else {
+            cm.setHidden(from_email_index, false);
+            cm.setHidden(from_name_index, false);
+            cm.setHidden(to_index, true);
+        }
+
+        // this.saveState();
+
+        // } else {
+        //     // TODO make this work
+        //     const state = this.getState();
+        //     this.applyState(state);
+        // }
+    },
+
     /**
      *  called after a new set of Records has been loaded
      *  
@@ -1279,8 +1454,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.supr().onStoreLoad.apply(this, arguments);
         
         Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad(): store loaded new records.');
-        
-        var folder = this.getCurrentFolderFromTree();
+
+        let folder = this.getCurrentFolderFromTree();
         if (folder && records.length < folder.get('cache_totalcount')) {
             Tine.log.debug('Tine.Felamimail.GridPanel::onStoreLoad() - Count mismatch: got ' + records.length + ' records for folder ' + folder.get('globalname'));
             Tine.log.debug(folder);
@@ -1380,27 +1555,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Event} event
      */
     onAddAccount: function(button, event) {
+        // it is only allowed to create user (external) accounts here
+        var newAccount = new Tine.Felamimail.Model.Account({
+            type: 'user'
+        });
+        // this is a little bit clunky but seems to be required to prevent record loading in AccountEditDialog
+        newAccount.id = null;
+
+        // make sure accountStore is initialised
+        this.app.getAccountStore();
+
         var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({
-            record: null,
-            listeners: {
-                scope: this,
-                'update': function(record) {
-                    var account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
-                    
-                    // add to registry
-                    Tine.Felamimail.registry.get('preferences').replace('defaultEmailAccount', account.id);
-                    // need to do this because store could be unitialized yet
-                    var registryAccounts = Tine.Felamimail.registry.get('accounts');
-                    registryAccounts.results.push(account.data);
-                    registryAccounts.totalcount++;
-                    Tine.Felamimail.registry.replace('accounts', registryAccounts);
-                    
-                    // add to tree / store
-                    var treePanel = this.app.getMainScreen().getTreePanel();
-                    treePanel.addAccount(account);
-                    treePanel.accountStore.add([account]);
-                }
-            }
+            record: newAccount
         });
     },
     
@@ -1442,9 +1608,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         frame.contentWindow.focus();
         frame.contentWindow.print();
-        
-        // removeing frame chrashes chrome
-//        setTimeout(function(){Ext.removeNode(frame);}, 100);
     },
     
     /**

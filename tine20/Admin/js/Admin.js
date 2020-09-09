@@ -12,6 +12,8 @@
 
 Ext.ns('Tine.Admin');
 
+require('./LogEntries');
+
 Tine.Admin.init = function () {
     var registeredItems = [];
     var panels = [];
@@ -138,6 +140,18 @@ Tine.Admin.init = function () {
             dataPanelType: "accesslog",
             viewRight: 'access_log'
         }, {
+            text: translation.gettext('Log'),
+            cls: "treemain",
+            iconCls: 'admin-node-accesslog',
+            allowDrag: false,
+            allowDrop: true,
+            id: "logentries",
+            icon: false,
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "logentries",
+        },{
             text: translation.gettext('Server Information'),
             cls: "treemain",
             iconCls: 'admin-node-server-info',
@@ -151,7 +165,7 @@ Tine.Admin.init = function () {
             viewRight: 'serverinfo'
         }];
         
-        // TODO use hooking mechanism bellow - why is manage_devices a Tinebase right and not a ActiveSync right???
+        // TODO use hooking mechanism below
         if (Tine.Tinebase.appMgr.get('ActiveSync') && Tine.Tinebase.common.hasRight('manage_devices', 'ActiveSync')) {
             tree.push({
                 text: translation.gettext('ActiveSync Devices'),
@@ -168,10 +182,48 @@ Tine.Admin.init = function () {
             });
         }
 
+        // TODO use hooking mechanism
+        if (Tine.Tinebase.appMgr.get('Felamimail')
+            && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')
+        ) {
+            tree.push({
+                text: translation.gettext('E-mail Accounts'),
+                //pos: 850,
+                cls: "treemain",
+                iconCls: 'FelamimailIconCls',
+                allowDrag: false,
+                allowDrop: true,
+                id: "emailaccounts",
+                children: [],
+                leaf: null,
+                expanded: true,
+                dataPanelType: "emailaccounts",
+                viewRight: 'emailaccounts'
+            });
+        }
+
+        // TODO use hooking mechanism
+        if (Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_importexportdefinitions')
+        ) {
+            tree.push({
+                text: translation.gettext('Import Export Definitions'),
+                cls: "treemain",
+                iconCls: 'admin-node-customfields',
+                allowDrag: false,
+                allowDrop: true,
+                id: "importexportdefinitions",
+                icon: false,
+                children: [],
+                leaf: null,
+                expanded: true,
+                dataPanelType: "importexportdefinitions",
+            });
+        }
+        
         _.each(tree, function(item, idx) {
             item.pos = item.pos || (100 + 100 * idx);
         });
-        _.each(registeredItems, function(item) {
+            _.each(registeredItems, function(item) {
             // NOTE: too early for appMgr :-(
             var app = item.appName ? Tine.Tinebase.appMgr.get(item.appName) : null,
                 i18n = app ? app.i18n : translation;
@@ -244,10 +296,12 @@ Tine.Admin.init = function () {
         treePanel.setRootNode(treeRoot);
         
         var initialTree = getInitialTree(translation);
-        
-        for (var i = 0; i < initialTree.length; i += 1) {
-            // check view right
-            if (initialTree[i].viewRight && !Tine.Tinebase.common.hasRight('view_' + initialTree[i].viewRight, 'Admin')) {
+
+        for (var i = 0, rightSuffix; i < initialTree.length; i += 1) {
+            rightSuffix = String(initialTree[i].viewRight).replace(/^view_/, '');
+            if (rightSuffix !== 'undefined' && !(Tine.Tinebase.common.hasRight('view_' + rightSuffix, 'Admin')
+                || Tine.Tinebase.common.hasRight('manage_' + rightSuffix, 'Admin')
+            )) {
                 initialTree[i].hidden = true;
             }
             var node = new Ext.tree.AsyncTreeNode(initialTree[i]);
@@ -275,6 +329,9 @@ Tine.Admin.init = function () {
             case 'accesslog':
                 Tine.Admin.accessLog.show();
                 break;
+            case 'logentries':
+                Tine.Admin.LogEntries.show();
+                break;
             case 'accounts':
                 Tine.Admin.user.show();
                 break;
@@ -298,6 +355,9 @@ Tine.Admin.init = function () {
                 break;
             case 'customfields':
                 Tine.Admin.customfield.show();
+                break;
+            case 'importexportdefinitions':
+                Tine.Admin.importexportdefinitions.show();
                 break;
             case 'serverinfo':
                 Tine.Admin.getServerInfo(function(response) {
@@ -332,6 +392,14 @@ Tine.Admin.init = function () {
             // TODO find a generic hooking mechanism
             case 'devices':
                 Tine.ActiveSync.syncdevices.show();
+                break;
+            case 'emailaccounts':
+                // TODO should be hidden if feature is disabled
+                if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featureEmailAccounts')) {
+                    Tine.Felamimail.admin.showAccountGridPanel();
+                } else {
+                    Ext.MessageBox.alert(translation.gettext('Disabled'), translation.gettext('Feature is disabled by configuration.'));
+                }
                 break;
 
             default:

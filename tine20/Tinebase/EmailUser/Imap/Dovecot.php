@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Fronk
  * 
  * example dovecot db schema:
@@ -20,19 +20,24 @@
 --
 
 CREATE TABLE IF NOT EXISTS `dovecot_users` (
-`userid`        VARCHAR( 40 ) NOT NULL ,
-`domain`        VARCHAR( 80 ) NOT NULL DEFAULT '',
-`username`      VARCHAR( 80 ) NOT NULL ,
-`password`      VARCHAR( 256 ) NOT NULL ,
-`quota_bytes`   BIGINT NOT NULL DEFAULT '0',
-`quota_message` INT NOT NULL DEFAULT '0',
-`uid`           VARCHAR( 20 ) DEFAULT NULL ,
-`gid`           VARCHAR( 20 ) DEFAULT NULL ,
-`home`          VARCHAR( 256 ) DEFAULT NULL ,
-`last_login`    DATETIME DEFAULT NULL ,
-PRIMARY KEY (`userid`, `domain`),
-UNIQUE (`username`)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+`userid` varchar(80) NOT NULL,
+`domain` varchar(80) NOT NULL DEFAULT '',
+`username` varchar(80) NOT NULL,
+`loginname` varchar(255) DEFAULT NULL,
+`password` varchar(100) NOT NULL,
+`quota_bytes` bigint(20) NOT NULL DEFAULT '2000',
+`quota_message` int(11) NOT NULL DEFAULT '0',
+`quota_sieve_bytes` bigint(20) NOT NULL DEFAULT '0',
+`quota_sieve_script` int(11) NOT NULL DEFAULT '0',
+`uid` varchar(20) DEFAULT NULL,
+`gid` varchar(20) DEFAULT NULL,
+`home` varchar(256) DEFAULT NULL,
+`last_login` datetime DEFAULT NULL,
+`last_login_unix` int(11) DEFAULT NULL,
+`instancename` varchar(40) DEFAULT NULL,
+PRIMARY KEY (`userid`,`domain`),
+UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
 --
@@ -207,6 +212,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     protected $_propertyMapping = array(
         'emailUserId'       => 'userid',
         'emailUsername'     => 'username',
+        'emailLoginname'    => 'loginname',
         'emailPassword'     => 'password',
         'emailUID'          => 'uid', 
         'emailGID'          => 'gid', 
@@ -260,7 +266,9 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
      * @var string
      */
     protected $_subconfigKey = 'dovecot';
-    
+
+    protected $_masterUserTable = 'dovecot_master_users';
+
     /**
      * the constructor
      */
@@ -317,6 +325,13 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             // Only want 1 user (shouldn't be more than 1 anyway)
             ->limit(1);
 
+        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
+
+        return $select;
+    }
+
+    protected function _appendDomainOrClientIdOrInstanceToSelect(Zend_Db_Select $select)
+    {
         $schema = $this->getSchema();
         // append instancename OR domain if set or domain IS NULL
         if (isset($this->_config['instanceName'])
@@ -331,8 +346,6 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         } else {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
         }
-
-        return $select;
     }
     
     /**
@@ -429,7 +442,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
 
-        $emailUsername = $this->_getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
+        $emailUsername = $this->getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
 
         list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
         $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
@@ -440,22 +453,15 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
 
         $rawData['domain'] = $domain;
 
-        // replace home wildcards when storing to db
-        // %d = domain
-        // %n = user
-        // %u == user@domain
-        $search = array('%n', '%d', '%u');
-        $replace = array(
-            $localPart,
-            $domain,
-            $emailUsername
-        );
-        
-        $rawData[$this->_propertyMapping['emailHome']] = str_replace($search, $replace, $this->_config['emailHome']);
+        $rawData[$this->_propertyMapping['emailHome']] = $this->_getEmailHome($emailUsername, $localPart, $domain);
         $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
+
+        // set primary email address as optional login name
+        $rawData['loginname'] = $_user->accountEmailAddress;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' ' . print_r($rawData, true));
+
         return $rawData;
     }
 
@@ -465,14 +471,45 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     public function getAllDomains()
     {
         $select = $this->_db->select()->from(array($this->_userTable), 'domain')->distinct();
-        if (isset($this->_config['instanceName'])) {
-            $select->where($this->_db->quoteIdentifier('instancename') . ' = ?', $this->_config['instanceName']);
-        }
+        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
 
-        $result = $select->query()->fetchAll(Zend_DB::FETCH_NUM);
-        array_walk($result, function(&$val) {
-            $val = $val[0];
-        });
+        $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
         return $result;
+    }
+
+    public function setMasterPassword($username, $password, $type = 'sieve')
+    {
+        $this->checkMasterUserTable();
+        $data = [
+            'username' => $username,
+            'password' => Hash_Password::generate($this->_config['emailScheme'], $password),
+            'service' => $type,
+        ];
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+            . __LINE__ . ' Add new ' . $type . ' master user: ' . $username);
+
+        $this->_db->insert($this->_masterUserTable, $data);
+    }
+
+    public function removeMasterPassword($username)
+    {
+        $this->checkMasterUserTable();
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('username') . ' = ?', $username)
+        );
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+            . __LINE__ . ' Remove master user: ' . $username);
+
+        $this->_db->delete($this->_masterUserTable, $where);
+    }
+
+    public function checkMasterUserTable()
+    {
+        $tables = $this->_db->listTables();
+        if (! in_array($this->_masterUserTable, $tables)) {
+            throw new Tinebase_Exception_NotFound('Dovecot master user table not found');
+        }
     }
 }

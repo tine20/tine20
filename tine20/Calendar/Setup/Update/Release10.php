@@ -5,9 +5,10 @@
  * @package     Calendar
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
 class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**
@@ -70,6 +71,8 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
                         $resourceController->update($resource);
                     } catch (Tinebase_Exception_AccessDenied $tead) {
                         Tinebase_Exception::log($tead);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        Tinebase_Exception::log($tenf);
                     }
                 }
             }
@@ -141,7 +144,12 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('cal_events', $declaration);
+        try {
+            $this->_backend->addIndex('cal_events', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('cal_events', 13);
         $this->setApplicationVersion('Calendar', '10.5');
@@ -244,6 +252,40 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     public function update_11()
+    {
+        $containerController = Tinebase_Container::getInstance();
+        try {
+            $oldValue = $containerController->doSearchAclFilter(false);
+            $containerBackend = new Tinebase_Backend_Sql(array(
+                'modelName' => 'Tinebase_Model_Container',
+                'tableName' => 'container',
+            ));
+            foreach ($containerBackend->search(new Tinebase_Model_ContainerFilter([
+                ['field' => 'application_id', 'operator' => 'equals', 'value' =>
+                    Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()],
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED],
+                ['field' => 'name', 'operator' => 'contains', 'value' => '@'],
+                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => 0],
+            ])) as $container) {
+                if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $container->name)) {
+                    continue;
+                }
+                $grants = $containerController->getGrantsOfContainer($container, true);
+                if ($grants->count() !== 1 || $grants->getFirstRecord()->account_type !==
+                    Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE ||
+                    $grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_READ}) {
+                    continue;
+                }
+                $grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_DELETE} = false;
+                $containerController->setGrants($container, $grants, true, false);
+            }
+        } finally {
+            $containerController->doSearchAclFilter($oldValue);
+        }
+        $this->setApplicationVersion('Calendar', '10.12');
+    }
+
+    public function update_12()
     {
         $this->setApplicationVersion('Calendar', '11.0');
     }

@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -89,7 +89,7 @@ class Setup_Server_Json extends Tinebase_Server_Json
             
             $response = $server->handle($request);
             
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             $response = $this->_handleException($request, $exception);
         }
         

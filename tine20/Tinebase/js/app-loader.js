@@ -11,7 +11,7 @@
 /**
  * webpack tine 2.0 app-loader
  *
- * - does not realy load a source format
+ * - does not really load a source format
  *   -> it's just there to inject initial javascript of the apps
  * - finds all apps at BUILDTIME so their javascript code gets build
  * - injects a RUNTIME app loader so application js is only included on demand
@@ -58,28 +58,45 @@ module.exports = function() {
     var runtime = '';
 
     runtime += 'var _ = window.lodash,\n';
-    runtime +='     availableApps = ' + JSON.stringify(initialAppFileMap, null, 2) + '\n';
+    runtime += '     availableApps = ' + JSON.stringify(initialAppFileMap, null, 2) + ',\n';
+    runtime += '     appResolves = {},\n';
+    runtime += '     appLoadedPromises = {};\n';
+    runtime += '\n';
+    runtime += '_.each(availableApps, function(index,key) {\n';
+    runtime += '  var appName = key.replace(/\\/.*$/, "");\n';
+    runtime += '  appLoadedPromises[appName] = new Promise(function(resolve) {\n';
+    runtime += '    appResolves[appName] = resolve;\n';
+    runtime += '  });\n';
+    runtime += '});\n';
+    runtime += '\n';
 
-    runtime += 'module.exports = function(userApps) {\n';
 
-    runtime += '  var pms = _.reduce(userApps, function(p, app) {\n';
+    runtime += 'module.exports = {\n';
+    runtime += '  loadAllApps: function(userApps) {\n';
+
+    runtime += '    var pms = _.reduce(userApps, function(p, app) {\n';
 
     // runs at buildtime
     _.each(initialAppFileMap, function(index, key) {
-        runtime += '    if(app.name == "' + key.replace(/\/.*$/, '') + '") {\n';
-        runtime += '      return p.then(function() {return import(\n';
-        runtime += '        /* webpackChunkName: "' + key + '" */\n';
-        runtime += '        "' + index + '"\n';
-        runtime += '      )});\n';
-        runtime += '    }\n\n';
+        runtime += '      var appName = "' + key.replace(/\/.*$/, '') + '"; \n';
+        runtime += '      if(app.name == appName) {\n';
+        runtime += '        return p.then(function() {return import(\n';
+        runtime += '          /* webpackChunkName: "' + key + '" */\n';
+        runtime += '          "' + index + '"\n';
+        runtime += '        )}).then(function() {\n';
+        runtime += '          appResolves[appName]();\n';
+        runtime += '        });\n';
+        runtime += '      }\n\n';
     });
 
-    runtime += "  return p;\n";
-    runtime += "  }, Promise.resolve());\n";
-    runtime += "  return pms;\n";
+    runtime += "    return p;\n";
+    runtime += "    }, Promise.resolve());\n";
+    runtime += "    return pms;\n";
+    runtime += "  },\n";
+    runtime += "  appLoadedPromises: appLoadedPromises\n";
     runtime += "}\n";
 
-    // console.log(runtime);
+    //console.log(runtime);
 
     return runtime;
 };

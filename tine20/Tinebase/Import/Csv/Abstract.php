@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -39,6 +39,33 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      * @var array
      */
     protected $_headline = array();
+
+    // this week
+    protected $_monday       = NULL;
+    protected $_tuesday      = NULL;
+    protected $_wednesday    = NULL;
+    protected $_thursday     = NULL;
+    protected $_friday       = NULL;
+    protected $_saturday     = NULL;
+    protected $_sunday       = NULL;
+
+    // last week
+    protected $_lastMonday   = NULL;
+    protected $_lastFriday   = NULL;
+    protected $_lastSaturday = NULL;
+    protected $_lastSunday   = NULL;
+
+    // next week
+    protected $_nextMonday     = NULL;
+    protected $_nextWednesday  = NULL;
+    protected $_nextFriday     = NULL;
+
+    protected $_wednesday2week = NULL;
+    protected $_friday2week    = NULL;
+
+    // next year
+    protected $_nextyear       = NULL;
+    protected $_next2year       = NULL;
     
     /**
      * special delimiters
@@ -67,16 +94,115 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             'headline'                    => 0,
             'use_headline'                => 1,
             'mapUndefinedFieldsEnable'    => 0,
-            'mapUndefinedFieldsTo'        => 'description'
+            'mapUndefinedFieldsTo'        => 'description',
+            'demoData'                    => false
         ));
+
+        $this->_days();
         
         parent::__construct($_options);
-        
+
         if (empty($this->_options['model'])) {
             throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs model in config.');
         }
         
         $this->_setController();
+    }
+
+    /**
+     *
+     * @param Tinebase_DateTime $now
+     */
+    protected function _days(Tinebase_DateTime $now = NULL)
+    {
+        // find out where we are
+        if (! $now) {
+            $now = new Tinebase_DateTime();
+        }
+        $weekday = $now->format('w');
+
+        $subdaysLastMonday = 6 + $weekday;    // Monday last Week
+        $subdaysLastFriday = 2 + $weekday;    // Friday last Week
+
+        // this week
+        $this->_monday = new Tinebase_DateTime();
+        $this->_monday->sub(date_interval_create_from_date_string(($weekday - 1) . ' days'));
+        $this->_tuesday = new Tinebase_DateTime();
+        $this->_tuesday->sub(date_interval_create_from_date_string(($weekday - 2) . ' days'));
+        $this->_wednesday = new Tinebase_DateTime();
+        $this->_wednesday->sub(date_interval_create_from_date_string(($weekday - 3) . ' days'));
+        $this->_thursday = new Tinebase_DateTime();
+        $this->_thursday->sub(date_interval_create_from_date_string(($weekday - 4) . ' days'));
+        $this->_friday = new Tinebase_DateTime();
+        $this->_friday->sub(date_interval_create_from_date_string(($weekday - 5) . ' days'));
+        $this->_saturday = clone $this->_friday;
+        $this->_saturday->add(date_interval_create_from_date_string('1 day'));
+        $this->_sunday = clone $this->_friday;
+        $this->_sunday->add(date_interval_create_from_date_string('2 days'));
+
+        // last week
+        $this->_lastMonday = clone $this->_monday;
+        $this->_lastMonday->subWeek(1);
+        $this->_lastWednesday = clone $this->_wednesday;
+        $this->_lastWednesday->subWeek(1);
+        $this->_lastFriday = clone $this->_friday;
+        $this->_lastFriday->subWeek(1);
+        $this->_lastThursday = clone $this->_thursday;
+        $this->_lastThursday->subWeek(1);
+        $this->_lastSaturday = clone $this->_saturday;
+        $this->_lastSaturday->subWeek(1);
+        $this->_lastSunday = clone $this->_sunday;
+        $this->_lastSunday->subWeek(1);
+
+        $this->_nextMonday = clone $this->_monday;
+        $this->_nextMonday->addWeek(1);
+        $this->_nextTuesday = clone $this->_tuesday;
+        $this->_nextTuesday->addWeek(1);
+        $this->_nextWednesday = clone $this->_wednesday;
+        $this->_nextWednesday->addWeek(1);
+        $this->_nextThursday = clone $this->_thursday;
+        $this->_nextThursday->addWeek(1);
+        $this->_nextFriday = clone $this->_friday;
+        $this->_nextFriday->addWeek(1);
+
+        $this->_wednesday2week = clone $this->_nextWednesday;
+        $this->_wednesday2week->addWeek(1);
+        $this->_friday2week = clone $this->_nextFriday;
+        $this->_friday2week->addWeek(1);
+
+        $this->_nextyear = new Tinebase_DateTime();
+        $this->_nextyear->addYear(1);
+        $this->_next2year = new Tinebase_DateTime();
+        $this->_next2year->addYear(2);
+
+
+    }
+
+    protected function _getDay($data,$dates)
+    {
+        foreach ($dates as $date) {
+            if(!empty($data[$date]) && $data[$date] != 'today') {
+                $data[$date] = $this->{'_' . $data[$date]};
+            }else
+            {
+                $data[$date] = new Tinebase_DateTime();
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * do conversions
+     *
+     * @param array $_data
+     * @return array
+     */
+    protected function _doConversions($_data)
+    {
+        if ($this->_options['demoData'] && isset($this->_additionalOptions['dates'])) $_data = $this->_getDay($_data,
+            $this->_additionalOptions['dates']);
+        $result = parent::_doConversions($_data);
+        return $result;
     }
 
     /**
@@ -147,10 +273,27 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     {
         $data = array();
         $_data_indexed = array();
-        
-        if (! empty($this->_headline)) {
-            if (sizeof($this->_headline) != sizeof($_data)) {
-                $_data = array_merge($_data, array_fill(sizeof($_data), sizeof($this->_headline)-sizeof($_data), ''));
+
+        if (! $_data) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Got empty raw data - skipping.');
+            return $data;
+        }
+
+        if (!empty($this->_headline)) {
+            $headlineSize = sizeof($this->_headline);
+            $dataSize = sizeof($_data);
+            if ($headlineSize > $dataSize) {
+                $arrayWithEmptyValues = array_fill($dataSize, $headlineSize - $dataSize, '');
+                if (is_array($arrayWithEmptyValues)) {
+                    $_data = array_merge($_data, $arrayWithEmptyValues);
+                }
+            } elseif ($dataSize > $headlineSize) {
+                // TODO throw an exception if this happens?
+                $arrayWithUnknownValues = array_fill($headlineSize, $dataSize - $headlineSize, 'unknown');
+                if (is_array($arrayWithUnknownValues)) {
+                    $this->_headline = array_merge($this->_headline, $arrayWithUnknownValues);
+                }
             }
             $_data_indexed = array_combine($this->_headline, $_data);
         }
@@ -191,7 +334,11 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             if (empty($_data_indexed) && isset($_data[$index])) {
                 $value = $_data[$index];
             } else if (isset($field['source']) && isset($_data_indexed[$field['source']])) {
-                $value = $_data_indexed[$field['source']];
+                if (isset($field['append']) && isset($data[$field['destination']])) {
+                    $value = $data[$field['destination']] . $field['append'] . $_data_indexed[$field['source']];
+                } else {
+                    $value = $_data_indexed[$field['source']];
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' No value found for field ' . (isset($field['source']) ? $field['source'] : print_r($field, true)));

@@ -632,10 +632,30 @@ sortInfo: {
      * @param {Ext.data.Record} record
      */
     addSorted : function(record){
+        const remoteSort = this.remoteSort;
+        this.remoteSort = false;
         var index = this.findInsertIndex(record);
+        this.remoteSort = remoteSort;
         this.insert(index, record);
     },
 
+    /**
+     * appends (number) to property to ensure uniqness
+     *
+     * @param {Ext.data.Record} record
+     * @param {String} prop property name or property path
+     */
+    addUnique: function(record, prop) {
+        prop = prop.match(/^data\./) ? prop : `data.${prop}`;
+        let [,name, idx, ext] = String(_.get(record, prop)).match(/(.*?)(?:\s\((\d+)\))?(\..*)/) || [null, _.get(record, prop)];
+        while(_.find(this.data.items, (item) => {return _.get(item, prop) === _.get(record, prop)})) {
+            idx = idx || 0;
+            _.set(record, prop, `${name} (${++idx})${ext ||''}`);
+        }
+
+        this.addSorted(record);
+    },
+    
     /**
      * Remove Records from the Store and fires the {@link #remove} event.
      * @param {Ext.data.Record/Ext.data.Record[]} record The record object or array of records to remove from the cache.
@@ -731,7 +751,7 @@ sortInfo: {
      * @return {Number} The index of the Record. Returns -1 if not found.
      */
     indexOfId : function(id){
-        return this.data.indexOfKey(id);
+        return this.data.indexOfKey(String(id));
     },
 
     /**
@@ -826,6 +846,37 @@ sortInfo: {
         }
     },
 
+    /**
+     * promisified store load
+     */
+    promiseLoad : function(options) {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            try {
+                me.load(Ext.apply(options || {}, {
+                    callback: function (r, options, success) {
+                        if (success) {
+                            fulfill(r, options);
+                        } else if (Ext.isFunction(reject)) {
+                            reject(new Error(options));
+                        }
+                    }
+                }));
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new Error(options));
+                }
+            }
+        });
+    },
+
+    nextLoad: function() {
+        var me = this;
+        return new Promise(function (resolve) {
+            me.on('load', resolve, me, { single: true });
+        });
+    },
+    
     /**
      * updateRecord  Should not be used directly.  This method will be called automatically if a Writer is set.
      * Listens to 'update' event.

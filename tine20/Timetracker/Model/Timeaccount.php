@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -19,6 +19,8 @@
 class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 {
     const TABLE_NAME = 'timetracker_timeaccount';
+
+    const MODEL_NAME_PART = 'Timeaccount';
 
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -48,7 +50,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 13,
+        'version'           => 14,
         'containerName'     => 'Timeaccount',
         'containersName'    => 'Timeaccounts',
         'recordName'        => 'Timeaccount',
@@ -66,12 +68,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         'multipleEdit'      => TRUE,
         'requiredRight'     => 'manage',
 
-        'titleProperty'     => array(
-            '%s - %s',
-            array('number', 'title')
-        ),
-        'appName'           => 'Timetracker',
-        'modelName'         => 'Timeaccount',
+        'titleProperty'     => '{{number}} - {{title}}{% if not is_open %} (closed) {% endif %}',
+        'appName'           => Timetracker_Config::APP_NAME,
+        'modelName'         => self::MODEL_NAME_PART,
 
         // TODO add this when we convert container to MCV2
 //       'associations' => [\Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_ONE => [
@@ -241,7 +240,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'nullable'              => true,
                 'copyOmit'              => true,
             ),
-                'deadline' => array(
+            'deadline' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => self::DEADLINE_NONE),
                 'nullable' => true,
                 'default' => self::DEADLINE_NONE,
@@ -283,6 +282,24 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                     )
                 )
             ),
+            'accounting_time_factor' => array(
+                'label'                 => 'Accounting time factor', // _('Accounting time factor')
+                'inputFilters' => array('Zend_Filter_Empty' => 1),
+                'type'                  => 'float',
+                'default'               => 1
+            ),
+            'stream'     => [
+                self::TYPE                  => self::TYPE_VIRTUAL,
+                self::CONFIG                => [
+                    self::TYPE                  => self::TYPE_RELATION,
+                    self::LABEL                 => 'Stream', // _('Stream')
+                    self::CONFIG                => [
+                        self::APP_NAME              => 'HumanResources',
+                        self::MODEL_NAME            => 'Stream',
+                        self::TYPE                  => Timetracker_Model_Timeaccount::MODEL_NAME_PART
+                    ]
+                ]
+            ]
         )
     );
 
@@ -301,7 +318,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         array('relatedApp' => 'Sales', 'relatedModel' => 'Contract', 'config' => array(
             array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '1:0'), // _('Time Account')
         )
-        ),
+        ), [
+            'relatedApp' => 'HumanResources',
+            'relatedModel' => 'Stream',
+            'config' => [
+                ['type' => self::MODEL_NAME_PART, 'degree' => Tinebase_Model_Relation::DEGREE_SIBLING, 'max' => '1:0'],
+            ],
+        ],
     );
     
     /**
@@ -458,7 +481,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
     */
     public function loadBillables(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate)
     {
-        $this->_referenceDate = $date;
+        $this->_referenceDate = clone $date;
         $this->_billables = array();
         
         if (intval($this->budget) > 0) {

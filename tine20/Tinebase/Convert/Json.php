@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_ModelConfiguration_Const as MCC;
+
 /**
  * convert functions for records from/to json (array) format
  *
@@ -31,17 +33,32 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      */
     protected $_recursiveResolvingProtection = [];
 
+    protected $_recordClass = null;
+
+    public function __construct($recordClass = null)
+    {
+        if ($recordClass) {
+            $this->_recordClass = $recordClass;
+        }
+    }
+
     /**
      * converts external format to Tinebase_Record_Interface
      *
      * @param  mixed $_blob the input data to parse
      * @param  Tinebase_Record_Interface $_record update existing record
      * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_NotImplemented
      */
     public function toTine20Model($_blob, Tinebase_Record_Interface $_record = NULL)
     {
-        throw new Tinebase_Exception_NotImplemented('From json to record is not implemented yet');
+        /** @var Tinebase_Record_Interface $record */
+        $record = new $this->_recordClass([], true);
+        $record->setFromJsonInUsersTimezone($_blob);
+        if (null !== ($mc = ($this->_recordClass)::getConfiguration()) && $mc
+                ->{Tinebase_ModelConfiguration_Const::RUN_CONVERT_TO_RECORD_FROM_JSON}) {
+            $record->runConvertToRecord();
+        }
+        return $record;
     }
     
     /**
@@ -101,6 +118,41 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     protected function _fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $config, $multiple)
     {
         $this->_resolveBeforeToArray($_records, $config, $multiple);
+
+        // I protest against this code. and actually I rather would have it in the FE, we could have the relations
+        // renderer expose a hook and every loaded module (TT) can hook in there and then resolve such things by
+        // making a search query. then it would really only be executed when needed and having the client do things
+        // is great anyway
+        if (class_exists('Timetracker_Model_Timesheet') && $_records->getFirstRecord()->has('relations')) {
+            $ts = [];
+            foreach ($_records as $record) {
+                if (!empty($record->relations)) {
+                    /** @var Tinebase_Model_Relation $relation */
+                    foreach ($record->relations as $relation) {
+                        if (is_object($relation)
+                            && $relation->related_model === Timetracker_Model_Timesheet::class
+                            && $relation->related_record instanceof Tinebase_Record_Interface
+                        ) {
+                            if (isset($ts[$relation->related_record->getId()])) {
+                                $relation->related_record = $ts[$relation->related_record->getId()];
+                            } else {
+                                $ts[$relation->related_record->getId()] = $relation->related_record;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!empty($ts)) {
+                $ts = new Tinebase_Record_RecordSet(Timetracker_Model_Timesheet::class, array_values($ts));
+                // expand required properties
+                $expander = new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'timeaccount_id' => [],
+                    ],
+                ]);
+                $expander->expand($ts);
+            }
+        }
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->setConvertDates(true);
@@ -250,9 +302,6 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     $idx = $foreignRecords->getIndexById($foreignId);
                     if (isset($idx) && $idx !== FALSE) {
                         $record->{$field} = $foreignRecords[$idx];
-                    } else {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' No matching foreign record found for id: ' . $foreignId);
                     }
                 }
             }
@@ -497,16 +546,19 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $controller = $config['controllerClassName']::getInstance();
             $filterName = $config['filterClassName'];
             
-            $filterArray = array();
+            $filterArray = array(
+                array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)
+            );
             
             // addFilters can be added and must be added if the same model resides in more than one records fields
             if (isset($config['addFilters']) && is_array($config['addFilters'])) {
                 $filterArray = $config['addFilters'];
             }
 
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray);
-            $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
-            
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray,
+                Tinebase_Model_Filter_FilterGroup::CONDITION_AND, isset($config[MCC::FILTER_OPTIONS]) ?
+                    $config[MCC::FILTER_OPTIONS] : []);
+
             $paging = NULL;
             if (isset($config['paging']) && is_array($config['paging'])) {
                 $paging = new Tinebase_Model_Pagination($config['paging']);
@@ -584,7 +636,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         foreach ($virtualFields as $field) {
             // resolve virtual relation record from relations property
-            if (isset($field['type']) && $field['type'] == 'relation') {
+            if (isset($field['type']) && ($field['type'] === 'relation' || $field['type'] === 'relations')) {
 
                 // tODO probably move this array nesting to the top of the function, check 'function' todo below though
                 if ($multiple) {
@@ -605,7 +657,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     }
                 }
             // resolve virtual field by function
-                // TODO multiple is not passed along and not part of the if condition! this is bad I guess this is dead code?
+                // shouldn't really be used, but got used for example in OOI ooi_editors systemCF
             } else if ((isset($field['function']) || array_key_exists('function', $field))) {
                 if (is_array($field['function'])) {
                     if (count($field['function']) > 1) { // static method call

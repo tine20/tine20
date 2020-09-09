@@ -67,7 +67,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     /**
      * @cfg {Int} width of new window
      */
-    width: 500,
+    width: 600,
     /**
      * @cfg {Int} height of new window
      */
@@ -76,6 +76,11 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      * @cfg {Bolean}
      */
     modal: false,
+    /**
+     * @cfg {Boolean} cut relation to opener
+     * needed e.g. when opening a new mainWindow
+     */
+    noParent: false,
     /**
      * @cfg {String}
      */
@@ -137,11 +142,32 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     render: function() {
         // open popup window first to save time
         if (! this.popup) {
-            this.popup = this.openWindow(this.name, this.url, this.width, this.height);
+            try {
+                this.popup = this.openWindow(this.name, this.url, this.width, this.height);
+                if (this.noParent) {
+                    this.popup.opener = null;
+                }
+            } catch (e) {
+                return Ext.MessageBox.alert(
+                    i18n._('Cannot open new window'),
+                    String.format(i18n._('A new window cannot be opened. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
+                    function () {
+                        this.render()
+                    }.bind(this)
+                );
+            }
         }
 
         //. register window ( in fact register complete PopupWindow )
         this.windowManager.register(this);
+
+        // closing properly or prevent close otherwise
+        this.popup.addEventListener('beforeunload', _.bind((e) => {
+            if(!this.forceClose && this.fireEvent("beforeclose", this) === false){
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        }, this));
 
         // does not work on reload!
         //this.popup.PopupWindow = this;
@@ -267,14 +293,16 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             this.popup.document.title = Ext.util.Format.stripTags(title);
         }
     },
-    
+
     /**
      * Closes the window, removes it from the DOM and destroys the window object. 
      * The beforeclose event is fired before the close happens and will cancel 
      * the close action if it returns false.
      */
-    close: function() {
-        if(this.fireEvent("beforeclose", this) !== false){
+    close: function(force) {
+        if(force || this.fireEvent("beforeclose", this) !== false){
+            this.forceClose = true;
+
             this.fireEvent('close', this);
 
             var popup = this.popup;
@@ -286,6 +314,10 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             } else {
                 Ext.ux.PopupWindow.close(popup);
             }
+
+            return true;
+        } else {
+            this.confirmLeavSite(this);
         }
     },
     

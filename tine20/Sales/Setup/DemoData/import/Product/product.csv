@@ -1,3 +1,3 @@
 gtin,name,description,manufacturer,category,purchaseprice,salesprice,accountable,lifespan_start,lifespan_end
-Hosting,Server Hosting, Bereitstellung von servern,MW,,20,500,Sales_Model_Product,2018-09-15 20:00:00,2018-12-24 00:00:00
-GT,Getränke,Cola,Bull,,10,50,Sales_Model_Product,2018-09-10 20:00:00,2020-02-05 00:00:00
+Hosting,Server Hosting, Bereitstellung von servern,MW,,20,500,Sales_Model_Product,today,nextMonday
+GT,Getränke,Cola,Bull,,10,50,Sales_Model_Product,monday,next2year

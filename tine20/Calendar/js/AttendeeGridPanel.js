@@ -146,11 +146,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initColumns();
         
         this.mon(Ext.getBody(), 'click', this.stopEditingIf, this);
-        
-        this.viewConfig = {
+
+        this.viewConfig = _.assign(this.viewConfig || {},{
             getRowClass: this.getRowClass
-        };
-        
+        });
+
         Tine.Calendar.AttendeeGridPanel.superclass.initComponent.call(this);
 
         this.initPhoneGridPanelHook();
@@ -708,14 +708,23 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             schedulingInfo = this.record.getSchedulingData(),
             encodedSchedulingInfo = Ext.encode(schedulingInfo);
 
-        if (encodedSchedulingInfo == this.encodedSchedulingInfo && !force) return;
+        if (encodedSchedulingInfo == this.encodedSchedulingInfo && !force) {
+            return;
+        }
+
+        if (! schedulingInfo.dtend || ! schedulingInfo.dtstart) {
+            // dtend & dtstart are required
+            return;
+        }
 
         // @TODO have load spinner?
         this.encodedSchedulingInfo = encodedSchedulingInfo;
 
         // clear state
         this.store.each(function(attendee) {
-            if (Ext.isArray(force) && force.indexOf(attendee.id) < 0) return;
+            if (Ext.isArray(force) && force.indexOf(attendee.id) < 0) {
+                return;
+            }
 
             attendee.set('fbInfo', '...');
             attendee.commit();
@@ -877,20 +886,27 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     renderAttenderMemberofName: function(name) {
         return Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderGroupName.apply(this, arguments);
     },
-    
-    renderAttenderResourceName: function(name) {
-        if (typeof name.getTitle == 'function') {
-            return Ext.util.Format.htmlEncode(name.getTitle());
-        }
-        if (name.name) {
-            return Ext.util.Format.htmlEncode(name.name);
-        }
-        if (Ext.isString(name)) {
-            return Ext.util.Format.htmlEncode(name);
-        }
-        return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+
+    renderAttenderResourceName: function (name, metadata) {
+        var icon =  metadata && metadata.noIcon ? '' : this.renderAttenderResourceIcon(name),
+            displayName = Ext.isString(name) ? name :
+                Ext.isFunction(name.getTitle) ? name.getTitle() :
+                name.name ? name.name : Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+
+
+        return icon + Ext.util.Format.htmlEncode(displayName);
     },
-    
+
+    renderAttenderResourceIcon: function (name) {
+        try {
+            var ResourceId = name.type,
+            icon = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes')
+                .getById(ResourceId).get('icon');
+            return '<img class="tine-keyfield-icon" src="' + icon + '"/>';
+        } catch (e) {
+        }
+        return '';
+    },
     
     renderAttenderDispContainer: function(displaycontainer_id, metadata, attender) {
         metadata.attr = 'style = "overflow: none;"';
@@ -945,7 +961,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             qtipText =  '',
             userId = attender.get('user_id'),
             hasAccount = userId && ((userId.get && userId.get('account_id')) || userId.account_id);
-            
         switch (type) {
             case 'user':
                 cssClass += hasAccount || ! userId ? 'renderer_typeAccountIcon' : 'renderer_typeContactIcon';

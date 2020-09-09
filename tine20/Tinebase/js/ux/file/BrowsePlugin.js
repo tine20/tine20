@@ -134,6 +134,12 @@ Ext.ux.file.BrowsePlugin.prototype = {
             me.component.on('enable', this.onEnable, this);
             me.component.on('disable', this.onDisable, this);
             me.component.el.dom.addEventListener('click', function () {
+                
+                // no input on split area
+                if (me.component.split && me.component.el.getBox().right - Ext.EventObject.getXY()[0] < 18) {
+                    return;
+                }
+                
                 me.input_file.click();
             });
             me.createInputFile();

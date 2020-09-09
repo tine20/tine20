@@ -38,6 +38,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Admin.Model.User,
     recordProxy: Tine.Admin.userBackend,
     evalGrants: false,
+    passwordConfirmWindow: null,
     
     /**
      * @private
@@ -84,7 +85,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.getForm().loadRecord(this.samRecord);
         this.record.set('sambaSAM', this.samRecord.data);
 
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             if (this.emailRecord.get('emailAliases')) {
                 this.aliasesGrid.setStoreFromArray(this.emailRecord.get('emailAliases'));
             }
@@ -92,7 +93,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
             }
         }
-        if (Tine.Admin.registry.get('manageImapEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageImapEmailUser')) {
             if (!this.emailRecord.get('emailMailQuota')) this.getForm().findField('emailMailQuota').setValue(null);
         }
 
@@ -135,13 +136,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         form.updateRecord(this.emailRecord);
         // get aliases / forwards
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             // forcing blur of quickadd grids
             this.aliasesGrid.doBlur();
             this.forwardsGrid.doBlur();
             this.emailRecord.set('emailAliases', this.aliasesGrid.getFromStoreAsArray());
             this.emailRecord.set('emailForwards', this.forwardsGrid.getFromStoreAsArray());
-            Tine.log.debug('Tine.Admin.UserEditDialog::onRecordUpdate() -> setting aliases and forwards in email record');
+            Tine.log.debug('Tine.Admin.UserEditDialog::onRecordUpdate() -> setting aliases and forwards in e-mail record');
             Tine.log.debug(this.emailRecord);
         }
         this.unsetLocalizedDateTimeFields(this.emailRecord, ['emailLastLogin']);
@@ -168,7 +169,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
 
-        var xprops = {};
+        var xprops = this.record.get('xprops');
+        xprops = Ext.isObject(xprops) ? xprops : {};
         xprops.personalFSQuota = this.getForm().findField('personalFSQuota').getValue();
         Tine.Tinebase.common.assertComparable(xprops);
         this.record.set('xprops', xprops);
@@ -197,9 +199,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return false;
         }
         
-        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             var emailValue = this.getForm().findField('accountEmailAddress').getValue();
-            if (! this.checkEmailDomain(emailValue)) {
+            if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
                 result = false;
                 this.getForm().markInvalid([{
                     id: 'accountEmailAddress',
@@ -219,29 +221,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         return result;
-    },
-    
-    /**
-     * check valid email domain (if email domain is set in config)
-     * 
-     * @param {String} email
-     * @return {Boolean}
-     * 
-     * TODO use this for smtp aliases, too
-     */
-    checkEmailDomain: function(email) {
-        if (! Tine.Admin.registry.get('primarydomain') || ! email) {
-            return true;
-        }
-        
-        var allowedDomains = [Tine.Admin.registry.get('primarydomain')],
-            emailDomain = email.split('@')[1];
-            
-        if (Ext.isString(Tine.Admin.registry.get('secondarydomains'))) {
-            allowedDomains = allowedDomains.concat(Tine.Admin.registry.get('secondarydomains').split(','));
-        }
-        
-        return (allowedDomains.indexOf(emailDomain) !== -1);
     },
     
     /**
@@ -432,7 +411,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.666
                     }, {
                         xtype: 'displayfield',
-                        fieldLabel: this.app.i18n.gettext('Logon Time'),
+                        fieldLabel: this.app.i18n.gettext('Login Time'),
                         name: 'logonTime',
                         emptyText: this.app.i18n.gettext('never logged in'),
                         style: this.displayFieldStyle
@@ -442,7 +421,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.666
                     }, {
                         xtype: 'displayfield',
-                        fieldLabel: this.app.i18n.gettext('Logoff Time'),
+                        fieldLabel: this.app.i18n.gettext('Logout Time'),
                         name: 'logoffTime',
                         emptyText: this.app.i18n.gettext('never logged off'),
                         style: this.displayFieldStyle
@@ -530,7 +509,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Array} - array of IMAP tab items
      */
     initImap: function () {
-        if (Tine.Admin.registry.get('manageImapEmailUser')) {
+        if (Tine.Tinebase.registry.get('manageImapEmailUser')) {
             return [{
                 xtype: 'fieldset',
                 title: this.app.i18n.gettext('IMAP Quota'),
@@ -628,19 +607,18 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * init email grids
      * @return Array
      * 
-     * TODO     add ctx menu
+     * TODO     add ctx menus
      */
     initSmtp: function () {
-        if (! Tine.Admin.registry.get('manageSmtpEmailUser')) {
+        if (! Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             return [];
         }
         
-        var commonConfig = {
+        let commonConfig = {
             autoExpandColumn: 'email',
             quickaddMandatory: 'email',
             frame: false,
             useBBar: true,
-            dataField: 'email',
             height: 200,
             columnWidth: 0.5,
             recordClass: Ext.data.Record.create([
@@ -648,17 +626,62 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ])
         };
         
-        // TODO how to fetch smtp config if Felamimail isn't installed?
-        var smtpPrimarydomain = Tine.Admin.registry.get('primarydomain');
-        var smtpSecondarydomains = Tine.Admin.registry.get('secondarydomains');
+        this.initAliasesGrid(commonConfig);
+        this.initForwardsGrid(commonConfig);
 
-        var domains = (smtpSecondarydomains && smtpSecondarydomains.length) ? smtpSecondarydomains.split(',') : [];
+        return [
+            [this.aliasesGrid, this.forwardsGrid],
+            [{hidden: true},
+             {
+                fieldLabel: this.app.i18n.gettext('Forward Only'),
+                name: 'emailForwardOnly',
+                xtype: 'checkbox',
+                readOnly: false
+            }]
+        ];
+    },
+
+    initAliasesGrid: function(commonConfig) {
+        let smtpPrimarydomain = Tine.Tinebase.registry.get('primarydomain');
+        let smtpSecondarydomains = Tine.Tinebase.registry.get('secondarydomains');
+
+        let domains = (smtpSecondarydomains && smtpSecondarydomains.length) ? smtpSecondarydomains.split(',') : [];
         if (smtpPrimarydomain.length) {
             domains.push(smtpPrimarydomain);
         }
-        var app = this.app,
-            record = this.record;
-            
+        let app = this.app;
+
+        let smtpAliasesDispatchFlag = Tine.Tinebase.registry.get('smtpAliasesDispatchFlag');
+
+        let cm = [{
+            id: 'email',
+            header: this.app.i18n.gettext('E-mail Alias'),
+            dataIndex: 'email',
+            width: 260,
+            hideable: false,
+            sortable: true,
+            quickaddField: new Ext.form.TextField({
+                emptyText: this.app.i18n.gettext('Add an alias address...'),
+                vtype: 'email'
+            }),
+            editor: new Ext.form.TextField({allowBlank: false})
+        }];
+
+        let gridPlugins = [];
+        if (smtpAliasesDispatchFlag) {
+            this.aliasesDispatchCheckColumn = new Ext.grid.CheckColumn({
+                id: 'dispatch_address',
+                header: '...',
+                tooltip: this.app.i18n.gettext('This alias can be used for sending e-mails.'),
+                dataIndex: 'dispatch_address',
+                width: 40,
+                hideable: false,
+                sortable: true
+            })
+            cm.push(this.aliasesDispatchCheckColumn);
+            gridPlugins.push(this.aliasesDispatchCheckColumn);
+        }
+
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
@@ -668,6 +691,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                     var domain = split[1];
                     if (domains.indexOf(domain) > -1) {
+                        if (smtpAliasesDispatchFlag) {
+                            value.dispatch_address = 1;
+                        }
                         Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.call(this, value);
                     } else {
                         Ext.MessageBox.show({
@@ -681,24 +707,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         return false;
                     }
                 },
-                cm: new Ext.grid.ColumnModel([{
-                    id: 'email', 
-                    header: this.app.i18n.gettext('Email Alias'),
-                    dataIndex: 'email', 
-                    width: 300, 
-                    hideable: false, 
-                    sortable: true,
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: this.app.i18n.gettext('Add an alias address...'),
-                        vtype: 'email'
-                    }),
-                    editor: new Ext.form.TextField({allowBlank: false})
-                }])
+                cm: new Ext.grid.ColumnModel(cm),
+                plugins: gridPlugins
             }, commonConfig)
         );
         this.aliasesGrid.render(document.body);
-        
-        var aliasesStore = this.aliasesGrid.getStore();
+    },
+
+    initForwardsGrid: function(commonConfig) {
+        let aliasesStore = this.aliasesGrid.getStore();
+        let app = this.app;
+        let record = this.record;
 
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
@@ -708,7 +727,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             buttons: Ext.Msg.OK,
                             icon: Ext.MessageBox.WARNING,
                             title: app.i18n._('Forwarding to self'),
-                            msg: app.i18n._('You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases.')
+                            msg: app.i18n._('You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases.')
                         });
                         return false;
                     } else {
@@ -716,44 +735,24 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 },
                 cm: new Ext.grid.ColumnModel([{
-                    id: 'email', 
-                    header: this.app.i18n.gettext('Email Forward'),
-                    dataIndex: 'email', 
-                    width: 300, 
-                    hideable: false, 
+                    id: 'email',
+                    header: this.app.i18n.gettext('E-mail Forward'),
+                    dataIndex: 'email',
+                    width: 300,
+                    hideable: false,
                     sortable: true,
                     quickaddField: new Ext.form.TextField({
-                        emptyText: this.app.i18n.gettext('Add a forward address...'),
+                        emptyText: this.app.i18n.gettext('Add a forwarding address...'),
                         vtype: 'email'
                     }),
-                    editor: new Ext.form.TextField({allowBlank: false}) 
+                    editor: new Ext.form.TextField({allowBlank: false})
                 }])
             }, commonConfig)
         );
         this.forwardsGrid.render(document.body);
-        
-        return [
-            [this.aliasesGrid, this.forwardsGrid],
-            [{hidden: true},
-             {
-                fieldLabel: this.app.i18n.gettext('Forward Only'),
-                name: 'emailForwardOnly',
-                xtype: 'checkbox',
-                readOnly: false
-            }]
-        ];
     },
-    
-    /**
-     * @private
-     */
-    getFormItems: function () {
-        this.displayFieldStyle = {
-            border: 'silver 1px solid',
-            padding: '3px',
-            height: '11px'
-        };
-        
+
+    initPasswordConfirmWindow: function() {
         this.passwordConfirmWindow = new Ext.Window({
             title: this.app.i18n.gettext('Password confirmation'),
             closeAction: 'hide',
@@ -769,8 +768,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 monitorValid: true,
                 defaults: { anchor: '100%' },
                 items: [{
-                    xtype: 'textfield',
+                    xtype: 'tw-passwordTriggerField',
                     inputType: 'password',
+                    autocomplete: 'new-password',
                     id: 'passwordRepeat',
                     fieldLabel: this.app.i18n.gettext('Repeat password'),
                     name: 'passwordRepeat',
@@ -804,7 +804,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     scope: this,
                     handler: function () {
                         var confirmForm = this.passwordConfirmWindow.items.first().getForm();
-                        
+
                         // check if confirm form is valid (we need this if special key called button handler)
                         if (confirmForm.isValid()) {
                             this.passwordConfirmWindow.hide();
@@ -818,14 +818,29 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 show: function (win) {
                     var confirmForm = this.passwordConfirmWindow.items.first().getForm();
-                    
+
                     confirmForm.reset();
                     confirmForm.findField('passwordRepeat').focus(true, 500);
                 }
             }
         });
         this.passwordConfirmWindow.render(document.body);
-        
+    },
+
+    /**
+     * @private
+     */
+    getFormItems: function () {
+        this.displayFieldStyle = {
+            border: 'silver 1px solid',
+            padding: '3px',
+            height: '11px'
+        };
+
+        if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featureForceRetypePassword')) {
+            this.initPasswordConfirmWindow();
+        }
+
         var config = {
             xtype: 'tabpanel',
             deferredRender: false,
@@ -872,9 +887,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.5
                     }, {
                         fieldLabel: this.app.i18n.gettext('Password'),
+                        xtype: 'tw-passwordTriggerField',
                         id: 'accountPassword',
                         name: 'accountPassword',
                         inputType: 'password',
+                        autocomplete: 'new-password',
                         columnWidth: 0.5,
                         tabIndex: 4,
                         passwordsMatch: true,
@@ -883,26 +900,29 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             scope: this,
                             blur: function (field) {
                                 var fieldValue = field.getValue();
-                                if (fieldValue !== '') {
+                                if (fieldValue !== '' && this.passwordConfirmWindow) {
                                     // show password confirmation
                                     // NOTE: we can't use Ext.Msg.prompt because field has to be of inputType: 'password'
                                     this.passwordConfirmWindow.show.defer(100, this.passwordConfirmWindow);
                                 }
                             },
                             destroy: function () {
-                                // destroy password confirm window
-                                this.passwordConfirmWindow.destroy();
+                                if (this.passwordConfirmWindow) {
+                                    this.passwordConfirmWindow.destroy();
+                                }
                             },
                             keydown: function (field) {
-                                field.passwordsMatch = false;
+                                if (this.passwordConfirmWindow) {
+                                    field.passwordsMatch = false;
+                                }
                             }
                         },
                         validateValue: function (value) {
-                            return this.passwordsMatch;
+                            return (this.passwordsMatch);
                         }
                     }], [{
                         vtype: 'email',
-                        fieldLabel: this.app.i18n.gettext('Email'),
+                        fieldLabel: this.app.i18n.gettext('E-mail'),
                         tabIndex: 5,
                         name: 'accountEmailAddress',
                         id: 'accountEmailAddress',
@@ -1024,7 +1044,16 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             },
                             scope: this
                         }
-                    }]] 
+                    },
+                     {
+                            hideLabel: true,
+                            xtype: 'checkbox',
+                            boxLabel: this.app.i18n.gettext('Password Must Change'),
+                            hidden: this.ldapBackend,
+                            ctCls: 'admin-checkbox',
+                            fieldClass: 'admin-checkbox-box',
+                            name: 'password_must_change'
+                    }]]
                 }, {
                     xtype: 'fieldset',
                     title: this.app.i18n.gettext('Information'),
@@ -1081,7 +1110,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: this.initFilesystem()
             }, {
                 title: this.app.i18n.gettext('IMAP'),
-                disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
+                disabled: ! Tine.Tinebase.registry.get('manageImapEmailUser'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -1090,7 +1119,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, {
                 xtype: 'columnform',
                 title: this.app.i18n.gettext('SMTP'),
-                disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
+                disabled: ! Tine.Tinebase.registry.get('manageSmtpEmailUser'),
                 border: false,
                 frame: true,
                 labelAlign: 'top',
@@ -1098,8 +1127,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'textfield',
                     anchor: '100%',
                     labelSeparator: '',
-                    columnWidth: 0.5,
-                    readOnly: true
+                    columnWidth: 0.5
                 },
                 items: this.initSmtp()
             }]

@@ -17,7 +17,7 @@
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
     <!-- ============================================  -->
-    <target name="prepare">
+    <target name="prepare" depends="translation-test">
         <echo msg="basedir: ${project.basedir}" />
         <init />
 
@@ -275,7 +275,12 @@
             <available file="${project.basedir}/${name}/js/webpack.prod.js"/>
             <then>
                 <echo message="Starting webpack build..." />
-                <exec command="./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
+                <exec command="node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
+                <fail message="Build failed ... webpack-assets-FAT.json not found">
+                    <condition>
+                        <not><available file="${project.basedir}/${name}/js/webpack-assets-FAT.json"/></not>
+                    </condition>
+                </fail>
             </then>
         </if>
 
@@ -383,7 +388,7 @@
         <echo msg="updating templates" />
         <exec command="./langHelper.php --pot" passthru="true" />
         <echo msg="push translations to transifex" />
-        <exec command="tx push -s" passthru="true" />
+        <exec command="tx push -s -t --skip" passthru="true" />
         <echo msg="commit updated strings now:" />
         <echo msg="git commit -a -m 'update lang templates'" />
         <echo msg="git push gerrit HEAD:refs/heads/master" />
@@ -394,7 +399,17 @@
     <!-- ============================================  -->
     <target name="translation-test">
         <echo msg="find duplicates or syntax errors" />
-        <exec command="for i in `ls ./*/translations/*.po`; do msgfmt -o - --strict $i 1>/dev/null; done" passthru="true"/>
+        <exec command="for i in `ls ./*/translations/*.po`; do msgfmt -o - --strict $i 1>/dev/null || exit 1; done"
+              passthru="true" returnProperty="return"/>
+        <if>
+            <equals arg1="${return}" arg2="0" />
+            <then>
+                <echo message="Translation test successful" />
+            </then>
+            <else>
+                <fail message="Translation test failed" />
+            </else>
+        </if>
     </target>
     
     <!-- ============================================  -->
@@ -411,6 +426,7 @@
                 acceptedTermsVersion=1000 \
                 imap=${imap} \
                 smtp=${smtp} \
+                lang=${lang} \
                 authentication=${authentication} \
                 accounts=${accounts} \
                 sieve=${sieve}

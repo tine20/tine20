@@ -108,8 +108,8 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match("/PHPUnit/",      $xmlBody), 'no name');
         $this->assertEquals(1, preg_match("/Description/",  $xmlBody), 'no description');
         $this->assertEquals(1, preg_match('/open/',         $xmlBody), 'no leadstate');
-        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountDisplayName) . '/',      $xmlBody), 'no creator');
-        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountLastName) . '/',         $xmlBody), 'no container name');
+        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountDisplayName, '/') . '/',      $xmlBody), 'no creator');
+        $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountFirstName, '/') . '/',         $xmlBody), 'no container name');
     }
 
     /**
@@ -120,7 +120,7 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
     public function testExportOdsWithoutGrant()
     {
         // remove all grants for container
-        $this->_container = Tinebase_Container::getInstance()->getDefaultContainer('Crm');
+        $this->_container = Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class);
         Tinebase_Container::getInstance()->setGrants($this->_container, new Tinebase_Record_RecordSet($this->_container->getGrantClass(), array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',

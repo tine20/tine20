@@ -60,8 +60,18 @@ abstract class Tinebase_Convert_VCalendar_Abstract
         }
         
         $blob = Tinebase_Core::filterInputForDatabase($blob);
-        
-        $vcalendar = self::readVCalBlob($blob);
+
+        try {
+            $vcalendar = self::readVCalBlob($blob);
+        } catch (Sabre\VObject\ParseException $svpe) {
+            // try again with utf8_encoded blob
+            $utf8_blob = Tinebase_Helper::mbConvertTo($blob);
+            // alse replace some linebreaks and \x00's
+            $search = array("\r\n", "\x00");
+            $replace = array("\n", '');
+            $utf8_blob = str_replace($search, $replace, $utf8_blob);
+            $vcalendar = self::readVCalBlob($utf8_blob);
+        }
         
         return $vcalendar;
     }
@@ -97,14 +107,14 @@ abstract class Tinebase_Convert_VCalendar_Abstract
                     '/Invalid VObject, line ([0-9]+) did not follow the icalendar\/vcard format/', $svpe->getMessage(), $matches
             )) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                        ' ' . $svpe->getMessage() .
-                        ' lastBrokenLineNumber: ' . $lastBrokenLineNumber);
-    
+                    ' ' . $svpe->getMessage() .
+                    ' lastBrokenLineNumber: ' . $lastBrokenLineNumber);
+
                 $brokenLineNumber = $matches[1] - 1 + $spacecount;
-    
+
                 if ($lastBrokenLineNumber === $brokenLineNumber) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                            ' Try again: concat this line to previous line.');
+                        ' Try again: concat this line to previous line.');
                     $lines = $lastLines;
                     $brokenLineNumber--;
                     // increase spacecount because one line got removed
@@ -112,18 +122,21 @@ abstract class Tinebase_Convert_VCalendar_Abstract
                 } else {
                     $lines = preg_split('/[\r\n]*\n/', $blob);
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                            ' Concat next line to this one.');
+                        ' Concat next line to this one.');
                     $lastLines = $lines; // for retry
                 }
                 $lines[$brokenLineNumber] .= $lines[$brokenLineNumber + 1];
                 unset($lines[$brokenLineNumber + 1]);
-    
+
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                        ' failcount: ' . $failcount .
-                        ' brokenLineNumber: ' . $brokenLineNumber .
-                        ' spacecount: ' . $spacecount);
-    
+                    ' failcount: ' . $failcount .
+                    ' brokenLineNumber: ' . $brokenLineNumber .
+                    ' spacecount: ' . $spacecount);
+
                 $vcalendar = self::readVCalBlob(implode("\n", $lines), $failcount + 1, $spacecount, $brokenLineNumber, $lastLines);
+            } else if ($failcount < 10 && preg_match('/%0A/', $blob)) {
+                // maybe the input file is urlencoded
+                $vcalendar = \Sabre\VObject\Reader::read(urldecode($blob));
             } else {
                 throw $svpe;
             }
@@ -206,6 +219,10 @@ abstract class Tinebase_Convert_VCalendar_Abstract
                     $alarmTime->setTimezone('UTC');
                     
                     preg_match('/(?P<invert>[+-]?)(?P<spec>P.*)/', $valarm->TRIGGER->getValue(), $matches);
+                    // PRODID:-//DDay.iCal//NONSGML ddaysoftware.com//EN issue: "TRIGGER:P"
+                    if ('P' === $matches['spec']) {
+                        $matches['spec'] = 'PT15M';
+                    }
                     $duration = new DateInterval($matches['spec']);
                     $duration->invert = !!($matches['invert'] === '-');
                     

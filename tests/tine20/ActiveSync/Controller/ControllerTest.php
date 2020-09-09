@@ -83,24 +83,6 @@ abstract class ActiveSync_Controller_ControllerTest extends ActiveSync_TestCase
     {
         return $this->_testUpdateFolderForDeviceType(self::TYPE_ANDROID_6);
     }
-
-    /**
-     * @return Syncroton_Model_Folder
-     */
-    public function testUpdateFolderOldAndroid()
-    {
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID), new Tinebase_DateTime(null, null, 'de_DE'));
-        
-        $syncrotonFolders = $controller->getAllFolders();
-        self::assertTrue(isset($syncrotonFolders[$this->_specialFolderName]), 'could not find ' . $this->_specialFolderName);
-    
-        try {
-            $controller->updateFolder($syncrotonFolders[$this->_specialFolderName]);
-            self::fail('expected Syncroton_Exception_UnexpectedValue expcetion');
-        } catch (Exception $e) {
-            self::assertTrue($e instanceof Syncroton_Exception_UnexpectedValue, $e);
-        }
-    }
     
     /**
      * test if changed folders got returned

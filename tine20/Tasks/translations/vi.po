@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-23 18:43+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,62 +17,68 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:102
-#, python-format
-msgid "%s's personal tasks"
-msgstr "Việc cá nhân của %s"
+#: Model/Task.php:37
+msgid "GENDER_Task"
+msgid_plural "GENDER_Tasks"
+msgstr[0] ""
 
-#: Acl/Rights.php:97
-msgid "manage shared task lists"
-msgstr "Quản lý danh sách công việc dùng chung"
+#: Model/Task.php:38 js/Models.js:66
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "one: Công việc\nothers: Công việc"
 
-#: Acl/Rights.php:98
-msgid "Create new shared tasks lists"
-msgstr "Tạo danh sách công việc dùng chung"
+#: Model/Task.php:76 Model/Task.php:312 js/TaskGridPanel.js:138
+msgid "Percent"
+msgstr "Phần trăm"
 
-#: Acl/Rights.php:101
-msgid "manage shared tasks favorites"
-msgstr "Quản lý lối tắt công việc chung"
+#: Model/Task.php:82 js/TaskEditDialog.js:235 js/TaskGridPanel.js:167
+#: Config.php:48 Setup/Update/Release5.php:75
+msgid "Completed"
+msgstr "Hoàn thành"
 
-#: Acl/Rights.php:102
-msgid "Create or update shared tasks favorites"
-msgstr "Tạo/ cập nhật lối tắt công việc chung"
-
-#: Model/Task.php:207
+#: Model/Task.php:87 Model/Task.php:307
 msgid "Due"
 msgstr "Hạn"
 
-#: Model/Task.php:208 js/TaskEditDialog.js:204
-msgid "Organizer"
-msgstr "Người tổ chức"
+#: Model/Task.php:92
+msgid "Class"
+msgstr ""
 
-#: Model/Task.php:209
+#: Model/Task.php:100 Model/Task.php:309
 msgid "Description"
 msgstr "Mô tả"
 
-#: Model/Task.php:210 js/TaskEditDialog.js:196 js/TaskGridPanel.js:119
+#: Model/Task.php:106
+msgid "Geo"
+msgstr ""
+
+#: Model/Task.php:111
+msgid "Location"
+msgstr ""
+
+#: Model/Task.php:116 Model/Task.php:308 js/TaskEditDialog.js:204
+msgid "Organizer"
+msgstr "Người tổ chức"
+
+#: Model/Task.php:310 js/TaskEditDialog.js:196 js/TaskGridPanel.js:122
 msgid "Priority"
 msgstr "Độ quan trọng"
 
-#: Model/Task.php:211 js/TaskEditDialog.js:226 js/TaskGridPanel.js:148
-#: js/Models.js:110 js/Models.js:168
+#: Model/Task.php:311 js/TaskEditDialog.js:226 js/Models.js:110
+#: js/Models.js:168 js/TaskGridPanel.js:151
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "one: Trạng thái\nother: Trạng thái"
 
-#: Model/Task.php:212 js/TaskGridPanel.js:135
-msgid "Percent"
-msgstr "Phần trăm"
-
-#: Model/Task.php:219
+#: Model/Task.php:319
 msgid "Lead"
 msgstr "Chủ trì"
 
-#: Model/Task.php:225
+#: Model/Task.php:325
 msgid "Telephone"
 msgstr "Điện thoại"
 
-#: Model/Task.php:226
+#: Model/Task.php:326
 msgid "Email"
 msgstr "Email"
 
@@ -84,7 +90,7 @@ msgstr ""
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "Bạn phải cung cấp ngày đến hạn, bởi vì bộ nhắc đã được chọn"
 
-#: js/TaskEditDialog.js:185 js/TaskGridPanel.js:97 js/Models.js:107
+#: js/TaskEditDialog.js:185 js/Models.js:107 js/TaskGridPanel.js:100
 msgid "Summary"
 msgstr "Tóm tắt"
 
@@ -108,49 +114,6 @@ msgstr "Nhập mô tả..."
 msgid "Percentage"
 msgstr "Phần trăm"
 
-#: js/TaskEditDialog.js:235 js/TaskGridPanel.js:171 Config.php:48
-#: Setup/Update/Release5.php:75
-msgid "Completed"
-msgstr "Hoàn thành"
-
-#: js/TaskGridPanel.js:54
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "one: Bạn có muốn xóa công việc đã chọn?\nother: Bạn có muốn xóa những công việc đã chọn?"
-
-#: js/TaskGridPanel.js:82
-msgid "Tags"
-msgstr "Thẻ"
-
-#: js/TaskGridPanel.js:87
-msgid "Lead name"
-msgstr ""
-
-#: js/TaskGridPanel.js:101
-msgid "Add a task..."
-msgstr "Thêm 1 việc"
-
-#: js/TaskGridPanel.js:105 js/Models.js:108
-msgid "Due Date"
-msgstr "Ngày đến hạn"
-
-#: js/TaskGridPanel.js:164 js/Models.js:122
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/TaskGridPanel.js:178 js/Models.js:118
-msgid "Responsible"
-msgstr "Có thể trả lời"
-
-#: js/Tasks.js:39
-msgid "New Task"
-msgstr "Tạo việc mới"
-
-#: js/Models.js:66
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "one: Công việc\nothers: Công việc"
-
 #: js/Models.js:66
 msgid "Tasks"
 msgstr "Công việc"
@@ -168,6 +131,14 @@ msgstr "Danh sách cần làm"
 msgid "Quick Search"
 msgstr "Tìm nhanh"
 
+#: js/Models.js:108 js/TaskGridPanel.js:108
+msgid "Due Date"
+msgstr "Ngày đến hạn"
+
+#: js/Models.js:118 js/TaskGridPanel.js:174
+msgid "Responsible"
+msgstr "Có thể trả lời"
+
 #: js/Models.js:120
 msgid "Last Modified Time"
 msgstr "Thời gian sửa"
@@ -176,13 +147,38 @@ msgstr "Thời gian sửa"
 msgid "Last Modified By"
 msgstr "Sửa lần cuối bởi"
 
+#: js/Models.js:122
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
 #: js/Models.js:123
 msgid "Created By"
 msgstr "Tạo bởi"
 
-#: Controller/Task.php:202
-msgid "Notification for Task "
-msgstr "Thông báo cho công việc"
+#: js/Tasks.js:39
+msgid "New Task"
+msgstr "Tạo việc mới"
+
+#: js/TaskGridPanel.js:54
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "one: Bạn có muốn xóa công việc đã chọn?\nother: Bạn có muốn xóa những công việc đã chọn?"
+
+#: js/TaskGridPanel.js:83
+msgid "Attachments"
+msgstr ""
+
+#: js/TaskGridPanel.js:84
+msgid "Tags"
+msgstr "Thẻ"
+
+#: js/TaskGridPanel.js:90
+msgid "Lead name"
+msgstr ""
+
+#: js/TaskGridPanel.js:104
+msgid "Add a task..."
+msgstr "Thêm 1 việc"
 
 #: Preference.php:24
 msgid "All my tasks"
@@ -251,6 +247,31 @@ msgstr "Cao"
 #: Config.php:68 Setup/Update/Release5.php:170
 msgid "urgent"
 msgstr "Khẩn cấp"
+
+#: Acl/Rights.php:97
+msgid "manage shared task lists"
+msgstr "Quản lý danh sách công việc dùng chung"
+
+#: Acl/Rights.php:98
+msgid "Create new shared tasks lists"
+msgstr "Tạo danh sách công việc dùng chung"
+
+#: Acl/Rights.php:101
+msgid "manage shared tasks favorites"
+msgstr "Quản lý lối tắt công việc chung"
+
+#: Acl/Rights.php:102
+msgid "Create or update shared tasks favorites"
+msgstr "Tạo/ cập nhật lối tắt công việc chung"
+
+#: Controller.php:102
+#, python-format
+msgid "%s's personal tasks"
+msgstr "Việc cá nhân của %s"
+
+#: Controller/Task.php:211
+msgid "Notification for Task %1$s"
+msgstr ""
 
 #: Setup/Initialize.php:38 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"

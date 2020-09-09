@@ -33,7 +33,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Calendar_Model_Event')),
         'uid'                   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'etag'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'container_id'          => array('filter' => 'Calendar_Model_CalendarFilter', 'options' => array('applicationName' => 'Calendar')),
+        'container_id'          => array('filter' => 'Calendar_Model_CalendarFilter', 'options' => array('modelName' => Calendar_Model_Event::class)),
         'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description', 'location'))),
         'period'                => array('filter' => 'Calendar_Model_PeriodFilter'),
         'attender'              => array('filter' => 'Calendar_Model_AttenderFilter'),

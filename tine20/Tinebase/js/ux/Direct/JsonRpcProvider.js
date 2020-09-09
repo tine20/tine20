@@ -34,6 +34,11 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
      * @cfg {Boolean} useNamedParams
      */
     useNamedParams: false,
+
+    /**
+     * @cfg {Number} timeout
+     */
+    timeout: 60000,
     
     // private
     initAPI : function() {
@@ -62,7 +67,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
                 if (e.status == 'failure') {
                     reject(e);
                 } else if (e.type == 'exception') {
-                    reject (new Error(e.error));
+                    reject (e.error);
                 } else {
                     fulfill(result);
                 }
@@ -143,7 +148,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
         xhr.responseText = [];
         Ext.each(rs, function(rpcresponse, i) {
             xhr.responseText[i] = {
-                type: rpcresponse.result ? 'rpc' : 'exception',
+                type: rpcresponse.hasOwnProperty('result') ? 'rpc' : 'exception',
                 result: rpcresponse.result,
                 tid: rpcresponse.id,
                 error: rpcresponse.error

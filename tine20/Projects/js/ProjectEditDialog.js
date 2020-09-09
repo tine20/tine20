@@ -33,7 +33,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Projects.recordBackend,
     evalGrants: true,
     showContainerSelector: true,
-    hideRelationsPanel: true,
+    hideRelationsPanel: false,
     displayNotes: true,
     
     /**
@@ -60,7 +60,17 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
         Tine.Projects.ProjectEditDialog.superclass.onRecordUpdate.call(this);
-        this.record.set('relations', this.contactLinkPanel.getData());
+        var _ = window.lodash,
+            relations = this.record.get('relations');
+
+        relations = relations.filter(function (element) {
+            if (element.type == 'COWORKER' || element.type == 'RESPONSIBLE') {
+                return null;
+            } else return element;
+        });
+
+        relations = _.concat(relations, this.contactLinkPanel.getData());
+        this.record.set('relations', relations);
     },
     
     /**
@@ -93,7 +103,6 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'

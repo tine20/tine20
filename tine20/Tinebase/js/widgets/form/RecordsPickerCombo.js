@@ -37,6 +37,16 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
     minWidth: 200,
 
+    /**
+     * config spec for additionalFilters - passed to PickerGridPanel
+     *
+     * @type: {object} e.g.
+     * additionalFilterConfig: {config: { 'name': 'configName', 'appName': 'myApp'}}
+     * additionalFilterConfig: {preference: {'appName': 'myApp', 'name': 'preferenceName}}
+     * additionalFilterConfig: {favorite: {'appName': 'myApp', 'id': 'favoriteId', 'name': 'optionallyuseaname'}}
+     */
+    additionalFilterSpec: null,
+
     initComponent: function () {
         this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records ...'));
         this.currentValue = this.currentValue || [];
@@ -54,7 +64,8 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
             recordClass: this.recordClass,
             height: this.layerHeight - 40 || 'auto',
             onStoreChange: Ext.emptyFn,
-            store: this.store
+            store: this.store,
+            additionalFilterSpec: this.additionalFilterSpec
         });
 
         return [this.pickerGrid];
@@ -88,6 +99,7 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
 
         var oldValue = this.currentValue;
         this.currentValue = value;
+        this.value = value;
         Tine.Tinebase.common.assertComparable(this.currentValue);
 
         if (JSON.stringify(value) != JSON.stringify(oldValue)){

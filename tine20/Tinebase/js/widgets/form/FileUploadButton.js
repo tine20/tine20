@@ -8,7 +8,8 @@
 Ext.ns('Tine.widgets.form');
 
 /**
- * Upload Button
+ * Upload Button for a _single_ file
+ * Calls handler when upload is complete 
  * 
  * @namespace   Tine.widgets.form
  * @class       Tine.widgets.form.FileUploadButton
@@ -41,7 +42,7 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
     browsePlugin: null,
     
     // private config overrides
-    iconCls: 'action_import',
+    iconCls: 'action_upload',
 
     multiple: false,
     
@@ -70,7 +71,7 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
      * called when a file got selected
      * 
      * @param {ux.BrowsePlugin} fileSelector
-     * @param {Ext.EventObj} e
+     * @param {Ext.EventObj} event
      */
     onFileSelect: function(fileSelector, event) {
         if (Ext.isArray(this.allowedTypes) && this.allowedTypes.indexOf(fileSelector.getFileCls()) < 0) {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>test_adb_doc_tableWithPOSTPmarkers</name>
+    <label>Export as DOC</label>
+    <type>export</type>
+    <plugin>Addressbook_Export_Doc</plugin>
+</config>

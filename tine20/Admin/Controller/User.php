@@ -6,9 +6,8 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        catch error (and show alert) if postfix email already exists
  * @todo        extend Tinebase_Controller_Record_Abstract
  */
 
@@ -87,15 +86,18 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $result = $this->_userBackend->getUsers($_filter, $_sort, $_dir, $_start, $_limit, 'Tinebase_Model_FullUser');
 
-        $emailUser = null;
-        try {
-            $emailUser = Tinebase_EmailUser::getInstance();
-        } catch (Tinebase_Exception_NotFound $tenf) {}
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            $emailUser = null;
+            try {
+                $emailUser = Tinebase_EmailUser::getInstance();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
 
-        // FIXME if you want quota info: in Tinebase_User_Plugin_LdapInterface, inspectGetUserByProperty has a second param!
-        if (null !== $emailUser && ! $emailUser instanceof Tinebase_User_Plugin_LdapInterface ) {
-            foreach ($result as $user) {
-                $emailUser->inspectGetUserByProperty($user);
+            // FIXME if you want quota info: in Tinebase_User_Plugin_LdapInterface, inspectGetUserByProperty has a second param!
+            if (null !== $emailUser && !$emailUser instanceof Tinebase_User_Plugin_LdapInterface) {
+                foreach ($result as $user) {
+                    $emailUser->inspectGetUserByProperty($user);
+                }
             }
         }
         
@@ -127,9 +129,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('VIEW_ACCOUNTS');
         
-        $user = $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser');
-        
-        return $user;
+        return $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser');
     }
     
     /**
@@ -170,6 +170,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         if ($_password != $_passwordRepeat) {
             throw new Admin_Exception("Passwords don't match.");
+        }
+
+        if ($_mustChange === null) {
+            $_mustChange = $_account->password_must_change ? true : false;
         }
         
         $this->_userBackend->setPassword($_account, $_password, true, $_mustChange);
@@ -220,20 +224,19 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
-        
+        $deactivated = false;
+
+        $this->_checkSystemEmailAccountCreation($_user, $oldUser, $_password);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
+
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
-            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                $_user->contact_id = $oldUser->contact_id;
-                $contact = $this->createOrUpdateContact($_user);
-                $_user->contact_id = $contact->getId();
-            }
-            
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
-            
+
+            $deactivated = $this->_checkAccountStatus($_user, $oldUser);
             $user = $this->_userBackend->updateUser($_user);
 
             // make sure primary groups is in the list of group memberships
@@ -242,19 +245,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 : (array) $_user->groups;
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), $currentGroups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
-
-            // update account status if changed to enabled/disabled
-            if ($oldUser->accountStatus !== $_user->accountStatus && in_array($_user->accountStatus, array(
-                    Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED,
-                    Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED,
-                ))) {
-                $this->_userBackend->setStatus($_user->getId(), $_user->accountStatus);
-
-                if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
-                    // TODO send this for blocked/expired, too? allow to configure this?
-                    Tinebase_User::getInstance()->sendDeactivationNotification($_user);
-                }
-            }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
@@ -268,6 +258,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
             throw $e;
         }
+
+        if ($deactivated) {
+            // TODO send this for blocked/expired, too? allow to configure this?
+            Tinebase_User::getInstance()->sendDeactivationNotification($user);
+        }
         
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
@@ -276,12 +271,73 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         Tinebase_Event::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($_user, $_password, $_passwordRepeat, FALSE);
+            $this->setAccountPassword($_user, $_password, $_passwordRepeat);
         }
 
         $this->_updateCurrentUser($user);
 
         return $user;
+    }
+
+    /**
+     * @param $user
+     * @param $oldUser
+     * @param $password
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkSystemEmailAccountCreation($user, $oldUser, $password)
+    {
+        if (Tinebase_EmailUser::isEmailSystemAccountConfigured()
+            && empty($oldUser->accountEmailAddress)
+            && ! empty($user->accountEmailAddress)
+            && ! $password ) {
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Password is needed for system account creation'));
+        }
+    }
+
+    /**
+     * @param Tinebase_Model_FullUser $_user
+     * @return Tinebase_Model_FullUser
+     * @throws Tinebase_Exception_Backend_Database_LockTimeout
+     */
+    public function updateUserWithoutEmailPluginUpdate(Tinebase_Model_FullUser $_user)
+    {
+        // remove email user plugins (add again afterwards)
+        $userPlugins = Tinebase_User::getInstance()->getSqlPluginNames();
+        $emailPlugins = [];
+        foreach ($userPlugins as $pluginName) {
+            if (Tinebase_EmailUser::isEmailUserPlugin($pluginName)) {
+                $emailPlugins[] = Tinebase_User::getInstance()->removePlugin($pluginName);
+            }
+        }
+        $result = $this->update($_user);
+        foreach ($emailPlugins as $plugin) {
+            Tinebase_User::getInstance()->registerPlugin($plugin);
+        }
+        return $result;
+    }
+
+    /**
+     * update account status if changed to enabled/disabled
+     *
+     * @param $_user
+     * @param $_oldUser
+     * @return boolean true if user is deactivated
+     */
+    protected function _checkAccountStatus($_user, $_oldUser)
+    {
+        if ($_oldUser->accountStatus !== $_user->accountStatus && in_array($_user->accountStatus, array(
+                Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED,
+                Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED,
+            ))) {
+
+            if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -305,17 +361,18 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param  Tinebase_Model_FullUser  $_account           the account
      * @param  string                     $_password           the new password
      * @param  string                     $_passwordRepeat  the new password again
+     * @param  boolean                    $_ignorePwdPolicy
      * @return Tinebase_Model_FullUser
      */
-    public function create(Tinebase_Model_FullUser $_user, $_password, $_passwordRepeat)
+    public function create(Tinebase_Model_FullUser $_user, $_password, $_passwordRepeat, $_ignorePwdPolicy = false)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         // avoid forging accountId, gets created in backend
         unset($_user->accountId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
 
         if ($_password != $_passwordRepeat) {
             throw new Admin_Exception("Passwords don't match.");
@@ -323,7 +380,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_password = '';
             $_passwordRepeat = '';
         }
-        Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
+        if (!$_ignorePwdPolicy) {
+            Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
+        }
 
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -331,27 +390,21 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $this->_checkLoginNameExistance($_user);
             $this->_checkLoginNameLength($_user);
             $this->_checkPrimaryGroupExistance($_user);
-            
-            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Addressbook_Model_Contact', [
-                        ['field' => 'n_fileas', 'operator' => 'equals', 'value' => $_user['accountDisplayName']]]);
+        } catch (Tinebase_Exception_SystemGeneric $sytemEx) {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
-                    $userContact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-                  
-                    if($userContact === null)
-                    {
-                        $userContact = $this->createOrUpdateContact($_user);
-                        $_user->contact_id = $userContact->getId();
-                    } else{
-                        $_user->contact_id = $userContact->getId();
-                        $this->createOrUpdateContact($_user);
-                    }
-                }
+            throw $sytemEx;
+        }  catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Exception::log($e);
+            throw $e;
+        }
 
-                      
+        try {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'create');
             
             $user = $this->_userBackend->addUser($_user);
+            $user->imapUser = $_user->imapUser;
             
             // make sure primary groups is in the list of groupmemberships
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
@@ -364,13 +417,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Exception::log($e);
             throw $e;
         }
-        
+
+        if (!empty($_password)) {
+            $this->setAccountPassword($user, $_password, $_passwordRepeat);
+        }
+
         $event = new Admin_Event_AddAccount(array(
-            'account' => $user
+            'account' => $user,
+            'pwd'     => $_password,
         ));
         Tinebase_Event::fireEvent($event);
-        
-        $this->setAccountPassword($user, $_password, $_passwordRepeat);
 
         return $user;
     }
@@ -481,7 +537,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        return Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ, TRUE);
+        return Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_READ, TRUE);
     }
     
     /**
@@ -489,7 +545,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * 
      * @return string|int ID
      */
-    public function getDefaultInternalAddressbook()
+    public static function getDefaultInternalAddressbook()
     {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
         if (empty($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])) {
@@ -500,67 +556,28 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         return $internalAdbId;
     }
-    
+
     /**
-     * create or update contact in addressbook backend
-     * 
-     * @param Tinebase_Model_FullUser $_user
-     * @param boolean $_setModlog
-     * @return Addressbook_Model_Contact
+     *  add email userid xprops to user accounts
      */
-    public function createOrUpdateContact(Tinebase_Model_FullUser $_user, $_setModlog = true)
+    public function convertAccountsToSaveUserIdInXprops()
     {
-        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        $contactsBackend->setGetDisabledContacts(true);
-        
-        if (empty($_user->container_id)) {
-            $_user->container_id = $this->getDefaultInternalAddressbook();
+        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            return;
         }
-        
-        try {
-            if (empty($_user->contact_id)) { // jump to catch block
-                throw new Tinebase_Exception_NotFound('contact_id is empty');
+
+        $this->checkRight('MANAGE_ACCOUNTS');
+
+        foreach (Tinebase_User::getInstance()->getFullUsers() as $user) {
+            if (empty($user->accountEmailAddress)) {
+                continue;
             }
 
-            /** @var Addressbook_Model_Contact $contact */
-            $contact = $contactsBackend->get($_user->contact_id);
-            
-            // update exisiting contact
-            $contact->n_family   = $_user->accountLastName;
-            $contact->n_given    = $_user->accountFirstName;
-            $contact->n_fn       = $_user->accountFullName;
-            $contact->n_fileas   = $_user->accountDisplayName;
-            $contact->email      = $_user->accountEmailAddress;
-            $contact->type       = Addressbook_Model_Contact::CONTACTTYPE_USER;
-            $contact->container_id = $_user->container_id;
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                __LINE__ . ' Set xprops of user ' . $user->accountLoginName);
 
-            unset($contact->jpegphoto);
-
-            if ($_setModlog) {
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
-            }
-            
-            $contact = $contactsBackend->update($contact);
-            
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // add new contact
-            $contact = new Addressbook_Model_Contact(array(
-                'n_family'      => $_user->accountLastName,
-                'n_given'       => $_user->accountFirstName,
-                'n_fn'          => $_user->accountFullName,
-                'n_fileas'      => $_user->accountDisplayName,
-                'email'         => $_user->accountEmailAddress,
-                'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
-                'container_id'  => $_user->container_id
-            ));
-
-            if ($_setModlog) {
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
-            }
-    
-            $contact = $contactsBackend->create($contact);
+            Tinebase_EmailUser_XpropsFacade::setXprops($user, $user->getId());
+            Tinebase_User::getInstance()->updateUserInSqlBackend($user);
         }
-        
-        return $contact;
     }
 }

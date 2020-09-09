@@ -64,12 +64,12 @@ class Tinebase_ImageHelper
         
         $imgInfo = @getimagesize($tmpPath);
         unlink($tmpPath);
-        if (! in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
+        if (! $imgInfo || ! in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
             throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');
         }
         if (! (isset($imgInfo['channels']) || array_key_exists('channels', $imgInfo))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Image of type ' . $imgInfo['mime']
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Image of type ' . $imgInfo['mime']
                     . ' had no channel information. Setting channels to 0.');
             $imgInfo['channels'] = 0;
         }
@@ -94,8 +94,8 @@ class Tinebase_ImageHelper
             return false;
         }
         try {
-            $imgInfo = getimagesize($_file);
-            if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
+            $imgInfo = @getimagesize($_file);
+            if ($imgInfo && isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
                 return true;
             }
         } catch (Exception $e) {

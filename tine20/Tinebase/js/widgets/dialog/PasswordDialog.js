@@ -170,7 +170,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
 
     getEventData: function (event) {
         if (event === 'apply') {
-            return [this.passwordField.getValue()];
+            return this.passwordField.getValue();
         }
     },
 

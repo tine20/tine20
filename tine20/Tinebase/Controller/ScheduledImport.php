@@ -182,9 +182,14 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             }
 
             $importer = $record->getOption('plugin');
-            $resource = $record->getOption('importFileByScheduler')
-                ? Tinebase_Helper::getFileOrUriContents($options['url'])
-                : null;
+            if ($record->getOption('importFileByScheduler')) {
+                $resource = Tinebase_Helper::getFileOrUriContents($options['url']);
+                if (!$resource) {
+                    throw new Tinebase_Exception_NotFound('url not found or timeout');
+                }
+            } else {
+                $resource = null;
+            }
 
             $importer = new $importer($options);
             $importer->import($resource);
@@ -192,12 +197,14 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
-                    . ' Import failed.');
+                    . ' Import failed: ' . $e->getMessage());
             }
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && isset($resource)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' resource: ' . $resource);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' . $e->getTraceAsString());
+                if (isset($resource)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' resource: ' . $resource);
+                }
             }
-            Tinebase_Exception::log($e);
 
             $record->lastfail = $e->getMessage();
             $record->failcount = $record->failcount + 1;

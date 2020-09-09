@@ -53,6 +53,15 @@ class Tinebase_ControllerTest extends TestCase
     }
 
     /**
+     * testGetIdByTitleProperty
+     */
+    public function testGetIdByTitleProperty()
+    {
+        $record = Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty('Tine 2.0 Admin Account');
+        self::assertEquals('Tine 2.0 Admin Account',$record->n_fn);
+    }
+
+    /**
      * testMaintenanceModeLoginFail
      *
      * @param $maintenanceModeSetting
@@ -157,6 +166,8 @@ class Tinebase_ControllerTest extends TestCase
         $counts = [];
         $newCounts = [];
 
+        $this->_instance->cleanAclTables();
+
         foreach ($aclTables as $table) {
             $row = $db->select()->from(SQL_TABLE_PREFIX . $table, new Zend_Db_Expr('count(*)'))->query()->
                 fetch(Zend_Db::FETCH_NUM);
@@ -172,7 +183,7 @@ class Tinebase_ControllerTest extends TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain()
+            'accountEmailAddress'   => 'phpunit@' . TestServer::getPrimaryMailDomain(),
         ));
         $account = Admin_Controller_User::getInstance()->create($account, $pw, $pw);
         $filter = new Tinebase_Model_PersistentFilter(

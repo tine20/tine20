@@ -168,21 +168,83 @@ trait Calendar_Export_GenericTrait
     {
         parent::_resolveRecords($_records);
 
-        if ('Calendar_Model_Event' !== $_records->getRecordClassName() ||
-                'Calendar_Export_Ods' !== static::class) {
+        if ('Calendar_Model_Event' !== $_records->getRecordClassName()/* ||
+                'Calendar_Export_Ods' !== static::class*/) {
             return;
         }
 
-        Calendar_Model_Attender::resolveAttendee($_records->attendee, false, $_records);
+        if ($attendees = $_records->attendee) {
+            if (Addressbook_Model_Contact::$doResolveAttenderCleanUp) {
+                // make sure they are not yet resolved!
+                foreach ($attendees as $attendee) {
+                    if ($attendee->user_id instanceof Tinebase_Record_Interface) {
+                        $attendee->user_id = $attendee->user_id->getId();
+                    }
+                }
 
-        foreach($_records as $record) {
-            $attendee = $record->attendee->getName();
-            $record->attendee = implode(' & ', $attendee);
-
-            $organizer = $record->resolveOrganizer();
-            if ($organizer) {
-                $record->organizer = $organizer->n_fileas;
+                Addressbook_Model_Contact::$doResolveAttenderCleanUp = false;
+                $raii = new Tinebase_RAII(function() {
+                    Addressbook_Model_Contact::$doResolveAttenderCleanUp = true;
+                });
+                Calendar_Model_Attender::clearCache();
             }
+            Calendar_Model_Attender::resolveAttendee($attendees, false, $_records);
+
+            // only for unused variable check
+            unset($raii);
+        }
+
+        /**
+         * TODO realy?
+         */
+        if (Calendar_Export_Ods::class === static::class) {
+            foreach ($_records as $record) {
+                $attendee = $record->attendee->getName();
+                $record->attendee = implode(' & ', $attendee);
+
+                $organizer = $record->resolveOrganizer();
+                if ($organizer) {
+                    $record->organizer = $organizer->n_fileas;
+                }
+            }
+        }
+    }
+
+    /**
+     * we dont want to change the order of $_records, they are sorted
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    protected function _extendedCFResolving(Tinebase_Record_RecordSet $_records)
+    {
+        if ($_records->getRecordClassName() !== Calendar_Model_Event::class) {
+            return;
+        }
+
+        $resolveRecords = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+        $recurInstances = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+        /** @var Calendar_Model_Event $event */
+        foreach ($_records as $event) {
+            if ($event->isRecurInstance()) {
+                if (!$_records->getById($event->base_event_id) && !$resolveRecords->getById($event->base_event_id)) {
+                    $resolveRecords->addRecord($this->_controller->get($event->base_event_id));
+                }
+                $recurInstances->addRecord($event);
+            } else {
+                $resolveRecords->addRecord($event);
+            }
+        }
+        $resolveRecords->customfields = array();
+        Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($resolveRecords, true);
+
+        /** @var Calendar_Model_Event $event */
+        foreach ($recurInstances as $event) {
+            $cfs = [];
+            foreach ($resolveRecords->getById($event->base_event_id)->customfields as $name => $cfc) {
+                $cfs[$name] = clone $cfc;
+            }
+            $event->customfields = $cfs;
         }
     }
 }

@@ -309,9 +309,10 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
 
             notifyOver : function(dd, e, data) {
                 var sourceEl = Ext.fly(data.sourceEl),
-                    sourceView = data.scope;
+                    sourceView = data.scope,
+                    colorIcon = _.get(data,'event.colorSet.text') === '#FFFFFF' ? '-WHITE' : '';
 
-                sourceEl.setStyle({'border-style': 'dashed'});
+                sourceEl.setStyle({'border-left-style': 'dashed'});
                 sourceEl.setOpacity(0.5);
 
                 data.denyDrop = true;
@@ -333,12 +334,13 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
                                 data.denyDrop = true;
                             }
 
-                            return  data.denyDrop ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                            var eventDrop =  data.denyDrop ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                            return eventDrop + colorIcon;
                         }
                     }
                 }
                 
-                return 'cal-daysviewpanel-event-drop-nodrop';
+                return 'cal-daysviewpanel-event-drop-nodrop' + colorIcon;
             },
             
             notifyOut : function() {
@@ -464,7 +466,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             },
             
             getRepairXY: function(e, dd) {
-                Ext.fly(this.dragData.sourceEl).setStyle({'border-style': 'solid'});
+                Ext.fly(this.dragData.sourceEl).setStyle({'border-left-style': 'solid'});
                 Ext.fly(this.dragData.sourceEl).setOpacity(1, 1);
                 
                 return Ext.fly(this.dragData.sourceEl).getXY();
@@ -551,11 +553,6 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         if (! this.isScrolling) {
             this.isScrolling = true;
 
-            var topOffset = this.scroller ? this.getHeightMinutes(this.scroller.dom.scrollTop) : null;
-            if (topOffset !== null) {
-                this.lastScrollTime = this.dayStart.clearTime(true).add(Date.MINUTE, topOffset);
-            }
-
             // walk all cols an hide hints
             Ext.each(this.dayCols, function(dayCol, idx) {
                 this.aboveHints.item(idx).setDisplayed(false);
@@ -574,11 +571,10 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
     onScroll: function(e, t, o) {
         // no arguments means programatic scroll (show/hide/...)
         if (! arguments.length) {
-            var topTime = this.lastScrollTime || this.defaultStart,
-                topOffset = this.getTimeOffset(topTime);
+            var topTime = this.lastScrollTime || this.defaultStart;
 
-            if (topOffset) {
-                this.scroller.dom.scrollTop = this.getTimeOffset(topTime);
+            if (topTime) {
+                this.scrollTo(topTime);
             }
         }
 
@@ -611,6 +607,13 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             }
         }, this);
 
+        var topOffset = this.scroller ? this.getHeightMinutes(this.scroller.dom.scrollTop) : null;
+        if (topOffset !== null) {
+            if (this.cropDayTime) {
+                topOffset = topOffset + this.dayStart.getHours() * 60 + this.dayStart.getMinutes();
+            }
+            this.lastScrollTime = this.dayStart.clearTime(true).add(Date.MINUTE, topOffset);
+        }
         this.isScrolling = false;
     },
 
@@ -653,7 +656,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         this.onLayout();
         
         //var eventEls = event.ui.getEls();
-        //eventEls[0].setStyle({'border-style': 'dashed'});
+        //eventEls[0].setStyle({'border-left-style': 'dashed'});
         //eventEls[0].setOpacity(0.5);
         
         // start sizing for range adds
@@ -672,11 +675,36 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
                     this.abortCreateEvent(event);
                 }
             }, this);
-            
+
+            // snap correction for rangeadds
+            var box = event.ui.resizeable.el.getBox(),
+                mouseXY = Ext.EventObject.getXY(),
+                startX = mouseXY[0],
+                startY = mouseXY[1],
+                handleX = box.x + box.width,
+                handleY = box.y + box.height;
+
+            event.ui.resizeable.correctionX = handleX - startX;
+            event.ui.resizeable.correctionY = handleY - startY;
+
+            event.ui.resizeable.snap = function(value, inc, min) {
+                var pos = this.activeHandle.position;
+
+                if (pos === 'south' && inc === this.heightIncrement) {
+                    value = value - this.correctionY;
+                } else if (pos === 'east' && inc === this.widthIncrement) {
+                    value = value - this.correctionX;
+                }
+
+                return Ext.Resizable.prototype.snap.call(this, value, inc, min);
+            };
+
             var rzPos = event.get('is_all_day_event') ? 'east' : 'south';
             
             event.ui.resizeable[rzPos].onMouseDown.call(event.ui.resizeable[rzPos], e);
-            //event.ui.resizeable.startSizing.defer(2000, event.ui.resizeable, [e, event.ui.resizeable[rzPos]]);
+
+            // adjust initial size to avoid flickering when start resizing
+            event.ui.resizeable.onMouseMove(Ext.EventObject);
         } else {
             this.startEditSummary(event);
         }
@@ -700,7 +728,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             renderTo: eventEls[0].down('div[class=' + bodyCls + ']'),
             width: event.ui.getEls()[0].getWidth() -12,
             height: Math.max(12, event.ui.getEls()[0].getHeight() -18),
-            style: 'background-color: transparent; background: 0: border: 0; position: absolute; top: 0px;',
+            style: 'background-color: transparent; background: 0: border: 0; position: absolute; top: 0px; font-weight: bold; color: ' + event.ui.colorSet.text + ';' ,
             value: this.newEventSummary,
             maxLength: 255,
             maxLengthText: this.app.i18n._('The summary must not be longer than 255 characters.'),
@@ -925,8 +953,11 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
      * @private
      */
     onBeforeEventResize: function(rz, e) {
+        var me = this;
         var parts = rz.el.id.split(':');
         var event = this.store.getById(parts[1]);
+
+        this.getSelectionModel().select(event);
 
         // @TODO compute max minutes also
         var maxHeight = 10000;
@@ -937,14 +968,14 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         }
 
         rz.heightIncrement = this.getTimeOffset(this.timeIncrement);
-        rz.maxHeight = maxHeight,
+        rz.maxHeight = maxHeight;
 
         rz.event = event;
         rz.originalHeight = rz.el.getHeight();
         rz.originalWidth  = rz.el.getWidth();
 
         // NOTE: ext dosn't support move events via api
-        rz.onMouseMove = rz.onMouseMove.createSequence(function() {
+        rz.onMouseMove = rz.onMouseMove.createSequence(function(e) {
             var event = this.event;
             if (! event) {
                 //event already gone -> late event / busy brower?
@@ -952,10 +983,25 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             }
             var ui = event.ui;
             var rzInfo = ui.getRzInfo(this);
-            
-            this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
+
+            if (e.type === 'mousemove') {
+                if (! event.get('is_all_day_event')) {
+                    // getRzInfo calcs wrong values???
+                    let shouldHeight = me.getTimeOffset(rzInfo.dtend) - me.getTimeOffset(event.get('dtstart'));
+                    this.el.setHeight(shouldHeight);
+                }
+
+                if (this.durationEl) {
+                    this.durationEl.update(rzInfo.dtend.format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
+                }
+            }
         }, rz);
-        
+
+        // adjust initial size to avoid flickering when start resizing
+        if (e.getTarget('.x-resizable-handle-south')) {
+            event.ui.resizeable.onMouseMove(e);
+        }
+
         event.ui.markDirty();
         
         // NOTE: Ext keeps proxy if element is not destroyed (diff !=0)
@@ -966,12 +1012,6 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             });
         }
         rz.durationEl.update(event.get('dtend').format(event.get('is_all_day_event') ? Ext.form.DateField.prototype.format : 'H:i'));
-        
-        if (event) {
-            this.getSelectionModel().select(event);
-        } else {
-            this.getSelectionModel().clearSelections();
-        }
     },
     
     /**
@@ -1005,8 +1045,13 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         // don't fire update events on rangeAdd
         if (rzInfo.diff != 0 && event != this.editing && ! event.isRangeAdd) {
             this.fireEvent('updateEvent', event);
-        } else {
+        } else if (event.isRangeAdd) {
             event.ui.clearDirty();
+        } else {
+            // NOTE: we need to redraw event as resizer is broken after one attempt
+            this.removeEvent(event);
+            this.insertEvent(event);
+            this.getSelectionModel().select(event);
         }
     },
 
@@ -1250,14 +1295,14 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         var wholeDayAreaEl = Ext.get(this.wholeDayArea),
             wholeDayAreaHeight = this.computeAllDayAreaHeight(),
             wholeDayScrollerHeight = wholeDayAreaHeight,
-            maxAllowedHeight = Math.round(csize.height/3),
+            maxAllowedHeight = Math.round(csize.height/4),
             resizeEvent = {
                 wholeDayAreaHeight: wholeDayAreaHeight,
-                wholeDayScrollerHeight: wholeDayScrollerHeight,
+                wholeDayScrollerHeight: Math.min(wholeDayAreaHeight, maxAllowedHeight),
                 maxAllowedHeight: maxAllowedHeight
             };
 
-        wholeDayAreaEl.setHeight(Math.min(wholeDayAreaHeight, maxAllowedHeight));
+        wholeDayAreaEl.setHeight(wholeDayAreaHeight);
         this.fireEvent('onBeforeAllDayScrollerResize', this, resizeEvent);
 
         this.wholeDayScroller.setHeight(resizeEvent.wholeDayScrollerHeight);
@@ -1510,8 +1555,8 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         
         ts.event = new Ext.XTemplate(
             '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">',
-                '<div class="cal-daysviewpanel-event-header" style="background-color: {color};">',
-                    '<div class="cal-daysviewpanel-event-header-inner" style="color: {textColor}; background-color: {color}; z-index: {zIndex};">{startTime}</div>',
+                '<div class="cal-daysviewpanel-event-header" style="background-color: {bgColor};">',
+                    '<div class="cal-daysviewpanel-event-header-inner" style="color: {textColor}; background-color: {bgColor}; z-index: {zIndex};">{startTime}</div>',
                     '<div class="cal-daysviewpanel-event-header-icons">',
                         '<tpl for="statusIcons">',
                             '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-status-icon {status}-{[parent.textColor == \'#FFFFFF\' ? \'white\' : \'black\']}" ext:qtip="{[this.encode(values.text)]}" />',

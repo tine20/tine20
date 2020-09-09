@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -206,6 +206,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
     /**
      * @var string
      */
+    const FEATURE_EVENT_NOTIFICATION_CONFIRMATION = 'featureEventNotificationConfirmation';
+
+    /**
+     * @var string
+     */
     const TENTATIVE_NOTIFICATIONS = 'tentativeNotifications';
 
     /**
@@ -223,6 +228,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
      */
     const TENTATIVE_NOTIFICATIONS_FILTER = 'filter';
 
+    const ASSIGN_ORGANIZER_MEETING_STATUS_ON_EDIT_GRANT = 'assignOrgMeetingStatusOnEditGrant';
+
     /**
      * @var string
      */
@@ -232,6 +239,18 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const POLL_GTC = 'pollGTC';
+
+    const SEARCH_ATTENDERS_FILTER = 'searchAttendersFilter';
+    const SEARCH_ATTENDERS_FILTER_USER = 'user';
+    const SEARCH_ATTENDERS_FILTER_GROUP = 'group';
+    const SEARCH_ATTENDERS_FILTER_RESOURCE = 'resource';
+
+    const FREEBUSY_INFO_ALLOW_DATETIME = 10;
+    const FREEBUSY_INFO_ALLOW_ORGANIZER = 20;
+    const FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE = 30;
+    const FREEBUSY_INFO_ALLOW_CALENDAR = 40;
+    const FREEBUSY_INFO_ALLOW_ALL_ATTENDEE = 50;
+
 
     /**
      * (non-PHPdoc)
@@ -311,8 +330,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => [
                 'records' => [
                     ['id' => 'CONFIRMED',    'value' => 'Confirmed',   'icon' => 'images/icon-set/icon_ok.svg',                          'system' => true], //_('Confirmed')
-                    ['id' => 'CANCELED',     'value' => 'Canceled',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',                        'system' => true], //_('Canceled')
                     ['id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true], //_('Tentative')
+                    ['id' => 'CANCELED',     'value' => 'Canceled',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',    'system' => true], //_('Canceled')
                 ],
                 'default' => 'CONFIRMED'
             ]
@@ -375,13 +394,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
                                    //_('Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.')
             'description'           => 'Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            'options'               => array('recordModel' => 'Calendar_Model_AttendeeRole'),
+            'options'               => array('recordModel' => Calendar_Model_AttendeeRole::class),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'REQ', 'value' => 'Required', 'system' => true), //_('Required')
-                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true), //_('Optional')
+                    array('id' => 'REQ', 'value' => 'Required', 'system' => true, 'order' => 0), //_('Required')
+                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true, 'order' => 1), //_('Optional')
                 ),
                 'default' => 'REQ'
             )
@@ -392,12 +411,23 @@ class Calendar_Config extends Tinebase_Config_Abstract
             //_('Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.')
             'description'           => 'Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'options'               => array('recordModel' => Calendar_Model_ResourceType::class),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'RESOURCE', 'value' => 'Resource', 'system' => true), //_('Resource')
-                    array('id' => 'ROOM', 'value' => 'Room', 'system' => true), //_('Room')
+                    array('id' => 'RESOURCE', 'is_location' => 0, 'value' => 'Resource', 'icon' => 'images/icon-set/icon_resource.svg', 'system' => true), //_('Resource') @todo default resource icon!
+                    array('id' => 'ROOM', 'is_location' => 1, 'value' => 'Room', 'icon' => 'images/icon-set/icon_resource_room1.svg', 'system' => true), //_('Room')
+                    array('id' => 'BOARD', 'is_location' => 0, 'value' => 'Board', 'icon' => 'images/icon-set/icon_resource_board.svg', 'system' => true), //_('Board')
+                    array('id' => 'CABLE', 'is_location' => 0, 'value' => 'Cable', 'icon' => 'images/icon-set/icon_resource_cable.svg', 'system' => true), //_('Cable')
+                    array('id' => 'CAR', 'is_location' => 1, 'value' => 'Car', 'icon' => 'images/icon-set/icon_resource_car.svg', 'system' => true), //_('Car')
+                    array('id' => 'COFFEE', 'is_location' => 0, 'value' => 'Coffee', 'icon' => 'images/icon-set/icon_resource_coffee.svg', 'system' => true), //_('Coffee')
+                    array('id' => 'HOMEOFFICE', 'is_location' => 1, 'value' => 'Homeoffice', 'icon' => 'images/icon-set/icon_resource_homeoffice.svg', 'system' => true), //_('Homeoffice')
+                    array('id' => 'LAMP', 'is_location' => 0, 'value' => 'Lamp', 'icon' => 'images/icon-set/icon_resource_lamp.svg', 'system' => true), //_('Lamp')
+                    array('id' => 'LAPTOP', 'is_location' => 0, 'value' => 'Laptop', 'icon' => 'images/icon-set/icon_resource_laptop.svg', 'system' => true), //_('Laptop')
+                    array('id' => 'MATERIAL', 'is_location' => 0, 'value' => 'Material', 'icon' => 'images/icon-set/icon_resource_material.svg', 'system' => true), //_('Material')
+                    array('id' => 'PROJECTOR', 'is_location' => 0, 'value' => 'Projector', 'icon' => 'images/icon-set/icon_resource_projector.svg', 'system' => true), //_('Projector')
+                    array('id' => 'TRAVEL', 'is_location' => 1, 'value' => 'Travel', 'icon' => 'images/icon-set/icon_resource_trolly.svg', 'system' => true), //_('Travel')
                 ),
                 'default' => 'RESOURCE'
             )
@@ -566,6 +596,12 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => true,
                 ),
+                self::FEATURE_EVENT_NOTIFICATION_CONFIRMATION   => [
+                    self::LABEL         => 'Event Notification Confirmation', //_('Lead Notification Confirmation')
+                    self::DESCRIPTION   => 'Event Notification Confirmation',
+                    self::TYPE          => self::TYPE_BOOL,
+                    self::DEFAULT_STR   => false,
+                ],
             ],
             self::DEFAULT_STR => [],
         ],
@@ -629,17 +665,75 @@ class Calendar_Config extends Tinebase_Config_Abstract
             self::TYPE              => self::TYPE_KEYFIELD,
                 self::OPTIONS           => [
                     'records'               => [
-                        ['id' => 10,  'value' => 'only date & time'], //_('only date & time')
-                        ['id' => 20,  'value' => 'and calendar'], //_('and calendar')
-                        ['id' => 30,  'value' => 'and organizer'], //_('and organizer')
-                        ['id' => 40,  'value' => 'and resources'], //_('and resources')
-                        ['id' => 50,  'value' => 'and other attendees'], //_('and other attendees')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_DATETIME,  'value' => 'only date & time'], //_('only date & time')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER,  'value' => 'and organizer'], //_('and organizer')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE,  'value' => 'and resources'], //_('and resources')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR,  'value' => 'and calendar'], //_('and calendar')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE,  'value' => 'and other attendees'], //_('and other attendees')
                     ],
                 ],
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => 10,
+        ],
+        self::SEARCH_ATTENDERS_FILTER => [
+            //_('Search Attenders Additional Filters')
+            self::LABEL             => 'Search Attenders Additional Filters',
+            //_('Search Attenders Additional Filters')
+            self::DESCRIPTION       => 'Search Attenders Additional Filters',
+            self::TYPE              => self::TYPE_OBJECT,
+            self::CLASSNAME         => Tinebase_Config_Struct::class,
+            self::CONTENT           => [
+                self::SEARCH_ATTENDERS_FILTER_USER      => [
+                    //_('User Additional Filters')
+                    self::LABEL                 => 'User Additional Filters',
+                    //_('User Additional Filters')
+                    self::DESCRIPTION           => 'User Additional Filters',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                self::SEARCH_ATTENDERS_FILTER_GROUP     => [
+                    //_('Group Additional Filters')
+                    self::LABEL                 => 'Group Additional Filters',
+                    //_('Group Additional Filters')
+                    self::DESCRIPTION           => 'Group Additional Filters',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                self::SEARCH_ATTENDERS_FILTER_RESOURCE  => [
+                    //_('Resource Additional Filters')
+                    self::LABEL                 => 'Resource Additional Filters',
+                    //_('Resource Additional Filters')
+                    self::DESCRIPTION           => 'Resource Additional Filters',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => false,
+                    self::DEFAULT_STR           => [],
+                ],
+            ],
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [],
+        ],
+        self::ASSIGN_ORGANIZER_MEETING_STATUS_ON_EDIT_GRANT => [
+            self::LABEL                 => 'Assign organizer meeting status on editGrant',
+            //_('Assign organizer meeting status on editGrant')
+            self::DESCRIPTION           => 'Assign organizer meeting status on editGrant',
+            //_('Assign organizer meeting status on editGrant')
+            self::TYPE                  => self::TYPE_BOOL,
+            self::DEFAULT_STR           => false,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYSETUPMODULE      => false,
+            self::SETBYADMINMODULE      => false,
         ],
     );
     

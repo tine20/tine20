@@ -123,6 +123,22 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }
 
     /**
+     * create new path record from given realpath string like this:
+     *  /personal/tine20admin/somedir
+     *
+     * @param string|Tinebase_Model_Tree_Node_Path $_path
+     * @return Tinebase_Model_Tree_Node_Path
+     */
+    public static function createFromRealPath($_path, $_application, $part = self::FOLDERS_PART)
+    {
+        $flatpath = '/' . $_application->name . '/' . $part . $_path;
+        return new Tinebase_Model_Tree_Node_Path(array(
+            'application' => $_application,
+            'flatpath'  => $flatpath
+        ));
+    }
+
+    /**
      * create new path record from given stat path (= path with ids) string
      *
      * @param string $statPath
@@ -140,14 +156,18 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $newStatPath = '/' . implode('/', $pathParts);
 
         if (count($pathParts) > 3) {
-            // replace account id with login name
-            try {
-                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $pathParts[3], 'Tinebase_Model_FullUser');
-                $containerType = Tinebase_FileSystem::FOLDER_TYPE_PERSONAL;
-                $pathParts[3] = $user->accountLoginName;
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // not a user -> shared
-                $containerType = Tinebase_FileSystem::FOLDER_TYPE_SHARED;
+            if ($pathParts[2] === Tinebase_FileSystem::FOLDER_TYPE_RECORDS) {
+                $containerType = Tinebase_FileSystem::FOLDER_TYPE_RECORDS;
+            } else {
+                // replace account id with login name
+                try {
+                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $pathParts[3], 'Tinebase_Model_FullUser');
+                    $containerType = Tinebase_FileSystem::FOLDER_TYPE_PERSONAL;
+                    $pathParts[3] = $user->accountLoginName;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // not a user -> shared
+                    $containerType = Tinebase_FileSystem::FOLDER_TYPE_SHARED;
+                }
             }
         } else if (count($pathParts) === 3) {
             $containerType = (in_array($pathParts[2], array(
@@ -241,9 +261,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         if ($_path === NULL) {
             $_path = $this->flatpath;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Parsing path: ' . $_path);
         
         $pathParts = $this->_getPathParts($_path);
         
@@ -360,12 +377,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             }
             $this->flatpath = '/' . implode('/', $pathParts);
         }
-        $result = $this->_createStatPathFromParts($pathParts);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Path to stat: ' . $result);
-        
-        return $result;
+        return $this->_createStatPathFromParts($pathParts);
     }
     
     /**
@@ -376,8 +388,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _createStatPathFromParts($pathParts)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($pathParts, TRUE));
-        
         if (count($pathParts) > 3) {
             // replace account login name with id
             if ($this->containerOwner) {
@@ -525,5 +535,25 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         }
 
         return $this->user;
+    }
+
+    public function getRecordId()
+    {
+        if ($this->containerType === Tinebase_FileSystem::FOLDER_TYPE_RECORDS) {
+            $pathparts = $this->_getPathParts();
+            return $pathparts[4];
+        } else {
+            return null;
+        }
+    }
+
+    public function getRecordModel()
+    {
+        if ($this->containerType === Tinebase_FileSystem::FOLDER_TYPE_RECORDS) {
+            $pathparts = $this->_getPathParts();
+            return $pathparts[3];
+        } else {
+            return null;
+        }
     }
 }

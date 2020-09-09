@@ -65,7 +65,7 @@ class Admin_Import_Group_Csv extends Tinebase_Import_Csv_Abstract
             
             $memberUids = array();
             
-            if (! empty($members)) {
+            if (!empty($members) && $members[0] != "") {
                 $users = $this->_resolveUsers($members);
                 foreach($users as $userId) {
                     try {

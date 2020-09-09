@@ -180,15 +180,14 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
 
                     html2canvas(win.document.body, {
                         canvas: canvas,
-                        grabMouse: false,
-                        onrendered: function (canvas) {
-                            var screenshot = canvas.toDataURL();
-                            me.useHtml2Canvas = false;
-                            win.document.body.innerHTML = '<img style="display: block; width: 100%" />';
-                            win.document.body.firstChild.onload = me.doPrint.createDelegate(me, [win]);
-                            win.document.body.firstChild.src = screenshot;
-                            fulfill();
-                        }
+                        grabMouse: false
+                    }).then(function (canvas) {
+                        var screenshot = canvas.toDataURL();
+                        me.useHtml2Canvas = false;
+                        win.document.body.innerHTML = '<img style="display: block; width: 100%" />';
+                        win.document.body.firstChild.onload = me.doPrint.createDelegate(me, [win]);
+                        win.document.body.firstChild.src = screenshot;
+                        fulfill();
                     });
                 }, 'Tinebase/js/html2canvas');
 

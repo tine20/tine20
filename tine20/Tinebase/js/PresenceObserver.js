@@ -56,8 +56,8 @@ Tine.Tinebase.PresenceObserver.prototype = {
     checkTask: null,
 
     startChecking: function() {
-        var now = new Date();
-        firstCheck = now.add(Date.MINUTE, this.maxAbsenceTime);
+        var now = new Date(),
+            firstCheck = now.add(Date.MINUTE, this.maxAbsenceTime);
 
         this.state = 'presence';
         this.setLastPresence(now);

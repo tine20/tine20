@@ -6,6 +6,7 @@
     <plugin>Timetracker_Export_Ods_Timesheet</plugin>
     <template>timesheet_export_default.ots</template>
     <description>default ods timesheet export definition</description>
+    <scope>multi</scope>
     <header>1</header>
     <columns>
         <column>
@@ -63,6 +64,11 @@
         <column>
             <identifier>duration</identifier>
             <header>Duration</header>
+            <type>int(11)</type>
+        </column>
+        <column>
+            <identifier>accounting_time</identifier>
+            <header>Accounting time</header>
             <type>int(11)</type>
         </column>
         <column>

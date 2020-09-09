@@ -108,6 +108,16 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
     }
 
+    /**
+     * test if app can be uninstalled and installed again
+     */
+    public function testUninstallAndInstallAgain()
+    {
+        $this->_uit->uninstallApplications(array('Filemanager'));
+        $this->_uit->installApplications(array('Filemanager'));
+        self::assertTrue(Setup_Controller::getInstance()->isInstalled('Filemanager'));
+    }
+
     public function testReplicationInstall()
     {
         // uninstall and get instance sequence
@@ -130,6 +140,28 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs($applicationModifications);
         static::assertTrue($result, 'applyReplicationModLogs failed');
         static::assertTrue($this->_uit->isInstalled('ActiveSync'));
+    }
+
+    public function testReplicationUninstall()
+    {
+        // get instance sequence and uninstall
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $this->_uit->uninstallApplications(['ActiveSync']);
+        static::assertFalse($this->_uit->isInstalled('ActiveSync'));
+
+        // get modification logs
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $applicationModifications = $modifications->filter('record_type', Tinebase_Model_Application::class);
+        static::assertEquals(1, $applicationModifications->count(), 'should have 1 mod logs to process');
+
+        // install again
+        $this->_uit->installApplications(['ActiveSync']);
+        static::assertTrue($this->_uit->isInstalled('ActiveSync'));
+
+        // apply modification log => application should be uninstalled
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs($applicationModifications);
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        static::assertFalse($this->_uit->isInstalled('ActiveSync'));
     }
     
     /**
@@ -228,10 +260,11 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      * test uninstall application
      *
      */
-    public function testUninstallTinebaseShouldThrowDependencyException()
+    public function testUninstallTinebase()
     {
-        $result = $this->_uit->uninstallApplications(array('Tinebase'));
+        $this->_uit->uninstallApplications(array('Tinebase'));
         $this->assertTrue($this->_uit->setupRequired());
+        Tinebase_Core::unsetUser();
     }
     
     /**
@@ -401,7 +434,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
 
     public function testSortInstallableApplications()
     {
-        $apps = ['Tinebase','Addressbook','Courses','CoreData','Voipmanager','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Phone','Timetracker','MailFiler','Tasks','Projects','Felamimail','Admin','Calendar','Sales'];
+        $apps = ['Tinebase','Addressbook','Courses','CoreData','Voipmanager','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Phone','Timetracker','Tasks','Projects','Felamimail','Admin','Calendar','Sales'];
 
         $applications = array();
         foreach ($apps as $applicationName) {
@@ -424,14 +457,29 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
             11 => 'ActiveSync',
             12 => 'Filemanager',
             13 => 'Phone',
-            14 => 'MailFiler',
-            15 => 'Crm',
-            16 => 'Tasks',
-            17 => 'Courses',
-            18 => 'Voipmanager',
-            19 => 'HumanResources',
-            20 => 'SimpleFAQ',
+            14 => 'Crm',
+            15 => 'Tasks',
+            16 => 'Courses',
+            17 => 'Voipmanager',
+            18 => 'HumanResources',
+            19 => 'SimpleFAQ',
         );
         self::assertEquals($expected, array_keys($result));
+    }
+
+    public function testApplicationUpdateInitialize()
+    {
+        $appCtrl = Tinebase_Application::getInstance();
+
+        //try {
+            $exampleApp = $appCtrl->getApplicationByName(ExampleApplication_Config::APP_NAME);
+        /*} catch (Tinebase_Exception_NotFound $tenf) {
+          install it on the fly?
+        }*/
+
+        $state = json_decode($appCtrl->getApplicationState($exampleApp, Tinebase_Application::STATE_UPDATES), true);
+        static::assertTrue(is_array($state) && isset($state[ExampleApplication_Setup_Update_0::RELEASE000_UPDATE001])
+            && isset($state[ExampleApplication_Setup_Update_12::RELEASE012_UPDATE001]), print_r($state, true));
+        static::assertCount(4, $state, print_r($state, true));
     }
 }

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -28,6 +28,7 @@ class Tinebase_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
 
         $suite->addTestSuite(Tinebase_ActionQueue_Test::class);
+        $suite->addTestSuite(Tinebase_ActionQueue_Backend_RedisTest::class);
         $suite->addTestSuite(Tinebase_CacheTest::class);
         $suite->addTestSuite(Tinebase_AccessLogTest::class);
         $suite->addTestSuite(Tinebase_AccountTest::class);
@@ -42,9 +43,10 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_ZendFilterTest::class);
         $suite->addTestSuite(Tinebase_ContainerTest::class);
         $suite->addTestSuite(Tinebase_ContainerPersistentCacheTest::class);
-        $suite->addTestSuite(Tinebase_ImageHelperTest::class);
         $suite->addTestSuite(Tinebase_ConfigTest::class);
         $suite->addTestSuite(Tinebase_CustomFieldTest::class);
+        $suite->addTestSuite(Tinebase_ImageHelperTest::class);
+        $suite->addTestSuite(Tinebase_ImportExportDefinitionTest::class);
         $suite->addTestSuite(Tinebase_PreferenceTest::class);
         $suite->addTestSuite(Tinebase_ApplicationTest::class);
         $suite->addTestSuite(Tinebase_Relation_AllTests::class);
@@ -61,7 +63,6 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_Model_Filter_TextTest::class);
         $suite->addTestSuite(Tinebase_TagsTest::class);
         $suite->addTestSuite(Tinebase_Log_AllTests::class);
-        $suite->addTestSuite(Tinebase_Redis_QueueTest::class);
         $suite->addTestSuite(Tinebase_TempFileTest::class);
         $suite->addTestSuite(Tinebase_Server_AllTests::class);
         $suite->addTestSuite(Tinebase_LockTest::class);
@@ -75,6 +76,10 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_AreaLockTest::class);
         $suite->addTestSuite(Tinebase_StateTest::class);
         $suite->addTestSuite(Tinebase_FilterSyncTokenTest::class);
+        $suite->addTestSuite(Tinebase_Frontend_AutodiscoverTests::class);
+        $suite->addTestSuite(Tinebase_FileSystem_PreviewTest::class);
+        $suite->addTestSuite(Tinebase_FileSystem_Preview_ServiceV2LiveTest::class);
+        $suite->addTestSuite(Tinebase_FileSystem_Preview_ServiceV2Test::class);
 
 
         $suite->addTest(Tinebase_User_AllTests::suite());

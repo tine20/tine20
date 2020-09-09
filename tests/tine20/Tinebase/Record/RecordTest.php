@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -237,8 +237,8 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      */
     public function testTranslate()
     {
-        $oldLocale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('de'));
+        $oldLocale = Tinebase_Core::getLocale();
+        Tinebase_Core::setLocale('de');
 
         $record = new Tinebase_Record_DummyRecord(array(
             'string' => 'test',
@@ -248,7 +248,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $record->translate();
         
         $this->assertEquals('Wartet auf Feedback', $record->leadstate);
-        Tinebase_Core::set(Tinebase_Core::LOCALE, $oldLocale);
+        Tinebase_Core::setLocale($oldLocale);
     }
     
     /**

@@ -36,46 +36,6 @@
     });
 })();
 
-Ext.override(Ext.data.Store, {
-    /**
-     * String cast the id, as otherwise the entries are not found
-     */
-    indexOfId : function(id){
-        return this.data.indexOfKey(String(id));
-    },
-
-    /**
-     * promisified store load
-     */
-    promiseLoad: function(options) {
-        var me = this;
-        return new Promise(function (fulfill, reject) {
-            try {
-                me.load(Ext.apply(options || {}, {
-                    callback: function (r, options, success) {
-                        if (success) {
-                            fulfill(r, options);
-                        } else if (Ext.isFunction(reject)) {
-                            reject(new Error(options));
-                        }
-                    }
-                }));
-            } catch (error) {
-                if (Ext.isFunction(reject)) {
-                    reject(new Error(options));
-                }
-            }
-        });
-    },
-
-    nextLoad: function() {
-        var me = this;
-        return new Promise(function (resolve) {
-            me.on('load', resolve, me, { single: true });
-        });
-    }
-});
-
 /**
  * for some reasons the original fix insertes two <br>'s on enter for webkit. But this is one to much
  */
@@ -335,6 +295,11 @@ Ext.form.DateField.prototype.getValue = function(){
 };
 
 /**
+ * Need this for ArrowEvents to navigate.
+ */
+Ext.KeyNav.prototype.forceKeyDown = Ext.isGecko;
+
+/**
  * We need to overwrite to preserve original time information because 
  * Ext.form.TimeField does not support seconds
  * 
@@ -349,11 +314,20 @@ Ext.form.DateField.prototype.getValue = function(){
  * @private
  */
 Ext.form.TimeField.prototype.getValue = function(){
-    // return the value that was set (has time information when unchanged in client) 
-    // and not just the date part!
-    var value =  this.fullDateTime;
-    
-    return value ? this.parseDate(value).dateFormat('H:i') : "";
+    var value =  this.fullDateTime,
+        dtValue = "";
+
+    if (value) {
+        var dtValue = this.parseDate(value);
+        if (Ext.isDate(dtValue)) {
+            dtValue = dtValue.clone();
+            dtValue.toJSON = function () {
+                return this.format('H:i:s');
+            }
+        }
+    }
+
+    return dtValue;
 };
 
 /**
@@ -466,6 +440,34 @@ Ext.ButtonToggleMgr = function(){
        }
    };
 }();
+
+Ext.override(Ext.Button, {
+    setIconClass : function(cls){
+        this.iconCls = cls;
+        if(this.el){
+            var iconEl = this.btnEl.next('.x-btn-image') || this.btnEl;
+            this.btnEl.dom.className = '';
+            if (iconEl === this.btnEl) {
+                this.btnEl.addClass(['x-btn-text', cls || '']);
+            } else {
+                this.btnEl.addClass(['x-btn-text']);
+                iconEl.dom.className = '';
+                iconEl.addClass(['x-btn-image', cls || '']);
+            }
+            this.setButtonClass();
+
+            if (this.scale === 'medium') {
+                var iconEl = Ext.fly(this.el.query('td.x-btn-mc div')[0]);
+                if (cls === 'x-btn-wait') {
+                    iconEl.setLeft(this.el.getWidth()/2 - iconEl.getWidth() /2);
+                } else {
+                    iconEl.dom.style.left = "";
+                }
+            }
+        }
+        return this;
+    },
+});
 
 /**
  * add beforeloadrecords event
@@ -644,10 +646,11 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
 
         var visible = !!window.lodash.get(cmp, 'el.dom.offsetParent', false);
 
-        if (visible !== cmp.wasVisible && cmp.el.dom) {
-            cmp.setWidth(cmp.width);
+        if (visible && visible !== cmp.wasVisible && cmp.el.dom && !cmp.noFix) {
+            var width = cmp.width || Ext.isFunction(cmp.getWidth) ? cmp.getWidth() : 150;
+            cmp.setWidth(width);
             if (cmp.wrap && cmp.wrap.dom) {
-                cmp.wrap.setWidth(cmp.width);
+                cmp.wrap.setWidth(width);
             }
             cmp.syncSize();
         }
@@ -920,6 +923,22 @@ Ext.override(Ext.Component, {
         return new Promise(function(resolve) {
             me.on('render', resolve);
         });
+    },
+
+    // support initialState
+    initState : function(){
+        if(Ext.state.Manager){
+            var id = this.getStateId();
+            if(id){
+                var state = Ext.state.Manager.get(id) || this.initialState;
+                if(state){
+                    if(this.fireEvent('beforestaterestore', this, state) !== false){
+                        this.applyState(Ext.apply({}, state));
+                        this.fireEvent('staterestore', this, state);
+                    }
+                }
+            }
+        }
     }
 });
 
@@ -950,6 +969,9 @@ Ext.override(Ext.menu.Menu, {
     })
 });
 
+/**
+ * FIXME: we already overwrite the email regex above!! which one is better?
+ */
 Ext.apply(Ext.form.VTypes, {
     //@see https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
     emailRe: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
@@ -1038,37 +1060,6 @@ Ext.layout.VBoxLayout.prototype.onLayout = Ext.layout.VBoxLayout.prototype.onLay
     }
 });
 
-Ext.override(Ext.grid.EditorGridPanel, {
-    initEvents : function(){
-        Ext.grid.EditorGridPanel.superclass.initEvents.call(this);
-
-        this.on('beforeedit', this.onBeforeEdit, this);
-
-        this.getGridEl().on('mousewheel', this.stopEditing.createDelegate(this, [true]), this);
-        this.on('columnresize', this.stopEditing, this, [true]);
-
-        if(this.clicksToEdit == 1){
-            this.on("cellclick", this.onCellDblClick, this);
-        }else {
-            var view = this.getView();
-            if(this.clicksToEdit == 'auto' && view.mainBody){
-                view.mainBody.on('mousedown', this.onAutoEditClick, this);
-            }
-            this.on('celldblclick', this.onCellDblClick, this);
-        }
-    },
-
-    onBeforeEdit: function(o) {
-        if (this.readOnly) {
-            o.cancel = true;
-        }
-    },
-
-    setReadOnly: function(readOnly) {
-        this.readOnly = readOnly;
-    }
-});
-
 Ext.override(Ext.layout.ToolbarLayout, {
     createMenuConfig : function(c, hideOnClick){
         var cfg = Ext.apply({}, c.initialConfig),
@@ -1119,3 +1110,50 @@ Ext.override(Ext.LoadMask, {
         this.el.unmask(this.removeMask);
     },
 });
+
+/**
+ * autocomplete for forms
+ */
+Ext.FormPanel.prototype.initComponent = Ext.FormPanel.prototype.initComponent.createSequence(function() {
+    if (this.autocomplete === false) {
+        this.bodyCfg.autocomplete = 'false';
+    }
+});
+
+/**
+ * autocomplete fix for password fields
+ * @see {https://stackoverflow.com/a/28457066}
+ */
+Ext.form.Field.prototype.origGetAutoCreate = Ext.Component.prototype.getAutoCreate;
+Ext.form.Field.prototype.getAutoCreate = function() {
+    var cfg = this.origGetAutoCreate();
+    if (this.inputType == 'password' && this.hasOwnProperty('autocomplete')) {
+        cfg.autocomplete = this.autocomplete;
+    }
+    return cfg;
+};
+
+Ext.override(Ext.EventObject, {
+    getSignature: function() {
+        return String(this.browserEvent.timeStamp) + '-' + this.getXY();
+    }
+});
+
+/**
+ * preserve dateformat
+ */
+Ext.data.Field = Ext.apply(Ext.data.Field.createSequence(function(config) {
+    if (config && config.type == 'date' && config.dateFormat) {
+        var convert = this.convert;
+
+        this.convert = function(v) {
+            var d = convert(v);
+            if (Ext.isDate(d)) {
+                d.toJSON = function() {
+                    return this.format(config.dateFormat);
+                }
+            }
+            return d;
+        };
+    }
+}), {prototype: Ext.data.Field.prototype});

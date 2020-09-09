@@ -60,8 +60,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     validateNumber: null,
 
-    displayNotes: true,
-    
     initComponent: function() {
         this.autoGenerateNumber = (Tine.Sales.registry.get('config').contractNumberGeneration.value == 'auto') ? true : false;
         this.validateNumber = Tine.Sales.registry.get('config').contractNumberValidation.value;
@@ -166,7 +164,8 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     });
 
                 dialog.openWindow();
-                dialog.on('apply', (product, contractDialog, relation) => {
+                dialog.on('apply', (eventData) => {
+                    let [product, contractDialog, relation] = eventData;
                     // link into product agg json attributes like this:
                     // 'accountables' -> [{"model":"WebAccounting_Model_ProxmoxVM","id":"12345abcde"}]
                     Tine.log.debug(product);
@@ -406,7 +405,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             activeTab: 0,
             border: false,

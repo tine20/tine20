@@ -14,29 +14,45 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "Edit phone settings"
+#: js/Phone.js:102
+msgid "Incoming call"
+msgstr "Incoming call"
 
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "Dial number"
+#: js/Phone.js:106
+msgid "Outgoing call"
+msgstr "Outgoing call"
 
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "Initiate a new outgoing call"
+#: js/Phone.js:114
+msgid "unknown number"
+msgstr "unknown number"
 
-#: js/CallGridPanel.js:167 Model/MyPhone.php:33
-msgid "Phones"
-msgstr "Phones"
+#: js/DialerPanel.js:54 Model/MyPhone.php:32
+msgid "Phone"
+msgstr "Phone"
 
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "No phone selected"
+#: js/DialerPanel.js:77 Model/Call.php:60
+msgid "Line"
+msgstr "Line"
 
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "Please select the desired phone in the tree!"
+#: js/DialerPanel.js:86
+msgid "Number"
+msgstr "Number"
+
+#: js/DialerPanel.js:95
+msgid "Cancel"
+msgstr "Cancel"
+
+#: js/DialerPanel.js:105
+msgid "Dial"
+msgstr "Dial"
+
+#: js/DialerPanel.js:125
+msgid "Error"
+msgstr "Error"
+
+#: js/DialerPanel.js:126
+msgid "Not possible to dial."
+msgstr "Not possible to dial."
 
 #: js/AddressbookGridPanelHook.js:40
 msgid "Call contact"
@@ -58,49 +74,65 @@ msgstr "Cell"
 msgid "Cell private"
 msgstr "Cell private"
 
-#: js/Phone.js:100
-msgid "Incoming call"
-msgstr "Incoming call"
+#: js/CallGridPanel.js:56
+msgid "Edit phone settings"
+msgstr "Edit phone settings"
 
-#: js/Phone.js:104
-msgid "Outgoing call"
-msgstr "Outgoing call"
+#: js/CallGridPanel.js:70
+msgid "Dial number"
+msgstr "Dial number"
 
-#: js/Phone.js:112
-msgid "unknown number"
-msgstr "unknown number"
+#: js/CallGridPanel.js:71
+msgid "Initiate a new outgoing call"
+msgstr "Initiate a new outgoing call"
 
-#: js/DialerPanel.js:53 Model/MyPhone.php:32
-msgid "Phone"
-msgstr "Phone"
+#: js/CallGridPanel.js:176 Model/MyPhone.php:33
+msgid "Phones"
+msgstr "Phones"
 
-#: js/DialerPanel.js:76 Model/Call.php:60
-msgid "Line"
-msgstr "Line"
+#: js/CallGridPanel.js:225
+msgid "No phone selected"
+msgstr "No phone selected"
 
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Number"
+#: js/CallGridPanel.js:226
+msgid "Please select the desired phone in the tree!"
+msgstr "Please select the desired phone in the tree!"
 
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Cancel"
+#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr "Calls this week"
 
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Dial"
+#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Calls last week"
 
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Error"
+#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Calls this month"
 
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "Not possible to dial."
+#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Calls last month"
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Incoming and outgoing calls of this week"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Incoming and outgoing calls of last week"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Incoming and outgoing calls of this month"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Incoming and outgoing calls of last month"
 
 #: Config.php:44 Config.php:46
-msgid "local prefix for outgoing calls"
-msgstr "local prefix for outgoing calls"
+msgid "Local prefix for outgoing calls"
+msgstr "Local prefix for outgoing calls"
 
 #: Config.php:53 Config.php:55
 msgid "telephone area code"
@@ -111,60 +143,16 @@ msgid "regex for local calls"
 msgstr "regex for local calls"
 
 #: Config.php:63
-msgid "identifies if a calling number is a local call without leading area code"
-msgstr "identifies if a calling number is a local call without leading area code"
+msgid "Identifies if a calling number is a local call without leading area code."
+msgstr "Identifies if a calling number is a local call without leading area code."
 
 #: Config.php:70
 msgid "own telephone number"
 msgstr "own telephone number"
 
 #: Config.php:72
-msgid "own telephone number to prefix to internal calls"
-msgstr "own telephone number to prefix to internal calls"
-
-#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
-msgid "Calls this week"
-msgstr "Calls this week"
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Incoming and outgoing calls of this week"
-
-#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
-msgid "Calls last week"
-msgstr "Calls last week"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Incoming and outgoing calls of last week"
-
-#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
-msgid "Calls this month"
-msgstr "Calls this month"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Incoming and outgoing calls of this month"
-
-#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
-msgid "Calls last month"
-msgstr "Calls last month"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Incoming and outgoing calls of last month"
-
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "Settings"
-
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Lines"
-
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Description"
+msgid "Own telephone number to prefix to internal calls."
+msgstr "Own telephone number to prefix to internal calls."
 
 #: Model/Call.php:43
 msgid "Call"
@@ -209,3 +197,19 @@ msgstr "Source"
 #: Model/Call.php:120
 msgid "Destination"
 msgstr "Destination"
+
+#: Model/Call.php:125
+msgid "resolved destination"
+msgstr "resolved destination"
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "Settings"
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Lines"
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Description"

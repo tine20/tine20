@@ -1,3 +1,0 @@
-lead_name,leadstate_id,leadtype_id,leadsource_id,start,description,end,turnover,probability,end_scheduled,resubmission_date,tags,CUSTOMER,PARTNER,RESPONSIBLE,TASK,PRODUCT
-Konzert,3,2,4,07/20/18,Konzerte in der Elbphilharmonie,07/20/19,1654784,60,07/21/18,08/01/18,Harmonie,j.baum,e.eichman,Test Respon,"Verkauf Karten;Verkauf Fan",Ocester
-ACB,1,1,1,07/19/18,Des,,165,100,,,Test,s.rattle,t.bar,test,"Verkauf 1;Verkauf 2",Own

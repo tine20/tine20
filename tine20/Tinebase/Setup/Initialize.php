@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -163,6 +163,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $scheduler = Tinebase_Core::getScheduler();
         $oldRightValue = $scheduler->doRightChecks(false);
 
+        // TODO do this via reflection
         try {
             Tinebase_Scheduler_Task::addAlarmTask($scheduler);
             Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
@@ -174,13 +175,19 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             Tinebase_Scheduler_Task::addImportTask($scheduler);
             Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
             Tinebase_Scheduler_Task::addReplicationTask($scheduler);
-            Tinebase_Scheduler_Task::addFileObjectsCleanupTask($scheduler);Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addFileObjectsCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
             Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
             Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemAVScanTask($scheduler);
+            Tinebase_Scheduler_Task::addFileSystemRepairDeleteTask($scheduler);
             Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
+            Tinebase_Scheduler_Task::addActionQueueConsistencyCheckTask($scheduler);
             Tinebase_Scheduler_Task::addActionQueueMonitoringTask($scheduler);
+            Tinebase_Scheduler_Task::addFilterSyncTokenCleanUpTask($scheduler);
+            Tinebase_Scheduler_Task::addLogEntryCleanUpTask($scheduler);
         } finally {
             $scheduler->doRightChecks($oldRightValue);
         }

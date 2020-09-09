@@ -36,7 +36,7 @@ describe('GenericPickerGridPanel', () => {
   it('renders a missing related_record', () => {
     require('../../../../../../tine20/Projects/js/Model')
     var result = uit.relatedRecordRenderer(undefined,
-      {}, new Tine.Tinebase.Model.Relation({'related_model': 'Projects_Model_Project'}))
+      {}, new Tine.Tinebase.Model.Relation({ 'related_model': 'Projects_Model_Project' }))
     expect(result).to.equal('No Access')
   })
 
@@ -46,7 +46,7 @@ describe('GenericPickerGridPanel', () => {
       number: '1223',
       status: 'IN-PROCESS',
       title: 'ascasc'
-    }, null, new Tine.Tinebase.Model.Relation({'related_model': 'Projects_Model_Project'}))
+    }, null, new Tine.Tinebase.Model.Relation({ 'related_model': 'Projects_Model_Project' }))
     expect(result).to.equal('ascasc')
   })
 })

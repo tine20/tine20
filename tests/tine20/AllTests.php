@@ -18,9 +18,12 @@ class AllTests
 {
     public static function suite()
     {
+        $node_total = isset($_ENV['NODE_TOTAL']) ? intval($_ENV['NODE_TOTAL']):1;
+        $node_index = isset($_ENV['NODE_INDEX']) ? intval($_ENV['NODE_INDEX']):1;
+
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
 
-        $oldSuits = array(
+        $suites = array(
             'Tinebase',
             'Addressbook',
             'Admin',
@@ -47,18 +50,21 @@ class AllTests
             'Zend',
         );
 
-        foreach ($oldSuits as $className) {
-            $className .= '_AllTests';
-            $suite->addTest($className::suite());
-        }
-
-        // this will not find ./library/OpenDocument/AllTests.php ... but it had not been added previously neither. So nothing changed with regards to that
+        // this will not find ./library/OpenDocument/AllTests.php
+        // ... but it had not been added previously neither. So nothing changed with regards to that
         foreach (new DirectoryIterator(__DIR__) as $dirIter) {
             if ($dirIter->isDir() && !$dirIter->isDot() &&
                 is_file($dirIter->getPathname() . DIRECTORY_SEPARATOR . 'AllTests.php') &&
                 'Scheduler' !== $dirIter->getFilename() &&
-                !in_array($dirIter->getFilename(), $oldSuits)) {
-                $className = $dirIter->getFilename() . '_AllTests';
+                !in_array($dirIter->getFilename(), $suites))
+            {
+                $suites[] = $dirIter->getFilename();
+            }
+        }
+
+        foreach ($suites as $i => $name) {
+            if ($i % $node_total === $node_index - 1) {
+                $className = $name . '_AllTests';
                 $suite->addTest($className::suite());
             }
         }

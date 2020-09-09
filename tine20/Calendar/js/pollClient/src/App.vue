@@ -15,12 +15,12 @@
       <template v-if="!transferingPoll && !askPassword && showPoll">
         <div class="row">
           <div class="col-md-8 col-sm-12">
-            <h1>{{poll.event_summary}}</h1>
-            <h2 v-if="poll.name.length > 0">{{poll.name}}</h2>
+            <h1 class="poll-event">{{poll.event_summary}}</h1>
+            <h2 class="poll-name" v-if="poll.name.length > 0">{{poll.name}}</h2>
           </div>
           <div class="col-md-4 col-sm-12 text-right">
             <a :href="poll.config.brandingWeburl">
-              <img :src="poll.config.installLogo" :alt="poll.config.brandingTitle" />
+              <img style="max-width: 300px; max-height: 80px" :src="poll.config.installLogo" :alt="poll.config.brandingTitle"/>
             </a>
           </div>
         </div>
@@ -47,9 +47,9 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="attendee in poll.attendee_status" :key="attendee.key" :class="{'row-active': activeAttendee.id === attendee.key}">
-                  <td :class="activeAttendee.id === attendee.key ? 'table-info' : 'table-light'">{{attendee.name}}</td>
-                  <td v-for="datestatus in attendee.status" class="icon-cell" :key="datestatus"
+                <tr v-for="attendee in poll.attendee_status" :key="attendee.key" :class="{'row-active': activeAttendee.user_id === attendee.user_id}" v-if="attendee.user_type!= 'group'">
+                  <td :class="activeAttendee.user_id === attendee.user_id ? 'table-info' : 'table-light'">{{attendee.name}}</td>
+                  <td v-for="datestatus in attendee.status" class="icon-cell" :key="datestatus.id"
                     :class="[{'editable': datestatus.status_authkey !== null}, statusList[datestatus.status].cellclass]"
                     @click="nextStatus(datestatus, attendee.key)"
                     :title="statusName(datestatus.status)"
@@ -59,19 +59,19 @@
                     <div class="modified-marker" v-if="datestatus.status !== datestatus.initial"></div>
                     <span @click.stop="showCalendar(datestatus)"
                       class="calendar-symbol"
-                      v-if="!poll.config.is_anonymous && activeAttendee.id !== null && activeAttendee.id === attendee.key"
+                      v-if="!poll.config.is_anonymous && activeAttendee.user_id !== null && activeAttendee.user_id === attendee.user_id"
                     >
                       <img :src="getCalendarIcon(datestatus)" alt="formatMessage('Calendar')" />
                     </span>
                     <img :src="getStatusIcon(datestatus.status)" :alt="statusName(datestatus.status)" />
                   </td>
                 </tr>
-                <tr v-if="activeAttendee.id === null && poll.locked == '0' && poll.closed !== '1'" class="row-active">
+                <tr v-if="activeAttendee.user_id === null && poll.locked == '0' && poll.closed !== '1'" class="row-active">
                   <td class="table-info name-field">
                     <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, ĺast name')" class="form-control name-field" />
                     <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('E-Mail address')" class="form-control email-field" />
                   </td>
-                  <td v-for="date in poll.alternative_dates" :key="date.id" class="status-cell icon-cell"
+                  <td v-for="date in poll.alternative_dates" :key="date.id" class="status-cell icon-cell editable"
                     v-if="typeof activeAttendee[date.id] !== 'undefined'"
                     :class="statusList[activeAttendee[date.id].status].cellclass"
                     @click="nextStatus(activeAttendee[date.id], null)"
@@ -82,7 +82,7 @@
                     <img :src="getStatusIcon(activeAttendee[date.id].status)" :alt="statusName(activeAttendee[date.id].status)" />
                   </td>
                 </tr>
-                <tr v-if="activeAttendee.id !== null && poll.locked == '0' && newAccountContact && poll.closed !== '1'" class="row-active">
+                <tr v-if="activeAttendee.user_id !== null && poll.locked == '0' && newAccountContact && poll.closed !== '1'" class="row-active">
                   <td class="table-info">{{activeAttendee.name}}</td>
                   <td v-for="date in poll.alternative_dates" class="status-cell icon-cell" :key="date.id"
                     v-if="typeof activeAttendee[date.id] !== 'undefined'"
@@ -101,7 +101,7 @@
         </div>
         <div class="row">
           <div class="col-md-12" v-if="showChangeButtons()">
-            <b-button-group>
+            <b-button-group class="change-buttons">
               <b-btn @click="onCancelChanges" variant="secondary">{{formatMessage('Cancel')}}</b-btn>
               <b-btn @click="onApplyChanges" variant="primary">{{formatMessage('Save')}}</b-btn>
             </b-button-group>
@@ -128,7 +128,7 @@
       <div>
         <b-modal ref="linkInfo" :visible="usePersonalLink" hide-footer centered title="formatMessage('Use your personal link please.')" v-model="usePersonalLink" @hide="usePersonalLink">
           <p>{{formatMessage('Use your personal link please.')}}</p>
-          <p>{{formatMessage('We have send it to your E-Mail account again.')}}</p>
+          <p>{{formatMessage('We have sent it to your E-Mail account again.')}}</p>
           <p>{{formatMessage('If you did not receive the link, please contact the organiser.')}}</p>
         </b-modal>
       </div>
@@ -146,8 +146,8 @@
       <div>
         <b-modal ref="tine-login" :visible="askTineLogin" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
           <form>
-            <h2>{{formatMessage('Plase log in')}}</h2>
-            <label for="tine-username">{{formatMessage('User name')}}<input id="tine-user" type="text" class="form-control" v-model="login.user" /></label>
+            <h2>{{formatMessage('Please log in')}}</h2>
+            <label for="tine-user">{{formatMessage('User name')}}<input id="tine-user" type="text" class="form-control" v-model="login.user" /></label>
             <label for="tine-password">{{formatMessage('Password')}}<input id="tine-password" type="password" class="form-control" v-model="login.password" /></label>
             <b-btn variant="primary" @click.prevent="submitTineLogin" type="submit">{{formatMessage('Submit')}}</b-btn>
             <b-alert variant="danger" class="login-error" :show="wrongLogin">
@@ -168,11 +168,7 @@
 
 <script>
 import axios from 'axios'
-import bModal from 'bootstrap-vue/es/components/modal/modal'
-import bModalDirective from 'bootstrap-vue/es/directives/modal/modal'
-import bBtn from 'bootstrap-vue/es/components/button/button'
-import bBtnGrp from 'bootstrap-vue/es/components/button-group/button-group'
-import bAlert from 'bootstrap-vue/es/components/alert/alert'
+import { BModal, BButton, BButtonGroup, BAlert, VBModal } from 'bootstrap-vue'
 import Spinner from 'vue-simple-spinner'
 import _ from 'lodash'
 
@@ -184,7 +180,7 @@ export default {
       transferingPoll: true,
       showPoll: true,
       poll: {},
-      activeAttendee: {name: '', email: '', id: null},
+      activeAttendee: { name: '', email: '', id: null, user_id: null },
       forceNewAttendee: false,
       showGtc: false,
       gtcText: '',
@@ -196,7 +192,7 @@ export default {
       defaultStatus: 'NEEDS-ACTION',
       askTineLogin: false,
       wrongLogin: false,
-      login: {user: '', password: ''},
+      login: { user: '', password: '' },
       loginErrorMessage: '',
       newAccountContact: false,
       showCalendarModal: false,
@@ -208,13 +204,13 @@ export default {
 
   watch: {
     poll () {
-      if (this.activeAttendee.id === null || this.newAccountContact === true) {
+      if (this.activeAttendee.user_id === null || this.newAccountContact === true) {
         _.each(this.poll.alternative_dates, (date) => {
-          this.activeAttendee[date.id] = {status: this.defaultStatus}
+          this.activeAttendee[date.id] = { status: this.defaultStatus }
         })
       } else {
         _.each(this.poll.attendee_status, (attendee) => {
-          if (attendee.key === this.activeAttendee.id) {
+          if (attendee.user_id === this.activeAttendee.user_id) {
             this.activeAttendee.status = attendee.status
             this.activeAttendee.name = attendee.name
             this.activeAttendee.user_type = attendee.user_type
@@ -226,15 +222,15 @@ export default {
   },
 
   components: {
-    'b-modal': bModal,
-    'b-btn': bBtn,
-    'b-button-group': bBtnGrp,
+    'b-modal': BModal,
+    'b-btn': BButton,
+    'b-button-group': BButtonGroup,
     Spinner,
-    'b-alert': bAlert
+    'b-alert': BAlert
   },
 
   directives: {
-    'b-modal': bModalDirective
+    'b-modal': VBModal
   },
 
   mounted () {
@@ -264,7 +260,7 @@ export default {
 
       let needUpdate = false
 
-      let payload = {status: []}
+      let payload = { status: [] }
       if (this.activeAttendee.id === null || this.newAccountContact) {
         action = 'put'
         needUpdate = true
@@ -305,7 +301,7 @@ export default {
 
       let url = this.baseUrl + 'Calendar/poll/' + this.poll.id
 
-      let options = {auth: {password: this.password}}
+      let options = { auth: { password: this.password } }
 
       axios[action](url, payload, options).then((response) => {
         if (action === 'put' && this.activeAttendee.id === null) {
@@ -373,17 +369,14 @@ export default {
 
         this.poll = response.data
 
-        this.formatMessage.setup({locale: this.poll.config.locale || 'en'})
+        this.formatMessage.setup({ locale: this.poll.config.locale || 'en' })
 
         if (this.poll.config.has_gtc === true) {
           this.hidegtcmessage = false
           this.retrieveGTC()
         }
 
-        this.askPassword = false
-        if (this.poll.password !== null && this.password !== this.poll.password) {
-          this.askPassword = true
-        }
+        this.askPassword = this.poll.password !== null && this.password !== this.poll.password
 
         let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
 
@@ -398,6 +391,7 @@ export default {
             this.activeAttendee.id = this.poll.config.current_contact.type + '-' + this.poll.config.current_contact.id
             this.activeAttendee.name = this.poll.config.current_contact.n_fn
             this.activeAttendee.email = this.poll.config.current_contact.email
+            this.activeAttendee.user_id = this.poll.config.current_contact.id
           }
         }
 
@@ -406,7 +400,7 @@ export default {
           this.newAccountContact = false
         } else {
           _.each(this.poll.attendee_status, (attendee) => {
-            if (attendee.key === this.activeAttendee.id) {
+            if (attendee.user_id === this.activeAttendee.user_id) {
               this.newAccountContact = false
             }
           })
@@ -484,7 +478,7 @@ export default {
       return attendee.user_type + '-' + _.get(attendee.user_id, 'id', attendee.user_id)
     },
     statusName (status) {
-      let statusName = _.get(_.find(_.get(this.poll, 'config.status_available.records', {}), {id: status}), 'value', status)
+      let statusName = _.get(_.find(_.get(this.poll, 'config.status_available.records', {}), { id: status }), 'value', status)
       return this.fmHidden(statusName)
     },
     nextStatus (attendee, id) {
@@ -510,6 +504,7 @@ export default {
       this.forceNewAttendee = true
       this.activeAttendee = {
         id: null,
+        user_id: null,
         name: '',
         email: '',
         status: []
@@ -537,6 +532,7 @@ export default {
         this.activeAttendee.id = 'user-' + account.contact_id
         this.activeAttendee.name = account.accountDisplayName
         this.activeAttendee.email = account.accountEmailAddress
+        this.activeAttendee.user_id = account.contact_id
 
         this.wrongLogin = false
         this.askTineLogin = false

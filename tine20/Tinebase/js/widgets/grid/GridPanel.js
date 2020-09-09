@@ -35,6 +35,13 @@ Tine.widgets.grid.GridPanel = function(config) {
         limit: 50
     };
 
+    // allow to initialize with string
+    this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+
+    if (! this.app && this.recordClass) {
+        this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+    }
+
     // autogenerate stateId
     if (this.stateful !== false && ! this.stateId) {
         this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
@@ -53,6 +60,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * instance of the app object (required)
      */
     app: null,
+    /**
+     * @cfg {Boolean} asAdminModule is the panel in an admin context? this is passed to the edit dialog, too
+     */
+    asAdminModule: false,
     /**
      * @cfg {Object} gridConfig
      * Config object for the Ext.grid.GridPanel
@@ -206,6 +217,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     hasQuickSearchFilterToolbarPlugin: true,
 
     /**
+     * display selections helper on paging tb
+     * @cfg {Boolean} displaySelectionHelper
+     */
+    displaySelectionHelper: true,
+
+    /**
      * disable 'select all pages' in paging toolbar
      * @cfg {Boolean} disableSelectAllPages
      */
@@ -318,7 +335,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type String
      */
     groupTextTpl: null,
-    
+
+    /**
+     * cols to exclude
+     *
+     * @type String[]
+     * @cfg hideColumns
+     */
+    hideColumns: null,
+
     /**
      * @property selectionModel
      * @type Tine.widgets.grid.FilterSelectionModel
@@ -383,6 +408,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.editDialogConfig = this.editDialogConfig || {};
         this.editBuffer = [];
         this.deleteQueue = [];
+
+        this.hideColumns = this.hideColumns || [];
         
         // init generic stuff
         if (this.modelConfig) {
@@ -446,7 +473,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (existingRecord && e.topic.match(/\.update/)) {
             // NOTE: local mode saves again (and again...)
             this.onUpdateRecord(JSON.stringify(data)/*, 'local'*/);
-        } if (existingRecord && e.topic.match(/\.delete/)) {
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
             this.store.remove(existingRecord);
         } else {
             // we can't evaluate the filters on client side to check compute if this affects us
@@ -456,7 +483,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         }
         // NOTE: grid doesn't update selections itself
-        this.actionUpdater.updateActions(this.grid.getSelectionModel());
+        this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
     },
 
     /**
@@ -478,7 +505,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     onContentResize: function() {
         // make sure details panel doesn't hide grid
-        if (this.detailsPanel) {
+        if (this.detailsPanel && this.grid) {
             var gridHeight = this.grid.getHeight(),
                 detailsHeight = this.detailsPanel.getHeight();
 
@@ -523,6 +550,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} config
      */
     initFilterPanel: function(config) {
+        config = Ext.apply(config || {}, this.filterConfig);
+
         if (! this.filterToolbar && ! this.editDialog) {
             var filterModels = [];
             if (this.modelConfig) {
@@ -537,7 +566,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 filterModels: filterModels,
                 defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
                 filters: this.defaultFilters || []
-            }, config || {}));
+            }, config));
             
             this.plugins = this.plugins || [];
             this.plugins.push(this.filterToolbar);
@@ -562,7 +591,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 if (['relations', 'customfields'].indexOf(key) !== -1) {
                     return;
                 }
-                
+
+                if (this.hideColumns.indexOf(key) !== -1) {
+                    return;
+                }
+
                 if (config) {
                     columns.push(config);
                 }
@@ -916,6 +949,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         if (container) {
             container = treePanel.getDefaultContainer(container);
+        } else if (Ext.isFunction(this.getDefaultContainer)) {
+            container = this.getDefaultContainer();
         }
 
         Tine.widgets.dialog.ImportDialog.openWindow({
@@ -1089,6 +1124,46 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     /**
+     * adds given record and starts editing
+     * 
+     * @param localRecord
+     * @param editProperty
+     * @param proxyFn
+     * @return {Promise<void>}
+     */
+    newInlineRecord: async function(localRecord, editProperty, proxyFn) {
+        localRecord.noProxy = true;
+        this.store.addUnique(localRecord, editProperty);
+        this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
+        this.grid.startEditingRecord(localRecord, editProperty);
+        const ed = this.grid.activeEditor;
+        ed.field.selectText(0, String(ed.field.getValue()).lastIndexOf('.'));
+        ed.startValue = Math.random();
+
+        const onCancelEdit = (e) => {
+            this.grid.un('afteredit', onAfterEdit);
+            this.store.remove(localRecord);
+        };
+        ed.on('canceledit', onCancelEdit, this, {single: true});
+
+        const onAfterEdit = async (o) => {
+            ed.un('canceledit', onCancelEdit);
+
+            this.pagingToolbar.refresh.disable();
+            this.store.remove(localRecord);
+            this.store.addSorted(localRecord);
+            this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
+            
+            const remoteRecord = await proxyFn(localRecord);
+            this.store.remove(localRecord);
+            this.store.addSorted(remoteRecord);
+            this.grid.getSelectionModel().selectRow(this.store.indexOf(remoteRecord));
+            this.pagingToolbar.refresh.enable();
+        }
+        this.grid.on('afteredit', onAfterEdit, this, {single: true, buffer: 100});
+    },
+    
+    /**
      * header is clicked
      * 
      * @param {Object} grid
@@ -1134,6 +1209,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {String} operation
      */
     onStoreUpdate: function(store, record, operation) {
+        if (record.noProxy) return;
         switch (operation) {
             case Ext.data.Record.EDIT:
                 this.addToEditBuffer(record);
@@ -1142,7 +1218,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.pagingToolbar.refresh.disable();
                 }
                 // don't save these records. Add them to the parents' record store
-                if (this.editDialog) {
+                if (this.editDialog && this.editDialogRecordProperty) {
                     var items = [];
                     store.each(function(item) {
                         items.push(item.data);
@@ -1189,8 +1265,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.editBuffer = [];
         }
 
-//        options.preserveSelection = options.hasOwnProperty('preserveSelection') ? options.preserveSelection : true;
-//        options.preserveScroller = options.hasOwnProperty('preserveScroller') ? options.preserveScroller : true;
+        if (! options.preserveSelection) {
+            this.actionUpdater.updateActions([]);
+        }
 
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
@@ -1220,6 +1297,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }, this);
         }
+        this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
 
         // restore scroller
         if (Ext.isNumber(options.preserveScroller)) {
@@ -1230,6 +1308,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (window.isMainWindow && this.autoRefreshInterval) {
             this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
         }
+    },
+
+    /**
+     * gets currently displayed container in case a container filter is set
+     * NOTE: this data is unresolved as it comes from filter and not through json convert!
+     */
+    getFilteredContainers: function() {
+        const containerFilter = _.find(_.get(this, 'store.reader.jsonData.filter[0].filters[0].filters', {}), {field: this.recordClass.getMeta('containerProperty')});
+        const operator = _.get(containerFilter, 'operator', '');
+        const value = operator.match(/equals|in/) ? _.get(containerFilter, 'value', null) : null;
+
+        return value && _.isArray(value) ? [value] : value;
     },
 
     /**
@@ -1349,7 +1439,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (defaultFavorite && favoritesPanel) {
             favoritesPanel.selectFilter(defaultFavorite);
         } else {
-            if (! this.editDialog) {
+            if (! (this.editDialog && this.editDialogRecordProperty)) {
                 this.store.load.defer(10, this.store, [ typeof this.autoLoad == 'object' ? this.autoLoad : undefined]);
             } else {
                 // editDialog exists, so get the records from there.
@@ -1394,12 +1484,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nEmptyText = i18n.gettext('No data to display');
         
         // init sel model
-        this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
-            store: this.store,
-            gridPanel: this
-        });
+        if (! this.selectionModel) {
+            this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
+                store: this.store,
+                gridPanel: this
+            });
+        }
+
         this.selectionModel.on('selectionchange', function(sm) {
-            this.actionUpdater.updateActions(sm);
+            this.actionUpdater.updateActions(sm, this.getFilteredContainers());
 
             this.ctxNode = this.selectionModel.getSelections();
             if (this.updateOnSelectionChange && this.detailsPanel) {
@@ -1414,7 +1507,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 displayInfo: true,
                 displayMsg: i18n._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
                 emptyMsg: String.format(i18n._("No {0} to display"), this.i18nRecordsName),
-                displaySelectionHelper: true,
+                displaySelectionHelper: this.displaySelectionHelper,
                 sm: this.selectionModel,
                 disableSelectAllPages: this.disableSelectAllPages,
                 nested: this.editDialog ? true : false
@@ -1519,7 +1612,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} options
      */
     loadGridData: function(options) {
-        var options = options || {};
+        options = options || {};
 
         Ext.applyIf(options, {
             callback:           Ext.emptyFn,
@@ -1853,27 +1946,36 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
             result = [];
         Ext.each(cfConfigs, function(cfConfig) {
-            var cfDefinition = cfConfig.get('definition');
-            switch (cfDefinition.type) {
-                case 'record':
-                    result.push({
-                        filtertype: 'foreignrecord',
-                        label: cfDefinition.label,
-                        app: this.app,
-                        ownRecordClass: this.recordClass,
-                        foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
-                        linkType: 'foreignId',
-                        ownField: 'customfield:' + cfConfig.id
-                    });
-                    break;
-                case 'keyfield':
-                    // @TODO implement me
-                    break;
-                default:
-                    result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
-                    break;
+            try {
+                var cfDefinition = cfConfig.get('definition');
+                switch (cfDefinition.type) {
+                    case 'record':
+                        if (_.get(window, cfDefinition.recordConfig.value.records)) {
+                            result.push({
+                                filtertype: 'foreignrecord',
+                                label: cfDefinition.label,
+                                app: this.app,
+                                ownRecordClass: this.recordClass,
+                                foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
+                                linkType: 'foreignId',
+                                ownField: 'customfield:' + cfConfig.id,
+                                pickerConfig: cfDefinition.recordConfig.additionalFilterSpec ? {
+                                    additionalFilterSpec: cfDefinition.recordConfig.additionalFilterSpec
+                                } : null
+                            });
+                        }
+                        break;
+                    default:
+                        result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+                        break;
+                }
+
+            } catch (e) {
+                Tine.log.warn('CustomfieldFilters ' + cfDefinition.label + ' doesnt create');
+
             }
         }, this);
+
 
         return result;
     },
@@ -1930,43 +2032,74 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     onKeyDown: function(e){
-        if (e.ctrlKey) {
-            switch (e.getKey()) {
-                case e.A:
-                    // select only current page
-                    this.grid.getSelectionModel().selectAll(true);
-                    e.preventDefault();
-                    break;
-                case e.E:
-                    if (this.action_editInNewWindow && !this.action_editInNewWindow.isDisabled()) {
-                        this.onEditInNewWindow.call(this, {
-                            actionType: 'edit'
-                        });
-                        e.preventDefault();
-                    }
-                    break;
-                case e.N:
-                    if (this.action_addInNewWindow && !this.action_addInNewWindow.isDisabled()) {
-                        this.onEditInNewWindow.call(this, {
-                            actionType: 'add'
-                        });
-                        e.preventDefault();
-                    }
-                    break;
-                case e.F:
-                    if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
-                        e.preventDefault();
-                        this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
-                    }
-                    break;
-            }
-        } else {
-            if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
-                if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
-                    this.onDeleteRecords.call(this);
+        // no keys for quickadds etc.
+        if (e.getTarget('input') || e.getTarget('textarea')) return;
+
+        // do not catch modified keys (CTRL, ALT)
+        if (e.ctrlKey || e.altKey) return;
+
+        switch (e.getKey()) {
+            case e.A:
+                // select only current page
+                this.grid.getSelectionModel().selectAll(true);
+                e.preventDefault();
+                break;
+            case e.C:
+                if (this.action_editCopyInNewWindow && !this.action_editCopyInNewWindow.isDisabled()) {
+                    this.onEditInNewWindow.call(this, {
+                        actionType: 'copy'
+                    });
                     e.preventDefault();
                 }
-            }
+                break;
+            case e.E:
+                if (this.action_editInNewWindow && !this.action_editInNewWindow.isDisabled()) {
+                    this.onEditInNewWindow.call(this, {
+                        actionType: 'edit'
+                    });
+                    e.preventDefault();
+                }
+                break;
+            case e.N:
+                if (this.action_addInNewWindow && !this.action_addInNewWindow.isDisabled()) {
+                    this.onEditInNewWindow.call(this, {
+                        actionType: 'add'
+                    });
+                    e.preventDefault();
+                }
+                break;
+            case e.F:
+                if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
+                    e.preventDefault();
+                    this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
+                }
+                break;
+            case e.R:
+                this.bufferedLoadGridData();
+                break;
+            default:
+                if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
+                    if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
+                        this.onDeleteRecords.call(this);
+                        e.preventDefault();
+                    }
+                }
+                if (e.browserEvent.key === '?') {
+                    // TODO only show keys of actions that are available
+                    var helpText = i18n._('A: select all visible rows') + '<br/>' +
+                        i18n._('C: copy record') + '<br/>' +
+                        i18n._('E: edit record') + '<br/>' +
+                        i18n._('N: new record') + '<br/>' +
+                        i18n._('F: find') + '<br/>' +
+                        i18n._('ESC: focus grid') + '<br/>' +
+                        i18n._('R: reload grid') + '<br/>';
+                    Ext.MessageBox.show({
+                        title: i18n._('Grid Panel Key Bindings'),
+                        msg: helpText,
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.INFO
+                    });
+                }
         }
     },
 
@@ -2004,8 +2137,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         if (e.getTarget('.action_attach')) {
             if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-                Tine.Filemanager.DocumentPreview.openWindow({
-                    record: this.getStore().getAt(row),
+                const record = this.getStore().getAt(row);
+                if (record.get('attachments').length === 0) {
+                    return;
+                }
+                const firstAttachment = new Tine.Tinebase.Model.Tree_Node(record.get('attachments')[0]);
+                Tine.Filemanager.QuickLookPanel.openWindow({
+                    record: firstAttachment,
                     initialApp: this.app,
                     sm: sm
                 });
@@ -2078,7 +2216,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         var totalcount = this.selectionModel.getCount(),
             selectedRecords = [],
             fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
-            editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
+            editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass),
             additionalConfig = additionalConfig ? additionalConfig : {};
         
         // add "multiple_edit_dialog" plugin to dialog, if required
@@ -2101,17 +2239,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                plugins: plugins ? Ext.encode(plugins) : null,
+                plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),
                 record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 recordId: record.getId(),
                 copyRecord: (button.actionType == 'copy'),
+                asAdminModule: this.asAdminModule,
                 listeners: {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'record,recordId,listeners,fixedFields,copyRecord,plugins,additionalConfig')
+            }, 'record,recordId,listeners,fixedFields,copyRecord,plugins,additionalConfig,asAdminModule')
         );
         return true;
     },
@@ -2168,21 +2307,33 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.log.debug(record, mode);
 
         if (record && Ext.isFunction(record.copy)) {
-            var idx = this.getStore().indexOfId(record.id);
+            var idx = this.getStore().indexOfId(record.id),
+                isSelected = this.getGrid().getSelectionModel().isSelected(idx),
+                store = this.getStore();
+
             if (idx >= 0) {
                 // only run do this in local mode as we reload the store in remote mode
                 // NOTE: this would otherwise delete the record if a record proxy exists!
                 if (mode == 'local') {
-                    var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
-                    this.getStore().removeAt(idx);
-                    this.getStore().insert(idx, [record]);
-                    if (isSelected) {
-                        this.getGrid().getSelectionModel().selectRow(idx, true);
-                    }
+                    store.removeAt(idx);
+                    store.insert(idx, [record]);
                 }
             } else {
                 this.getStore().add([record]);
             }
+
+            // sort new/edited record
+            store.remoteSort = false;
+            store.sort(
+                _.get(store, 'sortInfo.field', this.recordClass.getMeta('titleField')),
+                _.get(store, 'sortInfo.direction', 'ASC')
+            );
+            store.remoteSort = this.storeRemoteSort;
+
+            if (isSelected) {
+                this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
+            }
+
             this.addToEditBuffer(record);
         }
 
@@ -2190,7 +2341,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
         } else {
             this.bufferedLoadGridData({
-                removeStrategy: 'keepBuffered'
+                removeStrategy: 'keepBuffered',
             });
         }
     },
@@ -2328,7 +2479,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.store.remove(record);
             });
             // if nested in an editDialog, just change the parent record
-            if (this.editDialog) {
+            if (this.editDialog && this.editDialogRecordProperty) {
                 var items = [];
                 this.store.each(function(item) {
                     items.push(item.data);
@@ -2443,7 +2594,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onAfterEdit: function(ids) {
         this.editBuffer = this.editBuffer.diff(ids);
-
         this.bufferedLoadGridData({
             removeStrategy: 'keepBuffered'
         });

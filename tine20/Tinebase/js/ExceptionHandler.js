@@ -272,7 +272,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 600:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._(exception.title),
-                    msg: i18n._(exception.message)
+                    msg: Ext.util.Format.nl2br(i18n._(exception.message))
                 }));
                 break;
                 
@@ -359,6 +359,14 @@ Tine.Tinebase.ExceptionHandler = function() {
         window.onerror.createSequence(onWindowError) :
         onWindowError;
 
+    window.addEventListener("unhandledrejection", function(promiseRejectionEvent) {
+        var error = promiseRejectionEvent.reason;
+
+        // unhandled from jsonrpcprovider
+        if (_.get(error, 'code') && _.get(error, 'data')) {
+            handleRequestException(error.data);
+        }
+    });
     return {
         handleException: handleException,
         handleRequestException: handleRequestException

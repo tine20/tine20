@@ -394,7 +394,7 @@ class ActiveSync_TimezoneConverter
             // the milestone is sending a positive value for daylightBias while it should send a negative value
             $daylightOffsetMilestone = ($_offsets['bias'] + ($_offsets['daylightBias'] * -1) ) * 60 * -1;
             
-            if ($daylightOffset == $_daylightTransition['offset'] || $daylightOffsetMilestone == $_daylightTransition['offset']) {
+            if ($_daylightTransition && isset($_daylightTransition['offset']) && ($daylightOffset == $_daylightTransition['offset'] || $daylightOffsetMilestone == $_daylightTransition['offset'])) {
                 $standardParsed = getdate($_standardTransition['ts']);
                 $daylightParsed = getdate($_daylightTransition['ts']);
 
@@ -615,22 +615,28 @@ class ActiveSync_TimezoneConverter
         } else {
             $transitions = $_timezone->getTransitions();
         }
-        
-        $index = 0;            //we need to access index counter outside of the foreach loop
-        $transition = array(); //we need to access the transition counter outside of the foreach loop
-        foreach ($transitions as $index => $transition) {
-            if (strftime('%Y', $transition['ts']) == $_year) {
-                if (isset($transitions[$index+1]) && strftime('%Y', $transitions[$index]['ts']) == strftime('%Y', $transitions[$index+1]['ts'])) {
-                    $daylightTransition = $transition['isdst'] ? $transition : $transitions[$index+1];
-                    $standardTransition = $transition['isdst'] ? $transitions[$index+1] : $transition;
-                } else {
-                    $daylightTransition = $transition['isdst'] ? $transition : null;
-                    $standardTransition = $transition['isdst'] ? null : $transition;
+
+        if ($transitions) {
+            $index = 0;            //we need to access index counter outside of the foreach loop
+            $transition = array(); //we need to access the transition counter outside of the foreach loop
+            foreach ($transitions as $index => $transition) {
+                if (strftime('%Y', $transition['ts']) == $_year) {
+                    if (isset($transitions[$index + 1]) && strftime('%Y', $transitions[$index]['ts']) == strftime('%Y', $transitions[$index + 1]['ts'])) {
+                        $daylightTransition = $transition['isdst'] ? $transition : $transitions[$index + 1];
+                        $standardTransition = $transition['isdst'] ? $transitions[$index + 1] : $transition;
+                    } else {
+                        $daylightTransition = $transition['isdst'] ? $transition : null;
+                        $standardTransition = $transition['isdst'] ? null : $transition;
+                    }
+                    break;
+                } elseif ($index == count($transitions) - 1) {
+                    $standardTransition = $transition;
                 }
-                break;
-            } elseif ($index == count($transitions) -1) {
-                $standardTransition = $transition;
             }
+        } else {
+            // TODO throw an exception?
+            $this->_log(__METHOD__, __LINE__, 'Transitions not found for TZ '
+                . print_r($_timezone, true), Tinebase_Log::WARN);
         }
          
         return array($standardTransition, $daylightTransition);

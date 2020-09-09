@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -45,6 +45,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     protected $_notificationActive = false;
 
     protected $_revision = null;
+
+    protected $_beforeCreateHook = [];
+    protected $_beforeUpdateHook = [];
+    protected $_afterUpdateHook = [];
 
     /**
      * NOTE: returns fake tree controller
@@ -86,6 +90,21 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         parent::__construct($_dbAdapter, $_options);
     }
 
+    public function registerBeforeCreateHook($key, $hook)
+    {
+        $this->_beforeCreateHook[$key] = $hook;
+    }
+
+    public function registerBeforeUpdateHook($key, $hook)
+    {
+        $this->_beforeUpdateHook[$key] = $hook;
+    }
+
+    public function registerAfterUpdateHook($key, $hook)
+    {
+        $this->_afterUpdateHook[$key] = $hook;
+    }
+
     /**
      * if set to an integer value, only revisions of that number will be selected
      * if set to null value, regular revision will be selected
@@ -112,13 +131,13 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             ->joinLeft(
                 /* table  */ array('tree_fileobjects' => $this->_tablePrefix . 'tree_fileobjects'), 
                 /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.object_id') . ' = ' . $this->_db->quoteIdentifier('tree_fileobjects.id'),
-                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'revision', 'contenttype', 'revision_size', 'indexed_hash', 'description')
+                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'seq', 'contenttype', 'revision_size', 'indexed_hash', 'description')
             )
             ->joinLeft(
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions.id') . ' AND ' .
                 $this->_db->quoteIdentifier('tree_filerevisions.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier('tree_fileobjects.revision')),
-                /* select */ array('hash', 'size', 'preview_count')
+                /* select */ array('hash', 'size', 'preview_count', 'preview_status', 'preview_error_count', 'lastavscan_time', 'is_quarantined', 'revision')
             )->joinLeft(
             /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
                 /* on     */ $this->_db->quoteIdentifier('tree_fileobjects.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
@@ -161,6 +180,37 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
     }
 
+    protected function _checkName($name)
+    {
+        if (strpos($name, '/') !== false) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('node name must not contain the character /'));
+        }
+    }
+
+    protected function _checkRecordName(Tinebase_Model_Tree_Node $node)
+    {
+        $this->_checkName($node->name);
+    }
+
+    /**
+     * Creates new entry
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return Tinebase_Record_Interface
+     * @throws Exception
+     * @todo    remove autoincremental ids later
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        $this->_checkRecordName($_record);
+        foreach ($this->_beforeCreateHook as $hook) {
+            call_user_func($hook, $_record);
+        }
+
+        return parent::create($_record);
+    }
+
     /**
      * Updates existing entry
      *
@@ -171,7 +221,13 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function update(Tinebase_Record_Interface $_record, $_doModLog = true)
     {
+        $this->_checkRecordName($_record);
+
         $oldRecord = $this->get($_record->getId(), true);
+        foreach ($this->_beforeUpdateHook as $hook) {
+            call_user_func($hook, $_record, $oldRecord);
+        }
+
         $newRecord = parent::update($_record);
 
         if (true === $_doModLog) {
@@ -179,6 +235,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             if (null !== $currentMods && $currentMods->count() > 0) {
                 Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             }
+        }
+
+        foreach ($this->_afterUpdateHook as $hook) {
+            call_user_func($hook, $newRecord, $oldRecord);
         }
 
         /** @var Tinebase_Model_Tree_Node $newRecord */
@@ -221,8 +281,12 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     public function updateMultiple($_ids, $_data)
     {
         $oldRecords = null;
-        if ($this->_omitModLog === true) {
+        if ($this->_omitModLog !== true) {
             $oldRecords = $this->getMultiple($_ids);
+        }
+
+        if (isset($_data['name'])) {
+            $this->_checkName($_data['name']);
         }
 
         $result = parent::updateMultiple($_ids, $_data);
@@ -248,7 +312,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     protected function _inspectBeforeSoftDelete(array $_ids)
     {
         if (!empty($_ids)) {
+            list($accountId, $now) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+            /** @var Tinebase_Model_Tree_Node $node */
             foreach($this->getMultiple($_ids) as $node) {
+                $node->last_modified_by = $accountId;
+                $node->last_modified_time = $now;
                 $this->_writeModLog(null, $node);
             }
         }
@@ -260,7 +328,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     protected function _inspectForPreviewCreation(Tinebase_Model_Tree_Node $_newRecord, Tinebase_Model_Tree_Node $_oldRecord = null)
     {
-        if (true !== Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}
+        if (! Tinebase_FileSystem::getInstance()->isPreviewActive()
                 || ($_oldRecord !== null && $_oldRecord->hash === $_newRecord->hash) || (int)$_newRecord->revision < 1 ||
                 empty($_newRecord->hash) || Tinebase_Model_Tree_FileObject::TYPE_FILE !== $_newRecord->type) {
             return;
@@ -270,7 +338,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             return;
         }
 
-        Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
+        Tinebase_ActionQueueLongRun::getInstance()->queueAction('Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
     }
 
     /**
@@ -353,22 +421,28 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * return direct children of tree node
      * 
      * @param  string|Tinebase_Model_Tree_Node  $nodeId  the id of the node
+     * @param  bool $ignoreAcl default is true
+     * @param  bool $getDeleted
      * @return Tinebase_Record_RecordSet
      */
-    public function getChildren($nodeId)
+    public function getChildren($nodeId, $ignoreAcl = true, $getDeleted = false)
     {
         $nodeId = $nodeId instanceof Tinebase_Model_Tree_Node ? $nodeId->getId() : $nodeId;
-        
-        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-            array(
-                'field'     => 'parent_id',
-                'operator'  => 'equals',
-                'value'     => $nodeId
-            )
-        ), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => true));
-        $children = $this->search($searchFilter);
-        
-        return $children;
+
+        $options = [];
+        if ($ignoreAcl) {
+            $options['ignoreAcl'] = true;
+        }
+        $filterArr = [[
+            'field' => 'parent_id', 'operator' => 'equals', 'value' => $nodeId
+        ]];
+        if (true === $getDeleted) {
+            $filterArr[] = [
+                'field' => 'is_deleted', 'operator'  => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET
+            ];
+        }
+        return $this->search(new Tinebase_Model_Tree_Node_Filter($filterArr,
+            Tinebase_Model_Filter_FilterGroup::CONDITION_AND, $options));
     }
 
     /**
@@ -548,7 +622,22 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         // no transactions yet
         // get root node ids
         $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl(null);
-        return $this->_recalculateFolderSize($_fileObjectBackend, $this->_getIdsOfDeepestFolders($this->search($searchFilter, null, true)));
+        $result = $this->_recalculateFolderSize($_fileObjectBackend, $this->_getIdsOfDeepestFolders($this->search($searchFilter, null, true), true));
+
+        $size = 0;
+        $revisionSize = 0;
+        /** @var Tinebase_Model_Tree_Node $rootNode */
+        foreach ($this->search($searchFilter) as $rootNode) {
+            $size += $rootNode->size;
+            $revisionSize += $rootNode->revision_size;
+        }
+
+        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Core::getTinebaseId(),
+            Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $size);
+        Tinebase_Application::getInstance()->setApplicationState(Tinebase_Core::getTinebaseId(),
+            Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, $revisionSize);
+
+        return $result;
     }
 
     /**
@@ -568,7 +657,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             try {
                 try {
                     /** @var Tinebase_Model_Tree_Node $record */
-                    $record = $this->get($id);
+                    $record = $this->get($id, true);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     $transactionManager->commitTransaction($transactionId);
                     continue;
@@ -578,19 +667,26 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                     $parentIds[$record->parent_id] = $record->parent_id;
                 }
 
-                $childrenNodes = $this->getChildren($id);
+                $childrenNodes = $this->getChildren($id, true, true);
                 $size = 0;
                 $revision_size = 0;
 
                 /** @var Tinebase_Model_Tree_Node $child */
                 foreach($childrenNodes as $child) {
-                    $size += ((int)$child->size);
+                    if (!$child->is_deleted) {
+                        $size += ((int)$child->size);
+                    }
                     $revision_size += ((int)$child->revision_size);
                 }
 
                 if ($size !== ((int)$record->size) || $revision_size !== ((int)$record->revision_size)) {
                     /** @var Tinebase_Model_Tree_FileObject $fileObject */
-                    $fileObject = $_fileObjectBackend->get($record->object_id);
+                    try {
+                        $fileObject = $_fileObjectBackend->get($record->object_id, true);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $transactionManager->commitTransaction($transactionId);
+                        continue;
+                    }
                     $fileObject->size = $size;
                     $fileObject->revision_size = $revision_size;
                     $_fileObjectBackend->update($fileObject);
@@ -619,15 +715,16 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * returns ids of folders that do not have any sub folders
      *
      * @param array $_folderIds
+     * @param boolean $_getDeleted
      * @return array
      */
-    protected function _getIdsOfDeepestFolders(array $_folderIds)
+    protected function _getIdsOfDeepestFolders(array $_folderIds, $_getDeleted = false)
     {
         $result = array();
         $subFolderIds = array();
         foreach($_folderIds as $folderId) {
             // children folders
-            $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl($folderId);
+            $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl($folderId, $_getDeleted);
             $nodeIds = $this->search($searchFilter, null, true);
             if (empty($nodeIds)) {
                 // no children, this is a result
@@ -638,7 +735,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
 
         if (!empty($subFolderIds)) {
-            $result = array_merge($result, $this->_getIdsOfDeepestFolders($subFolderIds));
+            $result = array_merge($result, $this->_getIdsOfDeepestFolders($subFolderIds, $_getDeleted));
         }
 
         return $result;

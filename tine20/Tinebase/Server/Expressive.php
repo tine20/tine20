@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -89,7 +89,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 .' Is Routing request. uri: ' . $this->_request->getUri()->getPath() . '?'
-                . $this->_request->getUri()->getQuery());
+                . $this->_request->getUri()->getQuery() . ' method: ' . $this->_request->getMethod());
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::'
                 . __LINE__ .' REQUEST: ' . print_r($this->_request, true));
 
@@ -116,7 +116,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
                 $this->_emitter->emit($response);
             }
 
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             Tinebase_Exception::log($exception, false);
             header('HTTP/1.0 500 Service Unavailable');
             return false;

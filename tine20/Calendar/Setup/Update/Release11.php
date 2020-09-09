@@ -5,9 +5,10 @@
  * @package     Calendar
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2015-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
+
 class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**
@@ -130,7 +131,15 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 
         /** @var Calendar_Model_Resource $resource */
         foreach ($resources as $resource) {
-            $container = $containerController->getContainerById($resource->container_id);
+            try {
+                $container = $containerController->getContainerById($resource->container_id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Resource might have lost its container... deleting invalid resource.'
+                    . ' Error: ' . $tenf->getMessage());
+                $resourceController->delete($resource->getId());
+                continue;
+            }
             if (!isset($container->xprops()['Tinebase']['Container']['GrantsModel'])) {
                 $container->xprops()['Tinebase']['Container']['GrantsModel'] = Calendar_Model_ResourceGrants::class;
                 $container->xprops()['Calendar']['Resource']['resource_id'] = $resource->getId();
@@ -323,12 +332,92 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->setApplicationVersion('Calendar', '11.13');
     }
 
+    public function update_13()
+    {
+        $records = Calendar_Controller_Resource::getInstance()->getAll();
+
+        foreach ($records as $record)
+        {
+            $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
+            $resource_type = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)->getValue($record['type']);
+            $container->xprops()['Calendar']['Resource']['resource_icon'] = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)
+                ->getKeyfieldRecordByValue($resource_type)['icon'];
+
+            Tinebase_Container::getInstance()->update($container);
+        }
+
+
+
+        $this->setApplicationVersion('Calendar', '11.14');
+    }
+
+    public function update_14()
+    {
+        $records = Calendar_Controller_Resource::getInstance()->getAll();
+        foreach ($records as $record)
+        {
+            $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
+
+            unset($container->xprops()['Calendar']['Resource']['resource_icon']);
+
+            $resource_type = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)->getValue($record['type']);
+            $container->xprops()['Calendar']['Resource']['resource_type'] = Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_TYPES)
+                ->getKeyfieldRecordByValue($resource_type)['id'];
+
+            Tinebase_Container::getInstance()->update($container);
+        }
+
+
+
+        $this->setApplicationVersion('Calendar', '11.15');
+    }
+
+    public function update_15()
+    {
+        $update10 = new Calendar_Setup_Update_Release10($this->_backend);
+        $update10->update_11();
+
+        $this->setApplicationVersion('Calendar', '11.16');
+    }
+
+    public function update_16()
+    {
+        try {
+            $this->_backend->dropForeignKey('cal_attendee', 'cal_attendee::displaycontainer_id--container::id');
+        } catch (Exception $e) {
+            // fk might not exist yet
+            Tinebase_Exception::log($e);
+        }
+        try {
+            $this->_backend->addForeignKey('cal_attendee', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>cal_attendee::displaycontainer_id--container::id</name>
+                    <field>
+                        <name>displaycontainer_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                        <ondelete>SET NULL</ondelete>
+                    </reference>
+                </index>'));
+        } catch (Exception $e) {
+            // this is strange - maybe the table structure has an issue that needs to be solved manually
+            Tinebase_Exception::log($e);
+        }
+
+        if ($this->getTableVersion('cal_events') < 8) {
+            $this->setTableVersion('cal_events', 8);
+        }
+        $this->setApplicationVersion('Calendar', '11.17');
+    }
+
     /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_13()
+    public function update_17()
     {
         $this->setApplicationVersion('Calendar', '12.0');
     }

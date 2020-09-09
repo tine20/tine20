@@ -5,23 +5,27 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * class to hold data representing one object which can be inserted into the tree
  * 
- * @property  string   name
- * @property  string   revision
- * @property  string   available_revisions
- * @property  string   description
- * @property  string   contenttype
- * @property  integer  size
- * @property  integer  revision_size
- * @property  string   indexed_hash
- * @property  string   hash
- * @property  string   type
- * @property  integer  preview_count
+ * @property  string            name
+ * @property  string            revision
+ * @property  array             available_revisions
+ * @property  string            description
+ * @property  string            contenttype
+ * @property  integer           size
+ * @property  integer           revision_size
+ * @property  string            indexed_hash
+ * @property  string            hash
+ * @property  string            type
+ * @property  integer           preview_count
+ * @property  integer           preview_status
+ * @property  integer           preview_error_count
+ * @property  Tinebase_DateTime lastavscan_time
+ * @property  boolean           is_quarantined
  */
 class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 {
@@ -54,13 +58,19 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      */
     const TYPE_FILE   = 'file';
 
-
     /**
      * object type: preview
      *
      * @var string
      */
     const TYPE_PREVIEW = 'preview';
+
+    /**
+     * object type: link
+     *
+     * @var string
+     */
+    const TYPE_LINK = 'link';
     
     /**
      * this filter get used when validating user generated content with Zend_Input_Filter
@@ -95,15 +105,19 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'available_revisions'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'),
-        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
+        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
         'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
         'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'preview_status'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'preview_error_count'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
         'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(
             'presence' => 'required',
-            array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW))
-        )
+            array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW, self::TYPE_LINK))
+        ),
+        'lastavscan_time'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_quarantined'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -122,7 +136,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      *
      * @var array list of modlog omit fields
      */
-    protected $_modlogOmitFields = array('indexed_hash', 'preview_count', 'revision_size', 'available_revisions');
+    protected $_modlogOmitFields = array('indexed_hash', 'preview_count', 'preview_status', 'preview_error_count', 'revision_size', 'available_revisions');
 
     protected static $_isReplicable = true;
     

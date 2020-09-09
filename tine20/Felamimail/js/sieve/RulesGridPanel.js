@@ -303,6 +303,9 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     conditionsRenderer: function(value) {
         var result = '';
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get('Felamimail');
+        }
         
         // show only first condition
         if (value && value.length > 0) {
@@ -356,6 +359,8 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             newRecord.set('id', nextId);
             newRecord.id = nextId;
         } else {
+            // need to set data.id as well to make sure we don't get any duplicates here
+            newRecord.set('id', newRecord.id);
             this.store.remove(this.store.getById(newRecord.id));
         }
         

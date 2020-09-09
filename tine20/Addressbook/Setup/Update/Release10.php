@@ -6,9 +6,10 @@
  * @package     Addressbook
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
 class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**
@@ -20,10 +21,6 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $release9 = new Addressbook_Setup_Update_Release9($this->_backend);
-        $release9->update_9();
-        $release9->update_10();
-
         $this->setApplicationVersion('Addressbook', '10.1');
     }
 
@@ -76,7 +73,12 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
             </index>
         ');
 
-        $this->_backend->addIndex('addressbook', $declaration);
+        try {
+            $this->_backend->addIndex('addressbook', $declaration);
+        } catch (Exception $e) {
+            // might have already been added by \Setup_Controller::upgradeMysql564
+            Tinebase_Exception::log($e);
+        }
 
         $this->setTableVersion('addressbook', 24);
         $this->setApplicationVersion('Addressbook', '10.4');

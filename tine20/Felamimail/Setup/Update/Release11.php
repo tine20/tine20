@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -73,11 +73,55 @@ sieveFile
     }
 
     /**
+     * update to 11.2
+     *
+     * ensure vacation template folder is present
+     */
+    public function update_1()
+    {
+        if (Tinebase_Core::isReplicationMaster()) {
+            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'Felamimail',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            );
+            try {
+                Tinebase_FileSystem::getInstance()->stat($basepath . '/Vacation Templates');
+            } catch (Tinebase_Exception_NotFound $e) {
+                Felamimail_Setup_Initialize::createVacationTemplatesFolder();
+            }
+        }
+
+        $this->setApplicationVersion('Felamimail', '11.2');
+    }
+
+    /**
+     * update to 11.3
+     *
+     * Make vacation reason a longtext field
+     */
+    public function update_2()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>reason</name>
+                <!--Long text!-->
+                <length>2147483647</length>
+                <type>text</type>
+            </field>
+        ');
+
+        $this->_backend->alterCol('felamimail_sieve_vacation', $declaration);
+
+        $this->setTableVersion('felamimail_sieve_vacation', 4);
+        $this->setApplicationVersion('Felamimail', '11.3');
+    }
+
+    /**
      * update to 12.0
      *
      * @return void
      */
-    public function update_1()
+    public function update_3()
     {
         $this->setApplicationVersion('Felamimail', '12.0');
     }

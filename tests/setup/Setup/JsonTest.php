@@ -171,10 +171,12 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testGetRegistryData
+     *
+     * @group needsbuild
      */
     public function testGetRegistryData()
     {
-      $result = $this->_json->getRegistryData();
+        $result = $this->_json->getRegistryData();
       
         $this->assertTrue(is_array($result));
         $this->assertTrue(isset($result['configExists']));

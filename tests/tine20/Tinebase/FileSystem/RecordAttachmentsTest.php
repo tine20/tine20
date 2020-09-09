@@ -4,12 +4,12 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test class for Tinebase_User
+ * Test class for Tinebase_FileSystem_RecordAttachments
  */
 class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
 {
@@ -61,22 +61,42 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
     {
         $recordAttachments = Tinebase_FileSystem_RecordAttachments::getInstance();
         
-        $record = new Addressbook_Model_Contact(array('n_family' => Tinebase_Record_Abstract::generateUID()));
+        $record = new Addressbook_Model_Contact(array(
+            'n_family' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => Addressbook_Controller::getDefaultInternalAddressbook()
+        ));
         $record = Addressbook_Controller_Contact::getInstance()->create($record);
         
         $recordAttachments->addRecordAttachment($record, 'Test.txt', fopen(__FILE__, 'r'));
-        
+        $recordAttachments->addRecordAttachment($record, 'Test_xyz.txt', fopen(__FILE__, 'r'));
+
         $attachments = $this->testGetRecordAttachments($record);
-        self::assertEquals(1, count($attachments));
+        self::assertEquals(2, count($attachments));
 
         $adbJson = new Addressbook_Frontend_Json();
         $contactJson = $adbJson->getContact($record->getId());
+        self::assertEquals(2, count($contactJson['attachments']));
+        self::assertEquals('Test.txt', $contactJson['attachments'][0]['name']);
+        self::assertEquals('Test_xyz.txt', $contactJson['attachments'][1]['name']);
         static::assertTrue(isset($contactJson['attachments']) && isset($contactJson['attachments'][0]) &&
             isset($contactJson['attachments'][0]['path']));
         Tinebase_FileSystem::getInstance()->stat(Tinebase_FileSystem::getInstance()->
             getApplicationBasePath('Addressbook') . '/folders' . $contactJson['attachments'][0]['path']);
 
         return $record;
+    }
+
+    public function testRecordAttachmentNodeAcl()
+    {
+        $record = $this->testAddRecordAttachments();
+        $sclever = $this->_personas['sclever'];
+        Tinebase_Core::setUser($sclever);
+        $nodeId = $record->attachments->getFirstRecord()->getId();
+        $node = Tinebase_FileSystem::getInstance()->get($nodeId);
+        $nodePath = Tinebase_FileSystem::getInstance()->getPathOfNode($node, true);
+        $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($nodePath);
+        $result = Tinebase_FileSystem::getInstance()->checkPathACL($path);
+        self::assertTrue($result);
     }
 
     public function testRecordAttachmentFilter()
@@ -144,6 +164,7 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
             $record->setId(Tinebase_Record_Abstract::generateUID());
             
             $recordAttachments->addRecordAttachment($record, $i . 'Test.txt', fopen(__FILE__, 'r'));
+            $recordAttachments->addRecordAttachment($record, 'Test_xyz.txt', fopen(__FILE__, 'r'));
             
             $records->addRecord($record);
         }
@@ -151,7 +172,8 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
         $recordAttachments->getMultipleAttachmentsOfRecords($records);
         
         foreach ($records as $record) {
-            self::assertEquals(1, $record->attachments->count(), 'Attachments missing');
+            self::assertEquals(2, $record->attachments->count(), 'Attachments missing');
+            self::assertContains('Test.txt', $record->attachments->getFirstRecord()->name);
         }
     }
 

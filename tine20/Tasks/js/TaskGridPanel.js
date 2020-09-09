@@ -100,6 +100,9 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._("Summary"),
             width: 400,
             dataIndex: 'summary',
+            editor: new Ext.form.TextField({
+                allowBlank: false
+            }),
             quickaddField: new Ext.form.TextField({
                 emptyText: this.app.i18n._('Add a task...')
             })
@@ -131,7 +134,6 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                 app: 'Tasks',
                 keyFieldName: 'taskPriority',
-                value: 'NORMAL'
             })
         }, {
             id: 'percent',
@@ -155,12 +157,15 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             editor: {
                 xtype: 'widget-keyfieldcombo',
                 app: 'Tasks',
-                keyFieldName: 'taskStatus'
+                keyFieldName: 'taskStatus',
+                allowBlank: false
             },
             quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                 app: 'Tasks',
                 keyFieldName: 'taskStatus',
-                value: 'NEEDS-ACTION'
+                value: 'NEEDS-ACTION',
+                // TODO make this work ...
+                allowBlank: false
             })
         }, {
             id: 'completed',
@@ -180,7 +185,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 useAccountRecord: true,
                 blurOnSelect: true,
                 selectOnFocus: true,
-                allowEmpty: true,
+                allowBlank: true,
                 value: Tine.Tinebase.registry.get('currentAccount')
             })
         }].concat(this.getModlogColumns().concat(this.getCustomfieldColumns())));

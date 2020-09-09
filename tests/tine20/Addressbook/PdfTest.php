@@ -67,7 +67,6 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testContactPdf()
     {
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
         $contact = $this->_createContact();
         
         $pdf = new Addressbook_Export_Pdf();
@@ -81,12 +80,6 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         
         // check name and company name
         $this->assertEquals(1, preg_match("/Metaways Infosystems GmbH/", $pdfOutput), 'name not found');
-
-        // check notes (removed that because system notes are no longer shown in pdf)
-        /*
-        $translatedNoteString = $translate->_('created') . ' ' . $translate->_('by');
-        $this->assertEquals(1, preg_match("/$translatedNoteString/", $pdfOutput), 'note not found');
-        */   
     }
 
     /**
@@ -99,8 +92,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testContactPdfLocale()
     {
-        // set de_DE locale
-        Zend_Registry::set('locale', new Zend_Locale('de'));
+        Tinebase_Core::setLocale('de');
         
         $contact = $this->_createContact();
         
@@ -121,7 +113,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
     {
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
+            Addressbook_Model_Contact::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );

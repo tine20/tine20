@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -18,9 +18,11 @@
  */
 class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstract
 {
+    // FIXME why is this duplicated here? belongs to the model! i.e. \Tinebase_Model_ImportExportDefinition::SCOPE_SINGLE
     const SCOPE_SINGLE = 'single';
     const SCOPE_MULTI = 'multi';
     const SCOPE_HIDDEN = 'hidden';
+    const SCOPE_REPORT = 'report';
 
     /**
      * holds the instance of the singleton
@@ -84,7 +86,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      */
     public function getExportDefinitionsForApplication(Tinebase_Model_Application $_application)
     {
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
             array('field' => 'application_id',  'operator' => 'equals',  'value' => $_application->getId()),
             array('field' => 'type',            'operator' => 'equals',  'value' => 'export'),
         ));
@@ -93,7 +95,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         $fileSystem = Tinebase_FileSystem::getInstance();
         $toRemove = new Tinebase_Record_RecordSet('Tinebase_Model_ImportExportDefinition');
         /** @var Tinebase_Model_ImportExportDefinition $definition */
-        foreach($result as $definition) {
+        foreach ($result as $definition) {
             if ($definition->plugin_options) {
                 $config = Tinebase_ImportExportDefinition::getInstance()->
                     getOptionsAsZendConfigXml($definition, array());
@@ -105,14 +107,26 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                         $node = $fileSystem->stat(substr($config->template, 9));
                         if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $node->getId(),
                                 Tinebase_Model_Grants::GRANT_READ)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__
+                                . ' Removing export definition because'
+                                . ' user has no read grant on template file ' . $config->template);
                             $toRemove[] = $definition;
                         }
                     } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__
+                            . ' Removing export definition because'
+                            . ' exception was thrown: ' . $e->getMessage());
                         $toRemove[] = $definition;
                     }
                 } elseif (!empty($config->templateFileId)) {
                     if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $config->templateFileId,
                             Tinebase_Model_Grants::GRANT_READ)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__
+                            . ' Removing export definition because'
+                            . ' user has no read grant on template file id ' . $config->templateFileId);
                         $toRemove[] = $definition;
                     }
                 }
@@ -173,7 +187,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'plugin'                      => $config->plugin,
                 'icon_class'                  => $config->icon_class,
                 'scope'                       => (empty($config->scope) ||
-                        !in_array($config->scope, array(self::SCOPE_SINGLE, self::SCOPE_MULTI, self::SCOPE_HIDDEN))) ? '' : $config->scope,
+                        !in_array($config->scope, [
+                            self::SCOPE_SINGLE,
+                            self::SCOPE_MULTI,
+                            self::SCOPE_HIDDEN,
+                            self::SCOPE_REPORT,
+                        ])) ? '' : $config->scope,
                 'plugin_options'              => $content,
                 'filename'                    => $basename,
                 'favorite'                    => false == $config->favorite ? 0 : 1,
@@ -181,7 +200,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'order'                       => (int)$config->order,
                 'mapUndefinedFieldsEnable'    => $config->mapUndefinedFieldsEnable,
                 'mapUndefinedFieldsTo'        => $config->mapUndefinedFieldsTo,
-                'postMappingHook'             => $config->postMappingHook
+                'postMappingHook'             => $config->postMappingHook,
+                'filter'                      => $config->filter,
             ));
             
             return $definition;
@@ -211,17 +231,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $config = new Zend_Config_Xml($xmlConfig, /* section = */ null, /* runtime mods allowed = */ true);
             $cache->save($config, $cacheId);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Get Zend_Config_Xml from cache' . $cacheId);
             $config = $cache->load($cacheId);
         }
         
         if (! empty($_additionalOptions)) {
             $config->merge(new Zend_Config($_additionalOptions));
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Config: ' . print_r($config->toArray(), true));
         
         return $config;
     }
@@ -256,6 +271,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $existing = $this->getByName($definition->name, true);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $definition->setId($existing->getId());
+            $definition->is_deleted = $existing->is_deleted;
             $result = $this->_backend->update($definition);
             
         } catch (Tinebase_Exception_NotFound $tenf) {

@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
@@ -329,18 +329,6 @@ class Tinebase_DateTime extends DateTime
     public function getIso()
     {
         return $this->format("c");
-    }
-    
-    /**
-     * Returns the UNIX timestamp representation of this datetime.
-     * 
-     * NOTE: PHP < 5.3.0 dosn't have this fn, so we overwrite it
-     *
-     * @return string  UNIX timestamp
-     */
-    public function getTimestamp()
-    {
-        return $this->format('U');
     }
     
     /**
@@ -780,7 +768,7 @@ class Tinebase_DateTime extends DateTime
     }
     
     /**
-     * Returns the actual date as new date object
+     * Returns the current datetime
      *
      * @return Tinebase_DateTime
      */
@@ -788,6 +776,17 @@ class Tinebase_DateTime extends DateTime
     {
         return new Tinebase_DateTime();
     }
-    
+
+    /**
+     * returns the current date
+     *
+     * @return Tinebase_DateTime
+     */
+    public static function today()
+    {
+        $date = static::now();
+        $date->hasTime(false);
+        return $date;
+    }
 }
 

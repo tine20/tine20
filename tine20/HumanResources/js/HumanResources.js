@@ -10,9 +10,25 @@
 
 Ext.namespace('Tine.HumanResources');
 
+require('./DailyWTReportGridPanel');
+require('./MonthlyWTReportGridPanel');
+require('./MonthlyWTReportEditDialog');
+require('./FreeTimePlanningPanel');
+
 Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 
     hasMainScreen: true,
+
+    init: function() {
+        if (this.featureEnabled(('workingTimeAccounting'))) {
+            Tine.widgets.MainScreen.registerContentType('HumanResources', {
+                contentType: 'FreeTimePlanning',
+                text: 'Free Time Planning', // _('Free Time Planning'),
+                xtype: 'humanresources.freetimeplanning'
+            });
+
+        }
+    },
 
     /**
      * Get translated application title of the HumanResources App
@@ -26,61 +42,37 @@ Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 
     registerCoreData: function() {
         Tine.log.info('Tine.HumanResources.Application - registering core data ... ');
-        Tine.CoreData.Manager.registerGrid(
-            'hr_wtm',
-            Tine.widgets.grid.GridPanel,
-            {
-                recordClass: Tine.HumanResources.Model.WorkingTime,
-                app: this,
-                initialLoadAfterRender: false,
-                gridConfig: {
-                    autoExpandColumn: 'title',
-                    columns: [{
-                        id: 'title',
-                        header: this.i18n._("Title"),
-                        width: 300,
-                        sortable: true,
-                        dataIndex: 'title'
-                    }, {
-                        id: 'work_start',
-                        header: this.i18n._("Work Start"),
-                        width: 300,
-                        sortable: true,
-                        dataIndex: 'work_start',
-                        renderer: Tine.Tinebase.common.timeRenderer
-                    }, {
-                        id: 'work_end',
-                        header: this.i18n._("Work End"),
-                        width: 300,
-                        sortable: true,
-                        dataIndex: 'work_end',
-                        renderer: Tine.Tinebase.common.timeRenderer
-                    }]
-                }
-            }
-        );
+        Tine.CoreData.Manager.registerGrid('hr_wts', Tine.HumanResources.WorkingTimeSchemeGridPanel);
     }
 });
 
 /**
  * register special renderer for contract workingtime_json
  */
-Tine.widgets.grid.RendererManager.register('HumanResources', 'Contract', 'workingtime_json', function(v) {
+Tine.widgets.grid.RendererManager.register('HumanResources', 'Contract', 'workingtime_json', function(v, m, r) {
+    var _ = window.lodash;
+    // NOTE: workingtime_json is not longer used
+    v = _.get(r, 'data.working_time_scheme.json', 0);
+
     if (! v) {
         return 0;
     }
-    var object = Ext.decode(v);
+    var object = Ext.isString(v) ? Ext.decode(v) : v;
     var sum = 0;
     for (var i=0; i < object.days.length; i++) {
         sum = sum + parseFloat(object.days[i]);
     }
-    return sum;
+    return sum/3600;
 });
 
-Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTime', 'account_id', function(v) {
-    if (! v) {
-        return '';
+// working time schema translations
+Tine.widgets.grid.RendererManager.register('HumanResources', 'WorkingTimeScheme', 'type', function(v) {
+    var i18n = Tine.Tinebase.appMgr.get('HumanResources').i18n;
+    switch(String(v)) {
+        case 'template': v = i18n._('Template'); break;
+        case 'individual': v = i18n._('Individual'); break;
+        case 'shared': v = i18n._('Shared'); break;
     }
-    
-    return v.year;
+
+    return v;
 });

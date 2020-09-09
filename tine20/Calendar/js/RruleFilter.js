@@ -42,8 +42,6 @@ Tine.Calendar.RruleFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         var value  = new Tine.Calendar.RruleFilterValueField({
             app: this.app,
             filter: filter,
-            width: this.filterValueWidth,
-            id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el
         });

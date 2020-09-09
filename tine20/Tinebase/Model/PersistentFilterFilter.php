@@ -30,7 +30,7 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Grants
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = 'Tinebase_Model_PersistentFilter';
+    protected $_modelName = Tinebase_Model_PersistentFilter::class;
     
     /**
      * @var string acl table name
@@ -48,28 +48,22 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Grants
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'model'          => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
-    
-    /**
-     * add account id to filter
-     *
-     * @param Zend_Db_Select $select
-     * @param Tinebase_Backend_Sql_Abstract $backend
-     */
-    protected function _appendAclSqlFilter($select, $backend)
-    {
-        if (! $this->_isResolved) {
-            $user = Tinebase_Core::getUser();
-            
-            // if this is called from setup, no user instance exists
-            if (is_string($user)) {
-                return;
-            }
-            
-            $this->_appendAccountFilter($select, $backend, $user);
-            $this->_appendGrantsFilter($select, $backend, $user);
 
-            $this->_isResolved = TRUE;
+    /**
+     * appends custom filters to a given select object
+     *
+     * @param  Zend_Db_Select                    $select
+     * @param  Tinebase_Backend_Sql_Abstract     $backend
+     * @return void
+     */
+    public function appendFilterSql($select, $backend)
+    {
+        if ($this->_ignoreAcl) {
+            return;
         }
+
+        $this->_appendAccountFilter($select, $backend, Tinebase_Core::getUser());
+        parent::appendFilterSql($select, $backend);
     }
     
     /**

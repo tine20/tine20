@@ -101,13 +101,13 @@ Tine.ActiveSync.SyncDeviceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         maxLength: 40
                     }, {
                         columnWidth: 0.33,
-                        fieldLabel: this.app.i18n._('AS Version'),
+                        fieldLabel: this.app.i18n._('ActiveSync Version'),
                         name: 'acsversion',
                         readOnly: true,
                         maxLength: 40
                     }, {
                         columnWidth: 0.333,
-                        fieldLabel: this.app.i18n._('Useragent'),
+                        fieldLabel: this.app.i18n._('User agent'),
                         name: 'useragent',
                         readOnly: true,
                         maxLength: 40

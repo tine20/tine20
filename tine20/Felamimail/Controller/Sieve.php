@@ -46,7 +46,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @var Felamimail_Backend_Sieve
      */
     protected $_backend = NULL;
-    
+
+    protected $_doAclCheck = true;
+
     /**
      * Sieve script data backend
      *
@@ -94,7 +96,15 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         return self::$_instance;
     }
-    
+
+    public function doAclCheck($_value = null)
+    {
+        $oldValue = $this->_doAclCheck;
+        if (null !== $_value) {
+            $this->_doAclCheck = (bool)$_value;
+        }
+        return $oldValue;
+    }
     /**
      * get vacation for account
      * 
@@ -103,7 +113,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function getVacation($_accountId)
     {
-        $script = $this->_getSieveScript($_accountId);
+        $script = $this->getSieveScript($_accountId);
         $vacation = ($script !== NULL) ? $script->getVacation() : NULL;
         
         $result = new Felamimail_Model_Sieve_Vacation(array(
@@ -123,20 +133,21 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @param string|Felamimail_Model_Account $_accountId
      * @return NULL|Felamimail_Sieve_Backend_Abstract
      */
-    protected function _getSieveScript($_accountId)
+    public function getSieveScript($_accountId)
     {
         $script = NULL;
         if ($this->_scriptDataBackend === 'Sql') {
             try {
                 $script = new Felamimail_Sieve_Backend_Sql($_accountId);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                $serverScript = $this->_getServerSieveScript($_accountId);
-                if ($serverScript !== NULL) {
-                    $script = $this->_createNewSieveScript($_accountId, $serverScript);
-                }
             }
         } else {
             $script = $this->_getServerSieveScript($_accountId);
+        }
+
+        if (! $script) {
+            $serverScript = $this->_getServerSieveScript($_accountId);
+            $script = $this->_createNewSieveScript($_accountId, $serverScript);
         }
         
         return $script;
@@ -155,26 +166,32 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $result = NULL;
         $scripts = $this->_backend->listScripts();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));
    
         foreach (array($this->_scriptName, $this->_oldScriptName) as $scriptNameToFetch) {
             if (count($scripts) > 0 && (isset($scripts[$scriptNameToFetch]) || array_key_exists($scriptNameToFetch, $scripts))) {
                 $scriptName = $scripts[$scriptNameToFetch]['name'];
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
                 
                 $script = $this->_backend->getScript($scriptName);
                 if ($script) {
                     if ($scriptNameToFetch == $this->_oldScriptName) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got old SIEVE script for migration.');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' Got old SIEVE script for migration.');
                     }
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Got SIEVE script: ' . $script);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__ . ' Got SIEVE script: ' . $script);
                     return new Felamimail_Sieve_Backend_Script($script);
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not get SIEVE script: ' . $scriptName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' Could not get SIEVE script: ' . $scriptName);
                 }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No relevant SIEVE scripts found.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' No relevant SIEVE scripts found.');
             }
         }
         
@@ -208,10 +225,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_vacation->getId());
-        if ($account->user_id !== Tinebase_Core::getUser()->getId()) {
-            throw new Tinebase_Exception_AccessDenied('It is not allowed to set the vacation message of another user.');
-        }
-        
+        $this->_checkAccountEditGrant($account);
+
         $this->_setSieveBackendAndAuthenticate($account);
         $this->_addVacationUserData($_vacation, $account);
         $this->_checkCapabilities($_vacation);
@@ -219,20 +234,37 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         $fsv = $_vacation->getFSV();
         
-        $script = $this->_getSieveScript($account);
+        $script = $this->getSieveScript($account);
         if ($script === NULL) {
             $script = $this->_createNewSieveScript($account);
         }
         $script->setVacation($fsv);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
         
         $this->_putScript($account, $script);
         Felamimail_Controller_Account::getInstance()->setVacationActive($account, $_vacation->enabled);
         
         return $this->getVacation($account);
     }
-    
+
+    /**
+     * @param $account
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkAccountEditGrant($account)
+    {
+        if ($this->_doAclCheck) {
+            if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+                Felamimail_Controller_Account::getInstance()->checkGrantForSharedAccount($account,
+                    Felamimail_Model_AccountGrants::GRANT_EDIT);
+            } else if ($account->user_id !== Tinebase_Core::getUser()->getId()) {
+                throw new Tinebase_Exception_AccessDenied('It is not allowed to edit the account of another user.');
+            }
+        }
+    }
+
     /**
      * add addresses and from to vacation
      * 
@@ -267,16 +299,24 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     protected function _getSystemAccountVacationAddresses(Felamimail_Model_Account $account)
     {
         $addresses = array();
-        $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        try {
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+        } catch (Tinebase_Exception_NotFound $e) {
+            $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+        }
         
-        $addresses[] = (! empty(Tinebase_Core::getUser()->accountEmailAddress)) ? Tinebase_Core::getUser()->accountEmailAddress : $account->email;
+        $addresses[] = (! empty($fullUser->accountEmailAddress)) ? $fullUser->accountEmailAddress : $account->email;
         if ($fullUser->smtpUser && ! empty($fullUser->smtpUser->emailAliases)) {
-            $addresses = array_merge($addresses, $fullUser->smtpUser->emailAliases);
+            $addresses = array_merge($addresses, $fullUser->smtpUser->getAliasesAsEmails());
         }
         
         // append all valid domains if nessesary
         $systemAccountConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         foreach ($addresses as $idx => $address) {
+            if (is_array($address)) {
+                // might be an array with dispatch_address + email keys
+                $address = $address['email'];
+            }
             if (! strpos($address, '@')) {
                 $addresses[$idx] = $address . '@' . $systemAccountConfig['primarydomain'];
                 if ($systemAccountConfig['secondarydomains']) {
@@ -334,8 +374,15 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         if ($this->_isDbmailSieve()) {
             // dbmail seems to have problems with different subjects and sends vacation responses to the same recipients again and again
+            $account = $_vacation->account_id instanceof Felamimail_Model_Account ? $_vacation->account_id :
+                Felamimail_Controller_Account::getInstance()->get($_vacation->account_id);
+            try {
+                $fullUser = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+            } catch (Tinebase_Exception_NotFound $e) {
+                $fullUser = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId());
+            }
             $translate = Tinebase_Translation::getTranslation('Felamimail');
-            $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), Tinebase_Core::getUser()->accountFullName);
+            $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), $fullUser->accountFullName);
         }
     }
     
@@ -449,7 +496,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_Rule');
         
-        $script = $this->_getSieveScript($_accountId);
+        $script = $this->getSieveScript($_accountId);
         if ($script !== NULL) {
             foreach ($script->getRules() as $fsr) {
                 $rule = new Felamimail_Model_Sieve_Rule();
@@ -473,7 +520,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function setRules($_accountId, Tinebase_Record_RecordSet $_rules)
     {
-        $script = $this->_getSieveScript($_accountId);
+        $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $this->_checkAccountEditGrant($account);
+        $script = $this->getSieveScript($_accountId);
         
         if ($script === NULL) {
             $script = $this->_createNewSieveScript($_accountId);
@@ -503,29 +552,22 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _checkRule($_rule, $_accountId)
     {
-        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $account = ($_accountId instanceof Felamimail_Model_Account)
+            ? $_accountId
+            : Felamimail_Controller_Account::getInstance()->get($_accountId);
+
         if ($_rule->action_type === Felamimail_Sieve_Rule_Action::REDIRECT && $_rule->enabled) {
-            if ($account->email === $_rule->action_argument) {
-                throw new Felamimail_Exception_Sieve('It is not allowed to redirect emails to self (' . $account->email . ')! Please change the recipient.');
+            $redirectEmails = is_array($_rule->action_argument) ? (array) $_rule->action_argument['emails'] : [$_rule->action_argument];
+
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            if (in_array($account->email, $redirectEmails)) {
+                throw new Felamimail_Exception_Sieve($translate->_('It is not allowed to redirect emails to self! Please change the recipient.'));
             }
             if (Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_REDIRECT_ONLY_INTERNAL}) {
-                $success = false;
-                $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
-                $allowedDomains = array();
-                if (isset($smtpConfig['primarydomain'])) {
-                    $allowedDomains[] = $smtpConfig['primarydomain'];
-                }
-                if (isset($smtpConfig['secondarydomains'])) {
-                    $allowedDomains[] = array_merge($allowedDomains, explode(',', $smtpConfig['secondarydomains']));
-                }
-                foreach ($allowedDomains as $allowedDomain) {
-                    if (strpos($_rule->action_argument, $allowedDomain) !== false) {
-                        $success = true;
-                        break;
+                foreach ($redirectEmails as $email) {
+                    if (false === Tinebase_EmailUser::checkDomain($email)) {
+                        throw new Felamimail_Exception_Sieve($translate->_('Redirects to external email domains are not allowed.'));
                     }
-                }
-                if (false === $success) {
-                    throw new Felamimail_Exception_Sieve('redirects only to the following domains allowed: ' . join(',', $whiteList));
                 }
             }
         }
@@ -563,6 +605,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($vacation->toArray(), TRUE));
 
+        if (empty($vacation->account_id)) {
+            $vacation->account_id = Felamimail_Controller_Account::getInstance()->getSystemAccount();
+        }
         $message = $this->_getMessageFromTemplateFile($vacation->template_id);
         $message = $this->_doMessageSubstitutions($vacation, $message);
         
@@ -605,7 +650,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             }
         }
         try {
-            $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+            $account = $vacation->account_id instanceof Felamimail_Model_Account ? $vacation->account_id :
+                Felamimail_Controller_Account::getInstance()->get($vacation->account_id);
+            $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->user_id);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             $ownContact = NULL;
@@ -673,7 +720,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
 
         $fileSystem = Tinebase_FileSystem::getInstance();
         $translate = Tinebase_Translation::getTranslation('Felamimail');
-        $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $locale = Tinebase_Core::getLocale();
         $subject = $translate->_('You have new mail from ', $locale);
         if (empty($adminBounceEmail = Felamimail_Config::getInstance()->
                 {Felamimail_Config::SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL}) ||
@@ -715,26 +762,26 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             Felamimail_Controller_Account::getInstance()->get($_accountId);
         }
 
+        $this->_updateScriptParts($_accountId, $_scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION);
+    }
+
+    protected function _updateScriptParts($_accountId, Tinebase_Record_RecordSet $_scriptParts, $type)
+    {
         if ($_scriptParts->count() !==
-                $_scriptParts->filter('type', Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION)->count()) {
+            $_scriptParts->filter('type', $type)->count()) {
             throw new Tinebase_Exception_UnexpectedValue('all script parts need to be of type '
-                . Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION);
+                . $type);
         }
         $_scriptParts->account_id = $_accountId;
 
-        $script = $this->_getSieveScript($_accountId);
-
-        if (null === $script) {
-            $script = $this->_createNewSieveScript($_accountId);
-        }
+        $script = $this->getSieveScript($_accountId);
 
         try {
             $script->readScriptData();
         } catch(Tinebase_Exception_NotFound $tenf) {}
 
         $oldScripParts = $script->getScriptParts();
-        $oldScripParts->removeRecords($oldScripParts->filter('type',
-            Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION));
+        $oldScripParts->removeRecords($oldScripParts->filter('type', $type));
         $oldScripParts->merge($_scriptParts);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -743,5 +790,54 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         }
 
         $this->_putScript($_accountId, $script);
+    }
+
+    /**
+     * set auto move notification script for account
+     *
+     * @param string|Felamimail_Model_Account $_account
+     */
+    public function updateAutoMoveNotificationScript($_account)
+    {
+        // get account user and check forward_only - disable sieve if forward_only address
+        if ($_account->user_id) {
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserById($_account->user_id);
+                if (isset($user->smtpUser) && $user->emailForwardOnly) {
+                    $_account->sieve_notification_move = false;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
+        }
+
+        $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
+        if (isset($_account->sieve_notification_move)
+            && $_account->sieve_notification_move
+            && ! empty($_account->sieve_notification_move_folder)
+        ) {
+            $scriptParts->addRecord(new Felamimail_Model_Sieve_ScriptPart([
+                'account_id' => $_account,
+                'type' => Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION,
+                'script' => 'if header :contains "X-Tine20-Type" "Notification" {
+    fileinto :create "' . $_account->sieve_notification_move_folder . '";
+}',
+                'name' => 'auto_move_notification',
+                'requires' => ['"fileinto"', '"mailbox"'],
+            ]));
+        }
+        $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION);
+    }
+
+    /**
+     * set adb list script for account
+     *
+     * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Sieve_ScriptPart $_scriptPart
+     */
+    public function setAdbListScript(Felamimail_Model_Account $_account, Felamimail_Model_Sieve_ScriptPart $_scriptPart)
+    {
+        $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
+        $scriptParts->addRecord($_scriptPart);
+        $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST);
     }
 }

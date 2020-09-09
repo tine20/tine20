@@ -6,7 +6,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -32,6 +32,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      * @var string
      */
     protected $_applicationName;
+
+    protected $_model;
 
     /**
      * container model name
@@ -340,7 +342,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             }
         } else {
             $container = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_getApplicationName(),
+                $this->_model,
                 (string) $name,
                 Tinebase_Model_Container::TYPE_SHARED
             );
@@ -423,7 +425,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
         } else {
             $container = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_getApplicationName(),
+                $this->_model,
                 (string) $name,
                 Tinebase_Model_Container::TYPE_PERSONAL,
                 $accountId
@@ -591,7 +593,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 if ($this->_getApplicationName() === 'Filemanager' || $this->_clientSupportsDelegations()) {
                     $containers = $this->_containerController->getPersonalContainer(
                         Tinebase_Core::getUser(),
-                        $this->_getApplicationName(),
+                        $this->_model,
                         $accountId,
                         array(
                             Tinebase_Model_Grants::GRANT_READ,
@@ -600,7 +602,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                     );
                 } else {
                     // NOTE: seems to be the expected behavior for non-delegation clients
-                    $containers = $this->_containerController->getContainerByACL(Tinebase_Core::getUser(), $this->_getApplicationName(),  array(
+                    $containers = $this->_containerController->getContainerByACL(Tinebase_Core::getUser(), $this->_model, array(
                         Tinebase_Model_Grants::GRANT_READ,
                         Tinebase_Model_Grants::GRANT_SYNC
                     ));
@@ -630,7 +632,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     {
         $containers = $this->_containerController->getSharedContainer(
             Tinebase_Core::getUser(),
-            $this->_getApplicationName(),
+            $this->_model ?: $this->_getApplicationName(),
             array(
                 Tinebase_Model_Grants::GRANT_READ,
                 Tinebase_Model_Grants::GRANT_SYNC
@@ -800,9 +802,57 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             __METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . ' ' . print_r($requestedProperties, true));
         
         $response = array();
+        $pathParts = $this->_getPathParts();
     
         foreach ($requestedProperties as $property) {
             switch ($property) {
+                // owncloud specific
+                // owncloud does send paths starting with /webdav ... some comments here say that would be not ok?
+                case '{http://owncloud.org/ns}size':
+                    if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
+                        /*if (count($pathParts) === 1) {
+                            // webdav -> root file system ... what to return? all? all visible? complicated...
+                            // and why return anything? it will not be displayed anyway?
+                        } else*/if (count($pathParts) === 2) {
+                            $size = 0;
+                            foreach ($this->getChildren() as $node) {
+                                $size += $node->getSize();
+                            }
+                            $response[$property] = $size;
+                        }
+                    }
+                    break;
+
+                case '{DAV:}quota-available-bytes':
+                    if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
+                        if (count($pathParts) === 1) {
+                            // webdav -> root file system ...
+                            if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes() &&
+                                    0 === Tinebase_FileSystem_Quota::getPersonalQuotaBytes()) {
+                                // unlimited: RFC 4331: If a resource has no quota enforced or unlimited storage
+                                // ("infinite limits"), the server MAY choose not to return this property
+                                break;
+                            }
+                            $response[$property] = Tinebase_FileSystem_Quota::getPersonalQuotaBytes() ?:
+                                Tinebase_FileSystem_Quota::getRootFreeBytes();
+                        }
+                    }
+                    break;
+
+                case '{DAV:}quota-used-bytes':
+                    if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
+                        if (count($pathParts) === 1) {
+                            // webdav -> root file system ...
+                            if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes()) {
+                                // owncloud displays garbage if we dont have a quota-available-bytes value
+                                // so better not return something here
+                                break;
+                            }
+                            $response[$property] = Tinebase_FileSystem_Quota::getRootUsedBytes();
+                        }
+                    }
+                    break;
+
                 case '{DAV:}displayname':
                     if (count($this->_getPathParts()) === 2 && $this->getName() !== Tinebase_Model_Container::TYPE_SHARED) {
                         try {
@@ -960,11 +1010,15 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
         try {
             if ($this->_containerModel === 'Tinebase_Model_Container') {
+                if (empty($this->_model)) {
+                    throw new Tinebase_Exception_Backend('model needs to be known to create a container!');
+                }
+
                 $newContainer = new Tinebase_Model_Container(array_merge($properties, array(
                     'type' => $containerType,
                     'backend' => 'Sql',
                     'application_id' => $this->_getApplication()->getId(),
-                    'model' => Tinebase_Core::getApplicationInstance($this->_getApplicationName())->getDefaultModel()
+                    'model' => $this->_model,
                 )));
                 $container = Tinebase_Container::getInstance()->addContainer($newContainer);
 
@@ -1033,6 +1087,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     /**
      * @param $_id
      * @return Tinebase_Model_FullUser
+     * @throws \Sabre\DAV\Exception\Forbidden
      */
     protected function _getUser($_id)
     {
@@ -1043,7 +1098,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         }
 
         if ($this->_useIdAsName) {
-            $contact = Addressbook_Controller_Contact::getInstance()->get($_id);
+            try {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($_id);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                throw new \Sabre\DAV\Exception\Forbidden('No permission to get user / contact');
+            }
             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $contact->account_id, 'Tinebase_Model_FullUser');
         } else {
             if ($this->_useLoginAsFolderName()) {

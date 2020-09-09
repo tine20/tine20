@@ -5,9 +5,10 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
 class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 {
     /**
@@ -833,6 +834,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_16()
     {
+        $this->setContainerModels();
         $this->_addIsDeletedToTreeNodes();
 
         // this is needed for filesystem operations
@@ -2306,17 +2308,20 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_48()
     {
-        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql) {try {
-            $this->_backend->addIndex('customfield', new Setup_Backend_Schema_Index_Xml('<index>
-                    <name>value_index</name>
-                    <length>255</length>
-                    <field>
-                        <name>value</name>
-                    </field>
-                </index>'));
-            $this->setTableVersion('customfield', 5);
-        } catch (Exception $e) {Tinebase_Exception::log($e);
-            }}
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql && $this->getTableVersion('customfield') < 5) {
+            try {
+                $this->_backend->addIndex('customfield', new Setup_Backend_Schema_Index_Xml('<index>
+                        <name>value_index</name>
+                        <length>255</length>
+                        <field>
+                            <name>value</name>
+                        </field>
+                    </index>'));
+                $this->setTableVersion('customfield', 5);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
         $this->setApplicationVersion('Tinebase', '10.49');
     }
 
@@ -2427,15 +2432,10 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_53()
     {
         if (Setup_Backend_Factory::factory()->supports('mariadb >= 10.0.5')) {
-            ob_start();
-            $cli = new Setup_Frontend_Cli();
-            $opts = new Zend_Console_Getopt(['upgradeMysql564' => []], ['--upgradeMysql564']);
-            $cli->handle($opts, false);
-            $result = ob_get_clean();
-            ob_end_clean();
+            $failures = Setup_Controller::getInstance()->upgradeMysql564();
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' upgradeMysql564 returned: '
-                    . $result);
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' upgradeMysql564 failures: '
+                    . print_r($failures, true));
         }
 
         $this->setApplicationVersion('Tinebase', '10.54');
@@ -2505,103 +2505,197 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_57()
     {
-        // turn on FS modLog temporarily
-        $oldFsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
-        if (!$oldFsConfig) throw new Tinebase_Exception('did not find filesystem config!');
-        if (!$oldFsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
-            $fsConfig = clone $oldFsConfig;
-            $fsConfig->unsetParent();
-            $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
-            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
-        }
-
-        $doSleep = false;
-        $fsController = Tinebase_FileSystem::getInstance();
-        $fsController->resetBackends();
-
-        do {
-            $cont = false;
-            $stmt = $this->_db->select()->from(['n1' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.id')
-                ->join(['n2' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.parent_id = n2.parent_id AND '.
-                    'n1.name = n2.name AND n1.id <> n2.id AND n1.deleted_time IS NULL AND n2.deleted_time IS NULL',
-                    ['id2' => 'n2.id'])->limit(1000)->query();
-
-            if ($doSleep) sleep(1);
-            $doSleep = true;
-            $namesProcessed = [];
-
-            foreach ($stmt->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
-                try {
-                    $node = $fsController->get($row['id']);
-                } catch(Tinebase_Exception_NotFound $tenf) { continue; }
-                $key = $node->parent_id . $node->name;
-                if (isset($namesProcessed[$key])) continue;
-                $namesProcessed[$key] = true;
-
-                try {
-                    $node2 = $fsController->get($row['id2']);
-                } catch(Tinebase_Exception_NotFound $tenf) { continue; }
-                if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE && $node2->type  ===
-                        Tinebase_Model_Tree_FileObject::TYPE_FILE) {
-                    if (empty($node->hash) || !is_file($node->getFilesystemPath())) {
-                        // delete $node
-                    } elseif (empty($node2->hash) || !is_file($node2->getFilesystemPath())) {
-                        // delete $node2
-                        $node = $node2;
-                    } elseif ($node2->last_modified_time < $node->last_modified_time) {
-                        // delete node2
-                        $node = $node2;
-                    }
-                } else {
-                    if ($node2->last_modified_time < $node->last_modified_time) {
-                        // delete node2
-                        $node = $node2;
-                    }
-                }
-
-                if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
-                    $fsController->deleteFileNode($node);
-                } else {
-                    $fsController->_getTreeNodeBackend()->softDelete($node->getId());
-
-                    // delete object only, if no other tree node refers to it, really?
-                    if ($fsController->_getTreeNodeBackend()->getObjectCount($node->object_id) == 0) {
-                        $fsController->getFileObjectBackend()->softDelete($node->object_id);
-                    }
-                }
-
-                $cont = true;
+        // skip with PGSQL
+        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            // turn on FS modLog temporarily
+            $oldFsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
+            if (!$oldFsConfig) throw new Tinebase_Exception('did not find filesystem config!');
+            if (!$oldFsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+                $fsConfig = clone $oldFsConfig;
+                $fsConfig->unsetParent();
+                $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
+                Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
             }
-        } while ($cont);
 
-        $this->_db->update(SQL_TABLE_PREFIX . 'tree_nodes', ['deleted_time' => '1970-01-01 00:00:00'],
-            'deleted_time IS NULL');
+            $doSleep = false;
+            $fsController = Tinebase_FileSystem::getInstance();
+            $fsController->resetBackends();
 
-        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+            do {
+                $cont = false;
+                $stmt = $this->_db->select()->from(['n1' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.id')
+                    ->join(['n2' => SQL_TABLE_PREFIX . 'tree_nodes'], 'n1.parent_id = n2.parent_id AND ' .
+                        'n1.name = n2.name AND n1.id <> n2.id AND (n1.deleted_time IS NULL OR n1.deleted_time =
+                    "1970-01-01 00:00:00") AND (n2.deleted_time IS NULL OR n2.deleted_time = "1970-01-01 00:00:00")',
+                        ['id2' => 'n2.id'])->limit(1000)->query();
+
+                if ($doSleep) sleep(1);
+                $doSleep = true;
+                $namesProcessed = [];
+
+                foreach ($stmt->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+                    try {
+                        $node = $fsController->get($row['id']);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue;
+                    }
+                    $key = $node->parent_id . $node->name;
+                    if (isset($namesProcessed[$key])) continue;
+                    $namesProcessed[$key] = true;
+
+                    try {
+                        $node2 = $fsController->get($row['id2']);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        continue;
+                    }
+                    if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE && $node2->type ===
+                        Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+                        if (empty($node->hash) || !is_file($node->getFilesystemPath())) {
+                            // delete $node
+                        } elseif (empty($node2->hash) || !is_file($node2->getFilesystemPath())) {
+                            // delete $node2
+                            $node = $node2;
+                        } elseif ($node2->last_modified_time < $node->last_modified_time) {
+                            // delete node2
+                            $node = $node2;
+                        }
+                    } else {
+                        if ($node2->last_modified_time < $node->last_modified_time) {
+                            // delete node2
+                            $node = $node2;
+                        }
+                    }
+
+                    if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+                        $fsController->deleteFileNode($node);
+                    } else {
+                        $fsController->_getTreeNodeBackend()->softDelete($node->getId());
+
+                        // delete object only, if no other tree node refers to it, really?
+                        if ($fsController->_getTreeNodeBackend()->getObjectCount($node->object_id) == 0) {
+                            $fsController->getFileObjectBackend()->softDelete($node->object_id);
+                        }
+                    }
+
+                    $cont = true;
+                }
+            } while ($cont);
+
+            $this->_db->update(SQL_TABLE_PREFIX . 'tree_nodes', ['deleted_time' => '1970-01-01 00:00:00'],
+                'deleted_time IS NULL');
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
                     <name>deleted_time</name>
                     <type>datetime</type>
                     <default>1970-01-01 00:00:00</default>
                     <notnull>true</notnull>
                 </field>');
 
-        $this->_backend->alterCol('tree_nodes', $declaration);
-        if ($this->getTableVersion('tree_nodes') < 9) {
-            $this->setTableVersion('tree_nodes', 9);
-        }
+            $this->_backend->alterCol('tree_nodes', $declaration);
+            if ($this->getTableVersion('tree_nodes') < 9) {
+                $this->setTableVersion('tree_nodes', 9);
+            }
 
-        if (isset($fsConfig)) {
-            Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $oldFsConfig);
-            $fsController->resetBackends();
+            if (isset($fsConfig)) {
+                Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $oldFsConfig);
+                $fsController->resetBackends();
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ .' Update skipped with PGSQL - You need to migrate to MySQL soon!');
         }
 
         $this->setApplicationVersion('Tinebase', '10.58');
     }
 
     /**
-     * update to 11.0
+     * update to 10.59
+     *
+     * fix role name unique key
      */
     public function update_58()
     {
+        // skip with PGSQL
+        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $counter = 1;
+            $processedIds = [];
+            do {
+                $cont = false;
+                $stmt = $this->_db->select()->from(['r1' => SQL_TABLE_PREFIX . 'roles'], ['r1.id', 'r1.name'])
+                    ->join(['r2' => SQL_TABLE_PREFIX . 'roles'], 'r1.name = r2.name AND r1.id <> r2.id AND
+                    (r1.deleted_time IS NULL OR r1.deleted_time = "1970-01-01 00:00:00") AND
+                    (r2.deleted_time IS NULL OR r2.deleted_time = "1970-01-01 00:00:00")',
+                        ['id2' => 'r2.id'])->limit(1000)->query();
+                foreach ($stmt->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+                    if (isset($processedIds[$row[0]]) || isset($processedIds[$row[2]])) {
+                        continue;
+                    }
+                    $processedIds[$row[0]] = true;
+                    $processedIds[$row[2]] = true;
+                    $cont = true;
+                    $this->_db->update(SQL_TABLE_PREFIX . 'roles', ['name' => $row[1] . '_' . $counter],
+                        'id = "' . $row[0] . '"');
+                }
+                $counter += 1;
+                $processedIds = [];
+            } while ($cont && $counter < 100);
+
+            $this->_db->update(SQL_TABLE_PREFIX . 'roles', ['deleted_time' => '1970-01-01 00:00:00'],
+                'deleted_time IS NULL');
+
+            $this->_backend->alterCol('roles', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+                <notnull>true</notnull>
+                <default>1970-01-01 00:00:00</default>
+            </field>'));
+
+            if ($this->getTableVersion('roles') < 5) {
+                $this->setTableVersion('roles', 5);
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ .' Update skipped with PGSQL - You need to migrate to MySQL soon!');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.59');
+    }
+
+    /**
+     * update to 11.0
+     */
+    public function update_59()
+    {
         $this->setApplicationVersion('Tinebase', '11.0');
+    }
+
+    public function setContainerModels()
+    {
+        $models = [];
+        $containers = $this->_db->select()->from(SQL_TABLE_PREFIX . 'container', ['id', 'application_id'])
+            ->where($this->_db->quoteIdentifier('model') . ' IS NULL OR ' . $this->_db->quoteIdentifier('model')
+                . ' = ' . $this->_db->quote(''))->query()->fetchAll(Zend_DB::FETCH_ASSOC);
+
+        foreach ($containers as $container) {
+            if (!isset($models[$container['application_id']])) {
+                throw new Tinebase_Exception('you have to update to the max minor version of each major version. ' .
+                    'Do not make major version jumps. This is what happens. No other way than doing it right.');
+            }
+
+            if ($models[$container['application_id']]) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Setting model ' . $models[$container['application_id']] . ' for container ' . $container['id']);
+                }
+                $this->_db->update(SQL_TABLE_PREFIX . 'container', ['model' => $models[$container['application_id']]],
+                    $this->_db->quoteInto('id = ?', $container['id']));
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Could not find default model for app id ' . $container['application_id']);
+                }
+            }
+        }
     }
 }

@@ -110,7 +110,7 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account);
+                    $this->deletePersonalFolder($_eventObject->account, Projects_Model_Project::class);
                 }
                 break;
         }

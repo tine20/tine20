@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -329,5 +329,28 @@ class Sales_PurchaseInvoiceTest extends TestCase
         ;
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals(Tinebase_DateTime::now()->setTime(0,0,0), $search['results'][0]['due_at']);
+    }
+
+    public function testDuplicateCheckOnUpdate()
+    {
+        $invoice1 = $this->_createPurchaseInvoice();
+
+        $invoice2 = $invoice1;
+        unset($invoice2['id']);
+        $invoice2['number'] = 'SomethingElse';
+        $invoice2['price_total'] = 290.3;
+
+        // create a non-duplicate first
+        $invoice2 = $this->_json->savePurchaseInvoice($invoice2);
+
+        // now we create a duplicate conflict
+        $invoice2['number'] = $invoice1['number'];
+        $invoice2['price_total'] = $invoice1['price_total'];
+        try {
+            $this->_json->savePurchaseInvoice($invoice2);
+            self::fail('should throw Tinebase_Exception_Duplicate');
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            self::assertEquals('Duplicate record(s) found', $ted->getMessage());
+        }
     }
 }

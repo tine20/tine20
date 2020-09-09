@@ -1,3 +1,4 @@
+#: js/FilePickerDialog.js:114
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
@@ -26,57 +27,61 @@ msgstr "Submit"
 msgid "File not found!"
 msgstr "File not found!"
 
-#: Frontend/Download.php:196 Frontend/Download.php:223 js/FilePicker.js:275
-#: js/NodeGridPanel.js:237 js/NodeEditDialog.js:134
-#: js/NotificationGridPanel.js:126
+#: Frontend/Download.php:196 Frontend/Download.php:223 js/FilePicker.js:414
+#: js/NodeGridPanel.js:234 js/NodeEditDialog.js:139
+#: js/NotificationGridPanel.js:127
 msgid "Name"
 msgstr "Name"
 
-#: Frontend/Download.php:197 Frontend/Download.php:224 js/FilePicker.js:282
-#: js/NodeGridPanel.js:244 js/UsagePanel.js:39
+#: Frontend/Download.php:197 Frontend/Download.php:224 js/FilePicker.js:421
+#: js/NodeGridPanel.js:241 js/UsagePanel.js:39
 msgid "Size"
 msgstr "Size"
 
-#: Frontend/Download.php:198 Frontend/Download.php:225 js/NodeEditDialog.js:188
+#: Frontend/Download.php:198 Frontend/Download.php:225 js/NodeEditDialog.js:193
 msgid "Last Modified"
 msgstr "Last Modified"
 
-#: Frontend/Download.php:199 js/NodeEditDialog.js:209 js/Model.js:607
+#: Frontend/Download.php:199 js/NodeEditDialog.js:214 js/Model.js:636
 msgid "Description"
 msgstr "Description"
 
-#: Frontend/Download.php:200 js/FilePicker.js:297 js/NodeGridPanel.js:259
-#: js/NodeEditDialog.js:61 js/Model.js:26
+#: Frontend/Download.php:200 js/FilePicker.js:436 js/NodeGridPanel.js:256
+#: js/NodeEditDialog.js:61 js/Model.js:28
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Folder"
 msgstr[1] "Folders"
 
-#: Frontend/Download.php:226 js/NodeEditDialog.js:61 js/Model.js:23
+#: Frontend/Download.php:226 js/NodeEditDialog.js:61 js/Model.js:25
 msgid "File"
 msgid_plural "Files"
 msgstr[0] "File"
 msgstr[1] "Files"
 
 #: Preference.php:61
-msgid "Row double click default"
-msgstr "Row double click default"
+msgid "Default behavior when double-clicking on a Row"
+msgstr "Default behavior when double-clicking on a Row"
 
 #: Preference.php:62
-msgid "Defines which action should be executed on double click by default?"
-msgstr "Defines which action should be executed on double click by default?"
+msgid "Defines which action should be executed by default when double-clicked."
+msgstr "Defines which action should be executed by default when double-clicked."
 
-#: js/FilePicker.js:289 js/NodeGridPanel.js:251 js/Model.js:605
-msgid "Contenttype"
-msgstr "Contenttype"
+#: js/FilePicker.js:217
+msgid "Invalid Filename"
+msgstr "Invalid Filename"
+
+#: js/FilePicker.js:428 js/NodeGridPanel.js:248
+msgid "Content type"
+msgstr "Content type"
 
 #: js/PathFilterModel.js:50
 msgid "path"
 msgstr "path"
 
 #: js/FilePublishedDialog.js:58 js/DownloadLinkGridPanel.js:239
-msgid "Url"
-msgstr "Url"
+msgid "URL"
+msgstr "URL"
 
 #: js/FilePublishedDialog.js:66 js/FilePublishedDialog.js:109
 msgid "Password"
@@ -90,7 +95,7 @@ msgstr "Valid until"
 msgid "Send as e-mail"
 msgstr "Send as e-mail"
 
-#: js/FilePublishedDialog.js:106 js/GrantsPanel.js:55
+#: js/FilePublishedDialog.js:106 js/Model.js:82
 msgid "Download"
 msgstr "Download"
 
@@ -98,7 +103,7 @@ msgstr "Download"
 msgid "Create Public Link"
 msgstr "Create Public Link"
 
-#: js/DownloadLinkGridPanel.js:76 js/NotificationGridPanel.js:230
+#: js/DownloadLinkGridPanel.js:76 js/NotificationGridPanel.js:231
 msgid "Remove record"
 msgstr "Remove record"
 
@@ -114,13 +119,13 @@ msgstr "Deleting Download Links..."
 msgid "Deleting Download Link..."
 msgstr "Deleting Download Link..."
 
-#: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:274
-#: js/NodeEditDialog.js:173
+#: js/DownloadLinkGridPanel.js:255 js/NodeGridPanel.js:271
+#: js/NodeEditDialog.js:178
 msgid "Created By"
 msgstr "Created By"
 
-#: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:267
-#: js/NodeEditDialog.js:176 js/Model.js:606
+#: js/DownloadLinkGridPanel.js:263 js/NodeGridPanel.js:264
+#: js/NodeEditDialog.js:181 js/Model.js:635
 msgid "Creation Time"
 msgstr "Creation Time"
 
@@ -132,15 +137,15 @@ msgstr "Expiration Time"
 msgid "Access Count"
 msgstr "Access Count"
 
-#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:281
+#: js/DownloadLinkGridPanel.js:287 js/NodeGridPanel.js:278
 msgid "Last Modified Time"
 msgstr "Last Modified Time"
 
-#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:288
+#: js/DownloadLinkGridPanel.js:295 js/NodeGridPanel.js:285
 msgid "Last Modified By"
 msgstr "Last Modified By"
 
-#: js/RevisionPanel.js:34 js/Model.js:95
+#: js/RevisionPanel.js:34 js/Model.js:106
 msgid "Revision"
 msgstr "Revision"
 
@@ -160,47 +165,83 @@ msgstr "Limit revision amount to"
 msgid "Hold-back in months"
 msgstr "Hold-back in months"
 
-#: js/NodeTreePanel.js:560 js/NodeGridPanel.js:868
+#: js/NodeTreePanel.js:565 js/NodeGridPanel.js:877 js/Model.js:588
 msgid "Upload Failed"
 msgstr "Upload Failed"
 
-#: js/NodeTreePanel.js:561 js/NodeGridPanel.js:869
-msgid "Putting files in this folder is not allowed!"
-msgstr "Putting files in this folder is not allowed!"
+#: js/NodeTreePanel.js:566 js/NodeGridPanel.js:878
+msgid "It is not permitted to store files in this folder!"
+msgstr "It is not permitted to store files in this folder!"
 
-#: js/NodeGridPanel.js:229
+#: js/FilePickerDialog.js:103
+msgid "Select a file"
+msgstr "Select a file"
+
+#: js/FilePickerDialog.js:103
+msgid "Select files"
+msgstr "Select files"
+
+#: js/FilePickerDialog.js:106
+msgid "Select a folder"
+msgstr "Select a folder"
+
+#: js/FilePickerDialog.js:106
+msgid "Select folders"
+msgstr "Select folders"
+
+#: js/FilePickerDialog.js:109
+msgid "Select an item"
+msgstr "Select an item"
+
+#: js/FilePickerDialog.js:109
+msgid "Select items"
+msgstr "Select items"
+
+#: js/FilePickerDialog.js:129
+msgid "Checking ..."
+msgstr "Checking ..."
+
+#: js/FilePickerDialog.js:139
+msgid "Overwrite Existing File?"
+msgstr "Overwrite Existing File?"
+
+#: js/FilePickerDialog.js:140
+msgid "Do you really want to overwrite the selected file?"
+msgstr "Do you really want to overwrite the selected file?"
+
+#: js/NodeGridPanel.js:226
 msgid "Tags"
 msgstr "Tags"
 
-#: js/NodeGridPanel.js:299 js/UsagePanel.js:84
+#: js/NodeGridPanel.js:296 js/UsagePanel.js:84
 msgid "Revision Size"
 msgstr "Revision Size"
 
-#: js/NodeGridPanel.js:300
+#: js/NodeGridPanel.js:297
 msgid "Total size of all available revisions"
 msgstr "Total size of all available revisions"
 
-#: js/NodeGridPanel.js:312 js/NodeEditDialog.js:154 js/Model.js:612
+#: js/NodeGridPanel.js:309 js/NodeEditDialog.js:159 js/Model.js:641
 msgid "Indexed"
 msgstr "Indexed"
 
-#: js/NodeGridPanel.js:313
+#: js/NodeGridPanel.js:310
 msgid "File contents is part of the search index"
 msgstr "File contents is part of the search index"
 
-#: js/NodeGridPanel.js:425
+#: js/NodeGridPanel.js:417
 msgid "Upload"
 msgstr "Upload"
 
-#: js/NodeGridPanel.js:486 js/NodeGridPanel.js:610
+#: js/NodeGridPanel.js:474 js/NodeGridPanel.js:614
 msgid "Open Data Safe"
 msgstr "Open Data Safe"
 
-#: js/NodeGridPanel.js:508
+#: js/NodeGridPanel.js:496
 msgid "Folder Up"
 msgstr "Folder Up"
 
-#: js/NodeGridPanel.js:610
+#: js/NodeGridPanel.js:614
 msgid "Close Data Safe"
 msgstr "Close Data Safe"
 
@@ -211,6 +252,14 @@ msgstr "Filemanager"
 #: js/Filemanager.js:74 js/nodeActions.js:283
 msgid "Save locally"
 msgstr "Save locally"
+
+#: js/QuickLookPanel.js:62
+msgid "Close"
+msgstr "Close"
+
+#: js/QuickLookPanel.js:71
+msgid "Loading preview ..."
+msgstr "Loading preview ..."
 
 #: js/NodeEditDialog.js:59
 msgid "Edit folder"
@@ -224,25 +273,21 @@ msgstr "edit file"
 msgid "Public Links"
 msgstr "Public Links"
 
-#: js/NodeEditDialog.js:142 js/Model.js:604
+#: js/NodeEditDialog.js:147 js/Model.js:633
 msgid "Type"
 msgstr "Type"
 
-#: js/NodeEditDialog.js:154
+#: js/NodeEditDialog.js:159
 msgid "Not yet indexed"
 msgstr "Not yet indexed"
 
-#: js/NodeEditDialog.js:185
+#: js/NodeEditDialog.js:190
 msgid "Modified By"
 msgstr "Modified By"
 
-#: js/NodeEditDialog.js:223
+#: js/NodeEditDialog.js:228
 msgid "Enter description"
 msgstr "Enter description"
-
-#: js/SearchCombo.js:62
-msgid "Select a file"
-msgstr "Select a file"
 
 #: js/ExceptionHandler.js:32
 msgid "Service Unavailable"
@@ -254,16 +299,16 @@ msgid "The Filemanager is not configured correctly. Please refer to the {0}Tine 
 msgstr "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
 
 #: js/ExceptionHandler.js:55
-msgid "Files already exists"
-msgstr "Files already exists"
+msgid "File(s) already exists"
+msgstr "File(s) already exists"
 
 #: js/ExceptionHandler.js:55
 msgid "Do you want to replace the following file(s)?"
 msgstr "Do you want to replace the following file(s)?"
 
 #: js/ExceptionHandler.js:99
-msgid "Failure on create folder"
-msgstr "Failure on create folder"
+msgid "An error occurred creating this folder"
+msgstr "An error occurred creating this folder"
 
 #: js/ExceptionHandler.js:100
 msgid "Item with this name already exists!"
@@ -281,29 +326,50 @@ msgstr "This Folder"
 msgid "Search"
 msgstr "Search"
 
-#: js/Model.js:251 js/Model.js:266
+#: js/Model.js:83
+msgid "The grant to download files"
+msgstr "The grant to download files"
+
+#: js/Model.js:84 js/nodeActions.js:340
+msgid "Publish"
+msgstr "Publish"
+
+#: js/Model.js:85
+msgid "The grant to create anonymous download links for files"
+msgstr "The grant to create anonymous download links for files"
+
+#: js/Model.js:268 js/Model.js:283
 #, python-brace-format
 msgid "Copying data .. {0}"
 msgstr "Copying data .. {0}"
 
-#: js/Model.js:254 js/Model.js:268
+#: js/Model.js:271 js/Model.js:285
 #, python-brace-format
 msgid "Moving data .. {0}"
 msgstr "Moving data .. {0}"
 
-#: js/Model.js:272
+#: js/Model.js:289
 msgid "Please wait"
 msgstr "Please wait"
 
-#: js/Model.js:603
+#: js/Model.js:585
+#, python-brace-format
+msgid "Error while uploading \"{fileName}\". Please try again later."
+msgstr "Error while uploading \"{fileName}\". Please try again later."
+
+#: js/Model.js:632
 msgid "Quick Search"
 msgstr "Quick Search"
 
-#: js/Model.js:611
+#: js/Model.js:634
+msgid "Content Type"
+msgstr "Content Type"
+
+#: js/Model.js:640
 msgid "File Contents"
 msgstr "File Contents"
 
-#: js/Model.js:634
+#: js/Model.js:663
 msgid "Download Link"
 msgid_plural "Download Links"
 msgstr[0] "Download Link"
@@ -313,13 +379,25 @@ msgstr[1] "Download Links"
 msgid "Node Download Links"
 msgstr "Node Download Links"
 
-#: js/DocumentPreview.js:59
-msgid "Close"
-msgstr "Close"
+#: js/DocumentPreview.js:132
+msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
+msgstr "Sorry, Tine 2.0 would have liked to show you the contents of the file."
 
-#: js/DocumentPreview.js:141
-msgid "No preview available."
-msgstr "No preview available."
+#: js/DocumentPreview.js:133
+msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
+msgstr "This is possible for .doc, .jpg, .pdf and even more file formats."
+
+#: js/DocumentPreview.js:135
+msgid "Interested? Then let us know!"
+msgstr "Interested? Then let us know!"
+
+#: js/DocumentPreview.js:136
+msgid "We would be happy to make you a non-binding offer."
+msgstr "We would be happy to make you a non-binding offer."
+
+#: js/DocumentPreview.js:140
+msgid "No preview available yet - Please try again in a few minutes."
+msgstr "No preview available yet - Please try again in a few minutes."
 
 #: js/NotificationPanel.js:25
 msgid "Notifications"
@@ -352,43 +430,43 @@ msgstr[1] "Every {0} Days"
 msgid "No"
 msgstr "No"
 
-#: js/NotificationGridPanel.js:86
+#: js/NotificationGridPanel.js:87
 msgid "Don't summarize"
 msgstr "Don't summarize"
 
-#: js/NotificationGridPanel.js:87
+#: js/NotificationGridPanel.js:88
 msgid "Once a day"
 msgstr "Once a day"
 
-#: js/NotificationGridPanel.js:88
+#: js/NotificationGridPanel.js:89
 msgid "Every 3 days"
 msgstr "Every 3 days"
 
-#: js/NotificationGridPanel.js:89
+#: js/NotificationGridPanel.js:90
 msgid "Once a week"
 msgstr "Once a week"
 
-#: js/NotificationGridPanel.js:90
+#: js/NotificationGridPanel.js:91
 msgid "Once a month"
 msgstr "Once a month"
 
-#: js/NotificationGridPanel.js:91
+#: js/NotificationGridPanel.js:92
 msgid "Once a year"
 msgstr "Once a year"
 
-#: js/NotificationGridPanel.js:160
+#: js/NotificationGridPanel.js:161
 msgid "Search for users ..."
 msgstr "Search for users ..."
 
-#: js/NotificationGridPanel.js:200
+#: js/NotificationGridPanel.js:201
 msgid "No permission"
 msgstr "No permission"
 
-#: js/NotificationGridPanel.js:211
+#: js/NotificationGridPanel.js:212
 msgid "all"
 msgstr "all"
 
-#: js/NotificationGridPanel.js:298
+#: js/NotificationGridPanel.js:299
 msgid "Search for groups ..."
 msgstr "Search for groups ..."
 
@@ -397,32 +475,20 @@ msgid "Grants"
 msgstr "Grants"
 
 #: js/GrantsPanel.js:40
-msgid "This folder has own grants"
-msgstr "This folder has own grants"
+msgid "This folder has its own grants"
+msgstr "This folder has its own grants"
 
 #: js/GrantsPanel.js:44
-msgid "Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself."
-msgstr "Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself."
+msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
+msgstr "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
 
 #: js/GrantsPanel.js:49
 msgid "This folder is part of the data safe"
 msgstr "This folder is part of the data safe"
 
 #: js/GrantsPanel.js:52
-msgid "If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened."
-msgstr "If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened."
-
-#: js/GrantsPanel.js:56
-msgid "The grant to download files"
-msgstr "The grant to download files"
-
-#: js/GrantsPanel.js:57 js/nodeActions.js:337
-msgid "Publish"
-msgstr "Publish"
-
-#: js/GrantsPanel.js:58
-msgid "The grant to create anonymous download links for files"
-msgstr "The grant to create anonymous download links for files"
+msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
+msgstr "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
 
 #: js/UsagePanel.js:29
 msgid "Usage"
@@ -437,16 +503,16 @@ msgid "Quota"
 msgstr "Quota"
 
 #: js/UsagePanel.js:51
-msgid "no quota set"
-msgstr "no quota set"
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr "No quota set (examples: 10 GB, 900 MB)"
 
 #: js/UsagePanel.js:56
 msgid "Current Usage"
 msgstr "Current Usage"
 
 #: js/UsagePanel.js:64
-msgid "The Quota applies recursively for files and subfolders. Please note, the Effective Quota differs wehn a parent folder has set a lower quota."
-msgstr "The Quota applies recursively for files and subfolders. Please note, the Effective Quota differs wehn a parent folder has set a lower quota."
+msgid "The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota."
+msgstr "The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota."
 
 #: js/UsagePanel.js:91
 msgid "File Type"
@@ -468,68 +534,68 @@ msgstr "Usage by User"
 msgid "unknown"
 msgstr "unknown"
 
-#: js/nodeActions.js:22
+#: js/nodeActions.js:24
 msgid "Reload"
 msgstr "Reload"
 
-#: js/nodeActions.js:39
+#: js/nodeActions.js:41
 msgid "Create Folder"
 msgstr "Create Folder"
 
-#: js/nodeActions.js:48
+#: js/nodeActions.js:50
 msgid "New Folder"
 msgstr "New Folder"
 
-#: js/nodeActions.js:48
+#: js/nodeActions.js:50
 msgid "Please enter the name of the new folder:"
 msgstr "Please enter the name of the new folder:"
 
-#: js/nodeActions.js:51
+#: js/nodeActions.js:53
 #, python-brace-format
 msgid "No {0} added"
 msgstr "No {0} added"
 
-#: js/nodeActions.js:51 js/nodeActions.js:138
+#: js/nodeActions.js:53 js/nodeActions.js:133
 #, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr "You have to supply a {0} name!"
 
-#: js/nodeActions.js:84
+#: js/nodeActions.js:90
 msgid "Edit Properties"
 msgstr "Edit Properties"
 
-#: js/nodeActions.js:117
+#: js/nodeActions.js:112
 msgid "Rename"
 msgstr "Rename"
 
-#: js/nodeActions.js:131
+#: js/nodeActions.js:126
 #, python-brace-format
 msgid "Rename {0}"
 msgstr "Rename {0}"
 
-#: js/nodeActions.js:132
+#: js/nodeActions.js:127
 #, python-brace-format
 msgid "Please enter the new name of the {0}:"
 msgstr "Please enter the new name of the {0}:"
 
-#: js/nodeActions.js:138
+#: js/nodeActions.js:133
 #, python-brace-format
 msgid "Not renamed {0}"
 msgstr "Not renamed {0}"
 
-#: js/nodeActions.js:162 js/nodeActions.js:173
+#: js/nodeActions.js:157 js/nodeActions.js:168
 msgid "System Link"
 msgstr "System Link"
 
-#: js/nodeActions.js:176
+#: js/nodeActions.js:171
 msgid "Use this link to share the entry with other system users"
 msgstr "Use this link to share the entry with other system users"
 
-#: js/nodeActions.js:193
+#: js/nodeActions.js:191
 msgid "Delete"
 msgstr "Delete"
 
-#: js/nodeActions.js:216
+#: js/nodeActions.js:214
 msgid "Do you really want to delete the following files?"
 msgstr "Do you really want to delete the following files?"
 
@@ -541,19 +607,19 @@ msgstr "Move"
 msgid "Move Items"
 msgstr "Move Items"
 
-#: js/nodeActions.js:310
+#: js/nodeActions.js:311
 msgid "Preview"
 msgstr "Preview"
 
-#: js/nodeActions.js:353
-msgid "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
-msgstr "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
+#: js/nodeActions.js:356
+msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
+msgstr "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
 
-#: js/nodeActions.js:370
+#: js/nodeActions.js:373
 msgid "Folder has been published successfully"
 msgstr "Folder has been published successfully"
 
-#: js/nodeActions.js:370
+#: js/nodeActions.js:373
 msgid "File has been published successfully"
 msgstr "File has been published successfully"
 
@@ -562,50 +628,54 @@ msgid "Public Download URL"
 msgstr "Public Download URL"
 
 #: Config.php:28
-msgid "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
-msgstr "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
+msgid "Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly."
+msgstr "Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly."
 
-#: Controller/Node.php:526
+#: Controller/Node.php:277
+msgid "you can't remove your own admin grant"
+msgstr "you can't remove your own admin grant"
+
+#: Controller/Node.php:569
 msgid "My folders"
 msgstr "My folders"
 
-#: Controller/Node.php:533
+#: Controller/Node.php:576
 msgid "Shared folders"
 msgstr "Shared folders"
 
-#: Controller/Node.php:540
+#: Controller/Node.php:583
 msgid "Other users folders"
 msgstr "Other users folders"
 
-#: Controller/Node.php:1497
+#: Controller/Node.php:1559
 msgid "Received"
 msgstr "Received"
 
-#: Controller/Node.php:1498
+#: Controller/Node.php:1560
 msgid "To"
 msgstr "To"
 
-#: Controller/Node.php:1499
+#: Controller/Node.php:1561
 msgid "Cc"
 msgstr "Cc"
 
-#: Controller/Node.php:1500
+#: Controller/Node.php:1562
 msgid "Bcc"
 msgstr "Bcc"
 
-#: Controller/Node.php:1501
+#: Controller/Node.php:1563
 msgid "From (E-Mail)"
 msgstr "From (E-Mail)"
 
-#: Controller/Node.php:1502
+#: Controller/Node.php:1564
 msgid "From (Name)"
 msgstr "From (Name)"
 
-#: Controller/Node.php:1503
+#: Controller/Node.php:1565
 msgid "Body"
 msgstr "Body"
 
-#: Controller/Node.php:1504
+#: Controller/Node.php:1566
 msgid "Attachments"
 msgstr "Attachments"
 
@@ -622,8 +692,8 @@ msgid "Destination has the same Path"
 msgstr "Destination has the same Path"
 
 #: Exception/DestinationIsSameNode.php:31
-msgid "The destination has the same path the source has. No action has been performed."
-msgstr "The destination has the same path the source has. No action has been performed."
+msgid "The destination has the same path as the source. No action has been performed."
+msgstr "The destination has the same path as the source. No action has been performed."
 
 #: Acl/Rights.php:104
 msgid "manage shared folders"
@@ -638,5 +708,5 @@ msgid "Manage anonymous download links"
 msgstr "Manage anonymous download links"
 
 #: Acl/Rights.php:109
-msgid "Allow to see, add and delete download links of files and folders"
-msgstr "Allow to see, add and delete download links of files and folders"
+msgid "Allow viewing, adding and deleting download links"
+msgstr "Allow viewing, adding and deleting download links"

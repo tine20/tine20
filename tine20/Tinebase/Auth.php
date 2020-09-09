@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -25,6 +25,12 @@ class Tinebase_Auth
      *
      */
     const SQL = 'Sql';
+
+    /**
+     * constant for Sql by email auth
+     *
+     */
+    const SQL_EMAIL = 'SqlEmail';
     
     /**
      * constant for LDAP auth
@@ -137,7 +143,7 @@ class Tinebase_Auth
             'bindRequiresDn' => true,
             'useStartTls' => false,
             'useSsl' => false,
-            'port' => 0,
+            'port' => 389,
             'baseDn' => '',
             'accountFilterFormat' => NULL,
             'accountCanonicalForm' => '2',
@@ -224,7 +230,8 @@ class Tinebase_Auth
                 array($zaae->getMessage())
             );
         }
-        
+
+        $_password = Tinebase_Helper::mbConvertTo($_password);
         $this->_backend->setCredential($_password);
 
         try {
@@ -237,6 +244,17 @@ class Tinebase_Auth
             Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
         }
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
+
+        if ($result->getCode() !== self::SUCCESS && Tinebase_Config::getInstance()
+                ->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} && $this->_backend->supportsAuthByEmail()) {
+            $backend = $this->_backend->getAuthByEmailBackend();
+            $backend->setIdentity($_username);
+            $backend->setCredential($_password);
+            $tmpResult = Zend_Auth::getInstance()->authenticate($backend);
+            if ($tmpResult->getCode() === self::SUCCESS) {
+                return $tmpResult;
+            }
+        }
         
         return $result;
     }

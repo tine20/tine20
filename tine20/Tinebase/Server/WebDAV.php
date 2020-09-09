@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -143,6 +143,13 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     list($loginName, $password) = $this->_getAuthData($this->_request);
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
+                } catch (Zend_Session_Exception $zse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Maintenance mode / other session problem: ' . $zse->getMessage());
+                    }
+                    header('HTTP/1.1 503 Service Unavailable');
+                    return;
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
                     header('HTTP/1.1 401 Unauthorized');
@@ -156,8 +163,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
 
 
-            if (!$hasIdentity && null !== ($denyList = Tinebase_Config::getInstance()->get(
-                    Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) && is_array($denyList)) {
+            if (!$hasIdentity && $this->_request->getMethod() !== 'GET' && null !== ($denyList = Tinebase_Config
+                    ::getInstance()->get(Tinebase_Config::DENY_WEBDAV_CLIENT_LIST)) && is_array($denyList)) {
                 foreach ($denyList as $deny) {
                     if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
                         header('HTTP/1.1 420 Policy Not Fulfilled User Agent Not Accepted');
@@ -188,7 +195,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     . ' PID: ' . getmypid() . ')'
                 );
             }
-            self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
+            self::$_server = new \Sabre\DAV\Server(new Filemanager_Frontend_WebDAV('',
+                [Filemanager_Frontend_WebDAV::FM_REAL_WEBDAV_ROOT => new Tinebase_WebDav_Root()]));
             \Sabre\DAV\Server::$exposeVersion = false;
             self::$_server->httpResponse = new Tinebase_WebDav_HTTP_LogResponse();
 
@@ -199,7 +207,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 $contentType = self::$_server->httpRequest->getHeader('Content-Type');
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $this->_request->getMethod());
 
-                if (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false) {
+                if ($this->_request->getMethod() !== 'PUT' && (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false)) {
                     // NOTE inputstream can not be rewinded
                     $debugStream = fopen('php://temp', 'r+');
                     stream_copy_to_stream($this->_body, $debugStream);
@@ -218,10 +226,9 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             // compute base uri
             self::$_server->setBaseUri($this->_request->getBaseUrl() . '/');
 
-            $tempDir = Tinebase_Core::getTempDir();
-            if (!empty($tempDir)) {
+            if (Tinebase_Core::isFilesystemAvailable()) {
                 self::$_server->addPlugin(
-                    new \Sabre\DAV\Locks\Plugin(new \Sabre\DAV\Locks\Backend\File($tempDir . '/webdav.lock'))
+                    new \Sabre\DAV\Locks\Plugin(new Tinebase_WebDav_Plugin_LockBackend())
                 );
             }
 
@@ -229,18 +236,22 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
             );
 
+            self::$_server->addPlugin(
+                new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
+            );
+
             $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
-            $aclPlugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
-            $aclPlugin->principalCollectionSet = array(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
+            $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
+            $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
             );
             $aclPlugin->principalSearchPropertySet = array(
-                '{DAV:}displayname' => 'Display name',
-                '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set' => 'Email addresses',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => 'First name',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => 'Last name',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set' => 'Calendar user address set',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type' => 'Calendar user type'
+                '{DAV:}displayname'                                                   => 'Display name',
+                '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address'               => 'Email address',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set'  => 'Email addresses',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'         => 'First name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'          => 'Last name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-address-set' => 'Calendar user address set',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-type' => 'Calendar user type'
             );
 
             self::$_server->addPlugin($aclPlugin);
@@ -261,20 +272,20 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
                 $userA = null;
                 if (isset($_SERVER['HTTP_USER_AGENT'])) {
-                    list($userA,) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+                    list($userA, $tbVersion) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
                 }
-                if (Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD !== $userA) {
+                if (Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD !== $userA || version_compare($tbVersion, '78.0') >= 0) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                         __LINE__ . ' SyncTokenSupport enabled');
                     self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
                 }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
-                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' SyncTokenSupport disabled');
             }
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
-            self::$_server->httpResponse->startBodyLog(Tinebase_Core::isLogLevel(Zend_Log::DEBUG));
+            self::$_server->httpResponse->startBodyLog(Tinebase_Core::isLogLevel(Zend_Log::DEBUG) &&
+                $this->_request->getMethod() !== 'GET');
 
             self::$_server->exec();
 
@@ -285,7 +296,12 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
 
             Tinebase_Controller::getInstance()->logout();
-        } catch (Exception $e) {
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+            }
+            @header('HTTP/1.1 403 Forbidden');
+        } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
         }

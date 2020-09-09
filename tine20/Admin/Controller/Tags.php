@@ -28,8 +28,8 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     {
         $this->_applicationName = 'Admin';
         $this->_backend = Tinebase_Tags::getInstance();
-        $this->_doContainerACLChecks = FALSE;
-        $this->_omitModLog = TRUE;
+        $this->_doContainerACLChecks = false;
+        $this->_omitModLog = true;
         $this->_modelName = 'Tinebase_Model_FullTag';
     }
 
@@ -76,7 +76,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     public function search_($_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        return Tinebase_Tags::getInstance()->searchTags($_filter, $_pagination);
+        return Tinebase_Tags::getInstance()->searchTags($_filter, $_pagination, true);
     }
     
     /**
@@ -90,7 +90,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     public function searchCount_($_filter, $_action = 'get')
     {
-        return Tinebase_Tags::getInstance()->getSearchTagsCount($_filter);
+        return Tinebase_Tags::getInstance()->getSearchTagsCount($_filter, true);
     }
 
     /**
@@ -162,11 +162,6 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     protected function _setTagRights(Tinebase_Model_FullTag $_tag, $_tagId, $_purgeRights = FALSE)
     {
-        if (count($_tag->rights) == 0 || count($_tag->rights->view_right) == 0 || $_tag->rights->view_right[0] !== TRUE) {
-            // _('Could not save tag without (view-)rights')
-            throw new Tinebase_Exception_SystemGeneric('Could not save tag without (view-)rights');
-        }
-        
         if ($_purgeRights) {
             Tinebase_Tags::getInstance()->purgeRights($_tagId);
         }
@@ -186,7 +181,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     {
         $this->checkRight('MANAGE_SHARED_TAGS');
         
-        Tinebase_Tags::getInstance()->deleteTags($_tagIds);
+        Tinebase_Tags::getInstance()->deleteTags($_tagIds, true);
     }
     
     /**

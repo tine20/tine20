@@ -93,7 +93,7 @@
          * @param {Ext.ColorPalette} palette The {@link #palette Ext.ColorPalette}
 	     * @param {String} color The 6-digit color hex code (without the # symbol)
          */
-        this.relayEvents(this.palette, ['select']);
+        this.relayEvents(this.palette, ['select', 'pickerShow']);
         this.on('select', this.menuHide, this);
         if(this.handler){
             this.on('select', this.handler, this.scope || this);

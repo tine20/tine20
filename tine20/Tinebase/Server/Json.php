@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -67,7 +67,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
              * METHOD: POST
              * Origin:http://other.site
              * Referer:http://other.site/example.html
-             * Standard-JSON-Rquest-Headers...
+             * Standard-JSON-Request-Headers...
              * 
              * We have to add two additional headers to our standard response
              * 
@@ -128,14 +128,20 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if ($exception === false) {
             try {
                 Tinebase_Core::initFramework();
-            } catch (Exception $exception) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
+            } catch (Throwable $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' .
+                    get_class($e) . ' ' . $e->getMessage());
+                $exception = $e;
             }
         }
         
         $json = $this->_request->getContent();
         $json = Tinebase_Core::filterInputForDatabase($json);
+
+        if (empty($json)) {
+            // nginx cuts the JSON POST payload if out of disk space ...
+            throw new Tinebase_Exception_SystemGeneric('Got empty JSON request - server out of disk space?');
+        }
 
         if (substr($json, 0, 1) == '[') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -173,13 +179,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         try {
             $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
             $output = (string) $output;
-        } catch (ErrorException $ee) {
+        } catch (Throwable $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Got non-json response, last json error: ' . json_last_error_msg());
-                foreach ($response as $r) {
+                    . ' Got non-json response, last json error: ' . json_last_error_msg() . ' ' . get_class($e) . ' ' .
+                    $e->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' response: ' . print_r($r->getResult(), true));
+                        . ' response: ' . print_r($response, true));
                 }
             }
 
@@ -193,8 +200,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             try {
                 $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
                 $output = (string) $output;
-            } catch (ErrorException $eee) {
-                $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg());
+            } catch (Throwable $e) {
+                $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg() . ' ' .
+                    get_class($e) . ' ' . $e->getMessage());
                 $output = $this->_handleException($this->_request, $exception);
             }
         }
@@ -283,8 +291,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (
             is_array($classes)
             && Tinebase_Core::getCache()
-            && defined('TINE20_BUILDTYPE')
-            && TINE20_BUILDTYPE !== 'DEVELOPMENT'
         ) {
             $masterFiles = array();
             
@@ -320,6 +326,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     . " Failed to create cache. Exception: \n". $zce);
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' setting up json server ...');
         
         $server = new Zend_Json_Server();
         $server->setAutoEmitResponse(false);
@@ -342,7 +351,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         }
         
         if (isset($cache)) {
-            $cache->save($server, $cacheId, array(), null);
+            $lifetime = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE !== 'DEVELOPMENT' ? 30 : 3600;
+            $cache->save($server, $cacheId, array(), $lifetime);
         }
 
         return $server;
@@ -355,7 +365,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      * @param $request
      * @return JSON
      */
-    protected function _handle($request)
+    protected function _handle($request, $retries = 0)
     {
         try {
             $method = $request->getMethod();
@@ -380,6 +390,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $classes = self::_getServerClasses();
             $server = self::_getServer($classes);
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .' handle request ...');
+
             $response = $server->handle($request);
             if ($response->isError()) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Got response error: '
@@ -387,7 +400,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
             return $response;
             
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
+            if ($retries < 2 && $exception instanceof Zend_Db_Statement_Exception && strpos($exception->getMessage(),
+                    'Deadlock found') !== false) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                Tinebase_Exception::log($exception);
+                Tinebase_Exception::log(new Tinebase_Exception_Backend('Deadlock found, retrying: ' . $retries));
+                return $this->_handle($request, $retries + 1);
+            }
             return $this->_handleException($request, $exception);
         }
     }
@@ -395,13 +415,21 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     /**
      * handle exceptions
      * 
-     * @param Zend_Json_Server_Request_Http $request
-     * @param Exception $exception
+     * @param Zend_Json_Server_Request_Http|Tinebase_Http_Request $request
+     * @param Throwable $exception
      * @return Zend_Json_Server_Response
      */
     protected function _handleException($request, $exception)
     {
-        $server = self::_getServer();
+        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+        if ($exception instanceof Tinebase_Exception_ProgramFlow) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
+                $exception->getMessage());
+        } else {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
+                $exception->getMessage());
+            Tinebase_Exception::log($exception, $suppressTrace);
+        }
         
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
         $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');
@@ -411,20 +439,18 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $exceptionData['appName'] = $exception->getAppName();
             $exceptionData['title'] = $exception->getTitle();
         }
-        
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
-        
-        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+
         if ($suppressTrace !== TRUE) {
             $exceptionData['trace'] = Tinebase_Exception::getTraceAsArray($exception);
         }
-        
-        Tinebase_Exception::log($exception, $suppressTrace);
-        
+
+
+        $server = self::_getServer();
         $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
         
         $response = $server->getResponse();
-        if (null !== ($id = $request->getId())) {
+        // NOTE: Tinebase_Http_Request has no getId() - should we add the function?
+        if (method_exists($request, 'getId') && null !== ($id = $request->getId())) {
             $response->setId($id);
         }
         if (null !== ($version = $request->getVersion())) {
@@ -469,6 +495,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
 
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ .' fetching app json classes');
+
             foreach ($userApplications as $application) {
                 $jsonAppName = $application->name . '_Frontend_Json';
                 if (class_exists($jsonAppName)) {
@@ -497,6 +527,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.getAllRegistryData',
             'Tinebase.authenticate',
             'Tinebase.login',
+            'Tinebase.openIDCLogin',
             'Tinebase.getAvailableTranslations',
             'Tinebase.getTranslations',
             'Tinebase.setLocale'
@@ -510,6 +541,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
                     ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' .
                     $request->getRemoteAddress() . '". (session timeout?)');
+                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ .
+                    ' unauthorised request details: ' .
+                    print_r($request->getServer()->toArray(), true));
             } else {
                 Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
                     ' affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), true) .

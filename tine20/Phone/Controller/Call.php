@@ -74,9 +74,12 @@ class Phone_Controller_Call extends Tinebase_Controller_Record_Abstract
     public function resolveCallNumberToContact(Phone_Model_Call $call, $ignoreAcl = false)
     {
         // resolve telephone number to contacts if possible
-        $telNumber = Addressbook_Model_Contact::normalizeTelephoneNoCountry(
+        $telNumber = Addressbook_Model_Contact::normalizeTelephoneNum(
             $this->resolveInternalNumber($call->destination));
         if (null !== $telNumber && ! empty($telNumber)) {
+
+            $call->resolved_destination = $telNumber;
+
             $filter = new Addressbook_Model_ContactFilter(array(
                 array('field' => 'telephone_normalized', 'operator' => 'equals', 'value' => $telNumber),
             ));
@@ -111,7 +114,7 @@ class Phone_Controller_Call extends Tinebase_Controller_Record_Abstract
      */
     public function resolveInternalNumber($number)
     {
-        $number = preg_replace('/[^\d\+]/', '', $number);
+        $number = preg_replace('/[^\d\+]/u', '', $number);
         if (empty($number)) {
             return $number;
         }

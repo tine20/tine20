@@ -44,6 +44,8 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
         'containerProperty' => NULL,
         'resolveVFGlobally' => TRUE,
+
+        'exposeHttpApi'     => true,
         
         'titleProperty'     => 'fulltext',
         'appName'           => 'Sales',
@@ -118,7 +120,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'recursiveResolving' => true,
             ),
             'vatid' => array (
-                'label'   => 'VAT No.', // _('VAT No.')
+                'label'   => 'VAT ID', // _('VAT ID')
                 'type'    => 'text',
                 'group'   => 'accounting',
                 'shy'     => TRUE

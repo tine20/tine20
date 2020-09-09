@@ -114,7 +114,9 @@ class Tinebase_Role extends Tinebase_Acl_Roles
                     }
                 }
             default:
-                Tinebase_Timemachine_ModificationLog::defaultApply($_modification, $this);
+                try {
+                    Tinebase_Timemachine_ModificationLog::defaultApply($_modification, $this);
+                } catch (Tinebase_Exception_NotFound $tenf) {}
         }
     }
 }

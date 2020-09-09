@@ -20,16 +20,16 @@ class Admin_Import_GroupTest extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
+    /**
+     * @group longrunning
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public function testImportDemoData()
     {
-        if (!extension_loaded('yaml')) {
-            $this->markTestSkipped('Yaml are not install');
+        if (! extension_loaded('yaml')) {
+            self::markTestSkipped('yaml extension needed for test');
         }
+
         $this->_importContainer = $this->_getTestContainer('Admin', 'Tinebase_Model_Group');
         $importer = new Tinebase_Setup_DemoData_ImportSet('Admin', [
             'container_id' => $this->_importContainer->getId(),
@@ -48,6 +48,6 @@ class Admin_Import_GroupTest extends TestCase
                 $count++;
             }
         }
-        self::assertEquals(6, $count);
+        self::assertEquals(count($groups), $count);
     }
 }

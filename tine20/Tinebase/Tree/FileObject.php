@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -40,7 +40,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_modelName = 'Tinebase_Model_Tree_FileObject';
+    protected $_modelName = Tinebase_Model_Tree_FileObject::class;
 
     /**
      * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
@@ -131,7 +131,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             /* table  */ array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' AND ' 
                 . $this->_db->quoteIdentifier($this->_revisionsTableName . '.revision') . ' = ' . (null !== $this->_revision ? (int)$this->_revision : $this->_db->quoteIdentifier($this->_tableName . '.revision')),
-            /* select */ array('hash', 'size', 'preview_count')
+            /* select */ array('hash', 'size', 'preview_count', 'preview_status', 'preview_error_count', 'lastavscan_time', 'is_quarantined')
         )->joinLeft(
             /* table  */ array('tree_filerevisions2' => $this->_tablePrefix . 'tree_filerevisions'),
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('tree_filerevisions2.id'),
@@ -159,12 +159,55 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      */
     public function updatePreviewCount($_hash, $_count)
     {
-        $this->_db->update($this->_tablePrefix . $this->_revisionsTableName, array('preview_count' => (int)$_count), $this->_db->quoteInto('hash = ?', $_hash));
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            array('preview_count' => (int)$_count),
+            $this->_db->quoteInto('hash = ?', $_hash)
+        );
+    }
+
+    /**
+     * @param string $_hash
+     * @param integer $_status
+     */
+    public function updatePreviewStatus($_hash, $_status)
+    {
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            array('preview_status' => (int)$_status),
+            $this->_db->quoteInto('hash = ?', $_hash)
+        );
+    }
+
+    /**
+     * @param string $_hash
+     * @param integer $_count
+     */
+    public function updatePreviewErrorCount($_hash, $_count)
+    {
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            array('preview_error_count' => (int)$_count),
+            $this->_db->quoteInto('hash = ?', $_hash)
+        );
+    }
+
+    public function resetPreviewErrorCount()
+    {
+        $maxErrorCount = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
+            {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT};
+        $this->_db->update(
+            $this->_tablePrefix . $this->_revisionsTableName,
+            [
+                'preview_error_count' => 0
+            ],
+            $this->_db->quoteInto('preview_error_count >= ?', $maxErrorCount)
+        );
     }
 
     /**
      * get value of next revision for given fileobject
-     * 
+     *
      * @param Tinebase_Model_Tree_FileObject $_objectId
      * @return int
      */
@@ -180,21 +223,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $stmt->fetchAll();
 
-        $select = $this->_db->select()
-            ->from($this->_tablePrefix . $this->_revisionsTableName, new Zend_Db_Expr('MAX(' .
-                $this->_db->quoteIdentifier('revision') . ') + 1 AS ' . $this->_db->quoteIdentifier('revision')))
-            ->where($this->_db->quoteIdentifier($this->_tablePrefix . $this->_revisionsTableName . '.id') . ' = ?', $objectId);
-
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetchAll();
-        if (empty($queryResult)) {
-            $revision = 1;
-        } else {
-            $revision = (int)$queryResult[0]['revision'];
-            if (0 === $revision) {
-                $revision = 1;
-            }
-        }
+        $revision = $this->getNextByProperty('revision', $objectId, 'id', $this->_revisionsTableName);
 
         // increase revision
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $objectId);
@@ -240,22 +269,35 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         $createRevision = $this->_keepOldRevisions || $_mode === 'create';
         $updateRevision = false;
+        $currentRecord = null;
 
-        // do not create a revision if the hash did not change! What point in creating a revision if the file in the filesystem is still the same?
+        if (is_file($_record->getFilesystemPath())) {
+            if (false === ($_record->size = filesize($_record->getFilesystemPath()))) {
+                throw new Tinebase_Exception_Backend('couldn\'t get filesize() for hash: ' . $_record->hash);
+            }
+        } elseif(empty($_record->size)) {
+            $_record->size = 0;
+        }
+
+        // do not create a revision if the hash/size did not change!
+        // What point in creating a revision if the file in the filesystem is still the same?
         if ($_mode !== 'create') {
             /** @var Tinebase_Model_Tree_FileObject $currentRecord */
             $currentRecord = $this->get($_record, true);
             if (true === $this->_allowSetRevision && $_record->revision < $currentRecord->revision) {
-                return;
-            }
-            if ($currentRecord->hash !== null && !empty($currentRecord->revision)) {
-                if ($currentRecord->hash === $_record->hash && (int)$currentRecord->size === (int)$_record->size) {
-                    return;
+                if (!in_array($_record->revision, $currentRecord->available_revisions)) {
+                    throw new Tinebase_Exception_Backend('can\'t set revision to ' . $_record->revision .
+                        ' for fileobject ' . $_record->getId());
                 }
                 $updateRevision = true;
-                if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type) {
+                $createRevision = false;
+            }
+            if ($currentRecord->hash !== null && !empty($currentRecord->revision)) {
+                if (($currentRecord->hash === $_record->hash && (int)$currentRecord->size === (int)$_record->size) ||
+                        Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type) {
                     $createRevision = false;
                 }
+                $updateRevision = true;
             } else {
                 $createRevision = true;
             }
@@ -265,28 +307,27 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             return;
         }
 
-        if (!empty($_record->hash) && is_file($_record->getFilesystemPath())) {
-            if (false === ($_record->size = filesize($_record->getFilesystemPath()))) {
-                $_record->size = 0;
-            }
-        } elseif(empty($_record->size)) {
-            $_record->size = 0;
-        }
-
         $data = array(
             'creation_time' => Tinebase_DateTime::now()->toString(Tinebase_Record_Abstract::ISO8601LONG),
             'created_by' => is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : null,
             'hash' => $_record->hash,
             'size' => $_record->size,
+            'lastavscan_time' => $_record->lastavscan_time ? ($_record->lastavscan_time instanceof Tinebase_DateTime ?
+                $_record->lastavscan_time->toString(Tinebase_Record_Abstract::ISO8601LONG) : $_record->lastavscan_time)
+                : null,
+            'is_quarantined' => $_record->is_quarantined ? 1 : 0,
             'preview_count' => (int)$_record->preview_count,
-            'revision' => false === $createRevision && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $_record->type ? 1 : $this->_getNextRevision($_record),
+            'preview_status' => (int)$_record->preview_status,
+            'preview_error_count' => (int)$_record->preview_error_count,
+            'revision' => false === $createRevision ? $currentRecord->revision : $this->_getNextRevision($_record),
         );
 
         if ($createRevision) {
             $data['id'] = $_record->getId();
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
 
-            if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type) {
+            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type &&
+                Tinebase_Model_Tree_FileObject::TYPE_LINK !== $_record->type) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
                     array('revision_size' => new Zend_Db_Expr($this->_db->quoteIdentifier('revision_size') . ' + ' . (int)$_record->size)),
@@ -294,13 +335,18 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                         $_record->getId()));
             }
 
-        } elseif ($updateRevision) {
+        } else {
+
             $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_record->getId()),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ? AND ' .
+                    $this->_db->quoteIdentifier('revision') . ' = ' . (int)$data['revision'], $_record->getId()),
             );
             $this->_db->update($this->_tablePrefix . 'tree_filerevisions', $data, $where);
 
-            if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $_record->type && (int)$_record->revision_size !== (int)$_record->size) {
+            if (1 === count($currentRecord->available_revisions) &&
+                    Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type &&
+                    Tinebase_Model_Tree_FileObject::TYPE_LINK !== $_record->type &&
+                    (int)$currentRecord->revision_size !== (int)$_record->size) {
                 // update total size
                 $this->_db->update($this->_tablePrefix . $this->_tableName,
                     array('revision_size' => $_record->size),
@@ -356,7 +402,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             // add notes to tree_nodes!
             foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($newRecord->getId()) as
                     $node) {
-                Tinebase_Notes::getInstance()->addSystemNote($node->getId(), Tinebase_Core::getUser(),
+                Tinebase_Notes::getInstance()->addSystemNote($node, Tinebase_Core::getUser(),
                     Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods, 'Sql', 'Tinebase_Model_Tree_Node');
             }
         }
@@ -412,9 +458,11 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             return array();
         }
 
-        $select = $this->_db->select();
-        $select->from(array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName), array('hash'));
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' IN (?)',  $_ids));
+        $select = $this->_db->select()->distinct()
+            ->from(array($this->_revisionsTableName => $this->_tablePrefix . $this->_revisionsTableName),
+                array('hash'))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_revisionsTableName . '.id') . ' IN (?)',
+                $_ids));
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
@@ -597,14 +645,16 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
     /**
      * @param array $_hashes
+     * @param bool $_forUpdate
      * @return array
      * @throws Zend_Db_Statement_Exception
      */
-    public function getRevisionForHashes(array $_hashes)
+    public function getRevisionForHashes(array $_hashes, $_forUpdate = false)
     {
         $result = [];
-        $stmt = $this->_db->select()->from(SQL_TABLE_PREFIX . $this->_revisionsTableName, ['id', 'revision'])->where(
-            $this->_db->quoteIdentifier('hash') . ' in (?)', $_hashes)->query(Zend_Db::FETCH_NUM);
+        $stmt = $this->_db->select()->from(SQL_TABLE_PREFIX . $this->_revisionsTableName, ['id', 'revision'])
+            ->where($this->_db->quoteIdentifier('hash') . ' in (?)', $_hashes)
+            ->forUpdate($_forUpdate)->query(Zend_Db::FETCH_NUM);
         while ($row = $stmt->fetch()) {
             if (isset($result[$row[0]])) {
                 $result[$row[0]][] = $row[1];
@@ -636,9 +686,15 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 break;
 
             case Tinebase_Timemachine_ModificationLog::UPDATED:
-                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+
+                try {
                 /** @var Tinebase_Model_Tree_FileObject $record */
                 $record = $this->get($_modification->record_id, true);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    break;
+                }
+
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $currentRecord = clone $record;
                 $record->applyDiff($diff);
                 $this->_prepareReplicationRecord($record);
@@ -652,7 +708,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
-                $this->softDelete(array($_modification->record_id));
+                try {
+                    $this->softDelete(array($_modification->record_id));
+                } catch (Tinebase_Exception_NotFound $tenf) {}
                 break;
 
             default:

@@ -95,12 +95,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
     valueField: null,
 
     /**
-     * @cfg filterValueWidth
-     * @type Integer
-     */
-    filterValueWidth: 200,
-
-    /**
      * @cfg dateFilterSupportsPeriod
      * @type Boolean
      */
@@ -129,6 +123,17 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         if (! this.operators) {
             this.operators = [];
         }
+
+        if (this.appName && ! this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+
+        // e.g. {name = 'someApp'}
+        this.app = Tine.Tinebase.appMgr.get(this.app);
+
+        if (this.app) {
+            this.label = this.app.i18n._hidden(this.label);
+        }
         
         
         if (this.defaultOperator === null) {
@@ -142,8 +147,10 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'user':
                 case 'bool':
                 case 'number':
+                case 'money':
                 case 'percentage':
                 case 'combo':
+                case 'time':
                 case 'country':
                     this.defaultOperator = 'equals';
                     break;
@@ -171,6 +178,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'group':
                 case 'user':
                 case 'number':
+                case 'money':
                 case 'country':
                 default:
                     break;
@@ -281,10 +289,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'customfield':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');
                     break;
+                case 'time':
+                    this.operators.push('equals', 'before', 'after');
+                    break;
                 case 'date':
                     this.operators.push('equals', 'before', 'after', 'within', 'inweek');
                     break;
                 case 'number':
+                case 'money':
                 case 'percentage':
                     this.operators.push('equals', 'greater', 'less');
                     break;
@@ -312,8 +324,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         if (operatorStore.getCount() > 1) {
             var operator = new Ext.form.ComboBox({
                 filter: filter,
-                width: 80,
-                id: 'tw-ftb-frow-operatorcombo-' + filter.id,
                 mode: 'local',
                 lazyInit: false,
                 emptyText: i18n._('select a operator'),
@@ -342,15 +352,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         } else if (this.operators[0] == 'freeform') {
             var operator = new Ext.form.TextField({
                 filter: filter,
-                width: 100,
                 emptyText: this.emptyTextOperator || '',
                 value: filter.get('operator') ? filter.get('operator') : '',
                 renderTo: el
             });
         } else {
             var operator = new Ext.form.Label({
+                readOnly: true,
                 filter: filter,
-                width: 100,
                 style: {margin: '0px 10px'},
                 getValue: function() { return operatorStore.getAt(0).get('operator'); },
                 text : operatorStore.getAt(0).get('label'),
@@ -409,6 +418,12 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             valueField.disableTrigger = (newOperator != 'contains');
             valueField.checkTrigger();
         }
+
+        var width = valueField.el.up('.tw-ftb-frow-value').getWidth() -10;
+        if (valueField.wrap) {
+            valueField.wrap.setWidth(width);
+        }
+        valueField.setWidth(width);
     },
     
     /**
@@ -419,16 +434,26 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      */
     valueRenderer: function(filter, el) {
         var value,
-            fieldWidth = this.filterValueWidth,
             commonOptions = {
                 filter: filter,
-                width: fieldWidth,
-                id: 'tw-ftb-frow-valuefield-' + filter.id,
                 renderTo: el,
                 value: filter.data.value ? filter.data.value : this.defaultValue
             };
         
         switch (this.valueType) {
+            case 'time':
+                value = new Ext.form.TimeField(Ext.apply(commonOptions, {
+                    listeners: {
+                        'specialkey': function(field, e) {
+                            if(e.getKey() == e.ENTER){
+                                this.onFiltertrigger();
+                            }
+                        },
+                        'select': this.onFiltertrigger,
+                        scope: this
+                    }
+                }));
+                break;
             case 'date':
                 value = this.dateValueRenderer(filter, el);
                 break;
@@ -510,9 +535,32 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 value = new Tine.widgets.CountryCombo(Ext.apply(commonOptions, {
                 }));
                 break;
+            case 'number':
+                if (filter.specialType == 'percent') {
+                    Ext.apply(commonOptions, {
+                        useThousandSeparator: false,
+                        suffix: ' %'
+                    });
+                }
+                value = new Ext.ux.form.NumberField(Ext.apply(commonOptions, {
+                    decimalPrecision: 2,
+                    decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
+                }));
+                break;
+            case 'money':
+                value = new Ext.ux.form.MoneyField(Ext.apply(commonOptions, {
+                    listeners: {
+                        scope: this,
+                        specialkey: function(field, e){
+                            if(e.getKey() == e.ENTER){
+                                this.onFiltertrigger();
+                            }
+                        }
+                    }
+                }));
+                break;
             case 'customfield':
             case 'string':
-            case 'number':
             default:
                 value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
                     emptyText: this.emptyText,
@@ -574,7 +622,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         filter.withinCombo = new Ext.form.ComboBox({
             hidden: valueType != 'withinCombo',
             filter: filter,
-            width: this.filterValueWidth,
             renderTo: el,
             mode: 'local',
             lazyInit: false,
@@ -619,12 +666,15 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 if (! this.pp) {
                     this.pp = new Ext.ux.form.PeriodPicker({
                         range: range,
+                        FTBWidthCorrection: -18,
                         periodIncludesUntil: true,
-                        width: me.filterValueWidth - 18,
                         cls: 'x-pp-combo',
                         'renderTo': this.wrap
                     });
                     this.pp.on('change', me.onFiltertrigger, me , {buffer: 250});
+                    filter.withinCombo.on('resize', function(cmp, w) {
+                        this.pp.setSize(w-18);
+                    });
                 }
                 this.pp.show();
                 if (value.from) {
@@ -665,7 +715,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         filter.datePicker = new Ext.form.DateField({
             hidden: valueType != 'datePicker',
             filter: filter,
-            width: this.filterValueWidth,
             value: pickerValue,
             renderTo: el,
             listeners: {
@@ -682,7 +731,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         filter.numberfield = new Ext.form.NumberField({
             hidden: valueType != 'numberfield',
             filter: filter,
-            width: this.filterValueWidth,
             value: pickerValue,
             renderTo: el,
             minValue: 1,
@@ -729,7 +777,7 @@ Tine.widgets.grid.FilterRegistry = function() {
             if (! filters[key]) {
                 filters[key] = [];
             }
-            
+            Ext.applyIf(filter, {appName: appName, modelName: modelName});
             filters[key].push(filter);
         },
         

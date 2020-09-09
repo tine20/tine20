@@ -1,5 +1,17 @@
 <?php
 
+
+/**
+ * old VCard library, original source not available anymore on sourceforge (?)
+ * patched a bit
+ *
+ * @package     library
+ * @subpackage  vcard
+ * @license     BSD License
+ * @author      Paul Mehrer <p.mehrer@metaways.de>
+ * @copyright   Copyright (c) 2019-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
 /*
  * File:
  *      vcard.php
@@ -66,7 +78,7 @@ class VCard
      */
     function getProperty($name)
     {
-        return (array_key_exists($name, $this->_map)) ? $this->_map[$name][0] : NULL;
+        return isset($this->_map[$name]) ? $this->_map[$name][0] : NULL;
     }
 
     /**
@@ -134,7 +146,8 @@ class VCardProperty
      */
     function parse(&$lines)
     {
-        while (list(, $line) = each($lines)) {
+        while(false !== ($line = current($lines))) {
+            next($lines);
             $line = rtrim($line);
             $tmp = split_quoted_string(":", $line, 2);
             if (count($tmp) == 2) {
@@ -243,9 +256,10 @@ class VCardProperty
         $value = &$this->value;
         while ($value[strlen($value) - 1] == "=") {
             $value = substr($value, 0, strlen($value) - 1);
-            if (!(list(, $line) = each($lines))) {
+            if (false === ($line = current($lines))) {
                 break;
             }
+            next($lines);
             $value .= rtrim($line);
         }
         $value = quoted_printable_decode($value);
@@ -263,11 +277,11 @@ function split_quoted_string($d, $s, $n = 0)
     $quote = false;
     $len = strlen($s);
     for ($i = 0; $i < $len && ($n == 0 || $n > 1); $i++) {
-        $c = $s{$i};
+        $c = $s[$i];
         if ($c == '"') {
             $quote = !$quote;
         } else if (!$quote && $c == $d) {
-            $s{$i} = "\x00";
+            $s[$i] = "\x00";
             if ($n > 0) {
                 $n--;
             }

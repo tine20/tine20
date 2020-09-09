@@ -32,12 +32,14 @@ class Setup_Core extends Tinebase_Core
     public static function initFramework()
     {
         Setup_Core::setupConfig();
-        
+
         Setup_Core::setupTempDir();
         
         //Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX"
         Setup_Core::setupDatabaseConnection();
-        
+
+        self::setupSentry();
+
         Setup_Core::setupStreamWrapper();
         
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
@@ -48,7 +50,7 @@ class Setup_Core extends Tinebase_Core
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as seesion timeout
-        Setup_Core::set('locale', new Zend_Locale('en_US'));
+        Setup_Core::setLocale('en_US');
         Setup_Core::set(Tinebase_Core::USERTIMEZONE, 'UTC');
         
         Setup_Core::setupUserLocale();
@@ -96,7 +98,7 @@ class Setup_Core extends Tinebase_Core
         self::set(self::REQUEST, $request);
         
         $server = NULL;
-        
+
         /**************************** JSON API *****************************/
         if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')

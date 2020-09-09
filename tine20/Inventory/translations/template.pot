@@ -13,6 +13,14 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr ""
+
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
 msgstr ""
@@ -25,7 +33,7 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:101 Model/InventoryItem.php:83
+#: js/InventoryItemEditDialog.js:101 Model/InventoryItem.php:82
 msgid "Name"
 msgstr ""
 
@@ -45,7 +53,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:168 Model/InventoryItem.php:167
+#: js/InventoryItemEditDialog.js:168 Model/InventoryItem.php:168
 msgid "Warranty"
 msgstr ""
 
@@ -61,7 +69,7 @@ msgstr ""
 msgid "Available number"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:197 Model/InventoryItem.php:89
+#: js/InventoryItemEditDialog.js:197 Model/InventoryItem.php:88
 msgid "Status"
 msgstr ""
 
@@ -69,7 +77,7 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:251 Model/InventoryItem.php:149
+#: js/InventoryItemEditDialog.js:251 Model/InventoryItem.php:150
 msgid "Price"
 msgstr ""
 
@@ -77,24 +85,28 @@ msgstr ""
 msgid "Cost center"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:271 Model/InventoryItem.php:142
+#: js/InventoryItemEditDialog.js:271 Model/InventoryItem.php:143
 msgid "Invoice"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:277 Model/InventoryItem.php:115
+#: js/InventoryItemEditDialog.js:277 Model/InventoryItem.php:116
 msgid "Invoice date"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:283
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
 msgid "Depreciate"
 msgstr ""
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
+#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
+msgid "All Inventory Items"
 msgstr ""
 
-#: Preference.php:61
-msgid "The default container for new items"
+#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Inventory"
 msgstr ""
 
 #: Config.php:31
@@ -105,42 +117,28 @@ msgstr ""
 msgid "Possible status."
 msgstr ""
 
-#: Config.php:40
+#: Config.php:41
 msgid "ordered"
 msgstr ""
 
-#: Config.php:41
+#: Config.php:42
 msgid "available"
 msgstr ""
 
-#: Config.php:42
+#: Config.php:43
 msgid "defect"
 msgstr ""
 
-#: Config.php:43
+#: Config.php:44
 msgid "missing"
 msgstr ""
 
-#: Config.php:44
+#: Config.php:45
 msgid "removed"
 msgstr ""
 
-#: Config.php:45
+#: Config.php:46
 msgid "unknown"
-msgstr ""
-
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr ""
-
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
 msgstr ""
 
 #: Model/InventoryItem.php:38
@@ -155,34 +153,32 @@ msgid_plural "Inventory item lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/InventoryItem.php:98
+#: Model/InventoryItem.php:97
 msgid "Inventory ID"
 msgstr ""
 
-#: Model/InventoryItem.php:154
+#: Model/InventoryItem.php:155
 msgid "Cost Center"
 msgstr ""
 
-#: Model/InventoryItem.php:175
+#: Model/InventoryItem.php:176
 msgid "Item added"
 msgstr ""
 
-#: Model/InventoryItem.php:183
+#: Model/InventoryItem.php:184
 msgid "Item removed"
 msgstr ""
 
-#: Model/InventoryItem.php:192
-msgid "Deprecate"
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "Inventory"
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
-msgid "All Inventory Items"
-msgstr ""
-
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
-msgid "All existing Inventory Items"
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid ""
+"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
 msgstr ""

@@ -74,7 +74,12 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     getTitle: function() {
         return this.i18n._(this.appName);
     },
-    
+
+    formatMessage: function(template) {
+        arguments[0] = this.i18n._hidden(template);
+        return formatMessage.apply(formatMessage, arguments);
+    },
+
     /**
      * returns iconCls of this application
      * 
@@ -82,7 +87,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @return {String}
      */
     getIconCls: function(target) {
-        return iconCls = 'ApplicationIconCls ' + this.appName + 'IconCls';
+        return 'ApplicationIconCls ' + this.appName + 'IconCls';
     },
     
     /**

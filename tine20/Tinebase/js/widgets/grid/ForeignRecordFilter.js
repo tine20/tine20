@@ -39,7 +39,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @cfg {Record} foreignRecordClass needed for explicit defined filters
      */
     foreignRecordClass : null,
-    
+
+    /**
+     * @cfg {String} foreignRefIdField optional, defaults to idProperty
+     * might differ for foreignRecords (many to many relation) filter
+     *  -> foreignRefId is not yet part of modelConfiguration :-(
+     */
+    foreignRefIdField: null,
+
     /**
      * @cfg {String} linkType {relation|foreignId} needed for explicit defined filters
      */
@@ -135,25 +142,25 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
             operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
         }, this);
-        
+
         // we need this to detect operator changes
         Ext.each(operators, function(o) {o.toString = this.objectToString}, this);
-        
+
         this.operatorStore = new Ext.data.JsonStore({
             fields: ['operator', 'label'],
             data: operators
         });
-        
+
         if ( this.operatorStore.getCount() > 0) {
             this.defaultOperator = this.operatorStore.getAt(0).get('operator');
         }
     },
-    
+
     /**
      * init an explicit filter row
      */
     initExplicit: function() {
-        this.foreignField = this.foreignRecordClass.getMeta('idProperty');
+        this.foreignField = this.foreignRefIdField || this.foreignRecordClass.getMeta('idProperty');
 
         var foreignApp = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName')),
             i18n;
@@ -171,7 +178,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         }
 
         if (! this.operators) {
-            this.operators = ['equals', 'not', 'definedBy'];
+            this.operators = ['equals', 'not', 'in', /*'notin',*/ 'definedBy'];
         }
 
         // get operators from registry
@@ -183,12 +190,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     app = Tine.Tinebase.appMgr.get(appName),
                     label = app ? app.i18n._hidden(def.label) : def.label;
 
-                this.operators.push({
-                    operator: Ext.apply(def, {
-                        foreignRecordClass: foreignRecordClass
-                    }),
-                    label: label
-                });
+                if (foreignRecordClass == this.foreignRecordClass) {
+                    this.operators.push({
+                        operator: Ext.apply(def, {
+                            foreignRecordClass: foreignRecordClass
+                        }),
+                        label: label
+                    });
+                }
             }, this);
         }
 
@@ -251,10 +260,15 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 });
             } else {
                 // get value for idField if our own operator is not definedBy
-                if (filter.get('operator') != 'definedBy') {
+
+                // auto switch not to equals as we auto switch definedBy to notDefinedBy
+                var op = filter.get('operator'),
+                    opMap = {not: 'equals'};
+
+                if (op != 'definedBy') {
                     value.push({
-                        field: ':' + foreignRecordClass.getMeta('idProperty'),
-                        operator: filter.get('operator'),
+                        field: ':' + (me.foreignRefIdField || foreignRecordClass.getMeta('idProperty')),
+                        operator: opMap[op] || op,
                         value: filter.formFields.value.value
                     });
                 }
@@ -285,7 +299,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             operator = filter.get('operator') || filter.formFields.operator.origGetValue(),
             isRegisteredOperator = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == operator;}), 'operator', false);
         
-        if (isRegisteredOperator || ['equals', 'not', 'oneOf'].indexOf(operator) >= 0) {
+        if (isRegisteredOperator || ['equals', 'not', 'in', 'notin'].indexOf(operator) >= 0) {
             // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
             return filter.formFields.value.origSetValue(arguments.length ? arguments[1] : value);
         }
@@ -325,7 +339,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             // explicit chose right operator /equals / in /definedBy: left sided values create (multiple) subfilters in filterToolbar
             var foreignRecordDefinition = filter.foreignRecordDefinition,
                 foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
-                foreignRecordIdProperty = foreignRecordClass.getMeta('idProperty'),
+                foreignRecordIdProperty = me.foreignRefIdField || foreignRecordClass.getMeta('idProperty'),
                 parentFilters = [];
                 
             Ext.each(value, function(filterData, i) {
@@ -373,9 +387,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
             // a single id filter is always displayed in the parent Toolbar with our own filterRow
             else if (value.length == 1 && [foreignRecordIdProperty, ':' + foreignRecordIdProperty].indexOf(value[0].field) > -1) {
+                // switch back to not when operator is notDefinedby as we switched not to equals
+                var op = value[0].operator,
+                    opMap = { 'notDefinedBy:AND': 'not' },
+                    finalOp = opMap[operator] || op;
+
                 filter.set('value', value[0].value);
-                filter.formFields.operator.setValue(value[0].operator);
-                this.onOperatorChange(filter, value[0].operator, true);
+                filter.formFields.operator.setValue(finalOp);
+                this.onOperatorChange(filter, finalOp, true);
             }
 
             // a single registered filter is always displayed in the parent Toolbar with our own filterRow
@@ -450,7 +469,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         } else {
             operator = new Ext.form.ComboBox({
                 filter: filter,
-                width: 80,
                 id: 'tw-ftb-frow-operatorcombo-' + filter.id,
                 mode: 'local',
                 lazyInit: false,
@@ -477,9 +495,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
         operator.origGetValue = operator.getValue.createDelegate(operator);
         
-        // op is always AND atm.
         operator.getValue = function() {
-            return 'AND';
+            // auto switch operator for negating single line filters
+            var op = operator.origGetValue(),
+                opMap = {
+                    not: 'notDefinedBy:AND'
+                };
+
+            return opMap[op] || 'AND';
         };
         
 //        var origSetValue = operator.setValue.createDelegate(operator);
@@ -523,6 +546,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         }
         
         filter.formFields.value = this.valueRenderer(filter, el);
+
+        var width = filter.formFields.value.el.up('.tw-ftb-frow-value').getWidth() -10;
+        if (filter.formFields.value.wrap) {
+            filter.formFields.value.wrap.setWidth(width);
+        }
+        filter.formFields.value.setWidth(width);
     },
     
     /**
@@ -540,16 +569,24 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         switch(operator) {
             case 'equals':
             case 'not':
-                
-                value = Tine.widgets.form.RecordPickerManager.get(this.foreignRecordClass.getMeta('appName'), this.foreignRecordClass, Ext.apply({
+            case 'in':
+            case 'notin':
+                //@TODO find it
+                var pickerRecordClass = this.foreignRecordClass;
+                if (this.foreignRefIdField) {
+                    // many 2 many relation
+                    var foreignRecordConfig = _.get(this.foreignRecordClass.getModelConfiguration(), 'fields.' + this.foreignRefIdField + '.config');
+                    pickerRecordClass = Tine.Tinebase.data.RecordMgr.get(foreignRecordConfig.appName, foreignRecordConfig.modelName);
+                }
+
+                value = Tine.widgets.form.RecordPickerManager.get(pickerRecordClass.getMeta('appName'), pickerRecordClass, Ext.apply({
                     filter: filter,
                     blurOnSelect: true,
-                    width: this.filterValueWidth,
                     listWidth: 500,
                     listAlign: 'tr-br',
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
-                    renderTo: el
+                    renderTo: el,
+                    allowMultiple: ['in', 'notin'].indexOf(operator) > -1
                 }, this.pickerConfig));
                 
                 value.on('specialkey', function(field, e){
@@ -583,8 +620,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                         value = new Ext.Button({
                             text: i18n._(this.startDefinitionText),
                             filter: filter,
-                            width: this.filterValueWidth,
-                            id: 'tw-ftb-frow-valuefield-' + filter.id,
                             renderTo: el,
                             handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
                             scope: this

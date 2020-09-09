@@ -18,6 +18,11 @@
  */
 abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
+    const HTTP_ERROR_CODE_FORBIDDEN = 403;
+    const HTTP_ERROR_CODE_NOT_FOUND = 404;
+    const HTTP_ERROR_CODE_SERVICE_UNAVAILABLE = 503;
+    const HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
+
     /**
      * the request
      *
@@ -199,5 +204,27 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         Tinebase_Server_Abstract::$_modelConfigMethods[$frontend] = $definitions;
 
         return $definitions;
+    }
+
+    /**
+     * @param int $code
+     */
+    public static function setHttpHeader($code)
+    {
+        if (! headers_sent()) {
+            switch ($code) {
+                case self::HTTP_ERROR_CODE_FORBIDDEN:
+                    header('HTTP/1.1 403 Forbidden');
+                    break;
+                case self::HTTP_ERROR_CODE_NOT_FOUND:
+                    header('HTTP/1.1 404 Not Found');
+                    break;
+                case self::HTTP_ERROR_CODE_SERVICE_UNAVAILABLE:
+                    header('HTTP/1.1 503 Service Unavailable');
+                    break;
+                default:
+                    header("HTTP/1.1 500 Internal Server Error");
+            }
+        }
     }
 }

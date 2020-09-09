@@ -4,7 +4,7 @@
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -34,7 +34,7 @@ class ActiveSync_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $args = $this->_parseArgs($opts, array('user'));
         
-        if ($args['user'] != Tinebase_Core::getUser()->accountLoginName && ! $this->_checkAdminRight()) {
+        if ($args['user'] != Tinebase_Core::getUser()->accountLoginName && ! $this->_checkAdminRight(false)) {
             return 1;
         }
         

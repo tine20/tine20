@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -197,41 +197,31 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function login()
     {
+        if ($this->_redirect()) {
+            return;
+        }
+        
+        return $this->mainScreen();
+    }
+
+    protected function _redirect()
+    {
         // redirect to REDIRECTURL if set
         $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, '');
 
         if ($redirectUrl !== '' && Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTALWAYS, FALSE)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' redirecting to ' . $redirectUrl);
             header('Location: ' . $redirectUrl);
-            return;
+            return true;
         }
 
-        // check if setup/update required
-        $setupController = Setup_Controller::getInstance();
-        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        foreach ($applications as $application) {
-            if ($setupController->updateNeeded($application)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . " " . $application->name . ' needs an update');
-                return $this->setupRequired();
-            }
-        }
-
-        return $this->mainScreen();
+        return false;
     }
 
-    /**
-     * renders the setup/update required dialog
-     */
     public function setupRequired()
     {
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Update/Setup required!');
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('update.php');
-        exit();
+        return $this->mainScreen();
     }
 
     /**
@@ -350,6 +340,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @param string $_fileType
      * @param array $filesToWatch
+     * @throws Tinebase_Exception
      */
     protected function _deliverChangedFiles($_fileType, $filesToWatch=null)
     {
@@ -357,12 +348,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         Tinebase_Session::writeClose(true);
 
         $filesToWatch = $filesToWatch ? $filesToWatch : $this->_getFilesToWatch($_fileType);
-        if ($_fileType == 'js' && TINE20_BUILDTYPE != 'DEVELOPMENT') {
-            $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
-            if (! empty($customJSFiles)) {
-                $filesToWatch = array_merge($filesToWatch, (array)$customJSFiles);
-            }
-        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') Got files to watch: ' . print_r($filesToWatch, true));
@@ -386,7 +371,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') $clientETag: ' . $clientETag);
 
-        $serverETag = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
+        $serverETag = md5(implode('', array_map(function($fileName) {
+            return file_exists($fileName) ? md5_file($fileName) : '';
+        }, $filesToWatch)));
 
         if ($clientETag == $serverETag) {
             header("HTTP/1.0 304 Not Modified");
@@ -399,14 +386,21 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 if (file_exists($file)) {
                     readfile($file);
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __CLASS__ . '::' . __METHOD__
-                        . ' (' . __LINE__ .') File ' . $file . ' does not exist');
+                    if (preg_match('/^Tinebase/', $file)) {
+                        // this is critical!
+                        throw new Tinebase_Exception('client file does not exist: ' . $file);
+                    } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(
+                            __CLASS__ . '::' . __METHOD__
+                            . ' (' . __LINE__ .') File ' . $file . ' does not exist');
+                    }
                 }
             }
             if ($_fileType != 'lang') {
-                // adds new server version etag for client version check
-                echo "Tine.clientVersion.assetHash = '$serverETag';";
+                // adds assetHash for client version check
+                $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
+                echo "Tine = Tine || {}; Tine.clientVersion = Tine.clientVersion || {};";
+                echo "Tine.clientVersion.assetHash = '$assetHash';";
             }
         }
     }
@@ -421,8 +415,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function _getFilesToWatch($_fileType, $apps = array())
     {
         $requiredApplications = array('Setup', 'Tinebase', 'Admin', 'Addressbook');
-        $installedApplications = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
-        $orderedApplications = array_merge($requiredApplications, array_diff($installedApplications, $requiredApplications));
+        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+            $orderedApplications = $requiredApplications;
+        } else {
+            $installedApplications = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
+            $orderedApplications = array_merge($requiredApplications, array_diff($installedApplications, $requiredApplications));
+        }
+
         $filesToWatch = array();
 
         foreach ($orderedApplications as $application) {
@@ -528,9 +527,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         try {
             $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
         } catch (Tinebase_Exception_UnexpectedValue $teuv) {
-            Tinebase_Exception::log($teuv);
-            header('HTTP/1.1 404 Not Found');
-            return;
+            $this->_handleFailure(404);
         }
 
         $serverETag = sha1($image->blob . $width . $height . $ratiomode);
@@ -549,17 +546,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header("HTTP/1.0 304 Not Modified");
             header('Content-Length: 0');
         } else {
-            #$cache = Tinebase_Core::getCache();
-            
-            #if ($cache->test($serverETag) === true) {
-            #    $image = $cache->load($serverETag);
-            #} else {
-                if ($width != -1 && $height != -1) {
-                    Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
-                }
-            #    $cache->save($image, $serverETag);
-            #}
-        
+            if ($width != -1 && $height != -1) {
+                Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
+            }
+
             header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
             header('Content-Type: '. $image->mime);
             header('Etag: "' . $serverETag . '"');
@@ -605,10 +595,14 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             . ' Downloading attachment of ' . $modelName . ' record with id ' . $recordId);
         
         $recordController = Tinebase_Core::getApplicationInstance($modelName);
-        $record = $recordController->get($recordId);
+        try {
+            $record = $recordController->get($recordId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+        }
         
         $node = Tinebase_FileSystem::getInstance()->get($nodeId);
-        $node->grants =
+        $node->grants = null;
         $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX
             . Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($record)
             . '/' . $node->name;
@@ -631,7 +625,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // some grids can house tempfiles and filemanager nodes, therefor first try tmpfile and if no tmpfile try filemanager
         if (!$tmpFile && Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
             $filemanagerNodeController = Filemanager_Controller_Node::getInstance();
-            $file = $filemanagerNodeController->get($tmpfileId);
+            try {
+                $file = $filemanagerNodeController->get($tmpfileId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->_handleFailure(404);
+            }
 
             $filemanagerHttpFrontend = new Filemanager_Frontend_Http();
             $filemanagerHttpFrontend->downloadFile($file->path, null);
@@ -644,7 +642,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getPostalXWindow()
     {
         $context = [
-            'path' => Tinebase_Core::getUrl('path'),
+            'path' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
         ];
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML(
            'Tinebase/js/postal-xwindow-client.js',
@@ -680,18 +678,35 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 // ACL Check
                 $controller->get($pathParts[2]);
 
-                //$pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath();
                 $node = Tinebase_FileSystem::getInstance()->stat('/' . $_appId . '/folders/' . $path, $_revision);
             } else {
                 $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . $_appId . '/folders/' . $path);
-                $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
+                try {
+                    $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+                }
             }
         } else {
-            throw new Tinebase_Exception_InvalidArgument('A path is needed to download a preview file.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' A path is needed to download a preview file.');
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
 
         $this->_downloadPreview($node, $_type, $_num);
 
         exit;
+    }
+
+    /**
+     * openIDCLogin
+     *
+     * @return boolean
+     */
+    public function openIDCLogin()
+    {
+        $oidc = Tinebase_Auth_Factory::factory('OpenIdConnect');
+        // request gets redirected to login page on success
+        return $oidc->providerAuthRequest();
     }
 }

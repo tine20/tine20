@@ -32,7 +32,7 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('title', 'number', 'description'))),
-        'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Projects')),
+        'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('modelName' => Projects_Model_Project::class)),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Projects_Model_Project')),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
             'idProperty'      => 'projects_project.id',

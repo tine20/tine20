@@ -3,7 +3,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -27,6 +27,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     const DESCRIPTION           = 'description';
     const LABEL                 = 'label';
     const OPTIONS               = 'options';
+    const RECORDS               = 'records';
+    const RECORD_MODEL          = 'recordModel';
     const SETBYADMINMODULE      = 'setByAdminModule';
     const SETBYSETUPMODULE      = 'setBySetupModule';
     const TYPE                  = 'type';
@@ -58,7 +60,24 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @var string
      */
     const TYPE_STRING = 'string';
-    
+
+    /**
+     * record config type
+     * behaves like a string, only when sent to the client it will be resolved to the actual record
+     *
+     * @var string
+     */
+    const TYPE_RECORD = 'record';
+
+    const APPLICATION_NAME = 'appName';
+    const MODEL_NAME = 'modelName';
+
+    // @TODO: remove TYPE_RECORD_CONTROLLER and derive it from modelName!
+    /**
+     * @deprecated
+     */
+    const TYPE_RECORD_CONTROLLER = 'recordController';
+
     /**
      * float config type
      * 
@@ -167,7 +186,20 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         return $config;
     }
-    
+
+    /**
+     * @param string $val
+     * @return string
+     */
+    public static function uncertainJsonDecode($val)
+    {
+        if (!is_string($val)) return $val;
+        
+        $result = json_decode($val, TRUE);
+        if (null === $result && strtolower($val) !== '{null}') $result = $val;
+
+        return $result;
+    }
     /**
      * retrieve a value and return $default if there is no element set.
      *
@@ -199,9 +231,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
         
         if (true === $dbAvailable && null !== ($config = $this->_loadConfig($name))) {
-            $dbConfigArray = json_decode($config->value, TRUE);
-            // @todo JSON encode all config data via update script!
-            if (null === $dbConfigArray && strtolower($config->value) !== '{null}') $dbConfigArray = $config->value;
+            $dbConfigArray = static::uncertainJsonDecode($config->value);
         }
 
         $data = null;
@@ -283,17 +313,21 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
-        if (is_object($_value) && $_value instanceof Tinebase_Record_Interface) {
-            $_value = $_value->toArray(true);
-        }
+        try {
+            if (is_object($_value) && $_value instanceof Tinebase_Record_Interface) {
+                $_value = $_value->toArray(true);
+            }
 
-        $configRecord = new Tinebase_Model_Config(array(
-            "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
-            "name"              => $_name,
-            "value"             => json_encode($_value),
-        ));
-        
-        $this->_saveConfig($configRecord);
+            $configRecord = new Tinebase_Model_Config(array(
+                "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
+                "name"              => $_name,
+                "value"             => json_encode($_value),
+            ));
+
+            $this->_saveConfig($configRecord);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // during installation we may not have access to the application yet.. dangerous terrain
+        }
 
         $this->_mergedConfigCache[$_name] = $this->_rawToConfig($_value, $_name);
     }
@@ -405,8 +439,14 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 $cachedConfigFile = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
 
                 if (file_exists($cachedConfigFile)) {
-                    /** @noinspection PhpIncludeInspection */
-                    $cachedConfigData = include($cachedConfigFile);
+                    try {
+                        /** @noinspection PhpIncludeInspection */
+                        $cachedConfigData = include($cachedConfigFile);
+                    } catch (Throwable $e) {
+                        unlink($cachedConfigFile);
+                        $cachedConfigData = false;
+                        Tinebase_Exception::log($e);
+                    }
                 } else {
                     $cachedConfigData = false;
                 }
@@ -465,9 +505,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         while (false !== ($direntry = readdir($dh))) {
             if (strpos($direntry, '.inc.php') === (strlen($direntry) - 8)) {
-                // TODO do lint!?! php -l $confdFolder . DIRECTORY_SEPARATOR . $direntry
-                /** @noinspection PhpIncludeInspection */
-                $tmpArray = include($confdFolder . DIRECTORY_SEPARATOR . $direntry);
+                $tmpArray = $this->_getConfdFileData($confdFolder . DIRECTORY_SEPARATOR . $direntry);
                 if (false !== $tmpArray && is_array($tmpArray)) {
                     foreach ($tmpArray as $key => $value) {
                         self::$_configFileData[$key] = $value;
@@ -506,7 +544,6 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' can\'t create cached composed config file "' .$filename );
         } else {
-            
             fputs($fh, "<?php\n\nreturn ");
             fputs($fh, var_export(self::$_configFileData, true));
             fputs($fh, ';');
@@ -524,7 +561,39 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 . ' Renamed to file ' . $filename);
         }
     }
-    
+
+    /**
+     * returns conf.d file data
+     * - lint file
+     * - check PHP opening tag
+     *
+     * @param $filename
+     * @return array|boolean
+     */
+    protected function _getConfdFileData($filename)
+    {
+        $result = @shell_exec("php -l $filename");
+        if (preg_match('/parse error/i', $result)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' PHP syntax check failed for ' . $filename . ': ' . $result);
+            return false;
+        }
+
+        // check first chars to prevent leading spaces
+        $content = file_get_contents($filename, false, null, 0, 200);
+        if (strpos($content, '<?php') !== 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not find leading PHP open tag in ' . $filename);
+            return false;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Including config file ' . $filename);
+
+        /** @noinspection PhpIncludeInspection */
+        return include($filename);
+    }
+
     /**
      * returns data from application specific config.inc.php file
      *
@@ -590,7 +659,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     protected function _loadAllAppConfigsInCache()
     {
         if (empty($this->_appName)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' appName not set');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' appName not set');
             $this->_cachedApplicationConfig = array();
         }
 
@@ -614,8 +684,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         try {
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
-
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
             $filter = new Tinebase_Model_ConfigFilter(array(
                 array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
             ));
@@ -632,9 +702,6 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found ' . count($allConfigs) . ' configs.');
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allConfigs->toArray(), TRUE));
-        
         foreach ($allConfigs as $config) {
             $this->_cachedApplicationConfig[$config->name] = $config;
         }
@@ -812,6 +879,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         switch ($definition['type']) {
             case self::TYPE_INT:        return (int) $_rawData;
             case self::TYPE_BOOL:       return $_rawData === "true" || (bool) (int) $_rawData;
+            case self::TYPE_RECORD:
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;
             case self::TYPE_ARRAY:      return (array) $_rawData;
@@ -848,23 +916,34 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         return (isset($properties[$_name]) || array_key_exists($_name, $properties)) ? $properties[$_name] : NULL;
     }
 
+    /**
+     * @param $target
+     * @param $key
+     * @param $val
+     */
     protected function _mergeAppDefaultsConfigData(&$target, $key, $val)
     {
         if (!isset($target[$key])) {
             return;
         }
         if (is_array($val)) {
-            if ($target[$key][self::TYPE] === self::TYPE_OBJECT && $target[$key][self::CLASSNAME] ===
-                    Tinebase_Config_Struct::class && isset($target[$key][self::CONTENT])) {
+            if (   $target[$key][self::TYPE] === self::TYPE_OBJECT
+                && $target[$key][self::CLASSNAME] === Tinebase_Config_Struct::class
+                && isset($target[$key][self::CONTENT])
+            ) {
                 foreach ($val as $k => $v) {
                     if (!isset($target[$key][self::CONTENT][$k])) {
                         continue;
                     }
                     $this->_mergeAppDefaultsConfigData($target[$key][self::CONTENT], $k, $v);
                 }
+            } elseif (in_array($target[$key][self::TYPE], [self::TYPE_ARRAY, self::TYPE_KEYFIELD_CONFIG])) {
+                $target[$key][self::DEFAULT_STR] = $val;
             }
-        } elseif (!isset($target[$key][self::TYPE]) || ($target[$key][self::TYPE] !== self::TYPE_OBJECT &&
-                $target[$key][self::TYPE] !== self::TYPE_ARRAY)) {
+        } elseif (!isset($target[$key][self::TYPE])
+            || ($target[$key][self::TYPE] !== self::TYPE_OBJECT &&
+                $target[$key][self::TYPE] !== self::TYPE_ARRAY)
+        ) {
             $target[$key][self::DEFAULT_STR] = $val;
         }
     }
@@ -907,7 +986,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $features = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $features = $this->get(self::ENABLED_FEATURES);
-            if ('Tinebase' === $this->_appName && !Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            if ('Tinebase' === $this->_appName && (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')
+                    || !$features->{Tinebase_Config::FEATURE_FULLTEXT_INDEX})) {
                 $features->{Tinebase_Config::FEATURE_SEARCH_PATH} = false;
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

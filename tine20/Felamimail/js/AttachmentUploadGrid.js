@@ -29,12 +29,6 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
 
     initComponent: function () {
         this.app = this.app || Tine.Tinebase.appMgr.get('Felamimail');
-        this.events = [
-            /**
-             * Fired once files where selected from filemanager or from a local source
-             */
-            'filesSelected'
-        ];
 
         this.attachmentTypeStore = new Ext.data.JsonStore({
             fields: ['id', 'name'],
@@ -44,34 +38,27 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         Tine.Felamimail.AttachmentUploadGrid.superclass.initComponent.call(this);
 
         this.on('beforeedit', this.onBeforeEdit.createDelegate(this));
+        this.store.on('add', this.onStoreAddRecords, this);
 
-        this.initActions();
-    },
-
-    /**
-     * initActions
-     */
-    initActions: function () {
-        this.action_download = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: false,
-            actionType: 'download',
-            text: i18n._('Download'),
-            handler: this.onDownload,
-            iconCls: 'action_download',
-            scope: this,
-            disabled:true
-        });
-
-        if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {initialApp: this.app});
+        if (this.action_rename) {
+            _.set(this, 'action_rename.initialConfig.actionUpdater', this.renameActionUpdater);
         }
-
-        this.actionUpdater.addActions([this.action_download, this.action_preview]);
-        this.getTopToolbar().addItem(this.action_download);
-        this.contextMenu.addItem(this.action_download);
     },
-    
+
+    onStoreAddRecords: function(store, rs, idx) {
+        _.each(rs, (r) => {
+            _.set(r, 'data.attachment_type', 'attachment');
+        });
+    },
+
+    renameActionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+        const isTempfile = !!_.get(records, '[0].data.tempFile');
+        const enabled = !!isTempfile;
+
+        action.setDisabled(!enabled);
+        action.baseAction.setDisabled(!enabled);
+    },
+
     onBeforeEdit: function (e) {
         var record = e.record;
         this.currentRecord = record;
@@ -192,59 +179,5 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
             width: 70,
             header: i18n._('type')
         }]
-    },
-
-    onFilesSelect: function (fileSelector, e) {
-        if (window.lodash.isArray(fileSelector)) {
-            this.onFileSelectFromFilemanager(fileSelector);
-            return;
-        }
-
-        var files = fileSelector.getFileList();
-        Ext.each(files, function (file) {
-
-            var upload = new Ext.ux.file.Upload({
-                file: file,
-                fileSelector: fileSelector
-            });
-
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
-
-            upload.on('uploadfailure', this.onUploadFail, this);
-            upload.on('uploadcomplete', this.onUploadComplete, fileRecord);
-            upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
-
-            if (fileRecord.get('status') !== 'failure') {
-                // overriden because of this
-                fileRecord.data.attachment_type = 'attachment';
-                this.store.add(fileRecord);
-            }
-        }, this);
-
-        this.fireEvent('filesSelected');
-    },
-
-    onFileSelectFromFilemanager: function (nodes) {
-        var me = this;
-
-        Ext.each(nodes, function (node) {
-            var record = new Tine.Filemanager.Model.Node(node);
-
-            if (me.store.find('name', record.get('name')) === -1) {
-                // Overriden because of this
-                record.data.attachment_type = 'systemlink_fm';
-                me.store.add(record);
-            } else {
-                Ext.MessageBox.show({
-                    title: i18n._('Failure'),
-                    msg: i18n._('This file is already attached to this record.'),
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            }
-        });
-
-        this.fireEvent('filesSelected');
     }
 });

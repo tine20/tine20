@@ -39,33 +39,12 @@ class Felamimail_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * truncate email cache
      * 
      * @param Zend_Console_Getopt $opts
+     * @return integer
      */
     public function truncatecache($opts)
     {
         $this->_checkAdminRight();
-
-        $db = Tinebase_Core::getDb();
-        if (! $db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            throw new Felamimail_Exception('Only implemented for MySQL');
-        }
-
-        // disable fk checks
-        $db->query("SET FOREIGN_KEY_CHECKS=0");
-
-        $cacheTables = array(
-            'felamimail_cache_message',
-            'felamimail_cache_msg_flag',
-            'felamimail_cache_message_to',
-            'felamimail_cache_message_cc',
-            'felamimail_cache_message_bcc'
-        );
-
-        // truncate tables
-        foreach ($cacheTables as $table) {
-            $db->query("TRUNCATE TABLE " . $db->table_prefix . $table);
-            echo "Truncated " . $table . " table\n";
-        }
-
-        $db->query("SET FOREIGN_KEY_CHECKS=1");
+        Felamimail_Controller::getInstance()->truncateEmailCache();
+        return 0;
     }
 }

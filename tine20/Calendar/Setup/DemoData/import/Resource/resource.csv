@@ -1,0 +1,2 @@
+name,hierarchy,description,max_number_of_people,email,type,busy_type,suppress_notification,site
+test2,Kirche 1/test2,test,3,,RESOURCE,FREE,1,Admin Account

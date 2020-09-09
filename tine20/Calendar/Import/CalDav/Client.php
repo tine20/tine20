@@ -246,7 +246,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         try {
             while (true) {
-                $existingCalendar = Tinebase_Container::getInstance()->getContainerByName($this->appName, $displayname . $counter, $type, Tinebase_Core::getUser());
+                $existingCalendar = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, $displayname . $counter, $type, Tinebase_Core::getUser());
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                     . ' Got calendar: ' . $existingCalendar->name . ' (id: ' . $existingCalendar->getId() . ')');
@@ -836,11 +836,11 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
                     $grants[$user[$i]] = $this->_getWriteGrants();
                     break;
                 case '{DAV:}read-current-user-privilege-set':
-                    continue;
+                    continue 2;
                 default:
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' unknown privilege: ' . $privilege[$i]);
-                    continue;
+                    continue 2;
             }
             $grants[$user[$i]]['account_id'] = $user[$i];
             $grants[$user[$i]]['account_type'] = $type[$i];

@@ -5,10 +5,12 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
+
+use \Psr\Http\Message\RequestInterface;
 
 /**
  * the class provides functions to handle applications
@@ -84,12 +86,29 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @return  bool
      * @throws  Tinebase_Exception_MaintenanceMode
-     *
-     * TODO what happened to the $securitycode parameter?
-     *  ->  @param   string                           $securitycode   the security code(captcha)
      */
     public function login($loginName, $password, \Zend\Http\PhpEnvironment\Request $request, $clientIdString = NULL)
     {
+        // enforce utf8
+        $password = Tinebase_Helper::mbConvertTo($password);
+
+        // make sure pw is always replaced in Logger
+        Tinebase_Core::getLogger()->addReplacement($password);
+
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            throw new Tinebase_Exception_MaintenanceMode();
+        }
+
+        // sanitize loginname - we might not support invalid/out of range characters
+        $loginName = Tinebase_Core::filterInputForDatabase($loginName);
+
+        // rolechange user: username*authuser?
+        $authUserParts = preg_split('/\*+(?=[^*]+$)/', $loginName);
+        if (isset($authUserParts[1]) && Tinebase_User::getInstance()->getUserByLoginName($authUserParts[1])) {
+            $loginName = $authUserParts[1];
+            $roleChangeUserName = $authUserParts[0];
+        }
+
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
 
         $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
@@ -109,6 +128,59 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $userController->updateNtlmV2Hash($user->getId(), $password);
             }
         }
+
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail', true)) {
+            Felamimail_Controller::getInstance()->handleAccountLogin($user, $password);
+        }
+
+        if (isset($roleChangeUserName)) {
+            Tinebase_Controller::getInstance()->changeUserAccount($roleChangeUserName);
+        }
+
+        return true;
+    }
+
+    /**
+     * create new user session (via openID connect)
+     *
+     * @param   string                           $oidcResponse
+     * @param   \Zend\Http\PhpEnvironment\Request $request
+     *
+     * @return  bool
+     * @throws  Tinebase_Exception_MaintenanceMode
+     */
+    public function loginOIDC($oidcResponse, \Zend\Http\PhpEnvironment\Request $request)
+    {
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            throw new Tinebase_Exception_MaintenanceMode();
+        }
+
+        $ssoConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SSO};
+        if (! $ssoConfig->{Tinebase_Config::SSO_ACTIVE}) {
+            throw new Tinebase_Exception('sso client config inactive');
+        }
+
+        $adapterName = $ssoConfig->{Tinebase_Config::SSO_ADAPTER};
+        $authAdapter = Tinebase_Auth_Factory::factory($adapterName);
+        $authAdapter->setOICDResponse($oidcResponse);
+        $authResult = $authAdapter->authenticate();
+        $adapterUser = $authAdapter->getLoginUser();
+        if (! $adapterUser) {
+            return false;
+        }
+        $loginName = $adapterUser->accountLoginName;
+
+        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
+            $adapterName);
+
+        $user = $this->_validateAuthResult($authResult, $accessLog);
+
+        if (!($user instanceof Tinebase_Model_FullUser)) {
+            return false;
+        }
+
+        // TODO make credential cache work without PW
+        $this->_loginUser($user, $accessLog, Tinebase_Record_Abstract::generateUID(20));
 
         return true;
     }
@@ -272,6 +344,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function initUser(Tinebase_Model_FullUser $_user, $fixCookieHeader = true)
     {
         Tinebase_Core::set(Tinebase_Core::USER, $_user);
+        $ravenClient = Tinebase_Core::getSentry();
+        if ($ravenClient) {
+            $ravenClient->tags['user'] = $_user->accountLoginName;
+        }
         
         if (Tinebase_Session_Abstract::getSessionEnabled()) {
             $this->_initUserSession($fixCookieHeader);
@@ -294,6 +370,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _initUserSession($fixCookieHeader = true)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Init user session');
+
         // FIXME 0010508: Session_Validator_AccountStatus causes problems
         //Tinebase_Session::registerValidatorAccountStatus();
 
@@ -302,7 +381,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
             Tinebase_Session::registerValidatorHttpUserAgent();
         } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
         }
         
         // we only need to activate ip session validation for non-encrypted connections
@@ -310,7 +390,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONIPVALIDATION, $ipSessionValidationDefault)) {
             Tinebase_Session::registerValidatorIpAddress();
         } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
         }
         
         if ($fixCookieHeader && Zend_Session::getOptions('use_cookies')) {
@@ -327,17 +408,20 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             header(array_pop($cookieHeaders), true);
             /** end of fix **/
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Save account object in session');
+
         Tinebase_Session::getSessionNamespace()->currentAccount = Tinebase_Core::getUser();
     }
     
     /**
      * login failed
      * 
-     * @param  string                    $loginName
+     * @param  Zend_Auth_Result          $authResult
      * @param  Tinebase_Model_AccessLog  $accessLog
      */
-    protected function _loginFailed($authResult, Tinebase_Model_AccessLog $accessLog)
+    protected function _loginFailed(Zend_Auth_Result $authResult, Tinebase_Model_AccessLog $accessLog)
     {
         // @todo update sql schema to allow empty sessionid column
         $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
@@ -480,6 +564,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
                 throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
             }
+            if ($_oldPassword == $_newPassword) {
+                // @Todo translation didn work
+                throw new Tinebase_Exception_SystemGeneric('The new password must be different from the old one.'); // _('The new password must be different from the old one.')
+            }
             Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
         } else {
             $pinAuth = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
@@ -520,13 +608,19 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             && in_array($loginName, $allowedRoleChangesArray[$currentAccountName])
         ) {
             $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
-            Tinebase_Session::getSessionNamespace()->userAccountChanged = true;
-            Tinebase_Session::getSessionNamespace()->originalAccountName = $currentAccountName;
-            
+            // CalDAV / ActiveSync have no session
+            Tinebase_Core::set('userAccountChanged', true);
+            Tinebase_Core::set('originalAccountName', $currentAccountName);
+            if (Tinebase_Session::isStarted()) {
+                Tinebase_Session::getSessionNamespace()->userAccountChanged = true;
+                Tinebase_Session::getSessionNamespace()->originalAccountName = $currentAccountName;
+            }
         } else if (Tinebase_Session::getSessionNamespace()->userAccountChanged 
             && isset($allowedRoleChangesArray[Tinebase_Session::getSessionNamespace()->originalAccountName])
         ) {
             $user = Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_Session::getSessionNamespace()->originalAccountName);
+            Tinebase_Core::set('userAccountChanged', false);
+            Tinebase_Core::set('originalAccountName', null);
             Tinebase_Session::getSessionNamespace()->userAccountChanged = false;
             Tinebase_Session::getSessionNamespace()->originalAccountName = null;
         }
@@ -833,15 +927,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function userAccountChanged()
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ .' check if userAccountChanged');
+
         try {
             $session = Tinebase_Session::getSessionNamespace();
-        } catch (Zend_Session_Exception $zse) {
-            $session = null;
-        }
-        
-        return ($session instanceof Zend_Session_Namespace && isset($session->userAccountChanged)) 
+            return ($session instanceof Zend_Session_Namespace && isset($session->userAccountChanged))
                 ? $session->userAccountChanged
                 : false;
+        } catch (Zend_Session_Exception $zse) {
+            return !! Tinebase_Core::get('userAccountChanged');
+        }
     }
 
     /**
@@ -964,6 +1060,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ]))->toArray());
         });
 
+        $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/health', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'healthCheck', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/_status[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatus', [
@@ -971,11 +1074,26 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ]))->toArray());
         });
 
+        $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->post('/autodiscover.xml', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicApiMSAutodiscoverXml', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+
+        $r->addGroup('/Autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->post('/Autodiscover.xml', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicApiMSAutodiscoverXml', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
     }
 
     /**
      * @return \Zend\Diactoros\Response
      * @throws Tinebase_Exception_AccessDenied
+     *
+     * @todo replace with "healthCheck"?
      */
     public function getStatus($apiKey = null)
     {
@@ -997,16 +1115,116 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
 
     /**
-     * @param int $size
+     * return tine20 health (json encoded)
+     * - status can be one of [pass, fail, warn]
+     * - returns http error code 500 on fail
+     * - checks: config, db, temp dir, files dir
+     * - client ip address needs to be in Tinebase_Config::ALLOWEDHEALTHCHECKIPS
+     *
+     * @return \Zend\Diactoros\Response
+     *
+     * @todo add cache check (see \Tinebase_Frontend_Cli::monitoringCheckCache + add $this->checkCache())
+     * @todo use api key instead of client whitelist?
+     */
+    public function healthCheck()
+    {
+        $clientIp = Tinebase_Core::getRequest()->getRemoteAddress();
+        if (! in_array($clientIp, Tinebase_Config::getInstance()->{Tinebase_Config::ALLOWEDHEALTHCHECKIPS})) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' client ip not allowed: '
+                    . $clientIp);
+            return new \Zend\Diactoros\Response('php://memory', 404);
+        }
+
+        $status = 'pass';
+        $problems = [];
+        if (! Tinebase_Controller::getInstance()->checkConfig()) {
+            $status = 'fail';
+            $problems[] = 'config';
+        }
+
+        try {
+            Tinebase_Core::getDb();
+        } catch (Zend_Db_Adapter_Exception $zdae) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' '
+                    . $zdae->getMessage());
+            $status = 'fail';
+            $problems[] = 'database';
+        }
+
+        $dirsToCheck = [
+            'temp dir' => Tinebase_Core::getTempDir(),
+            'files dir' => Tinebase_Core::getConfig()->filesdir
+        ];
+        foreach ($dirsToCheck as $key => $dir) {
+            if (empty($dir)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $key . ' not configured');
+                $status = 'fail';
+                $problems[] = $key;
+            } else {
+                $filename = $dir . DIRECTORY_SEPARATOR . __METHOD__ . Tinebase_Record_Abstract::generateUID(10);
+                try {
+                    file_put_contents($filename, 'abc');
+                    unlink($filename);
+                } catch (Throwable $t) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $t->getMessage());
+                    $status = 'fail';
+                    $problems[] = $key;
+                }
+            }
+        }
+
+        $code = $status === 'fail' ? 500 : 200;
+        $data = [
+            'status' => $status,
+            'problems' => $problems,
+        ];
+        return new \Zend\Diactoros\Response\JsonResponse($data, $code);
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkConfig()
+    {
+        $configfile = Setup_Core::getConfigFilePath();
+        if ($configfile) {
+            $configfile = escapeshellcmd($configfile);
+            if (preg_match('/^win/i', PHP_OS)) {
+                exec("php -l $configfile 2> NUL", $error, $code);
+            } else {
+                exec("php -l $configfile 2> /dev/null", $error, $code);
+            }
+            if ($code == 0) {
+                return true;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
+                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Config file syntax error');
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Config file missing');
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int|string $size
      * @param string $ext
      * @return \Zend\Diactoros\Response
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Cache_Exception
+     *
+     * @todo fix $size param - it should not be allowed to set it to png/svg
      */
     public function getFavicon($size = 16, $ext = 'png')
     {
-        if ($size == 'svg') {
+        if ($size == 'svg' || $ext == 'svg') {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG);
 
             $response = new \Zend\Diactoros\Response();
@@ -1014,10 +1232,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             return $response
                 ->withAddedHeader('Content-Type', 'image/svg+xml');
+        } else if ($size === 'png') {
+            $size = 16;
+            $ext = 'png';
         }
         $mime = Tinebase_ImageHelper::getMime($ext);
         if (! in_array($mime, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
             throw new Tinebase_Exception_UnexpectedValue('image format not supported');
+        }
+
+        if (! is_numeric($size)) {
+            throw new Tinebase_Exception_UnexpectedValue('size should be numeric');
         }
 
         $cacheId = sha1(self::class . 'getFavicon' . $size . $mime);
@@ -1034,7 +1259,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (array_key_exists($size, $config)) {
                 $icon = $config[$size];
             } else {
-                foreach($config as $s => $i) {
+                foreach ($config as $s => $i) {
                     if (! is_numeric($s)) continue;
                     $diffs[$s] = abs($size - $s);
                 }
@@ -1063,12 +1288,125 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * @return bool
      */
+    public function actionQueueConsistencyCheck()
+    {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} &&
+            Tinebase_ActionQueue::getInstance()->hasAsyncBackend()) {
+
+            if (null === ($queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                    Tinebase_Application::STATE_ACTION_QUEUE_STATE), true))) {
+                $queueState = [
+                    'lastFullCheck' => 0,
+                    'lastSizeOver10k' => false,
+                    'actionQueueMissingQueueKeys' => [],
+                    'actionQueueMissingDaemonKeys' => [],
+                    'lastLRSizeOver10k' => false,
+                    'actionQueueLRMissingQueueKeys' => [],
+                    'actionQueueLRMissingDaemonKeys' => [],
+                ];
+            }
+
+            $time = [
+                'actionQueue' => ['dataWarn' => 15, 'dataErr' => 60],
+                'actionQueueLR' => ['dataWarn' => 60, 'dataErr' => 5 * 60],
+            ];
+
+            foreach (['actionQueue' => Tinebase_ActionQueue::getInstance(), 'actionQueueLR' => Tinebase_ActionQueueLongRun::getInstance()] as $qName => $actionQueue) {
+
+                $missingQueueKeys = [];
+                $missingDaemonKeys = [];
+                $warn = null;
+                $err = null;
+                // go through queue and daemon struct and check timestamps in data
+                // remember stuff we did not find
+                foreach ($actionQueue->getQueueKeys() as $key) {
+                    if (empty($data = $actionQueue->getData($key))) {
+                        if (isset($queueState[$qName . 'MissingQueueKeys'][$key])) {
+                            if (null === $warn) {
+                                $warn = $qName . ' contains keys which are not present in data';
+                            }
+                        } else {
+                            $missingQueueKeys[$key] = true;
+                        }
+                    } else {
+                        if (($timediff = time() - $data['time']) > $time[$qName]['dataWarn'] * 60) {
+                            if (null === $warn) {
+                                $warn = $qName . ' data contains data older than ' . $time[$qName]['dataWarn'] . ' minutes';
+                            }
+                        }
+                        if ($timediff > $time[$qName]['dataErr'] * 60) {
+                            $err = $qName . ' data contains data older than ' . $time[$qName]['dataErr'] . ' minutes';
+                        }
+                    }
+                }
+                $queueState[$qName . 'MissingQueueKeys'] = $missingQueueKeys;
+
+                foreach ($actionQueue->getDaemonStructKeys() as $key) {
+                    if (empty($data = $actionQueue->getData($key))) {
+                        if (isset($queueState[$qName . 'MissingDaemonKeys'][$key])) {
+                            if (null === $warn) {
+                                $warn = $qName . ' daemon contains keys which are not present in data';
+                            }
+                        } else {
+                            $missingDaemonKeys[$key] = true;
+                        }
+                    } else {
+                        if (($timediff = time() - $data['time']) > $time[$qName]['dataWarn'] * 60) {
+                            if (null === $warn) {
+                                $warn = $qName . ' data contains data older than ' . $time[$qName]['dataWarn'] . ' minutes';
+                            }
+                        }
+                        if ($timediff > $time[$qName]['dataErr'] * 60) {
+                            $err = $qName . ' data contains data older than ' . $time[$qName]['dataErr'] . ' minutes';
+                        }
+                    }
+                }
+                $queueState[$qName . 'MissingDaemonKeys'] = $missingDaemonKeys;
+
+                // go through data keys and check timestmaps
+                while (false !== ($data = $actionQueue->iterateAllData())) {
+                    foreach ($data as $jobId) {
+                        if (!empty($job = $actionQueue->getData($jobId))) {
+                            if (($timediff = time() - $job['time']) > $time[$qName]['dataWarn'] * 60) {
+                                if (null === $warn) {
+                                    $warn = $qName . ' data contains data older than ' . $time[$qName]['dataWarn'] . ' minutes';
+                                }
+                            }
+                            if ($timediff > $time[$qName]['dataErr'] * 60) {
+                                $err = $qName . ' data contains data older than ' . $time[$qName]['dataErr'] . ' minutes';
+                            }
+                        }
+                    }
+                }
+
+                if (null !== $err) {
+                    $e = new Tinebase_Exception($err);
+                    Tinebase_Exception::log($e);
+                } elseif (null !== $warn) {
+                    ($e = new Tinebase_Exception($warn))->setLogLevelMethod('warn');
+                    Tinebase_Exception::log($e);
+                }
+            }
+
+            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode($queueState));
+        }
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
     public function actionQueueActiveMonitoring()
     {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} &&
                 Tinebase_ActionQueue::getInstance()->hasAsyncBackend()) {
             Tinebase_ActionQueue::getInstance()->executeAction([
                 'action'    => 'Tinebase.measureActionQueue',
+                'params'    => [microtime(true)]
+            ]);
+            Tinebase_ActionQueueLongRun::getInstance()->executeAction([
+                'action'    => 'Tinebase.measureActionQueueLongRun',
                 'params'    => [microtime(true)]
             ]);
         }
@@ -1081,7 +1419,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function measureActionQueue($start)
     {
         $end = microtime(true);
-        $duration = ($end - $start) / 1000000;
+        $duration = $end - $start;
         $now = time();
         $lastUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
             Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE);
@@ -1090,6 +1428,24 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION, sprintf('%.3f', $duration));
             Tinebase_Application::getInstance()->setApplicationState('Tinebase',
                 Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE, $now);
+        }
+    }
+
+    /**
+     * @param float $start
+     */
+    public function measureActionQueueLongRun($start)
+    {
+        $end = microtime(true);
+        $duration = $end - $start;
+        $now = time();
+        $lastUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE);
+        if ($now - intval($lastUpdate) > 58) {
+            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION, sprintf('%.3f', $duration));
+            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE, $now);
         }
     }
 
@@ -1203,5 +1559,78 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             Tinebase_Container::getInstance()->forceSyncTokenResync(new Tinebase_Model_ContainerFilter($filter));
         }
+    }
+
+    public function publicApiMSAutodiscoverXml()
+    {
+        $tinebaseConfig = Tinebase_Config::getInstance();
+        if (!$tinebaseConfig->featureEnabled(Tinebase_Config::FEATURE_AUTODISCOVER)) {
+            throw new Tinebase_Exception_AccessDenied('this feature is not activated');
+        }
+
+        /** @var \Zend\Diactoros\Request $request */
+        $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
+        $body = Tinebase_Helper::mbConvertTo((string)$request->getBody());
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' request body: ' . $body);
+        $reqXml = simplexml_load_string($body);
+        $view = new Zend_View();
+        $view->setScriptPath(__DIR__ . '/views/autodiscover');
+        $response = new \Zend\Diactoros\Response();
+        $response = $response->withHeader('Content-Type', 'text/xml');
+
+        if (!$reqXml || empty($reqXml->Request) || empty($reqXml->Request->AcceptableResponseSchema)) {
+            $response->getBody()->write($view->render('error.php'));
+
+        } elseif (strpos($reqXml->Request->AcceptableResponseSchema, 'mobilesync') ||
+                strpos($reqXml->Request->AcceptableResponseSchema, 'outlook')) {
+
+            $view->schema = $reqXml->Request->AcceptableResponseSchema;
+            if (!empty($reqXml->Request->EMailAddress)) {
+                $view->email = $reqXml->Request->EMailAddress;
+            }
+            $view->url = Tinebase_Core::getUrl() . '/Microsoft-Server-ActiveSync';
+            $view->serverName = $tinebaseConfig->{Tinebase_Config::BRANDING_TITLE};
+            $view->account = '';
+
+            if (strpos($reqXml->Request->AcceptableResponseSchema, 'outlook') && $tinebaseConfig
+                    ->featureEnabled(Tinebase_Config::FEATURE_AUTODISCOVER_MAILCONFIG)) {
+                $protocols = [];
+                $imapConfig = $tinebaseConfig->{Tinebase_Config::IMAP};
+                // TODO: make host configurable independently, as 'localhost' wont help external clients
+                if ($imapConfig && $imapConfig->host) {
+                    $protocols['IMAP']['Server'] = $imapConfig->host;
+                    $protocols['IMAP']['Port'] = $imapConfig->port;
+                    $protocols['IMAP']['SSL'] = $imapConfig->ssl ? 'on' : 'off';
+                    $protocols['IMAP']['SPA'] = 'off';
+                    $protocols['IMAP']['AuthRequired'] = 'on';
+                }
+                $smtpConfig = $tinebaseConfig->{Tinebase_Config::SMTP};
+                if ($smtpConfig && $smtpConfig->host) {
+                    $protocols['SMTP']['Server'] = $smtpConfig->host;
+                    $protocols['SMTP']['Port'] = $smtpConfig->port;
+                    $protocols['SMTP']['SSL'] = $smtpConfig->ssl ? 'on' : 'off';
+                    $protocols['SMTP']['SPA'] = 'off';
+                    $protocols['SMTP']['AuthRequired'] = 'on';
+                }
+                if (!empty($protocols)) {
+                    $subView = new Zend_View();
+                    $subView->setScriptPath(__DIR__ . '/views/autodiscover');
+                    $subView->protocols = $protocols;
+                    $view->account = $subView->render('outlook.php');
+                }
+            }
+
+            $response->getBody()->write($view->render('mobilesync.php'));
+
+        } else {
+            $response->getBody()->write($view->render('error.php'));
+        }
+
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' response body: ' .
+                (string)$response->getBody());
+
+        return $response;
     }
 }

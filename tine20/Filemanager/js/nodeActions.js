@@ -3,9 +3,11 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Filemanager.nodeActions');
+
+require('Filemanager/js/QuickLookPanel');
 
 /**
  * @singleton
@@ -13,6 +15,48 @@ Ext.ns('Tine.Filemanager.nodeActions');
 Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
     actionConfigs: Tine.Filemanager.nodeActions
 }))();
+
+/**
+ * helper for disabled field
+ *
+ * @param action
+ * @param grants
+ * @param records
+ * @param isFilterSelect
+ * @param filteredContainers
+ * @returns {*}
+ */
+Tine.Filemanager.nodeActions.actionUpdater = function(action, grants, records, isFilterSelect, filteredContainers) {
+    // run default updater
+    Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, grants, records, isFilterSelect);
+
+    // check filtered node if nothing is selected
+    action.initialConfig.filteredContainer = null;
+    if (! _.get(records, 'length') && filteredContainers) {
+        const filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
+        const filteredContainerGrants = _.get(filteredContainers,'[0].account_grants',{});
+
+        records = [filteredContainer];
+        Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, filteredContainerGrants, records, false);
+
+        action.initialConfig.filteredContainer = filteredContainer;
+    }
+
+    let disabled = _.isFunction(action.isDisabled) ? action.isDisabled() : action.disabled;
+
+    // node specific checks (@TODO what about folders with quarantined contents?)
+    disabled = window.lodash.reduce(records, function(disabled, record) {
+        const isVirtual = _.isFunction(record.isVirtual) ? record.isVirtual() : false;
+        const isQuarantined = !!+record.get('is_quarantined');
+        const constraint = record.get('type') === action.initialConfig.constraint;
+        return disabled
+            || (!action.initialConfig.allowVirtual && isVirtual)
+            || (!action.initialConfig.allowQuarantined && isQuarantined)
+            || (action.initialConfig.constraint && !constraint);
+    }, disabled);
+
+    action.setDisabled(disabled);
+};
 
 // /**
 //  * reload
@@ -42,26 +86,48 @@ Tine.Filemanager.nodeActions.CreateFolder = {
     scope: this,
     handler: function() {
         var app = this.initialConfig.app,
-            currentFolderNode = this.initialConfig.selections[0],
+            currentFolderNode = this.initialConfig.selections[0] || this.initialConfig.filteredContainer,
+            currentPath = _.get(currentFolderNode, 'data.path'),
             nodeName = Tine.Filemanager.Model.Node.getContainerName();
 
-        Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), function(btn, text) {
-            if(currentFolderNode && btn == 'ok') {
-                if (! text) {
-                    Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), String.format(app.i18n._('You have to supply a {0} name!'), nodeName));
-                    return;
-                }
+        if (! currentPath) return;
 
-                var filename = currentFolderNode.get('path') + '/' + text;
-                Tine.Filemanager.fileRecordBackend.createFolder(filename);
-            }
-        }, this);
+        const grid = _.get(this, 'initialConfig.selectionModel.grid');
+        if (grid) {
+            const gridWdgt = grid.ownerCt.ownerCt;
+            const newRecord = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
+                name: app.i18n._('New Folder'),
+                type: 'folder'
+            }));
+            
+            gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
+                const nodeData = await Tine.Filemanager.createNode(currentPath + '/' + localRecord.get('name'), 'folder', [], false);
+                return Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
+            });
+        } else {
+            Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), function (btn, text) {
+                if (currentFolderNode && btn === 'ok') {
+                    if (!text) {
+                        Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), String.format(app.i18n._('You have to supply a {0} name!'), nodeName));
+                        return;
+                    }
+
+                    var filename = currentPath + '/' + text;
+                    Tine.Filemanager.fileRecordBackend.createFolder(filename);
+                }
+            }, this);
+        }
     },
-    actionUpdater: function(action, grants, records, isFilterSelect) {
+    actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
         var enabled = !isFilterSelect
-            && records && records.length == 1
-            && records[0].get('type') == 'folder'
+            && records && records.length === 1
+            && records[0].get('type') === 'folder'
             && window.lodash.get(records, '[0].data.account_grants.addGrant', false);
+
+        if (! _.get(records, 'length') && filteredContainers) {
+            enabled = _.get(filteredContainers, '[0].account_grants.addGrant', false);
+            action.initialConfig.filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
+        }
 
         action.setDisabled(!enabled);
     }
@@ -87,24 +153,12 @@ Tine.Filemanager.nodeActions.Edit = {
     // actionType: 'edit',
     scope: this,
     handler: function () {
-        if(this.initialConfig.selections.length == 1) {
-            Tine.Filemanager.NodeEditDialog.openWindow({record: this.initialConfig.selections[0]});
+        const selectedNode = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer')
+        if(selectedNode) {
+            Tine.Filemanager.NodeEditDialog.openWindow({record: selectedNode});
         }
     },
-    actionUpdater: function(action, grants, records, isFilterSelect) {
-        // run default updater
-        Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, grants, records, isFilterSelect);
-
-        var _ = window.lodash,
-            disabled = _.isFunction(action.isDisabled) ? action.isDisabled() : action.disabled;
-
-        // if enabled check for not accessible node and disable
-        if (! disabled) {
-            action.setDisabled(window.lodash.reduce(records, function(disabled, record) {
-                return disabled || record.isVirtual();
-            }, false));
-        }
-    }
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
@@ -139,16 +193,19 @@ Tine.Filemanager.nodeActions.Rename = {
                         return;
                     }
 
-                    // @TODO validate filename
-                    var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
-                    Tine.Filemanager.fileRecordBackend.copyNodes([record], targetPath, true);
-
+                    this.initialConfig.executor(record, text);
                 }
             },
             scope: this,
             prompt: true,
             icon: Ext.MessageBox.QUESTION
         });
+    },
+
+    executor: function(record, text) {
+        // @TODO validate filename
+        var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
+        Tine.Filemanager.fileRecordBackend.copyNodes([record], targetPath, true);
     }
 };
 
@@ -159,6 +216,8 @@ Tine.Filemanager.nodeActions.SystemLink = {
     app: 'Filemanager',
     requiredGrant: 'readGrant',
     allowMultiple: false,
+    allowVirtual: true,
+    allowQuarantined: true,
     text: 'System Link', // _('System Link')
     iconCls: 'action_system_link',
     disabled: true,
@@ -167,7 +226,7 @@ Tine.Filemanager.nodeActions.SystemLink = {
     handler: function () {
         var _ = window.lodash,
             app = this.initialConfig.app,
-            record = this.initialConfig.selections[0];
+            record = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
 
         Ext.MessageBox.show({
             title: i18n._('System Link'),
@@ -180,7 +239,8 @@ Tine.Filemanager.nodeActions.SystemLink = {
             // prompt: true,
             icon: Ext.MessageBox.INFO
         });
-    }
+    },
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
@@ -197,7 +257,9 @@ Tine.Filemanager.nodeActions.Delete = {
     handler: function (button, event) {
         var app = this.initialConfig.app,
             nodeName = '',
-            nodes = this.initialConfig.selections;
+            nodes = _.get(this, 'initialConfig.selections', []).length ?
+                _.get(this, 'initialConfig.selections', []) :
+                _.compact([_.get(this, 'initialConfig.filteredContainer')]);
 
         if (nodes && nodes.length) {
             for (var i = 0; i < nodes.length; i++) {
@@ -226,14 +288,17 @@ Tine.Filemanager.nodeActions.Delete = {
 
                     if (node.fileRecord) {
                         var upload = Tine.Tinebase.uploadManager.getUpload(node.fileRecord.get('uploadKey'));
-                        upload.setPaused(true);
-                        Tine.Tinebase.uploadManager.unregisterUpload(upload.id);
+                        if (upload) {
+                            upload.setPaused(true);
+                            Tine.Tinebase.uploadManager.unregisterUpload(upload.id);
+                        }
                     }
 
                 }
             }
         });
-    }
+    },
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
@@ -291,6 +356,7 @@ Tine.Filemanager.nodeActions.Download = {
         Tine.Filemanager.downloadFile(this.initialConfig.selections[0]);
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
+
         var enabled = !isFilterSelect
             && records && records.length == 1
             && records[0].get('type') != 'folder'
@@ -311,21 +377,21 @@ Tine.Filemanager.nodeActions.Preview = {
     disabled: true,
     iconCls: 'action_preview',
     scope: this,
+    constraint: 'file',
     handler: function () {
-        var selections = this.initialConfig.selections;
+        var selection = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
 
-        if (selections.length > 0) {
-            var selection = selections[0];
-
-            if (selection && selection.get('type') === 'file') {
-                Tine.Filemanager.DocumentPreview.openWindow({
+        if (selection) {
+            if (selection.get('type') === 'file') {
+                Tine.Filemanager.QuickLookPanel.openWindow({
                     record: selection,
                     initialApp: this.initialConfig.initialApp || null,
                     sm: this.initialConfig.sm
                 });
             }
         }
-    }
+    },
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**
@@ -334,6 +400,7 @@ Tine.Filemanager.nodeActions.Preview = {
 Tine.Filemanager.nodeActions.Publish = {
     app: 'Filemanager',
     allowMultiple: false,
+    requiredGrant: 'publishGrant',
     text: 'Publish', // _('Publish')
     disabled: true,
     iconCls: 'action_publish',
@@ -341,16 +408,16 @@ Tine.Filemanager.nodeActions.Publish = {
     handler: function() {
         var app = this.initialConfig.app,
             i18n = app.i18n,
-            selections = this.initialConfig.selections;
+            selected = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
 
-        if (selections.length != 1) {
+        if (! selected) {
             return;
         }
 
         var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
             allowEmptyPassword: true,
             locked: false,
-            questionText: i18n._('Public download links can be password protected. If left blank anyone who knows the link can download the selected files.')
+            questionText: i18n._('Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files.')
         });
         passwordDialog.openWindow();
 
@@ -359,7 +426,7 @@ Tine.Filemanager.nodeActions.Publish = {
             date.setDate(date.getDate() + 30);
 
             var record = new Tine.Filemanager.Model.DownloadLink({
-                node_id: selections[0].id,
+                node_id: selected.id,
                 expiry_time: date,
                 password: password
             });
@@ -367,7 +434,7 @@ Tine.Filemanager.nodeActions.Publish = {
             Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {
                 success: function (record) {
                     Tine.Filemanager.FilePublishedDialog.openWindow({
-                        title: selections[0].data.type == 'folder' ? app.i18n._('Folder has been published successfully') : app.i18n._('File has been published successfully'),
+                        title: selected.data.type === 'folder' ? app.i18n._('Folder has been published successfully') : app.i18n._('File has been published successfully'),
                         record: record,
                         password: password
                     });
@@ -375,13 +442,7 @@ Tine.Filemanager.nodeActions.Publish = {
             });
         }, this);
     },
-    actionUpdater: function(action, grants, records, isFilterSelect) {
-        var enabled = !isFilterSelect
-            && records && records.length == 1
-            && window.lodash.get(records, '[0].data.account_grants.publishGrant', false);
-
-        action.setDisabled(!enabled);
-    }
+    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
 };
 
 /**

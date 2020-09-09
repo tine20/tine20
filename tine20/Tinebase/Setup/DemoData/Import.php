@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -17,6 +17,8 @@
  */
 class Tinebase_Setup_DemoData_Import
 {
+    const IMPORT_DIR = 'importDir';
+
     protected $_application = null;
     protected $_options = [];
 
@@ -30,6 +32,7 @@ class Tinebase_Setup_DemoData_Import
         $extract = Tinebase_Application::extractAppAndModel($modelName);
         $this->_options['modelName'] = $extract['modelName'];
         $this->_options['dryrun'] = false;
+        $this->_options['demoData'] = true;
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($extract['appName']);
         $this->_options = array_merge($this->_options, $options);
     }
@@ -39,7 +42,8 @@ class Tinebase_Setup_DemoData_Import
      */
     public function importDemodata()
     {
-        $importDir = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR
+        $importDir = isset($this->_options[self::IMPORT_DIR]) ?  $this->_options[self::IMPORT_DIR] :
+            dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR
             . $this->_application->name . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData'
             . DIRECTORY_SEPARATOR . 'import'. DIRECTORY_SEPARATOR . $this->_options['modelName'];
 
@@ -47,7 +51,9 @@ class Tinebase_Setup_DemoData_Import
             throw new Tinebase_Exception_NotFound('Import dir not found: ' . $importDir);
         }
 
-        // loop all files in import dir
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Importing files in import dir ' . $importDir );
+
         // TODO allow more filters / subdirs
         $fh = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($importDir), RecursiveIteratorIterator::CHILD_FIRST);
         $importedDemoDataFiles = 0;
@@ -59,7 +65,7 @@ class Tinebase_Setup_DemoData_Import
             $result = $this->_importDemoDataFile($splFileInfo);
             if ($result) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Import result: ' . print_r($result, true));
+                    . ' Import result: ' . print_r($result['results']->toArray(), true));
                 $importedDemoDataFiles++;
             }
         }

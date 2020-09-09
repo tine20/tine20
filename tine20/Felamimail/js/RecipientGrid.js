@@ -335,7 +335,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     onSearchComboSelect: function(combo) {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSelect()');
-        
+
         var value = combo.getValue();
         
         if (combo.getValueIsList()) {
@@ -462,10 +462,14 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * -> update record to/cc/bcc
      */
     syncRecipientsToRecord: function() {
+        Tine.Tinebase.common.assertComparable(this.record.data.to);
+        Tine.Tinebase.common.assertComparable(this.record.data.cc);
+        Tine.Tinebase.common.assertComparable(this.record.data.bcc);
+
         // update record recipient fields
-        this.record.data.to = [];
-        this.record.data.cc = [];
-        this.record.data.bcc = [];
+        this.record.set('to', Tine.Tinebase.common.assertComparable([]));
+        this.record.set('cc', Tine.Tinebase.common.assertComparable([]));
+        this.record.set('bcc', Tine.Tinebase.common.assertComparable([]));
         this.store.each(function(recipient){
             if (recipient.data.address != '') {
                 this.record.data[recipient.data.type].push(recipient.data.address);
@@ -502,7 +506,19 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             this.setFixedHeight(true);
         }
     },
-    
+
+    // save selected record for usage in onAfterEdit
+    onEditComplete: function(ed, value, startValue) {
+        var _ = window.lodash,
+            selectedRecord = _.get(ed, 'field.selectedRecord'),
+            row = ed.row,
+            rowRecord = this.store.getAt(row);
+
+        rowRecord.selectedRecord = selectedRecord;
+
+        Tine.Felamimail.RecipientGrid.superclass.onEditComplete.call(this, ed, value, startValue);
+    },
+
     /**
      * after edit
      * 

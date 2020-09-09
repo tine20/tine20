@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -22,6 +22,7 @@
  * @property    array   members
  * @property    string  visibility
  * @property    string  list_id
+ * @property    boolean account_only
  */
 class Tinebase_Model_Group extends Tinebase_Record_Abstract
 {
@@ -64,6 +65,8 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             ['InArray', [self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED]],
             Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED
         ),
+        'account_only'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'xprops'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'created_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_by'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -72,7 +75,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         'deleted_time'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'seq'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        );
+    );
     
    /**
      * key in $_validators/$_properties array for the filed which 
@@ -119,7 +122,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         parent::setFromArray($_data);
         
         // sanitize members (could be an array of user arrays -> expecting to contain only ids)
-        if (isset($this->members) && is_array($this->members) && count($this->members) > 0 && is_array($this->members[0])) {
+        if (isset($this->members) && is_array($this->members) && count($this->members) > 0 && isset($this->members[0]) && is_array($this->members[0])) {
             $memberIds = array();
             foreach ($this->members as $member) {
                 $memberIds[] = $member['id'];
@@ -184,5 +187,20 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             $currentMembers = array_merge($currentMembers, $add);
         }
         $this->members = $currentMembers;
+    }
+
+    // TODO remove the runConvert methods when migration to Modelconfig!
+    public function runConvertToRecord()
+    {
+        if (isset($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
+        }
+    }
+
+    public function runConvertToData()
+    {
+        if (isset($this->_properties['xprops']) && is_array($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_encode($this->_properties['xprops']);
+        }
     }
 }

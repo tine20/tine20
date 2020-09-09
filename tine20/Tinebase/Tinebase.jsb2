@@ -274,6 +274,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "DurationSpinner.js",
+          "path": "js/ux/form/"
+        },
+        {
           "text": "LockCombo.js",
           "path": "js/ux/form/"
         },
@@ -363,6 +367,10 @@
         },
         {
           "text": "TabPanelSortPlugin.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "pluginRegistry.js",
           "path": "js/ux/"
         },
         {
@@ -946,6 +954,14 @@
           "path": "js/widgets/form/"
         },
         {
+          "text": "LocationTypePluginFactory.js",
+          "path": "js/widgets/file/"
+        },
+        {
+          "text": "SelectionField.js",
+          "path": "js/widgets/file/"
+        },
+        {
           "text": "PasswordDialog.js",
           "path": "js/widgets/dialog/"
         },
@@ -1026,10 +1042,6 @@
           "path": "js/"
         },
         {
-          "text": "layoutFixes.js",
-          "path": "js/touch/"
-        },
-        {
           "text": "PresenceObserver.js",
           "path": "js/"
         },
@@ -1046,8 +1058,8 @@
           "path": "js/widgets/form/"
         },
         {
-          "text": "FileSelectionDialog.js",
-          "path": "js/"
+          "text": "BLConfigPanel.js",
+          "path": "js/BL/"
         }
       ]
     },
@@ -1102,10 +1114,6 @@
         },
         {
           "text": "IconTextField.css",
-          "path": "css/ux/grid/"
-        },
-        {
-          "text": "PagingToolbar.css",
           "path": "css/ux/grid/"
         },
         {

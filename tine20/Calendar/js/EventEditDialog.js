@@ -67,7 +67,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         return {
             xtype: 'tabpanel',
-            border: false,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
             }],
@@ -197,6 +196,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             xtype: 'fieldset',
                             title: this.app.i18n._('Status'),
                             items: [{
+                                xtype: 'widget-keyfieldcombo',
+                                app:   'Calendar',
+                                keyFieldName: 'eventStatus',
+                                width: 120,
+                                hideLabel: true,
+                                value: 'CONFIRMED',
+                                name: 'status',
+                                requiredGrant: 'editGrant',
+                            }, {
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('non-blocking'),
@@ -213,20 +221,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }, Ext.apply(this.perspectiveCombo.getAttendeeTranspField(), {
                                 hideLabel: true
                             }), {
-                                xtype: 'checkbox',
-                                hideLabel: true,
-                                boxLabel: this.app.i18n._('Tentative'),
-                                name: 'status',
-                                requiredGrant: 'editGrant',
-                                getValue: function() {
-                                    var bool = Ext.form.Checkbox.prototype.getValue.call(this);
-                                    return bool ? 'TENTATIVE' : 'CONFIRMED';
-                                },
-                                setValue: function(value) {
-                                    var bool = (value == 'TENTATIVE' || value === true);
-                                    return Ext.form.Checkbox.prototype.setValue.call(this, bool);
-                                }
-                            }, {
                                 xtype: 'checkbox',
                                 hideLabel: true,
                                 boxLabel: this.app.i18n._('Private'),
@@ -333,6 +327,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onMuteNotificationOnce: function (button, e) {
         this.record.set('mute', button.pressed);
+        button.setText(Tine.Tinebase.appMgr.get('Calendar').i18n._(button.pressed ?
+            'Notifications are disabled' : 'Notifications are enabled'
+        ));
     },
 
     onPrint: function(printMode) {
@@ -364,7 +361,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.tbarItems = [new Ext.Button(this.action_freeTimeSearch), new Ext.Button(new Ext.Action({
-            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are enabled'),
             handler: this.onMuteNotificationOnce,
             iconCls: 'action_mute_noteification',
             disabled: false,
@@ -398,14 +395,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // auto location
         this.attendeeGridPanel.on('afteredit', function(o) {
-            if (o.field == 'user_id'
-                && o.record.get('user_type') == 'resource'
-                && o.record.get('user_id')
-                && o.record.get('user_id').type == 'ROOM'
-            ) {
-                this.getForm().findField('location').setValue(
-                    this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'))
-                );
+            if (o.field == 'user_id' && o.record.get('user_type') == 'resource' ) {
+                var typeId = _.get(o.record, 'data.user_id.type'),
+                    type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId);
+
+                if (type.get('is_location')) {
+                    this.getForm().findField('location').setValue(
+                        this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'), {noIcon: true})
+                    );
+                }
             }
         }, this);
         
@@ -523,7 +521,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var dtEndField = this.getForm().findField('dtend'),
                 dtEnd = dtEndField.getValue();
                 
-            if (Ext.isDate(dtEnd)) {
+            if (Ext.isDate(dtEnd) && dtEnd.format('H:i') != '23:59') {
                 var duration = dtEnd.getTime() - oldValue.getTime(),
                     newDtEnd = newValue.add(Date.MILLI, duration);
                 dtEndField.setValue(newDtEnd);
@@ -594,7 +592,28 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onAllDayChange(null, true);
         }
     },
-    
+
+    /**
+     * generic apply changes handler
+     * @param {Boolean} closeWindow
+     */
+    onApplyChanges: function(closeWindow) {
+        if (this.app.featureEnabled('featureEventNotificationConfirmation') && !this.record.get('mute')) {
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Send Notification?'),
+                this.app.i18n._('Changes to this event might send notifications. Press the button "Notifcation are enabled" to switch to "Notification are disabled"'),
+                function (button) {
+                    if (button === 'yes') {
+                        Tine.Crm.LeadEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+                    }
+                },
+                this
+            );
+            return;
+        }
+        Tine.Calendar.EventEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+    },
+
     onRecordUpdate: function() {
         Tine.Calendar.EventEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.attendeeGridPanel.onRecordUpdate(this.record);

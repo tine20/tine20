@@ -77,12 +77,10 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function addRelation($_relation)
     {
-        if ($_relation->getId()) {
-            throw new Tinebase_Exception_Record_NotAllowed('Could not add existing relation');
+        if (!($relId = $_relation->getId())) {
+            $relId = $_relation->generateUID();
+            $_relation->setId($relId);
         }
-        
-        $relId = $_relation->generateUID();
-        $_relation->setId($relId);
 
         // check if relation is already set (with is_deleted=1)
         if ($deletedRelId = $this->_checkExistance($_relation)) {

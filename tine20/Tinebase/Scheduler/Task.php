@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
@@ -37,6 +37,13 @@ class Tinebase_Scheduler_Task
      * @var string
      */
     const TASK_TYPE_DAILY = '0 0 * * *';
+
+    /**
+     * weekly task (thursdays)
+     *
+     * @var string
+     */
+    const TASK_TYPE_WEEKLY = '0 1 * * 4';
 
     const CLASS_NAME = 'class';
     const CONTROLLER = 'controller';
@@ -99,6 +106,14 @@ class Tinebase_Scheduler_Task
             'cron'              => $this->_cron,
             'callables'         => $this->_callables,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCron()
+    {
+        return $this->_cron;
     }
 
     public function setCron($cron)
@@ -545,6 +560,45 @@ class Tinebase_Scheduler_Task
             . ' Saved task Tinebase_FileSystem::notifyQuota in scheduler.');
     }
 
+    public static function addFileSystemRepairDeleteTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileSystem::repairTreeIsDeletedState')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_FileSystem::repairTreeIsDeletedState', self::TASK_TYPE_DAILY, [[
+            self::CONTROLLER    => 'Tinebase_FileSystem',
+            self::METHOD_NAME   => 'repairTreeIsDeletedState',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::repairTreeIsDeletedState in scheduler.');
+    }
+
+    /**
+     * add file system av scan task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addFileSystemAVScanTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_FileSystem::avScan')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_FileSystem::avScan', self::TASK_TYPE_WEEKLY, [[
+            self::CONTROLLER    => 'Tinebase_FileSystem',
+            self::METHOD_NAME   => 'avScan',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_FileSystem::avScan in scheduler.');
+    }
+
     /**
      * add file system size recalculation task to scheduler
      *
@@ -593,7 +647,29 @@ class Tinebase_Scheduler_Task
     }
 
     /**
-     * add acl tables cleanup task to scheduler
+     * add hourly action queue integrity check task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addActionQueueConsistencyCheckTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_ActionQueueConsistencyCheck')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_ActionQueueConsistencyCheck', self::TASK_TYPE_HOURLY, [[
+            self::CONTROLLER    => 'Tinebase_Controller',
+            self::METHOD_NAME   => 'actionQueueConsistencyCheck',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_Controller::actionQueueConsistencyCheck in scheduler.');
+    }
+
+    /**
+     * add action queue constant monitoring task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler
      */
@@ -634,5 +710,27 @@ class Tinebase_Scheduler_Task
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Tinebase_FilterSyncToken::cleanUp in scheduler.');
+    }
+
+    /**
+     * add log entry cleanup task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addLogEntryCleanUpTask(Tinebase_Scheduler $_scheduler)
+    {
+        if ($_scheduler->hasTask('Tinebase_LogEntry::cleanUp')) {
+            return;
+        }
+
+        $task = self::_getPreparedTask('Tinebase_LogEntry::cleanUp', self::TASK_TYPE_WEEKLY, [[
+            self::CONTROLLER    => 'Tinebase_Controller_LogEntry',
+            self::METHOD_NAME   => 'cleanUp',
+        ]]);
+
+        $_scheduler->create($task);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Saved task Tinebase_LogEntry::cleanUp in scheduler.');
     }
 }

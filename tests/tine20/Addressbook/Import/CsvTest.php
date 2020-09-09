@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -62,7 +62,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      */
     public function testImportDuplicates()
     {
-        $internalContainer = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        $internalContainer = Tinebase_Container::getInstance()->getContainerByName(Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         $options = array(
             'container_id'  => $internalContainer->getId(),
         );
@@ -394,7 +394,10 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         self::assertTrue((3 === $result['totalcount'] || 4 === $result['totalcount']), 'should have added 3 or 4 contacts');
         self::assertEquals('Straßbough', $result['results'][1]['adr_one_locality'],
                 'should have changed the locality of contact #2: ' . print_r($result['results'][1]->toArray(), true));
-        self::assertEquals('Gartencenter Röhr & Vater', $result['results'][3]['n_family']);
+        $n_family = $result['results'][3]['n_family'];
+        self::assertTrue('Gartencenter Röhr & Vater' === $n_family
+            || 'Dr. Schutheiss' === $n_family,
+            print_r($result['results']->toArray(), true));
     }
 
     public function testSplitField()
@@ -406,11 +409,15 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
         $result = $this->_doImport(array('dryrun' => true), $definition);
 
-        $this->assertEquals(1, $result['totalcount'], print_r($result, true));
+        $this->assertTrue(1 === $result['totalcount'] || 1 === $result['updatecount'], print_r($result, true));
         $importedRecord = $result['results']->getFirstRecord();
 
         $this->assertEquals('21222', $importedRecord->adr_one_postalcode, print_r($importedRecord->toArray(), true));
-        $this->assertEquals('Käln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
+        if (1 === $result['updatecount']) {
+            $this->assertEquals('Köln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
+        } else {
+            $this->assertEquals('Käln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
+        }
     }
 
     /**
@@ -422,7 +429,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
         $this->_filename = dirname(__FILE__) . '/files/import_split_duplicate.csv';
         $this->_deletePersonalContacts = TRUE;
-        $this->_deleteImportFile = FALSE;
+        $this->_deleteImportFile = false;
 
         $result = $this->_doImport(array('dryrun' => false), $definition);
 
@@ -439,5 +446,16 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
         $result = $this->_doImport(array('dryrun' => true), $definition);
         $this->assertEquals('c.baumann@unittest.de', $result['results'][0]->email);
+    }
+
+    public function testAppendField()
+    {
+        $definition = $this->_getDefinitionFromFile('adb_import_csv_append.xml');
+        $this->_filename = dirname(__FILE__) . '/files/append.csv';
+        $this->_deleteImportFile = false;
+        $result = $this->_doImport(array('dryrun' => true), $definition);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        $contact = $result['results']->getFirstRecord();
+        self::assertEquals('0190 800', $contact->tel_work, print_r($contact->toArray(), true));
     }
 }

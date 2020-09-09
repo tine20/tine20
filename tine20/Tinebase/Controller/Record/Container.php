@@ -110,9 +110,11 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      *
      * @param   array $_ids array of record identifiers
      * @param   bool $_ignoreACL don't check acl grants
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @param null|Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = FALSE, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $this->_checkRight('get');
 

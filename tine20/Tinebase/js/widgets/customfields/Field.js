@@ -85,19 +85,22 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                     case 'record':
                         var options = def.options ? def.options : {},
                            recordConfig = def.recordConfig ? def.recordConfig : null;
-                            
+                        if(!_.get(window, recordConfig.value.records)) return Ext.ComponentMgr.create({xtype: 'hidden'});
                         Ext.apply(fieldDef, {
                             xtype: 'tinerecordpickercombobox',
                             app: options.app ? options.app : app,
                             resizable: true,
                             recordClass: eval(recordConfig.value.records),
                             allowLinkingItself: false,
-                            editDialog: editDialog
+                            editDialog: editDialog,
+                            additionalFilterSpec: recordConfig.additionalFilterSpec
                         });
                         break;
                     case 'recordlist':
                         var options = def.options ? def.options : {},
                             recordListConfig = def.recordListConfig ? def.recordListConfig : null;
+
+                        if(!_.get(window, recordListConfig.value.records)) return Ext.ComponentMgr.create({xtype: 'hidden'});
 
                         Ext.apply(fieldDef, {
                             xtype: 'tinerecordspickercombobox',
@@ -132,6 +135,7 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                         break;
                     case 'textarea':
                         fieldDef.xtype = 'textarea';
+                        fieldDef.height = 150;
                         break;
                     case 'string':
                     default:

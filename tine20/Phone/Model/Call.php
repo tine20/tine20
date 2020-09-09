@@ -121,6 +121,11 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'queryFilter' => TRUE,
             ),
+            'resolved_destination'           => array(
+                'label'      => 'resolved destination', // _('resolved destination')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'queryFilter' => TRUE,
+            ),
             'contact_id'              => array(
                 'label'      => 'Contact',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

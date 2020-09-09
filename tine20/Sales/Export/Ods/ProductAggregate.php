@@ -104,7 +104,6 @@ class Sales_Export_Ods_ProductAggregate extends Sales_Export_Ods_Abstract
                     $cell->setStyle((string) $field->customStyle);
                 }
             }
-            $i++;
         }
     }
 }

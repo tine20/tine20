@@ -82,6 +82,29 @@ class Tinebase_PreferenceTest extends TestCase
             $this->_instance->create($preference);
         }
     }
+
+
+    /**
+     * test set TaskAlarm pref
+     * @throws Tinebase_Exception_NotFound
+     *
+     */
+    public function testTaskPreferenceAlarm()
+    {
+        Tinebase_Core::getPreference('Tasks')->setValue(Tasks_Preference::DEFAULTALARM_ENABLED,false);
+        $noDefaultAlarms = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTALARM_ENABLED);
+
+        Tinebase_Core::getPreference('Tasks')->setValue(Tasks_Preference::DEFAULTALARM_ENABLED,true);
+        $setDefaultAlarms = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTALARM_ENABLED);
+        $minutesBeforeDefaultAlarms = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTALARM_MINUTESBEFORE);
+        Tinebase_Core::getPreference('Tasks')->setValue(Tasks_Preference::DEFAULTALARM_MINUTESBEFORE,30);
+        $minutesBeforeDefaultAlarms2 = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTALARM_MINUTESBEFORE);
+
+        $this->assertEquals(0, $noDefaultAlarms);
+        $this->assertEquals(15, $minutesBeforeDefaultAlarms);
+        $this->assertEquals(30, $minutesBeforeDefaultAlarms2);
+        $this->assertEquals(1, $setDefaultAlarms);
+    }
     
     /**
      * test set timezone pref
@@ -261,6 +284,29 @@ class Tinebase_PreferenceTest extends TestCase
     }
 
     /**
+     * testSetForcedDefaultPref
+     */
+    public function testSetForcedDefaultPrefDefaultValue()
+    {
+        $defaultPref = (new Tinebase_Preference())->getApplicationPreferenceDefaults(
+            Tinebase_Preference::FILE_DBLCLICK_ACTION);
+        (new Tinebase_Frontend_Json())->savePreferences(['Tinebase' => [
+            $defaultPref->getId() => array(
+                'type'  => Tinebase_Model_Preference::TYPE_FORCED,
+                'value' => Tinebase_Model_Preference::DEFAULT_VALUE,
+                'name'  => Tinebase_Preference::FILE_DBLCLICK_ACTION
+            )
+        ]], 1);
+
+        $appPrefs = Tinebase_Core::getPreference('Tinebase');
+        $expectedPrefValue = (class_exists('OnlyOfficeIntegrator_Config') && Tinebase_Application::getInstance()
+                ->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME, true))
+                ? 'openwithonlyoffice'
+                : 'download';
+        static::assertSame($expectedPrefValue, $appPrefs->{Tinebase_Preference::FILE_DBLCLICK_ACTION});
+    }
+
+    /**
      * testSetLockedPref
      *
      * @see 0011178: allow to lock preferences for individual users
@@ -295,7 +341,7 @@ class Tinebase_PreferenceTest extends TestCase
      */
     public function testSetFixedCalendarsPreference()
     {
-        $personalContainer = $this->_getPersonalContainer('Calendar');
+        $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class);
         $data =
           array (
             'Calendar' =>
@@ -332,6 +378,18 @@ class Tinebase_PreferenceTest extends TestCase
             . print_r($fixedCalendarsPref, true));
         $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
         self::assertTrue(in_array($personalContainer->getId(), $fixedCalendarIds));
+    }
+
+    /**
+     * testDefaultFontPreference
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function testDefaultFontPreference()
+    {
+        Tinebase_Core::getPreference('Felamimail')->setValue(Felamimail_Preference::DEFAULT_FONT,Felamimail_Preference::FONT_ARIAL);
+        $noDefaultAlarms = Tinebase_Core::getPreference('Felamimail')->getValue(Felamimail_Preference::DEFAULT_FONT);
+
+        $this->assertEquals('arial', $noDefaultAlarms);
     }
 
     /******************** protected helper funcs ************************/

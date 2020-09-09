@@ -4,7 +4,7 @@
  *
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Michael Spahn <m.spahn@metaways.de>
- * @copyright    Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -15,22 +15,21 @@ trait Tinebase_Export_Convertible_PreviewServicePdf
 {
     /**
      * @param $from
+     * @param array $intermediateFormats check if the docService supports this transformation before use
      * @return string
-     * @throws Tinebase_Exception_NotFound
      */
-    public function convertToPdf($from)
+    public function convertToPdf($from, $intermediateFormats = [])
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Converting from ' . $from . ' to PDF');
+        }
+
         $suffixed = $from . '.' . $this->getFormat();
         copy($from, $suffixed);
 
-        $previewService = Tinebase_Core::getPreviewService();
-        if (false === ($result = $previewService->getPreviewsForFile($suffixed, ['onlyPdf' => true]))) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ .
-                ' preview service did not succeed');
-            throw new Tinebase_Exception_UnexpectedValue('preview service did not succeed');
-        }
+        $result = Tinebase_Core::getPreviewService()->getPdfForFile($suffixed, true, $intermediateFormats);
 
-        file_put_contents($suffixed, $result[0][0]);
+        file_put_contents($suffixed, $result);
         
         $name = $suffixed . '.pdf';
         rename($suffixed, $name);

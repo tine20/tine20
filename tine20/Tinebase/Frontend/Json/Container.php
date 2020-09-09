@@ -36,33 +36,34 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * 
      * @todo move getOtherUsers to own function
      * 
-     * @param  string $application
+     * @param  string $model
      * @param  string $containerType
      * @param  string $owner
      * @param  array $requiredGrants
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function getContainer($application, $containerType, $owner, $requiredGrants = NULL)
+    public function getContainer($model, $containerType, $owner, $requiredGrants = NULL)
     {
         if (!$requiredGrants) {
             $requiredGrants = Tinebase_Model_Grants::GRANT_READ;
         }
-        switch($containerType) {
+        switch ($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, $requiredGrants);
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, $owner, $requiredGrants);
                 $containers->sort('name');
                 break;
                 
             case Tinebase_Model_Container::TYPE_SHARED:
-                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $application, $requiredGrants);
+                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, $requiredGrants);
                 break;
                 
             case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                $containers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $application, $requiredGrants);
+                $containers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $model, $requiredGrants);
                 break;
                 
             default:
-                throw new Exception('no such NodeType');
+                throw new Tinebase_Exception_InvalidArgument('no such NodeType');
         }
         
         $converter = new Tinebase_Convert_Container_Json();
@@ -79,13 +80,9 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * @return  array new container
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function addContainer($application, $name, $containerType, $modelName = '')
+    public function addContainer($application, $name, $containerType, $modelName)
     {
-        if (empty($modelName)) {
-            $modelName = Tinebase_Core::getApplicationInstance($application)->getDefaultModel();
-        } else {
-            $modelName = strstr($modelName, '_Model_') ? $modelName : $application . '_Model_' . $modelName;
-        }
+        $modelName = strstr($modelName, '_Model_') ? $modelName : $application . '_Model_' . $modelName;
         
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => $name,
@@ -111,7 +108,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      * deletes a container
      * 
      * @param   int     $containerId
-     * @return  string  success
+     * @return  array
      */
     public function deleteContainer($containerId)
     {
@@ -196,8 +193,12 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      */
     public static function resolveAccounts($_grants)
     {
-        foreach($_grants as &$value) {
-            switch($value['account_type']) {
+        if (! is_array($_grants)) {
+            return [];
+        }
+
+        foreach ($_grants as &$value) {
+            switch ($value['account_type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
                         $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $value['account_id']);

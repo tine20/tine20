@@ -4,7 +4,7 @@
  *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -40,19 +40,21 @@ class Setup_SchemaTool
             $dbParams['user'] = $dbParams['username'];
             $db = Setup_Core::getDb();
             if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-                if (Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
+                if ($db->getConfig()['charset'] !== 'utf8' &&
+                        Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
                     $dbParams['defaultTableOptions'] = [
                         'charset' => 'utf8mb4',
-                        'collate' => 'utf8mb4_general_ci'
+                        'collate' => 'utf8mb4_unicode_ci'
                     ];
                 } else {
                     $dbParams['defaultTableOptions'] = [
                         'charset' => 'utf8',
-                        'collate' => 'utf8_general_ci'
+                        'collate' => 'utf8_unicode_ci'
                     ];
                 }
             }
 
+            $dbParams['defaultTableOptions']['row_format'] = 'DYNAMIC';
 
             static::$_dbParams = $dbParams;
         }
@@ -164,7 +166,7 @@ class Setup_SchemaTool
      * @param $otherDbName
      * @return array of sql statements
      */
-    public static function compareSchema($otherDbName)
+    public static function compareSchema($otherDbName, $otherUserName = null, $otherPassword = null)
     {
         $dbParams = self::getDBParams();
 
@@ -175,6 +177,12 @@ class Setup_SchemaTool
 
         $otherDbParams = $dbParams;
         $otherDbParams['dbname'] = $otherDbName;
+        if (null !== $otherUserName) {
+            $otherDbParams['user'] = $otherUserName;
+        }
+        if (null !== $otherPassword) {
+            $otherDbParams['password'] = $otherPassword;
+        }
         $otherConn = \Doctrine\DBAL\DriverManager::getConnection(
             $otherDbParams
         );

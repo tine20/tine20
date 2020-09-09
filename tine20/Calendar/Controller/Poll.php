@@ -439,7 +439,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
         // sync direct properties
         foreach($this->_syncFields as $fieldName) {
-            $alternativeEvents->{$fieldName} = $event{$fieldName};
+            $alternativeEvents->{$fieldName} = $event->{$fieldName};
         }
     }
 
@@ -500,8 +500,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
     {
         $locale = Tinebase_Core::getLocale();
 
-        $jsFiles = ['Calendar/js/pollClient/src/index.es6.js'];
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar";
+        $jsFiles[] = 'Calendar/js/pollClient/src/index.es6.js';
 
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles);
     }
@@ -622,11 +622,15 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 $status = [];
                 foreach ($alternative_dates as $date) {
                     $date_attendee = Calendar_Model_Attender::getAttendee($date->attendee, $attendee);
-                    $status[] = array_merge(array_intersect_key($date_attendee->toArray(), array_flip([
-                        'id', 'cal_event_id', 'status', 'user_type', 'user_id', 'status_authkey'
-                    ])), [
-                        'info_url'  => $anonymousAccess? '' : ("/#/Calendar/pollFBView/{$attendee['user_type']}/{$attendee['user_id']}/" . $date->dtstart->format('Y-m-d')),
-                    ]);
+                    if ($date_attendee) {
+                        $status[] = array_merge(array_intersect_key($date_attendee->toArray(), array_flip([
+                            'id', 'cal_event_id', 'status', 'user_type', 'user_id', 'status_authkey'
+                        ])), [
+                            'info_url' => $anonymousAccess ? '' : Tinebase_Core::getUrl()
+                                . "/#/Calendar/pollFBView/{$attendee['user_type']}/{$attendee['user_id']}/"
+                                . $date->dtstart->format('Y-m-d'),
+                        ]);
+                    }
                 }
                 $attendee_status[] = [
                     'key'       => $attendee['user_type'] . '-' . $attendee['user_id'],
@@ -634,6 +638,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                     'user_type' => $attendee['user_type'],
                     'name'      => $attendee->getName(),
                     'status'    => $status,
+                    'seq'       => $attendee['seq'],
                 ];
             }
 
@@ -773,11 +778,31 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
 
+            $transId = null;
             foreach($request['status'] as $date) {
-                $event = Calendar_Controller_Event::getInstance()->get($date['cal_event_id']);
                 $attendee = new Calendar_Model_Attender($date);
+                if (empty($attendee->status_authkey)) continue;
 
+                $raii = (new Tinebase_RAII(function() use($transId) {
+                    if (null !== $transId) {
+                        Tinebase_TransactionManager::getInstance()->rollBack();
+                    }
+                }))->setReleaseFunc(function() use(&$transId) {
+                    Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+                    $transId = null;
+                });
+                $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+                $event = Calendar_Controller_Event::getInstance()->get($date['cal_event_id']);
+                if (($currentAttender = Calendar_Model_Attender::getAttendee($event->attendee, $attendee)) !== null &&
+                        (int)$currentAttender->seq > (int)$attendee->seq) {
+                    $raii->release();
+                    continue;
+                }
+                
                 Calendar_Controller_Event::getInstance()->attenderStatusUpdate($event, $attendee, $attendee->status_authkey);
+
+                $raii->release();
             }
 
             // @TODO: queue some sort of notification

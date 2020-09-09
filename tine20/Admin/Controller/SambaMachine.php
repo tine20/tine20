@@ -139,11 +139,15 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
 
     /**
      * Returns a set of records identified by their id's
-     * 
-     * @param   array array of record identifiers
-     * @return  Tinebase_Record_RecordSet of $this->_modelName
+     *
+     * @param $_ids
+     * @param bool $_ignoreACL
+     * @param Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of $this->_modelName
+     * @internal param array $array of record identifiers
      */
-    public function getMultiple($_ids)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         //$this->checkRight('VIEW_SAMBAMACHINES');
         
@@ -249,15 +253,14 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
 
     /**
      * update multiple records
-     * 
-     * @param   Tinebase_Model_Filter_FilterGroup $_filter
-     * @param   array $_data
-     * @return  integer number of updated records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param array $_data
+     * @param Tinebase_Model_Pagination $_pagination
+     * @return array
      */
-    public function updateMultiple($_filter, $_data)
+    public function updateMultiple($_filter, $_data, $_pagination = null)
     {
-        //$this->checkRight('MANAGE_SAMBAMACHINES');
-        
         return $this->_backend->updateMultiple($_filter, $_data);
     }
 
@@ -285,5 +288,15 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
     public function has(array $_ids, $_getDeleted = false)
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * returns the model name
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return Admin_Model_SambaMachine::class;
     }
 }

@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -90,15 +90,10 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
                 ? array($records->getById($recordGrant->{$this->_recordColumn}))
                 : $records->filter($aclIdProperty, $recordGrant->{$this->_recordColumn});
             foreach ($recordsToUpdate as $record) {
-                // NOTICE: this is strange - we have to remove the record and add it
-                //   again to make sure that grants are updated ...
-                //   maybe we should add a "replace" method?
-                $records->removeRecord($record);
                 if (!$record->grants instanceof Tinebase_Record_RecordSet) {
                     $record->grants = new Tinebase_Record_RecordSet($this->_modelName);
                 }
                 $record->grants->addRecord($recordGrant);
-                $records->addRecord($record);
             }
         }
         
@@ -187,7 +182,7 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
             $existingIds = $groupController->getMultiple($accountIds['group'])->getArrayOfIds();
             $deletedIds = array_diff($accountIds['group'], $existingIds);
             if (!empty($deletedIds)) {
-                $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $this->_db->quoteIdentifier('account_type') .
+                $deleted = $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $this->_db->quoteIdentifier('account_type') .
                     ' = \'group\' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' IN (?)',
                         $deletedIds));
                 unset($deletedIds);

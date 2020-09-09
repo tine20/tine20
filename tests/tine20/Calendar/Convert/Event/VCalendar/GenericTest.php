@@ -118,7 +118,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertTrue(!empty($event->organizer));
         $this->assertEquals('2012-02-27 15:56:00', $event->creation_time->toString(), 'CREATED not taken from ics');
         $this->assertEquals('2012-02-27 15:56:20', $event->last_modified_time, 'DTSTAMP not taken from ics');
-        $this->assertEquals(3, $event->seq, 'SEQUENCE not taken from ics');
+        $this->assertTrue($event->hasExternalOrganizer(), 'external organizer expected');
+        $this->assertEquals(3, $event->external_seq, 'SEQUENCE not taken from ics');
         
         
         return $event;
@@ -501,8 +502,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
         $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
         $this->assertContains('CREATED:20111111T111100Z',         $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED:20111111T121200Z',   $vevent, $vevent);
-        $this->assertContains('DTSTAMP:',                         $vevent, $vevent);
+        $this->assertContains('LAST-MODIFIED:20111020T144539Z',   $vevent, $vevent);
+        $this->assertContains('DTSTAMP:20111020T144539Z',         $vevent, $vevent);
         $this->assertContains('DTSTART;VALUE=DATE:20111019',      $vevent, $vevent);
         $this->assertContains('DTEND;VALUE=DATE:20111020',        $vevent, $vevent);
         $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
@@ -782,5 +783,11 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
 
         $ics = $this->_converter->fromTine20Model($savedEvent);
         self::assertContains('UID:5aaratdeecgjat4cbjpif5dvms@google', $ics->serialize());
+    }
+
+    public function testExternalInvitationSeqBeforeOrganizer()
+    {
+        $event = $this->_convertHelper(__DIR__ . '/../../../Frontend/files/external_invitation_seq_before_organizer.ics');
+        $this->assertEquals(2, $event->external_seq);
     }
 }

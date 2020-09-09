@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -82,6 +82,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                         }
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
+                        Tinebase_Exception::log($e, false);
                     }
                 }
                 
@@ -108,11 +109,15 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         } catch (Zend_Json_Server_Exception $zjse) {
             // invalid method requested or not authenticated, etc.
             Tinebase_Exception::log($zjse);
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                . ' Attempt to request a privileged Http-API method without valid session from "'
+                . $_SERVER['REMOTE_ADDR']);
 
-            header('HTTP/1.0 403 Forbidden');
+            if (! headers_sent()) {
+                header('HTTP/1.0 403 Forbidden');
+            }
 
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             Tinebase_Exception::log($exception, false);
             
             try {
@@ -132,8 +137,9 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 
                 $server->handle(array('method' => $this->_method));
                 
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 header('HTTP/1.0 503 Service Unavailable');
+                Tinebase_Exception::log($e, false);
             }
         }
     }

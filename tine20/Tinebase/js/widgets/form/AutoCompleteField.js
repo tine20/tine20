@@ -35,6 +35,8 @@ Tine.Tinebase.widgets.form.AutoCompleteField = Ext.extend(Ext.form.ComboBox, {
      * @private
      */
     initComponent: function() {
+        this.recordClass = this.recordClass || Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
+        
         if (! this.property && this.name) {
             this.property = this.name;
         }

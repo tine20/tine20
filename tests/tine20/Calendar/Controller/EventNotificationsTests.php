@@ -143,7 +143,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testInvitationWithAttachment()
     {
         $event = $this->_getEvent(TRUE);
-        $event->attendee = $this->_getPersonaAttendee('pwulf');
+        $event->attendee = $this->_getPersonaAttendee('pwulf, sclever');
         
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(__FILE__))) . '/Filemanager/files/test.txt');
@@ -154,17 +154,16 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $messages = self::getMessages();
         
-        $this->assertEquals(1, count($messages));
+        $this->assertEquals(2, count($messages));
         $parts = $messages[0]->getParts();
         $this->assertEquals(2, count($parts));
         $fileAttachment = $parts[1];
         $this->assertEquals('text/plain; name="=?utf-8?Q?tempfile.tmp?="', $fileAttachment->type);
         
-        // check VEVENT ORGANIZER mailto
-        $vcalendarPart = $parts[0];
-        $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
-        $this->assertContains('SENT-BY="mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '":mailto:', str_replace("\r\n ", '', $vcalendar), 'sent-by mailto not quoted');
-        
+        $this->_assertMail('pwulf', 'SENT-BY="mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '":mailto:', 'ics');
+        $this->_assertMail('pwulf', 'RSVP=TRUE;EMAIL=' . $this->_personas['pwulf']->accountEmailAddress, 'ics');
+        $this->_assertMail('pwulf', 'RSVP=FALSE;EMAIL=' . $this->_personas['sclever']->accountEmailAddress, 'ics');
+
         // @todo assert attachment content (this seems to not work with array mailer, maybe we need a "real" email test here)
 //         $content = $fileAttachment->getDecodedContent();
 //         $this->assertEquals('test file content', $content);
@@ -242,17 +241,27 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->summary = 'detail update notification has precedence over attendee update';
         $persistentEvent->url = 'http://somedetail.com';
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
-        $persistentEvent->status = Calendar_Model_Event::STATUS_TENTATIVE;
         
         self::flushMailer();
         $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf, sclever', NULL);
         $this->_assertMail('jmcblack, rwright', 'update');
 
+    }
+    
+    public function testStatusUpdatesReschedulesEvent()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('jmcblack');
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $persistentEvent->status = Calendar_Model_Event::STATUS_TENTATIVE;
+        self::flushMailer();
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $messages = self::getMessages();
         $this->assertContains('"' . Tinebase_Translation::getTranslation('Calendar')->translate('Tentative') . '"', $messages[0]->getBodyText()->getRawContent(), 'keyfield not resolved');
     }
-        
+    
     /**
      * testUpdateAttendeeStatus
      */
@@ -409,7 +418,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         ]);
         Calendar_Controller::getInstance()->getInvitationContainer($externalAttender);
 
-        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Model_Grants::GRANT_EDIT);
+        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), Calendar_Model_Event::class, Tinebase_Model_Grants::GRANT_EDIT);
 
         foreach ($containers as $container) {
             if ($container->name === 'externer@example.org') {
@@ -1274,7 +1283,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                         
                         $this->assertContains($_assertString, $bodyText);
                         break;
-                        
+
+                    case 'ics':
+                        $parts = $mailsForPersona[0]->getParts();
+                        $vcalendarPart = $parts[0];
+                        $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
+
+                        $this->assertContains($_assertString, str_replace("\r\n ", '', $vcalendar), $_assertString . ' not found for ' . $personaName . " in:\n" . $vcalendar);
+
+                        break;
                     default:
                         throw new Exception('no such location '. $_location);
                         break;
@@ -1551,13 +1568,24 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
 
-    public function testSendTentativeNotifications()
+    /**
+     * funktion for NotificationsTest
+     * @param $sendTentative '0','1'
+     * @param $attendee @boolean
+     */
+    public function _tentativeNotification($sendTentative, $attendee)
     {
         $tentConf = Calendar_Config::getInstance()->{Calendar_Config::TENTATIVE_NOTIFICATIONS};
         $oldValue = $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED};
         $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = true;
+        Tinebase_Core::getPreference('Calendar')->setValueForUser(Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE, $sendTentative,
+            Tinebase_FullUser::getInstance()->getFullUserByLoginName('sclever')->getId());
         try {
             $event = $this->_getEvent(true);
+            if(!$attendee)
+            {
+                $event->attendee = null;
+            }
             $event->dtstart->addHour(15);
             $event->dtend->addHour(15);
             $event->status = Calendar_Model_Event::STATUS_TENTATIVE;
@@ -1566,31 +1594,63 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
             self::flushMailer();
             $this->_eventController->sendTentativeNotifications();
-            $this->_assertMail('sclever', 'Tentative');
+            if($sendTentative) {
+                $this->_assertMail('sclever', 'Tentative');
+            } else
+            {
+                $this->_assertMail('sclever', '');
+            }
         } finally {
             $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = $oldValue;
         }
     }
 
+    /**
+     * testSendTentativeNotifications
+     */
+    public function testSendTentativeNotifications()
+    {
+        $this->_tentativeNotification('0',true);
+    }
+
+    /**
+     * testSendTentativeNotificationsNoAttenders
+     */
     public function testSendTentativeNotificationsNoAttenders()
     {
-        $tentConf = Calendar_Config::getInstance()->{Calendar_Config::TENTATIVE_NOTIFICATIONS};
-        $oldValue = $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED};
-        $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = true;
-        try {
-            $event = $this->_getEvent(TRUE);
-            $event->attendee = null;
-            $event->dtstart->addHour(15);
-            $event->dtend->addHour(15);
-            $event->status = Calendar_Model_Event::STATUS_TENTATIVE;
-            $event->organizer = $this->_getPersonasContacts('sclever')->getId();
-            $this->_eventController->create($event);
+        $this->_tentativeNotification('0',false);
+    }
 
-            self::flushMailer();
-            $this->_eventController->sendTentativeNotifications();
-            $this->_assertMail('sclever', 'Tentative');
-        } finally {
-            $tentConf->{Calendar_Config::TENTATIVE_NOTIFICATIONS_ENABLED} = $oldValue;
-        }
+    /**
+     * testSendNotificationForTentative
+     */
+    public function testSendNotificationForTentative()
+    {
+        $this->_tentativeNotification('1',false);
+    }
+
+    /**
+     * testSendNotificationForNoTentative
+     */
+    public function testSendNotificationForNoTentative()
+    {
+        $this->_tentativeNotification('1',true);
+    }
+    
+    public function testEventStatusUpdateNotification()
+    {
+        $event = $this->_getEvent(TRUE);
+        $event->attendee = $this->_getPersonaAttendee('sclever');
+        $persistentEvent = $this->_eventController->create($event);
+
+        self::flushMailer();
+        $persistentEvent->status = Calendar_Model_Event::STATUS_CANCELED;
+        $persistentEvent = $this->_eventController->update($persistentEvent);
+        $this->_assertMail('sclever', 'canceled');
+
+        // we can't detect this situation in the controller yet :(
+//        self::flushMailer();
+//        $this->_eventController->delete($persistentEvent);
+//        $this->_assertMail('sclever', null);
     }
 }

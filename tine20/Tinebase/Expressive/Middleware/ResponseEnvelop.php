@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Expressive
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -68,11 +68,11 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             // $response->getBody()->rewind();
             // $response->getBody()->write(json_encode(['results' => [], 'status' => $response->getStatusCode()]));
             //}
-        } catch (Tinebase_Exception_Expressive_HTTPstatus $teeh) {
+        } catch (Tinebase_Exception_Expressive_HttpStatus $teeh) {
             // the exception can use logToSentry and logLevelMethod properties to achieve desired logging
             // default is false (no sentry) and info log level
             Tinebase_Exception::log($teeh);
-            $response = new Response($body = 'php://memory', $teeh->getCode, $teeh->getMessage());
+            $response = new Response($body = 'php://memory', $teeh->getCode());
         } catch (Exception $e) {
             Tinebase_Exception::log($e, false);
             $response = new Response($body = 'php://memory', 500);
@@ -82,11 +82,14 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             $body = $response->getBody();
             $body->rewind();
             $headerStr = '';
-            foreach($response->getHeaders() as $name => $values) {
+            foreach ($response->getHeaders() as $name => $values) {
                 $headerStr .= "$name: {$values[0]}\n";
             }
 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " response:\n$headerStr\n".$body->getContents());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " Response headers: " . $headerStr);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . " Response body: " . $body->getContents());
         }
         return $response;
     }

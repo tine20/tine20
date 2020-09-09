@@ -30,6 +30,7 @@ class Sales_Import_CustomerTest extends TestCase
         $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_Customer', [
             'definition' => 'Sales_import_customer_csv',
+            'file' => 'customers.csv',
         ]);
         $importer->importDemodata();
         $filter = Sales_Model_CustomerFilter::getFilterForModel('Sales_Model_Customer', [

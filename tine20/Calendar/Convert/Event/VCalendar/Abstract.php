@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,6 +18,24 @@
  */
 class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalendar_Abstract implements Tinebase_Convert_Interface
 {
+    /**
+     * add attachment content as binary base64 encoded string
+     * @const
+     */
+    const OPTION_ADD_ATTACHMENTS_BINARY = 'addAttachmentsBinary';
+
+    /**
+     * add attachment content max size (bytes)
+     * @const
+     */
+    const OPTION_ADD_ATTACHMENTS_MAX_SIZE = 'addAttachmentsMaxSize';
+
+    /**
+     * add attachment url
+     * @const
+     */
+    const OPTION_ADD_ATTACHMENTS_URL = 'addAttachmentsURL';
+
     public static $cutypeMap = array(
         Calendar_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
         Calendar_Model_Attender::USERTYPE_GROUPMEMBER   => 'INDIVIDUAL',
@@ -32,15 +50,21 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * @var string
      */
     protected $_method;
-    
+
+    /**
+     * @var Calendar_Model_Attender
+     */
+    protected $_calendarUser = NULL;
+
     /**
      * options array
      * @var array
      * 
-     * TODO allow more options
-     * 
      * current options:
      *  - onlyBasicData (only use basic event data when converting from VCALENDAR to Tine 2.0)
+     *  - addAttachmentsURL
+     *  - addAttachmentsMaxSize
+     *  - addAttachmentsBinary
      */
     protected $_options = array();
     
@@ -52,32 +76,40 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     {
         $this->_options = $options;
     }
-    
+
     /**
-     * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
+     * sets current calendar user
      *
-     * @param  Tinebase_Record_RecordSet  $_records
-     * @return Sabre\VObject\Component
+     * @param Calendar_Model_Attender $_calUser
+     * @return Calendar_Model_Attender oldUser
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    public function setCalendarUser(Calendar_Model_Attender $_calUser)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Events: ' . print_r($_records->toArray(), true));
-        
+        $oldUser = $this->_calendarUser;
+        $this->_calendarUser = $_calUser;
+
+        return $oldUser;
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $_record
+     * @return \Sabre\VObject\Component\VCalendar
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function createVCalendar(Tinebase_Record_Interface $_record)
+    {
         // required vcalendar fields
         $version = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->version;
-        
+
         $vcalendar = new \Sabre\VObject\Component\VCalendar(array(
             'PRODID'   => "-//tine20.com//Tine 2.0 Calendar V$version//EN",
             'VERSION'  => '2.0',
             'CALSCALE' => 'GREGORIAN'
         ));
-        
-        if (isset($this->_method)) {
-            $vcalendar->add('METHOD', $this->_method);
-        }
-        
-        $originatorTz = $_records->getFirstRecord() ? $_records->getFirstRecord()->originator_tz : NULL;
+
+        $originatorTz = $_record ? $_record->originator_tz : NULL;
         if (empty($originatorTz)) {
             throw new Tinebase_Exception_Record_Validation('originator_tz needed for conversion to Sabre\VObject\Component');
         }
@@ -88,27 +120,50 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             Tinebase_Exception::log($e);
             throw new Tinebase_Exception_Record_Validation('Bad Timezone: ' . $originatorTz);
         }
-        
-        foreach ($_records as $_record) {
-            $this->_convertCalendarModelEvent($vcalendar, $_record);
-            
-            if ($_record->exdate instanceof Tinebase_Record_RecordSet) {
-                $_record->exdate->addIndices(array('is_deleted'));
-                $eventExceptions = $_record->exdate->filter('is_deleted', false);
-                
-                foreach ($eventExceptions as $eventException) {
-                    $this->_convertCalendarModelEvent($vcalendar, $eventException, $_record);
-                }
-                
-            }
+
+        if (isset($this->_method)) {
+            $vcalendar->add('METHOD', $this->_method);
+        }
+
+        return $vcalendar;
+    }
+
+    /**
+     * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
+     *
+     * @param  Tinebase_Record_RecordSet  $_records
+     * @return Sabre\VObject\Component
+     */
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    {
+        $vcalendar = $this->createVCalendar($_records->getFirstRecord());
+
+        foreach ($_records as $record) {
+            $this->addEventToVCalendar($vcalendar, $record);
         }
         
         $this->_afterFromTine20Model($vcalendar);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' card ' . $vcalendar->serialize());
-        
         return $vcalendar;
+    }
+
+    /**
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
+     * @param Calendar_Model_Event $event
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function addEventToVCalendar(\Sabre\VObject\Component\VCalendar $vcalendar, Calendar_Model_Event $event)
+    {
+        $this->_convertCalendarModelEvent($vcalendar, $event);
+
+        if ($event->exdate instanceof Tinebase_Record_RecordSet) {
+            $event->exdate->addIndices(array('is_deleted'));
+            $eventExceptions = $event->exdate->filter('is_deleted', false);
+
+            foreach ($eventExceptions as $eventException) {
+                $this->_convertCalendarModelEvent($vcalendar, $eventException, $event);
+            }
+        }
     }
 
     /**
@@ -147,17 +202,23 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             'CREATED'       => $_event->creation_time->getClone()->setTimezone('UTC'),
             'LAST-MODIFIED' => $lastModifiedDateTime->getClone()->setTimezone('UTC'),
             'DTSTAMP'       => Tinebase_DateTime::now(),
-            'UID'           => $event->uid,
+            'UID'           => (!$_mainEvent && $event->isRecurException()) ? $event->getId() : $event->uid,
         ));
         
         $vevent->add('SEQUENCE', $event->hasExternalOrganizer() ? $event->external_seq : $event->seq);
         
-        if ($event->isRecurException()) {
+        if (null !== $_mainEvent) {
+            if (! $event->isRecurException()) {
+                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('event ' . $event->getId() .
+                    'is not a recure exception though a mainEvent was passed along'));
+                return;
+            }
+
             $originalDtStart = $_event->getOriginalDtStart()->setTimezone($_event->originator_tz);
             
             $recurrenceId = $vevent->add('RECURRENCE-ID', $originalDtStart);
             
-            if ($_mainEvent && $_mainEvent->is_all_day_event == true) {
+            if ($_mainEvent->is_all_day_event == true) {
                 $recurrenceId['VALUE'] = 'DATE';
             }
         }
@@ -218,7 +279,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
         $class = $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL';
         $vevent->add('X-CALENDARSERVER-ACCESS', $class);
-        if (! $_event->isRecurException()) {
+        if (! $_mainEvent && $vcalendar->{'X-CALENDARSERVER-ACCESS'} === null) {
             // add one time only
             $vcalendar->add('X-CALENDARSERVER-ACCESS', $class);
         }
@@ -227,7 +288,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         if (!isset($event->tags)) {
             $event->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($event);
         }
-        if(isset($event->tags) && count($event->tags) > 0) {
+        if (count($event->tags) > 0 && $event->tags instanceof Tinebase_Record_RecordSet) {
             $vevent->add('CATEGORIES', (array) $event->tags->name);
         }
         
@@ -264,8 +325,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 }
             }
         }
-        
-        $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
         
         if ($event->alarms instanceof Tinebase_Record_RecordSet) {
             $mozLastAck = NULL;
@@ -316,43 +375,97 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             if ($mozSnooze instanceof DateTime) {
                 $vevent->add('X-MOZ-SNOOZE-TIME', $mozSnooze->getClone()->setTimezone('UTC'), array('VALUE' => 'DATE-TIME'));
             }
+        }
 
-            if (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
-                $sabrePropertyParser = new Calendar_Convert_Event_VCalendar_SabrePropertyParser($vcalendar);
-                foreach ($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] as $prop) {
-                    try {
-                        $vevent->add($sabrePropertyParser->parseProperty($prop));
-                    } catch (\Sabre\VObject\ParseException $svope) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
-                            '::' . __LINE__ . ' failed adding events imip x-property: ' . $prop . ' -> ' .
-                            $svope->getMessage());
-                    }
+        if (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
+            $sabrePropertyParser = new Calendar_Convert_Event_VCalendar_SabrePropertyParser($vcalendar);
+            foreach ($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] as $prop) {
+                try {
+                    $propObj = $sabrePropertyParser->parseProperty($prop);
+                    $vevent->__set($propObj->name, $propObj);
+                } catch (\Sabre\VObject\ParseException $svope) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
+                        '::' . __LINE__ . ' failed adding events imip x-property: ' . $prop . ' -> ' .
+                        $svope->getMessage());
                 }
             }
         }
         
-        $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
-        
         if ($event->attachments instanceof Tinebase_Record_RecordSet) {
-            foreach ($event->attachments as $attachment) {
-                $filename = rawurlencode($attachment->name);
-                $attach = $vcalendar->createProperty('ATTACH', "{$baseUrl}{$filename}", array(
-                    'MANAGED-ID' => $attachment->hash,
-                    'FMTTYPE'    => $attachment->contenttype,
-                    'SIZE'       => $attachment->size,
-                    'FILENAME'   => $filename
-                ), 'TEXT');
-
-                $vevent->add($attach);
-            }
-            if ($event->attachments->count() && isset($this->_options['addAttachmentsURL']) && $this->_options['addAttachmentsURL']) {
-                $vevent->add($vcalendar->createProperty('URL', $baseUrl));
-            }
+            $this->_addAttachments($vevent, $vcalendar, $event);
         }
         
         $vcalendar->add($vevent);
     }
-    
+
+    protected function _addAttachments($vevent, $vcalendar, $event)
+    {
+        $baseUrl = Tinebase_Core::getHostname() . "/webdav/Calendar/records/Calendar_Model_Event/{$event->getId()}/";
+        $maxSize = isset($this->_options[self::OPTION_ADD_ATTACHMENTS_MAX_SIZE])
+            ? $this->_options[self::OPTION_ADD_ATTACHMENTS_MAX_SIZE]
+            : 10 * 1024 * 1024; // 10 MB
+        foreach ($event->attachments as $attachment) {
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Adding attachment: ' . print_r($attachment->toArray(), true));
+
+            if ($attachment->size > $maxSize) {
+                // NOTE: sabredav component->serialize fails with bigger files (> 10 MB)
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    ' Not adding attachment because it is bigger than configured max size: ' . Tinebase_Helper::formatBytes($attachment->size));
+                continue;
+            }
+
+            $filename = rawurlencode($this->_getAttachmentFilename($attachment->name));
+            if (isset($this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY])
+                && $this->_options[self::OPTION_ADD_ATTACHMENTS_BINARY]
+            ) {
+                $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
+                $value = base64_encode($content);
+                $attachmentData = [
+                    'ENCODING' => 'BASE64',
+                    'VALUE' => 'BINARY',
+                    'FILENAME' => $filename,
+                    'X-FILENAME' => $filename,
+                    'X-APPLE-FILENAME' => $filename,
+                    'FMTTYPE' => $attachment->contenttype,
+                ];
+            } else {
+                $value = "{$baseUrl}{$filename}";
+                $attachmentData = [
+                    'MANAGED-ID' => $attachment->hash,
+                    'FMTTYPE'    => $attachment->contenttype,
+                    'SIZE'       => $attachment->size,
+                    'FILENAME'   => $filename,
+                ];
+            }
+            $attach = $vcalendar->createProperty('ATTACH', $value, $attachmentData, 'TEXT');
+            $vevent->add($attach);
+        }
+        if ($event->attachments->count()
+            && isset($this->_options[self::OPTION_ADD_ATTACHMENTS_URL])
+            && $this->_options[self::OPTION_ADD_ATTACHMENTS_URL]
+        ) {
+            $vevent->add($vcalendar->createProperty('URL', $baseUrl));
+        }
+    }
+
+    /**
+     * convert to ascii string
+     *
+     * @param string $string
+     * @return string
+     *
+     * TODO move this to Tinebase_Helper
+     */
+    protected function _getAttachmentFilename($string)
+    {
+        $filename = str_replace([' ', '/'], '_', $string);
+        $filename = iconv("UTF-8", "ascii//TRANSLIT", $filename);
+
+        return $filename;
+    }
+
     /**
      * add event attendee to VEVENT object 
      * 
@@ -369,19 +482,30 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
         foreach($event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();
-            
+
             $parameters = array(
                 'CN'       => $eventAttendee->getName(),
-                'CUTYPE'   => Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type],
+                'CUTYPE'   => $this->_getAttendeeCUType($eventAttendee),
                 'PARTSTAT' => $eventAttendee->status,
                 'ROLE'     => "{$eventAttendee->role}-PARTICIPANT",
-                'RSVP'     => 'FALSE'
+                'RSVP'     => $eventAttendee->isSame($this->_calendarUser) ? 'TRUE' : 'FALSE',
             );
             if (strpos($attendeeEmail, '@') !== false) {
                 $parameters['EMAIL'] = $attendeeEmail;
             }
             $vevent->add('ATTENDEE', (strpos($attendeeEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $attendeeEmail, $parameters);
         }
+    }
+
+    /**
+     * returns CUTYPE for given attendee
+     *
+     * @param Calendar_Model_Attender $eventAttendee
+     * @return string
+     */
+    protected function _getAttendeeCUType($eventAttendee)
+    {
+        return Calendar_Convert_Event_VCalendar_Abstract::$cutypeMap[$eventAttendee->user_type];
     }
 
     /**
@@ -584,7 +708,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         $vcalendar = self::getVObject($blob);
         
         $result = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        
+
         foreach ($vcalendar->VEVENT as $vevent) {
             if (! isset($vevent->{'RECURRENCE-ID'})) {
                 $event = new Calendar_Model_Event();
@@ -593,6 +717,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     $this->_parseEventExceptions($event, $vcalendar, $options);
                 }
                 $result->addRecord($event);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Converted ' . count($result) . ' events from VCALENDAR blob.');
             }
         }
         
@@ -744,15 +870,22 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             }
             
             switch ($property->name) {
-                case 'CREATED':
                 case 'DTSTAMP':
+                    $imipProps['DTSTAMP'] = trim($property->serialize());
                     if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
-                        $event->{$property->name == 'CREATED' ? 'creation_time' : 'last_modified_time'} = $this->_convertToTinebaseDateTime($property);
+                        $event->last_modified_time = $this->_convertToTinebaseDateTime($property);
+                    }
+                    break;
+                case 'CREATED':
+                    $imipProps['CREATED'] = trim($property->serialize());
+                    if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
+                        $event->creation_time = $this->_convertToTinebaseDateTime($property);
                     }
                     break;
                     
                 case 'LAST-MODIFIED':
                     $event->last_modified_time = $this->_convertToTinebaseDateTime($property);
+                    $imipProps['LAST-MODIFIED'] = trim($property->serialize());
                     break;
                 
                 case 'ATTENDEE':
@@ -812,14 +945,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     $event->originator_tz = $dtstart->getTimezone()->getName();
                     $event->dtstart = $dtstart;
                     
-                    break;
-                    
-                case 'SEQUENCE':
-                    if (! isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
-                        $event->seq = $property->getValue();
-                    }
-                    // iMIP only
-                    $event->external_seq = $property->getValue();
                     break;
                     
                 case 'DESCRIPTION':
@@ -935,12 +1060,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     
                 case 'UID':
                     // it's not possible to change the uid by spec
-                    if (!empty($event->uid)) {
-                        continue;
+                    if (empty($event->uid)) {
+                        $event->uid = $property->getValue();
                     }
-                    
-                    $event->uid = $property->getValue();
-                
                     break;
                     
                 case 'VALARM':
@@ -1029,14 +1151,19 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                             . ' Downloading attachment: ' . $attachmentInfo);
                                 
-                                $stream = fopen($url, 'r');
-                                $attachment = new Tinebase_Model_Tree_Node(array(
-                                    'name'         => rawurldecode($name),
-                                    'type'         => Tinebase_Model_Tree_FileObject::TYPE_FILE,
-                                    'contenttype'  => (string) $property['FMTTYPE'],
-                                    'tempFile'     => $stream,
+                                $stream = @fopen($url, 'r');
+                                if ($stream) {
+                                    $attachment = new Tinebase_Model_Tree_Node(array(
+                                        'name' => rawurldecode($name),
+                                        'type' => Tinebase_Model_Tree_FileObject::TYPE_FILE,
+                                        'contenttype' => (string)$property['FMTTYPE'],
+                                        'tempFile' => $stream,
                                     ), true);
-                                $attachments->addRecord($attachment);
+                                    $attachments->addRecord($attachment);
+                                } else {
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                        . ' Could not open url (maybe no permissions?): ' . $attachmentInfo . ' - Skipping attachment');
+                                }
                             } else {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                                     . ' Url not found (got 404): ' . $attachmentInfo . ' - Skipping attachment');
@@ -1056,7 +1183,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'X-MOZ-SNOOZE-TIME':
                     $snoozeTime = $this->_convertToTinebaseDateTime($property);
                     break;
-                    
+
+                case 'EXDATE':
+                    // ignore this, we dont want it to land in default -> imipProps!
+                    break;
+
                 default:
                     // thunderbird saves snooze time for recurring event occurrences in properties with names like this -
                     // we just assume that the event/recur series has only one snooze time 
@@ -1070,11 +1201,28 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     break;
             }
         }
+        if (!empty($imipProps) && !$event->hasExternalOrganizer()) {
+            unset($imipProps['DTSTAMP']);
+            unset($imipProps['CREATED']);
+            unset($imipProps['LAST-MODIFIED']);
+        }
         if (!empty($imipProps)) {
             if (isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
                 $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] += $imipProps;
             } else {
                 $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] = $imipProps;
+            }
+        }
+
+        // evaluate seq after organizer is parsed
+        if ($vevent->SEQUENCE) {
+            $seq = $vevent->SEQUENCE->getValue();
+            if (!$event->hasExternalOrganizer()) {
+                if (!isset($options[self::OPTION_USE_SERVER_MODLOG]) || $options[self::OPTION_USE_SERVER_MODLOG] !== true) {
+                    $event->seq = $seq;
+                }
+            } else {
+                $event->external_seq = $seq;
             }
         }
 

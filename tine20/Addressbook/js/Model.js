@@ -21,8 +21,9 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'n_middle', label: 'Middle Name', group: 'Name' }, //_('Middle Name')
     {name: 'n_prefix', label: 'Title', group: 'Name' }, //_('Title')
     {name: 'n_suffix', label: 'Suffix', group: 'Name'}, //_('Suffix')
+    {name: 'n_short', label: 'Short Name', group: 'Name'}, //_('Short Name')
     {name: 'n_fn', label: 'Display Name', group: 'Name', omitDuplicateResolving: true }, //_('Display Name')
-    {name: 'n_fileas', group: 'Name', omitDuplicateResolving: true },
+    {name: 'n_fileas', group: 'Name', omitDuplicateResolving: true, sortType: Ext.data.SortTypes.asUCString },
     {name: 'bday', label: 'Birthday', type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
     {name: 'org_name', label: 'Company', group: 'Company' }, //_('Company')
     {name: 'org_unit', label: 'Unit', group: 'Company' }, //_('Unit')
@@ -163,6 +164,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
         {label: app.i18n._('Middle Name'),                                              field: 'n_middle'},
+        {label: app.i18n._('Short Name'),                                               field: 'n_short'}, 
         {label: app.i18n._('Company'),                                                  field: 'org_name'},
         {label: app.i18n._('Unit'),                                                     field: 'org_unit'},
         {label: app.i18n._('Phone'),                                                    field: 'telephone',          operators: ['contains']},
@@ -208,7 +210,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
 };
 
 /**
- * default timesheets backend
+ * default contact backend
  */
 Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Addressbook',
@@ -238,12 +240,14 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     {name: 'type'},
     {name: 'list_type'},
     {name: 'group_id'},
+    {name: 'account_only', type: 'boolean'},
     {name: 'emails'},
     {name: 'notes', omitDuplicateResolving: true},
     {name: 'paths', omitDuplicateResolving: true},
     {name: 'relations', omitDuplicateResolving: true},
     {name: 'customfields', omitDuplicateResolving: true},
-    {name: 'tags'}
+    {name: 'tags'},
+    {name: 'xprops'}
 ], {
     appName: 'Addressbook',
     modelName: 'List',
@@ -270,7 +274,7 @@ Tine.Addressbook.Model.List.getFilterModel = function() {
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app, field: 'contact'},
         {label: app.i18n._('Name'),                                               field: 'name' },
-        {label: app.i18n._('Description'),                                                field: 'description',           valueType: 'fulltext'},
+        {label: app.i18n._('Description'),                                                      field: 'description',        valueType: 'text'},
         {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
         {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
         {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},

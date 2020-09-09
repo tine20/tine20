@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -50,26 +50,6 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
              )
         ),
-        'importCalDavCalendars' => array(
-            'description'    => 'import calendars without events from a CalDav source',
-            'params'         => array(
-                'url'        => 'CalDav source URL',
-                'caldavuserfile' => 'CalDav user file containing utf8 username;pwd',
-             )
-        ),
-        'importegw14' => array(
-            'description'    => 'imports calendars/events from egw 1.4',
-            'params'         => array(
-                'host'       => 'dbhost',
-                'username'   => 'username',
-                'password'   => 'password',
-                'dbname'     => 'dbname'
-            )
-        ),
-        'exportICS' => array(  
-            'description'    => "export calendar as ics", 
-            'params'         => array('container_id') 
-        ),
     );
     
     /**
@@ -97,35 +77,21 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         parent::_import($_opts);
     }
-    
-    /**
-     * exports calendars as ICS
-     *
-     * @param Zend_Console_Getopt $_opts
-     */
-    public function exportICS($_opts)
-    {
-        Tinebase_Core::set('HOSTNAME', 'localhost');
-        
-        $opts = $_opts->getRemainingArgs();
-        $container_id = $opts[0];
-        $filter = new Calendar_Model_EventFilter(array(
-            array(
-                'field'     => 'container_id',
-                'operator'  => 'equals',
-                'value'     => $container_id
-            )
 
-        ));
-        $result = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'get');
-        if ($result->count() == 0) {
-            throw new Tinebase_Exception('this calendar does not contain any records.');
-        }
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory("generic");
-        $result = $converter->fromTine20RecordSet($result);
-        print $result->serialize();
+    /**
+     * exports calendars as ICS (VCALENDAR)
+     * examples:
+     *      --method Calendar.exportVCalendar --username=USER -- container_id=CALID filename=/my/export/file.ics
+     *      --method Calendar.exportVCalendar --username=USER -- type=personal path=/my/export/path/
+     *
+     * @param $_opts
+     * @return boolean
+     */
+    public function exportVCalendar($_opts)
+    {
+        return $this->_exportVObject($_opts, Calendar_Model_Event::class, Calendar_Export_VCalendar::class);
     }
-    
+
     /**
      * delete duplicate events
      *  - allowed params:
@@ -177,7 +143,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $filter = new Calendar_Model_EventFilter($filterData);
         
         $result = $be->deleteDuplicateEvents($filter, $opts->d);
-        exit($result > 0 ? 1 : 0);
+        return 0;
     }
     
     /**
@@ -194,22 +160,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $be = new Calendar_Backend_Sql();
         $be->repairDanglingDisplaycontainerEvents();
     }
-    
-    /**
-     * import calendars from a CalDav source
-     * 
-     * param Zend_Console_Getopt $_opts
-     */
-    public function importCalDavCalendars(Zend_Console_Getopt $_opts)
-    {
-        $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
-        
-        $this->_addOutputLogWriter(4);
-        
-        $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
-        $caldavCli->importAllCalendars();
-    }
-    
+
     /**
      * import calendar events from a CalDav source
      * 
@@ -350,6 +301,132 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo "\n";
             }
         }
+    }
+
+    /**
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     *
+     */
+    public function userCalendarReport(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($_opts, ['filename']);
+        if (!isset($args['status'])) $args['status'] = false;
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $count = Tinebase_User::getInstance()->getUserCount();
+        $headData = ['User', 'Number of Calendars', 'Required space in MB', 'Filemanager usage in MB'];
+
+        echo $count . "\n";
+
+        $fp = fopen($args['filename'], 'a');
+        fputcsv($fp, $headData);
+        fclose($fp);
+
+        $i = 0;
+
+        $users = Tinebase_User::getInstance()->getFullUsers(NULL, NULL, $_dir = 'ASC', $i, 100);
+        while ($users->count() > 0) {
+            $i += 100;
+            echo 'Count: ' . $i . "\n";
+            //$users = Tinebase_User::getInstance()->getFullUsers('metaways');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' . $users->count() . ' Users!');
+
+            foreach ($users as $user) {
+                Tinebase_Core::set(Tinebase_Core::USER, $user);
+                echo 'Search Container from User: ' . $user['accountLoginName'] . "\n";
+                $disabled = ($args['status'] || $user['accountStatus'] != 'disabled');
+                if ($disabled) {
+                    $containerFilter = [
+                        ['field' => 'owner_id', 'operator' => 'equals', 'value' => $user->getId()],
+                        ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class],
+                        ['field' => 'application_id', 'operator' => 'equals',
+                            'value' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()],
+                    ];
+
+                    $counContainers = Tinebase_Container::getInstance()->searchCount(
+                        new Tinebase_Model_ContainerFilter($containerFilter)
+                    );
+
+                    
+                    echo 'Found ' . $counContainers . ' Container!' . "\n";
+
+
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' . $counContainers .
+                        ' Calendars for ' . $user['accountLoginName']);
+
+
+                    $personalPath = [
+                        ['field' => 'recursive', 'operator' => 'equals', 'value' => 1],
+                    ];
+
+                    $usage = 0;
+                    $clUsage = 0;
+
+                    try {
+                        $personalNodes = Filemanager_Controller_Node::getInstance()->search(new Filemanager_Model_NodeFilter($personalPath));
+
+                        foreach ($personalNodes as $node) {
+                            if (preg_match('/^\/personal\/' . $user['accountLoginName'] . '.*/', $node['path'])) $usage += $node['size'];
+                        }
+                    } catch (Exception $e) {
+                        echo $user['accountLoginName'] . ' has no rights for Filemanager!' . "\n";
+                        $usage = 'no rights!';
+                    }
+
+                    $containers = Tinebase_Container::getInstance()->search(
+                        new Tinebase_Model_ContainerFilter($containerFilter)
+                    );
+
+                    foreach ($containers as $container) {
+
+                        echo 'Search Events from User: ' . $user['accountLoginName'] . ' and Container: ' . $container['name'] . "\n";
+
+                        $attachments = [];
+
+                        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+                            ['field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId()]]));
+
+                        echo 'Found ' . $events->count() . ' Events' . "\n";
+
+                        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($events);
+
+
+                        foreach ($events as $event) {
+                            $attachments = $event->attachments;
+                            if ($attachments) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' .
+                                $attachments->count() . ' attachments for the Events of ' . $user['accountLoginName']);
+
+                            if (isset($attachments)) {
+                                foreach ($attachments as $attachment) {
+                                    echo 'Found Attachments! ' . "\n";
+                                    //print_r($attachment->toArray());
+                                    $clUsage += $attachment['size'];
+                                }
+                            } else {
+                                echo 'No Attachments found! ' . "\n";
+                            }
+                        }
+
+                    }
+                    $clUsage = Tinebase_Helper::formatBytes($clUsage, 'MB');
+                    $usage = Tinebase_Helper::formatBytes($usage, 'MB');
+                    $data = [$user['accountLoginName'], $counContainers, $clUsage, $usage];
+                    $fp = fopen($args['filename'], 'a');
+                    fputcsv($fp, $data);
+                    fclose($fp);
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Save the result in ' .
+                        $args['filename']);
+
+                }
+            }
+            $users = Tinebase_User::getInstance()->getFullUsers(NULL, NULL, $_dir = 'ASC', $i, 100);
+        }
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Report Success!');
+
+        return 1;
     }
 
     /**
@@ -591,5 +668,204 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         }
 
+    }
+
+    /**
+     * fetch data from ics file and put it into the matching tine20 events
+     * example:
+     *  php tine20.php --method=Calendar.fetchDataFromIcs -v -d --username test --password test my.ics
+     *
+     * @param $_opts
+     * @return int
+     *
+     * NOTE: currently only alarms are supported
+     *
+     * TODO add more fields that can be processed / imported
+     */
+    public function fetchDataFromIcs($_opts)
+    {
+        // might not be necessary on your system
+        ini_set('memory_limit', '1G');
+
+        $args = $this->_parseArgs($_opts, array(), 'filename');
+
+        if ($_opts->d) {
+            $args['dryrun'] = 1;
+            if ($_opts->v) {
+                echo "Doing dry run.\n";
+            }
+        }
+
+        if (! isset($args['filename'])) {
+            if ($_opts->v) {
+                echo "No filename given.\n";
+            }
+            return 1;
+        }
+
+        $now = Tinebase_DateTime::now();
+        foreach ((array) $args['filename'] as $filename) {
+            $resource = fopen($filename, 'r');
+
+            // TODO allow to define the client
+            $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX);
+            $events = $converter->toTine20RecordSet($resource);
+
+            if ($_opts->v) {
+                echo "Got " . count($events) . " events to process from " . $filename . ".\n";
+            }
+
+            foreach ($events as $event) {
+                if (count($event->alarms) > 0) {
+                    $alarmsToSet = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
+
+                    foreach ($event->alarms as $alarm) {
+                        // check if alarms are pending and alarm time is after NOW()
+                        if ($alarm->sent_status === Tinebase_Model_Alarm::STATUS_PENDING && $alarm->alarm_time->isLater($now)) {
+                            $alarmsToSet->addRecord($alarm);
+                        }
+                    }
+                    if (count($alarmsToSet) > 0) {
+                        // check if event is in db
+                        $existingEventsFilter = new Calendar_Model_EventFilter(array(
+                            array('field' => 'uid', 'operator' => 'in', 'value' => $event->uid),
+                        ));
+                        $existingEvents = Calendar_Controller_Event::getInstance()->search($existingEventsFilter);
+                        if (count($existingEvents) == 1) {
+                            if ($_opts->v) {
+                                echo "Found matching event with uid" . $event->uid . "\n";
+                            }
+                            if (! $_opts->d) {
+                                // save alarms!
+                                $tine20Event = $existingEvents->getFirstRecord();
+                                $tine20Event = Calendar_Controller_Event::getInstance()->get($tine20Event);
+                                if ($tine20Event->alarms && count($tine20Event->alarms) > 0) {
+                                    if ($_opts->v) {
+                                        echo "Preserving existing alarms ...\n";
+                                    }
+                                } else {
+                                    // TODO allow to configure this - currently alarms are only set for the current user attender
+                                    $currentUserAttender = new Calendar_Model_Attender(array(
+                                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                                        'user_id'   => Tinebase_Core::getUser()->contact_id
+                                    ));
+                                    $alarmsToSet->setOption('attendee', Calendar_Controller_Alarm::attendeeToOption($currentUserAttender));
+                                    if ($_opts->v) {
+                                        echo "Setting alarms: ...\n";
+                                        print_r($alarmsToSet->toArray());
+                                    }
+
+                                    $tine20Event->alarms = $alarmsToSet;
+                                    // TODO make this public - atm this needs to be done by hand
+                                    // Calendar_Controller_Event::getInstance()->_saveAlarms($tine20Event);
+                                }
+                            }
+                        } else if (count($existingEvents) > 1) {
+                            if ($_opts->v) {
+                                echo "Got " . count($existingEvents) . " events for uid" . $event->uid . ". skipping ...\n";
+                            }
+                        } else if ($_opts->v) {
+                            echo "No matching event with uid" . $event->uid . " found.\n";
+                        }
+                    } else if ($_opts->v) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($event->alarms->toArray(), true));
+                        echo "Event with " . $event->uid . " has no pending alarms in the future.\n";
+                    }
+                } else if ($_opts->v) {
+                    echo "Event with " . $event->uid . " has no alarms.\n";
+                }
+            }
+
+            fclose($resource);
+        }
+
+        return 0;
+    }
+
+    public function reportBigEventAttachments()
+    {
+        // TODO find out calendar attachments parent node id
+        // TODO allow to define BIG (size param)
+
+        Calendar_Controller_Event::getInstance()->doContainerACLChecks(false);
+
+        $eventAttachmentsParentId = '5c77378e3091bb4047df608ab4b7f5a326b09ca4';
+
+        $db = Tinebase_Core::getDb();
+
+        $stmt = $db->query(
+            'select * from tine20_tree_nodes where parent_id in (select id from tine20_tree_nodes where parent_id = "'
+            . $eventAttachmentsParentId . '")');
+
+        $result = $stmt->fetchAll();
+
+        $tempFileName = Tinebase_TempFile::getTempPath();
+        $tempFileName .= '.csv';
+        $csvhandle = fopen($tempFileName, 'w');
+
+        $data = [
+            'filename',
+            'size',
+            'calendar',
+            'container_id',
+            'account',
+            'event_summary',
+            'event_dtstart',
+        ];
+
+        // headline
+        fputcsv($csvhandle, $data);
+
+        foreach ($result as $file) {
+            // check size
+            $stmt = $db->query('select * from tine20_tree_filerevisions where id in (select id from tine20_tree_fileobjects where id = "' .
+                $file['object_id'] . '") and size > 1024*1024');
+            $fileRes = $stmt->fetchAll();
+            if (! empty($fileRes)) {
+                // print_r($fileRes);
+
+                $stmt = $db->query(
+                    'select * from tine20_tree_nodes where id = "' . $file['parent_id'] . '"');
+                $eventNode = $stmt->fetchAll();
+                try {
+                    $event = Calendar_Controller_Event::getInstance()->get($eventNode[0]['name']);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // no matching event
+                    continue;
+                }
+
+                // print_r($event);
+
+                $container = Tinebase_Container::getInstance()->get($event->container_id);
+                try {
+                    $owner = Tinebase_User::getInstance()->getFullUserById($event->created_by);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // try container owner
+                    try {
+                        $owner = Tinebase_User::getInstance()->getFullUserById($container->owner_id);
+                    } catch (Exception $e) {
+                        $owner = null;
+                    }
+                }
+
+                $event->dtstart->setTimezone('Europe/Berlin');
+                $data = [
+                    'filename' => $file['name'],
+                    'size' => Tinebase_Helper::formatBytes((integer) $fileRes[0]['size']),
+                    'calendar' => $container->name,
+                    'container_id' => $container->getId(),
+                    'account' => $owner ? $owner->accountLoginName : 'unknown',
+                    'event_summary' => $event->summary,
+                    'event_dtstart' => $event->dtstart->toString(),
+                ];
+
+                fputcsv($csvhandle, $data);
+
+                // print_r($data);
+            }
+        }
+
+        fclose($csvhandle);
+        echo "exported csv data to file " . $tempFileName . "\n";
     }
 }

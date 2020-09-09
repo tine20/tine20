@@ -78,7 +78,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * @param bool   $_encrypt encrypt password
      * @return void
      */
-    public function setPassword($_loginName, $_password, $_encrypt = TRUE)
+    public function setPassword($_loginName, $_password, $_encrypt = TRUE, $_mustChange = null)
     {
         throw new Tinebase_Exception_AccessDenied();
     }

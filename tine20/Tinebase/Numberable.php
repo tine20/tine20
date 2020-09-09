@@ -67,4 +67,9 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
         }
         return self::$_numberableCache[$_class . '_#_' . $_field];
     }
+
+    public static function clearCache()
+    {
+        self::$_numberableCache = [];
+    }
 }

@@ -288,8 +288,9 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         }
         
         // handle products
-        $filter = new Sales_Model_ProductAggregateFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'in', 'value' => $sourceContracts->getId())));
+        $filter = new Sales_Model_ProductAggregateFilter(array(
+            array('field' => 'contract_id', 'operator' => 'equals', 'value' => $sourceContracts->getId())
+        ));
         $products = Sales_Controller_ProductAggregate::getInstance()->search($filter);
         
         foreach($products as $product) {

@@ -9,6 +9,7 @@
     background-repeat: no-repeat;
     margin: 0 5px 0 0;
     cursor: pointer;
+    background-size: 16px;
 }
 
 .ux-action-column-item span {

@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,22 @@
  */
 class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
 {
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
+    {
+        parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+
+        if (Tinebase_Application::getInstance()->isInstalled('GDPR', true)) {
+            $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
+                [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'intendedPurpose' => [],
+                    ]
+                ];
+            $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, $expanderDef);
+            $expander->expand($records);
+        }
+    }
+
    /**
     * parent converts Tinebase_Record_RecordSet to external format
     * this resolves Image Paths
@@ -37,6 +53,22 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
         Addressbook_Frontend_Json::resolveImages($_records);
 
         $this->_appendRecordPaths($_records, $_filter);
+
+        // TODO container + account_grants of duplicate records need to be dehydrated, too
+        // @see \Addressbook_JsonTest::testDuplicateCheck
+        $expanderDef = [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'container_id' => [],
+            ],
+        ];
+        if (Tinebase_Application::getInstance()->isInstalled('GDPR', true)) {
+            $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
+                [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
+                    'intendedPurpose' => [],
+            ];
+        }
+        $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, $expanderDef);
+        $expander->expand($_records);
 
         $dehydrator = Tinebase_Record_Hydration_Factory::createDehydrator(Tinebase_Record_Hydration_Factory::TYPE_ARRAY,
             Addressbook_Model_Contact::class, [
@@ -64,10 +96,6 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
             ]);
 
         return $dehydrator->dehydrate($_records);
-
-        //$result = parent::fromTine20RecordSet($_records, $_filter, $_pagination);
-
-        //return $result;
     }
 
     /**

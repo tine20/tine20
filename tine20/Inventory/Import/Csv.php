@@ -26,6 +26,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected $_additionalOptions = array(
         'container_id'      => '',
+        'dates' => array('added_date','warranty','invoice_date'),
     );
     
     /**
@@ -99,7 +100,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
             }
             $result["status"] = $statusRecord['id'];
         }
-        
+
         return $result;
     }
 }

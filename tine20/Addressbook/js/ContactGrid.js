@@ -247,11 +247,14 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'tz', header: i18n._('Timezone'), dataIndex: 'tz' },
         { id: 'geo', header: i18n._('Geo'), dataIndex: 'geo' },
         { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
-        { id: 'memberroles', header: i18n._('List Roles'), dataIndex: 'memberroles', renderer: Tine.Addressbook.ListMemberRoleRenderer }
+        { id: 'memberroles', header: i18n._('List Roles'), dataIndex: 'memberroles', sortable: false, renderer: Tine.Addressbook.ListMemberRoleRenderer }
     ];
 
     if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry')) {
         columns.push({ id: 'industry', header: i18n._('Industry'), dataIndex: 'industry', renderer: Tine.Tinebase.common.foreignRecordRenderer});
+    }
+    if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureShortName')) {
+        columns.push({ id: 'n_short', header: i18n._('Short Name'), dataIndex: 'n_short', width: 50 });
     }
     
     return columns;

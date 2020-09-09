@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -46,7 +46,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     protected function _setOptions(array $_options)
     {
-        if (! (isset($_options['controller']) || array_key_exists('controller', $_options)) || ! (isset($_options['filtergroup']) || array_key_exists('filtergroup', $_options))) {
+        if (! isset($_options['controller']) || ! isset($_options['filtergroup'])) {
             throw new Tinebase_Exception_InvalidArgument('a controller and a filtergroup must be specified in the options');
         }
         parent::_setOptions($_options);
@@ -60,11 +60,24 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if (! is_array($this->_foreignIds)) {
-            $this->_foreignIds = $this->_getController()->search($this->_filterGroup, new Tinebase_Model_Pagination(), FALSE, TRUE);
+        if (! is_array($this->_foreignIds) && null !== $this->_filterGroup) {
+            $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
         }
-        
-        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_foreignIds) ? new Zend_Db_Expr('NULL') : $this->_foreignIds);
+
+        if (strpos($this->_operator, 'not') === 0) {
+            if ($this->_valueIsNull) {
+                $_select->where($this->_getQuotedFieldName($_backend) . ' IS NOT NULL');
+            } elseif (!empty($this->_foreignIds)) {
+                $_select->where($this->_getQuotedFieldName($_backend) . ' NOT IN (?)', $this->_foreignIds);
+            }
+        } else {
+            if (!$this->_valueIsNull && empty($this->_foreignIds)) {
+                $_select->where('1 = 0');
+            } else {
+                $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)',
+                    empty($this->_foreignIds) ? new Zend_Db_Expr('NULL') : $this->_foreignIds);
+            }
+        }
     }
     
     /**

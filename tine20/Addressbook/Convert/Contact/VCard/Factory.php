@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -31,6 +31,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_DAVDROID       = 'davdroid';
     const CLIENT_CARDDAVSYNC    = 'org.dmfs.carddav.sync';
     const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
+    const CLIENT_CARDBOOK       = 'CardBook';
     
     /**
      * cache parsed user-agent strings
@@ -49,72 +50,55 @@ class Addressbook_Convert_Contact_VCard_Factory
     static public function factory($_backend, $_version = null)
     {
         switch ($_backend) {
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC:
+            case self::CLIENT_GENERIC:
                 return new Addressbook_Convert_Contact_VCard_Generic($_version);
                 
-                break;
-                
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_IOS:
+            case self::CLIENT_IOS:
                 return new Addressbook_Convert_Contact_VCard_IOS($_version);
                 
-                break;
-                
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE:
+            case self::CLIENT_KDE:
                 return new Addressbook_Convert_Contact_VCard_KDE($_version);
                 
-                break;
-                
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_AKONADI:
+            case self::CLIENT_AKONADI:
                 return new Addressbook_Convert_Contact_VCard_Akonadi($_version);
-                
-                break;
             
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX:
+            case self::CLIENT_MACOSX:
                 return new Addressbook_Convert_Contact_VCard_MacOSX($_version);
                 
-                break;
-                
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO:
+            case self::CLIENT_SOGO:
                 return new Addressbook_Convert_Contact_VCard_Sogo($_version);
                 
-                break;
-                
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT:
+            case self::CLIENT_EMCLIENT:
                 return new Addressbook_Convert_Contact_VCard_EMClient($_version);
                 
-                break;
-                
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT7:
+            case self::CLIENT_EMCLIENT7:
                 return new Addressbook_Convert_Contact_VCard_EMClient7($_version);
 
-                break;
-
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR:
+            case self::CLIENT_COLLABORATOR:
                 return new Addressbook_Convert_Contact_VCard_WebDAVCollaborator($_version);
-                break;
 
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_DAVDROID:
+            case self::CLIENT_DAVDROID:
                 return new Addressbook_Convert_Contact_VCard_DavDroid($_version);
-                break;
 
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_CARDDAVSYNC:
+            case self::CLIENT_CARDDAVSYNC:
                 return new Addressbook_Convert_Contact_VCard_CardDAVSync($_version);
-		    break;
 
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_CALDAVSYNCHRONIZER:
+            case self::CLIENT_CALDAVSYNCHRONIZER:
                 return new Addressbook_Convert_Contact_VCard_CalDAVSynchronizer($_version);
-		    break;
 
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH:
+            case self::CLIENT_TELEFONBUCH:
                 return new Addressbook_Convert_Contact_VCard_Telefonbuch($_version);
 
-            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_EVOLUTION:
+            case self::CLIENT_EVOLUTION:
                 return new Addressbook_Convert_Contact_VCard_Evolution($_version);
-	}
+
+            case self::CLIENT_CARDBOOK:
+                return new Addressbook_Convert_Contact_VCard_CardBook($_version);
+	    }
     }
     
     /**
-     * parse iseragent and return backend and version
+     * parse useragent and return backend and version
      * 
      * @return array
      */
@@ -126,57 +110,57 @@ class Addressbook_Convert_Contact_VCard_Factory
 
         // MacOS X
         if (preg_match(Addressbook_Convert_Contact_VCard_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX;
+            $backend = self::CLIENT_MACOSX;
             $version = $matches['version'];
         
         // Thunderbird with Sogo Connector
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_Sogo::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO;
+            $backend = self::CLIENT_SOGO;
             $version = $matches['version'];
         
         // iOS addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_IOS::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_IOS;
+            $backend = self::CLIENT_IOS;
             $version = $matches['version'];
         
         // KDE addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_KDE::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_KDE;
+            $backend = self::CLIENT_KDE;
             $version = isset($matches['version']) ? $matches['version'] : '0.0' ;
         
         // Akonadi DAV addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_Akonadi::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_AKONADI;
+            $backend = self::CLIENT_AKONADI;
             $version = $matches['version'];
             
         // eM Client 7 addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient7::HEADER_MATCH, $_userAgent, $matches) && (floor($matches['version']) >= 7)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT7;
+            $backend = self::CLIENT_EMCLIENT7;
             $version = $matches['version'];
 
         // eM Client addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT;
+            $backend = self::CLIENT_EMCLIENT;
             $version = $matches['version'];
         
         // Outlook WebDAV Collaborator
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_WebDAVCollaborator::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR;
+            $backend = self::CLIENT_COLLABORATOR;
             $version = $matches['version'];
 
         // DavDROID
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_DavDroid::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_DAVDROID;
+            $backend = self::CLIENT_DAVDROID;
             $version = $matches['version'];
 
         // DMFS CardDAVSync
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_CardDAVSync::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_CARDDAVSYNC;
+            $backend = self::CLIENT_CARDDAVSYNC;
             $version = $matches['version'];
 
         // Evolution 
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_Evolution::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EVOLUTION;
+            $backend = self::CLIENT_EVOLUTION;
             $version = $matches['version'];
         
         // CalDAVSynchronizer
@@ -184,9 +168,14 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
             $version = $matches['version'];
 
+        // CardBook
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_CardBook::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = self::CLIENT_CARDBOOK;
+            $version = $matches['version'];
+
         // generic client
         } else {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
+            $backend = self::CLIENT_GENERIC;
             $version = null;
         }
         

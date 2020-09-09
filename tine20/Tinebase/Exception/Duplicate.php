@@ -44,6 +44,11 @@ class Tinebase_Exception_Duplicate extends Tinebase_Exception_Data
      */
     public function setClientRecord(Tinebase_Record_Interface $_record)
     {
+        if (method_exists($_record, 'unsetFieldsBeforeConvertingToJson')) {
+            // may need to unset some fields because record is converted to json
+            $_record->unsetFieldsBeforeConvertingToJson();
+        }
+
         $this->_clientRecord = $_record;
     }
     

@@ -18,13 +18,16 @@
  * create console pseudo object when firebug is disabled/not installed
  */
 if (! window.console) window.console = {};
-for (fn in {
+(function() {
+    for (var fn in {
         // maximum possible console functions based on firebug
         log: null , debug: null, info: null, warn: null, error: null, assert: null, dir: null, dirxml: null, group: null,
         groupEnd: null, time: null, timeEnd: null, count: null, trace: null, profile: null, profileEnd: null
     }) {
-    window.console[fn] = window.console[fn] || function() {};
-}
+        window.console[fn] = window.console[fn] || function() {};
+    }
+})();
+
 
 /** -------------------- Extjs Framework Initialisation -------------------- **/
 
@@ -139,7 +142,7 @@ Date.prototype.toJSON = function(key) {
  * additional formats
  */
 Ext.util.Format = Ext.apply(Ext.util.Format, {
-    money: function (v) {
+    money: function (v , metadata) {
         var _ = window.lodash,
             currencySymbol = Tine.Tinebase.registry.get('currencySymbol');
         
@@ -147,7 +150,16 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
             v = Number(v);
         }
         
-        return v.toLocaleString(Tine.Tinebase.registry.get('locale').locale) + " " + currencySymbol;
+        var locale = Tine.Tinebase.registry.get('locale').locale;
+        
+        if (locale.includes('_')) {
+            locale = locale.split('_')[0];
+        }
+        if( (metadata && metadata.zeroMoney && v == '0')) {
+            return '';
+        }
+        return v.toLocaleString(locale,{minimumFractionDigits: 2}) + " " + currencySymbol;
+
     },
     percentage: function(v){
         if(v === null) {
@@ -200,3 +212,7 @@ Ext.Button.buttonTemplate = new Ext.Template(
     '<tr><td class="x-btn-bl"><i>&#160;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&#160;</i></td></tr>',
     '</tbody></table>');
 Ext.Button.buttonTemplate.compile();
+
+Ext.Window.prototype.shadow = false;
+Ext.Tip.prototype.shadow = false;
+Ext.QuickTip.prototype.shadow = false;

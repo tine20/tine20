@@ -192,12 +192,17 @@ abstract class Tinebase_Model_Filter_Abstract
      * sets operator
      *
      * @param string $_operator
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function setOperator($_operator)
     {
         if (empty($_operator) && isset($this->_operators[0])) {
             // try to use default/first operator
             $_operator = $this->_operators[0];
+        }
+
+        if (! is_array($this->_operators)) {
+            throw new Tinebase_Exception_UnexpectedValue("no allowed operators defined");
         }
         
         if (! in_array($_operator, $this->_operators)) {
@@ -458,5 +463,13 @@ abstract class Tinebase_Model_Filter_Abstract
     public function setParent(Tinebase_Model_Filter_FilterGroup $_parent)
     {
         $this->_parent = $_parent;
+    }
+
+    /**
+     * @return Tinebase_Model_Filter_FilterGroup $_parent
+     */
+    public function getParent()
+    {
+        return $this->_parent;
     }
 }

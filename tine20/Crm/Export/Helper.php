@@ -51,6 +51,7 @@ class Crm_Export_Helper
      * @param string $_cellType
      * @param array $_resolvedRecords
      * @return string
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public static function getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param,
                                                 $_key = NULL,
@@ -91,12 +92,18 @@ class Crm_Export_Helper
                 foreach ($_record->relations as $relation) {
                     // check if is task and open
                     if ($relation->type == 'TASK') {
-                        $idx = $_resolvedRecords['tasksStatus']->getIndexById($relation->related_record->status);
-                        if ($idx) {
-                            $status = $_resolvedRecords['tasksStatus'][$idx];
-                            if ($status->is_open) {
-                                $value++;
+                        if (is_object($relation->related_record)) {
+                            $idx = $_resolvedRecords['tasksStatus']->getIndexById($relation->related_record->status);
+                            if ($idx) {
+                                $status = $_resolvedRecords['tasksStatus'][$idx];
+                                if ($status->is_open) {
+                                    $value++;
+                                }
                             }
+                        } else {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
+                                    . ' related_record is not resolved in task relation');
                         }
                     }
                 }

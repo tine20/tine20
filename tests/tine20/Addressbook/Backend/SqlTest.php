@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -58,7 +58,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
+            Addressbook_Model_Contact::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );
@@ -251,7 +251,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $contact->jpegphoto = '';
         $updatedContact = $this->_backend->update($contact);
         
-        $this->assertEquals(0, $updatedContact->jpegphoto);
+        $this->assertEquals('', $updatedContact->jpegphoto);
     }
     
     /**

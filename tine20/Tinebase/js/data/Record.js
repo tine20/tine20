@@ -8,6 +8,11 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+// @see https://github.com/ericmorand/twing/issues/332
+// #if process.env.NODE_ENV !== 'unittest'
+import getTwingEnv from "twingEnv";
+// #endif
+
 Ext.ns('Tine.Tinebase', 'Tine.Tinebase.data');
 
 Tine.Tinebase.data.Record = function(data, id) {
@@ -81,6 +86,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * untranslated name of container (plural)
      */
     containersName: 'containers',
+    /**
+     * @cfg: {bool} copyNoAppendTitle
+     * don't append "(copy)" string to title when record is copied
+     */
+    copyNoAppendTitle: null,
     /**
      * default filter
      * @type {string}
@@ -160,8 +170,25 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * @return {String}
      */
     getTitle: function() {
+        var _ = window.lodash,
+            me = this;
+
         if (Tine.Tinebase.data.TitleRendererManager.has(this.appName, this.modelName)) {
             return Tine.Tinebase.data.TitleRendererManager.get(this.appName, this.modelName)(this);
+        } else if (String(this.titleProperty).match(/{/)) {
+            if (! this.constructor.titleTwing) {
+                var twingEnv = getTwingEnv();
+                var loader = twingEnv.getLoader();
+
+                loader.setTemplate(
+                    this.constructor.getPhpClassName() + 'Title',
+                    Tine.Tinebase.appMgr.get(this.appName).i18n._hidden(this.titleProperty)
+                );
+
+                this.constructor.titleTwing = twingEnv;
+            }
+
+            return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data);
         } else {
             var s = this.titleProperty ? this.titleProperty.split('.') : [null];
             return (s.length > 0 && this.get(s[0]) && this.get(s[0])[s[1]]) ? this.get(s[0])[s[1]] : s[0] ? this.get(this.titleProperty) : '';
@@ -192,6 +219,10 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         return Ext.encode(this.data);
     },
     
+    toJSON: function() {
+        return this.data;
+    },
+    
     /**
      * returns true if given record obsoletes this one
      * 
@@ -212,6 +243,53 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         }
         
         return (this.constructor.hasField('last_modified_time')) ? record.get('last_modified_time') > this.get('last_modified_time') : false;
+    },
+
+    /**
+     * update complete record with data from given record
+     *
+     * @param record
+     */
+    update: function(record) {
+        record = _.get(record, 'data', false) ? record :
+            Tine.Tinebase.data.Record.setFromJson(record, this.constructor);
+
+        this.beginEdit();
+        this.fields.each((field) => {
+            let newValue = Tine.Tinebase.common.assertComparable(record.get(field.name));
+            Tine.Tinebase.common.assertComparable(_.get(this, 'data.' + field.name));
+            this.set(field.name, newValue);
+        }, this);
+        this.endEdit();
+    },
+    
+    resolveForeignRecords: async function(fields) {
+        const fieldDefs = this.constructor.getModelConfiguration().fields;
+        const pms = [];
+        
+        _.each(this.constructor.getModelConfiguration().fields, (def, fieldName) => {
+            if (fields && _.indexOf(fields, fieldName) < 0) return;
+            
+            let value = this.get(fieldName);
+            if (_.get(def, 'type') === 'record' && value && ! _.isFunction(_.get(value, 'beginEdit'))) {
+                const recordClass = Tine.Tinebase.data.RecordMgr.get(def.config.appName, def.config.modelName);
+                if (! recordClass) return;
+                
+                if (String(value)[0] === '{' || _.isObject(value)) {
+                    this.set(fieldName, Tine.Tinebase.data.Record.setFromJson(value, recordClass));
+                } else {
+                    const proxy = new Tine.Tinebase.data.RecordProxy({
+                        recordClass: recordClass
+                    });
+                    pms.push(proxy.promiseLoadRecord(value)
+                        .then((record) => {
+                            this.set(fieldName, record);
+                        }));
+                }
+            }
+        });
+        
+        await Promise.all(pms);
     }
 });
 
@@ -261,7 +339,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     };
     f.getMeta = function(name) {
         var value = null;
-        switch(name) {
+        switch (name) {
             case ('phpClassName'):
                 value = p.appName + '_Model_' + p.modelName;
                 break;
@@ -326,6 +404,9 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
             i18n = app && app.i18n ? app.i18n : window.i18n;
 
         return i18n._(p.appName);
+    };
+    f.getIconCls = function() {
+        return 'ApplicationIconCls ' + p.appName + 'IconCls ' + p.appName + p.recordName;
     };
     /**
      * returns the php class name of the record itself or by the application(name) and model(name)
@@ -393,6 +474,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     },
     
     get: function(appName, modelName) {
+        if (! appName) return;
         if (Ext.isFunction(appName.getMeta)) {
             return appName;
         }
@@ -402,7 +484,18 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
         if (appName.appName) {
             appName = appName.appName;
         }
-            
+
+        if (_.isString(appName) && !modelName) {
+            appName = appName.replace(/^Tine[._]/, '')
+                .replace(/[._]Model[._]/, '.');
+
+            let appPart = appName.match(/^.+\./);
+            if (appPart) {
+                modelName = appName.replace(appPart[0], '')
+                appName = appPart[0].replace(/\.$/, '');
+            }
+        }
+
         if (! Ext.isString(appName)) {
             throw new Ext.Error('appName must be a string');
         }
@@ -435,14 +528,17 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         totalProperty: 'totalcount'
     }, recordClass);
 
-    var recordData = {results: [
+    var recordData = {results: _.compact([
             Ext.isString(json) ? Ext.decode(json) : json
-        ]},
+        ])},
         data = jsonReader.readRecords(recordData),
         record = data.records[0],
-        recordId = record.get(record.idProperty);
+        recordId = _.get(record, 'data.' + _.get(record, 'idProperty'), Tine.Tinebase.data.Record.generateUID());
 
-    record.id = recordId ? recordId : 0;
+    if (! record) {
+        record = new recordClass({}, recordId);
+    }
+    record.id = recordId;
 
     return record;
 };

@@ -11,6 +11,8 @@
 
 Ext.ns('Tine.widgets.grid');
 
+import '../file/SelectionDialog';
+
 /**
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.FileUploadGrid
@@ -68,6 +70,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initComponent: function () {
+        this.addEvents(
+            /**
+             * @event filesSelected
+             * Fired once files where selected from filemanager or from a local source
+             */
+            'filesSelected'
+        );
+        
         this.i18nFileString = this.i18nFileString ? this.i18nFileString : i18n._('File');
 
         this.record = this.record || null;
@@ -77,11 +87,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             evalGrants: false
         });
 
+        this.initSelectionModel();
         this.initToolbarAndContextMenu();
         this.initStore();
         this.initColumnModel();
-        this.initSelectionModel();
 
+        this.actionUpdater.updateActions(this.selModel, [_.get(this, 'record.data')]);
 
         if (!this.plugins) {
             this.plugins = [];
@@ -92,7 +103,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.enableHdMenu = false;
 
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
-
+        
         this.on('rowcontextmenu', function (grid, row, e) {
             e.stopEvent();
             var selModel = grid.getSelectionModel();
@@ -114,6 +125,39 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.onDownload()
             }, this);
         }
+
+        postal.subscribe({
+            channel: "recordchange",
+            topic: 'Tinebase.TempFile.*',
+            callback: this.onTempFileChanges.createDelegate(this)
+        });
+
+    },
+
+    /**
+     * bus notified about record changes
+     */
+    onTempFileChanges: function(data, e) {
+        var existingRecord = _.find(this.store.data.items, (item) => {return _.get(item, 'data.id') === data.id});
+        if (existingRecord && e.topic.match(/\.update/)) {
+            existingRecord.beginEdit();
+            _.each(data, (v, k) => {
+                const p = _.find(existingRecord.fields.items, {name: k});
+                if (p && /* preserve uniq name */ k !== 'name') {
+                    existingRecord.set(k, v);
+                }
+            });
+            _.assign(_.get(existingRecord, 'data.tempFile', {}), data);
+            existingRecord.commit();
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
+            this.store.remove(existingRecord);
+        } else {
+            const record = new Ext.ux.file.Upload.file(JSON.parse(JSON.stringify(data)), data.id);
+            record.set('tempFile', JSON.parse(JSON.stringify(data)));
+            this.store.addUnique(record, 'name');
+        }
+        // NOTE: grid doesn't update selections itself
+        this.actionUpdater.updateActions(this.selModel, [_.get(this, 'record.data')]);
     },
 
     setReadOnly: function (readOnly) {
@@ -173,7 +217,9 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i++) {
             var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
-            upload.setPaused(true);
+            if (upload) {
+                upload.setPaused(true);
+            }
         }
         this.getSelectionModel().deselectRange(0, this.getSelectionModel().getCount());
     },
@@ -228,29 +274,72 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             actionUpdater: this.isResumeEnabled
         });
 
-        this.tbar = [
-            this.action_add
-        ];
+        this.action_download = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: false,
+            actionType: 'download',
+            text: i18n._('Download'),
+            handler: this.onDownload,
+            iconCls: 'action_download',
+            scope: this,
+            disabled: true,
+            hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
+        });
 
-        this.tbar.push(this.action_remove);
+        let contextActions = [];
+        if (Tine.Tinebase.common.hasRight('run', 'Filemanager')) {
+            this.action_rename = Tine.Filemanager.nodeActionsMgr.get('rename', {
+                initialApp: this.app,
+                sm: this.getSelectionModel(),
+                executor: function(record, text) {
+                    if (_.isFunction(_.get(record, 'set'))) {
+                        record.set('name', text);
+                        const tempFile = record.get('tempFile');
+                        if (tempFile) {
+                            _.set(tempFile, 'name', text);
+                        }
+                    }
+                }
+            });
+            this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
+                initialApp: this.app,
+                sm: this.getSelectionModel()
+            });
+            contextActions = contextActions.concat([this.action_rename, this.action_preview]);
+        }
 
+        this.tbar = new Ext.Toolbar({
+            items: [
+                this.action_add,
+                this.action_remove,
+                this.action_download
+            ],
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tinebase-FileUploadGrid-Toolbar'
+            }],
+        });
+
+        contextActions = contextActions.concat([
+            this.action_download,
+            '-',
+            this.action_remove,
+            this.action_pause,
+            this.action_resume
+        ]);
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
                 key: 'Tinebase-MainContextMenu'
+            }, {
+                ptype: 'ux.itemregistry',
+                key: 'Tinebase-FileUploadGrid-ContextMenu'
             }],
-            items: [
-                this.action_remove,
-                this.action_pause,
-                this.action_resume
-            ]
+            items: contextActions
         });
 
-        this.actionUpdater.addActions([
-            this.action_pause,
-            this.action_resume
-        ]);
-
+        this.actionUpdater.addActions(this.tbar.items);
+        this.actionUpdater.addActions(this.contextMenu.items);
     },
 
     /**
@@ -365,7 +454,9 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 multiple: true,
                 enableFileDialog: false,
                 dropElSelector: 'div[id=' + this.id + ']',
-                handler: this.onFilesSelect.createDelegate(me)
+                handler: (fileSelection) => {
+                    me.onFilesSelect(fileSelection.getFileList());
+                }
             }],
             handler: me.openDialog
         };
@@ -373,11 +464,15 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     // Constructs a new dialog and opens it. Better to construct a new one everyt
     openDialog: function () {
-        this.fileSelectionDialog = new Tine.Tinebase.FileSelectionDialog({
-            handler: this.onFilesSelect.createDelegate(this)
+        const win = new Tine.Tinebase.widgets.file.SelectionDialog.openWindow({
+            windowId: this.id,
+            mode: 'source',
+            constraint: 'file',
+            listeners: {
+                scope: this,
+                apply: this.onFilesSelect
+            }
         });
-
-        this.fileSelectionDialog.openWindow()
     },
 
     /**
@@ -389,9 +484,16 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (record && record.get(this.filesProperty)) {
             var files = record.get(this.filesProperty);
             for (var i = 0; i < files.length; i += 1) {
-                var file = new Ext.ux.file.Upload.file(files[i]);
-                file.data.status = 'complete';
-                this.store.add(file);
+                const existing = this.store.getById(files[i].id);
+                if (existing) {
+                    _.each(files[i], (value, key) => {
+                        existing.set(value, key);
+                    });
+                } else {
+                    var file = new Ext.ux.file.Upload.file(files[i]);
+                    file.data.status = 'complete';
+                    this.store.addUnique(file, 'name');
+                }
             }
         }
     },
@@ -441,46 +543,37 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.selModel.on('selectionchange', function (selModel) {
             var rowCount = selModel.getCount();
             this.action_remove.setDisabled(this.readOnly || rowCount === 0);
-            this.actionUpdater.updateActions(selModel);
+            this.actionUpdater.updateActions(selModel, [_.get(this, 'record.data')]);
 
         }, this);
     },
 
     /**
      * upload new file and add to store
-     *
-     * @param {} btn
-     * @param {} e
      */
-    onFilesSelect: function (fileSelector, e) {
-        if (window.lodash.isArray(fileSelector)) {
-            this.onFileSelectFromFilemanager(fileSelector);
-            return;
+    onFilesSelect: function (fileList) {
+        if (_.get(fileList, '[0].type') === 'fm_node') {
+            this.onFileSelectFromFilemanager(fileList);
+        } else {
+            Ext.each(fileList, function (file) {
+                var upload = new Ext.ux.file.Upload({
+                    file: file
+                });
+
+                var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
+                var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
+
+                upload.on('uploadfailure', this.onUploadFail, this);
+                upload.on('uploadcomplete', this.onUploadComplete, fileRecord);
+                upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
+
+                if (fileRecord.get('status') !== 'failure') {
+                    this.store.addUnique(fileRecord, 'name');
+                }
+            }, this);
         }
 
-
-        var files = fileSelector.getFileList();
-        Ext.each(files, function (file) {
-
-            var upload = new Ext.ux.file.Upload({
-                file: file,
-                fileSelector: fileSelector
-            });
-
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
-
-            upload.on('uploadfailure', this.onUploadFail, this);
-            upload.on('uploadcomplete', this.onUploadComplete, fileRecord);
-            upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
-
-            if (fileRecord.get('status') !== 'failure') {
-                this.store.add(fileRecord);
-            }
-
-
-        }, this);
-
+        this.fireEvent('filesSelected');
     },
 
     /**
@@ -488,22 +581,27 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      *
      * @param nodes
      */
-    onFileSelectFromFilemanager: function (nodes) {
+    onFileSelectFromFilemanager: function (fileLocations) {
         var me = this;
 
-        Ext.each(nodes, function (node) {
-            var record = new Tine.Filemanager.Model.Node(node);
+        _.each(fileLocations, async (fileLocation) => {
+            const fileRecord = new Ext.ux.file.Upload.file({
+                name: _.get(fileLocation, 'node_id.name'),
+                size: _.get(fileLocation, 'node_id.size'),
+                type: _.get(fileLocation, 'node_id.contenttype'),
+                status: 'uploading',
+                progress: 80
+            });
+            this.store.addUnique(fileRecord, 'name');
 
-            if (me.store.find('name', record.get('name')) === -1) {
-                me.store.add(record);
-            } else {
-                Ext.MessageBox.show({
-                    title: i18n._('Failure'),
-                    msg: i18n._('This file is already attached to this record.'),
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            }
+            Tine.Tinebase.createTempFile(fileLocation).then((tempFileData) => {
+                fileRecord.beginEdit();
+                fileRecord.set('id', tempFileData.id);
+                fileRecord.set('tempFile', tempFileData);
+                fileRecord.set('status', 'complete');
+                fileRecord.set('progress', 100);
+                fileRecord.commit();
+            });
         });
     },
 
@@ -511,7 +609,11 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         fileRecord.beginEdit();
         fileRecord.set('status', 'complete');
         fileRecord.set('progress', 100);
-        fileRecord.commit(false);
+        try {
+            fileRecord.commit(false);
+        } catch (e) {
+            console.log(e);
+        }
         Tine.Tinebase.uploadManager.onUploadComplete();
     },
 

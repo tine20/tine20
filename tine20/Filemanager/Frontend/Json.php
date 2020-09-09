@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -70,7 +70,8 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
         
         foreach ($_result['filter'] as $idx => &$filter) {
-            if ($filter['field'] === 'path') {
+            if (isset($filter['field']) && $filter['field'] === 'path') {
+                // TODO what about subfilters?
                 if (is_array($filter['value'])) {
                     $filter['value']['path'] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($filter['value']['path'], $app);
                 } else {
@@ -84,14 +85,16 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * create node
      * 
      * @param array $filename
-     * @param string $type directory or file
+     * @param string $type mimetype
      * @param string $tempFileId
      * @param boolean $forceOverwrite
      * @return array
      */
     public function createNode($filename, $type, $tempFileId = array(), $forceOverwrite = false)
     {
-        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filename, $type, (array)$tempFileId, $forceOverwrite);
+        $this->_setRequestContext($fmCtrlNode = Filemanager_Controller_Node::getInstance());
+        // do not convert $type to array!
+        $nodes = $fmCtrlNode->createNodes((array)$filename, $type, (array)$tempFileId, $forceOverwrite);
         $result = (count($nodes) === 0) ? array() : $this->_recordToJson($nodes->getFirstRecord());
         
         return $result;
@@ -101,15 +104,17 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * create nodes
      * 
      * @param string|array $filenames
-     * @param string $type directory or file
+     * @param string|array $type directory or mime type in case of a file
      * @param string|array $tempFileIds
      * @param boolean $forceOverwrite
      * @return array
      */
-    public function createNodes($filenames, $type, $tempFileIds = array(), $forceOverwrite = false)
+    public function createNodes($filenames, $types, $tempFileIds = array(), $forceOverwrite = false)
     {
-        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $type, (array)$tempFileIds, $forceOverwrite);
-        
+        $this->_setRequestContext($fmCtrlNode = Filemanager_Controller_Node::getInstance());
+        // do not convert $type to array!
+        $nodes = $fmCtrlNode->createNodes((array)$filenames, $types, (array)$tempFileIds, $forceOverwrite);
+
         return $this->_multipleRecordsToJson($nodes);
     }
     
@@ -162,22 +167,34 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns the node record
      * @param string $id
      * @return array
+     * @throws Tinebase_Exception_NotFound
      */
     public function getNode($id)
     {
-        $controller = Filemanager_Controller_Node::getInstance();
-        $context = $controller->getRequestContext();
-        if (!is_array($context)) {
-            $context = array();
+        if ($id === null) {
+            throw new Tinebase_Exception_NotFound('Node not found');
         }
-        $context['quotaResult'] = true;
-        $controller->setRequestContext($context);
 
-        $result = $this->_get($id, $controller);
+        $controller = Filemanager_Controller_Node::getInstance();
+        try {
+            $oldDoThrow = $controller->doThrowOnGetQuarantined(false);
+            $context = $controller->getRequestContext();
+            if (!is_array($context)) {
+                $context = array();
+            }
+            $context['quotaResult'] = true;
+            $controller->setRequestContext($context);
 
-        $context = $controller->getRequestContext();
-        if (is_array($context) && isset($context['quotaResult']) && is_array($context['quotaResult'])) {
-            $result['effectiveAndLocalQuota'] = $context['quotaResult'];
+            $result = $this->_get($id, $controller);
+
+            $context = $controller->getRequestContext();
+            if (is_array($context) && isset($context['quotaResult']) && is_array($context['quotaResult'])) {
+                $result['effectiveAndLocalQuota'] = $context['quotaResult'];
+                unset($context['quotaResult']);
+            }
+        } finally {
+            $controller->doThrowOnGetQuarantined($oldDoThrow);
+            $controller->setRequestContext($context);
         }
 
         return $result;

@@ -38,12 +38,10 @@ Ext.extend(Tine.widgets.relation.GridRenderer, Ext.Component, {
         this.relModel = this.foreignApp + '_Model_' + this.foreignModel;
     },
     
-    /**
-     * 
-     * @param {Array} relations
-     */
-    render: function(relations) {
-        if ((! relations) || (relations.length == 0)) {
+    render: function(data, metadata, ownRecord) {
+        var relations = ownRecord.get('relations');
+
+        if ( ! _.get(relations, 'length', 0)) {
             return '';
         }
         

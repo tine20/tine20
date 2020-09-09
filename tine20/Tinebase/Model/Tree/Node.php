@@ -6,36 +6,43 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * class to hold data representing one node in the tree
  *
  * @package     Tinebase
  * @subpackage  Model
- * @property    string             contenttype
- * @property    Tinebase_DateTime  creation_time
- * @property    string             hash
- * @property    string             indexed_hash
- * @property    string             name
- * @property    Tinebase_DateTime  last_modified_time
- * @property    string             object_id
- * @property    string             parent_id
- * @property    string             size
- * @property    string             revision_size
- * @property    string             type
- * @property    string             revision
- * @property    string             available_revisions
- * @property    string             description
- * @property    string             acl_node
- * @property    array              revisionProps
- * @property    array              notificationProps
- * @property    string             preview_count
- * @property    integer            quota
- * @property    Tinebase_Record_RecordSet grants
- * @property    string             pin_protected_node
- * @property    string             path
+ * @property    string                      contenttype
+ * @property    Tinebase_DateTime           creation_time
+ * @property    string                      hash
+ * @property    string                      indexed_hash
+ * @property    string                      name
+ * @property    Tinebase_DateTime           last_modified_time
+ * @property    string                      object_id
+ * @property    string                      parent_id
+ * @property    int                         size
+ * @property    int                         revision_size
+ * @property    string                      type
+ * @property    string                      revision
+ * @property    string                      available_revisions
+ * @property    string                      description
+ * @property    string                      acl_node
+ * @property    array                       revisionProps
+ * @property    array                       notificationProps
+ * @property    string                      preview_count
+ * @property    integer                     preview_status
+ * @property    integer                     preview_error_count
+ * @property    integer                     quota
+ * @property    Tinebase_Record_RecordSet   grants
+ * @property    string                      pin_protected_node
+ * @property    string                      path
+ * @property    Tinebase_DateTime           lastavscan_time
+ * @property    boolean                     is_quarantined
+ * @property    Tinebase_Record_RecordSet   metadata
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -92,6 +99,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'createModule'      => false,
         'exposeHttpApi'     => false,
         'exposeJsonApi'     => false,
+        TMCC::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',
@@ -144,6 +152,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Tinebase_Model_Tree_FileObject::TYPE_FILE,
                     Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                     Tinebase_Model_Tree_FileObject::TYPE_PREVIEW,
+                    Tinebase_Model_Tree_FileObject::TYPE_LINK,
                 ], Zend_Filter_Input::ALLOW_EMPTY => true,],
             ],
             'description'                   => [
@@ -187,7 +196,8 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'modlogOmit'                    => true,
                 'validators'                    => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Empty::class => 0
+                    Zend_Filter_Empty::class => 0,
+                    Zend_Filter_Input::DEFAULT_VALUE => 0
                 ],
             ],
             'revision_size'                 => [
@@ -204,10 +214,46 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Zend_Filter_Input::DEFAULT_VALUE => 0,
                 ],
             ],
-
+            'preview_status'                 => [
+                'type'                          => 'integer',
+                'modlogOmit'                    => true,
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'Digits',
+                    Zend_Filter_Input::DEFAULT_VALUE => 0,
+                ],
+            ],
+            'preview_error_count'                 => [
+                'type'                          => 'integer',
+                'modlogOmit'                    => true,
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'Digits',
+                    Zend_Filter_Input::DEFAULT_VALUE => 0,
+                ],
+            ],
             'pin_protected_node'            => [
                 'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'lastavscan_time'               => [
+                'type'                          => 'datetime',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'modlogOmit'                    => true,
+            ],
+            'is_quarantined'                => [
+                'type'                          => 'boolean',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'default'                       => 0,
+                'modlogOmit'                    => true,
+            ],
+            'metadata'                      => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => Tinebase_Model_BLConfig::MODEL_NAME_PART,
+                    self::STORAGE                   => self::TYPE_JSON
+                ],
             ],
 
             // not persistent
@@ -272,7 +318,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     public function runConvertToData()
     {
         if (array_key_exists('deleted_time', $this->_properties) && null === $this->_properties['deleted_time']) {
-            unset($this->_properties['deleted_time']);
+            $this->_properties['deleted_time'] = '1970-01-01 00:00:00';
         }
         if (isset($this->_properties[self::XPROPS_REVISION]) && is_array($this->_properties[self::XPROPS_REVISION])) {
             if (count($this->_properties[self::XPROPS_REVISION]) > 0) {
@@ -385,5 +431,26 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             return true;
         }
         return false;
+    }
+
+    public function getHighestRevision()
+    {
+        if (is_array($ar = $this->available_revisions) && !empty($ar)) {
+            sort($ar, SORT_NUMERIC);
+            return (int)end($ar);
+        }
+        return 0;
+    }
+
+    public function getPreviousRevision()
+    {
+        // sort resets keys! so we can use it
+        if (is_array($ar = $this->available_revisions) && !empty($ar)) {
+            sort($ar, SORT_NUMERIC);
+            if (false !== ($idx = array_search($this->revision, $ar)) && $idx > 0) {
+                return $ar[$idx - 1];
+            }
+        }
+        return 0;
     }
 }

@@ -149,6 +149,8 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
         
         foreach ($splittedPath as $subPath) {
             $node = $this->_getTreeNodeBackend()->getChild($node, $subPath);
+            // do ACL check
+            $node = Filemanager_Controller_Node::getInstance()->get($node->getId());
         }
         
         return $node;
@@ -243,7 +245,7 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
             $basePath .= implode('/', $splittedPath) . '/';
         }
         
-        $children = $this->_getTreeNodeBackend()->getChildren($node);
+        $children = $this->_getTreeNodeBackend()->getChildren($node, false);
         foreach ($children as $child) {
             $child->path = $basePath . $child->name;
         }

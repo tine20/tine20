@@ -6,7 +6,7 @@
  * @subpackage  Alarm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -106,6 +106,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             ' Sending ' . count($alarms) . ' alarms (limit: ' . $limit . ').');
 
         // loop alarms and call sendAlarm in controllers
+        /** @var Tinebase_Model_Alarm $alarm */
         foreach ($alarms as $alarm) {
             list($appName, , $itemName) = explode('_', $alarm->model);
             $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
@@ -113,7 +114,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             Tinebase_Lock::keepLocksAlive();
 
             if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
-
+                $areaLockCheck = method_exists($appController, 'doAreaLockCheck')
+                    ? $appController->doAreaLockCheck(false)
+                    : false;
                 $alarm->sent_time = Tinebase_DateTime::now();
 
                 try {
@@ -122,7 +125,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     $appController->sendAlarm($alarm);
 
                 } catch (Exception $e) {
-                    Tinebase_Exception::log($e);
+                    if (!$e instanceof Tinebase_Exception_ProgramFlow) {
+                        Tinebase_Exception::log($e);
+                    }
                     $alarm->sent_message = $e->getMessage();
                     $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
                 }
@@ -131,6 +136,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     . ' Updating alarm status: ' . $alarm->sent_status);
 
                 $this->update($alarm);
+                if ($areaLockCheck) {
+                    $appController->doAreaLockCheck($areaLockCheck);
+                }
             }
         }
 
@@ -197,17 +205,21 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         
         // create / update alarms
         foreach ($alarms as $alarm) {
-            $id = $alarm->getId();
-            
-            if ($id) {
-                $alarm = $this->_backend->update($alarm);
-                
-            } else {
-                $alarm->record_id = $_record->getId();
-                if (! $alarm->model) {
-                    $alarm->model = $model;
+            $alarm->record_id = $_record->getId();
+            if (! $alarm->model) {
+                $alarm->model = $model;
+            }
+
+            if ($alarm->id) {
+                try {
+                    $this->_backend->update($alarm);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $alarm->id = null;
                 }
-                $alarm = $this->_backend->create($alarm);
+            }
+
+            if (!$alarm->id) {
+                $this->_backend->create($alarm);
             }
         }
     }

@@ -43,6 +43,17 @@ class Tinebase_Auth_Factory
                 );
                 break;
 
+            case Tinebase_Auth::SQL_EMAIL:
+                $instance = new Tinebase_Auth_Sql(
+                    Tinebase_Core::getDb(),
+                    SQL_TABLE_PREFIX . 'accounts',
+                    'email',
+                    'password',
+                    'MD5(?)',
+                    true
+                );
+                break;
+
             case Tinebase_Auth::PIN:
                 $instance = new Tinebase_Auth_Sql(
                     Tinebase_Core::getDb(),
@@ -70,7 +81,7 @@ class Tinebase_Auth_Factory
                 if (class_exists($authProviderClass)) {
                     $instance = new $authProviderClass($_options);
                 } else {
-                    throw new Tinebase_Exception_InvalidArgument('Unknown authentication backend');
+                    throw new Tinebase_Exception_InvalidArgument('Unknown authentication backend: ' . $authProviderClass);
                 }
                 break;
         }

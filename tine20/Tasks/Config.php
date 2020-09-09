@@ -41,7 +41,8 @@ class Tasks_Config extends Tinebase_Config_Abstract
             'description'           => 'Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Status'),
-            'clientRegistryInclude' => TRUE,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
             'default'               => array(
                 'records' => array(
                     array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1,  'icon' => 'images/icon-set/icon_invite.svg', 'system' => true), //_('No response')
@@ -62,12 +63,12 @@ class Tasks_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'LOW',    'value' => 'low',      'icon' => 'images/icon-set/icon_prio_low.svg', 'system' => true), //_('low')
-                    array('id' => 'NORMAL', 'value' => 'normal',   'icon' => 'images/icon-set/icon_prio_normal.svg', 'system' => true), //_('normal')
-                    array('id' => 'HIGH',   'value' => 'high',     'icon' => 'images/icon-set/icon_prio_high.svg', 'system' => true), //_('high')
-                    array('id' => 'URGENT', 'value' => 'urgent',   'icon' => 'images/icon-set/icon_prio_urgent.svg', 'system' => true), //_('urgent')
+                    array('id' => Tasks_Model_Priority::LOW,    'value' => 'low',      'icon' => 'images/icon-set/icon_prio_low.svg', 'system' => true), //_('low')
+                    array('id' => Tasks_Model_Priority::NORMAL, 'value' => 'normal',   'icon' => 'images/icon-set/icon_prio_normal.svg', 'system' => true), //_('normal')
+                    array('id' => Tasks_Model_Priority::HIGH,   'value' => 'high',     'icon' => 'images/icon-set/icon_prio_high.svg', 'system' => true), //_('high')
+                    array('id' => Tasks_Model_Priority::URGENT, 'value' => 'urgent',   'icon' => 'images/icon-set/icon_prio_urgent.svg', 'system' => true), //_('urgent')
                 ),
-                'default' => 'NORMAL'
+                'default' => Tasks_Model_Priority::NORMAL,
             )
         ),
     );

@@ -29,7 +29,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 $file .= (strpos($file, '?') ? '&' : '?') . 'version=' . Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
             }
 
-            $baseUrl = Tinebase_Core::getUrl() ;
+            $baseUrl = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NO_PROTO, false);
 
             if (TINE20_BUILDTYPE == 'DEBUG') {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
@@ -66,7 +66,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
         $scriptSrcs = array("'self'", "'unsafe-eval'", 'https://versioncheck.tine20.net');
         if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
-            $scriptSrcs[] = Tinebase_Core::getUrl('protocol') . '://' . Tinebase_Core::getUrl('host') . ":10443";
+            $scriptSrcs[] = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL) . '://' .
+                Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST) . ":10443";
         }
         $scriptSrc = implode(' ', $scriptSrcs);
         $header += [
@@ -102,7 +103,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      */
     public static function getAssetsMap($asJson = false)
     {
-        $jsonFile = 'Tinebase/js/webpack-assets-FAT.json';
+        $jsonFile = self::getAssetsJsonFilename();
 
         if (TINE20_BUILDTYPE =='DEVELOPMENT') {
             $devServerURL = Tinebase_Config::getInstance()->get('webpackDevServerURL', 'http://localhost:10443');
@@ -112,11 +113,33 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 Tinebase_Core::getLogger()->ERR(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
                 throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
             }
+        } else if ($absoluteJsonFilePath = self::getAbsoluteAssetsJsonFilename()) {
+            $json = file_get_contents($absoluteJsonFilePath);
         } else {
-            $json = file_get_contents(__DIR__ . '/../../../' . $jsonFile);
+            throw new Tinebase_Exception_NotFound(('assets json not found'));
         }
 
         return $asJson ? $json : json_decode($json, true);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getAssetsJsonFilename()
+    {
+        return 'Tinebase/js/webpack-assets-FAT.json';
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getAbsoluteAssetsJsonFilename()
+    {
+        $path = __DIR__ . '/../../../' . self::getAssetsJsonFilename();
+        if (! file_exists($path)) {
+            return null;
+        }
+        return $path;
     }
 
     /**
@@ -130,13 +153,21 @@ class Tinebase_Frontend_Http_SinglePageApplication {
     {
         $map = self::getAssetsMap();
 
-        if ($userEnabledOnly) {
-            $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-            foreach($map as $asset => $ressources) {
-                if (! $enabledApplications->filter('name', basename($asset))->count()) {
+        try {
+            $apps = Tinebase_Application::getInstance()->getApplications(null, /* sort = */ 'order')->name;
+            if ($userEnabledOnly) {
+                $apps = array_intersect($apps, Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name);
+            }
+
+            foreach ($map as $asset => $ressources) {
+                $appName = basename($asset);
+                if (!in_array($appName, $apps)) {
                     unset($map[$asset]);
                 }
             }
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->NOTICE(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') cannot filter assetMap by installed apps');
+            Tinebase_Core::getLogger()->NOTICE(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') ' . $e);
         }
 
         return sha1(json_encode($map) . TINE20_BUILDTYPE);

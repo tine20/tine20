@@ -4,37 +4,15 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Calendar_Convert_Event_VCalendar_Factory
  */
-class Calendar_Convert_Event_VCalendar_FactoryTest extends PHPUnit_Framework_TestCase
+class Calendar_Convert_Event_VCalendar_FactoryTest extends TestCase
 {
-    /**
-     * @var array test objects
-     */
-    protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Factory Event Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -98,6 +76,7 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends PHPUnit_Framework_Tes
             array('version' => '10.7.1', 'identifier' => 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)'),
             array('version' => '10.8',   'identifier' => 'Mac OS X/10.8 (12A269) CalendarAgent/47'),
             array('version' => '10.9',   'identifier' => 'Mac_OS_X/10.9 (13A603) CalendarAgent/174'),
+            array('version' => '11.0',   'identifier' => 'macOS/11.0 (20A5343i) CalendarAgent/950'),
         );
         
         foreach($agents as $agent) {
@@ -139,5 +118,16 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends PHPUnit_Framework_Tes
         
         $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD, $backend);
         $this->assertEquals('1.0b1', $version);
-    }            
+    }
+
+    /**
+     * test factory with useragent string from thunderbird
+     */
+    public function testUserAgentThunderbird78()
+    {
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Thunderbird/78.0');
+
+        $this->assertEquals(Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD, $backend);
+        $this->assertEquals('78.0', $version);
+    }
 }

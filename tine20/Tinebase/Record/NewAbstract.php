@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -132,14 +132,14 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function __construct($_data = null, $_bypassFilters = false, $_convertDates = true)
     {
-        /** @deprecated TODO remove this code */
-        if (true !== $_convertDates) {
-            throw new Tinebase_Exception_InvalidArgument(static::class . ' doesnt support convertDates anymore');
-        }
-
         // this needs to be instantiated
         if (null === static::$_configurationObject) {
             static::getConfiguration();
+        }
+
+        /** @deprecated TODO remove this code */
+        if (true !== $_convertDates) {
+            throw new Tinebase_Exception_InvalidArgument(static::class . ' doesnt support convertDates anymore');
         }
 
         $this->bypassFilters = (bool)$_bypassFilters;
@@ -151,6 +151,14 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         $this->_isDirty = false;
     }
 
+    public function __wakeup()
+    {
+        // this needs to be instantiated
+        if (null === static::$_configurationObject) {
+            static::getConfiguration();
+        }
+    }
+
     /**
      * returns the configuration object
      *
@@ -160,8 +168,8 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     public static function getConfiguration()
     {
         if (null === static::$_configurationObject) {
-            $modelConfiguration = static::_mergeModelConfiguration();
-            static::$_configurationObject = new Tinebase_NewModelConfiguration($modelConfiguration);
+            //$modelConfiguration = static::_mergeModelConfiguration();
+            static::$_configurationObject = new Tinebase_NewModelConfiguration(static::$_modelConfiguration, static::class);
         }
 
         return static::$_configurationObject;
@@ -172,11 +180,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * TODO maybe look at rocketeer deployment project, there was the same problem
      *
      * @return array
-     */
+     *
     protected static function _mergeModelConfiguration()
     {
         $modelConfiguration = static::$_modelConfiguration;
-        /** @var Tinebase_Record_NewAbstract $parent */
+        /** @var Tinebase_Record_NewAbstract $parent *
         foreach (class_parents(static::class) as $parent) {
             if (isset($parent::$_modelConfiguration) && null !== $parent::$_modelConfiguration) {
                 $modelConfiguration = array_merge_recursive($modelConfiguration, $parent::$_modelConfiguration);
@@ -184,7 +192,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         }
 
         return $modelConfiguration;
-    }
+    }*/
 
     /**
      * resetConfiguration
@@ -192,6 +200,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public static function resetConfiguration()
     {
+        static::$_inputFilters = [];
         static::$_configurationObject = null;
         // we have to re-instantiate it immediately, we depend on it
         static::getConfiguration();
@@ -396,6 +405,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
                     $this->{$fieldName} = $config['type'] == 'record' ?
                         new $modelName($_data[$fieldName], $this->bypassFilters, true) :
                         new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters, true);
+                    $this->{$fieldName}->runConvertToRecord();
                 }
             }
         }
@@ -916,17 +926,12 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     {
         $titleProperty = static::$_configurationObject->titleProperty;
 
-        // use vsprintf formatting if it is an array
-        if (is_array($titleProperty)) {
-            if (! is_array($titleProperty[1])) {
-                $propertyValues = array($this->{$titleProperty[1]});
-            } else {
-                $propertyValues = array();
-                foreach($titleProperty[1] as $property) {
-                    $propertyValues[] = $this->$property;
-                }
-            }
-            return vsprintf($titleProperty[0], $propertyValues);
+        if (strpos(static::$_configurationObject->titleProperty, '{') !== false) {
+            $translation = Tinebase_Translation::getTranslation($this->getApplication());
+            $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
+            $templateString = $translation->translate($titleProperty);
+            $template = $twig->getEnvironment()->createTemplate($templateString);
+            return $template->render(is_array($this->_data) ? $this->_data : []);
         } else {
             return $this->$titleProperty;
         }
@@ -958,6 +963,13 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         return $keys;
     }
 
+    /**
+     * @param array $_defintiion
+     */
+    public static function inheritModelConfigHook(array &$_defintion)
+    {
+    }
+
     public function runConvertToRecord()
     {
         $conf = self::getConfiguration();
@@ -965,10 +977,12 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_data[$key])) {
-                /** @var Tinebase_Model_Converter_Interface $converter */
-                foreach ($converters as $converter) {
-                    $this->_data[$key] = $converter::convertToRecord($this->_data[$key]);
+            foreach ($converters as $converter) {
+                if (isset($this->_data[$key])) {
+                    /** @var Tinebase_Model_Converter_Interface $converter */
+                    $this->_data[$key] = $converter->convertToRecord($this, $key, $this->_data[$key]);
+                } elseif ($converter instanceof Tinebase_Model_Converter_RunOnNullInterface) {
+                    $this->_data[$key] = $converter->convertToRecord($this, $key, null);
                 }
             }
         }
@@ -981,10 +995,12 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_data[$key])) {
-                foreach ($converters as $converter) {
+            foreach ($converters as $converter) {
+                if (isset($this->_data[$key])) {
                     /** @var Tinebase_Model_Converter_Interface $converter */
-                    $this->_data[$key] = $converter::convertToData($this->_data[$key]);
+                    $this->_data[$key] = $converter->convertToData($this, $key, $this->_data[$key]);
+                } elseif ($converter instanceof Tinebase_Model_Converter_RunOnNullInterface) {
+                    $this->_data[$key] = $converter->convertToData($this, $key, null);
                 }
             }
         }
@@ -1189,17 +1205,18 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
 
     public function hydrateFromBackend(array &$data)
     {
-        /** @var Tinebase_Model_Converter_Interface $converter */
-        foreach (static::$_configurationObject->getConverters() as $key => $converters) {
-            if (isset($data[$key])) {
-                foreach ($converters as $converter) {
-                    $data[$key] = $converter::convertToRecord($data[$key]);
-                }
-            }
-        }
-
+        // converter below may depend on other record fields, so data needs to be there initially
         foreach ($data as $key => $value) {
             $this->_data[$key] = $value;
+        }
+
+        /** @var Tinebase_Model_Converter_Interface $converter */
+        foreach (static::$_configurationObject->getConverters() as $key => $converters) {
+            if (isset($this->_data[$key])) {
+                foreach ($converters as $converter) {
+                    $this->_data[$key] = $converter->convertToRecord($this, $key, $this->_data[$key]);
+                }
+            }
         }
     }
 
@@ -1239,13 +1256,13 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         if (!static::$_configurationObject->hasField($_property)) {
             throw new Tinebase_Exception_UnexpectedValue($_property . ' is no property of $this->_properties');
         }
-        if (!isset($this->_properties[$_property])) {
-            $this->_properties[$_property] = array();
-        } else if (is_string($this->_properties[$_property])) {
-            $this->_properties[$_property] = json_decode($this->_properties[$_property], true);
+        if (!isset($this->_data[$_property])) {
+            $this->_data[$_property] = array();
+        } else if (is_string($this->_data[$_property])) {
+            $this->_data[$_property] = json_decode($this->_data[$_property], true);
         }
 
-        return $this->_properties[$_property];
+        return $this->_data[$_property];
     }
 
     /**
@@ -1273,9 +1290,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * returns the id of a record property
      *
      * @param string $_property
+     * @param boolean $_getIdFromRecord default true, returns null if property has a record and value is false
      * @return string|null
      */
-    public function getIdFromProperty($_property)
+    public function getIdFromProperty($_property, $_getIdFromRecord = true)
     {
         if (!isset($this->_data[$_property])) {
             return null;
@@ -1283,7 +1301,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
 
         $value = $this->_data[$_property];
         if (is_object($value) && $value instanceof Tinebase_Record_Interface) {
-            return $value->getId();
+            return $_getIdFromRecord ? (string)$value->getId() : null;
         } elseif (is_string($value) || is_integer($value)) {
             return (string)$value;
         }
@@ -1496,7 +1514,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         //$_format = "Y-m-d H:i:s";
         foreach ($_toConvert as $field => $value) {
             if (! $value) {
-                $dateTimeFields = is_object(static::$_configurationObject) ? static::$_configurationObject->datetimeFields : null;
+                $dateTimeFields = static::$_configurationObject->datetimeFields;
                 if ($dateTimeFields && in_array($field, $dateTimeFields)) {
                     $_toConvert[$field] = NULL;
                 }
@@ -1562,5 +1580,23 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             throw new Tinebase_Exception_NotImplemented(static::class . ' does not support convertDates anymore');
         }
         return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotesTranslatedText()
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * can be used to remove fields that can't be converted to json
+     *
+     * @todo add this to model config (field config) and just loop the fields here?
+     * @todo move this to TRInterface + TRAbstract?
+     */
+    public function unsetFieldsBeforeConvertingToJson()
+    {
     }
 }

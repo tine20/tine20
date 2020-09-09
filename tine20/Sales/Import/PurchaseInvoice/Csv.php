@@ -25,6 +25,7 @@ class Sales_Import_PurchaseInvoice_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected $_additionalOptions = array(
         'container_id' => '',
+        'dates'        => array('date','due_at','payed_at','discount_until')
     );
 
     /**

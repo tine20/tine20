@@ -157,4 +157,9 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
     {
         return implode(' ', $this->_parts[Zend_Db_Select::WHERE]);
     }
+
+    public function __toString()
+    {
+        return $this->_select->__toString();
+    }
 }

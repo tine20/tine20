@@ -82,6 +82,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     containersName: 'Calendars',
     copyOmitFields: ['uid', 'recurid'],
     allowBlankContainer: false,
+    copyNoAppendTitle: true,
     
     /**
      * default duration for new events
@@ -419,6 +420,10 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
             keyfieldName: 'eventClasses',
             defaultAll: true
         },
+        {label: i18n._('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
+        //{label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
+        //{label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
         {
             filtertype: 'calendar.rrule',
             app: app
@@ -1102,6 +1107,25 @@ Tine.Calendar.Model.Resource.getFilterModel = function() {
         {filtertype: 'tinebase.tag', app: app}
     ];
 };
+
+/**
+ * @namespace   Tine.Calendar.Model
+ * @class       Tine.Calendar.Model.ResourceType
+ * @extends     Tine.Tinebase.data.Record
+ * ResourceType Record Definition
+ */
+Tine.Calendar.Model.ResourceType = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'is_location'},
+    {name: 'value'},
+    {name: 'icon'},
+    {name: 'color'},
+    {name: 'system'},
+], {
+    appName: 'Calendar',
+    modelName: 'ResourceType',
+    idProperty: 'id'
+});
 
 /**
  * @namespace   Tine.Calendar.Model

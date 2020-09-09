@@ -23,7 +23,8 @@ class Felamimail_Sieve_Rule_Action
     const KEEP      = 'keep';
     const REJECT    = 'reject';
     const REDIRECT  = 'redirect';
-    
+    const VACATION  = 'vacation';
+
     /**
      * type of action
      * 
@@ -74,23 +75,25 @@ class Felamimail_Sieve_Rule_Action
      */
     public function __toString() 
     {
-        switch($this->_type) {
+        switch ($this->_type) {
             case self::DISCARD:
                 return "    $this->_type;";
                 break;
 
             case self::REDIRECT:
-                if (is_array($this->_argument)) {
-                    if (isset($this->_argument['copy']) && $this->_argument['copy'] == 1) {
-                        $argument = $this->_quoteString($this->_argument['emails']);
-                        return "    $this->_type :copy $argument;";
-                    } else {
-                        $argument = $this->_quoteString($this->_argument['emails']);
-                        return "    $this->_type $argument;";
-                    }
-
-                    break;
+                if (! is_array($this->_argument)) {
+                    $this->_argument = [
+                        'emails' => $this->_argument
+                    ];
                 }
+                if (isset($this->_argument['copy']) && $this->_argument['copy'] == 1) {
+                    $argument = $this->_quoteString($this->_argument['emails']);
+                    return "    $this->_type :copy $argument;";
+                } else {
+                    $argument = $this->_quoteString($this->_argument['emails']);
+                    return "    $this->_type $argument;";
+                }
+                break;
 
             default:
                 $argument = $this->_quoteString($this->_argument);
@@ -103,6 +106,7 @@ class Felamimail_Sieve_Rule_Action
      * quote string for usage in Sieve script 
      * 
      * @param   string  $string     the string to quote
+     * @return string
      * 
      * @todo generalize this
      */
@@ -116,7 +120,7 @@ class Felamimail_Sieve_Rule_Action
         }
     }
     
-/**
+    /**
      * return values as array
      * 
      * @return array

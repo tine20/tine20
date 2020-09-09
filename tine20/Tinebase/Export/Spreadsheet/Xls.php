@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -148,7 +148,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
      * @param string $_appName
      * @param string $_format
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         $result = parent::getDownloadFilename($_appName, $_format);
         
@@ -424,7 +424,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
         $sheet = $this->_excelObject->getActiveSheet();
         
         for ($i = 0; $i < $this->_columnCount; $i++) {
-            $sheet->getColumnDimension($i)->setAutoSize(TRUE);
+            $sheet->getColumnDimensionByColumn($i)->setAutoSize(TRUE);
         }
     }
 }

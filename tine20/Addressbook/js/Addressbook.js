@@ -9,6 +9,9 @@
 Ext.ns('Tine.Addressbook');
 
 require('./StructurePanel');
+require('./Model/ContactPersonalGrants');
+require('./Model/ListPersonalGrants');
+
 
 /**
  * @namespace   Tine.Addressbook
@@ -218,4 +221,40 @@ Tine.Addressbook.ListFilterPanel = function(config) {
 
 Ext.extend(Tine.Addressbook.ListFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ListFilter'}]
+});
+
+// register Contact related renderers -> needed e.g. for duplicate resolve dlg as Contact is no mcv2 app yet
+Tine.Tinebase.appMgr.isInitialised('Addressbook').then(() => {
+    _.each(Tine.Addressbook.ContactGridPanel.getBaseColumns(Tine.Tinebase.appMgr.get('Addressbook').i18n), (col) => {
+        if (col.renderer) {
+            Tine.widgets.grid.RendererManager.register('Addressbook', 'Contact', col.dataIndex, col.renderer);
+        }
+    });
+});
+
+// register grants for calendar containers
+Tine.widgets.container.GrantsManager.register('Addressbook_Model_Contact', function(container) {
+    var _ = window.lodash,
+        me = this,
+        grants = Tine.widgets.container.GrantsManager.defaultGrants(container);
+
+    grants.push('privateData');
+    return grants;
+});
+
+// register grants for calendar containers
+Tine.widgets.container.GrantsManager.register('Addressbook_Model_List', function(container) {
+    var _ = window.lodash,
+        me = this,
+        grants = Tine.widgets.container.GrantsManager.defaultGrants(container);
+
+    grants.push('privateData');
+    return grants;
+});
+
+
+Ext.override(Tine.widgets.container.GrantsGrid, {
+    privateDataGrantTitle: 'Private', // i18n._('Private')
+    privateDataGrantDescription: 'The grant to access contacts private information', // i18n._('The grant to access contacts private information')
+
 });

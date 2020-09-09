@@ -17,7 +17,7 @@ Ext.ns('Tine.Tinebase');
  * @singleton   
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-
+Tine.Tinebase.MainScreen = null;
 Tine.Tinebase.MainScreenPanel = function(config) {
     this.addEvents(
         /**
@@ -101,7 +101,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
             cls: 'tine-mainscreen-apptabs',
             hidden: this.hideAppTabs,
             border: false,
-            height: 20,
+            height: 30,
             items: new Tine.Tinebase.AppTabsPanel({
                 plain: true
             })

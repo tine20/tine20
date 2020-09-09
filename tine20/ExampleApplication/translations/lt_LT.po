@@ -1,0 +1,160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - ExampleApplication\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Lithuanian\n"
+"X-Poedit-Country: LITHUANIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: Preference.php:60
+msgid "Default Example Record Container"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default container for new records"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:50
+msgid "ExampleRecord"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:67 js/ExampleDetailsPanel.js:74
+#: Model/ExampleRecord.php:83
+msgid "Name"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:73 js/ExampleDetailsPanel.js:78
+#: Model/ExampleRecord.php:95
+msgid "Status"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:79 Model/ExampleRecord.php:103
+msgid "Reason"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:85 Model/ExampleRecord.php:90
+msgid "Description"
+msgstr ""
+
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
+msgstr ""
+
+#: js/Example.js:23
+msgid "New Example"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr ""
+
+#: Config.php:122
+msgid "Status Available"
+msgstr ""
+
+#: Config.php:124
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:133
+msgid "Completed"
+msgstr ""
+
+#: Config.php:134
+msgid "Cancelled"
+msgstr ""
+
+#: Config.php:135
+msgid "In process"
+msgstr ""
+
+#: Config.php:142
+msgid "Reasons Available"
+msgstr ""
+
+#: Config.php:144
+msgid "Possible status reasons."
+msgstr ""
+
+#: Config.php:155
+msgid "Change"
+msgstr ""
+
+#: Config.php:156
+msgid "Documentation"
+msgstr ""
+
+#: Config.php:157
+msgid "Requirement Changed"
+msgstr ""
+
+#: Config.php:158
+msgid "Not Possible"
+msgstr ""
+
+#: Config.php:159
+msgid "Implementation"
+msgstr ""
+
+#: Config.php:160
+msgid "Review"
+msgstr ""
+
+#: Config.php:161
+msgid "Integration"
+msgstr ""
+
+#: Config.php:168
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:170
+msgid "Enabled Features in Example Application."
+msgstr ""
+
+#: Config.php:177
+msgid "Invoices Module"
+msgstr ""
+
+#: Config.php:187
+msgid "Example String"
+msgstr ""
+
+#: Config.php:189
+msgid "Just an example string for test purpose"
+msgstr ""
+
+#: Model/ExampleRecord.php:38
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Model/ExampleRecord.php:39
+msgid "example records"
+msgstr ""
+
+#: Model/ExampleRecord.php:42
+msgid "example record list"
+msgstr ""
+
+#: Model/ExampleRecord.php:43
+msgid "example record lists"
+msgstr ""
+
+#: Model/ExampleRecord.php:110 Model/ExampleRecord.php:131
+msgid "Number"
+msgstr ""
+
+#: Model/ExampleRecord.php:142
+msgid "datetime"
+msgstr ""

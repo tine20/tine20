@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <kontakt@michaelspahn.de>
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -19,7 +19,8 @@
 class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Contact_VCard_Abstract
 {
     // DAVdroid/0.7.2
-    const HEADER_MATCH = '/DAVdroid\/(?P<version>.*)/';
+    // DAVx5/2.2.1-gplay
+    const HEADER_MATCH = '/(DAVdroid|DAVx5)\/(?P<version>.*)/';
 
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,

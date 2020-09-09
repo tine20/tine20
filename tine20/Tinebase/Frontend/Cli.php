@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -38,9 +38,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function increaseReplicationMasterId($opts)
     {
-        if (!$this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($opts, array());
         $count = isset($args['count']) ? $args['count'] : 1;
@@ -56,9 +54,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function readModifictionLogFromMaster($opts)
     {
-        if (!$this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_Timemachine_ModificationLog::getInstance()->readModificationLogFromMaster();
 
@@ -73,20 +69,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     */
     public function rebuildPaths($opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $result = Tinebase_Controller::getInstance()->rebuildPaths();
 
-        return $result ? true : -1;
+        return $result ? true : 1;
     }
 
     public function forceResync($_opts)
     {
-        if (!$this->_checkAdminRight()) {
-            return false;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array());
         $userIds = isset($args['userIds']) ? (is_array($args['userIds']) ? $args['userIds'] : [$args['userIds']])
@@ -148,9 +140,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function forceSyncTokenResync($_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array());
 
@@ -179,9 +169,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanModlog()
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
 
@@ -193,9 +181,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanRelations()
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $relations = Tinebase_Relations::getInstance();
         $filter = new Tinebase_Model_Filter_FilterGroup();
@@ -366,14 +352,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function triggerAsyncEvents($_opts)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Triggering async events from CLI.');
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::CRON_DISABLED)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' Cronjob is disabled.');
+            return false;
+        }
 
         if (Tinebase_Core::inMaintenanceModeAll()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                __LINE__ . ' maintenance mode prevents trigger async events.');
+                __LINE__ . ' Maintenance mode prevents trigger async events.');
             return false;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Triggering async events from CLI.');
 
         $userController = Tinebase_User::getInstance();
 
@@ -415,7 +407,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             throw new Tinebase_Exception_InvalidArgument('mandatory parameter "jobId" is missing');
         }
 
-        $actionQueue = Tinebase_ActionQueue::getInstance();
+        if (isset($args[1]) && $args[1] === 'longRunning=true') {
+            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+        } else {
+            $actionQueue = Tinebase_ActionQueue::getInstance();
+        }
         $job = $actionQueue->receive($jobId);
 
         if (isset($job['account_id'])) {
@@ -442,14 +438,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function clearTable(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
         $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
 
-        $db = Tinebase_Core::getDb();
         foreach ((array)$args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
@@ -488,9 +481,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function purgeDeletedRecords(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array(), 'tables');
         $doEverything = false;
@@ -529,6 +520,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             echo "\nCleaning notes...";
             $this->cleanNotes($_opts);
+
+            echo "\nCleaning files...";
+            $this->clearDeletedFiles();
         }
 
         echo "\n\n";
@@ -538,12 +532,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * cleanNotes: removes notes of records that have been deleted
+     *
+     * -- purge=1 param also removes redundant notes (empty updates + create notes)
+     * supports dry run (-d)
      */
     public function cleanNotes(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array(), 'cleanNotesOffset');
 
@@ -554,6 +549,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $models = array();
         $deleteIds = array();
         $deletedCount = 0;
+        $purge = isset($args['purge']) ? $args['purge'] : false;
+        $purgeCountCreated = 0;
+        $purgeCountEmptyUpdate = 0;
 
         do {
             echo "\noffset $offset...";
@@ -622,6 +620,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                     if ($result === 0) {
                         $deleteIds[] = $note->getId();
+                    } else if ($purge) {
+                        if ($note->note_type_id == 4) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountCreated++;
+                        } else if ($note->note_type_id == 5 && strpos($note->note, '|') === false) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountEmptyUpdate++;
+                        }
                     }
                 } else {
                     try {
@@ -633,19 +639,31 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
             if (count($deleteIds) > 0) {
                 $deletedCount += count($deleteIds);
-                $offset -= $notesController->purgeNotes($deleteIds);
-                if ($offset < 0) $offset = 0;
+                if ($_opts->d) {
+                    $offset -= count($deleteIds);
+                } else {
+                    $offset -= $notesController->purgeNotes($deleteIds);
+                }
+                if ($offset < 0) {
+                    $offset = 0;
+                }
                 $deleteIds = [];
             }
             echo ' done';
         } while ($notes->count() === $limit);
 
-
-
         foreach($controllers as $model => $controller) {
             $controller->doContainerACLChecks($models[$model][3]);
         }
 
+        if ($_opts->d) {
+            echo "\nDRY RUN!";
+        }
+
+        if ($purge) {
+            echo "\npurged " . $purgeCountEmptyUpdate . " system notes with empty updates";
+            echo "\npurged " . $purgeCountCreated . " create system notes";
+        }
         echo "\ndeleted " . $deletedCount . " notes\n";
     }
 
@@ -654,9 +672,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function cleanCustomfields()
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         $customFieldController = Tinebase_CustomField::getInstance();
         $customFieldConfigs = $customFieldController->searchConfig();
@@ -775,7 +791,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected function _orderTables($tables)
     {
-        // tags should be deleted first
+        // tags + tree_nodes should be deleted first
         // containers should be deleted last
 
         $orderedTables = array();
@@ -789,6 +805,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     array_unshift($lastTables, $table);
                     break;
                 case 'tags':
+                case 'tree_nodes': // delete them before tree_objects
+                case 'cal_attendee': // delete them before events
                     array_unshift($orderedTables, $table);
                     break;
                 default:
@@ -819,9 +837,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 continue;
             }
 
+
             $deleteCount = 0;
             try {
-                $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                if ($table === 'tree_nodes') {
+                    $deleteCount = $this->_purgeTreeNodes($where);
+                } else {
+                    $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                }
             } catch (Zend_Db_Statement_Exception $zdse) {
                 echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
             }
@@ -833,6 +856,28 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo "\nNothing to purge from $table";
             }
         }
+    }
+
+    protected function _purgeTreeNodes($where)
+    {
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
+
+        array_walk($where, function (&$item) {
+            $item = 'n.' . $item;
+        });
+        $table = SQL_TABLE_PREFIX . 'tree_nodes';
+        $idsQuery = 'SELECT n.id from ' . $table . ' as n LEFT JOIN ' . $table . ' as '
+            . 'child on n.id = child.parent_id WHERE child.id is NULL AND ' . implode(' AND ', $where);
+        $deleteQuery = 'DELETE FROM ' . $table . ' WHERE id IN (?)';
+        $deleteCount = 0;
+
+        do {
+            $ids = Tinebase_Core::getDb()->query($idsQuery)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+            $deleteCount += count($ids);
+        } while (!empty($ids) && Tinebase_Core::getDb()->query(Tinebase_Core::getDb()->quoteInto($deleteQuery, $ids))
+            ->rowCount() > 0);
+
+        return $deleteCount;
     }
 
     /**
@@ -849,9 +894,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function addCustomfield(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         // parse args
         $args = $_opts->getRemainingArgs();
@@ -872,7 +915,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         print_r($cf->toArray());
         echo "\n";
         
-        return TRUE;
+        return 0;
     }
 
     /**
@@ -889,9 +932,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function setCustomfieldAcl(Zend_Console_Getopt $_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
 
         // parse args
         $args = $_opts->getRemainingArgs();
@@ -911,7 +952,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             $data['application_id'],
-            $data['name']);
+            $data['name'],
+            null,
+            false,
+            true
+        );
 
         if (! $cf) {
             throw new Tinebase_Exception_InvalidArgument('customfield not found');
@@ -928,7 +973,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 } else {
                     $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
                     $accountId = $user->getId();
-                    $accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+                    $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
                 }
             } else {
                 $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
@@ -949,6 +994,64 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * set node acl
+     *
+     * example:
+     * $ php tine20.php --method Tinebase.setNodeAcl [-d] -- id=NODEID \
+     *   grants='[{"account":"$USERNAME","account_type":"user","readGrant":1,"writeGrant":1},{"account":"$GROUPNAME","account_type":"group","readGrant":1}]'
+     *
+     * @param $_opts
+     * @return integer
+     *
+     * @todo generalize this - see \Tinebase_Frontend_Cli::setCustomfieldAcl
+     * @todo add a test
+     */
+    public function setNodeAcl(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+
+        $args = $this->_parseArgs($_opts, ['id', 'grants'], 'other', false);
+        $node = Tinebase_FileSystem::getInstance()->get($args['id']);
+
+        $grantsArray = Tinebase_Helper::jsonDecode($args['grants']);
+        #print_r($grantsArray);
+        // @todo generalize this - see \Tinebase_Frontend_Cli::setCustomfieldAcl
+        $grantsToSet = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
+        foreach ($grantsArray as $grant) {
+            $accountType = isset($grant['account_type']) ? $grant['account_type'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+            if (isset($grant['account'])) {
+                if ($accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                    $group = Tinebase_Group::getInstance()->getGroupByName($grant['account']);
+                    $accountId = $group->getId();
+                } else {
+                    $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
+                    $accountId = $user->getId();
+                }
+            } else {
+                $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
+            }
+            $grantRecord = new Tinebase_Model_Grants([
+                'account_id' => $accountId,
+                'account_type' => $accountType,
+            ]);
+            foreach (Tinebase_Model_Grants::getAllGrants() as $possibleGrant) {
+                if (isset($grant[$possibleGrant])) {
+                    $grantRecord->{$possibleGrant} = (boolean) $grant[$possibleGrant];
+                }
+            }
+            $grantsToSet->addRecord($grantRecord);
+        }
+        if ($_opts->d) {
+            echo "DRYRUN! grants to be set:\n";
+            print_r($grantsToSet->toArray());
+        } else {
+            Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grantsToSet);
+        }
+
+        return 0;
+    }
+
+    /**
      * nagios monitoring for tine 2.0 database connection
      * 
      * @return integer
@@ -956,6 +1059,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function monitoringCheckDB()
     {
+        $result = 0;
         $message = 'DB CONNECTION FAIL';
         try {
             if (! Setup_Core::isRegistered(Setup_Core::CONFIG)) {
@@ -973,12 +1077,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         if ($dbcheck) {
-            echo "DB CONNECTION OK | connecttime={$time}ms;;;;\n";
-            return 0;
-        } 
+            $message = "DB CONNECTION OK | connecttime={$time}ms;;;;";
+        } else {
+            $result = 2;
+        }
         
         echo $message . "\n";
-        return 2;
+        $this->_logMonitoringResult($result, $message);
+
+        return $result;
     }
     
     /**
@@ -990,32 +1097,19 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function monitoringCheckConfig()
     {
         $message = 'CONFIG FAIL';
-        $configcheck = FALSE;
-        
-        $configfile = Setup_Core::getConfigFilePath();
-        if ($configfile) {
-            $configfile = escapeshellcmd($configfile);
-            if (preg_match('/^win/i', PHP_OS)) {
-                exec("php -l $configfile 2> NUL", $error, $code);
-            } else {
-                exec("php -l $configfile 2> /dev/null", $error, $code);
-            }
-            if ($code == 0) {
-                $configcheck = TRUE;
-            } else {
-                $message .= ': CONFIG FILE SYNTAX ERROR';
-            }
-        } else {
-            $message .= ': CONFIG FILE MISSING';
-        }
-        
+        $configcheck = Tinebase_Controller::getInstance()->checkConfig();
+        $result = 0;
+
         if ($configcheck) {
-            echo "CONFIG FILE OK\n";
-            return 0;
+            $message = "CONFIG FILE OK";
         } else {
-            echo $message . "\n";
-            return 2;
+            $result = 2;
         }
+
+        echo $message . "\n";
+        $this->_logMonitoringResult($result, $message);
+
+        return $result;
     }
     
     /**
@@ -1028,38 +1122,54 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     */
     public function monitoringCheckCron()
     {
-        $message = 'CRON FAIL';
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::CRON_DISABLED)) {
+            $message = 'CRON INACTIVE';
+            $result = 0;
+        } else {
+            $message = 'CRON FAIL';
+            try {
+                $lastJob = Tinebase_Scheduler::getInstance()->getLastRun();
 
-        try {
-            $lastJob = Tinebase_Scheduler::getInstance()->getLastRun();
-            
-            if ($lastJob === NULL || ! $lastJob->last_run instanceof Tinebase_DateTime) {
-                $message .= ': NO LAST JOB FOUND';
-                $result = 1;
-            } else {
-                $valueString = ' | duration=' . $lastJob->last_duration . 's;;;;';
-                $valueString .= ' end=' . $lastJob->last_run->getClone()->addSecond($lastJob->last_duration)->getIso() . ';;;;';
-                
-                if ($lastJob->server_time->isLater($lastJob->last_run->getClone()->addHour(1))) {
-                    $message .= ': NO JOB IN THE LAST HOUR';
+                if ($lastJob === NULL || !$lastJob->last_run instanceof Tinebase_DateTime) {
+                    $message .= ': NO LAST JOB FOUND';
                     $result = 1;
                 } else {
-                    $message = 'CRON OK';
-                    $result = 0;
+                    $valueString = ' | duration=' . $lastJob->last_duration . 's;;;;';
+                    $valueString .= ' end=' . $lastJob->last_run->getClone()->addSecond($lastJob->last_duration)->getIso() . ';;;;';
+
+                    if ($lastJob->server_time->isLater($lastJob->last_run->getClone()->addHour(1))) {
+                        $message .= ': NO JOB IN THE LAST HOUR';
+                        $result = 1;
+                    } else {
+                        $message = 'CRON OK';
+                        $result = 0;
+                    }
+                    $message .= $valueString;
                 }
-                $message .= $valueString;
+            } catch (Exception $e) {
+                $message .= ': ' . $e->getMessage();
+                $result = 2;
             }
-        } catch (Exception $e) {
-            $message .= ': ' . $e->getMessage();
-            $result = 2;
         }
-        
+
+        $this->_logMonitoringResult($result, $message);
         echo $message . "\n";
         return $result;
     }
+
+    protected function _logMonitoringResult($result, $message)
+    {
+        if ($result > 0) {
+            try {
+                Tinebase_Exception::log(new Tinebase_Exception($message));
+            } catch (Throwable $t) {
+                // just logging
+            }
+        }
+    }
     
     /**
-     * nagios monitoring for tine 2.0 logins during the last 5 mins
+     * nagios monitoring for successful tine 2.0 logins during the last 5 mins
      * 
      * @return number
      * 
@@ -1072,7 +1182,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         try {
             $filter = new Tinebase_Model_AccessLogFilter(array(
-                array('field' => 'li', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMinute(5))
+                array('field' => 'li', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMinute(5)),
+                array('field' => 'result', 'operator' => 'equals', 'value' => 1),
             ));
             $accesslogs = Tinebase_AccessLog::getInstance()->search($filter, NULL, FALSE, TRUE);
             $valueString = ' | count=' . count($accesslogs) . ';;;;';
@@ -1081,6 +1192,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $message .= ' FAIL: ' . $e->getMessage();
             $result = 2;
         }
+
+        $this->_logMonitoringResult($result, $message);
         
         echo $message . "\n";
         return $result;
@@ -1107,6 +1220,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $result = 2;
         }
 
+        $this->_logMonitoringResult($result, $message);
+
         echo $message . "\n";
         return $result;
     }
@@ -1129,6 +1244,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if (! $actionQueue->hasAsyncBackend()) {
                 $message = 'QUEUE INACTIVE';
             } else {
+                $actionLRQueue = Tinebase_ActionQueueLongRun::getInstance();
                 try {
                     if (null === ($lastDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION))) {
@@ -1169,25 +1285,151 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, '');
                     }
 
-                    if ($lastDuration > 3600) {
-                        throw new Tinebase_Exception('last duration > 3600 sec - ' . $lastDuration);
+                    if ($lastDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_CRIT}) {
+                        throw new Tinebase_Exception('last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_CRIT} . ' sec - ' . $lastDuration);
                     }
-                    if ($now - $lastDurationUpdate > 3600) {
-                        throw new Tinebase_Exception('last duration update > 3600 sec - ' . ($now - $lastDurationUpdate));
-                    }
-
-                    if ($diff > 60 && null === $warn) {
-                        $warn = 'last job id change > 60 sec - ' . $diff;
+                    if ($now - $lastDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT}) {
+                        throw new Tinebase_Exception('last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT} . ' sec - ' . ($now - $lastDurationUpdate));
                     }
 
-                    if ($lastDuration > 60 && null === $warn) {
-                        $warn = 'last duration > 60 sec - ' . $lastDuration;
+                    if ($diff > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last job id change > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - ' . $diff;
                     }
 
-                    if ($now - $lastDurationUpdate > 60 && null === $warn) {
-                        $warn = 'last duration update > 60 sec - ' . ($now - $lastDurationUpdate);
+                    if ($lastDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_DURATION_WARN} . ' sec - ' . $lastDuration;
                     }
 
+                    if ($now - $lastDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN}
+                        && null === $warn
+                    ) {
+                        $warn = 'last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN} . ' sec - '
+                            . ($now - $lastDurationUpdate);
+                    }
+
+
+                    if (null === ($lastLRDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION))) {
+                        throw new Tinebase_Exception('state ' . Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION .
+                            ' not set');
+                    }
+                    if (null === ($lastLRDurationUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE))) {
+                        throw new Tinebase_Exception('state ' .
+                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE . ' not set');
+                    }
+                    $lastLRDuration = floatval($lastLRDuration);
+                    $lastLRDurationUpdate = intval($lastLRDurationUpdate);
+
+                    $now = time();
+                    $diff = 0;
+                    if (false !== ($currentJobId = $actionLRQueue->peekJobId())) {
+                        if ($currentJobId === ($lastJobId = Tinebase_Application::getInstance()->getApplicationState(
+                                'Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID))) {
+                            if (null === ($lastChange = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                                    Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE))) {
+                                throw new Tinebase_Exception('state ' .
+                                    Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE . ' not set');
+                            }
+                            if (($diff = $now - intval($lastChange)) > (15 * 60)) {
+                                throw new Tinebase_Exception('last job id change > ' . (15 * 60) . ' sec - ' . $diff);
+                            }
+
+                        } else {
+                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE, (string)$now);
+                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID, $currentJobId);
+                        }
+                    } else {
+                        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID, '');
+                    }
+
+                    if ($lastLRDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT}) {
+                        throw new Tinebase_Exception('last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT} . ' sec - ' . $lastLRDuration);
+                    }
+                    if ($now - $lastLRDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT}) {
+                        throw new Tinebase_Exception('last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT} . ' sec - ' . ($now - $lastLRDurationUpdate));
+                    }
+
+                    if ($diff > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last job id change > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} . ' sec - ' . $diff;
+                    }
+
+                    if ($lastLRDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} && null === $warn) {
+                        $warn = 'last duration > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} . ' sec - ' . $lastLRDuration;
+                    }
+
+                    if ($now - $lastLRDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN}
+                        && null === $warn
+                    ) {
+                        $warn = 'last duration update > '
+                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN} . ' sec - '
+                            . ($now - $lastLRDurationUpdate);
+                    }
+
+
+                    if (null === ($queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_STATE), true))) {
+                        $queueState = [
+                            'lastFullCheck' => 0,
+                            'lastSizeOver10k' => false,
+                            'actionQueueMissingQueueKeys' => [],
+                            'actionQueueMissingDaemonKeys' => [],
+                            'lastLRSizeOver10k' => false,
+                            'actionQueueLRMissingQueueKeys' => [],
+                            'actionQueueLRMissingDaemonKeys' => [],
+                        ];
+                    }
+
+                    $queueSize = $actionQueue->getQueueSize();
+                    if (null === $warn && $actionQueue->getDaemonStructSize() > $queueConfig
+                            ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
+                        $warn = 'daemon struct size > ' . $queueConfig
+                                ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT};
+                    }
+
+                    $queueSizeLR = $actionLRQueue->getQueueSize();
+                    if (null === $warn && $actionLRQueue->getDaemonStructSize() > $queueConfig
+                            ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
+                        $warn = 'LR daemon struct size > ' . $queueConfig
+                                ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT};
+                    }
+
+                    // last full check older than one hour
+                    if (null === $warn && time() - $queueState['lastFullCheck'] > 3600) {
+                        if ($queueSize > 10000) {
+                            if (null === $warn && $queueState['lastSizeOver10k']) {
+                                $warn = 'at least two consecutive full checks with queue size > 10k';
+                            }
+                            $queueState['lastSizeOver10k'] = true;
+                        } else {
+                            $queueState['lastSizeOver10k'] = false;
+                        }
+
+                        if ($queueSizeLR > 10000) {
+                            if (null === $warn && $queueState['lastLRSizeOver10k']) {
+                                $warn = 'LR at least two consecutive full checks with queue size > 10k';
+                            }
+                            $queueState['lastLRSizeOver10k'] = true;
+                        } else {
+                            $queueState['lastLRSizeOver10k'] = false;
+                        }
+
+                        $queueState['lastFullCheck'] = time();
+                        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_STATE, json_encode($queueState));
+                    }
 
                     if (null !== $warn) {
                         $message = 'QUEUE WARN: ' . $warn;
@@ -1195,15 +1437,41 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     } else {
                         $message = 'QUEUE OK';
                     }
-                    $queueSize = $actionQueue->getQueueSize();
+
+
                     $message .= ' | size=' . $queueSize . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration .
                         ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
                 } catch (Exception $e) {
                     $message = 'QUEUE FAIL: ' . get_class($e) . ' - ' . $e->getMessage();
                     $result = 2;
                 }
+
+                $this->_logMonitoringResult($result, $message);
             }
         }
+
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
+     * nagios monitoring for tine 2.0 maintenance mode
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringMaintenanceMode()
+    {
+        $result = 0;
+
+        if (Tinebase_Core::inMaintenanceMode()) {
+            $message = 'MAINTENANCEMODE FAIL: it is on!';
+            $result = 2;
+        } else {
+            $message = 'MAINTENANCEMODE OK';
+        }
+
         echo $message . "\n";
         return $result;
     }
@@ -1232,21 +1500,27 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 // TODO add cache access time?
 
                 // write, read and delete to test cache
-                $cacheId = Tinebase_Helper::convertCacheId(__METHOD__);
-                $cache->save(true, $cacheId);
-                $value = $cache->load($cacheId);
-                $cache->remove($cacheId);
+                $cacheId = Tinebase_Helper::convertCacheId(uniqid(__METHOD__, true));
+                if (false !== $cache->save(true, $cacheId)) {
+                    $value = $cache->load($cacheId);
+                    $cache->remove($cacheId);
 
-                if ($value) {
-                    $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                    if ($value) {
+                        $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                    } else {
+                        $message = 'CACHE FAIL: loading value failed';
+                        $result = 1;
+                    }
                 } else {
-                    $message = 'CACHE FAIL: loading value failed';
+                    $message = 'CACHE FAIL: saving value failed';
                     $result = 1;
                 }
             } catch (Exception $e) {
                 $message = 'CACHE FAIL: ' . $e->getMessage();
                 $result = 2;
             }
+
+            $this->_logMonitoringResult($result, $message);
         }
         echo $message . "\n";
         return $result;
@@ -1263,9 +1537,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function undo(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $data = $this->_parseArgs($opts, array('modification_time'));
         
@@ -1275,7 +1547,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'record_type',
             'modification_time',
             'modification_account',
-            'record_id'
+            'record_id',
+            'client',
         );
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFilters)) {
@@ -1326,9 +1599,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function createAllDemoData($_opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         // fetch all applications and check if required are installed, otherwise remove app from array
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
@@ -1397,9 +1668,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function clearDeletedFiles()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
         
         $this->_addOutputLogWriter();
         
@@ -1416,9 +1685,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function clearDeletedFilesFromDatabase(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $this->_addOutputLogWriter();
 
@@ -1436,15 +1703,47 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * repair acl of nodes (supports -d for dry run)
+     *
+     * @param $opts
+     * @return int
+     * @throws ReflectionException
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function repairFileSystemAclNodes($opts)
+    {
+        $this->_checkAdminRight();
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $counter = 0;
+        foreach (Tinebase_Core::getDb()->query('SELECT tnchild.id, tnparent.acl_node FROM ' .
+                SQL_TABLE_PREFIX . 'tree_nodes as tnchild JOIN ' . SQL_TABLE_PREFIX .
+                'tree_nodes as tnparent ON tnchild.parent_id = tnparent.id WHERE tnparent.acl_node IS NOT NULL '
+                . 'AND tnchild.acl_node IS NULL')->fetchAll() as $row) {
+
+            if ($opts->d) {
+                echo "repairing acl of node id " . $row['id'] . PHP_EOL;
+            } else {
+                $fs->repairAclOfNode($row['id'], $row['acl_node']);
+            }
+            $counter++;
+        }
+        echo "repaired $counter nodes" . PHP_EOL;
+
+        return 0;
+    }
+
+    /**
      * recalculates the revision sizes and then the folder sizes
      *
      * @return int
      */
     public function fileSystemSizeRecalculation()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->recalculateRevisionSize();
 
@@ -1461,10 +1760,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemCheckIndexing()
     {
-
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->checkIndexing();
 
@@ -1480,11 +1776,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemCheckPreviews()
     {
+        $this->_checkAdminRight();
 
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
-
+        Tinebase_FileSystem_Previews::getInstance()->resetErrorCount();
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
 
         return 0;
@@ -1497,10 +1791,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemRecreateAllPreviews()
     {
-
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem_Previews::getInstance()->deleteAllPreviews();
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
@@ -1517,9 +1808,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function repairTable($opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $this->_addOutputLogWriter();
         
@@ -1546,9 +1835,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function transferRelations($opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
+        $this->_checkAdminRight();
         
         $this->_addOutputLogWriter();
         
@@ -1581,9 +1868,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function setDefaultGrantsOfPersistentFilters()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $this->_addOutputLogWriter(6);
 
@@ -1622,9 +1907,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function repairContainerOwner()
     {
-        if (! $this->_checkAdminRight()) {
-            return 2;
-        }
+        $this->_checkAdminRight();
 
         $this->_addOutputLogWriter(6);
         Tinebase_Container::getInstance()->setContainerOwners();
@@ -1640,9 +1923,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function userReport()
     {
-        if (! $this->_checkAdminRight()) {
-            return 2;
-        }
+        $this->_checkAdminRight();
 
         $translation = Tinebase_Translation::getTranslation('Tinebase');
 
@@ -1701,27 +1982,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     public function cleanFileObjects()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->clearFileObjects();
     }
 
     public function clearCache()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 
     public function cleanAclTables()
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_Controller::getInstance()->cleanAclTables();
     }
@@ -1748,9 +2023,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function sanitizeGroupListSync(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         $data = $this->_parseArgs($opts);
         if (isset($data['dryRun']) && ($data['dryRun'] === '0' || $data['dryRun'] === 'false')) {
@@ -1772,9 +2045,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function resetSchedulerTasks(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         Tinebase_Setup_Initialize::addSchedulerTasks();
 
@@ -1788,12 +2059,169 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function reportPreviewStatus(Zend_Console_Getopt $opts)
     {
-        if (! $this->_checkAdminRight()) {
-            return -1;
-        }
+        $this->_checkAdminRight();
 
         print_r(Tinebase_FileSystem::getInstance()->reportPreviewStatus());
 
         return 0;
     }
+
+    /**
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function reReplicateContainer(Zend_Console_Getopt $opts)
+    {
+        $this->_checkAdminRight();
+
+        $data = $this->_parseArgs($opts);
+        if (!isset($data['container'])) {
+            echo 'usage: --reReplicateContainer -- container={containerId}' . PHP_EOL;
+            return 1;
+        }
+
+        $db = Tinebase_Core::getDb();
+        $transId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+        /** @var Tinebase_Model_Container $container */
+        $container = Tinebase_Container::getInstance()->get($data['container']);
+        $container->application_id;
+        $container->model;
+
+        $filter = new Tinebase_Model_ContainerContentFilter([
+            ['field' => 'container_id', 'operator' => 'equals',  'value' => $container->getId()],
+        ]);
+        $result = array_keys(Tinebase_Container::getInstance()->getContentBackend()
+            ->search($filter, null, ['record_id']));
+
+        if (count($result) > 0) {
+            $db->query('SELECT @i := (SELECT MAX(instance_seq) FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog)');
+
+            $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'timemachine_modlog SET instance_seq = @i:=@i+1, instance_id = "'
+                . Tinebase_Core::getTinebaseId() . '" WHERE record_type = "' . $container->model .
+                '" AND application_id = "' . $container->application_id . '" AND record_id IN ("' .
+                join('","', $result) . '") ORDER BY instance_seq ASC');
+
+            $autoInc = $db->query('SELECT @i:=@i+1')->fetchColumn();
+
+            $db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . 'timemachine_modlog AUTO_INCREMENT ' . $autoInc);
+        }
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+
+        return 0;
+    }
+
+    public function testNotification()
+    {
+        $this->_checkAdminRight();
+
+        $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $messageSubject = 'Tine 2.0 test notification';
+        $messageBody = 'Tine 2.0 test notification has been sent successfully';
+        Tinebase_Notification::getInstance()->send(null, array($recipient), $messageSubject, $messageBody);
+        return 0;
+    }
+
+    /**
+     * Delete duplicate personal container without content.
+     *
+     * e.g. php tine20.php --method=Tinebase.duplicatePersonalContainerCheck app=Addressbook [-d]
+     *
+     * @param $opts
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_SystemContainer
+     */
+    public function duplicatePersonalContainerCheck($opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($opts, array('app'));
+
+        $removeCount = Tinebase_Container::getInstance()->deleteDuplicateContainer($args['app'], $opts->d);
+        if ($opts->d) {
+            echo "Would remove " . $removeCount . " duplicates\n";
+        } else {
+            echo $removeCount . " duplicates removed\n";
+        }
+    }
+
+    public function repairTreeIsDeletedState($opts)
+    {
+        $this->_checkAdminRight();
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
+    }
+
+
+    /**
+     * set Maintenance Mode
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function setMaintenanceMode(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($_opts);
+        $enable = null;
+
+        if (! isset($args['other'])) {
+            echo 'option Maintenance Mode is not set';
+            return 1;
+        }
+        if (in_array('on', $args['other'])) {
+            $enable = true;
+        }
+        if (in_array('off', $args['other'])) {
+            if (true === $enable) {
+                echo 'duplicated Maintenance Mode';
+                return 2;
+            }
+
+            $enable = false;
+        }
+        if (null === $enable) {
+            echo 'option Maintenance Mode is not set';
+            return 1;
+        }
+
+
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+
+        foreach ($enabledApplications as $application) {
+            $app = Tinebase_Core::getApplicationInstance($application->name);
+
+            if (true === $enable) {
+                $app->goIntoMaintenanceMode();
+            } else {
+                $app->leaveMaintenanceMode();
+            }
+        }
+
+        echo PHP_EOL . ($enable ? 'going into' : 'leaving') . ' maintenance mode. waiting...' . PHP_EOL;
+
+        do {
+            foreach ($enabledApplications as $application) {
+                $app = Tinebase_Core::getApplicationInstance($application->name);
+
+                if ($app->isInMaintenanceMode() === $enable) {
+                    $enabledApplications->removeById($application->id);
+                }
+            }
+
+            if ($enabledApplications->count() > 0) {
+                echo '.';
+                usleep(100000);
+            }
+
+        } while ($enabledApplications->count() > 0);
+        echo 'done' . PHP_EOL;
+        return 0;
+    }
 }
+
+
+

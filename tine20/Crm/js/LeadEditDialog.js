@@ -46,7 +46,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @property tasksGrid
      */
     tasksGrid: null,
-    
+
+    // problems with relations here
+    checkUnsavedChanges: false,
     /**
      * @private
      */
@@ -64,6 +66,17 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     ignoreRelatedModels: ['Sales_Model_Product', 'Addressbook_Model_Contact', 'Tasks_Model_Task'],
 
     initComponent: function() {
+        this.tbarItems = [new Ext.Button(new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Crm').i18n._(
+                this.record.get('mute') === '1' ?
+                    'Notifications are disabled' : 'Notifications are enabled'),
+            handler: this.onMuteNotificationOnce,
+            iconCls: 'action_mute_noteification',
+            disabled: false,
+            scope: this,
+            enableToggle: true,
+            pressed: this.record.get('mute') === '1',
+        }))];
         Tine.Crm.LeadEditDialog.superclass.initComponent.call(this);
         this.on('recordUpdate', this.onAfterRecordUpdate, this);
     },
@@ -92,6 +105,19 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.productsGrid.store.loadData(relations.products, true);
             }
         }
+    },
+
+    /**
+     * mute first alert
+     *
+     * @param {} button
+     * @param {} e
+     */
+    onMuteNotificationOnce: function (button, e) {
+        this.record.set('mute', button.pressed);
+        button.setText(Tine.Tinebase.appMgr.get('Crm').i18n._(button.pressed ?
+            'Notifications are disabled' : 'Notifications are enabled'
+        ));
     },
     
     onAfterRecordUpdate: function(closeWindow) {
@@ -166,7 +192,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.record.data.relations = relations;
     },
-    
+
     /**
      * split the relations array in contacts and tasks and switch related_record and relation objects
      * 
@@ -182,22 +208,25 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         for (var i=0; i < relations.length; i++) {
             var newLinkObject = relations[i]['related_record'];
-            relations[i]['related_record']['relation'] = null;
-            delete relations[i]['related_record']['relation'];
-            newLinkObject.relation = relations[i];
-            newLinkObject.relation_type = relations[i]['type'].toLowerCase();
-            
-            if ((newLinkObject.relation_type === 'responsible' 
-              || newLinkObject.relation_type === 'customer' 
-              || newLinkObject.relation_type === 'partner')) {
-                contacts.push(newLinkObject);
-            } else if (newLinkObject.relation_type === 'task') {
-                tasks.push(newLinkObject);
-            } else if (newLinkObject.relation_type === 'product') {
-                newLinkObject.remark_description = (relations[i].remark) ? relations[i].remark.description : '';
-                newLinkObject.remark_price = (relations[i].remark) ? relations[i].remark.price : 0;
-                newLinkObject.remark_quantity = (relations[i].remark) ? relations[i].remark.quantity : 1;
-                products.push(newLinkObject);
+            if (newLinkObject) {
+                relations[i]['related_record']['relation'] = null;
+                delete relations[i]['related_record']['relation'];
+                // this creates a circular structure which could not be converted to json!
+                // newLinkObject.relation = relations[i];
+                newLinkObject.relation_type = relations[i]['type'].toLowerCase();
+
+                if ((newLinkObject.relation_type === 'responsible'
+                        || newLinkObject.relation_type === 'customer'
+                        || newLinkObject.relation_type === 'partner')) {
+                    contacts.push(newLinkObject);
+                } else if (newLinkObject.relation_type === 'task') {
+                    tasks.push(newLinkObject);
+                } else if (newLinkObject.relation_type === 'product') {
+                    newLinkObject.remark_description = (relations[i].remark) ? relations[i].remark.description : '';
+                    newLinkObject.remark_price = (relations[i].remark) ? relations[i].remark.price : 0;
+                    newLinkObject.remark_quantity = (relations[i].remark) ? relations[i].remark.quantity : 1;
+                    products.push(newLinkObject);
+                }
             }
         }
         
@@ -207,6 +236,29 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             products: products
         };
     },
+
+    /**
+     * generic apply changes handler
+     * @param {Boolean} closeWindow
+     */
+    onApplyChanges: function(closeWindow) {
+        if (this.app.featureEnabled('featureLeadNotificationConfirmation') && !this.record.get('mute')) {
+            Ext.MessageBox.confirm(
+                this.app.i18n._('Send Notification?'),
+                this.app.i18n._('Changes to this lead might send notifications. Press the button "Notifcation are enabled" to switch to "Notification are disabled"'),
+                function (button) {
+                    if (button === 'yes') {
+                        Tine.Crm.LeadEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+                    }
+                },
+                this
+            );
+            return;
+        }
+        Tine.Crm.LeadEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+    },
+
+
 
     /**
      * returns dialog
@@ -289,7 +341,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
@@ -332,8 +383,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             allowBlank: false,
                             selectOnFocus: true,
                             maxLength: 255,
-                            // TODO make this work
-                            listeners: {render: function(field){field.focus(false, 2000);}}
                         }]
                     }, {
                         region: 'center',
@@ -359,7 +408,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     layout: 'form',
                                     defaults: {
                                         valueField:'id',
-                                        typeAhead: true,
+                                        typeAhead: false,
                                         mode: 'local',
                                         triggerAction: 'all',
                                         editable: false,

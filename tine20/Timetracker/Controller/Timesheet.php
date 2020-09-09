@@ -23,7 +23,14 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @var boolean
      */
     protected $_doCheckDeadline = TRUE;
-    
+
+    /**
+     * custom acl switch
+     *
+     * @var boolean
+     */
+    protected $_doTimesheetContainerACLChecks = TRUE;
+
     /**
      * check deadline or not
      * 
@@ -130,6 +137,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @param string $taCostCenter
      * @param string $cacheId
      * @return array
+     *
+     * @deprecated can be removed?
      */
     public function findTimesheetsByTimeaccountAndPeriod($timeaccountId, $startDate, $endDate, $destination = NULL, $taCostCenter = NULL)
     {
@@ -142,7 +151,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $timesheets = $this->search($filter);
         
         $matrix = array();
-        foreach($timesheets as $ts) {
+        foreach ($timesheets as $ts) {
             $matrix[] = array(
                 'userAccountId' => $ts->account_id,
                 'amount' => ($ts->duration / 60),
@@ -177,25 +186,23 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
 
             $duration = $end->diff($start);
             $_record->duration = $duration->h * 60 + $duration->i;
-            return;
-        }
-        
-        // If duration and start is set calculate the end
-        if (isset($duration) && isset($start)){
+        } else if (isset($duration) && isset($start)){
+            // If duration and start is set calculate the end
             $start = new dateTime($_record->start_date . ' ' . $start);
             
             $end = $start->modify('+' . $duration . ' minutes');
             $_record->end_time = $end->format('H:i');
-            return;
-        }
 
-        // If start is not set but duration and end calculate start instead
-        if (isset($duration) && isset($end)){
+        } else if (isset($duration) && isset($end)){
+            // If start is not set but duration and end calculate start instead
             $end = new dateTime($_record->start_date . ' ' . $end);
 
             $start = $end->modify('-' . $duration . ' minutes');
             $_record->start_time = $start->format('H:i');
-            return;
+        }
+
+        if (empty($_record->accounting_time)) {
+            $_record->accounting_time = $_record->duration;
         }
     }
     
@@ -277,8 +284,22 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     {
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
-    }    
-    
+    }
+
+    /**
+     * set/get checking ACL rights
+     *
+     * NOTE: as our business logic here needs $this->>_doContainerACLChecks to be turned off
+     *       we introduce a new switch to turn off all grants checking here
+     *
+     * @param  boolean $setTo
+     * @return boolean
+     */
+    public function doContainerACLChecks($setTo = NULL)
+    {
+        return $this->_setBooleanMemberVar('_doTimesheetContainerACLChecks', $setTo);
+    }
+
     /**
      * check grant for action
      *
@@ -295,6 +316,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
+        if (! $this->_doTimesheetContainerACLChecks) {
+            return TRUE;
+        }
+
         $isAdmin = false;
         // users with MANAGE_TIMEACCOUNTS have all grants here
         if ( $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)

@@ -116,9 +116,9 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             me.record = JSON.stringify(res);
             me.initRecord();
         }).then(function () {
-            me.loadMask.hide();
+            me.hideLoadMask();
         }).catch(function () {
-            me.loadMask.hide();
+            me.hideLoadMask();
         });
     },
     
@@ -379,7 +379,62 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.priceTaxField.setValue(tax);
         this.priceGrossField.setValue(gross);
     },
-    
+
+    /**
+     * Calculate Tax and Tax percent from Gross and Net
+     */
+    calcTaxFromGross: function() {
+        var grossPrice = parseFloat(this.priceGrossField.getValue());
+        var netPrice   = parseFloat(this.priceNetField.getValue());
+        if (!netPrice) {
+            var salesTax = parseFloat(this.salesTaxField.getValue());
+            var tax = grossPrice / salesTax;
+            this.priceTaxField.setValue(tax);
+        } else {
+            var tax = grossPrice - netPrice;
+            var taxPercent = tax * 100 / netPrice;
+
+            this.priceTaxField.setValue(tax);
+            this.salesTaxField.setValue(taxPercent.toFixed(2));
+        }
+    },
+
+    /**
+     * calculates price gross by price net and tax
+     */
+    calcTaxPercent: function() {
+        var netPrice = parseFloat(this.priceNetField.getValue());
+        var tax      = parseFloat(this.priceTaxField.getValue());
+
+        var taxPercent = tax / netPrice * 100;
+
+        var roundedPercent = Math.round(Math.abs(taxPercent) * 100) / 100;
+
+        this.salesTaxField.setValue(roundedPercent);
+    },
+
+    onUpdatePriceTax: function() {
+        this.calcTaxPercent();
+        this.calcGross();
+        this.calcNet();
+    },
+
+    onUpdatePriceGross: function() {
+        this.calcTaxFromGross();
+        this.calcNet();
+    },
+
+    /**
+     * calculates total prices by price gross, additional price gross, discount
+     */
+    calcNet: function() {
+        const priceGross = parseFloat(this.priceGrossField.getValue());
+        const tax = parseFloat(this.priceTaxField.getValue());
+        let netPrice = priceGross - tax;
+
+        this.priceNetField.setValue(netPrice);
+    },
+
     /**
      * returns dialog
      * 
@@ -406,39 +461,39 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
         }
         
-        this.priceNetField = new Ext.ux.form.NumberField({
-            name: 'price_net',
-            xtype: 'numberfield',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            decimalPrecision: 2,
-            suffix: ' €',
+        this.priceNetField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Net'),
+            name: 'price_net',
             columnWidth: 1/4,
             listeners: {
                 scope: this,
                 blur: this.calcGross.createDelegate(this)
+
             }
         });
 
-        this.priceTaxField = new Ext.ux.form.NumberField({
-            decimalPrecision: 2,
+        this.priceTaxField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
+            fieldLabel: this.app.i18n._('Taxes (VAT)'),
+            disabled: false,
             name: 'price_tax',
-            disabled: true,
-            xtype: 'numberfield',
-            suffix: ' €',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            fieldLabel: this.app.i18n._('Price Tax'),
-            columnWidth: 1/4
+            columnWidth: 1/4,
+            listeners: {
+                scope: this,
+                blur: this.onUpdatePriceTax.createDelegate(this)
+            }
         });
-        
-        this.priceGrossField = new Ext.ux.form.NumberField({
-            decimalPrecision: 2,
-            name: 'price_gross',
-            xtype: 'numberfield',
-            suffix: ' €',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+
+        this.priceGrossField = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Gross'),
-            columnWidth: 1/4
+            name: 'price_gross',
+            columnWidth: 1/4,
+            listeners: {
+                scope: this,
+                blur: this.onUpdatePriceGross.createDelegate(this)
+            }
         });
         
         this.salesTaxField = Ext.create({
@@ -453,7 +508,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }),
             name: 'sales_tax',
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            regex: /^[0-9]+\.?[0-9]*$/,
+            suffix: ' %',
             fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/4,
             listeners: {
@@ -463,13 +518,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
         
-        this.inventoryChange = new Ext.ux.form.NumberField({
-            name: 'inventory_change',
-            xtype: 'numberfield',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-            decimalPrecision: 2,
-            suffix: ' €',
+        this.inventoryChange = new Ext.ux.form.MoneyField({
+            xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Inventory Change'),
+            name: 'inventory_change',
             columnWidth: 1/4,
             listeners: {
                 scope: this,

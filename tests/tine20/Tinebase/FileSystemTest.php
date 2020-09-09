@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -23,10 +23,7 @@ class Tinebase_FileSystemTest extends TestCase
      */
     protected $_controller;
 
-    protected $_oldModLog;
-    protected $_oldIndexContent;
-    protected $_oldCreatePreview;
-    protected $_oldNotification;
+    protected $_oldFileSystemConfig;
     protected $_oldQuota;
 
     protected $_rmDir = array();
@@ -48,11 +45,9 @@ class Tinebase_FileSystemTest extends TestCase
         parent::setUp();
 
         $this->_rmDir = array();
-        $this->_oldNotification = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
-        $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
+
+        $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = true;
-        $this->_oldIndexContent = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
-        $this->_oldCreatePreview = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
         $this->_oldQuota = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
 
         $this->_controller = new Tinebase_FileSystem();
@@ -69,11 +64,7 @@ class Tinebase_FileSystemTest extends TestCase
      */
     protected function tearDown()
     {
-        $fsConfig = Tinebase_Core::getConfig()->get(Tinebase_Config::FILESYSTEM);
-        $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE} = $this->_oldModLog;
-        $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = $this->_oldIndexContent;
-        $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = $this->_oldCreatePreview;
-        $fsConfig->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS} = $this->_oldNotification;
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
         Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $this->_oldQuota;
 
         Tinebase_FileSystem::getInstance()->resetBackends();
@@ -100,16 +91,31 @@ class Tinebase_FileSystemTest extends TestCase
         $basePathNode = $this->_controller->stat($this->_basePath);
         
         $testPath = $this->_basePath . '/PHPUNIT';
+        if ($this->_controller->isDir($testPath)) {
+            return $testPath;
+        }
+
         $node = $this->_controller->mkdir($testPath);
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_controller->processRefLogs();
+        $this->_controller->clearStatCache();
         
         $this->assertInstanceOf('Tinebase_Model_Tree_Node', $node);
         $this->assertTrue($this->_controller->fileExists($testPath), 'path created by mkdir not found');
         $this->assertTrue($this->_controller->isDir($testPath),      'path created by mkdir is not a directory');
         $this->assertEquals(1, $node->revision);
-        $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($this->_basePath)->hash);
         static::assertNull($node->deleted_time, 'deleted_time should be null');
         
         return $testPath;
+    }
+
+    public function testMkdirRecycle()
+    {
+        $testPath = $this->testMkdir();
+
+        Tinebase_FileSystem::getInstance()->rmdir($testPath);
+
+        $this->testMkdir();
     }
 
     public function testMkdirFailAppId()
@@ -143,6 +149,9 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertNotEmpty($basePathNode->hash);
         
         $testNode = $this->_controller->mkdir($testPath . '/phpunit');
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_controller->processRefLogs();
+        $this->_controller->clearStatCache();
         
         $this->assertEquals(1, $testNode->revision);
         $this->assertNotEmpty($testNode->hash);
@@ -299,7 +308,7 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertFalse($result);
     }
     
-    public function testCreateFile($_name = 'phpunit.txt')
+    public function testCreateFile($_name = 'phpunit.txt', $_data = null)
     {
         $testDir  = $this->testMkdir();
         $testFile = $_name;
@@ -311,12 +320,16 @@ class Tinebase_FileSystemTest extends TestCase
         $handle = $this->_controller->fopen($testPath, 'x');
         
         $this->assertEquals('resource', gettype($handle), 'opening file failed');
+
+        if (null === $_data) $_data = 'phpunit';
+        $written = fwrite($handle, $_data);
         
-        $written = fwrite($handle, 'phpunit');
-        
-        $this->assertEquals(7, $written);
+        $this->assertEquals(strlen($_data), $written);
         
         $this->_controller->fclose($handle);
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_controller->processRefLogs();
+        $this->_controller->clearStatCache();
 
         $children = $this->_controller->scanDir($testDir)->name;
 
@@ -801,7 +814,9 @@ class Tinebase_FileSystemTest extends TestCase
     public function testPreviewImageGeneration()
     {
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = true;
+        Tinebase_Config::getInstance()->{Tinebase_Config::ENABLED_FEATURES}->{Tinebase_Config::FEATURE_CREATE_PREVIEWS} = true;
         $previewController = Tinebase_FileSystem_Previews::getInstance();
+        Tinebase_FileSystem::getInstance()->resetBackends();
         try {
             $oldService = $previewController->setPreviewService(new Tinebase_FileSystem_TestPreviewService());
 
@@ -832,7 +847,7 @@ class Tinebase_FileSystemTest extends TestCase
         $dirNode = $this->_controller->stat($testDir);
         /** @var Tinebase_Model_Tree_FileObject $dirObject */
         $dirObject = $fileObjectController->get($dirNode->object_id);
-        static::assertEquals(7, $dirObject->size, 'direcotry size wrong');
+        static::assertGreaterThanOrEqual(7, $dirObject->size, 'direcotry size wrong');
 
         $dirObject->size = 3;
         $fileObjectController->update($dirObject);
@@ -840,9 +855,92 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertEquals(3, $dirObject->size, 'direcotry size update did not work');
 
         $this->_controller->unlink($testFile);
+        Tinebase_FileSystem::flushRefLogs();
+        $this->_controller->processRefLogs();
 
         $dirObject = $fileObjectController->get($dirNode->object_id);
         static::assertEquals(0, $dirObject->size, 'direcotry size should not become negative, it should be set to 0 instead');
+    }
+
+    public function testAVModeOff()
+    {
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
+            Tinebase_FileSystem_AVScan_Factory::MODE_OFF;
+
+        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile());
+        static::assertNull($node->lastavscan_time, 'expect lastavscan_time to be null');
+        static::assertTrue(!$node->is_quarantined, 'expect is_quarantined to be false');
+    }
+
+    public function testAVModeUnittest()
+    {
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
+            'unittest';
+        Tinebase_FileSystem_AVScan_Factory::registerScanner('unittest', Tinebase_FileSystem_TestAVScanner::class);
+        Tinebase_FileSystem_TestAVScanner::$desiredResult = null;
+
+        $now = Tinebase_DateTime::now();
+        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile('avModeUnittest.txt',
+            'shalalalalablabla'));
+        static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
+        static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);
+        static::assertTrue(!$node->is_quarantined, 'expect is_quarantined to be false');
+    }
+
+    public function testAVModeUnittestFound()
+    {
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
+            'unittest';
+        Tinebase_FileSystem_AVScan_Factory::registerScanner('unittest', Tinebase_FileSystem_TestAVScanner::class);
+        Tinebase_FileSystem_TestAVScanner::$desiredResult = new Tinebase_FileSystem_AVScan_Result(
+            Tinebase_FileSystem_AVScan_Result::RESULT_FOUND, 'unittest virus');
+
+        $now = Tinebase_DateTime::now();
+        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile('avModeUnittestFound.txt',
+            'shubidubidulala'));
+        static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
+        static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);
+        static::assertFalse(!$node->is_quarantined, 'expect is_quarantined to be true');
+    }
+
+    public function testAVModeQuahogWithClamAVTestFiles()
+    {
+        if (!is_dir('/usr/share/clamav-testfiles/')) {
+            static::markTestSkipped('package clamav-testfiles not installed or not found');
+        }
+
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
+            Tinebase_FileSystem_AVScan_Factory::MODE_QUAHOG;
+
+        $testDir  = $this->testMkdir();
+        $testFile = $testDir . '/' . 'unittestAvFile';
+        static::assertNotFalse($fh = $this->_controller->fopen($testFile, 'w'),
+            'could not open testfile');
+        $avFiles = glob('/usr/share/clamav-testfiles/*.*');
+        $avFile = $avFiles[array_rand($avFiles)];
+        static::assertNotFalse($avFh = fopen($avFile, 'r'), 'could not open clamav test file ' . $avFile);
+        static::assertNotFalse(stream_copy_to_stream($avFh, $fh), 'could not stream copy files');
+        fclose($avFh);
+        static::assertNotFalse($this->_controller->fclose($fh), 'could not close tine file handle');
+
+        $node = $this->_controller->stat($testFile);
+        static::assertTrue(true == $node->is_quarantined, 'file should be quarantined');
+        static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
+        static::assertGreaterThanOrEqual(Tinebase_DateTime::now()->toString(), $node->lastavscan_time);
+    }
+
+    public function testAVModeNotOff()
+    {
+        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF === Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}
+                ->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            static::markTestSkipped('requires real AV to be configured');
+        }
+
+        $now = Tinebase_DateTime::now();
+        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile());
+        static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
+        static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);
+        static::assertTrue(!$node->is_quarantined, 'expect is_quarantined to be false');
     }
 
     public function testNotification()

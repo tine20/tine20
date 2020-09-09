@@ -50,7 +50,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $calenderFrontend->saveResource($resourceArrayFromDB);
         
         $containerFrontend = new Tinebase_Frontend_Json_Container();
-        $result = $containerFrontend->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, '');
+        $result = $containerFrontend->getContainer(Calendar_Model_Event::class, Tinebase_Model_Container::TYPE_SHARED, '');
 
         $found = false;
         foreach($result as $container) {
@@ -63,6 +63,8 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
             static::assertTrue(is_array($container->xprops), 'xprops is not an array');
             static::assertTrue(isset($container->xprops['Calendar']['Resource']['resource_id']),
                 'xprops Calendar Resource resource_id is missing');
+            static::assertTrue(isset($container->xprops['Calendar']['Resource']['resource_type']),
+                'xprops Calendar Resource resource_type is missing');
             break;
         }
         static::assertTrue($found, 'did not find resources shared container');
@@ -427,7 +429,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
 
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
         $json = new Tinebase_Frontend_Json_Container();
-        $containers = $json->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null);
+        $containers = $json->getContainer(Calendar_Model_Event::class, Tinebase_Model_Container::TYPE_SHARED, null);
 
         $this->assertTrue(is_array($containers));
         foreach ($containers as $container) {
@@ -439,7 +441,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         // try with sclever
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
-        $containers = $json->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null);
+        $containers = $json->getContainer(Calendar_Model_Event::class, Tinebase_Model_Container::TYPE_SHARED, null);
 
         $this->assertTrue(is_array($containers));
         $this->assertTrue(count($containers) > 0);
@@ -484,6 +486,36 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
 
 
         $this->assertEquals($hopefullyUpdatedEvent->location, $resource->name);
+
+        $ct->tearDown();
+    }
+
+    public function testSearchAttenderInResourceContainer()
+    {
+        // create event with resource
+        $resource = $this->testCreateResource();
+        $ct = new Calendar_Controller_EventTests();
+        $ct->setUp();
+        $event = $ct->_getEvent(true);
+        $event->location = $resource->name;
+        $scleverContactId = $this->_personas['sclever']->contact_id;
+        $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'   => $resource->getId()
+            ], [
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => $scleverContactId
+            ]]);
+        $createdEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+
+        $result = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'in', 'value' => ['path' => '/shared/' . $resource->container_id]],
+            ['field' => 'attender',     'operator' => 'in', 'value' => [['user_type' => 'user', 'user_id' => $scleverContactId]]]
+        ]));
+
+        $this->assertEquals(1, $result->count(), 'expect to find one event');
+        $this->assertSame($createdEvent->getId(), $result->getFirstRecord()->getId());
 
         $ct->tearDown();
     }

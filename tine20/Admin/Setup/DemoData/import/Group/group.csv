@@ -1,6 +1,6 @@
-"Orcester";"User die im Orcester ein Instrument spielen";"s.rattle s.fruehauf t.bar"
-"Elbphilharmonie";"Mitarbeiter der Elbphilharmonie";"s.rattle s.fruehauf t.bar j.baum"
-"Vorstand Elbphilharmonie";"Der Vorstand der Elbphilharmonie";"s.rattle j.baum"
-"Gaertner";"Die Gaertner vom König";"j.metzger m.schreiber"
-"Koenig" ;"Der Koenig";"e.eichmann"
-"Schloss Schönbrunn";"";"e.eichmann;j.metzger m.schreiber"
+Orcester;User die im Orcester ein Instrument spielen;s.rattle s.fruehauf t.bar
+Elbphilharmonie;Mitarbeiter der Elbphilharmonie;s.rattle s.fruehauf t.bar j.baum
+Vorstand Elbphilharmonie;Der Vorstand der Elbphilharmonie;s.rattle j.baum
+Gaertner;Die Gaertner vom König;j.metzger m.schreiber
+Koenig ;Der Koenig;e.eichmann
+Schloss Schönbrunn;Personal vom Schloss Schönbrunn;e.eichmann j.metzger m.schreiber

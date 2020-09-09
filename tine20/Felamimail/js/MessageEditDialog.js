@@ -4,8 +4,12 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+const { retryAllRejectedPromises } = require('promises-to-retry');
+
+require('./MessageFileButton');
 
 Ext.namespace('Tine.Felamimail');
 
@@ -17,9 +21,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Message Compose Dialog</p>
  * <p>This dialog is for composing emails with recipients, body and attachments.
  * you can choose from which account you want to send the mail.</p>
- * <p>
- * TODO         make email note editable
- * </p>
  *
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -29,6 +30,12 @@ Ext.namespace('Tine.Felamimail');
  * Create a new MessageEditDialog
  */
 Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+    /**
+     * @cfg {Boolean} autoSave
+     * enable autosave as draft
+     */
+    autoSave: true,
+
     /**
      * @cfg {Array/String} bcc
      * initial config for bcc
@@ -115,6 +122,26 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     quotedPGPMessage: null,
 
     /**
+     * @type {Boolean}
+     */
+    isDraft: false,
+
+    /**
+     * @type {Boolean}
+     */
+    isTemplate: false,
+
+    /**
+     * @type {String}
+     */
+    draftUid: null,
+
+    /**
+     * @type {String}
+     */
+    templateId: null,
+
+    /**
      * @private
      */
     windowNamePrefix: 'MessageEditWindow_',
@@ -133,9 +160,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     updateToolbars: Ext.emptyFn,
 
-    //private
+    // private
     initComponent: function () {
-        var me = this;
+        this.autoSave = Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('autoSaveDrafts');
+        let me = this;
+
+        if (me.autoSave) {
+            me.trottledsaveAsDraft = _.throttle(_.bind(me.saveAsDraft, me), 5000, {leading: false});
+            me.saveAsDraftPromise = Promise.resolve();
+        }
+
+        me.on('beforecancel', me.onBeforeCancel, this);
 
         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
 
@@ -145,7 +180,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Tine.log.info('mailvelope not available');
         });
     },
-
 
     /**
      * init buttons
@@ -185,17 +219,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this
         });
 
-        // TODO think about changing icon onToggle
-        this.action_saveEmailNote = new Ext.Action({
-            text: this.app.i18n._('Save Email Note'),
-            handler: this.onToggleSaveNote,
-            iconCls: 'notes_noteIcon',
-            disabled: false,
-            scope: this,
-            enableToggle: true
-        });
-        this.button_saveEmailNote = Ext.apply(new Ext.Button(this.action_saveEmailNote), {
-            tooltip: this.app.i18n._('Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s).')
+        this.button_fileMessage = new Tine.Felamimail.MessageFileButton({
+            mode: 'selectOnly',
+            composeDialog: this,
+            listeners: {
+                scope: this,
+                selectionchange: this.onFileMessageSelectionChange
+            }
         });
 
         this.action_toggleReadingConfirmation = new Ext.Action({
@@ -237,12 +267,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.tbar = new Ext.Toolbar({
-            defaults: {height: 55},
+            defaults: {height: 43},
             items: [{
                 xtype: 'buttongroup',
-                columns: 6,
+                columns: 7,
                 items: [
                     Ext.apply(new Ext.Button(this.action_send), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }),
+                    Ext.apply(new Ext.Button(this.action_cancel), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
@@ -254,7 +289,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
                     }),
                     this.action_saveAsDraft,
-                    this.button_saveEmailNote,
+                    this.button_fileMessage,
                     this.action_saveAsTemplate,
                     this.button_toggleReadingConfirmation,
                     this.button_toggleEncrypt,
@@ -284,6 +319,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!this.record) {
             this.record = new Tine.Felamimail.Model.Message(this.recordDefaults, 0);
         }
+        this.initAccountCombo();
         this.initFrom();
         this.initRecipients();
         this.initSubject();
@@ -316,20 +352,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRender: function (ct, position) {
         Tine.Felamimail.MessageEditDialog.superclass.onRender.call(this, ct, position);
-        this.loadMask.show();
+        this.showLoadMask();
     },
-
-    isRendered: function () {
-        var me = this;
-        return new Promise(function (fulfill, reject) {
-            if (me.rendered) {
-                fulfill(true);
-            } else {
-                me.on('render', fulfill);
-            }
-        });
-    },
-
+    
     /**
      * handle attachments: attaches message when forwarding mails or
      *  keeps attachments as they are (if preference is set or draft/template)
@@ -343,7 +368,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         var attachments = [];
         if ((Tine[this.app.appName].registry.get('preferences').get('emlForward')
-                && Tine[this.app.appName].registry.get('preferences').get('emlForward') == 0)
+                && (! Tine[this.app.appName].registry.get('preferences').get('emlForward') ||
+                    Tine[this.app.appName].registry.get('preferences').get('emlForward') === '0'
+                )
+            )
             || this.draftOrTemplate
         ) {
 
@@ -358,12 +386,21 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
 
         } else {
-            attachments = [{
+            var rfc822Attachment = {
                 name: message.get('subject'),
                 type: 'message/rfc822',
                 size: message.get('size'),
                 id: message.id
-            }];
+            }, node = message.get('from_node');
+            if (node) {
+                // @refactor use Ext.apply / lodash
+                rfc822Attachment.type = 'file';
+                rfc822Attachment.size = node.size;
+                rfc822Attachment.attachment_type = 'attachment';
+                rfc822Attachment.path = node.path;
+                rfc822Attachment.name = node.name;
+            }
+            attachments = [rfc822Attachment];
         }
 
         this.record.set('attachments', attachments);
@@ -371,28 +408,53 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
      * inits body and attachments from reply/forward/template
+     *
+     * @param {} message
      */
-    initContent: function () {
+    initContent: function (message) {
         if (!this.record.get('body')) {
             var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
-                format = account && account.get('compose_format') != '' ? 'text/' + account.get('compose_format') : 'text/html';
+                format = message === undefined
+                    ? account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 'text/html'
+                    : message.getBodyType();
 
             if (!this.msgBody) {
                 var message = this.getMessageFromConfig();
                 if (message) {
                     if (message.bodyIsFetched() && account.get('preserve_format')) {
-                        // format of the received message. this is the format to perserve
+                        // format of the received message. this is the format to preserve
                         format = message.get('body_content_type');
                     }
-                    if (!message.bodyIsFetched() || format != message.getBodyType()) {
+                    if (!message.bodyIsFetched() || format !== message.getBodyType()) {
                         // self callback when body needs to be (re) fetched
-                        return this.recordProxy.fetchBody(message, format, this.initContent.createDelegate(this));
+                        return this.recordProxy.fetchBody(message, format, {
+                            success: this.initContent.createDelegate(this),
+                            // set format to message body format if fetch fails
+                            failure: message.bodyIsFetched()
+                                ? this.initContent.createDelegate(this, [message])
+                                : null
+                        });
                     }
 
                     this.setMessageBody(message, account, format);
 
                     if (this.isForwardedMessage() || this.draftOrTemplate) {
                         this.handleAttachmentsOfExistingMessage(message);
+                    }
+
+                    let folder = this.app.getFolderStore().getById(message.get('folder_id'));
+                    if (folder) {
+                        this.isDraft = folder.get('globalname') === account.get('drafts_folder');
+                        this.isTemplate = folder.get('globalname') === account.get('templates_folder');
+
+                        if (this.isDraft) {
+                            this.record.set('messageuid', message.get('messageuid'));
+                            this.draftUid = message.get('messageuid');
+                        }
+
+                        if (this.isTemplate) {
+                            this.templateId = message.get('id');
+                        }
                     }
                 }
             }
@@ -487,40 +549,44 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Tine.Felamimail.Model.Account} account
      * @param {String} format
      */
-    addSignature: function (account, format) {
-        if (this.draftOrTemplate) {
+    addSignature: function (account, format, signatureText, msgBody) {
+        if (this.draftOrTemplate && !_.isString(arguments[3])) {
             return;
         }
 
-        var accountId = account ? this.record.get('account_id') : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'),
-            account = account ? account : this.app.getAccountStore().getById(accountId),
-            signaturePosition = (account && account.get('signature_position')) ? account.get('signature_position') : 'below',
-            signature = this.getSignature(account, format);
+        msgBody = _.isString(arguments[3]) ? arguments[3] : this.msgBody;
 
-        if (signaturePosition == 'below') {
-            this.msgBody += signature;
+        let signaturePosition = _.get(account, 'data.signature_position', 'below');
+        signatureText = _.isString(arguments[2]) ? arguments[2] : this.getSignature(account, format);
+
+        if (signaturePosition === 'below') {
+            msgBody += signatureText;
         } else {
-            this.msgBody = signature + '<br/><br/>' + this.msgBody;
+            msgBody = signatureText + '<br/><br/>' + msgBody;
         }
+
+        if (! arguments[3]) {
+            this.msgBody = msgBody;
+        }
+
+        return msgBody;
     },
 
+
     /**
-     * get account signature
+     * get account signature text
      *
      * @param {Tine.Felamimail.Model.Account} account
      * @param {String} format
      */
-    getSignature: function (account, format) {
-        var accountId = account ? this.record.get('account_id') : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'),
-            account = account ? account : this.app.getAccountStore().getById(accountId),
-            signaturePosition = (account && account.get('signature_position')) ? account.get('signature_position') : 'below',
-            signature = Tine.Felamimail.getSignature(accountId);
+    getSignature: function (account, format, signature) {
+        let signatureText = Tine.Felamimail.getSignature(account, signature);
 
-        if (format == 'text/plain') {
-            signature = Tine.Tinebase.common.html2text(signature);
+        if (format === 'text/plain') {
+            signatureText = Tine.Tinebase.common.html2text(signatureText);
         }
 
-        return signature;
+        return signatureText;
     },
 
     /**
@@ -530,6 +596,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!this.record.get('account_id')) {
             if (!this.accountId) {
                 var message = this.getMessageFromConfig(),
+                    availableAccounts = this.accountCombo.store,
+                    fromEmail = message ? message.get('from_email') : null,
+                    fromAccountIdx = availableAccounts.find('email', fromEmail),
+                    fromAccount = availableAccounts.getAt(fromAccountIdx),
                     folderId = message ? message.get('folder_id') : null,
                     folder = folderId ? Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(folderId) : null,
                     accountId = folder ? folder.get('account_id') : null;
@@ -539,9 +609,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     accountId = (activeAccount) ? activeAccount.id : null;
                 }
 
+                if (! this.replyTo) {
+                    this.from = fromAccount;
+                }
                 this.accountId = accountId;
             }
-
+            
             this.record.set('account_id', this.accountId);
         }
         delete this.accountId;
@@ -558,12 +631,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onKeyPress(e);
         }, this);
 
-        this.htmlEditor.on('keydown', function (e) {
-            if (e.getKey() == e.ENTER && e.ctrlKey) {
-                this.onSaveAndClose();
-            } else if (e.getKey() == e.TAB && e.shiftKey) {
-                this.subjectField.focus.defer(50, this.subjectField);
-            }
+        this.htmlEditor.on('keydown', function (ed, e) {
+            this.onKeyPress(e);
         }, this);
 
         this.htmlEditor.on('toggleFormat', this.onToggleFormat, this);
@@ -600,6 +669,74 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             } else if (e.getTarget('input[type=text]')) {
                 this.subjectField.focus.defer(50, this.subjectField);
             }
+        }
+        if (e.getTarget('body')) {
+            if (e.getKey() == e.ENTER && e.ctrlKey) {
+                this.onSaveAndClose();
+            } else if (e.getKey() == e.TAB && e.shiftKey) {
+                this.subjectField.focus.defer(50, this.subjectField);
+            }
+        }
+
+        this.checkStates();
+    },
+
+    checkStates: function() {
+        Tine.Felamimail.MessageEditDialog.superclass.checkStates.apply(this, arguments);
+        if (this.autoSave && _.keys(this.record.getChanges()).length) {
+            this.trottledsaveAsDraft();
+        }
+    },
+
+    saveAsDraft: function() {
+        let me = this;
+
+        me.record.set('messageuid', me.draftUid);
+        me.record.commit();
+
+        me.action_saveAsDraft.setIconClass('x-btn-wait');
+
+        return me.saveAsDraftPromise = retryAllRejectedPromises([() => {
+            return Tine.Felamimail.saveDraft(me.record.data)
+                .then((savedDraft) => {
+                    me.draftUid = savedDraft.messageuid;
+                })
+                .finally(() => {
+                    me.action_saveAsDraft.setIconClass('action_saveAsDraft');
+                });
+            }
+        ], {
+            maxAttempts: 5, delay: 500
+        });
+    },
+
+    deleteDraft: function(draftUid) {
+        return Tine.Felamimail.deleteDraft(draftUid, this.record.get('account_id'));
+    },
+
+    onBeforeCancel: function() {
+        if (this.autoSave) {
+            this.trottledsaveAsDraft.cancel();
+        }
+        if (this.draftUid) {
+            Ext.MessageBox.show({
+                title: this.app.i18n._('Discard this Draft?'),
+                msg: this.app.i18n._('Do you want to discard the current draft?'),
+                buttons: Ext.MessageBox.YESNO,
+                fn: (btn) => {
+                    this.showLoadMask()
+                        .then(() => {
+                            return btn === 'yes' ?
+                                this.deleteDraft(this.draftUid) :
+                                this.saveAsDraft();
+                        })
+                        .then(_.bind(this.window.close, this.window, true))
+
+                },
+                icon: Ext.MessageBox.QUESTION
+            });
+
+            return false;
         }
     },
 
@@ -787,6 +924,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {String} folderField
      */
     onSaveInFolder: function (folderField) {
+        if (this.autoSave) {
+            this.trottledsaveAsDraft.cancel();
+        }
+        
         this.onRecordUpdate();
 
         var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
@@ -807,30 +948,28 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             );
         } else {
             this.loadMask.show();
+            if (this.autoSave) {
+                this.trottledsaveAsDraft.cancel();
+            }
             this.recordProxy.saveInFolder(this.record, folderName, {
                 scope: this,
                 success: function (record) {
                     this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
-                    this.purgeListeners();
-                    this.window.close();
+                    Promise.resolve()
+                        .then(() => {
+                            if (this.draftUid) {
+                                return this.deleteDraft(this.draftUid)
+                            }
+                        })
+                        .then(_.bind(this.window.close, this.window, this));
                 },
                 failure: Tine.Felamimail.handleRequestException.createInterceptor(function () {
-                        this.loadMask.hide();
+                        this.hideLoadMask();
                     }, this
                 ),
                 timeout: 150000 // 3 minutes
             });
         }
-    },
-
-    /**
-     * toggle save note
-     *
-     * @param {} button
-     * @param {} e
-     */
-    onToggleSaveNote: function (button, e) {
-        this.record.set('note', (!this.record.get('note')));
     },
 
     /**
@@ -845,14 +984,25 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('massMailingFlag', active);
 
         if (active) {
-            this.infoText.show();
+            this.massMailingInfoText.show();
             this.doLayout();
         } else {
-            this.infoText.hide();
+            this.massMailingInfoText.hide();
             this.doLayout();
         }
     },
 
+    onFileMessageSelectionChange: function(btn, selection) {
+        var text = this.app.formatMessage('{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}', {
+                locationCount: selection.length,
+                locationsHtml: Tine.Felamimail.MessageFileButton.getFileLocationText(selection, ', ')
+            });
+
+        this.messageFileInfoText.update(text);
+        this.messageFileInfoText.setVisible(selection.length);
+        this.doLayout();
+    },
+    
     /**
      * toggle Request Reading Confirmation
      */
@@ -897,6 +1047,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.southPanel.collapse();
             this.southPanel.setVisible(false);
             this.btnAddAttachemnt.setDisabled(true);
+            this.signatureCombo.setDisabled(true);
         } else {
             this.mailvelopeEditor = null;
             delete this.mailvelopeEditor;
@@ -904,6 +1055,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             this.southPanel.setVisible(true);
             this.btnAddAttachemnt.setDisabled(false);
+            this.signatureCombo.setDisabled(false);
         }
     },
 
@@ -913,12 +1065,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onToggleFormat: function () {
         var source = this.bodyCards.layout.activeItem,
             format = source.mimeType,
-            target = format == 'text/plain' ? this.htmlEditor : this.textEditor,
-            convert = format == 'text/plain' ?
+            target = format === 'text/plain' ? this.htmlEditor : this.textEditor,
+            convert = format === 'text/plain' ?
                 Ext.util.Format.nl2br :
                 Tine.Tinebase.common.html2text;
 
         if (format.match(/^text/)) {
+            this.record.set('content_type', format);
             this.bodyCards.layout.setActiveItem(target);
             target.setValue(convert(source.getValue()));
         } else {
@@ -1002,13 +1155,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.getForm().loadRecord(this.record);
         this.attachmentGrid.loadRecord(this.record);
-
-        if (this.record.get('note') && this.record.get('note') == '1') {
-            this.button_saveEmailNote.toggle();
+        if (this.from) {
+            this.accountCombo.setValue(this.from.id);
         }
 
         if (this.record.get('massMailingFlag')) {
-            this.infoText.show();
+            this.massMailingInfoText.show();
         }
 
         this.onAfterRecordLoad();
@@ -1018,8 +1170,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * overwrite, just hide the loadMask
      */
     onAfterRecordLoad: function () {
+        (function() {
+            var autoSave = this.autoSave;
+            this.autoSave = false;
+
+            this.checkStates();
+            this.record.commit();
+
+            this.autoSave = autoSave;
+        }).defer(100, this);
+
         if (this.loadMask) {
-            this.loadMask.hide();
+            this.hideLoadMask();
         }
     },
 
@@ -1057,9 +1219,30 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
 
         this.record.set('account_id', account.get('original_id'));
+        
+        if (this.button_fileMessage.pressed) {
+            this.record.set('fileLocations', this.button_fileMessage.getSelected());
+        }
 
         // need to sync once again to make sure we have the correct recipients
         this.recipientGrid.syncRecipientsToRecord();
+    },
+
+    onAfterApplyChanges: async function(closeWindow) {
+        // grr. onRecordLoad hides loadMask
+        this.showLoadMask.defer(10, this);
+
+        if (this.autoSave) {
+            await this.saveAsDraftPromise
+                .then(() => {
+                    if (this.draftUid) {
+                        // autodelete draft when message is send
+                        return this.deleteDraft(this.draftUid)
+                    }
+                })
+        }
+
+        Tine.Felamimail.MessageEditDialog.superclass.onAfterApplyChanges.call(this, closeWindow);
     },
 
     /**
@@ -1086,7 +1269,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
 
             this.btnAddAttachemnt = new Ext.Button(this.action_addAttachment);
-            this.tbar.get(0).insert(1, Ext.apply(this.btnAddAttachemnt, {
+            this.tbar.get(0).insert(2, Ext.apply(this.btnAddAttachemnt, {
                 scale: 'medium',
                 rowspan: 2,
                 iconAlign: 'top'
@@ -1112,12 +1295,22 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         accountStore.each(function (account) {
             aliases = [account.get('email')];
 
-            if (account.get('type') == 'system') {
+            if (account.get('type') === 'system') {
                 // add identities / aliases to store (for systemaccounts)
                 var user = Tine.Tinebase.registry.get('currentAccount');
-                if (user.emailUser && user.emailUser.emailAliases && user.emailUser.emailAliases.length > 0) {
-                    aliases = aliases.concat(user.emailUser.emailAliases);
+                var systemAliases = _.get(user, 'emailUser.emailAliases', []);
+                if (Tine.Tinebase.registry.get('smtpAliasesDispatchFlag')) {
+                    var systemAliasAdresses = _.reduce(systemAliases, (aliases, alias) => {
+                        if (!!+alias.dispatch_address) {
+                            aliases.push(alias.email);
+                        }
+                        return aliases;
+                    }, []);
+                } else {
+                    var systemAliasAdresses = systemAliases;
                 }
+
+                aliases = aliases.concat(systemAliasAdresses);
             }
 
             for (var i = 0; i < aliases.length; i++) {
@@ -1151,23 +1344,77 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
 
+    initSignatureCombo: function() {
+        let me = this;
+        let signature = this.app.getDefaultSignature(this.record.get('account_id'));
+
+        this.signatureCombo = new Ext.form.ComboBox({
+            displayField: 'name',
+            value: _.get(signature, 'data.name', this.app.i18n._('None')),
+            editable: false,
+            triggerAction: 'all',
+            store: new Ext.data.JsonStore({
+                fields: Tine.Felamimail.Model.Signature,
+                listeners: {
+                    scope: this,
+                    beforeload: (store, options) => {
+                        let account = this.app.getAccountStore().getById(this.record.get('account_id'));
+                        let signatures = _.concat(
+                            {name: this.app.i18n._('None'), id: 'none'},
+                            _.get(account, 'data.signatures', [])
+                        );
+                        store.loadData(signatures);
+                        me.signatureCombo.lastQuery = Tine.Tinebase.data.Record.generateUID();
+                        return false;
+                    }
+                }
+            }),
+            listeners: {
+                scope: this,
+                beforeselect: (combo, signature, index) => {
+                    this.updateSignature(signature);
+                }
+            }
+        });
+    },
+
+    /**
+     * updates signature in mail body
+     *
+     * @param Tine.Felamimail.Model.Signature signature
+     */
+    updateSignature: function(signature) {
+        let account = this.app.getAccountStore().getById(this.record.get('account_id'));
+        let format = this.record.get('content_type');
+
+        let oldSignature = this.getSignature(account, format, _.find(this.signatureCombo.store.data.items, (r) => {return _.get(r, 'data.name') === this.signatureCombo.getValue()}));
+        let newSignature = this.getSignature(account, format, signature);
+
+        let bodyContent = this.bodyCards.layout.activeItem.getValue();
+        bodyContent = oldSignature ?
+            bodyContent.replace(oldSignature, newSignature) :
+            this.addSignature(account, format, newSignature, bodyContent);
+
+        this.bodyCards.layout.activeItem.setValue(bodyContent);
+    },
+
     /**
      * if 'account_id' is changed we need to update the signature
      *
      * @param {} combo
-     * @param {} newValue
-     * @param {} oldValue
+     * @param {} record
+     * @param {} index
      */
     onFromSelect: function (combo, record, index) {
 
-        // get new signature
-        var accountId = record.get('original_id');
-        var newSignature = Tine.Felamimail.getSignature(accountId);
-        var signatureRegexp = new RegExp('<br><br><span id="felamimail\-body\-signature">\-\-<br>.*</span>');
+        var newAccountId = record.get('original_id');
 
-        // update signature
-        var bodyContent = this.htmlEditor.getValue();
-        bodyContent = bodyContent.replace(signatureRegexp, newSignature);
+        var newSignature = this.app.getDefaultSignature(newAccountId);
+        this.updateSignature(newSignature);
+
+        this.signatureCombo.setValue(_.get(newSignature, 'data.name', this.app.i18n._('None')));
+
+        this.record.set('account_id', newAccountId);
 
         // update reply-to
         var replyTo = record.get('reply_to');
@@ -1175,7 +1422,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.replyToField.setValue(replyTo);
         }
 
-        this.htmlEditor.setValue(bodyContent);
+        this.record.set('account_id', newAccountId);
     },
 
     /**
@@ -1189,7 +1436,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function () {
 
         this.initAttachmentGrid();
-        this.initAccountCombo();
+        this.initSignatureCombo();
 
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
             record: this.record,
@@ -1237,6 +1484,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.htmlEditor = new Tine.Felamimail.ComposeEditor({
+            border: false,
             fieldLabel: this.app.i18n._('Body'),
             name: 'body_html',
             mimeType: 'text/html',
@@ -1250,6 +1498,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 return '';
             }
         });
+
+        const activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
 
         return {
             border: false,
@@ -1269,11 +1519,19 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: [
                         {
                             // mass mailing info text
+                            cls: 'felamimail-compose-info',
                             html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
                             hidden: true,
-                            ref: '../../infoText',
+                            ref: '../../massMailingInfoText',
                             padding: '2px',
                             height: 20
+                        }, {
+                            // message file info text
+                            cls: 'felamimail-compose-info',
+                            hidden: true,
+                            ref: '../../messageFileInfoText',
+                            padding: '2px',
+                            height: 'auto'
                         },
                         this.accountCombo,
                         {
@@ -1286,7 +1544,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             ref: '../../replyToField',
                             hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('showReplyTo'),
                             emptyText: this.app.i18n._('Add email address here for reply-to'),
-                            value: Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount().get('reply_to') // reply-to from account or email
+                            // reply-to from account or email
+                            value: activeAccount ? activeAccount.get('reply_to') : ''
                         },
                         this.recipientGrid,
                         {
@@ -1311,7 +1570,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     this.subjectField.focus(true, 100);
                                 }
                             }
-                        }, {
+                        }, new Ext.Toolbar({
+                            items: ['->', {xtype: 'tbtext', text: this.app.i18n._('Signature') + ':'}, this.signatureCombo]
+                        }), {
                             layout: 'card',
                             ref: '../../bodyCards',
                             activeItem: 0,
@@ -1385,12 +1646,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     extractMailFromString: function (string) {
+        string = String(string).trim();
         if (Ext.form.VTypes.email(string)) {
             return string;
         }
 
-        var angleBracketExtraction = string.match(/<([^>;]+)>/i)[1];
-        if (null !== angleBracketExtraction && Ext.form.VTypes.email(angleBracketExtraction)) {
+        let angleBracketExtraction = string.match(/<([^>;]+)>/i);
+        if (angleBracketExtraction && angleBracketExtraction[1] && Ext.form.VTypes.email(angleBracketExtraction)) {
             return angleBracketExtraction;
         }
 
@@ -1404,8 +1666,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Ext.Button} button
      * @param {Event} event
      * @param {Boolean} closeWindow
-     *
-     * TODO add note editing textfield here
      */
     onApplyChanges: function (closeWindow, emptySubject, passwordSet, nonSystemAccountRecipients) {
         var me = this,
@@ -1414,6 +1674,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges()');
 
         this.loadMask.show();
+        if (this.autoSave) {
+            this.trottledsaveAsDraft.cancel();
+        }
 
         if (Tine.Tinebase.appMgr.isEnabled('Filemanager') && undefined === nonSystemAccountRecipients) {
             this.validateSystemlinkRecipients().then(function (mails) {
@@ -1446,7 +1709,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     if (button == 'yes') {
                         me.onApplyChanges(closeWindow, emptySubject, passwordSet, false);
                     } else {
-                        this.loadMask.hide();
+                        this.hideLoadMask();
                     }
                 },
                 this
@@ -1475,7 +1738,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
                 // user presses cancel in dialog => allow to submit again or edit mail and so on!
                 dialog.on('cancel', function () {
-                    this.loadMask.hide();
+                    this.hideLoadMask();
                 }, this);
                 return;
             }
@@ -1491,7 +1754,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     if (button == 'yes') {
                         this.onApplyChanges(closeWindow, true, true, nonSystemAccountRecipients);
                     } else {
-                        this.loadMask.hide();
+                        this.hideLoadMask();
                     }
                 },
                 this
@@ -1580,7 +1843,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 700,
+        width: 750,
         height: 700,
         name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',

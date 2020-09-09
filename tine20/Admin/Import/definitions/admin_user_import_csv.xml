@@ -25,6 +25,10 @@
             <destination>password</destination>
         </field>
         <field>
+            <source>pin</source>
+            <destination>pin</destination>
+        </field>
+        <field>
             <source>email</source>
             <destination>accountEmailAddress</destination>
         </field>

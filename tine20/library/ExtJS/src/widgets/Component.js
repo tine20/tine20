@@ -996,7 +996,17 @@ Ext.Foo = Ext.extend(Ext.Bar, {
         return this;
     },
 
-
+    isRendered: function () {
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            if (me.rendered) {
+                fulfill(true);
+            } else {
+                me.on('render', fulfill);
+            }
+        });
+    },
+    
     /**
      * Update the content area of a component.
      * @param {Mixed} htmlOrData

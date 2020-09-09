@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -32,10 +32,41 @@ class Admin_Config extends Tinebase_Config_Abstract
     const FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME = 'featurePreventSpecialCharInLoginName';
 
     /**
+     * FEATURE_FORCE_REYPE_PASSWORD
+     *
+     * @var string
+     */
+    const FEATURE_FORCE_REYPE_PASSWORD = 'featureForceRetypePassword';
+
+    /**
+     * FEATURE_EMAIL_ACCOUNTS
+     *
+     * @var string
+     */
+    const FEATURE_EMAIL_ACCOUNTS = 'featureEmailAccounts';
+
+    /**
+     * DEFAULT_PASSWORD_MUST_CHANGE
+     * @var boolean
+     */
+    const DEFAULT_PASSWORD_MUST_CHANGE = 'defaultPasswordMustChange';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::DEFAULT_PASSWORD_MUST_CHANGE => [
+            //_('Default password must change for new user settings')
+            'label'                 => 'Default password must change for new user settings',
+            //_('Default password must change for new user settings')
+            'description'           => 'Default password must change for new user settings',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
+            'default'               => false
+        ],
         self::DEFAULT_IMAP_USER_SETTINGS => array(
                                    //_('Default IMAP user settings')
             'label'                 => 'Default IMAP user settings',
@@ -61,9 +92,22 @@ class Admin_Config extends Tinebase_Config_Abstract
                     //_('Prevent special chars in login name')
                     'description' => 'Prevent special chars in login name',
                 ),
+                self::FEATURE_EMAIL_ACCOUNTS => array(
+                    'label' => 'Manage all email accounts in admin area',
+                    //_('Force retype of new password in user edit dialog')
+                    'description' => 'Manage all email accounts in admin area',
+                ),
+                // maybe this can removed at some point if no one uses/misses it ... ;)
+                self::FEATURE_FORCE_REYPE_PASSWORD => array(
+                    'label' => 'Force retype of new password in user edit dialog',
+                    //_('Force retype of new password in user edit dialog')
+                    'description' => 'Force retype of new password in user edit dialog',
+                ),
             ),
             'default' => array(
                 self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => false,
+                self::FEATURE_EMAIL_ACCOUNTS => true,
+                self::FEATURE_FORCE_REYPE_PASSWORD => false,
             ),
         ),
     );

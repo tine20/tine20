@@ -109,20 +109,25 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
     /**
      * creates the groups if not created already
+     *
+     * TODO why is this using Admin_Frontend_Json? fix that!
      */
     protected function _createGroups()
     {
         $fe = new Admin_Frontend_Json();
-        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerById(
+            Admin_Controller_User::getDefaultInternalAddressbook()
+        );
         foreach ($this->_groups as $groupArray) {
             $groupArray['container_id'] = $internalAddressbook->getId();
             $members = array();
-            foreach($groupArray['groupMembers'] as $member) {
+            foreach ($groupArray['members'] as $member) {
                 $members[] = $this->_personas[$member]->getId();
             }
             
             try {
-                $this->_groups[$groupArray['groupData']['name']] = $fe->saveGroup($groupArray['groupData'], $members);
+                $groupArray['groupData']['members'] = $members;
+                $this->_groups[$groupArray['groupData']['name']] = $fe->saveGroup($groupArray['groupData']);
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
                 echo 'Group "' . $groupArray['groupData']['name'] . '" already exists. Skipping...' . PHP_EOL;
@@ -178,7 +183,6 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         foreach ($this->_personas as $login => $fullName) {
             try {
                 $user = Tinebase_User::getInstance()->getFullUserByLoginName($login);
-                $contact = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
             } catch (Tinebase_Exception_NotFound $e) {
                 list($given, $last) = explode(' ', $fullName);
 
@@ -197,36 +201,14 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'accountEmailAddress'   => $login . '@' . $emailDomain,
                 ));
 
-                if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-                    $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
-
-                    $user->container_id = $internalAddressbook->getId();
-
-                    $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($user);
-                    
-                    $user->contact_id = $contact->getId();
-                }
-                
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
-                $user = Tinebase_User::getInstance()->addUser($user);
-
-                // fire event to make sure all user data is created in the apps
-                $event = new Admin_Event_AddAccount(array(
-                    'account' => $user
-                ));
-                Tinebase_Event::fireEvent($event);
-
-                Tinebase_Group::getInstance()->addGroupMember($groupId, $user);
-                
-                if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && $group->list_id) {
-                    $listBackend = new Addressbook_Backend_List();
-                    $listBackend->addListMember($group->list_id, $user->contact_id);
-                }
-
-                $this->_setUserPassword($user);
+                $pwd = $this->_getUserPassword($user);
+                $user->imapUser = new Tinebase_Model_EmailUser(['emailPassword' => $pwd]);
+                $user->smtpUser = new Tinebase_Model_EmailUser(['emailPassword' => $pwd]);
+                $user = Admin_Controller_User::getInstance()->create($user, $pwd, $pwd);
             }
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
                 $ar = array_merge($this->_dataMapping[$login], $this->_dataMapping['default']);
                 $filename = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'DemoData' . DIRECTORY_SEPARATOR . 'persona_' . $login . '.jpg';
                 if (file_exists($filename)) {
@@ -289,8 +271,9 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * give additional testusers a password
      * 
      * @param Tinebase_Model_User $user
+     * @return string
      */
-    protected function _setUserPassword($user)
+    protected function _getUserPassword($user)
     {
         $testconfig = $this->_getTestConfig();
         $password =
@@ -306,7 +289,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             echo "\033[33mUser \"" . $user->accountDisplayName . "\" got a random password: \"" . $password . "\"\033[0m" . PHP_EOL;
         }
         
-        Tinebase_User::getInstance()->setPassword($user, $password);
+        return $password;
     }
     
     /**
@@ -315,10 +298,9 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createSharedTags()
     {
         $appList = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->toArray();
-        $adminJson = new Admin_Frontend_Json();
-        
-        foreach($this->_tagNames as $tagName) {
-            $savedSharedTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
+
+        foreach ($this->_tagNames as $tagName) {
+            Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
                 'type'  => Tinebase_Model_Tag::TYPE_SHARED,
                 'name'  => $tagName,
                 'description' => 'this is the shared tag ' . $tagName,

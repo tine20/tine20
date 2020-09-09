@@ -181,24 +181,41 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         // always update accountDisplayName and accountFullName
         if (isset($_data['accountLastName'])) {
-            $_data['accountDisplayName'] = $_data['accountLastName'];
+            $_data['accountDisplayName'] = trim($_data['accountLastName']);
             if (!empty($_data['accountFirstName'])) {
-                $_data['accountDisplayName'] .= ', ' . $_data['accountFirstName'];
+                $_data['accountDisplayName'] .= ', ' . trim($_data['accountFirstName']);
             }
             
             if (! (isset($_data['accountFullName']) || array_key_exists('accountFullName', $_data))) {
-                $_data['accountFullName'] = $_data['accountLastName'];
+                $_data['accountFullName'] = trim($_data['accountLastName']);
                 if (!empty($_data['accountFirstName'])) {
-                    $_data['accountFullName'] = $_data['accountFirstName'] . ' ' . $_data['accountLastName'];
+                    $_data['accountFullName'] = trim($_data['accountFirstName']) . ' ' . $_data['accountFullName'];
                 }
             }
         }
-        
+
+        if (isset($_data['accountEmailAddress'])) {
+            $_data['accountEmailAddress'] = Tinebase_Helper::convertDomainToPunycode($_data['accountEmailAddress']);
+        }
+
         parent::setFromArray($_data);
     }
-    
 
-    
+    /**
+     * @param bool $_recursive
+     * @return array
+     */
+    public function toArray($_recursive = TRUE)
+    {
+        $result = parent::toArray($_recursive);
+
+        if ($this->accountEmailAddress) {
+            $result['accountEmailAddress'] = Tinebase_Helper::convertDomainToUnicode($this->accountEmailAddress);
+        }
+
+        return $result;
+    }
+
     /**
      * check if current user has a given right for a given application
      *
@@ -214,9 +231,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
 
         $roles = Tinebase_Acl_Roles::getInstance();
         
-        $result = $roles->hasRight($_application, $this->accountId, $_right);
-        
-        return $result;
+        return $roles->hasRight($_application, $this->accountId, $_right);
     }
     
     /**
@@ -229,9 +244,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         $roles = Tinebase_Acl_Roles::getInstance();
         
-        $result = $roles->getApplicationRights($_application, $this->accountId);
-        
-        return $result;
+        return $roles->getApplicationRights($_application, $this->accountId);
     }
     
     /**
@@ -243,9 +256,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         $backend = Tinebase_Group::getInstance();
         
-        $result = $backend->getGroupMemberships($this->accountId);
-        
-        return $result;
+        return $backend->getGroupMemberships($this->accountId);
     }
     
     /**
@@ -259,9 +270,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     {
         $backend = Tinebase_User::getInstance();
         
-        $result = $backend->setLoginTime($this->accountId, $_ipAddress);
-        
-        return $result;
+        return $backend->setLoginTime($this->accountId, $_ipAddress);
     }
     
     /**
@@ -304,60 +313,6 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
                 }
             }
         }
-        
-        return $result;
-    }
-    
-    /**
-     * return all container, which the user has the requested right for
-     *
-     * used to get a list of all containers accesssible by the current user
-     * 
-     * @param string $_application the application name
-     * @param int $_right the required right
-     * @param   bool   $_onlyIds return only ids
-     * @return Tinebase_Record_RecordSet|array
-     * @todo write test for that
-     */
-    public function getContainerByACL($_application, $_right, $_onlyIds = FALSE)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getContainerByACL($this->accountId, $_application, $_right, $_onlyIds);
-        
-        return $result;
-    }
-
-    /**
-     * return all personal container of the current user
-     *
-     * used to get a list of all personal containers accesssible by the current user
-     * 
-     * @param string $_application the application name
-     * @return Tinebase_Record_RecordSet
-     * @todo write test for that
-     */
-    public function getPersonalContainer($_application, $_owner, $_grant)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getPersonalContainer($this, $_application, $_owner, $_grant);
-        
-        return $result;
-    }
-    
-    /**
-     * get shared containers
-     * 
-     * @param string|Tinebase_Model_Application $_application
-     * @param array|string $_grant
-     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
-     */
-    public function getSharedContainer($_application, $_grant)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getSharedContainer($this, $_application, $_grant);
         
         return $result;
     }
@@ -414,6 +369,10 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('ACL model not supported ');
+        }
+
+        if (!$result && Tinebase_Model_Grants::GRANT_ADMIN !== $_grant) {
+            return $this->hasGrant($_containerId, Tinebase_Model_Grants::GRANT_ADMIN, $_aclModel);
         }
 
         return $result;

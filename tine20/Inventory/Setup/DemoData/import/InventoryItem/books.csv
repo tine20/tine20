@@ -1,13 +1,13 @@
 Inventarnummer,Name,Beschreibung,Anschaffung,Standort,Garantie,Status,Preis,Kostenstelle,Rechnung,Rechnungsdatum,Abgeschrieben,Seriennummer,IMEI,Author,ISBN,Verlag,Erscheinungs Datum,Verfügbare Anzahl,Totale Anzahl
-1,Tine 2.0 für Einsteiger,Handbuch,2014-08-27,Bibliothek,2016-08-27,missing,10.5,1,1,2014-08-27,1,134-156-178,123456789,Metaways Infosystems GmbH,1,MW-Publishing,2004-06-10,5,20
-2,Tine 2.0 für Aufsteiger,Handbuch,2014-08-28,Bibliothek,2016-08-27,available,10.5,1,2,2014-08-28,1,134-156-179,123456790,Metaways Infosystems GmbH,2,MW-Publishing,2004-06-11,4,20
-3,Tine 2.0 für Profis,Handbuch,2014-08-29,Bibliothek,2016-08-27,available,10.5,1,3,2014-08-29,1,134-156-180,123456791,Metaways Infosystems GmbH,3,MW-Publishing,2004-06-12,3,20
-4,C++ für Einsteiger,Fachbuch,2015-08-29,Bibliothek,2016-08-27,available,15.99,1,4,2015-08-29,1,134-156-181,123456792,Carl Fritz,4,MW-Publishing,2004-06-13,6,20
-5,C++ für Aufsteiger,Fachbuch,2018-07-05,Bibliothek,2016-08-27,available,18.5,1,5,2018-07-05,1,134-156-182,123456793,Carl Fritz,5,MW-Publishing,2004-06-14,5,20
-6,C++ für Profis,Fachbuch,2016-10-24,Bibliothek,2016-08-27,available,20,1,6,2016-10-24,1,134-156-183,123456794,Carl Fritz,6,MW-Publishing,2004-06-15,1,20
-7,Datenbanken und die Welt 1,Buch,2002-12-12,Bibliothek,2016-08-27,available,1,1,7,2002-12-12,0,134-156-184,123456795,Jakob Falke,7,MW-Publishing,2004-06-16,10,10
-8,Datenbanken und die Welt 2,Buch,2017-12-24,Bibliothek,2016-08-27,missing,2,1,8,2017-12-24,1,134-156-185,123456796,Jakob Falke,8,MW-Publishing,2004-06-17,12,13
-9,Datenbanken und die Welt 3,Buch,2013-08-01,Bibliothek,2016-08-27,available,5,1,9,2013-08-01,0,134-156-186,123456797,Jakob Falke,9,MW-Publishing,2004-06-18,13,15
-10,Der kleine Programmierer,Kurzgeschichte,2016-08-08,Bibliothek,2016-08-27,available,15,1,10,2016-08-08,1,134-156-187,123456798,Willy Janson,10,MW-Publishing,2004-06-19,14,17
-11,Java für Profis,Buch,2014-07-20,Bibliothek,2016-08-27,available,180,1,11,2014-07-20,1,134-156-188,123456799,Tina Hawi,11,MW-Publishing,2004-06-20,15,18
-12,Php für Einsteiger,Buch,2018-06-04,Bibliothek,2016-08-27,missing,100.5,1,12,2018-06-04,0,134-156-189,123456800,Max Braune,12,MW-Publishing,2004-06-21,15,17
+1,Tine 2.0 für Einsteiger,Handbuch,today,Bibliothek,next2year,missing,10.5,1,1,nextMonday,1,134-156-178,123456789,Metaways Infosystems GmbH,1,MW-Publishing,2004-06-10,5,20
+2,Tine 2.0 für Aufsteiger,Handbuch,today,Bibliothek,next2year,available,10.5,1,2,nextMonday,1,134-156-179,123456790,Metaways Infosystems GmbH,2,MW-Publishing,2004-06-11,4,20
+3,Tine 2.0 für Profis,Handbuch,today,Bibliothek,next2year,available,10.5,1,3,nextMonday,1,134-156-180,123456791,Metaways Infosystems GmbH,3,MW-Publishing,2004-06-12,3,20
+4,C++ für Einsteiger,Fachbuch,today,Bibliothek,next2year,available,15.99,1,4,nextMonday,1,134-156-181,123456792,Carl Fritz,4,MW-Publishing,2004-06-13,6,20
+5,C++ für Aufsteiger,Fachbuch,today,Bibliothek,next2year,available,18.5,1,5,nextMonday,1,134-156-182,123456793,Carl Fritz,5,MW-Publishing,2004-06-14,5,20
+6,C++ für Profis,Fachbuch,today,Bibliothek,next2year,available,20,1,6,nextMonday,1,134-156-183,123456794,Carl Fritz,6,MW-Publishing,2004-06-15,1,20
+7,Datenbanken und die Welt 1,Buch,today,Bibliothek,next2year,available,1,1,7,nextMonday,0,134-156-184,123456795,Jakob Falke,7,MW-Publishing,2004-06-16,10,10
+8,Datenbanken und die Welt 2,Buch,today,Bibliothek,next2year,missing,2,1,8,nextMonday,1,134-156-185,123456796,Jakob Falke,8,MW-Publishing,2004-06-17,12,13
+9,Datenbanken und die Welt 3,Buch,today,Bibliothek,next2year,available,5,1,9,nextMonday,0,134-156-186,123456797,Jakob Falke,9,MW-Publishing,2004-06-18,13,15
+10,Der kleine Programmierer,Kurzgeschichte,today,Bibliothek,next2year,available,15,1,10,nextMonday,1,134-156-187,123456798,Willy Janson,10,MW-Publishing,2004-06-19,14,17
+11,Java für Profis,Buch,today,Bibliothek,next2year,available,180,1,11,nextMonday,1,134-156-188,123456799,Tina Hawi,11,MW-Publishing,2004-06-20,15,18
+12,Php für Einsteiger,Buch,today,Bibliothek,next2year,missing,100.5,1,12,nextMonday,0,134-156-189,123456800,Max Braune,12,MW-Publishing,2004-06-21,15,17

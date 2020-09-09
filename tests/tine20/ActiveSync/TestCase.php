@@ -98,7 +98,7 @@ abstract class ActiveSync_TestCase extends TestCase
         }
         try {
             $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_applicationName, 
+                $recordClass,
                 'ContainerWithSyncGrant-' . $this->_applicationName, 
                 Tinebase_Model_Container::TYPE_PERSONAL,
                 Tinebase_Core::getUser()
@@ -130,10 +130,17 @@ abstract class ActiveSync_TestCase extends TestCase
         if (isset($this->objects['container']['withoutSyncGrant'])) {
             return $this->objects['container']['withoutSyncGrant'];
         }
+
+        switch ($this->_applicationName) {
+            case 'Calendar':    $recordClass = 'Calendar_Model_Event'; break;
+            case 'Addressbook': $recordClass = 'Addressbook_Model_Contact'; break;
+            case 'Tasks':       $recordClass = 'Tasks_Model_Task'; break;
+            default: throw new Exception('handle this model!');
+        }
         
         try {
             $containerWithoutSyncGrant = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_applicationName, 
+                $recordClass,
                 'ContainerWithoutSyncGrant-' . $this->_applicationName, 
                 Tinebase_Model_Container::TYPE_PERSONAL,
                 Tinebase_Core::getUser()
@@ -220,17 +227,36 @@ abstract class ActiveSync_TestCase extends TestCase
      * returns a test event
      * 
      * @param Tinebase_Model_Container $personalContainer
+     * @param string $attendeeStatus
+     * @param boolean $addScleverAttendee
      * @return Calendar_Model_Event
      */
-    public static function getTestEvent($personalContainer = NULL)
+    public static function getTestEvent($personalContainer = NULL, $attendeeStatus = Calendar_Model_Attender::STATUS_ACCEPTED, $addScleverAttendee = false)
     {
         $personalContainer = ($personalContainer) ? $personalContainer : Tinebase_Container::getInstance()->getPersonalContainer(
             Tinebase_Core::getUser(),
-            'Calendar', 
+            Calendar_Model_Event::class,
             Tinebase_Core::getUser(),
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();
-        
+
+        $attendee = array(
+            array(
+                'user_id' => Tinebase_Core::getUser()->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'status' => $attendeeStatus
+            )
+        );
+
+        if ($addScleverAttendee) {
+            $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+            $attendee[] = array(
+                'user_id' => $sclever->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'status' => Calendar_Model_Attender::STATUS_NEEDSACTION
+            );
+        }
+
         return new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'SyncTest',
@@ -239,13 +265,7 @@ abstract class ActiveSync_TestCase extends TestCase
             'originator_tz' => 'Europe/Berlin',
             'container_id'  => $personalContainer->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
-            'attendee'      => new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-                array(
-                    'user_id' => Tinebase_Core::getUser()->contact_id,
-                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                    'status' => Calendar_Model_Attender::STATUS_ACCEPTED
-                )
-            ))
+            'attendee'      => new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee),
         ));
     }
     

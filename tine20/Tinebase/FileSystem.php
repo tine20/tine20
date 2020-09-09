@@ -6,7 +6,7 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -82,7 +82,7 @@ class Tinebase_FileSystem implements
 
     protected $_indexingActive = false;
 
-    protected $_previewActive = false;
+    protected $_previewActive = null;
 
     protected $_streamOptionsForNextOperation = array();
 
@@ -94,6 +94,7 @@ class Tinebase_FileSystem implements
      * @var array
      */
     protected $_statCache = array();
+    protected $_statCacheById = [];
 
     /**
      * class cache to remember secondFactor check per node id. This is required as the "state" might change
@@ -110,6 +111,13 @@ class Tinebase_FileSystem implements
      * @var array
      */
     protected $_quotaNotificationRoleMembers = array();
+
+    /**
+     * @var Tinebase_Backend_Sql
+     */
+    protected static $_refLogBackend = null;
+    protected static $_refLogs = [];
+    protected static $_refLogsFlushed = false;
 
     /**
      * holds the instance of the singleton
@@ -136,7 +144,6 @@ class Tinebase_FileSystem implements
             $this->_modLogActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
             $this->_indexingActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
             $this->_notificationActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
-            $this->_previewActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
         }
 
         $this->_fileObjectBackend = new Tinebase_Tree_FileObject(null, array(
@@ -144,6 +151,13 @@ class Tinebase_FileSystem implements
         ));
 
         $this->_nodeAclController = Tinebase_Tree_NodeGrants::getInstance();
+
+        if (null === static::$_refLogBackend) {
+            static::$_refLogBackend = new Tinebase_Backend_Sql([
+                Tinebase_Backend_Sql_Abstract::MODEL_NAME => Tinebase_Model_Tree_RefLog::class,
+                Tinebase_Backend_Sql_Abstract::TABLE_NAME => Tinebase_Model_Tree_RefLog::TABLE_NAME,
+            ]);
+        }
     }
     
     /**
@@ -166,7 +180,7 @@ class Tinebase_FileSystem implements
         $this->_modLogActive = true === $config->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
         $this->_indexingActive = true === $config->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
         $this->_notificationActive = true === $config->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
-        $this->_previewActive = true === $config->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS};
+        $this->_previewActive = null;
 
         $this->_treeNodeBackend = null;
 
@@ -238,7 +252,22 @@ class Tinebase_FileSystem implements
         
         return $result;
     }
-    
+
+    /**
+     * tries to get a node from the stat cache by id, on cache miss normal get() is invoked
+     *
+     * @param string $_id
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getFromStatCache($_id)
+    {
+        if (isset($this->_statCacheById[$_id])) {
+            return $this->_statCacheById[$_id];
+        }
+        return $this->get($_id);
+    }
+
     /**
      * Get one tree node (by id)
      *
@@ -257,6 +286,10 @@ class Tinebase_FileSystem implements
                 $treeBackend->setRevision($_revision);
             }
             $node = $treeBackend->get($_id, $_getDeleted);
+            if (null !== $_revision && (int)$node->revision !== (int)$_revision) {
+                throw new Tinebase_Exception_NotFound(Tinebase_Model_Tree_Node::class . ' ' . $_id . ' revision: ' .
+                    $_revision . ' couldn\'t be found');
+            }
         } finally {
             if (null !== $_revision) {
                 $treeBackend->setRevision(null);
@@ -278,6 +311,14 @@ class Tinebase_FileSystem implements
         }
 
         return $this->_treeNodeBackend;
+    }
+
+    public function repairAclOfNode($nodeId, $aclNode)
+    {
+        $node = $this->get($nodeId, true);
+        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $aclNode, $node->acl_node, true, true);
+        $node->acl_node = $aclNode;
+        $this->_getTreeNodeBackend()->update($node);
     }
 
     /**
@@ -370,7 +411,7 @@ class Tinebase_FileSystem implements
      * set grants for node
      *
      * @param Tinebase_Model_Tree_Node $node
-     * @param                          $grants
+     * @param Tinebase_Record_RecordSet $grants
      * @return Tinebase_Model_Tree_Node
      * @throws Timetracker_Exception_UnexpectedValue
      * @throws Tinebase_Exception_Backend
@@ -428,6 +469,7 @@ class Tinebase_FileSystem implements
      *
      * @param string|Tinebase_Model_Tree_Node $nodeId
      * @return string
+     * @throws Tinebase_Exception
      */
     public function getNodeContents($nodeId)
     {
@@ -435,6 +477,9 @@ class Tinebase_FileSystem implements
         // we do not start a transaction here
         $path = $this->getPathOfNode($nodeId, /* $getPathAsString */ true);
         $handle = $this->fopen($path, 'r');
+        if (! $handle) {
+            throw new Tinebase_Exception('Could not get contents of path ' . $path);
+        }
         $contents = stream_get_contents($handle);
         $this->fclose($handle);
 
@@ -449,10 +494,15 @@ class Tinebase_FileSystem implements
     public function clearStatCache($path = null)
     {
         if ($path !== null) {
-            unset($this->_statCache[$this->_getCacheId($path)]);
+            $cacheId = $this->_getCacheId($path);
+            if (isset($this->_statCache[$cacheId])) {
+                unset($this->_statCacheById[$this->_statCache[$cacheId]->getId()]);
+                unset($this->_statCache[$cacheId]);
+            }
         } else {
             // clear the whole cache
-            $this->_statCache = array();
+            $this->_statCache = [];
+            $this->_statCacheById = [];
         }
     }
     
@@ -469,6 +519,8 @@ class Tinebase_FileSystem implements
     public function copy($sourcePath, $destinationPath)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->acquireWriteLock();
+
         try {
             $destinationNode = $this->stat($sourcePath);
             $sourcePathParts = $this->_splitPath($sourcePath);
@@ -508,16 +560,16 @@ class Tinebase_FileSystem implements
                 $this->_updateDeletedNodeName($deletedNode);
             }
 
-            if ($destinationNode->type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
-                $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName);
-                $this->_updateFileObject($parentNode, $createdNode->object_id, $destinationNode->hash);
+            if ($destinationNode->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName, $destinationNode->type);
+                $this->_updateFileObject($parentNode, $createdNode, null, $destinationNode->hash);
                 $createdNode = $this->get($createdNode->getId());
             } else {
                 $createdNode = $this->_createDirectoryTreeNode($parentNode->getId(), $destinationNodeName);
             }
 
             // update hash of all parent folders
-            $this->_updateDirectoryNodesHash(dirname(implode('/', $destinationPathParts)));
+            $this->_checkQuotaAndRegisterRefLog($createdNode, (int)$createdNode->size, (int)$createdNode->revision_size);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -581,13 +633,14 @@ class Tinebase_FileSystem implements
         $this->_streamOptionsForNextOperation = array();
 
         switch ($options['tine20']['mode']) {
+            case 'a+':
             case 'w':
             case 'wb':
             case 'x':
             case 'xb':
                 $parentPath = dirname($options['tine20']['path']);
 
-                list ($hash, $hashFile) = $this->createFileBlob($handle);
+                list ($hash, $hashFile, $avResult) = $this->createFileBlob($handle);
 
                 try {
                     $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -595,7 +648,7 @@ class Tinebase_FileSystem implements
 
                     $parentFolder = $this->stat($parentPath);
 
-                    $this->_updateFileObject($parentFolder, $options['tine20']['node']->object_id, $hash, $hashFile);
+                    $this->_updateFileObject($parentFolder, $options['tine20']['node'], null, $hash, $hashFile, $avResult);
 
                     $this->clearStatCache($options['tine20']['path']);
 
@@ -604,14 +657,11 @@ class Tinebase_FileSystem implements
                     // write modlog and system notes
                     $this->_getTreeNodeBackend()->updated($newNode, $options['tine20']['node']);
 
-                    // update hash of all parent folders
-                    $this->_updateDirectoryNodesHash($parentPath);
-
                     Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                     $transactionId = null;
 
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Writing to file : ' .
-                        $options['tine20']['path'] . ' successful.');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                        . __LINE__ . ' Writing to file : ' . $options['tine20']['path'] . ' successful.');
                 } finally {
                     if (null !== $transactionId) {
                         Tinebase_TransactionManager::getInstance()->rollBack();
@@ -621,8 +671,8 @@ class Tinebase_FileSystem implements
                 break;
                 
             default:
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got mode : ' .
-                    $options['tine20']['mode'] . ' - nothing to do.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' Got mode : ' . $options['tine20']['mode'] . ' - nothing to do.');
         }
         
         fclose($handle);
@@ -642,12 +692,13 @@ class Tinebase_FileSystem implements
      * @param string|Tinebase_Model_Tree_FileObject $_id file object (or id)
      * @param string $_hash
      * @param string $_hashFile
+     * @param Tinebase_FileSystem_AVScan_Result $_avResult
      * @return Tinebase_Model_Tree_FileObject
      */
-    protected function _updateFileObject(Tinebase_Model_Tree_Node $_parentNode, $_id, $_hash, $_hashFile = null)
+    protected function _updateFileObject(Tinebase_Model_Tree_Node $_parentNode, Tinebase_Model_Tree_Node $_node, Tinebase_Model_Tree_FileObject $_fileObject = null, $_hash = null, $_hashFile = null, $_avResult = null)
     {
         /** @var Tinebase_Model_Tree_FileObject $currentFileObject */
-        $currentFileObject = $_id instanceof Tinebase_Record_Interface ? $_id : $this->_fileObjectBackend->get($_id);
+        $currentFileObject = $_fileObject ?: $this->_fileObjectBackend->get($_node->object_id);
 
         if (! $_hash) {
             // use existing hash from file object
@@ -658,6 +709,20 @@ class Tinebase_FileSystem implements
         $updatedFileObject = clone($currentFileObject);
         $updatedFileObject->hash = $_hash;
 
+        if ($updatedFileObject->hash !== $currentFileObject->hash) {
+            $updatedFileObject->is_quarantined = false;
+        }
+
+        if (null !== $_avResult) {
+            if (Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $_avResult->result) {
+                $updatedFileObject->lastavscan_time = Tinebase_DateTime::now();
+                $updatedFileObject->is_quarantined = true;
+            } elseif (Tinebase_FileSystem_AVScan_Result::RESULT_OK === $_avResult->result) {
+                $updatedFileObject->lastavscan_time = Tinebase_DateTime::now();
+                $updatedFileObject->is_quarantined = false;
+            }
+        }
+
         if (is_file($_hashFile)) {
             $updatedFileObject->size = filesize($_hashFile);
 
@@ -665,6 +730,10 @@ class Tinebase_FileSystem implements
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_file($finfo, $_hashFile);
                 if ($mimeType !== false) {
+                    if (PHP_VERSION_ID >= 70300 && ($mimeLen = strlen($mimeType)) % 2 === 0 &&
+                            substr($mimeType, 0, $mimeLen / 2) === substr($mimeType, $mimeLen / 2)) {
+                        $mimeType = substr($mimeType, 0, $mimeLen / 2);
+                    }
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                             " Setting file contenttype to " . $mimeType);
@@ -708,15 +777,15 @@ class Tinebase_FileSystem implements
         }
 
         $sizeDiff = ((int)$newFileObject->size) - ((int)$currentFileObject->size);
-        $revisionSizeDiff = (((int)$currentFileObject->revision) === ((int)$newFileObject->revision) ? 0 : $newFileObject->revision_size);
+        $revisionSizeDiff = ((int)$newFileObject->revision_size) - ((int)$currentFileObject->revision_size);
 
-        if ($sizeDiff !== 0 || $revisionSizeDiff > 0) {
-            // update parents with new sizes
-            $this->_updateFolderSizesUpToRoot($this->_getTreeNodeBackend()->getObjectUsage($newFileObject->getId()), $sizeDiff, $revisionSizeDiff);
+        if ($sizeDiff !== 0 || $revisionSizeDiff !== 0 || $currentFileObject->hash !== $newFileObject->hash) {
+            // update parents with new sizes if anything changed
+            $this->_checkQuotaAndRegisterRefLog($_node, $sizeDiff, $revisionSizeDiff);
         }
 
         if (true === Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM)->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT}) {
-            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
+            Tinebase_ActionQueueLongRun::getInstance()->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
         }
 
         return $newFileObject;
@@ -724,8 +793,8 @@ class Tinebase_FileSystem implements
 
     public function getEffectiveAndLocalQuota(Tinebase_Model_Tree_Node $node)
     {
-        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
-        $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
+        $quotaConfig = Tinebase_FileSystem_Quota::getConfig();
+        $total = Tinebase_FileSystem_Quota::getRootQuotaBytes();
         $effectiveQuota = $total;
         $localQuota = null !== $node->quota ? (int)$node->quota : null;
         if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
@@ -733,7 +802,7 @@ class Tinebase_FileSystem implements
         } else {
             $localSize = $node->revision_size;
         }
-        $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
+        $totalByUser = Tinebase_FileSystem_Quota::getPersonalQuotaBytes();
         $personalNode = null;
         if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
             $personalNode = $this->stat('/Filemanager/folders/personal');
@@ -742,13 +811,7 @@ class Tinebase_FileSystem implements
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
 
-        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
-            $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
-                Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE));
-        } else {
-            $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
-                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE));
-        }
+        $totalUsage = Tinebase_FileSystem_Quota::getRootUsedBytes();
         $effectiveUsage = $totalUsage;
 
 
@@ -813,21 +876,207 @@ class Tinebase_FileSystem implements
         );
     }
 
+    public function processRefLogs()
+    {
+        $lock = Tinebase_Core::getMultiServerLock(__METHOD__);
+        $lock->tryAcquire(30); // if acquire fails, lets run anyway to avoid unprocessed data in an edge case
+        $lockRaii = new Tinebase_RAII(function() /*use($lock)*/ {
+            // a bit bad ... for unittests...
+            //if ($lock->isLocked()) $lock->release();
+            Tinebase_Lock::clearLocks();
+        });
+
+        $refLogBackend = static::$_refLogBackend;
+        $refLogIds = $refLogBackend->search(null, new Tinebase_Model_Pagination([
+            'limit'     => 1000,
+            'sort'      => 'id'
+        ]), Tinebase_Backend_Sql_Abstract::IDCOL);
+        if (empty($refLogIds)) {
+            return;
+        }
+
+        $db = Tinebase_Core::getDb();
+        $transMgr = Tinebase_TransactionManager::getInstance();
+        $transId = $transMgr->startTransaction($db);
+        try {
+            $applicationController = Tinebase_Application::getInstance();
+            /** @var Tinebase_Model_Application $tinebaseApplication */
+            $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+            $rootSize = (int)$applicationController->getApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, true);
+            $rootRevisionSize = (int)$applicationController->getApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, true);
+
+            $refLogBackend->addSelectHook(function(Zend_Db_Select $select) {
+                $select->forUpdate(true);
+            });
+            $raii = new Tinebase_RAII(function() use($refLogBackend) {
+                $refLogBackend->resetSelectHooks();
+            });
+            $refLogs = $refLogBackend->getMultiple($refLogIds);
+            if (!$refLogs->count()) {
+                $transMgr->commitTransaction($transId);
+                $transId = null;
+                return;
+            }
+            $refLogIds = $refLogs->getArrayOfIds();
+            unset($raii);
+
+            $treeBackend = $this->_getTreeNodeBackend();
+            $treeBackend->addSelectHook(function(Zend_Db_Select $select) {
+                $select->forUpdate(true);
+            });
+            $raii = new Tinebase_RAII(function() use($treeBackend) {
+                $treeBackend->resetSelectHooks();
+            });
+
+            $folders = $allFolders = $treeBackend->getMultiple($refLogs->{Tinebase_Model_Tree_RefLog::FLD_FOLDER_ID});
+            while (!empty($parentIds = array_filter($folders->parent_id, function($val) use($allFolders) {
+                        return $val && $allFolders->getIndexById($val) === false;
+                    }))) {
+                $folders = $treeBackend->getMultiple($parentIds);
+                $allFolders->mergeById($folders);
+            }
+            unset($raii);
+
+            while ($refLogs->count()) {
+                foreach ($refLogs as $refLog) {
+                    if (false === ($folder = $allFolders->getById($refLog->{Tinebase_Model_Tree_RefLog::FLD_FOLDER_ID}))) {
+                        $refLogs->removeById($refLog->getId());
+                        continue;
+                    }
+                    $folder->size += $refLog->{Tinebase_Model_Tree_RefLog::FLD_SIZE_DELTA};
+                    $folder->revision_size += $refLog->{Tinebase_Model_Tree_RefLog::FLD_SIZE_DELTA};
+                    if ($folder->parent_id) {
+                        $refLog->{Tinebase_Model_Tree_RefLog::FLD_FOLDER_ID} = $folder->parent_id;
+                    } else {
+                        $rootSize += $refLog->{Tinebase_Model_Tree_RefLog::FLD_SIZE_DELTA};
+                        $rootRevisionSize += $refLog->{Tinebase_Model_Tree_RefLog::FLD_SIZE_DELTA};
+                        $refLogs->removeById($refLog->getId());
+                    }
+                }
+            }
+
+            if ($rootSize < 0) $rootSize = 0;
+            if ($rootRevisionSize) $rootRevisionSize = 0;
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $rootSize);
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, $rootRevisionSize);
+
+            $newHash = Tinebase_Record_Abstract::generateUID();
+            $now = new Zend_Db_Expr('NOW()');
+            /** @var Tinebase_Model_Tree_Node $folder */
+            foreach ($allFolders as $folder) {
+                if ($folder->size < 0) {
+                    $folder->size = 0;
+                }
+                if ($folder->revision_size < 0) {
+                    $folder->revision_size = 0;
+                }
+
+                $where = $db->quoteInto('id = ?', $folder->object_id);
+                $db->update(SQL_TABLE_PREFIX . 'tree_filerevisions', ['hash' => $newHash, 'size' => $folder->size],
+                    $where);
+                $db->update(SQL_TABLE_PREFIX . 'tree_fileobjects', [
+                    'revision_size' => $folder->revision_size,
+                    'last_modified_time' => $now], $where);
+            }
+
+            static::$_refLogBackend->delete($refLogIds);
+
+            $transMgr->commitTransaction($transId);
+            $transId = null;
+        } finally {
+            if (null !== $transId) {
+                $transMgr->rollBack();
+            }
+        }
+
+        // only for unused variable check
+        unset($lockRaii);
+    }
+
+    public static function insertRefLogActionQueue()
+    {
+        if (true === static::$_refLogsFlushed) {
+            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem.processRefLogs');
+            static::$_refLogsFlushed = false;
+        }
+    }
+
+    public static function flushRefLogs()
+    {
+        foreach (static::$_refLogs as $refLog) {
+            static::$_refLogBackend->create($refLog);
+        }
+        static::$_refLogs = [];
+        static::$_refLogsFlushed = true;
+    }
+
     /**
-     * @param Tinebase_Record_RecordSet $_nodes
+     * expectes nodes path to be resolved!
+     *
+     * @param Tinebase_Model_Tree_Node $_node
      * @param int $_sizeDiff
      * @param int $_revisionSizeDiff
      * @throws Tinebase_Exception_Record_NotAllowed
      */
-    protected function _updateFolderSizesUpToRoot(Tinebase_Record_RecordSet $_nodes, $_sizeDiff, $_revisionSizeDiff)
+    protected function _checkQuotaAndRegisterRefLog(Tinebase_Model_Tree_Node $_node, int $_sizeDiff, int $_revisionSizeDiff)
     {
-        $sizeIncrease = $_sizeDiff > 0 || $_revisionSizeDiff > 0;
-
-        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $transactionMgr = Tinebase_TransactionManager::getInstance();
+        if (!$transactionMgr->hasOpenTransactions()) {
+            throw new Tinebase_Exception('this function requires an open transaction!');
+        }
 
         $applicationController = Tinebase_Application::getInstance();
         /** @var Tinebase_Model_Application $tinebaseApplication */
         $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+        if (empty($_node->parent_id)) {
+            $rootSize = (int)$applicationController->getApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, true) + $_sizeDiff;
+            $rootRevisionSize = (int)$applicationController->getApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, true) + $_revisionSizeDiff;
+            if ($rootSize < 0) $rootSize = 0;
+            if ($rootRevisionSize < 0) $rootRevisionSize = 0;
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, $rootRevisionSize);
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $rootSize);
+
+            return;
+        }
+
+        $path = $this->getPathOfNode($_node, true, true);
+
+        $transactionMgr->registerOnCommitCallback([self::class, 'flushRefLogs']);
+        $transactionMgr->registerAfterCommitCallback([self::class, 'insertRefLogActionQueue']);
+
+        if (isset(static::$_refLogs[$_node->parent_id])) {
+            static::$_refLogs[$_node->parent_id]->{Tinebase_Model_Tree_RefLog::FLD_SIZE_DELTA} += $_sizeDiff;
+            static::$_refLogs[$_node->parent_id]->{Tinebase_Model_Tree_RefLog::FLD_REVISION_SIZE_DELTA}
+                += $_revisionSizeDiff;
+        } else {
+            static::$_refLogs[$_node->parent_id] = new Tinebase_Model_Tree_RefLog([
+                Tinebase_Model_Tree_RefLog::FLD_FOLDER_ID           => $_node->parent_id,
+                Tinebase_Model_Tree_RefLog::FLD_SIZE_DELTA          => $_sizeDiff,
+                Tinebase_Model_Tree_RefLog::FLD_REVISION_SIZE_DELTA => $_revisionSizeDiff,
+            ]);
+        }
+
+        if (0 === $_sizeDiff && 0 === $_revisionSizeDiff) return;
+
+        // check quota
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+
+        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION} && $_revisionSizeDiff > 0) {
+            $sizeIncrease = true;
+        } elseif ($_sizeDiff > 0) {
+            $sizeIncrease = true;
+        } else {
+            $sizeIncrease = false;
+        }
+
         if (null === ($rootSize = $applicationController->getApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE))) {
             $rootSize = 0;
@@ -851,7 +1100,7 @@ class Tinebase_FileSystem implements
             $rootRevisionSize = 0;
         }
 
-        if (true === $sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} > 0) {
+        if ($sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} > 0) {
             $total = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} * 1024 * 1024;
             if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
                 if ($rootRevisionSize > $total) {
@@ -864,70 +1113,46 @@ class Tinebase_FileSystem implements
             }
         }
 
-        $applicationController->setApplicationState($tinebaseApplication,
-            Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $rootSize);
-        $applicationController->setApplicationState($tinebaseApplication,
-            Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, $rootRevisionSize);
+        $userController = Tinebase_User::getInstance();
+        $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
+        $personalNode = null;
+        if ($applicationController->isInstalled('Filemanager')) {
+            try {
+                $personalNode = $this->stat('/Filemanager/folders/personal');
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->initializeApplication('Filemanager');
+                $personalNode = $this->stat('/Filemanager/folders/personal');
+            }
+        }
+        
+        while (($path = dirname($path)) !== DIRECTORY_SEPARATOR) {
+            $parentNode = $this->stat($path);
+            $parentNode->size += $_sizeDiff;
+            $parentNode->revision_size += $_revisionSizeDiff;
 
-        $folderNodes = $this->_getTreeNodeBackend()->getAllFolderNodes($_nodes);
-        if ($folderNodes->count() > 0) {
+            if (!$sizeIncrease) continue;
 
-            $userController = Tinebase_User::getInstance();
-            $totalByUser = $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} * 1024 * 1024;
-            $personalNode = null;
-            if (true === $sizeIncrease && $applicationController->isInstalled('Filemanager')) {
-                try {
-                    $personalNode = $this->stat('/Filemanager/folders/personal');
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    $this->initializeApplication('Filemanager');
-                    $personalNode = $this->stat('/Filemanager/folders/personal');
-                }
+            if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
+                $size = $parentNode->size;
+            } else {
+                $size = $parentNode->revision_size;
             }
 
-            /** @var Tinebase_Model_Tree_FileObject $fileObject */
-            foreach($this->_fileObjectBackend->getMultiple($folderNodes->object_id) as $fileObject) {
-                $fileObject->size = (int)$fileObject->size + (int)$_sizeDiff;
-                if ($fileObject->size < 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' size should not become smaller than 0: ' . $fileObject->size . ' for object id: ' . $fileObject->getId());
-                    $fileObject->size = 0;
+            // folder quota
+            if (null !== $parentNode->quota && $size > $parentNode->quota) {
+                throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+            }
+
+            //personal quota
+            if (null !== $personalNode && $parentNode->parent_id === $personalNode->getId()) {
+                $user = $userController->getFullUserById($parentNode->name);
+                $quota = isset(
+                    $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ?
+                    $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
+                    $totalByUser;
+                if ($quota > 0 && $size > $quota) {
+                    throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
                 }
-                $fileObject->revision_size = (int)$fileObject->revision_size + (int)$_revisionSizeDiff;
-                if ($fileObject->revision_size < 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' revision_size should not become smaller than 0: ' . $fileObject->size . ' for object id: ' . $fileObject->getId());
-                    $fileObject->revision_size = 0;
-                }
-
-                if (true === $sizeIncrease) {
-                    /** @var Tinebase_Model_Tree_Node $folderNode */
-                    foreach ($folderNodes->filter('object_id', $fileObject->getId()) as $folderNode) {
-                        if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
-                            $size = $fileObject->size;
-                        } else {
-                            $size = $fileObject->revision_size;
-                        }
-
-                        // folder quota
-                        if (null !== $folderNode->quota && $size > $folderNode->quota) {
-                            throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
-                        }
-
-                        //personal quota
-                        if (null !== $personalNode && $folderNode->parent_id === $personalNode->getId()) {
-                            $user = $userController->getFullUserById($folderNode->name);
-                            $quota = isset(
-                                $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ?
-                                $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
-                                $totalByUser;
-                            if ($quota > 0 && $size > $quota) {
-                                throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
-                            }
-                        }
-                    }
-                }
-
-                $this->_fileObjectBackend->update($fileObject, false);
             }
         }
     }
@@ -947,7 +1172,7 @@ class Tinebase_FileSystem implements
             return true;
         }
         if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileObject->type) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' file object ' . $_objectId . ' is not a file: ' . $fileObject->type);
             return true;
         }
@@ -968,12 +1193,16 @@ class Tinebase_FileSystem implements
         try {
 
             try {
+                $this->_fileObjectBackend->addSelectHook(function(Zend_Db_Select $select) {$select->forUpdate(true);});
                 $fileObject = $this->_fileObjectBackend->get($_objectId);
             } catch(Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Could not find file object ' . $_objectId);
                 return true;
+            } finally {
+                $this->_fileObjectBackend->resetSelectHooks();
             }
+            
             if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileObject->type) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' file object ' . $_objectId . ' is not a file: ' . $fileObject->type);
@@ -990,8 +1219,10 @@ class Tinebase_FileSystem implements
             $this->_fileObjectBackend->update($fileObject);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
 
         } catch (Exception $e) {
+            $transactionId = null;
             Tinebase_Exception::log($e);
             Tinebase_TransactionManager::getInstance()->rollBack();
 
@@ -999,40 +1230,14 @@ class Tinebase_FileSystem implements
 
         } finally {
             unlink($tmpFile);
+
+            // in case of the return trues above
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            }
         }
 
         return true;
-    }
-    
-    /**
-     * update hash of all directories for given path
-     * 
-     * @param string $path
-     */
-    protected function _updateDirectoryNodesHash($path)
-    {
-        // update hash of all parent folders
-        $parentNodes = $this->_getPathNodes($path);
-        $updatedNodes = $this->_fileObjectBackend->updateDirectoryNodesHash($parentNodes);
-        
-        // update nodes stored in local statCache
-        $subPath = null;
-        /** @var Tinebase_Model_Tree_Node $node */
-        foreach ($parentNodes as $node) {
-            /** @var Tinebase_Model_Tree_FileObject $directoryObject */
-            $directoryObject = $updatedNodes->getById($node->object_id);
-            
-            if ($directoryObject) {
-                $node->revision             = $directoryObject->revision;
-                $node->hash                 = $directoryObject->hash;
-                $node->size                 = $directoryObject->size;
-                $node->revision_size        = $directoryObject->revision_size;
-                $node->available_revisions  = $directoryObject->available_revisions;
-            }
-            
-            $subPath .= "/" . $node->name;
-            $this->_addStatCache($subPath, $node);
-        }
     }
 
     public function acquireWriteLock()
@@ -1065,6 +1270,28 @@ class Tinebase_FileSystem implements
                 // If the file already exists, the fopen() call will fail by returning false and generating
                 // an error of level E_WARNING. If the file does not exist, attempt to create it. This is
                 // equivalent to specifying O_EXCL|O_CREAT flags for the underlying open(2) system call.
+
+
+                // this would need some StreamWrapper tweaking for fseek
+                // StremWrapper needs optimization anyway, it should store the mode itself not ask the context...
+                case 'a+':
+                    if (!$this->isDir($dirName)) {
+                        $rollBack = false;
+                        return false;
+                    }
+                    $handle = fopen('php://temp', 'a+');
+
+                    if (!$this->fileExists($_path)) {
+                        $parent = $this->stat($dirName);
+                        $node = $this->createFileTreeNode($parent, $fileName, $fileType);
+                    } else {
+                        $node = $this->stat($_path);
+                        $hashFile = $this->getRealPathForHash($node->hash);
+                        stream_copy_to_stream(($tmpFh = fopen($hashFile, 'r')), $handle);
+                        fclose($tmpFh);
+                    }
+                    break;
+
                 case 'x':
                 case 'xb':
                     if (!$this->isDir($dirName) || $this->fileExists($_path)) {
@@ -1089,7 +1316,9 @@ class Tinebase_FileSystem implements
 
                     $node = $this->stat($_path, $_revision);
                     $hashFile = $this->getRealPathForHash($node->hash);
-
+                    if (! file_exists($hashFile)) {
+                        return false;
+                    }
                     $handle = fopen($hashFile, $_mode);
 
                     break;
@@ -1134,13 +1363,15 @@ class Tinebase_FileSystem implements
                 }
             }
         }
-        
-        $contextOptions = array('tine20' => array(
-            'path' => $_path,
-            'mode' => $_mode,
-            'node' => $node
-        ));
-        stream_context_set_option($handle, $contextOptions);
+
+        if (is_resource($handle)) {
+            $contextOptions = array('tine20' => array(
+                'path' => $_path,
+                'mode' => $_mode,
+                'node' => $node
+            ));
+            stream_context_set_option($handle, $contextOptions);
+        }
         
         return $handle;
     }
@@ -1189,11 +1420,7 @@ class Tinebase_FileSystem implements
             return false;
         }
         
-        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-            return false;
-        }
-        
-        return true;
+        return $node->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
     }
     
     /**
@@ -1212,11 +1439,7 @@ class Tinebase_FileSystem implements
             return false;
         }
     
-        if ($node->type != Tinebase_Model_Tree_FileObject::TYPE_FILE) {
-            return false;
-        }
-    
-        return true;
+        return $node->type === Tinebase_Model_Tree_FileObject::TYPE_FILE;
     }
     
     /**
@@ -1232,6 +1455,8 @@ class Tinebase_FileSystem implements
         $transactionId = $transactionManager->startTransaction(Tinebase_Core::getDb());
 
         try {
+            $this->acquireWriteLock();
+
             try {
                 $node = $this->stat($oldPath);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
@@ -1240,10 +1465,19 @@ class Tinebase_FileSystem implements
                 return false;
             }
 
-            if (dirname($oldPath) != dirname($newPath)) {
+            $oldParentPath = dirname($oldPath);
+            $newParentPath = dirname($newPath);
+            try {
+                $newParent = $this->stat($newParentPath);
+            } catch (Tinebase_Exception_InvalidArgument $teia) {
+                return false;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                return false;
+            }
+
+            if ($oldParentPath !== $newParentPath) {
                 try {
-                    $newParent = $this->stat(dirname($newPath));
-                    $oldParent = $this->stat(dirname($oldPath));
+                    $oldParent = $this->stat($oldParentPath);
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
                     return false;
                 } catch (Tinebase_Exception_NotFound $tenf) {
@@ -1264,7 +1498,7 @@ class Tinebase_FileSystem implements
                                     $node->acl_node = $node->getId();
                             }
                         }
-                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node);
+                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node, true, true);
                     }
                 }
                 if ($node->pin_protected_node === $oldParent->pin_protected_node
@@ -1291,15 +1525,14 @@ class Tinebase_FileSystem implements
                     $this->_recursiveInheritPropertyUpdate($node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
                 }
 
+                $this->_checkQuotaAndRegisterRefLog($node, 0 - (int)$node->size, 0 - (int)$node->revision_size);
                 $node->parent_id = $newParent->getId();
-
-                $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($oldParent)),
-                    0 - (int)$node->size, 0 - (int)$node->revision_size);
-                $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($newParent)),
-                    (int)$node->size, (int)$node->revision_size);
+                $this->_checkQuotaAndRegisterRefLog($node, (int)$node->size, (int)$node->revision_size);
+            } else {
+                $this->_checkQuotaAndRegisterRefLog($node, 0, 0);
             }
 
-            if (basename($oldPath) != basename($newPath)) {
+            if (basename($oldPath) !== basename($newPath)) {
                 $node->name = basename($newPath);
             }
 
@@ -1309,6 +1542,14 @@ class Tinebase_FileSystem implements
             } catch (Tinebase_Exception_NotFound $tenf) {}
 
             $node = $this->_getTreeNodeBackend()->update($node, true);
+
+            $fObj = $this->_fileObjectBackend->get($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER ?
+                $newParent->object_id : $node->object_id);
+            if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                $fObj->hash = Tinebase_Record_Abstract::generateUID();
+            }
+            Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($fObj, 'update', $fObj);
+            $this->_fileObjectBackend->update($fObj);
 
             $transactionManager->commitTransaction($transactionId);
             $transactionId = null;
@@ -1360,24 +1601,24 @@ class Tinebase_FileSystem implements
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
-        foreach ($pathParts as $pathPart) {
-            $pathPart = trim($pathPart);
-            $currentPath[]= $pathPart;
+            foreach ($pathParts as $pathPart) {
+                $pathPart = trim($pathPart);
+                $currentPath[]= $pathPart;
 
-            try {
-                $node = $this->stat('/' . implode('/', $currentPath));
-            } catch (Tinebase_Exception_NotFound $tenf) {
-if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Creating directory ' . $pathPart);                $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
+                try {
+                    $node = $this->stat('/' . implode('/', $currentPath));
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                        __LINE__ . ' Creating directory ' . $pathPart);
 
-                $this->_addStatCache($currentPath, $node);
+                    $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
+                    $this->_addStatCache($currentPath, $node);
+                }
+
+                $parentNode = $node;
             }
 
-            $parentNode = $node;
-        }
-
-        // update hash of all parent folders
-        $this->_updateDirectoryNodesHash($path);Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
         } finally {
             if (null !== $transactionId) {
@@ -1438,8 +1679,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             }
 
             if (false === $recursion) {
-                $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node)),
-                    0 - (int)$node->size, 0 - (int)$node->revision_size);
+                $this->_checkQuotaAndRegisterRefLog($node, 0 - (int)$node->size, 0 - (int)$node->revision_size);
             }
             $this->_getTreeNodeBackend()->softDelete($node->getId());
             $this->clearStatCache($path);
@@ -1509,7 +1749,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             $cacheId = $this->_getCacheId($pathParts, $revision);
 
             // let's see if the path is cached in statCache
-            if ((isset($this->_statCache[$cacheId]) || array_key_exists($cacheId, $this->_statCache))) {
+            if (isset($this->_statCache[$cacheId])) {
                 try {
                     // let's try to get the node from backend, to make sure it still exists
                     $this->_getTreeNodeBackend()->setRevision($revision);
@@ -1529,7 +1769,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             do {
                 $cacheId = $this->_getCacheId($pathParts);
 
-                if ((isset($this->_statCache[$cacheId]) || array_key_exists($cacheId, $this->_statCache))) {
+                if (isset($this->_statCache[$cacheId])) {
                     $node = $parentNode = $this->_statCache[$cacheId];
                     break;
                 }
@@ -1676,15 +1916,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             }
 
             if (true === $updateDirectoryNodesHash) {
-                $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node)),
-                    (int)$node->size, (int)$node->revision_size);
-
-                try {
-                    $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->getPathOfNode($node, true));
-                    $this->_updateDirectoryNodesHash(dirname($path->statpath));
-
-                    // Tinebase_Model_Tree_Node_Path::_getContainerType may find that is not a personal or shared container (for example it may be a records container)
-                } catch (Tinebase_Exception_InvalidArgument $teia) {}
+                $this->_checkQuotaAndRegisterRefLog($node, (int)$node->size, (int)$node->revision_size);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -1696,6 +1928,16 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         }
     }
 
+    public function isPreviewActive()
+    {
+        if ($this->_previewActive === null) {
+            $this->_previewActive = true ===
+                   Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}
+                && Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_CREATE_PREVIEWS);
+        }
+        return $this->_previewActive;
+    }
+    
     /**
      * delete file node
      *
@@ -1714,20 +1956,12 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             $this->acquireWriteLock();
 
             if (true === $updateDirectoryNodesHash) {
-                $this->_updateFolderSizesUpToRoot(new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node)),
-                    0 - (int)$node->size, 0 - (int)$node->revision_size);
-
-                try {
-                    $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->getPathOfNode($node, true));
-                    $this->_updateDirectoryNodesHash(dirname($path->statpath));
-
-                    // Tinebase_Model_Tree_Node_Path::_getContainerType may find that is not a personal or shared container (for example it may be a records container)
-                } catch (Tinebase_Exception_InvalidArgument $teia) {}
+                $this->_checkQuotaAndRegisterRefLog($node, 0 - (int)$node->size, 0 - (int)$node->revision_size);
             }
 
             $this->_getTreeNodeBackend()->softDelete($node->getId());
 
-            if (false === $this->_modLogActive && true === $this->_previewActive) {
+            if (false === $this->_modLogActive && $this->isPreviewActive()) {
                 $hashes = $this->_fileObjectBackend->getHashes(array($node->object_id));
             } else {
                 $hashes = array();
@@ -1737,12 +1971,16 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 if (true === $this->_indexingActive) {
                     Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($node->object_id);
                 }
-                if (true === $this->_previewActive) {
+                if ($this->isPreviewActive()) {
                     $existingHashes = $this->_fileObjectBackend->checkRevisions($hashes);
                     $hashesToDelete = array_diff($hashes, $existingHashes);
                     Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
                 }
             }
+
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Tinebase_Event_Observer_DeleteFileNode(array(
+               'observable' => $node
+            )));
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -1771,9 +2009,13 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $name, true, false)) &&
                     $deletedNode->is_deleted) {
                 $deletedNode->is_deleted = 0;
+                $deletedNode->deleted_time = null;
+                $deletedNode->deleted_by = null;
                 $object = $this->_fileObjectBackend->get($deletedNode->object_id, true);
                 if ($object->is_deleted) {
                     $object->is_deleted = 0;
+                    $object->deleted_time = null;
+                    $object->deleted_by = null;
                     $this->_fileObjectBackend->update($object);
                 }
                 $treeNode = $this->_getTreeNodeBackend()->update($deletedNode);
@@ -1817,6 +2059,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                         $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION} : null
                 ));
                 $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
+
+                $this->_checkQuotaAndRegisterRefLog($treeNode, 0, 0);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -1836,10 +2080,12 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * @param  string|Tinebase_Model_Tree_Node  $_parentId
      * @param  string                           $_name
      * @param  string                           $_fileType
+     * @param  string                           $_mimeType
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Model_Tree_Node
      */
-    public function createFileTreeNode($_parentId, $_name, $_fileType = Tinebase_Model_Tree_FileObject::TYPE_FILE)
+    public function createFileTreeNode($_parentId, $_name, $_fileType = Tinebase_Model_Tree_FileObject::TYPE_FILE,
+        $_mimeType = null)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
@@ -1848,6 +2094,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $_name, true, false)) &&
                     $deletedNode->is_deleted) {
                 $deletedNode->is_deleted = 0;
+                $deletedNode->deleted_by = null;
+                $deletedNode->deleted_time = null;
                 /** @var Tinebase_Model_Tree_FileObject $object */
                 $object = $this->_fileObjectBackend->get($deletedNode->object_id, true);
                 if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
@@ -1861,8 +2109,11 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 $object->hash = Tinebase_Record_Abstract::generateUID();
                 $object->size = 0;
                 $object->is_deleted = 0;
+                $object->deleted_by = null;
+                $object->deleted_time = null;
                 $object->type = $_fileType;
                 $object->preview_count = 0;
+                $object->contenttype = $_mimeType;
                 $this->_fileObjectBackend->update($object);
                 //we can use _treeNodeBackend as we called get further up
                 $treeNode = $this->_treeNodeBackend->update($deletedNode);
@@ -1870,10 +2121,12 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
                 $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId : $this->get($parentId);
 
-                $fileObject = new Tinebase_Model_Tree_FileObject(array(
+                $fileObject = new Tinebase_Model_Tree_FileObject([
                     'type' => $_fileType,
-                    'contentytype' => null,
-                ));
+                ]);
+                if (null !== $_mimeType) {
+                    $fileObject->contenttype = $_mimeType;
+                }
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'create');
 
                 // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
@@ -1918,11 +2171,31 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     }
 
     /**
+     * @param string $hash
+     * @return bool
+     */
+    public function checkHashFile(string $hash)
+    {
+        $file = $this->_basePath . DIRECTORY_SEPARATOR . substr($hash, 0, 3) . DIRECTORY_SEPARATOR . substr($hash, 3);
+        if (!($fh = fopen($file, 'r'))) {
+            throw new Tinebase_Exception_Backend('could not open file: ' . $file);
+        }
+        
+        $ctx = hash_init('sha1');
+        hash_update_stream($ctx, $fh);
+        $fileHash = hash_final($ctx);
+        fclose($fh);
+        
+        return $hash === $fileHash;
+    }
+
+    /**
      * places contents into a file blob
      * 
      * @param  resource $contents
-     * @return string hash
+     * @return array [hash, hashFilePath, Tinebase_FileSystem_AVScan_Result]
      * @throws Tinebase_Exception_NotImplemented
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function createFileBlob($contents)
     {
@@ -1939,22 +2212,74 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         
         $hashDirectory = $this->_basePath . '/' . substr($hash, 0, 3);
         if (!file_exists($hashDirectory)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
-            if(mkdir($hashDirectory, 0700) === false) {
-                throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' create hash directory: ' . $hashDirectory);
+            if (@mkdir($hashDirectory, 0700) === false) {
+                if (!is_dir($hashDirectory)) {
+                    throw new Tinebase_Exception_UnexpectedValue('failed to create directory');
+                }
             }
         }
         
-        $hashFile      = $hashDirectory . '/' . substr($hash, 3);
-        if (!file_exists($hashFile)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
-            rewind($handle);
+        $hashFile = $hashDirectory . '/' . substr($hash, 3);
+        $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
+        $fileCreated = false;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' create hash file: ' . $hashFile);
+        while (!file_exists($hashFile)) {
             $hashHandle = fopen($hashFile, 'x');
+            if (! $hashHandle) {
+                if (file_exists($hashFile)) {
+                    break;
+                }
+                throw new Tinebase_Exception_UnexpectedValue('failed to create hash file');
+            }
+            rewind($handle);
             stream_copy_to_stream($handle, $hashHandle);
             fclose($hashHandle);
+            $fileCreated = true;
+
+            // AV scan
+            if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
+                    ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+                if (false === ($fileSize = filesize($hashFile))) {
+                    throw new Tinebase_Exception_UnexpectedValue('failed to get hash file size');
+                }
+                if ($fileSize <= Tinebase_Config::getInstance()
+                        ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE}) {
+                    if (!($hashHandle = fopen($hashFile, 'r'))) {
+                        throw new Tinebase_Exception_UnexpectedValue('failed to repoen hash file');
+                    }
+                    $avResult = Tinebase_FileSystem_AVScan_Factory::getScanner()->scan($hashHandle);
+                    fclose($hashHandle);
+                }
+            }
+            break;
+        }
+
+        $tries = 0;
+        $currentFilesHash = null;
+        $previousCurrentFilesHash = null;
+        while (!$fileCreated && ($currentFilesHash = sha1_file($hashFile)) !== $hash && $tries++ < 10) {
+            if ($previousCurrentFilesHash === $currentFilesHash) {
+                // hash did not change -> we will start cleaning up then
+                break;
+            }
+            $previousCurrentFilesHash = $currentFilesHash;
+            // hash file mismatch! First lets sleep some time, maybe somebody is writting the file...
+            usleep(100000); // 100ms
+        }
+        if (!$fileCreated && $currentFilesHash !== $hash) {
+            // we have a corrupt hash file, lets remove it.
+            if (!unlink($hashFile)) {
+                throw new Tinebase_Exception_UnexpectedValue('failed to unlink corrupt hash file');
+            }
+
+            return $this->createFileBlob($contents);
         }
         
-        return array($hash, $hashFile);
+        return array($hash, $hashFile, $avResult);
     }
     
     /**
@@ -2059,6 +2384,9 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      */
     protected function _addStatCache($path, Tinebase_Model_Tree_Node $node, $revision = null)
     {
+        if (null === $revision) {
+            $this->_statCacheById[$node->getId()] = $node;
+        }
         $this->_statCache[$this->_getCacheId($path, $revision)] = $node;
     }
     
@@ -2100,6 +2428,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
         try {
             $currentNodeObject = $this->get($_node->getId());
+            /** @var Tinebase_Model_Tree_FileObject $fileObject */
             $fileObject = $this->_fileObjectBackend->get($currentNodeObject->object_id);
 
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_node, 'update', $currentNodeObject);
@@ -2116,11 +2445,11 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             // update file object
             $fileObject->description = $_node->description;
-            $this->_updateFileObject($this->get($currentNodeObject->parent_id), $fileObject, $_node->hash);
+            $this->_updateFileObject($this->get($currentNodeObject->parent_id), $currentNodeObject, $fileObject, $_node->hash);
 
             if ($currentNodeObject->acl_node !== $_node->acl_node) {
                 // update acl_node of subtree if changed
-                $this->_recursiveInheritPropertyUpdate($_node, 'acl_node', $_node->acl_node, $currentNodeObject->acl_node);
+                $this->_recursiveInheritPropertyUpdate($_node, 'acl_node', $_node->acl_node, $currentNodeObject->acl_node, true, true);
             }
             if ($currentNodeObject->pin_protected_node !== $_node->pin_protected_node) {
                 // update pin_protected_node of subtree if changed
@@ -2169,14 +2498,15 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * @param string $_newValue
      * @param string $_oldValue
      * @param bool   $_ignoreACL
+     * @param bool   $_updateDeleted
      */
-    protected function _recursiveInheritPropertyUpdate(Tinebase_Model_Tree_Node $_node, $_property, $_newValue, $_oldValue, $_ignoreACL = true)
+    protected function _recursiveInheritPropertyUpdate(Tinebase_Model_Tree_Node $_node, $_property, $_newValue, $_oldValue, $_ignoreACL = true, $_updateDeleted = false)
     {
-        $childIds = $this->getAllChildIds(array($_node->getId()), array(array(
-            'field'     => $_property,
-            'operator'  => 'equals',
-            'value'     => $_oldValue
-        )), $_ignoreACL);
+        $childIds = $this->getAllChildIds(array($_node->getId()), [
+                ['field' => $_property,   'operator'  => 'equals', 'value' => $_oldValue],
+                ['field' => 'is_deleted', 'operator'  => 'equals', 'value' => $_updateDeleted ?
+                    Tinebase_Model_Filter_Bool::VALUE_NOTSET : false]
+            ], $_ignoreACL);
         if (count($childIds) > 0) {
             $this->_getTreeNodeBackend()->updateMultiple($childIds, array($_property => $_newValue));
         }
@@ -2222,13 +2552,9 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     public function getAllChildIds(array $_ids, array $_additionalFilters = array(), $_ignoreAcl = true, $_requiredGrants = null)
     {
         $result = array();
-        $filter = array(
-            array(
-                'field'     => 'parent_id',
-                'operator'  => 'in',
-                'value'     => $_ids
-            )
-        );
+        $filter = [
+            ['field' => 'parent_id',  'operator'  => 'in',     'value' => $_ids],
+        ];
         foreach($_additionalFilters as $aF) {
             $filter[] = $aF;
         }
@@ -2251,9 +2577,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * 
      * @param Tinebase_Model_Tree_Node|string $node
      * @param boolean $getPathAsString
+     * @param boolean $getFromStatCache
      * @return array|string
      */
-    public function getPathOfNode($node, $getPathAsString = false)
+    public function getPathOfNode($node, $getPathAsString = false, $getFromStatCache = false)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
@@ -2261,7 +2588,11 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             $nodesPath = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($node));
             while ($node->parent_id) {
-                $node = $this->get($node->parent_id);
+                if ($getFromStatCache && isset($this->_statCacheById[$node->parent_id])) {
+                    $node = $this->_statCacheById[$node->parent_id];
+                } else {
+                    $node = $this->get($node->parent_id);
+                }
                 $nodesPath->addRecord($node);
             }
 
@@ -2388,9 +2719,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Scanning database for deleted files ...');
 
-        // get all file objects (thus, no folders) from db and check filesystem existence
+        // get all file objects (thus, no folders or links) from db and check filesystem existence
         $filter = new Tinebase_Model_Tree_FileObjectFilter([
-            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER]
+            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
+            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_LINK]
         ]);
         $start = 0;
         $limit = 500;
@@ -2426,7 +2758,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             return $count;
         }
 
-        if (true === $this->_previewActive) {
+        if ($this->isPreviewActive()) {
             Tinebase_FileSystem_Previews::getInstance()->deletePreviews($hashesToDelete);
         }
 
@@ -2479,18 +2811,19 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     /**
      * copy tempfile data to file path
      * 
-     * @param  mixed   $tempFile
+     * @param mixed $tempFile
          Tinebase_Model_Tree_Node     with property hash, tempfile or stream
          Tinebase_Model_Tempfile      tempfile
          string                       with tempFile id
          array                        with [id] => tempFile id (this is odd IMHO)
          stream                       stream ressource
          null                         create empty file
-     * @param  string  $path
+     * @param string $path
+     * @param boolean $deleteTempFileAfterCopy
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function copyTempfile($tempFile, $path)
+    public function copyTempfile($tempFile, $path, $deleteTempFileAfterCopy = false)
     {
         if ($tempFile === null) {
             $tempStream = fopen('php://memory', 'r');
@@ -2520,15 +2853,21 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
         $node = $this->setAclFromParent($path);
 
+        if ($tempFile instanceof Tinebase_Model_TempFile && $deleteTempFileAfterCopy) {
+            Tinebase_TempFile::getInstance()->deleteTempFile($tempFile);
+        }
+
         return $node;
     }
 
-    public function setAclFromParent($path)
+    public function setAclFromParent($path, $ifNotNull = false)
     {
         $node = $this->stat($path);
         $parent = $this->get($node->parent_id);
-        $node->acl_node = $parent->acl_node;
-        $this->update($node);
+        if (!$ifNotNull || !empty($parent->acl_node)) {
+            $node->acl_node = $parent->acl_node;
+            $this->update($node);
+        }
 
         return $node;
     }
@@ -2633,7 +2972,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * check acl of path
      *
      * @param Tinebase_Model_Tree_Node_Path $_path
-     * @param string $_action
+     * @param string $_action get|add
      * @param boolean $_topLevelAllowed
      * @throws Tinebase_Exception_AccessDenied
      * @return boolean
@@ -2684,6 +3023,20 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 break;
             case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
                 $hasPermission = ($_action === 'get');
+                break;
+            case self::FOLDER_TYPE_RECORDS:
+                if ($_action !== 'get') {
+                    throw new Tinebase_Exception_InvalidArgument('only "get" action supported here');
+                }
+                $model = $_path->getRecordModel();
+                try {
+                    $controller = Tinebase_Core::getApplicationInstance($_path->application, $model);
+                    $recordId = $_path->getRecordId();
+                    $controller->get($recordId);
+                    $hasPermission = true;
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    $hasPermission = false;
+                }
                 break;
             default:
                 $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
@@ -3166,7 +3519,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     if (is_array($fileNode->available_revisions) && count($fileNode->available_revisions) > $numRev) {
                         $revisions = $fileNode->available_revisions;
                         sort($revisions, SORT_NUMERIC);
-                        $count += $this->_fileObjectBackend->deleteRevisions($fileNode->object_id, array_slice($revisions, 0, count($revisions) - $numRevisions));
+                        $count += $this->_fileObjectBackend->deleteRevisions($fileNode->object_id, array_slice($revisions, 0, count($revisions) - $numRev));
                     }
                 }
 
@@ -3191,15 +3544,16 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      */
     public function reportPreviewStatus()
     {
-        $status = ['missing' => 0, 'created' => 0];
+        $status = ['missing' => 0, 'created' => 0, 'missing_files' => []];
 
-        if (false === $this->_previewActive) {
+        if (! $this->isPreviewActive()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
             return $status;
         }
 
         $created = &$status['created'];
         $missing = &$status['missing'];
+        $missingFilenames = &$status['missing_files'];
 
         $treeNodeBackend = $this->_getTreeNodeBackend();
         $previewController = Tinebase_FileSystem_Previews::getInstance();
@@ -3244,6 +3598,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     $created++;
                 } else {
                     $missing++;
+                    $missingFilenames[] = $actualNode->name;
                 }
             }
         }
@@ -3261,7 +3616,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' starting to sanitize previews');
 
-        if (false === $this->_previewActive) {
+        if (! $this->isPreviewActive()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
             return true;
         }
@@ -3408,6 +3763,24 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     }
 
     /**
+     * @param string $_hash
+     * @param integer $_status
+     */
+    public function updatePreviewStatus($_hash, $_status)
+    {
+        $this->_fileObjectBackend->updatePreviewStatus($_hash, $_status);
+    }
+
+    /**
+     * @param string $_hash
+     * @param integer $_count
+     */
+    public function updatePreviewErrorCount($_hash, $_count)
+    {
+        $this->_fileObjectBackend->updatePreviewErrorCount($_hash, $_count);
+    }
+
+    /**
      * check the folder tree up to the root for notification settings and either send notification immediately
      * or create alarm for it to be send in the future. Alarms aggregate!
      *
@@ -3417,6 +3790,11 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      */
     public function checkForCRUDNotifications($_fileNodeId, $_crudAction)
     {
+        if (! Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
+            // only done with FILESYSTEM_MODLOGACTIVE
+            return true;
+        }
+
         $nodeId = $_fileNodeId;
         $foundUsers = array();
         $foundGroups = array();
@@ -3534,10 +3912,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                                 'model'         => 'Tinebase_FOOO_FileSystem',
                                 'minutes_before'=> 0,
                                 'alarm_time'    => Tinebase_DateTime::now()->addDay((int)$notificationProp[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_SUMMARY]),
-                                'options'       => array(
+                                'options'       => json_encode(array(
                                     'files'     => array($_fileNodeId => array($_crudAction => true)),
                                     'accountId' => $accountId
-                                ),
+                                )),
                             ));
                             $alarmController->create($alarm);
                         }
@@ -3648,6 +4026,142 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     /**
      * @return bool
      */
+    public function avScan()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' starting... ');
+
+        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF ===
+                Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                    ->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            return true;
+        }
+
+        $lockId = __METHOD__;
+        if (!Tinebase_Core::acquireMultiServerLock($lockId)) {
+            return true;
+        }
+        $raii = new Tinebase_RAII(function() use($lockId) {
+            Tinebase_Core::releaseMultiServerLock($lockId);
+        });
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' updating... ');
+
+        $avScanner = Tinebase_FileSystem_AVScan_Factory::getScanner();
+
+        $result = true;
+        $fh = null;
+        $db = Tinebase_Core::getDb();
+        $transManager = Tinebase_TransactionManager::getInstance();
+
+        if (!($baseDir = opendir($this->_basePath))) {
+            Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open basedir'));
+            return false;
+        }
+
+        while (false !== ($hashDir = readdir($baseDir))) {
+            if (strlen($hashDir) !== 3 || !is_dir($this->_basePath . '/' . $hashDir)) continue;
+            if (!($fileDir = opendir($this->_basePath . '/' . $hashDir))) {
+                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open filedir: ' .
+                    $this->_basePath . '/' . $hashDir));
+                $result = false;
+                continue;
+            }
+            while (false !== ($file = readdir($fileDir))) {
+                $path = $this->_basePath . '/' . $hashDir . '/' . $file;
+                if (!is_file($path)) continue;
+
+                if (false === ($fileSize = filesize($path))) {
+                    Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('failed to get hash file size: ' .
+                        $path));
+                    $result = false;
+                    continue;
+                }
+                if ($fileSize > Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE}) {
+                    continue;
+                }
+
+                $fh = null;
+                $scanResult = null;
+                $transId = $transManager->startTransaction($db);
+                try {
+                    $fileObjectRevisions = $this->_fileObjectBackend->getRevisionForHashes([$hashDir . $file], true);
+
+                    if (count($fileObjectRevisions) === 0) {
+                        $transManager->commitTransaction($transId);
+                        $transId = null;
+                        continue;
+                    }
+
+                    foreach ($fileObjectRevisions as $fObjId => $revisions) {
+                        foreach ($revisions as $revision) {
+                            $this->_fileObjectBackend->setRevision($revision);
+                            /** @var \Tinebase_Model_Tree_FileObject $fObj */
+                            $fObj = $this->_fileObjectBackend->get($fObjId, true);
+                            if ($fObj->lastavscan_time && Tinebase_DateTime::now()->subHour(12)
+                                    ->isEarlier(new Tinebase_DateTime($fObj->lastavscan_time))) {
+                                continue;
+                            }
+
+                            if ($fObj->hash !== ($hashDir . $file)) {
+                                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                                    'file objects hash not as expected: ' . $fObj->getId() . ' rev: ' . $fObj->revision
+                                    . ' hash: ' . $fObj->hash . ' expected hash: ' . $hashDir . $file));
+                                $result = false;
+                                continue;
+                            }
+                            if (null === $scanResult) {
+                                if (false === ($fh = fopen($path, 'r'))) {
+                                    Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                                        'could not open file ' . $path . ' for reading... skipping'));
+                                    $result = false;
+                                    $fh = null;
+                                    continue 3;
+                                }
+
+                                $scanResult = $avScanner->scan($fh);
+                                fclose($fh);
+                                $fh = null;
+                                if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
+                                    $result = false;
+                                }
+                            }
+
+                            $fObj->lastavscan_time = Tinebase_DateTime::now();
+                            $fObj->is_quarantined =
+                                Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result;
+                            $this->_fileObjectBackend->update($fObj);
+                        }
+                    }
+
+                    $transManager->commitTransaction($transId);
+                    $transId = null;
+                } finally {
+                    $this->_fileObjectBackend->setRevision(null);
+                    if (null !== $transId) {
+                        $transManager->rollBack();
+                    }
+                    if (null !== $fh) {
+                        fclose($fh);
+                        $fh = null;
+                    }
+                }
+            }
+            closedir($fileDir);
+        }
+        closedir($baseDir);
+
+        // only for unused variable check
+        unset($raii);
+
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
     public function notifyQuota()
     {
         $treeNodeBackend = $this->_getTreeNodeBackend();
@@ -3733,9 +4247,21 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             Tinebase_Lock::keepLocksAlive();
         }
 
+        $this->_notifyImapQuota($quotaConfig);
+
+        return true;
+    }
+
+    protected function _notifyImapQuota($quotaConfig)
+    {
         if ($quotaConfig->{Tinebase_Config::QUOTA_SKIP_IMAP_QUOTA}) {
             return true;
         }
+
+        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            return true;
+        }
+
         /** @var Tinebase_EmailUser_Imap_Dovecot $imapBackend */
         $imapBackend = null;
         try {
@@ -3748,6 +4274,8 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             return true;
         }
 
+        $softQuota = $quotaConfig->{Tinebase_Config::QUOTA_SOFT_QUOTA};
+
         /** @var Tinebase_Model_EmailUser $emailUser */
         foreach ($imapBackend->getAllEmailUsers() as $emailUser) {
             if ($emailUser->emailMailQuota < 1) {
@@ -3757,7 +4285,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             $softAlert = false;
             if ($emailUser->emailMailSize >= ($emailUser->emailMailQuota * 0.99)) {
                 $alert = true;
-            } elseif($softQuota > 0 && $emailUser->emailMailSize > ($emailUser->emailMailQuota * $softQuota / 100)) {
+            } elseif ($softQuota > 0 && $emailUser->emailMailSize > ($emailUser->emailMailQuota * $softQuota / 100)) {
                 $alert = true;
                 $softAlert = true;
             }
@@ -3765,7 +4293,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             if (true === $alert) {
                 /** @var Tinebase_Model_FullUser $user */
                 foreach (Tinebase_User::getInstance()->getMultiple(array_unique(array_merge(
-                        $this->_quotaNotificationRoleMembers, array($emailUser->emailUserId)))) as $user) {
+                    $this->_quotaNotificationRoleMembers, array($emailUser->emailUserId)))) as $user) {
                     $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
                         $user->accountId));
                     $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
@@ -3781,8 +4309,6 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
 
             Tinebase_Lock::keepLocksAlive();
         }
-
-        return true;
     }
 
     protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
@@ -3891,5 +4417,58 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     public function has(array $_ids, $_getDeleted = false)
     {
         return $this->_getTreeNodeBackend()->has($_ids, $_getDeleted);
+    }
+
+    public function repairTreeIsDeletedState()
+    {
+        $fileobjectsTableName = SQL_TABLE_PREFIX . 'tree_fileobjects';
+        $nodesTableName = SQL_TABLE_PREFIX . 'tree_nodes';
+        $db = Tinebase_Core::getDb();
+        $ids = $db->query('SELECT id FROM ' . $nodesTableName . ' WHERE is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"')
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        if (count($ids)) {
+            Tinebase_Exception::log(new Exception('found ' . count($ids) . ' treenodes with broken deltime: ' .
+                print_r($ids, true)));
+
+            $db->query('update ' . $nodesTableName . ' set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
+        }
+
+        $ids = $db->query('SELECT id FROM ' . $fileobjectsTableName . ' WHERE is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"')
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        if (count($ids)) {
+            Tinebase_Exception::log(new Exception('found ' . count($ids) . ' fileobjects with broken deltime: ' .
+                print_r($ids, true)));
+
+            $db->query('update ' . $fileobjectsTableName . ' set deleted_time = "1970-01-01 00:00:00" where is_deleted = 0 and deleted_time != "1970-01-01 00:00:00"');
+        }
+
+        $ids = $db->query('SELECT F.id FROM ' . $fileobjectsTableName . ' as F join ' . $nodesTableName
+            . ' as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted')
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        if (count($ids)) {
+            Tinebase_Exception::log(new Exception('found ' . count($ids) .
+                ' fileobjects is_deleted differ from treenodes: ' . print_r($ids, true)));
+
+            $db->query('update ' . $fileobjectsTableName . ' as F join ' . $nodesTableName
+                . ' as N ON F.id = N.object_id AND F.is_deleted != N.is_deleted set F.deleted_time = N.deleted_time, F.is_deleted = N.is_deleted');
+        }
+
+        $ids = $db->query('SELECT N.id FROM ' . $nodesTableName . ' as N join ' . $nodesTableName
+            . ' as P ON N.parent_id = P.id AND N.is_deleted = 0 AND P.is_deleted = 1')
+            ->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+
+        if (count($ids)) {
+            Tinebase_Exception::log(new Exception('found ' . count($ids) .
+                ' treenodes are not deleted but parent is: ' . print_r($ids, true)));
+
+            $db->query('update ' . $fileobjectsTableName . ' as F join ' . $nodesTableName
+                . ' as N ON F.id = N.object_id set F.deleted_time = NOW(), N.deleted_time = NOW(), F.is_deleted = 1, N.is_deleted = 1 WHERE '
+                . $db->quoteInto('N.id IN (?)', $ids));
+        }
+
+        return true;
     }
 }

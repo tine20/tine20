@@ -35,6 +35,22 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     protected $_config = array();
 
     /**
+     * supportAliasesDispatchFlag
+     *
+     * @var boolean
+     *
+     * @todo remove DRY (see Tinebase_User_Plugin_LdapAbstract)
+     */
+    protected $_supportAliasesDispatchFlag = false;
+
+    /**
+     * list of all db connections other than Tinebase_Core::getDb()
+     *
+     * @var array
+     */
+    protected static $_dbConnections =  [];
+
+    /**
      * inspect data used to create user
      * 
      * @param Tinebase_Model_FullUser  $_addedUser
@@ -54,14 +70,21 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     public function inspectUpdateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
         if (! isset($_newUserProperties->imapUser) && ! isset($_newUserProperties->smtpUser)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No email properties found!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' No email properties found!');
             return;
         }
-        
-        if ($this->_userExists($_updatedUser) === true) {
-            $this->_updateUser($_updatedUser, $_newUserProperties);
-        } else {
-            $this->_addUser($_updatedUser, $_newUserProperties);
+
+        try {
+            if ($this->_userExists($_updatedUser) === true) {
+                $this->_updateUser($_updatedUser, $_newUserProperties);
+            } else {
+                $this->_addUser($_updatedUser, $_newUserProperties);
+            }
+        } catch (Tinebase_Exception_EmailInAdditionalDomains $teeiad) {
+            // TODO delete existing?
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' ' . $teeiad->getMessage());
         }
     }
 
@@ -97,6 +120,11 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         // do nothing
     }
 
+    public function copyUser(Tinebase_Model_FullUser $_user, $newId)
+    {
+        throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
+    }
+    
     /**
      * adds email properties for a new user
      * 
@@ -151,29 +179,53 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
                 MYSQLI_OPT_CONNECT_TIMEOUT => 5
             ];
             $this->_db = Tinebase_Core::createAndConfigureDbAdapter($dbConfig);
+            static::$_dbConnections[] = $this->_db;
+        }
+    }
+
+    public static function disconnectDbConnections()
+    {
+        /** @var Zend_Db_Adapter_Abstract $con */
+        foreach (static::$_dbConnections as $con) {
+            $con->closeConnection();
         }
     }
     
     /**
      * get email user name depending on config
+     * NOTE: translates xprops to userid if necessary
      *
      * @param Tinebase_Model_FullUser $user
      * @param $alternativeLoginName
      * @return string
      */
-    protected function _getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null)
+    public function getEmailUserName(Tinebase_Model_FullUser $user, $alternativeLoginName = null)
+    {
+        $userId = Tinebase_EmailUser_XpropsFacade::getEmailUserId($user);
+        return $this->getLoginName($userId, $user->accountLoginName, $user->accountEmailAddress,
+            $alternativeLoginName);
+    }
+
+    /**
+     * @param $accountId
+     * @param $accountLoginName
+     * @param $accountEmailAddress
+     * @param null $alternativeLoginName
+     * @return string|null
+     */
+    public function getLoginName($accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName = null)
     {
         $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';
         if (isset($this->_config['useEmailAsUsername']) && $this->_config['useEmailAsUsername']) {
-            $emailUsername = $user->accountEmailAddress;
+            $emailUsername = $accountEmailAddress;
         } else if (isset($this->_config['instanceName']) && ! empty($this->_config['instanceName'])) {
-            $emailUsername = $user->getId() . '@' . $this->_config['instanceName'];
+            $emailUsername = $accountId . '@' . $this->_config['instanceName'];
         } else if (isset($this->_config[$domainConfigKey]) && $this->_config[$domainConfigKey] !== null) {
-            $emailUsername = $this->_appendDomain($user->accountLoginName);
+            $emailUsername = $this->_appendDomain($accountLoginName);
         } else if ($alternativeLoginName !== null) {
-            $emailUsername = $emailAddress;
+            $emailUsername = $alternativeLoginName;
         } else {
-            $emailUsername = $user->accountLoginName;
+            $emailUsername = $accountLoginName;
         }
 
         return $emailUsername;
@@ -188,42 +240,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     {
         return $this->_db;
     }
-    
-    /**
-     * generate salt for password scheme
-     * 
-     * @param $_scheme
-     * @return string
-     */
-    protected function _salt($_scheme)
-    {
-        // create a salt that ensures crypt creates an sha2 hash
-        $base64_alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            .'abcdefghijklmnopqrstuvwxyz0123456789+/';
 
-        $salt = '';
-        for($i=0; $i<16; $i++){
-            $salt .= $base64_alphabet[rand(0,63)];
-        }
-        
-        switch ($_scheme) {
-            case 'SSHA256':
-                $salt = '$5$' . $salt . '$';
-                break;
-                
-            case 'SSHA512':
-                $salt = '$6$' . $salt . '$';
-                break;
-                
-            case 'MD5-CRYPT':
-            default:
-                $salt = crypt($_scheme);
-                break;
-        }
-
-        return $salt;
-    }
-    
     /**
      * updates email properties for an existing user
      * 
@@ -231,11 +248,60 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * @param  Tinebase_Model_FullUser  $_newUserProperties
      */
     abstract protected function _updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties);
-    
+
+    /**
+     * check if user exists already in plugin user table
+     *
+     * @param Tinebase_Model_FullUser $_user
+     * @return boolean
+     */
+    public function userExists(Tinebase_Model_FullUser $_user)
+    {
+        return $this->_userExists($_user);
+    }
+
     /**
      * check if user exists already in plugin user table
      * 
      * @param Tinebase_Model_FullUser $_user
+     * @return boolean
      */
     abstract protected function _userExists(Tinebase_Model_FullUser $_user);
+
+    // hack, should go into Tinebase_EmailUser_Sql but not all EmailUser Backends actually use that SQL one
+    // well not every backend is using sql, its just a bit messy around here
+    public function _getConfiguredSystemDefaults()
+    {
+        $systemDefaults = array();
+
+        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
+        if (!empty($this->_config[$hostAttribute])) {
+            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
+        }
+
+        if (!empty($this->_config['port'])) {
+            $systemDefaults['emailPort'] = $this->_config['port'];
+        }
+
+        if (!empty($this->_config['ssl'])) {
+            $systemDefaults['emailSecure'] = $this->_config['ssl'];
+        }
+
+        if (!empty($this->_config['auth'])) {
+            $systemDefaults['emailAuth'] = $this->_config['auth'];
+        }
+
+        return $systemDefaults;
+    }
+
+    /**
+     * @return bool
+     *
+     * @todo remove DRY (see Tinebase_User_Plugin_LdapAbstract)
+     * @todo make this a generic "capabilities" feature
+     */
+    public function supportsAliasesDispatchFlag()
+    {
+        return $this->_supportAliasesDispatchFlag;
+    }
 }

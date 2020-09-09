@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use PhpOffice\PhpSpreadsheet\Cell;
@@ -42,11 +42,16 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected $_rowCount = 0;
 
-    protected $_columnCount = 0;
+    protected $_columnCount = 1;
 
     protected $_cloneRow;
 
     protected $_cloneRowStyles = array();
+
+    protected $_cloneGroupStartRowStyles = null;
+    protected $_cloneGroupStartRow = null;
+    protected $_cloneGroupEndRowStyles = null;
+    protected $_cloneGroupEndRow = null;
 
     protected $_excelVersion;
 
@@ -61,7 +66,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter = null, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         parent::__construct($_filter, $_controller, $_additionalOptions);
 
@@ -109,7 +114,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
      * @param string $_format
      * @return string
      */
-    public function getDownloadFilename($_appName, $_format)
+    public function getDownloadFilename($_appName = null, $_format = null)
     {
         $result = parent::getDownloadFilename($_appName, $_format);
 
@@ -119,6 +124,26 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         }
 
         return $result;
+    }
+
+    /**
+     * get export format string (csv, ...)
+     *
+     * @return string
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getFormat()
+    {
+        if ('xls' === $this->_format && 'Xlsx' === $this->_excelVersion) {
+            // excel2007 extension is .xlsx
+            return 'xlsx';
+        }
+
+        if ($this->_format === null) {
+            throw new Tinebase_Exception_NotFound('Format string not found.');
+        }
+        
+        return $this->_format;
     }
 
     /**
@@ -155,7 +180,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     public function generate()
     {
         $this->_rowCount = 0;
-        $this->_columnCount = 0;
+        $this->_columnCount = 1;
         $this->_createDocument();
         $this->_exportRecords();
         $this->_replaceTine20ImagePaths();
@@ -164,7 +189,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     protected function _startRow()
     {
         $this->_rowCount += 1;
-        $this->_columnCount = 0;
+        $this->_columnCount = 1;
 
         //insert cloned row
         if ($this->_rowOffset > 0) {
@@ -186,6 +211,68 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                 call_user_func(array($rowDimension, $func), $value);
             }
         }
+    }
+
+    protected function _startGroup()
+    {
+        if (null === $this->_cloneGroupStartRow) {
+            return;
+        }
+
+        $this->_rowCount += 1;
+        //insert cloned row
+        if ($this->_rowOffset > 0) {
+            $newRowOffset = $this->_rowOffset + $this->_rowCount - 1;
+            $sheet = $this->_spreadsheet->getActiveSheet();
+
+            if ($this->_rowCount > 1) {
+                $sheet->insertNewRowBefore($newRowOffset);
+            }
+
+            foreach($this->_cloneGroupStartRow as $newRow) {
+                $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
+                $cell->setValue(preg_replace('/\$\{twig[^}]+\}/', '$0#' . $this->_rowCount, $newRow['value']));
+                $cell->setXfIndex($newRow['XFIndex']);
+            }
+
+            $rowDimension = $sheet->getRowDimension($newRowOffset);
+            foreach($this->_cloneGroupStartRowStyles as $func => $value) {
+                call_user_func(array($rowDimension, $func), $value);
+            }
+        }
+
+        $this->_renderTwigTemplate();
+    }
+
+    protected function _endGroup()
+    {
+        if (null === $this->_cloneGroupEndRow) {
+            return;
+        }
+
+        $this->_rowCount += 1;
+        //insert cloned row
+        if ($this->_rowOffset > 0) {
+            $newRowOffset = $this->_rowOffset + $this->_rowCount - 1;
+            $sheet = $this->_spreadsheet->getActiveSheet();
+
+            if ($this->_rowCount > 1) {
+                $sheet->insertNewRowBefore($newRowOffset);
+            }
+
+            foreach($this->_cloneGroupEndRow as $newRow) {
+                $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
+                $cell->setValue(preg_replace('/\$\{twig[^}]+\}/', '$0#' . $this->_rowCount, $newRow['value']));
+                $cell->setXfIndex($newRow['XFIndex']);
+            }
+
+            $rowDimension = $sheet->getRowDimension($newRowOffset);
+            foreach($this->_cloneGroupEndRowStyles as $func => $value) {
+                call_user_func(array($rowDimension, $func), $value);
+            }
+        }
+
+        $this->_renderTwigTemplate();
     }
 
     protected function _createDocument()
@@ -413,7 +500,113 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             );
             $cell->setValue(null);
             $cell->setXfIndex(0);
-            // TODO update replacement cache in case we implement it
+        }
+
+        if ($this->_config->group) {
+            $this->_findGroupStart();
+            $this->_findGroupEnd();
+        }
+    }
+
+    protected function _findGroupStart()
+    {
+        if (null === ($block = $this->_findCell('${GROUP_START}'))) {
+            return;
+        }
+        $startColumn = $block->getColumn();
+        $rowOffset = $block->getRow();
+
+        if (null === ($block = $this->_findCell('${/GROUP_START}'))) {
+            return;
+        }
+
+        $endColumn = $block->getColumn();
+        if ($block->getRow() !== $rowOffset) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' block tags need to be in the same row');
+            throw new Tinebase_Exception_UnexpectedValue('block tags need to be in the same row');
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found group start...');
+
+        $sheet = $this->_spreadsheet->getActiveSheet();
+
+        /** @var  $rowIterator */
+        $rowIterator = $sheet->getRowIterator($rowOffset);
+        $row = $rowIterator->current();
+        $rowDimension = $sheet->getRowDimension($row->getRowIndex());
+        $this->_cloneGroupStartRowStyles = array(
+            'setCollapsed'      => $rowDimension->getCollapsed(),
+            'setOutlineLevel'   => $rowDimension->getOutlineLevel(),
+            'setRowHeight'      => $rowDimension->getRowHeight(),
+            'setVisible'        => $rowDimension->getVisible(),
+            'setXfIndex'        => $rowDimension->getXfIndex(),
+            'setZeroHeight'     => $rowDimension->getZeroHeight()
+        );
+        $cellIterator = $row->getCellIterator($startColumn, $endColumn);
+
+        $replace = array('${GROUP_START}', '${/GROUP_START}');
+        /** @var Cell $cell */
+        foreach($cellIterator as $cell) {
+            $this->_cloneGroupStartRow[] = array(
+                'column'        => $cell->getColumn(),
+                'value'         => str_replace($replace, '', $cell->getValue()),
+                'XFIndex'       => $cell->getXfIndex()
+            );
+            $cell->setValue(null);
+            $cell->setXfIndex(0);
+        }
+    }
+
+    protected function _findGroupEnd()
+    {
+        if (null === ($block = $this->_findCell('${GROUP_END}'))) {
+            return;
+        }
+        $startColumn = $block->getColumn();
+        $rowOffset = $block->getRow();
+
+        if (null === ($block = $this->_findCell('${/GROUP_END}'))) {
+            return;
+        }
+
+        $endColumn = $block->getColumn();
+        if ($block->getRow() !== $rowOffset) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' block tags need to be in the same row');
+            throw new Tinebase_Exception_UnexpectedValue('block tags need to be in the same row');
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found group end...');
+
+        $sheet = $this->_spreadsheet->getActiveSheet();
+
+        /** @var  $rowIterator */
+        $rowIterator = $sheet->getRowIterator($rowOffset);
+        $row = $rowIterator->current();
+        $rowDimension = $sheet->getRowDimension($row->getRowIndex());
+        $this->_cloneGroupEndRowStyles = array(
+            'setCollapsed'      => $rowDimension->getCollapsed(),
+            'setOutlineLevel'   => $rowDimension->getOutlineLevel(),
+            'setRowHeight'      => $rowDimension->getRowHeight(),
+            'setVisible'        => $rowDimension->getVisible(),
+            'setXfIndex'        => $rowDimension->getXfIndex(),
+            'setZeroHeight'     => $rowDimension->getZeroHeight()
+        );
+        $cellIterator = $row->getCellIterator($startColumn, $endColumn);
+
+        $replace = array('${GROUP_END}', '${/GROUP_END}');
+        /** @var Cell $cell */
+        foreach($cellIterator as $cell) {
+            $this->_cloneGroupEndRow[] = array(
+                'column'        => $cell->getColumn(),
+                'value'         => str_replace($replace, '', $cell->getValue()),
+                'XFIndex'       => $cell->getXfIndex()
+            );
+            $cell->setValue(null);
+            $cell->setXfIndex(0);
         }
     }
 

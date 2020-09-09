@@ -493,8 +493,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             (function() {
                 // no initial load triggering here
                 this.getSelectionModel().suspendEvents();
-                this.selectPath(root + defaultContainerPath);
-                this.getSelectionModel().resumeEvents();
+                this.selectPath(root + defaultContainerPath, null, (function() {
+                    this.getSelectionModel().resumeEvents();
+                }).bind(this));
+
             }).defer(100, this);
         } else if (! this.hasPersonalContainer) {
             this.expandPath('/shared');
@@ -698,7 +700,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
 
         var params = {
             method: 'Tinebase_Container.getContainer',
-            application: this.app.appName,
+            model: this.recordClass.getPhpClassName(),
             containerType: type,
             requiredGrants: this.requiredGrants,
             owner: owner

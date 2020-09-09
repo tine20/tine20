@@ -22,6 +22,7 @@ class Tinebase_FileSystem_Preview_ServiceFactory
      * get Preview Services client
      *
      * @return Tinebase_FileSystem_Preview_ServiceInterface
+     * @throws Tinebase_Exception_NotFound PreviewService version not found
      */
     public static function getPreviewService()
     {
@@ -30,7 +31,12 @@ class Tinebase_FileSystem_Preview_ServiceFactory
             case 1:
                 return new Tinebase_FileSystem_Preview_ServiceV1();
             case 2:
-                throw new Tinebase_Exception_NotImplemented('v2 is reserved but not implemented');
+                return new Tinebase_FileSystem_Preview_ServiceV2(
+                    new Tinebase_FileSystem_Preview_DefaultNetworkAdapter(
+                        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL}
+                    )
+                );
         }
+        throw new Tinebase_Exception_NotFound("Preview Service Version not found", 500);
     }
 }

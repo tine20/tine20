@@ -136,6 +136,19 @@ class Calendar_Frontend_iMIPTest extends TestCase
             $_doAutoProcess);
     }
 
+    /**
+     * testExternalInvitationRequestAutoProcess
+     */
+    public function testBadTZ()
+    {
+        $iMIP = $this->_testExternalImap('invitation_bad_tz.ics', 2, 'test');
+        $event = $iMIP->getEvent();
+
+        // VCalendar will default to UTC on broken / bad TZ (like BRT), that them somehow defaults to UserTZ!
+        // if that is such a good idea?
+        static::assertEquals(Tinebase_Core::getUserTimezone(), $event->originator_tz);
+    }
+
     public function testExternalInvitationRequestMultiImport()
     {
         if (Tinebase_Core::getUser()->accountLoginName === 'travis') {
@@ -165,15 +178,28 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'organizer, vagrant and sclever should have accepted');
     }
 
+    /**
+     * @param $icsFilename
+     * @param $numAttendee
+     * @param $summary
+     * @param bool $_doAssertation
+     * @param bool $_doAutoProcess
+     * @return Calendar_Model_iMIP
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Statement_Exception
+     */
     protected function _testExternalImap($icsFilename, $numAttendee, $summary, $_doAssertation = true,
         $_doAutoProcess = true)
     {
         $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/' . $icsFilename);
+        $ics = preg_replace('#\d{8}T#', Tinebase_DateTime::now()->addDay(1)->format('Ymd') . 'T', $ics);
+
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'REQUEST',
-            'originator'     => 'l.kneschke@caldav.org',
+            'originator'     => 'l.Kneschke@caldav.org',
         ));
 
         if ($_doAutoProcess) {
@@ -397,6 +423,9 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     public function testExternalInvitationRequestProcess()
     {
+        // TODO should not depend on IMAP/SMTP config ...
+        $this->_checkIMAPConfig();
+
         $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/invitation_request_external.ics' );
         $ics = preg_replace('#DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:20111121T130000#', 'DTSTART;VALUE=DATE-TIME;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->addHour(1)->format('Ymd\THis'), $ics);
         $ics = preg_replace('#DTEND;VALUE=DATE-TIME;TZID=Europe/Berlin:20111121T140000#', 'DTEND;VALUE=DATE-TIME;TZID=Europe/Berlin:' . Tinebase_DateTime::now()->addHour(2)->format('Ymd\THis'), $ics);
@@ -405,7 +434,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
                 'id'             => Tinebase_Record_Abstract::generateUID(),
                 'ics'            => $ics,
                 'method'         => 'REQUEST',
-                'originator'     => 'l.kneschke@caldav.org',
+                'originator'     => 'l.Kneschke@caldav.org',
         ));
         
         Calendar_Controller_EventNotificationsTests::flushMailer();
@@ -432,15 +461,12 @@ class Calendar_Frontend_iMIPTest extends TestCase
         }
         
         // assert REPLY message to organizer only
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
-        if (isset($smtpConfig->from) && ! empty($smtpConfig->from)) {
-            $messages = Calendar_Controller_EventNotificationsTests::getMessages();
-            $this->assertEquals(1, count($messages), 'exactly one mail should be send');
-            $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
-            $this->assertContains('accepted', $messages[0]->getSubject(), 'wrong subject');
-            $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
-            $this->assertContains('SEQUENCE:0', var_export($messages[0], TRUE), 'external sequence has not been keepted');
-        }
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertEquals(1, count($messages), 'exactly one mail should be send');
+        $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
+        $this->assertContains('accepted', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
+        $this->assertContains('SEQUENCE:0', var_export($messages[0], TRUE), 'external sequence has not been keepted');
     }
     
     /**
@@ -450,7 +476,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
     {
         $this->testExternalInvitationRequestProcess();
         $containerFrontend = new Tinebase_Frontend_Json_Container();
-        $result = $containerFrontend->getContainer('Calendar', Tinebase_Model_Container::TYPE_SHARED, null, null);
+        $result = $containerFrontend->getContainer(Calendar_Model_Event::class, Tinebase_Model_Container::TYPE_SHARED, null, null);
         
         foreach ($result as $container) {
             if ($container['name'] === 'l.kneschke@caldav.org') {
@@ -483,9 +509,11 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $fmailJson = new Felamimail_Frontend_Json();
         $jsonMessage = $fmailJson->getMessage($complete->getId());
         Calendar_Config::getInstance()->set(Calendar_Config::DISABLE_EXTERNAL_IMIP, false);
-        $this->assertEmpty($jsonMessage['preparedParts']);
+        $this->assertFalse(empty($jsonMessage['preparedParts']));
+        static::assertTrue(isset($jsonMessage['preparedParts'][0]['preparedData']['preconditions']) &&
+            !empty($jsonMessage['preparedParts'][0]['preparedData']['preconditions']));
     }
-    
+
     /**
      * check IMAP config and marks test as skipped if no IMAP backend is configured
      */
@@ -584,7 +612,313 @@ class Calendar_Frontend_iMIPTest extends TestCase
         
         $this->fail("autoProcess did not throw TOPROCESS Exception");
     }
-    
+
+    public function testGoogleExternalInviteAddAttenderFelamiMailFE()
+    {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        static::assertSame('test', $createdEvent->summary);
+        $unitAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+
+        // test external invite update
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+
+        static::assertNull($this->_iMIPFrontend->autoProcess($iMIP), 'auto process failed');
+        $iMIPevent = $iMIP->getEvent();
+        static::assertSame(3, $iMIPevent->attendee->count(), 'attendee count mismatch');
+        $scleverAttender = Calendar_Model_Attender::getOwnAttender($iMIPevent->attendee);
+        static::assertNotNull($scleverAttender, 'sclever attender not found');
+        $unitAttender = $iMIPevent->attendee->find('user_id', $unitAttender->user_id);
+        static::assertNotNull($unitAttender, 'unit attender not found');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+    }
+
+    protected function _smtpConfigReadyForIMIPTest()
+    {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (!isset($smtpConfig['primarydomain'])) {
+            return false;
+        }
+        return true;
+    }
+
+    public function testGoogleExternalInviteAddAttenderConcurrencyHandlingWebDAV()
+    {
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        static::assertSame('test', $createdEvent->summary);
+        $unitAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+        $createdEvent->summary = 'shooohoho';
+        Calendar_Controller_Event::getInstance()->update($createdEvent);
+
+
+        $oldHTTPAgent = $_SERVER['HTTP_USER_AGENT'];
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        try {
+            $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) .
+                '/files/google_external_invite_addAttender.ics');
+
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+            Calendar_Controller_MSEventFacade::unsetInstance();
+
+            $id = '3evgs2i0jdkofmibc9u5cah0a9@googlePcomffffffffffffffff';
+            $event = Calendar_Frontend_WebDAV_Event::create(Tinebase_Container::getInstance()->getPersonalContainer(
+                $this->_personas['sclever'], Calendar_Model_Event::class,
+                $this->_personas['sclever'])->getFirstRecord(),
+                "$id.ics", $vcalendar);
+            $record = $event->getRecord();
+
+            static::assertSame($createdEvent->uid, $record->uid, 'uid does not match');
+            static::assertSame($createdEvent->getId(), $record->getId());
+
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+
+            $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+                ['field' => 'dtstart', 'operator' => 'equals', 'value' => $createdEvent->dtstart]
+            ]));
+
+            static::assertEquals(1, $events->count());
+            $ownAttender = Calendar_Model_Attender::getOwnAttender($events->getFirstRecord()->attendee);
+            static::assertNotNull($ownAttender, 'lost own attendee');
+            static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+        } finally {
+            $_SERVER['HTTP_USER_AGENT'] = $oldHTTPAgent;
+        }
+    }
+
+    public function testGoogleExternalInviteMultipleAttendeeConcurrencyHandlingWebDAV()
+    {
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        $unitAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+        $personalCal = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(),
+            Calendar_Model_Event::class, Tinebase_Core::getUser())->getFirstRecord();
+        Tinebase_Container::getInstance()->addGrants($personalCal, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['sclever'], [Tinebase_Model_Grants::GRANT_EDIT]);
+
+        $oldHTTPAgent = $_SERVER['HTTP_USER_AGENT'];
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        try {
+            $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) .
+                '/files/google_external_invite_addAttender.ics');
+            $vcalendar = str_replace('PARTSTAT=NEEDS-ACTION;RSVP=
+  TRUE;CN=sclever', 'PARTSTAT=ACCEPTED;RSVP=
+  TRUE;CN=sclever', $vcalendar);
+
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+            Calendar_Controller_MSEventFacade::unsetInstance();
+
+            $id = '3evgs2i0jdkofmibc9u5cah0a9@googlePcomffffffffffffffff';
+            $event = Calendar_Frontend_WebDAV_Event::create(Tinebase_Container::getInstance()->getPersonalContainer(
+                $this->_personas['sclever'], Calendar_Model_Event::class,
+                $this->_personas['sclever'])->getFirstRecord(),
+                "$id.ics", $vcalendar);
+            $record = $event->getRecord();
+
+            static::assertSame($createdEvent->uid, $record->uid, 'uid does not match');
+            static::assertSame($createdEvent->getId(), $record->getId());
+            $scleverAttender = Calendar_Model_Attender::getOwnAttender($record->attendee);
+            static::assertNotNull($scleverAttender, 'lost own attendee');
+            static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $scleverAttender->status);
+
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+
+            $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+                ['field' => 'dtstart', 'operator' => 'equals', 'value' => $createdEvent->dtstart]
+            ]));
+
+            static::assertEquals(1, $events->count());
+            $ownAttender = Calendar_Model_Attender::getOwnAttender($events->getFirstRecord()->attendee);
+            static::assertNotNull($ownAttender, 'lost own attendee');
+            static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+            $scleverAttender = $events->getFirstRecord()->attendee->find('user_id', $scleverAttender->user_id);
+            static::assertNotNull($scleverAttender, 'lost sclever attendee');
+            static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $scleverAttender->status);
+        } finally {
+            $_SERVER['HTTP_USER_AGENT'] = $oldHTTPAgent;
+        }
+    }
+
+    public function testGoogleExternalInviteMultipleAttendeeConcurrencyHandling()
+    {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        $unitAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+        // test external invite 2nd user
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($createdEvent->getId());
+        static::assertSame(3, $updatedEvent->attendee->count(), 'attendee count mismatch');
+        $scleverAttender = Calendar_Model_Attender::getOwnAttender($updatedEvent->attendee);
+        static::assertNotNull($scleverAttender, 'sclever attender not found');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $scleverAttender->status);
+        $unitAttender = $updatedEvent->attendee->find('user_id', $unitAttender->user_id);
+        static::assertNotNull($unitAttender, 'unit attender not found');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'dtstart', 'operator' => 'equals', 'value' => $createdEvent->dtstart]
+        ]));
+
+        static::assertEquals(1, $events->count());
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($events->getFirstRecord()->attendee);
+        static::assertNotNull($ownAttender, 'lost own attendee');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+    }
+
+    public function testGoogleExternalInviteAddAttenderConcurrencyHandling()
+    {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        static::assertSame('test', $createdEvent->summary);
+        $unitAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+
+        $createdEvent->summary = 'shooohoho';
+        Calendar_Controller_Event::getInstance()->update($createdEvent);
+
+        // test external invite update
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+
+        static::assertNull($this->_iMIPFrontend->autoProcess($iMIP), 'auto process failed');
+        $iMIPevent = $iMIP->getEvent();
+        static::assertSame(3, $iMIPevent->attendee->count(), 'attendee count mismatch');
+        $scleverAttender = Calendar_Model_Attender::getOwnAttender($iMIPevent->attendee);
+        static::assertNotNull($scleverAttender, 'sclever attender not found');
+        $unitAttender = $iMIPevent->attendee->find('user_id', $unitAttender->user_id);
+        static::assertNotNull($unitAttender, 'unit attender not found');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $unitAttender->status);
+    }
+
+    public function testGoogleExternalInviteAddAttender()
+    {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        static::assertSame('test', $createdEvent->summary);
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+
+
+        // test external invite update
+        $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($createdEvent->getId());
+        static::assertSame('test update', $updatedEvent->summary);
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($updatedEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'dtstart', 'operator' => 'equals', 'value' => $updatedEvent->dtstart]
+        ]));
+
+        static::assertEquals(1, $events->count());
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($events->getFirstRecord()->attendee);
+        static::assertNotNull($ownAttender, 'lost own attendee');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+    }
+
     /**
      * testInvitationExternalReply
      */
@@ -673,12 +1007,13 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         $ics = file_get_contents(dirname(__FILE__) . '/files/' . $_filename);
         $ics = preg_replace('/unittest@tine20\.org/', $email, $ics);
+        $ics = preg_replace('/@tine20\.org/', '@' . TestServer::getPrimaryMailDomain(), $ics);
 
         $iMIP = new Calendar_Model_iMIP(array(
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'REPLY',
-            'originator'     => 'mail@corneliusweiss.de',
+            'originator'     => 'mail@Corneliusweiss.de',
         ));
 
         $this->assertEquals(1, $iMIP->getEvent()->seq);
@@ -693,7 +1028,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         // force creation of external attendee
         $externalAttendee = new Calendar_Model_Attender(array(
             'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'       => 'mail@corneliusweiss.de',
+            'user_id'       => 'mail@cOrneliusweiss.de',
             'status'        => Calendar_Model_Attender::STATUS_NEEDSACTION
         ));
 
@@ -736,7 +1071,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'CANCEL',
-            'originator'     => 'l.kneschke@caldav.org',
+            'originator'     => 'l.kneschke@calDav.org',
         ));
 
         // TEST CANCEL
@@ -748,10 +1083,11 @@ class Calendar_Frontend_iMIPTest extends TestCase
         unset($iMIP->existing_event);
 
         $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP,true);
-        $this->assertNull($existingEvent, 'event must be deleted');
+        $this->assertNotNull($existingEvent, 'event must not be deleted');
 
-        $existingEvent =  $this->_iMIPFrontend->getExistingEvent($iMIP, true, true);
-        $this->assertEquals($existingEvent->is_deleted, 1, 'event must be deleted');
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent->attendee);
+        static::assertNotNull($ownAttender, 'own attender must not be null');
+        static::assertSame(Calendar_Model_Attender::STATUS_DECLINED, $ownAttender->status);
     }
 
     /**
@@ -772,7 +1108,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             'id'             => Tinebase_Record_Abstract::generateUID(),
             'ics'            => $ics,
             'method'         => 'CANCEL',
-            'originator'     => 'l.kneschke@caldav.org',
+            'originator'     => 'l.kneschke@caldav.Org',
         ));
 
         // TEST CANCEL
@@ -802,27 +1138,173 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     public function testExternalInvitationRescheduleOutlook()
     {
+        // TODO should not depend on IMAP/SMTP config ...
+        $this->_checkIMAPConfig();
+
+        // initial invitation
         $iMIP = $this->_testExternalImap('outlook_invitation.ics',
             3, 'Metaways Folgetermin ');
         $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
         $this->_eventIdsToDelete[] = $eventId = $iMIP->event->getId();
 
-        $ics = file_get_contents(dirname(__FILE__) . '/files/outlook_reschedule.ics');
+
+        // reschedule/reply first user
+        Calendar_Controller_EventNotificationsTests::flushMailer();
+        $ics = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/files/outlook_reschedule.ics');
+        $ics = preg_replace('/20170816/', Tinebase_DateTime::now()->addDay(2)->format('Ymd'), $ics);
         $iMIP = new Calendar_Model_iMIP(array(
             'id' => Tinebase_Record_Abstract::generateUID(),
             'ics' => $ics,
             'method' => 'REQUEST',
-            'originator' => 'l.kneschke@caldav.org',
+            'originator' => 'l.kneschkE@caldav.org',
         ));
-        // TEST REQUEST
-        try {
-            $this->_iMIPFrontend->autoProcess($iMIP);
-        } catch (Exception $e) {
-            $this->fail('TEST REQUEST autoProcess throws Exception: ' . $e);
-        }
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_TENTATIVE);
         unset($iMIP->existing_event);
 
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($eventId);
-        $this->assertEquals('2017-08-16 09:00:00',$updatedEvent->dtstart->toString());
+        $this->assertEquals(Tinebase_DateTime::now()->addDay(2)->format('Y-m-d') . ' 11:00:00',
+            $updatedEvent->dtstart->setTimezone($updatedEvent->originator_tz)->toString());
+
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertEquals(1, count($messages), 'exactly one mail should be send');
+        $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
+        $this->assertContains('Tentative response', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
+        $this->assertContains('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
+
+
+        // reply from second internal attendee
+        Calendar_Controller_EventNotificationsTests::flushMailer();
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        Calendar_Model_Attender::clearCache();
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id' => Tinebase_Record_Abstract::generateUID(),
+            'ics' => $ics,
+            'method' => 'REQUEST',
+            'originator' => 'l.kNeschke@caldav.org',
+        ));
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_DECLINED);
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertEquals(1, count($messages), 'exactly one mail should be send');
+        $this->assertContains('Clever, Susan declined event', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertContains('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
+
+        // try outdated imip
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
+        try {
+            $iMIP = $this->_testExternalImap('outlook_invitation.ics',
+                3, 'Metaways Folgetermin ');
+        } catch (Calendar_Exception_iMIP $preconditionException) {}
+        $this->assertContains('RECENT', $preconditionException->getMessage());
+
+    }
+
+    public function testGoogleExternalInviteLongUID()
+    {
+        if (! $this->_smtpConfigReadyForIMIPTest()) {
+            $this->markTestSkipped('smtp config not ready for test');
+        }
+
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_inviteLongUID.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        static::assertSame('test', $createdEvent->summary);
+        static::assertSame('3evgs2i0jdkofmibc9u5cah0a9@googlePcomffffffffffffffff', $createdEvent->uid);
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+
+        // test external invite update
+        $iMIP = $this->_createiMIPFromFile('google_external_inviteLongUID.ics');
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+
+        $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP, true);
+        static::assertNotNull($existingEvent, 'can\'t get existing event');
+        static::assertSame($createdEvent->uid, $existingEvent->uid, 'uid does not match');
+        static::assertSame($createdEvent->getId(), $existingEvent->getId());
+
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP, true);
+        static::assertSame($createdEvent->uid, $existingEvent->uid, 'uid does not match');
+        static::assertSame($createdEvent->getId(), $existingEvent->getId());
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'dtstart', 'operator' => 'equals', 'value' => $createdEvent->dtstart]
+        ]));
+
+        static::assertEquals(1, $events->count());
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($events->getFirstRecord()->attendee);
+        static::assertNotNull($ownAttender, 'lost own attendee');
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+    }
+
+    public function testGoogleExternalInviteLongUIDWebDAV()
+    {
+        // test external invite
+        $iMIP = $this->_createiMIPFromFile('google_external_inviteLongUID.ics');
+        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->method = 'REQUEST';
+        /*try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('external invite autoProcess throws Exception: ' . get_class($e) . ': ' . $e->getMessage());
+        }*/
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($iMIP->getEvent()->getId());
+        static::assertSame('test', $createdEvent->summary);
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+
+
+        $oldHTTPAgent = $_SERVER['HTTP_USER_AGENT'];
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        try {
+            $vcalendar = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) .
+                '/files/google_external_inviteLongUID.ics');
+
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+
+            $id = '3evgs2i0jdkofmibc9u5cah0a9@googlePcomffffffffffffffff';
+            $event = Calendar_Frontend_WebDAV_Event::create(Tinebase_Container::getInstance()->getPersonalContainer(
+                $this->_personas['sclever'], Calendar_Model_Event::class,
+                $this->_personas['sclever'])->getFirstRecord(),
+                "$id.ics", $vcalendar);
+            $record = $event->getRecord();
+
+            static::assertSame($createdEvent->uid, $record->uid, 'uid does not match');
+            static::assertSame($createdEvent->getId(), $record->getId());
+
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+
+            $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+                ['field' => 'dtstart', 'operator' => 'equals', 'value' => $createdEvent->dtstart]
+            ]));
+
+            static::assertEquals(1, $events->count());
+            $ownAttender = Calendar_Model_Attender::getOwnAttender($events->getFirstRecord()->attendee);
+            static::assertNotNull($ownAttender, 'lost own attendee');
+            static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+        } finally {
+            $_SERVER['HTTP_USER_AGENT'] = $oldHTTPAgent;
+        }
     }
 }

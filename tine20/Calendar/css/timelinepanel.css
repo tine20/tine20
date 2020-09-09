@@ -1,11 +1,11 @@
 .cal-timelinepanel-header {
     height: 100%;
-    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    /*background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;*/
     overflow-y: scroll;
 }
 
 .cal-timelinepanel-header-label {
-    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    /*background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;*/
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -41,7 +41,7 @@
     overflow: hidden;
 }
 
-.cal-timelinepanel-headeritem:hover, cal-timelinepanel-headeritem-today{
+.cal-timelinepanel-headeritem:hover, .cal-timelinepanel-headeritem-today{
     background:#EBF3FD url(../../library/ExtJS/resources/images/default/grid/grid3-hrow-over.gif) repeat-x scroll 0 bottom;
 }
 
@@ -145,7 +145,7 @@
 }
 
 .cal-timeline-view .cal-daysviewpanel-event-header-icons {
-    background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
+    /*background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;*/
     padding-left: 2px;
     top: 3px;
 }

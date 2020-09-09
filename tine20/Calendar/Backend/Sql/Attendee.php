@@ -19,13 +19,15 @@ class Calendar_Backend_Sql_Attendee extends Tinebase_Backend_Sql_Abstract
      * event foreign key column
      */
     const FOREIGNKEY_EVENT = 'cal_event_id';
+
+    const TABLENAME = 'cal_attendee';
     
     /**
      * Table name without prefix
      *
      * @var string
      */
-    protected $_tableName = 'cal_attendee';
+    protected $_tableName = self::TABLENAME;
     
     /**
      * Model name

@@ -80,7 +80,7 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
         if (isset($taskConfig->$configString)) {
             $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
         } else {
-            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer('Tasks');
+            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer(Tasks_Model_Task::class);
         }
         
         return $defaultContainer;
@@ -133,7 +133,7 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account);
+                    $this->deletePersonalFolder($_eventObject->account, Tasks_Model_Task::class);
                 }
                 break;
         }

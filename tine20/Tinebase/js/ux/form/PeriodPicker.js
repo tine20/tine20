@@ -40,7 +40,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
     startDate: null,
 
     /**
-     * @cfg {Bool} periodIncludesUntil
+     * @cfg {Boolean} periodIncludesUntil
      * the period includes until timestamp
      */
     periodIncludesUntil: false,
@@ -153,7 +153,8 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
         var rangeCombo = this.getRangeCombo();
         rangeCombo.render(this.el.child('.ux-pp-range'));
-        rangeCombo.setWidth(this.getEl().getWidth() * 0.4);
+
+        this.onResize(this.getEl().getWidth(), this.getEl().getHeight());
 
         this.setValue(this.value);
         this.mon(this.getEl(), 'click', this.onClick, this);
@@ -193,7 +194,14 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
     onResize: function (w, h) {
         Ext.ux.form.PeriodPicker.superclass.onResize.apply(this, arguments);
 
-        this.getRangeCombo().setWidth(this.getEl().getWidth() * 0.4);
+        var rw = Math.floor(this.getEl().getWidth() * 0.4),
+            cw = Math.floor(this.getEl().getWidth() * 0.6);
+
+        this.el.select('.ux-pp-range').setWidth(rw);
+        this.getRangeCombo().wrap.setWidth(rw);
+        this.getRangeCombo().setWidth(rw);
+
+        this.el.select('.ux-pp-controls').setWidth(cw);
     },
 
     getRangeCombo: function() {
@@ -208,9 +216,10 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 triggerAction: 'all',
                 mode: 'local',
                 forceSelection: true,
-                allowEmpty: false,
+                allowBlank: false,
                 editable: false,
                 store: fieldDef,
+                isInnerFTBCmp: true,
                 // value: this.range,
                 listeners: {
                     scope: this,
@@ -238,10 +247,12 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                     weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._hidden('WK'),
                     inspectMonthPickerClick: function(btn, e) {
                         if (e.getTarget('button')) {
-                            me.getRangeCombo().setValue('month');
-                            me.range = 'month';
-                            me.setStartDate(this.activeDate);
-                            this.destroy();
+                            if (me.availableRanges.match('month')) {
+                                me.getRangeCombo().setValue('month');
+                                me.range = 'month';
+                                me.setStartDate(this.activeDate);
+                                this.destroy();
+                            }
                             return false;
                         }
                     }
@@ -249,9 +260,12 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 listeners: {
                     scope: this,
                     select: function(picker, value, weekNumber) {
-                        this.getRangeCombo().setValue(weekNumber ? 'week' : 'day');
-                        this.range = weekNumber ? 'week' : 'day';
-                        this.setStartDate(value);
+                        var range = weekNumber ? 'week' : 'day';
+                        if (me.availableRanges.match(range)) {
+                            this.getRangeCombo().setValue(range);
+                            this.range = range;
+                            this.setStartDate(value);
+                        }
                     }
                 }
             });

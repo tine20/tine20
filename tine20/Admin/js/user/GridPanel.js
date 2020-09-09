@@ -207,12 +207,13 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Login name'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 160, hidden: false},
             { header: this.app.i18n._('Last name'), id: 'accountLastName', dataIndex: 'accountLastName'},
             { header: this.app.i18n._('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName'},
-            { header: this.app.i18n._('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200, hidden: false},
-            { header: this.app.i18n._('Email usage'), id: 'emailQuota', hidden: this.isEmailBackend, dataIndex: 'emailUser', renderer: this.emailQuotaRenderer, sortable: false},
+            { header: this.app.i18n._('E-mail'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200, hidden: false},
+            { header: this.app.i18n._('E-mail usage'), id: 'emailQuota', hidden: this.isEmailBackend, dataIndex: 'emailUser', renderer: this.emailQuotaRenderer, sortable: false},
             { header: this.app.i18n._('Filesystem usage'), id: 'fileQuota', dataIndex: 'filesystemSize', renderer: this.fileQuotaRenderer, hidden: false, sortable: false},
             { header: this.app.i18n._('OpenID'), id: 'openid', dataIndex: 'openid', width: 200},
             { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: this.isLdapBackend, width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', hidden: this.isLdapBackend, dataIndex: 'accountLastLoginfrom'},
+            { header: this.app.i18n._('Password Must Change'), id: 'password_must_change', dataIndex: 'password_must_change', width: 200, renderer: Tine.Tinebase.common.booleanRenderer, hidden: false},
             { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
             { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false}
         ].concat(this.getModlogColumns());
@@ -257,11 +258,13 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Array} requiredAccountStatus
      */
     enableDisableActionUpdater: function(action, grants, records, isFilterSelect, requiredAccountStatus) {
-        var enabled = records.length > 0;
-        Ext.each(records, function(record){
-            enabled &= requiredAccountStatus.indexOf(record.get('accountStatus')) >=0;// === requiredAccountStatus;
-            return enabled;
-        }, this);
+        let enabled = records.length > 0;
+        if (requiredAccountStatus) {
+            Ext.each(records, function (record) {
+                enabled &= requiredAccountStatus.indexOf(record.get('accountStatus')) >= 0;// === requiredAccountStatus;
+                return enabled;
+            }, this);
+        }
         
         action.setDisabled(!enabled);
     },
@@ -332,7 +335,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         switch(_value) {
             case 'blocked':
-                gridValue = "<img src='images/oxygen/16x16/status/security-medium.png' width='16' height='16'/>";
+                gridValue = "<img src='images/icon-set/icon_action_minus.svg' width='16' height='16'/>";
                 break;
 
             case 'enabled':
@@ -344,7 +347,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 break;
 
             case 'expired':
-                gridValue = "<img src='images/oxygen/16x16/status/user-away.png' width='16' height='16'/>";
+                gridValue = "<img src='images/icon-set/icon_time.svg' width='16' height='16'/>";
                 break;
 
             default:

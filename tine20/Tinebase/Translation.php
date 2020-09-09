@@ -246,10 +246,10 @@ class Tinebase_Translation
      * @param  Zend_Locale $_locale [optional]
      * @return Zend_Translate_Adapter
      */
-    public static function getTranslation($_applicationName, Zend_Locale $_locale = NULL)
+    public static function getTranslation($_applicationName = 'Tinebase', Zend_Locale $_locale = NULL)
     {
         $locale = $_locale
-            ?: Tinebase_Core::get('locale')
+            ?: Tinebase_Core::getLocale()
             ?: (Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_LOCALE, 'en'));
         
         $cacheId = (string) $locale . $_applicationName;
@@ -353,10 +353,13 @@ class Tinebase_Translation
                 $jsTranslations .= "/************************** generic translations **************************/ \n";
                 
                 $jsTranslations .= file_get_contents($genericTranslationFile);
-                
+
                 $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
                 if (file_exists($extjsTranslationFile)) {
-                    $jsTranslations  .= file_get_contents($extjsTranslationFile);
+                    $jsTranslations .= "Tine.__applyExtTranslations = function() {";
+                    $jsTranslations .= file_get_contents($extjsTranslationFile);
+                    $jsTranslations .= "};";
+
                 } else {
                     $jsTranslations  .= "console.error('Translation Error: extjs changed their lang file name again ;-(');";
                 }
@@ -399,7 +402,7 @@ class Tinebase_Translation
         $d = dir($tine20path);
         while (false !== ($appName = $d->read())) {
             $appPath = "$tine20path/$appName";
-            if ($appName{0} != '.' && is_dir($appPath)) {
+            if ($appName[0] != '.' && is_dir($appPath)) {
                 $translationPath = "$appPath/translations";
                 if (is_dir($translationPath)) {
                     $langDirs[$appName] = $translationPath;
@@ -511,7 +514,7 @@ class Tinebase_Translation
     {
         $date = ($date !== null) ? clone($date) : Tinebase_DateTime::now();
         $timezone = ($timezone !== null) ? $timezone : Tinebase_Core::getUserTimezone();
-        $locale = ($locale !== null) ? $locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
+        $locale = ($locale !== null) ? $locale : Tinebase_Core::getLocale();
         
         $date = new Zend_Date($date->getTimestamp());
         $date->setTimezone($timezone);

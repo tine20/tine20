@@ -125,7 +125,16 @@ class Tinebase_State
                     'state_id' => $_name,
                     'data' => $_value
                 ));
-                $this->_backend->create($record);
+                try {
+                    $this->_backend->create($record);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                        throw $zdse;
+                    } else {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Ignore duplicates: '
+                            . $zdse->getMessage());
+                    }
+                }
             } else {
                 $record = $results->getFirstRecord();
                 $record->data = $_value;
@@ -213,7 +222,7 @@ class Tinebase_State
         } else if(is_bool($state)) {
             $enc = "b:" . ($state ? "1" : "0");
         } else if($state instanceof DateTime){
-            $enc = "d:" . $state->format('D, d M Y H:i:s') + ' GMT';
+            $enc = "d:" . $state->format('D, d M Y H:i:s') . ' GMT';
         } else if(is_array($state)) {
             $flat = "";
             if (! count(array_filter(array_keys($state), 'is_string'))) {

@@ -27,9 +27,6 @@ class Sales_Import_ContractTest extends TestCase
 
     public function testImportDemoData()
     {
-        if (!extension_loaded('yaml')) {
-            $this->markTestSkipped('Yaml are not install');
-        }
         self::clear('Sales', 'Contract');
         $now = Tinebase_DateTime::now();
         $this->_importContainer = $this->_getTestContainer('Sales', 'Sales_Model_Contract');

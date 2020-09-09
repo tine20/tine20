@@ -100,7 +100,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onAfterRecordLoad: function() {
         Tine.HumanResources.EmployeeEditDialog.superclass.onAfterRecordLoad.call(this);
         this.disableFreetimes();
-        if (this.record.get('id') && (! Ext.isObject(this.record.get('account_id')))) {
+        if (this.record.get('id') && this.record.get('account_id') && (! Ext.isObject(this.record.get('account_id')))) {
             var f = this.getForm().findField('account_id');
             f.disable();
             f.setRawValue(this.app.i18n._('Account is disabled or deleted!'));
@@ -157,7 +157,8 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             frame: false,
             border: true,
             autoScroll: true,
-            layout: 'border'
+            layout: 'border',
+            hideColumns: ['employee_id']
         });
         
         this.vacationGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
@@ -169,7 +170,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             autoScroll: true,
             layout: 'border',
             freetimeType: 'VACATION',
-            editDialogRecordProperty: 'vacation'
+            hideColumns: ['employee_id']
         });
         this.sicknessGridPanel = new Tine.HumanResources.FreeTimeGridPanel({
             app: this.app,
@@ -180,7 +181,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             autoScroll: true,
             layout: 'border',
             freetimeType: 'SICKNESS',
-            editDialogRecordProperty: 'sickness'
+            hideColumns: ['employee_id']
         });
             
         var tabs = [{
@@ -299,7 +300,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .25,
                                     listeners: {
                                         scope: this,
-                                        blur: this.updateDisplayName
+                                        change: this.updateDisplayName
                                     }
                                 }
                             ), Tine.widgets.form.FieldManager.get(
@@ -311,7 +312,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     columnWidth: .25,
                                     listeners: {
                                         scope: this,
-                                        blur: this.updateDisplayName
+                                        change: this.updateDisplayName
                                     }
                                 }
                             )], [

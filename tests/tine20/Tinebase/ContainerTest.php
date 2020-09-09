@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
+class Tinebase_ContainerTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -38,7 +38,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_instance = Tinebase_Container::getInstance();
 
@@ -83,7 +83,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
         
         Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false);
     }
@@ -129,7 +129,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     protected function _validateOwnerId(Tinebase_Model_Container $_container)
     {
         if ($_container->type == Tinebase_Model_Container::TYPE_SHARED)  {
-            $this->assertTrue(empty($_container->owner_id), 'shared container does not have an owner');
+            $this->assertTrue(empty($_container->owner_id), 'shared container should not have an owner: '
+                . print_r($_container->toArray(), true));
         } else {
             $this->assertTrue(! empty($_container->owner_id), 'personal container must have an owner');
         }
@@ -156,7 +157,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     public function testGetContainerByName()
     {
         $container = $this->_instance->getContainerByName(
-            'Addressbook',
+            Addressbook_Model_Contact::class,
             $this->objects['initialContainer']->name,
             $this->objects['initialContainer']->type,
             Tinebase_Core::getUser()->getId()
@@ -305,9 +306,10 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetGrants()
     {
-        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
+        $grantsClass = $this->objects['initialContainer']->getGrantClass();
+        $newGrants = new Tinebase_Record_RecordSet($grantsClass);
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(array(
+            new $grantsClass(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
                     Tinebase_Model_Grants::GRANT_READ      => true,
@@ -324,7 +326,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         )));
         $groupToAdd = $lists->getFirstRecord();
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(array(
+            new $grantsClass(array(
                     'account_id'     => $groupToAdd->group_id,
                     'account_type'   => 'group',
                     Tinebase_Model_Grants::GRANT_READ      => true,
@@ -363,9 +365,10 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->testSetGrants();
         
-        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
+        $grantsClass = $this->objects['initialContainer']->getGrantClass();
+        $newGrants = new Tinebase_Record_RecordSet($grantsClass);
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(array(
+            new $grantsClass(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
                     Tinebase_Model_Grants::GRANT_ADMIN     => true
@@ -395,7 +398,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $stmt = Tinebase_Core::getDb()->query('select * from '.Tinebase_Core::getDb()->quoteIdentifier(SQL_TABLE_PREFIX .'container_acl') . ' where ' . Tinebase_Core::getDb()->quoteInto(Tinebase_Core::getDb()->quoteIdentifier('container_id') . ' = ?', $this->objects['initialContainer']->getId()));
         $rows = $stmt->fetchAll();
         
-        $this->assertEquals(7, count($rows));
+        $this->assertEquals(12, count($rows), print_r($rows, true));
     }
     
     /**
@@ -435,14 +438,67 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->_instance->deleteContainer($container->getId(), TRUE);
     }
 
+    public function testGetSharedContainerOrder()
+    {
+        // expected sorting is order 9, then order 20, hierarchy containerTest1 (!) then name containerTest20, then 21
+        $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest9',
+            'order'          => 9,
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
+        )));
+
+        $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest20',
+            'order'          => 20,
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
+        )));
+
+        $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest21',
+            'order'          => 20,
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
+        )));
+
+        $this->_instance->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'containerTest22',
+            'order'          => 20,
+            'hierarchy'      => 'containerTest1',
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'backend'        => 'Sql',
+            'model'          => Addressbook_Model_Contact::class,
+        )));
+
+        $result = $this->_instance->getSharedContainer(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, '*');
+
+        while ('containerTest9' !== $result->getFirstRecord()->name) { $result->removeFirst(); }
+        static::assertEquals('containerTest9', $result->getFirstRecord()->name);
+        $result->removeFirst();
+        static::assertEquals('containerTest22', $result->getFirstRecord()->name);
+        $result->removeFirst();
+        static::assertEquals('containerTest20', $result->getFirstRecord()->name);
+        $result->removeFirst();
+        static::assertEquals('containerTest21', $result->getFirstRecord()->name);
+    }
+
     /**
      * testGetSearchContainerWithoutReadButWithAdminGrant
      */
     public function testGetSearchContainerWithoutReadButWithAdminGrant()
     {
-        $newGrants = new Tinebase_Record_RecordSet($this->objects['initialContainer']->getGrantClass());
+        $grantsClass = $this->objects['initialContainer']->getGrantClass();
+        $newGrants = new Tinebase_Record_RecordSet($grantsClass);
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(array(
+            new $grantsClass(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
                     Tinebase_Model_Grants::GRANT_READ      => false,
@@ -457,7 +513,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $container = $this->_instance->getContainerById($this->objects['initialContainer']);
         $this->assertTrue(is_object($container));
         
-        $containers = $this->_instance->getPersonalContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
+        $containers = $this->_instance->getPersonalContainer(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
         $container = $containers->find('name', $this->objects['initialContainer']->name);
         $this->assertTrue(is_object($container));
     }
@@ -469,7 +525,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->_instance->hasGrant(Tinebase_Core::getUser(), $this->objects['initialContainer'], Tinebase_Model_Grants::GRANT_READ));
 
-        $readableContainer = $this->_instance->getContainerByACL(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
+        $readableContainer = $this->_instance->getContainerByACL(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_READ);
         $this->assertEquals('Tinebase_Record_RecordSet', get_class($readableContainer), 'wrong type');
         $this->assertTrue(count($readableContainer) >= 2);
         foreach($readableContainer as $container) {
@@ -547,7 +603,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         Tinebase_User::getInstance()->setStatus($user, 'enabled');
         
         $container = Tinebase_Container::getInstance()->getPersonalContainer(
-            $user, 'Calendar', $user, Tinebase_Model_Grants::GRANT_READ
+            $user, Calendar_Model_Event::class, $user, Tinebase_Model_Grants::GRANT_READ
         )->getFirstRecord();
 
         $this->assertTrue($container !== null);
@@ -632,7 +688,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $filter = new Tinebase_Model_ContainerFilter(array(
             array('field' => 'owner_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
             array('field' => 'application_id', 'operator' => 'equals', 'value' =>
-                Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId())
+                Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId())
         ));
         $result = Tinebase_Container::getInstance()->search($filter);
         

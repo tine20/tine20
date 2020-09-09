@@ -110,7 +110,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
         this.conditionsPanel.conjunctionOperator = this.record.get('conjunction') == 'anyof' ? 'or' : 'and';
         
-        this.loadMask.hide();
+        this.hideLoadMask();
     },
     
     /**
@@ -394,6 +394,16 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             hideLabel: true
                         }]
                     }, {
+                        id: this.idPrefix + 'vacation',
+                        layout: 'form',
+                        items: [{
+                            name: 'action_argument_vacation',
+                            xtype: 'textarea',
+                            width: 300,
+                            height: 60,
+                            hideLabel: true
+                        }]
+                    }, {
                         id: this.idPrefix + 'discard',
                         layout: 'fit',
                         items: []
@@ -428,11 +438,15 @@ Tine.Felamimail.sieve.RuleEditDialog.openWindow = function (config) {
  * @return {Array}
  */
 Tine.Felamimail.sieve.RuleEditDialog.getActionTypes = function(app) {
+    if (! app) {
+        app = Tine.Tinebase.appMgr.get('Felamimail');
+    }
     return [
         ['fileinto',    app.i18n._('Move mail to folder')],
         ['redirect',    app.i18n._('Redirect mail to address')],
         ['reject',      app.i18n._('Reject mail with this text')],
-        ['discard',     app.i18n._('Discard mail')]
+        ['discard',     app.i18n._('Discard mail')],
+        ['vacation',    app.i18n._('Auto-Reply mail with this text')]
         //['keep',        app.i18n._('Keep mail')],
     ];
 };

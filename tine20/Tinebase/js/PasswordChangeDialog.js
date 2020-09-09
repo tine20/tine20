@@ -55,10 +55,14 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                 name:'oldPassword'
             },{
                 id: 'newPassword',
+                xtype: 'tw-passwordTriggerField',
+                autocomplete: 'new-password',
                 fieldLabel: String.format(i18n._('New {0}'), this.passwordLabel),
                 name:'newPassword'
             },{
                 id: 'newPasswordSecondTime',
+                xtype: 'tw-passwordTriggerField',
+                autocomplete: 'new-password',
                 fieldLabel: String.format(i18n._('Repeat new {0}'), this.passwordLabel),
                 name:'newPasswordSecondTime'
             }],
@@ -74,18 +78,22 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                 handler: function() {
                     var form = Ext.getCmp('changePasswordPanel').getForm();
                     var values;
+                    if (! this.loadMask) {
+                        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Changing {0}'), this.passwordLabel)});
+                    }
+                    this.loadMask.show();
+
                     if (form.isValid()) {
                         values = form.getValues();
                         if (values.newPassword == values.newPasswordSecondTime) {
                             Ext.Ajax.request({
-                                waitTitle: i18n._('Please Wait!'),
-                                waitMsg: String.format(i18n._('Changing {0}'), this.passwordLabel),
                                 params: {
                                     method: this.pwType === 'pin' ? 'Tinebase.changePin' : 'Tinebase.changePassword',
                                     oldPassword: values.oldPassword,
                                     newPassword: values.newPassword
                                 },
                                 success: function(_result, _request){
+                                    this.loadMask.hide();
                                     var response = Ext.util.JSON.decode(_result.responseText);
                                     if (response.success) {
                                         Ext.getCmp('changePassword_window').close();
@@ -106,7 +114,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                     } else {
                                         Ext.MessageBox.show({
                                             title: i18n._('Failure'),
-                                            msg: response.errorMessage,
+                                            msg: Ext.util.Format.nl2br(response.errorMessage),
                                             buttons: Ext.MessageBox.OK,
                                             icon: Ext.MessageBox.ERROR  
                                         });

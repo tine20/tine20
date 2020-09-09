@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -178,10 +178,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $importOptions
      * @param array $clientRecordData
      * @return array
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function importEvents($tempFileId, $definitionId, $importOptions, $clientRecordData = array())
     {
-        return $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
+        try {
+            $result = $this->_import($tempFileId, $definitionId, $importOptions, $clientRecordData);
+        } catch (Calendar_Exception_IcalParser $ceip) {
+            throw new Tinebase_Exception_SystemGeneric('Import error: ' . $ceip->getMessage());
+        }
+        return $result;
     }
     
     /**
@@ -292,11 +298,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for events matching given arguments
      *
-     * @param  array $filter
-     * @param  array $paging
+     * @param array $filter
+     * @param array $paging
+     * @param boolean $addFixedCalendars
      * @return array
      */
-    public function searchEvents($filter, $paging)
+    public function searchEvents($filter, $paging, $addFixedCalendars = true)
     {
         $controller = Calendar_Controller_Event::getInstance();
         
@@ -304,9 +311,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
 
-        // find out if fixed calendars should be used
-        $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
-        $useFixedCalendars = is_array($fixedCalendarIds) && ! empty($fixedCalendarIds);
+        if ($addFixedCalendars) {
+            // find out if fixed calendars should be used
+            $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
+            $useFixedCalendars = is_array($fixedCalendarIds) && !empty($fixedCalendarIds);
+        } else {
+            $useFixedCalendars = false;
+        }
         
         $periodFilter = $filter->getFilter('period');
         
@@ -333,7 +344,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter = new Calendar_Model_EventFilter(array(), 'AND');
             $filter->addFilterGroup($og);
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' events filter: ' . print_r($filter->toArray(), true));
+
         $records = $controller->search($filter, $pagination, FALSE);
         
         $result = $this->_multipleRecordsToJson($records, $clientFilter, $pagination);
@@ -352,15 +366,16 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getDefaultPeriodFilter()
     {
-        $now = Tinebase_DateTime::now()->setTime(0,0,0);
+        $now = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         
         $from = $now->getClone()->subMonth(Calendar_Config::getInstance()->get(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM, 0));
         $until = $now->getClone()->addMonth(Calendar_Config::getInstance()->get(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL, 1));
-        $periodFilter = new Calendar_Model_PeriodFilter(array(
+        $periodFilter = new Calendar_Model_PeriodFilter([
             'field' => 'period',
             'operator' => 'within',
-            'value' => array("from" => $from, "until" => $until)
-        ));
+            'value' => array("from" => $from, "until" => $until),
+            'options' => ['timezone' => Tinebase_Core::getUserTimezone()]
+        ]);
         
         return $periodFilter;
     }
@@ -410,13 +425,32 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param   array   $recordData
      * @return  array   created/updated Resource
+     * @throws Calendar_Exception_ResourceAdminGrant
      */
     public function saveResource($recordData)
     {
         if(array_key_exists ('max_number_of_people', $recordData) && $recordData['max_number_of_people'] == '') {
            $recordData['max_number_of_people'] = null;
         }
-        
+
+        $check = false;
+        if ($recordData['grants']) {
+
+            foreach ($recordData['grants'] as $grant) {
+                try {
+                    if (isset($grant['resourceAdminGrant']) && $grant['resourceAdminGrant'] == true) {
+                        $check = true;
+                        break;
+                    }
+                } catch (Exception $e) {
+                }
+            }
+            if (!$check) {
+                throw new Calendar_Exception_ResourceAdminGrant();
+            }
+
+        }
+
         return $this->_save($recordData, Calendar_Controller_Resource::getInstance(), 'Resource');
     }
     
@@ -517,9 +551,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $events = array_filter($events);
 
-        $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
-        $calendarController = Calendar_Controller_Event::getInstance();
         $fbInfo = [];
+        try {
+            $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
+        } catch (Tinebase_Exception_Record_Validation $terv) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $terv->getMessage() . ' attendee: '
+                . print_r($attendee, true));
+            return $fbInfo;
+        }
+
+        $calendarController = Calendar_Controller_Event::getInstance();
         $periods = [];
         $aggregatedPeriods = [];
 
@@ -546,13 +588,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $fbInfo[$eventRecord->getId()] = [];
             $periods[$eventRecord->getId()] = $eventPeriods;
             $aggregatedPeriods = array_merge($aggregatedPeriods, $eventPeriods);
-
-            /*$periods = $calendarController->getBlockingPeriods($eventRecord, [
-                'from'  => $eventRecord->dtstart,
-                'until' => $eventRecord->dtstart->getClone()->addMonth(2)
-            ]);
-
-            $fbInfo[$eventRecord->getId()] = $calendarController->getFreeBusyInfo($periods, $attendee, $ignoreUIDs)->toArray();*/
         }
 
         if (count($aggregatedPeriods = $this->_reduceAggregatePeriods($aggregatedPeriods)) === 0) {
@@ -619,6 +654,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $periodFilters = [];
         foreach ($periods as $period) {
+            if (! $period['from']) {
+                $period['from'] = Tinebase_DateTime::now();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Sanitizing "from" to ' . $period['from']->toString());
+            }
+            if (! $period['until']) {
+                $period['until'] = Tinebase_DateTime::now()->addMonth(Calendar_Config::getInstance()->get(
+                    Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL, 1));
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Sanitizing "until" to ' . $period['until']->toString());
+            }
             $periodFilters[] = [
                 'field' => 'period',
                 'operator' => 'within',
@@ -645,7 +691,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = [current($periods)];
         $i = 0;
         foreach ($periods as $period) {
-            if ($result[$i]['until']->compare($period['from']) !== -1) {
+            if ($result[$i]['until'] && $result[$i]['until']->compare($period['from']) !== -1) {
                 if ($result[$i]['until']->compare($period['until']) === -1) {
                     $result[$i]['until'] = $period['until'];
                 }
@@ -686,6 +732,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $result = array();
         $addressBookFE = new Addressbook_Frontend_Json();
+        $searchAttendersConfig = Calendar_Config::getInstance()->{Calendar_Config::SEARCH_ATTENDERS_FILTER};
 
         if (!isset($filters['type']) || in_array(Calendar_Model_Attender::USERTYPE_USER, $filters['type'])) {
             $contactFilter = array(array('condition' => 'OR', 'filters' => array(
@@ -694,6 +741,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             )));
             if (isset($filters['userFilter'])) {
                 $contactFilter[] = $filters['userFilter'];
+            }
+            if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER})) {
+                $contactFilter = [['condition' => 'AND', 'filters' => [
+                    ['condition' => 'AND', 'filters' => $contactFilter],
+                    $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_USER}
+                ]]];
             }
             $contactPaging = $paging;
             $contactPaging['sort'] = array('type', 'n_fileas');
@@ -710,6 +763,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $groupFilter[] = $filters['groupFilter'];
             }
             $groupFilter[] = array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP);
+            if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP})) {
+                $groupFilter = [['condition' => 'AND', 'filters' => [
+                    ['condition' => 'AND', 'filters' => $groupFilter],
+                    $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_GROUP}
+                ]]];
+            }
             $groupPaging = $paging;
             $groupPaging['sort'] = 'name';
             $result[Calendar_Model_Attender::USERTYPE_GROUP] = $addressBookFE->searchLists($groupFilter, $groupPaging);
@@ -729,6 +788,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 if (!empty($filters['resourceFilter'])) {
                     $resourceFilter[] = $filters['resourceFilter'];
                 }
+            }
+            if (!empty($searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE})) {
+                $resourceFilter = [['condition' => 'AND', 'filters' => [
+                    ['condition' => 'AND', 'filters' => $resourceFilter],
+                    $searchAttendersConfig->{Calendar_Config::SEARCH_ATTENDERS_FILTER_RESOURCE}
+                ]]];
             }
             $resourcePaging = $paging;
             $resourcePaging['sort'] = 'name';

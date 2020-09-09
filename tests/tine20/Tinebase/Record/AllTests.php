@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -24,10 +24,10 @@ class Tinebase_Record_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Record Tests');
 
-        $suite->addTestSuite('Tinebase_Record_RecordTest');
-        $suite->addTestSuite('Tinebase_Record_RecordSetTest');
-        $suite->addTestSuite('Tinebase_Record_PathTest');
-        $suite->addTestSuite('Tinebase_Record_ExpanderTest');
+        $suite->addTestSuite(Tinebase_Record_RecordTest::class);
+        $suite->addTestSuite(Tinebase_Record_RecordSetTest::class);
+        $suite->addTestSuite(Tinebase_Record_PathTest::class);
+        $suite->addTestSuite(Tinebase_Record_ExpanderTest::class);
 
         return $suite;
     }

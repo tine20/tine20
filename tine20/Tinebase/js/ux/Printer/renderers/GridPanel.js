@@ -91,16 +91,15 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
         Ext.each(records, function (item) {
             var convertedData = {};
 
-            //apply renderers from column model
-            Ext.iterate(item.data, function (key, value) {
-                Ext.each(columns, function (column) {
-                    if (column.dataIndex == key) {
-                        convertedData[key] = column.renderer ? column.renderer(value, null, item) : value;
-                        convertedData[key] = convertedData[key] || '';
-                        return false;
-                    }
-                });
+
+            Ext.each(columns, function (column) {
+                var key = column.dataIndex,
+                    value = item.get(key);
+
+                convertedData[key] = column.renderer ? column.renderer(value, null, item) : value;
+                convertedData[key] = convertedData[key] || '';
             });
+
 
             data.push(convertedData);
         });

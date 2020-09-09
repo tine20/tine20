@@ -12,40 +12,11 @@ Ext.ns('Tine.HumanResources');
  * @class       Tine.HumanResources.FreeTimeEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * 
- * <p>FreeTime Compose Dialog</p>
- * <p></p>
- * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * Create a new Tine.HumanResources.FreeTimeEditDialog
  */
 Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
-    /**
-     * @private
-     */
-    mode: 'local',
-    
-    /**
-     * show private Information (autoset due to rights)
-     * 
-     * @type {Boolean}
-     */
-    showPrivateInformation: null,
-    
-    /**
-     * holds cached getFeastAndFreeDaysQueries
-     * 
-     * @type {Array}
-     */
-    calculatedFeastDays: null,
-    
-    /**
-     * either SICKNESS or VACATION
-     * 
-     * @type {String}
-     */
-    freetimeType: null,
     
     /**
      * the datepicker holds a calendar to select the dates of vacation or sickness
@@ -60,76 +31,17 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     accountPicker: null,
     
-    /**
-     * two years ago for the accountPicker search
-     * 
-     * @type {Number}
-     */
-    twoYearsAgo: null,
     
-    /**
-     * year on init time
-     * 
-     * @type {Number}
-     */
-    startYear: null,
-    
-    /**
-     * holds the current account (by the startYear, if no account is given by the record)
-     * 
-     * @type {Tine.HumanResources.Model.Account}
-     */
-    currentAccount: null,
-    
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     * @private
-     */
-    updateToolbars: Ext.emptyFn,
-    
-    /**
-     * holds vacation day records already inserted in the employee by account_id
-     * 
-     * @type {Object}
-     */
-    localVacationDays: null,
-    
-    /**
-     * holds already removed sickness days which are not persisted
-     * 
-     * @type {Object}
-     */
-    removedSicknessDays: null,
-    
-    /**
-     * holds already removed vacation days which are not persisted
-     * 
-     * @type {Object}
-     */
-    removedVacationDays: null,
-    
-    /**
-     * holds sickness day records already inserted in the employee by account_id
-     * 
-     * @type {Object}
-     */
-    localSicknessDays: null,
+    // private
+    recordFromJson: true,
     
     /**
      * inits the component
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('HumanResources');
-        this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
-        
-        this.calculatedFeastDays = [];
-        this.localVacationDays = {};
-        this.localSicknessDays = {};
-        
-        // calculate current year and two years ago for the accountPicker search
-        var date = new Date();
-        this.startYear = parseInt(date.format('Y'));
-        this.twoYearsAgo = this.startYear - 2;
+
+        this.feastAndFreeDaysCache = {};
         
         Tine.HumanResources.FreeTimeEditDialog.superclass.initComponent.call(this);
     },
@@ -139,38 +51,50 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * 
      * @private
      */
-    onRecordLoad: function() {
-        // interrupt process flow until dialog is rendered
-        if (! this.rendered) {
-            this.onRecordLoad.defer(250, this);
-            return;
+    onAfterRecordLoad: async function() {
+        await Promise.all([
+            this.isRendered(),
+            this.record.resolveForeignRecords()
+        ]);
+
+        const statusPicker = this.getStatusPicker();
+        if (statusPicker && this.record.get('created_by')) {
+            statusPicker.setValue(this.record.get('status'));
         }
         
-        if (Ext.isString(this.record)) {
-            this.record = this.recordProxy.recordReader({responseText: this.record});
-        }
-        this.record.set('employee_id', this.fixedFields.get('employee_id'));
+        this.datePicker.setValue(Date.parseDate(_.get(this.record, 'data.firstday_date'), Date.patterns.ISO8601Long) || new Date());
+        this.datePicker.setSelected(_.map(_.get(this.record, 'data.freedays', []), (day) => {
+            return Date.parseDate(day.date, Date.patterns.ISO8601Long);
+        }));
         
-        if (this.record.get('employee_id')) {
-            this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
-        }
-        
-        Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);
-        
-        if (this.accountPicker) {
-            this.accountPicker.onRecordLoad(this.record);
-        }
-        // set title after record load to determine if it's an update or new record
-        var typeString = this.freetimeType == 'SICKNESS' ? 'Sickness Days' : 'Vacation Days';
-        if (this.record.id) {
-            if (this.accountPicker) {
-                this.accountPicker.disable();
-            }
-            this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
+        Tine.HumanResources.FreeTimeEditDialog.superclass.onAfterRecordLoad.call(this);
+    },
+
+    checkStates: function() {
+        Tine.HumanResources.FreeTimeEditDialog.superclass.checkStates.apply(this, arguments);
+
+        // record vs. recordData!
+        var type = this.typePicker.selectedRecord || this.record.get('type') || {};
+        var employee = this.employeePicker.selectedRecord || this.record.get('employee_id');
+        var employeeName = _.get(employee, 'data.n_fn', _.get(employee, 'n_fn', this.app.i18n._('Employee')));
+        var typeString = _.get(type, 'data.name', _.get(type, 'name', type)) || 'Free Time';
+        var isNewRecord = !this.record.get('creation_time');
+
+        if (!isNewRecord) {
+            // this.accountPicker.hide();
+            this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), employeeName));
         } else {
-            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'),  this.app.i18n._hidden(typeString), this.record.get('employee_id').n_fn));
-            this.statusPicker.setValue((this.freetimeType == 'SICKNESS') ? 'EXCUSED' : 'ACCEPTED');
+            this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'),  this.app.i18n._hidden(typeString), employeeName));
         }
+
+        this.employeePicker.setDisabled(!isNewRecord || this.fixedFields.indexOfKey('employee_id') >= 0);
+        this.typePicker.setDisabled(!isNewRecord || this.fixedFields.indexOfKey('type') >= 0);
+        
+        this.sicknessStatusPicker[type.id === 'sickness' ? 'show' : 'hide']();
+        this.vacationStatusPicker[type.id === 'vacation' ? 'show' : 'hide']();
+        this.accountPicker[type.id === 'vacation' ? 'show' : 'hide']();
+        this.accountPicker.setDisabled(!employee);
+        this.remainingDaysField[type.id === 'vacation' ? 'show' : 'hide']();
     },
     
     /**
@@ -181,10 +105,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     onApplyChanges: function(closeWindow) {
         // if no day is selected, show message and break saving
-        if (! this.datePicker.store.getFirstDay()) {
-            var msg = this.freetimeType == 'SICKNESS'
-                ? this.app.i18n._('You have to select at least one day to save this sickness entry.')
-                : this.app.i18n._('You have to select at least one day to save this vacation entry.');
+        if (! this.datePicker.getSelected().length) {
+            var msg = this.app.i18n._('You have to select at least one day to save this freetime entry.');
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,
@@ -205,273 +127,254 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onRecordUpdate: function() {
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordUpdate.call(this);
 
-        var _ = window.lodash;
-        var firstDay = this.datePicker.store.getFirstDay();
-        var lastDay  = this.datePicker.store.getLastDay();
+        const statusPicker = this.getStatusPicker();
+        this.record.set('status', statusPicker ? statusPicker.getValue() : null);
         
-        // add in json by year if sickness record
-        if (! this.accountPicker) {
-            this.record.set('account_id', null);
-        } else {
-            this.record.set('account_id', _.get(this, 'currentAccount.data'));
-        }
-        
-        this.record.set('freedays',      this.datePicker.getData());
-        this.record.set('type',          this.fixedFields.get('type').toLowerCase());
-        this.record.set('firstday_date', firstDay ? firstDay.get('date') : null);
-        this.record.set('lastday_date',  lastDay ? lastDay.get('date') : null);
-        this.record.set('days_count',    this.datePicker.store.getCount());
+        this.record.set('account_id', _.get(this.accountPicker, 'selectedRecord.data'));
     },
     
     /**
      * creates the date picker
      */
     initDatePicker: function() {
-        var date, account = null;
-        if (this.record.id && (account = this.record.get('account_id'))) {
-            var year = account.year;
-        } else {
-            var year = this.startYear;
-        }
-
-        // init to current date if year is current
-        if (year == new Date().format('Y')) {
-            date = new Date().clearTime();
-        }
-        
-        Tine.log.debug('Initializing the date picker. Using year ' + year);
-        
-        this.datePicker = new Tine.HumanResources.DatePicker({
-            accountPickerActive: (this.freetimeType == 'VACATION') ? true : false,
-            recordClass: Tine.HumanResources.Model.FreeDay,
-            app: this.app,
-            editDialog: this,
-            dateProperty: 'date',
-            recordsProperty: 'freedays',
-            foreignIdProperty: 'freeday_id',
-            freetimeType: this.freetimeType,
-            currentYear: year,
-            value: date || new Date(year, 0, 1)
+        this.datePicker = new Ext.DatePicker({
+            allowMultiSelection: true,
+            listeners: {
+                scope: this,
+                periodchange: this.onPeriodChange,
+                beforeselect: this.onBeforeDateSelect,
+                select: this.onDateSelect,
+            },
+            plugins: [new Ext.ux.DatePickerWeekPlugin({
+                weekHeaderString: Tine.Tinebase.appMgr.get('Calendar').i18n._('WK')
+            })]
         });
     },
+
+    onPeriodChange: async function(datePicker, period) {
+        // datePicker must always have a value
+        datePicker.setValue(period.from.add(Date.DAY, 15));
+        if (! _.get(this, 'accountPicker.selectedRecord.data.id')) return;
+        
+        const years = _.uniq([period.from.format('Y'), period.until.format('Y')]);
+        
+        const pms = _.reduce(years, (pms, year) => {
+            return pms.concat(_.get(this.feastAndFreeDaysCache, year) ? [] :
+                this.getFeastAndFreeDays(year));
+        }, []);
+
+        // wait until cache is filled
+        if (pms.length) this.datePicker.showLoadMask();
+        await Promise.all(pms);
+        
+        // const days = [];
+        const disabledDates = [];
+        const dateClss = {};
+        _.each(_.range(0, 42), (i) => {
+            const day = period.from.add(Date.DAY, i);
+            const date = day.format(datePicker.format);
+            const isDisabled = Tine.HumanResources.Model.FreeTime.isExcludeDay(this.feastAndFreeDaysCache, day);
+            const freeTimes = Tine.HumanResources.Model.FreeTime.getFreeTimes(this.feastAndFreeDaysCache, day);
+            const isCurrent = _.find(_.get(this.record, 'data.freedays', []), {date: day.format(Date.patterns.ISO8601Long)});
+            if (!isCurrent && (isDisabled || freeTimes.length)) {
+                disabledDates.push(date);
+            }
+        });
     
-    /**
-     * validates day length
-     * 
-     * @param {Float/Integer} value
-     * @return {Boolean}
-     */
-    isDayLengthValid: function(value) {
-        return (value <= 1 && value >=0.25);
+
+        datePicker.setDisabledDates(disabledDates);
+        // @TODO setStyle once we have colors
+        // @TODO qTips for details?
+
+        this.datePicker.hideLoadMask();
+    },
+
+    onBeforeDateSelect: function(datePicker, dateValue) {
+        return !!this.form.findField('remaining_vacation_days').getValue();
+    },
+    
+    onDateSelect: function(datePicker, dateValue) {
+        const freeDays = this.datePicker.getSelected();
+        this.record.set('freedays', _.map(freeDays, (day) => {
+            return {date: day.format(Date.patterns.ISO8601Long)}
+        }));
+        this.record.set('firstday_date', freeDays[0]);
+        this.record.set('lastday_date', freeDays[freeDays.length-1]);
+        this.record.set('days_count', freeDays.length);
+
+        this.checkStates();
     },
     
     /**
      * initializes the account picker
      */
     initAccountPicker: function() {
-        Tine.log.debug('Initializing the account picker...');
-        var that = this;
-        
+        let me = this;
         this.accountPicker = Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Account', {
             name: 'account_id',
             fieldLabel: this.app.i18n._('Personal account'),
-            additionalFilters: [
-                {field: 'employee_id', operator: 'AND', value: [
-                    { field: ':id', operator: 'equals', value: this.fixedFields.get('employee_id').id}
-                ]}
-            ],
-            
-            /**
-             * fills the accountPicker on init with the account associated to 
-             * the record or current year if the record is new
-             * 
-             * @param {Tine.HumanResources.Model.Account} record
-             */
-            onRecordLoad: function(record) {
-                
-                Tine.log.debug('Called onRecordLoad of the account picker...');
-                
-                if (record.get('account_id')) {
-                    Tine.log.debug('The record has an account attached:', record.get('account_id'));
-                    
-                    that.currentAccount = new Tine.HumanResources.Model.Account(record.get('account_id'));
-                    that.datePicker.loadFeastDays(false, true, null, that.currentAccount.get('year'));
+            columnWidth: 1,
+            hideMode: 'offsets',
+
+            checkState: async function() {
+                let employee = _.get(me, 'employeePicker.selectedRecord.data', me.record.get('employee_id'));
+                let account = _.get(me, 'accountPicker.selectedRecord.data', me.record.get('account_id'));
+
+                if (!employee) {
+                    if (me.accountPicker) {
+                        me.accountPicker.clearValue();
+                    }
+                    this.setDisabled(true);
                     return;
                 }
+                const employeeFilter = [{
+                    field: 'employee_id', operator: 'AND', value: [
+                        {field: ':id', operator: 'equals', value: _.get(employee, 'data', employee)}
+                    ]
+                }];
+                this.additionalFilters = employeeFilter;
                 
-                Tine.log.debug('The record is new, so no account has been attached. So we search one for the year ' + this.startYear);
-                
-                var addFilters = [{field: 'employee_id', operator: 'AND', value: [
-                    { field: ':id', operator: 'equals', value: record.get('employee_id').id}
-                ]}, {field: 'year', operator:'equals', value: this.startYear}];
-                
-                var request = Ext.Ajax.request({
-                    url : 'index.php',
-                    params : { method : 'HumanResources.searchAccounts', filter: addFilters},
-                    success : function(_result, _request) {
-                        var result = Ext.decode(_result.responseText);
-                        this.store.loadData(result);
-                        var rr = result.results;
-                        for (var index = 0; index < rr.length; index++) {
-                            if (rr[index].year == that.startYear) {
-                                this.setValue(rr[index]);
-                                that.currentAccount = new Tine.HumanResources.Model.Account(rr[index]);
-                                that.datePicker.loadFeastDays(false, true, null, that.currentAccount.get('year'));
-                            }
-                        }
-                    },
-                    failure : function(exception) {
-                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-                    },
-                    scope: this
-                });
+                // NOTE: account and year is somehow synonym. Unfortunately in some scenarios we only
+                //       have the account_id and don't know the year which we need to load the rest of the data
+                if (!_.get(account, 'id') || _.get(employee, 'id', employee) !== _.get(account, 'employee_id.id', _.get(account, 'employee_id'))) {
+                    await me.showLoadMask();
+                    
+                    const filter = [_.isString(account) && account.length ?
+                        {field: 'id', operator: 'equals', value: account} : // by id
+                        {field: 'year', operator: 'equals', value: new Date().format('Y')} // by startYear
+                    ].concat(employeeFilter);
+                    
+                    // fetch account
+                    const accountsData = await Tine.HumanResources.searchAccounts(filter, []);
+                    
+                    if (_.get(accountsData, 'results.length') === 1) {
+                        const accountData = _.get(accountsData, 'results.0');
+                        me.accountPicker.setValue(accountData);
+                        await me.onAccountSelect(accountData);
+                    }
+                    
+                    return me.hideLoadMask();
+                } else if (! Object.keys(me.feastAndFreeDaysCache).length) {
+                    // initial load
+                    me.onAccountSelect(account);
+                }
             }
         });
-        
-        // update remaining days on account change
-        this.accountPicker.on('select', function(combo, record, index) {
-            var year = record.get('year');
-            
-            Tine.log.debug('On select event handler called. Using year ' + year);
-            
-            that.currentAccount = record;
-            // if not cached, fetch from server
-            if (! that.calculatedFeastDays[year]) {
-                Tine.log.debug('No cached feast days found. Creating request...');
-                var request = Ext.Ajax.request({
-                    url : 'index.php',
-                    params : { 
-                        method : 'HumanResources.getFeastAndFreeDays',
-                        _employeeId: this.fixedFields.get('employee_id').id,
-                        _year: year
-                    },
-                    success : function(_result, _request) {
-                        var response = Ext.decode(_result.responseText);
-                        // cache result
-                        this.calculatedFeastDays[year] = response.results;
-                        this.onAccountLoad(response.results);
-                        // update date picker
-                        this.datePicker.onFeastDaysLoad(response, false, null, year);
-                    },
-                    failure : function(exception) {
-                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception, this.onFeastDaysLoadFailureCallback, this);
-                    },
-                    scope: that
-                });
-            } else {
-                Tine.log.debug('Cached feast days found for year ' + year);
-                that.onAccountLoad(this.calculatedFeastDays[year]);
+
+        this.accountPicker.on('select', async function (combo, record, index) {
+            if (record) {
+                this.onAccountSelect(_.get(record, 'data'));
             }
         }, this);
     },
     
-    /**
-     * initializes the status picker
-     */
-    initStatusPicker: function() {
-        this.freetimeType = this.fixedFields.get('type');
+    onAccountSelect: async function (accountData) {
+        this.feastAndFreeDaysCache = {};
+        let year = _.get(accountData, 'year');
+        await this.getFeastAndFreeDays(year);
+        await this.datePicker.getPeriod().then(async (period) => {
+            await this.onPeriodChange(this.datePicker, period);
+        });
+        this.checkStates();
+    },
+    
+    getFeastAndFreeDays: async function(year) {
+        let me = this;
+        let employee = _.get(me, 'employeePicker.selectedRecord.data', me.record.get('employee_id'));
+        let employeeId = _.get(employee, 'id', employee);
+        let accountId = _.get(me, 'accountPicker.selectedRecord.data.id');
+        var isNewRecord = !this.record.get('creation_time');
+        let freeTimeId = isNewRecord ? null : me.record.get('id');
         
-        Tine.log.debug('Initializing status picker with type "' + this.freetimeType + '"');
-        
+        return me.showLoadMask()
+            .then(() => {
+                const response = _.get(this.feastAndFreeDaysCache, year);
+                if (response) {
+                    return {results: response};
+                } else {
+                    return Tine.HumanResources.getFeastAndFreeDays(employeeId, year, freeTimeId, accountId);
+                }
+            })
+            .then((response) => {
+                const feastAndFreeDays = response.results;
+                Tine.HumanResources.Model.FreeTime.prepareFeastAndFreeDays(feastAndFreeDays);
+                
+                this.feastAndFreeDaysCache[year] = feastAndFreeDays;
+                return response.results ;
+            })
+            .finally(() => {
+                return me.hideLoadMask()
+            });
+    },
+    
+    initStatusPickers: function() {
         var statusPickerDefaults = {
             fieldLabel: this.app.i18n._('Status'),
             xtype: 'widget-keyfieldcombo',
-            app: 'HumanResources',
-            name: 'status'
+            app: 'HumanResources'
         };
-        if (this.freetimeType != 'VACATION') {
-            this.statusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
-                Ext.apply({
-                    keyFieldName: 'sicknessStatus',
-                    value: 'EXCUSED',
-                    columnWidth: 1
-                }, statusPickerDefaults)
-            );
-        } else {
-            this.statusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
-                Ext.apply({
-                    keyFieldName: 'vacationStatus',
-                    value: 'REQUESTED',
-                    columnWidth: 2/3
-                }, statusPickerDefaults)
-            );
-        }
+
+        this.sicknessStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
+            Ext.apply({
+                keyFieldName: 'sicknessStatus',
+                name: 'sicknessStatus'
+            }, statusPickerDefaults)
+        );
+        this.vacationStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
+            Ext.apply({
+                keyFieldName: 'vacationStatus',
+                name: 'vacationStatus'
+            }, statusPickerDefaults)
+        );
+    },
+
+    getStatusPicker: function() {
+        const pickerName = _.toLower(_.get(this.record, 'data.type.id', _.get(this.record, 'data.type'))) + 'StatusPicker';
+        return _.isFunction(_.get(this, pickerName + '.setValue')) ? this[pickerName] : null;
     },
     
-    /**
-     * 
-     * @param {} calculated
-     */
-    onAccountLoad: function(calculated) {
-        var remaining = calculated.allVacation - this.getDaysToSubstract();
-        
-        Tine.log.debug('Called onAccountLoad. Calculated ' + remaining + ' remaining feast days.');
-        
-        this.form.findField('remaining_vacation_days').setValue(remaining);
+    initEmployeePicker: function() {
+        this.employeePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'employee_id', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
     },
-    
-    /**
-     * if loading feast and freedays failes
-     */
-    onFeastDaysLoadFailureCallback: function() {
+
+    initTypePicker: function() {
+        this.typePicker = Tine.widgets.form.FieldManager.get('HumanResources', 'FreeTime', 'type', Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
     },
-    
-    /**
-     * calculates the amount of days to substract for the remaining_vacation_days field
-     * 
-     * @return {Number}
-     */
-    getDaysToSubstract: function() {
-        var substractDays = 0;
-        // find out local free days to substract. this is by account only
-        var accountId = this.currentAccount.get('id');
-        
-        if (this.localVacationDays.hasOwnProperty(accountId)) {
-            substractDays = substractDays + this.localVacationDays[accountId].length;
-        }
-        
-        return substractDays;
-    },
-    
-    /**
-     * returns dialog
-     * 
-     * NOTE: when this method gets called, all initalisation is done.
-     * 
-     * @return {Object}
-     * @private
-     */
+
     getFormItems: function() {
         this.initDatePicker();
-        if (this.freetimeType == 'VACATION') {
-            this.initAccountPicker();
-        }
-        this.initStatusPicker();
-        
-        var firstRow = [this.statusPicker];
-        
-        if (this.freetimeType == 'VACATION') {
-            firstRow.push(this.accountPicker);
-            firstRow.push({columnWidth: 1/3, name: 'remaining_vacation_days', readOnly: true, fieldLabel: this.app.i18n._('Remaining')});
-            var freeTimeTypeName = 'Vacation Days';
-        } else {
-            var freeTimeTypeName = 'Sickness Days';
-        }
+        this.initAccountPicker();
+        this.initStatusPickers();
+        this.initEmployeePicker();
+        this.initTypePicker();
 
+        this.remainingDaysField = new Ext.form.NumberField({
+            fieldLabel: this.app.i18n._('Remaining'),
+            columnWidth: 1/3,
+            name: 'remaining_vacation_days',
+            readOnly: true,
+            allowBlank: true,
+            
+            checkState: () => {
+                const year = _.get(this, 'accountPicker.selectedRecord.data.year');
+                const feastAndFreeDays = _.get(this.feastAndFreeDaysCache, year);
+                let remaining = _.get(feastAndFreeDays, 'remainingVacation', 0);
+                
+                const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', 0) : 0;
+                const currentDays = this.record.get('days_count');
+                remaining = remaining + originalDays - currentDays;
+
+                this.form.findField('remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');
+            }
+        });
+        
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
-            defaults: {
-                hideMode: 'offsets'
-            },
-            plugins: [{
-                ptype : 'ux.tabpanelkeyplugin'
-            }],
             activeTab: 0,
             border: false,
             items:[{
-                title: this.app.i18n._(freeTimeTypeName),
+                title: this.app.i18n._('Freetime'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -483,10 +386,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     items: [{
                         xtype: 'fieldset',
                         autoHeight: true,
-                        title: this.app.i18n._(freeTimeTypeName),
+                        title: this.app.i18n._('Days'),
                         items: [{
                             xtype: 'columnform',
-                            style: { 'float': 'left', width: '50%', 'min-width': '178px' },
                             labelAlign: 'top',
                             formDefaults: {
                                 xtype:'textfield',
@@ -496,11 +398,15 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 columnWidth: 1
                             },
                             items: [
-                                firstRow,
+                                [this.employeePicker],
+                                [this.typePicker],
+                                [this.sicknessStatusPicker],
+                                [this.vacationStatusPicker],
+                                [this.accountPicker],
+                                [this.remainingDaysField],
                                 [{
                                     xtype: 'panel',
                                     cls: 'HumanResources x-form-item',
-                                    width: 220,
                                     style: {
                                         'float': 'right',
                                         margin: '0 5px 10px 0'
@@ -548,3 +454,16 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         };
     }
 });
+
+Tine.HumanResources.FreeTimeEditDialog.openWindow  = function(config) {
+    const recordData = _.get(config, 'record.data', _.get(config, 'record'));
+    config.record = JSON.stringify(recordData);
+    
+    return Tine.WindowFactory.getWindow({
+        width: 490,
+        height: 550,
+        name: 'FreeTimeEditWindow_' + _.get(recordData, 'id', 0),
+        contentPanelConstructor: 'Tine.HumanResources.FreeTimeEditDialog',
+        contentPanelConstructorConfig: config
+    });
+};

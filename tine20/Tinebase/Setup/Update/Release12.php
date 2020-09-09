@@ -5,9 +5,10 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
+
 class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
 {
     /**
@@ -170,5 +171,59 @@ class Tinebase_Setup_Update_Release12 extends Setup_Update_Abstract
     public function update_12()
     {
         $this->setApplicationVersion('Tinebase', '12.13');
+    }
+
+    /**
+     * update note icons
+     */
+    public function update_13()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_40();
+        $this->setApplicationVersion('Tinebase', '12.14');
+    }
+
+    /**
+     * ensure tree_filerevision exist for all fileobjects
+     */
+    public function update_14()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_41();
+        $this->setApplicationVersion('Tinebase', '12.15');
+    }
+
+    /**
+     * update to 12.16
+     *
+     * fix role name unique key
+     */
+    public function update_15()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_58();
+        $this->setApplicationVersion('Tinebase', '12.16');
+    }
+
+    /**
+     * update to 12.17
+     *
+     * just an empty update - the migration is done in the Setup_Controller
+     */
+    public function update_16()
+    {
+        $this->setApplicationVersion('Tinebase', '12.17');
+    }
+
+    /**
+     * update to 12.18
+     *
+     * reimport templates
+     */
+    public function update_17()
+    {
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->update_44();
+        $this->setApplicationVersion('Tinebase', '12.18');
     }
 }

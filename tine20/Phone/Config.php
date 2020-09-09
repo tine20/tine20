@@ -41,10 +41,10 @@ class Phone_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::LOCAL_PREFIX => array(
-                                    //_('local prefix for outgoing calls')
-            'label'                 => 'local prefix for outgoing calls',
-                                    //_('local prefix for outgoing calls')
-            'description'           => 'local prefix for outgoing calls',
+                                    //_('Local prefix for outgoing calls')
+            'label'                 => 'Local prefix for outgoing calls',
+                                    //_('Local prefix for outgoing calls')
+            'description'           => 'Local prefix for outgoing calls',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'default'               => '0'
         ),
@@ -60,8 +60,8 @@ class Phone_Config extends Tinebase_Config_Abstract
         self::LOCAL_CALL_REGEX => array(
                                     //_('regex for local calls')
             'label'                 => 'regex for local calls',
-                                    //_('identifies if a calling number is a local call without leading area code')
-            'description'           => 'identifies if a calling number is a local call without leading area code',
+                                    //_('Identifies if a calling number is a local call without leading area code.')
+            'description'           => 'Identifies if a calling number is a local call without leading area code.',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'default'               => '/^[^0]/'
         ),
@@ -69,8 +69,8 @@ class Phone_Config extends Tinebase_Config_Abstract
         self::OWN_NUMBER_PREFIX => array(
                                     //_('own telephone number')
             'label'                 => 'own telephone number',
-                                    //_('own telephone number to prefix to internal calls')
-            'description'           => 'own telephone number to prefix to internal calls',
+                                    //_('Own telephone number to prefix to internal calls.')
+            'description'           => 'Own telephone number to prefix to internal calls.',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
         ),
     );

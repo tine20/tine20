@@ -42,6 +42,7 @@ Tine.Admin.Model.AccessLog = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'account_id'},
     {name: 'result'},
+    {name: 'user_agent'},
     {name: 'clienttype'}
 ], {
     appName: 'Admin',
@@ -77,8 +78,11 @@ Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.ge
     {name: 'name'},
     {name: 'description'},
     {name: 'container_id'},
-    {name: 'visibility'}
-    //{name: 'groupMembers'}
+    {name: 'visibility'},
+    {name: 'account_only', type: 'boolean'},
+    {name: 'email'},
+    {name: 'xprops'},
+    {name: 'members'}
 ]), {
     appName: 'Admin',
     modelName: 'Group',
@@ -104,6 +108,13 @@ Tine.Admin.Model.Group.getDefaultData = function () {
         container_id: internalAddressbook
     };
 };
+
+Tine.Admin.groupBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Admin',
+    modelName: 'Group',
+    recordClass: Tine.Admin.Model.Group,
+    idProperty: 'id'
+});
 
 /**
  * @namespace Tine.Admin.Model

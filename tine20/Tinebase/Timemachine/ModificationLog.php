@@ -6,7 +6,7 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -271,7 +271,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * 
      * @param string $_application application of given identifier  
      * @param string $_id identifier to retrieve modification log for
-     * @param string $_type 
+     * @param string $_type record model
      * @param string $_backend 
      * @param Tinebase_DateTime $_from beginning point of timespan, excluding point itself
      * @param Tinebase_DateTime $_until end point of timespan, including point itself
@@ -280,7 +280,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * 
      * @todo use backend search() + Tinebase_Model_ModificationLogFilter
      */
-    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', Tinebase_DateTime $_from = NULL, Tinebase_DateTime $_until = NULL, $_modifierId = NULL, $_fromInstanceId = NULL)
+    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', Tinebase_DateTime $_from = NULL, Tinebase_DateTime $_until = NULL, $_modifierId = NULL, $_fromInstanceId = NULL, $_changeType = NULL)
     {
         $id = ($_id instanceof Tinebase_Record_Interface) ? $_id->getId() : $_id;
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
@@ -319,6 +319,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         if ($_fromInstanceId) {
             $select->where($db->quoteInto($db->quoteIdentifier('instance_seq') . ' >= ?', $_fromInstanceId));
+        }
+
+        if ($_changeType) {
+            $select->where($db->quoteInto($db->quoteIdentifier('change_type') . ' = ?', $_changeType));
         }
 
         $stmt = $db->query($select);
@@ -373,6 +377,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     }
 
     /**
+     * returns the maximum instance_seq of entries that should be replicated
+     *
      * @return int
      */
     public function getMaxInstanceSeq()
@@ -1171,7 +1177,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 self::increaseRecordSequence($_newRecord, $_curRecord);
                 break;
             default:
-                throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete}.');
+                throw new Tinebase_Exception_InvalidArgument('Action must be one of {create|update|delete|undelete}.');
                 break;
         }
         
@@ -1251,7 +1257,20 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             return true;
         }
 
-        $tine20Service = new Zend_Service_Tine20($tine20Url);
+        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
+        $path = $fileObject->getFilesystemPath();
+        if (is_file($path)) {
+            if (Tinebase_FileSystem::getInstance()->checkHashFile($hash)) {
+                return true;
+            }
+            if (!unlink($path)) {
+                throw new Tinebase_Exception_Backend('could not unlink file: ' . $path);
+            }
+        }
+
+        $tine20Service = new Zend_Service_Tine20($tine20Url, new Zend_Http_Client(null, [
+            'timeout' => 25
+        ]));
 
         $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
         if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
@@ -1266,17 +1285,31 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 !isset($response['data'])) {
             throw new Tinebase_Exception_Backend('could not fetch blob from master successfully: ' . $hash);
         }
-        if (false === ($data = base64_decode($response['data'], true))) {
-            throw new Tinebase_Exception_Backend('fetched blob from master was not proper base64: ' . $hash);
-        }
 
-        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
-        $path = $fileObject->getFilesystemPath();
         if (!is_dir(dirname($path))) {
             mkdir(dirname($path));
         }
-        if (false === file_put_contents($path, $data)) {
-            throw new Tinebase_Exception_Backend('fetched blob from master could not written to disk: ' . $hash);
+        // no warning desired, we throw ourselves only if required below => @fopen
+        if (!($fh = @fopen($path, 'x'))) {
+            if (is_file($path) && Tinebase_FileSystem::getInstance()->checkHashFile($hash)) {
+                return true;
+            }
+            throw new Tinebase_Exception_Backend('could not create file: ' . $path);
+        }
+        $success = false;
+        try {
+            if (!stream_filter_append($fh, 'convert.base64-decode', STREAM_FILTER_WRITE)) {
+                throw new Tinebase_Exception_Backend('could not append stream filter');
+            }
+            if (false === fwrite($fh, $response['data'])) {
+                throw new Tinebase_Exception_Backend('fetched blob from master could not written to disk: ' . $hash);
+            }
+            $success = true;
+        } finally {
+            fclose($fh);
+            if (!$success) {
+                unlink($path);
+            }
         }
     }
 
@@ -1321,6 +1354,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 Tinebase_Exception::log($e);
             }
             if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                    ' Could not login: ' . print_r($authResponse, true));
                 throw new Tinebase_Exception_AccessDenied('login failed');
             }
             unset($authResponse);
@@ -1354,6 +1389,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             unset($tinebaseProxy);
             unset($tine20Service);
 
+            Tinebase_Core::setPrimaryTinebaseId($result['primaryTinebaseId']);
             $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $result['results']);
             unset($result);
 

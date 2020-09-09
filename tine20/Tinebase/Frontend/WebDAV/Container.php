@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,6 +18,8 @@
  * 
  * @TODO extend from Tinebase_Frontend_WebDAV_Directory 
  *       and remove Tinebase_WebDav_Container_Abstract
+ *
+ * that is why we needed to implement getProperties here, cause we dont inherit properly...
  */
 class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
 {
@@ -205,8 +207,12 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         // Loop through the directory, and create objects for each node
         foreach (Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
-            if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)) {
-                $children[] = $this->getChild($node->name);
+            try {
+                if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)) {
+                    $children[] = $this->getChild($node->name);
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // skip
             }
         }
         
@@ -220,7 +226,19 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function getETag()
     {
-        return '"' . Tinebase_FileSystem::getInstance()->stat($this->_path)->hash . '"';
+        $node = Tinebase_FileSystem::getInstance()->stat($this->_path);
+        return '"' . (empty($node->hash) ? sha1($node->object_id) : $node->hash) . '"';
+    }
+
+    /**
+     * return size
+     *
+     * @return int
+     */
+    public function getSize()
+    {
+        $node = Tinebase_FileSystem::getInstance()->stat($this->_path);
+        return (int)$node->size;
     }
     
     /**
@@ -250,5 +268,26 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected function _getContainer()
     {
         return $this->_container;
+    }
+
+    /**
+     * Returns the list of properties
+     *
+     * @param array $requestedProperties
+     * @return array
+     */
+    public function getProperties($requestedProperties)
+    {
+        $response = parent::getProperties($requestedProperties);
+
+        foreach ($requestedProperties as $prop) {
+            switch($prop) {
+                case '{http://owncloud.org/ns}size':
+                    $response[$prop] = $this->_getContainer()->size;
+                    break;
+            }
+        }
+
+        return $response;
     }
 }

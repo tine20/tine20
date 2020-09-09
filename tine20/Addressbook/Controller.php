@@ -39,7 +39,9 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      * @var array|null
      */
     protected $_modelsUsingPath = array(
-        'Addressbook_Model_Contact'
+        Addressbook_Model_Contact::class,
+        Addressbook_Model_List::class,
+        // don't ever add listrole or listmemberrole here! why? read the code and until you do, dont touch paths at all
     );
     
     /**
@@ -93,7 +95,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account);
+                    $this->deletePersonalFolder($_eventObject->account, Addressbook_Model_Contact::class);
                 }
 
                 //make to be deleted accounts (user) contact a normal contact
@@ -107,6 +109,9 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                     $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
                     $contactsBackend->delete($_eventObject->account->contact_id);
                 }
+                break;
+            case 'Tinebase_Event_Container_BeforeCreate':
+                $this->_handleContainerBeforeCreateEvent($_eventObject);
                 break;
         }
     }
@@ -138,6 +143,24 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;
+    }
+
+    protected function _handleContainerBeforeCreateEvent(Tinebase_Event_Container_BeforeCreate $_eventObject)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+            . ' about to handle Tinebase_Event_Container_BeforeCreate' );
+
+        $this->_addDefaultPersonalGrantsToContainer(
+            $_eventObject->container,
+            'Addressbook',
+            $_eventObject->grants,
+            $_eventObject->accountId,
+            [
+                Addressbook_Model_Contact::class,
+                Addressbook_Model_List::class,
+            ],
+            Addressbook_Model_ContactGrants::class
+        );
     }
 
     /**

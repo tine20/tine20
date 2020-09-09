@@ -140,7 +140,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($clientConfig->Calendar instanceof Tinebase_Config_Struct, 'calendar clientconfig is not a struct');
         $this->assertEquals(Calendar_Config::getInstance()->fixedCalendars, $clientConfig->Calendar->fixedCalendars->value, 'fixed calendar config not correct');
 
-        $this->assertFalse((isset($clientConfig->Tinebase['SMTP']) || array_key_exists('SMTP', $clientConfig->Tinebase)), 'SMTP is not a client config');
+        $this->assertFalse(isset($clientConfig->Tinebase['SMTP']), 'SMTP is not a client config');
     }
 
     /**
@@ -353,7 +353,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 
             $regConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             $tinebaseFeatures = $regConfig->Tinebase->{Tinebase_Config::ENABLED_FEATURES}->toArray();
-            static::assertEquals(5, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
+            static::assertGreaterThanOrEqual(6, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
 
             $db->delete(SQL_TABLE_PREFIX . 'config', $db->quoteIdentifier('application_id') . $db->quoteInto(' = ?',
                 Tinebase_Core::getTinebaseId()) . ' AND ' . $db->quoteIdentifier('name') . $db->quoteInto(' = ?',
@@ -369,7 +369,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 
             $regConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             $tinebaseFeatures = $regConfig->Tinebase->{Tinebase_Config::ENABLED_FEATURES}->toArray();
-            static::assertEquals(5, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
+            static::assertGreaterThanOrEqual(6, count($tinebaseFeatures['value']), print_r($tinebaseFeatures, true));
         } finally {
             Tinebase_TransactionManager::getInstance()->rollBack();
         }

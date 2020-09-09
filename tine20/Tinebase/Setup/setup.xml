@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>12.13</version>
-    <minimumRequiredVersion>9.8</minimumRequiredVersion>
+    <version>13.4</version>
+    <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
             <name>application_states</name>
@@ -123,7 +123,7 @@
 
         <table>
             <name>groups</name>
-            <version>7</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -152,7 +152,12 @@
                 <field>
                     <name>email</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>account_only</name>
+                    <type>boolean</type>
+                    <default>true</default>
                 </field>
                 <field>
                     <name>list_id</name>
@@ -225,7 +230,7 @@
 
         <table>
             <name>accounts</name>
-            <version>15</version>
+            <version>16</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -282,6 +287,11 @@
                 <field>
                     <name>last_password_change</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>password_must_change</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>status</name>
@@ -496,6 +506,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>
                 <index>
@@ -1457,7 +1468,7 @@
 
         <table>
             <name>roles</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1508,6 +1519,8 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                    <notnull>true</notnull>
+                    <default>1970-01-01 00:00:00</default>
                 </field>
                 <field>
                     <name>seq</name>
@@ -1999,7 +2012,7 @@
                     <name>is_system</name>
                     <type>boolean</type>
                     <notnull>true</notnull>
-                    <default>true</default>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>definition</name>
@@ -2031,7 +2044,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
-                        <!-- add onupdate/ondelete? -->
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>
             </declaration>
@@ -2467,7 +2480,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>11</version>
+            <version>12</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2539,6 +2552,11 @@
                     <name>format</name>
                     <type>text</type>
                     <length>255</length>
+                </field>
+                <field>
+                    <name>filter</name>
+                    <type>text</type>
+                    <length>16000</length>
                 </field>
                 <field>
                     <name>favorite</name>
@@ -2818,6 +2836,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                     </reference>
                 </index>
             </declaration>
@@ -2956,6 +2975,7 @@
                     <reference>
                         <table>accounts</table>
                         <field>id</field>
+                        <ondelete>CASCADE</ondelete>
                         <!-- add onupdate/ondelete? -->
                     </reference>
                 </index>
@@ -3152,7 +3172,7 @@
 
         <table>
             <name>tree_filerevisions</name>
-            <version>2</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3185,6 +3205,18 @@
                     <default>0</default>
                 </field>
                 <field>
+                    <name>preview_status</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <field>
+                    <name>preview_error_count</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <field>
                     <name>created_by</name>
                     <type>text</type>
                     <length>40</length>
@@ -3192,7 +3224,17 @@
                 <field>
                     <name>creation_time</name>
                     <type>datetime</type>
-                </field> 
+                </field>
+                <field>
+                    <name>lastavscan_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_quarantined</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
                 <index>
                     <name>id-revision</name>
                     <primary>true</primary>
@@ -3589,7 +3631,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/note.png</value>
+                <value>images/icon-set/icon_note.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
@@ -3620,7 +3662,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/apps/kcall.png</value>
+                <value>images/icon-set/icon_phone.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
@@ -3651,7 +3693,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/kontact-mail.png</value>
+                <value>images/icon-set/icon_email.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
@@ -3682,7 +3724,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/knewstuff.png</value>
+                <value>images/icon-set/icon_star_out.svg</value>
             </field>
             <field>
                 <name>icon_class</name>
@@ -3713,7 +3755,7 @@
             </field>
             <field>
                 <name>icon</name>
-                <value>images/oxygen/16x16/actions/document-properties.png</value>
+                <value>images/icon-set/icon_file.svg</value>
             </field>
             <field>
                 <name>icon_class</name>

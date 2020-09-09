@@ -27,6 +27,7 @@ class Tinebase_Log_AllTests
         $suite->addTestSuite('Tinebase_Log_Filter_FilterTest');
         $suite->addTestSuite('Tinebase_Log_FormatterTest');
         $suite->addTestSuite('Tinebase_Log_Formatter_JsonTest');
+        $suite->addTestSuite('Tinebase_Log_Writer_DbTest');
         return $suite;
     }
 }

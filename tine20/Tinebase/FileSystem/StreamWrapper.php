@@ -38,6 +38,13 @@ class Tinebase_FileSystem_StreamWrapper
      * @var Tinebase_Record_RecordTest
      */
     protected $_readDirRecordSet;
+
+    /**
+     * stores the list of directory children for readdir
+     *
+     * @var ArrayIterator
+     */
+    protected $_readDirIterator;
     
     /**
      * @var resource
@@ -81,7 +88,7 @@ class Tinebase_FileSystem_StreamWrapper
         
         $this->_readDirRecordSet = Tinebase_FileSystem::getInstance()->scanDir(substr($_path, 9));
         $this->_readDirIterator  = $this->_readDirRecordSet->getIterator();
-        reset($this->_readDirIterator);
+        $this->_readDirIterator->rewind();
         
         return true;
     }
@@ -91,10 +98,11 @@ class Tinebase_FileSystem_StreamWrapper
      */
     public function dir_readdir() 
     {
-        if (($node = current($this->_readDirIterator)) === false) {
+        if (!$this->_readDirIterator->valid()) {
             return false;
         }
-        next($this->_readDirIterator);
+        $node = $this->_readDirIterator->current();
+        $this->_readDirIterator->next();
         
         return $node->name;
     }
@@ -104,7 +112,7 @@ class Tinebase_FileSystem_StreamWrapper
      */
     public function dir_rewinddir()
     {
-        reset($this->_readDirIterator);
+        $this->_readDirIterator->rewind();
     }
     
     /**
@@ -144,7 +152,36 @@ class Tinebase_FileSystem_StreamWrapper
     {
         return Tinebase_FileSystem::getInstance()->rmdir(substr($_path, 9), true);
     }
-    
+
+    public function stream_truncate(int $new_size)
+    {
+        if (!is_resource($this->_stream)) {
+            return false;
+        }
+
+        $options = stream_context_get_options($this->_stream);
+
+        if (!in_array($options['tine20']['mode'], array('w', 'wb', 'x', 'xb', 'a+'))) {
+            // readonly
+            return false;
+        }
+
+        return ftruncate($this->_stream, $new_size);
+    }
+
+    // well this needs improvment!
+    // https://www.php.net/manual/en/streamwrapper.stream-lock.php
+    public function stream_lock(int $operation)
+    {
+        if (!is_resource($this->_stream)) {
+            return false;
+        }
+
+        Tinebase_FileSystem::getInstance()->acquireWriteLock();
+
+        return true;
+    }
+
     /**
      * stream_close
      * 
@@ -188,13 +225,17 @@ class Tinebase_FileSystem_StreamWrapper
     {
         $quiet    = !(bool)($_options & STREAM_REPORT_ERRORS);
 
-        $context = stream_context_get_options($this->context);
+        if (!is_resource($this->context)) {
+            $context = null;
+        } else {
+            $context = stream_context_get_options($this->context);
+        }
         if (isset($context[__CLASS__]) && isset($context[__CLASS__]['revision'])) {
             $revision = $context[__CLASS__]['revision'];
         } else {
             $revision = null;
         }
-        
+
         $stream = Tinebase_FileSystem::getInstance()->fopen(substr($_path, 9), $_mode, $revision);
         
         if (!is_resource($stream)) {
@@ -305,7 +346,7 @@ class Tinebase_FileSystem_StreamWrapper
         
         $options = stream_context_get_options($this->_stream);
         
-        if (!in_array($options['tine20']['mode'], array('w', 'wb', 'x', 'xb'))) {
+        if (!in_array($options['tine20']['mode'], array('w', 'wb', 'x', 'xb', 'a+'))) {
             // readonly
             return false;
         }

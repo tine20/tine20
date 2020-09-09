@@ -30,6 +30,8 @@ Ext.extend(Ext.ux.form.Spinner.Strategy, Ext.util.Observable, {
     alternateIncrementValue : 5,
     validationTask : new Ext.util.DelayedTask(),
     
+    init: function(cmp) {},
+    
     onSpinUp : function(field){
         this.spin(field, false, false);
     },
@@ -74,6 +76,16 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
     allowDecimals : true,
     decimalPrecision : 2,
     
+    init : function(field) {
+        field.setValue = Ext.ux.form.NumberField.prototype.setValue;
+        field.parseValue = Ext.ux.form.NumberField.prototype.parseValue;
+        field.validateValue = Ext.ux.form.NumberField.prototype.validateValue;
+        field.getValue = Ext.ux.form.NumberField.prototype.getValue;
+        field.fixPrecision = Ext.ux.form.NumberField.prototype.fixPrecision;
+        field.beforeBlur = Ext.ux.form.NumberField.prototype.beforeBlur;
+        
+        field.el.applyStyles('text-align: right');
+    },
     spin : function(field, down, alternate){
         Ext.ux.form.Spinner.NumberStrategy.superclass.spin.call(this, field, down, alternate);
 
@@ -83,7 +95,7 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
         (down == true) ? v -= incr : v += incr ;
         v = (isNaN(v)) ? this.defaultValue : v;
         v = this.fixBoundries(v);
-        field.setRawValue(v);
+        field.setValue(v);
     },
 
     fixBoundries : function(value){
@@ -120,8 +132,10 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
 Ext.ux.form.Spinner.DateStrategy = function(config){
     Ext.ux.form.Spinner.DateStrategy.superclass.constructor.call(this, config);
 };
+Ext.ux.form.Spinner.DateStrategy.isNegRe = /^ *- */;
 
 Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
+    allowNegative: true,
     defaultValue : new Date(),
     format : "Y-m-d",
     incrementValue : 1,
@@ -132,7 +146,12 @@ Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
     spin : function(field, down, alternate){
         Ext.ux.form.Spinner.DateStrategy.superclass.spin.call(this, field, down, alternate);
 
-        var v = field.getRawValue();
+        var v = field.getRawValue(),
+            isNegValue = v.match(Ext.ux.form.Spinner.DateStrategy.isNegRe);
+
+        if (isNegValue) {
+            v = v.replace(Ext.ux.form.Spinner.DateStrategy.isNegRe, '');
+        }
         
         v = Date.parseDate(v, this.format);
         var dir = (down == true) ? -1 : 1 ;
@@ -143,10 +162,23 @@ Ext.extend(Ext.ux.form.Spinner.DateStrategy, Ext.ux.form.Spinner.Strategy, {
             this.defaultValue = Date.parseDate(this.defaultValue, this.format);
         }
 
+        // transition form 0
+        if (v.format('H:i:s') == '00:00:00' && this.allowNegative) {
+            isNegValue = down;
+        }
+
+        if (isNegValue) {
+            dir = dir*-1;
+        }
+
         v = (v) ? v.add(dtconst, dir*incr) : this.defaultValue;
 
+        if (v.format('H:i:s') == '00:00:00') {
+            isNegValue = false;
+        }
+
         v = this.fixBoundries(v);
-        field.setRawValue(Ext.util.Format.date(v,this.format));
+        field.setRawValue((isNegValue ? '- ' : '') + Ext.util.Format.date(v,this.format));
     },
     
     //private

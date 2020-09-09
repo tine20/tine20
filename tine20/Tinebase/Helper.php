@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -264,9 +264,6 @@ class Tinebase_Helper
      */
     public static function mbConvertTo($string, $encodingTo = 'utf-8')
     {
-        if (! extension_loaded('mbstring')) {
-            return $string;
-        }
         // try to fix bad encodings
         $encoding = mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'windows-1252', 'iso-8859-15'));
         if ($encoding !== FALSE) {
@@ -423,7 +420,7 @@ class Tinebase_Helper
     /**
      * fetches contents from file or uri
      *
-     * @param string $source
+     * @param string $filenameOrUrl
      * @return string|null
      */
     public static function getFileOrUriContents($filenameOrUrl)
@@ -513,5 +510,38 @@ class Tinebase_Helper
         }
 
         return null;
+    }
+
+    /**
+     * convert domain or email string to punycode / ACE representation
+     *
+     * @param string $domain domain or email
+     * @return string punycode domain/email
+     */
+    public static function convertDomainToPunycode($domain)
+    {
+        return self::convertDomain($domain, 'idn_to_ascii');
+    }
+
+    public static function convertDomain($domain, $converterFunction)
+    {
+        if (strpos($domain, '@') !== false) {
+            list($emailpart, $domainpart) = explode('@', $domain);
+            return call_user_func_array($converterFunction, [$emailpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46])
+                . '@' . call_user_func_array($converterFunction, [$domainpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46]);
+        } else {
+            return call_user_func_array($converterFunction, [$domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46]);
+        }
+    }
+
+    /**
+     * convert domain or email string from punycode / ACE representation to IDN form (unicode)
+     *
+     * @param string $domain domain or email
+     * @return string
+     */
+    public static function convertDomainToUnicode($domain)
+    {
+        return self::convertDomain($domain, 'idn_to_utf8');
     }
 }

@@ -190,7 +190,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'deprecated_status' => array(
                 'type'         => 'integer',
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => 0),
-                //'label'        => 'Deprecate', // _('Deprecate')
+                //'label'        => 'Depreciate', // _('Depreciate')
                 'label'        => NULL,
                 'default'      => 0,
             ),

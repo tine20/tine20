@@ -103,4 +103,39 @@ abstract class Tinebase_Controller_Event extends Tinebase_Controller_Abstract im
 
         return $container;
     }
+
+    protected function _addDefaultPersonalGrantsToContainer($container,
+                                                            $applicationName,
+                                                            $grants,
+                                                            $accountId,
+                                                            $models = [],
+                                                            $grantModel = Tinebase_Model_Grants::class,
+                                                            $additionalGrants = [])
+    {
+        if (! $container
+            || $container->type !== Tinebase_Model_Container::TYPE_PERSONAL
+            || ! in_array($container->model, $models)
+            || $container->application_id !== Tinebase_Application::getInstance()
+                ->getApplicationByName($applicationName)->getId())
+        {
+            return null;
+        }
+
+        $container->xprops()['Tinebase']['Container']['GrantsModel'] = $grantModel;
+
+        if ($grants instanceof Tinebase_Record_RecordSet) {
+            $grantRecord = new $grantModel([
+                'account_id' => $accountId,
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            ]);
+            foreach ($grantModel::getAllGrants() as $grant) {
+                $grantRecord->$grant = true;
+            }
+            $grants->addRecord($grantRecord);
+
+            foreach ($additionalGrants as $grantRecord) {
+                $grants->addRecord($grantRecord);
+            }
+        }
+    }
 }

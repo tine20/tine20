@@ -29,18 +29,6 @@ abstract class Timetracker_AbstractTest extends TestCase
     protected $_deletePersistentFilters = array();
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -48,11 +36,11 @@ abstract class Timetracker_AbstractTest extends TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
         $this->_deleteTimeAccounts = array();
         $this->_deleteTimeSheets = array();
         $this->_deletePersistentFilters = array();
-        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_json = new Timetracker_Frontend_Json();
         
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
@@ -67,7 +55,8 @@ abstract class Timetracker_AbstractTest extends TestCase
      */
     protected function tearDown()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
+
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
 
         if (count($this->_deleteTimeAccounts) > 0) {
@@ -140,12 +129,14 @@ abstract class Timetracker_AbstractTest extends TestCase
      */
     protected function _getTimesheet($_data = array(), $_forceCreation = false)
     {
-        $defaultData = array('account_id'        => Tinebase_Core::getUser()->getId(),
-             'description'       => 'blabla',
-             'duration'          => 30,
-             'timeaccount_id'    => NULL,
-             'start_date'        => NULL
-        );
+        $defaultData = [
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'description' => 'blabla',
+            'duration' => 30,
+            'accounting_time' => 15,
+            'timeaccount_id' => NULL,
+            'start_date' => NULL
+        ];
 
         $data = array_replace($defaultData, $_data);
 
@@ -251,9 +242,10 @@ abstract class Timetracker_AbstractTest extends TestCase
      * get Timesheet filter
      *
      * @param array $_cfFilter
+     * @param string $taId
      * @return array
      */
-    protected function _getTimesheetFilter($_cfFilter = NULL)
+    protected function _getTimesheetFilter($_cfFilter = null, $taId = null)
     {
         $result = array(
             array(
@@ -262,6 +254,14 @@ abstract class Timetracker_AbstractTest extends TestCase
                 'value' => 'blabla'
             ),
         );
+
+        if ($taId) {
+            $result[] = [
+                'field' => 'timeaccount_id',
+                'operator' => 'equals',
+                'value' => $taId
+            ];
+        }
 
         if ($_cfFilter !== NULL) {
             $result[] = $_cfFilter;

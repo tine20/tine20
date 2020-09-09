@@ -25,8 +25,8 @@ class Calendar_Model_ResourceFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'email'))),
-        'container_id'          => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Calendar')),
+        'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'hierarchy', 'email'))),
+        'container_id'          => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('modelName' => Calendar_Model_Resource::class)),
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'  ),
         'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'hierarchy'             => array('filter' => 'Tinebase_Model_Filter_Text'),

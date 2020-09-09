@@ -68,11 +68,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initComponent: function() {
         Ext.applyIf(this.defaultSortInfo, {field: 'name', direction: 'DESC'});
+        Ext.applyIf(this.defaultPaging, { start: 0, limit: 500 });
         Ext.applyIf(this.gridConfig, {
             autoExpandColumn: 'name',
             enableFileDialog: false,
             enableDragDrop: true,
             ddGroup: 'fileDDGroup',
+            gridType: Ext.grid.EditorGridPanel,
+            clicksToEdit: 'auto',
             listeners: {
                 scope: this,
                 afterrender: this.initDragDrop
@@ -89,7 +92,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.gridConfig.cm = this.getColumnModel();
 
-        this.defaultFilters = [
+        this.defaultFilters = this.defaultFilters || [
             {field: 'query', operator: 'contains', value: ''},
             {field: 'path', operator: 'equals', value: Tine.Tinebase.container.getMyFileNodePath()}
         ];
@@ -235,7 +238,15 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 70,
                 sortable: true,
                 dataIndex: 'name',
-                renderer: Ext.ux.PercentRendererWithName
+                renderer: Ext.ux.PercentRendererWithName,
+                editor: Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'name', Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID)
+            },{
+                id: 'hash',
+                header: this.app.i18n._("MD5 Hash"),
+                width: 40,
+                sortable: true,
+                dataIndex: 'hash',
+                hidden: true
             },{
                 id: 'size',
                 header: this.app.i18n._("Size"),
@@ -245,14 +256,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
             },{
                 id: 'contenttype',
-                header: this.app.i18n._("Contenttype"),
+                header: this.app.i18n._("Content type"),
                 width: 50,
                 sortable: true,
                 dataIndex: 'contenttype',
                 renderer: function(value, metadata, record) {
 
                     var app = Tine.Tinebase.appMgr.get('Filemanager');
-                    if(record.data.type == 'folder') {
+                    if(record.data.type === 'folder') {
                         return app.i18n._("Folder");
                     }
                     else {
@@ -425,13 +436,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 disable: true
             }],
             iconCls: 'action_add',
-            actionUpdater: function(action) {
-                var _ = window.lodash,
-                    allowAdd = _.get(this, 'currentFolderNode.attributes.account_grants.addGrant', false),
-                    isVirtual = false;
+            actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+                let allowAdd = _.get(filteredContainers, '[0].account_grants.addGrant', false);
+                let isVirtual = false;
 
                 try {
-                    isVirtual = this.currentFolderNode.attributes.nodeRecord.isVirtual();
+                    const filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
+                    isVirtual = filteredContainer.isVirtual();
                 } catch(e) {}
 
                 action.setDisabled(!allowAdd || isVirtual);
@@ -526,7 +537,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
-        });
+        }, [{
+            ptype: 'ux.itemregistry',
+            key: 'Filemanager-Node-GridPanel-ContextMenu'
+        }]);
 
         this.folderContextMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getContainerName(),
@@ -597,11 +611,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName).then(function(isLocked) {
             // if state change -> reload
             if (isLocked == me.action_dataSafe.items[0].pressed) {
-                me.loadGridData({
-                    preserveCursor:     false,
-                    preserveSelection:  false,
-                    preserveScroller:   false
-                });
+                _.defer(() => {
+                    me.loadGridData({
+                        preserveCursor:     false,
+                        preserveSelection:  false,
+                        preserveScroller:   false
+                    }
+                )});
             }
 
             var cls = isLocked ? 'removeClass' : 'addClass';
@@ -750,24 +766,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {} row record
      * @param {Ext.EventObjet} e
      */
-    onRowDblClick: function (grid, row, e) {
-        var rowRecord = grid.getStore().getAt(row),
-            _ = window.lodash,
-            prefs = this.app.getRegistry().get('preferences'),
-            dbClickAction = Tine.Tinebase.configManager.get('downloadsAllowed') ? prefs.get('dbClickAction') : 'preview';
-
-        if (prefs && dbClickAction === 'download' && rowRecord.data.type == 'file'
-            && !this.readOnly && _.get(rowRecord, 'data.account_grants.downloadGrant', false)
-        ) {
-            Tine.Filemanager.downloadFile(rowRecord);
-        } else if (prefs && dbClickAction === 'preview' && rowRecord.data.type == 'file'
-            && !this.readOnly && _.get(rowRecord, 'data.account_grants.readGrant', false)
-        ) {
-            this.action_preview.execute();
-        } else if (rowRecord.data.type == 'folder') {
-            this.expandFolder(rowRecord);
-        }
-    },
+    onRowDblClick: Tine.widgets.dialog.AttachmentsGridPanel.prototype.onRowDbClick,
 
     /**
      * expand folder node
@@ -871,7 +870,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if(!nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
-                    app.i18n._('Putting files in this folder is not allowed!')
+                    app.i18n._('It is not permitted to store files in this folder!')
             ).setIcon(Ext.MessageBox.ERROR);
 
             return;
@@ -879,7 +878,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         var files = fileSelector.getFileList();
 
-        var filePathsArray = [], uploadKeyArray = [], promises = [];
+        var filePathsArray = [], uploadKeyArray = [], fileTypesArray= [], promises = [];
 
         Ext.each(files, function (file) {
             var promise = new Promise(function (fullfill, reject) {
@@ -901,6 +900,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     });
 
                     filePathsArray.push(filePath);
+                    fileTypesArray.push('vnd.adobe.partial-upload; final_type=' + file.type);
                     uploadKeyArray.push(Tine.Tinebase.uploadManager.queueUpload(upload));
                 }, me).then(function () {
                     fullfill();
@@ -918,7 +918,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
             var params = {
                 filenames: filePathsArray,
-                type: "file",
+                types: fileTypesArray,
                 tempFileIds: [],
                 forceOverwrite: false
             };
@@ -980,6 +980,17 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         } else {
             this.quotaBar.hide();
         }
+    },
+
+    /**
+     * gets currently displayed node in case a path filter is set
+     * NOTE: this data is unresolved as it comes from filter and not through json convert!
+     *
+     * @return {Object}
+     */
+    getFilteredContainers: function () {
+        const pathFilter = _.get(_.find(_.get(this, 'store.reader.jsonData.filter', {}), {field: 'path'}), 'value');
+        return pathFilter ? [pathFilter] : null;
     },
 
     /**

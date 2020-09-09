@@ -28,6 +28,8 @@
 class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
 {
     const DEF_FIELD = 'fieldDef';
+    const DEF_HOOK = 'hook';
+    const CONTROLLER_HOOKS = 'controllerHooks';
 
     protected $_identifier = 'id';
     
@@ -80,7 +82,7 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
      */
     public function valueIsEmpty($_value)
     {
-        if ($this->definition['type'] === 'bool') {
+        if (isset($this->definition['type']) && $this->definition['type'] === 'bool') {
             $result = empty($_value);
         } else {
             $result = ($_value === '' || $_value === NULL);

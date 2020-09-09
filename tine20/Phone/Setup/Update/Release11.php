@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
+
 class Phone_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**

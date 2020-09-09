@@ -204,7 +204,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         this.inputCheck = new Ext.form.Checkbox({
             checked: (record) ? record.isShared() : false,
             hideLabel: true,
-            boxLabel: i18n._('Shared Favorite (visible by all users)'),
+            boxLabel: i18n._('Shared Favorite (visible by other users)'),
             disabled: ! this.hasRight(),
             listeners: {
                 'check': function(checkbox, value) {
@@ -230,10 +230,12 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
             this.inputTitle, 
             this.inputDescription
         ];
+
+        items.push(this.inputCheck);
+        items.push(this.getGrantsGrid());
         
-        if (this.hasRight() || this.hasEditGrant()) {
-            items.push(this.inputCheck);
-            items.push(this.getGrantsGrid());
+        if (!record.isShared()) {
+            this.getGrantsGrid().disable();
         }
         
         return {
@@ -256,19 +258,16 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
                     header: i18n._('Read'),
                     dataIndex: 'readGrant',
                     tooltip: i18n._('The grant to see and use this filter'),
-                    width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: i18n._('Edit'),
                     tooltip: i18n._('The grant to edit this filter'),
                     dataIndex: 'editGrant',
-                    width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: i18n._('Delete'),
                     tooltip: i18n._('The grant to delete this filter'),
                     dataIndex: 'deleteGrant',
-                    width: 55
                 })
             ];
             
@@ -280,12 +279,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
                 configColumns: columns,
                 //selectAnyone: true,
                 selectTypeDefault: 'group',
-                height : 250,
-                // TODO improve layout: use border layout, move this panel to center to allow dynamic resizing
-                //width: 'auto',
-                //height : '100%',
-                //height : 'auto',
-                disabled: ! this.window.record || ! this.window.record.isShared(),
+                anchor: '97% 65%',
                 recordClass: Tine.Tinebase.Model.Grant
             });
         }

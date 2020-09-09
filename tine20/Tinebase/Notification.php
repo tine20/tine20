@@ -18,7 +18,18 @@
 class Tinebase_Notification
 {
     protected $_smtpBackend;
-    
+
+    protected $_blockDisabledAccounts = true;
+
+    public function blockDisabledAccounts($_value = null)
+    {
+        $result = $this->_blockDisabledAccounts;
+        if (null !== $_value) {
+            $this->_blockDisabledAccounts = (bool)$_value;
+        }
+        return $result;
+    }
+
     /**
      * the constructor
      *
@@ -79,10 +90,18 @@ class Tinebase_Notification
         
         $exception = NULL;
         $sentContactIds = array();
+        /** @var Addressbook_Model_Contact $recipient */
         foreach ($_recipients as $recipient) {
             try {
                 if (! $recipient instanceof Addressbook_Model_Contact) {
                     $recipient = $contactsBackend->get($recipient);
+                }
+                if ($this->_blockDisabledAccounts && !empty($recipient->account_id) && Tinebase_User::getInstance()
+                        ->getFullUserById($recipient->account_id)->accountStatus ===
+                        Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ .
+                        '::' . __LINE__ . ' ommiting notification for disabled account: ' . $recipient->account_id);
+                    continue;
                 }
                 if (! in_array($recipient->getId(), $sentContactIds)) {
                     $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachments);
@@ -90,9 +109,10 @@ class Tinebase_Notification
                 }
             } catch (Exception $e) {
                 $exception = $e;
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Failed to send notification message (recipient: '
                     . ($recipient instanceof Addressbook_Model_Contact ? $recipient->email : $recipient) . '. Exception: ' . $e);
+                Tinebase_Exception::log($e);
             }
         }
         

@@ -20,8 +20,9 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
 {
     protected $_applicationName      = 'Sales';
     protected $_modelName            = 'Sales_Model_PurchaseInvoice';
-    protected $_doContainerACLChecks = FALSE;
-    
+    protected $_doContainerACLChecks = false;
+    protected $_duplicateCheckOnUpdate = true;
+
     /**
      * the constructor
      *

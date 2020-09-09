@@ -45,7 +45,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             this.enableDD = false;
         }
 
-        this.defaultContainerPath = Tine.Tinebase.container.getMyFileNodePath();
+        // NOTE: fm tree is initially loaded from grid!
+        // this.defaultContainerPath = Tine.Tinebase.container.getMyFileNodePath();
 
         this.dragConfig = {
             ddGroup: this.ddGroup,
@@ -562,7 +563,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
-                    app.i18n._('Putting files in this folder is not allowed!')
+                    app.i18n._('It is not permitted to store files in this folder!')
                 ).setIcon(Ext.MessageBox.ERROR);
 
             return;
@@ -570,6 +571,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         var files = fileSelector.getFileList(),
             filePathsArray = [],
+            fileTypesArray = [],
             uploadKeyArray = [],
             addToGridStore = false;
 
@@ -591,6 +593,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
 
             filePathsArray.push(filePath);
+            fileTypesArray.push('vnd.adobe.partial-upload; final_type=' + file.type);
             uploadKeyArray.push(uploadKey);
 
             addToGridStore = grid.currentFolderNode.id === targetNodeId;

@@ -5,10 +5,8 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- * @todo remove cli session/cache path (add http://aidanlister.com/2004/04/recursively-deleting-a-folder-in-php/ to helpers?)
  */
 
 /**
@@ -99,14 +97,17 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         if (! in_array($method, self::getAnonymousMethods($method))) {
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }
-        $result = $tinebaseServer->handle($opts);
-        
-        //@todo remove cli session path
-
-        // convert function result to shell return code
-        if ($result === NULL || $result === TRUE || ! is_int($result)) {
-            $result = 0;
-        } else if ($result === FALSE) {
+        try {
+            $result = $tinebaseServer->handle($opts);
+            // convert function result to shell return code
+            if ($result === NULL || $result === TRUE || ! is_int($result)) {
+                $result = 0;
+            } else if ($result === FALSE) {
+                $result = 1;
+            }
+        } catch (Throwable $e) {
+            Tinebase_Exception::log($e);
+            echo $e . "\n";
             $result = 1;
         }
         

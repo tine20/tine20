@@ -43,6 +43,12 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
             $this->_controller->setGeoDataForContacts(FALSE);
         }
 
+        //@todo option over cli method! -> switch to enable.
+        // default only for demodata!
+        if(isset($_options['demoData'])) {
+            $this->_getNotes();
+        }
+
         // get container id from default container if not set
         if (empty($this->_options['container_id'])) {
             $defaultContainer = $this->_controller->getDefaultAddressbook();
@@ -86,5 +92,65 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
         } 
         
         return $result;
+    }
+
+    /**
+     * add history notes to imported contacts
+     */
+    protected function _afterImport()
+    {
+        $controller = $this->_controller;
+        if ($this->_options['demoData'] && $this->_additionalOptions['notes'] && $this->_importResult['results']) {
+            foreach ($this->_importResult['results'] as $record) {
+                $oldRecord = clone $record;
+                foreach ($this->_additionalOptions['notes'] as $key => $note) {
+                    $record->$key = $note;
+                }
+                /*
+                 * update record and saves the old data
+                 * update record with the old data
+                 * the record shouldn´t be change!
+                 */
+                $newRecord = $controller->update($record);
+                $oldRecord->seq = $newRecord->seq;
+                $controller->update($oldRecord);
+            }
+        }
+    }
+
+    /**
+     * generate notes values
+     * @return |null
+     * @throws Tinebase_Exception
+     */
+    protected function _getNotes()
+    {
+        if (!extension_loaded('yaml')) {
+            throw new Tinebase_Exception('yaml extension required');
+        }
+
+        $importDir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR
+            . 'Addressbook' . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData' . DIRECTORY_SEPARATOR .  'import' . DIRECTORY_SEPARATOR . 'Notes';
+
+        //@todo give notes name as variable
+        $path = $importDir . DIRECTORY_SEPARATOR . 'notes.yml';
+        if (file_exists($path)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' import notes from file: ' . $path);
+            $setData = yaml_parse_file($path);
+        }
+
+        if (!isset($setData)) {
+            return null;
+        }
+
+        $notes = [];
+
+        foreach ($setData['notes'] as $note){
+            $splitNote = explode(' => ', $note);
+            $notes[$splitNote[0]] = $splitNote[1];
+        }
+
+        $this->_additionalOptions['notes'] = $notes;
     }
 }

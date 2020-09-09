@@ -44,6 +44,13 @@ class Crm_Config extends Tinebase_Config_Abstract
     const FEATURE_LEAD_IMPORT = 'featureLeadImport';
 
     /**
+     * lead notification confirmation
+     *
+     * @var string
+     */
+    const FEATURE_LEAD_NOTIFICATION_CONFIRMATION = 'featureLeadNotificationConfirmation';
+
+    /**
      * lead import auto task
      *
      * @var string
@@ -65,10 +72,52 @@ class Crm_Config extends Tinebase_Config_Abstract
     const LEAD_DUP_FIELDS = 'leadDupFields';
 
     /**
+     * send nofifications to responsible/customer/partner
+     */
+    const SEND_NOTIFICATION = 'sendnotification';
+    const SEND_NOTIFICATION_TO_RESPONSIBLE = 'sendnotificationtoresponsible';
+    const SEND_NOTIFICATION_TO_CUSTOMER = 'sendnotificationtocustomer';
+    const SEND_NOTIFICATION_TO_PARTNER = 'sendnotificationtopartner';
+
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::SEND_NOTIFICATION => array(
+            'label' => 'send notification', //_('send notification'')
+            'description' => 'controls sending notification of Leads', //_('controls sending notification of Leads')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => true,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::SEND_NOTIFICATION_TO_RESPONSIBLE => array(
+            'label' => 'send notification to responsible', //_('send notification to responsible'')
+            'description' => 'send notification to responsible', //_('send notification to responsible')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => true,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::SEND_NOTIFICATION_TO_CUSTOMER => array(
+            'label' => 'send notification to customer', //_('send notification to customer')
+            'description' => 'send notification to customer', //_('send notification to customer')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => false,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::SEND_NOTIFICATION_TO_PARTNER => array(
+            'label' => 'send notification to partner', //_('send notification to partner')
+            'description' => 'send notification to partner', //_('send notification to partner')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => false,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+
         self::LEAD_STATES => array(
             //_('Lead States Available')
             'label'                 => 'Lead States Available',
@@ -136,8 +185,8 @@ class Crm_Config extends Tinebase_Config_Abstract
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',
-            //_('Enabled Features in Crm Application.')
-            self::DESCRIPTION           => 'Enabled Features in Crm Application.',
+            //_('Enabled Features in CRM Application.')
+            self::DESCRIPTION           => 'Enabled Features in CRM Application.',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => true,
@@ -147,6 +196,12 @@ class Crm_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION   => 'Lead Import',
                     self::TYPE          => self::TYPE_BOOL,
                     self::DEFAULT_STR   => true,
+                ],
+                self::FEATURE_LEAD_NOTIFICATION_CONFIRMATION   => [
+                    self::LABEL         => 'Lead Notification Confirmation', //_('Lead Notification Confirmation')
+                    self::DESCRIPTION   => 'Lead Notification Confirmation',
+                    self::TYPE          => self::TYPE_BOOL,
+                    self::DEFAULT_STR   => false,
                 ],
             ],
             self::DEFAULT_STR => [],
@@ -161,10 +216,10 @@ class Crm_Config extends Tinebase_Config_Abstract
             'default'               => false,
         ),
         self::LEAD_IMPORT_NOTIFICATION => array(
-            //_('Send notification email on lead import')
-            'label'                 => 'Send notification email on lead import',
-            //_('Sends an email to all responsible persons for the imported leads.')
-            'description'           => 'Sends an email to all responsible persons for the imported leads.',
+            //_('Send notification e-mail on lead import')
+            'label'                 => 'Send notification e-mail on lead import',
+            //_('Sends an e-mail to all responsible persons for the imported leads.')
+            'description'           => 'Sends an e-mail to all responsible persons for the imported leads.',
             'type'                  => 'boolean',
             'clientRegistryInclude' => false,
             'default'               => false,

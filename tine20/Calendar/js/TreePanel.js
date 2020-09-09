@@ -144,6 +144,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
     initContextMenu: function() {
         this.supr().initContextMenu.call(this);
+        this.contextModel = 'Event';
         this.action_editResource = new Ext.Action({
             iconCls: 'cal-resource',
             hidden: true,
@@ -206,10 +207,29 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Object} attr
      */
     onBeforeCreateNode: function(attr) {
+        var xprops = lodash.get(attr, 'xprops'),
+            resourceIcon,
+            typeId;
+
         this.supr().onBeforeCreateNode.apply(this, arguments);
         
         if (attr.container) {
             attr.container.capabilites_private = true;
+        }
+
+        if (Ext.isString(xprops)) {
+            xprops = Ext.decode(xprops);
+        }
+
+        typeId = lodash.get(xprops, 'Calendar.Resource.resource_type');
+
+        resourceIcon = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId);
+
+        
+        if (resourceIcon) {
+            attr.icon = resourceIcon.get('icon');
+            attr.cls = attr.cls || '';
+            attr.cls += ' cal-calendartree-resource-icon';
         }
     },
     

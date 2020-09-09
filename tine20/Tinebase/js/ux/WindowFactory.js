@@ -16,28 +16,40 @@ Ext.ns('Ext.ux');
  * @class       Ext.ux.WindowFactory
  * @contructor
  *
- * @cfg {String} windowType type of window {Ext|Browser|Air}
+ * @cfg {String} windowType type of window {Ext|Browser}
  */
 Ext.ux.WindowFactory = function (config) {
+    let me = this;
     Ext.apply(this, config);
-    
-    switch (this.windowType) 
-    {
-    case 'Browser' :
-        this.windowClass = Ext.ux.PopupWindow;
-        this.windowManager = Ext.ux.PopupWindowMgr;
-        break;
-    case 'Ext' :
-        this.windowClass = Ext.Window;
-        this.windowManager = Ext.WindowMgr;
-        break;
-    case 'Air' :
-        this.windowClass = Ext.air.NativeWindow;
-        this.windowManager = Ext.air.NativeWindowManager;
-        break;
-    default :
-        console.error('No such windowType: ' + this.windowType);
-        break;
+
+    switch (this.windowType) {
+        case 'Browser' :
+            this.windowClass = Ext.ux.PopupWindow;
+            this.windowManager = Ext.ux.PopupWindowMgr;
+            break;
+
+        case 'Ext' :
+            this.windowClass = Ext.extend(Ext.Window, {
+                confirmLeavSite: me.confirmLeavSite,
+
+                // closing interception analog to browser windows
+                close : function(force){
+                    if(force || this.fireEvent('beforeclose', this) !== false){
+                        if(this.hidden){
+                            this.doClose();
+                        }else{
+                            this.hide(null, this.doClose, this);
+                        }
+                    } else {
+                        this.confirmLeavSite(this);
+                    }
+                },
+            });
+            this.windowManager = Ext.WindowMgr;
+            break;
+        default :
+            console.error('No such windowType: ' + this.windowType);
+            break;
     }
 };
 
@@ -63,6 +75,7 @@ Ext.ux.WindowFactory.prototype = {
         
         if (! win) {
             win = new this.windowClass(config);
+            win.confirmLeavSite = this.confirmLeavSite;
         }
         
         Ext.ux.PopupWindowMgr.bringToFront(win);
@@ -74,6 +87,7 @@ Ext.ux.WindowFactory.prototype = {
      */
     getExtWindow: function (c) {
         var win = Ext.WindowMgr.get(c.name);
+        var winConstructor = c.modal ? Ext.Window : this.windowClass;
 
         if (! win) {
             c.id = c.name;
@@ -102,7 +116,7 @@ Ext.ux.WindowFactory.prototype = {
             // NOTE: is this still true ?? -> we can only handle one window yet
             c.modal = true;
 
-            win = new Ext.Window(c);
+            win = new winConstructor(c);
             c.items.items[0].window = win;
         }
         
@@ -211,5 +225,20 @@ Ext.ux.WindowFactory.prototype = {
             console.error('No such windowType: ' + this.windowType);
             break;
         }
+    },
+
+    confirmLeavSite: function(scope) {
+        let win = scope.popup ? scope.popup : window;
+        win.Ext.MessageBox.show({
+            title: i18n._('Leave site?'),
+            msg: i18n._('Changes you made may not be saved.'),
+            buttons: Ext.MessageBox.OKCANCEL,
+            fn: function(buttonId) {
+                if (buttonId === 'ok') {
+                    scope.close(true);
+                }
+            },
+            icon: Ext.MessageBox.WARNING
+        });
     }
 };

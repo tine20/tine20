@@ -29,9 +29,9 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
      * @return bool|array false if error, array with returned information
      *                    otherwise (flags, exists, recent, uidvalidity)
      */
-    public function examineOrSelect($command = 'EXAMINE', $box = 'INBOX')
+    public function examineOrSelect($command = 'EXAMINE', $box = 'INBOX', $params=[])
     {
-        $this->sendRequest($command, array($this->escapeString($box)), $tag);
+        $this->sendRequest($command, array_merge(array($this->escapeString($box)), $params), $tag);
 
         $result = array();
         while (!$this->readLine($tokens, $tag)) {
@@ -67,6 +67,19 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         }
         
         return $result;
+    }
+
+    /**
+     * change folder
+     *
+     * @param string $box change to this folder
+     * @param array $params
+     * @return bool|array see examineOrselect()
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function select($box = 'INBOX', $params = [])
+    {
+        return $this->examineOrSelect('SELECT', $box, $params);
     }
 
     /**
@@ -164,4 +177,38 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         
         return $result;
      }
+
+    /**
+     * append a new message to given folder
+     *
+     * @param string $folder  name of target folder
+     * @param string $message full message content
+     * @param array  $flags   flags for new message
+     * @param string $date    date for new message
+     * @return int|bool returns UID of mail on success
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function append($folder, $message, $flags = null, $date = null)
+    {
+        $tokens = array();
+        $tokens[] = $this->escapeString($folder);
+        if ($flags !== null) {
+            $tokens[] = $this->escapeList($flags);
+        }
+        if ($date !== null) {
+            $tokens[] = $this->escapeString($date);
+        }
+        $tokens[] = $this->escapeString($message);
+
+        $result = $this->requestAndResponse('APPEND', $tokens);
+        if ($result) {
+            // TODO it would be better to parse APPENDUID from APPEND response - but we need to teach zend-mail the parsing
+            // (or use a different mail lib)
+            $select = $this->select($folder);
+            // return uidnext if given
+            return isset($select['uidnext']) ? $select['uidnext'] - 1 : false;
+        } else {
+            return false;
+        }
+    }
 }

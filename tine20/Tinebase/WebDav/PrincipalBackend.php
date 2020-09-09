@@ -465,7 +465,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                         }
                         
                         // return containers only, if the user has the sync AND read grant set
-                        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer($user, 'Calendar', array(Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ), false, true);
+                        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer($user, Calendar_Model_Event::class, array(Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ), false, true);
                         
                         if ($sharedContainers->count() > 0) {
                             $result[] = self::PREFIX_USERS . '/' . self::SHARED . '/calendar-proxy-write';

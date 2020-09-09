@@ -362,7 +362,7 @@ class Projects_JsonTest extends TestCase
     public function testPersonalContainers()
     {
         $containerJson = new Tinebase_Frontend_Json_Container();
-        $personalContainers = $containerJson->getContainer('Projects', 'personal', Tinebase_Core::getUser()->getId());
+        $personalContainers = $containerJson->getContainer(Projects_Model_Project::class, 'personal', Tinebase_Core::getUser()->getId());
         $this->assertEquals(1, count($personalContainers), 'this should only return 1 personal container: ' . print_r($personalContainers, TRUE));
     }
 

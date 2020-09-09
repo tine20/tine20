@@ -52,7 +52,9 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         this.recordProxy = Tine.Addressbook.emailAddressBackend;
 
         // add additional filter to show only contacts with email addresses
-        this.additionalFilters = [{field: 'email_query', operator: 'contains', value: '@' }];
+        this.additionalFilters = [
+            {field: 'email_query', operator: 'contains', value: '@' }
+        ];
         
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
@@ -89,7 +91,20 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         
         this.store.on('load', this.onStoreLoad, this);
     },
-    
+
+    /**
+     * use beforequery to set query filter
+     *
+     * @param {Event} qevent
+     */
+    onBeforeQuery: function(qevent){
+        Tine.Felamimail.ContactSearchCombo.superclass.onBeforeQuery.apply(this, arguments);
+
+        const filter = this.store.baseParams.filter;
+        const queryFilter = _.find(filter, {field: 'query'});
+        _.remove(filter, queryFilter);
+        filter.push({field: 'name_email_query', operator: 'contains', value: queryFilter.value});
+    },
     /**
      * override default onSelect
      * - set email/name as value
@@ -106,7 +121,9 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
             this.setValue(record.get("emails"));
             this.valueIsList = true;
         }
-        
+
+        this.selectedRecord = record;
+
         this.collapse();
         this.fireEvent('blur', this);
         this.fireEvent('select', this, record, index);

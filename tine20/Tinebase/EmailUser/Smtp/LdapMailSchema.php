@@ -62,11 +62,12 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
             }
         }
         
-        $smtpUser['emailAliases'] = $emailAliases;
+        $smtpUser['emailAliases'] = new Tinebase_Record_RecordSet(
+            Tinebase_Model_EmailUser_Alias::class,
+            $emailAliases
+        );
         $smtpUser['emailForwardOnly'] = null;
         $smtpUser['emailForwards'] = array();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($smtpUser, true));
         
         return $smtpUser;
     }
@@ -80,7 +81,7 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
     protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
     {
         if (! empty($_user->smtpUser) && $_user->smtpUser->emailAliases && ! empty($_user->smtpUser->emailAliases)) {
-            $mail = $_user->smtpUser->emailAliases;
+            $mail = $_user->smtpUser->emailAliases->email;
             array_unshift($mail, $_user->accountEmailAddress);
         } else {
             $mail = $_user->accountEmailAddress;
@@ -91,6 +92,19 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
         parent::_user2Ldap($_user, $_ldapData, $_ldapEntry);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($_ldapData, true));
+    }
+
+    /**
+     * check if user exists already in email backend user table
+     *
+     * @param  Tinebase_Model_FullUser  $_user
+     * @return boolean
+     *
+     * TODO implement
+     */
+    public function emailAddressExists(Tinebase_Model_FullUser $_user)
+    {
+        return false;
     }
 }
 

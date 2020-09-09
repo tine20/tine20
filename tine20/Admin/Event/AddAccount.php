@@ -21,4 +21,6 @@ class Admin_Event_AddAccount extends Tinebase_Event_Abstract
      * @var Tinebase_Model_FullUser
      */
     public $account;
+
+    public $pwd;
 }

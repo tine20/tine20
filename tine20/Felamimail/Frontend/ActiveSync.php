@@ -133,7 +133,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             rewind($inputStream);
         }
         
-         if ($this->_debugEmail == true) {
+         if ($this->_debugEmail) {
              $debugStream = fopen("php://temp", 'r+');
              stream_copy_to_stream($inputStream, $debugStream);
              rewind($debugStream);
@@ -172,7 +172,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $replyBody = NULL;
         }
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody, $account->signature);
         if ($rfc822) {
             $mail->addAttachment($rfc822);
         }
@@ -249,8 +249,13 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " fileReference " . $fileReference);
-        
-        list($messageId, $partId) = explode(ActiveSync_Frontend_Abstract::LONGID_DELIMITER, $fileReference, 2);
+
+        if (strpos($fileReference, ActiveSync_Frontend_Abstract::LONGID_DELIMITER) !== false) {
+            list($messageId, $partId) = explode(ActiveSync_Frontend_Abstract::LONGID_DELIMITER, $fileReference, 2);
+        } else {
+            $messageId = $fileReference;
+            $partId = null;
+        }
         
         $part = $this->_contentController->getMessagePart($messageId, $partId);
         
@@ -288,7 +293,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             rewind($inputStream);
         }
         
-        if ($this->_debugEmail == true) {
+        if ($this->_debugEmail) {
              $debugStream = fopen("php://temp", 'r+');
              stream_copy_to_stream($inputStream, $debugStream);
              rewind($debugStream);
@@ -319,7 +324,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $replyBody = null;
         }
         
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody, $account->signature);
         
         Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
     }
@@ -353,14 +358,14 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             rewind($inputStream);
         }
         
-        if ($this->_debugEmail == true) {
+        if ($this->_debugEmail) {
              $debugStream = fopen("php://temp", 'r+');
              stream_copy_to_stream($inputStream, $debugStream);
              rewind($debugStream);
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                  __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
         
-             //replace original stream wirh debug stream, as php://input can't be rewinded
+             // replace original stream with debug stream, as php://input can't be rewinded
              $inputStream = $debugStream;
              rewind($inputStream);
         }
@@ -379,7 +384,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . " Send Message with subject " . $subject . " (saveInSent: " . $saveInSent . ")");
-            
+
             $mail = Tinebase_Mail::createFromZMM($incomingMessage, null, $account->signature);
         
             Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
@@ -558,7 +563,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         }
         
         $storeResponse->total = $totalCount;
-        if (count($storeResponse->result) > 0) {
+        if (is_array($storeResponse->result) && count($storeResponse->result) > 0) {
             $storeResponse->range = array($store->options['range'][0], $store->options['range'][1]);
         }
         
@@ -714,7 +719,8 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         
         if ($_collectionData->deletesAsMoves === true && !empty($account->trash_folder)) {
             // move message to trash folder
-            $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, $account->trash_folder);
+            $trashFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account->getId(),
+                Felamimail_Model_Folder::FOLDER_TRASH);
             Felamimail_Controller_Message_Move::getInstance()->moveMessages($_serverId, $trashFolder);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " moved entry $_serverId to trash folder");
         } else {
@@ -791,6 +797,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)
     {
         // does nothing => you can't add emails via ActiveSync
+        throw new Syncroton_Exception_Status(Syncroton_Exception_Status::COMMAND_NOT_SUPPORTED);
     }
     
     /**
@@ -846,8 +853,11 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             } catch (Tinebase_Exception_NotFound $ten) {
                 return NULL;
             }
+
+            // set default signature
+            $this->_account->setSignatureText();
         }
-        
+
         return $this->_account;
     }
     

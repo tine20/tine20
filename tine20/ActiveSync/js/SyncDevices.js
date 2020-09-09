@@ -11,7 +11,7 @@
 Ext.ns('Tine.ActiveSync.syncdevices');
 
 /**
- * Containers 'mainScreen'
+ * SyncDevices 'mainScreen'
  * 
  * @static
  */
@@ -54,6 +54,7 @@ Tine.ActiveSync.Model.SyncDeviceArray = [
     { name: 'pinglifetime' },
     { name: 'pingfolder' },
     { name: 'remotewipe' },
+    { name: 'monitor_lastping' },
     { name: 'calendarfilter_id' },
     { name: 'contactsfilter_id' },
     { name: 'emailfilter_id' },
@@ -65,11 +66,10 @@ Tine.ActiveSync.Model.SyncDevice = Tine.Tinebase.data.Record.create(Tine.ActiveS
     appName: 'ActiveSync',
     modelName: 'SyncDevice',
     idProperty: 'id',
-    //titleProperty: 'name',
     titleProperty: 'deviceid',
-    // ngettext('SyncDevice', 'SyncDevices', n);
-    recordName: 'SyncDevice',
-    recordsName: 'SyncDevices'
+    // ngettext('Sync Device', 'Sync Devices', n);
+    recordName: 'Sync Device',
+    recordsName: 'Sync Devices'
 });
 
 /**

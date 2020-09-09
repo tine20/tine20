@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -227,13 +227,17 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
             $contact = new Addressbook_Model_Contact(null, true);
         }
         unset($contact->jpegphoto);
-        
-        foreach($this->_mapping as $fieldName => $value) {
+        $mc = Addressbook_Model_Contact::getConfiguration();
+        $fields = $mc->getFields();
+
+        foreach ($this->_mapping as $fieldName => $value) {
             if (!isset($data->$fieldName)) {
                 $contact->$value = null;
                 
                 continue;
             }
+
+            $maxLength = isset($fields[$value]['length']) ? $fields[$value]['length'] : null;
             
             switch ($value) {
                 case 'jpegphoto':
@@ -268,17 +272,12 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                 case 'adr_one_countryname':
                 case 'adr_two_countryname':
                     $contact->$value = Tinebase_Translation::getRegionCodeByCountryName($data->$fieldName);
-                    
                     break;
-                    
+
                 case 'adr_one_street':
-                    if (strtolower($this->_device->devicetype) == 'palm') {
-                        // palm pre sends the whole address in the <Contacts:BusinessStreet> tag
-                        unset($contact->adr_one_street);
-                    } else {
-                        $contact->$value = $data->$fieldName;
-                    }
-                    
+                case 'adr_two_street':
+                case 'title':
+                    $this->_truncateField($contact, $value, $data->$fieldName, $maxLength);
                     break;
                     
                 case 'email':
@@ -312,9 +311,17 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     break;
                     
                 default:
-                    $contact->$value = $data->$fieldName;
-                    
+                    $this->_truncateField($contact, $value, $data->$fieldName, $maxLength);
                     break;
+            }
+
+            if (in_array($fields[$value]['type'], [
+                Tinebase_Record_NewAbstract::TYPE_STRING,
+                Tinebase_Record_NewAbstract::TYPE_STRING_AUTOCOMPLETE,
+                Tinebase_Record_NewAbstract::TYPE_FULLTEXT,
+                Tinebase_Record_NewAbstract::TYPE_TEXT,
+            ])) {
+                $contact->$value = Tinebase_Core::filterInputForDatabase($contact->$value);
             }
         }
 
@@ -325,17 +332,9 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
         );
         // force update of n_fileas and n_fn
         $contact->setFromArray($data);
-        
-        // either "org_name" or "n_family" must be given!
-        if (empty($contact->org_name) && empty($contact->n_family)) {
-            $contact->n_family = 'imported';
-        }
-        
+
         // contact should be valid now
         $contact->isValid();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($contact->toArray(), true));
         
         return $contact;
     }

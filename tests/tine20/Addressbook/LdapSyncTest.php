@@ -87,6 +87,8 @@ class Addressbook_LdapSyncTest extends TestCase
 
     /**
      * test sync to sync backend works, we need to match filter {n_fn contains "test"}
+     *
+     * @group nogitlabci_ldap
      */
     public function testSyncBackend()
     {

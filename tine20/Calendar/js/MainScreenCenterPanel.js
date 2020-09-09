@@ -62,7 +62,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     defaultPrintMode: 'sheet',
     
-    periodRe: /^(day|week|month|year)/i,
+    periodRe: /^(day|week|month|year|custom)/i,
     presentationRe: /(sheet|grid|timeline)$/i,
     
     calendarPanels: {},
@@ -284,12 +284,35 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
         this.showYearView = new Ext.Toolbar.Button({
             pressed: String(this.activeView).match(/^year/i),
+            hidden: !this.app.featureEnabled('featureYearView'),
             text: this.app.i18n._('Year'),
             iconCls: 'cal-year-view',
             xtype: 'tbbtnlockedtoggle',
             handler: this.changeView.createDelegate(this, ["year"]),
             enableToggle: true,
-            toggleGroup: 'Calendar_Toolbar_tgViews'
+            toggleGroup: 'Calendar_Toolbar_tgViews',
+            checkState: (mainScreen, btn) => {
+                _.defer(() => {btn.setVisible(this.app.featureEnabled('featureYearView'));});
+            }
+        });
+        this.showCustomView = new Ext.Toolbar.Button({
+            pressed: String(this.activeView).match(/^custom/i),
+            tooltip: this.app.i18n._('Custom Selection'),
+            text: '&nbsp;',
+            iconCls: 'cal-customperiod-view',
+            xtype: 'tbbtnlockedtoggle',
+            handler: this.changeView.createDelegate(this, ["custom"]),
+            enableToggle: true,
+            toggleGroup: 'Calendar_Toolbar_tgViews',
+            hidden: !this.activeView.match(/grid/i),
+            checkState: (mainScreen, btn) => {
+                let isGridView = mainScreen.activeView.match(/grid/i);
+                btn.setVisible(isGridView);
+
+                if (!isGridView && btn.pressed) {
+                    _.defer(() => {this.showWeekView.toggle(true);});
+                }
+            }
         });
         this.toggleFullScreen = new Ext.Toolbar.Button({
             text: '\u2197',
@@ -320,7 +343,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             disabled: false,
             handler: this.onImport,
             minWidth: 60,
-            requiredGrant: 'readGrant',
             iconCls: 'action_import',
             scope: this,
             allowMultiple: true
@@ -345,12 +367,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.changeViewActions = [
             this.showDayView,
             this.showWeekView,
-            this.showMonthView
+            this.showMonthView,
+            this.showYearView,
+            this.showCustomView
         ];
-
-        if (this.app.featureEnabled('featureYearView')) {
-            this.changeViewActions.push(this.showYearView);
-        }
 
         this.changeViewActions.push(this.toggleFullScreen);
 
@@ -579,13 +599,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         this.activeView = view;
-        
-        // move around changeViewButtons
-        var rightRow = Ext.get(Ext.DomQuery.selectNode('tr[class=x-toolbar-right-row]', panel.tbar.dom));
-        
-        for (var i = this.changeViewActions.length - 1; i >= 0; i--) {
-            rightRow.insertFirst(this.changeViewActions[i].getEl().parent().dom);
-        }
+
+        this.movePeriodBtns(panel.tbar);
         this['show' + Ext.util.Format.capitalize(viewParts.period) +  'View'].toggle(true);
         this['show' + Ext.util.Format.capitalize(viewParts.presentation) +  'View'].toggle(true);
         
@@ -593,10 +608,26 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.updateEventActions();
         
         // update data
-        panel.getView().updatePeriod({from: this.startDate});
+        // NOTE: monthView periods differ for views.
+        //  - sheetView begins with end of last month and ends with beginning of next month
+        //  - timelineView starts with the first and ends with the last
+        //    BUT startDate sticks to first of month!
+        // monthSheet is a bitch!
+        panel.getView().updatePeriod({from: this.startDate}, currentPeriod);
         panel.getStore().load({});
         
         this.fireEvent('changeview', this, view);
+    },
+
+    movePeriodBtns: function(tgt) {
+        var rightRow = Ext.get(Ext.DomQuery.selectNode('tr[class=x-toolbar-right-row]', tgt.dom));
+
+        for (var i = this.changeViewActions.length - 1; i >= 0; i--) {
+            if (_.isFunction(this.changeViewActions[i].checkState)) {
+                this.changeViewActions[i].checkState(this, this.changeViewActions[i]);
+            }
+            rightRow.insertFirst(this.changeViewActions[i].getEl().parent().dom);
+        }
     },
 
     /**
@@ -643,7 +674,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             return;
         }
         
-        var addAction, responseAction, copyAction;
+        var addAction, responseAction, copyAction, eventStatusAction;
 
         if (datetime || event) {
             var dtStart = datetime || event.get('dtstart').clone();
@@ -661,6 +692,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             if (event) {
                 responseAction = this.getResponseAction(event);
                 copyAction = this.getCopyAction(event);
+                eventStatusAction = this.getEventStatusAction(event);
             }
         } else {
             addAction = this.action_addInNewWindow;
@@ -672,8 +704,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             view.getSelectionModel().clearSelections();
         }
 
-        var menuitems = this.recordActions.concat(addAction, responseAction || [], copyAction || []);
-
+        var menuitems = this.recordActions.concat(addAction, copyAction || [], eventStatusAction || [], '-', responseAction || []);
         if (event && event.get('poll_id') && event.get('editGrant')) {
             require('./PollSetDefiniteEventAction');
             menuitems = menuitems.concat(['-',{
@@ -697,7 +728,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }
             }]);
         }
-
         if (event) {
             this.action_copy_to.setDisabled(event.isRecurInstance() || event.isRecurException() || event.isRecurBase());
             menuitems = menuitems.concat(['-', this.action_cut, this.action_copy_to, '-']);
@@ -781,6 +811,36 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         };
         
         return copyAction
+    },
+
+    /**
+     * get eventStatusAction action
+     *
+     * @param {Tine.Calendar.Model.Event} event
+     * @return {Object}
+     */
+    getEventStatusAction: function(event) {
+        let statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'eventStatus');
+        let statusRecord = statusStore.getById(event.get('status'));
+        let eventStatusAction = {
+            text: this.app.i18n._('Set event status'),
+            icon: statusRecord ? statusRecord.get('icon') : false,
+            menu: []
+        };
+
+        statusStore.each(function(status) {
+            let isCurrent = statusRecord && statusRecord.id === status.id;
+
+            // NOTE: we can't use checked items here as we use icons already
+            eventStatusAction.menu.push({
+                text: status.get('i18nValue'),
+                handler: this.setEventStatus.createDelegate(this, [event, status.id]),
+                icon: status.get('icon'),
+                disabled: isCurrent
+            });
+        }, this);
+        
+        return eventStatusAction;
     },
     
     checkPastEvent: function(event, checkBusyConflicts, actionType, oldEvent) {
@@ -1012,11 +1072,19 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             panel = this.getCalendarPanel(this.activeView),
             store = this.getStore(),
             view = panel.getView(),
+            isSelected = panel.getSelectionModel().isSelected(event),
             me = this,
             promise = Promise.resolve();
 
-        updatedEvent.markDirty();
+        if (updatedEvent.ui) {
+            updatedEvent.ui.markDirty();
+        }
+
         store.replaceRecord(event, updatedEvent);
+
+        if (isSelected) {
+            panel.getSelectionModel().select(updatedEvent);
+        }
 
         if (! event.inPeriod(view.getPeriod())) {
             view.updatePeriod({from: event.get('dtstart')});
@@ -1035,7 +1103,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
             filterData.push({field: 'period', operator: 'within', value: me.getCalendarPanel(me.activeView).getView().getPeriod()});
 
-            Tine.Calendar.searchEvents(filterData, {}, function(r) {
+            Tine.Calendar.searchEvents(filterData, {}, /* fixed calendars */ true, function(r) {
                 if (updatedEvent.ui) {
                     updatedEvent.ui.clearDirty();
                 }
@@ -1270,7 +1338,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         record.beginEdit();
 
-        if (isCopy != true) {
+        if (isCopy !== true) {
             // remove from ui before update
             var oldRecord = store.getAt(store.findExact('id', record.getId()));
             if (oldRecord && oldRecord.hasOwnProperty('ui')) {
@@ -1328,7 +1396,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         record.endEdit();
 
-        if (isCopy == true) {
+        if (isCopy === true) {
             record.isCopy = true;
             Tine.Tinebase.data.Clipboard.push(record);
             if (record.ui) {
@@ -1412,8 +1480,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onKeyDown: function (e) {
-        if (e.ctrlKey) {
-            switch (e.getKey()) {
+        // no keys for quickadds etc.
+        if (e.getTarget('input') || e.getTarget('textarea')) return;
+
+        switch (e.getKey()) {
             case e.A:
                 // select only current page
                 //this.grid.getSelectionModel().selectAll(true);
@@ -1431,12 +1501,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }
                 e.preventDefault();
                 break;
-            }
-        } else if (e.getKey() === e.DELETE) {
-            e.stopEvent();
-            if (! this.action_deleteRecord.isDisabled()) {
-                this.onDeleteRecords.call(this);
-            }
+            case e.DELETE:
+                e.stopEvent();
+                if (! this.action_deleteRecord.isDisabled()) {
+                    this.onDeleteRecords.call(this);
+                }
+                break;
         }
     },
     
@@ -1661,16 +1731,25 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var myAttenderRecord = event.getMyAttenderRecord();
         if (myAttenderRecord) {
             myAttenderRecord.set('status', status);
-            event.dirty = true;
-            event.modified = {};
-            
-            var panel = this.getCalendarPanel(this.activeView);
-            var store = this.getStore();
-            
-            store.replaceRecord(event, event);
-            
-            this.onUpdateEvent(event);
+            this.updateEvent(event);
         }
+    },
+
+    setEventStatus: function(event, status) {
+        event.set('status', status);
+        this.updateEvent(event);
+    },
+    
+    updateEvent: function(event) {
+        event.dirty = true;
+        event.modified = {};
+
+        var panel = this.getCalendarPanel(this.activeView);
+        var store = this.getStore();
+
+        store.replaceRecord(event, event);
+
+        this.onUpdateEvent(event);
     },
     
     updateEventActions: function () {
@@ -1702,7 +1781,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     getCalendarPanel: function (which) {
         var whichParts = this.getViewParts(which);
         which = whichParts.toString();
-        
+
+        let currentCalendarPanel = _.get(this, `calendarPanels.${this.activeView}`);
+        let currentPeriod = _.isFunction(_.get(currentCalendarPanel, 'getView')) &&
+            _.isFunction(_.get(currentCalendarPanel.getView(), 'getPeriod')) ?
+            currentCalendarPanel.getView().getPeriod() : null;
+
         if (! this.calendarPanels[which]) {
             Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::getCalendarPanel creating new calender panel for view ' + which);
             
@@ -1730,6 +1814,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 view: whichParts.period,
                 store: store,
                 dtStart: this.startDate,
+                period: _.cloneDeep(currentPeriod),
                 listeners: {
                     scope: this,
                     // NOTE: only render the button once for the toolbars
@@ -1800,6 +1885,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.calendarPanels[which] = new Tine.Calendar.GridView({
                     tbar: tbar,
                     store: store,
+                    mainScreen: this,
                     canonicalName: ['Event', 'Grid']
                 });
             }  else if (whichParts.presentation.match(/timeline/i)) {

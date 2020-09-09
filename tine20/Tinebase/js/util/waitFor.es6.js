@@ -15,7 +15,7 @@ export default function (condition, timeout, interval) {
       let result = condition()
       if (!result) {
         if (new Date().getTime() > until) {
-          return reject(new Error('did not succseed in given time interval'))
+          return reject(new Error('did not succeed in given time interval'))
         } else {
           return window.setTimeout(fn, interval)
         }

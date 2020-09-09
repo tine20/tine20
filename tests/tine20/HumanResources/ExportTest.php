@@ -66,7 +66,7 @@ class HumanResources_Export_OdsTest extends PHPUnit_Framework_TestCase
         
         $this->assertContains('hr_default_ods.xml successfully.', $output);
         
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
             array('field' => 'name', 'operator' => 'equals', 'value' => 'hr_default_ods')
         ));
         $backend = new Tinebase_Backend_Sql(array(

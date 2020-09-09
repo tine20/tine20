@@ -43,7 +43,7 @@ Tine.Admin.config.FieldManager = function() {
                         options = Ext.apply({
                             mode: 'local',
                             forceSelection: true,
-                            allowEmpty: false,
+                            allowBlank: false,
                             triggerAction: 'all',
                             editable: false,
                             store: [[true, i18n._('Yes')], [false, i18n._('No')]]
@@ -60,7 +60,7 @@ Tine.Admin.config.FieldManager = function() {
                         options = Ext.apply({
                             mode: 'local',
                             forceSelection: true,
-                            allowEmpty: false,
+                            allowBlank: false,
                             triggerAction: 'all',
                             editable: false,
                             store: store
@@ -70,6 +70,17 @@ Tine.Admin.config.FieldManager = function() {
 
                     case 'keyFieldConfig':
                         constr = Tine.Tinebase.widgets.keyfield.ConfigField;
+                        break;
+
+                    case 'record':
+                        var recordOptions = configRecord.get('options'),
+                            recordClass = Tine.Tinebase.data.RecordMgr.get(recordOptions.appName, recordOptions.modelName);
+
+                        options = Ext.apply({
+                            recordClass: recordClass
+                        }, options);
+
+                        constr = Tine.Tinebase.widgets.form.RecordPickerComboBox;
                         break;
 
                     default:

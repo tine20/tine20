@@ -41,7 +41,14 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         parent::_authenticate();
         
         if (!Tinebase_Session::isStarted()) {
-            Tinebase_Core::startCoreSession();
+            try {
+                Tinebase_Core::startCoreSession();
+            } catch (Zend_Session_Exception $zse) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage());
+                header('WWW-Authenticate: Basic realm="Tine 2.0"');
+                header('HTTP/1.0 401 Unauthorized');
+                exit;
+            }
         }
         
         $snomSession = Phone_Session::getSessionNamespace();
@@ -280,7 +287,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         foreach($phone->rights as $right) {
             if($right->account_type == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
-                $containers = $tbContainer->getContainerByACL($right->account_id, 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
+                $containers = $tbContainer->getContainerByACL($right->account_id, Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_READ);
                 $readAbleContainer = array_merge($readAbleContainer, $containers->getArrayOfIds());
             }
         }
@@ -397,11 +404,19 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
                 break;
                 
             case 'connected':
-                $controller->callConnected($call);
+                try {
+                    $controller->callConnected($call);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                }
                 break;
                 
             case 'disconnected':
-                $controller->callDisconnected($call);
+                try {
+                    $controller->callDisconnected($call);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                }
                 break;
 
             default:

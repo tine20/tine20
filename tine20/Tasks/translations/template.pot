@@ -13,6 +13,74 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Model/Task.php:37
+msgid "GENDER_Task"
+msgid_plural "GENDER_Tasks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Task.php:38 js/Models.js:66
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Task.php:76 Model/Task.php:312 js/TaskGridPanel.js:138
+msgid "Percent"
+msgstr ""
+
+#: Model/Task.php:82 js/TaskEditDialog.js:235 js/TaskGridPanel.js:167
+#: Config.php:48 Setup/Update/Release5.php:75
+msgid "Completed"
+msgstr ""
+
+#: Model/Task.php:87 Model/Task.php:307
+msgid "Due"
+msgstr ""
+
+#: Model/Task.php:92
+msgid "Class"
+msgstr ""
+
+#: Model/Task.php:100 Model/Task.php:309
+msgid "Description"
+msgstr ""
+
+#: Model/Task.php:106
+msgid "Geo"
+msgstr ""
+
+#: Model/Task.php:111
+msgid "Location"
+msgstr ""
+
+#: Model/Task.php:116 Model/Task.php:308 js/TaskEditDialog.js:204
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:310 js/TaskEditDialog.js:196 js/TaskGridPanel.js:122
+msgid "Priority"
+msgstr ""
+
+#: Model/Task.php:311 js/TaskEditDialog.js:226 js/Models.js:110
+#: js/Models.js:168 js/TaskGridPanel.js:151
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Task.php:319
+msgid "Lead"
+msgstr ""
+
+#: Model/Task.php:325
+msgid "Telephone"
+msgstr ""
+
+#: Model/Task.php:326
+msgid "Email"
+msgstr ""
+
 #: js/TaskEditDialog.js:89
 msgid "Add New Task"
 msgstr ""
@@ -21,20 +89,12 @@ msgstr ""
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: js/TaskEditDialog.js:185 js/TaskGridPanel.js:97 js/Models.js:107
+#: js/TaskEditDialog.js:185 js/Models.js:107 js/TaskGridPanel.js:100
 msgid "Summary"
 msgstr ""
 
 #: js/TaskEditDialog.js:192
 msgid "Due date"
-msgstr ""
-
-#: js/TaskEditDialog.js:196 js/TaskGridPanel.js:119 Model/Task.php:308
-msgid "Priority"
-msgstr ""
-
-#: js/TaskEditDialog.js:204 Model/Task.php:116 Model/Task.php:306
-msgid "Organizer"
 msgstr ""
 
 #: js/TaskEditDialog.js:205
@@ -53,54 +113,6 @@ msgstr ""
 msgid "Percentage"
 msgstr ""
 
-#: js/TaskEditDialog.js:226 js/TaskGridPanel.js:148 js/Models.js:110
-#: js/Models.js:168 Model/Task.php:309
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/TaskEditDialog.js:235 js/TaskGridPanel.js:164 Config.php:48
-#: Model/Task.php:82 Setup/Update/Release5.php:75
-msgid "Completed"
-msgstr ""
-
-#: js/TaskGridPanel.js:54
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/TaskGridPanel.js:82
-msgid "Tags"
-msgstr ""
-
-#: js/TaskGridPanel.js:87
-msgid "Lead name"
-msgstr ""
-
-#: js/TaskGridPanel.js:101
-msgid "Add a task..."
-msgstr ""
-
-#: js/TaskGridPanel.js:105 js/Models.js:108
-msgid "Due Date"
-msgstr ""
-
-#: js/TaskGridPanel.js:135 Model/Task.php:76 Model/Task.php:310
-msgid "Percent"
-msgstr ""
-
-#: js/TaskGridPanel.js:171 js/Models.js:118
-msgid "Responsible"
-msgstr ""
-
-#: js/Models.js:66 Model/Task.php:38
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] ""
-msgstr[1] ""
-
 #: js/Models.js:66
 msgid "Tasks"
 msgstr ""
@@ -117,6 +129,14 @@ msgstr ""
 
 #: js/Models.js:105
 msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:108 js/TaskGridPanel.js:108
+msgid "Due Date"
+msgstr ""
+
+#: js/Models.js:118 js/TaskGridPanel.js:174
+msgid "Responsible"
 msgstr ""
 
 #: js/Models.js:120
@@ -137,6 +157,28 @@ msgstr ""
 
 #: js/Tasks.js:39
 msgid "New Task"
+msgstr ""
+
+#: js/TaskGridPanel.js:54
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/TaskGridPanel.js:83
+msgid "Attachments"
+msgstr ""
+
+#: js/TaskGridPanel.js:84
+msgid "Tags"
+msgstr ""
+
+#: js/TaskGridPanel.js:90
+msgid "Lead name"
+msgstr ""
+
+#: js/TaskGridPanel.js:104
+msgid "Add a task..."
 msgstr ""
 
 #: Preference.php:24
@@ -207,48 +249,32 @@ msgstr ""
 msgid "urgent"
 msgstr ""
 
+#: Acl/Rights.php:97
+msgid "manage shared task lists"
+msgstr ""
+
+#: Acl/Rights.php:98
+msgid "Create new shared tasks lists"
+msgstr ""
+
+#: Acl/Rights.php:101
+msgid "manage shared tasks favorites"
+msgstr ""
+
+#: Acl/Rights.php:102
+msgid "Create or update shared tasks favorites"
+msgstr ""
+
 #: Controller.php:102
 #, python-format
 msgid "%s's personal tasks"
 msgstr ""
 
-#: Model/Task.php:87 Model/Task.php:305
-msgid "Due"
+#: Controller/Task.php:211
+msgid "Notification for Task %1$s"
 msgstr ""
 
-#: Model/Task.php:92
-msgid "Class"
-msgstr ""
-
-#: Model/Task.php:100 Model/Task.php:307
-msgid "Description"
-msgstr ""
-
-#: Model/Task.php:106
-msgid "Geo"
-msgstr ""
-
-#: Model/Task.php:111
-msgid "Location"
-msgstr ""
-
-#: Model/Task.php:317
-msgid "Lead"
-msgstr ""
-
-#: Model/Task.php:323
-msgid "Telephone"
-msgstr ""
-
-#: Model/Task.php:324
-msgid "Email"
-msgstr ""
-
-#: Controller/Task.php:202
-msgid "Notification for Task "
-msgstr ""
-
-#: Setup/Update/Release3.php:65 Setup/Initialize.php:38
+#: Setup/Initialize.php:38 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"
 msgstr ""
 
@@ -278,20 +304,4 @@ msgstr ""
 
 #: Setup/Initialize.php:83
 msgid "Tasks without responsible"
-msgstr ""
-
-#: Acl/Rights.php:97
-msgid "manage shared task lists"
-msgstr ""
-
-#: Acl/Rights.php:98
-msgid "Create new shared tasks lists"
-msgstr ""
-
-#: Acl/Rights.php:101
-msgid "manage shared tasks favorites"
-msgstr ""
-
-#: Acl/Rights.php:102
-msgid "Create or update shared tasks favorites"
 msgstr ""

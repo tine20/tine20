@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -155,49 +155,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * repair groups
-     * 
-     * * add missing lists
-     * * checks if list container has been deleted (and hides groups if that's the case)
-     * 
-     * @see 0010401: add repair script for groups without list_ids
-     */
-    public function repairGroups()
-    {
-        echo 'use Tinebase.sanitizeGroupListSync instead';
-        /*
-        $count = 0;
-        $be = new Tinebase_Group_Sql();
-        $listBackend = new Addressbook_Backend_List();
-        
-        $groups = $be->getGroups();
-        
-        foreach ($groups as $group) {
-            if ($group->list_id == null) {
-                $list = Addressbook_Controller_List::getInstance()->createByGroup($group);
-                $group->list_id = $list->getId();
-                $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Add missing list for group ' . $group->name);
-                $be->updateGroupInSqlBackend($group);
-                $count++;
-            } else if ($group->visibility === Tinebase_Model_Group::VISIBILITY_DISPLAYED) {
-                try {
-                    $list = $listBackend->get($group->list_id);
-                    $listContainer = Tinebase_Container::getInstance()->get($list->container_id);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                            . ' Hide group '  . $group->name . ' without list / list container.');
-                    $group->visibility = Tinebase_Model_Group::VISIBILITY_HIDDEN;
-                    $be->updateGroupInSqlBackend($group);
-                    $count++;
-                }
-            }
-        }
-        echo $count . " groups repaired!\n";*/
-    }
-    
-    /**
      * overwrite Samba options for users
      *
      */
@@ -240,7 +197,18 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo('Found ' . $count . ' users!');
         echo("\n");
     }
-    
+
+    public function deleteAccount($_opts)
+    {
+        $args = $this->_parseArgs($_opts);
+        if (!isset($args['accountName'])) exit('accountName required');
+
+        Admin_Controller_User::getInstance()->delete([Tinebase_User::getInstance()
+            ->getUserByLoginName($args['accountName'])->getId()]);
+
+        echo 'deleted account ' . $args['accountName'] . PHP_EOL;
+    }
+
     /**
      * shorten loginnmes to fit ad samaccountname
      *
@@ -280,5 +248,115 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         echo('Found ' . $count . ' users!');
         echo("\n");
+    }
+
+    /**
+     * usage: method=Admin.synchronizeGroupAndListMembers [-d]
+     *
+     * @param $opts
+     */
+    public function synchronizeGroupAndListMembers($opts)
+    {
+        $this->_checkAdminRight();
+
+        $groupUpdateCount = Admin_Controller_Group::getInstance()->synchronizeGroupAndListMembers($opts->d);
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+        echo "Repaired " . $groupUpdateCount . " groups and or lists\n";
+    }
+
+    public function fixUserIdInSharedEmailAccounts($opts)
+    {
+        $sharedAccounts = Admin_Controller_EmailAccount::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED]
+            ]
+        ));
+        if (count($sharedAccounts) === 0) {
+            // nothing to do
+            return 0;
+        }
+
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+
+        echo "Found " . count($sharedAccounts) . " shared email accounts to check\n";
+
+        $accountsBackend = new Felamimail_Backend_Account();
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $repaired = 0;
+        foreach ($sharedAccounts as $account) {
+            if (empty($account->user_id)) {
+                // if empty: get user from dovecot table by email
+                $emailUser = Felamimail_Controller_Account::getInstance()->getSharedAccountEmailUser($account);
+                $userInBackend = $emailUserBackend->getRawUserByProperty($emailUser, 'emailLoginname', 'accountEmailAddress');
+                if ($userInBackend) {
+                    echo "Setting user_id " . $userInBackend['userid'] . "for account " . $account->name . "...\n";
+                    if (! $opts->d) {
+                        $account->user_id = $userInBackend['userid'];
+                        $accountsBackend->update($account);
+                    }
+                    $repaired++;
+                }
+            }
+        }
+        echo "Repaired " . $repaired . " shared email accounts\n";
+        return 0;
+    }
+
+    /**
+     * enabled sieve_notification_move for all system accounts
+     *
+     * usage: method=Admin.enableAutoMoveNotificationsinSystemEmailAccounts [-d] -- [folder=Benachrichtigungen]
+     *
+     * @param $opts
+     * @return int
+     */
+    public function enableAutoMoveNotificationsinSystemEmailAccounts($opts)
+    {
+        $systemAccounts = Admin_Controller_EmailAccount::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM]
+            ]
+        ));
+        if (count($systemAccounts) === 0) {
+            // nothing to do
+            return 0;
+        }
+
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+
+        echo "Found " . count($systemAccounts) . " system email accounts to check\n";
+
+        $args = $this->_parseArgs($opts, array());
+
+        $accountsController = Admin_Controller_EmailAccount::getInstance();
+        $translate = Tinebase_Translation::getTranslation('Felamimail');
+        $folderName = isset($args['folder']) ? $args['folder'] : $translate->_('Notifications');
+        $enabled = 0;
+        foreach ($systemAccounts as $account) {
+            /* @var Felamimail_Model_Account $account */
+            if (! $account->sieve_notification_move) {
+                if (! $opts->d) {
+                    $account->sieve_notification_move = true;
+                    $account->sieve_notification_move_folder = $folderName;
+                    try {
+                        $accountsController->update($account);
+                        $enabled++;
+                    } catch (Exception $e) {
+                        echo "Could not activate sieve_notification_move for account " . $account->name . ". Error: "
+                            . $e->getMessage() . "\n";
+                    }
+                } else {
+                    $enabled++;
+                }
+            }
+        }
+        echo "Enabled auto-move notification script for " . $enabled . " email accounts\n";
+        return 0;
     }
 }

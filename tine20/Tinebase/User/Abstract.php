@@ -126,9 +126,13 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         $this->_plugins[$className] = $_plugin;
     }
 
+    /**
+     * @param object $_plugin
+     * @return mixed|null
+     */
     public function removePlugin($_plugin)
     {
-        $className = get_class($_plugin);
+        $className = is_object($_plugin) ? get_class($_plugin) : $_plugin;
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Removing " . $className . ' plugin.');
@@ -778,7 +782,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User');
 
-    public function getDefaultModel()
+    public function getModel()
     {
         return Tinebase_Model_FullUser::class;
     }

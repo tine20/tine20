@@ -27,7 +27,10 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     
     /**
      * Override method: Setup needs additional initialisation
-     * 
+     *
+     * @param Tinebase_Model_Application $_application
+     * @param array $_options
+     *
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
      */
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
@@ -45,7 +48,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
 
         // make sure we have a setup user:
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
+        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User && $setupUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
@@ -78,13 +81,14 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      * returns internal addressbook
      * 
      * @return Tinebase_Model_Container
-     * @todo replace with setDefaultInternalAddressbook
      */
     protected function _getInternalAddressbook()
     {
         if ($this->_internalAddressbook === NULL) {
-            $this->_internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
-        } 
+            $this->_internalAddressbook = Tinebase_Container::getInstance()->getContainerById(
+                Admin_Controller_User::getDefaultInternalAddressbook()
+            );
+        }
         
         return $this->_internalAddressbook;
     }
@@ -254,7 +258,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         if ($internalAddressbook === NULL) {
             try {
                 $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName(
-                    'Addressbook',
+                    Addressbook_Model_Contact::class,
                     'Internal Contacts',
                     Tinebase_Model_Container::TYPE_SHARED);
             } catch (Tinebase_Exception_NotFound $tenf) {

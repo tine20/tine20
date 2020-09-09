@@ -33,7 +33,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         'getRoleMemberships' => array(),
         'hasRight'           => array(),
     );
-    
+
+    protected static $injectRoleMembers;
+
     /**
      * holdes the _instance of the singleton
      *
@@ -173,6 +175,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         if (empty($roleMemberships)) {
             return new Tinebase_Record_RecordSet('Tinebase_Model_Application');
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ .' fetch applications from db');
         
         $select = $this->_getDb()->select()
             ->distinct()
@@ -270,16 +275,19 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $role = $this->_getRolesBackend()->getByProperty($_roleName, 'name');
         return $role;
     }
-    
+
     /**
-     * Get multiple roles
+     * Returns a set of records identified by their id's
      *
-     * @param string|array $_ids Ids
-     * @return Tinebase_Record_RecordSet
+     * @param   array $_ids array of record identifiers
+     * @param   bool $_ignoreACL don't check acl grants
+     * @param Tinebase_Record_Expander $_expander
+     * @param   bool $_getDeleted
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Role
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        return $this->_getRolesBackend()->getMultiple($_ids, $_ignoreACL, $_expander);
+        return $this->_getRolesBackend()->getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
     }
     
     /**
@@ -394,6 +402,50 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         return $accountIds;
     }
 
+    public function injectRoleMemberships($roles, $accountId, $type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    {
+        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+            $accountId        = Tinebase_Model_User::convertUserIdToInt($accountId);
+            $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . implode('', $groupMemberships) . $type);
+        } else if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+            $accountId = Tinebase_Model_Group::convertGroupIdToInt($accountId);
+
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . $type);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $type);
+        }
+
+        if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
+            unset($this->_classCache[__FUNCTION__][$classCacheId]);
+        }
+
+        static::$injectRoleMembers[$type][$accountId] = $roles;
+    }
+
+    public function unInjectRoleMemberships($accountId, $type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    {
+        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+            $accountId        = Tinebase_Model_User::convertUserIdToInt($accountId);
+            $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
+
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . implode('', $groupMemberships) . $type);
+        } else if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+            $accountId = Tinebase_Model_Group::convertGroupIdToInt($accountId);
+
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . $type);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $type);
+        }
+
+        if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
+            unset($this->_classCache[__FUNCTION__][$classCacheId]);
+        }
+
+        unset(static::$injectRoleMembers[$type][$accountId]);
+    }
+
     /**
      * get list of role memberships
      *
@@ -423,6 +475,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
             return $this->_classCache[__FUNCTION__][$classCacheId];
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ .' fetch role memberships from db');
         
         $select = $this->_getDb()->select()
             ->distinct()
@@ -438,6 +493,10 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $stmt = $this->_getDb()->query($select);
         
         $memberships = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+
+        if (isset(static::$injectRoleMembers[$type][$accountId])) {
+            $memberships = array_unique(array_merge($memberships, static::$injectRoleMembers[$type][$accountId]));
+        }
         
         $this->_classCache[__FUNCTION__][$classCacheId] = $memberships;
         
@@ -587,12 +646,17 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      *
      * @param  mixed $_roleId
      * @param  array $_account as role member ("type" => account type, "id" => account id)
-     * @throws Tinebase_Exception_InvalidArgument
      */
     public function removeRoleMember($_roleId, $_account)
     {
         /** @var Tinebase_Model_Role $oldRole */
-        $oldRole = $this->get($_roleId);
+        try {
+            $oldRole = $this->get($_roleId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' ' . $tenf->getMessage());
+            $oldRole = null;
+        }
         
         $where = array(
             $this->_getDb()->quoteIdentifier('role_id') . ' = ?'      => (string) $_roleId,
@@ -602,7 +666,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         
         $this->_getDb()->delete(SQL_TABLE_PREFIX . 'role_accounts', $where);
 
-        $this->_writeModLogForRole($oldRole);
+        if ($oldRole) {
+            $this->_writeModLogForRole($oldRole);
+        }
         
         $this->resetClassCache();
     }

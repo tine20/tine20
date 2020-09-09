@@ -380,6 +380,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $timesheet->account_id = Tinebase_Core::getUser()->getId();
                 $timesheet->start_date = (clone $this->_referenceDate)->addDay($i);
                 $timesheet->duration = 30;
+                $timesheet->accounting_time = 30;
                 Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
             }
             

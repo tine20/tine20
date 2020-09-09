@@ -4,7 +4,7 @@
  *
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
@@ -220,13 +220,15 @@ class Calendar_Controller_PollTest extends TestCase
         "status":"TENTATIVE",
         "user_type":"user",
         "user_id":"{$contact_id}",
-        "status_authkey":"{$statusData['status'][0]['status_authkey']}"
+        "status_authkey":"{$statusData['status'][0]['status_authkey']}",
+        "seq":1
     } , {
         "cal_event_id":"{$statusData['status'][1]['cal_event_id']}",
         "status":"DECLINED",
         "user_type":"user",
         "user_id":"{$contact_id}",
-        "status_authkey":"{$statusData['status'][1]['status_authkey']}"
+        "status_authkey":"{$statusData['status'][1]['status_authkey']}",
+        "seq":1
     }]
 }
 EOT;
@@ -241,12 +243,45 @@ EOT;
         $event = Calendar_Controller_Event::getInstance()->get($statusData['status'][0]['cal_event_id']);
         $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
         $this->assertEquals('TENTATIVE', $attendee->status);
+        static::assertEquals(2, $attendee->seq);
 
         $event = Calendar_Controller_Event::getInstance()->get($statusData['status'][1]['cal_event_id']);
         $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
         $this->assertEquals('DECLINED', $attendee->status);
+        static::assertEquals(2, $attendee->seq);
 
+        $requestBody = <<<EOT
+{
+    "status":[{
+        "cal_event_id":"{$statusData['status'][0]['cal_event_id']}",
+        "status":"DECLINED",
+        "user_type":"user",
+        "user_id":"{$contact_id}",
+        "status_authkey":"{$statusData['status'][0]['status_authkey']}",
+        "seq":1
+    } , {
+        "cal_event_id":"{$statusData['status'][1]['cal_event_id']}",
+        "status":"TENTATIVE",
+        "user_type":"user",
+        "user_id":"{$contact_id}",
+        "status_authkey":"{$statusData['status'][1]['status_authkey']}",
+        "seq":2
+    }]
+}
+EOT;
+        $request->setContent($requestBody);
+        $response = $this->_uit->publicApiUpdateAttendeeStatus($pollData['id']);
+        $this->assertEquals(200, $response->getStatusCode());
 
+        $event = Calendar_Controller_Event::getInstance()->get($statusData['status'][0]['cal_event_id']);
+        $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
+        $this->assertEquals('TENTATIVE', $attendee->status);
+        static::assertEquals(2, $attendee->seq);
+
+        $event = Calendar_Controller_Event::getInstance()->get($statusData['status'][1]['cal_event_id']);
+        $attendee = $event->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
+        $this->assertEquals('TENTATIVE', $attendee->status);
+        static::assertEquals(3, $attendee->seq);
     }
 
     /**
@@ -549,13 +584,7 @@ EOT;
 
     public function testPublicApiAddAttenderNotification()
     {
-        // if mailing is not installed, as with pgsql
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
-        if (empty($smtpConfig->primarydomain)) {
-            $smtpConfig->primarydomain = 'unittest.test';
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
-        }
-
+        $this->_setMailDomainIfEmpty();
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
         static::resetMailer();
@@ -572,13 +601,13 @@ EOT;
             $expectedMessages = Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS) ? 1 : 2;
             static::assertEquals($expectedMessages, count($messages), 'expected ' . $expectedMessages . ' mails send');
 
-            if (isset($messages[1])) {
-                /** @var Tinebase_Mail $confirmationMessage */
-                $confirmationMessage = $messages[1];
-                $this->assertEquals('john@doe.net', $confirmationMessage->getRecipients()[0]);
-                $text = $confirmationMessage->getBodyText()->getContent();
-                $this->assertContains('Thank you for attendening', $text);
-            }
+            /** @var Tinebase_Mail $confirmationMessage */
+            $confirmationMessage = $messages[0];
+            $this->assertEquals('john@doe.net', $confirmationMessage->getRecipients()[0]);
+            $text = $confirmationMessage->getBodyText()->getContent();
+            $this->assertContains('Thank you for attendening', $text);
+            $this->assertNotContains('Array', $text, 'notification did not cope with resolved stuff');
+
         } finally {
             Tinebase_Smtp::setDefaultTransport($oldTransport);
             Felamimail_Transport::setTestTransport($oldTestTransport);
@@ -593,12 +622,7 @@ EOT;
      */
     public function testDefiniteEventNotification()
     {
-        // if mailing is not installed, as with pgsql
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
-        if (empty($smtpConfig->primarydomain)) {
-            $smtpConfig->primarydomain = 'unittest.test';
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
-        }
+        $this->_setMailDomainIfEmpty();
 
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
@@ -638,12 +662,7 @@ EOT;
 
     public function testSupressDeleteNotifications()
     {
-        // if mailing is not installed, as with pgsql
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()));
-        if (empty($smtpConfig->primarydomain)) {
-            $smtpConfig->primarydomain = 'unittest.test';
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
-        }
+        $this->_setMailDomainIfEmpty();
 
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);

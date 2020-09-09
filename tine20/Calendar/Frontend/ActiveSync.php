@@ -221,7 +221,11 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
      */
     public function setAttendeeStatus(Syncroton_Model_MeetingResponse $response)
     {
-        $event = $instance = $this->_contentController->get($response->requestId);
+        try {
+            $event = $instance = $this->_contentController->get($response->requestId);
+        } catch (Tinebase_Exception_NotFound $eventNotFound) {
+            throw new Syncroton_Exception_Status_MeetingResponse("event not found", Syncroton_Exception_Status_MeetingResponse::MEETING_ERROR);
+        }
         $method = 'attenderStatusUpdate';
         
         if ($response->instanceId instanceof DateTime) {
@@ -247,7 +251,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         // return id of calendar event
         return $response->requestId;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see ActiveSync_Frontend_Abstract::toSyncrotonModel()
@@ -255,10 +259,21 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
      */
     public function toSyncrotonModel($entry, array $options = array())
     {
+        /** @var Calendar_Model_Event $entry */
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . " calendar data " . print_r($entry->toArray(), true));
+
+        // fill attendee cache ATTENTION this is needed by some of the code below!
+        Calendar_Model_Attender::resolveAttendee($entry->attendee, FALSE);
         
         $syncrotonEvent = new Syncroton_Model_Event();
+        $syncrotonEvent->meetingStatus = $this->_getMeetingStatus($entry);
+        $syncrotonEvent->responseType = $this->_getResponseType($entry);
+        if (5 === $syncrotonEvent->responseType) {
+            $syncrotonEvent->responseRequested = true;
+        } else {
+            $syncrotonEvent->responseRequested = false;
+        }
         
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
             if ($this->_isEmptyValue($entry->$tine20Property)) {
@@ -266,12 +281,12 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                 continue;
             }
             
-            switch($tine20Property) {
+            switch ($tine20Property) {
                 case 'alarms':
-                    $entry->$tine20Property->sort('alarm_time');
+                    $entry->alarms->sort('alarm_time');
                     $alarm = $entry->alarms->getFirstRecord();
                     
-                    if($alarm instanceof Tinebase_Model_Alarm) {
+                    if ($alarm instanceof Tinebase_Model_Alarm) {
                         // NOTE: option minutes_before is always calculated by Calendar_Controller_Event::_inspectAlarmSet
                         $minutesBefore = (int) $alarm->getOption('minutes_before');
                         
@@ -292,12 +307,9 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                         break;
                     }
                     
-                    // fill attendee cache
-                    Calendar_Model_Attender::resolveAttendee($entry->$tine20Property, FALSE);
-                    
                     $attendees = array();
                 
-                    foreach($entry->$tine20Property as $attenderObject) {
+                    foreach ($entry->attendee as $attenderObject) {
                         $attendee = new Syncroton_Model_EventAttendee();
                         $attendee->name = $attenderObject->getName();
                         $attendee->email = $attenderObject->getEmail();
@@ -321,46 +333,47 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     break;
                     
                 case 'class':
-                    $syncrotonEvent->$syncrotonProperty = $entry->$tine20Property == Calendar_Model_Event::CLASS_PRIVATE ? 2 : 0;
+                    $syncrotonEvent->$syncrotonProperty = $entry->class == Calendar_Model_Event::CLASS_PRIVATE ? 2 : 0;
                     
                     break;
                     
                 case 'description':
                     $syncrotonEvent->$syncrotonProperty = new Syncroton_Model_EmailBody(array(
                         'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
-                        'data' => $entry->$tine20Property
+                        'data' => $entry->description
                     ));
                     
                     break;
                     
                 case 'dtend':
-                    if($entry->$tine20Property instanceof DateTime) {
+                    if ($entry->dtend instanceof DateTime) {
                         if ($entry->is_all_day_event == true) {
                             // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
-                            $dtend = clone $entry->$tine20Property;
+                            $dtend = clone $entry->dtend;
                             $dtend->addSecond($dtend->get('s') == 59 ? 1 : 0);
                             $dtend->addMinute($dtend->get('i') == 59 ? 1 : 0);
 
                             $syncrotonEvent->$syncrotonProperty = $dtend;
                         } else {
-                            $syncrotonEvent->$syncrotonProperty = $entry->$tine20Property;
+                            $syncrotonEvent->$syncrotonProperty = $entry->dtend;
                         }
                     }
                     
                     break;
                     
                 case 'dtstart':
-                    if($entry->$tine20Property instanceof DateTime) {
-                        $syncrotonEvent->$syncrotonProperty = $entry->$tine20Property;
+                    if ($entry->dtstart instanceof DateTime) {
+                        $syncrotonEvent->$syncrotonProperty = $entry->dtstart;
                     }
                     
                     break;
                     
                 case 'exdate':
                     // handle exceptions of repeating events
-                    if($entry->$tine20Property instanceof Tinebase_Record_RecordSet && $entry->$tine20Property->count() > 0) {
+                    if ($entry->exdate instanceof Tinebase_Record_RecordSet && $entry->exdate->count() > 0) {
                         $exceptions = array();
-                    
+
+                        /** @var Calendar_Model_Event $exdate */
                         foreach ($entry->exdate as $exdate) {
                             $exception = new Syncroton_Model_EventException();
                             
@@ -368,7 +381,22 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                             // HTC devices ignore the value(0 or 1) of the Deleted element
                             if ((int)$exdate->is_deleted === 1) { 
                                 $exception->deleted        = 1;
+
+                                // make sure event status is cancled for meetingStatus calculation
+                                $exdate->status = Calendar_Model_Event::STATUS_CANCELED;
+
+                                // None. The user's response to the meeting has not yet been received.
+                                $exception->responseType = 0;
+                            } else {
+                                $exception->responseType = $this->_getResponseType($exdate);
                             }
+
+                            if (5 === $exception->responseType) {
+                                $exception->responseRequested = true;
+                            } else {
+                                $exception->responseRequested = false;
+                            }
+                            $exception->meetingStatus = $this->_getMeetingStatus($exdate);
                             $exception->exceptionStartTime = $exdate->getOriginalDtStart();
                             
                             if ((int)$exdate->is_deleted === 0) {
@@ -391,14 +419,14 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     
                 case 'rrule':
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__ . " calendar rrule " . $entry->$tine20Property);
+                        __METHOD__ . '::' . __LINE__ . " calendar rrule " . $entry->rrule);
                         
-                    $rrule = Calendar_Model_Rrule::getRruleFromString($entry->$tine20Property);
+                    $rrule = Calendar_Model_Rrule::getRruleFromString($entry->rrule);
                     
                     $recurrence = new Syncroton_Model_EventRecurrence();
                     
                     // required fields
-                    switch($rrule->freq) {
+                    switch ($rrule->freq) {
                         case Calendar_Model_Rrule::FREQ_DAILY:
                             $recurrence->type = Syncroton_Model_EventRecurrence::TYPE_DAILY;
                             
@@ -411,7 +439,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                             break;
                     
                         case Calendar_Model_Rrule::FREQ_MONTHLY:
-                            if(!empty($rrule->bymonthday)) {
+                            if (!empty($rrule->bymonthday)) {
                                 $recurrence->type       = Syncroton_Model_EventRecurrence::TYPE_MONTHLY;
                                 $recurrence->dayOfMonth = $rrule->bymonthday;
                             } else {
@@ -427,7 +455,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                             break;
                     
                         case Calendar_Model_Rrule::FREQ_YEARLY:
-                            if(!empty($rrule->bymonthday)) {
+                            if (!empty($rrule->bymonthday)) {
                                 $recurrence->type        = Syncroton_Model_EventRecurrence::TYPE_YEARLY;
                                 $recurrence->dayOfMonth  = $rrule->bymonthday;
                                 $recurrence->monthOfYear = $rrule->bymonth;
@@ -448,9 +476,9 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     // required field
                     $recurrence->interval = $rrule->interval ? $rrule->interval : 1;
                     
-                    if($rrule->count) {
+                    if ($rrule->count) {
                         $recurrence->occurrences = $rrule->count;
-                    } else if($rrule->until instanceof DateTime) {
+                    } elseif ($rrule->until instanceof DateTime) {
                         $recurrence->until = $rrule->until;
                     }
                     
@@ -459,7 +487,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     break;
                     
                 case 'tags':
-                    $syncrotonEvent->$syncrotonProperty = $entry->$tine20Property->name;;
+                    $syncrotonEvent->$syncrotonProperty = $entry->tags->name;;
                     
                     break;
                     
@@ -475,15 +503,77 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             Tinebase_Core::get(Tinebase_Core::CACHE)
         );
         
-        $syncrotonEvent->timezone = $timeZoneConverter->encodeTimezone(Tinebase_Core::getUserTimezone());
-        
-        $syncrotonEvent->meetingStatus = 1;
+        $syncrotonEvent->timezone = $timeZoneConverter->encodeTimezone($entry->originator_tz);
         $syncrotonEvent->dtStamp = $entry->creation_time;
         $syncrotonEvent->uID = $entry->uid;
         
         $this->_addOrganizer($syncrotonEvent, $entry);
         
         return $syncrotonEvent;
+    }
+
+    /**
+     * @param Calendar_Model_Event $_event
+     * @return int
+     */
+    protected function _getResponseType(Calendar_Model_Event $_event)
+    {
+        $organizer = $_event->resolveOrganizer();
+        // if the organizer is null we put ourself as organizer, so it is the same as if we would be the organizer
+        if (null === $organizer || Tinebase_Core::getUser()->getId() === $organizer->account_id) {
+            return 1;
+        } else {
+            if (null === ($ownAttendee = Calendar_Model_Attender::getOwnAttender($_event->attendee))) {
+                return 0;
+            }
+            switch ($ownAttendee->status) {
+                case Calendar_Model_Attender::STATUS_TENTATIVE:
+                    return 2;
+                case Calendar_Model_Attender::STATUS_ACCEPTED:
+                    return 3;
+                case Calendar_Model_Attender::STATUS_DECLINED:
+                    return 4;
+                case Calendar_Model_Attender::STATUS_NEEDSACTION:
+                    return 5;
+                default:
+                    $e = new Tinebase_Exception_NotImplemented('unknown attender status: ' . $ownAttendee->status);
+                    Tinebase_Exception::log($e);
+                    return 0;
+            }
+        }
+    }
+
+    /**
+     * @param Calendar_Model_Event $_event
+     * @return int
+     */
+    protected function _getMeetingStatus(Calendar_Model_Event $_event)
+    {
+        $organizer = $_event->resolveOrganizer();
+        // if the organizer is null we put ourself as organizer, so it is the same as if we would be the organizer
+        if (null === $organizer || Tinebase_Core::getUser()->getId() === $organizer->account_id) {
+            if (Calendar_Model_Event::STATUS_CANCELED === $_event->status) {
+                return 5;
+            } else {
+                return 1;
+            }
+        } elseif (null === Calendar_Model_Attender::getOwnAttender($_event->attendee)) {
+            if (Calendar_Config::getInstance()->{Calendar_Config::ASSIGN_ORGANIZER_MEETING_STATUS_ON_EDIT_GRANT} &&
+                    $_event->{Tinebase_Model_Grants::GRANT_EDIT}) {
+                if (Calendar_Model_Event::STATUS_CANCELED === $_event->status) {
+                    return 5;
+                } else {
+                    return 1;
+                }
+            }
+            return 0;
+        } else {
+            if (Calendar_Model_Event::STATUS_CANCELED === $_event->status) {
+                return 7;
+            } else {
+                return 3;
+            }
+        }
     }
     
     /**
@@ -544,7 +634,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         }
         
         // Update seq to entries seq to prevent concurrent update
-        $event->seq = $entry['seq'];
+        $event->seq = isset($entry['seq']) ? $entry['seq'] : null;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . " Event before mapping: " . print_r($event->toArray(), true));
@@ -647,7 +737,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                         }
 
                         $eventException->is_deleted = (bool) $exception->deleted;
-                        $eventException->seq = $entry['seq'];
+                        $eventException->seq = isset($entry['seq']) ? $entry['seq'] : null;
                         $exdates->addRecord($eventException);
                     }
                     
@@ -730,7 +820,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                             $rrule->until = null;
                         } else if(isset($data->$syncrotonProperty->until)) {
                             $rrule->count = null;
-                            $rrule->until = new Tinebase_DateTime($data->$syncrotonProperty->until);
+                            $rrule->until = $this->_convertDateTime($data->$syncrotonProperty->until);
                         } else {
                             $rrule->count = null;
                             $rrule->until = null;
@@ -744,7 +834,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     
                 default:
                     if ($data->$syncrotonProperty instanceof DateTime) {
-                        $event->$tine20Property = new Tinebase_DateTime($data->$syncrotonProperty);
+                        $event->$tine20Property = $this->_convertDateTime($data->$syncrotonProperty);
                     } else {
                         $event->$tine20Property = $data->$syncrotonProperty;
                     }
@@ -791,6 +881,18 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             __METHOD__ . '::' . __LINE__ . " eventData " . print_r($event->toArray(), true));
 
         return $event;
+    }
+
+    protected function _convertDateTime($syncrotonDateTime)
+    {
+        if ($syncrotonDateTime instanceof DateTime) {
+            // convert TZ from type 2 ('Z') to type 3 ('UTC')
+            // TODO do we need to do this for more TZs?
+            $tz = $syncrotonDateTime->getTimezone()->getName() === 'Z' ? new DateTimeZone('UTC') : null;
+        } else {
+            $tz = null;
+        }
+        return new Tinebase_DateTime($syncrotonDateTime, $tz);
     }
     
     /**

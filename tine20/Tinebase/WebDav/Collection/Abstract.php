@@ -101,20 +101,24 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
         }
         
         try {
-            Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $name, $containerType, Tinebase_Core::getUser());
+            Tinebase_Container::getInstance()->getContainerByName($this->_model, $name, $containerType, Tinebase_Core::getUser());
             
             // container exists already => that's bad!
             throw new Sabre\DAV\Exception\Forbidden('Folders exists already');
         } catch (Tinebase_Exception_NotFound $tenf) {
             // continue
         }
-        
+
+        if (empty($this->_model)) {
+            throw new Tinebase_Exception_Backend('model needs to be known to create a container!');
+        }
+
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => $name,
             'type'           => $containerType,
             'backend'        => 'sql',
             'application_id' => $this->_getApplication()->getId(),
-            'model'          => Tinebase_Core::getApplicationInstance($this->_applicationName)->getDefaultModel()
+            'model'          => $this->_model,
         )));
         
         return $container;
@@ -144,7 +148,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
             case 2:
                 if ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_SHARED) {
                     try {
-                        $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_SHARED);
+                        $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_model, $_name, Tinebase_Model_Container::TYPE_SHARED);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         throw new Sabre\DAV\Exception\NotFound('Directory not found');
                     }
@@ -177,7 +181,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
             # return personal folders
             case 3:
                 try {
-                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $_name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+                    $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_model, $_name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     throw new Sabre\DAV\Exception\NotFound('Directory not found');
                 }
@@ -224,7 +228,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                     
                     $containers = Tinebase_Container::getInstance()->getSharedContainer(
                         Tinebase_Core::getUser(),
-                        $this->_applicationName,
+                        $this->_model,
                         array(
                             Tinebase_Model_Grants::GRANT_READ,
                             Tinebase_Model_Grants::GRANT_SYNC
@@ -244,7 +248,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
             # return personal folders
             case 3:
                 if ($this->_hasPersonalFolders) { 
-                    $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
+                    $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_model, Tinebase_Core::getUser(), array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
                     foreach ($containers as $container) {
                         $children[] = $this->getChild($container);
                     }

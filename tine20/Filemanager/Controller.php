@@ -88,7 +88,7 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject
                  */
                 if ($_eventObject->deletePersonalContainers()) {
-                    $this->deletePersonalFolder($_eventObject->account, '', 'Tinebase_Model_Tree_Node');
+                    $this->deletePersonalFolder($_eventObject->account, null, 'Tinebase_Model_Tree_Node');
                 }
                 break;
         }

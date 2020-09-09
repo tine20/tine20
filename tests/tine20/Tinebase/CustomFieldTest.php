@@ -188,7 +188,7 @@ class Tinebase_CustomFieldTest extends TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'n_family'     => 'testcontact',
             'container_id' => Tinebase_Container::getInstance()->getSharedContainer(
-                Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ)->getFirstRecord()->getId()
+                Tinebase_Core::getUser(), Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_READ)->getFirstRecord()->getId()
         )));
         $cfValue = array(
             $createdCustomField->name => 'test value',
@@ -234,6 +234,57 @@ class Tinebase_CustomFieldTest extends TestCase
     public function testAddressbookCustomFieldAclViaCli()
     {
         $this->testAddressbookCustomFieldAcl(true);
+    }
+
+    /**
+     * testMultiRecordCustomField
+     */
+    public function testRecordCustomField()
+    {
+        $this->_testCustomField = $this->_instance->addCustomField(self::getCustomField(array(
+            'name' => 'test',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+            'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
+        )));
+
+        //Customfield record 1
+        $contact1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'org_name'     => 'contact 1'
+        )));
+
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'     => 'contact'
+        )));
+
+        $cfValue = array($this->_testCustomField->name => $contact1->getId());
+        $contact->customfields = $cfValue;
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => $contact1->getId(), 'expectContactToBeFound' => true],
+            ['operator' => 'equals', 'value' => '',                 'expectContactToBeFound' => false],
+            ['operator' => 'equals', 'value' => null,               'expectContactToBeFound' => false],
+            ['operator' => 'AND',    'value' => [],                 'expectContactToBeFound' => false],
+        ];
+
+        foreach ($filtersToTest as $filterToTest) {
+            $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+                ['field' => 'customfield', 'operator' => $filterToTest['operator'], 'value' => [
+                    'cfId' => $this->_testCustomField->getId(),
+                    'value' => $filterToTest['value']
+                ]]
+            ]));
+            if ($filterToTest['expectContactToBeFound']) {
+                static::assertEquals(1, $result->count(), 'contact not found with filter '
+                    . print_r($filterToTest, true)
+                    . ' cf value: ' . $contact1->getId()
+                );
+                static::assertTrue(in_array($contact->getId(), $result->getArrayOfIds()));
+            } else {
+                static::assertFalse(in_array($contact->getId(), $result->getArrayOfIds()));
+            }
+        }
     }
 
     /**
@@ -347,6 +398,9 @@ class Tinebase_CustomFieldTest extends TestCase
             ['operator' => 'endswith', 'value' => '1234', 'expectContactToBeFound' => true],
             ['operator' => 'equals', 'value' => 'abc', 'expectContactToBeFound' => false],
             ['operator' => 'contains', 'value' => 'x', 'expectContactToBeFound' => false],
+            ['operator' => 'contains', 'value' => '', 'expectContactToBeFound' => false],
+            ['operator' => 'contains', 'value' => null, 'expectContactToBeFound' => false],
+            ['operator' => 'contains', 'value' => '0', 'expectContactToBeFound' => false],
         ];
         $this->_testContactCustomFieldOfType('string', $value, $filtersToTest);
     }
@@ -553,11 +607,11 @@ class Tinebase_CustomFieldTest extends TestCase
 
     public function testSystemCF()
     {
-        $app = Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication');
+        $app = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $systemCF = new Tinebase_Model_CustomField_Config([
             'application_id'    => $app->getId(),
             'name'              => Tinebase_Record_Abstract::generateUID(),
-            'model'             => ExampleApplication_Model_ExampleRecord::class,
+            'model'             => Addressbook_Model_Contact::class,
             'definition'        => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
                     Tinebase_ModelConfiguration::TYPE       => Tinebase_ModelConfiguration::TYPE_INTEGER,
@@ -570,19 +624,35 @@ class Tinebase_CustomFieldTest extends TestCase
 
         Tinebase_CustomField::getInstance()->addCustomField($systemCF);
 
-        $record = new ExampleApplication_Model_ExampleRecord([], true);
+        $record = new Addressbook_Model_Contact([], true);
         static::assertTrue($record->has($systemCF->name), 'record does not have the system cf property');
 
         $setup = Setup_Backend_Factory::factory();
-        static::assertTrue($setup->columnExists($systemCF->name, ExampleApplication_Model_ExampleRecord::getConfiguration()
+        static::assertTrue($setup->columnExists($systemCF->name, Addressbook_Model_Contact::getConfiguration()
             ->getTableName()), 'system cf column was not created');
 
         // test calling it with an id, not a record
         Tinebase_CustomField::getInstance()->deleteCustomField($systemCF->getId());
-        static::assertFalse($setup->columnExists($systemCF->name, ExampleApplication_Model_ExampleRecord::getConfiguration()
+        static::assertFalse($setup->columnExists($systemCF->name, Addressbook_Model_Contact::getConfiguration()
             ->getTableName()), 'system cf column was not removed');
 
-        $record = new ExampleApplication_Model_ExampleRecord([], true);
+        $record = new Addressbook_Model_Contact([], true);
         static::assertFalse($record->has($systemCF->name), 'record still has the system cf property');
     }
+
+    public function testCustomKeyFieldFilter()
+    {
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            static::markTestSkipped('pgsql doesnt support int customfield filters');
+        }
+
+        $value = 'go';
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => $value, 'expectContactToBeFound' => true],
+            ['operator' => 'not', 'value' => $value, 'expectContactToBeFound' => false],
+            ['operator' => 'equals', 'value' => '1234', 'expectContactToBeFound' => false],
+        ];
+        $this->_testContactCustomFieldOfType('keyField', $value, $filtersToTest);
+    }
+
 }

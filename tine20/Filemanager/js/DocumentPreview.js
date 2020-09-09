@@ -8,7 +8,7 @@
 
 Ext.ns('Tine.Filemanager');
 
-Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
+Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
     /**
      * Node record to preview
      */
@@ -25,29 +25,9 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
     initialApp: null,
 
     /**
-     * Required for overflow auto
-     */
-    autoScroll: true,
-
-    /**
-     * Overflow auto to enable scrollbar automatically
-     */
-    overflow: 'auto',
-
-    /**
      * Layout
      */
-    layout: 'hfit',
-
-    /**
-     * Enable scrollbar
-      */
-    containsScrollbar: true,
-
-    /**
-     * gray fbar
-     */
-    cls: 'tw-editdialog',
+    layout: 'fit',
 
     initComponent: function () {
         this.addEvents(
@@ -63,32 +43,27 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
 
-        this.action_close = new Ext.Action({
-            text: this.app.i18n._('Close'),
-            minWidth: 70,
-            scope: this,
-            handler: this.onClose,
-            iconCls: 'action_cancel'
+        this.tbar = new Ext.Toolbar({
+            items: [{
+                xtype: 'tbfill',
+                order: 50
+            }],
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Tine-Filemanager-DocumentPreview'
+            }],
         });
 
-        this.fbar = ['->', this.action_close];
+        this.actionUpdater = new Tine.widgets.ActionUpdater({
+            evalGrants: true
+        });
 
-        Ext.getBody().on('keydown', function (e) {
-            switch (e.getKey()) {
-                case e.SPACE:
-                case e.ESC:
-                    this.onClose();
-                    break;
-                case e.DOWN:
-                case e.UP:
-                case e.LEFT:
-                case e.RIGHT:
-                    this.onNavigate(e);
-                    break;
-                default:
-                    break;
-            }
-        }, this);
+        this.actionUpdater.addActions(this.tbar.items);
+        this.actionUpdater.updateActions([this.record]);
+
+        if (this.tbar.items.getCount() < 2) {
+            this.tbar.hide();
+        }
 
         Tine.Filemanager.DocumentPreview.superclass.initComponent.apply(this, arguments);
 
@@ -111,40 +86,32 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
             _.each(this.record.get('attachments'), function(attachmentData) {
                 records.push(new Tine.Tinebase.Model.Tree_Node(attachmentData));
             });
-        } else if (this.record.get('preview_count')) {
-            records.push(this.record);
-        } else if (this.hasEmailPreview(this.record)) {
-            // @todo fake preview count needed?
-            this.record.set('preview_count', 1);
-
+        } else if (+this.record.get('preview_count')) {
             records.push(this.record);
         }
 
         records = _.filter(records, function(record) {
-            return !!record.get('preview_count');
+            return !!+record.get('preview_count');
         });
 
         if (! records.length) {
             this.fireEvent('noPreviewAvailable');
             return;
         }
-        
-        this.removeAll(true);
-        
+
+        me.add(this.previewContainer = new Ext.Panel({
+            layout: 'anchor',
+            bodyStyle: 'overflow-y: scroll;'
+        }));
         this.afterIsRendered().then(function () {
             _.each(records, function(record) {
-                if (me.hasEmailPreview(record)) {
-                    me.addEmailDetailsPanel(me, record);
-                } else {
-                    me.addPreviewPanelForRecord(me, record);
-                }
+                me.addPreviewPanelForRecord(me, record);
             });
-            
-            me.doLayout();
         });
     },
 
     addPreviewPanelForRecord: function (me, record) {
+        var _ = window.lodash;
         _.range(record.get('preview_count')).forEach(function (previewNumber) {
             var path = record.get('path'),
                 revision = record.get('revision');
@@ -159,73 +126,8 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
                 _revision: revision
             }, Tine.Tinebase.tineInit.requestUrl + '?');
 
-            me.add({
+            me.previewContainer.add({
                 html: '<img style="width: 100%;" src="' + url + '" />',
-                xtype: 'panel',
-                frame: true,
-                border: true
-            });
-        });
-    },
-
-    addEmailDetailsPanel: function (me, node) {
-        require('Felamimail/js/MailDetailsPanel');
-
-        let detailsPanel = new Tine.Felamimail.MailDetailsPanel({
-            height: 830, // @todo auto
-            autoscroll: true, // @todo scollbar!
-            appName: 'Filemanager'
-        });
-        me.add(detailsPanel);
-
-        Tine.Felamimail.messageBackend.getMessageFromNode(node, {
-            success: function(response) {
-                // TODO make it work
-                var message = Tine.Felamimail.messageBackend.recordReader({responseText: Ext.util.JSON.encode(response.data)});
-                this.loadRecord(message.data);
-            },
-            failure: function (exception) {
-                Tine.log.debug(exception);
-                // @todo add loadMask?
-                // this.getLoadMask().hide();
-                // if (exception.code == 404) {
-                    this.defaultTpl.overwrite(body, {msg: this.app.i18n._('Message not available.')});
-                // } else {
-                //     // @todo handle exception?
-                // }
-            },
-            scope: detailsPanel
-        });
-    },
-
-    hasEmailPreview: function (fileNode) {
-        if (! Tine.Tinebase.common.hasRight('run', 'Felamimail')) {
-            // needs Felamimail
-            return false;
-        }
-
-        // define email content-types
-        const emailContentTypes = [
-            'message/rfc822'
-        ];
-        if (emailContentTypes.indexOf(fileNode.get('contenttype')) !== -1) {
-            return true;
-        } else {
-            return false;
-        }
-    },
-
-    /**
-     * Fires if no previews are available
-     *
-     * @todo show more information about preview service + configuration
-     */
-    onNoPreviewAvailable: function () {
-        var me = this;
-        me.afterIsRendered().then(function() {
-            me.removeAll(true);
-            me.add({
-                html: '<b>' + me.app.i18n._('No preview available.') + '</b>',
                 xtype: 'panel',
                 frame: true,
                 border: true
@@ -234,46 +136,48 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.FormPanel, {
         });
     },
 
-    onNavigate: function(e) {
-        if (this.sm) {
-            switch (e.getKey()) {
-                case e.DOWN:
-                    this.sm.selectNext();
-                    break;
-                case e.UP:
-                    this.sm.selectPrevious();
-                    break;
-                default:
-                    break;
-            }
-
-            if (this.sm.getSelected() !== this.record) {
-                this.record = this.sm.getSelected();
-                this.removeAll(true);
-                this.loadPreview();
-            }
-
-        }
-    },
     /**
-     * @private
+     * Fires if no previews are available
      */
-    onClose : function(){
-        this.fireEvent('cancel');
-        this.purgeListeners();
-        this.window.close();
+    onNoPreviewAvailable: function () {
+        var me = this;
+        me.afterIsRendered().then(function() {
+            var text = '';
+
+            if (!Tine.Tinebase.configManager.get('filesystem').createPreviews) {
+                text = '<b>' + me.app.i18n._('Sorry, Tine 2.0 would have liked to show you the contents of the file.') + '</b><br/><br/>' +
+                    me.app.i18n._('This is possible for .doc, .jpg, .pdf and even more file formats.') + '<br/>' +
+                    '<a href="https://www.tine20.com/kontakt/" target="_blank">' +
+                    me.app.i18n._('Interested? Then let us know!') + '</a><br/>' +
+                    me.app.i18n._('We would be happy to make you a non-binding offer.');
+            } else {
+                text = '<b>' + me.app.i18n._('No preview available yet - Please try again in a few minutes.') + '</b>';
+            }
+
+            const contenttype =  me.record.get('contenttype');
+            const iconCls = me.record.get('type') === 'folder' ? 'mime-icon-folder' :
+                contenttype ? Tine.Tinebase.common.getMimeIconCls(contenttype) : 'mime-icon-file';
+
+            me.add({
+                border: false,
+                layout: 'vbox',
+                layoutConfig: {
+                    align: 'stretch'
+                },
+                items: [{
+                    html: text,
+                    frame: true,
+                    border: true
+                }, {
+                    border: false,
+                    flex: 1,
+                    xtype: 'container',
+                    cls: iconCls,
+                    style: 'background-repeat: no-repeat; background-position: center; background-size: contain;'
+                }]
+            });
+
+            me.doLayout();
+        });
     }
 });
-
-Tine.Filemanager.DocumentPreview.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    return Tine.WindowFactory.getWindow({
-        width: (screen.height * 0.8) / Math.sqrt(2), // DIN A4 and so on
-        height: screen.height * 0.8,
-        name: Tine.Filemanager.DocumentPreview.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Filemanager.DocumentPreview',
-        contentPanelConstructorConfig: config,
-        modal: false,
-        windowType: 'Browser'
-    });
-};

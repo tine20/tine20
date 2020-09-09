@@ -658,7 +658,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 try {
                     $result = array_merge($result, $this->checkForUpdate($id));
                 } catch (Exception $e) {
-                    $failure = 'Could not create auto invoice for contract "' . $contract->title . '" Exception: ' . $e->getCode() . ' has been thrown: "' . $e->getMessage() . '".';
+                    $contractTitle = $contract ? $contract->title : 'unknown';
+                    $failure = 'Could not create auto invoice for contract "' . $contractTitle
+                        . '" Exception: ' . $e->getCode() . ' has been thrown: "' . $e->getMessage() . '".';
                     $this->_autoInvoiceIterationFailures[] = $failure;
                     Tinebase_Exception::log($e, FALSE);
                     continue;
@@ -1024,6 +1026,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $this->_currentMonthToBill = null;
         foreach ($productAggregates as $productAggregate) {
             if ( null != $productAggregate->last_autobill ) {
+                if ($productAggregate->last_autobill->isEarlier($contract->start_date)) {
+                    $productAggregate->last_autobill = null;
+                    continue;
+                }
                 $tmp = clone $productAggregate->last_autobill;
                 $tmp->setDate($tmp->format('Y'), $tmp->format('m'), 1);
                 $tmp->setTime(0,0,0);
@@ -1040,11 +1046,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             // do not modify $newestInvoiceTime!!!! it does NOT get cloned!
             $newestInvoiceTime = null;
             $newestInvoice = null;
-            foreach($invoiceRelations as $invoiceRelation) {
-                $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
-                if ( null == $newestInvoiceTime || $invoiceRelation->related_record->creation_time->isLater($newestInvoiceTime) ) {
-                    $newestInvoiceTime = $invoiceRelation->related_record->creation_time;
-                    $newestInvoice = $invoiceRelation->related_record;
+            foreach ($invoiceRelations as $invoiceRelation) {
+                if ($invoiceRelation->related_record) {
+                    $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
+                    if (null == $newestInvoiceTime || $invoiceRelation->related_record->creation_time->isLater($newestInvoiceTime)) {
+                        $newestInvoiceTime = $invoiceRelation->related_record->creation_time;
+                        $newestInvoice = $invoiceRelation->related_record;
+                    }
                 }
             }
             
@@ -1053,7 +1061,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $this->_currentMonthToBill = clone $newestInvoice->end_date;
                 $this->_currentMonthToBill->addDay(4);
                 $this->_currentMonthToBill->subMonth(1);
-                //$this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
             }
         }
         
@@ -1384,7 +1391,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             
             $address = Sales_Controller_Address::getInstance()->get(is_string($record->address_id) ? $record->address_id : $record->address_id.id);
             
-            $string = $foundCustomer['name'] . PHP_EOL;
+            $string = (isset($foundCustomer['name']) ? $foundCustomer['name'] : '') . PHP_EOL;
             $string .= $address->prefix1 ? $address->prefix1 . "\n" : '';
             $string .= $address->prefix2 ? $address->prefix2 . "\n" : '';
             $string .= $address->pobox   ? $address->pobox   . "\n" : '';
@@ -1466,10 +1473,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     
                     // get all invoices related to this contract. throw exception if a follwing invoice has been found
                     $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
-                    foreach($invoiceRelations as $invoiceRelation) {
-                        $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
-                        if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
-                            throw new Sales_Exception_DeletePreviousInvoice();
+                    foreach ($invoiceRelations as $invoiceRelation) {
+                        if ($invoiceRelation->related_record) {
+                            $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
+                            if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
+                                throw new Sales_Exception_DeletePreviousInvoice();
+                            }
                         }
                     }
                     $this->_currentBillingContract = $contract;
@@ -1488,13 +1497,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 
                 $allModels = array_unique($invoicePositions->model);
                 
-                foreach($allModels as $model) {
+                foreach ($allModels as $model) {
                     
                     if ($model == 'Sales_Model_ProductAggregate') {
                         continue;
                     }
-                    
-                    $filteredInvoicePositions = $invoicePositions->filter('model', $model);
                     
                     $billableControllerName = $model::getBillableControllerName();
                     $billableFilterName     = $model::getBillableFilterName();
@@ -1504,16 +1511,25 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $record->getId())
                     ));
                     
-                    $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
                     
-                    // set invoice ids of the timeaccounts
+                    // TODO move this to Timetracker (as on delete hook/fn)
                     if ($model == 'Timetracker_Model_Timeaccount') {
+                        // prevent throwing of Timetracker_Exception_ClosedTimeaccount for closed accounts (see \Timetracker_Controller_Timesheet::_checkGrant)
+                        $billableControllerName::getInstance()->setRequestContext([
+                            'skipClosedCheck' => true,
+                        ]);
+                        $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                        $billableControllerName::getInstance()->setRequestContext([]);
+                      
+                        // set invoice ids of the timeaccounts
                         $filterInstance = new Timetracker_Model_TimeaccountFilter(array());
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $record->getId())));
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'status', 'operator' => 'equals', 'value' => Timetracker_Model_Timeaccount::STATUS_BILLED)));
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'cleared_at', 'operator' => 'isnull', 'value' => '')));
                         
                         Timetracker_Controller_Timeaccount::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL, 'status' => Timetracker_Model_Timeaccount::STATUS_TO_BILL));
+                    } else {
+                        $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
                     }
                 }
                 
@@ -1537,13 +1553,24 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                             $undoProductAggregates[$inPos->accountable_id] = $inPos->month;
                         }
                     }
+
+                    $isLastInvoice = false;
+                    if ('0' === $this->_backend->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        Sales_Model_Invoice::class, [
+                            ['field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId()],
+                            ['field' => 'id', 'operator' => 'notin', 'value' => $_ids],
+                        ]
+                    ))) {
+                        $isLastInvoice = true;
+                    }
                     
                     foreach($productAggregates as $productAggregate) {
                         
                         if (!$productAggregate->last_autobill)
                             continue;
-                        
-                        if ( !isset($undoProductAggregates[$productAggregate->id]) ) {
+                        if ($isLastInvoice) {
+                            $productAggregate->last_autobill = NULL;
+                        } elseif ( !isset($undoProductAggregates[$productAggregate->id]) ) {
                             $product = $this->_cachedProducts->getById($productAggregate->product_id);
                             if (! $product) {
                                 $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
@@ -1714,7 +1741,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             ['field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()]
         );
 
-        $definition = Tinebase_ImportExportDefinition::getInstance()->search(new Tinebase_Model_ImportExportDefinitionFilter([
+        $definition = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
             'model' => Sales_Model_Invoice::class,
             'name' => 'invoice_timesheet_xlsx'
         ]))->getFirstRecord()->getId();
@@ -1724,7 +1751,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $xlsxFiles = [];
         
         /* @var $timeaccountPositions Sales_Model_InvoicePosition[] */
-        foreach($timeaccountPositions as $timeaccountPosition) {
+        foreach ($timeaccountPositions as $timeaccountPosition) {
             $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountPosition->accountable_id);
             $export = new Sales_Export_TimesheetTimeaccount($filter, null,
                 [
@@ -1738,13 +1765,20 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(
                 Tinebase_Record_Abstract::generateUID()));
 
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Creating export ...');
+
             $export->generate();
             
             $xlsx = Tinebase_TempFile::getTempPath();
             $export->save($xlsx);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' ... xlsx created: ' . $xlsx);
             
             $xlsxFiles[$timeaccount->getTitle()] = $xlsx;
-            $pdfFiles[] = $export->convert(Tinebase_Export_Convertible::PDF, $xlsx);
+            $pdfFiles[] = $export->convertToPdf($xlsx, ['ods']);
         }
         
         foreach ($xlsxFiles as $account => $file) {
@@ -1774,7 +1808,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         return $invoice;
     }
-    
+
 
     /**
      * @param $files
@@ -1783,17 +1817,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      */
     protected function _mergePdfFiles($files) {
         $mergedPdf = Tinebase_TempFile::getTempPath();
+        file_put_contents($mergedPdf, Tinebase_Core::getPreviewService()->mergePdfFiles($files, true));
 
-        $cmd = "gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=$mergedPdf ";
-        foreach ($files as $file) {
-            $cmd .= $file . ' ';
-        }
-        $result = shell_exec($cmd);
-
-        if ($result === null) {
-            throw new Tinebase_Exception('ghostscript failed or is not installed');
-        }
-        
         return $mergedPdf;
     }
 }

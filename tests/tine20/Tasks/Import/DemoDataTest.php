@@ -35,6 +35,7 @@ class Tasks_Import_DemoDataTest extends TestCase
         $importer = new Tinebase_Setup_DemoData_Import('Tasks_Model_Task', [
             'container_id' => $this->_importContainer->getId(),
             'definition' => 'tasks_import_demo_csv',
+            'file' => 'task.csv'
         ]);
         $importer->importDemodata();
 

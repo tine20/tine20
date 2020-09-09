@@ -142,8 +142,13 @@ class Tinebase_Relations
         $relationsIds = $this->_getRelationIds($relations, $currentRelations);
         
         $toAdd = $relations->getIdLessIndexes();
-        $toDel = array_diff($currentIds, $relationsIds);
+        $toDel = $this->_getToDeleteIds($currentRelations, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
+        foreach ($relations as $key => $relation) {
+            if (!empty($id = $relation->getId()) && !in_array($id, $toDel) && !in_array($id, $toUpdate)) {
+                $toAdd[] = $key;
+            }
+        }
 
         // prevent two empty related_ids of the same relation type
         $emptyRelatedId = array();
@@ -211,13 +216,30 @@ class Tinebase_Relations
                 }
             }
             
-            if (! $current->isEqual($update, array('related_record'))) {
+            if (! $current->isEqual($update, array('related_record', 'record_removed_reason'))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Relation diff: ' . print_r($current->diff($update)->toArray(), true));
                 
                 $this->_updateRelation($update);
             }
         }
+    }
+
+    /**
+     * @param $currentRelations
+     * @param array $relationsIds
+     * @return array
+     */
+    protected function _getToDeleteIds($currentRelations, $relationsIds)
+    {
+        $deleteIds = [];
+        foreach ($currentRelations as $relation) {
+            if (! in_array($relation->getId(), $relationsIds) && empty($relation->record_removed_reason)) {
+                $deleteIds[] = $relation->getId();
+            }
+        }
+
+        return $deleteIds;
     }
 
     /**
@@ -550,10 +572,16 @@ class Tinebase_Relations
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Don\'t update related record because user has no update grant');
         } else {
-            /** @var Tinebase_Record_Interface $record */
-            $record = $appController->$method($_relation->related_record,
-                $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
-            $_relation->related_id = $record->getId();
+            try {
+                /** @var Tinebase_Record_Interface $record */
+                $record = $appController->$method($_relation->related_record,
+                    $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
+                $_relation->related_id = $record->getId();
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                // some right might prevent the update ... skipping update
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Don\'t update related record: ' . $tead->getMessage());
+            }
         }
 
         switch ($_relation->related_model) {
@@ -616,27 +644,7 @@ class Tinebase_Relations
 
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
-            
-            // check right
-            $split = explode('_Model_', $modelName);
-            $rightClass = $split[0] . '_Acl_Rights';
-            $rightName = 'manage_' . strtolower($split[1]) . 's';
-            
-            if (class_exists($rightClass)) {
-                
-                $ref = new ReflectionClass($rightClass);
-                $u = Tinebase_Core::getUser();
-                
-                // if a manage right is defined and the user has no manage_record or admin right, remove relations having this record class as related model
-                if (is_object($u) && $ref->hasConstant(strtoupper($rightName)) && (! $u->hasRight($split[0], $rightName)) && (! $u->hasRight($split[0], Tinebase_Acl_Rights::ADMIN))) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        $_relations->removeRecords($relations);
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Skipping relation due to no manage right: ' . $modelName);
-                    }
-                    continue;
-                }
-            }
-            
+
             $getMultipleMethod = 'getMultiple';
 
             $records = null;
@@ -658,25 +666,30 @@ class Tinebase_Relations
                             $appController->getAlarms($records);
                         }
                     } else {
-                        throw new Tinebase_Exception_AccessDenied('Controller ' . get_class($appController) . ' has no method ' . $getMultipleMethod);
+                        throw new Tinebase_Exception_AccessDenied('Controller ' . get_class($appController)
+                            . ' has no method ' . $getMultipleMethod);
                     }
                 } catch (Tinebase_Exception_AccessDenied $tea) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__
                         . ' Removing relations from result. Got exception: ' . $tea->getMessage());
                     $removeReason = Tinebase_Model_Relation::REMOVED_BY_ACL;
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not find controller for model: ' . $modelName . '! you have broken relations: ' . join(',', $relations->id));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' Could not find controller for model: ' . $modelName
+                        . '! you have broken relations: ' . join(',', $relations->id));
                     $_relations->removeRecords($relations);
                     continue;
                 } catch (Tinebase_Exception_AreaLocked $teal) {
                     $removeReason = Tinebase_Model_Relation::REMOVED_BY_AREA_LOCK;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__
                         . ' AreaLocked for model: ' . $modelName);
                 }
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                " Resolving " . count($relations) . " relations");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " Resolving " . count($relations) . " relations");
 
             /** @var Tinebase_Model_Relation $relation */
             foreach ($relations as $relation) {

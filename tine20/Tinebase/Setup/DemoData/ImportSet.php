@@ -41,16 +41,22 @@ class Tinebase_Setup_DemoData_ImportSet
     public function __construct($appName, $options = [])
     {
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($appName);
+        $this->_options['demoData'] = true;
         $this->_options = array_merge($this->_options, $options);
     }
 
     /**
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception
      */
     public function importDemodata()
     {
         if (!isset($this->_options['files']) || empty($this->_options['files'])) {
             throw new Tinebase_Exception_InvalidArgument('no yml files given.');
+        }
+
+        if (! extension_loaded('yaml')) {
+            throw new Tinebase_Exception('yaml extension required');
         }
 
         $importDir = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR

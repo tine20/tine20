@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -21,6 +21,10 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DEFAULT_POLICY = 'defaultPolicy';
+
+    const DEVICE_MODEL_DENY_LIST = 'deviceModelDenyList';
+
+    const USER_AGENT_DENY_LIST = 'userAgentDenyList';
 
     /**
      * DISABLE_ACCESS_LOG
@@ -43,6 +47,9 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
      */
     const MAX_FILTER_TYPE_CALENDAR = 'maxfiltertypecalendar';
 
+    const LAST_PING_MONITORING_THRESHOLD_DAYS = 'lastPingMonitoringThresholdDays';
+    const LAST_PING_MONITORING_NOTIFICATION_EMAILS = 'lastPingMonitoringNotificationEmails';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -59,6 +66,32 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
             'default'               => null,
         ),
+        self::DEVICE_MODEL_DENY_LIST => array(
+            //_('Device Model Agent Deny List')
+            'label'                 => 'Device Model Agent Deny List',
+            //_('Array of regular expressions of Device-Model strings')
+            'description'           => 'Array of regular expressions of Device-Model strings',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => [
+                // '/^Redmi 4X$/', // example if you like to deny all c models
+            ],
+        ),
+        self::USER_AGENT_DENY_LIST => array(
+            //_('User Agent Deny List')
+            'label'                 => 'User Agent Deny List',
+            //_('Array of regular expressions of User-Agent strings')
+            'description'           => 'Array of regular expressions of User-Agent strings',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => [
+                // '/^Android-Mail.*/', // example if you like to deny all Android-Mail* clients
+            ],
+        ),
         self::DISABLE_ACCESS_LOG => array(
         //_('Disable Access Log')
             'label'                 => 'Disable Access Log creation',
@@ -70,10 +103,10 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
             'default'               => FALSE,
         ),
-    self::MAX_FILTER_TYPE_EMAIL => array(
-        //_('Filter timeslot for emails')
+        self::MAX_FILTER_TYPE_EMAIL => array(
+        //_('Filter timeslot for e-mails')
             'label'                 => 'Filter timeslot for emails',
-        //_('For how long in the past the emails should be synchronized.')
+        //_('For how long in the past the e-mails should be synchronized.')
             'description'           => 'For how long in the past the emails should be synchronized.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
             // @todo options is not used yet (only for TYPE_KEYFIELD_CONFIG configs),
@@ -111,6 +144,23 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => Syncroton_Command_Sync::FILTER_6_MONTHS_BACK,
+        ),
+        self::LAST_PING_MONITORING_THRESHOLD_DAYS => array(
+            'label'                 => 'Last ping monitoring threshold',
+            'description'           => 'Last ping monitoring threshold (in days)',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 3,
+        ),
+        self::LAST_PING_MONITORING_NOTIFICATION_EMAILS => array(
+            'label'                 => 'Last ping monitoring notification emails',
+            'description'           => 'Last ping monitoring notification emails',
+            'type'                  => 'array',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
         ),
     );
     

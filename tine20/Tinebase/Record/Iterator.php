@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -135,13 +135,13 @@ class Tinebase_Record_Iterator
     /**
      * iterator batches of records
      * 
-     * @return array with totalcount and results in array
+     * @return bool|array with totalcount and results in array
      */
     public function iterate()
     {
         $records = $this->_getRecords();
         if (count($records) < 1) {
-            return FALSE;
+            return false;
         }
 
         $result = array(
@@ -168,7 +168,7 @@ class Tinebase_Record_Iterator
      */
     protected function _getRecords()
     {
-        $pagination = (! empty($this->_options['sortInfo'])) ? new Tinebase_Model_Pagination($this->_options['sortInfo']) : new Tinebase_Model_Pagination();
+        $pagination = $this->_getPagination();
         
         if ($this->_recordIds === NULL) {
             // need to fetch record ids first because filtered fields can change during iteration step
@@ -199,5 +199,21 @@ class Tinebase_Record_Iterator
             . ' Got ' . count($records) . ' for next iteration.');
         
         return $records;
+    }
+
+    /**
+     * @return Tinebase_Model_Pagination
+     */
+    protected function _getPagination()
+    {
+        if (! empty($this->_options['sortInfo'])) {
+            if ($this->_options['sortInfo'] instanceof Tinebase_Model_Pagination) {
+                return $this->_options['sortInfo'];
+            } else {
+                return new Tinebase_Model_Pagination($this->_options['sortInfo']);
+            }
+        } else {
+            return new Tinebase_Model_Pagination();
+        }
     }
 }

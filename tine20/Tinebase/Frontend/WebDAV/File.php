@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -16,6 +16,13 @@
  */
 class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\IFile
 {
+    /**
+     * @return bool|false|mixed|resource|null
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws \Sabre\DAV\Exception\Forbidden
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
     public function get() 
     {
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
@@ -27,14 +34,26 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         ) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to download file: ' . $this->_path);
         }
-        $handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r');
+
+        try {
+            $node = $pathRecord->getNode();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
+        }
+        if ($node->is_quarantined) {
+            throw new Sabre\DAV\Exception\Forbidden('File is quarantined: ' . $this->_path);
+        }
+
+        if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r'))) {
+            // if we have a file without content / revision yet
+            if (empty($node->hash) || $node->size == 0) {
+                return fopen('php://memory', 'r');
+            }
+            // possible race condition
+            throw new Sabre\DAV\Exception\NotFound('could not open ' . $this->_path);
+        }
          
         return $handle;
-    }
-
-    public function getSize() 
-    {
-        return $this->_node->size;
     }
     
     /**
@@ -45,17 +64,6 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     public function getContentType() 
     {
         return $this->_node->contenttype;
-    }
-    
-    /**
-     * Returns the ETag for a file
-     *
-     * An ETag is a unique identifier representing the current version of the file. If the file changes, the ETag MUST change.
-     * The ETag is an arbritrary string, but MUST be surrounded by double-quotes.
-     */
-    public function getETag() 
-    {
-        return '"' . $this->_node->hash . '"';
     }
     
     /**

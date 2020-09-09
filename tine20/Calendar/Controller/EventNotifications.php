@@ -127,6 +127,7 @@
      * @param String                     $_action
      * @param Tinebase_Record_Interface  $_oldEvent
      * @param Array                      $_additionalData
+     * @throws Calendar_Exception
      *
      * @refactor split up this function, it's way too long
      */
@@ -151,11 +152,7 @@
             return;
         }
 
-        if ($_event->dtend === NULL) {
-            throw new Tinebase_Exception_UnexpectedValue('no dtend set in event');
-        }
-        
-        if (Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend)) {
+        if ($_event->dtend && Tinebase_DateTime::now()->subHour(1)->isLater($_event->dtend)) {
             if ($_action == 'alarm' || ! ($_event->isRecurException() || $_event->rrule)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . " Skip notifications to past events");
@@ -164,7 +161,7 @@
         }
         
         $notificationPeriodConfig = Calendar_Config::getInstance()->get(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM);
-        if (Tinebase_DateTime::now()->subWeek($notificationPeriodConfig)->isLater($_event->dtend)) {
+        if ($_event->dtend && Tinebase_DateTime::now()->subWeek($notificationPeriodConfig)->isLater($_event->dtend)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Skip notifications to past events (MAX_NOTIFICATION_PERIOD_FROM: " . $notificationPeriodConfig . " week(s))");
             return;
@@ -179,17 +176,22 @@
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Notification action: " . $_action);
 
-
         $organizerContact = $_event->resolveOrganizer();
         if (! $organizerContact) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Organizer missing - using creator as organizer for notification purposes.');
-            $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_event->created_by);
+            try {
+                $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_event->created_by);
+            } catch (Addressbook_Exception_NotFound $aenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Creator contact not found: ' . $aenf->getMessage() . ' - skipping notifications');
+                return;
+            }
         }
 
         $organizerIsAttender = false;
         foreach ($_event->attendee as $attender) {
-            if ($attender->getUserId() == $_event->resolveOrganizer()->id) {
+            if ($attender->getUserId() === $organizerContact->getId()) {
                 $organizerIsAttender = true;
             }
         }
@@ -203,6 +205,12 @@
 
         switch ($_action) {
             case 'alarm':
+                if ($_event->is_deleted || $_event->status === Calendar_Model_Event::STATUS_CANCELED) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Skip alarm for canceled event");
+                    return;
+                }
+
                 foreach($_event->attendee as $attender) {
                     if (Calendar_Model_Attender::isAlarmForAttendee($attender, $_alarm)) {
                         $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_NONE);
@@ -219,13 +227,24 @@
                     }
                 } else {
                     // send reply (aka status update) to external organizer
-                    $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE);
+                    $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, [
+                        'attendee' => [
+                            'toUpdate' => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [Calendar_Model_Attender::getOwnAttender($_event->attendee)])
+                        ]
+                    ]);
                 }
                 break;
             case 'changed':
-                $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
-
                 if (! $organizerIsExternal) {
+                    if (! $_oldEvent) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Missing oldEvent ... can not get attendee migration');
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' ' . print_r($_event->toArray(), true));
+                        return;
+                    }
+
+                    $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
                     foreach ($attendeeMigration['toCreate'] as $attender) {
                         $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                     }
@@ -233,53 +252,57 @@
                     foreach ($attendeeMigration['toDelete'] as $attender) {
                         $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                     }
-                }
-                
-                // NOTE: toUpdate are all attendee to be notified
-                if (count($attendeeMigration['toUpdate']) > 0) {
+
                     $updates = $this->_getUpdates($_event, $_oldEvent);
-                    
                     if (empty($updates)) {
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " empty update, nothing to notify about");
                         return;
                     }
-                    
+
                     // compute change type
-                    if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
+                    if (count(array_intersect(array('dtstart', 'dtend', 'status'), array_keys($updates))) > 0) {
                         $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
                     } else if (count(array_diff(array_keys($updates), array('attendee'))) > 0) {
                         $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
                     } else {
                         $notificationLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
                     }
-                    
-                    // send notifications
-                    if (! $organizerIsExternal) {
+
+                    // NOTE: toUpdate are all attendee to be notified
+                    if (count($attendeeMigration['toUpdate']) > 0) {
+                        // send notifications
                         foreach ($attendeeMigration['toUpdate'] as $attender) {
                             $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
                         }
                     }
 
-                    if ($organizerIsExternal || !$organizerIsAttender) {
+                    if (! $organizerIsAttender) {
                         $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', $notificationLevel, $updates);
                     }
-
-                    if ($organizerIsExternal) {
-                        // NOTE: a reply to an external reschedule is a reschedule for us, but a status update only for external!
-                        $updatesForExternalOrganizer = array('attendee' => array('toUpdate' => $_event->attendee));
-                        $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updatesForExternalOrganizer);
-                    }
+                } else {
+                    // NOTE: a reply to an external reschedule is a reschedule for us, but a status update only for external!
+                    $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, [
+                        'attendee' => [
+                            'toUpdate' => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [Calendar_Model_Attender::getOwnAttender($_event->attendee)])
+                        ]
+                    ]);
                 }
-                
                 break;
 
             case 'tentative':
+                $prefUser = ($organizerContact->account_id)
+                    ? Tinebase_Core::getPreference('Calendar')->getValueForUser(
+                        Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE,
+                        $organizerContact->account_id)
+                    : false;
                 $attendee = new Calendar_Model_Attender(array(
                     'cal_event_id'      => $_event->getId(),
                     'user_type'         => Calendar_Model_Attender::USERTYPE_USER,
                     'user_id'           => $_event->organizer,
                 ), true);
-                $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
+                if ($prefUser) {
+                    $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
+                }
                 break;
 
             default:
@@ -374,7 +397,7 @@
             $messageBody = $view->render('eventNotification.php');
             
             $calendarPart = null;
-            $attachments = $this->_getAttachments($method, $_event, $_action, $_updater, $calendarPart);
+            $attachments = $this->_getAttachments($method, $_event, $_action, $_updater, $calendarPart, $_attender);
             
             $sender = $_action == 'alarm' ? $prefUser : $_updater;
             if (!empty($recipients)) {
@@ -528,6 +551,16 @@
     {
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
 
+        // rewrite status updates
+        if (isset($_updates['status'])) {
+            if ($_event->status === Calendar_Model_Event::STATUS_CANCELED) {
+                $_action = 'deleted';
+            }
+            else if ($_updates['status'] === Calendar_Model_Event::STATUS_CANCELED) {
+                $_action = 'created';
+            }
+        }
+        
         switch ($_action) {
             case 'alarm':
                 $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
@@ -576,23 +609,35 @@
                             
                             switch ($attender->status) {
                                 case Calendar_Model_Attender::STATUS_ACCEPTED:
-                                    $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    $messageSubject = sprintf($translate->_('%1$s accepted event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                                     break;
                                     
                                 case Calendar_Model_Attender::STATUS_DECLINED:
-                                    $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    $messageSubject = sprintf($translate->_('%1$s declined event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                                     break;
                                     
                                 case Calendar_Model_Attender::STATUS_TENTATIVE:
-                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                                     break;
                                     
                                 case Calendar_Model_Attender::STATUS_NEEDSACTION:
-                                    $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s' ), $attender->getName(), $_event->summary, $startDateString);
+                                    $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                                     break;
+
+                                default:
+                                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                        __METHOD__ . '::' . __LINE__ . ' Unknown status for attender '
+                                        . print_r($attender->toArray(), true));
+                                    $messageSubject = sprintf($translate->_('Unknown status update from %1$s for event "%2$s" at %3$s'),
+                                        $attender->getName(), $_event->summary, $startDateString);
                             }
                         } else {
-                            $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
+                            $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ),
+                                $_event->summary, $startDateString);
                         }
                         
                         // we don't send iMIP parts to organizers with an account cause event is already up to date
@@ -608,8 +653,9 @@
                 break;
 
             default:
-                $messageSubject = 'unknown action';
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
+                $messageSubject = $translate->_('Unknown action');
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . " Unknown action '$_action'");
                 break;
         }
         if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
@@ -626,15 +672,16 @@
      * @param string $_action
      * @param Tinebase_Model_FullUser $updater
      * @param Zend_Mime_Part $calendarPart
+     * @param Calendar_Model_Attender $attendee
      * @return array
      */
-    protected function _getAttachments($method, $event, $_action, $updater, &$calendarPart)
+    protected function _getAttachments($method, $event, $_action, $updater, &$calendarPart, $attendee)
     {
         if ($method === NULL) {
             return array();
         }
         
-        $vcalendar = $this->_createVCalendar($event, $method, $updater);
+        $vcalendar = $this->_createVCalendar($event, $method, $updater, $attendee);
         
         $calendarPart           = new Zend_Mime_Part($vcalendar->serialize());
         $calendarPart->charset  = 'UTF-8';
@@ -664,12 +711,15 @@
      * @param Calendar_Model_Event $event
      * @param string $method
      * @param Tinebase_Model_FullAccount $updater
+     * @param Calendar_Model_Attender $attendee
      * @return Sabre\VObject\Component
      */
-    protected function _createVCalendar($event, $method, $updater)
+    protected function _createVCalendar($event, $method, $updater, $attendee)
     {
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         $converter->setMethod($method);
+        $converter->setCalendarUser($attendee);
+
         $vcalendar = $converter->fromTine20Model($event);
         
         foreach ($vcalendar->children() as $component) {
@@ -723,8 +773,10 @@
                 $attachments[] = $part;
                 
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Not adding attachment " . $attachment->name . ' to invitation mail (size: ' . Tinebase_Helper::convertToMegabytes($attachment-size) . ')');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " Not adding attachment " . $attachment->name
+                    . ' to invitation mail (size: ' . Tinebase_Helper::convertToMegabytes($attachment->size) . ')'
+                );
             }
         }
         

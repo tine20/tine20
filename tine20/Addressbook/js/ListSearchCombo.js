@@ -16,7 +16,9 @@ Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordP
      * @cfg {Boolean} groupOnly
      */
     groupOnly: false,
+
     departmentOnly: false,
+    addPathFilter: true,
 
     //private
     initComponent: function(){
@@ -39,20 +41,29 @@ Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordP
     onBeforeQuery: function(qevent){
         Tine.Addressbook.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
 
-        var contactFilter = {condition: 'AND', filters: this.store.baseParams.filter},
-            pathFilter = { field: 'path', operator: 'contains', value: qevent.query };
+        const filter = this.store.baseParams.filter;
 
-        this.store.baseParams.filter = [{condition: "OR", filters: [
-            contactFilter,
-            pathFilter
-        ] }];
+        if (this.addPathFilter) {
+
+            const queryFilter = _.find(filter, {field: 'query'});
+            const pathFilter = {field: 'path', operator: 'contains', value: queryFilter.value};
+
+            _.remove(filter, queryFilter);
+
+            filter.push({
+                condition: "OR", filters: [
+                    queryFilter,
+                    pathFilter
+                ]
+            });
+        }
 
         if (this.groupOnly) {
-            this.store.baseParams.filter.push({field: 'type', operator: 'equals', value: 'group'});
+            filter.push({field: 'type', operator: 'equals', value: 'group'});
         }
         
         if (this.departmentOnly) {
-            this.store.baseParams.filter.push({field: 'list_type', operator: 'equals', value: 'department'});
+            filter.push({field: 'list_type', operator: 'equals', value: 'department'});
         }
     },
 

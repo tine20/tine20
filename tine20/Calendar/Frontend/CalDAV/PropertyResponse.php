@@ -75,8 +75,8 @@ class Calendar_Frontend_CalDAV_PropertyResponse implements Sabre\DAV\Property\IH
 
         $xresponse->appendChild($document->createElement('d:href',$uri));
 
-        if ( !isset($properties[200]) && isset($properties[$uri]) ) {
-            $xresponse->appendChild($document->createElement('d:status',$server->httpResponse->getStatusMessage($properties[$uri])));
+        if ( !isset($properties[200]) && isset($properties[$this->href]) ) {
+            $xresponse->appendChild($document->createElement('d:status',$server->httpResponse->getStatusMessage($properties[$this->href])));
             return;
         }
 

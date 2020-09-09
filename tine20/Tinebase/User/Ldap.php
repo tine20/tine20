@@ -372,6 +372,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -411,7 +413,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
         
-        $this->_setPluginsPassword($user->getId(), $_password, $_encrypt);
+        $this->_setPluginsPassword($user, $_password, $_encrypt);
     }
 
     /**
@@ -423,6 +425,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function setStatusInSyncBackend($_accountId, $_status)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -477,6 +481,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -510,6 +516,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return $_account;
         }
         
@@ -572,6 +580,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function addUserToSyncBackend(Tinebase_Model_FullUser $user)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return null;
         }
         
@@ -608,6 +618,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function deleteUserInSyncBackend($_userId)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -637,6 +649,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function deleteUsersInSyncBackend(array $_accountIds)
     {
         if ($this->_isReadOnlyBackend) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
         }
         
@@ -690,7 +704,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         );
         
         if (count($accounts) !== 1) {
-            throw new Tinebase_Exception_NotFound('User with ' . $_property . ' =  ' . $value . ' not found.');
+            throw new Tinebase_Exception_NotFound('User with ' . $_property . ' = "' . $value . '" not found.');
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -826,7 +840,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function updateContactFromSyncBackend(Tinebase_Model_FullUser $_user, Addressbook_Model_Contact $_contact)
     {
-        $userData = $this->_getMetaData($_user);
+        try {
+            $userData = $this->_getMetaData($_user);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $tenf->getMessage());
+            return;
+        }
 
         $userData = $this->_ldap->getEntry($userData['dn']);
         

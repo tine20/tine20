@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * @todo        add 'getTitleTranslation' function?
@@ -33,13 +33,20 @@ class Tinebase_Application
      */
     const DISABLED = 'disabled';
 
+    const STATE_ACTION_QUEUE_LR_LAST_DURATION = 'actionQueueLRLastDuration';
+    const STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE = 'actionQueueLRLastDurationUpdate';
+    const STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
+    const STATE_ACTION_QUEUE_LR_LAST_JOB_ID = 'actionQueueLastJobId';
     const STATE_ACTION_QUEUE_LAST_DURATION = 'actionQueueLastDuration';
     const STATE_ACTION_QUEUE_LAST_DURATION_UPDATE = 'actionQueueLastDurationUpdate';
     const STATE_ACTION_QUEUE_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
     const STATE_ACTION_QUEUE_LAST_JOB_ID = 'actionQueueLastJobId';
+    const STATE_ACTION_QUEUE_STATE = 'actionQueueState';
     const STATE_FILESYSTEM_ROOT_REVISION_SIZE = 'filesystemRootRevisionSize';
     const STATE_FILESYSTEM_ROOT_SIZE = 'filesystemRootSize';
     const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';
+    const STATE_REPLICATION_PRIMARY_TB_ID = 'replicationPrimaryTBId';
+    const STATE_UPDATES = 'updates';
 
 
     /**
@@ -195,9 +202,8 @@ class Tinebase_Application
         
         if ($filter === null && $pagination === null) {
             try {
-                $result = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, 'allApplications', Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
-                
-                return $result;
+                return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__,
+                    'allApplications', Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // do nothing
             }
@@ -315,6 +321,7 @@ class Tinebase_Application
      */
     public function setApplicationStatus($_applicationIds, $state)
     {
+        $state = strtolower($state);
         if (!in_array($state, array(Tinebase_Application::ENABLED, Tinebase_Application::DISABLED))) {
             throw new Tinebase_Exception_InvalidArgument('$_state can be only Tinebase_Application::DISABLED  or Tinebase_Application::ENABLED');
         }
@@ -472,12 +479,20 @@ class Tinebase_Application
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing app ' . $_applicationId . ' from applications table.');
-        
+
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+
+        if ($_applicationId instanceof Tinebase_Model_Application) {
+            $application = $_applicationId;
+        } else {
+            $application = $this->getApplicationById($applicationId);
+        }
         
         $this->resetClassCache();
         
         $this->_getBackend()->delete($applicationId);
+
+        $this->_writeModLog(null, $application);
     }
     
     /**
@@ -628,7 +643,12 @@ class Tinebase_Application
                     $count = Tinebase_Config::getInstance()->deleteConfigByApplicationId($_application->getId());
                     break;
                 case 'customfield':
-                    $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+                    try {
+                        $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+                    } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
+                        $count = 0;
+                    }
                     break;
                 case 'pobserver':
                     $count = Tinebase_Record_PersistentObserver::getInstance()->deleteByApplication($_application);
@@ -636,9 +656,10 @@ class Tinebase_Application
                 case 'rootnode':
                     $count = 0;
                     try {
-                        if (Tinebase_FileSystem::getInstance()->isDir($_application->name)) {
+                        $tries = 0;
+                        while (Tinebase_FileSystem::getInstance()->isDir($_application->name) && ++$tries < 10) {
                             // note: TFS expects name here, not ID
-                            $count = Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
+                            $count += (int)Tinebase_FileSystem::getInstance()->rmdir($_application->name, true);
                         }
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // nothing to do
@@ -646,6 +667,9 @@ class Tinebase_Application
                     } catch (Tinebase_Exception_Backend $teb) {
                         // nothing to do
                         Tinebase_Exception::log($teb);
+                    } catch (Throwable $e) {
+                        // problem!
+                        Tinebase_Exception::log($e);
                     }
                     break;
                 default:
@@ -703,26 +727,32 @@ class Tinebase_Application
     }
 
     /**
-     * returns the Models of all installed applications
+     * returns the Models of all enabled (or all installed) applications
      * uses Tinebase_Application::getApplicationsByState
      * and Tinebase_Controller_Abstract::getModels
      *
      * @return array
      */
-    public function getModelsOfAllApplications()
+    public function getModelsOfAllApplications($allApps = false)
     {
         $models = array();
 
-        $apps = $this->getApplicationsByState(Tinebase_Application::ENABLED);
+        if ($allApps) {
+            $apps = $this->getApplications();
+        } else {
+            $apps = $this->getApplicationsByState(Tinebase_Application::ENABLED);
+        }
 
         /** @var Tinebase_Model_Application $app */
-        foreach($apps as $app) {
+        foreach ($apps as $app) {
             /** @var Tinebase_Controller $controllerClass */
             $controllerClass = $app->name . '_Controller';
             if (!class_exists(($controllerClass))) {
                 try {
                     $controllerInstance = Tinebase_Core::getApplicationInstance($app->name, '', true);
-                } catch(Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    continue;
+                } catch (Tinebase_Exception_AccessDenied $tead) {
                     continue;
                 }
             } else {
@@ -793,7 +823,23 @@ class Tinebase_Application
                 Setup_Core::set(Setup_Core::CHECKDB, true);
                 Setup_Controller::destroyInstance();
                 Setup_Controller::getInstance()->installApplications([$record->getId() => $record->name],
-                    [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true]);
+                    [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true,
+                        Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true]);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::DELETED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $model = $_modification->record_type;
+                /** @var Tinebase_Model_Application $record */
+                $record = new $model($diff->oldData);
+
+                // close transaction open in \Tinebase_Timemachine_ModificationLog::applyReplicationModLogs
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                Setup_Core::set(Setup_Core::CHECKDB, true);
+                Setup_Controller::destroyInstance();
+                Setup_Controller::getInstance()->uninstallApplications([$record->name], [
+                    Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true
+                ]);
                 break;
 
             default:

@@ -101,6 +101,9 @@ Tine.Calendar.EventUI.prototype = {
             if (el.dom.firstChild.firstChild) {
                 Ext.DomHelper.applyStyles(el.dom.firstChild.firstChild, {'background-color': '#888'});
             }
+            if (_.get(el, 'dom.firstChild.children[1]')) {
+                Ext.DomHelper.applyStyles(_.get(el, 'dom.firstChild.children[1]'), {'background-color': '#888'});
+            }
         });
     },
     

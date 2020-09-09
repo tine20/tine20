@@ -5,6 +5,9 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+require('../../../css/widgets/PickerGridPanel.css');
+
 Ext.ns('Tine.widgets.grid');
 
 /**
@@ -104,24 +107,46 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @cfg {Bool} readOnly
      */
     readOnly: false,
-    
+
+    /**
+     * config spec for additionalFilters - passed to RecordPicker
+     *
+     * @type: {object} e.g.
+     * additionalFilterConfig: {config: { 'name': 'configName', 'appName': 'myApp'}}
+     * additionalFilterConfig: {preference: {'appName': 'myApp', 'name': 'preferenceName}}
+     * additionalFilterConfig: {favorite: {'appName': 'myApp', 'id': 'favoriteId', 'name': 'optionallyuseaname'}}
+     */
+    additionalFilterSpec: null,
+
+    cls: 'x-wdgt-pickergrid',
+
     /**
      * @private
      */
     initComponent: function() {
+
+        if (this.disabled) {
+            this.disabled = false;
+            this.readOnly = true;
+        }
+
         this.contextMenuItems = (this.contextMenuItems !== null) ? this.contextMenuItems : [];
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         this.searchComboConfig = this.searchComboConfig || {};
+        this.searchComboConfig.additionalFilterSpec = this.additionalFilterSpec;
         
         this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
+        if (String(this.labelField).match(/{/)) {
+            this.labelField = this.labelField.match(/(?:{{\s*)(\w+)/)[1];
+        }
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
         
         this.initStore();
         this.initGrid();
         this.initActionsAndToolbars();
 
-
         this.on('afterrender', this.onAfterRender, this);
+        this.on('rowdblclick', this.onRowDblClick,     this);
 
         Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
     },
@@ -143,10 +168,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     item.disabled = readOnly;
                 }
             }, this);
+            tbar[readOnly ? 'hide' : 'show']();
+        }
+        var bbar = this.getBottomToolbar();
+        if (bbar) {
+            bbar[readOnly ? 'hide' : 'show']();
         }
         if (_.get(this, 'actionRemove.setDisabled')) {
             this.actionRemove.setDisabled(readOnly);
         }
+        // pickerCombos doesn´t show
+        this.doLayout();
     },
 
     /**
@@ -158,7 +190,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (!this.store) {
             this.store = new Ext.data.SimpleStore({
                 sortInfo: this.defaultSortInfo || {
-                    field: this.recordClass.getMeta('titleProperty'),
+                    field: this.labelField,
                     order: 'DESC'
                 },
                 fields: this.recordClass
@@ -322,15 +354,11 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (!this.columns) {
                 var labelColumn = {
                     id: this.labelField,
-                    // TODO use translated records name here
-                    //header: String.format(i18n._('Selected {0}'),
-                    //    this.recordClass.getMeta('recordsName')),
                     header: this.recordClass.getRecordsName(),
-                    dataIndex: this.labelField
+                    dataIndex: this.labelField,
+                    renderer: this.labelRenderer ? this.labelRenderer : function(v,m,r) { return Ext.isFunction(r.getTitle) ? r.getTitle() : v}
                 };
-                if (this.labelRenderer != Ext.emptyFn) {
-                    labelColumn.renderer = this.labelRenderer;
-                }
+
                 this.columns = [labelColumn];
             } else {
                 // convert string cols
@@ -413,6 +441,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // check if already in
         if (! this.store.getById(record.id)) {
             this.store.add([record]);
+            this.fireEvent('add', this, [record]);
         }
         
         picker.reset();
@@ -436,21 +465,19 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     onKeyDown: function(e){
-        if (e.ctrlKey) {
-            switch (e.getKey()) {
-                case e.A:
-                    // select all records
-                    this.getSelectionModel().selectAll(true);
-                    e.preventDefault();
-                    break;
-            }
-        } else {
-            switch (e.getKey()) {
-                case e.DELETE:
-                    // delete selected record(s)
-                    this.onRemove();
-                    break;
-            }
+        // no keys for quickadds etc.
+        if (e.getTarget('input') || e.getTarget('textarea')) return;
+        
+        switch (e.getKey()) {
+            case e.A:
+                // select all records
+                this.getSelectionModel().selectAll(true);
+                e.preventDefault();
+                break;
+            case e.DELETE:
+                // delete selected record(s)
+                this.onRemove();
+                break;
         }
     },
 
@@ -470,6 +497,79 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.loadMask.hide.defer(100, this.loadMask);
         }
         return Promise.resolve();
+    },
+
+    setValue: function(recordsdata) {
+        var me = this,
+            selectRowAfterAdd = me.selectRowAfterAdd,
+            highlightRowAfterAdd = me.highlightRowAfterAdd;
+
+        me.highlightRowAfterAdd = false;
+        me.selectRowAfterAdd = false;
+
+        me.store.clearData();
+        _.each(recordsdata, function(recordData) {
+            var record = Tine.Tinebase.data.Record.setFromJson(recordData, me.recordClass);
+            me.store.addSorted(record);
+        });
+
+        (function() {
+            me.highlightRowAfterAdd = highlightRowAfterAdd;
+            me.selectRowAfterAdd = selectRowAfterAdd;
+        }).defer(300, me)
+    },
+
+    getValue: function() {
+        var me = this,
+            data = [];
+
+        Tine.Tinebase.common.assertComparable(data);
+
+        me.store.each(function(record) {
+            data.push(record.data);
+        });
+
+        return data;
+    },
+
+    /* needed for isFormField cycle */
+    markInvalid: Ext.form.Field.prototype.markInvalid,
+    clearInvalid: Ext.form.Field.prototype.clearInvalid,
+    getMessageHandler: Ext.form.Field.prototype.getMessageHandler,
+    getName: Ext.form.Field.prototype.getName,
+    validate: function() { return true; },
+
+    // NOTE: picker picks independed records - so lets support to open them w.o. restirctions
+    onRowDblClick: function(grid, row, col) {
+        var me = this,
+            editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(me.recordClass),
+            record = me.store.getAt(row);
+
+        if (editDialogClass) {
+            editDialogClass.openWindow({
+                record: record,
+                recordId: record.getId(),
+                listeners: {
+                    scope: me,
+                    'update': function (updatedRecord) {
+                        if (!updatedRecord.data) {
+                            updatedRecord = Tine.Tinebase.data.Record.setFromJson(updatedRecord, me.recordClass)
+                        }
+
+                        var idx = me.store.indexOfId(updatedRecord.id),
+                            isSelected = me.getSelectionModel().isSelected(idx);
+
+                        me.getStore().removeAt(idx);
+                        me.getStore().insert(idx, [updatedRecord]);
+                        if (isSelected) {
+                            me.getSelectionModel().selectRow(idx, true);
+                        }
+
+                        me.fireEvent('update', this, updatedRecord);
+                    }
+                }
+            });
+        }
     }
 });
 

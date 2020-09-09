@@ -85,7 +85,7 @@ class ActiveSync_Command_SyncTests extends TestCase
      */
     public function testSyncOfContacts()
     {
-        $container = $this->_getPersonalContainer('Addressbook');
+        $container = $this->_getPersonalContainer(Addressbook_Model_Contact::class);
         
         $this->_syncFolder();
         $this->_requestInitialSynckey($container);
@@ -141,7 +141,7 @@ class ActiveSync_Command_SyncTests extends TestCase
         );
         $folderSync = new Syncroton_Command_FolderSync($doc, $this->_device, $this->_device->policykey);
         $folderSync->handle();
-        $folderSync->getResponse();
+        return $folderSync->getResponse();
     }
     
     /**
@@ -208,7 +208,7 @@ class ActiveSync_Command_SyncTests extends TestCase
      */
     public function testCreateContact()
     {
-        $personalContainer = $this->_getPersonalContainer('Addressbook');
+        $personalContainer = $this->_getPersonalContainer(Addressbook_Model_Contact::class);
         
         $this->testSyncOfContacts();
         
@@ -287,7 +287,7 @@ class ActiveSync_Command_SyncTests extends TestCase
      */
     public function testSyncOfEvents()
     {
-        $personalContainer = $this->_getPersonalContainer('Calendar');
+        $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class);
         
         // add a test event
         $event = new Calendar_Model_Event(array(
@@ -411,7 +411,6 @@ class ActiveSync_Command_SyncTests extends TestCase
 
         $folders = $emailController->getAllFolders();
 
-
         foreach ($folders as $folder) {
             if (strtoupper($folder->displayName) == 'INBOX') {
                 break;
@@ -492,6 +491,8 @@ class ActiveSync_Command_SyncTests extends TestCase
 
         // activate for xml output
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
+
+        self::assertNotNull($syncDoc, 'sync doc is null');
         
         $xpath = new DomXPath($syncDoc);
         $xpath->registerNamespace('AirSync', 'uri:AirSync');
@@ -557,5 +558,23 @@ class ActiveSync_Command_SyncTests extends TestCase
                 $this->assertEquals('id not found', $e->getMessage());
             }
         }
+    }
+
+    public function testDeniedModel()
+    {
+        $denyList = ActiveSync_Config::getInstance()->{ActiveSync_Config::DEVICE_MODEL_DENY_LIST};
+
+        ActiveSync_Config::getInstance()->{ActiveSync_Config::DEVICE_MODEL_DENY_LIST} = [
+            '/^Redmi 4X$/',
+        ];
+
+        $this->_device->model = 'Redmi 4X';
+
+        try {
+            $this->assertContains('<SyncKey>0</SyncKey>', $this->_syncFolder()->saveXML());
+        } finally {
+            ActiveSync_Config::getInstance()->{ActiveSync_Config::DEVICE_MODEL_DENY_LIST} = $denyList;
+        }
+
     }
 }

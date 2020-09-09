@@ -98,11 +98,7 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
      */
     public function testEmailsToAttendeeWithGroups()
     {
-        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
-            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
-        ) {
-            $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend');
-        }
+        $this->_skipIfLDAPBackend();
 
         $event = $this->_getEvent();
         

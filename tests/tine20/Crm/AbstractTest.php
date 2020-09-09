@@ -86,20 +86,21 @@ class Crm_AbstractTest extends TestCase
      * 
      * @return Crm_Model_Lead
      */
-    protected function _getLead()
+    protected function _getLead($mute = false)
     {
         return new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId(),
+            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class)->getId(),
             'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description',
             'end'           => NULL,
             'turnover'      => '200000',
             'probability'   => 70,
             'end_scheduled' => NULL,
+            'mute'          => $mute,
         ));
     }
     

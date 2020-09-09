@@ -18,8 +18,8 @@ describe('Record', () => {
 
   beforeEach(() => {
     Uit = Tine.Tinebase.data.Record.create([
-      {name: 'id'},
-      {name: 'name'}
+      { name: 'id' },
+      { name: 'name' }
     ], {
       appName: 'Tinebase',
       modelName: 'TestModel',

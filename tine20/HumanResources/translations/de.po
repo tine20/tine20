@@ -2,7 +2,7 @@
 # Translators:
 # Alexander Stintzing <a.stintzing@metaways.de>, 2012-2013
 # Björn Balazs <transifex@lazs.de>, 2012-2013
-# Ettore Atalan <atalanttore@googlemail.com>, 2014
+# Ettore Atalan <atalanttore@googlemail.com>, 2014,2016
 # lkneschke <l.kneschke@metaways.de>, 2013
 # lkneschke <l.kneschke@metaways.de>, 2013
 # Michael Spahn <michael@spahn.me>, 2014
@@ -15,257 +15,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 10:19+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2020-03-31 10:21+0200\n"
+"Last-Translator: Paul Hartog <p.hartog@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 2.3\n"
 
-#: js/AccountGridPanel.js:32
-msgid "Book remaining vacation"
-msgstr "Urlaub vom letzten Jahr als Sonderurlaub buchen"
+#: Controller.php:74
+msgid "You do not have admin rights on HumanResources"
+msgstr "Sie haben keine Administratorenrechte am Modul Human Ressources"
 
-#: js/AccountGridPanel.js:46 Model/Account.php:71
-msgid "Year"
-msgstr "Jahr"
-
-#: js/AccountGridPanel.js:46
-msgid "Please enter the year you want to create accounts for:"
-msgstr "Bitte geben Sie das Jahr an, für das Personalkonten erzeugt werden sollen:"
-
-#: js/AccountGridPanel.js:68
-msgid "Accounts have been created"
-msgstr "Konten wurden angelegt"
-
-#: js/AccountGridPanel.js:69
-#, python-brace-format
-msgid "{0} accounts for the year {1} have been created successfully!"
-msgstr "{0} Konten wurden im Jahr {1} erfolgreich erstellt!"
-
-#: js/AccountGridPanel.js:80
-msgid "Create new accounts"
-msgstr "Personalkonten anlegen"
-
-#: js/AccountGridPanel.js:134
-msgid "Booking has been successfull!"
-msgstr "Buchung erfolgreich!"
-
-#: js/AccountGridPanel.js:135
-msgid "The remaining vacation days of the selected accounts have been booked successfully!"
-msgstr "Die übrigen Urlaubstage wurden erfolgreich umgebucht!"
-
-#: js/ContractEditDialog.js:88
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "{0} bearbeiten"
-
-#: js/ContractEditDialog.js:212 js/ContractEditDialog.js:225
-#: js/ContractGridPanel.js:42 Model/Contract.php:33
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Vertrag"
-msgstr[1] "Verträge"
-
-#: js/ContractEditDialog.js:230 Model/Contract.php:61 Model/CostCenter.php:72
-msgid "Start Date"
-msgstr "Anfang"
-
-#: js/ContractEditDialog.js:231 Model/Contract.php:71
-msgid "End Date"
-msgstr "Ende"
-
-#: js/ContractEditDialog.js:235 js/AdminPanel.js:219
-msgid "Calendar"
-msgstr "Kalender"
-
-#: js/ContractEditDialog.js:236 js/AdminPanel.js:220
-msgid "Calendars"
-msgstr "Kalender"
-
-#: js/ContractEditDialog.js:242 Model/Contract.php:85
-msgid "Feast Calendar"
-msgstr "Feiertagskalender"
-
-#: js/ContractEditDialog.js:250 js/Models.js:23 js/AccountEditDialog.js:139
-msgid "Working Time"
-msgid_plural "Working Times"
-msgstr[0] "Arbeitszeitmodell"
-msgstr[1] "Arbeitszeitmodelle"
-
-#: js/ContractEditDialog.js:258
-msgid "Choose the template"
-msgstr "Vorlage auswählen"
-
-#: js/ContractEditDialog.js:268
-msgid "Working Hours per week"
-msgstr "Arbeitsstunden pro Woche"
-
-#: js/ContractEditDialog.js:276
-msgid "Vacation days of one calendar year"
-msgstr "Urlaubstage eines Kalenderjahrs"
-
-#: js/ContractEditDialog.js:280
-msgid "Mon."
-msgstr "Mo."
-
-#: js/ContractEditDialog.js:283
-msgid "Tue."
-msgstr "Di."
-
-#: js/ContractEditDialog.js:286
-msgid "Wed."
-msgstr "Mi."
-
-#: js/ContractEditDialog.js:289
-msgid "Thu."
-msgstr "Do."
-
-#: js/ContractEditDialog.js:292
-msgid "Fri."
-msgstr "Fr."
-
-#: js/ContractEditDialog.js:295
-msgid "Sat."
-msgstr "Sa."
-
-#: js/ContractEditDialog.js:298
-msgid "Sun."
-msgstr "So."
-
-#: js/ExtraFreeTimeEditDialog.js:97 js/ExtraFreeTimeEditDialog.js:109
-#: js/AccountEditDialog.js:78 Model/ExtraFreeTime.php:33
-msgid "Extra free time"
-msgid_plural "Extra free times"
-msgstr[0] "Sonderurlaub"
-msgstr[1] "Sonderurlaube"
-
-#: js/ExtraFreeTimeEditDialog.js:122 Model/ExtraFreeTime.php:70
-msgid "Days"
-msgstr "Tage"
-
-#: js/ExtraFreeTimeEditDialog.js:127 Model/FreeTime.php:71
-#: Model/ExtraFreeTime.php:58
-msgid "Type"
-msgstr "Typ"
-
-#: js/ExtraFreeTimeEditDialog.js:131 Model/ExtraFreeTime.php:74
-msgid "Expiration date"
-msgstr "Ablaufdatum"
-
-#: js/ExtraFreeTimeEditDialog.js:153 js/FreeTimeEditDialog.js:521
-#: js/AccountEditDialog.js:165 js/EmployeeEditDialog.js:427
-#: Model/Account.php:89 Model/FreeTime.php:77 Model/Employee.php:83
-#: Model/ExtraFreeTime.php:64
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/ExtraFreeTimeEditDialog.js:167 js/FreeTimeEditDialog.js:535
-#: js/EmployeeEditDialog.js:441
-msgid "Enter description"
-msgstr "Geben Sie eine Beschreibung an"
-
-#: js/ContractGridPanel.js:150
-msgid "Vacation in same period"
-msgstr "Urlaub im selben Zeitraum"
-
-#: js/ContractGridPanel.js:151
-msgid "There are some vacation days matching the period of the contract you added. After saving this employee, changing the contract is not possible anymore."
-msgstr "Es gibt Urlaubstage die zu dem Zeitraum des hinzugefügten Vertrags passen. Nachdem der Mitarbeiter gespeichert wurde, kann der Vertrag nicht mehr geändert werden."
-
-#: js/FreeTimeEditDialog.js:155
-#, python-brace-format
-msgid "Edit {0} \"{1}\""
-msgstr "{0} \"{1}\" bearbeiten"
-
-#: js/FreeTimeEditDialog.js:169
-#, python-brace-format
-msgid "Edit {0} for {1}"
-msgstr "{0} für {1} bearbeiten"
-
-#: js/FreeTimeEditDialog.js:171
-#, python-brace-format
-msgid "Add {0} for {1}"
-msgstr "Füge {0} für {1} hinzu"
-
-#: js/FreeTimeEditDialog.js:186
-msgid "You have to select at least one day to save this sickness entry."
-msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Kranksheitseintrag speichern zu können."
-
-#: js/FreeTimeEditDialog.js:187
-msgid "You have to select at least one day to save this vacation entry."
-msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Urlaub speichern zu können."
-
-#: js/FreeTimeEditDialog.js:191
-msgid "No day selected"
-msgstr "Kein Tag gewählt"
-
-#: js/FreeTimeEditDialog.js:271 Model/Account.php:34
-msgid "Personal account"
-msgid_plural "Personal accounts"
-msgstr[0] "Personalkonto"
-msgstr[1] "Personalkonten"
-
-#: js/FreeTimeEditDialog.js:371 Model/FreeTime.php:82
-msgid "Status"
-msgstr "Status"
-
-#: js/FreeTimeEditDialog.js:449
-msgid "Remaining"
-msgstr "Übrig"
-
-#: js/FreeTimeEditDialog.js:502
-msgid "Select Days"
-msgstr "Wählen Sie die Tage"
-
-#: js/AdminPanel.js:64
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: js/AdminPanel.js:72
-msgid "OK"
-msgstr "OK"
-
-#: js/AdminPanel.js:126
-msgid "Please use the following format: MM-DD"
-msgstr "Bitte das folgende Format verwenden: MM-TT"
-
-#: js/AdminPanel.js:230 Config.php:146
-msgid "Vacation expires"
-msgstr "Urlaub verfällt"
-
-#: js/Models.js:58
-msgid "Quick Search"
-msgstr "Schnellsuche"
-
-#: js/CostCenterGridPanel.js:58
-msgid "CostCenter"
-msgid_plural "CostCenters"
-msgstr[0] "Kostenstelle"
-msgstr[1] "Kostenstellen"
-
-#: js/CostCenterGridPanel.js:125 Model/CostCenter.php:33
-#: Model/CostCenter.php:61
-msgid "Cost Center"
-msgid_plural "Cost Centers"
-msgstr[0] ""
-msgstr[1] "Kostenstelle"
-
-#: js/CostCenterGridPanel.js:128
-msgid "Startdate"
-msgstr "Anfangsdatum"
+#: Controller.php:104 js/WorkingTimeEditDialog.js:186
+msgid "Working time model"
+msgstr "Arbeitszeitmodell"
 
 #: js/FreeTimeGridPanel.js:62
 msgid "Book as vacation"
 msgstr "Als Urlaub buchen"
 
 #: js/FreeTimeGridPanel.js:73 js/FreeTimeGridPanel.js:273
-#: js/AccountEditDialog.js:125 Config.php:78 Model/Employee.php:272
+#: js/AccountEditDialog.js:125 Config.php:90 Model/Employee.php:343
 msgid "Sickness"
 msgstr "Krankheit"
 
@@ -273,40 +47,65 @@ msgstr "Krankheit"
 msgid "Sickness Days"
 msgstr "Krankheitstage"
 
-#: js/FreeTimeGridPanel.js:77 js/FreeTimeGridPanel.js:275 Config.php:79
-#: Model/Employee.php:259
+#: js/FreeTimeGridPanel.js:77 js/FreeTimeGridPanel.js:275 Config.php:91
+#: Model/Employee.php:330
 msgid "Vacation"
 msgstr "Urlaub"
 
-#: js/FreeTimeGridPanel.js:78 js/FreeTimeGridPanel.js:79 Model/Contract.php:77
+#: js/FreeTimeGridPanel.js:78 js/FreeTimeGridPanel.js:79 Model/Contract.php:102
 msgid "Vacation Days"
 msgstr "Urlaubstage"
 
 #: js/FreeTimeGridPanel.js:88
 #, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
-msgstr "Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien oder Ansichtseinstellungen."
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria "
+"or view-options."
+msgstr ""
+"Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien "
+"oder Ansichtseinstellungen."
 
 #: js/FreeTimeGridPanel.js:135
 msgid "Could not book as vacation"
 msgstr "Konnte nicht als Urlaub gebucht werden"
 
 #: js/FreeTimeGridPanel.js:136
-msgid "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
-msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, da keine Urlaubstage mehr übrig sind!"
+msgid ""
+"The unexcused sickness days could not be booked as vacation. There are not "
+"enough days left!"
+msgstr ""
+"Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, "
+"da keine Urlaubstage mehr übrig sind!"
 
-#: js/FreeTimeEmployeeFilter.js:31 js/EmployeeEditDialog.js:184
-#: js/EmployeeEditDialog.js:197 Model/Contract.php:49 Model/FreeTime.php:49
-#: Model/CostCenter.php:50 Model/Employee.php:35
-msgid "Employee"
-msgid_plural "Employees"
-msgstr[0] "Mitarbeiter"
-msgstr[1] "Mitarbeiter"
+#: js/HumanResources.js:23
+msgid "Human Resources"
+msgid_plural "Human Resources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/HumanResources.js:40 Model/WorkingTime.php:56 Model/Employee.php:170
+msgid "Title"
+msgstr "Titel"
+
+#: js/HumanResources.js:46 js/WorkingTimeEditDialog.js:213
+msgid "Work Start"
+msgstr "Arbeitsbegin"
+
+#: js/HumanResources.js:53 js/WorkingTimeEditDialog.js:219
+msgid "Work End"
+msgstr "Arbeitsende"
 
 #: js/AccountEditDialog.js:56
 #, python-brace-format
 msgid "Edit {0} for {1} - {2}"
 msgstr "{0} von {1} des Jahres {2} bearbeiten"
+
+#: js/AccountEditDialog.js:78 js/ExtraFreeTimeEditDialog.js:97
+#: js/ExtraFreeTimeEditDialog.js:109 Model/ExtraFreeTime.php:34
+msgid "Extra free time"
+msgid_plural "Extra free times"
+msgstr[0] "Sonderurlaub"
+msgstr[1] "Sonderurlaube"
 
 #: js/AccountEditDialog.js:95
 msgid "Summary"
@@ -344,6 +143,11 @@ msgstr "Entschuldigte Krankheitstage"
 msgid "Unexcused sickness days"
 msgstr "Unentschuldigte Krankheitstage"
 
+#: js/AccountEditDialog.js:139 js/WorkingTimeEditDialog.js:199
+#: js/ContractEditDialog.js:250
+msgid "Working Time"
+msgstr "Arbeitszeit"
+
 #: js/AccountEditDialog.js:145
 msgid "Days to work"
 msgstr "Anzahl Arbeitstage"
@@ -360,261 +164,372 @@ msgstr "Arbeitstage nach Urlaub und Krankheit"
 msgid "Hours to work after vacation and sickness"
 msgstr "Zu leistende Stunden nach Urlaub und Krankheit"
 
-#: js/AccountEditDialog.js:156 Model/Account.php:90
+#: js/AccountEditDialog.js:156 Model/Account.php:114
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
-#: js/DatePicker.js:107
-msgid "WK"
-msgstr "KW"
+#: js/AccountEditDialog.js:165 js/FreeTimeEditDialog.js:527
+#: js/EmployeeEditDialog.js:505 js/ExtraFreeTimeEditDialog.js:153
+#: Model/Account.php:113 Model/ExtraFreeTime.php:91 Model/FreeTime.php:104
+#: Model/Employee.php:100
+msgid "Description"
+msgstr "Beschreibung"
 
-#: js/DatePicker.js:171
-msgid "Loading calendar data..."
-msgstr "Lade Kalender.."
+#: js/WorkingTimeEditDialog.js:215 js/WorkingTimeEditDialog.js:221
+msgid "not set"
+msgstr "Nicht gesetzt"
 
-#: js/DatePicker.js:414
-msgid "Year can not be changed"
-msgstr "Das Jahr kann nicht geändert werden"
+#: js/WorkingTimeEditDialog.js:225 js/ContractEditDialog.js:268
+msgid "Working Hours per week"
+msgstr "Arbeitsstunden pro Woche"
 
-#: js/DatePicker.js:415
-msgid "You have already selected some dates from another year. Please create a new record to add dates from another year!"
-msgstr "Sie haben bereits ein odere mehrere Tage aus einem anderen Jahr gewählt. Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage einzutragen."
+#: js/WorkingTimeEditDialog.js:236 js/ContractEditDialog.js:280
+msgid "Mon."
+msgstr "Mo."
 
-#: js/DatePicker.js:485
-msgid "No more vacation days"
-msgstr "Keine weiteren Urlaubstage vorhanden"
+#: js/WorkingTimeEditDialog.js:239 js/ContractEditDialog.js:283
+msgid "Tue."
+msgstr "Di."
 
-#: js/DatePicker.js:486
-msgid "The Employee has no more possible vacation days left for this year. Create a new vacation and use another personal account the vacation should be taken from."
-msgstr "Der Mitarbeiter hat keine Urlaubstage auf dem gewünschten Personalkonto. Erstellen Sie einen neuen Urlaub und wählen Sie ein anderes Personalkonto, von dem die Urlaubstage abgezogen werden sollen."
+#: js/WorkingTimeEditDialog.js:242 js/ContractEditDialog.js:286
+msgid "Wed."
+msgstr "Mi."
+
+#: js/WorkingTimeEditDialog.js:245 js/ContractEditDialog.js:289
+msgid "Thu."
+msgstr "Do."
+
+#: js/WorkingTimeEditDialog.js:248 js/ContractEditDialog.js:292
+msgid "Fri."
+msgstr "Fr."
+
+#: js/WorkingTimeEditDialog.js:251 js/ContractEditDialog.js:295
+msgid "Sat."
+msgstr "Sa."
+
+#: js/WorkingTimeEditDialog.js:254 js/ContractEditDialog.js:298
+msgid "Sun."
+msgstr "So."
+
+#: js/FreeTimeEmployeeFilter.js:31 js/EmployeeEditDialog.js:190
+#: js/EmployeeEditDialog.js:203 Model/CostCenter.php:73 Model/FreeTime.php:72
+#: Model/Employee.php:36 Model/Contract.php:72
+msgid "Employee"
+msgid_plural "Employees"
+msgstr[0] "Mitarbeiter"
+msgstr[1] "Mitarbeiter"
+
+#: js/AdminPanel.js:64
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: js/AdminPanel.js:72
+msgid "OK"
+msgstr "OK"
+
+#: js/AdminPanel.js:126
+msgid "Please use the following format: MM-DD"
+msgstr "Bitte das folgende Format verwenden: MM-TT"
+
+#: js/AdminPanel.js:219 js/ContractEditDialog.js:235
+msgid "Calendar"
+msgstr "Kalender"
+
+#: js/AdminPanel.js:220 js/ContractEditDialog.js:236
+msgid "Calendars"
+msgstr "Kalender"
+
+#: js/AdminPanel.js:231 Config.php:178
+msgid "Vacation expires"
+msgstr "Urlaub verfällt"
+
+#: js/BreakGridPanel.js:50 Model/WorkingTime.php:89
+msgid "Breaks"
+msgstr "Pausen"
+
+#: js/BreakGridPanel.js:104 Model/Break.php:72
+msgid "Hours"
+msgstr "Stunden"
+
+#: js/BreakGridPanel.js:109 Model/Break.php:80
+msgid "Break duration"
+msgstr "Pausenzeit"
+
+#: js/AccountGridPanel.js:32
+msgid "Book remaining vacation"
+msgstr "Urlaub vom letzten Jahr als Sonderurlaub buchen"
+
+#: js/AccountGridPanel.js:46 Model/Account.php:95
+msgid "Year"
+msgstr "Jahr"
+
+#: js/AccountGridPanel.js:46
+msgid "Please enter the year you want to create accounts for:"
+msgstr ""
+"Bitte geben Sie das Jahr an, für das Personalkonten erzeugt werden sollen:"
+
+#: js/AccountGridPanel.js:68
+msgid "Accounts have been created"
+msgstr "Konten wurden angelegt"
+
+#: js/AccountGridPanel.js:69
+#, python-brace-format
+msgid "{0} accounts for the year {1} have been created successfully!"
+msgstr "{0} Konten wurden im Jahr {1} erfolgreich erstellt!"
+
+#: js/AccountGridPanel.js:80
+msgid "Create new accounts"
+msgstr "Personalkonten anlegen"
+
+#: js/AccountGridPanel.js:134
+msgid "Booking has been successfull!"
+msgstr "Buchung erfolgreich!"
+
+#: js/AccountGridPanel.js:135
+msgid ""
+"The remaining vacation days of the selected accounts have been booked "
+"successfully!"
+msgstr "Die übrigen Urlaubstage wurden erfolgreich umgebucht!"
+
+#: js/CostCenterGridPanel.js:58
+msgid "CostCenter"
+msgid_plural "CostCenters"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"
+
+#: js/CostCenterGridPanel.js:125 Model/CostCenter.php:34
+#: Model/CostCenter.php:85
+msgid "Cost Center"
+msgid_plural "Cost Centers"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"
+
+#: js/CostCenterGridPanel.js:128
+msgid "Startdate"
+msgstr "Anfangsdatum"
+
+#: js/ContractGridPanel.js:42 js/ContractEditDialog.js:212
+#: js/ContractEditDialog.js:225 Model/Contract.php:34
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Vertrag"
+msgstr[1] "Verträge"
+
+#: js/ContractGridPanel.js:150
+msgid "Vacation in same period"
+msgstr "Urlaub im selben Zeitraum"
+
+#: js/ContractGridPanel.js:151
+msgid ""
+"There are some vacation days matching the period of the contract you added. "
+"After saving this employee, changing the contract is not possible anymore."
+msgstr ""
+"Es gibt Urlaubstage die zu dem Zeitraum des hinzugefügten Vertrags passen. "
+"Nachdem der Mitarbeiter gespeichert wurde, kann der Vertrag nicht mehr "
+"geändert werden."
+
+#: js/ContractEditDialog.js:88
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "{0} bearbeiten"
+
+#: js/ContractEditDialog.js:230 Model/CostCenter.php:96 Model/Contract.php:85
+msgid "Start Date"
+msgstr "Anfang"
+
+#: js/ContractEditDialog.js:231 Model/Contract.php:96
+msgid "End Date"
+msgstr "Ende"
+
+#: js/ContractEditDialog.js:242 Model/Contract.php:110
+msgid "Feast Calendar"
+msgstr "Feiertagskalender"
+
+#: js/ContractEditDialog.js:258
+msgid "Choose the template"
+msgstr "Vorlage auswählen"
+
+#: js/ContractEditDialog.js:276
+msgid "Vacation days of one calendar year"
+msgstr "Urlaubstage eines Kalenderjahrs"
+
+#: js/FreeTimeEditDialog.js:155
+#, python-brace-format
+msgid "Edit {0} \"{1}\""
+msgstr "{0} \"{1}\" bearbeiten"
+
+#: js/FreeTimeEditDialog.js:169
+#, python-brace-format
+msgid "Edit {0} for {1}"
+msgstr "{0} für {1} bearbeiten"
+
+#: js/FreeTimeEditDialog.js:171
+#, python-brace-format
+msgid "Add {0} for {1}"
+msgstr "Füge {0} für {1} hinzu"
+
+#: js/FreeTimeEditDialog.js:186
+msgid "You have to select at least one day to save this sickness entry."
+msgstr ""
+"Sie müssen mindestens einen Tag auswählen, um diesen Kranksheitseintrag "
+"speichern zu können."
+
+#: js/FreeTimeEditDialog.js:187
+msgid "You have to select at least one day to save this vacation entry."
+msgstr ""
+"Sie müssen mindestens einen Tag auswählen, um diesen Urlaub speichern zu "
+"können."
+
+#: js/FreeTimeEditDialog.js:191
+msgid "No day selected"
+msgstr "Kein Tag ausgewählt"
+
+#: js/FreeTimeEditDialog.js:277 Model/Account.php:35
+msgid "Personal account"
+msgid_plural "Personal accounts"
+msgstr[0] "Personalkonto"
+msgstr[1] "Personalkonten"
+
+#: js/FreeTimeEditDialog.js:377 Model/FreeTime.php:111
+msgid "Status"
+msgstr "Status"
+
+#: js/FreeTimeEditDialog.js:455
+msgid "Remaining"
+msgstr "Übrig"
+
+#: js/FreeTimeEditDialog.js:508
+msgid "Select Days"
+msgstr "Tage auswählen"
+
+#: js/FreeTimeEditDialog.js:541 js/EmployeeEditDialog.js:519
+#: js/ExtraFreeTimeEditDialog.js:167
+msgid "Enter description"
+msgstr "Geben Sie eine Beschreibung an"
 
 #: js/EmployeeEditDialog.js:106
 msgid "Account is disabled or deleted!"
 msgstr "Benutzer nicht mehr vorhanden!"
 
-#: js/EmployeeEditDialog.js:130 Model/Employee.php:199
-msgid "Supervisor"
-msgstr "Vorgesetzter"
-
-#: js/EmployeeEditDialog.js:138 Model/Employee.php:211
+#: js/EmployeeEditDialog.js:141 Model/Employee.php:278
 msgid "Division"
 msgstr "Abteilung"
 
-#: js/EmployeeEditDialog.js:145 Model/Employee.php:221
+#: js/EmployeeEditDialog.js:148 Model/Employee.php:287
 msgid "Health Insurance"
 msgstr "Krankenkasse"
 
-#: js/EmployeeEditDialog.js:203 Model/Employee.php:71
-msgid "Number"
-msgstr "Pers.-Nr."
-
-#: js/EmployeeEditDialog.js:215 Model/FreeTime.php:60 Model/Employee.php:77
-msgid "Account"
-msgstr "Benutzerkonto"
-
-#: js/EmployeeEditDialog.js:234
+#: js/EmployeeEditDialog.js:245
 msgid "Apply contact data on form"
 msgstr "Wende Kontaktdaten auf dieses Formular an"
 
-#: js/EmployeeEditDialog.js:263
-msgid "Full Name"
-msgstr "Name"
-
-#: js/EmployeeEditDialog.js:268 Model/Employee.php:136
+#: js/EmployeeEditDialog.js:282 Model/Employee.php:175
 msgid "Salutation"
 msgstr "Anrede"
 
-#: js/EmployeeEditDialog.js:276 Model/Employee.php:133
-msgid "Title"
-msgstr "Titel"
-
-#: js/EmployeeEditDialog.js:280 Model/Employee.php:142
-msgid "First Name"
-msgstr "Vorname"
-
-#: js/EmployeeEditDialog.js:289 Model/Employee.php:139
-msgid "Last Name"
-msgstr "Nachname"
-
-#: js/EmployeeEditDialog.js:303
+#: js/EmployeeEditDialog.js:336
 msgid "Personal Information"
 msgstr "Persönliche Informationen"
 
-#: js/EmployeeEditDialog.js:313 Model/Employee.php:87
+#: js/EmployeeEditDialog.js:346 Model/Employee.php:106
 msgid "Country"
 msgstr "Land"
 
-#: js/EmployeeEditDialog.js:316 Model/Employee.php:93
-msgid "Locality"
-msgstr "Ort"
-
-#: js/EmployeeEditDialog.js:319 Model/Employee.php:98
-msgid "Postalcode"
-msgstr "Postleitzahl"
-
-#: js/EmployeeEditDialog.js:322 Model/Employee.php:103
-msgid "Region"
-msgstr "Region"
-
-#: js/EmployeeEditDialog.js:325 Model/Employee.php:108
-msgid "Street"
-msgstr "Straße"
-
-#: js/EmployeeEditDialog.js:328
-msgid "Street2"
-msgstr "Straße 2"
-
-#: js/EmployeeEditDialog.js:331 Model/Employee.php:118
-msgid "E-Mail"
-msgstr "E-Mail"
-
-#: js/EmployeeEditDialog.js:334 Model/Employee.php:123
-msgid "Telephone Number"
-msgstr "Telefonnummer"
-
-#: js/EmployeeEditDialog.js:337 Model/Employee.php:128
-msgid "Cell Phone Number"
-msgstr "Handynummer"
-
-#: js/EmployeeEditDialog.js:341 Model/Employee.php:150
+#: js/EmployeeEditDialog.js:390 Model/Employee.php:197
 msgid "Birthday"
 msgstr "Geburtstag"
 
-#: js/EmployeeEditDialog.js:349
+#: js/EmployeeEditDialog.js:398
 msgid "Internal Information"
 msgstr "Interne Informationen"
 
-#: js/EmployeeEditDialog.js:358 Model/Employee.php:189
-msgid "Employment begin"
-msgstr "Angestellt von"
-
-#: js/EmployeeEditDialog.js:365 Model/Employee.php:194
-msgid "Employment end"
-msgstr "Angestellt bis"
-
-#: js/EmployeeEditDialog.js:369 Model/Employee.php:225
-msgid "Profession"
-msgstr "Beruf"
-
-#: js/EmployeeEditDialog.js:373 Model/Employee.php:228
-msgid "Position"
-msgstr "Position"
-
-#: js/EmployeeEditDialog.js:382 Model/Employee.php:50
+#: js/EmployeeEditDialog.js:447 Model/Employee.php:51
 msgid "Banking Information"
 msgstr "Bankverbindung"
 
-#: js/EmployeeEditDialog.js:391 Model/Employee.php:155
-msgid "Account Holder"
-msgstr "Kontoinhaber"
+#: js/ExtraFreeTimeEditDialog.js:122 Model/ExtraFreeTime.php:99
+msgid "Days"
+msgstr "Tage"
 
-#: js/EmployeeEditDialog.js:394 Model/Employee.php:160
-msgid "Account Number"
-msgstr "Kontonummer"
+#: js/ExtraFreeTimeEditDialog.js:127 Model/ExtraFreeTime.php:83
+#: Model/FreeTime.php:95
+msgid "Type"
+msgstr "Typ"
 
-#: js/EmployeeEditDialog.js:397 Model/Employee.php:178
-msgid "Bank Name"
-msgstr "Name der Bank"
+#: js/ExtraFreeTimeEditDialog.js:131 Model/ExtraFreeTime.php:103
+msgid "Expiration date"
+msgstr "Ablaufdatum"
 
-#: js/EmployeeEditDialog.js:400 Model/Employee.php:183
-msgid "Code Number"
-msgstr "Bankleitzahl"
+#: js/DatePicker.js:107
+msgid "WK"
+msgstr "KW"
 
-#: Config.php:69
-msgid "Freetime Type"
-msgstr "Freizeitanspruch Typ"
+#: js/DatePicker.js:169
+msgid "Loading calendar data..."
+msgstr "Lade Kalender…"
 
-#: Config.php:71
-msgid "Possible free time definitions"
-msgstr "Mögliche Definitionen für Freie Zeit"
+#: js/DatePicker.js:415
+msgid "Year can not be changed"
+msgstr "Das Jahr kann nicht geändert werden"
 
-#: Config.php:85
-msgid "Vacation Status"
-msgstr "Urlaubsstatus"
+#: js/DatePicker.js:416
+msgid ""
+"You have already selected some dates from another year. Please create a new "
+"record to add dates from another year!"
+msgstr ""
+"Sie haben bereits ein oder mehrere Tage aus einem anderen Jahr gewählt. "
+"Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage "
+"einzutragen."
 
-#: Config.php:87
-msgid "Possible vacation status definitions"
-msgstr "Mögliche Definitionen des Urlaubsstatus"
+#: js/DatePicker.js:486
+msgid "No more vacation days"
+msgstr "Keine weiteren Urlaubstage vorhanden"
 
-#: Config.php:94
-msgid "Requested"
-msgstr "beantragt"
+#: js/DatePicker.js:487
+msgid ""
+"The Employee has no more possible vacation days left for this year. Create a "
+"new vacation and use another personal account the vacation should be taken "
+"from."
+msgstr ""
+"Der Mitarbeiter hat keine Urlaubstage auf dem gewünschten Personalkonto. "
+"Erstellen Sie einen neuen Urlaub und wählen Sie ein anderes Personalkonto, "
+"von dem die Urlaubstage abgezogen werden sollen."
 
-#: Config.php:95
-msgid "In process"
-msgstr "in Bearbeitung"
-
-#: Config.php:96
-msgid "Accepted"
-msgstr "angenommen"
-
-#: Config.php:97
-msgid "Declined"
-msgstr "abgewiesen"
-
-#: Config.php:104
-msgid "Sickness Status"
-msgstr "Krankheitsstatus"
-
-#: Config.php:106
-msgid "Possible sickness status definitions"
-msgstr "Mögliche Definitionen von Krankheiten"
-
-#: Config.php:113 Setup/Update/Release6.php:299
+#: Setup/Update/Release6.php:299 Config.php:125
 msgid "Excused"
 msgstr "Entschuldigt"
 
-#: Config.php:114 Setup/Update/Release6.php:300
+#: Setup/Update/Release6.php:300 Config.php:126
 msgid "Unexcused"
 msgstr "Unentschuldigt"
 
-#: Config.php:121
-msgid "Default Feast Calendar"
-msgstr "Standard Feiertagskalender"
+#: Setup/Update/Release6.php:330
+msgid "Currently employed"
+msgstr "Momentan angestellt"
 
-#: Config.php:123
-msgid "Here you can define the default feast calendar used to set feast days and other free days in datepicker"
-msgstr "Hier können Sie den Standard Feiertagskalender festlegen, der benutzt wird um Feiertage und andere freie Tage in der Datumsauswahl anzuzeigen"
+#: Setup/Update/Release6.php:331 Setup/Initialize.php:34
+msgid "Employees which are currently employed"
+msgstr "Momentan angestellte Mitarbeiter"
 
-#: Config.php:130
-msgid "Extra freetime type"
-msgstr "Sonderurlaub Typ"
+#: Setup/Update/Release7.php:143 Setup/Initialize.php:39
+msgid "All employees"
+msgstr "Alle Angestellten"
 
-#: Config.php:132
-msgid "Possible extra free time definitions"
-msgstr "Mögliche Sonderurlaube"
+#: Setup/Update/Release7.php:144 Setup/Initialize.php:40
+msgid "All available employees"
+msgstr "Alle verfügbaren Mitarbeiter"
 
-#: Config.php:139 Setup/Update/Release7.php:373
+#: Setup/Update/Release7.php:373 Config.php:171
 msgid "Payed"
 msgstr "Bezahlt"
 
-#: Config.php:140 Setup/Update/Release7.php:374
+#: Setup/Update/Release7.php:374 Config.php:172
 msgid "Not payed"
 msgstr "Unbezahlt"
-
-#: Config.php:148
-msgid "Here you can define the day, when the vacation days taken from last year expires, the format is MM-DD."
-msgstr "Hier können Sie den Tag angeben, ab dem die Urlaubstage vom letzten Jahr verfallen sind. Bitte im Format JJ-DD angeben."
-
-#: Config.php:156
-msgid "Report Templates Node ID"
-msgstr ""
 
 #: Setup/Initialize.php:33
 msgid "Currently employed employees"
 msgstr "Zur Zeit angestellt"
-
-#: Setup/Initialize.php:34 Setup/Update/Release6.php:331
-msgid "Employees which are currently employed"
-msgstr "Momentan angestellte Mitarbeiter"
-
-#: Setup/Initialize.php:39 Setup/Update/Release7.php:143
-msgid "All employees"
-msgstr "Alle Angestellten"
-
-#: Setup/Initialize.php:40 Setup/Update/Release7.php:144
-msgid "All available employees"
-msgstr "Alle verfügbaren Mitarbeiter"
 
 #: Setup/Initialize.php:52
 msgid "All accounts"
@@ -636,97 +551,341 @@ msgstr "Vollzeit 37,5 Stunden"
 msgid "Part-time 20 hours"
 msgstr "Teilzeit 20 Stunden"
 
-#: Setup/Update/Release6.php:330
-msgid "Currently employed"
-msgstr "Momentan angestellt"
+#: Config.php:81
+msgid "Freetime Type"
+msgstr "Freizeitanspruch Typ"
 
-#: Controller.php:74
-msgid "You do not have admin rights on HumanResources"
-msgstr "Sie haben keine Administratorenrechte am Modul Human Ressources"
+#: Config.php:83
+msgid "Possible free time definitions"
+msgstr "Mögliche Definitionen für Freie Zeit"
 
-#: Acl/Rights.php:93
-msgid "edit private employee data"
-msgstr "Private Daten des Mitarbeiters bearbeiten"
+#: Config.php:97
+msgid "Vacation Status"
+msgstr "Urlaubsstatus"
 
-#: Acl/Rights.php:94
-msgid "Edit birthday, account data and other private information of employee records"
-msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Mitarbeiters."
+#: Config.php:99
+msgid "Possible vacation status definitions"
+msgstr "Mögliche Definitionen des Urlaubsstatus"
 
-#: Model/Account.php:52
+#: Config.php:106
+msgid "Requested"
+msgstr "Angefragt"
+
+#: Config.php:107
+msgid "In process"
+msgstr "In Bearbeitung"
+
+#: Config.php:108
+msgid "Accepted"
+msgstr "Akzeptiert"
+
+#: Config.php:109
+msgid "Declined"
+msgstr "Abgewiesen"
+
+#: Config.php:116
+msgid "Sickness Status"
+msgstr "Krankheitsstatus"
+
+#: Config.php:118
+msgid "Possible sickness status definitions"
+msgstr "Mögliche Definitionen von Krankheiten"
+
+#: Config.php:133
+msgid "Default Feast Calendar"
+msgstr "Standard-Feiertagskalender"
+
+#: Config.php:135
+msgid ""
+"Here you can define the default feast calendar used to set feast days and "
+"other free days in datepicker"
+msgstr ""
+"Hier können Sie den Standard-Feiertagskalender festlegen, der verwendet "
+"wird, um Feiertage und andere freie Tage in der Datumsauswahl anzuzeigen"
+
+#: Config.php:142
+msgid "Enabled Features"
+msgstr "Aktiviertes Features"
+
+#: Config.php:144
+msgid "Enabled Features in HumanResources Application."
+msgstr "Aktivierte Funktionen in der HumanResources Anwendung."
+
+#: Config.php:152
+msgid "Calculate Daily Reports"
+msgstr "Tägliche Berichte berechnen"
+
+#: Config.php:154
+msgid "Activate to calculate daily reports with a nightly scheduler job"
+msgstr ""
+"Aktivieren Sie diese Option, um tägliche Berichte zu Berechnen. (Berechnung "
+"geschieht über Nacht)"
+
+#: Config.php:162
+msgid "Extra freetime type"
+msgstr "Sonderurlaub Typ"
+
+#: Config.php:164
+msgid "Possible extra free time definitions"
+msgstr "Mögliche Sonderurlaube"
+
+#: Config.php:180
+msgid ""
+"Here you can define the day, when the vacation days taken from last year "
+"expires, the format is MM-DD."
+msgstr ""
+"Hier können Sie den Tag angeben, ab dem die Urlaubstage vom letzten Jahr "
+"verfallen sind. Bitte im Format MM-TT angeben."
+
+#: Config.php:188
+msgid "Report Templates Node ID"
+msgstr "Berichtsvorlagen Node ID"
+
+#: Config.php:197
+msgid "Timetracker Timeaccount for Workingtime Tracking"
+msgstr "Zeit-Tracker der Zeitkonten für die Arbeitszeiterfassung"
+
+#: Model/DailyWTReport.php:51
+msgid "Daily Working Time Report"
+msgid_plural "Daily Working Time Reports"
+msgstr[0] "Täglicher Arbeitszeitbericht"
+msgstr[1] "Tägliche Arbeitszeitberichte"
+
+#: Model/DailyWTReport.php:108
+msgid "Date"
+msgstr "Datum"
+
+#: Model/DailyWTReport.php:113 Model/WorkingTime.php:68
+msgid "Evaluation Start Time"
+msgstr "Auswertungsstartzeit"
+
+#: Model/DailyWTReport.php:119 Model/WorkingTime.php:74
+msgid "Evaluation End Time"
+msgstr "Auswertungsendzeit"
+
+#: Model/DailyWTReport.php:124
+msgid "Paid Absence Time"
+msgstr "Bezahlter Urlaub"
+
+#: Model/DailyWTReport.php:132
+msgid "Unpaid Absence Time"
+msgstr "Unbezahlter Urlaub"
+
+#: Model/DailyWTReport.php:140
+msgid "Absence"
+msgstr "Abwesenheit"
+
+#: Model/DailyWTReport.php:148
+msgid "Break Time Net"
+msgstr "Pausenzeit (Netto)"
+
+#: Model/DailyWTReport.php:156
+msgid "Break Deduction Time"
+msgstr "Pausenzeit Abzug"
+
+#: Model/DailyWTReport.php:165
+msgid "Feast Time"
+msgstr ""
+
+#: Model/DailyWTReport.php:173
+msgid "Break Time"
+msgstr "Pausenzeit"
+
+#: Model/DailyWTReport.php:181
+msgid "Sickness Time"
+msgstr "Tage der Krankmeldung"
+
+#: Model/DailyWTReport.php:189
+msgid "Working Time Correction"
+msgstr "Arbeitszeit (Berichtigt)"
+
+#: Model/DailyWTReport.php:198
+msgid "Actual Working Time"
+msgstr "Arbeitszeit (Ist)"
+
+#: Model/DailyWTReport.php:206
+msgid "Target Working Time"
+msgstr "Arbeitszeit (Soll)"
+
+#: Model/DailyWTReport.php:213
+msgid "System Remark"
+msgstr "Anmerkung des Systems"
+
+#: Model/DailyWTReport.php:219
+msgid "Remark"
+msgstr "Anmerkung"
+
+#: Model/DailyWTReport.php:225
+msgid "Is Cleared"
+msgstr "Ist Freigegeben"
+
+#: Model/DailyWTReport.php:233
+msgid "Cleared in"
+msgstr ""
+
+#: Model/WorkingTime.php:36 Model/Contract.php:122
+msgid "Working time"
+msgid_plural "Working times"
+msgstr[0] "Arbeitszeit"
+msgstr[1] "Arbeitszeiten"
+
+#: Model/Account.php:53
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: Model/Account.php:78
+#: Model/Account.php:102
 msgid "Extra free times"
 msgstr "Sonderurlaub"
 
-#: Model/FreeDay.php:34
-msgid "Free Day"
-msgid_plural "Free Days"
-msgstr[0] "freier Tag"
-msgstr[1] "freie Tage"
-
-#: Model/Contract.php:95
-msgid "Workingtime"
-msgstr "Arbeitszeit"
-
-#: Model/FreeTime.php:34
+#: Model/FreeTime.php:35
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] "Freizeitanspruch"
 msgstr[1] "Freizeitansprüche"
 
-#: Model/FreeTime.php:88
+#: Model/FreeTime.php:84 Model/Employee.php:84
+msgid "Account"
+msgstr "Benutzerkonto"
+
+#: Model/FreeTime.php:120
 msgid "First Day"
 msgstr "Erster Tag"
 
-#: Model/FreeTime.php:92
+#: Model/FreeTime.php:126
 msgid "Last Day"
 msgstr "Letzter Tag"
 
-#: Model/FreeTime.php:96
+#: Model/FreeTime.php:132
 msgid "Days Count"
 msgstr "Anzahl der Tage"
 
-#: Model/FreeTime.php:102
+#: Model/FreeTime.php:141
 msgid "Free Days"
-msgstr "freie Tage"
+msgstr "Freie Tage"
 
-#: Model/Employee.php:51
+#: Model/Employee.php:52
 msgid "Private Information"
 msgstr "Private Informationen"
 
-#: Model/Employee.php:63
+#: Model/Employee.php:64
 msgid "Is employed"
 msgstr "Ist angestellt"
 
-#: Model/Employee.php:89
+#: Model/Employee.php:76
+msgid "Number"
+msgstr "Pers.-Nr."
+
+#: Model/Employee.php:92
+msgid "Badge Id"
+msgstr ""
+
+#: Model/Employee.php:108
 msgid "Germany"
 msgstr "Deutschland"
 
-#: Model/Employee.php:113
+#: Model/Employee.php:114
+msgid "Locality"
+msgstr "Ort"
+
+#: Model/Employee.php:121
+msgid "Postalcode"
+msgstr "Postleitzahl"
+
+#: Model/Employee.php:128
+msgid "Region"
+msgstr "Region"
+
+#: Model/Employee.php:135
+msgid "Street"
+msgstr "Straße"
+
+#: Model/Employee.php:142
 msgid "Street 2"
 msgstr "Straße 2"
 
-#: Model/Employee.php:145
+#: Model/Employee.php:149
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: Model/Employee.php:156
+msgid "Telephone Number"
+msgstr "Telefonnummer"
+
+#: Model/Employee.php:163
+msgid "Cell Phone Number"
+msgstr "Handynummer"
+
+#: Model/Employee.php:180
+msgid "Last Name"
+msgstr "Nachname"
+
+#: Model/Employee.php:185
+msgid "First Name"
+msgstr "Vorname"
+
+#: Model/Employee.php:190
 msgid "Employee name"
 msgstr "Name des Mitarbeiters"
 
-#: Model/Employee.php:232
+#: Model/Employee.php:204
+msgid "Account Holder"
+msgstr "Kontoinhaber"
+
+#: Model/Employee.php:211
+msgid "Account Number"
+msgstr "Kontonummer"
+
+#: Model/Employee.php:235
+msgid "Bank Name"
+msgstr "Name der Bank"
+
+#: Model/Employee.php:242
+msgid "Code Number"
+msgstr "Bankleitzahl"
+
+#: Model/Employee.php:250
+msgid "Employment begin"
+msgstr "Angestellt von"
+
+#: Model/Employee.php:257
+msgid "Employment end"
+msgstr "Angestellt bis"
+
+#: Model/Employee.php:264
+msgid "Supervisor"
+msgstr "Vorgesetzter"
+
+#: Model/Employee.php:293
+msgid "Profession"
+msgstr "Beruf"
+
+#: Model/Employee.php:298
+msgid "Position"
+msgstr "Position"
+
+#: Model/Employee.php:304
 msgid "Contracts"
 msgstr "Verträge"
 
-#: Model/Employee.php:247
+#: Model/Employee.php:318
 msgid "Cost Centers"
 msgstr "Kostenstellen"
 
-#: Exception/RemainingNotBookable.php:26
-msgid "Not allowed!"
-msgstr "Nicht erlaubt!"
+#: Model/FreeDay.php:35
+msgid "Free Day"
+msgid_plural "Free Days"
+msgstr[0] "Freier Tag"
+msgstr[1] "Freie Tage"
 
-#: Exception/RemainingNotBookable.php:31
-msgid "It's only allowed to book remaining vacation days from years in the past!"
-msgstr "Es ist nur erlaubt, Resturlaub aus vergangenen Jahren zu buchen!"
+#: Model/Break.php:34 Model/Break.php:35
+msgid "Break"
+msgid_plural "Breaks"
+msgstr[0] "Pause"
+msgstr[1] "Pausen"
+
+#: Model/Contract.php:122
+msgid "Workingtime"
+msgstr "Arbeitszeit"
 
 #: Exception/NoContract.php:26
 msgid "No contract could be found."
@@ -736,14 +895,6 @@ msgstr "Es  konnte kein Vertrag gefunden werden."
 msgid "Please create a contract for this employee!"
 msgstr "Bitte erstellen Sie einen Vertrag für diesen Mitarbeiter!"
 
-#: Exception/NoCurrentContract.php:33
-msgid "No current contract!"
-msgstr "Kein aktueller Vertrag!"
-
-#: Exception/NoCurrentContract.php:38
-msgid "A current contract could not be found!"
-msgstr "Es  konnte kein aktueller Vertrag gefunden werden!"
-
 #: Exception/ContractDates.php:26
 msgid "Negative Timespace"
 msgstr "Negativer Zeitraum"
@@ -752,21 +903,14 @@ msgstr "Negativer Zeitraum"
 msgid "The start date of the contract must be before the end date!"
 msgstr "Der Anfang des Vertrages muss vor dem Ende sein!"
 
-#: Exception/NeedsYear.php:26
-msgid "No or no valid year given"
-msgstr "Kein oder kein valides Jahr angegeben"
+#: Exception/RemainingNotBookable.php:26
+msgid "Not allowed!"
+msgstr "Nicht erlaubt!"
 
-#: Exception/NeedsYear.php:31
-msgid "Please use a valid year!"
-msgstr "Bitte geben Sie ein korrektes Jahr an!"
-
-#: Exception/NoAccount.php:26
-msgid "No personal account found"
-msgstr "Kein Personalkonto gefunden"
-
-#: Exception/NoAccount.php:31
-msgid "An existing personal account could not be found. Please create one!"
-msgstr "Es konnte kein Personalkonto gefunden werden. Bitte erstellen Sie eines!"
+#: Exception/RemainingNotBookable.php:31
+msgid ""
+"It's only allowed to book remaining vacation days from years in the past!"
+msgstr "Es ist nur erlaubt, Resturlaub aus vergangenen Jahren zu buchen!"
 
 #: Exception/ContractOverlap.php:26
 msgid "Contracts overlap"
@@ -776,24 +920,316 @@ msgstr "Überlappende Verträge"
 msgid "The contracts must not overlap!"
 msgstr "Die Verträge dürfen sich nicht überlappen!"
 
+#: Exception/NeedsYear.php:26
+msgid "No or no valid year given"
+msgstr "Kein oder kein valides Jahr angegeben"
+
+#: Exception/NeedsYear.php:31
+msgid "Please use a valid year!"
+msgstr "Bitte geben Sie ein korrektes Jahr an!"
+
+#: Exception/NoCurrentContract.php:33
+msgid "No current contract!"
+msgstr "Kein aktueller Vertrag!"
+
+#: Exception/NoCurrentContract.php:38
+msgid "A current contract could not be found!"
+msgstr "Es  konnte kein aktueller Vertrag gefunden werden!"
+
 #: Exception/ContractNotEditable.php:26
 msgid "Contract not editable"
 msgstr "Vertrag nicht bearbeitbar"
 
 #: Exception/ContractNotEditable.php:31
-msgid "You are not allowed to change the record if a vacation has been booked already!"
-msgstr "Der Vertrag kann nicht mehr geändert werden, wenn bereits Urlaub gebucht worden ist."
+msgid ""
+"You are not allowed to change the record if a vacation has been booked "
+"already!"
+msgstr ""
+"Der Vertrag kann nicht mehr geändert werden, wenn bereits Urlaub gebucht "
+"worden ist."
 
-#~ msgid "Export {0}"
-#~ msgid_plural "Export {0}"
-#~ msgstr[0] "{0} exportieren"
-#~ msgstr[1] "{0} exportieren"
+#: Exception/NoAccount.php:26
+msgid "No personal account found"
+msgstr "Kein Personalkonto gefunden"
 
-#~ msgid "Export as ODS"
-#~ msgstr "Als ODS exportieren"
+#: Exception/NoAccount.php:31
+msgid "An existing personal account could not be found. Please create one!"
+msgstr ""
+"Es konnte kein Personalkonto gefunden werden. Bitte erstellen Sie eines!"
 
-#~ msgid "Export as XLS"
-#~ msgstr "Als XLS exportieren"
+#: Acl/Rights.php:93
+msgid "edit private employee data"
+msgstr "Private Daten des Mitarbeiters bearbeiten"
 
-#~ msgid "Report Templates Container ID"
-#~ msgstr "Container ID für Berichte"
+#: Acl/Rights.php:94
+msgid ""
+"Edit birthday, account data and other private information of employee records"
+msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Mitarbeiters"
+
+#: js/ContractEditDialog.js:242
+msgid "Public Holiday Calendar"
+msgstr "Feiertagskalender"
+
+#: Config.php:135
+msgid ""
+"Here you can define the default public holiday calendar used to set public "
+"holidays and other free days in datepicker"
+msgstr ""
+"Hier können Sie den Standardkalender für Feiertage definieren, mit dem "
+"Feiertage und andere freie Tage in der Datumsauswahl festgelegt werden"
+
+#: Model/DailyWTReport.php:165
+msgid "Public Holidays"
+msgstr "Feiertage"
+
+#: Model/Employee.php:92
+msgid "Badge ID"
+msgstr "Karten ID"
+
+msgid "Working time Model"
+msgstr "Arbeitszeitmodell"
+
+msgid "Work start"
+msgstr "Arbeitsbegin"
+
+msgid "Work end"
+msgstr "Arbeitsende"
+
+msgid "Feast Days"
+msgstr "Feiertage"
+
+msgid "Wage types"
+msgstr "Lohnarten"
+
+msgid "Free time types"
+msgstr "Abwesenheitsarten"
+
+msgid "Working time scheme"
+msgid_plural "Working time schemes"
+msgstr[0] "Arbeitszeitschema"
+msgstr[1] "Arbeitszeitschemas"
+
+msgid "Template"
+msgstr "Vorlage"
+
+msgid "Individual"
+msgstr "Individuell"
+
+msgid "Shared"
+msgstr "Gemeinsam"
+
+msgid "Calculate all Reports"
+msgstr "Berechnen alle Berichte"
+
+msgid "Recalculate"
+msgstr "Neuberechnung"
+
+msgid "Working Time Rules"
+msgstr "Arbeitszeit Regeln"
+
+msgid "Working Time Schema"
+msgstr "Arbeitszeit Schema"
+
+msgid ""
+"Template (individual working time schemas are created for each contract)"
+msgstr ""
+"Vorlage (für jeden Vertrag wird ein individuelles Arbeitszeitschema "
+"angelegt)"
+
+msgid "Shared (this working time schemas can be shared among contracts)"
+msgstr "Gemeinsam (dieses Arbeitszeit Schema kann gemeinsam genutzt werden)"
+
+msgid "Default wage type"
+msgstr "Standard Lohnart"
+
+msgid "Salary"
+msgstr "Gehalt"
+
+msgid "Business trip"
+msgstr "Dienstreise"
+
+msgid "Sunday bonus"
+msgstr "Sonntagszulage"
+
+msgid "Feast day"
+msgstr "Feiertag"
+
+msgid "Feast day bonus"
+msgstr "Feiertagszulage"
+
+msgid "Overtime"
+msgstr "Überstunden"
+
+msgid "Overtime bonus"
+msgstr "Überstundenzulage"
+
+msgid "Late shift bonus"
+msgstr "Spätschichtzulage"
+
+msgid "Night bonus"
+msgstr "Nachtarbeitszulage"
+
+msgid "Stand by"
+msgstr "Bereitschaft"
+
+msgid "Unpaid"
+msgstr "Unbezahlt"
+
+msgid "[S] Sickness"
+msgstr "[K] Krankheit"
+
+msgid "[D] Visit doctor"
+msgstr "[A] Arzt"
+
+msgid "[V] Vacation"
+msgstr "[U] Urlaub"
+
+msgid "[BT] Business trip"
+msgstr "[D] Dienstreise"
+
+msgid "[FT] Flex time"
+msgstr "[G] Gleitzeit"
+
+msgid "[BK] Break"
+msgstr "[P] Pause"
+
+msgid "[T] Training"
+msgstr "[S] Schulung"
+
+msgid "No valid contract for this date"
+msgstr "Für dieses Datum existiert kein gültiger Vertrag"
+
+msgid "unexpected error: "
+msgstr "Unerwarteter Fehler: "
+
+msgid "daily wt reports can't be created"
+msgstr "Tägliche Arbeitszeitberichte können nicht manuell erzeugt werden"
+
+msgid "It is not allowed to update a cleared report"
+msgstr "Abgerechnete Berichte können nicht geändert werden"
+
+msgid "monthly wt reports can't be created"
+msgstr "Monatliche Arbeitszeitberichte können nicht manuell erzeugt werden"
+
+msgid "previous months need to be cleared first"
+msgstr "Sie müssen den Vormonat zuerst abrechnen"
+
+msgid "following months need to be uncleared first"
+msgstr "Sie müssen die Abrechnung des Vormonats zuvor aufheben"
+
+msgid "Corrected Evaluation Start Time"
+msgstr "Korrigierte Auswertungs Startzeit"
+
+msgid "Corrected Evaluation End Time"
+msgstr "Korrigierte Auswertungs Endzeit"
+
+msgid "Target Working Time Correction"
+msgstr "Soll Arbeitszeit Korrektur"
+
+msgid "Working Times"
+msgstr "Arbeitszeiten"
+
+msgid "Total Working Time"
+msgstr "Gesamt Arbeitszeit"
+
+msgid "Calculation Error"
+msgstr "Fehler bei der Berechnung"
+
+msgid "Monthly Working Time Report"
+msgid_plural "Monthly Working Time Reports"
+msgstr[0] "Monatlicher Arbeitszeit Bericht"
+msgstr[1] "Monatliche Arbeitszeit Berichte"
+
+msgid "Month"
+msgstr "Monat"
+
+msgid "Daily Working Time Reports"
+msgstr "Tägliche Arbeitszeit Berichte"
+
+msgid "Working Time Balance Previous Month"
+msgstr "Vormonats Saldo Arbeitszeit"
+
+msgid "Total Working Time Balance"
+msgstr "Gesamt Saldo Arbeitszeit"
+
+msgid "Wage type"
+msgid_plural "Wage types"
+msgstr[0] "Lohnart"
+msgstr[1] "Lohnarten"
+
+msgid "Abbreviation"
+msgstr "Abkürzung"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "System"
+msgstr "System"
+
+msgid "Factor (%)"
+msgstr "Faktor (%)"
+
+msgid "Additional Wage"
+msgstr "Zusatzlohn"
+
+msgid "Start time"
+msgstr "Startzeit"
+
+msgid ""
+"After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time "
+"{{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted "
+"automatically."
+msgstr ""
+"Wenn {{time_worked|date(\"H:i\", \"GMT\")}} Arbeitszeit überschritten "
+"sind, werden {{break_time|date(\"H:i\", \"GMT\")}} Pausenzeit automatisch "
+"abgezogen."
+
+msgid "Time worked"
+msgstr "Arbeitszeit"
+
+msgid "Break time"
+msgstr "Pausenzeit"
+
+msgid "Work Time Limit"
+msgid_plural "Work Time Limits"
+msgstr[0] "Arbeitzeitlimitierung"
+msgstr[1] "Arbeitzeitlimitierungen"
+
+msgid ""
+"Working time is evaluated from {{start_time|date(\"H:i\")}} until "
+"{{end_time|date(\"H:i\")}}."
+msgstr ""
+"Arbeitszeit wird ausgewertet von {{start_time|date(\"H:i\")}} bis "
+"{{end_time|date(\"H:i\")}}."
+
+msgid "Absence reason"
+msgid_plural "Absence reasons"
+msgstr[0] "Abwesenheitsgrund"
+msgstr[1] "Abwesenheitsgründe"
+
+msgid "Allow Booking"
+msgstr "Buchung erlauben"
+
+msgid "Allow Planning"
+msgstr "Plaung erlauben"
+
+msgid "Enable Freetime Timetracking"
+msgstr "Abwesenheits-Zeiterfassung aktivieren"
+
+msgid "Timeaccount"
+msgstr "Zeitkonto"
+
+msgid "Transponder Id"
+msgstr "Transponder"
+
+msgid "Working Time Balance"
+msgstr "Arbeitszeit Saldo"
+
+msgid "[FD] Feast day"
+msgstr "[F] Feiertag"
+
+msgid "Break Times"
+msgstr "Pausenzeiten"
+
+msgid "Work Time Limits"
+msgstr "Arbeitzeitlimits"

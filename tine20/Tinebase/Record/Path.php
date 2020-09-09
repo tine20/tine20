@@ -46,8 +46,6 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
 
     protected $_rebuildQueue = array();
 
-    protected $_afterRebuildQueueHook = array();
-
     protected $_recursionCounter = 0;
     
     /**
@@ -70,11 +68,6 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             self::$instance = new self();
         }
         return self::$instance;
-    }
-
-    public function addAfterRebuildQueueHook(array $hook)
-    {
-        $this->_afterRebuildQueueHook[$this->_recursionCounter][] = $hook;
     }
 
     public function addToRebuildQueue(Tinebase_Record_Interface $_rebuildPathParams)
@@ -280,6 +273,10 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
 
             $this->deleteShadowPathParts($toDelete);
 
+            // eventually we alreasy added some of our new parents or children as the above delete triggers rebuilds...
+            // we start start over
+
+            $this->rebuildPaths($_record, $_oldRecord);
         } else {
 
             foreach ($newChildren as $child) {
@@ -310,15 +307,6 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
                 if (false !== $params) {
                     call_user_func_array(array($this, 'rebuildPaths'), $params);
                 }
-            }
-        }
-
-        if (isset($this->_afterRebuildQueueHook[$this->_recursionCounter])) {
-            // recursion prevention!
-            $hooks = $this->_afterRebuildQueueHook[$this->_recursionCounter];
-            unset($this->_afterRebuildQueueHook[$this->_recursionCounter]);
-            foreach($hooks as $hook) {
-                call_user_func_array(array_shift($hook), $hook);
             }
         }
     }

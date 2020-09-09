@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 14:19+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2018-11-28 11:09+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/tine20/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,6 +18,42 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: js/CourseGridPanel.js:44 js/Models.js:68
+msgid "Name"
+msgstr "Naam"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "soort"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Mislukt"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
+
+#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Cursus"
+msgstr[1] "Cursussen"
+
+#: js/Models.js:67
+msgid "Quick Search"
+msgstr "Snel zoeken"
+
+#: js/Models.js:70 js/CourseEditDialog.js:227 Config.php:103
+msgid "Internet Access"
+msgstr "Internet toegang"
+
+#: js/Models.js:105
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Cursus soort"
+msgstr[1] "Cursus soorten"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
@@ -31,11 +67,11 @@ msgstr "Achternaam"
 msgid "Add new member to course"
 msgstr "Voeg nieuw lid toe aan cursus"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:121
 msgid "Errors"
 msgstr "Fouten"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:121
 msgid "Please fix the errors noted."
 msgstr "Verhelp de genoemde fouten."
 
@@ -46,12 +82,6 @@ msgstr "Importeer cursus leden"
 #: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Voeg nieuwe gebruiker toe"
-
-#: js/CourseEditDialog.js:188 js/Models.js:43 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Cursus"
-msgstr[1] "Cursussen"
 
 #: js/CourseEditDialog.js:204
 msgid "Course Name"
@@ -64,10 +94,6 @@ msgstr "Cursus / School soort"
 #: js/CourseEditDialog.js:221
 msgid "Description"
 msgstr "Omschrijving"
-
-#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:103
-msgid "Internet Access"
-msgstr "Internet toegang"
 
 #: js/CourseEditDialog.js:256
 msgid "Members"
@@ -85,40 +111,8 @@ msgstr "Onbekend"
 msgid "Reset Password"
 msgstr "Reset wachtwoord"
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
-msgid "Name"
-msgstr "Naam"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "soort"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Mislukt"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Foutmelding tijdens poging van het updaten van de cursussen"
-
-#: js/Models.js:47
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Taaklijst"
-msgstr[1] "Taaklijsten"
-
-#: js/Models.js:71
-msgid "Quick Search"
-msgstr "Snel zoeken"
-
-#: js/Models.js:109
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Cursus soort"
-msgstr[1] "Cursus soorten"
-
-#: Preference.php:24 Preference.php:60 Setup/Update/Release5.php:30
-#: Setup/Initialize.php:35
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
 msgid "All courses"
 msgstr "Alle cursussen"
 
@@ -192,30 +186,6 @@ msgstr "Standaard afdeling"
 msgid "The default department for new Courses"
 msgstr "De standaard afdeling voor nieuwe cursussen"
 
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Docent"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Docent account"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Mijn cursus"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Cursussen"
-
-#: Setup/Initialize.php:57
-msgid "School"
-msgstr "School"
-
-#: Setup/Initialize.php:58
-msgid "Defaul school for Courses application"
-msgstr "Standaard school voor Cursussen applicatie "
-
 #: Acl/Rights.php:108
 msgid "Add new user"
 msgstr "Voeg nieuwe gebruiker toe"
@@ -239,3 +209,27 @@ msgstr "Beheer gedeelde favoriete cursussen"
 #: Acl/Rights.php:117
 msgid "Create or update shared courses favorites"
 msgstr "Maak of update favoriete gedeelde cursussen"
+
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr "Docent"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Docent account"
+
+#: Controller/Course.php:321
+msgid "My course"
+msgstr "Mijn cursus"
+
+#: Setup/Initialize.php:57
+msgid "School"
+msgstr "School"
+
+#: Setup/Initialize.php:58
+msgid "Defaul school for Courses application"
+msgstr "Standaard school voor Cursussen applicatie "
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Cursussen"

@@ -5,7 +5,7 @@
  * @package     ActiveSync
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  */
@@ -18,4 +18,12 @@
  */
 class ActiveSync_Setup_Initialize extends Setup_Initialize
 {
+    /**
+     * init scheduler tasks
+     */
+    protected function _initializeSchedulerTasks()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        ActiveSync_Scheduler_Task::addMonitorDeviceLastPingTask($scheduler);
+    }
 }

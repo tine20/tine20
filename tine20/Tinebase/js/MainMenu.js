@@ -140,7 +140,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             var regItems = Ext.ux.ItemRegistry.itemMap['Tine.Tinebase.MainMenu.userActions'] || [];
             
             Ext.each(regItems, function(reg) {
-                var addItem = def = reg.item;
+                var addItem = reg.item;
 
                 this.userActions.push(addItem);
             }, this);
@@ -322,7 +322,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 }
 
                 Tine.Tinebase.common.reload({
-                    clearCache: true
+                    clearCache: true,
+                    redirectAlways: Tine.Tinebase.configManager.get('redirectAlways'),
+                    redirectUrl: Tine.Tinebase.configManager.get('redirectUrl')
                 });
             }
         });

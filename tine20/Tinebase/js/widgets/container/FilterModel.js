@@ -144,9 +144,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             hidden: valueType != 'selectionComboBox',
             app: this.app,
             filter: filter,
-            width: this.filterValueWidth,
             listWidth: 200,
-            //id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el,
             allowNodeSelect: true,
@@ -188,8 +186,6 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             containerName: this.containerName,
             containersName: this.containersName,
             filter: filter,
-            width: this.filterValueWidth,
-            //id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el,
             listeners: {
@@ -249,8 +245,10 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     },
     
     initComponent: function() {
-        this.containerName = this.containerName == 'container' && this.recordClass ? this.recordClass.getContainerName() : this.containerName;
-        this.containersName = this.containersName == 'containers' && this.recordClass ? this.recordClass.getContainersName() : this.containersName;
+        this.app = this.app || Tine.Tinebase.appMgr.get(this.appName);
+        this.recordClass = this.recordClass || Tine.Tinebase.data.RecordMgr.get(this.app, this.modelName);
+        this.containerName = this.containerName === 'container' && this.recordClass ? this.recordClass.getContainerName() : this.containerName;
+        this.containersName = this.containersName === 'containers' && this.recordClass ? this.recordClass.getContainersName() : this.containersName;
 
         this.on('beforecollapse', this.onBeforeCollapse, this);
         this.store = new Ext.data.SimpleStore({
@@ -381,6 +379,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
         }, this);
         
         this.setRawValue(containerNames.join(', '));
+        this.validate();
         return this;
     },
     

@@ -114,10 +114,8 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             activeTab: 0,
-            border: false,
             items:[{
                 title: i18n._('Properties'),
                 border: false,

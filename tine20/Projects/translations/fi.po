@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # maukka <huru_ukko@hotmail.com>, 2013
 # maukka <huru_ukko@hotmail.com>, 2013
@@ -11,44 +11,90 @@ msgstr ""
 "PO-Revision-Date: 2017-09-19 14:29+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Finnish (http://www.transifex.com/tine20/tine20/language/fi/)\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projektit"
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's hemkilökohtaisesta projektista"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Kaikki projektini"
 
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Tagit"
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
 
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:137
-msgid "Number"
-msgstr "Numero"
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Oletus suosikki joka ladataan projekti ohjelmaa käynnistettäessä"
 
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:132
-msgid "Title"
-msgstr "Otsikko"
+#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "Osallistuja"
 
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:143
-msgid "Status"
-msgstr "Tila"
+#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
+msgid "Role"
+msgstr "Rooli"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekti"
 msgstr[1] "Projektit"
+
+#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "Otsikko"
+
+#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "Numero"
+
+#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "Tila"
+
+#: js/ProjectEditDialog.js:188 js/Model.js:76
+msgid "Description"
+msgstr "Kuvaus"
+
+#: js/ProjectEditDialog.js:202
+msgid "Enter description"
+msgstr "Lisää kuvaus"
+
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projektit"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Valitse projekti lisätäksesi yhteyshenkilöt"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Valitse osallistujan rooli"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Valitse projekti"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Valitse rooli"
+
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Lisätty {0} osallistujaa projektiin"
 
 #: js/Model.js:39
 msgid "Project list"
@@ -63,10 +109,6 @@ msgstr "Projekti lista"
 #: js/Model.js:73
 msgid "Quick Search"
 msgstr ""
-
-#: js/Model.js:76 js/ProjectEditDialog.js:178
-msgid "Description"
-msgstr "Kuvaus"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -84,104 +126,17 @@ msgstr "Luontiaika"
 msgid "Created By"
 msgstr "Luonut"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Osallistuja"
-
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr "Osallistujan rooli"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Valitse projekti lisätäksesi yhteyshenkilöt"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr ""
 
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Valitse osallistujan rooli"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Valitse projekti"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Rooli"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Valitse rooli"
-
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Lisätty {0} osallistujaa projektiin"
-
-#: js/ProjectEditDialog.js:192
-msgid "Enter description"
-msgstr "Lisää kuvaus"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Kaikki projektini"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Oletus suosikki"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Oletus suosikki joka ladataan projekti ohjelmaa käynnistettäessä"
-
-#: Config.php:38
-msgid "Project Status Available"
-msgstr "Projektin tila saatavilla"
-
-#: Config.php:40
-msgid ""
-"Possible Project status. Please note that additional project status might "
-"impact other Projects systems on export or syncronisation."
-msgstr "Mahdolliset projektin tilat. Huomaathan, että lisätyt tilat eivät välttämättä välity oikein muihin projektinhallintajärjestelmiin."
-
-#: Config.php:47
-msgid "On hold"
-msgstr "Odottamassa"
-
-#: Config.php:48
-msgid "Completed"
-msgstr "Valmis"
-
-#: Config.php:49
-msgid "Cancelled"
-msgstr "Peruttu"
-
-#: Config.php:50
-msgid "In process"
-msgstr "Työn alla"
-
-#: Config.php:56
-msgid "Project Attendee Role Available"
-msgstr "Projektin osallistujan rooli saatavilla"
-
-#: Config.php:58
-msgid ""
-"Possible Project attendee roles. Please note that additional project "
-"attendee roles might impact other Projects systems on export or "
-"syncronisation."
-msgstr "Mahdolliset osallistujien roolit. Huomaathan, että lisätyt roolit eivät välttämättä välity oikein muihin projektinhallintajärjestelmiin."
-
-#: Config.php:65
-msgid "Coworker"
-msgstr "Aliurakoitsija"
-
-#: Config.php:66
-msgid "Responsible"
-msgstr "Vastuuhenkilö"
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's hemkilökohtaisesta projektista"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Tagit"
 
 #: Setup/Initialize.php:36
 msgid "All my open projects"
@@ -203,6 +158,46 @@ msgstr "Odottavat projektit"
 msgid "My projects that are on hold"
 msgstr "Odottamassa olevat projektini"
 
+#: Config.php:38
+msgid "Available Project Status"
+msgstr ""
+
+#: Config.php:40
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
+msgstr "Mahdolliset projektin tilat. Huomaathan, että lisätyt tilat eivät välttämättä välity oikein muihin projektinhallintajärjestelmiin."
+
+#: Config.php:47
+msgid "On hold"
+msgstr "Odottamassa"
+
+#: Config.php:48
+msgid "Completed"
+msgstr "Valmis"
+
+#: Config.php:49
+msgid "Cancelled"
+msgstr "Peruttu"
+
+#: Config.php:50
+msgid "In process"
+msgstr "Työn alla"
+
+#: Config.php:56
+msgid "Available Project Attendee Role"
+msgstr ""
+
+#: Config.php:58
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+msgstr "Mahdolliset osallistujien roolit. Huomaathan, että lisätyt roolit eivät välttämättä välity oikein muihin projektinhallintajärjestelmiin."
+
+#: Config.php:65
+msgid "Coworker"
+msgstr "Aliurakoitsija"
+
+#: Config.php:66
+msgid "Responsible"
+msgstr "Vastuuhenkilö"
+
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"
 msgstr "Hallinnoi projektin jaettuja suosikkeja"
@@ -210,3 +205,9 @@ msgstr "Hallinnoi projektin jaettuja suosikkeja"
 #: Acl/Rights.php:91
 msgid "Create new shared project favorites"
 msgstr "Luo projektille uusi jaettu suosikki"
+
+#~ msgid "Project Status Available"
+#~ msgstr "Projektin tila saatavilla"
+
+#~ msgid "Project Attendee Role Available"
+#~ msgstr "Projektin osallistujan rooli saatavilla"

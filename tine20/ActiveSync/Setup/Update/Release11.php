@@ -18,11 +18,39 @@
 class ActiveSync_Setup_Update_Release11 extends Setup_Update_Abstract
 {
     /**
-     * update to 12.0
+     * update to 11.1
      *
      * @return void
      */
     public function update_0()
+    {
+        if (!$this->_backend->columnExists('monitor_lastping', 'acsync_device')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>monitor_lastping</name>
+                    <type>integer</type>
+                    <default>0</default>
+                </field>
+            ');
+            $this->_backend->addCol('acsync_device', $declaration);
+
+            $this->setTableVersion('acsync_device', '7');
+        }
+
+        $scheduler = Tinebase_Core::getScheduler();
+        if (!$scheduler->hasTask('ActiveSync_Controller_Device::monitorDeviceLastPingTask')) {
+            ActiveSync_Scheduler_Task::addMonitorDeviceLastPingTask($scheduler);
+        }
+
+        $this->setApplicationVersion('ActiveSync', '11.1');
+    }
+
+    /**
+     * update to 12.0
+     *
+     * @return void
+     */
+    public function update_1()
     {
         $this->setApplicationVersion('ActiveSync', '12.0');
     }

@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -37,7 +37,28 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @var array
      */
-    protected $_configuredModels = array('Employee', 'Account', 'ExtraFreeTime', 'Contract', 'FreeDay', 'FreeTime', 'CostCenter', 'WorkingTime', 'Break');
+    protected $_configuredModels = [
+        HumanResources_Model_BLDailyWTReport_BreakTimeConfig::MODEL_NAME_PART,
+        HumanResources_Model_BLDailyWTReport_Config::MODEL_NAME_PART,
+        HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::MODEL_NAME_PART,
+        'Contract',
+        'CostCenter',
+        'Employee',
+        'Account',
+        HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
+        'ExtraFreeTime',
+        'FreeDay',
+        'FreeTime',
+        HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
+        HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
+        HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
+        HumanResources_Model_Stream::MODEL_NAME_PART,
+        HumanResources_Model_StreamModality::MODEL_NAME_PART,
+        HumanResources_Model_StreamModalReport::MODEL_NAME_PART,
+        HumanResources_Model_WageType::MODEL_NAME_PART,
+        HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
+    ];
+
     protected $_defaultModel = 'Employee';
     
     /**
@@ -46,6 +67,108 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function __construct()
     {
         $this->_applicationName = 'HumanResources';
+        if (! HumanResources_Config::getInstance()->featureEnabled(
+            HumanResources_Config::FEATURE_WORKING_TIME_ACCOUNTING)
+        ) {
+            $this->_configuredModels = array_diff($this->_configuredModels, [
+                HumanResources_Model_BLDailyWTReport_BreakTimeConfig::MODEL_NAME_PART,
+                HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::MODEL_NAME_PART,
+                HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
+                HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
+                HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
+                HumanResources_Model_WageType::MODEL_NAME_PART,
+            ]);
+        }
+    }
+
+    public function searchStreams($filter, $paging)
+    {
+        return $this->_search($filter, $paging, HumanResources_Controller_Stream::getInstance(),
+            HumanResources_Model_Stream::class);
+    }
+
+    public function saveStream($data)
+    {
+        return $this->_save($data, HumanResources_Controller_Stream::getInstance(), HumanResources_Model_Stream::class);
+    }
+
+    public function generateStreamReport($streamId)
+    {
+        $stremCtrl = HumanResources_Controller_Stream::getInstance();
+        $stream = $stremCtrl->get($streamId);
+
+        $expander = new Tinebase_Record_Expander(HumanResources_Model_Stream::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                HumanResources_Model_Stream::FLD_STREAM_MODALITIES  => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        HumanResources_Model_StreamModality::FLD_REPORTS => []
+                    ],
+                ],
+            ],
+        ]);
+        $expander->expand(new Tinebase_Record_RecordSet(HumanResources_Model_Stream::class, [$stream]));
+
+        $stremCtrl->createReports($stream);
+
+        return $this->_recordToJson($stremCtrl->get($streamId));
+    }
+
+    public function saveMonthlyWTReport($data)
+    {
+        if (!isset($data['id']) || empty($data['id'])) {
+            throw new Tinebase_Exception_Record_NotAllowed('monthly wt reports can\'t be created');
+        }
+
+        $mwtrCtrl = HumanResources_Controller_MonthlyWTReport::getInstance();
+        $oldContext = $mwtrCtrl->getRequestContext() ?: [];
+
+        try {
+            $mwtrCtrl->setRequestContext([HumanResources_Controller_MonthlyWTReport::RC_JSON_REQUEST => true]);
+            return $this->_save($data, $mwtrCtrl, HumanResources_Model_MonthlyWTReport::class);
+
+        } finally {
+            $mwtrCtrl->setRequestContext($oldContext);
+        }
+    }
+
+    public function saveDailyWTReport($data)
+    {
+        if (!isset($data['id']) || empty($data['id'])) {
+            throw new Tinebase_Exception_Record_NotAllowed('daily wt reports can\'t be created');
+        }
+
+        $dwtrCtrl = HumanResources_Controller_DailyWTReport::getInstance();
+        $oldContext = $dwtrCtrl->getRequestContext() ?: [];
+
+        try {
+            $dwtrCtrl->setRequestContext([HumanResources_Controller_DailyWTReport::RC_JSON_REQUEST => true]);
+            return $this->_save($data, $dwtrCtrl, HumanResources_Model_DailyWTReport::class);
+
+        } finally {
+            $dwtrCtrl->setRequestContext($oldContext);
+        }
+    }
+
+    /**
+     * calculate all daily working time reports
+     *
+     * @return void
+     */
+    public function calculateAllDailyWTReports()
+    {
+        // NOTE: this method calcs daily & monthly
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports();
+    }
+
+    /**
+     * calculate all monthly working time reports
+     *
+     * @return void
+     */
+    public function calculateAllMonthlyWTReports()
+    {
+        // NOTE: this method calcs daily & monthly
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports();
     }
 
     /**
@@ -105,43 +228,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
-        $aids = array();
-        $fids = array();
-        
-        // TODO: resolve this in controller
-        foreach(array('vacation', 'sickness') as $type) {
-            if (! empty($employee[$type]) && is_array($employee[$type])) {
-                foreach($employee[$type] as $v) {
-                    $aids[] = $v['account_id'];
-                    $fids[] = $v['id'];
-                }
-            }
-        }
-        
-        $aids = array_unique($aids);
-        $fids = array_unique($fids);
-        $acs = HumanResources_Controller_Account::getInstance()->getMultiple($aids);
-        $freedayFilter = new HumanResources_Model_FreeDayFilter(array());
-        $freedayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $fids)));
-        $fds = HumanResources_Controller_FreeDay::getInstance()->search($freedayFilter);
-        $fds->setTimezone(Tinebase_Core::getUserTimezone());
-        
-        foreach(array('vacation', 'sickness') as $type) {
-            if (! empty($employee[$type]) && is_array($employee[$type])) {
-                for ($i = 0; $i < count($employee[$type]); $i++) {
-                    
-                    $account = $acs->filter('id', $employee[$type][$i]['account_id'])->getFirstRecord();
-                    
-                    if ($account) {
-                        $employee[$type][$i]['account_id'] = $account->toArray();
-                    }
-                    
-                    $freedays = $fds->filter('freetime_id', $employee[$type][$i]['id']);
-                    $employee[$type][$i]['freedays'] = $freedays->toArray();
-                }
-            }
-        }
-        
         return $employee;
     }
 
@@ -177,37 +263,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
         }
-        
-        foreach(array('vacation', 'sickness') as $prop) {
-            if (! empty($recordData[$prop])) {
-                for ($i = 0; $i < count($recordData[$prop]); $i++) {
-                    // add account id by year if no account id is given (sickness)
-                    if (! $recordData[$prop][$i]['account_id']) {
-                        
-                        $date = new Tinebase_DateTime($recordData[$prop][$i]['firstday_date']);
-                        $year = $date->format('Y');
-                        
-                        if (! isset($this->_cachedAccountsOnSaveEmployee[$year])) {
-                            $filter = new HumanResources_Model_AccountFilter(array(array('field' => 'year', 'operator' => 'equals', 'value' => $year)));
-                            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $recordData['id'])));
-                            $account = HumanResources_Controller_Account::getInstance()->search($filter)->getFirstRecord();
-                            if (! $account) {
-                                throw new HumanResources_Exception_NoAccount();
-                            }
-                            $this->_cachedAccountsOnSaveEmployee[$year] = $account;
-                        } else {
-                            $account = $this->_cachedAccountsOnSaveEmployee[$year];
-                        }
-                        
-                        $recordData[$prop][$i]['account_id'] = $account->getId();
-                    }
-                    // flat account id
-                    if (is_array($recordData[$prop][$i]['account_id'])) {
-                        $recordData[$prop][$i]['account_id'] = $recordData[$prop][$i]['account_id']['id'];
-                    }
-                }
-            }
-        }
+
         // auto set dates of the first contract to dates of the employee, if none are given
         if (! empty($recordData['contracts'])) {
             
@@ -285,7 +341,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchWorkingTimes($filter, $paging)
     {
-        return $this->_search($filter, $paging, HumanResources_Controller_WorkingTime::getInstance(), 'HumanResources_Model_WorkingTimeFilter');
+        return $this->_search($filter, $paging, HumanResources_Controller_WorkingTimeScheme::getInstance(),
+            'HumanResources_Model_WorkingTimeSchemeFilter');
     }
 
     /**
@@ -296,7 +353,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getWorkingTime($id)
     {
-        return $this->_get($id, HumanResources_Controller_WorkingTime::getInstance());
+        return $this->_get($id, HumanResources_Controller_WorkingTimeScheme::getInstance());
     }
 
     /**
@@ -307,7 +364,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveWorkingTime($recordData)
     {
-        return $this->_save($recordData, HumanResources_Controller_WorkingTime::getInstance(), 'WorkingTime');
+        return $this->_save($recordData, HumanResources_Controller_WorkingTimeScheme::getInstance(), 'WorkingTimeScheme');
     }
 
     /**
@@ -318,7 +375,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteWorkingTime($ids)
     {
-        return $this->_delete($ids, HumanResources_Controller_WorkingTime::getInstance());
+        return $this->_delete($ids, HumanResources_Controller_WorkingTimeScheme::getInstance());
     }
 
     /**
@@ -371,7 +428,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string $_employeeId
      * @param integer $_year
-     * @param string $_freeTimeId
+     * @param string $_freeTimeId (filters out current freetimes, sets minDate)
+     *  NOTE: minDate/maxDate => year is used for remainingVacation calculation
+     *        remainingVacation is the sum of vacations from all contracts
+     *        of this year
      * @param string $_accountId
      */
     public function getFeastAndFreeDays($_employeeId, $_year = NULL, $_freeTimeId = NULL, $_accountId = NULL)
@@ -468,8 +528,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // find out disabled days for the different contracts
         foreach ($contracts as $contract) {
             $json = $contract->getWorkingTimeJson();
-            $startDay = ($contract->start_date == NULL) ? $minDate : ($contract->start_date < $minDate) ? $minDate : $contract->start_date;
-            $stopDay  = ($contract->end_date == NULL)   ? $maxDate : ($contract->end_date > $maxDate)   ? $maxDate : $contract->end_date;
+            $startDay = ($contract->start_date == NULL) ? $minDate : (($contract->start_date < $minDate) ? $minDate : $contract->start_date);
+            $stopDay  = ($contract->end_date == NULL)   ? $maxDate : (($contract->end_date > $maxDate)   ? $maxDate : $contract->end_date);
 
             if ($first) {
                 $firstDay = clone $startDay;
@@ -477,13 +537,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             
             // find out weekdays to disable
-            if (is_object($json)) {
-                foreach($json->days as $index => $hours) {
+            if (is_array($json)) {
+                foreach($json['days'] as $index => $hours) {
                     $hours = intval($hours);
                     if ($hours === 0) {
                         $day = clone $startDay;
                         $day->setWeekDay(($index+1));
-                        while ($day->compare($stopDay) == -1) {
+                        if ($day->compare($startDay) < 0) $day->addWeek(1);
+                        while ($day->compare($stopDay) < 1) {
                             $exdate = clone $day;
                             $exdate->setTimezone(Tinebase_Core::getUserTimezone());
                             $excludeDates[] = $exdate;
@@ -533,12 +594,12 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $acceptedVacationTimes = $vacationTimes->filter('status', 'ACCEPTED');
         
-        // search all sickness times for the interval
-        $sicknessTimesFilter = clone $freeTimeFilter;
-        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'type', 'operator' => 'equals', 'value' => 'sickness')));
-        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $fddMin)));
-        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $fddMax)));
-        $sicknessTimes = $ftController->search($sicknessTimesFilter);
+//        // search all sickness times for the interval
+//        $sicknessTimesFilter = clone $freeTimeFilter;
+//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'type', 'operator' => 'equals', 'value' => 'sickness')));
+//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $fddMin)));
+//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $fddMax)));
+//        $sicknessTimes = $ftController->search($sicknessTimesFilter);
         
         // search free days belonging the found free times
         
@@ -553,11 +614,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $remainingVacation = $remainingVacation - $fdController->search($accountFreeDayFilter)->count();
         }
         
-        // find all vacation days of the period
-        $vacationDayFilter = clone $freeDayFilter;
-        $vacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)));
-        
-        $vacationDays = $fdController->search($vacationDayFilter);
+//        // find all vacation days of the period
+//        $vacationDayFilter = clone $freeDayFilter;
+//        $vacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)));
+//
+//        $vacationDays = $fdController->search($vacationDayFilter);
         
         // find out accepted vacation days. Vacation days will be substracted from remainingVacation only if they are accepted,
         // but they will be shown in the freetime edit dialog
@@ -578,13 +639,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $extraFreeTimes = NULL;
         }
         
-        // find all sickness days of the period
-        $sicknessDayFilter = clone $freeDayFilter;
-        $sicknessDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $sicknessTimes->id)));
-        $sicknessDays = $fdController->search($sicknessDayFilter);
+//        // find all sickness days of the period
+//        $sicknessDayFilter = clone $freeDayFilter;
+//        $sicknessDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $sicknessTimes->id)));
+//        $sicknessDays = $fdController->search($sicknessDayFilter);
         
         $ownFreeDays = NULL;
-        
+
+        // "own" means the freeDays of the currently loaded freeTime!
         if ($_freeTimeId) {
             $ownFreeDaysFilter = clone $freeDayFilter;
             $ownFreeDaysFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => array($_freeTimeId))));
@@ -592,17 +654,26 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $remainingVacation = $remainingVacation - $ownFreeDays->count();
             $ownFreeDays = $ownFreeDays->toArray();
         }
-        
+
+        $allFreeTimes = $ftController->search($freeTimeFilter);
+        $allFreeDayFilter = clone $freeDayFilter;
+        $allFreeDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $allFreeTimes->id)));
+        $allFreeDays = $fdController->search($allFreeDayFilter);
+        $freeTimeTypes = HumanResources_Controller_FreeTimeType::getInstance()->getAll();
+
         // TODO: remove results property, just return results array itself
         return array(
             'results' => array(
                 'remainingVacation' => floor($remainingVacation),
                 'extraFreeTimes'    => $extraFreeTimes,
-                'vacationDays'      => $vacationDays->toArray(),
-                'sicknessDays'      => $sicknessDays->toArray(),
+//                'vacationDays'      => $vacationDays->toArray(),
+//                'sicknessDays'      => $sicknessDays->toArray(),
                 'excludeDates'      => $excludeDates,
                 'ownFreeDays'       => $ownFreeDays,
                 'allVacation'       => $allVacation,
+                'freeTimeTypes'     => $freeTimeTypes->toArray(),
+                'allFreeTimes'      => $allFreeTimes->toArray(),
+                'allFreeDays'       => $allFreeDays->toArray(),
                 'feastDays'         => $feastDays,
                 'contracts'         => $contracts->toArray(),
                 'employee'          => $employee->toArray(),

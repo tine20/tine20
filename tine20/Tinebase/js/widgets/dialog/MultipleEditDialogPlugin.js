@@ -203,7 +203,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             ff.triggerEvents = ['blur'];
             
             // special events for special field types
-            if (ff.isXType('tinedurationspinner')) {
+            if (ff.isXType('durationspinner')) {
                 ff.emptyOnZero = true;
                 ff.startEvents = ['focus', 'spin'];
                 ff.triggerEvents = ['spin', 'blur'];
@@ -285,7 +285,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
     
             ff.multipleInitialized = true;
 
-            if (ff.isXType('tinedurationspinner') || ff.isXType('checkbox')) {
+            if (ff.isXType('durationspinner') || ff.isXType('checkbox')) {
                 ff.fireEvent(ff.triggerEvents[1]);
             }
             
@@ -337,13 +337,18 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             return;
         }
         
+        if (formField.isXType('combo') || formField.isXType('extuxclearabledatefield') || formField.isXType('datefield') || formField.isXType('uxspinner'))
+        {
+            left = left + ';top: 3px';
+        }
+        
         // create Button
         formField.multiButton = new Ext.Element(document.createElement('img'));
         formField.multiButton.set({
             'src': Ext.BLANK_IMAGE_URL,
             'ext:qtip': Ext.util.Format.htmlEncode(i18n._('Delete value from all selected records')),
             'class': 'tinebase-editmultipledialog-clearer',
-            'style': 'left:' + left
+            'style': 'left:' + left,
             });
         
         formField.multiButton.addClassOnOver('over');
@@ -554,7 +559,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if (field.formField.isXType('timefield')) {
                 var value = this.interRecord.get(field.key);
                 if (value) {
-                    field.formField.setValue(new Date(value));
+                    field.formField.setValue(Date.parseDate(value, Date.patterns.ISO8601Time));
                 }
             }
             // handle DateTimeFields to set original value
@@ -680,7 +685,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.changedHuman += '<li><span style="font-weight:bold">' + label + ':</span> ';
             if (ff.isXType('checkbox')) {
                     renderer = Tine.Tinebase.common.booleanRenderer;
-                } else if (ff.isXType('tinedurationspinner')) {
+                } else if (ff.isXType('durationspinner')) {
                     renderer = Tine.Tinebase.common.minutesRenderer;
                 }
                 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Calendar_Model_Event</model>
+    <name>cal_default_vcalendar</name>
+    <type>export</type>
+    <favorite>true</favorite>
+    <scope>multi</scope>
+    <plugin>Calendar_Export_VCalendar</plugin>
+    <!-- _('VCalendar/ICS') -->
+    <label>VCalendar/ICS</label>
+    <!-- _('Export visible events to ics file') -->
+    <description>Export visible events to ics file</description>
+</config>

@@ -190,13 +190,12 @@ class Tinebase_TransactionManager
                  try {
                      call_user_func_array($callable[0], $callable[1]);
                  } catch (Exception $e) {
-                     // we don't want to fail after we commited. Otherwise a rollback maybe triggered outside which
-                     // actually can't rollback anything anymore as we already commited.
+                     // we don't want to fail after we committed. Otherwise a rollback maybe triggered outside which
+                     // actually can't rollback anything anymore as we already committed.
                      // So afterCommitCallbacks will fail "silently", they only log and go to sentry
                      Tinebase_Exception::log($e, false);
                  }
              }
-
 
          } else {
              if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");
@@ -260,10 +259,10 @@ class Tinebase_TransactionManager
     /**
      * register a callable to call just after the real commit happens
      *
-     * @param array $callable
+     * @param array|callable $callable
      * @param array $param
      */
-    public function registerAfterCommitCallback(array $callable, array $param = array())
+    public function registerAfterCommitCallback($callable, array $param = array())
     {
         $this->_afterCommitCallbacks[] = array($callable, $param);
     }
@@ -271,10 +270,10 @@ class Tinebase_TransactionManager
     /**
      * register a callable to call just before the rollback happens
      *
-     * @param array $callable
+     * @param array|callable $callable
      * @param array $param
      */
-    public function registerOnRollbackCallback(array $callable, array $param = array())
+    public function registerOnRollbackCallback($callable, array $param = array())
     {
         $this->_onRollbackCallbacks[] = array($callable, $param);
     }
@@ -295,5 +294,12 @@ class Tinebase_TransactionManager
     public function unitTestForceSkipRollBack($bool)
     {
         $this->_unitTestForceSkipRollBack = $bool;
+    }
+
+    public function unitTestRemoveTransactionable($_transactionable)
+    {
+        if (false !== ($pos = array_search($_transactionable, $this->_openTransactionables, true))) {
+            unset($this->_openTransactionables[$pos]);
+        }
     }
 }

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add transactions to move/create/delete/copy 
  */
@@ -56,6 +56,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @var bool
      */
     protected $_inCopyOrMoveNode = false;
+
+    /**
+     * where to throw on access to a quarantined node or not
+     *
+     * @var bool
+     */
+    protected $_throwOnGetQuarantined = true;
+
+    protected $_createNodeInBackendInterceptor = [];
     
     /**
      * holds the instance of the singleton
@@ -96,7 +105,22 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
-    
+
+    /**
+     * get/set whether to throw on access on quarantined file
+     *
+     * @param null|boolean $_val
+     * @return bool
+     */
+    public function doThrowOnGetQuarantined($_val = null)
+    {
+        $result = $this->_throwOnGetQuarantined;
+        if (null !== $_val) {
+            $this->_throwOnGetQuarantined = (bool)$_val;
+        }
+        return $result;
+    }
+
     /**
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::update()
@@ -213,7 +237,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             return $aclNode;
         }
 
-        if (! Tinebase_Core::getUser()->hasGrant(
+        $currentUser = Tinebase_Core::getUser();
+        if (! $currentUser->hasGrant(
             $record,
             Tinebase_Model_Grants::GRANT_ADMIN,
             'Tinebase_Model_Tree_Node')
@@ -232,7 +257,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         if (empty($record->acl_node) && !$nodePath->isToplevelPath()) {
             // acl_node empty -> remove acl
-            $node = $this->_backend->setAclFromParent($nodePath->statpath);
+            $node = $this->_backend->setAclFromParent($nodePath->statpath, true);
             $aclNode = $node->acl_node;
 
         } elseif ($record->acl_node === $record->getId() && isset($record->grants)) {
@@ -241,7 +266,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $record->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $record->grants);
             }
             $diff = $record->grants->diff($oldGrants);
-            if (!$diff->isEmpty() || $aclNode !== $record->acl_node) {
+            if (!$diff->isEmpty() || $oldRecord->acl_node !== $record->acl_node) {
+                $stillAdmin = false;
+                /** @var Tinebase_Model_Grants $grant */
+                foreach ($record->grants as $grant) {
+                    if ($grant->userHasGrant(Tinebase_Model_Grants::GRANT_ADMIN, $currentUser)) {
+                        $stillAdmin = true;
+                        break;
+                    }
+                }
+                if (!$stillAdmin) {
+                    throw new Tinebase_Exception_SystemGeneric('you can\'t remove your own admin grant'); // _("you can't remove your own admin grant")
+                }
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Setting new node grants.');
                 $this->_backend->setGrantsForNode($record, $record->grants);
@@ -251,14 +287,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         return $aclNode;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::getMultiple()
-     * 
-     * @return  Tinebase_Record_RecordSet
+     *
+     * @param array $_ids
+     * @param bool $_ignoreACL
+     * @param null|Tinebase_Record_Expander $_expander
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         foreach (($results = $this->_backend->getMultipleTreeNodes($_ids, $_ignoreACL)) as $node) {
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
@@ -300,7 +340,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
     {
         /** @var Tinebase_Model_Tree_Node $record */
-        $record = parent::get($_id, $_getRelatedData, $_getDeleted);
+        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+
+        if ($record->is_quarantined) {
+            throw new Filemanager_Exception_Quarantined('File is quarantined');
+        }
+
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
 
         $this->_backend->checkPathACL($nodePath, 'get');
@@ -405,10 +450,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected function _searchNodesRecursive($_filter, $_pagination)
     {
         $_filter->removeFilter('type');
-        $_filter->addFilter($_filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
+        $_filter->addFilter($_filter->createFilter('type', 'in', [Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_LINK]));
         $filter = clone $_filter;
         // prepend base path to original $_filter object! it is required for toArray() in the response array
-        $this->_prependBasePathToPathFilter($_filter);
+        $this->_ensurePathFilterPresent($_filter);
         $filter->removeFilter('path');
         $filter->removeFilter('recursive');
 
@@ -466,7 +511,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
-        $path = $this->_prependBasePathToPathFilter($_filter);
+        $path = $this->_ensurePathFilterPresent($_filter);
         
         $this->_backend->checkPathACL($path, $_action);
         
@@ -477,7 +522,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return Tinebase_Model_Tree_Node_Path
      */
-    protected function _prependBasePathToPathFilter(Tinebase_Model_Filter_FilterGroup $_filter)
+    protected function _ensurePathFilterPresent(Tinebase_Model_Filter_FilterGroup $_filter)
     {
         if ($_filter === NULL) {
             $_filter = new Tinebase_Model_Tree_Node_Filter();
@@ -498,15 +543,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $pathFilter = $pathFilters[0];
         }
 
-        // add base path and check grants
+        // check path is valid or reset it to root aka /
         try {
-            $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($pathFilter->getValue()));
+            $path = Tinebase_Model_Tree_Node_Path::createFromPath($pathFilter->getValue());
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Could not determine path, setting root path (' . $e->getMessage() . ')');
             $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath('/'));
+            $pathFilter->setValue($path);
         }
-        $pathFilter->setValue($path);
 
         return $path;
     }
@@ -555,7 +600,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _getOtherUserNodes()
     {
-        $result = $this->_backend->getOtherUsers(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
+        $result = $this->_backend->getOtherUsers(Tinebase_Core::getUser(), $this->_modelName, Tinebase_Model_Grants::GRANT_READ);
         return $result;
     }
 
@@ -602,16 +647,19 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             throw new Filemanager_Exception('Is a directory');
         }
         
-        return $this->_backend->stat($_path->statpath, $_revision);
+        $node = $this->_backend->stat($_path->statpath, $_revision);
+        if ($node->is_quarantined) {
+            throw new Filemanager_Exception_Quarantined('File is quarantined');
+        }
+
+        return $node;
     }
     
     /**
      * add base path
      * 
-     * @param Tinebase_Model_Tree_Node_PathFilter $_pathFilter
+     * @param string $_path
      * @return string
-     *
-     * TODO should be removed/replaced
      */
     public function addBasePath($_path)
     {
@@ -638,7 +686,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $basePath = $this->_backend->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
         $basePath .= '/folders';
 
-        return preg_replace('@^' . preg_quote($basePath) . '@', '', $_path);
+        return preg_replace('@^' . preg_quote($basePath, '@') . '@', '', $_path);
     }
 
     /**
@@ -655,7 +703,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $filter->removeFilter('path');
             $filter->removeFilter('recursive');
             $filter->removeFilter('type');
-            $filter->addFilter($filter->createFilter('type', 'equals', Tinebase_Model_Tree_FileObject::TYPE_FILE));
+            $filter->addFilter($filter->createFilter('type', 'in', [Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_LINK]));
             $filter = new Tinebase_Model_Tree_Node_Filter($filter->toArray(), '', array('nameCaseInSensitive' => true));
             $result = $this->_backend->searchNodesCount($filter);
         } else {
@@ -675,22 +723,26 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     /**
      * create node(s)
      * 
-     * @param string|array $_filenames
-     * @param string $_type directory or file
+     * @param array $_filenames
+     * @param array $_types directory or file
      * @param array $_tempFileIds
      * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * @throws Filemanager_Exception_NodeExists
      */
-    public function createNodes($_filenames, $_type, $_tempFileIds = array(), $_forceOverwrite = FALSE)
+    public function createNodes($_filenames, $_types, $_tempFileIds = array(), $_forceOverwrite = FALSE)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $nodeExistsException = NULL;
+        if (!is_array($_filenames)) $_filenames = [$_filenames];
+        if (!is_array($_types)) $_types = array_fill(0, count($_filenames), $_types);
         
-        foreach ((array) $_filenames as $idx => $filename) {
+        foreach ($_filenames as $idx => $filename) {
             $tempFileId = (isset($_tempFileIds[$idx])) ? $_tempFileIds[$idx] : NULL;
+            $type = isset($_types[$idx]) ? $_types[$idx] : NULL;
 
             try {
-                $node = $this->_createNode($filename, $_type, $tempFileId, $_forceOverwrite);
+                $node = $this->_createNode($filename, $type, $tempFileId, $_forceOverwrite);
                 if ($node) {
                     $result->addRecord($node);
                 }
@@ -711,6 +763,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * 
      * @param Filemanager_Exception_NodeExists $_fene
      * @param Filemanager_Exception_NodeExists|NULL $_parentNodeExistsException
+     * @return Filemanager_Exception_NodeExists
      */
     protected function _handleNodeExistsException($_fene, $_parentNodeExistsException = NULL)
     {
@@ -746,11 +799,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _createNode($_path, $_type, $_tempFileId = NULL, $_forceOverwrite = FALSE)
     {
-        if (! in_array($_type, array(Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_FOLDER))) {
-            throw new Tinebase_Exception_InvalidArgument('Type ' . $_type . 'not supported.');
-        } 
-
-        $path = ($_path instanceof Tinebase_Model_Tree_Node_Path) 
+        $path = ($_path instanceof Tinebase_Model_Tree_Node_Path)
             ? $_path : Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_path));
         $parentPathRecord = $path->getParent();
         $existingNode = null;
@@ -785,8 +834,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     $this->resolveGrants($existingNode);
                     return $existingNode;
 
-                } elseif ($existingNode->type !== $_type) {
+                } elseif ($existingNode->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER && $_type !==
+                        Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
                     throw new Tinebase_Exception_SystemGeneric('Can not overwrite a folder with a file');
+
+                }  elseif ($existingNode->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER && $_type ===
+                    Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                    throw new Tinebase_Exception_SystemGeneric('Can not overwrite a file with a folder');
 
                 } else {
                     // check if a new (size 0) file is overwritten
@@ -798,8 +852,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     }
                 }
             } else if (! $_forceOverwrite) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' ' . $fene);
                 throw $fene;
             }
         }
@@ -811,7 +863,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $this->resolveGrants($newNode);
         return $newNode;
     }
-    
+
+    public function registerCreateNodeInBackendInterceptor($callable)
+    {
+        $this->_createNodeInBackendInterceptor[] = $callable;
+    }
+
     /**
      * create node in backend
      * 
@@ -826,29 +883,38 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
 
-        $node = NULL;
+        $node = null;
+        foreach ($this->_createNodeInBackendInterceptor as $callable) {
+            if (null !== ($node = call_user_func($callable, $_statpath, $_type, $_tempFileId))) {
+                return $node;
+            }
+        }
         switch ($_type) {
-            case Tinebase_Model_Tree_FileObject::TYPE_FILE:
-                if (null === $_tempFileId) {
-                    $this->_backend->createFileTreeNode($this->_backend->stat(dirname($_statpath)), basename($_statpath));
-                } else {
-                    try {
-                        $this->_backend->copyTempfile($_tempFileId, $_statpath);
-                    } catch (Tinebase_Exception_Record_NotAllowed $e) {
-                        if ('quota exceeded' === $e->getMessage()) {
-                            $this->_backend->unlink($_statpath);
-                        }
-                        throw $e;
-                    }
-                }
-                break;
-
             case Tinebase_Model_Tree_FileObject::TYPE_FOLDER:
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($_statpath);
                 if ($path->getParent()->isToplevelPath()) {
                     $node = $this->_backend->createAclNode($_statpath);
                 } else {
                     $node = $this->_backend->mkdir($_statpath);
+                }
+                break;
+
+            default:
+                if ($_type === Tinebase_Model_Tree_FileObject::TYPE_FILE) {
+                    $_type = null;
+                }
+                if (! $_tempFileId) {
+                    $this->_backend->createFileTreeNode($this->_backend->stat(dirname($_statpath)),
+                        basename($_statpath), Tinebase_Model_Tree_FileObject::TYPE_FILE, $_type);
+                } else {
+                    try {
+                        $this->_backend->copyTempfile($_tempFileId, $_statpath, true);
+                    } catch (Tinebase_Exception_Record_NotAllowed $e) {
+                        if ('quota exceeded' === $e->getMessage()) {
+                            $this->_backend->unlink($_statpath);
+                        }
+                        throw $e;
+                    }
                 }
                 break;
         }
@@ -878,7 +944,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $existsException = new Filemanager_Exception_NodeExists();
                 $existsException->addExistingNodeInfo($_node);
                 throw $existsException;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Could not find node ...');
             }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Path does not exist yet');
         }
     }
     
@@ -894,8 +966,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         $ownerId = ($_type === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) ? Tinebase_Core::getUser()->getId() : NULL;
         try {
-            $existingContainer = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_applicationName, $_name, $_type, $ownerId);
+            $existingContainer = Tinebase_Container::getInstance()->getContainerByName(Filemanager_Model_Node::class,
+                $_name, $_type, $ownerId);
             throw new Filemanager_Exception_NodeExists('Container ' . $_name . ' of type ' . $_type . ' already exists.');
         } catch (Tinebase_Exception_NotFound $tenf) {
             // go on
@@ -994,7 +1066,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (isset($path)) {
-                $grantRecord = $this->_backend->createAclNode($path);
+                try {
+                    $grantRecord = $this->_backend->createAclNode($path);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // some strange race condition ...
+                    throw $tenf;
+                }
             } else {
                 throw $tenf;
             }
@@ -1217,10 +1294,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => Tinebase_Model_Tree_Node_Path::removeAppIdFromPath(
-                $_source->flatpath, 
-                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)
-            ),
+            'value'    => $_source->flatpath,
         )));
         $result = $this->search($filter);
         if (count($result) > 0) {
@@ -1424,57 +1498,93 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * file message
+     * file message and returns parent node
      *
-     * @param                          $targetPath
+     * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
-     * @returns Filemanager_Model_Node
-     * @throws
+     * @return Filemanager_Model_Node|null
      * @throws Filemanager_Exception_NodeExists
      * @throws Tinebase_Exception_AccessDenied
-     * @throws null
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function fileMessage($targetPath, Felamimail_Model_Message $message)
+    public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
     {
-        // save raw message in temp file
-        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message);
-        $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
-        file_put_contents($tempFilename, $rawContent);
-        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
+        if ($location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
+            // file message as attachment
+            return parent::fileMessage($location, $message);
+        }
+        $targetPath = $this->_getLocationTargetPath($location);
 
-        $filename = $this->_getMessageNodeFilename($message);
-
-        $emlNode = $this->createNodes(
-            array($targetPath . '/' . $filename),
-            Tinebase_Model_Tree_FileObject::TYPE_FILE,
-            array($tempFile->getId()),
-            /* $_forceOverwrite */ true
-        )->getFirstRecord();
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
+        $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
+        $emlNode = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile);
+        if (! $emlNode) {
+            return null;
+        }
 
         $emlNode->description = $this->_getMessageNodeDescription($message);
         $emlNode->last_modified_time = Tinebase_DateTime::now();
-        return $this->update($emlNode);
+        $this->update($emlNode);
+
+        $parent = $this->get($emlNode->parent_id);
+        Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $parent, $emlNode);
+
+        return $parent;
     }
 
-    /**
-     * create node filename from message data
-     *
-     * @param $message
-     * @return string
-     */
-    protected function _getMessageNodeFilename($message)
+    protected function _createNodeFromTempfile($targetPath, $filename, $tempFile)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r($message->toArray(), true));
+        try {
+            $node = $this->createNodes(
+                array($targetPath . '/' . $filename),
+                Tinebase_Model_Tree_FileObject::TYPE_FILE,
+                array($tempFile->getId()),
+                /* $_forceOverwrite */
+                false
+            )->getFirstRecord();
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $fene->getMessage());
+            return null;
+        }
 
-        // remove '/' and '\' from name as this might break paths
-        $subject = preg_replace('/[\/\\\]+/', '_', $message->subject);
-        // remove possible harmful utf-8 chars
-        // TODO should not be enabled by default (configurable?)
-        $subject = Tinebase_Helper::mbConvertTo($subject, 'ASCII');
-        $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageuid . $message->folder_id), 0, 10) . '.eml';
+        return $node;
+    }
 
-        return $name;
+    protected function _getLocationTargetPath($location)
+    {
+        if (isset($location['record_id']['path'])) {
+            $targetPath = $location['record_id']['path'];
+        } else {
+            if (is_array($location['record_id'])) {
+                if (! isset($location['record_id']['id'])) {
+                    throw new Tinebase_Exception_InvalidArgument('path or id required in record_id');
+                }
+                $recordId = $location['record_id']['id'];
+            } else {
+                $recordId = $location['record_id'];
+            }
+            $node = $this->get($recordId);
+            $targetPath = $node->path;
+        }
+        return $targetPath;
+    }
+
+    public function fileMessageAttachment($location, $message, $attachment)
+    {
+        if ($location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
+            return parent::fileMessageAttachment($location, $message, $attachment);
+        }
+
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile(
+            $message,
+            $attachment['partId']);
+
+        $filename = $this->_getfiledAttachmentFilename($attachment, $message);
+        $targetPath = $this->_getLocationTargetPath($location);
+        $node = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile);
+
+        return $node ? $this->get($node->parent_id) : false;
     }
 
     /**
@@ -1535,10 +1645,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $description .= "\n";
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Description: ' . $description);
-
-        return $description;
+        return Tinebase_Core::filterInputForDatabase($description);
     }
 
     /**

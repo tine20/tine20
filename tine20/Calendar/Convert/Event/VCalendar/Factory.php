@@ -26,10 +26,11 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_EMCLIENT7   = 'emclient7';
     const CLIENT_TINE        = 'tine';
     const CLIENT_DAVDROID    = 'davdroid';
-    const CLIENT_BUSYCAL	 = 'busycal';
     const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
+    const CLIENT_FANTASTICAL = 'fantastical';
+    const CLIENT_BUSYCAL     = 'busycal';
     const CLIENT_EVOLUTION   = 'evolution';
-    
+
     /**
      * cache parsed user-agent strings
      * 
@@ -52,7 +53,7 @@ class Calendar_Convert_Event_VCalendar_Factory
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE:
                 return new Calendar_Convert_Event_VCalendar_Iphone($_version);
-                
+
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_BUSYCAL:
                 return new Calendar_Convert_Event_VCalendar_BusyCal($_version);
                 
@@ -77,6 +78,9 @@ class Calendar_Convert_Event_VCalendar_Factory
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER:
                 return new Calendar_Convert_Event_VCalendar_CalDAVSynchronizer($_version);
+
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_FANTASTICAL:
+                return new Calendar_Convert_Event_VCalendar_Fantastical($_version);
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE:
                 return new Calendar_Convert_Event_VCalendar_Tine($_version);
@@ -113,7 +117,7 @@ class Calendar_Convert_Event_VCalendar_Factory
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_BusyCal::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_BUSYCAL;
             $version = $matches['version'];
-                
+
         // KDE
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_KDE::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE;
@@ -133,7 +137,7 @@ class Calendar_Convert_Event_VCalendar_Factory
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT;
 
-        
+
         // Evolution
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_Evolution::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EVOLUTION;
@@ -153,6 +157,12 @@ class Calendar_Convert_Event_VCalendar_Factory
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_CalDAVSynchronizer::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
             $version = $matches['version'];
+
+        // Fantastical
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_Fantastical::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_FANTASTICAL;
+            $version = $matches['version'];
+
         } else {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
             $version = null;
@@ -176,7 +186,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     {
         $result = false;
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
             list($backend, $version) = self::parseUserAgent($_userAgent);
             switch ($backend) {
@@ -198,7 +208,7 @@ class Calendar_Convert_Event_VCalendar_Factory
                         ' Client ' . $backend . ' version ' . $version . ' supports SyncToken.');
             }
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
         }
         return $result;

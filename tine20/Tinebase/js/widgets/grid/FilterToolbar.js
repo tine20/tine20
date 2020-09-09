@@ -84,10 +84,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @type {Boolean}
      */
     customFilterSorting: false,
-    
-    filterFieldWidth: 240,
-    filterValueWidth: 200,
-    
+
     /**
      * @cfg {String} row prefix (defaults to i18n._('Show'))
      */
@@ -150,9 +147,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     '<td class="tw-ftb-frow-pbutton"></td>',
                     '<td class="tw-ftb-frow-mbutton"></td>',
                     '<td class="tw-ftb-frow-prefix">{prefix}</td>',
-                    '<td class="tw-ftb-frow-field" width="' + this.filterFieldWidth + 'px">{field}</td>',
-                    '<td class="tw-ftb-frow-operator" width="90px" >{operator}</td>',
-                    '<td class="tw-ftb-frow-value" width="' + this.filterValueWidth + 'px">{value}</td>',
+                    '<td class="tw-ftb-frow-field">{field}</td>',
+                    '<td class="tw-ftb-frow-operator">{operator}</td>',
+                    '<td class="tw-ftb-frow-value">{value}</td>',
                     '<td class="tw-ftb-frow-searchbutton"></td>',
                     //'<td class="tw-ftb-frow-deleteallfilters"></td>',
                     //'<td class="tw-ftb-frow-savefilterbutton"></td>',
@@ -212,7 +209,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             handler: this.onLoadFilter
         });
     },
-    
+
     /**
      * @private
      */
@@ -364,10 +361,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // field
         filter.formFields.field = new Ext.form.ComboBox({
             filter: filter,
-            width: this.filterFieldWidth,
             minListWidth: 240, // will be ignored if width is heigher
             resizable: true,
-            id: 'tw-ftb-frow-fieldcombo-' + filter.id,
+            // id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
             emptyText: i18n._('select a field'),
@@ -456,16 +452,20 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     this.actions.addFilterRow.show();
                     // move start search button
                     tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.searchButtonWrap);
+                    // have save button for single rows
+                    if (numFilters === 1) {
+                        tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
+                    }
+                    this.searchButtonWrap.applyStyles('float: left');
+                    this.actions.saveFilter.getEl().applyStyles('float: left');
                 }
                 if (this.showSearchButton) {
                     this.actions.startSearch.show();
                 }
                 // move delete all filters
-                // tr.child('td[class=tw-ftb-frow-deleteallfilters]').insertFirst(this.actions.removeAllFilters.getEl());
                 this.actions.removeAllFilters.setVisible(numFilters > 1);
                 // move save filter button
-                // tr.child('td[class=tw-ftb-frow-savefilterbutton]').insertFirst(this.actions.saveFilter.getEl());
-                this.actions.saveFilter.setVisible(this.allowSaving && numFilters > 1);
+                this.actions.saveFilter.setVisible(this.allowSaving);
             }
             
             if (filter.id == firstId) {
@@ -474,20 +474,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
                 
                 // hack for the save/delete all btns which are now in the first row
-                //if (Ext.isSafari) {
-                    this.actions.removeAllFilters.getEl().applyStyles('float: left');
-                //} else {
-                //    this.actions.saveFilter.getEl().applyStyles('display: inline');
-                //    this.actions.removeAllFilters.getEl().applyStyles('display: inline');
-                //}
-                
+                this.actions.removeAllFilters.getEl().applyStyles('float: left');
+
                 if (tr) {
-                    tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
+                    if (numFilters > 1) {
+                        tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.saveFilter.getEl());
+                    }
                     tr.child('td[class=tw-ftb-frow-searchbutton]').insertFirst(this.actions.removeAllFilters.getEl());
                 }
-                
-                //tr.child('td[class=tw-ftb-frow-pmbutton]').insertFirst(this.actions.removeAllFilters.getEl());
-                //this.actions.removeAllFilters.setVisible(numFilters > 1);
             }
         }, this);
     },
@@ -499,21 +493,33 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 
         if (this.rendered) {
             this.arrangeButtons();
-            
-            this.filterStore.each(function(filter){
-                for (var formItemName in filter.formFields) {
-                    if (filter.formFields[formItemName] && typeof filter.formFields[formItemName].syncSize == 'function') {
-                        filter.formFields[formItemName].setWidth(filter.formFields[formItemName].width);
-                        if (filter.formFields[formItemName].wrap) {
-                            filter.formFields[formItemName].wrap.setWidth(filter.formFields[formItemName].width);
-                        }
-                        filter.formFields[formItemName].syncSize();
-                    }
-                }
-            }, this);
+            this.fixWidths();
         }
     },
-    
+
+    fixWidths: function() {
+        var aw = this.getWidth()-250,
+            dim = {
+                'tw-ftb-frow-field': Math.floor(aw*0.45),
+                'tw-ftb-frow-operator': Math.floor(aw*0.17),
+                'tw-ftb-frow-value': Math.floor(aw*0.38)
+            };
+
+        for (var cls in dim) {
+            this.el.select('.' + cls).setWidth(dim[cls]);
+            this.el.select('.' + cls + ' div[class^=x-form-field-wrap] *[id^=ext-comp-]').each(function(el) {
+                var cmp = Ext.getCmp(el.id);
+                if (cmp && !cmp.isInnerFTBCmp) {
+                    var width = dim[cls] + (cmp.FTBWidthCorrection || 0);
+                    if (cmp.wrap) {
+                        cmp.wrap.setWidth(width);
+                    }
+                    cmp.setWidth(width);
+                }
+            });
+        }
+    },
+
     /**
      * called  when a filter action is to be triggered (start new search)
      * @private
@@ -579,6 +585,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 filter.formFields.value.selectText.defer(50, filter.formFields.value);
             }
         }
+
+        this.fixWidths();
     },
     
     /**
@@ -731,7 +739,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (! fieldName && field.data && field.data.condition) {
             return this.ownRecordFilterModel;
         }
-        
+        if (! this.filterModelMap[fieldName]) {
+            Tine.log.err('"' + fieldName + '" filter not defined in filter map');
+        }
+
         return this.filterModelMap[fieldName];
     },
     

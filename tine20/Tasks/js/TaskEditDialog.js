@@ -154,7 +154,6 @@ Ext.namespace('Tine.Tasks');
     getFormItems: function() {
         return {
             xtype: 'tabpanel',
-            border: false,
             plain:true,
             activeTab: 0,
             border: false,
@@ -197,7 +196,6 @@ Ext.namespace('Tine.Tasks');
                             name: 'priority',
                             app: 'Tasks',
                             keyFieldName: 'taskPriority',
-                            value: 'NORMAL'
                         }),
                         Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
@@ -205,7 +203,7 @@ Ext.namespace('Tine.Tasks');
                             emptyText: i18n._('Add Responsible ...'),
                             useAccountRecord: true,
                             name: 'organizer',
-                            allowEmpty: true
+                            allowBlank: true
                         })
                     ], [{
                         columnWidth: 1,

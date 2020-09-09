@@ -7,6 +7,7 @@
  */
  
 /*global Ext, Tine*/
+require('widgets/form/ApplicationPickerCombo');
 
 Ext.ns('Tine.Admin.container');
 
@@ -124,18 +125,6 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      */
     getContainerFormItems: function () {
-        var userApplications = Tine.Tinebase.registry.get('userApplications');
-        this.appStore = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            fields: Tine.Admin.Model.Application
-        });
-
-        this.appStore.loadData({
-            results: userApplications,
-            totalcount: userApplications.length
-        });
-
         this.modelStore = new Ext.data.ArrayStore({
             idIndex: 0,
             fields: [{name: 'value'}, {name: 'name'}]
@@ -159,18 +148,13 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false,
                     maxLength: 255
                 }, {
-                    xtype: 'combo',
+                    xtype: 'tw-app-picker',
                     readOnly: this.record.id != 0,
-                    store: this.appStore,
                     columnWidth: 0.2,
                     name: 'application_id',
-                    displayField: 'name',
-                    valueField: 'id',
                     fieldLabel: this.app.i18n._('Application'),
-                    mode: 'local',
                     anchor: '100%',
                     allowBlank: false,
-                    forceSelection: true,
                     listeners: {
                         scope: this,
                         'select': function (combo, rec) {
@@ -223,7 +207,6 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }],[{
                     xtype: 'textfield',
                     fieldLabel: this.app.i18n._('Container Hierarchy/Name'),
-                    allowBlank: false,
                     columnWidth: 1,
                     name: 'hierarchy',
                     allowBlank: true
@@ -239,8 +222,18 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
                ]
         };
+    },
+    
+    onSaveAndClose: function() {
+        if (this.record.data.model == 'Tine.Calendar.Model.Resource') {
+            Ext.MessageBox.alert(this.app.i18n._('Info'), this.app.i18n._('Please create Resources in Addressbook or CoreData.'),function (){this.window.close()},this);
+        } else {
+            Tine.Admin.ContainerEditDialog.superclass.onSaveAndClose.apply(this, arguments);
+        }
     }
 });
+
+
 
 /**
  * Container Edit Popup

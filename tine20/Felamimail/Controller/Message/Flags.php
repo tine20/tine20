@@ -246,29 +246,36 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            
-            $idsToDelete = array();
-            foreach ($_messagesToFlag as $message) {
-                foreach ($_flags as $flag) {
-                    if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
-                        if (is_array($message->flags) && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
-                            $folderCounts[$message->folder_id]['decrementUnreadCounter']++;
-                        }
-                        $folderCounts[$message->folder_id]['decrementMessagesCounter']++;
-                        $idsToDelete[] = $message->getId();
-                    } elseif (!is_array($message->flags) || !in_array($flag, $message->flags)) {
-                        $this->_backend->addFlag($message, $flag);
-                        if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
-                            // count messages with seen flag for the first time
-                            $folderCounts[$message->folder_id]['decrementUnreadCounter']++;
+
+            try {
+                $idsToDelete = array();
+                foreach ($_messagesToFlag as $message) {
+                    foreach ($_flags as $flag) {
+                        if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
+                            if (is_array($message->flags) && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
+                                $folderCounts[$message->folder_id]['decrementUnreadCounter']++;
+                            }
+                            $folderCounts[$message->folder_id]['decrementMessagesCounter']++;
+                            $idsToDelete[] = $message->getId();
+                        } elseif (!is_array($message->flags) || !in_array($flag, $message->flags)) {
+                            $this->_backend->addFlag($message, $flag);
+                            if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
+                                // count messages with seen flag for the first time
+                                $folderCounts[$message->folder_id]['decrementUnreadCounter']++;
+                            }
                         }
                     }
                 }
+
+                $this->_backend->delete($idsToDelete);
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = null;
+            } finally {
+                if (null !== $transactionId) {
+                    Tinebase_TransactionManager::getInstance()->rollBack();
+                }
             }
-            
-            $this->_backend->delete($idsToDelete);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
             $idsToMarkAsChanged = array_diff($_messagesToFlag->getArrayOfIds(), $idsToDelete);
             $this->_backend->updateMultiple($idsToMarkAsChanged, array(
@@ -282,7 +289,6 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             );
                 
         } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
             return $_folderCounts;
@@ -305,26 +311,34 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         
         // set flags in local database
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
-        // store flags in local cache
-        foreach($_messagesToUnflag as $message) {
-            if (in_array(Zend_Mail_Storage::FLAG_SEEN, $_flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
-                // count messages with seen flag for the first time
-                $folderCounts[$message->folder_id]['incrementUnreadCounter']++;
+        try {
+
+            // store flags in local cache
+            foreach ($_messagesToUnflag as $message) {
+                if (in_array(Zend_Mail_Storage::FLAG_SEEN, $_flags) && in_array(Zend_Mail_Storage::FLAG_SEEN,
+                        $message->flags)) {
+                    // count messages with seen flag for the first time
+                    $folderCounts[$message->folder_id]['incrementUnreadCounter']++;
+                }
+
+                $this->_backend->clearFlag($message, $_flags);
             }
-            
-            $this->_backend->clearFlag($message, $_flags);
+
+            // mark message as changed in the cache backend
+            $this->_backend->updateMultiple(
+                $_messagesToUnflag->getArrayOfIds(),
+                array(
+                    'timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                )
+            );
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $transactionId = null;
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
         }
-        
-        // mark message as changed in the cache backend
-        $this->_backend->updateMultiple(
-            $_messagesToUnflag->getArrayOfIds(), 
-            array(
-                'timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-            )
-        );
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         return $folderCounts;
     }
