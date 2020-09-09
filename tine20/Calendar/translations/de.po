@@ -1904,12 +1904,12 @@ msgstr "Die E-Mail-Adresse wurde verkürzt:"
 #: Model/Rrule.php:367
 #, python-format
 msgid "Every %s day"
-msgstr "Jeden %s. Tag"
+msgstr "Jeden %s Tag"
 
 #: Model/Rrule.php:373
 #, python-format
 msgid "Every %s week on"
-msgstr "Jede %s. Woche am"
+msgstr "Jede %s Woche am"
 
 #: Model/Rrule.php:374
 msgid "Weekly on"
