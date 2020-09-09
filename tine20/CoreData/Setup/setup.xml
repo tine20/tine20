@@ -2,7 +2,7 @@
 <application>
     <name>CoreData</name>
     <!-- gettext('CoreData') -->
-    <version>12.0</version>
+    <version>13.0</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
