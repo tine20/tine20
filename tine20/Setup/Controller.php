@@ -646,6 +646,10 @@ class Setup_Controller
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Tinebase to version ' . $major . '.' . $minor);
 
         // TODO remove this in release 13
+        $release12 = new Tinebase_Setup_Update_12(Setup_Backend_Factory::factory());
+        $release12->addPreviewStatusAndErrorCount();
+
+        // TODO remove this in release 13
         $release11 = new Tinebase_Setup_Update_Release11(Setup_Backend_Factory::factory());
         $release11->fsAVupdates();
         Setup_SchemaTool::updateSchema([
@@ -654,10 +658,6 @@ class Setup_Controller
 
         $adbRelease11 = new Addressbook_Setup_Update_Release11(Setup_Backend_Factory::factory());
         $adbRelease11->fixContactData();
-
-        // TODO remove this in release 13
-        $release12 = new Tinebase_Setup_Update_12(Setup_Backend_Factory::factory());
-        $release12->addPreviewStatusAndErrorCount();
 
         for ($majorVersion = $tinebase->getMajorVersion(); $majorVersion <= $major; $majorVersion++) {
             $messages = array_merge($messages, $this->updateApplication($tinebase, $majorVersion));
