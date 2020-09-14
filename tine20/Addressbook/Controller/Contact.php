@@ -473,7 +473,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             foreach ($lists->filter(function($list) {
                 return $list->xprops[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST];}) as $list) {
                 Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
-                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                    try {
+                        Felamimail_Sieve_AdbList::setScriptForList($list);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    }
                 }, [$list]);
             }
 
