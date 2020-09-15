@@ -642,6 +642,7 @@ class Tinebase_Frontend_Cli_Abstract
      * @param string $_model
      * @param string $_exportClass
      * @return boolean
+     * @throws Tinebase_Exception_InvalidArgument
      *
      * TODO use Calendar_Export_VCalendarReport / Addressbook_Export_VCardReport here
      */
@@ -649,18 +650,21 @@ class Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($_opts);
 
-        // @todo implement
-        //   - allow to export all shared containers
-
-        if (isset($args['type']) && $args['type'] === 'personal') {
+        if (isset($args['type']) && in_array($args['type'], [
+            Tinebase_Model_Container::TYPE_PERSONAL,
+            Tinebase_Model_Container::TYPE_SHARED,
+        ])) {
             // get all containers of given type
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(
-                Tinebase_Core::getUser(),
-                $_model,
-                Tinebase_Core::getUser()
-            )->getArrayOfIds();
+            $containers = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter([
+                ['field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()
+                    ->getApplicationByName($this->_applicationName)->getId()],
+                ['field' => 'model', 'operator' => 'equals', 'value' => $_model],
+                ['field' => 'type', 'operator' => 'equals', 'value' => $args['type']],
+            ]))->getArrayOfIds();
         } else if (isset($args['container_id'])) {
             $containers = explode(',', $args['container_id']);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('type (personal|shared) or container_id required');
         }
 
         foreach ($containers as $containerId) {
@@ -684,7 +688,10 @@ class Tinebase_Frontend_Cli_Abstract
     protected function _getVObjectExportFilename($container, $args, $extension)
     {
         $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
-        return $path . DIRECTORY_SEPARATOR . Tinebase_Core::getUser()->accountLoginName
+        $owner = $container->type === Tinebase_Model_Container::TYPE_SHARED
+            ? 'shared'
+            : Tinebase_User::getInstance()->getFullUserById($container->owner_id)->accountLoginName;
+        return $path . DIRECTORY_SEPARATOR . $owner
             // . '_' . $container->name
             . '_' . substr($container->getId(), 0, 8) . '.' . $extension;
     }
