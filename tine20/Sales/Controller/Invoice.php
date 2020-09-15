@@ -1138,7 +1138,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     'end_date'      => $latestEndDate,
                     'positions'     => $invoicePositions->toArray(),
                     'date'          => clone $this->_currentMonthToBill,
-                    'sales_tax'     => 16
+                    'sales_tax'     => 19
                 ));
                 
                 $invoice->relations = $relations;
