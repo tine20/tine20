@@ -64,6 +64,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const AUTHENTICATION_BY_EMAIL = 'authenticationByEmail';
 
+    const AUTH_TOKEN_CHANNELS = 'authTokenChanels';
+    const AUTH_TOKEN_DEFAULT_TTL = 'authTokenDefaultTTL';
+
     /**
      * save automatic alarms when creating new record
      *
@@ -2667,6 +2670,36 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule' => true,
             'setBySetupModule' => true,
         ),
+        self::AUTH_TOKEN_CHANNELS => [
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => [
+                'recordModel'               => Tinebase_Model_AuthTokenChannelConfig::class
+            ],
+            self::DEFAULT_STR           => [
+                'records'                   => [
+                    /*[
+                        Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME => 'test',
+                        Tinebase_Model_AuthTokenChannelConfig::FLDS_TOKEN_CREATE_HOOK => [
+                            Tinebase_Frontend_Json::class, 'testHook'
+                        ]
+                    ]*/
+                ]
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+        ],
+        self::AUTH_TOKEN_DEFAULT_TTL => [
+            //_('auth token default and maximum TTL in seconds')
+            self::LABEL                 => 'auth token default and maximum TTL in seconds',
+            //_('auth token default and maximum TTL in seconds')
+            self::DESCRIPTION           => 'auth token default and maximum TTL in seconds',
+            self::TYPE                  => self::TYPE_INT,
+            self::DEFAULT_STR           => 12 * 60 * 60, // 12 hours
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::CREDENTIAL_CACHE_SHARED_KEY => [
             //_('shared credential cache cryptographic key')
             self::LABEL                 => 'shared credential cache cryptographic key',
@@ -2677,7 +2710,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
-        ]
+        ],
     );
 
     /**

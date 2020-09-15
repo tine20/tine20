@@ -427,6 +427,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_AreaLockConfig::class,
                 Tinebase_Model_AreaLockState::class,
                 Tinebase_Model_AsyncJob::class,
+                Tinebase_Model_AuthToken::class,
+                Tinebase_Model_AuthTokenChannelConfig::class,
                 Tinebase_Model_BLConfig::class,
                 Tinebase_Model_Config::class,
                 Tinebase_Model_Container::class,
