@@ -135,7 +135,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         if (this.record.get('sales_tax') == null) {
-            this.record.set('sales_tax', 19);
+            this.record.set('sales_tax', 16);
         }
         
         if (this.createReversal) {
