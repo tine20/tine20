@@ -841,13 +841,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onFilesSelect: function (fileSelector, event) {
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = this,
-            targetNode = grid.currentFolderNode,
+            targetNode = grid.currentFolderNode ? grid.currentFolderNode : _.get(this.getFilteredContainers(),'0'),
             gridStore = grid.store,
             rowIndex = false,
             me = this,
-            targetFolderPath = grid.currentFolderNode.attributes.path,
+            targetFolderPath = targetNode.attributes ? targetNode.attributes.path : _.get(targetNode, 'path'),
             addToGrid = true,
-            nodeRecord = null;
+            nodeRecord = null
 
         if(event && event.getTarget()) {
             rowIndex = grid.getView().findRowIndex(event.getTarget());
@@ -865,6 +865,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 addToGrid = false;
                 nodeRecord = new Tine.Filemanager.Model.Node(newTargetNode.data);
             }
+        }
+
+        if(!nodeRecord) {
+            nodeRecord = new Tine.Filemanager.Model.Node(targetNode);
         }
 
         if(!nodeRecord.isDropFilesAllowed()) {
