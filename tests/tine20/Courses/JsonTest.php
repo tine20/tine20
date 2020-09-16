@@ -4,7 +4,7 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -67,7 +67,12 @@ class Courses_JsonTest extends TestCase
      * @var Boolean
      */
     protected $_defaultDepartmentConfigChanged = FALSE;
-    
+
+    /**
+     * @var Boolean
+     */
+    protected $_additionalGroupMembershipsConfigChanged = FALSE;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -135,6 +140,10 @@ class Courses_JsonTest extends TestCase
         if ($this->_defaultDepartmentConfigChanged) {
             Courses_Config::getInstance()->set(Courses_Config::DEFAULT_DEPARTMENT, $this->_defaultDepartmentConfig);
         }
+
+        if ($this->_additionalGroupMembershipsConfigChanged) {
+            Courses_Config::getInstance()->set(Courses_Config::ADDITIONAL_GROUP_MEMBERSHIPS, []);
+        }
         parent::tearDown();
     }
     
@@ -143,13 +152,10 @@ class Courses_JsonTest extends TestCase
      */
     public function testAddCourse()
     {
-        $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse($course);
-        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
+        $courseData = $this->_saveCourse();
         
         // checks
-        $this->assertEquals($course['description'], $courseData['description']);
-        $this->assertEquals($course['type'], $courseData['type']['value']);
+        $this->assertEquals('blabla', $courseData['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $courseData['created_by'], 'Created by has not been set.');
         $this->assertTrue(! empty($courseData['group_id']));
         $this->assertGreaterThan(0, count($courseData['members']));
@@ -167,10 +173,8 @@ class Courses_JsonTest extends TestCase
      */
     public function testGetCourse()
     {
-        $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse($course);
-        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
-        $courseData = $this->_json->getCourse($courseData['id']);
+        $course = $this->_saveCourse();
+        $courseData = $this->_json->getCourse($course['id']);
         
         // checks
         $this->assertEquals($course['description'], $courseData['description']);
@@ -185,9 +189,7 @@ class Courses_JsonTest extends TestCase
      */
     public function testUpdateCourse()
     {
-        $course = $this->_getCourseData();
-        $courseData = $this->_json->saveCourse($course);
-        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
+        $courseData = $this->_saveCourse();
 
         // update Course
         $courseData['description'] = "blubbblubb";
@@ -204,7 +206,47 @@ class Courses_JsonTest extends TestCase
         // cleanup
         $this->_json->deleteCourses($courseData['id']);
     }
-    
+
+    protected function _saveCourse()
+    {
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
+        return $courseData;
+    }
+
+    public function testUpdateCourseSetAdditionalMemberships($checkWithNoRight = false)
+    {
+        $group = $this->_setAdditionalGroupMembershipsConfig();
+        $courseData = $this->_saveCourse();
+        // add memberships
+        $memberships = [
+            $group->getId()
+        ];
+        $courseData['type'] = $courseData['type']['value'];
+        $courseData['members'][0]['additionalGroups'] = $memberships;
+        $courseUpdated = $this->_json->saveCourse($courseData);
+        self::assertTrue(isset($courseUpdated['members'][0]['additionalGroups']));
+        if ($checkWithNoRight) {
+            self::assertEquals([], $courseUpdated['members'][0]['additionalGroups']);
+        } else {
+            self::assertEquals($memberships, $courseUpdated['members'][0]['additionalGroups']);
+        }
+
+        // remove memberships
+        $memberships = [];
+        $courseData['members'][0]['additionalGroups'] = $memberships;
+        $courseUpdated = $this->_json->saveCourse($courseData);
+        self::assertEquals($memberships, $courseUpdated['members'][0]['additionalGroups'], 'memberships should be empty');
+    }
+
+    public function testUpdateCourseSetAdditionalMembershipsWithoutRight()
+    {
+        // call testUpdateCourseSetAdditionalMemberships without the right
+        $this->_removeRoleRight('Courses', Courses_Acl_Rights::SET_ADDITIONAL_MEMBERSHIPS);
+        $this->testUpdateCourseSetAdditionalMemberships(true);
+    }
+
     /**
      * try to get a Course
      */
@@ -603,9 +645,29 @@ class Courses_JsonTest extends TestCase
         $result = $this->_json->getRegistryData();
         $this->assertEquals($this->_department->id, $result['defaultType']['value']);
     }
-    
+
+    /**
+     * Test if the ADDITIONAL_GROUP_MEMBERSHIPS groups are in registry data
+     */
+    public function testAdditionalGroupMembershipsInRegistryData()
+    {
+        $group = $this->_setAdditionalGroupMembershipsConfig();
+        $result = $this->_json->getRegistryData();
+        $this->assertTrue(isset($result['additionalGroupMemberships']));
+        $this->assertEquals(1, count($result['additionalGroupMemberships']));
+        $this->assertEquals($group->getId(), $result['additionalGroupMemberships'][0]['id']);
+    }
+
     /************ protected helper funcs *************/
-    
+
+    protected function _setAdditionalGroupMembershipsConfig()
+    {
+        $group = $this->_createGroup();
+        $this->_additionalGroupMembershipsConfigChanged = true;
+        Courses_Config::getInstance()->set(Courses_Config::ADDITIONAL_GROUP_MEMBERSHIPS, [$group->getId()]);
+        return $group;
+    }
+
     /**
      * get Course
      *

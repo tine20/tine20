@@ -20,13 +20,20 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Courses.coursesBackend,
     evalGrants: false,
     displayNotes: true,
+    additionalGroups: [],
 
     /**
      * initComponent
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Courses');
-        
+        this.additionalGroups = Tine.Courses.registry.get('additionalGroupMemberships');
+        this.initTbarActions();
+
+        Tine.Courses.CourseEditDialog.superclass.initComponent.call(this);
+    },
+
+    initTbarActions: function() {
         this.action_import = new Ext.Action({
             iconCls: 'action_import',
             disabled: true,
@@ -35,7 +42,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this,
             handler: this.onFileSelect
         });
-        
+
         this.action_addNewMember = new Ext.Action({
             iconCls: 'action_add',
             disabled: true,
@@ -43,14 +50,13 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this,
             handler: this.onAddNewMember
         });
-        
+
         this.tbarItems = [
             this.action_import,
             this.action_addNewMember
         ];
-        Tine.Courses.CourseEditDialog.superclass.initComponent.call(this);
     },
-    
+
     /**
      * onFileSelect
      * 
@@ -131,8 +137,13 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * onRecordLoad
      */
     onRecordLoad: function() {
-        var members = this.record.get('members') || [];
+        let members = this.record.get('members') || [];
         if (members.length > 0) {
+            _.each(members, function(member) {
+                _.each(member.additionalGroups, function(groupId) {
+                    member['group_' + groupId] = true;
+                });
+            });
             this.membersStore.loadData({results: members});
         }
         
@@ -152,12 +163,18 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordUpdate: function() {
         Tine.Courses.CourseEditDialog.superclass.onRecordUpdate.call(this);
-        
-        this.record.set('members', '');
-        
-        var members = [];
+
+        let members = [];
+        let me = this;
         this.membersStore.each(function(_record){
-            members.push(_record.data.id);
+            let additionalGroupMemberships = [];
+            _.each(me.additionalGroups, function(group) {
+                if (_record.get('group_' + group.id)) {
+                    additionalGroupMemberships.push(group.id);
+                }
+            });
+            _record.set('additionalGroups', additionalGroupMemberships);
+            members.push(_record.data);
         });
         
         this.record.set('members', members);
@@ -270,14 +287,16 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getMembersGrid: function() {
         if (! this.membersGrid) {
-            this.membersStore =  new Ext.data.JsonStore({
-                root: 'results',
-                totalProperty: 'totalcount',
-                id: 'id',
-                fields: Tine.Tinebase.Model.Account
-            });
-            
-            var columns = [{
+            let me = this;
+            let membersFields = [
+                {name: 'id'},
+                {name: 'type'},
+                {name: 'name'},
+                {name: 'additionalGroups'},
+                {name: 'data'}
+            ];
+
+            let columns = [{
                 id: 'data',
                 header: this.app.i18n._("Login"),
                 width: 200,
@@ -286,8 +305,28 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     return (value.account_id) ? i18n._('unknown') : value;
                 }
             }];
-            
-            var action_resetPwd = new Ext.Action({
+
+            // add configured groups here (as checkbox column) and additionalGroupMemberships fields to store model
+            _.each(this.additionalGroups, function(group) {
+                let fieldName = 'group_' + group.id;
+                columns.push(new Ext.ux.grid.CheckColumn({
+                    listeners: {checkchange: _.bind(me.onGroupMembershipCheckChange, me)},
+                    id: fieldName,
+                    header: group.name,
+                    width: 100,
+                    dataIndex: fieldName
+                }));
+                membersFields.push(fieldName);
+            });
+
+            this.membersStore =  new Ext.data.JsonStore({
+                root: 'results',
+                totalProperty: 'totalcount',
+                id: 'id',
+                fields: membersFields
+            });
+
+            const action_resetPwd = new Ext.Action({
                 text: i18n._('Reset Password'),
                 scope: this,
                 handler: function(_button, _event) {
@@ -317,6 +356,10 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
         }
         return this.membersGrid;
+    },
+
+    onGroupMembershipCheckChange: function() {
+        console.log('check!');
     }
 });
 
