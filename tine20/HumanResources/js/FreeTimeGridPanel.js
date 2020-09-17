@@ -80,6 +80,7 @@ Tine.HumanResources.FreeTimeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     onStoreBeforeload: function(store, options) {
         Tine.HumanResources.FreeTimeGridPanel.superclass.onStoreBeforeload.apply(this, arguments);
         options.params.filter.push({field: 'type', operator: 'equals', value: this.freetimeType});
+        options.params.filter.push({field: 'employee_id', operator: 'equals', value: this.editDialog.record.id});
     },
     
     /**
