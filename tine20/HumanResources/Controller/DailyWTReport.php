@@ -377,8 +377,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     protected function _getBLPipe(HumanResources_Model_WorkingTimeScheme $_wts)
     {
         if (!isset($this->_wtsBLPipes[$_wts->getId()])) {
-            if (! $_wts->blpipe instanceof  Tinebase_Record_RecordSet || $_wts->blpipe->count() === 0) {
-                return $this->_wtsBLPipes[$_wts->getId()] = false; // assignment on purpose
+            if (! $_wts->blpipe instanceof Tinebase_Record_RecordSet) {
+                $_wts->blpipe = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_Config::class);
             }
             $rs = $_wts->blpipe->getClone(true);
             $record = new HumanResources_Model_BLDailyWTReport_Config([
