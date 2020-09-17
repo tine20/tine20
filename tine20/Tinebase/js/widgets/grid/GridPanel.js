@@ -1486,6 +1486,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // init sel model
         if (! this.selectionModel) {
             this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
+                moveEditorOnEnter: false,
                 store: this.store,
                 gridPanel: this
             });
@@ -2080,6 +2081,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             case e.R:
                 this.bufferedLoadGridData();
                 break;
+            case e.ENTER:
+                if (_.isFunction(this.grid.startEditing)) {
+                    const col = _.find(this.grid.colModel.columns, {dataIndex: this.recordClass.getMeta('titleProperty')});
+                    const selections = this.selectionModel.getSelections();
+                    if (col && selections && selections.length === 1) {
+                        this.grid.startEditing(this.store.indexOf(selections[0]), _.indexOf(this.grid.colModel.columns, col));
+                        e.stopEvent();
+                    }
+                }
+                break;
             default:
                 if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
                     if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
@@ -2102,6 +2113,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.INFO
                     });
+                    e.stopEvent();
                 }
         }
     },
