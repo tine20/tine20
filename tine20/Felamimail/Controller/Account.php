@@ -826,6 +826,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'drafts_folder',
             'templates_folder',
             'migration_approved',
+            'from',
+            'organization',
         );
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
@@ -1914,12 +1916,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (empty($_account->name) && $_account->type !== Felamimail_Model_Account::TYPE_USER_INTERNAL) {
             $_account->name = $_email;
         }
-        $_account->from = $_user->accountFullName;
-        
+        if (empty($_account->from)) {
+            $_account->from = $_user->accountFullName;
+        }
+
         // add contact data (if available)
         try {
             $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId(), TRUE);
-            $_account->organization = $contact->org_name;
+            if (empty($_account->organization)) {
+                $_account->organization = $contact->org_name;
+            }
         } catch (Addressbook_Exception_NotFound $aenf) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not get system account user contact: ' . $aenf->getMessage());
         }
