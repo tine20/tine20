@@ -37,8 +37,6 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
         switch (this.cfDefinition.type) {
             case 'record':
             case 'keyField':
-                this.operators = ['not', 'equals'];
-                this.defaultOperator = 'equals';
                 // Not used @see {Tine.Tinebase.widgets.grid.GridPanel.getCustomfieldFilters}
                 break;
             case 'integer':
@@ -108,7 +106,7 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.data.Record} filter line
      * @param {Ext.Element} element to render to 
      */
-    valueRenderer: function(filter, el) {
+    cfValueRenderer: function(filter, el) {        
         var valueType   = this.getValueType(filter);
                     
         filter.valueFields = {};
