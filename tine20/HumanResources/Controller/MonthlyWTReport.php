@@ -27,7 +27,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_applicationName = HumanResources_Config::APP_NAME;
         $this->_modelName = HumanResources_Model_MonthlyWTReport::class;
