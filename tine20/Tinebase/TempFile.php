@@ -309,23 +309,40 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed ' . $result . ' temp files from database and filesystem.');
 
-        $result = 0;
-        foreach (new DirectoryIterator(Tinebase_Core::getTempDir()) as $directoryIterator) {
+        $numberOfDeletedFiles = $this->_removeFilesFromDirByTimestamp(Tinebase_Core::getTempDir(), $date);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed ' . $numberOfDeletedFiles . ' temp files from filesystem only.');
+
+        return true;
+    }
+
+    /**
+     * @param string $dir
+     * @param Tinebase_DateTime $date
+     * @return int
+     */
+    protected function _removeFilesFromDirByTimestamp($dir, Tinebase_DateTime $date)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Deleting old files from dir: ' . $dir);
+
+        $numberOfDeletedFiles = 0;
+        foreach (new DirectoryIterator($dir) as $directoryIterator) {
             $filename = $directoryIterator->getFilename();
             // preserve directories and dot-files
             if (strpos($filename, '.') !== 0 && $directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime()))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Deleting file ' . $filename);
                 unlink($directoryIterator->getPathname());
-                ++$result;
+                ++$numberOfDeletedFiles;
+            } else if ($directoryIterator->isDir()) {
+                $numberOfDeletedFiles += $this->_removeFilesFromDirByTimestamp($directoryIterator->getPathname(), $date);
             }
 
             Tinebase_Lock::keepLocksAlive();
         }
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removed ' . $result . ' temp files from filesystem only.');
 
-        return true;
+        return $numberOfDeletedFiles;
     }
     
     /**
