@@ -185,8 +185,9 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * exports contacts as VCARDs / VCF file
      * examples:
-     *      --method Addressbook.exportVCard --username=USER -- container_id=CONTAINER_ID filename=/my/export/file.vcf
-     *      --method Addressbook.exportVCard --username=USER -- container_id=CONTAINER_ID stdout=1
+     *      --method Addressbook.exportVCard -- container_id=CONTAINER_ID filename=/my/export/file.vcf
+     *      --method Addressbook.exportVCard -- container_id=CONTAINER_ID stdout=1
+     *      --method Addressbook.exportVCard -- type=personal
      *
      * @param $_opts
      * @return boolean

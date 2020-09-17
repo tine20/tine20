@@ -177,7 +177,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         foreach ($this->_listsToDelete as $list) {
-            Addressbook_Controller_List::getInstance()->delete($list->getId());
+            $listId = $list instanceof Addressbook_Model_List ? $list->getId() : $list;
+            Addressbook_Controller_List::getInstance()->delete($listId);
         }
 
         Tinebase_Lock_UnitTestFix::clearLocks();
@@ -809,44 +810,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string', $definition = null)
     {
-        if ($type === 'keyField') {
-            $definition = [
-                'label' => Tinebase_Record_Abstract::generateUID(),
-                'type' => $type,
-                'required' => false,
-                'keyFieldConfig' => [
-                    'value' => [
-                        'records' => [
-                            ['id' => 'test', 'value' => 'test'],
-                            ['id' => 'go', 'value' => 'go'],
-                        ],
-                        'default' => 'go'
-                    ]
-                ]
-            ];
-        }
         if ($definition === null) {
             $definition = array(
                 'label' => Tinebase_Record_Abstract::generateUID(),
-                'type' => $type,
+                'type'  => $type,
                 'recordConfig' => $type === 'record'
                     ? array('value' => array('records' => 'Tine.Addressbook.Model.Contact'))
                     : null,
-                'keyFieldConfig' => $type === 'keyField'
-                    ? ['value' => [
-                        'records' => [
-                            ['id' => 'test', 'value' => 'test'],
-                            ['id' => 'go', 'value' => 'go'],
-                        ],
-                        'default' => 'go'
-                    ]
-                    ]
-                    : null,
                 'uiconfig' => array(
-                    'xtype' => Tinebase_Record_Abstract::generateUID(),
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
                     'length' => 10,
-                    'group' => 'unittest',
-                    'order' => 100,
+                    'group'  => 'unittest',
+                    'order'  => 100,
                 )
             );
         }
@@ -1049,6 +1024,24 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $mailinglist = Addressbook_Controller_List::getInstance()->create($list);
         $this->_listsToDelete[] = $mailinglist;
         return $mailinglist;
+    }
+
+    /**
+     * @return Tinebase_Model_Group|unknown
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     *
+     * TODO add more data?
+     */
+    protected function _createGroup()
+    {
+        $group = Tinebase_Group::getInstance()->addGroup(new Tinebase_Model_Group([
+            'name'      => 'unittestgroup' . Tinebase_Record_Abstract::generateUID(5)
+        ]));
+        $this->_listsToDelete[] = $group->list_id;
+
+        return $group;
     }
 
     /**

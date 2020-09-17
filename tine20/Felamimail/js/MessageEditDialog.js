@@ -1320,7 +1320,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     aliasAccount.data.id = id;
                     aliasAccount.set('email', aliases[i]);
                 }
-                aliasAccount.set('name', aliasAccount.get('name') + ' (' + aliases[i] + ')');
+                let name = aliasAccount.get('from') ? aliasAccount.get('from') : aliasAccount.get('name');
+                aliasAccount.set('name', name + ' (' + aliases[i] + ')');
                 aliasAccount.set('original_id', account.id);
                 accountComboStore.add(aliasAccount);
             }

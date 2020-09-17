@@ -1274,6 +1274,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (event.ui) {
             event.ui.markDirty();
         }
+
+        event.view = event.view ? event.view : panel.view;
         Tine.Tinebase.data.Clipboard.push(event);
     },
 

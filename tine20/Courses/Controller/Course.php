@@ -111,11 +111,12 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      * 
      * @param Courses_Model_Course $course
      * @param Tinebase_Model_Group $group
+     * @param array $memberData
      * @return Courses_Model_Course
      * 
      * @todo this should be moved to normal create/update (inspection) functions
      */
-    public function saveCourseAndGroup(Courses_Model_Course $course, Tinebase_Model_Group $group)
+    public function saveCourseAndGroup(Courses_Model_Course $course, Tinebase_Model_Group $group, $memberData = [])
     {
         $i18n = Tinebase_Translation::getTranslation('Courses');
         $groupNamePrefix = $i18n->_('Course');
@@ -123,9 +124,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $groupNamePrefix = is_array($groupNamePrefix) ? $groupNamePrefix[0] : $groupNamePrefix;
         $group->name = $groupNamePrefix . '-' . $course->name;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Saving course ' . $course->name . ' with group ' . $group->name);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($group->toArray(), true));
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Saving course ' . $course->name . ' with group ' . $group->name);
+
         if (empty($group->id)) {
             $savedGroup         = $this->_groupController->create($group);
             $course->group_id   = $savedGroup->getId();
@@ -147,12 +148,15 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($course->group_id);
         // add/remove members to/from internet/fileserver group
         if (! empty($groupMembers)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found ' . count($groupMembers) . ' group members');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Found ' . count($groupMembers) . ' group members');
             $this->_manageAccessGroups($groupMembers, $savedRecord);
-            // $this->_manageAccessGroups($group->members, $savedRecord, 'fileserver');
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No group members found.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' No group members found.');
         }
+
+        $this->_manageAdditionalGroupMemberships($memberData);
         
         return $savedRecord;
     }
@@ -211,7 +215,94 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             }
         }
     }
-    
+
+    /**
+     * @param $memberData
+     */
+    protected function _manageAdditionalGroupMemberships($memberData)
+    {
+        if (count($memberData) === 0) {
+            return;
+        }
+
+        $additionalGroups = $this->getAdditionalGroupMemberships();
+
+        // find out migrations (added + removed members)
+        foreach ($memberData as $member) {
+            if (! isset($member['additionalGroups'])) {
+                $member['additionalGroups'] = [];
+            }
+            $memberId = $member['id'];
+            $currentMemberships = $additionalGroups->filter(function($record) use ($memberId) {
+                return in_array($memberId, $record->members);
+            }, $memberId)->getArrayOfIds();
+
+            foreach ($member['additionalGroups'] as $membership) {
+                if (! in_array($membership, $currentMemberships)
+                    && Tinebase_Core::getUser()->hasRight($this->_applicationName, Courses_Acl_Rights::SET_ADDITIONAL_MEMBERSHIPS)
+                ) {
+                    Admin_Controller_Group::getInstance()->addGroupMember($membership, $memberId);
+                }
+            }
+
+            $membershipsToRemove = array_diff($currentMemberships, $member['additionalGroups']);
+            foreach ($membershipsToRemove as $removeMember) {
+                if (Tinebase_Core::getUser()->hasRight($this->_applicationName, Courses_Acl_Rights::SET_ADDITIONAL_MEMBERSHIPS)) {
+                    Admin_Controller_Group::getInstance()->removeGroupMember($removeMember, $memberId);
+                }
+            }
+        }
+    }
+
+    /**
+     * get course members by group id (as array with additionalGroups)
+     *
+     * @param int $_groupId
+     * @return array
+     *
+     * TODO make course member a real Model
+     */
+    public function getCourseMembers($_groupId)
+    {
+        $adminJson = new Admin_Frontend_Json();
+        $members = $adminJson->getGroupMembers($_groupId);
+        $additionalGroups = $this->getAdditionalGroupMemberships();
+
+        $result = [];
+        foreach ($members['results'] as $member) {
+            $memberId = $member['id'];
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($memberId);
+            $additionalMemberships = $additionalGroups->filter(function($record) use ($memberId) {
+                return in_array($memberId, $record->members);
+            }, $memberId)->getArrayOfIds();
+
+            $result[] = [
+                'id' => $memberId,
+                'name' => $member['name'],
+                'data' => $fullUser->accountLoginName,
+                'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'additionalGroups' => $additionalMemberships,
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getAdditionalGroupMemberships()
+    {
+        $groupIds = Courses_Config::getInstance()->get(Courses_Config::ADDITIONAL_GROUP_MEMBERSHIPS, []);
+        $additionalGroups = new Tinebase_Record_RecordSet(Tinebase_Model_Group::class);
+        foreach ($groupIds as $groupId) {
+            $group = Tinebase_Group::getInstance()->getGroupById($groupId);
+            $group->members = Tinebase_Group::getInstance()->getGroupMembers($groupId);
+            $additionalGroups->addRecord($group);
+        }
+        return $additionalGroups;
+    }
+
     /**
     * inspect creation of one record (after create)
     *

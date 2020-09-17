@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -12,11 +12,23 @@
  * 
  * @package     Courses
  * @subpackage  Config
- * 
- * @todo add config settings/properties here
  */
 class Courses_Config extends Tinebase_Config_Abstract
 {
+    /**
+     * additional_group_memberships
+     *
+     * @var string
+     */
+    const ADDITIONAL_GROUP_MEMBERSHIPS = 'additional_group_memberships';
+
+    /**
+     * default department
+     *
+     * @var string
+     */
+    const DEFAULT_DEPARTMENT = 'default_department';
+
     /**
     * fields for internet access
     *
@@ -74,6 +86,13 @@ class Courses_Config extends Tinebase_Config_Abstract
     const STUDENT_LOGINNAME_PREFIX = 'student_loginname_prefix';
 
     /**
+     * students password suffix
+     *
+     * @var string
+     */
+    const STUDENT_PASSWORD_SUFFIX = 'password_suffix';
+
+    /**
      * students loginname prefix
      *
      * @var string
@@ -81,24 +100,20 @@ class Courses_Config extends Tinebase_Config_Abstract
     const TEACHER_PASSWORD = 'teacher_password';
 
     /**
-     * students password suffix
-     *
-     * @var string
-     */
-    const STUDENT_PASSWORD_SUFFIX = 'password_suffix';
-    
-    /**
-    * default department
-    *
-    * @var string
-    */
-    const DEFAULT_DEPARTMENT = 'default_department';
-    
-    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::ADDITIONAL_GROUP_MEMBERSHIPS => array(
+            //_('Additional Group Memberships')
+            'label'                 => 'Additional Group Memberships',
+            //_('Array of IDs of Groups students can be members of')
+            'description'           => 'Array of IDs of Groups students can be members of',
+            'type'                  => 'array',
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+        ),
         self::INTERNET_ACCESS => array(
         //_('Internet Access')
             'label'                 => 'Internet Access',
