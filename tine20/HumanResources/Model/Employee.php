@@ -261,6 +261,13 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
+                'filterDefinition'  => [
+                    'filter'    => Tinebase_Model_Filter_Date::class,
+                    'options'   => [
+                        Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
+                        Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
+                    ]
+                ]
             ),
             'supervisor_id' => array(
                 'label' => 'Supervisor', //_('Supervisor')
