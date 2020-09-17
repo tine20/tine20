@@ -150,7 +150,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             } catch (e) {
                 return Ext.MessageBox.alert(
                     i18n._('Cannot open new window'),
-                    String.format(i18n._('A new window cannot be opened. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
+                    String.format(i18n._('An attempt to open a new window failed. When clicking OK the openening procedure will be tried again. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
                     function () {
                         this.render()
                     }.bind(this)

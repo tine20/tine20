@@ -170,4 +170,17 @@ module.exports = {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: module});
         }
     },
+    
+    clickSlitButton: async function(page, text) {
+        return await page.evaluate((text) => {
+            const btn = document.evaluate('//em[button[text()="' + text + '"]]', document).iterateNext();
+            const box = btn.getBoundingClientRect();
+
+            // cruid split btn hack
+            const tmp = Ext.EventObject.getPageX;
+            Ext.EventObject.getPageX = () => {return 10000}
+            document.elementFromPoint(box.x+box.width, box.y).click();
+            Ext.EventObject.getPageX = tmp;
+        }, text);
+    }
 };
