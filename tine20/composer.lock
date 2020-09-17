@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "882164672bcd4dfb96041445135e8555",
+    "content-hash": "5efdaf8ecf65bacadbfaddea8b00d522",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1620,11 +1620,11 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.10.1pl1",
+            "version": "1.10.1pl3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PhpSpreadsheet.git",
-                "reference": "08ebd89abbefb92c3c479774d23b9e08ac65bd8c"
+                "reference": "093a7965b5cbbed9dd007eec11e99b524d0baab2"
             },
             "require": {
                 "ext-ctype": "*",
@@ -1720,7 +1720,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2020-01-22T13:15:39+00:00"
+            "time": "2019-05-20T15:06:53+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -5466,7 +5466,7 @@
         {
             "alias": "1.10.1",
             "alias_normalized": "1.10.1.0",
-            "version": "1.10.1.0-patch1",
+            "version": "1.10.1.0-patch3",
             "package": "phpoffice/phpspreadsheet"
         },
         {
