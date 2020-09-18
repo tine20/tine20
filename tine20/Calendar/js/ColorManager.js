@@ -336,8 +336,11 @@ Tine.Calendar.colorStrategies['requiredAttendee'] = {
 
         if (attendeeRecord) {
             role = attendeeRecord.get('role');
+            
+            const roleStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeRoles');
+            const roleRecord = roleStore.getById(role);
 
-            color = role == 'REQ' ? 'FF0000' : '00FF00'
+            color = roleRecord ? roleRecord.get('color') : role === 'REQ' ? 'FF0000' : '00FF00';
         } else {
             color = 'C0C0C0' // light gray
         }

@@ -4568,3 +4568,6 @@ msgstr "Datei Doppelklick-Verhalten"
 
 msgid "Which action should be executed by default when a file is double-clicked."
 msgstr "Welche Aktion soll ausgeführt werden, wenn eine Datei doppelt angeklickt wird."
+
+msgid "Select Color"
+msgstr "Farbe auswählen"
