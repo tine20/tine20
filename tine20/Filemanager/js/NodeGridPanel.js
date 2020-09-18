@@ -239,7 +239,17 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 sortable: true,
                 dataIndex: 'name',
                 renderer: Ext.ux.PercentRendererWithName,
-                editor: Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'name', Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID)
+                editor: Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'name', Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID, {
+                    listeners: {
+                        show: (field) => {
+                            const record = this.selectionModel.getSelected();
+                            const value = String(field.getValue());
+                            const match = value.match(/\..*/);
+                            const end = match && record.get('type') === 'file' ? match.index : value.length;
+                            field.selectText(0, end);
+                        }
+                    }
+                })
             },{
                 id: 'hash',
                 header: this.app.i18n._("MD5 Hash"),
@@ -353,9 +363,17 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onKeyDown: function(e) {
         Tine.Filemanager.NodeGridPanel.superclass.onKeyDown.apply(this, arguments);
 
+        const selections = this.selectionModel.getSelections();
+        
         // Open preview on space if a node is selected and the node type equals file
         if (e.getKey() == e.SPACE) {
-            this.action_preview.execute()
+            this.action_preview.execute();
+            e.stopEvent();
+        }
+        
+        if (e.getKey() == e.RIGHT && selections.length === 1 && selections[0].get('type') === 'folder') {
+            this.expandFolder(selections[0]);
+            e.stopEvent();
         }
     },
 
