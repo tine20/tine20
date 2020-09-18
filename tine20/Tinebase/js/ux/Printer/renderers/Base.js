@@ -154,7 +154,8 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                 if (comp.display !== "none") {
                     return checkcss.defer(10, me, [win, component]);
                 }
-                fulfill();
+                // give some extra time for logo
+                _.delay(fulfill, 500);
             };
             checkcss(win, component);
         })
