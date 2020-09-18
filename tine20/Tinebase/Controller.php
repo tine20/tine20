@@ -1058,8 +1058,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'getFavicon', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-        });
 
+            $routeCollector->get('/logo[/{type}[/{size}]]', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getLogo', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+        
         $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/health', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'healthCheck', [
@@ -1285,6 +1290,42 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ->withAddedHeader('Content-Type', $mime);
     }
 
+    public function getLogo($type='b', $size='135x50')
+    {
+        $mime = 'image/png';
+
+        if (! in_array($type, ['b', 'i'])) {
+            throw new Tinebase_Exception_UnexpectedValue('invalid type');
+        }
+        
+        if (! in_array($size, ['135x50'])) {
+            throw new Tinebase_Exception_UnexpectedValue('invalid size format');
+        }
+
+        $cacheId = sha1(self::class . 'getLogo' . $type . $size . $mime);
+        $imageBlob = Tinebase_Core::getCache()->load($cacheId);
+        
+        if (!$imageBlob) {
+            preg_match('/^(\d+)x(\d+)$/', $size, $matches);
+
+            $path = $type === 'i' ?
+                Tinebase_Core::getInstallLogo() :
+                Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO);
+            
+            $blob = Tinebase_Helper::getFileOrUriContents($path);
+            $image = Tinebase_Model_Image::getImageFromBlob($blob);
+            Tinebase_ImageHelper::resize($image, $matches[1], $matches[2], Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
+            $imageBlob = $image->getBlob($mime);
+            Tinebase_Core::getCache()->save($imageBlob, $cacheId);
+        }
+
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write($imageBlob);
+        
+        return $response
+            ->withAddedHeader('Content-Type', $mime);
+    }
+    
     /**
      * @return bool
      */
