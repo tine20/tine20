@@ -54,6 +54,10 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
         me.i18nRecordName = 'Free Time';
         me.initFreeTimeTypes(); // async!
+        
+        this.defaultFilters = [{
+            field: 'employment_end', operator: 'after', value: new Date().clearTime().getLastDateOfMonth().add(Date.DAY, 1)
+        }];
         Tine.HumanResources.FreeTimePlanningPanel.superclass.initComponent.call(me);
 
         me.grid.on('cellmousedown', _.bind(me.onCellMouseDown, me));
