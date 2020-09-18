@@ -603,7 +603,7 @@ Tine.Tinebase.tineInit = {
                 };
                 
                 // encapsulate as jsonrpc response
-                var requestOptions = Ext.decode(options.jsonData);
+                var requestOptions = _.isString(options.jsonData) ? Ext.decode(options.jsonData) : options.jsonData;
                 response.responseText = Ext.encode({
                     jsonrpc: requestOptions.jsonrpc,
                     id: requestOptions.id,
