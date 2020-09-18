@@ -314,7 +314,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 btn.setVisible(isGridView);
 
                 if (!isGridView && btn.pressed) {
-                    _.defer(() => {this.showWeekView.toggle(true);});
+                    _.delay(() => {this.showWeekView.toggle(true);}, 500);
                 }
             }
         });
