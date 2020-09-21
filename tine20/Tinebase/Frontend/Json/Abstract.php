@@ -151,7 +151,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $clientData = [];
         if ($request = Tinebase_Core::getRequest()) {
             foreach ($request->getHeaders() as $header) {
-                if (strpos(($name = $header->getFieldName()), 'X-TINE20-REQUEST-CONTEXT-') === 0) {
+                if (strpos(($name = strtoupper($header->getFieldName())), 'X-TINE20-REQUEST-CONTEXT-') === 0) {
                     $name = strtolower(substr($name, strlen('X-TINE20-REQUEST-CONTEXT-')));
                     $clientData[$name] = $header->getFieldValue();
                 }
