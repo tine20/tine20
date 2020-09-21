@@ -1748,7 +1748,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
-            } 
+            }
+            
+            this.actionUpdater.addActions(this.actionToolbar.items);
         }
 
         return this.actionToolbar;

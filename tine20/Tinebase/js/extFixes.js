@@ -910,38 +910,6 @@ Ext.override(Ext.menu.DateMenu, {
     }
 });
 
-Ext.override(Ext.Component, {
-    /**
-     * is this component rendered?
-     * @return {Promise}
-     */
-    afterIsRendered : function(){
-        var me = this;
-        if (this.rendered) {
-            return Promise.resolve(me);
-        }
-        return new Promise(function(resolve) {
-            me.on('render', resolve);
-        });
-    },
-
-    // support initialState
-    initState : function(){
-        if(Ext.state.Manager){
-            var id = this.getStateId();
-            if(id){
-                var state = Ext.state.Manager.get(id) || this.initialState;
-                if(state){
-                    if(this.fireEvent('beforestaterestore', this, state) !== false){
-                        this.applyState(Ext.apply({}, state));
-                        this.fireEvent('staterestore', this, state);
-                    }
-                }
-            }
-        }
-    }
-});
-
 Ext.override(Ext.tree.TreePanel, {
     /**
      * Gets a node in this tree by its id

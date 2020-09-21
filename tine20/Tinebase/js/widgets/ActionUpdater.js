@@ -62,12 +62,12 @@
      */
     addAction: function(action) {
         // register action once only!
-        if (this.actions.indexOf(action) >= 0) {
+        if (!action ||this.actions.indexOf(action) >= 0) {
             return;
         }
 
         // if action has to initialConfig it's no Ext.Action!
-        if (action && action.initialConfig) {
+        if (action.initialConfig) {
             
             // in some cases our actionUpdater config is not in the initial config
             // this happens for direct extensions of button class, like the notes button
@@ -91,6 +91,11 @@
                     action.initialConfig.menu
                 );
             }
+        }
+        
+        // e.g. btngroup 
+        if (action.items && action.constructor !== Ext.Action) {
+            this.addActions(action.items);
         }
     },
     
