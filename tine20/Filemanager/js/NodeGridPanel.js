@@ -366,7 +366,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const selections = this.selectionModel.getSelections();
         
         // Open preview on space if a node is selected and the node type equals file
-        if (e.getKey() == e.SPACE) {
+        if (e.getKey() == e.SPACE && !(e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
             this.action_preview.execute();
             e.stopEvent();
         }
