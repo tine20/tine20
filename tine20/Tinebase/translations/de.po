@@ -4274,8 +4274,8 @@ msgstr "Neues Fenster konnte nicht geöffnet werden"
 
 #: js/ux/PopupWindow.js:145
 #, python-brace-format
-msgid "An attempt to open a new window failed. When clicking OK the openening procedure will be tried again. To avoid this message please deactivate your browsers popup blocker for {0}"
-msgstr "Der Versuch ein neues Fenster zu öffnen ist fehlgeschlagen. Wenn sie OK drücken wird es erneut versucht. Um diese Nachricht in Zukunft zu vermeiden deaktivieren Sie bitten ihren Popup-Blocker für {0}"
+msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
+msgstr "Der Versuch, ein neues Fenster zu öffnen, ist fehlgeschlagen. Wenn sie OK drücken, wird es erneut versucht. Um diese Nachricht in Zukunft zu vermeiden, deaktivieren Sie bitten ihren Popup-Blocker für {0}"
 
 #: js/ux/PopupWindow.js:368
 msgid "Window can be closed"
