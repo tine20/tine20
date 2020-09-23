@@ -44,6 +44,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'BLConfig',
         'ImportExportDefinition',
         'LogEntry',
+        'Tree_Node'
     ];
 
     /**
