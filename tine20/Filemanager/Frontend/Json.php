@@ -26,7 +26,15 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_applicationName = 'Filemanager';
-    
+
+    /**
+     * All configured models
+     * @var array
+     */
+    protected $_configuredModels = [
+        'Node',
+    ];
+
     /**
      * search file/directory nodes
      *
