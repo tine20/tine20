@@ -4621,6 +4621,11 @@
         }
       }
     },
+    "email-addresses": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/email-addresses/-/email-addresses-3.1.0.tgz",
+      "integrity": "sha512-k0/r7GrWVL32kZlGwfPNgB2Y/mMXVTq/decgLczm/j34whdaspNrZO8CnXPf1laaHxI6ptUlsnAxN+UAPw+fzg=="
+    },
     "emoji-regex": {
       "version": "7.0.3",
       "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-7.0.3.tgz",
@@ -15734,6 +15739,11 @@
       "requires": {
         "tslib": "^1.9.0"
       }
+    },
+    "s": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/s/-/s-1.0.0.tgz",
+      "integrity": "sha512-Tz63UXhdEBvvIV6Q0a+AV2Dx1TPq+vVWNYBxyCT9TG0uqn9kySwFTjfq3C1YuGBRwYtt9Tof11L6GCKi88foqw=="
     },
     "safe-buffer": {
       "version": "5.1.2",
