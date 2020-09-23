@@ -150,6 +150,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {Event} e
      */
     onCtxMenu: function(grid, row, e) {
+        const targetInput = e.getTarget('input[type=text]', 1, true);
+        if (targetInput) {
+            // allow native context menu for input field
+            return;
+        }
+
         var activeRow = (row === null) ? ((this.activeEditor) ? this.activeEditor.row : 0) : row;
         
         e.stopEvent();
