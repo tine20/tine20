@@ -192,7 +192,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dropAllowed =
                 record.get('type') == 'folder'
                 && _.get(record, 'data.account_grants.addGrant', false)
-                && source == this.grid.getView().dragZone,
+                && source == this.grid.getView().dragZone
+                && Tine.Filemanager.nodeActionsMgr.checkCreateNodeConstraints(record, {type: 'file'}),
             action = e.ctrlKey || e.altKey ? 'copy' : 'move'
 
         return dropAllowed ?
@@ -457,13 +458,17 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
                 let allowAdd = _.get(filteredContainers, '[0].account_grants.addGrant', false);
                 let isVirtual = false;
+                let constraints = false;
 
                 try {
                     const filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
                     isVirtual = filteredContainer.isVirtual();
+
+                    constraints = Tine.Filemanager.nodeActionsMgr.checkCreateNodeConstraints(filteredContainer, {type: 'file'});
+
                 } catch(e) {}
 
-                action.setDisabled(!allowAdd || isVirtual);
+                action.setDisabled(!allowAdd || isVirtual ||!constraints);
             }.createDelegate(this)
         };
     },
@@ -772,6 +777,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }
+
+            this.actionUpdater.addActions(this.actionToolbar.items);
         }
 
         return this.actionToolbar;

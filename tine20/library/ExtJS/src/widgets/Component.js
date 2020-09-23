@@ -1125,7 +1125,7 @@ var myGrid = new Ext.grid.EditorGridPanel({
         if(Ext.state.Manager){
             var id = this.getStateId();
             if(id){
-                var state = Ext.state.Manager.get(id);
+                var state = Ext.state.Manager.get(id) || this.initialState;
                 if(state){
                     if(this.fireEvent('beforestaterestore', this, state) !== false){
                         this.applyState(Ext.apply({}, state));
@@ -1501,6 +1501,10 @@ new Ext.Panel({
         return this.rendered && this.getVisibilityEl().isVisible();
     },
 
+    isHidden: function(){
+        return !this.isVisible();
+    },
+    
     /**
      * Clone the current component using the original config values passed into this instance by default.
      * @param {Object} overrides A new config containing any properties to override in the cloned version.
@@ -1749,6 +1753,20 @@ myGridPanel.mon(myGridPanel.getSelectionModel(), {
      */
     getBubbleTarget : function(){
         return this.ownerCt;
+    },
+
+    /**
+     * is this component rendered?
+     * @return {Promise}
+     */
+    afterIsRendered : function(){
+        var me = this;
+        if (this.rendered) {
+            return Promise.resolve(me);
+        }
+        return new Promise(function(resolve) {
+            me.on('render', resolve);
+        });
     }
 });
 
