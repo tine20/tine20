@@ -239,7 +239,7 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
                                 alternateIncrementValue: 10,
                                 minValue      : 0,
                                 maxValue      : 100,
-                                allowDecimals : 0
+                                allowDecimals : false
                             })
                         }
                     ]

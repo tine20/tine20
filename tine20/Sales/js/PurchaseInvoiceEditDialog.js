@@ -258,9 +258,9 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 incrementValue : 1,
                 alternateIncrementValue: 10,
                 minValue: 0,
-                maxValue: 1024,
-                allowDecimals: false
+                maxValue: 1024
             }),
+            allowDecimals: false,
             listeners: {
                 scope: this,
                 blur: this.onUpdateInDays.createDelegate(this)
@@ -338,15 +338,14 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.salesTaxField = Ext.create({
             xtype: 'uxspinner',
             decimalPrecision: 2,
+            allowDecimals: true,
             strategy: new Ext.ux.form.Spinner.NumberStrategy({
                 incrementValue : 1,
                 alternateIncrementValue: 0.1,
                 minValue: 0,
                 maxValue: 100,
-                allowDecimals: 2
             }),
             name: 'sales_tax',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/4,
             suffix: ' %',
@@ -363,11 +362,10 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             strategy: new Ext.ux.form.Spinner.NumberStrategy({
                 incrementValue : 1,
                 minValue: 0,
-                maxValue: 100,
-                allowDecimals: 0
+                maxValue: 100
             }),
             name: 'discount',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            allowDecimals: true,
             fieldLabel: this.app.i18n._('Discount (%)'),
             columnWidth: 1/4,
             value: 0,
