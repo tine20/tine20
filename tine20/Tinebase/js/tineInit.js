@@ -174,11 +174,11 @@ Tine.Tinebase.tineInit = {
 
         // generic context menu
         Ext.getBody().on('contextmenu', function (e) {
-            var target = e.getTarget('a',1 ,true) ||
-                e.getTarget('input[type=text]',1 ,true) ||
-                e.getTarget('textarea',1 ,true);
+            var target = e.getTarget('a', 1 , true) ||
+                e.getTarget('input[type=text]', 1 , true) ||
+                e.getTarget('textarea', 1, true);
             if (target) {
-                // allow native context menu for links
+                // allow native context menu for links + textareas + (text)input fields
                 return;
             }
 
@@ -188,7 +188,7 @@ Tine.Tinebase.tineInit = {
                 return;
             }
 
-            // deny native context menu if we have an oown one
+            // deny native context menu if we have an own one
             if (Tine.Tinebase.MainContextMenu.showIf(e)) {
                 e.stopPropagation();
                 e.preventDefault();
