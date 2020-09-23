@@ -496,18 +496,28 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
     /**
      * send to semicolon separated recipient list
+     *
+     * @param string $delimiter
      */
     public function testSendMessageWithDelimiterSeparatedEmails($delimiter = ';')
     {
         $message = $this->_getMessageData();
-        $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $delimiter . $this->_personas['sclever']->accountEmailAddress];
-        $this->_sendMessage(
-            'INBOX',
-            array(),
-            '',
-            'test',
-            $_messageToSend = $message
-        );
+
+        foreach ([
+                    $delimiter,
+                    ' ' . $delimiter,
+                    $delimiter . ' ',
+                    ' ' . $delimiter . ' '
+                 ] as $testDelimiter) {
+            $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $testDelimiter . $this->_personas['sclever']->accountEmailAddress];
+            $this->_sendMessage(
+                'INBOX',
+                array(),
+                '',
+                'test',
+                $_messageToSend = $message
+            );
+        }
     }
 
     /**

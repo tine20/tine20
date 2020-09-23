@@ -844,6 +844,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     if (empty($recipient)) {
                         unset($recipients[$key]);
                     }
+                    $recipient = trim($recipient);
                 }
                 unset($recipient);
 
