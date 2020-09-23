@@ -655,6 +655,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {Object} attr
      */
     onBeforeCreateNode: function(attr) {
+        attr.cls = attr.cls || '';
+        
         if (attr.accountDisplayName) {
             attr.name = attr.accountDisplayName;
             attr.path = '/personal/' + attr.accountId;

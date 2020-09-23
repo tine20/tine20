@@ -1139,7 +1139,7 @@ div.x-btn-wait,
     height: 32px;
 }
 
-.x-tree-node-loading .x-tree-node-icon,
+.x-tree-node-el.x-tree-node-loading img.x-tree-node-icon,
 .x-item-disabled .x-tbar-loading,
 .x-btn-wait {
     background-image: none !important;

@@ -69,6 +69,19 @@ Tine.Filemanager.Model.Node.getExtension = function(filename) {
     return filename.split('.').pop();
 };
 
+Tine.Filemanager.Model.Node.registerStyleProvider = function(provider) {
+    const ns = Tine.Filemanager.Model.Node;
+    ns._styleProviders = ns._styleProviders || [];
+    ns._styleProviders.push(provider);
+};
+
+Tine.Filemanager.Model.Node.getStyles = function(node) {
+    const ns = Tine.Filemanager.Model.Node;
+    return _.uniq(_.compact(_.map(ns._styleProviders || [], (styleProvider) => {
+        return styleProvider(node);
+    })));
+};
+
 // register grants for nodes
 Tine.widgets.container.GrantsManager.register('Filemanager_Model_Node', function(container) {
     // TODO get default grants and remove export
