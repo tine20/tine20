@@ -2143,6 +2143,7 @@ class Tinebase_FileSystem implements
                 $fileObject = $this->_fileObjectBackend->create($fileObject);
 
                 $treeNode = new Tinebase_Model_Tree_Node(array(
+                    'type' => Tinebase_Model_Tree_FileObject::TYPE_FILE,
                     'name' => $_name,
                     'object_id' => $fileObject->getId(),
                     'parent_id' => $parentId,
