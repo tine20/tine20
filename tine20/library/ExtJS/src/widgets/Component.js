@@ -857,7 +857,10 @@ new Ext.Panel({
                 ptype: p
             });
         }
-        p.init(this);
+        if (! p.isInitialized) {
+            p.init(this);
+            p.isInitialized = true;
+        }
         return p;
     },
 
