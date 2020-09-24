@@ -329,13 +329,18 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $numberOfDeletedFiles = 0;
         foreach (new DirectoryIterator($dir) as $directoryIterator) {
             $filename = $directoryIterator->getFilename();
-            // preserve directories and dot-files
-            if (strpos($filename, '.') !== 0 && $directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime()))) {
+            if (strpos($filename, '.') === 0) {
+                // do nothing with dotfiles
+                continue;
+            }
+
+            if ($directoryIterator->isFile() && $date->isLater(new Tinebase_DateTime($directoryIterator->getMTime()))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Deleting file ' . $filename);
                 unlink($directoryIterator->getPathname());
                 ++$numberOfDeletedFiles;
             } else if ($directoryIterator->isDir()) {
+                // delete sub dir contents, too
                 $numberOfDeletedFiles += $this->_removeFilesFromDirByTimestamp($directoryIterator->getPathname(), $date);
             }
 
