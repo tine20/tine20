@@ -69,6 +69,19 @@ Tine.Filemanager.Model.Node.getExtension = function(filename) {
     return filename.split('.').pop();
 };
 
+Tine.Filemanager.Model.Node.registerStyleProvider = function(provider) {
+    const ns = Tine.Filemanager.Model.Node;
+    ns._styleProviders = ns._styleProviders || [];
+    ns._styleProviders.push(provider);
+};
+
+Tine.Filemanager.Model.Node.getStyles = function(node) {
+    const ns = Tine.Filemanager.Model.Node;
+    return _.uniq(_.compact(_.map(ns._styleProviders || [], (styleProvider) => {
+        return styleProvider(node);
+    })));
+};
+
 // register grants for nodes
 Tine.widgets.container.GrantsManager.register('Filemanager_Model_Node', function(container) {
     // TODO get default grants and remove export
@@ -375,66 +388,6 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
     },
     
     /**
-     * upload file 
-     * 
-     * @param {} params Request parameters
-     * @param String uploadKey
-     * @param Boolean addToGridStore 
-     */
-    createNode: function(params, uploadKey, addToGridStore) {
-        var app = Tine.Tinebase.appMgr.get(this.appName),
-            me = this,
-            grid = app.getMainScreen().getCenterPanel(),
-            gridStore = grid.getStore();
-        
-        params.application = this.appName;
-        params.method = this.appName + '.createNode';
-        params.uploadKey = uploadKey;
-        params.addToGridStore = addToGridStore;
-        
-        var onSuccess = (function(result, request){
-
-            var nodeData = Ext.util.JSON.decode(response.responseText),
-                fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);
-
-            fileRecord.on('update', me.onUploadUpdate.createDelegate(me));
-
-            if(addToGridStore) {
-                var recordToRemove = gridStore.query('name', fileRecord.get('name'));
-                if(recordToRemove.items[0]) {
-                    gridStore.remove(recordToRemove.items[0]);
-                }
-                
-                fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
-                var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
-                
-                nodeRecord.fileRecord = fileRecord;
-                gridStore.add(nodeRecord);
-                
-            }
-        }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
-        
-        var onFailure = (function(response, request) {
-            
-            var nodeData = Ext.util.JSON.decode(response.responseText);
-            request = Ext.util.JSON.decode(request.jsonData);
-            
-            nodeData.data.uploadKey = this.uploadKey;
-            nodeData.data.addToGridStore = this.addToGridStore;
-            Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
-            
-        }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
-        
-        Ext.Ajax.request({
-            params: params,
-            timeout: 300000, // 5 minutes
-            scope: this,
-            success: onSuccess || Ext.emptyFn,
-            failure: onFailure || Ext.emptyFn
-        });
-    },
-    
-    /**
      * upload files
      * 
      * @param {} params Request parameters
@@ -452,7 +405,6 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
         params.uploadKeyArray = uploadKeyArray;
         params.addToGridStore = addToGridStore;
 
-
         var onSuccess = (function (response, request) {
 
             var nodeData = Ext.util.JSON.decode(response.responseText);
@@ -463,10 +415,7 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
                 Tine.Tinebase.uploadManager.getUpload(this.uploadKeyArray[i]).on('update', me.onUploadUpdate.createDelegate(me));
 
                 if (addToGridStore) {
-                    fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
-                    var nodeRecord = new Tine.Filemanager.Model.Node(nodeData[i]);
-
-                    nodeRecord.fileRecord = fileRecord;
+                    var nodeRecord = Tine.Tinebase.data.Record.setFromJson(nodeData[i], Tine.Filemanager.Model.Node);
 
                     var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
                     if (existingRecordIdx > -1) {
@@ -475,6 +424,9 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
                     } else {
                         gridStore.add(nodeRecord);
                     }
+                    
+                    fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
+                    nodeRecord.fileRecord = fileRecord;
                 }
             }
 
@@ -585,7 +537,7 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
             timeout: 10*60*1000, // Overriding Ajax timeout - important!
             params: {
                 method: proxy.appName + '.createNode',
-                filename: upload.id,
+                filename: upload.fileRecord.get('path'),
                 type: 'file',
                 tempFileId: file.get('id'),
                 forceOverwrite: true
