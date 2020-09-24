@@ -1382,9 +1382,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * TODO just change the field??
      */
     changeFilterInParams: function (params, from, to) {
-        const queryFilter =_.remove(params.filter[0].filters[0].filters, {
-            field: from
-        });
+        const queryFilter = params.filter[0] && params.filter[0].filters
+            ? _.remove(params.filter[0].filters[0].filters, {
+                field: from
+            })
+            : [];
         if (queryFilter.length > 0) {
             params.filter[0].filters[0].filters =
                 params.filter[0].filters[0].filters.concat({
