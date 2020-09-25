@@ -149,8 +149,8 @@ Tine.Tinebase.tineInit = {
                 Ext.ux.screenshot.ux(window, {download: true, grabMouse: !e.shiftKey});
             }  else if (window.isMainWindow) {
                 // select first row of current grid panel if available
-                var app = Tine.Tinebase.MainScreen.getActiveApp(),
-                    centerPanel = app.getMainScreen().getCenterPanel(),
+                var app = Tine.Tinebase.MainScreen ? Tine.Tinebase.MainScreen.getActiveApp() : null,
+                    centerPanel = app ? app.getMainScreen().getCenterPanel() : null,
                     grid = centerPanel && Ext.isFunction(centerPanel.getGrid) ? centerPanel.getGrid() : null,
                     sm = grid ? grid.getSelectionModel() : null;
                 
