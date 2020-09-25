@@ -344,7 +344,7 @@ Tine.Filemanager.nodeActions.Move = {
         });
 
         filePickerDialog.on('apply', function(node) {
-            Tine.Filemanager.fileRecordBackend.copyNodes(records, node, true);
+            Tine.Filemanager.fileRecordBackend.copyNodes(records, node[0], true);
         });
 
         filePickerDialog.openWindow();
