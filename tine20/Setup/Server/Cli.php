@@ -47,7 +47,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
                 'install_dump'              => 'Install Tine from a backup
                          Examples:
-                           setup.php --install_dump -- db=1 files=1 backupDir=/backup/tine20
+                           setup.php --install_dump -- db=1 files=1 backupDir=/backup/tine20 keepTinebaseID=1
                            setup.php --install_dump -- db=1 files=1 backupUrl=https://username:password@example.org/mydump',
                 'list-s'                    => 'List installed applications',
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',

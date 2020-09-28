@@ -1827,7 +1827,9 @@ class Setup_Controller
 
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing from dump ' . $mysqlBackupFile);
 
-        $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        if (! isset($options['keepTinebaseID']) || ! $options['keepTinebaseID']) {
+            $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        }
         $this->restore($options);
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
