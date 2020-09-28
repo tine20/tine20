@@ -58,7 +58,7 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
 
         'titleProperty'     => 'name',
         'appName'           => 'Filemanager',
-        'modelName'         => 'Node',
+        'modelName'         => 'Node', // _('GENDER_Node')
         'idProperty'        => 'id',
         'table'             => [
             'name'              => 'tree_nodes',

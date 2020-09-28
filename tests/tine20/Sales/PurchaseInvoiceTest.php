@@ -273,7 +273,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
 
         $paging['sort'] = 'approver';
         $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $paging);
-        $this->assertEquals($purchase['number'], $search['results'][1]['number']);
+        $this->assertEquals($purchase['number'], $search['results'][0]['number']);
         $this->assertEquals(2, $search['totalcount']);
 
         $paging['sort'] = 'supplier';

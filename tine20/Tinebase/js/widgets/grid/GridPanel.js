@@ -1547,7 +1547,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             sm: this.selectionModel,
             parentScope: this,
             view: this.createView(),
-            recordClass: this.recordClass
+            recordClass: this.recordClass,
+            getDragDropText: this.getDragDropText.createDelegate(this)
         }));
 
         // init various grid / sm listeners
@@ -1561,6 +1562,29 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     },
 
+    getDragDropText: function() {
+        const titleProperty = this.recordClass.getMeta('titleProperty');
+        if (! titleProperty) {
+            return Ext.grid.GridView.prototype.getDragDropText.call(this.grid);
+        }
+        
+        const col = _.indexOf(this.grid.colModel.config, _.find(this.grid.colModel.config, {dataIndex: titleProperty}));
+        const selections = this.grid.selModel.getSelections();
+        
+        if (!col || selections.length > 10) {
+            return formatMessage('{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}', {
+                recordGender: this.recordClass.getRecordGender(),
+                recordCount: selections.length,
+                recordName: this.recordClass.getRecordName(),
+                recordsName: this.recordClass.getRecordsName()
+            })
+        }
+        // else
+        return _.reduce(selections, (html, node) => {
+            return html += '<tr>' + this.grid.getView().getCell(this.store.indexOf(node), col).cloneNode(true).outerHTML + '</tr>';
+        }, '<table>') + '</table>';
+    },
+    
     /**
      * creates and returns the view for the grid
      * 

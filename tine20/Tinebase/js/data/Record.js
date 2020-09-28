@@ -387,6 +387,14 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
 
         return i18n.n_(p.recordName, p.recordsName, 50);
     };
+    f.getRecordGender = function () {
+        var app = Tine.Tinebase.appMgr.get(p.appName),
+            i18n = app && app.i18n ? app.i18n : window.i18n,
+            msgId = 'GENDER_' + p.recordName,
+            gender = i18n._hidden(msgId);
+        
+        return gender !== msgId ? gender : 'other';
+    };
     f.getContainerName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n : window.i18n;
