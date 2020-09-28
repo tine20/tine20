@@ -1563,7 +1563,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun, (isset($data['modified_attribute'])?$data['modified_attribute']:null));
         
         if (! $dryrun) {
-            $this->clearCache();
+            Setup_Controller::getInstance()->clearCache(false);
             echo 'Reverted ' . $result['totalcount'] . " change(s)\n";
         } else {
             echo "Dry run\n";
@@ -1985,13 +1985,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->clearFileObjects();
-    }
-
-    public function clearCache()
-    {
-        $this->_checkAdminRight();
-
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 
     public function cleanAclTables()
