@@ -258,7 +258,7 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @param string $_subject
      * @param string $_folderName
-     * @return string message data
+     * @return string|null message data
      */
     protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX', $_doAssertions = true)
     {
@@ -267,7 +267,7 @@ abstract class Felamimail_TestCase extends TestCase
 
         $result = $this->_getMessages($_folderName);
 
-        $message = array();
+        $message = [];
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $_subject) {
                 $message = $mail;
