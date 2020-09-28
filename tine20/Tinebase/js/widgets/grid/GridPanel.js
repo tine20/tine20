@@ -2097,7 +2097,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
                     if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
                         this.onDeleteRecords.call(this);
-                        e.preventDefault();
+                        e.stopEvent();
                     }
                 }
                 if (e.browserEvent.key === '?') {
