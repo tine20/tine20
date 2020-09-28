@@ -260,6 +260,9 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             plain:true,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   'Filemanager-Node-EditDialog-TabPanel'
             }],
             activeTab: 0,
             border: false,

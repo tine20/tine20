@@ -454,6 +454,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             },
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
             }],
             items:[
                 {
