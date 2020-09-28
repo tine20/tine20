@@ -19,7 +19,7 @@ Ext = {
      * The version of the framework
      * @type String
      */
-    version : '3.1.1'
+    version : '3.1.1~custom'
 };
 
 /**
@@ -50,6 +50,7 @@ Ext.apply = function(o, c, defaults){
         check = function(r){
             return r.test(ua);
         },
+        docMode = document.documentMode,
         DOC = document,
         isStrict = DOC.compatMode == "CSS1Compat",
         isOpera = check(/opera/),
@@ -63,6 +64,10 @@ Ext.apply = function(o, c, defaults){
         isIE7 = isIE && check(/msie 7/),
         isIE8 = isIE && check(/msie 8/),
         isIE6 = isIE && !isIE7 && !isIE8,
+        isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
+        isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
+        isNewIE = (Ext.isIE9 || isIE10 || isIE11),
+        isEdge = check(/edge/),
         isGecko = !isWebKit && check(/gecko/),
         isGecko2 = isGecko && check(/rv:1\.8/),
         isGecko3 = isGecko && check(/rv:1\.9/),
@@ -71,7 +76,23 @@ Ext.apply = function(o, c, defaults){
         isMac = check(/macintosh|mac os x/),
         isAir = check(/adobeair/),
         isLinux = check(/linux/),
-        isSecure = /^https/i.test(window.location.protocol);
+        isSecure = /^https/i.test(window.location.protocol),
+        isIOS = check(/ipad/) || check(/iphone/),
+        isAndroid = check(/android/),
+        isTouchDevice =
+            // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
+            'ontouchstart' in window        // works on most browsers
+            || navigator.maxTouchPoints,    // works on IE10/11 and Surface
+        isWebApp =
+            // @see https://stackoverflow.com/questions/17989777/detect-if-ios-is-using-webapp/40932301#40932301
+            (window.navigator.standalone == true)                           // iOS safari
+            || (window.matchMedia('(display-mode: standalone)').matches),   // android chrome
+        // NOTE: some browsers require user interaction (like click events)
+        //       for focus to work (e.g. iOS dosn't show keyborad)
+        supportsUserFocus = ! (isTouchDevice && !isWebApp),
+        isThenable = function(v) {
+            return !!v && typeof v.then === 'function';
+        };
 
     // remove css image flicker
     if(isIE6){
@@ -771,7 +792,19 @@ function(el){
          * True if the detected platform is Adobe Air.
          * @type Boolean
          */
-        isAir : isAir
+        isAir : isAir,
+        isIE10: isIE10,
+        isIE11: isIE11,
+        isNewIE: isNewIE,
+        isEdge: isEdge,
+        isIOS: isIOS,
+        isAndroid: isAndroid,
+        isTouchDevice: isTouchDevice,
+        isWebApp: isWebApp,
+        supportsUserFocus: supportsUserFocus,
+        supportsPopupWindows: !isIOS && !isAndroid,
+        isThenable: isThenable,
+        isPromise: isThenable
     });
 
     /**

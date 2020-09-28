@@ -278,28 +278,37 @@ Ext.Component = function(config){
         this.baseAction.addComponent(this);
     }
 
-    this.initComponent();
-
-    if(this.plugins){
-        if(Ext.isArray(this.plugins)){
-            for(var i = 0, len = this.plugins.length; i < len; i++){
-                this.plugins[i] = this.initPlugin(this.plugins[i]);
+    const v = this.initComponent();
+    const afterInit = () => {
+        if (this.plugins) {
+            if (Ext.isArray(this.plugins)) {
+                for (var i = 0, len = this.plugins.length; i < len; i++) {
+                    this.plugins[i] = this.initPlugin(this.plugins[i]);
+                }
+            } else {
+                this.plugins = this.initPlugin(this.plugins);
             }
-        }else{
-            this.plugins = this.initPlugin(this.plugins);
+        }
+
+        if (this.stateful !== false) {
+            this.initState();
+        }
+
+        if (this.applyTo) {
+            this.applyToMarkup(this.applyTo);
+            delete this.applyTo;
+        } else if (this.renderTo) {
+            this.render(this.renderTo);
+            delete this.renderTo;
         }
     }
-
-    if(this.stateful !== false){
-        this.initState();
-    }
-
-    if(this.applyTo){
-        this.applyToMarkup(this.applyTo);
-        delete this.applyTo;
-    }else if(this.renderTo){
-        this.render(this.renderTo);
-        delete this.renderTo;
+    
+    if (Ext.isThenable(v)) {
+        v.then(() => {
+            afterInit();
+        });
+    } else {
+        afterInit();
     }
 };
 
