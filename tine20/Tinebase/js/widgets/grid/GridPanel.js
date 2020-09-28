@@ -2048,14 +2048,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             case e.A:
                 // select only current page
                 this.grid.getSelectionModel().selectAll(true);
-                e.preventDefault();
+                e.stopEvent();
                 break;
             case e.C:
                 if (this.action_editCopyInNewWindow && !this.action_editCopyInNewWindow.isDisabled()) {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'copy'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.E:
@@ -2063,7 +2063,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'edit'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.N:
@@ -2071,17 +2071,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'add'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.F:
                 if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
-                    e.preventDefault();
+                    e.stopEvent();
                     this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
                 }
                 break;
             case e.R:
                 this.bufferedLoadGridData();
+                e.stopEvent();
                 break;
             case e.ENTER:
                 if (_.isFunction(this.grid.startEditing)) {
