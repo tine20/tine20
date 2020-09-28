@@ -744,7 +744,9 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         )), Felamimail_Model_Folder::FOLDER_TRASH);
 
-        $messageInTrash = $this->_searchForMessageBySubject($message['subject'], $this->_account->trash_folder);
+        $this->_searchForMessageBySubject($message['subject'], $this->_account->trash_folder);
+        $messageInInbox = $this->_searchForMessageBySubject($message['subject'], 'INBOX', false);
+        self::assertEquals([], $messageInInbox, 'message should be moved from inbox to trash');
     }
 
     /**

@@ -160,7 +160,9 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             // no need to move
             $result = FALSE;
         } else if ($messagesInFolder->getFirstRecord()->account_id == $_targetFolder->account_id) {
-            if (Felamimail_Config::getInstance()->get(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT)) {
+            if (Felamimail_Config::getInstance()->get(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT) &&
+                $keepOriginalMessages
+            ) {
                 $translation = Tinebase_Translation::getTranslation('Felamimail');
                 throw new Tinebase_Exception_SystemGeneric($translation->_('It is not allowed to copy e-mails in the same account.'));
             }
