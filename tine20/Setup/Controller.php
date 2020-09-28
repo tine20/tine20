@@ -2542,21 +2542,27 @@ class Setup_Controller
     }
     
     /**
-     * clear cache
+     * clear caches
      *
-     * @return void
+     * @param boolean $deactivateCache after clearing
+     * @return array
      */
-    public function clearCache()
+    public function clearCache($deactivateCache = true)
     {
+        $cachesCleared = [];
+
         // setup cache (via tinebase because it is disabled in setup by default)
         Tinebase_Core::setupCache(TRUE);
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache ...');
         
         Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        $cachesCleared[] = 'TinebaseCache';
 
         Tinebase_Application::getInstance()->resetClassCache();
+        $cachesCleared[] = 'ApplicationClassCache';
         Tinebase_Cache_PerRequest::getInstance()->reset();
+        $cachesCleared[] = 'RequestCache';
 
         // clear routing cache
         foreach (new DirectoryIterator(Tinebase_Core::getCacheDir()) as $directoryIterator) {
@@ -2566,9 +2572,13 @@ class Setup_Controller
                 unlink($directoryIterator->getPathname());
             }
         }
+        $cachesCleared[] = 'RoutesCache';
 
-        // deactivate cache again
-        Tinebase_Core::setupCache(FALSE);
+        if ($deactivateCache) {
+            Tinebase_Core::setupCache(FALSE);
+        }
+
+        return $cachesCleared;
     }
 
     /**
