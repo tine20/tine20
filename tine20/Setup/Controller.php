@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  */
@@ -1827,7 +1827,9 @@ class Setup_Controller
 
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing from dump ' . $mysqlBackupFile);
 
-        $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        if (! isset($options['keepTinebaseID']) || ! $options['keepTinebaseID']) {
+            $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        }
         $this->restore($options);
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
@@ -2551,11 +2553,19 @@ class Setup_Controller
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache ...');
         
-        // clear cache
         Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
 
         Tinebase_Application::getInstance()->resetClassCache();
         Tinebase_Cache_PerRequest::getInstance()->reset();
+
+        // clear routing cache
+        foreach (new DirectoryIterator(Tinebase_Core::getCacheDir()) as $directoryIterator) {
+            if (strpos($directoryIterator->getFilename(), 'route.cache') !== false && $directoryIterator->isFile()) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Deleting routing cache file ' . $filename);
+                unlink($directoryIterator->getPathname());
+            }
+        }
 
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
