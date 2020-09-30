@@ -35,8 +35,9 @@
  * @property    integer $reading_conf       true if it must send a reading confirmation
  * @property    boolean $massMailingFlag    true if message should be treated as mass mailing
  * @property    array   $fileLocations      file locations of this message
+ * @property    boolean $is_spam_suspicions true if is spam suspicions
  */
-class Felamimail_Model_Message extends Tinebase_Record_Abstract
+class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tinebase_BL_DataInterface
 {
     /**
      * message content type (rfc822)
@@ -170,6 +171,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             array('InArray', array(0, 1)),
         ),
         'fileLocations'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_spam_suspicions'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

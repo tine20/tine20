@@ -83,6 +83,14 @@
     background-image:url(../../images/icon-set/icon_bell.svg) !important;
 }
 
+.felamimail-action-spam {
+    background-image:url(../../images/icon-set/icon_spam.svg) !important;
+}
+
+.felamimail-action-ham {
+    background-image:url(../../images/icon-set/icon_ham.svg) !important;
+}
+
 /***** flag classes ******/
 
 .flag_unread td{
@@ -96,6 +104,10 @@
 .flag_deleted td {
     text-decoration: line-through;
     color: #aaaaaa;
+}
+
+.is_spam_suspicions td {
+    color: #D8A45B;
 }
 
 .FelamimailFlagIcon {
