@@ -2806,7 +2806,7 @@ class Setup_Controller
         foreach (new DirectoryIterator(Tinebase_Core::getCacheDir()) as $directoryIterator) {
             if (strpos($directoryIterator->getFilename(), 'route.cache') !== false && $directoryIterator->isFile()) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Deleting routing cache file ' . $filename);
+                    . ' Deleting routing cache file ' . $directoryIterator->getPathname());
                 unlink($directoryIterator->getPathname());
             }
         }
