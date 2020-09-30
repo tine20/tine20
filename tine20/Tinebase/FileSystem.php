@@ -652,7 +652,7 @@ class Tinebase_FileSystem implements
 
                     $this->clearStatCache($options['tine20']['path']);
 
-                    $newNode = $this->stat($options['tine20']['path']);
+                    $newNode = $this->_getTreeNodeBackend()->get($options['tine20']['node']->getId());
 
                     // write modlog and system notes
                     $this->_getTreeNodeBackend()->updated($newNode, $options['tine20']['node']);

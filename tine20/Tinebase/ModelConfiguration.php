@@ -1165,6 +1165,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
         }
 
+        $recordClass::modelConfigHook($this->_fields);
+
         // holds the filters used for the query-filter, if any
         $queryFilters = array();
         
@@ -1613,11 +1615,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 }
                 $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
                 $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
+                $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
                 if ($fieldDef[self::TYPE] == 'record') {
                     $fieldDef['config']['length'] = 40;
                     $this->_recordFields[$fieldKey] = $fieldDef;
                 } else {
-                    $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
                     $this->_recordsFields[$fieldKey] = $fieldDef;
                     if (isset($fieldDef[self::CONFIG][self::STORAGE]) && self::TYPE_JSON === $fieldDef[self::CONFIG][self::STORAGE] &&
                             !isset($this->_converters[$fieldKey])) {

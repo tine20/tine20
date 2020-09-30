@@ -964,9 +964,16 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     }
 
     /**
-     * @param array $_defintiion
+     * @param array $_definition
      */
-    public static function inheritModelConfigHook(array &$_defintion)
+    public static function inheritModelConfigHook(array &$_definition)
+    {
+    }
+
+    /**
+     * @param array $_definition
+     */
+    public static function modelConfigHook(array &$_definition)
     {
     }
 

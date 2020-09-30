@@ -38,6 +38,7 @@ class Tinebase_ModelConfiguration_Const {
     const DEGREE = 'degree';
     const DEPENDENT_RECORDS = 'dependentRecords';
     const DISABLED = 'disabled';
+    const DOCTRINE_IGNORE = 'doctrineIgnore';
 
     const EXPOSE_HTTP_API = 'exposeHttpApi';
     const EXPOSE_JSON_API = 'exposeJsonApi';
