@@ -34,7 +34,7 @@ describe('keyFields', () => {
     })
 });
 
-describe('changeViews', () => {
+describe.skip('changeViews', () => {
     // .tine-mainscreen-centerpanel-center
     test('day View', async () => {
         // NOTE: if we enter the tests here we need to wait till loadmask shows and hides
