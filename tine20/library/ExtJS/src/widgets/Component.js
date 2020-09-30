@@ -302,7 +302,7 @@ Ext.Component = function(config){
             delete this.renderTo;
         }
     }
-    
+
     if (Ext.isThenable(v)) {
         v.then(() => {
             afterInit();
@@ -866,10 +866,8 @@ new Ext.Panel({
                 ptype: p
             });
         }
-        if (! p.isInitialized) {
-            p.init(this);
-            p.isInitialized = true;
-        }
+        
+        p.init(this);
         return p;
     },
 
