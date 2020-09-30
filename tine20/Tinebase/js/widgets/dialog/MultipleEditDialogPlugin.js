@@ -79,10 +79,17 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      */
     skipItems: [],
     
+    // private
+    isInitialised: false,
+    
     /**
      * initializes the plugin
      */    
     init : function(ed) {
+        if (this.isInitialised) {
+            return;
+        }
+        this.isInitialised = true;
         ed.mode = 'local';
         ed.evalGrants = false;
         ed.onRecordLoad = Ext.emptyFn;
