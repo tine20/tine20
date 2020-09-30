@@ -1,23 +1,65 @@
+# This file sets the defaults for all ci variables.
+# It can and should be used to configure differences between branches.
+# It can also be used for feature branches e.g. if not all test are needed or another db should be used.
+# overwritten by: ci-config.yml < variables in gitlab-ci.yml < gitlab project variables < per pipeline variables
+
 variables:
-  PHP_UNIT_ALL_TESTS_SOURCE: "true"
-  PHP_UNIT_ALL_TESTS_BUILT: "true"
-  PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP: "false"
-  PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL: "true"
+  # The major commit ref name is mainly used for ci caching. Non feature branches should be there own major. The major of feature branches should be the branch the will be merged into.
   MAJOR_COMMIT_REF_NAME: "2019.11"
-  DOCKER_BUILD_BASE_IMAGE: "false"
-  DOCKER_BUILD_DEPENDENCY_IMAGE: "false"
-  DOCKER_BUILD_BUILD: "true"
-  PHP_UNIT_NOGITLABCI_TESTS_BUILT: "false"
-  PHP_STAN_ANALYSES: "true"
-  NO_CACHE: "true"
+
+  # main toggle for gitlab ci. if false the ci will do nothing
   RUN_CI_PIPELINE: "true"
-  PUSH_TO_DOCKERHUB: "false"
-  DOCKERHUB_TAG: "dev"
-  PHP_UNIT_SERVERTESTS: "true"
-  DATABASE_IMAGE: "mariadb:10.4.1"
-  REDIS_IMAGE: "redis:5.0.5"
-  DOCKER_GIT_CONFIG: ""
+
+  # do not push any images. Commit images will still be pushed. But they are tagged per pipeline
   NO_PUSH: "false"
+
+  # push the built result to docker hub. should be only set to true by schedules
+  PUSH_TO_DOCKERHUB: "false"
+
+  # tag used on docker hub
+  DOCKERHUB_TAG: "dev"
+
+  # whether to build the built, and dev image. needed for built tests
+  DOCKER_BUILD_BUILD: "true"
+
+  # install one custom app via composer: vendor
   CUSTOM_APP_VENDOR: "metaways"
+
+  # install one custom app via composer: version
   CUSTOM_APP_VERSION: "dev-master"
+
+  # install one custom app via composer: name
+  # CUSTOM_APP_NAME default should be nothing
+
+  # install one custom app via composer: git url
+  # CUSTOM_APP_GIT_URL default should be nothing
+
+  # enable php stan
+  PHP_STAN_ANALYSES: "true"
+
+  # enable or disable php unit tests on source (with webpack) image.
+  PHP_UNIT_ALL_TESTS_SOURCE: "true"
+
+  # enable or disable php unit test on built (with built js, and clean files) image.
+  PHP_UNIT_ALL_TESTS_BUILT: "true"
+
+  # enable or disable run all test with ldap backend enabled. Not connected with PHP_UNIT_ALL_TESTS_BUILT.
+  PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP: "false"
+
+  # whether to run source test in parallel or not
+  PHP_UNIT_SERVERTESTS: "true"
+
+  # run test with nogitlabci group (test know to not work in gitlab).
+  PHP_UNIT_NOGITLABCI_TESTS_BUILT: "false"
+
+  # database image used by tests
+  PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL: "true"
+
+  # enable server tests
+  DATABASE_IMAGE: "mariadb:10.4.1"
+
+  # redis image used by tests
+  REDIS_IMAGE: "redis:5.0.5"
+
+  # add a php unit filter to all php unit test jobs e.g. "CashBook"
   PHPUNIT_FILTER: ""

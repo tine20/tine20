@@ -1,7 +1,7 @@
 [template]
 prefix = "/phpfpm"
 src = "php-fpm.conf.tmpl"
-dest = "/usr/local/etc/php-fpm.d/www.conf"
+dest = "/etc/php7/php-fpm.d/www.conf"
 owner = "root"
 mode = "0644"
 keys = [

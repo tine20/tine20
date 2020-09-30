@@ -1,0 +1,24 @@
+# description:
+#   This image is used to run tests in the ci pipeline.
+#
+# build:
+#   $ docker build [...] --build-arg='SOURCE_IMAGE=source-tag' .
+#
+# ARGS:
+#   SOURCE_IMAGE=source
+#   TINE20ROOT=/usr/share
+#   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true - is this still needed here?
+
+ARG SOURCE_IMAGE=source
+
+#  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
+FROM ${SOURCE_IMAGE} as test-source
+ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ARG TINE20ROOT=/usr/share
+
+RUN apk add mysql-client
+
+COPY ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/webpack.ini
+COPY docs/config /config
+COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
+COPY phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon
