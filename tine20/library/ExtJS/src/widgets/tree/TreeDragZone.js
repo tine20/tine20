@@ -39,7 +39,8 @@ Ext.extend(Ext.tree.TreeDragZone, Ext.dd.DragZone, {
     // private
     onInitDrag : function(e){
         var data = this.dragData;
-        this.tree.getSelectionModel().select(data.node);
+        // if user wants to select he clicks instead of drages!
+        // this.tree.getSelectionModel().select(data.node);
         this.tree.eventModel.disable();
         this.proxy.update("");
         data.node.ui.appendDDGhost(this.proxy.ghost.dom);
