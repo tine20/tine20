@@ -1,7 +1,7 @@
 [template]
 prefix = "/php"
 src = "php.ini.tmpl"
-dest = "/usr/local/etc/php/conf.d/php.ini"
+dest = "/etc/php7/php.ini"
 owner = "root"
 mode = "0644"
 keys = [
