@@ -34,11 +34,15 @@ http {
 
 	ssl_session_cache shared:SSL:2m;
 
-	gzip {{getv "/gzip" "off"}};
+	gzip {{getv "/gzip" "on"}};
 
 	gzip_vary on;
 
 	gzip_static {{getv "/gzip/static" "off"}};
+
+	brotli {{getv "/brotli" "on"}};
+	brotli_comp_level {{getv "/brotli/comp/level" "6"}};
+	brotli_types text/xml image/svg+xml application/x-font-ttf image/vnd.microsoft.icon application/x-font-opentype application/json font/eot application/vnd.ms-fontobject application/javascript font/otf application/xml application/xhtml+xml text/javascript  application/x-javascript text/plain application/x-font-truetype application/xml+rss image/x-icon font/opentype text/css image/x-win-bitmap;
 
 	log_format main '$remote_addr - $remote_user [$time_local] "$request" '
 			'$status $body_bytes_sent "$http_referer" '

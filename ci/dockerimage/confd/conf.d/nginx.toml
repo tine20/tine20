@@ -9,6 +9,8 @@ keys = [
     "/keepalive/timeout",
     "/tcp/nopush",
     "/gzip",
-    "/gzip/static"
+    "/gzip/static",
+    "/brotli",
+    "/brotli/comp/level"
 ]
 check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
