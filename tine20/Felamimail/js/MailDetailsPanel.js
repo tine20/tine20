@@ -628,7 +628,15 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         }
 
         if(record.get('is_spam_suspicions')) {
-            this.spamToolbar.show();
+            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(record.get('account_id'));
+            var folder = this.app.getFolderStore().getById(record.get('folder_id'));
+            
+            //remove toolbar if the message is in trash
+            if(folder.get('globalname') === account.get('trash_folder')) {
+                this.spamToolbar.hide();
+            } else {
+                this.spamToolbar.show();
+            }
         } else {
             this.spamToolbar.hide();
         }
