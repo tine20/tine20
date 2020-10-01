@@ -63,4 +63,23 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         );
         static::assertSame(1, $result->count());
     }
+
+    public function testOneToOne()
+    {
+        $record = $this->_getExampleRecord();
+        $record->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE} = [
+            ExampleApplication_Model_OneToOne::FLD_NAME => 'unittest'
+        ];
+
+        $createdRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($record);
+        $expander = new Tinebase_Record_Expander(ExampleApplication_Model_ExampleRecord::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE => []
+            ]
+        ]);
+        $expander->expand(new Tinebase_Record_RecordSet(ExampleApplication_Model_ExampleRecord::class, [$createdRecord]));
+
+        static::assertTrue($createdRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE} instanceof
+            ExampleApplication_Model_OneToOne, 'onetoone not instance of ' . ExampleApplication_Model_OneToOne::class);
+    }
 }
