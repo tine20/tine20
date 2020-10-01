@@ -145,19 +145,23 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.common.reload({
                     clearCache: true
                 });
-            } else if (window.isMainWindow && e.getKey() === e.ESC) {
-                // select first row of current grid panel if available
-                var app = Tine.Tinebase.MainScreen.getActiveApp(),
-                    centerPanel = app.getMainScreen().getCenterPanel(),
-                    grid = centerPanel && Ext.isFunction(centerPanel.getGrid) ? centerPanel.getGrid() : null,
-                    sm = grid ? grid.getSelectionModel() : null;
-                if (sm) {
-                    sm.selectFirstRow();
-                    grid.getView().focusRow(0);
-                }
-
             } else if (e.ctrlKey && e.getKey() === e.S ) {
                 Ext.ux.screenshot.ux(window, {download: true, grabMouse: !e.shiftKey});
+            }  else if (window.isMainWindow) {
+                // select first row of current grid panel if available
+                var app = Tine.Tinebase.MainScreen ? Tine.Tinebase.MainScreen.getActiveApp() : null,
+                    centerPanel = app ? app.getMainScreen().getCenterPanel() : null,
+                    grid = centerPanel && Ext.isFunction(centerPanel.getGrid) ? centerPanel.getGrid() : null,
+                    sm = grid ? grid.getSelectionModel() : null;
+                
+                if (grid) {
+                    if (e.getKey() === e.ESC && sm) {
+                        sm.selectFirstRow();
+                        grid.getView().focusRow(0);
+                    } else {
+                        grid.fireEvent('keydown', e);
+                    }
+                }
             }
         });
         
@@ -170,11 +174,11 @@ Tine.Tinebase.tineInit = {
 
         // generic context menu
         Ext.getBody().on('contextmenu', function (e) {
-            var target = e.getTarget('a',1 ,true) ||
-                e.getTarget('input[type=text]',1 ,true) ||
-                e.getTarget('textarea',1 ,true);
+            var target = e.getTarget('a', 1 , true) ||
+                e.getTarget('input[type=text]', 1 , true) ||
+                e.getTarget('textarea', 1, true);
             if (target) {
-                // allow native context menu for links
+                // allow native context menu for links + textareas + (text)input fields
                 return;
             }
 
@@ -184,7 +188,7 @@ Tine.Tinebase.tineInit = {
                 return;
             }
 
-            // deny native context menu if we have an oown one
+            // deny native context menu if we have an own one
             if (Tine.Tinebase.MainContextMenu.showIf(e)) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -599,7 +603,7 @@ Tine.Tinebase.tineInit = {
                 };
                 
                 // encapsulate as jsonrpc response
-                var requestOptions = Ext.decode(options.jsonData);
+                var requestOptions = _.isString(options.jsonData) ? Ext.decode(options.jsonData) : options.jsonData;
                 response.responseText = Ext.encode({
                     jsonrpc: requestOptions.jsonrpc,
                     id: requestOptions.id,
@@ -774,6 +778,11 @@ Tine.Tinebase.tineInit = {
         });
 
         Tine.Tinebase.tineInit.initExtDirect();
+
+
+        Ext.form.NumberField.prototype.decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
+        Ext.ux.form.NumberField.prototype.thousandSeparator = Tine.Tinebase.registry.get('thousandSeparator');
+
 
         formatMessage.setup({
             locale: Tine.Tinebase.registry.get('locale').locale || 'en'

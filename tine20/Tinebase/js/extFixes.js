@@ -1,41 +1,3 @@
-(function(){
-    var ua = navigator.userAgent.toLowerCase(),
-        check = function(r){
-            return r.test(ua);
-        },
-        docMode = document.documentMode,
-        isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
-        isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
-        isNewIE = (Ext.isIE9 || isIE10 || isIE11),
-        isEdge = check(/edge/),
-        isIOS = check(/ipad/) || check(/iphone/),
-        isAndroid = check(/android/),
-        isTouchDevice =
-            // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
-            'ontouchstart' in window        // works on most browsers
-            || navigator.maxTouchPoints,    // works on IE10/11 and Surface
-        isWebApp =
-            // @see https://stackoverflow.com/questions/17989777/detect-if-ios-is-using-webapp/40932301#40932301
-            (window.navigator.standalone == true)                           // iOS safari
-            || (window.matchMedia('(display-mode: standalone)').matches),   // android chrome
-        // NOTE: some browsers require user interaction (like click events)
-        //       for focus to work (e.g. iOS dosn't show keyborad)
-        supportsUserFocus = ! (isTouchDevice && !isWebApp);
-
-    Ext.apply(Ext, {
-        isIE10: isIE10,
-        isIE11: isIE11,
-        isNewIE: isNewIE,
-        isEdge: isEdge,
-        isIOS: isIOS,
-        isAndroid: isAndroid,
-        isTouchDevice: isTouchDevice,
-        isWebApp: isWebApp,
-        supportsUserFocus: supportsUserFocus,
-        supportsPopupWindows: !isIOS && !isAndroid
-    });
-})();
-
 /**
  * for some reasons the original fix insertes two <br>'s on enter for webkit. But this is one to much
  */
@@ -906,38 +868,6 @@ Ext.override(Ext.menu.DateMenu, {
         this.on('select', this.menuHide, this);
         if(this.handler){
             this.on('select', this.handler, this.scope || this);
-        }
-    }
-});
-
-Ext.override(Ext.Component, {
-    /**
-     * is this component rendered?
-     * @return {Promise}
-     */
-    afterIsRendered : function(){
-        var me = this;
-        if (this.rendered) {
-            return Promise.resolve(me);
-        }
-        return new Promise(function(resolve) {
-            me.on('render', resolve);
-        });
-    },
-
-    // support initialState
-    initState : function(){
-        if(Ext.state.Manager){
-            var id = this.getStateId();
-            if(id){
-                var state = Ext.state.Manager.get(id) || this.initialState;
-                if(state){
-                    if(this.fireEvent('beforestaterestore', this, state) !== false){
-                        this.applyState(Ext.apply({}, state));
-                        this.fireEvent('staterestore', this, state);
-                    }
-                }
-            }
         }
     }
 });

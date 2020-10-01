@@ -83,6 +83,17 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
         Tine.Tinebase.dialog.Dialog.superclass.initComponent.call(this);
     },
 
+    afterRender: function() {
+        Tine.Tinebase.dialog.Dialog.superclass.afterRender.call(this);
+        
+        if (this.enableKeyEvents) {
+            this.getEl().on('keydown', (e) => {
+                if (e.getKey() === e.ENTER) this.onButtonApply();
+                if (e.getKey() === e.ESC) this.onButtonCancel();
+            });
+        }
+    },
+    
     /**
      * template fn, implement to have specific data in the events
      */

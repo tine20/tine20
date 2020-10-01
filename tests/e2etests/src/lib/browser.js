@@ -150,7 +150,7 @@ module.exports = {
         await page.waitForSelector('input[name=username]');
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toMatchElement('input[name=username]');
-        await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")')
+        await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")');
         await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME);
         await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD);
         await expect(page).toClick('button', {text: 'Anmelden'});
@@ -170,4 +170,17 @@ module.exports = {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: module});
         }
     },
+    
+    clickSlitButton: async function(page, text) {
+        return await page.evaluate((text) => {
+            const btn = document.evaluate('//em[button[text()="' + text + '"]]', document).iterateNext();
+            const box = btn.getBoundingClientRect();
+
+            // cruid split btn hack
+            const tmp = Ext.EventObject.getPageX;
+            Ext.EventObject.getPageX = () => {return 10000}
+            document.elementFromPoint(box.x+box.width, box.y).click();
+            Ext.EventObject.getPageX = tmp;
+        }, text);
+    }
 };

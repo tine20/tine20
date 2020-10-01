@@ -278,28 +278,37 @@ Ext.Component = function(config){
         this.baseAction.addComponent(this);
     }
 
-    this.initComponent();
-
-    if(this.plugins){
-        if(Ext.isArray(this.plugins)){
-            for(var i = 0, len = this.plugins.length; i < len; i++){
-                this.plugins[i] = this.initPlugin(this.plugins[i]);
+    const v = this.initComponent();
+    const afterInit = () => {
+        if (this.plugins) {
+            if (Ext.isArray(this.plugins)) {
+                for (var i = 0, len = this.plugins.length; i < len; i++) {
+                    this.plugins[i] = this.initPlugin(this.plugins[i]);
+                }
+            } else {
+                this.plugins = this.initPlugin(this.plugins);
             }
-        }else{
-            this.plugins = this.initPlugin(this.plugins);
+        }
+
+        if (this.stateful !== false) {
+            this.initState();
+        }
+
+        if (this.applyTo) {
+            this.applyToMarkup(this.applyTo);
+            delete this.applyTo;
+        } else if (this.renderTo) {
+            this.render(this.renderTo);
+            delete this.renderTo;
         }
     }
 
-    if(this.stateful !== false){
-        this.initState();
-    }
-
-    if(this.applyTo){
-        this.applyToMarkup(this.applyTo);
-        delete this.applyTo;
-    }else if(this.renderTo){
-        this.render(this.renderTo);
-        delete this.renderTo;
+    if (Ext.isThenable(v)) {
+        v.then(() => {
+            afterInit();
+        });
+    } else {
+        afterInit();
     }
 };
 
@@ -857,6 +866,7 @@ new Ext.Panel({
                 ptype: p
             });
         }
+        
         p.init(this);
         return p;
     },
@@ -1125,7 +1135,7 @@ var myGrid = new Ext.grid.EditorGridPanel({
         if(Ext.state.Manager){
             var id = this.getStateId();
             if(id){
-                var state = Ext.state.Manager.get(id);
+                var state = Ext.state.Manager.get(id) || this.initialState;
                 if(state){
                     if(this.fireEvent('beforestaterestore', this, state) !== false){
                         this.applyState(Ext.apply({}, state));
@@ -1501,6 +1511,10 @@ new Ext.Panel({
         return this.rendered && this.getVisibilityEl().isVisible();
     },
 
+    isHidden: function(){
+        return !this.isVisible();
+    },
+    
     /**
      * Clone the current component using the original config values passed into this instance by default.
      * @param {Object} overrides A new config containing any properties to override in the cloned version.
@@ -1749,6 +1763,20 @@ myGridPanel.mon(myGridPanel.getSelectionModel(), {
      */
     getBubbleTarget : function(){
         return this.ownerCt;
+    },
+
+    /**
+     * is this component rendered?
+     * @return {Promise}
+     */
+    afterIsRendered : function(){
+        var me = this;
+        if (this.rendered) {
+            return Promise.resolve(me);
+        }
+        return new Promise(function(resolve) {
+            me.on('render', resolve);
+        });
     }
 });
 

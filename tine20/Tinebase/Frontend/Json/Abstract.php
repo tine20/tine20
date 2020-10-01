@@ -151,7 +151,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $clientData = [];
         if ($request = Tinebase_Core::getRequest()) {
             foreach ($request->getHeaders() as $header) {
-                if (strpos(($name = $header->getFieldName()), 'X-TINE20-REQUEST-CONTEXT-') === 0) {
+                if (strpos(($name = strtoupper($header->getFieldName())), 'X-TINE20-REQUEST-CONTEXT-') === 0) {
                     $name = strtolower(substr($name, strlen('X-TINE20-REQUEST-CONTEXT-')));
                     $clientData[$name] = $header->getFieldValue();
                 }
@@ -213,7 +213,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * Search for records matching given arguments
      *
      * @param string|array                        $_filter json encoded / array
-     * @param string|array                        $_paging json encoded / array
+     * @param string|array|Tinebase_Model_Pagination $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
      * @param bool|array|Tinebase_Record_Expander $_getRelations
@@ -227,13 +227,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         }
 
         $filter = $this->_decodeFilter($_filter, $_filterModel);
-        $decodedPagination = $this->_prepareParameter($_paging);
-        if (null !== $this->_paginationModel) {
-            $decodedPagination['model'] = $this->_paginationModel;
-        } else {
-            $decodedPagination['model'] = $filter->getModelName();
-        }
-        $pagination = new Tinebase_Model_Pagination($decodedPagination);
+        $pagination = $this->_preparePaginationParameter($_paging, $filter);
         $records = $_controller->search($filter, $pagination, $_getRelations);
 
         $result = $this->_multipleRecordsToJson($records, $filter);
@@ -243,6 +237,34 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             'results'       => array_values($result),
             'filter'        => $filter->toArray(true),
         ]);
+    }
+
+    /**
+     * @param mixed $_paging
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return Tinebase_Model_Pagination
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _preparePaginationParameter($_paging, Tinebase_Model_Filter_FilterGroup $_filter = null)
+    {
+        if ($_paging instanceof Tinebase_Model_Pagination) {
+            return $_paging;
+        }
+
+        $decodedPagination = $this->_prepareParameter($_paging);
+        if (! is_array($decodedPagination)) {
+            $decodedPagination = [
+                'start' => 0,
+                'limit' => 50,
+            ];
+        }
+        if (null !== $this->_paginationModel) {
+            $decodedPagination['model'] = $this->_paginationModel;
+        } else if ($_filter) {
+            $decodedPagination['model'] = $_filter->getModelName();
+        }
+        return new Tinebase_Model_Pagination($decodedPagination);
     }
 
     /**

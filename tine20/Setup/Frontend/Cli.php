@@ -116,6 +116,8 @@ class Setup_Frontend_Cli
             $this->_checkRequirements($_opts);
         } elseif(isset($_opts->setconfig)) {
             $this->_setConfig($_opts);
+        } elseif(isset($_opts->clear_cache)) {
+            $this->_clearCache($_opts);
         } elseif(isset($_opts->create_admin)) {
             $this->_createAdminUser($_opts);
         } elseif(isset($_opts->getconfig)) {
@@ -648,6 +650,8 @@ class Setup_Frontend_Cli
     
     /**
      * list installed apps
+     *
+     * TODO add --version command, too
      */
     protected function _listInstalled()
     {
@@ -657,7 +661,8 @@ class Setup_Frontend_Cli
             echo "No applications installed\n";
             return 1;
         }
-        
+
+        echo 'Version: "' . TINE20_CODENAME . '" ' . TINE20_PACKAGESTRING . ' (Build: ' . TINE20_BUILDTYPE . ")\n";
         echo "Currently installed applications:\n";
         $applications->sort('name');
         foreach ($applications as $application) {
@@ -910,7 +915,20 @@ class Setup_Frontend_Cli
             }
         }
     }
-    
+
+    /**
+     * clears all caches
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _clearCache(Zend_Console_Getopt $_opts)
+    {
+        $cachesCleared = Setup_Controller::getInstance()->clearCache();
+        if ($_opts->v) {
+            echo "Caches cleared: " . print_r($cachesCleared, true) . "\n";
+        }
+    }
+
     /**
      * create admin user / activate existing user / allow to reset password
      * 

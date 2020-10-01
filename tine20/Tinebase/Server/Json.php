@@ -530,7 +530,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.openIDCLogin',
             'Tinebase.getAvailableTranslations',
             'Tinebase.getTranslations',
-            'Tinebase.setLocale'
+            'Tinebase.setLocale',
+            'Tinebase.checkAuthToken'
         );
         
         // check json key for all methods but some exceptions

@@ -1862,3 +1862,18 @@ msgstr "E-Mails innerhalb eines Kontos zu kopieren ist nicht erlaubt."
 
 msgid "Copy"
 msgstr "Kopieren"
+
+msgid "This message is probably SPAM. Please help to train your anti-SPAM system with a decision: \"Yes, it is SPAM\" or \"No, it is not\""
+msgstr "Diese Nachricht ist möglicherweise SPAM. Bitte helfen Sie, das Anti-SPAM-System mit Ihrer Entscheidung zu trainieren: \"Ja, es ist SPAM\" oder \"Nein, kein SPAM\""
+
+msgid "Yes, it is SPAM"
+msgstr "Ja, es ist SPAM"
+
+msgid "No, it is not"
+msgstr "Nein, kein SPAM"
+
+msgid "About SPAM"
+msgstr "Über SPAM"
+
+msgid "This message might be SPAM"
+msgstr "Bei dieser Nachricht könnte es sich um SPAM handeln"

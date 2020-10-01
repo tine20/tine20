@@ -1486,6 +1486,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // init sel model
         if (! this.selectionModel) {
             this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
+                moveEditorOnEnter: false,
                 store: this.store,
                 gridPanel: this
             });
@@ -1747,7 +1748,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
-            } 
+            }
+            
+            this.actionUpdater.addActions(this.actionToolbar.items);
         }
 
         return this.actionToolbar;
@@ -2045,14 +2048,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             case e.A:
                 // select only current page
                 this.grid.getSelectionModel().selectAll(true);
-                e.preventDefault();
+                e.stopEvent();
                 break;
             case e.C:
                 if (this.action_editCopyInNewWindow && !this.action_editCopyInNewWindow.isDisabled()) {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'copy'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.E:
@@ -2060,7 +2063,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'edit'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.N:
@@ -2068,23 +2071,34 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'add'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.F:
                 if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
-                    e.preventDefault();
+                    e.stopEvent();
                     this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
                 }
                 break;
             case e.R:
                 this.bufferedLoadGridData();
+                e.stopEvent();
+                break;
+            case e.ENTER:
+                if (_.isFunction(this.grid.startEditing)) {
+                    const col = _.find(this.grid.colModel.columns, {dataIndex: this.recordClass.getMeta('titleProperty')});
+                    const selections = this.selectionModel.getSelections();
+                    if (col && selections && selections.length === 1) {
+                        this.grid.startEditing(this.store.indexOf(selections[0]), _.indexOf(this.grid.colModel.columns, col));
+                        e.stopEvent();
+                    }
+                }
                 break;
             default:
                 if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
                     if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
                         this.onDeleteRecords.call(this);
-                        e.preventDefault();
+                        e.stopEvent();
                     }
                 }
                 if (e.browserEvent.key === '?') {
@@ -2102,6 +2116,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.INFO
                     });
+                    e.stopEvent();
                 }
         }
     },

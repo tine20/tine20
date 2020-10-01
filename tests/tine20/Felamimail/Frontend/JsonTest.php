@@ -496,18 +496,28 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
     /**
      * send to semicolon separated recipient list
+     *
+     * @param string $delimiter
      */
     public function testSendMessageWithDelimiterSeparatedEmails($delimiter = ';')
     {
         $message = $this->_getMessageData();
-        $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $delimiter . $this->_personas['sclever']->accountEmailAddress];
-        $this->_sendMessage(
-            'INBOX',
-            array(),
-            '',
-            'test',
-            $_messageToSend = $message
-        );
+
+        foreach ([
+                    $delimiter,
+                    ' ' . $delimiter,
+                    $delimiter . ' ',
+                    ' ' . $delimiter . ' '
+                 ] as $testDelimiter) {
+            $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $testDelimiter . $this->_personas['sclever']->accountEmailAddress];
+            $this->_sendMessage(
+                'INBOX',
+                array(),
+                '',
+                'test',
+                $_messageToSend = $message
+            );
+        }
     }
 
     /**
@@ -734,7 +744,9 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         )), Felamimail_Model_Folder::FOLDER_TRASH);
 
-        $messageInTrash = $this->_searchForMessageBySubject($message['subject'], $this->_account->trash_folder);
+        $this->_searchForMessageBySubject($message['subject'], $this->_account->trash_folder);
+        $messageInInbox = $this->_searchForMessageBySubject($message['subject'], 'INBOX', false);
+        self::assertEquals([], $messageInInbox, 'message should be moved from inbox to trash');
     }
 
     /**

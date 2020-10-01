@@ -13,7 +13,18 @@ require('Filemanager/js/QuickLookPanel');
  * @singleton
  */
 Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
-    actionConfigs: Tine.Filemanager.nodeActions
+    createNodeConstraintsProvider: [],
+    actionConfigs: Tine.Filemanager.nodeActions,
+    
+    registerCreateNodeConstraintsProvider: function(provider) {
+        this.createNodeConstraintsProvider.push(provider);
+    },
+
+    checkCreateNodeConstraints: function (parentNode, node) {
+        return _.reduce(this.createNodeConstraintsProvider, (allowed, constraintsProvider) => {
+            return allowed && (constraintsProvider(parentNode, node) !== false);
+        }, true);
+    }
 }))();
 
 /**
@@ -122,13 +133,16 @@ Tine.Filemanager.nodeActions.CreateFolder = {
         var enabled = !isFilterSelect
             && records && records.length === 1
             && records[0].get('type') === 'folder'
-            && window.lodash.get(records, '[0].data.account_grants.addGrant', false);
+            && window.lodash.get(records, '[0].data.account_grants.addGrant', false)
+            && Tine.Filemanager.nodeActionsMgr.checkCreateNodeConstraints(records[0], {type: 'folder'});
 
         if (! _.get(records, 'length') && filteredContainers) {
             enabled = _.get(filteredContainers, '[0].account_grants.addGrant', false);
             action.initialConfig.filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
+        
+            enabled = Tine.Filemanager.nodeActionsMgr.checkCreateNodeConstraints(action.initialConfig.filteredContainer, {type: 'folder'}) && enabled;
         }
-
+        
         action.setDisabled(!enabled);
     }
 };
@@ -330,7 +344,7 @@ Tine.Filemanager.nodeActions.Move = {
         });
 
         filePickerDialog.on('apply', function(node) {
-            Tine.Filemanager.fileRecordBackend.copyNodes(records, node, true);
+            Tine.Filemanager.fileRecordBackend.copyNodes(records, node[0], true);
         });
 
         filePickerDialog.openWindow();

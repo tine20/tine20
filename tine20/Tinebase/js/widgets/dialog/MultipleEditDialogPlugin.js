@@ -79,26 +79,29 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      */
     skipItems: [],
     
+    // private
+    isInitialised: false,
+    
     /**
      * initializes the plugin
      */    
     init : function(ed) {
+        if (this.isInitialised) {
+            return;
+        }
+        this.isInitialised = true;
         ed.mode = 'local';
         ed.evalGrants = false;
-        ed.onRecordLoad = ed.onRecordLoad.createSequence(this.onAfterRender, this);
+        ed.onRecordLoad = Ext.emptyFn;
         ed.onApplyChanges = ed.onApplyChanges.createInterceptor(this.onRecordUpdate, this);
         ed.onRecordUpdate = Ext.emptyFn;
         ed.initRecord = Ext.emptyFn;
         ed.useMultiple = true;
         ed.interRecord = new ed.recordClass({});
         ed.loadRecord = true;
-        
-        ed.on('load', function(editDialog, record, ticketFn) {
-            this.loadInterceptor = ticketFn();
-        }, this);
+        ed.checkUnsavedChanges = false;
         
         this.app = Tine.Tinebase.appMgr.get(ed.app);
-        this.form = ed.getForm();
         this.handleFields = [];
         this.interRecord = ed.interRecord;
         
@@ -122,6 +125,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 ff.combo.disableClearer = true;
             });
         }
+
+        ed.on('render', async () => {
+            await ed.showLoadMask();
+            this.onAfterRender();
+        }, this);
     },
     
     /**
@@ -145,14 +153,14 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         var keys = [];
         
         // disable container selector - just container_id
-        var field = this.form.findField('container_id');
+        var field = this.editDialog.getForm().findField('container_id');
         if (field) {
             field.disable();
         }
         
         // get fields to handle
         Ext.each(this.editDialog.recordClass.getFieldNames(), function(key) {
-            var field = this.form.findField(key);
+            var field = this.editDialog.getForm().findField(key);
             if (!field) {
                 Tine.log.info('No field found for property "' + key + '". Ignoring...');
                 return true;
@@ -165,7 +173,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         var cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, this.editDialog.recordClass);
         if (cfConfigs) {
             Ext.each(cfConfigs, function (config) {
-                var field = this.form.findField('customfield_' + config.data.name);
+                var field = this.editDialog.getForm().findField('customfield_' + config.data.name);
                 if (!field) {
                     Tine.log.info('No customfield found for property "' + config.data.name + '". Ignoring...');
                     return true;
@@ -551,8 +559,6 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             });
         }
         
-        this.loadInterceptor();
-        
         // some field sanitizing
         Ext.each(this.handleFields, function(field) {
             // handle TimeFields to set original value (not possible before)
@@ -570,8 +576,13 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 }
             }
         }, this);
-        
-        return false;
+
+        const ticketFn = (() => {
+            this.editDialog.hideLoadMask();
+        }).deferByTickets(this);
+        const wrapTicket = ticketFn();
+        this.editDialog.fireEvent('load', this.editDialog, this.editDialog.record, ticketFn);
+        wrapTicket();
     },
 
     
@@ -752,6 +763,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                         },
                         scope: this
                     });
+                } else {
+                    this.editDialog.onCancel();
                 }
             }, this);
         } else {
@@ -766,7 +779,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      * @param {} dialog
      */
     onUpdateFailure: function(btn, dialog) {
-        this.form.clear();
+        this.editDialog.getForm().clear();
         this.onRecordLoad();
     },
     

@@ -92,7 +92,11 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * @param string $name Name of the file 
      * @param resource $data Initial payload, passed as a readable stream resource. 
      * @throws Sabre\DAV\Exception\Forbidden
-     * @return void
+     * @throws Sabre\DAV\Exception\NotFound
+     * @throws Sabre\DAV\Exception\InsufficientStorage
+     * @return string
+     *
+     * TODO only throw Sabre\DAV\Exception\*?
      */
     public function createFile($name, $data = null) 
     {
@@ -122,8 +126,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         }
 
         if ($this->childExists($name)) {
-            $result = $this->getChild($name)->put($data);
-            return $result;
+            return $this->getChild($name)->put($data);
         }
 
         $path = $this->_path . '/' . $name;
@@ -156,9 +159,11 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
             if ($e instanceof Tinebase_Exception_Record_NotAllowed && $e->getMessage() === 'quota exceeded') {
                 throw new Sabre\DAV\Exception\InsufficientStorage($e->getMessage());
+            } else if ($e instanceof Tinebase_Exception_NotFound) {
+                throw new Sabre\DAV\Exception\NotFound($e->getMessage());
+            } else {
+                throw $e;
             }
-
-            throw $e;
         }
 
         return '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';

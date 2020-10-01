@@ -34,6 +34,48 @@ describe('keyFields', () => {
     })
 });
 
+describe.skip('changeViews', () => {
+    // .tine-mainscreen-centerpanel-center
+    test('day View', async () => {
+        // NOTE: if we enter the tests here we need to wait till loadmask shows and hides
+        // await page.waitFor(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        // await page.waitFor(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+
+        await expect(page).toClick('button', {text: 'Tag'});
+        await page.waitFor(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitFor(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        
+        await page.waitForSelector('.x-panel.cal-ms-panel:not(.x-hide-display) .cal-daysviewpanel-daysheader');
+
+        await page.waitFor(() => {
+            return document.querySelector('.x-panel.cal-ms-panel:not(.x-hide-display) .cal-daysviewpanel-daysheader').childNodes.length === 1
+        });
+    });
+    
+    test('week View', async () => {
+        await expect(page).toClick('button', {text: 'Woche'});
+        await page.waitFor(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitFor(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+
+        await page.waitFor(() => {
+            return document.querySelector('.x-panel.cal-ms-panel:not(.x-hide-display) .cal-daysviewpanel-daysheader').childNodes.length === 7
+        });
+    });
+
+    test('week View custom days', async () => {
+        await lib.clickSlitButton(page, "Woche");
+
+        await expect(page).toClick('button', {text: 'Sa'});
+        await expect(page).toClick('.cal-wkperiod-config-menu button', {text: 'OK'});
+
+        await page.waitFor(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitFor(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitFor(() => {
+            return document.querySelector('.x-panel.cal-ms-panel:not(.x-hide-display) .cal-daysviewpanel-daysheader').childNodes.length === 5
+        });
+    });
+});
+
 afterAll(async () => {
     browser.close();
 });

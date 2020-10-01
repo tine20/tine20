@@ -192,7 +192,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dropAllowed =
                 record.get('type') == 'folder'
                 && _.get(record, 'data.account_grants.addGrant', false)
-                && source == this.grid.getView().dragZone,
+                && source == this.grid.getView().dragZone
+                && Tine.Filemanager.nodeActionsMgr.checkCreateNodeConstraints(record, {type: 'file'}),
             action = e.ctrlKey || e.altKey ? 'copy' : 'move'
 
         return dropAllowed ?
@@ -239,7 +240,17 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 sortable: true,
                 dataIndex: 'name',
                 renderer: Ext.ux.PercentRendererWithName,
-                editor: Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'name', Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID)
+                editor: Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'name', Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID, {
+                    listeners: {
+                        show: (field) => {
+                            const record = this.selectionModel.getSelected();
+                            const value = String(field.getValue());
+                            const match = value.match(/\..*/);
+                            const end = match && record.get('type') === 'file' ? match.index : value.length;
+                            field.selectText(0, end);
+                        }
+                    }
+                })
             },{
                 id: 'hash',
                 header: this.app.i18n._("MD5 Hash"),
@@ -353,9 +364,17 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onKeyDown: function(e) {
         Tine.Filemanager.NodeGridPanel.superclass.onKeyDown.apply(this, arguments);
 
+        const selections = this.selectionModel.getSelections();
+        
         // Open preview on space if a node is selected and the node type equals file
-        if (e.getKey() == e.SPACE) {
-            this.action_preview.execute()
+        if (e.getKey() == e.SPACE && !(e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
+            this.action_preview.execute();
+            e.stopEvent();
+        }
+        
+        if (e.getKey() == e.RIGHT && selections.length === 1 && selections[0].get('type') === 'folder') {
+            this.expandFolder(selections[0]);
+            e.stopEvent();
         }
     },
 
@@ -439,13 +458,17 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
                 let allowAdd = _.get(filteredContainers, '[0].account_grants.addGrant', false);
                 let isVirtual = false;
+                let constraints = false;
 
                 try {
                     const filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
                     isVirtual = filteredContainer.isVirtual();
+
+                    constraints = Tine.Filemanager.nodeActionsMgr.checkCreateNodeConstraints(filteredContainer, {type: 'file'});
+
                 } catch(e) {}
 
-                action.setDisabled(!allowAdd || isVirtual);
+                action.setDisabled(!allowAdd || isVirtual ||!constraints);
             }.createDelegate(this)
         };
     },
@@ -754,6 +777,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }
+
+            this.actionUpdater.addActions(this.actionToolbar.items);
         }
 
         return this.actionToolbar;

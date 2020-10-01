@@ -880,14 +880,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-            'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
+            'brandingLogo'      => 'logo',
             'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
             'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
             'brandingDescription'=> Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION),
             'brandingHelpUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_HELPURL),
             'brandingShopUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_SHOPURL),
             'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
-            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
+            'installLogo'       => 'logo/i',
             'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') &&
                 Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX),
@@ -1610,6 +1610,62 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = Tinebase_TempFile::getInstance()->createTempFileFromNode($src->getNode())->toArray();
         $raii->release();
         return $result;
+    }
+
+    public function checkAuthToken($token, $channel)
+    {
+        /** @var Tinebase_Model_AuthToken $t */
+        $t = Tinebase_Controller_AuthToken::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Tinebase_Model_AuthToken::class, [
+                ['field' => Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, 'operator' => 'equals', 'value' => $token]
+            ]
+        ))->getFirstRecord();
+
+        if ($t && in_array($channel, $t->{Tinebase_Model_AuthToken::FLD_CHANNELS})) {
+            return $t->toArray();
+        }
+
+        throw new Tinebase_Exception_AccessDenied('auth token not valid');
+    }
+
+    public function getAuthToken($channels, $ttl = null)
+    {
+        if (!is_array($channels) || empty($channels)) {
+            throw new Tinebase_Exception_UnexpectedValue('channels needs to be a non empty array of channel names');
+        }
+        sort($channels);
+
+        $token = hash('sha256', uniqid('', true) . hash('sha256', uniqid('', true) . Tinebase_Record_Abstract::generateUID()));
+
+        $maxTtl = Tinebase_Config::getInstance()->{Tinebase_Config::AUTH_TOKEN_DEFAULT_TTL};
+        $tokenRecord = new Tinebase_Model_AuthToken([
+            Tinebase_Model_AuthToken::FLD_AUTH_TOKEN   => $token,
+            Tinebase_Model_AuthToken::FLD_ACCOUNT_ID   => Tinebase_Core::getUser()->getId(),
+            Tinebase_Model_AuthToken::FLD_CHANNELS     => $channels,
+            Tinebase_Model_AuthToken::FLD_MAX_TTL      => $maxTtl,
+        ], true);
+
+        $configuredChannels = Tinebase_Config::getInstance()->{Tinebase_Config::AUTH_TOKEN_CHANNELS};
+        foreach ($channels as $channel) {
+            if (!($channelCfg = $configuredChannels->records
+                    ->find(Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME, $channel))) {
+                throw new Tinebase_Exception_UnexpectedValue('unknown channel "' . $channel . '"');
+            }
+            if (is_callable($channelCfg->{Tinebase_Model_AuthTokenChannelConfig::FLDS_TOKEN_CREATE_HOOK})) {
+                call_user_func($channelCfg->{Tinebase_Model_AuthTokenChannelConfig::FLDS_TOKEN_CREATE_HOOK},
+                    $tokenRecord);
+            }
+        }
+
+        $ttl = intval($ttl);
+        if ($ttl < 1 || $ttl > $tokenRecord->{Tinebase_Model_AuthToken::FLD_MAX_TTL}) {
+            $ttl = $tokenRecord->{Tinebase_Model_AuthToken::FLD_MAX_TTL};
+        }
+        $tokenRecord->{Tinebase_Model_AuthToken::FLD_VALID_UNTIL} = Tinebase_DateTime::now()->addSecond($ttl);
+
+        $tokenRecord = Tinebase_Controller_AuthToken::getInstance()->create($tokenRecord);
+
+        return $tokenRecord->toArray();
     }
 
     public function restoreRevision($fileLocationSrc, $fileLocationTrgt = null)

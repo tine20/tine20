@@ -399,8 +399,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'REQ', 'value' => 'Required', 'system' => true, 'order' => 0), //_('Required')
-                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true, 'order' => 1), //_('Optional')
+                    array('id' => 'REQ', 'value' => 'Required', 'system' => true, 'order' => 0, 'color' => 'FF0000'), //_('Required')
+                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true, 'order' => 1, 'color' => '00FF00'), //_('Optional')
                 ),
                 'default' => 'REQ'
             )

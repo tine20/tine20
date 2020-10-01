@@ -52,6 +52,18 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
         $employee3 = $this->_getEmployee('jmcblack');
         $employee3->employment_begin = $oneMonthAhead;
         $employee3 = $employeeController->create($employee3);
+
+        $filter = new HumanResources_Model_EmployeeFilter(array(
+            array('field' => 'employment_end', 'operator' => 'after', 'value' => $oneMonthAhead)
+        ));
+        $result = $employeeController->search($filter);
+        $msg = 'jmcblack and rwright should have been found';
+        $this->assertEquals(2, $result->count(), $msg);
+        $names = $result->n_fn;
+        // just jmcblack and rwright should have been found
+        $this->assertContains('Roberta Wright', $names, $msg);
+        $this->assertContains('James McBlack', $names, $msg);
+
         
         // employee4 has been employed
         $employee4 = $this->_getEmployee('jsmith');

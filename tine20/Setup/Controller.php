@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  */
@@ -1827,7 +1827,9 @@ class Setup_Controller
 
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing from dump ' . $mysqlBackupFile);
 
-        $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        if (! isset($options['keepTinebaseID']) || ! $options['keepTinebaseID']) {
+            $this->_replaceTinebaseidInDump($mysqlBackupFile);
+        }
         $this->restore($options);
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
@@ -2540,25 +2542,43 @@ class Setup_Controller
     }
     
     /**
-     * clear cache
+     * clear caches
      *
-     * @return void
+     * @param boolean $deactivateCache after clearing
+     * @return array
      */
-    public function clearCache()
+    public function clearCache($deactivateCache = true)
     {
+        $cachesCleared = [];
+
         // setup cache (via tinebase because it is disabled in setup by default)
         Tinebase_Core::setupCache(TRUE);
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache ...');
         
-        // clear cache
         Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        $cachesCleared[] = 'TinebaseCache';
 
         Tinebase_Application::getInstance()->resetClassCache();
+        $cachesCleared[] = 'ApplicationClassCache';
         Tinebase_Cache_PerRequest::getInstance()->reset();
+        $cachesCleared[] = 'RequestCache';
 
-        // deactivate cache again
-        Tinebase_Core::setupCache(FALSE);
+        // clear routing cache
+        foreach (new DirectoryIterator(Tinebase_Core::getCacheDir()) as $directoryIterator) {
+            if (strpos($directoryIterator->getFilename(), 'route.cache') !== false && $directoryIterator->isFile()) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Deleting routing cache file ' . $directoryIterator->getPathname());
+                unlink($directoryIterator->getPathname());
+            }
+        }
+        $cachesCleared[] = 'RoutesCache';
+
+        if ($deactivateCache) {
+            Tinebase_Core::setupCache(FALSE);
+        }
+
+        return $cachesCleared;
     }
 
     /**

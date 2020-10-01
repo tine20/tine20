@@ -108,6 +108,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! record.hasFlag('\\Seen')) {
             className += ' flag_unread';
         }
+        if (record.get('is_spam_suspicions')) {
+            className += ' is_spam_suspicions';
+        }
         
         return className;
     },
@@ -627,11 +630,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }   
         if (record.hasFlag('Passed')) {
             icons.push({src: 'images/icon-set/icon_email_forward.svg', qtip: i18n._('Forwarded')});
-        }   
+        }
+        
+        if (record.get('is_spam_suspicions')) {
+            icons.push({src: 'images/icon-set/icon_spam.svg', qtip: i18n._('This message might be SPAM')});
+        }
+
         if (record.hasFlag('Tine20')) {
             const icon = record.getTine20Icon();
             icons.push({src: icon, qtip: i18n._('Tine20')});
         }
+
         if (record.get('content_type') === 'multipart/encrypted') {
             icons.push({src: 'images/icon-set/icon_lock.svg', qtip: i18n._('Encrypted Message')});
         }
@@ -1382,9 +1391,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * TODO just change the field??
      */
     changeFilterInParams: function (params, from, to) {
-        const queryFilter =_.remove(params.filter[0].filters[0].filters, {
-            field: from
-        });
+        const queryFilter = params.filter[0] && params.filter[0].filters
+            ? _.remove(params.filter[0].filters[0].filters, {
+                field: from
+            })
+            : [];
         if (queryFilter.length > 0) {
             params.filter[0].filters[0].filters =
                 params.filter[0].filters[0].filters.concat({
@@ -1668,5 +1679,5 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
         return result;
-    }    
+    }
 });

@@ -569,7 +569,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->checkRight('MANAGE_ACCOUNTS');
 
         foreach (Tinebase_User::getInstance()->getFullUsers() as $user) {
-            if (empty($user->accountEmailAddress)) {
+            if (empty($user->accountEmailAddress) || ! Tinebase_EmailUser::checkDomain($user->accountEmailAddress)) {
                 continue;
             }
 

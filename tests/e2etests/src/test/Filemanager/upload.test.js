@@ -36,26 +36,26 @@ describe('filemanager', () => {
                 editDialog = await lib.getNewWindow();
                 await expect(editDialog).toClick('span',{text: 'Berechtigungen'});
             });
-            test('add user in grantsPanel', async () => {
-                await expect(editDialog).toClick('.x-form-cb-label', {text:'Diese Ordner hat eigene Berechtigungen'});
-                let input = await editDialog.$$('.x-panel-tbar.x-panel-tbar-noheader');
-                await input[1].click();
-                await editDialog.keyboard.press('ArrowDown');
-                await expect(editDialog).toClick('.x-combo-list-item', {text:'Users'});
-            });
-            test('give new user rights', async () => {
-                await editDialog.waitForXPath('//div[contains(@class, "x-grid3-row ") and contains(., "Users")]');
-                await clickCheckBox(editDialog,'x-grid3-cc-add');
-                await clickCheckBox(editDialog,'x-grid3-cc-edit');
-                await clickCheckBox(editDialog,'x-grid3-cc-delete');
-                await clickCheckBox(editDialog,'x-grid3-cc-download');
-                await clickCheckBox(editDialog,'x-grid3-cc-publish');
-            });
+            // test('add user in grantsPanel', async () => {
+            //     await expect(editDialog).toClick('.x-form-cb-label', {text:'Diese Ordner hat eigene Berechtigungen'});
+            //     let input = await editDialog.$$('.x-panel-tbar.x-panel-tbar-noheader');
+            //     await input[1].click();
+            //     await editDialog.keyboard.press('ArrowDown');
+            //     await expect(editDialog).toClick('.x-combo-list-item', {text:'Users'});
+            // });
+            // test('give new user rights', async () => {
+            //     await editDialog.waitForXPath('//div[contains(@class, "x-grid3-row ") and contains(., "Users")]');
+            //     await clickCheckBox(editDialog,'x-grid3-cc-add');
+            //     await clickCheckBox(editDialog,'x-grid3-cc-edit');
+            //     await clickCheckBox(editDialog,'x-grid3-cc-delete');
+            //     await clickCheckBox(editDialog,'x-grid3-cc-download');
+            //     await clickCheckBox(editDialog,'x-grid3-cc-publish');
+            // });
             test('save folder', async () => {
                 await expect(editDialog).toClick('button', {text:'Ok'});
             });
             test('upload file', async () => {
-                //@todo uploade file! https://taiga.metaways.net/project/admin-tine20-service/us/3616
+                //@todo upload file!
             });
         })
     })

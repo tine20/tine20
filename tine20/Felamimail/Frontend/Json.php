@@ -789,4 +789,35 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         return $result;
     }
+
+    /**
+     * @param string $messageId
+     * @param string $userRating
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function processSpam($messageId, $userRating)
+    {
+        if (Felamimail_Model_MessagePipeConfig::USER_RATING_SPAM === $userRating || Felamimail_Model_MessagePipeConfig::USER_RATING_HAM === $userRating) {
+            $pl = Felamimail_Config::getInstance()->{Felamimail_Config::SPAM_USERPROCESSING_PIPELINE};
+        } else {
+            throw new \InvalidArgumentException("incorrect pipeline option: 'spam' or 'ham' have to be given");
+        }
+
+        $rs = new Tinebase_Record_RecordSet(Felamimail_Model_MessagePipeConfig::class);
+
+        foreach ($pl[$userRating] as $data) {
+            $pipeLineRecord = Felamimail_Model_MessagePipeConfig::factory($data);
+            $rs->addRecord(new Felamimail_Model_MessagePipeConfig([
+                Felamimail_Model_MessagePipeConfig::FLDS_CLASSNAME => get_class($pipeLineRecord),
+                Felamimail_Model_MessagePipeConfig::FLDS_CONFIG_RECORD => $pipeLineRecord]));
+        }
+
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId);
+        $pipeLine = new Tinebase_BL_Pipe($rs, false);
+        $pipeLine->execute($message);
+    }
 }

@@ -222,6 +222,42 @@ class Tinebase_AuthTest extends TestCase
         $this->assertEquals(true, $result->isValid());
     }
 
+    // mock function for testAuthToken()
+    public static function authTokenTestHook(Tinebase_Model_AuthToken $authToken)
+    {
+        $authToken->{Tinebase_Model_AuthToken::FLD_AUTH_TOKEN} = 'unittest';
+        $authToken->{Tinebase_Model_AuthToken::FLD_MAX_TTL} = 60;
+    }
+
+    public function testAuthToken()
+    {
+        // register an auth token channel
+        Tinebase_Config::getInstance()->{Tinebase_Config::AUTH_TOKEN_CHANNELS}->records->addRecord(
+            new Tinebase_Model_AuthTokenChannelConfig([
+                Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME                => 'unittest',
+                Tinebase_Model_AuthTokenChannelConfig::FLDS_TOKEN_CREATE_HOOK   => [
+                    self::class,
+                    'authTokenTestHook'
+                ]
+            ])
+        );
+        $jsonFE = new Tinebase_Frontend_Json();
+
+        $before = Tinebase_DateTime::now()->addSecond(60);
+        $result = $jsonFE->getAuthToken(['unittest']);
+        $after = Tinebase_DateTime::now()->addSecond(60);
+
+        static::assertSame('unittest', $result[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN]);
+        static::assertTrue($before->isEarlierOrEquals(new Tinebase_DateTime($result[Tinebase_Model_AuthToken::FLD_VALID_UNTIL])));
+        static::assertTrue($after->isLaterOrEquals(new Tinebase_DateTime($result[Tinebase_Model_AuthToken::FLD_VALID_UNTIL])));
+
+        $checkResult = $jsonFE->checkAuthToken($result[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN], 'unittest');
+
+        static::assertTrue(is_array($checkResult));
+        static::assertSame($result[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN],
+            $checkResult[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN]);
+    }
+
     /**
      * @see 0013272: add pin column, backend and config
      */

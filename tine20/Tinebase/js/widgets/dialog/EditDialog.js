@@ -367,6 +367,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         Ext.ux.pluginRegistry.addRegisteredPlugins(this);
 
+        // multiEditPlugin need to load before record is initialised
+        const multiEditPlugin = _.find(this.plugins, { ptype: "multiple_edit_dialog"});
+        if (multiEditPlugin) {
+            this.initPlugin(multiEditPlugin);
+        }
+        
         // init actions
         this.initActions();
         // init buttons and tbar
@@ -448,6 +454,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             },
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
             }],
             items:[
                 {

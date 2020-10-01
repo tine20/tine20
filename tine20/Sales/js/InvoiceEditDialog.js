@@ -135,7 +135,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         if (this.record.get('sales_tax') == null) {
-            this.record.set('sales_tax', 19);
+            this.record.set('sales_tax', 16);
         }
         
         if (this.createReversal) {
@@ -504,10 +504,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 alternateIncrementValue: 1,
                 minValue: 0,
                 maxValue: 100,
-                allowDecimals: 2
             }),
+            allowDecimals: true,
             name: 'sales_tax',
-            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+
             suffix: ' %',
             fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/4,
@@ -646,8 +646,8 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     alternateIncrementValue: 10,
                                     minValue: 0,
                                     maxValue: 1024,
-                                    allowDecimals: false
-                                })
+                                }),
+                                allowDecimals: false
                             }, Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', {
                                     columnWidth: 1/2,
                                     blurOnSelect: true,

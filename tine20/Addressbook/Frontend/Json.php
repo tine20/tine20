@@ -115,8 +115,8 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchEmailAddresss($filter, $paging)
     {
         $results = array();
-        $contactPaging = $paging;
-        $contactPaging["sort"] = "n_fn"; // Field are not named the same for contacts and lists
+        $contactPaging = $this->_preparePaginationParameter($paging);
+        $contactPaging->sort = "n_fn"; // Field are not named the same for contacts and lists
         $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
 
         $emailFields = ['n_fileas', 'email', 'email_home'];

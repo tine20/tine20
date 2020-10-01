@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -39,6 +39,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'getconfig'                 => 'Get Config value for a specify the key \' -- configkey="your_key" app=Calendar\'',
                 'check_requirements'        => 'Check if all requirements are met to install and run tine20',
                 'create_admin'              => 'Create new admin user (or reactivate if already exists)',
+                'clear_cache'               => 'Clears all caches',
                 'install-s'                 => 'Install applications [all if nothing installed yet] or comma separated list (use "all" as parameter to install all available apps);'
                     . ' To specify the login name and login password of the admin user that is created during installation, append \' -- adminLoginName="admin" adminPassword="password"\''
                     . ' To add imap or smtp settings, append (for example) \' -- imap="host:mail.example.org,port:143,dbmail_host:localhost" smtp="ssl:tls"\'',
@@ -47,7 +48,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
                 'install_dump'              => 'Install Tine from a backup
                          Examples:
-                           setup.php --install_dump -- db=1 files=1 backupDir=/backup/tine20
+                           setup.php --install_dump -- db=1 files=1 backupDir=/backup/tine20 keepTinebaseID=1
                            setup.php --install_dump -- db=1 files=1 backupUrl=https://username:password@example.org/mydump',
                 'list-s'                    => 'List installed applications',
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
@@ -114,7 +115,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->updateAllImportExportDefinitions) &&
             empty($opts->updateAllAccountsWithAccountEmail) &&
             empty($opts->create_admin) &&
-            empty($opts->setconfig) && 
+            empty($opts->clear_cache) &&
+            empty($opts->setconfig) &&
             empty($opts->backup) &&
             empty($opts->restore) &&
             empty($opts->compare) &&

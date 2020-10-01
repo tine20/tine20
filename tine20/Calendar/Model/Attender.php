@@ -481,6 +481,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 ) {
                     $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
                     $attendeeId = $matches[1];
+
+                    try {
+                        $list = Addressbook_Controller_List::getInstance()->get($attendeeId);
+                        if ($list && $list->type === Addressbook_Model_List::LISTTYPE_GROUP) {
+                            $attendeeId = $list->group_id;
+                        }
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
                 }
 
                 // does a contact with this email address exist?
@@ -525,9 +534,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     try {
                         $listId = explode('@', $newAttendee['email'])[0];
                         $list = Addressbook_Controller_List::getInstance()->get($listId);
-                        if ($list) {
+                        if ($list && $list->type === Addressbook_Model_List::LISTTYPE_GROUP) {
                             $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
-                            $attendeeId = $list->getId();
+                            $attendeeId = $list->group_id;
                         }
                     } catch (Exception $e) {
                         // do nothing

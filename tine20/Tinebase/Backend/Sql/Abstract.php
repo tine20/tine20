@@ -1689,7 +1689,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     public static function traitGroup(Zend_Db_Select $select)
     {
         // not needed for MySQL backends
-        if ($select->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql) {
+        if ($select->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mysql
+            && ! Setup_Backend_Mysql::dbSupportsVersion($select->getAdapter(), 'mysql >= 8')) {
             return;
         }
         

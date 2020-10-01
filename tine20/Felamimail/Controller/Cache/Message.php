@@ -894,6 +894,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         $messageToCache = $this->_createMessageToCache($_message, $_folder);
+        
+        if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY)) {
+            $strategy = Felamimail_Spam_SuspicionStrategy_Factory::factory();
+            $messageToCache->is_spam_suspicions = $strategy->apply($messageToCache);
+        }
+        
         $cachedMessage = $this->addMessageToCache($messageToCache);
 
         if ($cachedMessage !== false) {

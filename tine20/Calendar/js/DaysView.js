@@ -1079,7 +1079,9 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
     },
 
     getPeriod: function() {
-        return {
+        var tbar = this.findParentBy(function(c) {return c.getTopToolbar()}).getTopToolbar();
+                
+        return tbar && tbar.periodPicker ? tbar.periodPicker.getPeriod() : {
             from: this.startDate,
             until: this.startDate.add(Date.DAY, this.numOfDays)
         };
