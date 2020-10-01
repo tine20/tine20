@@ -26,7 +26,7 @@ describe('employee', () => {
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
         });
     
-        describe('vacation (freetime)', () => {
+        describe.skip('vacation (freetime)', () => {
             const testString = 'test vacation ' + Math.round(Math.random() * 10000000);
             test('vacation grid', async () => {
                 await expect(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Urlaub'});
@@ -137,7 +137,7 @@ describe('employee', () => {
             });
         });
 
-        describe('sickness (freetime)', () => {
+        describe.skip('sickness (freetime)', () => {
             const testString = 'test sickness ' + Math.round(Math.random() * 10000000);
             test('sickness grid', async () => {
                 await expect(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Krankheit'});
