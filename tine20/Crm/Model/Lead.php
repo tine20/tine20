@@ -335,7 +335,10 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
 
         foreach ($relationTypes as $relationType) {
             foreach ($this->relations as $relation) {
-                if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == $relationType) {
+                if ($relation->related_model == 'Addressbook_Model_Contact'
+                    && $relation->type == $relationType
+                    && is_object($relation->related_record)
+                ) {
                     $responsibles->addRecord($relation->related_record);
                 }
             }
