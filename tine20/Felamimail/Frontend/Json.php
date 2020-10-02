@@ -820,4 +820,120 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $pipeLine = new Tinebase_BL_Pipe($rs, false);
         $pipeLine->execute($message);
     }
+
+    /**
+     * test imap settings
+     *
+     * @param $accountId
+     * @param $fields
+     * @return Felamimail_Model_Account
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public function testIMapSettings($accountId , $fields)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+        $params = [];
+        
+        if (is_array($fields)) {
+            $params = (object)$fields;
+        }
+
+        if ('' === $params->host) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('IMAP Hostname missing'));
+        }
+
+        if ('' ===  $params->user || (!$accountId && '' ===  $params->password)) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('IMAP Credentials missing'));
+        }
+        
+        foreach ($fields as $key => $field) {
+            $account[$key] = $fields[$key];
+        }
+
+        $params->host     = isset($fields['host'])     ? $fields['host']    : 'localhost';
+        $params->password = isset($fields['password']) ? $fields['password'] : '';
+        $params->port     = isset($fields['port'])     ? $fields['port']     : null;
+        $params->ssl      = isset($fields['ssl'])      ? $fields['ssl']      : false;
+
+        //avoid null $_id error
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+        $userInBackend = $emailUserBackend->getRawUserById($emailUser);
+        
+        if ($userInBackend) {
+            $params->account = $account;
+        }
+        
+        try {
+            $backend = new Felamimail_Backend_Imap($params);
+        } catch (Exception $e) {
+            throw new Tinebase_Exception_SystemGeneric($e->getMessage());
+        }
+        
+        return $account;
+    }
+
+    /**
+     * test smtp settings
+     *
+     * @param $accountId
+     * @param $fields
+     * @return Felamimail_Model_Account
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Exception
+     */
+    public function testSmtpSettings($accountId, $fields)
+    {
+        
+        if ('' === $fields['smtp_user'] && isset($fields['user'])) {
+            $fields['smtp_user'] = $fields['user'];
+        }
+        if ('' === $fields['smtp_password'] && isset($fields['password'])) {
+            $fields['smtp_password'] = $fields['password'];
+        }
+        
+        if ('' === $fields['smtp_hostname']) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Hostname missing'));
+        }
+
+        if ('' === $fields['smtp_user'] || (!$accountId && '' === $fields['smtp_password'])) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Credentials missing'));
+        }
+
+        $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+        
+        foreach ($fields as $key => $field) {
+            $account[$key] = $fields[$key];
+        }
+        
+        $smtpConfig = $account->getSmtpConfig();
+        $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
+
+        // Check if authentication is required and determine required class
+        $connectionClass = 'Zend_Mail_Protocol_Smtp';
+
+        if (array_key_exists('auth',$smtpConfig) && isset($smtpConfig['auth'])) {
+            $connectionClass .= '_Auth_' . ucwords($smtpConfig['auth']);
+        }
+
+        if (!class_exists($connectionClass)) {
+            require_once 'Zend/Loader.php';
+            Zend_Loader::loadClass($connectionClass);
+        }
+
+        try {
+            $transport->setConnection(new $connectionClass($smtpConfig['hostname'], $smtpConfig['port'], $smtpConfig));
+            $transport->getConnection()->connect();
+            $transport->getConnection()->helo($smtpConfig['hostname']);
+        } catch (Exception $e) {
+            throw new Tinebase_Exception_SystemGeneric($e->getMessage());
+        }
+        
+        return $account;
+    }
+    
 }
