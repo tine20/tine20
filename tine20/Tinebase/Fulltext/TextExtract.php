@@ -6,7 +6,7 @@
  * @subpackage  Fulltext
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -84,6 +84,11 @@ class Tinebase_Fulltext_TextExtract
 
         $tempFileName = Tinebase_TempFile::getTempPath();
         $blobFileName = $_fileObject->getFilesystemPath();
+
+        // tika may complain, aka not return status 0 if file is empty
+        if (($fSize = filesize($blobFileName)) === 0 || false === $fSize) {
+            return $tempFileName;
+        }
 
         @exec($this->_javaBin . ' -jar '. $this->_tikaJar . ' -t -eUTF8 '
             . escapeshellarg($blobFileName) . ' > ' . escapeshellarg($tempFileName) . ' 2> /dev/null', $output, $result);
