@@ -2488,4 +2488,55 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_json->changeCredentials($account['id'], Tinebase_Core::getUser()->accountEmailAddress, $pass);
         $this->_assertPassword($account['id'], $pass);
     }
+    
+
+    public function testImapSettingsConnection()
+    {
+        $account = $this->_createSharedAccount();
+        $config = $account->getImapConfig();
+        
+        $fields = [
+            'host' => $config['host'],
+            'port' => $config['port'],
+            'ssl' => $config['ssl'],
+            'user' => '',
+            'password' => ''
+        ];
+
+        try {
+            $this->_json->testImapSettings($account->getId(), $fields);
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            $this->assertEquals($translation->_('Credentials missing'), $e->getMessage(), $e->getMessage());
+        }
+        
+        $fields['user'] = $config['user'];
+        $fields['password'] = $config['password'];
+        
+        $result = $this->_json->testImapSettings($account->getId(), $fields);
+        
+        self::assertEquals('success', $result['imap_status'], 'connection failed');
+    }
+
+    public function testSmtpSettingsConnection()
+    {
+        $account = $this->_account;
+        $config = $account->getImapConfig();
+        $fields = [
+            'smtp_hostname' => $account['smtp_hostname'],
+            'smtp_port' => $account['smtp_port'],
+            'smtp_ssl' => 'none',
+            'smtp_auth' => 'none',
+            'smtp_user' => '',
+            'smtp_password' => '',
+        ];
+
+        $fields['user'] = $config['user'];
+        $fields['password'] = $config['password'];
+
+        $this->_json->testSmtpSettings($account->getId(), $fields);
+
+        $result = $this->_json->testSmtpSettings($account->getId(), $fields);
+        self::assertEquals($result['smtp_user'], $config['user'], 'IMAP username should be used if not set');
+    }
 }
