@@ -1347,14 +1347,25 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_Notes::getInstance()->setNotesOfRecord($updatedRecord);
             }
         }
-        if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())
-                && is_array($config->recordsFields)) {
-            foreach ($config->recordsFields as $property => $fieldDef) {
-                if ($isCreate) {
-                    $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
-                } else {
-                    $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
-                    $updatedRecord->{$property} = $record->{$property};
+        if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())) {
+            if (is_array($config->recordsFields)) {
+                foreach ($config->recordsFields as $property => $fieldDef) {
+                    if ($isCreate) {
+                        $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
+                    } else {
+                        $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
+                        $updatedRecord->{$property} = $record->{$property};
+                    }
+                }
+            }
+            if (is_array($config->recordFields)) {
+                foreach ($config->recordFields as $property => $fieldDef) {
+                    if ($isCreate) {
+                        $this->_createDependentRecord($updatedRecord, $record, $property, $fieldDef['config']);
+                    } else {
+                        $this->_updateDependentRecord($record, $currentRecord, $property, $fieldDef['config']);
+                        $updatedRecord->{$property} = $record->{$property};
+                    }
                 }
             }
         }
@@ -2553,7 +2564,123 @@ abstract class Tinebase_Controller_Record_Abstract
 
         return $result;
     }
-    
+
+    /**
+     * creates dependent record after creating the parent record
+     *
+     * @param Tinebase_Record_Interface $_createdRecord
+     * @param Tinebase_Record_Interface $_record
+     * @param string $_property
+     * @param array $_fieldConfig
+     */
+    protected function _createDependentRecord(Tinebase_Record_Interface $_createdRecord, Tinebase_Record_Interface $_record, $_property, $_fieldConfig)
+    {
+        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS]) || ! $_fieldConfig[TMCC::DEPENDENT_RECORDS]) {
+            return;
+        }
+
+        if (! isset ($_fieldConfig[TMCC::REF_ID_FIELD])) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
+        }
+
+        if ($_record->has($_property) && $_record->{$_property}) {
+            $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
+            /** @var Tinebase_Controller_Interface $ccn */
+            $ccn = $_fieldConfig[TMCC::CONTROLLER_CLASS_NAME];
+            /** @var Tinebase_Controller_Record_Interface $controller */
+            $controller = $ccn::getInstance();
+
+            /** @var Tinebase_Record_Interface $rec */
+            // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
+            if (is_array($_record->{$_property})) {
+                /** @var Tinebase_Record_Interface $rec */
+                $rec = new $recordClassName(array(),true);
+                $tmp = $_record->{$_property};
+                $rec->setFromJsonInUsersTimezone($tmp);
+
+                $_record->{$_property} = $rec;
+            }
+            // legacy end
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating a dependent record on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+            }
+
+            if (strlen($_record->{$_property}->getId()) < 40) {
+                $_record->{$_property}->setId(Tinebase_Record_Abstract::generateUID());
+            }
+            $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_createdRecord->getId();
+
+            $_createdRecord->{$_property} = $controller->create($_record->{$_property});
+        }
+    }
+
+    /**
+     * updates dependent record on update the parent record
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_oldRecord
+     * @param string $_property
+     * @param array $_fieldConfig
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    protected function _updateDependentRecord(Tinebase_Record_Interface $_record, /** @noinspection PhpUnusedParameterInspection */
+                                               Tinebase_Record_Interface $_oldRecord, $_property, $_fieldConfig)
+    {
+        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS])|| ! $_fieldConfig[TMCC::DEPENDENT_RECORDS]) {
+            return;
+        }
+
+        if (! isset ($_fieldConfig[TMCC::REF_ID_FIELD])) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
+        }
+
+        // don't handle dependent records on property if it is set to null or doesn't exist.
+        if (($_record->{$_property} === NULL) || (! $_record->has($_property))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Skip updating dependent record (got NULL) on property ' . $_property . ' for '
+                    . $this->_applicationName . ' ' . $this->_modelName . ' with id = "' . $_record->getId() . '"');
+            }
+            return;
+        }
+
+        /** @var Tinebase_Controller_Interface $ccn */
+        $ccn = $_fieldConfig[TMCC::CONTROLLER_CLASS_NAME];
+        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+        $controller = $ccn::getInstance();
+        $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
+        $existingDepRec = $controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName, [
+            ['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]
+        ]))->getFirstRecord();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($_record->{$_property}, TRUE));
+
+        // legacy - should be already done in frontend json - remove if all record properties are record instances before getting to controller
+        if (is_array($_record->{$_property}) && ! empty($_record->{$_property})) {
+            $rec = new $recordClassName(array(),true);
+            $tmp = $_record->{$_property};
+            $rec->setFromJsonInUsersTimezone($tmp);
+            $_record->{$_property} = $rec;
+        }
+        //legacy end
+
+        if ($_record->{$_property} instanceof $recordClassName) {
+
+            $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_record->getId();
+
+            if ($existingDepRec) {
+                $_record->{$_property}->setId($existingDepRec->getId());
+                $_record->{$_property} = $controller->update($_record->{$_property});
+            } else {
+                $_record->{$_property} = $controller->create($_record->{$_property});
+            }
+        } elseif ($existingDepRec) {
+            $controller->delete($existingDepRec);
+        }
+    }
 
     /**
      * creates dependent records after creating the parent record

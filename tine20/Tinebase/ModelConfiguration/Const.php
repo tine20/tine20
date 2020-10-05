@@ -40,10 +40,12 @@ class Tinebase_ModelConfiguration_Const {
     const DISABLED = 'disabled';
     const DOCTRINE_IGNORE = 'doctrineIgnore';
 
+    const EXPORT = 'export';
     const EXPOSE_HTTP_API = 'exposeHttpApi';
     const EXPOSE_JSON_API = 'exposeJsonApi';
 
     const FIELDS = 'fields';
+    const FIELD_NAME = 'fieldName';
     const FILTER = 'filter';
     const FILTER_CLASS_NAME = 'filterClassName';
     const FILTER_DEFINITION = 'filterDefinition';
@@ -73,6 +75,8 @@ class Tinebase_ModelConfiguration_Const {
     const IS_DEPENDENT = 'isDependent';
     const IS_VIRTUAL = 'isVirtual';
 
+    const JOIN_COLUMNS = 'joinColumns';
+
     const LABEL = 'label';
     const LENGTH = 'length';
 
@@ -83,6 +87,8 @@ class Tinebase_ModelConfiguration_Const {
     const NULLABLE = 'nullable';
 
     const OMIT_MOD_LOG = 'modlogOmit';
+    const ON_DELETE = 'onDelete';
+    const ON_UPDATE = 'onUpdate';
     const OPTIONS = 'options';
 
     const PAGING = 'paging';
@@ -90,6 +96,7 @@ class Tinebase_ModelConfiguration_Const {
     const QUERY_FILTER = 'queryFilter';
 
     const READ_ONLY = 'readOnly';
+    const REFERENCED_COLUMN_NAME = 'referencedColumnName';
     const REF_ID_FIELD = 'refIdField';
     const REF_MODEL_FIELD = 'refModelField';
     const RECORD_CLASS_NAME = 'recordClassName';
@@ -102,9 +109,11 @@ class Tinebase_ModelConfiguration_Const {
     const SPECIAL_TYPE = 'specialType';
     const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
     const STORAGE = 'storage';
+    const SUPPORTED_FORMATS = 'supportedFormats';
     const SYSTEM = 'system';
 
     const TABLE = 'table';
+    const TARGET_ENTITY = 'targetEntity';
     const TITLE_PROPERTY = 'titleProperty';
     const TYPE = 'type';
     const TYPE_ATTACHMENTS = 'attachments';

@@ -95,6 +95,7 @@
  * @property array      $converterDefaultMapping This maps field types to their default converter
  * @property array      $copyOmitFields Collection of copy omit properties for frontend
  * @property array      $keyfieldFields
+ * @property array      $jsonExpander
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -946,6 +947,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     protected $_hasDeletedTimeUnique = false;
 
+    protected $_jsonExpander;
+
     /**
      * the constructor (must be called by the singleton pattern)
      *
@@ -1023,7 +1026,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
                 if (isset($definition[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS])) {
                     foreach ($definition[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS] as $key => $cHooks) {
-                        $this->$key = array_merge($this->$key, $cHooks);
+                        $this->$key = array_merge((array)$this->$key, $cHooks);
                     }
                 }
             }

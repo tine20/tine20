@@ -326,6 +326,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'ExampleApplication' => array(
                 ExampleApplication_Model_ExampleRecord::class,
+                ExampleApplication_Model_OneToOne::class,
                 ExampleApplication_Model_Status::class,
             ),
             'Felamimail' => array(
