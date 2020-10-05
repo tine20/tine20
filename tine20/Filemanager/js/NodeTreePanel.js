@@ -197,6 +197,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         var _ = window.lodash,
             requiredGrant = e.ctrlKey || e.altKey ? 'readGrant' : 'editGrant';
 
+        data.nodes = [_.get(data, 'node.attributes.nodeRecord')];
+        
         // @TODO: rethink: do I need delte on the record or parent?
         return !! _.get(data, 'node.attributes.nodeRecord.data.account_grants.' + requiredGrant);
     },
@@ -223,12 +225,14 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * cancel - Set this to true to signal drop not allowed.
      */
     onNodeDragOver: function(dragOverEvent) {
-        var _ = window.lodash,
-            cancel = this.readOnly
-                || dragOverEvent.target == dragOverEvent.source.dragData.node
-                || ! _.get(dragOverEvent, 'target.attributes.nodeRecord.data.account_grants.addGrant');
+        const action = dragOverEvent.rawEvent.ctrlKey || dragOverEvent.rawEvent.altKey ? 'copy' : 'move';
+        const targetNode = _.get(dragOverEvent, 'target.attributes.nodeRecord');
+        const sourceNodes = dragOverEvent.data.nodes;
 
-        dragOverEvent.cancel = cancel;
+        dragOverEvent.cancel = this.readOnly
+            || ! Tine.Filemanager.nodeActionsMgr.checkConstraints(action, targetNode, sourceNodes, {
+                targetChildNodes: dragOverEvent.target.childNodes
+            });
     },
 
     /**
@@ -238,15 +242,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @private
      */
     onBeforeNodeDrop: function(dropEvent) {
-        var nodes, target = dropEvent.target;
-
-        if(dropEvent.data.selections) {
-            nodes = dropEvent.data.grid.selModel.selections.items;
-        }
-
-        if(!nodes && dropEvent.data.node) {
-            nodes = [dropEvent.data.node];
-        }
+        var nodes = dropEvent.data.nodes,
+            target = dropEvent.target;
 
         Tine[this.appName].fileRecordBackend.copyNodes(nodes, target, !(dropEvent.rawEvent.ctrlKey  || dropEvent.rawEvent.altKey));
 
@@ -561,7 +558,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         }
 
-        if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
+        var files = fileSelector.getFileList();
+        if(!Tine.Filemanager.nodeActionsMgr.checkConstraints('create', targetNode.attributes.nodeRecord, _.map(files, Tine.Filemanager.Model.Node.createFromFile))) {
             Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
                     app.i18n._('It is not permitted to store files in this folder!')
@@ -570,8 +568,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             return;
         }
 
-        var files = fileSelector.getFileList(),
-            filePathsArray = [],
+        var filePathsArray = [],
             fileTypesArray = [],
             uploadKeyArray = [],
             addToGridStore = false;
@@ -597,7 +594,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             fileTypesArray.push('vnd.adobe.partial-upload; final_type=' + file.type);
             uploadKeyArray.push(uploadKey);
 
-            addToGridStore = grid.currentFolderNode.id === targetNodeId;
+            addToGridStore = _.get(grid, 'currentFolderNode.id') === targetNodeId;
 
         }, this);
 

@@ -1546,3 +1546,6 @@ msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben."
 
 msgid "Assets"
 msgstr "Guthaben"
+
+msgid "GENDER_Contract"
+msgstr "male"

@@ -29,18 +29,6 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     containerName: 'Folder',
     containersName: 'Folders',
 
-    
-    isDropFilesAllowed: function() {
-        var grants = this.get('account_grants');
-        if(!grants) {
-            return false;
-        }
-        else if(!grants.addGrant) {
-            return false;
-        }
-        return true;
-    },
-
     /**
      * virtual nodes are part of the tree but don't exists / are editable
      *
