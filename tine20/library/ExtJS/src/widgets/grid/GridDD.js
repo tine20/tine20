@@ -42,7 +42,10 @@ Ext.extend(Ext.grid.GridDragZone, Ext.dd.DragZone, {
         var rowIndex = this.view.findRowIndex(t);
         if(rowIndex !== false){
             var sm = this.grid.selModel;
-            if(!sm.isSelected(rowIndex) || e.hasModifier()){
+            // fix: make DD & checkbox selection working together
+            // fix: behaviour with modifier (e.g. file copy of mulitiselection) should not change?
+            //      if there is a valid use case let's have an option
+            if(!sm.isSelected(rowIndex) && !e.getTarget('.x-grid3-row-checker')) {
                 sm.handleMouseDown(this.grid, rowIndex, e);
             }
             return {grid: this.grid, ddel: this.ddel, rowIndex: rowIndex, selections:sm.getSelections()};

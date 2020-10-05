@@ -225,7 +225,6 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     onNodeDragOver: function(dragOverEvent) {
         var _ = window.lodash,
             cancel = this.readOnly
-                || ! dragOverEvent.target.expanded
                 || dragOverEvent.target == dragOverEvent.source.dragData.node
                 || ! _.get(dragOverEvent, 'target.attributes.nodeRecord.data.account_grants.addGrant');
 
