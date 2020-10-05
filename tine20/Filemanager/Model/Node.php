@@ -43,7 +43,7 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
     {
         unset($_definition[self::VERSION]);
         $_definition[self::APP_NAME] = 'Filemanager';
-        $_definition[self::MODEL_NAME] = 'modelName';
+        $_definition[self::MODEL_NAME] = 'Node';
         
         parent::inheritModelConfigHook($_definition);
     }

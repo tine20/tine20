@@ -65,6 +65,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected $_throwOnGetQuarantined = true;
 
     protected $_createNodeInBackendInterceptor = [];
+
+    protected $_allowedProperties = ['name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'];
     
     /**
      * holds the instance of the singleton
@@ -104,6 +106,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
+    }
+
+    public function addAllowedProperty($property) {
+        if (!in_array($property, $this->_allowedProperties)) {
+            $this->_allowedProperties[] = $property;
+        }
     }
 
     /**
@@ -185,7 +193,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         return parent::update($_record, $_duplicateCheck);
     }
-    
+
     /**
      * inspect update of one record (before update)
      *
@@ -197,7 +205,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         // protect against file object spoofing
         foreach (array_keys($_record->toArray()) as $property) {
-            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'))) {
+            if (! in_array($property, $this->_allowedProperties)) {
                 $_record->{$property} = $_oldRecord->{$property};
             }
         }
@@ -864,9 +872,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $newNode;
     }
 
-    public function registerCreateNodeInBackendInterceptor($callable)
+    public function registerCreateNodeInBackendInterceptor($key, $callable)
     {
-        $this->_createNodeInBackendInterceptor[] = $callable;
+        $this->_createNodeInBackendInterceptor[$key] = $callable;
     }
 
     /**
