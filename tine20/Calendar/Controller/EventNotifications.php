@@ -115,6 +115,11 @@
         if (! empty($attendeeMigration)) {
             $updates['attendee'] = $attendeeMigration;
         }
+
+        // in case an exception was created by only changing attendees we should not create a new REQUEST msg later
+        if ($_event->recurid && isset($updates['attendee']) && isset($updates['rrule']) && count($updates) === 2) {
+            unset($updates['rrule']);
+        }
         
         return $updates;
     }
