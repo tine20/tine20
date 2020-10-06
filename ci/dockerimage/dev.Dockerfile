@@ -18,5 +18,3 @@ FROM ${BASE_IMAGE} as dev
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 RUN apk add --no-cache nodejs npm composer git php7-pecl-xdebug
-
-COPY ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/webpack.ini
