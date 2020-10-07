@@ -42,16 +42,18 @@
      * add actions to update
      * @param {Array|Toolbar} actions
      */
-    addActions: function(actions) {
+    addActions: function(actions, explicitUpdaterOnly) {
         if (Ext.isArray(actions)) {
             for (var i=0; i<actions.length; i++) {
-                this.addAction(actions[i]);
+                this.addAction(actions[i], explicitUpdaterOnly);
             }
         } else if (Ext.isFunction(actions.each)) {
-            actions.each(this.addAction, this);
+            actions.each((action) => {
+                this.addAction(action, explicitUpdaterOnly);
+            });
         } else if (Ext.isObject(actions)) {
             for (var action in actions) {
-                this.addAction(actions[action]);
+                this.addAction(actions[action], explicitUpdaterOnly);
             }
         }
     },
@@ -60,7 +62,7 @@
      * add a single action to update
      * @param {Ext.Action} action
      */
-    addAction: function(action) {
+    addAction: function(action, explicitUpdaterOnly) {
         // register action once only!
         if (!action ||this.actions.indexOf(action) >= 0) {
             return;
@@ -69,33 +71,36 @@
         // if action has to initialConfig it's no Ext.Action!
         if (action.initialConfig) {
             
-            // in some cases our actionUpdater config is not in the initial config
-            // this happens for direct extensions of button class, like the notes button
-            if (action.requiredGrant) {
-                Ext.applyIf(action.initialConfig, {
-                    requiredGrant: action.requiredGrant,
-                    actionUpdater: action.actionUpdater,
-                    allowMultiple: action.allowMultiple,
-                    singularText: action.singularText,
-                    pluralText: action.pluralText,
-                    translationObject: action.translationObject,
-                    selections: []
-                });
+            if (!explicitUpdaterOnly || _.isFunction(_.get(action, 'initialConfig.actionUpdater'))) {
+                // in some cases our actionUpdater config is not in the initial config
+                // this happens for direct extensions of button class, like the notes button
+                if (action.requiredGrant) {
+                    Ext.applyIf(action.initialConfig, {
+                        requiredGrant: action.requiredGrant,
+                        actionUpdater: action.actionUpdater,
+                        allowMultiple: action.allowMultiple,
+                        singularText: action.singularText,
+                        pluralText: action.pluralText,
+                        translationObject: action.translationObject,
+                        selections: []
+                    });
+                }
+
+                this.actions.push(action);
             }
             
-            this.actions.push(action);
-
             if (action.initialConfig.menu) {
                 this.addActions(action.initialConfig.menu.items ?
                     action.initialConfig.menu.items :
                     action.initialConfig.menu
-                );
+                , explicitUpdaterOnly);
             }
         }
         
         // e.g. btngroup 
         if (action.items && action.constructor !== Ext.Action) {
-            this.addActions(action.items);
+            // add only those actions having an explicit actionUpdater (to stay backward compatible)
+            this.addActions(action.items, true);
         }
     },
     
