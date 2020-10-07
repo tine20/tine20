@@ -441,7 +441,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 'dtend'         => '2012-03-14 10:00:00',
                 'rrule'         => 'FREQ=DAILY;INTERVAL=1',
                 'container_id'  => $this->_getTestCalendar()->getId(),
-                'attendee'      => $this->_getPersonaAttendee('jmcblack'),
+                'attendee'      => $this->_getPersonaAttendee('jmcblack')->merge($this->_getPersonaAttendee('pwulf')),
         ));
         
         self::flushMailer();
@@ -473,6 +473,17 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $recurSet[6]->dtend->addHour(2);
         $this->_eventController->createRecurException($recurSet[6], FALSE, FALSE); //2012-03-21
         $this->_assertMail('jmcblack', 'reschedule');
+
+        // attendee status update instance
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[7]);
+        $recurSet[7]->last_modified_time = $updatedBaseEvent->last_modified_time;
+        $recurSet[7]->attendee->find('user_id', $this->_personas['jmcblack']->contact_id)->status = 'ACCEPTED';
+        self::flushMailer();
+        Tinebase_Core::getPreference('Calendar')->setValueForUser(Calendar_Preference::NOTIFICATION_LEVEL,
+            Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE,
+            $this->_personas['pwulf']->getId());
+        $this->_eventController->createRecurException($recurSet[7], FALSE, FALSE); //2012-03-22
+        $this->_assertMail('pwulf', 'McBlack, James accepted event');
         
         // cancel thisandfuture
         // @TODO check RANGE in ics
