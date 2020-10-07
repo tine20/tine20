@@ -961,7 +961,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $this->_inspectEvent($_record, $skipEvent);
                
                 if ($_checkBusyConflicts) {
-                    if ($event->isRescheduled($_record) ||
+                    if ($_record->isRescheduled($event) ||
                         count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0
                     ) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {

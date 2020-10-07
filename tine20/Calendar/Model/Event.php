@@ -762,6 +762,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     
     /**
      * returns TRUE if comparison detects a resechedule / significant change
+     *
+     * ATTENTION: is may not be reversable all the time (because of the rrule logic below)
+     * $event1->isRescheduled($event2) !== $event2->isRescheduled($event1)
      * 
      * @param  Calendar_Model_Event $_event
      * @return bool
@@ -769,7 +772,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function isRescheduled($_event)
     {
         $diff = $this->diff($_event)->diff;
-        
+
+        if (isset($diff['rrule']) && $diff['rrule'] instanceof Tinebase_Record_Diff) {
+            $rrDiff = $diff['rrule']->diff;
+            if (isset($rrDiff['count']) && (int)$rrDiff['count'] > (int)$diff['rrule']->oldData['count']) {
+                unset($rrDiff['count']);
+            }
+            if (empty($rrDiff)) {
+                unset($diff['rrule']);
+            }
+        }
+
         return (isset($diff['dtstart']) || array_key_exists('dtstart', $diff))
             || (! $this->is_all_day_event && (isset($diff['dtend']) || array_key_exists('dtend', $diff)))
             || (isset($diff['rrule']) || array_key_exists('rrule', $diff));
