@@ -35,6 +35,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
      */
     checkConstraints: function(action, targetNode, sourceNodes = [], options = {}) {
         let isAllowed = true;
+        const targetPath = _.get(targetNode, 'data.path', _.get(targetNode, 'path'));
         
         if (['create', 'copy', 'move'].indexOf(action) >= 0) {
             // only folders allowed in virtual folders
@@ -50,21 +51,20 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
             }, true);
             
             if (action === 'move') {
-                // delete grant for all sources required
-                isAllowed = isAllowed && _.reduce(sourceNodes, (grant, node) => {
-                    return grant && _.get(node, 'data.account_grants.deleteGrant')
+                isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
+                    return allowed
+                        // delete grant for all sources required
+                        && _.get(node, 'data.account_grants.deleteGrant')
+                        // sourceFolder must not be parent of target
+                        && targetPath.indexOf(_.get(node, 'data.path')) !== 0
                 }, true);
             }
             
-            // sourceNode != targetNode
+            // sourceNode != targetNode && source != direct children of target
             isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
-                return allowed || node.id !== targetNode.id
+                const parentId = _.get(node, 'data.parent_id', _.get(node, 'parent_id'));
+                return allowed && node.id !== targetNode.id && parentId !== targetNode.id;
             }, true);
-            
-            if (options.targetChildNodes) {
-                // source != direct children of target
-                isAllowed = isAllowed && !_.intersection(_.map(options.targetChildNodes, 'id'), _.map(sourceNodes, 'id')).length
-            }
         }
         
         if (action === 'delete') {
