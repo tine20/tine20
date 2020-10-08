@@ -230,6 +230,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         const sourceNodes = dragOverEvent.data.nodes;
 
         dragOverEvent.cancel = this.readOnly
+            || dragOverEvent.point !== 'append'
             || ! Tine.Filemanager.nodeActionsMgr.checkConstraints(action, targetNode, sourceNodes, {
                 targetChildNodes: dragOverEvent.target.childNodes
             });
