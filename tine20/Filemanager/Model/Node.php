@@ -47,7 +47,7 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
         
         parent::inheritModelConfigHook($_definition);
     }
-
+    
     /**
      * returns true if this record should be replicated
      *

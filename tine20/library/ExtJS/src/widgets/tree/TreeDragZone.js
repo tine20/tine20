@@ -67,9 +67,9 @@ Ext.extend(Ext.tree.TreeDragZone, Ext.dd.DragZone, {
     // private
     beforeInvalidDrop : function(e, id){
         // this scrolls the original position back into view
-        var sm = this.tree.getSelectionModel();
-        sm.clearSelections();
-        sm.select(this.dragData.node);
+        // var sm = this.tree.getSelectionModel();
+        // sm.clearSelections();
+        // sm.select(this.dragData.node);
     },
     
     // private

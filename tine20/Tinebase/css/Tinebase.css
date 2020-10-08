@@ -286,6 +286,9 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
 /* ----- drop-icon-size ------------------------------------------------------*/
 
 .x-dd-drop-icon {
+    top: 0px;
+    height: 100%;
+    background-position-y: center;
     background-size: 16px 16px;
 }
 
@@ -303,7 +306,7 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
 
 /* ----- tree classes --------------------------------------------------------*/
 .tinebase-tree-drop-move  .x-dd-drop-icon {
-    background-image:url(../../images/icon-set/icon_system_link.svg) !important;
+    background-image:url(../../images/icon-set/icon_item_move.svg) !important;
 }
 
 .tinebase-tree-hide-collapsetool .x-tree-ec-icon {

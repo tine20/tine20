@@ -1205,6 +1205,9 @@ msgstr "Dieser Kontakt wurde automatisch vom System als Termin Teilnehmer hinzug
 msgid "All Contacts"
 msgstr "Alle Kontakte"
 
+msgid "GENDER_Contact"
+msgstr "male"
+
 #~ msgid "Print {0}"
 #~ msgstr "{0} Drucken"
 

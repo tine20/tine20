@@ -58,7 +58,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     idProperty: 'id',
     titleProperty: 'subject',
     // ngettext('Message', 'Messages', n);
-    recordName: 'Message',
+    recordName: 'Message', // _('GENDER_Message')
     recordsName: 'Messages',
     containerProperty: 'folder_id',
     // ngettext('Folder', 'Folders', n);

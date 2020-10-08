@@ -131,9 +131,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         'containerProperty' => 'container_id',
         'multipleEdit'      => true,
 
-        'titleProperty'     => 'n_fn',
+        'titleProperty'     => 'n_fileas',
         'appName'           => 'Addressbook',
-        'modelName'         => self::MODEL_PART_NAME,
+        'modelName'         => self::MODEL_PART_NAME, // _('GENDER_Contact')
         self::TABLE         => [
             self::NAME          => 'addressbook',
             self::INDEXES       => [
