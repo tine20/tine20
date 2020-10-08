@@ -233,6 +233,11 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         fileName = value.name;
     }
     fileName = Ext.util.Format.htmlEncode(fileName);
+    
+    if (_.get(record, 'data.type', _.get(record, 'type')) === 'link') {
+        fileName = '<div class="mime-icon-overlay mime-icon-link"></div>' + fileName;
+    }
+    
     var percent = record.get('progress');
 
     var additionalStyle = '';

@@ -2,6 +2,21 @@
     background-repeat: no-repeat;
     background-size: 16px 16px;
     padding-left: 16px;
+    position: relative;
+}
+
+.x-grid3-cell .mime-icon-overlay {
+    position: absolute;
+    top: 1px;
+    left: 0px;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+}
+
+.mime-icon-link {
+    background-image: url(../../images/icon-set/icon_link.svg);
 }
 
 /**folder**/
