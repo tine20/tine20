@@ -27,26 +27,27 @@ Ext.ns('Tine.Filemanager');
  * Create a new Tine.Filemanager.FileGridPanel
  */
 Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
-    /* config */
+    
+    // private
     frame: true,
     border: true,
     autoScroll: true,
     layout: 'fit',
     autoExpandColumn: 'url',
-    
+    requiredGrant: 'publishGrant',
     enableHdMenu: false,
+    
     /**
      * inits this cmp
      * @private
      */
     initComponent: function() {
-        var _ = window.lodash,
-            record = this.editDialog.record,
-            evalGrants = this.editDialog.evalGrants,
-            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
-
+        var _ = window.lodash;
+        
         this.recordProxy = Tine.Filemanager.downloadLinkRecordBackend;
         this.recordClass = Tine.Filemanager.Model.DownloadLink;
+
+        this.editDialog.on('load', this.onRecordLoad, this);
         
         this.store = new Ext.data.Store({
             fields: this.recordClass,
@@ -66,7 +67,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.actionCreate = new Ext.Action({
             text: this.app.i18n._('Create Public Link'),
-            disabled: !hasRequiredGrant,
+            disabled: true,
             scope: this,
             handler: this.onCreate,
             iconCls: 'action_add'
@@ -74,7 +75,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.actionRemove = new Ext.Action({
             text: i18n._('Remove record'),
-            disabled: !hasRequiredGrant,
+            disabled: true,
             scope: this,
             handler: this.onRemove,
             iconCls: 'action_delete'
@@ -101,10 +102,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.plugins = this.plugins ? this.plugins : [];
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-        this.stripeRows = Tine.Tinebase.registry.get('preferences').get('gridStripeRows')
-            ? Tine.Tinebase.registry.get('preferences').get('gridStripeRows')
-            : false,
-        
+
         // on selectionchange handler
         this.sm.on('selectionchange', function(sm) {
             var rowCount = sm.getCount();
@@ -117,6 +115,14 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         Tine.Filemanager.DownloadLinkGridPanel.superclass.initComponent.call(this);
         
         this.initialLoad();
+    },
+
+    onRecordLoad: function(editDialog, record, ticketFn) {
+        var _ = window.lodash,
+            evalGrants = editDialog.evalGrants,
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+
+        this.actionCreate.setDisabled(!hasRequiredGrant);
     },
     
     /**
@@ -139,18 +145,27 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     onCreate: function() {
-        if (! this.createMask) {
-            this.createMask = new Ext.LoadMask(this.getEl(), {
-                msg: this.app.i18n._('Creating new Download Link...')
-            });
-        }
-        this.createMask.show();
-        
-        var date = new Date();
-        date.setDate(date.getDate() + 30);
-        
-        var record = new this.recordClass({node_id: this.editDialog.record.get('id'), expiry_time: date});
-        this.recordProxy.saveRecord(record, {success: this.onAfterCreate, scope: this});
+        var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
+            allowEmptyPassword: true,
+            locked: false,
+            questionText: i18n._('Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files.')
+        });
+        passwordDialog.openWindow();
+
+        passwordDialog.on('apply', function (password) {
+            if (! this.createMask) {
+                this.createMask = new Ext.LoadMask(this.getEl(), {
+                    msg: this.app.i18n._('Creating new Download Link...')
+                });
+            }
+            this.createMask.show();
+
+            var date = new Date();
+            date.setDate(date.getDate() + 30);
+
+            var record = new this.recordClass({node_id: this.editDialog.record.get('id'), expiry_time: date, password: password});
+            this.recordProxy.saveRecord(record, {success: this.onAfterCreate, scope: this});
+        }, this);
     },
     
     onAfterCreate: function() {
@@ -239,15 +254,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: this.app.i18n._('URL'),
                 dataIndex: 'url',
                 width: 250,
-                //sortable: false,
                 hidden: false,
-                editor: new Ext.form.Field({
-                    listeners: {
-                        change: function() {
-                            this.setValue(this.startValue);
-                        }
-                    }
-                }),
                 readOnly: true,
                 disabled: true
             }, {
@@ -275,6 +282,14 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 hidden: false,
                 renderer: Tine.Tinebase.common.dateTimeRenderer,
                 editor: new Ext.ux.form.ClearableDateField()
+            }, {
+                id: 'password',
+                header: this.app.i18n._("Password"),
+                width: 70,
+                sortable: true,
+                dataIndex: 'password',
+                renderer: Tine.Tinebase.common.booleanRenderer,
+                hidden: false
             }, {
                 id: 'access_count',
                 header: this.app.i18n._("Access Count"),
