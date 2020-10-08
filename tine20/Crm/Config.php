@@ -78,6 +78,7 @@ class Crm_Config extends Tinebase_Config_Abstract
     const SEND_NOTIFICATION_TO_RESPONSIBLE = 'sendnotificationtoresponsible';
     const SEND_NOTIFICATION_TO_CUSTOMER = 'sendnotificationtocustomer';
     const SEND_NOTIFICATION_TO_PARTNER = 'sendnotificationtopartner';
+    const SEND_NOTIFICATION_TO_ALL_ACCESS = 'sendnotificationtoallaccess';
 
 
     /**
@@ -87,6 +88,14 @@ class Crm_Config extends Tinebase_Config_Abstract
     protected static $_properties = array(
         self::SEND_NOTIFICATION => array(
             'label' => 'send notification', //_('send notification'')
+            'description' => 'controls sending notification of Leads', //_('controls sending notification of Leads')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => true,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::SEND_NOTIFICATION_TO_ALL_ACCESS => array(
+            'label' => 'send notification to all access container', //_('send notification to all access container')
             'description' => 'controls sending notification of Leads', //_('controls sending notification of Leads')
             'type' => Tinebase_Config_Abstract::TYPE_BOOL,
             'default' => true,
