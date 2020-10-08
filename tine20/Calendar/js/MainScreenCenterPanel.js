@@ -1743,8 +1743,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
 
     setEventStatus: function(event, status) {
-        event.set('status', status);
-        this.updateEvent(event);
+        Ext.MessageBox.confirm(
+            this.app.i18n._('Update Status for all Attendee?'),
+            this.app.i18n._('You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?'), function (btn) {
+            if (btn === 'yes') {
+                event.set('status', status);
+                this.updateEvent(event);
+            }
+        }, this).setIcon(Ext.MessageBox.QUESTION);
     },
     
     updateEvent: function(event) {

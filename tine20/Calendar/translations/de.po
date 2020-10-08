@@ -2587,3 +2587,12 @@ msgstr ""
 "Änderungen an diesem Termin können Benachrichtigungen senden. Drücken Sie "
 "die Taste \"Benachrichtigung werden nicht unterdrückt\", um zu "
 "\"Benachrichtigung werden unterdrückt\" zu wechseln."
+
+msgid "Update Status for all Attendee?"
+msgstr "Status für alle Teilnehmer ändern?"
+
+msgid "You are about to change the status of the event itself and not just "
+"your own status. Do you really want to change the event status for all "
+"attendee?"
+msgstr "Sie sind dabei den Gesamt-Terminstatus und nicht nur ihren eigenen "
+"Status zu ändern. Wollen sie wirklich den Status für alle Teilnehmer ändern?"
