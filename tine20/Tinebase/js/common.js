@@ -525,7 +525,7 @@ Tine.Tinebase.common = {
      * @return {string}
      */
     booleanRenderer: function (value) {
-        var translationString = String.format("{0}",(value == 1) ? Locale.getTranslationData('Question', 'yes') : Locale.getTranslationData('Question', 'no'));
+        var translationString = String.format("{0}",(Boolean(value) && value !== "0") ? Locale.getTranslationData('Question', 'yes') : Locale.getTranslationData('Question', 'no'));
         
         return translationString.substr(0, translationString.indexOf(':'));
     },
