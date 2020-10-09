@@ -1366,7 +1366,7 @@ class Tinebase_FileSystem implements
 
         if (is_resource($handle)) {
             $contextOptions = array('tine20' => array(
-                'path' => $_path,
+                'path' => $this->getPathOfNode($node, true, true),
                 'mode' => $_mode,
                 'node' => $node
             ));
