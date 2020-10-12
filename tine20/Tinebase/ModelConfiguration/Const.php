@@ -147,6 +147,7 @@ class Tinebase_ModelConfiguration_Const {
 
     const UNIQUE_CONSTRAINTS = 'uniqueConstraints';
     const UNSIGNED = 'unsigned';
+    const UI_CONFIG = 'uiconfig';
 
     const VALIDATORS = 'validators';
     const VERSION = 'version';
