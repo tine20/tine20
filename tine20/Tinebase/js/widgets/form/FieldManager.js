@@ -59,7 +59,7 @@ Tine.widgets.form.FieldManager = function() {
         getByModelConfig: function(appName, modelName, fieldName, category, config) {
             var recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
-                fieldDefinition = modelConfig && modelConfig.fields ? modelConfig.fields[fieldName] : {};
+                fieldDefinition = _.get(modelConfig, 'fields.' + fieldName, {});
 
             // have self contained fieldDefinition 
             fieldDefinition.appName = appName;

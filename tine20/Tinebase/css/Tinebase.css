@@ -18,6 +18,16 @@ html, body {
     background-image:url(../../images/icon-set/icon_debug.svg);
 }
 
+.x-dialog-info {
+    background-image: url('../../images/icon-set/icon_dialog_info.svg');
+}
+.x-dialog-question {
+    background-image: url('../../images/icon-set/icon_dialog_question.svg');
+}
+.x-dialog-warn {
+    background-image: url('../../images/icon-set/icon_dialog_warning.svg');
+}
+
 /* ----- ext fixes -------------------------------------------------------------*/
 
 /* auto column sizing */

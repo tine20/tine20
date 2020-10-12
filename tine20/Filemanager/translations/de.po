@@ -718,6 +718,9 @@ msgstr "Anonyme Download Links verwalten"
 msgid "Allow viewing, adding and deleting download links"
 msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
 
+msgid "This file has no contents. The Upload has failed or has not yet finished."
+msgstr "Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen oder noch nicht fertig."
+
 #~ msgid "Contenttype"
 #~ msgstr "Inhalts Typ"
 
