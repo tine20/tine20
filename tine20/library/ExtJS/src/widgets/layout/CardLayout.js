@@ -140,6 +140,11 @@ Ext.layout.CardLayout = Ext.extend(Ext.layout.FitLayout, {
     renderAll : function(ct, target){
         if(this.deferredRender){
             this.renderItem(this.activeItem, undefined, target);
+            ct.items.each((c) => {
+                if (Ext.isFunction(c.setOwnerCt)) {
+                    c.setOwnerCt(ct);
+                }
+            });
         }else{
             Ext.layout.CardLayout.superclass.renderAll.call(this, ct, target);
         }
