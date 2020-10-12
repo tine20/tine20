@@ -2872,7 +2872,34 @@ class Tinebase_FileSystem implements
 
         return $node;
     }
-    
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_child
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
+     * @return Tinebase_Model_Tree_Node|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getParentByFilter(Tinebase_Model_Tree_Node $_child, Tinebase_Model_Tree_Node_Filter $_filter)
+    {
+        if (null === $_child->parent_id) {
+            return null;
+        }
+
+        if (!($parentFilter = $_filter->getFilter('parent_id'))) {
+            $tmpFilter = new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'parent_id', 'operator' => 'equals', 'value' => $_child->parent_id]
+            ]);
+            $tmpFilter->addFilterGroup($_filter);
+            $_filter = $tmpFilter;
+        } else {
+            $parentFilter->setValue($_child);
+        }
+
+        return $this->searchNodes($_filter)->getFirstRecord() ?:
+            $this->getParentByFilter($this->get($_child->parent_id), $_filter);
+    }
+
     /**
      * copy stream data to file path
      *

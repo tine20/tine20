@@ -508,7 +508,33 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         return $result;
     }
-    
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_child
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getParentByFilter(Tinebase_Model_Tree_Node $_child, Tinebase_Model_Tree_Node_Filter $_filter)
+    {
+        if (null === ($parent = $this->_backend->getParentByFilter($_child, $_filter))) {
+            throw new Tinebase_Exception_NotFound('no parent matching given filter found');
+        }
+        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($parent, true));
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $appPath = '/' . $app->getId() . '/' . Tinebase_Model_Tree_Node_Path::FOLDERS_PART;
+
+        if (strpos($parentPath->statpath, $appPath) !== 0) {
+            throw new Tinebase_Exception_NotFound('no parent matching given filter found');
+        }
+        $this->_backend->checkPathACL($parentPath, 'get');
+        $parent->path = substr($parentPath->statpath, strlen($appPath));
+
+        return $parent;
+    }
+
     /**
      * checks filter acl and adds base path
      * 

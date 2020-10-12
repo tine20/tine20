@@ -25,7 +25,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     /**
      * @var string name of model this filter group is designed for
      */
-    protected $_modelName = Tinebase_Model_Tree_Node::class;
+    protected $_configuredModel = Tinebase_Model_Tree_Node::class;
 
     /**
      * @var string acl table name
@@ -44,84 +44,26 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
 
     /**
      * @var array filter model fieldName => definition
-     */
+     *
     protected $_filterModel = array(
-        'query'                 => array(
-            'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('name', 'content', 'description'))
-        ),
-        'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'path'                  => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
+
+
+
         'parent_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'name'                  => array(
-            'filter' => 'Tinebase_Model_Filter_Text',
-            'options' => array('binary' => true)
-        ),
         'object_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'acl_node'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+
     // tree_fileobjects table
-        'last_modified_time'    => array(
-            'filter' => 'Tinebase_Model_Filter_Date',
-            'options' => array('tablename' => 'tree_fileobjects')
-        ),
-        'deleted_time'          => array(
-            'filter' => 'Tinebase_Model_Filter_DateTime',
-            'options' => array('tablename' => 'tree_fileobjects')
-        ),
-        'creation_time'         => array(
-            'filter' => 'Tinebase_Model_Filter_Date',
-            'options' => array('tablename' => 'tree_fileobjects')
-        ),
-        'last_modified_by'      => array(
-            'filter' => 'Tinebase_Model_Filter_User',
-            'options' => array('tablename' => 'tree_fileobjects'
-        )),
-        'created_by'            => array(
-            'filter' => 'Tinebase_Model_Filter_User',
-            'options' => array('tablename' => 'tree_fileobjects')
-        ),
-        'type'                  => array(
-            'filter' => 'Tinebase_Model_Filter_Text', 
-            'options' => array('tablename' => 'tree_fileobjects')
-        ),
-        'contenttype'           => array(
-            'filter' => 'Tinebase_Model_Filter_Text',
-            'options' => array('tablename' => 'tree_fileobjects')
-        ),
-        'description'           => array(
-            'filter' => 'Tinebase_Model_Filter_FullText',
-            'options' => array('tablename' => 'tree_fileobjects')
-        ),
+
+
     // tree_filerevisions table
-        'size'                  => array(
-            'filter' => Tinebase_Model_Filter_Int::class,
-            'options' => array('tablename' => 'tree_filerevisions')
-        ),
+
     // recursive search
-        'recursive'             => array(
-            'filter' => 'Tinebase_Model_Filter_Bool'
-        ),
-        'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
-            'idProperty' => 'tree_nodes.id',
-            'applicationName' => 'Tinebase',
-        )),
+
     // fulltext search
-        'content'               => array(
-            'filter'                => 'Tinebase_Model_Filter_ExternalFullText',
-            'options'               => array(
-                'idProperty'            => 'object_id',
-            )
-        ),
-        'isIndexed'             => array(
-            'filter'                => 'Tinebase_Model_Tree_Node_IsIndexedFilter',
-        ),
-        'is_deleted'            => array(
-            'filter'                => Tinebase_Model_Filter_Bool::class
-        ),
-        'quota'                 => array(
-            'filter'                => Tinebase_Model_Filter_Int::class
-        )
-    );
+
+
+    );*/
 
     /**
      * set options

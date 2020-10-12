@@ -1445,23 +1445,27 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected function _getQueryFilter($queryFilters)
     {
+        $relatedModels = array();
+        foreach ($this->_filterModel as $name => $filter) {
+            if ($filter['filter'] === 'Tinebase_Model_Filter_ExplicitRelatedRecord') {
+                $relatedModels[] = $filter['options']['related_model'];
+            }
+            if (isset($filter[self::QUERY_FILTER]) && $filter[self::QUERY_FILTER]) {
+                $queryFilters[] = $name;
+            }
+        }
+
         $queryFilterData = array(
             'label' => 'Quick Search',
             'field' => 'query',
             'filter' => 'Tinebase_Model_Filter_Query',
             'useGlobalTranslation' => true,
             'options' => array(
-                'fields' => $queryFilters,
+                'fields' => array_unique($queryFilters),
                 'modelName' => $this->_getPhpClassName(),
             )
         );
 
-        $relatedModels = array();
-        foreach ($this->_filterModel as $name => $filter) {
-            if ($filter['filter'] === 'Tinebase_Model_Filter_ExplicitRelatedRecord') {
-                $relatedModels[] = $filter['options']['related_model'];
-            }
-        }
         if (count($relatedModels) > 0) {
             $queryFilterData['options']['relatedModels'] = array_unique($relatedModels);
         }

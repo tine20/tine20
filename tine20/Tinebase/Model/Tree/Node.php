@@ -137,6 +137,22 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             ],
         ],
 
+        'filterModel'       => [
+            'recursive'         => [
+                'filter'            => Tinebase_Model_Filter_Bool::class,
+            ],
+            'content'           => [
+                'filter'            => Tinebase_Model_Filter_ExternalFullText::class,
+                self::QUERY_FILTER  => true,
+                'options'           => [
+                    'idProperty'        => 'object_id',
+                ]
+            ],
+            'isIndexed'         => [
+                'filter'            => Tinebase_Model_Tree_Node_IsIndexedFilter::class,
+            ],
+        ],
+
         'fields'            => [
             'parent_id'                     => [
                 'type'                          => 'string',
@@ -152,9 +168,14 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             'name'                          => [
                 'type'                          => 'string',
                 self::LENGTH                    => 255,
+                self::QUERY_FILTER              => true,
                 'validators'                    => ['presence' => 'required'],
                 self::OPTIONS                   => [
                     'collation'                     => 'utf8mb4_bin',
+                ],
+                self::FILTER_DEFINITION     => [
+                    self::FILTER                => Tinebase_Model_Filter_Text::class,
+                    self::OPTIONS               => ['binary' => true]
                 ]
             ],
             'islink'                        => [
@@ -215,6 +236,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'type'                          => self::TYPE_DATETIME,
                 self::DEFAULT_VAL               => '1970-01-01 00:00:00',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_DateTime::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
             ],
 
 
@@ -228,18 +253,31 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Tinebase_Model_Tree_FileObject::TYPE_PREVIEW,
                     Tinebase_Model_Tree_FileObject::TYPE_LINK,
                 ], Zend_Filter_Input::ALLOW_EMPTY => true,],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Text::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
             ],
             'description'                   => [
                 self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
+                self::QUERY_FILTER              => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Text::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
             ],
             'contenttype'                   => [
                 self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Text::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
             ],
             'revision'                      => [
                 self::DOCTRINE_IGNORE           => true,
@@ -276,6 +314,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Zend_Filter_Empty::class => 0,
                     Zend_Filter_Input::DEFAULT_VALUE => 0
                 ],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Int::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_filerevisions']
+                ]
             ],
             'revision_size'                 => [
                 self::DOCTRINE_IGNORE           => true,
@@ -342,6 +384,9 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Tree_Node_PathFilter::class,
+                ]
             ],
             'account_grants'                => [
                 self::DOCTRINE_IGNORE           => true,
@@ -383,12 +428,31 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 
     public static function modelConfigHook(array &$_definition)
     {
+        $fileObjectTime = [
+            self::FILTER    => Tinebase_Model_Filter_DateTime::class,
+            self::OPTIONS   => ['tablename' => 'tree_fileobjects']
+        ];
+        $fileObjectUser = [
+            self::FILTER    => Tinebase_Model_Filter_User::class,
+            self::OPTIONS   => ['tablename' => 'tree_fileobjects']
+        ];
+
         $_definition['created_by'][self::DOCTRINE_IGNORE] = true;
+        $_definition['created_by'][self::FILTER_DEFINITION] = $fileObjectUser;
+
         $_definition['creation_time'][self::DOCTRINE_IGNORE] = true;
+        $_definition['creation_time'][self::FILTER_DEFINITION] = $fileObjectTime;
+
         $_definition['last_modified_by'][self::DOCTRINE_IGNORE] = true;
+        $_definition['last_modified_by'][self::FILTER_DEFINITION] = $fileObjectUser;
+
         $_definition['last_modified_time'][self::DOCTRINE_IGNORE] = true;
+        $_definition['last_modified_time'][self::FILTER_DEFINITION] = $fileObjectTime;
+
         $_definition['seq'][self::DOCTRINE_IGNORE] = true;
+
         $_definition['deleted_by'][self::DOCTRINE_IGNORE] = true;
+        $_definition['deleted_by'][self::FILTER_DEFINITION] = $fileObjectUser;
     }
 
     public function runConvertToRecord()
