@@ -351,7 +351,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
         var fieldconfig = modelConfig.fields[fieldKey];
 
         if (fieldconfig && fieldconfig.type === 'virtual') {
-            fieldconfig = fieldconfig.config;
+            fieldconfig = fieldconfig.config || {};
         }
 
         var appName = modelConfig.appName;
@@ -498,7 +498,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                         var fieldDefinition = modelConfig.fields[key];
 
                         if (fieldDefinition.type === 'virtual') {
-                            fieldDefinition = fieldDefinition.config;
+                            fieldDefinition = fieldDefinition.config || {};
                         }
 
                         // add field to model array
@@ -545,15 +545,15 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                                'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
                                 'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle')
                         );
+                        
+                        // called from legacy code - but all filters should come from registy (see below)
+                        Tine[appName].Model[modelName].getFilterModel = function() { return [];};
 
                         // NOTE: no constructor, super magic here
                         if (Tine[appName].Model.hasOwnProperty(modelName + 'Mixin')) {
                             Ext.override(Tine[appName].Model[modelName], Tine[appName].Model[modelName + 'Mixin']);
                             Ext.apply(Tine[appName].Model[modelName], _.get(Tine[appName].Model[modelName + 'Mixin'], 'statics', {}));
                         }
-                        
-                        // called from legacy code - but all filters should come from registy (see below)
-                        Tine[appName].Model[modelName].getFilterModel = function() { return [];};
                     }
 
                     // register filters
@@ -573,7 +573,15 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                             modelName: modelName,
                             recordClass: Tine[appName].Model[modelName]
                         });
+
+                        if (Tine[appName].hasOwnProperty([recordProxyName] + 'Mixin')) {
+                            Ext.apply(Tine[appName][recordProxyName], Tine[appName][recordProxyName + 'Mixin']);
+                            Ext.apply(Tine[appName][recordProxyName], _.get(Tine[appName][recordProxyName + 'Mixin'], 'statics', {}));
+                        }
                     }
+                    
+                    if (recordProxyName === 'nodeBackend') return;
+                    
                     // if default data is empty, it will be resolved to an array
                     if (Ext.isArray(modelConfig.defaultData)) {
                         modelConfig.defaultData = {};

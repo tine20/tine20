@@ -489,54 +489,6 @@ Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
     recordsName: 'Configs'
 });
 
-Tine.Tinebase.Model.Tree_NodeArray = Tine.Tinebase.Model.modlogFields.concat([
-    { name: 'id' },
-    { name: 'name', label: 'Name' }, // _('Name')
-    { name: 'path', label: 'Path' }, // _('Path')
-    { name: 'size', label: 'Size' }, // _('Size')
-    { name: 'revision', label: 'Revision' }, // _('Revision')
-    { name: 'available_revisions', label: 'Available Revision' }, // _('Available Revision')
-    { name: 'type', label: 'Type' }, // _('Type')
-    { name: 'contenttype', label: 'Content Type' }, // _('Content Type')
-    { name: 'description', label: 'Description' }, // _('Description')
-    { name: 'account_grants' },
-    { name: 'grants', label: 'Grants' }, // _('Grants')
-    { name: 'acl_node', label: 'Grants Folder' }, // _('Grants Folder')
-    { name: 'object_id'},
-    { name: 'hash', label: 'MD5 Hash' }, // _('MD5 Hash')
-    { name: 'revision_size', label: 'Revision Size' }, // _('Revision Size')
-    { name: 'preview_count', label: 'Preview Count', type: 'int' }, // _('Preview Count')
-    { name: 'parent_id' },
-    { name: 'isIndexed', label: 'Indexed' }, // _('Indexed')
-    { name: 'pin_protected_node', label: 'Pin Protected' }, // _('Pin Protected')
-    { name: 'quota', label: 'Quota'}, // _('Quota')
-    { name: 'effectiveAndLocalQuota', label: 'Effective Quota' }, // _('Effective Quota')
-    { name: 'is_quarantined', label: 'Is Quarantined' }, // _('Is Quarantined') // TODO add type bool/int?
-
-    { name: 'relations' },
-    { name: 'customfields' },
-    { name: 'notes' },
-    { name: 'tags' },
-
-    { name: 'revisionProps' },
-    { name: 'notificationProps' },
-    { name: 'is_quarantined', type: 'boolean'}
-]);
-/**
- * @namespace   Tine.Tinebase.Model
- * @class       Tine.Tinebase.Model.Tree_Node
- * @extends     Tine.Tinebase.data.Record
- */
-Tine.Tinebase.Model.Tree_Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Tree_NodeArray, {
-    appName: 'Tinebase',
-    modelName: 'Tree_Node',
-    idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('File', 'Files', n); gettext('File');
-    recordName: 'File',
-    recordsName: 'Files'
-});
-
 Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'size', Tine.Tinebase.common.byteRenderer);
 Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision_size', Tine.Tinebase.common.byteRenderer);
 

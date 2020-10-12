@@ -46,8 +46,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     autoExpandColumn: 'name',
     showProgress: true,
     enableDD: true,
-
-    recordClass: Tine.Filemanager.Model.Node,
+    
+    recordClass: 'Filemanager.Node',
     listenMessageBus: true,
     hasDetailsPanel: false,
     evalGrants: true,
@@ -88,7 +88,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock(this.dataSafeAreaName);
 
-        this.recordProxy = this.recordProxy || Tine.Filemanager.fileRecordBackend;
+        this.recordProxy = this.recordProxy || Tine.Filemanager.nodeBackend;
 
         this.gridConfig.cm = this.getColumnModel();
 
@@ -231,7 +231,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return false;
         }
         
-        Tine.Filemanager.fileRecordBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey));
+        Tine.Filemanager.nodeBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey));
         this.grid.getStore().remove(data.nodes);
         return true;
     },
@@ -976,7 +976,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 tempFileIds: [],
                 forceOverwrite: false
             };
-            Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, true);
+            Tine.Filemanager.nodeBackend.createNodes(params, uploadKeyArray, true);
         });
     },
 
