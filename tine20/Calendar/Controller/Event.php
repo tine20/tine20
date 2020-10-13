@@ -1497,6 +1497,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 // we save attendee separately to preserve their attributes
                 if ($attendees instanceof Tinebase_Record_RecordSet) {
+                    if ($dtStartHasDiff || $ruleChanged) {
+                        $attendees->status = 'NEEDS-ACTION';
+                    }
                     foreach($attendees as $attendee) {
                         $this->_createAttender($attendee, $persistentExceptionEvent, true);
                     }
