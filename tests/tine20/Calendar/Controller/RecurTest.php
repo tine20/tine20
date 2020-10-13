@@ -73,6 +73,40 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(NULL, $rrule->bymonthday, 'bymonthday must not be added');
     }
 
+    public function testRescheduleAllFutureEvents()
+    {
+        $from = new Tinebase_DateTime('2011-04-18 00:00:00');
+        $until = new Tinebase_DateTime('2011-05-05 23:59:59');
+
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2011-04-19 14:00:00', // Tuesday
+            'dtend'         => '2011-04-19 15:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;COUNT=10',
+            'container_id'  => $this->_getTestCalendar()->getId(),
+            'attendee'      => [$this->_createAttender($this->_personas['pwulf']->contact_id)],
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+
+        $persistentEvent = $this->_controller->create($event);
+        $persistentEvent->attendee->status = 'CONFIRMED';
+        $persistentEvent = $this->_controller->update($persistentEvent);
+        $events = new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$persistentEvent]);
+
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
+        static::assertEquals(10, count($events), 'there should be 10 events in the set');
+
+        $events[5]->dtstart->addHour(1);
+        $events[5]->dtend->addHour(1);
+        $exception = $this->_controller->createRecurException($events[5], false, true);
+
+        $baseEvent = $this->_controller->get($persistentEvent->getId());
+        static::assertSame('NEEDS-ACTION', $baseEvent->attendee->getFirstRecord()->status);
+        static::assertSame('NEEDS-ACTION', $exception->attendee->getFirstRecord()->status);
+    }
+
     public function testDailyCountOneEvent()
     {
         $from = new Tinebase_DateTime('2011-04-18 00:00:00');
