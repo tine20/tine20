@@ -2455,8 +2455,27 @@ class Tinebase_FileSystem implements
             }
 
             if ($oldValue != $newValue) {
-                $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
-                $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
+                // ensure same order / same json string
+                if (count($oldValue) > 0) {
+                    $oldValue = json_encode([
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH   => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM     => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_ON      => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID],
+                    ]);
+                } else {
+                    $oldValue = null;
+                }
+                if (count($newValue) > 0) {
+                    $newValue = json_encode([
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH   => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM     => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_ON      => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID],
+                    ]);
+                } else {
+                    $newValue = null;
+                }
 
                 // update revisionProps of subtree if changed
                 $this->_recursiveInheritPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
