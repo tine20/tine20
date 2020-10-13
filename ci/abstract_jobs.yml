@@ -169,9 +169,9 @@
 
 .abstract_jobs.customapp.merge_nothing:
   stage: merge
-    script:
-      - echo At least one job must run for the pipeline to be successful.
-    rules:
-      - if: $CI_MERGE_REQUEST_TITLE =~ /^Merge/
-        when: on_success
-      - when: never
+  script:
+    - echo At least one job must run for the pipeline to be successful.
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^Merge/
+      when: on_success
+    - when: never
