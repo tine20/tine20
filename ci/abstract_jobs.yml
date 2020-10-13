@@ -116,3 +116,62 @@
     - source ci/build.sh
     - export DOCKER_BUILDKIT=0
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
+
+
+# merge job for customapps
+# $MERGE_TABLE: required {"2018.11":"2019.11", "2019.11":"2020.11"}
+#
+# all other jobs should have a rule to not run when $CI_MERGE_REQUEST_TITLE =~ /^Merge/ is true, because
+# they would run on the source branch. All test on the source branch wer already run, in a previous pipeline.
+#
+# .abstract_jobs.customapp.merge_nothing might also be needed in no job runs for a merge merge request
+.abstract_jobs.customapp.merge_upwards:
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    - apk add jq curl
+    - |
+      function mergeUpwards() {
+        if mergeTarget=$(echo $MERGE_TABLE | jq -e -r --arg name ${CI_COMMIT_REF_NAME} '.[$name]'); then
+          if mergeId=$(
+            curl -s -f \
+              --header "Authorization: Bearer ${GITLAB_TOKEN}" \
+              -X POST "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests" \
+              -d "source_branch=${CI_COMMIT_REF_NAME}" \
+              -d "target_branch=${mergeTarget}" \
+              -d "title=Merge%20${CI_COMMIT_REF_NAME}%20into%20${mergeTarget}" \
+              -d "allow_collaboration=true" \
+              -d "assignee_id=${GITLAB_USER_ID}" \
+              | jq .iid
+          ); then
+            sleep 10
+            if curl -s -f \
+              --header "Authorization: Bearer ${GITLAB_TOKEN}" \
+              -X PUT "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${mergeId}/merge" \
+              -d "merge_when_pipeline_succeeds=1" | jq ; then
+              echo merged
+            else
+              echo failed to merge
+              exit 1
+            fi
+          else
+            echo failed to create merge request
+            exit 1
+          fi
+        fi
+      }
+    - mergeUpwards
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^Merge/
+      when: never
+    - when: on_success
+
+.abstract_jobs.customapp.merge_nothing:
+  stage: merge
+    script:
+      - echo At least one job must run for the pipeline to be successful.
+    rules:
+      - if: $CI_MERGE_REQUEST_TITLE =~ /^Merge/
+        when: on_success
+      - when: never
