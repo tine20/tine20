@@ -3779,7 +3779,10 @@ msgstr "Erfolg"
 
 #: js/widgets/dialog/ExportDialog.js:206
 msgid "Export created successfully."
-msgstr "Der Export wurde erfolgreich erstellt"
+msgstr "Der Export wurde erfolgreich erstellt."
+
+msgid "Please check your computers downloads folder!"
+msgstr "Bitte kontrollieren sie ihren Download Ordner!"
 
 #: js/widgets/dialog/ExportDialog.js:216
 msgid "Export could not be created. Please try again later"
