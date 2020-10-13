@@ -2413,6 +2413,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         $fileSystem->clearStatCache();
         $nodes = $this->_statPaths($paths);
+        static::assertSame(count($paths), count($nodes));
         $this->_assertRevisionProperties($nodes, array(), array(
             'dir1'      => $dir1TreeRevisionProperties,
             'subDir11'  => $dir1TreeRevisionProperties,
@@ -2429,6 +2430,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp/subdir11');
         $paths['subDir12'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp/subdir12');
         $nodes = $this->_statPaths($paths);
+        static::assertSame(count($paths), count($nodes));
         $this->_assertRevisionProperties($nodes, array(), array(
             'dir1'      => $dir1TreeRevisionProperties,
             'subDir11'  => $dir1TreeRevisionProperties,
@@ -2455,6 +2457,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir22/tmp/subdir11');
         $paths['subDir12'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir22/tmp/subdir12');
         $nodes = $this->_statPaths($paths);
+        static::assertSame(count($paths), count($nodes));
         $this->_assertRevisionProperties($nodes, array(), array(
             'subDir22'  => $subdir22TreeRevisionProperties,
             'dir1'      => $dir1TreeRevisionProperties,
@@ -2470,6 +2473,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $fileSystem->clearStatCache();
         $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp');
         $nodes = $this->_statPaths($paths);
+        static::assertSame(count($paths), count($nodes));
         $this->_assertRevisionProperties($nodes, array(), array(
             'subDir22'  => $subdir22TreeRevisionProperties,
             'dir1'      => $dir1TreeRevisionProperties,
@@ -2478,7 +2482,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
 
 
-        // reset properties for whole tree
+        // reset properties for whole tree, should not change dirs that have properties
         $testContainerRevisionProperties = array(
             Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH => 6,
             Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM   => 5,
@@ -2490,7 +2494,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         $fileSystem->clearStatCache();
         $nodes = $this->_statPaths($paths);
-        $this->_assertRevisionProperties($nodes, $testContainerRevisionProperties);
+        static::assertSame(count($paths), count($nodes));
+        $this->_assertRevisionProperties($nodes, $testContainerRevisionProperties, array(
+            'subDir22'  => $subdir22TreeRevisionProperties,
+            'dir1'      => $dir1TreeRevisionProperties,
+            'subDir12'  => $dir1TreeRevisionProperties
+        ));
     }
 
     public function testGetFolderUsage()
