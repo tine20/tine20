@@ -173,9 +173,13 @@ cp.colors = ['000000', '993300', '333300'];
      * @param {String} color A valid 6-digit color hex code (# will be stripped if included)
      */
     select : function(color){
-        color = color.replace('#', '');
+        color = String(color).replace('#', '');
         if (color === 'PICKER') {
             this.renderColorPicker();
+            return;
+        }
+
+        if( !/^[0-9A-F]{6}$/i.test(color) ) {
             return;
         }
 

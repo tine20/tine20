@@ -7,7 +7,36 @@ beforeAll(async () => {
     await lib.getBrowser('Kalender');
 });
 
-describe('keyFields', () => {
+describe('ColorPicker', () => {
+    let shared = 'test' + Math.round(Math.random() * 10000000);
+    let privat = 'test' + Math.round(Math.random() * 10000000);
+    test('add calendar', async () => {
+        try {
+            await page.waitForSelector('.t-app-calendar .tine-mainscreen-centerpanel-west-treecards .x-panel-collapsed .x-tool.x-tool-toggle');
+            console.log('tree expand');
+            await page.click('.t-app-calendar .tine-mainscreen-centerpanel-west-treecards .x-panel-collapsed .x-tool.x-tool-toggle');
+        } catch (e) {
+            console.log('tree also expand');
+        }
+
+        await page.waitFor(1000); //wait to expand tree
+        await addTestCalendar(page,'Gemeinsame Kalender', shared);
+        await page.waitFor(1000);  //wait to expand tree
+        await addTestCalendar(page,'Meine Kalender', privat);
+    });
+    test('change color on private calendar', async () => {
+        await expect(page).toMatchElement('span', {text: privat});
+        await changeColor(page, privat,'008080');
+        await changeColor(page, privat,'008080', true);
+    });
+    test('change color on shared calendar', async () => {
+        await expect(page).toMatchElement('span', {text: shared});
+        await changeColor(page, shared,'008080');
+        await changeColor(page, shared,'008080', true);
+    })
+});
+
+describe.skip('keyFields', () => {
     describe('calendar', () => {
         let popupWindow;
         test('events keyFields', async () => {
@@ -79,3 +108,29 @@ describe.skip('changeViews', () => {
 afterAll(async () => {
     browser.close();
 });
+
+
+async function addTestCalendar(page, root, calName) {
+    await expect(page).toClick('span', {text:root, button:'right'});
+    await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
+    await expect(page).toClick('span', {text:'Kalender hinzufügen'});
+    await page.waitFor('.x-window.x-window-plain.x-window-dlg');
+    await page.type('.ext-mb-text', calName);
+    await page.keyboard.press('Enter');
+}
+
+async function changeColor(page, calName, color, colorPicker = false) {
+    await expect(page).toClick('span', {text: calName, button: 'right'});
+    await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
+    let picker = await page.$x('//span[contains(@class,"x-menu-item-text") and contains(.,"Kalender Farbe einstellen")]');
+    await picker[0].hover();
+    await page.waitForSelector('.x-color-palette');
+    if(colorPicker) {
+        await expect(page).toClick('.color-picker', {visible: true});
+        await page.waitForSelector('.hu-color-picker.light');
+        //@todo change color!
+        await expect(page).toClick('.x-window.x-resizable-pinned button', {text:'Ok', visible: true});
+    }else {
+        await expect(page).toClick('.color-' + color, {visible: true});
+    }
+}
