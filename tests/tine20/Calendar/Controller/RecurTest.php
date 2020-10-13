@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
@@ -103,7 +103,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $exception = $this->_controller->createRecurException($events[5], false, true);
 
         $baseEvent = $this->_controller->get($persistentEvent->getId());
-        static::assertSame('NEEDS-ACTION', $baseEvent->attendee->getFirstRecord()->status);
+        static::assertSame('CONFIRMED', $baseEvent->attendee->getFirstRecord()->status);
         static::assertSame('NEEDS-ACTION', $exception->attendee->getFirstRecord()->status);
     }
 
