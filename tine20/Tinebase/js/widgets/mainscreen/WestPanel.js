@@ -170,7 +170,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             c = new Array(collection.getCount()), k = collection.keys, items = collection.items;
 
         // do not apply broken state
-        if (_.remove(state.order, function(v) {return _.isNumber(v) && !_.isNaN(v)}).length < items.length) {
+        if (_.filter(state.order, function(v) {return _.isNumber(v) && !_.isNaN(v)}).length < items.length) {
             return;
         }
 
