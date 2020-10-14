@@ -27,7 +27,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const USERTYPE_GROUP       = 'group';
     const USERTYPE_GROUPMEMBER = 'groupmember';
     const USERTYPE_RESOURCE    = 'resource';
-    const USERTYPE_LIST        = 'list';
     const USERTYPE_ANY         = 'any';
 
     /**
@@ -56,7 +55,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         self::USERTYPE_USER        => array(),
         self::USERTYPE_GROUPMEMBER => array(),
         self::USERTYPE_GROUP       => array(),
-        self::USERTYPE_LIST        => array(),
         self::USERTYPE_RESOURCE    => array(),
         Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF => array()
     );
@@ -294,7 +292,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $translation->translate('User');
             case self::USERTYPE_GROUPMEMBER:
                 return $translation->translate('Member of group');
-            case self::USERTYPE_LIST:
             case self::USERTYPE_GROUP:
                 return $translation->translate('Group');
             case self::USERTYPE_RESOURCE:
@@ -852,7 +849,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             self::USERTYPE_USER        => array(),
             self::USERTYPE_GROUPMEMBER => array(),
             self::USERTYPE_GROUP       => array(),
-            self::USERTYPE_LIST        => array(),
             self::USERTYPE_RESOURCE    => array(),
             Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF => array()
         );
@@ -1101,7 +1097,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 case Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF:
                     // first fetch the groups, then the lists identified by list_id
                     $typeMap[$type] = Tinebase_Group::getInstance()->getMultiple(array_unique($ids));
-                    $typeMap[self::USERTYPE_LIST] = Addressbook_Controller_List::getInstance()->getMultiple($typeMap[$type]->list_id, true);
+                    $listIds = array_unique(array_merge($typeMap[$type]->list_id, $ids));
+                    $typeMap['list'] = Addressbook_Controller_List::getInstance()->getMultiple($listIds, true);
                     break;
                 case self::USERTYPE_RESOURCE:
                     $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids), true);
@@ -1137,8 +1134,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $idx = $attendeeTypeSet->getIndexById($attender->user_id);
                     if ($idx !== false) {
                         $group = $attendeeTypeSet[$idx];
-                        $attendeeTypeSet = $typeMap[self::USERTYPE_LIST];
+                        $attendeeTypeSet = $typeMap['list'];
                         $idx = $attendeeTypeSet->getIndexById($group->list_id);
+                    } else {
+                        $attendeeTypeSet = $typeMap['list'];
+                        $idx = $attendeeTypeSet->getIndexById($attender->user_id);
                     }
                 } else {
                     $attendeeTypeSet = $typeMap[$attender->user_type];
