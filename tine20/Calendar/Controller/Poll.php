@@ -896,7 +896,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             list($prefUser, $locale, $timezone, $translate, $sendLevel, $sendOnOwnActions, $sendAlarms) =
                 Calendar_Controller_EventNotifications::getNotificationPreferences($attendee, $definiteEvent);
 
-            if ($attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUP || $attendee->user_type === Calendar_Model_Attender::USERTYPE_LIST) {
+            if ($attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUP) {
                 // list members are separate attendee - skip this
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Skipping group/list attender notification');
