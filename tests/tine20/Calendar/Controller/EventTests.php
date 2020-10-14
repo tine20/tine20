@@ -819,7 +819,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
         $event = $this->_getEvent(true);
         $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
-                'user_id'   => $group->getId(),
+                'user_id'   => $group->list_id,
                 'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             ]]);
