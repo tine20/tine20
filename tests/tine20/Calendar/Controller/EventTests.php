@@ -810,7 +810,28 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent = $this->_controller->update($persistendEvent);
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee[0]->status, 'updateing of other attedee must not set status');
     }
-    
+
+    public function testGroupMembershipChangeReflectsInAttendeeList()
+    {
+        $admGrpCtrl = Admin_Controller_Group::getInstance();
+        $group = $admGrpCtrl->create(new Tinebase_Model_Group(['name' => 'unittest']));
+        $admGrpCtrl->addGroupMember($group->getId(), $this->_personas['sclever']->getId());
+
+        $event = $this->_getEvent(true);
+        $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_id'   => $group->getId(),
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+            ]]);
+        $event = $this->_controller->create($event);
+        static::assertSame(2, $event->attendee->count(), 'expect 2 attendees on event');
+
+        $admGrpCtrl->addGroupMember($group->getId(), $this->_personas['pwulf']->getId());
+        Calendar_Model_Attender::clearCache();
+        $event = $this->_controller->get($event->getId());
+        static::assertSame(3, $event->attendee->count(), 'expect 3 attendees on event');
+    }
+
     public function testAttendeeSetStatus()
     {
         $event = $this->_getEvent();
