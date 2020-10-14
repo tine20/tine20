@@ -168,8 +168,12 @@ Tine.Filemanager.nodeActions.CreateFolder = {
             }));
             
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
-                const nodeData = await Tine.Filemanager.createNode(currentPath + '/' + localRecord.get('name'), 'folder', [], false);
-                return Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
+                return new Promise((resolve, reject) => {
+                    Tine.Filemanager.fileRecordBackend.createFolder(currentPath + '/' + localRecord.get('name'), {
+                        success: resolve,
+                        failure: reject
+                    });
+                })
             });
         } else {
             Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), function (btn, text) {
