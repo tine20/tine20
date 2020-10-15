@@ -203,7 +203,8 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 
                 Ext.Msg.show({
                     title: i18n._('Success'),
-                    msg: i18n._('Export created successfully.'),
+                    msg: i18n._('Export created successfully.') + 
+                        (_.get(response, 'file_location.type') === 'download' ? ('<br /><b>' + i18n._('Please check your computers downloads folder!') + '</b>')  : ''),
                     icon: Ext.MessageBox.INFO,
                     buttons: Ext.Msg.OK,
                     scope: this.window,
