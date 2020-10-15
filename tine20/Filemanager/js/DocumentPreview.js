@@ -59,7 +59,9 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
         });
 
         this.actionUpdater.addActions(this.tbar.items);
-        this.actionUpdater.updateActions([this.record]);
+        this.on('show', () => {
+            this.actionUpdater.updateActions([this.record]);
+        });
 
         if (this.tbar.items.getCount() < 2) {
             this.tbar.hide();
