@@ -2901,22 +2901,32 @@ class Tinebase_FileSystem implements
      */
     public function getParentByFilter(Tinebase_Model_Tree_Node $_child, Tinebase_Model_Tree_Node_Filter $_filter)
     {
+        static $recursive = false;
         if (null === $_child->parent_id) {
             return null;
         }
 
-        if (!($parentFilter = $_filter->getFilter('parent_id'))) {
+        if (!$recursive) {
             $tmpFilter = new Tinebase_Model_Tree_Node_Filter([
-                ['field' => 'parent_id', 'operator' => 'equals', 'value' => $_child->parent_id]
+                ['field' => 'id', 'operator' => 'equals', 'value' => $_child->parent_id]
             ]);
+            // we do the pin protection only once, on the outer filter
+            $_filter->ignorePinProtection(true);
+
             $tmpFilter->addFilterGroup($_filter);
             $_filter = $tmpFilter;
+            $_filter->doIgnoreAcl(true);
         } else {
-            $parentFilter->setValue($_child);
+            $_filter->getFilter('id')->setValue($_child->parent_id);
         }
 
-        return $this->searchNodes($_filter)->getFirstRecord() ?:
-            $this->getParentByFilter($this->get($_child->parent_id), $_filter);
+        try {
+            $recursive = true;
+            return $this->searchNodes($_filter)->getFirstRecord() ?:
+                $this->getParentByFilter($this->get($_child->parent_id), $_filter);
+        } finally {
+            $recursive = false;
+        }
     }
 
     /**
