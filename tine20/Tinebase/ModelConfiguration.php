@@ -1216,7 +1216,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     }
                 }
             } elseif ($fieldDef[self::TYPE] === 'virtual') {
-                $fieldDef['modlogOmit'] = true;
+                if (!isset($fieldDef['modlogOmit'])) {
+                    $fieldDef['modlogOmit'] = true;
+                }
                 $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] :
                     isset($fieldDef['config'][self::TYPE]) && $fieldDef['config'][self::TYPE] === self::TYPE_RELATION;
                 $virtualField = $fieldDef['config'];
@@ -1305,7 +1307,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
             
             // add field to modlog omit, if configured and modlog is used
-            if ($this->_modlogActive && isset($fieldDef['modlogOmit'])) {
+            if ($this->_modlogActive && isset($fieldDef['modlogOmit']) && $fieldDef['modlogOmit']) {
                 $this->_modlogOmitFields[] = $fieldKey;
             }
 

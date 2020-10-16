@@ -101,6 +101,11 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',
         'modelName'         => 'Tree_Node',
+        self::RECORD_NAME   => 'File', // ngettext('File', 'Files', n); gettext('File');
+        self::RECORDS_NAME  => 'Files',
+        self::CONTAINER_NAME => 'Folder', // ngettext('Folder', 'Folders', n); gettext('Folder');
+        self::CONTAINERS_NAME => 'Folders',
+
         'idProperty'        => 'id',
         'table'             => [
             'name'              => 'tree_nodes',
@@ -389,8 +394,9 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 ]
             ],
             'account_grants'                => [
+                self::OMIT_MOD_LOG              => false,
                 self::DOCTRINE_IGNORE           => true,
-                //'type'                          => 'string',
+                self::TYPE                      => self::TYPE_VIRTUAL,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tempFile'                      => [
@@ -405,8 +411,14 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             ],
             // acl grants
             'grants'                        => [
+                self::OMIT_MOD_LOG              => false,
                 self::DOCTRINE_IGNORE           => true,
-                //'type'                          => 'string',
+                self::TYPE                      => self::TYPE_VIRTUAL,
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'effectiveAndLocalQuota'        => [
+                self::DOCTRINE_IGNORE           => true,
+                self::TYPE                      => self::TYPE_VIRTUAL,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
         ],
