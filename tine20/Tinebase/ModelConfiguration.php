@@ -1217,18 +1217,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 }
             } elseif ($fieldDef[self::TYPE] === 'virtual') {
                 $fieldDef['modlogOmit'] = true;
-
-                if (isset($fieldDef['config'])) {
-                    $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] :
-                        isset($fieldDef['config'][self::TYPE]) && $fieldDef['config'][self::TYPE] === self::TYPE_RELATION;
-                    $virtualField = $fieldDef['config'];
-                    $virtualField['key'] = $fieldKey;
-                    if ((isset($virtualField['default']))) {
-                        // @todo: better handling of virtualfields
-                        $this->_defaultData[$fieldKey] = $virtualField['default'];
-                    }
-                    $this->_virtualFields[$fieldKey] = $virtualField;
+                $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] :
+                    isset($fieldDef['config'][self::TYPE]) && $fieldDef['config'][self::TYPE] === self::TYPE_RELATION;
+                $virtualField = $fieldDef['config'];
+                $virtualField['key'] = $fieldKey;
+                if ((isset($virtualField['default']))) {
+                    // @todo: better handling of virtualfields
+                    $this->_defaultData[$fieldKey] = $virtualField['default'];
                 }
+                $this->_virtualFields[$fieldKey] = $virtualField;
             } elseif ($fieldDef[self::TYPE] === 'numberableStr' || $fieldDef[self::TYPE] === 'numberableInt') {
                 $this->_autoincrementFields[] = $fieldDef;
             }  elseif ($fieldDef[self::TYPE] === 'image') {
