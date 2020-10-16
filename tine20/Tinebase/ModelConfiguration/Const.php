@@ -90,6 +90,9 @@ class Tinebase_ModelConfiguration_Const {
     const ON_DELETE = 'onDelete';
     const ON_UPDATE = 'onUpdate';
     const OPTIONS = 'options';
+    // used for example by system customfields. Tells the receiving model, that this property originates from a different app
+    // relevant for translation, keyfields, etc.
+    const OWNING_APP = 'owningApp';
 
     const PAGING = 'paging';
 
