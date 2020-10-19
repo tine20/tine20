@@ -885,7 +885,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             throw new Syncroton_Exception_Status_FolderSync(Syncroton_Exception_Status_FolderSync::FOLDER_SERVER_ERROR);
             
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
-            Tinebase_Exception::log($feiic, null, array(
+            Tinebase_Exception::logExceptionToLogger($feiic, null, array(
                 'accountname' => $account->name
             ));
         }
