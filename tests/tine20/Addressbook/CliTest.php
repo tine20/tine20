@@ -31,8 +31,8 @@ class Addressbook_CliTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_cli = new Addressbook_Frontend_Cli();
@@ -98,7 +98,7 @@ class Addressbook_CliTest extends TestCase
         $this->_cli->setContainerGrants($opts);
         $out = ob_get_clean();
         
-        $this->assertContains("Updated $_numberExpected container(s)", $out,
+        $this->assertStringContainsString("Updated $_numberExpected container(s)", $out,
                 'Text not found in: ' . $out . '(current user: ' . Tinebase_Core::getUser()->accountLoginName . ')');
         
         return $out;

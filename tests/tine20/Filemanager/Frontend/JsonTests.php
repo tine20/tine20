@@ -81,8 +81,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_oldModLog = Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
@@ -106,8 +106,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         if (count($this->_rmDir) > 0) {
@@ -540,7 +540,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $node = $this->testCreateContainerNodeInPersonalFolder();
         $node['grants'] = [];
 
-        static::setExpectedException(Tinebase_Exception_SystemGeneric::class, 'you can\'t remove your own admin grant');
+        static::expectException(Tinebase_Exception_SystemGeneric::class); $this->expectExceptionMessageMatches('/you can\'t remove your own admin grant/');
         $this->_getUit()->saveNode($node);
     }
 
@@ -553,7 +553,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcon/tainer';
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
     }
 
@@ -593,32 +593,40 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     public function testCreateFileNodeInShared()
     {
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
-            'it should not be possible to create a file in /shared/ folder');
+        // it should not be possible to create a file in /shared/ folder
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->expectExceptionCode(403);
+
         $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/test.file',
             Tinebase_Model_Tree_FileObject::TYPE_FILE);
     }
 
     public function testCreateFileNodeInOwnPersonalFolder()
     {
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
-            'it should not be possible to create a file in own personal folder');
+        // it should not be possible to create a file in own personal folder
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->expectExceptionCode(403);
+
         $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()
                 ->accountLoginName . '/test.file', Tinebase_Model_Tree_FileObject::TYPE_FILE);
     }
 
     public function testCreateFileNodeInForeignPersonalFolder()
     {
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
-            'it should not be possible to create a file in a foreign personal folder');
+        // it should not be possible to create a file in a foreign personal folder
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->expectExceptionCode(403);
+
         $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/test.file',
             Tinebase_Model_Tree_FileObject::TYPE_FILE);
     }
 
     public function testCreateFolderNodeInForeignPersonalFolder()
     {
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
-            'it should not be possible to create a file in a foreign personal folder');
+        // it should not be possible to create a file in a foreign personal folder
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->expectExceptionCode(403);
+
         $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/testFolder',
             Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
     }
@@ -810,7 +818,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $tempFileIds, false);
             self::fail('it is not allowed to create new files here');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::assertContains('No permission to add nodes in path', $tead->getMessage());
+            self::assertStringContainsString('No permission to add nodes in path', $tead->getMessage());
         }
     }
 
@@ -1270,7 +1278,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $file1 = $filesToCopy[0];
         $file2 = $filesToCopy[1];
         
-        $this->setExpectedException('Filemanager_Exception_NodeExists');
+        $this->expectException('Filemanager_Exception_NodeExists');
         $result = $this->_getUit()->copyNodes(array($file1), array($file2), false);
     }
     
@@ -1544,7 +1552,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->deleteNodes($sharedContainerNode['path']);
 
         // check if node is deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_fsController->stat($sharedContainerNode['path']);
     }
 
@@ -1626,7 +1634,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->deleteNodes($dirpaths);
 
         // check if node is deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $node = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($dirpaths[0]));
     }
     
@@ -1762,7 +1770,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->createNode($path . '/Test1/Test2', 'folder', null, false);
         $this->_getUit()->createNode($path . '/Test1/Test3', 'folder', null, false);
         
-        $this->setExpectedException('Filemanager_Exception_NodeExists');
+        $this->expectException('Filemanager_Exception_NodeExists');
         
         $this->_getUit()->moveNodes(array($path . '/Test1/Test3'), array($path . '/Test1/Test2'), false);
      }
@@ -1855,7 +1863,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->createNode('/shared/Parent', 'folder', null, false);
         $this->_getUit()->createNode('/shared/Parent/Child', 'folder', null, false);
         
-        $this->setExpectedException('Filemanager_Exception_DestinationIsOwnChild');
+        $this->expectException('Filemanager_Exception_DestinationIsOwnChild');
         
         // this must not work
         $this->_getUit()->moveNodes(array('/shared/Parent'), array('/shared/Parent/Child/Parent'), false);
@@ -1871,7 +1879,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->createNode('/shared/Parent', 'folder', null, false);
         $this->_getUit()->createNode('/shared/Parent/Child', 'folder', null, false);
     
-        $this->setExpectedException('Filemanager_Exception_DestinationIsSameNode');
+        $this->expectException('Filemanager_Exception_DestinationIsSameNode');
     
         // this must not work
         $this->_getUit()->moveNodes(array('/shared/Parent/Child'), array('/shared/Parent/Child'), false);
@@ -2167,11 +2175,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->searchNodes($filter, array());
         self::assertEquals(2, $result['totalcount'], 'no files found in path: ' . print_r($result, true));
         $file1Node = $result['results'][0];
-        self::assertContains('/shared/testcontainer/file', $file1Node['path'], 'no path found in node: ' . print_r($file1Node, true));
+        self::assertStringContainsString('/shared/testcontainer/file', $file1Node['path'], 'no path found in node: ' . print_r($file1Node, true));
         $this->_assertGrantsInNode($file1Node);
 
         $file2Node = $this->_getUit()->getNode($result['results'][1]['id']);
-        self::assertContains('/shared/testcontainer/file', $file2Node['path'], 'no path found in node: ' . print_r($file2Node, true));
+        self::assertStringContainsString('/shared/testcontainer/file', $file2Node['path'], 'no path found in node: ' . print_r($file2Node, true));
         $this->_assertGrantsInNode($file2Node);
     }
 

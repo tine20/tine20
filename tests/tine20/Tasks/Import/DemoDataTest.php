@@ -18,8 +18,8 @@ class Tasks_Import_DemoDataTest extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tasks_Controller_Task::getInstance()->deleteByFilter(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel('Tasks_Model_Task', [
                     ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']

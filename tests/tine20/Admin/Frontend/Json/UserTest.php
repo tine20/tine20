@@ -123,7 +123,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         Tinebase_Translation::getTranslation('Tinebase');
         $id = 12334567;
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_User::getInstance()->getUserById($id);
     }
 
@@ -134,7 +134,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     {
         $loginName = 'something';
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_User::getInstance()->getUserByLoginName($loginName);
     }
 
@@ -287,7 +287,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $userArray = $this->_createTestUser();
         Admin_Controller_User::getInstance()->delete($userArray['accountId']);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_User::getInstance()->getUserById($userArray['accountId']);
     }
 
@@ -339,8 +339,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $this->assertEquals($translate->_('Your Tine 2.0 account has been deactivated'), $message->getSubject());
         // @todo make this work. currently it does not work in de translation as the user name is cropped (tine20phpuni=)
-        //$this->assertContains($userArray['accountLoginName'], $bodyText);
-        $this->assertContains(Tinebase_Core::getHostname(), $bodyText);
+        //$this->assertStringContainsString($userArray['accountLoginName'], $bodyText);
+        $this->assertStringContainsString(Tinebase_Core::getHostname(), $bodyText);
     }
 
     /**

@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Courses
  */
-class Courses_CliTest extends PHPUnit_Framework_TestCase
+class Courses_CliTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Backend
@@ -47,7 +47,7 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Courses Cli Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Courses Cli Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -57,8 +57,8 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // enable courses app
@@ -106,8 +106,8 @@ class Courses_CliTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     

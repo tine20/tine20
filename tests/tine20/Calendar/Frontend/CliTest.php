@@ -28,8 +28,8 @@ class Calendar_Frontend_CliTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_cli = new Calendar_Frontend_Cli();
@@ -70,7 +70,7 @@ class Calendar_Frontend_CliTest extends TestCase
             ',"members":["' => 'member names expected'
         ];
         foreach ($expectedStrings as $expected => $failMessage) {
-            self::assertContains($expected, $out, $failMessage);
+            self::assertStringContainsString($expected, $out, $failMessage);
         }
     }
 }

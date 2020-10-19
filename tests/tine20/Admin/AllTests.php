@@ -24,7 +24,7 @@ class Admin_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Admin All Tests');
         $suite->addTestSuite(Admin_ControllerTest::class);
         $suite->addTestSuite(Admin_Controller_UserTest::class);
         $suite->addTestSuite(Admin_CliTest::class);

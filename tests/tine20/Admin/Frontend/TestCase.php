@@ -26,8 +26,8 @@ abstract class Admin_Frontend_TestCase extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_json = new Admin_Frontend_Json();
@@ -38,8 +38,8 @@ abstract class Admin_Frontend_TestCase extends TestCase
         ));
     }
     
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false);
     }

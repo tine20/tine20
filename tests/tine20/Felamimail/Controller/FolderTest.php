@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Felamimail_Controller_Folder
  */
-class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
+class Felamimail_Controller_FolderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Felamimail_Controller_Folder
@@ -46,8 +46,8 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Folder::getInstance();
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
@@ -62,8 +62,8 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->_createdFolders as $foldername) {
             $this->_controller->delete($this->_account->getId(), $foldername);
         }
@@ -192,7 +192,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         
         $this->_createdFolders = array($testFolderName . '_renamed');
         
-        $this->setExpectedException('Felamimail_Exception_IMAPFolderNotFound');
+        $this->expectException('Felamimail_Exception_IMAPFolderNotFound');
         $renamedFolder = $this->_controller->rename($this->_account->getId(), $testFolderName, $testFolderName);
     }
     

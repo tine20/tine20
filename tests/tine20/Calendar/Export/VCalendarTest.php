@@ -27,9 +27,9 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         );
         $result = $this->_export('stdout=1');
 
-        self::assertContains('Anforderungsanalyse', $result);
-        self::assertContains('BEGIN:VCALENDAR', $result);
-        self::assertContains('BEGIN:VTIMEZONE', $result);
+        self::assertStringContainsString('Anforderungsanalyse', $result);
+        self::assertStringContainsString('BEGIN:VCALENDAR', $result);
+        self::assertStringContainsString('BEGIN:VTIMEZONE', $result);
         // 4 events + 1 time in header
         self::assertEquals(5, substr_count($result, 'X-CALENDARSERVER-ACCESS:PUBLIC'),
             'X-CALENDARSERVER-ACCESS:PUBLIC should appear once in header');
@@ -57,8 +57,8 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
 
         $result = $this->_export('stdout=1');
 
-        self::assertContains('hard working man needs some silence', $result);
-        self::assertContains('RRULE:FREQ=DAILY', $result);
+        self::assertStringContainsString('hard working man needs some silence', $result);
+        self::assertStringContainsString('RRULE:FREQ=DAILY', $result);
     }
 
     public function testExportRecurEventWithException()
@@ -76,10 +76,10 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
 
         $result = $this->_export('stdout=1');
 
-        self::assertContains('hard working man needs some silence', $result);
-        self::assertContains('hard working woman needs some silence', $result);
-        self::assertContains('RRULE:FREQ=DAILY', $result);
-        self::assertContains('RECURRENCE-ID', $result);
+        self::assertStringContainsString('hard working man needs some silence', $result);
+        self::assertStringContainsString('hard working woman needs some silence', $result);
+        self::assertStringContainsString('RRULE:FREQ=DAILY', $result);
+        self::assertStringContainsString('RECURRENCE-ID', $result);
     }
 
     public function testExportEventWithAlarm()
@@ -96,8 +96,8 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
 
         $result = $this->_export('stdout=1');
 
-        self::assertContains('Early to bed and early to rise', $result);
-        self::assertContains('VALARM', $result);
+        self::assertStringContainsString('Early to bed and early to rise', $result);
+        self::assertStringContainsString('VALARM', $result);
     }
 
     public function testExportEventWithAttachment()
@@ -112,9 +112,9 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
 
         $result = $this->_export('stdout=1');
 
-        self::assertContains('Early to bed and early to rise', $result);
-        self::assertContains('ATTACH;ENCODING=BASE64;VALUE=BINARY;FILENAME=tempfile.tmp', $result);
-        self::assertContains('X-APPLE-FILENAME=tempfile.tmp;FMTTYPE=text/plain:dGVzdCBmaWxlIGNvbn', $result);
+        self::assertStringContainsString('Early to bed and early to rise', $result);
+        self::assertStringContainsString('ATTACH;ENCODING=BASE64;VALUE=BINARY;FILENAME=tempfile.tmp', $result);
+        self::assertStringContainsString('X-APPLE-FILENAME=tempfile.tmp;FMTTYPE=text/plain:dGVzdCBmaWxlIGNvbn', $result);
     }
 
     public function testExportIntoFile()
@@ -132,11 +132,11 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertTrue(file_exists($filename), 'export file does not exist');
         $result = file_get_contents($filename);
         unlink($filename);
-        self::assertContains('Anforderungsanalyse', $result);
-        self::assertContains('SUMMARY:Mittag', $result);
-        self::assertContains('BEGIN:VCALENDAR', $result);
-        self::assertContains('BEGIN:VTIMEZONE', $result);
-        self::assertContains('END:VCALENDAR', $result);
+        self::assertStringContainsString('Anforderungsanalyse', $result);
+        self::assertStringContainsString('SUMMARY:Mittag', $result);
+        self::assertStringContainsString('BEGIN:VCALENDAR', $result);
+        self::assertStringContainsString('BEGIN:VTIMEZONE', $result);
+        self::assertStringContainsString('END:VCALENDAR', $result);
     }
 
     public function testExportAllCalendars()
@@ -154,7 +154,7 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         mkdir($path);
         $output = $this->_export('path=' . $path . ' type=personal', false);
 
-        self::assertContains('Exported container ' . $this->_getTestCalendar()->getId() . ' into file', $output);
+        self::assertStringContainsString('Exported container ' . $this->_getTestCalendar()->getId() . ' into file', $output);
 
         // loop files in export dir
         $exportFilesFound = 0;
@@ -165,9 +165,9 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
             if ($filename === '.' || $filename === '..') {
                 continue;
             }
-            self::assertContains(Tinebase_Core::getUser()->accountLoginName, $filename);
+            self::assertStringContainsString(Tinebase_Core::getUser()->accountLoginName, $filename);
             $result = file_get_contents($splFileInfo->getPathname());
-            self::assertContains('END:VCALENDAR', $result);
+            self::assertStringContainsString('END:VCALENDAR', $result);
             $exportFilesFound++;
             unlink($splFileInfo->getPathname());
         }

@@ -19,7 +19,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
  * @package     Tinebase
  */
 
-class Tinebase_Model_Filter_TextTest extends PHPUnit_Framework_TestCase
+class Tinebase_Model_Filter_TextTest extends \PHPUnit\Framework\TestCase
 {
     public function testEmptyStringValues()
     {

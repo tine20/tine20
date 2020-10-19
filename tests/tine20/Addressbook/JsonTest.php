@@ -69,8 +69,8 @@ class Addressbook_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_geodata = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
         
         // always resolve customfields
@@ -113,8 +113,8 @@ class Addressbook_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
 
         if ($this->_uit) {
@@ -617,7 +617,7 @@ class Addressbook_JsonTest extends TestCase
         $changedNote = preg_replace('/\s*GDPR_DataProvenance \([^)]+\)/', '',
             $history['results'][$_changedNoteNumber - 1]);
         foreach ((array) $_expectedText as $text) {
-            $this->assertContains($text, $changedNote['note'], print_r($changedNote, TRUE));
+            $this->assertStringContainsString($text, $changedNote['note'], print_r($changedNote, TRUE));
         }
     }
 
@@ -919,7 +919,7 @@ class Addressbook_JsonTest extends TestCase
 
         $this->_uit->deleteContacts($contact['id']);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $contact = $this->_uit->getContact($contact['id']);
     }
 
@@ -949,8 +949,8 @@ class Addressbook_JsonTest extends TestCase
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
         $filename = $exporter->generate();
         $export = file_get_contents($filename);
-        $this->assertContains($sharedTagName, $export, 'shared tag was not found in export:' . $export);
-        $this->assertContains($personalTagName, $export, 'personal tag was not found in export:' . $export);
+        $this->assertStringContainsString($sharedTagName, $export, 'shared tag was not found in export:' . $export);
+        $this->assertStringContainsString($personalTagName, $export, 'personal tag was not found in export:' . $export);
 
         // cleanup
         unset($filename);
@@ -1003,9 +1003,9 @@ class Addressbook_JsonTest extends TestCase
         $xlswriter->save('php://output');
         $out = ob_get_clean();
         
-        $this->assertContains(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
-        $this->assertContains('exportcf', $out, 'customfield not found in headline.');
-        $this->assertContains('testcustomfieldvalue', $out, 'customfield value not found.');
+        $this->assertStringContainsString(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
+        $this->assertStringContainsString('exportcf', $out, 'customfield not found in headline.');
+        $this->assertStringContainsString('testcustomfieldvalue', $out, 'customfield value not found.');
     }
     
     /**
@@ -1038,8 +1038,8 @@ class Addressbook_JsonTest extends TestCase
         $xlswriter->save('php://output');
         $out = ob_get_clean();
         
-        $this->assertContains(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
-        $this->assertContains('Herr', $out, 'no translated salutation found.');
+        $this->assertStringContainsString(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
+        $this->assertStringContainsString('Herr', $out, 'no translated salutation found.');
     }
     
     /**
@@ -2396,7 +2396,7 @@ Steuernummer 33/111/32212";
             $this->_uit->saveList($list);
             self::fail('jsmith should not be able to update the record');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::assertContains('permission', $tead->getMessage());
+            self::assertStringContainsString('permission', $tead->getMessage());
         }
 
         // give jsmith edit grant
@@ -2415,7 +2415,7 @@ Steuernummer 33/111/32212";
             $this->_uit->saveList($list);
             self::fail('jsmith should not be able to update the record');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::assertContains('ACCOUNTS', $tead->getMessage());
+            self::assertStringContainsString('ACCOUNTS', $tead->getMessage());
         }
     }
 

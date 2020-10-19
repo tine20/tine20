@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_DateTimeTest
  */
-class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
+class Tinebase_DateTimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Sets up the fixture.
@@ -24,7 +24,7 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp() {}
+    protected function setUp(): void {}
 
     /**
      * Tears down the fixture
@@ -32,7 +32,7 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown() {}
+    protected function tearDown(): void {}
     
     public function testConstructFromIsoString()
     {
@@ -51,7 +51,7 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
     {
         $dt = Tinebase_DateTime::now();
         
-        $this->setExpectedException('Tinebase_Exception_Date');
+        $this->expectException('Tinebase_Exception_Date');
         $dt->compare('2010-11-13 09:36:00');
     }
     

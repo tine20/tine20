@@ -22,7 +22,7 @@ class Voipmanager_Backend_Snom_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager All Snom Backend Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Voipmanager All Snom Backend Tests');
         $suite->addTestSuite('Voipmanager_Backend_Snom_PhoneTest');
         $suite->addTestSuite('Voipmanager_Backend_Snom_XmlTest');
         return $suite;

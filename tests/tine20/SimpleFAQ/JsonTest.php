@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for SimpleFAQ_Frontend_Json
  */
-class SimpleFAQ_JsonTest extends PHPUnit_Framework_TestCase
+class SimpleFAQ_JsonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SimpleFAQ_Frontend_Json
@@ -31,7 +31,7 @@ class SimpleFAQ_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 SimpleFAQ Json Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 SimpleFAQ Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -41,8 +41,8 @@ class SimpleFAQ_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = new SimpleFAQ_Frontend_Json();
     }
@@ -53,8 +53,8 @@ class SimpleFAQ_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     

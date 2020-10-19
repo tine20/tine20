@@ -24,8 +24,8 @@ class Crm_NotificationsTests extends Crm_AbstractTest
      * (non-PHPdoc)
      * @see tests/tine20/Crm/AbstractTest::setUp()
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
 
         Tinebase_Config::getInstance()->clearCache();
@@ -61,7 +61,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertContains(' Lars Kneschke (Metaways', $bodyText);
+        $this->assertStringContainsString(' Lars Kneschke (Metaways', $bodyText);
         return $savedLead;
     }
 
@@ -91,7 +91,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertContains('**PHPUnit **', $bodyText);
+        $this->assertStringContainsString('**PHPUnit **', $bodyText);
     }
 
     /**
@@ -203,7 +203,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertContains('**PHPUnit **', $bodyText);
+        $this->assertStringContainsString('**PHPUnit **', $bodyText);
     }
 
     /**
@@ -232,8 +232,8 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $translate = Tinebase_Translation::getTranslation('Crm');
         $changeMessage = $translate->_("'%s' changed from '%s' to '%s'.");
 
-        $this->assertContains("testNotificationTag\n", $bodyText);
-        $this->assertContains(sprintf($changeMessage, 'description', 'Description', 'updated description'), $bodyText);
+        $this->assertStringContainsString("testNotificationTag\n", $bodyText);
+        $this->assertStringContainsString(sprintf($changeMessage, 'description', 'Description', 'updated description'), $bodyText);
     }
 
     public function testMuteNotification()

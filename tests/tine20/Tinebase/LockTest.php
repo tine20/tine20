@@ -18,8 +18,8 @@ class Tinebase_LockTest extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_testLockIds = [];
@@ -28,8 +28,8 @@ class Tinebase_LockTest extends TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->_testLockIds as $id => $foo) {
             $lock = Tinebase_Lock::getLock($id);
             if ($lock->isLocked()) {

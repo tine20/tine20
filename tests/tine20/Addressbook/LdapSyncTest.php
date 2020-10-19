@@ -29,8 +29,8 @@ class Addressbook_LdapSyncTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $ldapOptions = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->toArray();
@@ -61,8 +61,8 @@ class Addressbook_LdapSyncTest extends TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Addressbook_Config::getInstance()->set('syncBackends', $this->_oldSyncBackendsConfig);
         Addressbook_Controller_Contact::getInstance()->resetSyncBackends();
 

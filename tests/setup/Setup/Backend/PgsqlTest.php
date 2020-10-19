@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_User
  */
-class Setup_Backend_PgsqlTest extends PHPUnit_Framework_TestCase
+class Setup_Backend_PgsqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var    Setup_Backend_Pgsql
@@ -24,8 +24,8 @@ class Setup_Backend_PgsqlTest extends PHPUnit_Framework_TestCase
      */
     protected $_backend;
     
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_backend = Setup_Backend_Factory::factory();
     }
     

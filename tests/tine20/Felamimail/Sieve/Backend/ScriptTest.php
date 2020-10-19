@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Felamimail_Sieve_Backend_Script
  */
-class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
+class Felamimail_Sieve_Backend_ScriptTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * serialized rule
@@ -54,7 +54,7 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Sieve Script Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Felamimail Sieve Script Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -64,8 +64,8 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $rule      = new Felamimail_Sieve_Rule();
         $condition = new Felamimail_Sieve_Rule_Condition();
         $action    = new Felamimail_Sieve_Rule_Action();
@@ -92,8 +92,8 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
 
     /**
@@ -123,9 +123,9 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         $script->addRule($rule);
         
         $sieveScript = $script->getSieve();
-        $this->assertContains('if anyof (address :contains "From" "info@example.com")', $sieveScript);
-        $this->assertContains('fileinto "INBOX/UNITTEST";', $sieveScript);
-        $this->assertContains('Felamimail_Sieve_Rule', $sieveScript);
+        $this->assertStringContainsString('if anyof (address :contains "From" "info@example.com")', $sieveScript);
+        $this->assertStringContainsString('fileinto "INBOX/UNITTEST";', $sieveScript);
+        $this->assertStringContainsString('Felamimail_Sieve_Rule', $sieveScript);
     }
 
     public function testAutoReplyAction()
@@ -144,10 +144,10 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         $script->addRule($rule);
 
         $sieveScript = $script->getSieve();
-        $this->assertContains('require ["fileinto","reject","copy","vacation"]', $sieveScript,
+        $this->assertStringContainsString('require ["fileinto","reject","copy","vacation"]', $sieveScript,
             'vacation extension is required in script: ' . $sieveScript);
-        $this->assertContains('vacation "my reason";', $sieveScript);
-        $this->assertContains('Felamimail_Sieve_Rule', $sieveScript);
+        $this->assertStringContainsString('vacation "my reason";', $sieveScript);
+        $this->assertStringContainsString('Felamimail_Sieve_Rule', $sieveScript);
     }
 
     /**
@@ -160,14 +160,14 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         
         $sieveScript = $script->getSieve();
         
-        $this->assertContains(':days 8', $sieveScript);
-        $this->assertContains(':from "sieve@example.com"', $sieveScript);
-        $this->assertContains(':addresses ["info@example.com"]', $sieveScript);
-        $this->assertContains('?Q?L=C3=B6=C3=9Flich?=', $sieveScript, $sieveScript);
-        $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
-        $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
-        $this->assertContains('currentdate :value "le" "date" "2020-01-31"', $sieveScript);
-        $this->assertContains('currentdate :value "ge" "date" "2020-01-28"', $sieveScript);
+        $this->assertStringContainsString(':days 8', $sieveScript);
+        $this->assertStringContainsString(':from "sieve@example.com"', $sieveScript);
+        $this->assertStringContainsString(':addresses ["info@example.com"]', $sieveScript);
+        $this->assertStringContainsString('?Q?L=C3=B6=C3=9Flich?=', $sieveScript, $sieveScript);
+        $this->assertStringContainsString('Felamimail_Sieve_Vacation', $sieveScript);
+        $this->assertStringContainsString('Tine 2.0 Unit Test', $sieveScript);
+        $this->assertStringContainsString('currentdate :value "le" "date" "2020-01-31"', $sieveScript);
+        $this->assertStringContainsString('currentdate :value "ge" "date" "2020-01-28"', $sieveScript);
     }
     
     /**
@@ -205,10 +205,10 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         
         $sieveScript = $script->getSieve();
         
-        $this->assertContains('Content-Type: multipart/alternative; boundary=foo', $sieveScript);
-        $this->assertContains('vacation :days 8 :subject "=?UTF-8?Q?L=C3=B6=C3=9Flich?=" :from "sieve@example.com" :addresses ["info@example.com"] :mime text:', $sieveScript);
-        $this->assertContains('<html><body><strong>AWAY!</strong></body></html>', $sieveScript);
-        $this->assertContains('--foo--', $sieveScript);
+        $this->assertStringContainsString('Content-Type: multipart/alternative; boundary=foo', $sieveScript);
+        $this->assertStringContainsString('vacation :days 8 :subject "=?UTF-8?Q?L=C3=B6=C3=9Flich?=" :from "sieve@example.com" :addresses ["info@example.com"] :mime text:', $sieveScript);
+        $this->assertStringContainsString('<html><body><strong>AWAY!</strong></body></html>', $sieveScript);
+        $this->assertStringContainsString('--foo--', $sieveScript);
     }
     
     /**
@@ -227,9 +227,9 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         $script->setVacation($vacation);
         $sieveScript = $script->getSieve();
         
-        $this->assertContains('require ["vacation","date","relational"]', $sieveScript);
-        $this->assertContains('if allof(currentdate :value "le" "date" "2012-05-18",', $sieveScript);
-        $this->assertContains('currentdate :value "ge" "date" "2012-05-08")', $sieveScript);
+        $this->assertStringContainsString('require ["vacation","date","relational"]', $sieveScript);
+        $this->assertStringContainsString('if allof(currentdate :value "le" "date" "2012-05-18",', $sieveScript);
+        $this->assertStringContainsString('currentdate :value "ge" "date" "2012-05-08")', $sieveScript);
     }
     
     /**
@@ -250,9 +250,9 @@ class Felamimail_Sieve_Backend_ScriptTest extends PHPUnit_Framework_TestCase
         
         $sieveScript = $script->getSieve();
         
-        $this->assertNotContains('vacation :days 8 :addresses ["info@example.com"]', $sieveScript);
-        $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
-        $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
+        $this->assertStringNotContainsString('vacation :days 8 :addresses ["info@example.com"]', $sieveScript);
+        $this->assertStringContainsString('Felamimail_Sieve_Vacation', $sieveScript);
+        $this->assertStringContainsString('Tine 2.0 Unit Test', $sieveScript);
     }
 
     /**

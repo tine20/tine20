@@ -43,8 +43,8 @@ abstract class Tinebase_WebDav_Plugin_AbstractBaseTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());

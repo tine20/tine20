@@ -22,7 +22,7 @@ class Sales_OfferControllerTests extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Offer Controller Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales Offer Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     

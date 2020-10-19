@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_User
  */
-class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
+class Tinebase_FileSystem_StreamWrapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 filesystem streamwrapper tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 filesystem streamwrapper tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
             $this->markTestSkipped('filesystem base path not found');
         }
@@ -62,8 +62,8 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
@@ -83,11 +83,10 @@ class Tinebase_FileSystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
 
     public function testMkdirFail()
     {
-        try {
-            mkdir('tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() .
-                '/notAllowedHere');
-            static::fail('mkdir should throw exception');
-        } catch (Tinebase_Exception_InvalidArgument $teia) {}
+        $this->expectException(Tinebase_Exception_InvalidArgument::class);
+
+        mkdir('tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() .
+            '/notAllowedHere');
     }
     
     public function testRmdir()

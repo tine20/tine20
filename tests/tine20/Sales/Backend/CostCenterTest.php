@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Sales_Backend_CostCenterTest
  */
-class Sales_Backend_CostCenterTest extends PHPUnit_Framework_TestCase
+class Sales_Backend_CostCenterTest extends \PHPUnit\Framework\TestCase
 {
     
     /**
@@ -39,7 +39,7 @@ class Sales_Backend_CostCenterTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales CostCenter Backend Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales CostCenter Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -48,8 +48,8 @@ class Sales_Backend_CostCenterTest extends PHPUnit_Framework_TestCase
      * 
      * This method is called before a test is executed.
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_backend = new Sales_Backend_CostCenter();
     }
@@ -59,8 +59,8 @@ class Sales_Backend_CostCenterTest extends PHPUnit_Framework_TestCase
      * This method is called after a test is executed.
      *
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     

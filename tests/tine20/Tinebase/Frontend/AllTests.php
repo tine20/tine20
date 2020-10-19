@@ -17,7 +17,7 @@ class Tinebase_Frontend_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Frontend Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All Frontend Tests');
         $suite->addTestSuite(Tinebase_Frontend_Json_ContainerTest::class);
         $suite->addTestSuite(Tinebase_Frontend_Json_PersistentFilterTest::class);
         $suite->addTestSuite(Tinebase_Frontend_JsonTest::class);

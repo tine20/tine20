@@ -35,8 +35,8 @@ class Calendar_JsonTests extends Calendar_TestCase
      * (non-PHPdoc)
      * @see Calendar/Calendar_TestCase::setUp()
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
@@ -47,8 +47,8 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_oldFreebusyInfoAllowed = Calendar_Config::getInstance()->{Calendar_Config::FREEBUSY_INFO_ALLOWED};
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         Calendar_Model_Event::resetFreeBusyCleanupCache();
         Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, $this->_oldFreebusyInfoAllowed);
 
@@ -240,7 +240,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $this->_uit->deleteEvents(array($eventData['id']));
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_uit->getEvent($eventData['id']);
     }
     
@@ -1607,9 +1607,9 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testSaveResourcesWithoutRights()
     {
 
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, 'No Permission.');
+        static::expectException(Tinebase_Exception_AccessDenied::class); $this->expectExceptionMessageMatches('/No Permission./');
         $this->testSaveResource(array(Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true));
-        static::setExpectedException(Calendar_Exception_ResourceAdminGrant::class, 'The right Resource Admin must be set once.');
+        static::expectException(Calendar_Exception_ResourceAdminGrant::class); $this->expectExceptionMessageMatches('/The right Resource Admin must be set once./');
         $this->testSaveResource(array());
     }
 

@@ -22,7 +22,7 @@ class Tasks_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('All Tasks tests');
+        $suite = new \PHPUnit\Framework\TestSuite('All Tasks tests');
         
         $suite->addTest(Tasks_Backend_AllTests::suite());
         $suite->addTest(Tasks_Convert_Task_VCalendar_AllTests::suite());

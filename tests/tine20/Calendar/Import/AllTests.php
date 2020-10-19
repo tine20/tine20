@@ -22,7 +22,7 @@ class Calendar_Import_AllTests
 
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Tests Import');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar All Tests Import');
         $suite->addTestSuite('Calendar_Import_DemoDataTest');
         $suite->addTestSuite('Calendar_Import_CalDAVTest');
         $suite->addTestSuite('Calendar_Import_ICalTest');

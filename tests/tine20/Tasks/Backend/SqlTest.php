@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * Test class for Tinebase_User
  * @todo move concurrency tests to controller test!
  */
-class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
+class Tasks_Backend_SqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Tasks_Backend_Sql SQL Backend in test
@@ -40,8 +40,8 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
      * Moreover we generate static initial datas for two tasks which act 
      * as our test rabits.
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $user = Tinebase_Core::getUser();
         $container = Tinebase_Container::getInstance()->getPersonalContainer($user, Tasks_Model_Task::class, $user, Tinebase_Model_Grants::GRANT_ADMIN);
         $this->container_id = $container[0]->getId();
@@ -80,8 +80,8 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
      * remove stuff from db
      *
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         // NOTE: cascading delete of dependend stuff due to sql schema
         $db = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'tasks'));
         $db->delete($db->getAdapter()->quoteInto($db->getAdapter()->quoteIdentifier('id') .' = ?', $this->_persistantTestTask1->getId() ));

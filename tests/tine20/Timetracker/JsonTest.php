@@ -21,8 +21,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // switch back to admin user
         if ($this->_testUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
@@ -51,7 +51,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
 
         // check if it got deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
     }
 
@@ -283,7 +283,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
 
         // check if it got deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
     }
     
@@ -321,7 +321,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
 
         // check if everything got deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timesheet::getInstance()->get($timesheetData['id']);
     }
 

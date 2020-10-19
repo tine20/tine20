@@ -51,8 +51,8 @@ class Sales_PurchaseInvoiceTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
     
         $this->_contactController  = Addressbook_Controller_Contact::getInstance();
@@ -299,7 +299,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
         // delete record
         $this->_json->deletePurchaseInvoices($purchase['id']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $customerBackend = new Sales_Backend_PurchaseInvoice();
         $deletedPurchase = $customerBackend->get($purchase['id'], TRUE);
         $this->assertEquals(1, $deletedPurchase->is_deleted);

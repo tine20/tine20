@@ -22,7 +22,7 @@ class Tasks_Convert_Task_VCalendar_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Import VCalendar Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar All Import VCalendar Tests');
         $suite->addTestSuite('Tasks_Convert_Task_VCalendar_FactoryTest');
         $suite->addTestSuite('Tasks_Convert_Task_VCalendar_GenericTest');
         $suite->addTestSuite('Tasks_Convert_Task_VCalendar_MacOSXTest');

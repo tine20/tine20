@@ -33,8 +33,8 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         Tinebase_Cache_PerRequest::getInstance()->reset();
         $this->_json = new Crm_Frontend_Json();
@@ -58,8 +58,8 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_Cache_PerRequest::getInstance()->reset();
     }

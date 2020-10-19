@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tasks_Convert_Task_VCalendar_EMClient
  */
-class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCase
+class Tasks_Convert_Task_VCalendar_EMClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Tasks WebDAV EM Client Task Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tasks WebDAV EM Client Task Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 
@@ -52,8 +52,8 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -152,20 +152,20 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends PHPUnit_Framework_TestCa
         $vcalendar = $converter->fromTine20Model($task)->serialize();
         // var_dump($vcalendar);
         // required fields
-        $this->assertContains('VERSION:2.0',                                    $vcalendar, $vcalendar);
-        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Tasks V',         $vcalendar, $vcalendar);
-        $this->assertContains('CREATED:20111111T111100Z',       $vcalendar, $vcalendar);
-        $this->assertContains('LAST-MODIFIED:20111111T121200Z', $vcalendar, $vcalendar);
-        $this->assertContains('DTSTAMP:',                       $vcalendar, $vcalendar);
-        $this->assertContains('TZID:Europe/Berlin',               $vcalendar, $vcalendar);
-        $this->assertContains('UID:' . $task->uid,                $vcalendar, $vcalendar);
-        $this->assertContains('LOCATION:' . $task->location,      $vcalendar, $vcalendar);
-        $this->assertContains('CLASS:PUBLIC',                    $vcalendar, $vcalendar);
-        $this->assertContains('TZOFFSETFROM:+0100',  $vcalendar, $vcalendar);
-        $this->assertContains('TZOFFSETTO:+0200',    $vcalendar, $vcalendar);
-        $this->assertContains('TZNAME:CEST',         $vcalendar, $vcalendar);
-        $this->assertContains('TZOFFSETFROM:+0200',  $vcalendar, $vcalendar);
-        $this->assertContains('TZOFFSETTO:+0100',    $vcalendar, $vcalendar);
-        $this->assertContains('TZNAME:CET',          $vcalendar, $vcalendar);
+        $this->assertStringContainsString('VERSION:2.0',                                    $vcalendar, $vcalendar);
+        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Tasks V',         $vcalendar, $vcalendar);
+        $this->assertStringContainsString('CREATED:20111111T111100Z',       $vcalendar, $vcalendar);
+        $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z', $vcalendar, $vcalendar);
+        $this->assertStringContainsString('DTSTAMP:',                       $vcalendar, $vcalendar);
+        $this->assertStringContainsString('TZID:Europe/Berlin',               $vcalendar, $vcalendar);
+        $this->assertStringContainsString('UID:' . $task->uid,                $vcalendar, $vcalendar);
+        $this->assertStringContainsString('LOCATION:' . $task->location,      $vcalendar, $vcalendar);
+        $this->assertStringContainsString('CLASS:PUBLIC',                    $vcalendar, $vcalendar);
+        $this->assertStringContainsString('TZOFFSETFROM:+0100',  $vcalendar, $vcalendar);
+        $this->assertStringContainsString('TZOFFSETTO:+0200',    $vcalendar, $vcalendar);
+        $this->assertStringContainsString('TZNAME:CEST',         $vcalendar, $vcalendar);
+        $this->assertStringContainsString('TZOFFSETFROM:+0200',  $vcalendar, $vcalendar);
+        $this->assertStringContainsString('TZOFFSETTO:+0100',    $vcalendar, $vcalendar);
+        $this->assertStringContainsString('TZNAME:CET',          $vcalendar, $vcalendar);
     }
 }

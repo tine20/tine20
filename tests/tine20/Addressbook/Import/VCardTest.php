@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Addressbook_Import_VCard
  */
-class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
+class Addressbook_Import_VCardTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Addressbook_Import_VCard instance
@@ -43,7 +43,7 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook VCard Import Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook VCard Import Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -53,8 +53,8 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         $this->_filename = dirname(__FILE__) . '/files/contacts.vcf';
@@ -66,8 +66,8 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
 

@@ -18,7 +18,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
+class Voipmanager_ControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Fixtures
@@ -44,7 +44,7 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Controller Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Voipmanager Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -54,8 +54,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_backends['Asterisk_Context']   = Voipmanager_Controller_Asterisk_Context::getInstance();
@@ -76,8 +76,8 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
 

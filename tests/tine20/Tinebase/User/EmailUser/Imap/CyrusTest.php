@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tinebase_EmailUser_Imap_Cyrus
  */
-class Tinebase_User_EmailUser_Imap_CyrusTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_EmailUser_Imap_CyrusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * email user backend
@@ -41,7 +41,7 @@ class Tinebase_User_EmailUser_Imap_CyrusTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_EmailUser_Imap_CyrusTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_User_EmailUser_Imap_CyrusTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -51,8 +51,8 @@ class Tinebase_User_EmailUser_Imap_CyrusTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_backend = Tinebase_User::getInstance();
         
         if (!array_key_exists('Tinebase_EmailUser_Imap_Cyrus', $this->_backend->getPlugins())) {
@@ -70,8 +70,8 @@ class Tinebase_User_EmailUser_Imap_CyrusTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->objects['users'] as $user) {
             $this->_backend->deleteUser($user);
         }

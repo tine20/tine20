@@ -48,8 +48,8 @@ class Tasks_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_backend = new Tasks_Frontend_Json();
@@ -63,8 +63,8 @@ class Tasks_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if ($this->_smtpConfigChanged) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_smtpConfig);
             Tinebase_Smtp::setDefaultTransport($this->_smtpTransport);

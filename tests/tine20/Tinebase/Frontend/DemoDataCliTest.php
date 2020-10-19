@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for DemoData creation in Tinebase_Frontend_Cli
  */
-class Tinebase_Frontend_DemoDataCliTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_DemoDataCliTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Backend
@@ -33,7 +33,7 @@ class Tinebase_Frontend_DemoDataCliTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase Cli Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase Cli Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -43,8 +43,8 @@ class Tinebase_Frontend_DemoDataCliTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_cli = new Tinebase_Frontend_Cli();
     }
     

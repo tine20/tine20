@@ -22,7 +22,7 @@ class ActiveSync_Command_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('All ActiveSync command tests');
+        $suite = new \PHPUnit\Framework\TestSuite('All ActiveSync command tests');
         
         $suite->addTestSuite('ActiveSync_Command_PingTests');
         $suite->addTestSuite('ActiveSync_Command_SyncTests');

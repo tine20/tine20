@@ -23,7 +23,7 @@ class Tinebase_Relation_AllTests
     
     public static function suite() 
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Relation Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All Relation Tests');
         $suite->addTestSuite('Tinebase_Relation_Backend_SqlTest');
         $suite->addTestSuite('Tinebase_Relation_RelationTest');
         return $suite;

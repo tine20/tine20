@@ -15,8 +15,8 @@
 class Timetracker_DoctrineModelTest extends TestCase
 {
 
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     public function testTimesheetTimaccountForeignKey()
@@ -36,9 +36,9 @@ class Timetracker_DoctrineModelTest extends TestCase
         $schema = $tool->getSchemaFromMetadata($classes);
         $sql = $schema->toSql($em->getConnection()->getDatabasePlatform());
         self::assertEquals(3, count($sql));
-        self::assertContains('CREATE TABLE `tine20_timetracker_timeaccount`', $sql[0], print_r($sql, true));
-        self::assertContains('CREATE TABLE `tine20_timetracker_timesheet`', $sql[1], print_r($sql, true));
-        self::assertContains('ALTER TABLE `tine20_timetracker_timesheet` ADD CONSTRAINT', $sql[2], print_r($sql, true));
-        self::assertContains('FOREIGN KEY (`timeaccount_id`) REFERENCES `tine20_timetracker_timeaccount` (`id`)', $sql[2], print_r($sql, true));
+        self::assertStringContainsString('CREATE TABLE `tine20_timetracker_timeaccount`', $sql[0], print_r($sql, true));
+        self::assertStringContainsString('CREATE TABLE `tine20_timetracker_timesheet`', $sql[1], print_r($sql, true));
+        self::assertStringContainsString('ALTER TABLE `tine20_timetracker_timesheet` ADD CONSTRAINT', $sql[2], print_r($sql, true));
+        self::assertStringContainsString('FOREIGN KEY (`timeaccount_id`) REFERENCES `tine20_timetracker_timeaccount` (`id`)', $sql[2], print_r($sql, true));
     }
 }

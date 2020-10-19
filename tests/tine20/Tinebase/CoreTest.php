@@ -15,8 +15,8 @@
  */
 class Tinebase_CoreTest extends TestCase
 {
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         
         Tinebase_Core::set(Tinebase_Core::REQUEST, null);

@@ -30,14 +30,14 @@ class Tinebase_AreaLockTest extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_uit = Tinebase_AreaLock::getInstance();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         Tinebase_AreaLock::destroyInstance();
     }

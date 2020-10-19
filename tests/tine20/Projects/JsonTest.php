@@ -37,8 +37,8 @@ class Projects_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_json = new Projects_Frontend_Json();
     }
@@ -62,7 +62,7 @@ class Projects_JsonTest extends TestCase
         $this->_json->deleteProjects($projectData['id']);
 
         // check if it got deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Projects_Controller_Project::getInstance()->get($projectData['id']);
     }
     

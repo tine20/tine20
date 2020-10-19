@@ -62,7 +62,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller Tasks Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 ActiveSync Controller Tasks Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     

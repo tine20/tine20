@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Calendar_Convert_Event_VCalendar_Generic
  */
-class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_TestCase
+class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -36,8 +36,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
             // account email addresses are empty with AD backend
             $this->markTestSkipped('skipped for ad backend');
@@ -53,8 +53,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -338,15 +338,15 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         
         //var_dump($vevent);
-        $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
-        $this->assertContains('CREATED:20111111T111100Z',                       $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED:20111111T121200Z',                 $vevent, $vevent);
-        $this->assertContains('DTSTAMP:',                                       $vevent, $vevent);
-        $this->assertContains('RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20111112',     $vevent, $vevent);
-        $this->assertContains('EXDATE;VALUE=DATE:20111111',                     $vevent, $vevent);
-        #$this->assertContains('ORGANIZER;CN="' . Tinebase_Core::getUser()->accountDisplayName . '";EMAIL=' . Tinebase_Core::getUser()->accountEmailAddress . ':', $vevent, $vevent);
-        $this->assertContains('ORGANIZER;CN=', $vevent, $vevent);
+        $this->assertStringContainsString('VERSION:2.0',                                    $vevent, $vevent);
+        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->assertStringContainsString('CREATED:20111111T111100Z',                       $vevent, $vevent);
+        $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z',                 $vevent, $vevent);
+        $this->assertStringContainsString('DTSTAMP:',                                       $vevent, $vevent);
+        $this->assertStringContainsString('RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20111112',     $vevent, $vevent);
+        $this->assertStringContainsString('EXDATE;VALUE=DATE:20111111',                     $vevent, $vevent);
+        #$this->assertStringContainsString('ORGANIZER;CN="' . Tinebase_Core::getUser()->accountDisplayName . '";EMAIL=' . Tinebase_Core::getUser()->accountEmailAddress . ':', $vevent, $vevent);
+        $this->assertStringContainsString('ORGANIZER;CN=', $vevent, $vevent);
     }
     
     /**
@@ -420,23 +420,23 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         // var_dump($vevent);
         // required fields
-        $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
-        $this->assertContains('CREATED:20111111T111100Z',         $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED:20111111T121200Z',   $vevent, $vevent);
-        $this->assertContains('DTSTAMP:',                         $vevent, $vevent);
-        $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
-        $this->assertContains('UID:' . $event->uid,               $vevent, $vevent);
-        $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
-        $this->assertContains('CLASS:PRIVATE',                    $vevent, $vevent);
-        $this->assertContains('TZOFFSETFROM:+0100',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0200',    $vevent, $vevent);
-        $this->assertContains('TZNAME:CEST',         $vevent, $vevent);
-        $this->assertContains('TZOFFSETFROM:+0200',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0100',    $vevent, $vevent);
-        $this->assertContains('TZNAME:CET',          $vevent, $vevent);
-        $this->assertContains('CATEGORIES:CATEGORY 1,CATEGORY 2', $vevent, $vevent);
-        $this->assertNotContains('X-MOZ-LASTACK', $vevent, $vevent);
+        $this->assertStringContainsString('VERSION:2.0',                                    $vevent, $vevent);
+        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->assertStringContainsString('CREATED:20111111T111100Z',         $vevent, $vevent);
+        $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z',   $vevent, $vevent);
+        $this->assertStringContainsString('DTSTAMP:',                         $vevent, $vevent);
+        $this->assertStringContainsString('TZID:Europe/Berlin',               $vevent, $vevent);
+        $this->assertStringContainsString('UID:' . $event->uid,               $vevent, $vevent);
+        $this->assertStringContainsString('LOCATION:' . $event->location,     $vevent, $vevent);
+        $this->assertStringContainsString('CLASS:PRIVATE',                    $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETFROM:+0100',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETTO:+0200',    $vevent, $vevent);
+        $this->assertStringContainsString('TZNAME:CEST',         $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETFROM:+0200',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETTO:+0100',    $vevent, $vevent);
+        $this->assertStringContainsString('TZNAME:CET',          $vevent, $vevent);
+        $this->assertStringContainsString('CATEGORIES:CATEGORY 1,CATEGORY 2', $vevent, $vevent);
+        $this->assertStringNotContainsString('X-MOZ-LASTACK', $vevent, $vevent);
     }
     
     /**
@@ -459,22 +459,22 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         // var_dump($vevent);
         // required fields
-        $this->assertContains('VERSION:2.0',                               $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V', $vevent, $vevent);
-        $this->assertContains('CREATED:20111111T111100Z',                  $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED:20111111T121200Z',            $vevent, $vevent);
-        $this->assertContains('DTSTAMP:',                                  $vevent, $vevent);
-        $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
-        $this->assertContains('UID:' . $event->uid,               $vevent, $vevent);
-        $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
-        $this->assertContains('CLASS:PRIVATE',                    $vevent, $vevent);
-        $this->assertContains('TRIGGER;VALUE=DURATION:-PT1H15M',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETFROM:+0100',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0200',  $vevent, $vevent);
-        $this->assertContains('TZNAME:CEST',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETFROM:+0200',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0100',  $vevent, $vevent);
-        $this->assertContains('TZNAME:CET',  $vevent, $vevent);
+        $this->assertStringContainsString('VERSION:2.0',                               $vevent, $vevent);
+        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V', $vevent, $vevent);
+        $this->assertStringContainsString('CREATED:20111111T111100Z',                  $vevent, $vevent);
+        $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z',            $vevent, $vevent);
+        $this->assertStringContainsString('DTSTAMP:',                                  $vevent, $vevent);
+        $this->assertStringContainsString('TZID:Europe/Berlin',               $vevent, $vevent);
+        $this->assertStringContainsString('UID:' . $event->uid,               $vevent, $vevent);
+        $this->assertStringContainsString('LOCATION:' . $event->location,     $vevent, $vevent);
+        $this->assertStringContainsString('CLASS:PRIVATE',                    $vevent, $vevent);
+        $this->assertStringContainsString('TRIGGER;VALUE=DURATION:-PT1H15M',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETFROM:+0100',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETTO:+0200',  $vevent, $vevent);
+        $this->assertStringContainsString('TZNAME:CEST',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETFROM:+0200',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETTO:+0100',  $vevent, $vevent);
+        $this->assertStringContainsString('TZNAME:CET',  $vevent, $vevent);
         
     }
     
@@ -499,24 +499,24 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         // var_dump($vevent);
         // required fields
-        $this->assertContains('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
-        $this->assertContains('CREATED:20111111T111100Z',         $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED:20111020T144539Z',   $vevent, $vevent);
-        $this->assertContains('DTSTAMP:20111020T144539Z',         $vevent, $vevent);
-        $this->assertContains('DTSTART;VALUE=DATE:20111019',      $vevent, $vevent);
-        $this->assertContains('DTEND;VALUE=DATE:20111020',        $vevent, $vevent);
-        $this->assertContains('TZID:Europe/Berlin',               $vevent, $vevent);
-        $this->assertContains('UID:' . $event->uid,               $vevent, $vevent);
-        $this->assertContains('LOCATION:' . $event->location,     $vevent, $vevent);
-        $this->assertContains('CLASS:PRIVATE',                    $vevent, $vevent);
-        $this->assertContains('TRIGGER;VALUE=DATE-TIME:20111019T000000Z',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETFROM:+0100',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0200',    $vevent, $vevent);
-        $this->assertContains('TZNAME:CEST',         $vevent, $vevent);
-        $this->assertContains('TZOFFSETFROM:+0200',  $vevent, $vevent);
-        $this->assertContains('TZOFFSETTO:+0100',    $vevent, $vevent);
-        $this->assertContains('TZNAME:CET',          $vevent, $vevent);
+        $this->assertStringContainsString('VERSION:2.0',                                    $vevent, $vevent);
+        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->assertStringContainsString('CREATED:20111111T111100Z',         $vevent, $vevent);
+        $this->assertStringContainsString('LAST-MODIFIED:20111020T144539Z',   $vevent, $vevent);
+        $this->assertStringContainsString('DTSTAMP:20111020T144539Z',         $vevent, $vevent);
+        $this->assertStringContainsString('DTSTART;VALUE=DATE:20111019',      $vevent, $vevent);
+        $this->assertStringContainsString('DTEND;VALUE=DATE:20111020',        $vevent, $vevent);
+        $this->assertStringContainsString('TZID:Europe/Berlin',               $vevent, $vevent);
+        $this->assertStringContainsString('UID:' . $event->uid,               $vevent, $vevent);
+        $this->assertStringContainsString('LOCATION:' . $event->location,     $vevent, $vevent);
+        $this->assertStringContainsString('CLASS:PRIVATE',                    $vevent, $vevent);
+        $this->assertStringContainsString('TRIGGER;VALUE=DATE-TIME:20111019T000000Z',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETFROM:+0100',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETTO:+0200',    $vevent, $vevent);
+        $this->assertStringContainsString('TZNAME:CEST',         $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETFROM:+0200',  $vevent, $vevent);
+        $this->assertStringContainsString('TZOFFSETTO:+0100',    $vevent, $vevent);
+        $this->assertStringContainsString('TZNAME:CET',          $vevent, $vevent);
         
     }
 
@@ -536,19 +536,19 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
         // required fields
-        $this->assertContains('VERSION:2.0', $vevent, $vevent);
-        $this->assertContains('PRODID:-//tine20.com//Tine 2.0 Calendar V', $vevent, $vevent);
-        $this->assertContains('CREATED:20111111T111100Z',                  $vevent, $vevent);
-        $this->assertContains('LAST-MODIFIED:20111111T121200Z',            $vevent, $vevent);
-        $this->assertContains('DTSTAMP:',                                  $vevent, $vevent);
-        $this->assertContains('RRULE:FREQ=DAILY;UNTIL=20111030T060000Z',   $vevent, $vevent);
-        $this->assertContains('EXDATE:20111005T080000Z',      $vevent, $vevent);
-        $this->assertContains('EXDATE:20111006T080000Z',      $vevent, $vevent);
-        $this->assertContains('EXDATE:20111007T080000Z',      $vevent, $vevent);
-        $this->assertContains('TZID:Europe/Berlin',           $vevent, $vevent);
-        $this->assertContains('UID:' . $event->uid,           $vevent, $vevent);
-        $this->assertContains('LOCATION:' . $event->location, $vevent, $vevent);
-        $this->assertContains('CLASS:PRIVATE',                $vevent, $vevent);
+        $this->assertStringContainsString('VERSION:2.0', $vevent, $vevent);
+        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V', $vevent, $vevent);
+        $this->assertStringContainsString('CREATED:20111111T111100Z',                  $vevent, $vevent);
+        $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z',            $vevent, $vevent);
+        $this->assertStringContainsString('DTSTAMP:',                                  $vevent, $vevent);
+        $this->assertStringContainsString('RRULE:FREQ=DAILY;UNTIL=20111030T060000Z',   $vevent, $vevent);
+        $this->assertStringContainsString('EXDATE:20111005T080000Z',      $vevent, $vevent);
+        $this->assertStringContainsString('EXDATE:20111006T080000Z',      $vevent, $vevent);
+        $this->assertStringContainsString('EXDATE:20111007T080000Z',      $vevent, $vevent);
+        $this->assertStringContainsString('TZID:Europe/Berlin',           $vevent, $vevent);
+        $this->assertStringContainsString('UID:' . $event->uid,           $vevent, $vevent);
+        $this->assertStringContainsString('LOCATION:' . $event->location, $vevent, $vevent);
+        $this->assertStringContainsString('CLASS:PRIVATE',                $vevent, $vevent);
     }
     
     public function testConvertFromTine20ModelWithCustomAlarm()
@@ -568,7 +568,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
-        $this->assertContains('TRIGGER;VALUE=DATE-TIME:20111004T071000Z',        $vevent, $vevent);
+        $this->assertStringContainsString('TRIGGER;VALUE=DATE-TIME:20111004T071000Z',        $vevent, $vevent);
     }
     
     public function testConvertFromTine20ModelWithStatus()
@@ -582,12 +582,12 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
-        $this->assertContains('STATUS:CONFIRMED',        $vevent, $vevent);
+        $this->assertStringContainsString('STATUS:CONFIRMED',        $vevent, $vevent);
         
         $event->is_deleted = 1;
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
-        $this->assertContains('STATUS:CANCELED',        $vevent, $vevent);
+        $this->assertStringContainsString('STATUS:CANCELED',        $vevent, $vevent);
     }
     
     public function testConvertToTine20ModelWithCustomAlarm()
@@ -689,7 +689,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $savedEvent = $this->_saveIcsEvent('iphone_longsummary.ics');
         
-        $this->assertContains("immer im Voraus vereinbart.\nBezahlt haben sie letztes mal",
+        $this->assertStringContainsString("immer im Voraus vereinbart.\nBezahlt haben sie letztes mal",
             $savedEvent->summary, print_r($savedEvent->toArray(), true));
         $this->assertTrue(empty($savedEvent->description), print_r($savedEvent->toArray(), true));
     }
@@ -710,7 +710,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     public function testInvalidUtf8()
     {
         $savedEvent = $this->_saveIcsEvent('invalid_utf8.ics');
-        $this->assertContains('Hoppegarten Day', $savedEvent->summary);
+        $this->assertStringContainsString('Hoppegarten Day', $savedEvent->summary);
     }
     
     /**
@@ -720,9 +720,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $savedEvent = $this->_saveIcsEvent('iphone_longlocation.ics');
         
-        $this->assertContains('1. Rufen Sie folgende Seite auf: https://xxxxxxxxxxxxxx.webex.',
+        $this->assertStringContainsString('1. Rufen Sie folgende Seite auf: https://xxxxxxxxxxxxxx.webex.',
             $savedEvent->location, print_r($savedEvent->toArray(), true));
-        $this->assertContains("und Ihre E-Mail-Adresse ein.; geben Sie das Meeting-Passwort ein: xxxx",
+        $this->assertStringContainsString("und Ihre E-Mail-Adresse ein.; geben Sie das Meeting-Passwort ein: xxxx",
             $savedEvent->location, print_r($savedEvent->toArray(), true));
     }
 
@@ -733,7 +733,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $savedEvent = $this->_saveIcsEvent('utf8mb4_summary.ics');
         
-        $this->assertContains('Mail an Frau LaLiLoLu ging am 4.11 raus, dass du später zur Ralf Sitzung kommst (joda)', $savedEvent->summary);
+        $this->assertStringContainsString('Mail an Frau LaLiLoLu ging am 4.11 raus, dass du später zur Ralf Sitzung kommst (joda)', $savedEvent->summary);
     }
 
     /**
@@ -782,7 +782,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $savedEvent = $this->_saveIcsEvent('simple_at_in_id.ics', Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD);
 
         $ics = $this->_converter->fromTine20Model($savedEvent);
-        self::assertContains('UID:5aaratdeecgjat4cbjpif5dvms@google', $ics->serialize());
+        self::assertStringContainsString('UID:5aaratdeecgjat4cbjpif5dvms@google', $ics->serialize());
     }
 
     public function testExternalInvitationSeqBeforeOrganizer()

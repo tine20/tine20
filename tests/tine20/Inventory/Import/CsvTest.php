@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Inventory
  */
-class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
+class Inventory_Import_CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Inventory_Import_Csv instance
@@ -43,7 +43,7 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Inventory Csv Import Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Inventory Csv Import Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -53,8 +53,8 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Inventory_Controller_InventoryItem::getInstance()->resolveCustomfields(TRUE);
     }
 
@@ -64,8 +64,8 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // cleanup
         if (file_exists($this->_filename) && $this->_deleteImportFile) {
             unlink($this->_filename);
@@ -104,7 +104,7 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
         $this->assertEquals($result['results'][0]['added_date']->setTimezone('Europe/Berlin')->toString(), '2013-01-11 00:00:00');
         $this->assertEquals($result['results'][0]['inventory_id'], '12345');
-        $this->assertContains($translatedString, $result['results'][0]['description']);
+        $this->assertStringContainsString($translatedString, $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Tolle Leute - second mapping set');
         $this->assertEquals($result['results'][1]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
@@ -113,7 +113,7 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result['results'][2]['name'], 'Tine 2.0 für Profis');
         $this->assertEquals($result['results'][2]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
         $this->assertEquals($result['results'][2]['inventory_id'], '1333431666');
-        $this->assertContains($translatedString, $result['results'][2]['description']);
+        $this->assertStringContainsString($translatedString, $result['results'][2]['description']);
     }
     
     /**
@@ -140,7 +140,7 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
         $this->assertEquals($result['results'][0]['added_date']->setTimezone('Europe/Berlin')->toString(), '2013-01-11 00:00:00');
         $this->assertNotEquals($result['results'][0]['inventory_id'], '');
-        $this->assertContains($translatedString, $result['results'][0]['description']);
+        $this->assertStringContainsString($translatedString, $result['results'][0]['description']);
         
         $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Profis');
         $this->assertEquals($result['results'][1]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
@@ -189,7 +189,7 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
         $this->assertEquals($result['results'][0]['added_date']->setTimezone('Europe/Berlin')->toString(), '2014-08-27 00:00:00');
         $this->assertEquals($result['results'][0]['inventory_id'], '133331666');
-        $this->assertContains($translatedString, $result['results'][0]['description']);
+        $this->assertStringContainsString($translatedString, $result['results'][0]['description']);
     }
     
     /**

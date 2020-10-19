@@ -30,8 +30,8 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_backend = new Tinebase_Frontend_Json_Container();
@@ -69,7 +69,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
         $this->assertEquals('Addressbook_Model_Contact', $container['model']);
         $this->_backend->deleteContainer($container['id']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
         
@@ -93,7 +93,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
 
         $this->_backend->deleteContainer($container['id']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
     }
@@ -117,7 +117,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
 
         $this->_backend->deleteContainer($container['id']);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
     }
@@ -158,7 +158,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
 
         $this->_backend->deleteContainer($container['id']);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         Tinebase_Container::getInstance()->getContainerById($container['id']);
     }

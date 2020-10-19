@@ -19,7 +19,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
+class Voipmanager_JsonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Backend
@@ -36,7 +36,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Json Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Voipmanager Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -44,8 +44,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      * Sets up the fixture.
      * This method is called before a test is executed.
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_json = new Voipmanager_Frontend_Json();
@@ -57,8 +57,8 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     

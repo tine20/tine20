@@ -15,8 +15,8 @@
  */
 class HumanResources_Controller_StreamTests extends HumanResources_TestCase
 {
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_uit = HumanResources_Controller_Stream::getInstance();
 
         parent::setUp();
@@ -24,7 +24,8 @@ class HumanResources_Controller_StreamTests extends HumanResources_TestCase
 
     public function testStreamModalityOverlap()
     {
-        static::setExpectedExceptionRegExp(Tinebase_Exception_UnexpectedValue::class, '/^modalities may not overlap$/');
+        $this->expectException(Tinebase_Exception_UnexpectedValue::class);
+        $this->expectExceptionMessageMatches('/^modalities may not overlap$/');
 
         $this->_uit->create(new HumanResources_Model_Stream([
             HumanResources_Model_Stream::FLD_TYPE => 'velocity stream',
@@ -120,8 +121,9 @@ class HumanResources_Controller_StreamTests extends HumanResources_TestCase
             ]
         ]));
 
-        static::setExpectedExceptionRegExp(Tinebase_Exception_InvalidRelationConstraints::class,
-            '/^You tried to create a relation which is forbidden by the constraints config of one of the models\.$/');
+        $this->expectException(Tinebase_Exception_InvalidRelationConstraints::class);
+        $this->expectExceptionMessage(
+            'You tried to create a relation which is forbidden by the constraints config of one of the models.');
 
         $this->_uit->create(new HumanResources_Model_Stream([
             HumanResources_Model_Stream::FLD_TYPE => 'velocity stream',

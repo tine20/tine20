@@ -36,8 +36,8 @@ class Tinebase_Tree_NodeTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_fileObjectBackend = new Tinebase_Tree_FileObject();
         $this->_treeNodeBackend   = new Tinebase_Tree_Node();
         
@@ -51,8 +51,8 @@ class Tinebase_Tree_NodeTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         foreach ($this->objects['nodes'] as $node) {

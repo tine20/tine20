@@ -32,11 +32,11 @@ class Felamimail_AllTests
     /**
      * get all Felamimail test suites 
      *
-     * @return PHPUnit_Framework_TestSuite
+     * @return \PHPUnit\Framework\TestSuite
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('All Felamimail tests');
+        $suite = new \PHPUnit\Framework\TestSuite('All Felamimail tests');
         
         // only call Felamimail tests if imap is configured in config.inc.php
         if (Tinebase_EmailUser::isEmailSystemAccountConfigured()) {

@@ -116,7 +116,7 @@
   },
   "require-dev": {
     "phing/phing": "2.16.*",
-    "phpunit/phpunit": "5.2.*",
+    "phpunit/phpunit": "^8.5",
     "tedivm/jshrink": "~1.0",
     "zendframework/zend-psr7bridge": "^0.2"
   },
@@ -143,7 +143,7 @@
   "config": {
     "secure-http": false,
     "platform": {
-      "php": "7.1"
+      "php": "7.2"
     },
     "sort-packages": true
   },

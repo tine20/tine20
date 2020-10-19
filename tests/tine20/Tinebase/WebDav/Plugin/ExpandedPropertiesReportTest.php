@@ -13,8 +13,8 @@
  */
 class Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest extends Tinebase_WebDav_Plugin_PrincipalSearchTest
 {
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
     }

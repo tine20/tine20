@@ -15,8 +15,8 @@ class Tinebase_FileSystem_Preview_ServiceV2LiveTest extends TestCase
      */
     protected $_previewService;
 
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_previewService = Tinebase_Core::getPreviewService();
     }
 

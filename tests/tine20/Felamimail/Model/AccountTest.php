@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Felamimail_Model_AccountTest
  */
-class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
+class Felamimail_Model_AccountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Runs the test methods of this class.
@@ -27,7 +27,7 @@ class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Account Model Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Felamimail Account Model Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -37,8 +37,8 @@ class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     /**
@@ -47,8 +47,8 @@ class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
 
     /********************************* test funcs *************************************/
@@ -76,7 +76,7 @@ class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
         $accountSmtpConfig = $account->getSmtpConfig();
         
         if ((isset($smtpConfig['primarydomain']) || array_key_exists('primarydomain', $smtpConfig))) {
-            $this->assertContains($smtpConfig['primarydomain'], $accountSmtpConfig['username']);
+            $this->assertStringContainsString($smtpConfig['primarydomain'], $accountSmtpConfig['username']);
         }
         
         if (TestServer::getInstance()->getConfig()->mailserver) {

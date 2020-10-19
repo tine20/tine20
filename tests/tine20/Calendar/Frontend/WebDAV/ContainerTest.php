@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Calendar_Frontend_WebDAV_Container
  */
-class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
+class Calendar_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Container Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar WebDAV Container Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -73,8 +73,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
         Calendar_Config::getInstance()->set(Calendar_Config::SKIP_DOUBLE_EVENTS, '');
     }
@@ -380,10 +380,10 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
     public function testGetCalendarVTimezone()
     {
         $vTimezone = Tinebase_WebDav_Container_Abstract::getCalendarVTimezone('Calendar');
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
+        $this->assertStringContainsString('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
         
         $vTimezone = Tinebase_WebDav_Container_Abstract::getCalendarVTimezone(Tinebase_Application::getInstance()->getApplicationByName('Calendar'));
-        $this->assertContains('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
+        $this->assertStringContainsString('PRODID:-//tine20.org//Tine 2.0 Calendar', $vTimezone);
     }
     
     /**

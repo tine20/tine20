@@ -44,7 +44,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
     {
         $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $collection->createFile('foobar');
     }

@@ -439,8 +439,8 @@ Zeile 3</AirSyncBase:Data>
      * (non-PHPdoc)
      * @see ActiveSync/ActiveSync_TestCase::setUp()
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);

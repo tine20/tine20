@@ -47,6 +47,6 @@ class ExampleApplication_ImportTest extends ImportTestCase
         $cli->import($opts);
         $out = ob_get_clean();
 
-        $this->assertContains('Imported 1 records', $out);
+        $this->assertStringContainsString('Imported 1 records', $out);
     }
 }

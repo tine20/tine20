@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tasks_Convert_Task_VCalendar_Factory
  */
-class Tasks_Convert_Task_VCalendar_FactoryTest extends PHPUnit_Framework_TestCase
+class Tasks_Convert_Task_VCalendar_FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Tasks_Convert_Task_VCalendar_FactoryTest extends PHPUnit_Framework_TestCas
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Factory Event Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar WebDAV Factory Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Tasks_Convert_Task_VCalendar_FactoryTest extends PHPUnit_Framework_TestCas
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     /**
@@ -51,8 +51,8 @@ class Tasks_Convert_Task_VCalendar_FactoryTest extends PHPUnit_Framework_TestCas
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
     
     /**
