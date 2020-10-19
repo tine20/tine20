@@ -545,4 +545,26 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         self::assertNotContains('Notification', $sievescript);
         self::assertNotContains('fileinto', $sievescript);
     }
+
+    public function testChangeFrom()
+    {
+        $user = $this->_createUserWithEmailAccount();
+
+        // from of system account should change
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $account->from = 'changeFrom';
+        $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+        self::assertEquals('changeFrom', $account->from);
+    }
+
+    public function testChangeÓorganization()
+    {
+        $user = $this->_createUserWithEmailAccount();
+
+        // from of system account should change
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $account->organization = 'changeOrganization';
+        $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+        self::assertEquals('changeOrganization', $account->organization);
+    }
 }

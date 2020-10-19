@@ -121,10 +121,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(disabled);
                     break;
                 case 'signatures':
+                case 'from':
                 case 'signature_position':
                 case 'display_format':
                 case 'compose_format':
                 case 'preserve_format':
+                case 'organization':
                 case 'reply_to':
                 case 'sent_folder':
                 case 'trash_folder':
