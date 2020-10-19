@@ -557,7 +557,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         self::assertEquals('changeFrom', $account->from);
     }
 
-    public function testChangeÓorganization()
+    public function testChangeOrganization()
     {
         $user = $this->_createUserWithEmailAccount();
 
