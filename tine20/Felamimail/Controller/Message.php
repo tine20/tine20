@@ -532,13 +532,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // remove possible harmful utf-8 chars
         // TODO should not be enabled by default (configurable?)
         $subjectAndMail = Tinebase_Helper::mbConvertTo($message->from_email . '_' . $subject, 'ASCII');
-        $name = str_replace(' ', '_', $message->received->toString('Y-m-d'))
+        return str_replace(' ', '_', $message->received->toString('Y-m-d'))
             . '_' . mb_substr($subjectAndMail, 0, 245)
             . '_' . mb_substr(md5($message->messageuid
             . $message->folder_id), 0, 10)
             . '.eml';
-
-        return $name;
     }
 
     /**

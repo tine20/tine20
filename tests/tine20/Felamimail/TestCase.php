@@ -318,7 +318,7 @@ abstract class Felamimail_TestCase extends TestCase
      * @param Felamimail_Model_Account $account
      * @return Felamimail_Model_Folder|NULL
      */
-    protected function _getFolder($name, $createFolder = TRUE, $account = null)
+    protected function _getFolder($name, $createFolder = TRUE, Felamimail_Model_Account $account = null)
     {
         $account = $account ? $account : $this->_account;
         Felamimail_Controller_Cache_Folder::getInstance()->update($account->getId());

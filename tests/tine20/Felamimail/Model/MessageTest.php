@@ -135,7 +135,7 @@ class Felamimail_Model_MessageTest extends \PHPUnit\Framework\TestCase
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'subject');
 
         $config = [
-            'pattern' => '/^SPAM\? \([^)]+\) \*\*\* /',
+            'pattern' => '/^SPAM\? \(.+\) \*\*\* /',
         ];
 
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY_CONFIG, $config);

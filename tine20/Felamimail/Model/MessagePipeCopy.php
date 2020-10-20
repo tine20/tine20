@@ -6,10 +6,9 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Ching-En, Cheng <c.cheng@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-
 
 /**
  * felamimail model message pipe copy config model
@@ -27,35 +26,42 @@ class Felamimail_Model_MessagePipeCopy implements Tinebase_BL_ElementInterface, 
         $this->_config = $config;
     }
 
+    /**
+     * @param Tinebase_BL_PipeContext $_context
+     * @param Tinebase_BL_DataInterface $_data
+     * @throws Felamimail_Exception_IMAPServiceUnavailable
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     public function execute(Tinebase_BL_PipeContext $_context, Tinebase_BL_DataInterface $_data)
     {
-        /** @var Felamimail_Model_Message $_data */
-        $targetFolder = $this->_config['target']['folder'];
-        $accountId = isset($this->_config['target']['accountid']) ? 
-            $this->_config['target']['accountid'] :
-            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
-        
-        $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+        /** @var Felamimail_Model_Message $message */
+        $message = $_data;
 
-        $folder = Felamimail_Model_MessagePipeMove::getTargetFolder($account, $targetFolder);
+        if (array_key_exists('local_directory', $this->_config['target'])) {
 
-        if (!isset($this->_config['wrap'])) {
-            // keep original message
-            Felamimail_Controller_Message_Move::getInstance()->moveMessages($_data, $folder, true);
-        } else {
-            if (!isset($this->_config['wrap']['to']) || !isset($this->_config['wrap']['subject'])) {
-                throw new Exception('wrap config "to" or "subject" is not set');
+            // create directory if it does not exist
+            $targetDir = $this->_config['target']['local_directory'];
+            if (! is_dir($targetDir)) {
+                mkdir($targetDir);
             }
-            
-            $translation = Tinebase_Translation::getTranslation('Felamimail');
-            $this->_config['wrap']['subject'] = $translation->_($this->_config['wrap']['subject']);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' NOT IMPLEMENTED YET - this needs to be implemented - currently no message is sent to wrap address!'
-            );
+            // put message as eml into local_directory (filename = MESSAGE-ID.eml)
+            $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
+            if (isset($message->headers['message-id'])) {
+                $filename = $message->headers['message-id'] . '.eml';
+            } else {
+                $filename = $message->getId()  . '.eml';
+            }
+            copy($tempFile->path, $targetDir . DIRECTORY_SEPARATOR . $filename);
+        } else {
+            $accountId = isset($this->_config['target']['accountid']) ?
+                $this->_config['target']['accountid'] :
+                Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+            $account = Felamimail_Controller_Account::getInstance()->get($accountId);
 
-            // TODO implement me
-            // Felamimail_Controller_Message_Send::getInstance()->copyMessageWithAttachment($_data, $this->_config['wrap'], $folder);
+            $folder = Felamimail_Model_MessagePipeMove::getTargetFolder($account, $this->_config['target']['folder']);
+            Felamimail_Controller_Message_Move::getInstance()->moveMessages($message, $folder, true, false);
         }
     }
 
