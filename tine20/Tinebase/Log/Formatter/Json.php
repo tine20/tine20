@@ -26,7 +26,7 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
         $data = $this->getLogData($event);
         
         // filebeat friendly format, make sure you have set "json.overwrite_keys: true" in your filebeat conf
-        $data['@timestamp'] = date(sprintf('Y-m-d\TH:i:s\Z%s', substr(microtime(), 1, 4)));
+        $data['@timestamp'] = date(sprintf('Y-m-d\TH:i:s%s\Z', substr(microtime(), 1, 4)));
         
         return @json_encode($data,
             JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)
