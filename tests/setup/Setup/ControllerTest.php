@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Setup_ControllerTest extends PHPUnit_Framework_TestCase
+class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Setup_Controller
@@ -30,8 +30,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_uit = Setup_ControllerMock::getInstance();
 
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
@@ -59,8 +59,8 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $testCredentials = Setup_TestServer::getInstance()->getTestCredentials();
         $this->_installAllApplications(array(
             'defaultAdminGroupName' => 'Administrators',

@@ -14,8 +14,8 @@
 class Tinebase_FullTextTest extends TestCase
 {
 
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT);
         $javaBin = $fulltextConfig->{Tinebase_Config::FULLTEXT_JAVABIN};
         $tikaJar = $fulltextConfig->{Tinebase_Config::FULLTEXT_TIKAJAR};

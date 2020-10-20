@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Felamimail_Model_MessageTest
  */
-class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
+class Felamimail_Model_MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Runs the test methods of this class.
@@ -27,7 +27,7 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Message Model Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Felamimail Message Model Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -37,8 +37,8 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     /**
@@ -47,8 +47,8 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
 
     /********************************* test funcs *************************************/
@@ -120,10 +120,10 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
         $result = Felamimail_Message::replaceUris($message->body);
         $result = Felamimail_Message::replaceEmails($result);
 
-        $this->assertContains('a href="http://www.facebook.com/media/set/', $result);
-        $this->assertContains('a href="http://www.kieler-linuxtage.de/', $result);
-        $this->assertContains('eMail=abc@efh.com', $result);
-        $this->assertContains('a href="http://my.serveer.com/job/job1/137/display/redirect?page=changes"', $result);
+        $this->assertStringContainsString('a href="http://www.facebook.com/media/set/', $result);
+        $this->assertStringContainsString('a href="http://www.kieler-linuxtage.de/', $result);
+        $this->assertStringContainsString('eMail=abc@efh.com', $result);
+        $this->assertStringContainsString('a href="http://my.serveer.com/job/job1/137/display/redirect?page=changes"', $result);
     }
 
     /**

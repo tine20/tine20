@@ -31,11 +31,11 @@ class AllTests
     /**
      * suite
      *
-     * @return PHPUnit_Framework_TestSuite
+     * @return \PHPUnit\Framework\TestSuite
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Setup All Tests');
         $suite->addTest(Setup_AllTests::suite());
         
         return $suite;

@@ -24,7 +24,7 @@ class Crm_Export_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm All Export Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Crm All Export Tests');
         $suite->addTestSuite('Crm_Export_PdfTest');
         $suite->addTestSuite('Crm_Export_CsvTest');
         $suite->addTestSuite('Crm_Export_OdsTest');

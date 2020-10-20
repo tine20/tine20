@@ -26,15 +26,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      * (non-PHPdoc)
      * @see Calendar_TestCase::setUp()
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
         $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
         parent::tearDown();
     }
@@ -65,7 +65,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->originator_tz = 'BRT';
-        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        static::expectException(Tinebase_Exception_Record_Validation::class);
         $this->_controller->create($event);
     }
     
@@ -765,7 +765,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'role'      => Calendar_Model_Attender::ROLE_REQUIRED
         )));
         
-        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->expectException('Calendar_Exception_AttendeeBusy');
         $this->_controller->update($persitentConflictEvent, TRUE);
     }
     
@@ -775,7 +775,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentConflictEvent->summary = 'time updates should recheck free/busy';
         $persitentConflictEvent->dtend->addHour(1);
         
-        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->expectException('Calendar_Exception_AttendeeBusy');
         $this->_controller->update($persitentConflictEvent, TRUE);
     }
 
@@ -1304,7 +1304,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         unset($persistentEvent->rrule);
         $this->_controller->delete($persistentEvent);
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentException->getId());
     }
     
@@ -1322,7 +1322,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $contentSeq = Tinebase_Container::getInstance()->getContentSequence($this->_getTestCalendar());
         $this->assertEquals(3, $contentSeq, 'container content seq should be increased 3 times!');
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentEvent->getId());
     }
     
@@ -1347,7 +1347,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persistentException = $this->_controller->create($exception);
         
         $this->_controller->delete($persistentEvent->getId());
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentException->getId());
     }
     
@@ -2340,7 +2340,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
         // undo the summary change
         $mod = $modifications->getLastRecord();
-        static::assertNotContains(Calendar_Model_Attender::class, $mod->new_value);
+        static::assertStringNotContainsString(Calendar_Model_Attender::class, $mod->new_value);
         $modifications->removeRecord($mod);
         Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))

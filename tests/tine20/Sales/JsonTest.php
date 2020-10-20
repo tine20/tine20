@@ -27,7 +27,7 @@ class Sales_JsonTest extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Json Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -37,8 +37,8 @@ class Sales_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_instance = new Sales_Frontend_Json();
@@ -49,8 +49,8 @@ class Sales_JsonTest extends TestCase
         $this->_deleteContracts = array();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, false);
 
         parent::tearDown();
@@ -725,7 +725,7 @@ class Sales_JsonTest extends TestCase
         
         $this->_instance->deleteDivisions(array($d['id']));
         
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         
         $d = $this->_instance->getDivision($d['id']);
     }
@@ -739,7 +739,7 @@ class Sales_JsonTest extends TestCase
     
         list($contact1, $contact2, $contact3, $contact4) = $this->_createContacts();
         
-        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
+        $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
         
         $this->_setContractRelations($contract, array($contact1, $contact2), 'CUSTOMER');
     }
@@ -815,7 +815,7 @@ class Sales_JsonTest extends TestCase
         
         $contact4->relations = array($relation);
         
-        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
+        $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
         $contact4 = Addressbook_Controller_Contact::getInstance()->update($contact4);
     }
     

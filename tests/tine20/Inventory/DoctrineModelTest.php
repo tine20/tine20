@@ -17,8 +17,8 @@ use Doctrine\DBAL\Schema\Comparator;
 class Inventory_DoctrineModelTest extends Inventory_TestCase
 {
 
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     public function testGetMetadataOfInventoryModel()
@@ -46,7 +46,7 @@ class Inventory_DoctrineModelTest extends Inventory_TestCase
 
         $table = $toSchema->getTable('tine20_inventory_item');
 
-        $this->setExpectedException('Doctrine\DBAL\DBALException');
+        $this->expectException('Doctrine\DBAL\DBALException');
         $table->renameColumn('id', 'ident');
     }
 

@@ -16,7 +16,7 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
+class ActiveSync_TimezoneConverterTest extends \PHPUnit\Framework\TestCase
 {
     
     protected $_uit = null;
@@ -137,8 +137,8 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
         'Pacific/Kwajalein' => 'MHT',
     );
     
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $this->_uit = ActiveSync_TimezoneConverter::getInstance(Tinebase_Core::getLogger());
     }
         
@@ -192,7 +192,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
 
     public function testUnknownOffsets()
     {
-        $this->setExpectedException('ActiveSync_TimezoneNotFoundException');
+        $this->expectException('ActiveSync_TimezoneNotFoundException');
         $offsets = array(                                                                                                                            
                     'bias' => -600000,
                     'standardName' => '',
@@ -221,7 +221,7 @@ class ActiveSync_TimezoneConverterTest extends PHPUnit_Framework_TestCase
     
     public function testInvalidOffsets()
     {
-        $this->setExpectedException('ActiveSync_Exception');
+        $this->expectException('ActiveSync_Exception');
         //When specifiying standardOffsest then it is invalid provide empty daylight offsets and vice versa 
         $offsets = array(
                         'bias' => 1,

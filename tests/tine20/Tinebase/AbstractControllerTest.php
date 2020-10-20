@@ -15,7 +15,7 @@
 /**
  * Abstact tests for record controllers
  */
-class Tinebase_AbstractControllerTest extends PHPUnit_Framework_TestCase
+class Tinebase_AbstractControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * application name of the controller to test
@@ -49,8 +49,8 @@ class Tinebase_AbstractControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_controller = Tinebase_Core::getApplicationInstance($this->_appName);
     }
 
@@ -60,8 +60,8 @@ class Tinebase_AbstractControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         
     }
     

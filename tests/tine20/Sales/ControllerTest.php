@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Sales_ControllerTest extends PHPUnit_Framework_TestCase
+class Sales_ControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Sales_Controller_Contract
@@ -37,8 +37,8 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Sales_Config::getInstance()->set(Sales_Config::CONTRACT_NUMBER_VALIDATION, 'text');
         
         $this->_backend = Sales_Controller_Contract::getInstance();
@@ -53,8 +53,8 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
     
     /**
@@ -72,7 +72,7 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         // check uniquity
         $cc1 = $this->_getCostCenter();
         
-        $this->setExpectedException('Tinebase_Exception_Duplicate');
+        $this->expectException('Tinebase_Exception_Duplicate');
 
         Sales_Controller_CostCenter::getInstance()->create($cc1);
     }

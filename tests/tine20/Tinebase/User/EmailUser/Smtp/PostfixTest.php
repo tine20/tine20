@@ -39,8 +39,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_backend = Tinebase_User::getInstance();
@@ -68,8 +68,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->objects['users'] as $user) {
             try {
                 Tinebase_User::getInstance()->deleteUser($user);

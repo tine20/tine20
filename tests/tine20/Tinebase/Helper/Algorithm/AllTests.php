@@ -22,7 +22,7 @@ class Tinebase_Helper_Algorithm_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Helper Algorithm Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 All Helper Algorithm Tests');
 
         $suite->addTestSuite(Tinebase_Helper_Algorithm_TerminationDeadlineTest::class);
 

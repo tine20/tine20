@@ -58,14 +58,14 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
             </table>';
     
     
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_backend = Setup_Backend_Factory::factory();
         $this->_createTestTable();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->_tableNames as $tableName) {
             try {
                $this->_backend->dropTable($tableName);
@@ -284,7 +284,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
             
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         
-        $this->setExpectedException('Zend_Db_Statement_Exception'); //Column "id" already exists - expecting Exception'
+        $this->expectException('Zend_Db_Statement_Exception'); //Column "id" already exists - expecting Exception'
         $this->_backend->addCol($this->_table->name, $field);
         
     }
@@ -343,7 +343,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
             </field>";
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->setExpectedException('Zend_Db_Statement_Exception'); //1075: There may only be one autoincrement column  - expecting Exception'
+        $this->expectException('Zend_Db_Statement_Exception'); //1075: There may only be one autoincrement column  - expecting Exception'
         $this->_backend->addCol($this->_table->name, $field);
     }
     
@@ -392,7 +392,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         
         $db = Tinebase_Core::getDb();
         $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'test' => 'enabled'));
-        $this->setExpectedException('Zend_Db_Statement_Exception'); //invalid enum value -> expect exception
+        $this->expectException('Zend_Db_Statement_Exception'); //invalid enum value -> expect exception
         $db->insert(SQL_TABLE_PREFIX . $this->_table->name, array('name' => 'test', 'test' => 'deleted'));
     }
     
@@ -615,7 +615,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $result = $db->fetchCol($db->select()->from($tableName, 'price'));
         $this->assertEquals(round($value), $result[1], 'Test if too many scale digits get rounded');
         
-        $this->setExpectedException('Zend_Db_Statement_Exception'); //too many digits (maxim 4 + 2 precision)
+        $this->expectException('Zend_Db_Statement_Exception'); //too many digits (maxim 4 + 2 precision)
         $value = 99999;
         $db->insert($tableName, array('name' => 'test3', 'price' => $value));
     }
@@ -746,7 +746,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
 
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
 
-        $this->setExpectedException('Zend_Db_Statement_Exception'); //ORA-02260: there can only be one primary key - expecting Exception
+        $this->expectException('Zend_Db_Statement_Exception'); //ORA-02260: there can only be one primary key - expecting Exception
         $this->_backend->addIndex($this->_table->name, $index);
     }
     
@@ -765,7 +765,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         
-        $this->setExpectedException('Zend_Db_Statement_Exception'); //field application_id does not exist
+        $this->expectException('Zend_Db_Statement_Exception'); //field application_id does not exist
         $this->_backend->addIndex($this->_table->name, $index);
     }
     
@@ -812,7 +812,7 @@ abstract class Setup_Backend_AbstractTest extends BaseTest
         $db->insert($tableName, array('name' => 'test2', 'group_id' => 1, 'account_id' => 2));
         $db->insert($tableName, array('name' => 'test3', 'group_id' => 2, 'account_id' => 1));
         
-        $this->setExpectedException('Zend_Db_Statement_Exception'); //unique constraint violation
+        $this->expectException('Zend_Db_Statement_Exception'); //unique constraint violation
         $db->insert($tableName, array('name' => 'test4', 'group_id' => 1, 'account_id' => 1));
     }
     

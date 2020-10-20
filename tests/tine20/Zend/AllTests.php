@@ -33,7 +33,7 @@ class Zend_AllTests
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Test for Zend rewritten stuff');
+        $suite = new \PHPUnit\Framework\TestSuite('Test for Zend rewritten stuff');
         $suite->addTestSuite('Zend_Translate_Adapter_GettextPoTest');
         $suite->addTestSuite('Zend_Translate_TranslateTest');
         $suite->addTestSuite('Zend_Ldap_ConvertTest');

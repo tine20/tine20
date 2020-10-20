@@ -37,8 +37,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_config = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP,
             new Tinebase_Config_Struct())->toArray();
         if (!isset($this->_config['backend']) || !('Imap_' . ucfirst($this->_config['backend']) == Tinebase_EmailUser::IMAP_DOVECOT) || $this->_config['active'] != true) {
@@ -64,8 +64,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // delete email account
         foreach ($this->_objects['addedUsers'] as $user) {
             $this->_backend->inspectDeleteUser($user);

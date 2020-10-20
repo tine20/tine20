@@ -14,14 +14,14 @@
  */
 class Tinebase_TranslationTest extends TestCase
 {
-    public function setUp()
-    {
+    public function setUp(): void
+{
         // Some tests may have changed the User Locale => restore defaults
         Tinebase_Core::setupUserLocale();
     }
     
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         // Some tests may have changed the User Locale => restore defaults
         Tinebase_Core::setupUserLocale();
     }
@@ -156,7 +156,7 @@ class Tinebase_TranslationTest extends TestCase
     public function testSingularExistence()
     {
         $jsTranslations = Tinebase_Translation::getJsTranslations('de', 'Tinebase');
-        $this->assertContains(', "Deleting Tag"', $jsTranslations, 'Singular of "Deleting Tag, Deleting Tags" is missing!');
+        $this->assertStringContainsString(', "Deleting Tag"', $jsTranslations, 'Singular of "Deleting Tag, Deleting Tags" is missing!');
     }
 
     /**
@@ -169,7 +169,7 @@ class Tinebase_TranslationTest extends TestCase
         Tinebase_Core::getCache()->clean();
         $jsTranslations = Tinebase_Translation::getJsTranslations('fr', 'Tinebase');
         $this->assertTrue(preg_match("/: \"liste \\\\\"\n/", $jsTranslations, $matches) === 0, 'Translation string missing / preg_match fail: ' . print_r($matches, TRUE));
-        $this->assertContains(': "liste \"à faire\""', $jsTranslations, 'Could not find french singular of "todo lists"');
+        $this->assertStringContainsString(': "liste \"à faire\""', $jsTranslations, 'Could not find french singular of "todo lists"');
     }
 
     /**
@@ -202,7 +202,7 @@ class Tinebase_TranslationTest extends TestCase
         $cmd = TestServer::assembleCliCommand($cmd);
         exec($cmd, $output);
 
-        $this->assertContains('langHelper.php [ options ]', $output[0]);
+        $this->assertStringContainsString('langHelper.php [ options ]', $output[0]);
     }
 
     public function testExtraTranslations()

@@ -26,8 +26,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
     /**
      * setUp
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         $this->_uit = new Tinebase_Frontend_Json_PersistentFilter();
@@ -37,8 +37,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
     /**
      * tearDown
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         
         parent::tearDown();
@@ -356,7 +356,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         $this->_uit->deletePersistentFilters(array($filter['id']));
         $this->assertNotEquals(Tinebase_Core::getPreference('Tasks')->{Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER}, $filter['id']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_PersistentFilter::getInstance()->get($filter['id']);
     }
     
@@ -609,7 +609,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         // get backend record
         $backend = new Tinebase_PersistentFilter_Backend_Sql();
         $filterData = $backend->getRawDataByProperty($result['id'], 'id');
-        self::assertContains('"value":"' . $userContact->getId(), $filterData['filters'], print_r($filterData, true));
+        self::assertStringContainsString('"value":"' . $userContact->getId(), $filterData['filters'], print_r($filterData, true));
 
         // search by persistent filter - should find one contact
         $adbJson = new Addressbook_Frontend_Json();

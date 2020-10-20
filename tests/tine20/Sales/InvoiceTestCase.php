@@ -151,8 +151,8 @@ class Sales_InvoiceTestCase extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Sales_Controller_Contract::getInstance()->deleteByFilter(new Sales_Model_ContractFilter(array()));
         
         $cfg = Sales_Config::getInstance();
@@ -173,8 +173,8 @@ class Sales_InvoiceTestCase extends TestCase
      * (non-PHPdoc)
      * @see TestCase::tearDown()
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         $this->_removeFixtures();
     }

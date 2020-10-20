@@ -25,8 +25,8 @@ class Tinebase_Acl_RolesTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
@@ -65,8 +65,8 @@ class Tinebase_Acl_RolesTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
         
         // cleanup for testHasRight/test disabled app
@@ -272,7 +272,7 @@ class Tinebase_Acl_RolesTest extends TestCase
         
         Tinebase_Acl_Roles::getInstance()->deleteRoles(array($this->objects['role']->getId(), $this->objects['role_2']->getId()));
       
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_Acl_Roles::getInstance()->getRoleById($this->objects['role']->getId());
     }
 }

@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_User
  */
-class Addressbook_Backend_LdapTest extends PHPUnit_Framework_TestCase
+class Addressbook_Backend_LdapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -38,7 +38,7 @@ class Addressbook_Backend_LdapTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook LDAP Backend Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook LDAP Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -48,8 +48,8 @@ class Addressbook_Backend_LdapTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $config = Tinebase_Core::getConfig()->get('accounts')->get('ldap')->toArray();
         $this->_backend = new Addressbook_Backend_Ldap($config);
     }
@@ -60,8 +60,8 @@ class Addressbook_Backend_LdapTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     
     }
     

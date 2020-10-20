@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Tinebase_Log_Filter_*
  */
-class Tinebase_Log_Filter_FilterTest extends PHPUnit_Framework_TestCase
+class Tinebase_Log_Filter_FilterTest extends \PHPUnit\Framework\TestCase
 {
     protected $_logger = null;
     
@@ -29,7 +29,7 @@ class Tinebase_Log_Filter_FilterTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Log_Filter_FilterTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_Log_Filter_FilterTest');
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 

@@ -5,24 +5,24 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
+         beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="bootstrap.php">
     <listeners>
         <listener class="LogListener" file="LogListener.php" />
     </listeners>
-    <filter>
-        <!-- code coverage blacklisting -->
-        <blacklist>
-            <!-- skip tests -->
+    <!-- <filter>
+          code coverage blacklisting
+         <blacklist>
+             <! - - skip tests - - >
             <directory>.</directory>
-            <!-- skip libraries -->
+            <! - - skip libraries - - >
             <directory>../../tine20/vendor</directory>
             <directory>../../tine20/library</directory>
             <directory>../../tine20/Zend</directory>
-            <!-- setup tests are separate -->
+            <! - - setup tests are separate - - >
             <directory>../../tine20/Setup</directory>
-            <!-- don't show config files -->
+            <!- - don't show config files - ->
             <directory>/etc/tine20</directory>
         </blacklist>
-    </filter>
+    </filter>  -->
 </phpunit>

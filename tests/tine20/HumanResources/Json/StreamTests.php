@@ -18,8 +18,8 @@ use HumanResources_Model_StreamModality as StreamModality;
  */
 class HumanResources_Json_StreamTests extends HumanResources_TestCase
 {
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_uit = new HumanResources_Frontend_Json();
 
         parent::setUp();

@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Felamimail_Controller_Cache_*
  */
-class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
+class Felamimail_Controller_Cache_MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Felamimail_Controller_Cache_Message
@@ -70,8 +70,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         
@@ -102,8 +102,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }

@@ -241,7 +241,7 @@ class Tinebase_AccountTest extends TestCase
 
         Tinebase_User::getInstance()->deleteUser($account);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         $account = Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
     }
@@ -258,7 +258,7 @@ class Tinebase_AccountTest extends TestCase
 
         Tinebase_User::getInstance()->deleteUsers($todelete);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
     }
@@ -269,7 +269,7 @@ class Tinebase_AccountTest extends TestCase
      */
     public function testConvertAccountIdToInt()
     {
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->expectException('Tinebase_Exception_InvalidArgument');
         
         Tinebase_Model_User::convertUserIdToInt(0);
     }
@@ -292,7 +292,7 @@ class Tinebase_AccountTest extends TestCase
             )
         );
         
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->expectException('Tinebase_Exception_InvalidArgument');
         
         Tinebase_Model_User::convertUserIdToInt($noIdAccount);
     }

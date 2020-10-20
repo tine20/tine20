@@ -31,7 +31,7 @@ class Tinebase_NotesTest extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_NotesTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_NotesTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -39,8 +39,8 @@ class Tinebase_NotesTest extends TestCase
      * set up tests
      *
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_instance = Tinebase_Notes::getInstance();
@@ -193,7 +193,7 @@ class Tinebase_NotesTest extends TestCase
             $this->_objects['record']['id']
         );
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         $note = $this->_instance->getNote($note->getId());
     }

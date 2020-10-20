@@ -12,13 +12,13 @@
  * test suite with shared Selenium RC Session
  *
  */
-class SessionTestSuite extends PHPUnit_Framework_TestSuite
+class SessionTestSuite extends \PHPUnit\Framework\TestSuite
 {
     /* moved to testHelper as it seems like setUp is called in any suite, 
      * whereas tearDown only in the outer one (as expected)
      * we should run our setup code only once per session
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $connection = new SessionTestCase();
         $connection->setBrowser('*firefox');
         $connection->setBrowserUrl('http://localhost/tt/tine20/');
@@ -32,8 +32,8 @@ class SessionTestSuite extends PHPUnit_Framework_TestSuite
     }
     */
  
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         SessionTestCase::destroySession();
     }
 }

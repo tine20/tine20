@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Sales_CustomersTest extends PHPUnit_Framework_TestCase
+class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Runs the test methods of this class.
@@ -27,7 +27,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Controller Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -41,8 +41,8 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_contactController = Addressbook_Controller_Contact::getInstance();
@@ -56,8 +56,8 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -228,7 +228,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         foreach($deletedAddresses as $address) {
             $this->assertEquals(1, $address->is_deleted);
         }
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         return $this->_json->getCustomer($retVal['id']);
     }
@@ -322,7 +322,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
         // if the property is set to an empty array, all (in this case the last) dependent record(s) should 
         // be deleted (in this case deleting should fail, because the billing address is used in a contract)
         
-        $this->setExpectedException('Sales_Exception_DeleteUsedBillingAddress');
+        $this->expectException('Sales_Exception_DeleteUsedBillingAddress');
         
         $customer['billing'] = array();
         $this->_json->saveCustomer($customer);

@@ -34,8 +34,8 @@ class Tinebase_PersistentFilterTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_instance = Tinebase_PersistentFilter::getInstance();
         parent::setUp();
     }
@@ -43,8 +43,8 @@ class Tinebase_PersistentFilterTest extends TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if ($this->_restoreTestUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_restoreTestUser);
         }

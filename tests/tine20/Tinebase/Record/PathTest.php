@@ -32,8 +32,8 @@ class Tinebase_Record_PathTest extends TestCase
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
             $this->markTestSkipped('mysql 5.6.4+ | mariadb >= 10.0.5+ required');
         }
@@ -419,7 +419,7 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertTrue(isset($firstRecord['paths']), 'paths should be set in record' . print_r($firstRecord, true));
         // sometimes only 1 path is resolved. this is a little bit strange ...
         $this->assertGreaterThan(0, count($firstRecord['paths']), print_r($firstRecord['paths'], true));
-        $this->assertContains('/my test group', $firstRecord['paths'][0]['path'], 'could not find my test group in paths of record' . print_r($firstRecord, true));
+        $this->assertStringContainsString('/my test group', $firstRecord['paths'][0]['path'], 'could not find my test group in paths of record' . print_r($firstRecord, true));
     }
 
     /**

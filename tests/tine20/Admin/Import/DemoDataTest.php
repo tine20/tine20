@@ -27,7 +27,7 @@ class Admin_Import_DemoDataTest
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Demo Data Test');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Admin Demo Data Test');
         $suite->addTestSuite('Admin_Import_UserTest');
         $suite->addTestSuite('Admin_Import_GroupTest');
         $suite->addTestSuite('Admin_Import_RoleTest');

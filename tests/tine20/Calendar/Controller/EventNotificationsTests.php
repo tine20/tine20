@@ -29,8 +29,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * (non-PHPdoc)
      * @see tests/tine20/Calendar/Calendar_TestCase::setUp()
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         Calendar_Controller_Event::getInstance()->sendNotifications(true);
@@ -54,8 +54,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      *
      * @access protected
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         parent::tearDown();
 
         Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last week */ 1);
@@ -259,7 +259,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         self::flushMailer();
         $updatedEvent = $this->_eventController->update($persistentEvent);
         $messages = self::getMessages();
-        $this->assertContains('"' . Tinebase_Translation::getTranslation('Calendar')->translate('Tentative') . '"', $messages[0]->getBodyText()->getRawContent(), 'keyfield not resolved');
+        $this->assertStringContainsString('"' . Tinebase_Translation::getTranslation('Calendar')->translate('Tentative') . '"', $messages[0]->getBodyText()->getRawContent(), 'keyfield not resolved');
     }
     
     /**
@@ -1292,7 +1292,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                             . ' body text: ' . $bodyText);
                         
-                        $this->assertContains($_assertString, $bodyText);
+                        $this->assertStringContainsString($_assertString, $bodyText);
                         break;
 
                     case 'ics':
@@ -1300,7 +1300,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                         $vcalendarPart = $parts[0];
                         $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
 
-                        $this->assertContains($_assertString, str_replace("\r\n ", '', $vcalendar), $_assertString . ' not found for ' . $personaName . " in:\n" . $vcalendar);
+                        $this->assertStringContainsString($_assertString, str_replace("\r\n ", '', $vcalendar), $_assertString . ' not found for ' . $personaName . " in:\n" . $vcalendar);
 
                         break;
                     default:
@@ -1310,7 +1310,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 
                 $headers = $mailsForPersona[0]->getHeaders();
                 $this->assertTrue(isset($headers['Message-Id']), 'message-id header not found');
-                $this->assertContains('@' . php_uname('n'), $headers['Message-Id'][0], 'hostname not in message-id');
+                $this->assertStringContainsString('@' . php_uname('n'), $headers['Message-Id'][0], 'hostname not in message-id');
             }
         }
     }
@@ -1475,8 +1475,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         } else {
             $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
             $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
-            $this->assertContains('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
-            $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));
+            $this->assertStringContainsString('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
+            $this->assertStringContainsString('Meeting Room (Required, No response)', print_r($messages, true));
         }
     }
 

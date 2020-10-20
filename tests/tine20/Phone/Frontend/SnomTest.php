@@ -26,8 +26,8 @@ class Phone_Frontend_SnomTest extends Phone_AbstractTest
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_snom = new Phone_Frontend_Snom();

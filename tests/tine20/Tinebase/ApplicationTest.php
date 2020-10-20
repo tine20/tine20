@@ -27,12 +27,12 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_ApplicationTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_ApplicationTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         Tinebase_Application::getInstance()->resetClassCache();
@@ -107,7 +107,7 @@ class Tinebase_ApplicationTest extends TestCase
 
         Tinebase_Application::getInstance()->deleteApplication($application);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         Tinebase_Application::getInstance()->getApplicationById($application);
     }
@@ -137,7 +137,7 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public function testGetApplicationByInvalidId()
     {
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         Tinebase_Application::getInstance()->getApplicationById(Tinebase_Record_Abstract::generateUID());
     }
@@ -170,21 +170,17 @@ class Tinebase_ApplicationTest extends TestCase
         $this->assertGreaterThanOrEqual(2, count($applications));
         $this->assertContains($application->id, $applications->id);
 
-
         Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::DISABLED);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertNotContains($application->id, $applications->id);
-
 
         $application2 = $this->testAddApplication();
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertContains($application2->id, $applications->id);
 
-
         Tinebase_Application::getInstance()->deleteApplication($application2);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertNotContains($application2->id, $applications->id);
-
 
         Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::ENABLED);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
@@ -198,7 +194,7 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public function testGetApplicationByInvalidState()
     {
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->expectException('Tinebase_Exception_InvalidArgument');
 
         Tinebase_Application::getInstance()->getApplicationsByState('foobar');
     }
@@ -210,7 +206,7 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public function testGetApplicationByInvalidName()
     {
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Record_Abstract::generateUID());
     }

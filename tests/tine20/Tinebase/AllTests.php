@@ -25,7 +25,7 @@ class Tinebase_AllTests
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All Tests');
 
         $suite->addTestSuite(Tinebase_ActionQueue_Test::class);
         $suite->addTestSuite(Tinebase_ActionQueue_Backend_RedisTest::class);
@@ -90,7 +90,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_Tree_AllTests::suite());
         $suite->addTest(Tinebase_Record_AllTests::suite());
         $suite->addTest(Tinebase_WebDav_AllTests::suite());
-        $suite->addTest(OpenDocument_AllTests::suite());
+        //$suite->addTest(OpenDocument_AllTests::suite());
 
         return $suite;
     }

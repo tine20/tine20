@@ -11,7 +11,7 @@
 /**
  * Test class for Tinebase_Frontend_Http
  */
-class Tinebase_Frontend_Http_SinglePageApplicationTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_Http_SinglePageApplicationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group needsbuild

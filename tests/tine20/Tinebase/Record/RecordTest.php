@@ -32,7 +32,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Record_RecordTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_Record_RecordTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -42,8 +42,8 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         // initial object
         $this->objects['TestRecord'] = new Tinebase_Record_DummyRecord(array(), true);
         $tmpData = array('id'=>'2', 'test_2'=>NULL, );
@@ -99,8 +99,8 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     
     }
     
@@ -274,7 +274,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      */
     public function testRecordException()
     {
-        $this->setExpectedException('Tinebase_Exception_Record_Validation');
+        $this->expectException('Tinebase_Exception_Record_Validation');
         $record = new Tinebase_Record_DummyRecord(array('string' => '123'));
     }
     

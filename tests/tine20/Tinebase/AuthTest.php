@@ -42,8 +42,8 @@ class Tinebase_AuthTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_originalBackendConfiguration = Tinebase_Auth::getBackendConfiguration();
@@ -56,8 +56,8 @@ class Tinebase_AuthTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // this needs to be done because Tinebase_Auth & Tinebase_Config use caching mechanisms
         Tinebase_Auth::setBackendType($this->_originalBackendType);
         Tinebase_Auth::deleteBackendConfiguration();

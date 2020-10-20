@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Addressbook_Convert_Contact_VCard_EMClient
  */
-class Addressbook_Convert_Contact_VCard_EMClientTest extends PHPUnit_Framework_TestCase
+class Addressbook_Convert_Contact_VCard_EMClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Addressbook_Convert_Contact_VCard_EMClientTest extends PHPUnit_Framework_T
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV EMClient Contact Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook WebDAV EMClient Contact Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Addressbook_Convert_Contact_VCard_EMClientTest extends PHPUnit_Framework_T
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     /**
@@ -51,8 +51,8 @@ class Addressbook_Convert_Contact_VCard_EMClientTest extends PHPUnit_Framework_T
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
     
     /**
@@ -114,25 +114,25 @@ class Addressbook_Convert_Contact_VCard_EMClientTest extends PHPUnit_Framework_T
         $vcard = $converter->fromTine20Model($contact)->serialize();
         
         // required fields
-        $this->assertContains('VERSION:3.0', $vcard, $vcard);
+        $this->assertStringContainsString('VERSION:3.0', $vcard, $vcard);
         
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $this->assertContains("PRODID:-//tine20.com//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
+        $this->assertStringContainsString("PRODID:-//tine20.com//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
-        $this->assertContains('ADR;TYPE=HOME:;;Address Privat;City Privat;;98765;COUNTRY PRIVAT', $vcard, $vcard);
-        $this->assertContains('ADR;TYPE=WORK:;;Address Business;City Business;;12345;COUNTRY BUSINESS', $vcard, $vcard);
-        $this->assertContains('EMAIL:privat@email.de', $vcard, $vcard);
-        $this->assertContains('EMAIL;TYPE=PREF:business@email.de', $vcard, $vcard);
-        $this->assertContains('N:Nach;Vor;;Prefix', $vcard, $vcard);
-        $this->assertContains('NOTE:Notes\nwith\nbreaks', $vcard, $vcard);
-        $this->assertContains('ORG:Firma;Abteilung', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=CELL:+49 MOBIL', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=FAX,HOME:+49 PRIVATFAX', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=FAX,WORK:+49 FAX', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=HOME,VOICE:+49 PRIVAT', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=OTHER:+49 MOBIL2', $vcard, $vcard);
-        $this->assertContains('TEL;TYPE=WORK,VOICE:+49 BUSINESS', $vcard, $vcard);
+        $this->assertStringContainsString('ADR;TYPE=HOME:;;Address Privat;City Privat;;98765;COUNTRY PRIVAT', $vcard, $vcard);
+        $this->assertStringContainsString('ADR;TYPE=WORK:;;Address Business;City Business;;12345;COUNTRY BUSINESS', $vcard, $vcard);
+        $this->assertStringContainsString('EMAIL:privat@email.de', $vcard, $vcard);
+        $this->assertStringContainsString('EMAIL;TYPE=PREF:business@email.de', $vcard, $vcard);
+        $this->assertStringContainsString('N:Nach;Vor;;Prefix', $vcard, $vcard);
+        $this->assertStringContainsString('NOTE:Notes\nwith\nbreaks', $vcard, $vcard);
+        $this->assertStringContainsString('ORG:Firma;Abteilung', $vcard, $vcard);
+        $this->assertStringContainsString('TEL;TYPE=CELL:+49 MOBIL', $vcard, $vcard);
+        $this->assertStringContainsString('TEL;TYPE=FAX,HOME:+49 PRIVATFAX', $vcard, $vcard);
+        $this->assertStringContainsString('TEL;TYPE=FAX,WORK:+49 FAX', $vcard, $vcard);
+        $this->assertStringContainsString('TEL;TYPE=HOME,VOICE:+49 PRIVAT', $vcard, $vcard);
+        $this->assertStringContainsString('TEL;TYPE=OTHER:+49 MOBIL2', $vcard, $vcard);
+        $this->assertStringContainsString('TEL;TYPE=WORK,VOICE:+49 BUSINESS', $vcard, $vcard);
         
     }
 }

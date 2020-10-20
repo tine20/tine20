@@ -19,7 +19,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Crm_ControllerTest extends PHPUnit_Framework_TestCase
+class Crm_ControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -46,7 +46,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Controller Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Crm Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -56,8 +56,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $GLOBALS['Crm_ControllerTest'] = (isset($GLOBALS['Crm_ControllerTest']) || array_key_exists('Crm_ControllerTest', $GLOBALS)) ? $GLOBALS['Crm_ControllerTest'] : array();
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
@@ -185,8 +185,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
     
     /**
@@ -322,7 +322,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         // delete contact
         Addressbook_Controller_Contact::getInstance()->delete($this->_objects['user']->getId());
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
     }
     

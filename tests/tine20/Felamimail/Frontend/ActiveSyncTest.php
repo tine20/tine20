@@ -54,7 +54,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller Email Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 ActiveSync Controller Email Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -63,8 +63,8 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * 
      * @todo move setup to abstract test case
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
@@ -98,8 +98,8 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }
@@ -379,7 +379,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         self::assertEquals('text/plain; charset=ISO-8859-1', $completeMessage->headers['content-type']);
 
         // check signature
-        self::assertContains('my special signature', $completeMessage->body);
+        self::assertStringContainsString('my special signature', $completeMessage->body);
     }
 
     /**
@@ -405,7 +405,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         // check content
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        $this->assertContains('Test', $completeMessage->body);
+        $this->assertStringContainsString('Test', $completeMessage->body);
     }
     
     /**
@@ -644,7 +644,7 @@ dGVzdAo=&#13;
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $originalMessage->flags), 'forward flag missing in original message: ' . print_r($originalMessage->toArray(), TRUE));
         
         // check body
-        $this->assertContains("The attached list notes all of the packages that were added or removed", $completeMessage->body);
+        $this->assertStringContainsString("The attached list notes all of the packages that were added or removed", $completeMessage->body);
     }
     
     /**
@@ -671,7 +671,7 @@ dGVzdAo=&#13;
         
         $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        $this->assertContains('Sebastian
+        $this->assertStringContainsString('Sebastian
 The attached list notes all of the packages that were added or removed<br />from the tree, for the week ending 2009-04-12 23h59 UTC.<br />', $completeMessage->body,
             'reply body has not been appended correctly');
     }
@@ -781,7 +781,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
 
         //echo $completeMessage->body;
-        $this->assertContains($stringToCheck, $completeMessage->body);
+        $this->assertStringContainsString($stringToCheck, $completeMessage->body);
         return $completeMessage;
     }
     

@@ -22,14 +22,11 @@ class Tinebase_Group_AllTests
     
     public static function suite() 
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Group Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All Group Tests');
         $suite->addTestSuite('Tinebase_Group_SqlTest');
         $suite->addTestSuite('Tinebase_Group_LdapTest');
+        $suite->addTestSuite('Tinebase_Group_ActiveDirectoryTest');
 
-        if (TestServer::getInstance()->isPhpunitVersionGreaterOrEquals("3.5.0")) {
-            // getMockBuilder() is only supported in phpunit 3.5 and higher 
-            $suite->addTestSuite('Tinebase_Group_ActiveDirectoryTest');
-        }
         return $suite;
     }
 }

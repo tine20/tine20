@@ -41,8 +41,8 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
      *
      * @access protected
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $this->calDAVTests = new Calendar_Frontend_WebDAV_EventTest();
         $this->calDAVTests->setup();
 
@@ -165,6 +165,6 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
         $this->server->exec();
 
         static::assertSame('HTTP/1.1 207 Multi-Status', $this->response->status);
-        static::assertContains($uri . '/' . $recurException->getId(), $this->response->body);
+        static::assertStringContainsString($uri . '/' . $recurException->getId(), $this->response->body);
     }
 }

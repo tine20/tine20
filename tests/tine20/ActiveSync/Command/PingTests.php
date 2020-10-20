@@ -48,7 +48,7 @@ class ActiveSync_Command_PingTests extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Ping Command Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 ActiveSync Ping Command Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -56,8 +56,8 @@ class ActiveSync_Command_PingTests extends TestCase
      * (non-PHPdoc)
      * @see ActiveSync/ActiveSync_TestCase::setUp()
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         // speed up tests

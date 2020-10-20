@@ -27,8 +27,8 @@ class Tinebase_User_LdapTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
             $this->markTestSkipped('LDAP backend not enabled');
         }
@@ -61,8 +61,8 @@ class Tinebase_User_LdapTest extends TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Config::getInstance()->set(Tinebase_Config::LDAP_OVERWRITE_CONTACT_FIELDS, array());
 
         parent::tearDown();
@@ -237,7 +237,7 @@ class Tinebase_User_LdapTest extends TestCase
         $this->_backend->deleteUser($user);
         unset($this->objects['users']['testUser']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
     }
@@ -397,7 +397,7 @@ class Tinebase_User_LdapTest extends TestCase
             Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $user->getId());
             $this->fail('user should be deleted from tine20 db');
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $this->assertContains('User with accountId = ' . $sqlUser->getId(), $tenf->getMessage());
+            $this->assertStringContainsString('User with accountId = ' . $sqlUser->getId(), $tenf->getMessage());
         }
 
         // check if user contact is deleted, too
@@ -405,7 +405,7 @@ class Tinebase_User_LdapTest extends TestCase
             Addressbook_Controller_Contact::getInstance()->get($sqlUser->contact_id);
             $this->fail('user contact should be deleted from tine20 db');
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $this->assertContains('Addressbook_Model_Contact record with id = ' . $sqlUser->contact_id, $tenf->getMessage());
+            $this->assertStringContainsString('Addressbook_Model_Contact record with id = ' . $sqlUser->contact_id, $tenf->getMessage());
         }
     }
 

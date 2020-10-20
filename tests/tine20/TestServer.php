@@ -50,8 +50,6 @@ class TestServer
      */
     public function initFramework()
     {
-        $this->setWhiteAndBlacklists();
-
         $config = $this->getConfig();
 
         // set some server vars. sabredav complains if REQUEST_URI is not set
@@ -78,34 +76,6 @@ class TestServer
         Tinebase_Core::set('frameworkInitialized', true);
 
         Tinebase_Core::set(Tinebase_Core::CONTAINER, Tinebase_Core::getPreCompiledContainer());
-    }
-    
-    /**
-     * Set white / black lists
-     */
-    public function setWhiteAndBlacklists()
-    {
-        if ($this->isPhpunitVersionGreaterOrEquals("4.0.0")) {
-            // TODO make this work for newer phpunit versions
-        } else if ($this->isPhpunitVersionGreaterOrEquals("3.6.0")) {
-            // TODO not sure if this is working - we need to validate that
-            $filter = new PHP_CodeCoverage_Filter();
-            $filter->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
-            $filter->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
-            $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Setup');
-            $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Zend');
-            $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/vendor');
-        } else if ($this->isPhpunitVersionGreaterOrEquals("3.5.0")) {
-            PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
-            PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
-            PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Setup');
-            PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Zend');
-        } else {
-            PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TEST_DIR);
-            PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TINE_LIBRARY);
-            PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
-            PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
-        }
     }
 
     /**
@@ -289,17 +259,6 @@ class TestServer
         }
 
         return 'tine20.org';
-    }
-
-    /**
-     * isPhpunitVersionGreaterOrEquals
-     * 
-     * @param String $version for example '3.6.0'
-     */
-    public function isPhpunitVersionGreaterOrEquals($version)
-    {
-        $phpUnitVersion = explode(' ',PHPUnit_Runner_Version::getVersionString());
-        return (version_compare($phpUnitVersion[1], $version) >= 0);
     }
 
     /**

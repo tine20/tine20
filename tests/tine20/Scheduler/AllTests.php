@@ -24,7 +24,7 @@ class Scheduler_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Scheduler All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Scheduler All Tests');
         $suite->addTestSuite('Scheduler_SchedulerTest');
         return $suite;
     }

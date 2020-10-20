@@ -27,8 +27,8 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         // always resolve customfields
         Addressbook_Controller_Contact::getInstance()->resolveCustomfields(TRUE);
 
@@ -43,8 +43,8 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // cleanup
         if (file_exists($this->_filename) && $this->_deleteImportFile) {
             unlink($this->_filename);

@@ -18,7 +18,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Acl_Roles
  */
-class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
+class Tinebase_Acl_RightsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -33,7 +33,7 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Acl_RightsTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_Acl_RightsTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -43,8 +43,8 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         return;
     }
 
@@ -54,8 +54,8 @@ class Tinebase_Acl_RightsTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
 
     /**
