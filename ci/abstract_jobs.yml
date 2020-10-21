@@ -119,7 +119,7 @@
 
 
 # merge job for customapps
-# $MERGE_TABLE: required {"2018.11":"2019.11", "2019.11":"2020.11"}
+# $MERGE_TABLE: required {"2018-11":"2019-11","2019-11":"2020-11","2020-11":"master"}
 #
 # all other jobs should have a rule to not run when $CI_MERGE_REQUEST_TITLE =~ /^Merge/ is true, because
 # they would run on the source branch. All test on the source branch wer already run, in a previous pipeline.
