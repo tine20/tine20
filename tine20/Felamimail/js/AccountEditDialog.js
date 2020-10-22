@@ -11,7 +11,7 @@
 Ext.namespace('Tine.Felamimail');
 
 require('./SignatureGridPanel');
-
+require('./sieve/VacationPanel');
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.AccountEditDialog
@@ -60,7 +60,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 idProperty: 'id'
             });
         }
-
+        
         Tine.Felamimail.AccountEditDialog.superclass.initComponent.call(this);
     },
 
@@ -88,7 +88,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.grantsGrid.setValue(this.record.get('grants'));
         }
-
+        
+        if (this.isSystemAccount()) {
+            this.loadVacationRecord();
+            this.loadRuleRecord();
+        }
+        
         this.disableFormFields();
     },
 
@@ -105,6 +110,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordUpdate.apply(this, arguments);
 
         this.record.set('grants', this.grantsGrid.getValue());
+
+        if (this.isSystemAccount()) {
+            this.updateVacationRecord();
+            this.updateRuleRecord();
+        }
     },
 
     disableFormFields: function() {
@@ -171,6 +181,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     // always disabled for non-system accounts
                     item.setDisabled(! this.isSystemAccount());
                     break;
+                case 'enabled':
+                    item.setDisabled(! this.isSystemAccount());
+                    break;
                 default:
                     item.setDisabled(! this.asAdminModule && this.isSystemAccount());
             }
@@ -223,6 +236,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             disabled: ! this.asAdminModule,
             recordClass: Tine.Tinebase.Model.Grant
         });
+
+        this.rulesGridPanel = new Tine.Felamimail.sieve.RulesGridPanel({
+            title: i18n._('Rules'),
+            account: this.record ? this.record : null,
+            recordProxy: this.ruleRecordProxy,
+            initialLoadAfterRender: false,
+            disabled: !this.isSystemAccount()
+        });
+        
+        this.vacationPanel = new Tine.Felamimail.sieve.VacationPanel({
+            title: i18n._('Vacation'),
+            account: this.record,
+            editDialog: this,
+            disabled: !this.isSystemAccount()
+        });
         
         var commonFormDefaults = {
             xtype: 'textfield',
@@ -234,6 +262,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return {
             xtype: 'tabpanel',
+            name: 'accountEditPanel',
             deferredRender: false,
             border: false,
             activeTab: 0,
@@ -583,8 +612,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     app: this.appName,
                     record_id: this.record.id,
                     record_model: this.modelName
-            }),
-            this.grantsGrid
+            }), 
+                this.rulesGridPanel,
+                this.vacationPanel,
+                this.grantsGrid
             ]
         };
     },
@@ -810,6 +841,114 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return message;
     },
+
+    /*
+     * load rule record
+     *
+     */
+    loadRuleRecord: function() {
+        let me = this;
+        if (!me.record.id) {
+            return;
+        }
+
+        if (!me.ruleRecordProxy) {
+            me.ruleRecordProxy = me.asAdminModule ? new Tine.Felamimail.RulesBackend({
+                appName: 'Admin',
+                modelName: 'SieveRule'
+            }) : Tine.Felamimail.rulesBackend;
+        }
+
+        me.ruleRecord = me.ruleRecordProxy.searchRecords(me.record.id, null, {
+            scope: me,
+            success: function(response) {
+                if (Ext.isArray(response.records)) {
+                    Ext.each(response.records, function(item) {
+                        let record = me.ruleRecordProxy.recordReader({responseText: Ext.encode(item)});
+                        me.rulesGridPanel.store.addSorted(record);
+                    });
+                }
+                me.ruleRecord = response.records;
+            },
+            failure: function (exception) {
+                Tine.Felamimail.handleRequestException(exception);
+            },
+        });
+
+        me.getForm().loadRecord(me.ruleRecord);
+    },
+
+    /**
+     * update vacation record
+     *
+     */
+    updateVacationRecord: async function() {
+        let me = this;
+        
+        if (!me.record.id || 
+            !me.vacationRecord || 
+            !me.vacationPanel) {
+            return;
+        }
+
+        let form = me.getForm();
+        let contactIds = [];
+        
+        form.updateRecord(me.vacationRecord);
+        
+        Ext.each(['contact_id1', 'contact_id2'], function (field) {
+            if (form.findField(field) && form.findField(field).getValue() !== '') {
+                contactIds.push(form.findField(field).getValue());
+            }
+        }, this);
+        
+        let template = form.findField('template_id').getValue();
+
+        me.vacationRecord.set('contact_ids', contactIds);
+        me.vacationRecord.set('template_id', template);
+        
+        if (template !== '') {
+            try {
+                let response = await Tine.Felamimail.getVacationMessage(me.vacationRecord.data);
+                me.vacationPanel.reasonEditor.setValue(response.message);
+            } catch (e) {
+                Tine.Felamimail.handleRequestException(e);
+            }
+        }
+
+        await me.vacationRecordProxy.saveRecord(me.vacationRecord);
+    },
+
+    /**
+     * update rule record
+     *
+     */
+    updateRuleRecord: async function () {
+        let me = this;
+        
+        if (!me.ruleRecordProxy || 
+            !me.record.id ||
+            me.rulesGridPanel.store.getCount() === 0
+        ) {
+            return;
+        }
+
+        let rules = [];
+        me.rulesGridPanel.store.each(function (record) {
+            rules.push(record.data);
+        });
+
+        await me.ruleRecordProxy.saveRules(me.record.id, rules, {
+            scope: me,
+            success: function (record) {
+                me.purgeListeners();
+            },
+            failure: Tine.Felamimail.handleRequestException.createSequence(function () {
+                me.hideLoadMask();
+            }, me),
+            timeout: 150000 // 3 minutes
+        });
+    }
 });
 
 /**
