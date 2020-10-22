@@ -1,6 +1,6 @@
 language: php
 php:
-  - '7.1'
+  - '7.2'
 
 services:
   - mysql
@@ -8,13 +8,6 @@ services:
 env:
   - DB=mysql
 
-#addons:
-#  apt:
-#    sources:
-#      - mysql-5.7-trusty
-#    packages:
-#      - mysql-server
-    
 before_script:
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS tine20;" -uroot; fi
   - cd tine20
