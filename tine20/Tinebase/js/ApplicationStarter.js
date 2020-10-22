@@ -202,7 +202,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     gridRenderer = Tine.Tinebase.common.usernameRenderer;
                     break;
                 case 'keyfield': 
-                    gridRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, config.name);
+                    gridRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get(_.get(config, 'owningApp', appName), config.name);
                     break;
                 case 'datetime_separated_date':
                 case 'date':
