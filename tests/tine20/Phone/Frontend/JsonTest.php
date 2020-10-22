@@ -26,8 +26,8 @@ class Phone_Frontend_JsonTest extends Phone_AbstractTest
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_json = new Phone_Frontend_Json();
@@ -116,7 +116,7 @@ class Phone_Frontend_JsonTest extends Phone_AbstractTest
         $userPhone = $this->_json->getMyPhone($this->_objects['phone']->getId());
 
         unset($userPhone['lines'][1]);
-        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->expectException('Tinebase_Exception_AccessDenied');
         $this->_json->saveMyPhone($userPhone);
     }
     

@@ -22,7 +22,7 @@ class Calendar_Frontend_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('All Calendar frontend tests');
+        $suite = new \PHPUnit\Framework\TestSuite('All Calendar frontend tests');
         
         $suite->addTest(Calendar_Frontend_CalDAV_AllTests::suite());
         $suite->addTest(Calendar_Frontend_WebDAV_AllTests::suite());

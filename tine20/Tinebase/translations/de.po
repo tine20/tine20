@@ -3779,7 +3779,10 @@ msgstr "Erfolg"
 
 #: js/widgets/dialog/ExportDialog.js:206
 msgid "Export created successfully."
-msgstr "Der Export wurde erfolgreich erstellt"
+msgstr "Der Export wurde erfolgreich erstellt."
+
+msgid "Please check your computers downloads folder!"
+msgstr "Bitte kontrollieren sie ihren Download Ordner!"
 
 #: js/widgets/dialog/ExportDialog.js:216
 msgid "Export could not be created. Please try again later"
@@ -4847,3 +4850,28 @@ msgstr ""
 "Der Versuch, ein neues Fenster zu öffnen, ist fehlgeschlagen. Wenn sie OK "
 "drücken, wird es erneut versucht. Um diese Nachricht in Zukunft zu "
 "vermeiden, deaktivieren Sie bitten ihren Popup-Blocker für {0}"
+
+msgid "GENDER_Node"
+msgstr "other"
+
+msgid ""
+"{recordGender, select, male {{recordCount, plural, one {# {recordName} "
+"selected} other {# {recordsName} selected}}} female {{recordCount, plural, "
+"one {# {recordName} selected} other {# {recordsName} selected}}} other "
+"{{recordCount, plural, one {# {recordName} selected} other {# {recordsName}"
+" selected}}}}"
+msgstr ""
+"{recordGender, select, male {{recordCount, plural, one {# {recordName} "
+"ausgewählt} other {# {recordsName} ausgewählt}}} female {{recordCount, "
+"plural, one {# {recordName} ausgewählt} other {# {recordsName} ausgewählt}}} "
+"other {{recordCount, plural, one {# {recordName} ausgewählt} other {# "
+"{recordsName} ausgewählt}}}}"
+
+msgid "This file has no contents. The Upload has failed or has not yet finished."
+msgstr "Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen oder noch nicht fertig."
+
+msgid "quarantined"
+msgstr "quarantänisiert"
+
+msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
+msgstr "Diese Datei kann ihren Computer potentiell schädigen. Daher wurde sie quarantänisiert und kann nicht bearbeitet oder heruntergeladen werden." 

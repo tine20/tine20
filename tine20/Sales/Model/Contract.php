@@ -42,7 +42,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Contract',
+        'recordName'        => 'Contract', // gettext('GENDER_Contract)
         'recordsName'       => 'Contracts', // ngettext('Contract', 'Contracts', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,

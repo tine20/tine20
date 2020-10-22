@@ -30,8 +30,8 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
     /**
      * set up tests
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
 
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
@@ -42,8 +42,8 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
     /**
      * tear down tests
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         foreach ($this->selfReset as $prop => $val) {
             $this->{$prop} = $val;
         }

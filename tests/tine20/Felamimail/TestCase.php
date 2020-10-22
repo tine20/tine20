@@ -116,8 +116,8 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         Felamimail_Controller_Account::destroyInstance();
@@ -151,8 +151,8 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Tearing down ...');
 
@@ -501,7 +501,7 @@ abstract class Felamimail_TestCase extends TestCase
             if ($_isMime) {
                 // TODO check why behaviour changed with php 7 (test was relaxed to hotfix this)
                 //$this->assertEquals(html_entity_decode('unittest vacation&nbsp;message', ENT_NOQUOTES, 'UTF-8'), $resultSet['reason']);
-                self::assertContains('unittest vacation', $resultSet['reason']);
+                self::assertStringContainsString('unittest vacation', $resultSet['reason']);
             } else {
                 $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
             }

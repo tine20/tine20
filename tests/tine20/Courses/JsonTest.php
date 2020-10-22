@@ -79,8 +79,8 @@ class Courses_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_json = new Courses_Frontend_Json();
@@ -126,8 +126,8 @@ class Courses_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $this->_groupIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
         if ($this->_schemaConfigChanged) {
             Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, $this->_schemaConfig);
@@ -164,7 +164,7 @@ class Courses_JsonTest extends TestCase
         $this->_json->deleteCourses($courseData['id']);
 
         // check if it got deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Courses_Controller_Course::getInstance()->get($courseData['id']);
     }
     

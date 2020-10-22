@@ -22,7 +22,7 @@ class Tinebase_Record_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Record Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 All Record Tests');
 
         $suite->addTestSuite(Tinebase_Record_RecordTest::class);
         $suite->addTestSuite(Tinebase_Record_RecordSetTest::class);

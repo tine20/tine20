@@ -46,8 +46,8 @@ class Crm_JsonTest extends Crm_AbstractTest
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_fsController = Tinebase_FileSystem::getInstance();
@@ -72,8 +72,8 @@ class Crm_JsonTest extends Crm_AbstractTest
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if (isset($this->_objects['paths'])) {
             foreach ($this->_objects['paths'] as $path) {
                 try {
@@ -168,7 +168,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals(0, $result['totalcount']);
         
         // check if linked task got removed as well
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tasks_Controller_Task::getInstance()->get($relatedTaskId);
     }
     
@@ -402,7 +402,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'related_record' => $leadData2
         );
         
-        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
+        $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
         $taskJson->saveTask($taskData);
     }
     
@@ -448,7 +448,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             )
         );
         
-        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
+        $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
         
         $leadJson->saveLead($leadData2);
     }
@@ -788,7 +788,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $leadArray['start'] = null;
         $newLead = $this->_getUit()->saveLead($leadArray);
         
-        $this->assertContains(Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d'),
+        $this->assertStringContainsString(Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d'),
             $newLead['start'], 'start should be set to now if missing');
     }
     

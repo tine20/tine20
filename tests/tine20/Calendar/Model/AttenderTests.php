@@ -26,8 +26,8 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
      * tear down tests
      *
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         parent::tearDown();
         
         foreach($this->_testEmailContacts as $email) {

@@ -20,8 +20,8 @@ class Admin_Import_UserTest extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
     }
 

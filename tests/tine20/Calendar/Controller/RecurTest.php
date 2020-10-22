@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
@@ -20,8 +20,8 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
      */
     protected $_controller;
     
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
     }
@@ -38,7 +38,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'container_id'  => $this->_getTestCalendar()->getId(),
         ));
         
-        $this->setExpectedException('Tinebase_Exception_Record_Validation');
+        $this->expectException('Tinebase_Exception_Record_Validation');
         $persistentEvent = $this->_controller->create($event);
     }
     
@@ -71,6 +71,40 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $rrule->normalize($event);
         $this->assertEquals(5, $rrule->bymonth, 'bymonth not normalized');
         $this->assertEquals(NULL, $rrule->bymonthday, 'bymonthday must not be added');
+    }
+
+    public function testRescheduleAllFutureEvents()
+    {
+        $from = new Tinebase_DateTime('2011-04-18 00:00:00');
+        $until = new Tinebase_DateTime('2011-05-05 23:59:59');
+
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2011-04-19 14:00:00', // Tuesday
+            'dtend'         => '2011-04-19 15:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;COUNT=10',
+            'container_id'  => $this->_getTestCalendar()->getId(),
+            'attendee'      => [$this->_createAttender($this->_personas['pwulf']->contact_id)],
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+
+        $persistentEvent = $this->_controller->create($event);
+        $persistentEvent->attendee->status = 'CONFIRMED';
+        $persistentEvent = $this->_controller->update($persistentEvent);
+        $events = new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$persistentEvent]);
+
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
+        static::assertEquals(10, count($events), 'there should be 10 events in the set');
+
+        $events[5]->dtstart->addHour(1);
+        $events[5]->dtend->addHour(1);
+        $exception = $this->_controller->createRecurException($events[5], false, true);
+
+        $baseEvent = $this->_controller->get($persistentEvent->getId());
+        static::assertSame('CONFIRMED', $baseEvent->attendee->getFirstRecord()->status);
+        static::assertSame('NEEDS-ACTION', $exception->attendee->getFirstRecord()->status);
     }
 
     public function testDailyCountOneEvent()
@@ -165,7 +199,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $this->_controller->delete($firstInstanceException->getId(), Calendar_Model_Event::RANGE_THISANDFUTURE);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_controller->get($firstInstanceException->getId());
     }
     
@@ -381,7 +415,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             array('user_type' => Calendar_Model_Attender::USERTYPE_USER, 'user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         
-        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->expectException('Calendar_Exception_AttendeeBusy');
         $this->_controller->create($event1, TRUE);
     }
     
@@ -408,7 +442,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $event1 = $this->_controller->create($event1);
         $event1->rrule = "FREQ=DAILY;INTERVAL=2";
         
-        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->expectException('Calendar_Exception_AttendeeBusy');
         $this->_controller->update($event1, TRUE);
     }
     
@@ -828,7 +862,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->_controller->createRecurException($firstSessionExdate, FALSE, TRUE);
         
         // try to update exception concurrently
-        $this->setExpectedException('Tinebase_Exception_ConcurrencyConflict');
+        $this->expectException('Tinebase_Exception_ConcurrencyConflict');
         $secondSessionExdate = clone $recurSet[1];
         $secondSessionExdate->summary = 'just an update';
         $this->_controller->createRecurException($secondSessionExdate, FALSE, TRUE);
@@ -1110,7 +1144,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $updatedPersistentEvent->dtstart = new Tinebase_DateTime('2012-03-09 13:00:00');
         $updatedPersistentEvent->dtend = new Tinebase_DateTime('2012-03-09 14:00:00');
         
-        $this->setExpectedException('Tinebase_Exception_ConcurrencyConflict');
+        $this->expectException('Tinebase_Exception_ConcurrencyConflict');
         $updatedPersistentEvent = $this->_controller->createRecurException($updatedPersistentEvent);
     }
 
@@ -1126,7 +1160,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
 
-        $this->setExpectedException('Calendar_Exception_ExdateContainer');
+        $this->expectException('Calendar_Exception_ExdateContainer');
 
         $recurSet[2]->container_id = $this->_getTestContainer('Calendar', Calendar_Model_Event::class)->getId();
         $this->_controller->createRecurException($recurSet[2]);
@@ -1148,7 +1182,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
 
         $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[2]);
 
-        $this->setExpectedException('Calendar_Exception_ExdateContainer');
+        $this->expectException('Calendar_Exception_ExdateContainer');
 
         $updatedPersistentEvent->container_id = $this->_getTestContainer('Calendar', Calendar_Model_Event::class)->getId();
         $this->_controller->update($updatedPersistentEvent);
@@ -1182,7 +1216,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $newEvent->dtstart = new Tinebase_DateTime('2014-01-20 12:30:00');
         $newEvent->dtend = new Tinebase_DateTime('2014-01-20 13:30:00');
 
-        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->expectException('Calendar_Exception_AttendeeBusy');
         $savedEvent = Calendar_Controller_Event::getInstance()->create($newEvent, /* $checkBusyConflicts = */ true);
     }
 

@@ -65,6 +65,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected $_throwOnGetQuarantined = true;
 
     protected $_createNodeInBackendInterceptor = [];
+
+    protected $_allowedProperties = ['name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'];
     
     /**
      * holds the instance of the singleton
@@ -104,6 +106,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
+    }
+
+    public function addAllowedProperty($property) {
+        if (!in_array($property, $this->_allowedProperties)) {
+            $this->_allowedProperties[] = $property;
+        }
     }
 
     /**
@@ -185,7 +193,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         return parent::update($_record, $_duplicateCheck);
     }
-    
+
     /**
      * inspect update of one record (before update)
      *
@@ -197,7 +205,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         // protect against file object spoofing
         foreach (array_keys($_record->toArray()) as $property) {
-            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'))) {
+            if (! in_array($property, $this->_allowedProperties)) {
                 $_record->{$property} = $_oldRecord->{$property};
             }
         }
@@ -500,7 +508,33 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         return $result;
     }
-    
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_child
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getParentByFilter(Tinebase_Model_Tree_Node $_child, Tinebase_Model_Tree_Node_Filter $_filter)
+    {
+        if (null === ($parent = $this->_backend->getParentByFilter($_child, $_filter))) {
+            throw new Tinebase_Exception_NotFound('no parent matching given filter found');
+        }
+        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($parent, true));
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $appPath = '/' . $app->getId() . '/' . Tinebase_Model_Tree_Node_Path::FOLDERS_PART;
+
+        if (strpos($parentPath->statpath, $appPath) !== 0) {
+            throw new Tinebase_Exception_NotFound('no parent matching given filter found');
+        }
+        $this->_backend->checkPathACL($parentPath, 'get');
+        $parent->path = substr($parentPath->statpath, strlen($appPath));
+
+        return $parent;
+    }
+
     /**
      * checks filter acl and adds base path
      * 
@@ -864,9 +898,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $newNode;
     }
 
-    public function registerCreateNodeInBackendInterceptor($callable)
+    public function registerCreateNodeInBackendInterceptor($key, $callable)
     {
-        $this->_createNodeInBackendInterceptor[] = $callable;
+        $this->_createNodeInBackendInterceptor[$key] = $callable;
     }
 
     /**

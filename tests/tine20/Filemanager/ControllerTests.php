@@ -17,8 +17,8 @@
 class Filemanager_ControllerTests extends TestCase
 {
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
@@ -62,7 +62,8 @@ class Filemanager_ControllerTests extends TestCase
 
         // check if personal folder exists
         $personalFolderPath = $this->_getPersonalPath($user);
-        self::setExpectedException('Tinebase_Exception_NotFound', 'child:');
+        $this->expectException('Tinebase_Exception_NotFound');
+        $this->expectExceptionMessageMatches('/child:/');
         Tinebase_FileSystem::getInstance()->stat($personalFolderPath);
     }
 

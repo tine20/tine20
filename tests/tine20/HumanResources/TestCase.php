@@ -44,8 +44,8 @@ class HumanResources_TestCase extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         // remove employees and costcenters, if there are some already
         $filter = new HumanResources_Model_EmployeeFilter(array());
         HumanResources_Controller_Employee::getInstance()->deleteByFilter($filter);

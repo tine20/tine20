@@ -19,16 +19,16 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
     }
     
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         
         Tinebase_FileSystem::getInstance()->clearStatCache();
@@ -165,7 +165,7 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
         Filemanager_Config::getInstance()->set(Filemanager_Config::PUBLIC_DOWNLOAD_URL, 'https://download.example.com/');
         $downloadLink = $this->testCreateDownloadLink();
 
-        $this->assertContains('example', $downloadLink->url);
+        $this->assertStringContainsString('example', $downloadLink->url);
     }
 
     public function testDownloadListAlternativeURL()
@@ -173,7 +173,7 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
         Filemanager_Config::getInstance()->set(Filemanager_Config::PUBLIC_DOWNLOAD_URL, 'https://download.example.com/');
         $fileList = $this->testGetFileList();
 
-        $this->assertContains('example', $fileList[0]->path);
+        $this->assertStringContainsString('example', $fileList[0]->path);
     }
 
     /**

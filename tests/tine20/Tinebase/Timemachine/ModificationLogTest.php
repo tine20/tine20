@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCase
+class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Tinebase_Timemachine_ModificationLog
@@ -51,7 +51,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     public static function main()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tinebase_Timemachine_ModificationLogTest');
+        $suite = new \PHPUnit\Framework\TestSuite('Tinebase_Timemachine_ModificationLogTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -60,8 +60,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
@@ -157,8 +157,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      * cleanup database
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
 
         Tinebase_TransactionManager::getInstance()->rollBack();

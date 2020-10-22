@@ -71,74 +71,173 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      * @var string
      */
     const TYPE_LINK = 'link';
-    
+
     /**
-     * this filter get used when validating user generated content with Zend_Input_Filter
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var array list of zend inputfilter
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_filters = array(
-        'contenttype' => 'StringToLower'
-    );
-    
+    protected static $_configurationObject = NULL;
+
     /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array (
-        // tine 2.0 generic fields
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        
-        // model specific fields
-        'revision'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'available_revisions'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'),
-        'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'revision_size'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
-        'preview_count'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'preview_status'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'preview_error_count'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits', Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'indexed_hash'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'                  => array(
-            'presence' => 'required',
-            array('InArray', array(self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW, self::TYPE_LINK))
-        ),
-        'lastavscan_time'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_quarantined'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
-    
-    /**
-     * name of fields containing datetime or or an array of datetime information
-     *
-     * @var array list of datetime fields
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time'
-    );
+    protected static $_modelConfiguration = [
+        self::VERSION       => 7,
+        'modlogActive'      => true,
 
-    /**
-     * name of fields that should be omitted from modlog
-     *
-     * @var array list of modlog omit fields
-     */
-    protected $_modlogOmitFields = array('indexed_hash', 'preview_count', 'preview_status', 'preview_error_count', 'revision_size', 'available_revisions');
+        'appName'           => 'Tinebase',
+        'modelName'         => 'Tree_FileObject',
+        'idProperty'        => 'id',
+        'table'             => [
+            'name'              => 'tree_fileobjects',
+            self::INDEXES => [
+                'type'             => [
+                    self::COLUMNS           => ['type']
+                ],
+                'is_deleted'        => [
+                    self::COLUMNS           => ['is_deleted']
+                ],
+                'description'        => [
+                    self::COLUMNS           => ['description'],
+                    self::FLAGS             => ['fulltext'],
+                ]
+            ]
+        ],
+
+        'fields'            => [
+            'revision'                      => [
+                self::TYPE                      => self::TYPE_BIGINT,
+                self::LENGTH                    => 64,
+                self::NULLABLE                  => true,
+                self::DEFAULT_VAL               => 0,
+                self::UNSIGNED                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'type'                          => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    ['InArray', [self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW, self::TYPE_LINK]]
+                ],
+            ],
+            'contenttype'                   => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 128,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'
+                ],
+                self::INPUT_FILTERS             => [Zend_Filter_StringToLower::class],
+            ],
+            // to preserve order we do this...
+            'created_by'                    => null,
+            'description'                   => [
+                self::TYPE                      => self::TYPE_TEXT,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            // to preserve order we do this...
+            'creation_time'                 => null,
+            'last_modified_by'              => null,
+            'last_modified_time'            => null,
+            'is_deleted'                    => null,
+            'deleted_by'                    => null,
+            'deleted_time'                  => null,
+            'seq'                           => null,
+            'revision_size'                 => [
+                self::TYPE                      => self::TYPE_BIGINT,
+                self::LENGTH                    => 64,
+                self::DEFAULT_VAL               => 0,
+                self::UNSIGNED                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'],
+                self::OMIT_MOD_LOG              => true,
+            ],
+            'indexed_hash'                  => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::OMIT_MOD_LOG              => true,
+            ],
+
+            // doctrine ignore properties
+            'size'                          => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DOCTRINE_IGNORE           => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'Digits',
+                    Zend_Filter_Input::DEFAULT_VALUE => 0
+                ],
+            ],
+            'preview_count'                 => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DOCTRINE_IGNORE           => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'Digits',
+                    Zend_Filter_Input::DEFAULT_VALUE => 0
+                ],
+                self::OMIT_MOD_LOG              => true,
+            ],
+            'preview_status'                => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DOCTRINE_IGNORE           => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'Digits',
+                    Zend_Filter_Input::DEFAULT_VALUE => 0
+                ],
+                self::OMIT_MOD_LOG              => true,
+            ],
+            'preview_error_count'           => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DOCTRINE_IGNORE           => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'Digits',
+                    Zend_Filter_Input::DEFAULT_VALUE => 0
+                ],
+                self::OMIT_MOD_LOG              => true,
+            ],
+            'hash'                          => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::DOCTRINE_IGNORE           => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'lastavscan_time'               => [
+                self::TYPE                      => self::TYPE_DATETIME,
+                self::DOCTRINE_IGNORE           => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'is_quarantined'                => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::DOCTRINE_IGNORE           => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'available_revisions'           => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::DOCTRINE_IGNORE           => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::OMIT_MOD_LOG              => true,
+            ],
+        ]
+    ];
 
     protected static $_isReplicable = true;
+
+    public static function modelConfigHook(array &$_definition)
+    {
+        // legacy :-/
+        $_definition['is_deleted'][self::NULLABLE] = true;
+        $_definition['is_deleted'][self::UNSIGNED] = true;
+    }
     
     /**
      * converts a string or Addressbook_Model_List to a list id

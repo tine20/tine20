@@ -22,7 +22,7 @@ class Tasks_Backend_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tasks All Backend Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tasks All Backend Tests');
         $suite->addTestSuite('Tasks_Backend_SqlTest');
         return $suite;
     }

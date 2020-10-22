@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -99,20 +99,21 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * return all groups an account is member of
      *
      * @param mixed $_accountId the account as integer or Tinebase_Model_User
+     * @param boolean $_fromCache
      * @return array
      */
-    public function getGroupMemberships($_accountId)
+    public function getGroupMemberships($_accountId, $_fromCache = true)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $classCacheId = $accountId;
         
-        if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
+        if ($_fromCache && isset($this->_classCache[__FUNCTION__][$classCacheId])) {
             return $this->_classCache[__FUNCTION__][$classCacheId];
         }
         
         $cacheId     = Tinebase_Helper::convertCacheId(__FUNCTION__ . $classCacheId);
-        $memberships = Tinebase_Core::getCache()->load($cacheId);
+        $memberships = $_fromCache ? Tinebase_Core::getCache()->load($cacheId) : false;
         
         if (! $memberships) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -139,14 +140,15 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * get list of groupmembers
      *
      * @param int $_groupId
+     * @param boolean $_fromCache
      * @return array with account ids
      */
-    public function getGroupMembers($_groupId)
+    public function getGroupMembers($_groupId, $_fromCache = true)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $cacheId = Tinebase_Helper::convertCacheId(__FUNCTION__ . $groupId);
-        $members = Tinebase_Core::getCache()->load($cacheId);
+        $members = $_fromCache ? Tinebase_Core::getCache()->load($cacheId) : false;
 
         if (false === $members) {
             $members = array();
@@ -202,7 +204,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
 
-        $oldGroupMembers = $this->getGroupMembers($groupId);
+        $oldGroupMembers = $this->getGroupMembers($groupId, false);
 
         // remove old members
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' = ?', $groupId);
@@ -319,8 +321,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }
         
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        
-        $groupMemberships = $this->getGroupMemberships($userId);
+
+        $groupMemberships = $this->getGroupMemberships($userId, false);
         
         $removeGroupMemberships = array_diff($groupMemberships, $_groupIds);
         $addGroupMemberships    = array_diff($_groupIds, $groupMemberships);

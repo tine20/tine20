@@ -652,7 +652,7 @@ class Tinebase_FileSystem implements
 
                     $this->clearStatCache($options['tine20']['path']);
 
-                    $newNode = $this->stat($options['tine20']['path']);
+                    $newNode = $this->_getTreeNodeBackend()->get($options['tine20']['node']->getId());
 
                     // write modlog and system notes
                     $this->_getTreeNodeBackend()->updated($newNode, $options['tine20']['node']);
@@ -1366,7 +1366,7 @@ class Tinebase_FileSystem implements
 
         if (is_resource($handle)) {
             $contextOptions = array('tine20' => array(
-                'path' => $_path,
+                'path' => $this->getPathOfNode($node, true, true),
                 'mode' => $_mode,
                 'node' => $node
             ));
@@ -2465,8 +2465,27 @@ class Tinebase_FileSystem implements
             }
 
             if ($oldValue != $newValue) {
-                $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
-                $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
+                // ensure same order / same json string
+                if (count($oldValue) > 0) {
+                    $oldValue = json_encode([
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH   => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM     => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_ON      => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID],
+                    ]);
+                } else {
+                    $oldValue = null;
+                }
+                if (count($newValue) > 0) {
+                    $newValue = json_encode([
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH   => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM     => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_ON      => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID],
+                    ]);
+                } else {
+                    $newValue = null;
+                }
 
                 // update revisionProps of subtree if changed
                 $this->_recursiveInheritPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
@@ -2872,7 +2891,44 @@ class Tinebase_FileSystem implements
 
         return $node;
     }
-    
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_child
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
+     * @return Tinebase_Model_Tree_Node|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getParentByFilter(Tinebase_Model_Tree_Node $_child, Tinebase_Model_Tree_Node_Filter $_filter)
+    {
+        static $recursive = false;
+        if (null === $_child->parent_id) {
+            return null;
+        }
+
+        if (!$recursive) {
+            $tmpFilter = new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'id', 'operator' => 'equals', 'value' => $_child->parent_id]
+            ]);
+            // we do the pin protection only once, on the outer filter
+            $_filter->ignorePinProtection(true);
+
+            $tmpFilter->addFilterGroup($_filter);
+            $_filter = $tmpFilter;
+            $_filter->doIgnoreAcl(true);
+        } else {
+            $_filter->getFilter('id')->setValue($_child->parent_id);
+        }
+
+        try {
+            $recursive = true;
+            return $this->searchNodes($_filter)->getFirstRecord() ?:
+                $this->getParentByFilter($this->get($_child->parent_id), $_filter);
+        } finally {
+            $recursive = false;
+        }
+    }
+
     /**
      * copy stream data to file path
      *

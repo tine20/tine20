@@ -21,7 +21,7 @@ class AllTests
         $node_total = isset($_ENV['NODE_TOTAL']) ? intval($_ENV['NODE_TOTAL']):1;
         $node_index = isset($_ENV['NODE_INDEX']) ? intval($_ENV['NODE_INDEX']):1;
 
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 All Tests');
 
         $suites = array(
             'Tinebase',

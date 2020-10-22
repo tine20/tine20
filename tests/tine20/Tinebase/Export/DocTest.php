@@ -47,8 +47,8 @@ class Tinebase_Export_DocTest extends TestCase
             $export->save($tmpFile);
 
             $data = file_get_contents('zip://' . $tmpFile . '#word/document.xml');
-            static::assertContains('twig template: 1', $data);
-            static::assertContains('twig templateB: 1', $data);
+            static::assertStringContainsString('twig template: 1', $data);
+            static::assertStringContainsString('twig templateB: 1', $data);
         } finally {
             unlink($tmpFile);
         }
@@ -75,7 +75,7 @@ class Tinebase_Export_DocTest extends TestCase
         try {
             $export->save($tmpFile);
 
-            static::assertContains('twig template: 1', file_get_contents('zip://' . $tmpFile . '#word/document.xml'));
+            static::assertStringContainsString('twig template: 1', file_get_contents('zip://' . $tmpFile . '#word/document.xml'));
         } finally {
             unlink($tmpFile);
         }
@@ -133,7 +133,7 @@ class Tinebase_Export_DocTest extends TestCase
 
         $refProp = new ReflectionProperty(Tinebase_Export_Richtext_TemplateProcessor::class, 'tempDocumentMainPart');
         $refProp->setAccessible(true);
-        static::assertContains('test, Name', $refProp->getValue($export->getDocument()));
+        static::assertStringContainsString('test, Name', $refProp->getValue($export->getDocument()));
     }
 
     public function testDocV2TwigMap()
@@ -161,7 +161,7 @@ class Tinebase_Export_DocTest extends TestCase
 
         $refProp = new ReflectionProperty(Tinebase_Export_Richtext_TemplateProcessor::class, 'tempDocumentMainPart');
         $refProp->setAccessible(true);
-        static::assertContains('test, Name', $refProp->getValue($export->getDocument()));
+        static::assertStringContainsString('test, Name', $refProp->getValue($export->getDocument()));
     }
 
     public function testDocTwigFunctions2()

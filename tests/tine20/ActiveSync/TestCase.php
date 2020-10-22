@@ -52,10 +52,10 @@ abstract class ActiveSync_TestCase extends TestCase
 
     /**
      * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
+     * @see \PHPUnit\Framework\TestCase::setUp()
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_testUser          = Tinebase_Core::getUser();

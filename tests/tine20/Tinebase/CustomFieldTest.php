@@ -35,8 +35,8 @@ class Tinebase_CustomFieldTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_instance = Tinebase_CustomField::getInstance();
         
@@ -62,7 +62,7 @@ class Tinebase_CustomFieldTest extends TestCase
         $cfName = $cf->name;
         $record->customfields = array($cfName => $record->toArray());
         
-        $this->setExpectedException('Tinebase_Exception_Record_Validation');
+        $this->expectException('Tinebase_Exception_Record_Validation');
         Addressbook_Controller_Contact::getInstance()->update($record);
     }
     
@@ -144,7 +144,7 @@ class Tinebase_CustomFieldTest extends TestCase
         
         // delete
         $this->_instance->deleteCustomField($createdCustomField);
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_instance->getCustomField($createdCustomField->getId());
     }
     

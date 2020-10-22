@@ -23,7 +23,7 @@ class ExampleApplication_AllTests
     
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 ExampleApplication All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 ExampleApplication All Tests');
         
         $suite->addTestSuite('ExampleApplication_JsonTest');
         $suite->addTestSuite('ExampleApplication_ImportTest');

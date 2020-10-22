@@ -171,17 +171,13 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     metadata.css = 'x-grid-mimeicon';
 
     if(record.get('type') == 'folder') {
-
         metadata.css += ' mime-icon-folder';
+        
         if (dataSafeEnabled && !!record.get('pin_protected_node')) {
             metadata.css += ' x-type-data-safe'
         }
 
-    }else if(record.get('is_quarantined') == '1') {
-
-        metadata.css = 'x-tinebase-virus';
-    }
-    else {
+    } else {
         metadata.css += ' mime-icon-file';
 
         var contenttype =  record.get('contenttype');
@@ -233,8 +229,27 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         fileName = value.name;
     }
     fileName = Ext.util.Format.htmlEncode(fileName);
-    var percent = record.get('progress');
+    
+    if (_.get(record, 'data.type', _.get(record, 'type')) === 'link') {
+        fileName = '<div class="mime-icon-overlay mime-icon-link"></div>' + fileName;
+    }
+    
+    if(record.get('is_quarantined') == '1') {
+        const warningText = i18n._('This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded.');
+        fileName = '<div class="mime-icon-overlay x-tinebase-virus" ext:qtip="'+ Tine.Tinebase.common.doubleEncode(warningText) +'"></div>' + fileName + ' (' + i18n._('quarantined') + ')';
+    }
 
+    if (_.get(record, 'data.type', _.get(record, 'type')) === 'link') {
+        fileName = '<div class="mime-icon-overlay mime-icon-link"></div>' + fileName;
+    }
+
+    if (String(record.get('contenttype')).match(/^vnd\.adobe\.partial-upload.*/) && record.get('status') !== 'uploading') {
+        const warningText = i18n._('This file has no contents. The Upload has failed or has not yet finished.');
+        fileName = '<div class="mime-icon-overlay x-dialog-warn" ext:qtip="'+ Tine.Tinebase.common.doubleEncode(warningText) +'"></div>' + fileName;
+    }
+
+    var percent = record.get('progress');
+    
     var additionalStyle = '';
     if(record.get('status') == 'paused' && percent < 100) {
         fileName = i18n._('(paused)') + '&#160;&#160;' + fileName;

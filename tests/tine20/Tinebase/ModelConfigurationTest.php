@@ -13,8 +13,8 @@
  */
 class Tinebase_ModelConfigurationTest extends TestCase
 {
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         // reset mc config to prevent problems with following tests

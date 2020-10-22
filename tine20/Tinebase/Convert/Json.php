@@ -717,6 +717,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
             $this->_recursiveResolvingProtection = [];
             $this->_resolveRecursive($records, $modelConfiguration, $multiple);
+
+            if ($expanderDef = $modelConfiguration->jsonExpander) {
+                $expander = new Tinebase_Record_Expander($records->getRecordClassName(), $expanderDef);
+                $expander->expand($records);
+            }
         }
     }
 

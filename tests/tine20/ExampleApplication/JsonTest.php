@@ -21,8 +21,8 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
 {
     protected $_recordsToDelete = array();
 
-    public function setUp()
-    {
+    public function setUp(): void
+{
         Tinebase_Application::getInstance()->setApplicationStatus(array(
             Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId()
         ), Tinebase_Application::ENABLED);
@@ -32,8 +32,8 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $this->_recordsToDelete = array();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if (count($this->_recordsToDelete) > 0)
         {
             $this->_json->deleteExampleRecords(array_keys($this->_recordsToDelete));
@@ -207,7 +207,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $returnValueDeletion = $this->_json->deleteExampleRecords($exampleRecordID);
         $this->assertEquals($returnValueDeletion['status'], 'success');
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_json->getExampleRecord($exampleRecordID);
     }
 

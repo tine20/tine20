@@ -97,7 +97,7 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     appName: 'Addressbook',
     modelName: 'Contact',
     idProperty: 'id',
-    titleProperty: 'n_fn',
+    titleProperty: 'n_fileas',
     // ngettext('Contact', 'Contacts', n); gettext('Contacts');
     recordName: 'Contact',
     recordsName: 'Contacts',

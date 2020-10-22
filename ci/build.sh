@@ -13,6 +13,12 @@ function build_image() {
 
     docker pull "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" || echo "no cache image for ${TARGET}"
 
+    ALPINE_PHP_REPOSITORY_VERSION=v3.12
+    if [ ${PHP_IMAGE_TAG} = "7.4-fpm-alpine" ] ; then
+        ALPINE_PHP_REPOSITORY_VERSION=edge
+    fi
+
+
     docker build ${DOCKER_ADDITIONAL_BUILD_ARGS} \
         --target "${TARGET}" \
         --tag "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" \
@@ -36,6 +42,7 @@ function build_image() {
         --build-arg GERRIT_URL="${GERRIT_URL}" \
         --build-arg GERRIT_USER="${GERRIT_USER}" \
         --build-arg GERRIT_PASSWORD="${GERRIT_PASSWORD}" \
+        --build-arg ALPINE_PHP_REPOSITORY_VERSION=ALPINE_PHP_REPOSITORY_VERSION \
         --cache-from "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" \
         .
 }

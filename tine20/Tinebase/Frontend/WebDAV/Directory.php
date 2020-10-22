@@ -94,9 +94,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * @throws Sabre\DAV\Exception\Forbidden
      * @throws Sabre\DAV\Exception\NotFound
      * @throws Sabre\DAV\Exception\InsufficientStorage
+     * @throws Sabre\DAV\Exception
      * @return string
-     *
-     * TODO only throw Sabre\DAV\Exception\*?
      */
     public function createFile($name, $data = null) 
     {
@@ -121,12 +120,16 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
             $name = $completeFile->name;
             if (false === ($data = fopen($completeFile->path, 'r'))) {
-                throw new Tinebase_Exception_Backend('fopen on temp file path failed ' . $completeFile->path);
+                throw new Sabre\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
             }
         }
 
         if ($this->childExists($name)) {
-            return $this->getChild($name)->put($data);
+            try {
+                return $this->getChild($name)->put($data);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
+            }
         }
 
         $path = $this->_path . '/' . $name;
@@ -143,14 +146,14 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
             if (is_resource($data)) {
                 if (false === stream_copy_to_stream($data, $handle)) {
-                    throw new Tinebase_Exception_Backend('stream_copy_to_stream failed');
+                    throw new Sabre\DAV\Exception('stream_copy_to_stream failed');
                 }
             } else {
-                throw new Tinebase_Exception_UnexpectedValue('data should be a resource');
+                throw new Sabre\DAV\Exception('data should be a resource');
             }
 
             if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
-                throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $path);
+                throw new Sabre\DAV\Exception('Tinebase_FileSystem::fclose failed for path ' . $path);
             }
 
 
@@ -162,7 +165,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             } else if ($e instanceof Tinebase_Exception_NotFound) {
                 throw new Sabre\DAV\Exception\NotFound($e->getMessage());
             } else {
-                throw $e;
+                throw new Sabre\DAV\Exception($e->getMessage());
             }
         }
 

@@ -17,7 +17,7 @@ class TravisTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Travis Smoke Testing');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Travis Smoke Testing');
 
         // addressbook
         $suite->addTestSuite(Addressbook_JsonTest::class);

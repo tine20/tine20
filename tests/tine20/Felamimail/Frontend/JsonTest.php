@@ -24,8 +24,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     protected $_pathsToDelete = array();
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
             try {
@@ -476,7 +476,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             $this->_json->saveMessage($messageToSend);
             $this->fail('Tinebase_Exception_SystemGeneric expected');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $this->assertContains('>: ' . $translation->_($expectedExceptionMessage), $tesg->getMessage(),
+            $this->assertStringContainsString('>: ' . $translation->_($expectedExceptionMessage), $tesg->getMessage(),
                 'exception message did not match: ' . $tesg->getMessage());
         }
     }
@@ -543,16 +543,16 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
         // check
         $this->assertTrue(isset($message['headers']) && $message['headers']['message-id']);
-        $this->assertContains('@' . $this->_mailDomain, $message['headers']['message-id']);
-        $this->assertNotContains('<<', $message['headers']['message-id']);
-        $this->assertNotContains('>>', $message['headers']['message-id']);
+        $this->assertStringContainsString('@' . $this->_mailDomain, $message['headers']['message-id']);
+        $this->assertStringNotContainsString('<<', $message['headers']['message-id']);
+        $this->assertStringNotContainsString('>>', $message['headers']['message-id']);
         $this->assertGreaterThan(0, preg_match('/aaaaaä/', $message['body']));
 
         // delete message on imap server and check if correct exception is thrown when trying to get it
         $this->_imap->selectFolder('INBOX');
         $this->_imap->removeMessage($message['messageuid']);
         Tinebase_Core::getCache()->clean();
-        $this->setExpectedException('Felamimail_Exception_IMAPMessageNotFound');
+        $this->expectException('Felamimail_Exception_IMAPMessageNotFound');
         $message = $this->_json->getMessage($message['id']);
     }
 
@@ -682,7 +682,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $message = $this->_json->getMessage($message['id']);
         $this->assertFalse(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'seen flag should not be set');
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_DELETED);
         $this->_json->getMessage($message['id']);
     }
@@ -728,7 +728,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             'field' => 'id', 'operator' => 'in', 'value' => array($messageInTrash['id'])
         )), Zend_Mail_Storage::FLAG_DELETED);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_json->getMessage($messageInTrash['id']);
     }
 
@@ -1054,7 +1054,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $fullMessage = $this->_json->getMessage($forwardMessage['id']);
         $this->assertTrue(count($fullMessage['attachments']) === 1);
         $attachment = $fullMessage['attachments'][0];
-        $this->assertContains($tempfileName, $attachment['filename'], 'wrong attachment filename: ' . print_r($attachment, TRUE));
+        $this->assertStringContainsString($tempfileName, $attachment['filename'], 'wrong attachment filename: ' . print_r($attachment, TRUE));
         $this->assertEquals(16, $attachment['size'], 'wrong attachment size: ' . print_r($attachment, TRUE));
 
         return $fullMessage;
@@ -1077,7 +1077,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
         $fullMessage = $this->_json->getMessage($message['id']);
 
-        self::assertContains('lalala &lt; logloff​', $fullMessage['body']);
+        self::assertStringContainsString('lalala &lt; logloff​', $fullMessage['body']);
     }
 
     /**
@@ -1099,7 +1099,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         self::assertEquals($messageToSave['subject'], $message['subject']);
         self::assertEquals($messageToSave['to'][0], $message['to'][0], 'recipient not found');
         self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
-        self::assertContains('bccaddress', $message['bcc'][0], 'bcc recipient not found');
+        self::assertStringContainsString('bccaddress', $message['bcc'][0], 'bcc recipient not found');
     }
 
     /**
@@ -1123,7 +1123,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->_messageIds[] = $message['id'];
 
         $complete = $this->_json->getMessage($message['id']);
-        $this->assertContains($translate->_('Was read by:') . ' ' . $this->_account->from, $complete['body']);
+        $this->assertStringContainsString($translate->_('Was read by:') . ' ' . $this->_account->from, $complete['body']);
     }
 
     /**
@@ -1220,14 +1220,14 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         self::assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $emlNode->type);
         self::assertEquals('message/rfc822', $emlNode->contenttype);
         self::assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
-        self::assertContains(Tinebase_Core::getUser()->accountEmailAddress, $emlNode->name);
+        self::assertStringContainsString(Tinebase_Core::getUser()->accountEmailAddress, $emlNode->name);
         $now = Tinebase_DateTime::now();
-        self::assertContains($now->toString('Y-m-d'), $emlNode->name);
+        self::assertStringContainsString($now->toString('Y-m-d'), $emlNode->name);
 
         $nodeWithDescription = Filemanager_Controller_Node::getInstance()->get($emlNode['id']);
         self::assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
-        self::assertContains($message['received'], $nodeWithDescription->description);
-        self::assertContains('aaaaaä', $nodeWithDescription->description);
+        self::assertStringContainsString($message['received'], $nodeWithDescription->description);
+        self::assertStringContainsString('aaaaaä', $nodeWithDescription->description);
 
         // assert MessageFileLocation
         $completeMessage = $this->_json->getMessage($message['id']);
@@ -1394,8 +1394,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $message = $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
         $fullMessage = $this->_json->getMessage($message['id']);
 
-        $this->assertContains('multipart/encrypted', $fullMessage['headers']['content-type']);
-        $this->assertContains('protocol="application/pgp-encrypted"', $fullMessage['headers']['content-type']);
+        $this->assertStringContainsString('multipart/encrypted', $fullMessage['headers']['content-type']);
+        $this->assertStringContainsString('protocol="application/pgp-encrypted"', $fullMessage['headers']['content-type']);
         $this->assertCount(2, $fullMessage['structure']['parts']);
         $this->assertEquals('application/pgp-encrypted', $fullMessage['structure']['parts'][1]['contentType']);
         $this->assertEquals('application/octet-stream', $fullMessage['structure']['parts'][2]['contentType']);
@@ -1413,7 +1413,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $fullMessage = $this->testSendMailveopeAPIMessage();
 
         $this->assertEquals('application/pgp-encrypted', $fullMessage['preparedParts'][0]['contentType']);
-        $this->assertContains('-----BEGIN PGP MESSAGE-----', $fullMessage['preparedParts'][0]['preparedData']);
+        $this->assertStringContainsString('-----BEGIN PGP MESSAGE-----', $fullMessage['preparedParts'][0]['preparedData']);
     }
 
     public function testMessagePGPInline()
@@ -1750,7 +1750,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_account->signature = "llalala<br>\nxyz<br>\nblubb<br>";
 
         $result = $this->_getVacationMessageWithTemplate();
-        $this->assertContains('-- <br />llalala<br />xyz<br />blubb<br />', $result['message'], 'wrong linebreaks or missing signature');
+        $this->assertStringContainsString('-- <br />llalala<br />xyz<br />blubb<br />', $result['message'], 'wrong linebreaks or missing signature');
     }
 
     /**
@@ -1765,8 +1765,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $vacationData['end_date'] = '2012-04-20';
         $result = $this->_sieveTestHelper($vacationData);
 
-        $this->assertContains($vacationData['start_date'], $result['start_date']);
-        $this->assertContains($vacationData['end_date'], $result['end_date']);
+        $this->assertStringContainsString($vacationData['start_date'], $result['start_date']);
+        $this->assertStringContainsString($vacationData['end_date'], $result['end_date']);
     }
 
     /**
@@ -1793,7 +1793,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $sieveScriptVacation = $sieveBackend->getScript($this->_testSieveScriptName);
 
         // compare sieve scripts
-        $this->assertContains($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
+        $this->assertStringContainsString($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
 
     public function testSieveEmailNotification()
@@ -1815,7 +1815,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         static::assertTrue(count(array_intersect(array('"enotify"', '"variables"', '"copy"', '"body"'),
                 $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES))) === 4,
             print_r($scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES), true));
-        static::assertContains('test@test.de', $script->getSieve());
+        static::assertStringContainsString('test@test.de', $script->getSieve());
     }
 
     /**
@@ -1938,7 +1938,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
         self::assertEquals(0, count($message['attachments']), 'attachment set: ' . print_r($message, true));
-        self::assertContains('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
+        self::assertStringContainsString('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
     }
 
     /**
@@ -1954,7 +1954,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
         self::assertEquals(0, count($message['attachments']), 'attachment set: ' . print_r($message, true));
-        self::assertContains('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
+        self::assertStringContainsString('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
     }
 
     /**
@@ -1971,8 +1971,8 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         self::assertTrue(isset($message['attachments']), 'attachment set: ' . print_r($message, true));
         self::assertEquals(0, count($message['attachments']), 'attachment set: ' . print_r($message, true));
-        self::assertContains('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
-        self::assertContains('</a>', $message['body'],
+        self::assertStringContainsString('/download', $message['body'], 'no download link in body: ' . print_r($message, true));
+        self::assertStringContainsString('</a>', $message['body'],
             'link has no anchor tag: ' . $message['body']);
 
         // download link id is at the end of message body
@@ -2013,7 +2013,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         Felamimail_Controller_Account::getInstance()->update($this->_account);
 
         $message = $this->_testAttachmentType('systemlink_fm', true);
-        self::assertContains('testcontainer/test.txt', $message['body'],
+        self::assertStringContainsString('testcontainer/test.txt', $message['body'],
             'system link missing from body - ' . print_r($message, true));
         // check if
         self::assertGreaterThan(
@@ -2121,7 +2121,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $message = $this->_json->getMessageFromNode($result[0]['id']);
         self::assertEquals('Christof Gacki', $message['from_name']);
         self::assertEquals('c.gacki@metaways.de', $message['from_email']);
-        self::assertContains('wie gestern besprochen würde mich sehr freuen', $message['body']);
+        self::assertStringContainsString('wie gestern besprochen würde mich sehr freuen', $message['body']);
         self::assertEquals(Zend_Mime::TYPE_HTML, $message['body_content_type'], $message['body']);
         self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));
         self::assertEquals(1, count($message['attachments']));
@@ -2178,7 +2178,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($suggestion['model']));
         self::assertEquals(Felamimail_Model_MessageFileLocation::class, $suggestion['model']);
         self::assertEquals(Filemanager_Model_Node::class, $suggestion['record']['model']);
-        self::assertContains('personal files', $suggestion['record']['record_title']);
+        self::assertStringContainsString('personal files', $suggestion['record']['record_title']);
     }
 
     /**
@@ -2285,7 +2285,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             'field' => 'id', 'operator' => 'in', 'value' => [$message['id']]
         ]];
         // try to send with wrong param structure
-        self::setExpectedException(Tinebase_Exception_Record_NotAllowed::class);
+        self::expectException(Tinebase_Exception_Record_NotAllowed::class);
         $this->_json->fileMessages($filter, [
             'model' => Addressbook_Model_Contact::class,
             'record_id' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
@@ -2400,7 +2400,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals($messageToSave['to'][0], $message['to'][0], 'recipient not found');
         self::assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'flags: ' . print_r($message['flags'], true));
         self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: ' . print_r($message, TRUE));
-        self::assertContains('bccaddress', $message['bcc'][0], 'bcc recipient not found');
+        self::assertStringContainsString('bccaddress', $message['bcc'][0], 'bcc recipient not found');
 
         return $draft;
     }

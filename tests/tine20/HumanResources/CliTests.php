@@ -33,8 +33,8 @@ class HumanResources_CliTests extends HumanResources_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_cli = new HumanResources_Frontend_Cli();
     }
     
@@ -44,8 +44,8 @@ class HumanResources_CliTests extends HumanResources_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         HumanResources_Controller_Employee::getInstance()->delete($this->_idsToDelete);
     }
         
@@ -99,7 +99,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $this->assertEquals(0, $result, 'import failed: ' . $out);
         
         if ($checkOutput) {
-            $this->assertContains("Imported 2 records.", $out);
+            $this->assertStringContainsString("Imported 2 records.", $out);
         }
     }
     

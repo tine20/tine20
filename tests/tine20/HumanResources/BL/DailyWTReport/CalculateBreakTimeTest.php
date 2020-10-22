@@ -21,8 +21,8 @@ class HumanResources_BL_DailyWTReport_CalculateBreakTimeTest extends TestCase
      */
     protected static $_pipe;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass(): void
+{
         parent::setUpBeforeClass();
 
         $rs = new Tinebase_Record_RecordSet(Tinebase_Model_BLConfig::class, [
@@ -44,8 +44,8 @@ class HumanResources_BL_DailyWTReport_CalculateBreakTimeTest extends TestCase
         static::$_pipe = new Tinebase_BL_Pipe($rs);
     }
 
-    public static function tearDownAfterClass()
-    {
+    public static function setUptearDownAfterClass(): void
+{
         parent::tearDownAfterClass();
 
         static::$_pipe = null;

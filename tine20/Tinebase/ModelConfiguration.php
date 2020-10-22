@@ -95,6 +95,7 @@
  * @property array      $converterDefaultMapping This maps field types to their default converter
  * @property array      $copyOmitFields Collection of copy omit properties for frontend
  * @property array      $keyfieldFields
+ * @property array      $jsonExpander
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -946,6 +947,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     protected $_hasDeletedTimeUnique = false;
 
+    protected $_jsonExpander;
+
     /**
      * the constructor (must be called by the singleton pattern)
      *
@@ -1023,7 +1026,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
                 if (isset($definition[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS])) {
                     foreach ($definition[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS] as $key => $cHooks) {
-                        $this->$key = array_merge($this->$key, $cHooks);
+                        $this->$key = array_merge((array)$this->$key, $cHooks);
                     }
                 }
             }
@@ -1165,6 +1168,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
         }
 
+        $recordClass::modelConfigHook($this->_fields);
+
         // holds the filters used for the query-filter, if any
         $queryFilters = array();
         
@@ -1211,7 +1216,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     }
                 }
             } elseif ($fieldDef[self::TYPE] === 'virtual') {
-                $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] : true;
+                if (!isset($fieldDef['modlogOmit'])) {
+                    $fieldDef['modlogOmit'] = true;
+                }
+                $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] :
+                    isset($fieldDef['config'][self::TYPE]) && $fieldDef['config'][self::TYPE] === self::TYPE_RELATION;
                 $virtualField = $fieldDef['config'];
                 $virtualField['key'] = $fieldKey;
                 if ((isset($virtualField['default']))) {
@@ -1219,8 +1228,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     $this->_defaultData[$fieldKey] = $virtualField['default'];
                 }
                 $this->_virtualFields[$fieldKey] = $virtualField;
-                $fieldDef['modlogOmit'] = true;
-
             } elseif ($fieldDef[self::TYPE] === 'numberableStr' || $fieldDef[self::TYPE] === 'numberableInt') {
                 $this->_autoincrementFields[] = $fieldDef;
             }  elseif ($fieldDef[self::TYPE] === 'image') {
@@ -1300,7 +1307,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
             
             // add field to modlog omit, if configured and modlog is used
-            if ($this->_modlogActive && isset($fieldDef['modlogOmit'])) {
+            if ($this->_modlogActive && isset($fieldDef['modlogOmit']) && $fieldDef['modlogOmit']) {
                 $this->_modlogOmitFields[] = $fieldKey;
             }
 
@@ -1440,23 +1447,27 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected function _getQueryFilter($queryFilters)
     {
+        $relatedModels = array();
+        foreach ($this->_filterModel as $name => $filter) {
+            if ($filter['filter'] === 'Tinebase_Model_Filter_ExplicitRelatedRecord') {
+                $relatedModels[] = $filter['options']['related_model'];
+            }
+            if (isset($filter[self::QUERY_FILTER]) && $filter[self::QUERY_FILTER]) {
+                $queryFilters[] = $name;
+            }
+        }
+
         $queryFilterData = array(
             'label' => 'Quick Search',
             'field' => 'query',
             'filter' => 'Tinebase_Model_Filter_Query',
             'useGlobalTranslation' => true,
             'options' => array(
-                'fields' => $queryFilters,
+                'fields' => array_unique($queryFilters),
                 'modelName' => $this->_getPhpClassName(),
             )
         );
 
-        $relatedModels = array();
-        foreach ($this->_filterModel as $name => $filter) {
-            if ($filter['filter'] === 'Tinebase_Model_Filter_ExplicitRelatedRecord') {
-                $relatedModels[] = $filter['options']['related_model'];
-            }
-        }
         if (count($relatedModels) > 0) {
             $queryFilterData['options']['relatedModels'] = array_unique($relatedModels);
         }
@@ -1613,11 +1624,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 }
                 $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
                 $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
+                $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
                 if ($fieldDef[self::TYPE] == 'record') {
                     $fieldDef['config']['length'] = 40;
                     $this->_recordFields[$fieldKey] = $fieldDef;
                 } else {
-                    $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
                     $this->_recordsFields[$fieldKey] = $fieldDef;
                     if (isset($fieldDef[self::CONFIG][self::STORAGE]) && self::TYPE_JSON === $fieldDef[self::CONFIG][self::STORAGE] &&
                             !isset($this->_converters[$fieldKey])) {

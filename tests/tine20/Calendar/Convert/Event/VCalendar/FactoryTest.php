@@ -19,8 +19,8 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     /**
@@ -29,8 +29,8 @@ class Calendar_Convert_Event_VCalendar_FactoryTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
     
     /**

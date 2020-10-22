@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Addressbook_Frontend_WebDAV_Contact
  */
-class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
+class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Contact Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook WebDAV Contact Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
 
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -64,8 +64,8 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
         
         Tinebase_TransactionManager::getInstance()->rollBack();
@@ -185,7 +185,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
     
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
     
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $contact->put($vcardStream);
     }

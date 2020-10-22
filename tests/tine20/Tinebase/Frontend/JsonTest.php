@@ -35,8 +35,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * set up tests
      *
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         $this->_instance = new Tinebase_Frontend_Json();
@@ -68,8 +68,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
     /**
      * tear down
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         parent::tearDown();
         
         // reset tz in core
@@ -295,9 +295,10 @@ class Tinebase_Frontend_JsonTest extends TestCase
         static::assertSame('data2', file_get_contents('tine20:///Filemanager/folders/shared/unittest/test.txt'));
         $node2 = Tinebase_FileSystem::getInstance()->stat('Filemanager/folders/shared/unittest/test.txt');
 
-        static::setExpectedException(Tinebase_Exception_UnexpectedValue::class,
-            Tinebase_Model_Tree_FileLocation::FLD_FM_PATH . ' and ' . Tinebase_Model_Tree_FileLocation::FLD_NODE_ID .
-            ' mismatch');
+        $this->expectException(Tinebase_Exception_UnexpectedValue::class);
+        $this->expectExceptionMessage(Tinebase_Model_Tree_FileLocation::FLD_FM_PATH . ' and ' .
+            Tinebase_Model_Tree_FileLocation::FLD_NODE_ID . ' mismatch');
+
         $this->_instance->restoreRevision([
             Tinebase_Model_Tree_FileLocation::FLD_TYPE      => Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
             Tinebase_Model_Tree_FileLocation::FLD_FM_PATH   => '/shared/unittest/test.txt',
@@ -443,7 +444,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $result['value']);
                 $this->assertTrue(is_array($result['options']));
                 $this->assertEquals(3, count($result['options']));
-                $this->assertContains('option1', $result['options'][1][1]);
+                $this->assertStringContainsString('option1', $result['options'][1][1]);
             } else if ($result['name'] == Tinebase_Preference::TIMEZONE) {
                 $this->assertTrue(is_array($result['options'][0]), 'options should be arrays');
             }
@@ -516,7 +517,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         }
         
         $this->assertTrue(isset($defaultString));
-        $this->assertContains('(auto)', $defaultString);
+        $this->assertStringContainsString('(auto)', $defaultString);
 
         // set user pref to en first then to 'use default'
         Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = 'en';
@@ -535,7 +536,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             }
         }
         $this->assertEquals(count($locale['options']), count($updatedLocale['options']), 'option count has to be equal');
-        $this->assertContains('(Deutsch)', $defaultString);
+        $this->assertStringContainsString('(Deutsch)', $defaultString);
         $this->assertEquals('de', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
     }
     
@@ -796,7 +797,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertTrue(is_array($profile['updateableFields']));
         
         // try to get user profile of different user
-        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->expectException('Tinebase_Exception_AccessDenied');
         
         $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
         $this->_instance->getUserProfile($sclever->getId());

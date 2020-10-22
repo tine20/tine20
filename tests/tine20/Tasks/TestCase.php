@@ -18,7 +18,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  * 
  * @package     Tasks
  */
-abstract class Tasks_TestCase extends PHPUnit_Framework_TestCase
+abstract class Tasks_TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * transaction id if test is wrapped in an transaction
@@ -29,8 +29,8 @@ abstract class Tasks_TestCase extends PHPUnit_Framework_TestCase
      * set up tests
      *
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
     
@@ -38,8 +38,8 @@ abstract class Tasks_TestCase extends PHPUnit_Framework_TestCase
      * tear down tests
      *
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         if ($this->_transactionId) {
             Tinebase_TransactionManager::getInstance()->rollBack();
         }

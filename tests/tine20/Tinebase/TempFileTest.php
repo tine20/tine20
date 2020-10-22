@@ -25,8 +25,8 @@ class Tinebase_TempFileTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_instance = Tinebase_TempFile::getInstance();
         parent::setUp();
     }

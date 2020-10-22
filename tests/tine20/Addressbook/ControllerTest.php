@@ -37,8 +37,8 @@ class Addressbook_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_instance = Addressbook_Controller_Contact::getInstance();
 
@@ -144,8 +144,8 @@ class Addressbook_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if ($this->_instance) {
             $this->_instance->useNotes(true);
             if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
@@ -318,7 +318,7 @@ class Addressbook_ControllerTest extends TestCase
         $contact->jpegphoto = '';
         $contact = $this->_instance->update($contact);
         
-        $this->setExpectedException('Addressbook_Exception_NotFound');
+        $this->expectException('Addressbook_Exception_NotFound');
         $image = Addressbook_Controller::getInstance()->getImage($contact->id);
     }
     
@@ -333,7 +333,7 @@ class Addressbook_ControllerTest extends TestCase
         $this->_instance->delete($contact->getId());
         unset($this->objects['contact']);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $contact = $this->_instance->get($contact->getId());
     }
 
@@ -343,7 +343,7 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testDeleteUserAccountContact()
     {
-        $this->setExpectedException('Addressbook_Exception_AccessDenied');
+        $this->expectException('Addressbook_Exception_AccessDenied');
         $userContact = $this->_instance->getContactByUserId(Tinebase_Core::getUser()->getId());
         $this->_instance->delete($userContact->getId());
     }
@@ -417,7 +417,7 @@ class Addressbook_ControllerTest extends TestCase
         $this->assertTrue($newcontact1->has('notes'));
         $this->assertEquals($compStr, $newcontact1->notes[0]->note);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->objects['contact']->notes[0]->note = 'note';
     }
 

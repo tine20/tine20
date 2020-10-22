@@ -1085,10 +1085,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * create new system user
      *
      * @param string $accountLoginName
-     * @param Tinebase_Group $defaultGroup
+     * @param Tinebase_Model_Group|null $defaultGroup
      * @return Tinebase_Model_FullUser|null
      */
-    static public function createSystemUser($accountLoginName, $defaultGroup = null)
+    static public function createSystemUser($accountLoginName, Tinebase_Model_Group $defaultGroup = null)
     {
         try {
             $systemUser = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
@@ -1127,7 +1127,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         try {
             $systemUser = Tinebase_User::getInstance()->addUser($systemUser);
             Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
-        } catch(Zend_Ldap_Exception $zle) {
+        } catch (Zend_Ldap_Exception $zle) {
             Tinebase_Exception::log($zle);
             if (stripos($zle->getMessage(), 'Already exists') !== false) {
                 try {
@@ -1163,14 +1163,19 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
 
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                ' no system user could be created');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                ' No system user could be created');
+
             // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
-            Tinebase_Exception::log($e);
+
             try {
-                $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
-                Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
-            } catch(Exception $e) {
+                if ($e instanceof Zend_Db_Statement_Exception && Tinebase_Exception::isDbDuplicate($e)) {
+                    $systemUser = Tinebase_User::getInstance()->getUserByLoginName($accountLoginName);
+                } else {
+                    $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
+                    Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+                }
+            } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
                     ' no system user could be created');
                 // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)

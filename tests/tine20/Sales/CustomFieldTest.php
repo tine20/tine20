@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_CustomField
  */
-class Sales_CustomFieldTest extends TestCase // PHPUnit_Framework_TestCase
+class Sales_CustomFieldTest extends TestCase // \PHPUnit\Framework\TestCase
 {
     /**
      * unit under test (UIT)
@@ -39,8 +39,8 @@ class Sales_CustomFieldTest extends TestCase // PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         //$this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -53,8 +53,8 @@ class Sales_CustomFieldTest extends TestCase // PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if ($this->_user) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_user);
         }

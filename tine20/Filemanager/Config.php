@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,6 +15,7 @@
  */
 class Filemanager_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'Filemanager';
     const PUBLIC_DOWNLOAD_URL = 'publicDownloadUrl';
 
     /**

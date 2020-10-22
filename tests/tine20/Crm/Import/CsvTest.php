@@ -22,8 +22,8 @@ class Crm_Import_CsvTest extends ImportTestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         // delete tasks
@@ -44,7 +44,7 @@ class Crm_Import_CsvTest extends ImportTestCase
         $this->assertEquals(2, $result['totalcount'], 'should import 2 records: ' . print_r($result, true));
 
         $firstLead = $result['results']->getFirstRecord();
-        $this->assertContains('neuer lead', $firstLead->lead_name);
+        $this->assertStringContainsString('neuer lead', $firstLead->lead_name);
         $this->assertEquals(1, count($firstLead->tags));
         $this->assertEquals(5, count($firstLead->relations),
             'relations not imported for first lead ' . print_r($firstLead->toArray(), true));
@@ -166,7 +166,7 @@ class Crm_Import_CsvTest extends ImportTestCase
             'expecting 1 or more mails (at least for unittest + sclever) / messages:'
             . print_r($messages, true));
         $firstMessage = $importNotifications[0];
-        $this->assertContains('neuer lead 2', $firstMessage->getBodyText()->getContent(), 'lead name missing');
-        $this->assertContains('PHPUnit', $firstMessage->getBodyText()->getContent(), 'container name missing');
+        $this->assertStringContainsString('neuer lead 2', $firstMessage->getBodyText()->getContent(), 'lead name missing');
+        $this->assertStringContainsString('PHPUnit', $firstMessage->getBodyText()->getContent(), 'container name missing');
     }
 }

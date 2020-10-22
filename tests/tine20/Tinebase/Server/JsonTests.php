@@ -173,11 +173,11 @@ class Tinebase_Server_JsonTests extends TestCase
         //echo $out;
 
         $this->assertTrue(! empty($out), 'request should not be empty');
-        $this->assertNotContains('Not Authorised', $out);
-        $this->assertNotContains('Method not found', $out);
-        $this->assertNotContains('No Application Controller found', $out);
-        $this->assertNotContains('"error"', $out);
-        $this->assertNotContains('PHP Fatal error', $out);
-        $this->assertContains('"result"', $out);
+        $this->assertStringNotContainsString('Not Authorised', $out);
+        $this->assertStringNotContainsString('Method not found', $out);
+        $this->assertStringNotContainsString('No Application Controller found', $out);
+        $this->assertStringNotContainsString('"error"', $out);
+        $this->assertStringNotContainsString('PHP Fatal error', $out);
+        $this->assertStringContainsString('"result"', $out);
     }
 }

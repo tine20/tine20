@@ -31,8 +31,8 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         // create shared folder and other users folder

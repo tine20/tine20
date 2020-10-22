@@ -29,8 +29,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     protected $_uit;
     
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         /**
@@ -48,8 +48,8 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->_uit->doContainerACLChecks(true);
     }
     
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         parent::tearDown();
         
         if (! $this->_transactionId) {
@@ -118,7 +118,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
         
-        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->expectException('Tinebase_Exception_AccessDenied');
         $this->_uit->get($persistentEvent->getId());
     }
 
@@ -250,7 +250,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->assertFalse((bool)$event->{Tinebase_Model_Grants::GRANT_DELETE}, Tinebase_Model_Grants::GRANT_DELETE);
         
         // direct get of freebusy only events is not allowed
-        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->expectException('Tinebase_Exception_AccessDenied');
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
     }
     
@@ -275,7 +275,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('pwulf', 'pwulf', 'pwulf', Calendar_Model_Event::CLASS_PRIVATE);
         
-        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->expectException('Tinebase_Exception_AccessDenied');
         $loadedEvent = $this->_uit->get($persistentEvent->getId());
     }
 

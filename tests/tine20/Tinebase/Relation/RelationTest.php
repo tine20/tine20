@@ -53,7 +53,7 @@ class Tinebase_Relation_RelationTest extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Relation_RelationTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_Relation_RelationTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -63,8 +63,8 @@ class Tinebase_Relation_RelationTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
@@ -311,6 +311,12 @@ class Tinebase_Relation_RelationTest extends TestCase
         $backend = new Tinebase_Relation_Backend_Sql();
         $backend->purgeAllRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
         $backend->purgeAllRelations($this->_crmId2['model'], $this->_crmId2['backend'], $this->_crmId2['id']);
+
+        $rels1 = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
+        $rels2 = $this->_object->getRelations($this->_crmId2['model'], $this->_crmId2['backend'], $this->_crmId2['id']);
+
+        $this->assertSame(0, $rels1->count());
+        $this->assertSame(0, $rels2->count());
     }
     
     /**
@@ -378,7 +384,7 @@ class Tinebase_Relation_RelationTest extends TestCase
         $contractJson = $json->getContract($contract->getId());
         $this->assertEquals($pwulf->getId(), $contractJson['relations'][0]['related_id']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         Tinebase_Relations::getInstance()->transferRelations($sclever->getId(), $pwulf->getId(), 'Addressbook_Model_Contract');
     }

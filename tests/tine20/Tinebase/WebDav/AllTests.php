@@ -12,7 +12,7 @@ class Tinebase_WebDav_AllTests
 {
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All WebDAV Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All WebDAV Tests');
         $suite->addTestSuite(Tinebase_WebDav_Plugin_ACLTest::class);
         $suite->addTestSuite(Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest::class);
         $suite->addTestSuite(Tinebase_WebDav_Plugin_InverseTest::class);

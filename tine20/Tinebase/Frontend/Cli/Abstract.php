@@ -628,7 +628,13 @@ class Tinebase_Frontend_Cli_Abstract
 
             $cronuser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_CRON);
             if ($cronuser) {
-                Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
+                try {
+                    Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (! Tinebase_Exception::isDbDuplicate($e)) {
+                        throw $zdse;
+                    }
+                }
             }
         }
 

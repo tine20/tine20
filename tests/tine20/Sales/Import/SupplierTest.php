@@ -18,8 +18,8 @@ class Sales_Import_SupplierTest extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         self::clear('Sales', 'Supplier');
 

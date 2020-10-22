@@ -227,7 +227,7 @@ class Calendar_Frontend_iMIP
             }
             
             // allow if not rescheduled
-            if ($isObsoleted && $existingEvent->isRescheduled($iMIPEvent)) {
+            if ($isObsoleted && $iMIPEvent->isRescheduled($existingEvent)) {
                 $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
                 $result = FALSE;
             }
@@ -505,7 +505,7 @@ class Calendar_Frontend_iMIP
         $eventAttender = $eventAttenderIdx !== FALSE ? $existingEvent->attendee[$eventAttenderIdx] : NULL;
         $eventAttenderStatus = $eventAttender ? $eventAttender->status : NULL;
 
-        if ($existingEvent->isRescheduled($_iMIP->getEvent())) {
+        if ($_iMIP->getEvent()->isRescheduled($existingEvent)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "event was rescheduled");
             $result = FALSE;
         }

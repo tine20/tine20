@@ -46,9 +46,9 @@ class Calendar_Export_VCalendarReportTest extends Calendar_TestCase
         $exportFilenamePath = 'Filemanager/folders/shared/unittestexport/'
             . str_replace([' ', DIRECTORY_SEPARATOR], '', $this->_getTestCalendar()->name . '.ics');
         $ics = file_get_contents('tine20:///' . $exportFilenamePath);
-        self::assertContains('Anforderungsanalyse', $ics);
-        self::assertContains('BEGIN:VCALENDAR', $ics);
-        self::assertContains('BEGIN:VTIMEZONE', $ics);
+        self::assertStringContainsString('Anforderungsanalyse', $ics);
+        self::assertStringContainsString('BEGIN:VCALENDAR', $ics);
+        self::assertStringContainsString('BEGIN:VTIMEZONE', $ics);
         // 4 events + 1 time in header
         self::assertEquals(5, substr_count($ics, 'X-CALENDARSERVER-ACCESS:PUBLIC'),
             'X-CALENDARSERVER-ACCESS:PUBLIC should appear once in header');

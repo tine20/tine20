@@ -14,8 +14,8 @@
  */
 class Tinebase_Record_ExpanderTest extends TestCase
 {
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         parent::tearDown();
 
         Tinebase_Record_Expander_DataRequest::clearCache();

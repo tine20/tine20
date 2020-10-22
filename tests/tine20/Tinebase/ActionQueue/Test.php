@@ -26,8 +26,8 @@ class Tinebase_ActionQueue_Test extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $config = Tinebase_Config::getInstance();
@@ -43,8 +43,8 @@ class Tinebase_ActionQueue_Test extends TestCase
         Tinebase_ActionQueueLongRun::getInstance('Test');
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $config = Tinebase_Config::getInstance();
         $config->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} = $this->_oldConfActive;
         $config->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_BACKEND} = $this->_oldConfBackend;

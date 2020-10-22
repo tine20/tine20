@@ -31,8 +31,8 @@ class Tinebase_PreferenceTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_instance = Tinebase_Core::getPreference();
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
@@ -43,8 +43,8 @@ class Tinebase_PreferenceTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -172,7 +172,7 @@ class Tinebase_PreferenceTest extends TestCase
         ));
         
         // try to force pref
-        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
+        $this->expectException('Tinebase_Exception_UnexpectedValue');
         $pref = $this->_instance->create($pref);
     }
     

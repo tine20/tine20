@@ -26,8 +26,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_uit = $this->_json = new HumanResources_Frontend_Json();
     }
@@ -380,7 +380,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         );
         
         // doing this manually, this won't be the last assertion, and more assertions are needed
-        // $this->setExpectedException('Tinebase_Exception_Data');
+        // $this->expectException('Tinebase_Exception_Data');
         
         $exception = new Exception('no exception has been thrown');
         
@@ -447,7 +447,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class);
 
          // test duplicate exception
-         $this->setExpectedException('Tinebase_Exception_Duplicate');
+         $this->expectException('Tinebase_Exception_Duplicate');
          $this->_json->saveWorkingTime($recordData);
     }
     
@@ -710,7 +710,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     {
         $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         
-        $this->setExpectedException('HumanResources_Exception_NoAccount');
+        $this->expectException('HumanResources_Exception_NoAccount');
         
         $this->_json->getFeastAndFreeDays($employee->getId(), '2000');
     }
@@ -870,7 +870,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->assertEquals('2014-01-02 00:00:00', $res['firstDay']->toString());
             $this->assertEquals('2014-01-30 23:59:59', $res['lastDay']->toString());
             
-            $this->setExpectedException('HumanResources_Exception_NoAccount');
+            $this->expectException('HumanResources_Exception_NoAccount');
             
             $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
     }

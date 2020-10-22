@@ -33,8 +33,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_skipWithoutEmailSystemAccountConfig();
 
         parent::setUp();
@@ -42,8 +42,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->_json = new Admin_Frontend_Json();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->_emailAccounts as $account) {
             try {
                 $this->_json->deleteEmailAccounts([is_array($account) ? $account['id'] : $account->getId()]);
@@ -222,7 +222,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $account = $this->testEmailAccountApiSharedAccount(false);
 
         try {
-            static::setExpectedException(Tinebase_Exception_SystemGeneric::class, 'email account already exists');
+            static::expectException(Tinebase_Exception_SystemGeneric::class); $this->expectExceptionMessageMatches('/email account already exists/');
             $this->testEmailAccountApiSharedAccount(true, [
                 'email' => $account->email
             ]);

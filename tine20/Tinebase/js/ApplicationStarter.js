@@ -20,7 +20,8 @@ require('widgets/grid/ImageRenderer');
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
-Tine.Tinebase.ApplicationStarter = {
+Tine.Tinebase.ApplicationStarter = {};
+Ext.apply(Tine.Tinebase.ApplicationStarter,{
     
     /**
      * the applictions the user has access to
@@ -44,6 +45,10 @@ Tine.Tinebase.ApplicationStarter = {
         'integer':  'int',
         'float':    'float'
     },
+
+    __applicationStarterInitialized: new Promise( (resolve) => {
+        Tine.Tinebase.ApplicationStarter.__applicationStarterInitializedResolve = resolve;
+    }),
     
     /**
      * initializes the starter
@@ -60,7 +65,12 @@ Tine.Tinebase.ApplicationStarter = {
         if (! this.userApplications || this.userApplications.length == 0) {
             this.userApplications = Tine.Tinebase.registry.get('userApplications');
             this.createStructure(true);
+            Tine.Tinebase.ApplicationStarter.__applicationStarterInitializedResolve();
         }
+    },
+    
+    isInitialised: function() {
+        return Tine.Tinebase.ApplicationStarter.__applicationStarterInitialized;
     },
     
     /**
@@ -696,4 +706,4 @@ Tine.Tinebase.ApplicationStarter = {
         
         var stop = new Date();
     }
-}
+});

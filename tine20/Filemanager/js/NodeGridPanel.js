@@ -153,13 +153,15 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ddGroup: 'fileDDGroup',
             onNodeOver: this.onNodeOver.createDelegate(this),
             onNodeDrop: this.onNodeDrop.createDelegate(this),
+            onContainerOver: this.onContainerOver.createDelegate(this),
+            onContainerDrop: this.onContainerDrop.createDelegate(this),
             getTargetFromEvent: function(e) {
                 var idx = view.findRowIndex(e.target),
                     record = grid.getStore().getAt(idx);
 
                 return record;
             }
-        })
+        });
     },
 
     /**
@@ -174,6 +176,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             // @TODO: rethink: do I need delte on the record or parent?
             requiredGrant = e.ctrlKey || e.altKey ? 'readGrant' : 'editGrant';
 
+        data.nodes = this.selectionModel.getSelections();
+        
         return !this.selectionModel.isFilterSelect &&
             _.reduce(this.selectionModel.getSelections(), function(allowed, record) {
                 return allowed && !! _.get(record, 'data.account_grants.' + requiredGrant);
@@ -188,19 +192,29 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String} status The CSS class that communicates the drop status back to the source so that the underlying {@link Ext.dd.StatusProxy} can be updated
      */
     onNodeOver: function(record, source, e, data) {
-        var _ = window.lodash,
-            dropAllowed =
-                record.get('type') == 'folder'
-                && _.get(record, 'data.account_grants.addGrant', false)
-                && source == this.grid.getView().dragZone
-                && Tine.Filemanager.nodeActionsMgr.checkCreateNodeConstraints(record, {type: 'file'}),
-            action = e.ctrlKey || e.altKey ? 'copy' : 'move'
-
+        const action = e.ctrlKey || e.altKey ? 'copy' : 'move';
+        const targetNode = record;
+        const sourceNodes = data.nodes;
+        
+        const dropAllowed =
+            targetNode.get('type') == 'folder'
+            && Tine.Filemanager.nodeActionsMgr.checkConstraints(action, targetNode, sourceNodes);
+            
         return dropAllowed ?
             'tinebase-dd-drop-ok-' + action :
             Ext.dd.DropZone.prototype.dropNotAllowed;
     },
-
+    
+    onContainerOver: function(dd, e, data) {
+        const filteredContainers = this.getFilteredContainers();
+        const record = Tine.Tinebase.data.Record.setFromJson(_.get(this.getFilteredContainers(),'0'), this.recordClass);
+        const dropAllowed = filteredContainers.length === 1
+            && _.reduce(data.nodes, (allowed, node) => {return allowed && !this.store.getById(node.id)}, true);
+            
+        return dropAllowed ? this.onNodeOver(record, dd.source, e, data) :
+            Ext.dd.DropZone.prototype.dropNotAllowed;
+    },
+    
     /**
      * Called when the DropZone determines that a {@link Ext.dd.DragSource} has been dropped onto
      * the drop node.  The default implementation returns false, so it should be overridden to provide the
@@ -213,11 +227,22 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Boolean} True if the drop was valid, else false
      */
     onNodeDrop: function(target, dd, e, data) {
-        Tine.Filemanager.fileRecordBackend.copyNodes(data.selections, target, !(e.ctrlKey || e.altKey));
-        this.grid.getStore().remove(data.selections);
+        if (Ext.fly(dd.getDragEl()).hasClass('x-dd-drop-nodrop')) {
+            return false;
+        }
+        
+        Tine.Filemanager.fileRecordBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey));
+        this.grid.getStore().remove(data.nodes);
         return true;
     },
 
+    onContainerDrop: function(dd, e, data) {
+        const filteredContainers = this.getFilteredContainers();
+        const target = Tine.Tinebase.data.Record.setFromJson(_.get(this.getFilteredContainers(),'0'), this.recordClass);
+
+        return filteredContainers.length === 1 ? this.onNodeDrop(target, dd, e, data) : false;
+    },
+    
     /**
      * returns cm
      *
@@ -464,7 +489,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     const filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
                     isVirtual = filteredContainer.isVirtual();
 
-                    constraints = Tine.Filemanager.nodeActionsMgr.checkCreateNodeConstraints(filteredContainer, {type: 'file'});
+                    constraints = Tine.Filemanager.nodeActionsMgr.checkConstraints('create', filteredContainer, [{type: 'file'}]);
 
                 } catch(e) {}
 
@@ -896,7 +921,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             nodeRecord = new Tine.Filemanager.Model.Node(targetNode);
         }
 
-        if(!nodeRecord.isDropFilesAllowed()) {
+        var files = fileSelector.getFileList();
+        
+        if(!Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, _.map(files, Tine.Filemanager.Model.Node.createFromFile))) {
             Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
                     app.i18n._('It is not permitted to store files in this folder!')
@@ -904,9 +931,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
             return;
         }
-
-        var files = fileSelector.getFileList();
-
+        
         var filePathsArray = [], uploadKeyArray = [], fileTypesArray= [], promises = [];
 
         Ext.each(files, function (file) {

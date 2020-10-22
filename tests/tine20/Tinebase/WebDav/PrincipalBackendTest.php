@@ -36,8 +36,8 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_backend = new Tinebase_WebDav_PrincipalBackend();

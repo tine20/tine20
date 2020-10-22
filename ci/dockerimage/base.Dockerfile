@@ -6,14 +6,18 @@
 #
 # ARGS:
 #   TINE20ROOT=/usr/share
+#   ALPINE_PHP_REPOSITORY_VERSION=v3.12 from which alpine versions repository php should be installed
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM alpine:3.12 as cache-invalidator
-RUN apk add --no-cache --simulate supervisor curl bash ytnef openjdk8-jre php7 php7-fpm php7-bcmath php7-exif \
-                                  php7-mysqli php7-pcntl php7-pdo_mysql php7-soap php7-sockets php7-zip php7-xsl \
-                                  php7-intl php7-gd php7-opcache php7-gettext php7-iconv php7-ldap php7-pecl-igbinary \
-                                  php7-pecl-yaml php7-simplexml php7-ctype php7-xml php7-xmlreader php7-curl \
-                                  php7-tokenizer php7-xmlwriter php7-fileinfo gettext | sha256sum >> /cachehash
+ARG ALPINE_PHP_REPOSITORY_VERSION=v3.12
+RUN apk add --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl | sha256sum >> /cachehash
+RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_VERSION}/main \
+                                  php7 php7-fpm php7-bcmath php7-exif php7-mysqli php7-pcntl php7-pdo_mysql php7-soap \
+                                  php7-sockets php7-zip php7-xsl php7-intl php7-gd php7-opcache php7-gettext php7-iconv \
+                                  php7-ldap php7-pecl-igbinary php7-pecl-yaml php7-simplexml php7-ctype php7-xml \
+                                  php7-xmlreader php7-curl php7-tokenizer php7-xmlwriter php7-fileinfo php7-posix \
+                                  | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community \
                                   php7-pecl-redis=4.3.0-r2 | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv \
@@ -23,6 +27,7 @@ RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM alpine:3.12 as base
+ARG ALPINE_PHP_REPOSITORY_VERSION=v3.12
 ARG TINE20ROOT=/usr/share
 
 #todo version vars | move tika to lib
@@ -34,10 +39,12 @@ RUN wget -O /usr/local/bin/tika.jar http://packages.tine20.org/tika/tika-app-1.1
 RUN mkdir /usr/local/lib/container
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
-RUN apk add --no-cache supervisor curl bash ytnef openjdk8-jre php7 php7-fpm php7-bcmath php7-exif php7-mysqli \
-                       php7-pcntl php7-pdo_mysql php7-soap php7-sockets php7-zip php7-xsl php7-intl php7-gd \
-                       php7-opcache php7-gettext php7-iconv php7-ldap php7-pecl-igbinary php7-pecl-yaml php7-simplexml \
-                       php7-ctype php7-xml php7-xmlreader php7-curl php7-tokenizer php7-xmlwriter php7-fileinfo gettext
+RUN apk add --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl
+RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_VERSION}/main \
+                       php7 php7-fpm php7-bcmath php7-exif php7-mysqli php7-pcntl php7-pdo_mysql php7-soap php7-sockets \
+                       php7-zip php7-xsl php7-intl php7-gd php7-opcache php7-gettext php7-iconv php7-ldap \
+                       php7-pecl-igbinary php7-pecl-yaml php7-simplexml php7-ctype php7-xml php7-xmlreader php7-curl \
+                       php7-tokenizer php7-xmlwriter php7-fileinfo php7-posix
 # todo check if the new redis version 5.2.2 (alpine v3.12) also works
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community --no-cache php7-pecl-redis=4.3.0-r2
 

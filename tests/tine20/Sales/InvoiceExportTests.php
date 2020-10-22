@@ -22,7 +22,7 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Invoice Controller Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales Invoice Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     

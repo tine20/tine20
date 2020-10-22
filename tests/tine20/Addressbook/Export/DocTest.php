@@ -153,11 +153,11 @@ class Addressbook_Export_DocTest extends TestCase
 
         $plain = $this->getPlainTextFromDocx($doc);
 
-        static::assertContains($export->getTranslate()->_('Mr'), $plain);
-        static::assertContains($contact->n_fn, $plain);
-        static::assertContains($contact->n_given, $plain);
+        static::assertStringContainsString($export->getTranslate()->_('Mr'), $plain);
+        static::assertStringContainsString($contact->n_fn, $plain);
+        static::assertStringContainsString($contact->n_given, $plain);
         $relatedRecord = new Addressbook_Model_Contact($contact->relations[0]['related_record'], true);
-        static::assertContains($relatedRecord->getTitle(), $plain);
+        static::assertStringContainsString($relatedRecord->getTitle(), $plain);
     }
 
     /**
@@ -211,10 +211,10 @@ class Addressbook_Export_DocTest extends TestCase
 
         $plain = $this->getPlainTextFromDocx($doc);
      
-        static::assertContains($contactPrivat->n_given, $plain);
-        static::assertContains($contactPrivat->adr_two_street, $plain);
-        static::assertContains($contactBusiness->n_given, $plain);
-        static::assertContains($contactBusiness->adr_one_street, $plain);
+        static::assertStringContainsString($contactPrivat->n_given, $plain);
+        static::assertStringContainsString($contactPrivat->adr_two_street, $plain);
+        static::assertStringContainsString($contactBusiness->n_given, $plain);
+        static::assertStringContainsString($contactBusiness->adr_one_street, $plain);
     }
 
     /**
@@ -276,7 +276,7 @@ class Addressbook_Export_DocTest extends TestCase
 
         $plain = $this->getPlainTextFromDocx($doc);
 
-        static::assertContains($contactRelated->getTitle(), $plain);
+        static::assertStringContainsString($contactRelated->getTitle(), $plain);
     }
 
     public function testFactoryNoFilter()
@@ -298,6 +298,6 @@ class Addressbook_Export_DocTest extends TestCase
         $export->save($doc);
 
         $plain = $this->getPlainTextFromDocx($doc);
-        static::assertContains('James McBlack', $plain);
+        static::assertStringContainsString('James McBlack', $plain);
     }
 }

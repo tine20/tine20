@@ -22,7 +22,7 @@ class Tinebase_Timemachine_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Timemachine Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All Timemachine Tests');
         $suite->addTestSuite('Tinebase_Timemachine_ModificationLogTest');
         return $suite;
     }

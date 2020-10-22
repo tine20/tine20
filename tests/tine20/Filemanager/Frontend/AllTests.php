@@ -22,7 +22,7 @@ class Filemanager_Frontend_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Filemanager Frontend Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Filemanager Frontend Tests');
         $suite->addTestSuite('Filemanager_Frontend_JsonTests');
         $suite->addTestSuite('Filemanager_Frontend_WebDAVTest');
         

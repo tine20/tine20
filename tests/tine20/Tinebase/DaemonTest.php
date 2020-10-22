@@ -19,13 +19,13 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  * @group nogitlabci
  * gitlabci:  Tinebase_DaemonTest::testStart: could not find pid file
  */
-class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
+class Tinebase_DaemonTest extends \PHPUnit\Framework\TestCase
 {
     protected static $oldActionQueueConfig = null;
     protected static $oldIniFileContent = null;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass(): void
+{
         static::$oldActionQueueConfig = Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE};
         $actionQueueConfig = clone static::$oldActionQueueConfig;
         $actionQueueConfig->{Tinebase_Config::ACTIONQUEUE_BACKEND} = 'redis';
@@ -39,8 +39,8 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
         static::assertEquals(strlen($configData), file_put_contents('/etc/tine20/actionQueue.ini', $configData), 'writing config data failed');
     }
 
-    public static function tearDownAfterClass()
-    {
+    public static function setUptearDownAfterClass(): void
+{
         Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE} = static::$oldActionQueueConfig;
         static::$oldActionQueueConfig = null;
 
@@ -55,15 +55,15 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
         Tinebase_ActionQueue::destroyInstance();
     }
 
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (! extension_loaded('redis') ) {
             static::markTestSkipped('redis extension required for these tests');
         }
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $this->_stopDaemon();
     }
 

@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use Tinebase_ModelConfiguration_Const as TMCC;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 /**
  * class to hold data representing one node in the tree
@@ -89,64 +89,168 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
+        self::VERSION       => 10,
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
         'hasTags'           => true,
-        'hasXProps'         => false,
         'modlogActive'      => true,
-        'hasAttachments'    => false,
-        'createModule'      => false,
-        'exposeHttpApi'     => false,
-        'exposeJsonApi'     => false,
-        TMCC::HAS_SYSTEM_CUSTOM_FIELDS => true,
+        self::HAS_DELETED_TIME_UNIQUE => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',
         'modelName'         => 'Tree_Node',
+        self::RECORD_NAME   => 'File', // ngettext('File', 'Files', n); gettext('File');
+        self::RECORDS_NAME  => 'Files',
+        self::CONTAINER_NAME => 'Folder', // ngettext('Folder', 'Folders', n); gettext('Folder');
+        self::CONTAINERS_NAME => 'Folders',
+
         'idProperty'        => 'id',
         'table'             => [
             'name'              => 'tree_nodes',
+            self::UNIQUE_CONSTRAINTS => [
+                'object_id'             => [
+                    self::COLUMNS           => ['object_id', 'parent_id']
+                ],
+                'parent_id_name'        => [
+                    self::COLUMNS           => ['parent_id', 'name', 'deleted_time']
+                ]
+            ]
         ],
 
-        'filterModel'       => [],
+        self::ASSOCIATIONS => [
+            ClassMetadataInfo::MANY_TO_ONE => [
+                'parent_id' => [
+                    'targetEntity' => self::class,
+                    'fieldName' => 'parent_id',
+                    'joinColumns' => [[
+                        'name' => 'parent_id',
+                        'referencedColumnName' => 'id'
+                    ]],
+                ],
+                // this morphs into a one_to_one since object_id is unique too (well ... object_id, parent_id ... argh! legacy)
+                'object_id' => [
+                    'targetEntity' => Tinebase_Model_Tree_FileObject::class,
+                    'fieldName' => 'object_id',
+                    'joinColumns' => [[
+                        'name' => 'object_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'CASCADE',
+                    ]],
+                ]
+            ],
+        ],
+
+        'filterModel'       => [
+            'recursive'         => [
+                'filter'            => Tinebase_Model_Filter_Bool::class,
+            ],
+            'content'           => [
+                'filter'            => Tinebase_Model_Filter_ExternalFullText::class,
+                self::QUERY_FILTER  => true,
+                'options'           => [
+                    'idProperty'        => 'object_id',
+                ]
+            ],
+            'isIndexed'         => [
+                'filter'            => Tinebase_Model_Tree_Node_IsIndexedFilter::class,
+            ],
+        ],
 
         'fields'            => [
             'parent_id'                     => [
                 'type'                          => 'string',
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'object_id'                     => [
                 'type'                          => 'string',
+                self::LENGTH                    => 40,
                 'validators'                    => ['presence' => 'required'],
             ],
-            'revisionProps'                 => [
+            'name'                          => [
                 'type'                          => 'string',
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LENGTH                    => 255,
+                self::QUERY_FILTER              => true,
+                'validators'                    => ['presence' => 'required'],
+                self::OPTIONS                   => [
+                    'collation'                     => 'utf8mb4_bin',
+                ],
+                self::FILTER_DEFINITION     => [
+                    self::FILTER                => Tinebase_Model_Filter_Text::class,
+                    self::OPTIONS               => ['binary' => true]
+                ]
             ],
-            'notificationProps'             => [
+            'islink'                        => [
+                'type'                          => self::TYPE_BOOLEAN,
+                'validators'                    => [Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::DEFAULT_VAL               => 0,
+                self::UNSIGNED                  => true,
+            ],
+            'indexed_hash'                  => [
                 'type'                          => 'string',
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             // contains id of node with acl info
             'acl_node'                      => [
                 'type'                          => 'string',
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
-            'name'                          => [
-                'type'                          => 'string',
-                'validators'                    => ['presence' => 'required'],
+            'linkto'                        => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
             ],
-            'islink'                        => [
-                'type'                          => 'integer',
+            'revisionProps'                 => [
+                'type'                          => 'text',
+                self::NULLABLE                  => true,
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'notificationProps'             => [
+                'type'                          => 'text',
+                self::NULLABLE                  => true,
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'is_deleted'                    => [
+                'type'                          => self::TYPE_BOOLEAN,
                 'validators'                    => [Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::DEFAULT_VAL               => 0,
+                self::UNSIGNED                  => true,
             ],
             'quota'                         => [
-                'type'                          => 'integer',
+                'type'                          => self::TYPE_BIGINT,
+                self::LENGTH                    => 64,
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NULLABLE                  => true,
+                self::UNSIGNED                  => true,
+            ],
+            'pin_protected_node'            => [
+                'type'                          => 'string',
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
+            'deleted_time'                  => [
+                'type'                          => self::TYPE_DATETIME,
+                self::DEFAULT_VAL               => '1970-01-01 00:00:00',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_DateTime::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
+            ],
+
+
             // fields from filemanager_objects table (ro)
             'type'                          => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'validators'                    => ['inArray' => [
                     Tinebase_Model_Tree_FileObject::TYPE_FILE,
@@ -154,44 +258,60 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Tinebase_Model_Tree_FileObject::TYPE_PREVIEW,
                     Tinebase_Model_Tree_FileObject::TYPE_LINK,
                 ], Zend_Filter_Input::ALLOW_EMPTY => true,],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Text::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
             ],
             'description'                   => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
+                self::QUERY_FILTER              => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Text::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
             ],
             'contenttype'                   => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Text::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
             ],
             'revision'                      => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'available_revisions'           => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'hash'                          => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
-            'indexed_hash'                  => [
-                'type'                          => 'string',
-                'modlogOmit'                    => true,
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-            ],
+
             'isIndexed'                     => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
             ],
             'size'                          => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
                 'validators'                    => [
@@ -199,13 +319,19 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Zend_Filter_Empty::class => 0,
                     Zend_Filter_Input::DEFAULT_VALUE => 0
                 ],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Int::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_filerevisions']
+                ]
             ],
             'revision_size'                 => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'preview_count'                 => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
                 'validators'                    => [
@@ -215,6 +341,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 ],
             ],
             'preview_status'                 => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
                 'validators'                    => [
@@ -224,6 +351,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 ],
             ],
             'preview_error_count'                 => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
                 'validators'                    => [
@@ -232,57 +360,65 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     Zend_Filter_Input::DEFAULT_VALUE => 0,
                 ],
             ],
-            'pin_protected_node'            => [
-                'type'                          => 'string',
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-            ],
+
             'lastavscan_time'               => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'datetime',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'modlogOmit'                    => true,
             ],
             'is_quarantined'                => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'boolean',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'default'                       => 0,
                 'modlogOmit'                    => true,
             ],
-            'metadata'                      => [
-                self::TYPE                      => self::TYPE_RECORDS,
-                self::CONFIG                    => [
-                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                => Tinebase_Model_BLConfig::MODEL_NAME_PART,
-                    self::STORAGE                   => self::TYPE_JSON
-                ],
-            ],
+
 
             // not persistent
             'container_name'                => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
 
             // this is needed should be sent by / delivered to client (not persistent in db atm)
             'path'                          => [
+                self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Tree_Node_PathFilter::class,
+                ]
             ],
             'account_grants'                => [
-                //'type'                          => 'string',
+                self::OMIT_MOD_LOG              => false,
+                self::DOCTRINE_IGNORE           => true,
+                self::TYPE                      => self::TYPE_VIRTUAL,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'tempFile'                      => [
+                self::DOCTRINE_IGNORE           => true,
                 //'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'stream'                        => [
+                self::DOCTRINE_IGNORE           => true,
                 //'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             // acl grants
             'grants'                        => [
-                //'type'                          => 'string',
+                self::OMIT_MOD_LOG              => false,
+                self::DOCTRINE_IGNORE           => true,
+                self::TYPE                      => self::TYPE_VIRTUAL,
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'effectiveAndLocalQuota'        => [
+                self::DOCTRINE_IGNORE           => true,
+                self::TYPE                      => self::TYPE_VIRTUAL,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
         ],
@@ -302,11 +438,37 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'Tinebase_Model_User' => array('created_by', 'last_modified_by')
     );
 
+    public static function modelConfigHook(array &$_definition)
+    {
+        $fileObjectTime = [
+            self::FILTER    => Tinebase_Model_Filter_DateTime::class,
+            self::OPTIONS   => ['tablename' => 'tree_fileobjects']
+        ];
+        $fileObjectUser = [
+            self::FILTER    => Tinebase_Model_Filter_User::class,
+            self::OPTIONS   => ['tablename' => 'tree_fileobjects']
+        ];
+
+        $_definition['created_by'][self::DOCTRINE_IGNORE] = true;
+        $_definition['created_by'][self::FILTER_DEFINITION] = $fileObjectUser;
+
+        $_definition['creation_time'][self::DOCTRINE_IGNORE] = true;
+        $_definition['creation_time'][self::FILTER_DEFINITION] = $fileObjectTime;
+
+        $_definition['last_modified_by'][self::DOCTRINE_IGNORE] = true;
+        $_definition['last_modified_by'][self::FILTER_DEFINITION] = $fileObjectUser;
+
+        $_definition['last_modified_time'][self::DOCTRINE_IGNORE] = true;
+        $_definition['last_modified_time'][self::FILTER_DEFINITION] = $fileObjectTime;
+
+        $_definition['seq'][self::DOCTRINE_IGNORE] = true;
+
+        $_definition['deleted_by'][self::DOCTRINE_IGNORE] = true;
+        $_definition['deleted_by'][self::FILTER_DEFINITION] = $fileObjectUser;
+    }
+
     public function runConvertToRecord()
     {
-        if (isset($this->_properties['deleted_time']) && $this->_properties['deleted_time'] == '1970-01-01 00:00:00') {
-            unset($this->_properties['deleted_time']);
-        }
         if (isset($this->_properties['available_revisions']) && is_string($this->_properties['available_revisions'])) {
             $this->_properties['available_revisions'] = explode(',', ltrim(
                 rtrim($this->_properties['available_revisions'], '}'), '{'));
@@ -317,9 +479,6 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 
     public function runConvertToData()
     {
-        if (array_key_exists('deleted_time', $this->_properties) && null === $this->_properties['deleted_time']) {
-            $this->_properties['deleted_time'] = '1970-01-01 00:00:00';
-        }
         if (isset($this->_properties[self::XPROPS_REVISION]) && is_array($this->_properties[self::XPROPS_REVISION])) {
             if (count($this->_properties[self::XPROPS_REVISION]) > 0) {
                 $this->_properties[self::XPROPS_REVISION] = json_encode($this->_properties[self::XPROPS_REVISION]);

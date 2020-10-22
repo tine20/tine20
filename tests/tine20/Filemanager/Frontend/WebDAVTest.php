@@ -24,8 +24,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
     protected $_oldLoginnameAsFoldername;
 
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_oldLoginnameAsFoldername = Tinebase_Config::getInstance()
@@ -35,8 +35,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME,
             $this->_oldLoginnameAsFoldername);
@@ -53,7 +53,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         $children = $node->getChildren();
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/');
     }
@@ -69,7 +69,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         $this->assertInstanceOf('Tinebase_WebDav_Collection_AbstractContainerTree', $children[0], 'wrong child class');
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav');
     }
@@ -86,7 +86,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertGreaterThanOrEqual(2, count($children));
         $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $children[0], 'wrong node class');
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager');
     }
@@ -177,7 +177,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertEquals(1, count($children));
         $this->assertEquals('Filemanager_Frontend_WebDAV', get_class($children[0]), 'wrong child class');
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/personal');
     }
@@ -194,7 +194,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($children));
         $this->assertInstanceOf('Filemanager_Frontend_WebDAV_Container', $children[0], 'wrong node class');
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName);
     }
@@ -221,7 +221,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName .'/unittestdirectory');
         
-        $this->setExpectedException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Sabre\DAV\Exception\NotFound');
 
         Tinebase_WebDav_Collection_AbstractContainerTree::clearClassCache();
         $this->_webdavTree = null;
@@ -237,7 +237,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         $children = $node->getChildren();
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/shared');
     }
@@ -318,7 +318,7 @@ EOS
         $server->handle($request);
         $result = ob_get_contents();
         ob_end_clean();
-        static::assertContains('<s:exception>Sabre\DAV\Exception\Locked</s:exception>', $result);
+        static::assertStringContainsString('<s:exception>Sabre\DAV\Exception\Locked</s:exception>', $result);
 
         $request = Tinebase_Http_Request::fromString(<<<EOS
 UNLOCK /webdav/Filemanager/shared/unittestdirectory/aTestFile HTTP/1.1\r
@@ -403,8 +403,10 @@ EOS
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
 
-        static::setExpectedException(\Sabre\DAV\Exception\Forbidden::class, null, 0,
-            'it should not be possible to create a file in /webdav/Filemanager/shared folder');
+        // it should not be possible to create a file in /webdav/Filemanager/shared folder
+        $this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+        $this->expectExceptionCode(0);
+
         $node->createFile('test.file');
     }
 
@@ -600,7 +602,7 @@ EOS
         $this->assertGreaterThanOrEqual(1, count($children));
         $this->assertInstanceOf('Filemanager_Frontend_WebDAV_Container', $children[0], 'wrong node class');
     
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
     
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName);
     }
@@ -611,8 +613,9 @@ EOS
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/'
             . Tinebase_Core::getUser()->accountLoginName);
 
-        static::setExpectedException(\Sabre\DAV\Exception\Forbidden::class, null, 0,
-            'it should not be possible to create a file in own /webdav/Filemanager/personal folder');
+        // it should not be possible to create a file in own /webdav/Filemanager/personal folder
+        static::expectException(\Sabre\DAV\Exception\Forbidden::class);
+
         $node->createFile('test.file');
     }
 
@@ -621,8 +624,9 @@ EOS
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
 
-        static::setExpectedException(\Sabre\DAV\Exception\Forbidden::class, null, 0,
-            'it should not be possible to create a file in foreign /webdav/Filemanager/personal folder');
+        // it should not be possible to create a file in foreign /webdav/Filemanager/personal folder
+        $this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
         $node->createFile('test.file');
     }
 
@@ -631,8 +635,9 @@ EOS
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
 
-        static::setExpectedException(\Sabre\DAV\Exception\Forbidden::class, null, 0,
-            'it should not be possible to create a folder in foreign /webdav/Filemanager/personal folder');
+        // it should not be possible to create a folder in foreign /webdav/Filemanager/personal folder
+        $this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+
         $node->createDirectory('testFolder');
     }
 
@@ -732,7 +737,7 @@ EOS
     
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
     
-        $this->setExpectedException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Sabre\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
     }
@@ -756,21 +761,21 @@ EOS
     
     public function testgetNodeForPath_invalidApplication()
     {
-        $this->setExpectedException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Sabre\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/invalidApplication');
     }
     
     public function testgetNodeForPath_invalidContainerType()
     {
-        $this->setExpectedException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Sabre\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/invalidContainerType');
     }
     
     public function testgetNodeForPath_invalidFolder()
     {
-        $this->setExpectedException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Sabre\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/invalidContainer');
     }

@@ -215,6 +215,23 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $recordData;
         }
     }
+
+    /**
+     * @param string $id
+     * @param array $filter
+     * @return array
+     * @throws Filemanager_Exception_Quarantined
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getParentNodeByFilter($id, $filter)
+    {
+        $filter = $this->_decodeFilter($filter, Filemanager_Model_NodeFilter::class);
+
+        $controller = Filemanager_Controller_Node::getInstance();
+        $childNode = $controller->get($id);
+        return $this->_recordToJson($controller->getParentByFilter($childNode, $filter));
+    }
     
     /**
      * Search for records matching given arguments

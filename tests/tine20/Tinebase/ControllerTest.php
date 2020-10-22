@@ -34,8 +34,8 @@ class Tinebase_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = Tinebase_Controller::getInstance();
     }
@@ -46,8 +46,8 @@ class Tinebase_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Config::getInstance()->maintenanceMode = 0;
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
@@ -57,8 +57,8 @@ class Tinebase_ControllerTest extends TestCase
      */
     public function testGetIdByTitleProperty()
     {
-        $record = Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty('Tine 2.0 Admin Account');
-        self::assertEquals('Tine 2.0 Admin Account',$record->n_fn);
+        $record = Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty('Admin Account, Tine 2.0');
+        self::assertEquals('Admin Account, Tine 2.0',$record->n_fileas);
     }
 
     /**
@@ -259,7 +259,7 @@ class Tinebase_ControllerTest extends TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_API_KEY, 'fooobar123');
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_INFO, true);
 
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class);
+        static::expectException(Tinebase_Exception_AccessDenied::class);
         Tinebase_Controller::getInstance()->getStatus('hahahaIhackyou!!!');
     }
 
@@ -271,7 +271,7 @@ class Tinebase_ControllerTest extends TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_API_KEY, 'fooobar123');
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_INFO, true);
 
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class);
+        static::expectException(Tinebase_Exception_AccessDenied::class);
         Tinebase_Controller::getInstance()->getStatus();
     }
 

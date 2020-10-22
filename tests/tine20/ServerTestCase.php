@@ -16,7 +16,7 @@
  * @todo we should extend a generic TestCase class to prevent code duplication
  *       NOTE: currently it's not possible to just extend TestCase (because of TestHelper include)
  */
-abstract class ServerTestCase extends PHPUnit_Framework_TestCase
+abstract class ServerTestCase extends \PHPUnit\Framework\TestCase
 {
     protected $preserveGlobalState = false;
     protected $runTestInSeparateProcess = true;
@@ -47,8 +47,8 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Zend_Session::$_unitTestEnabled = true;
         
         // get config
@@ -71,8 +71,8 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
             $this->_deleteUsers();
         }

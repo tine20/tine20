@@ -39,7 +39,7 @@ class Calendar_Convert_Event_VCalendar_DavDroidTest extends TestCase
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         $domain = isset($smtpConfig['primarydomain']) ? '@' . $smtpConfig['primarydomain'] : '';
 
-        $this->assertContains($group->list_id.$domain, $vevent, $vevent);
+        $this->assertStringContainsString($group->list_id.$domain, $vevent, $vevent);
 
         return $vevent;
     }

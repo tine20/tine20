@@ -58,8 +58,8 @@ abstract class Calendar_TestCase extends TestCase
     /**
      * set up tests
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         $this->_backend = new Calendar_Backend_Sql();
@@ -81,8 +81,8 @@ abstract class Calendar_TestCase extends TestCase
     /**
      * tear down tests
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         parent::tearDown();
         
         Calendar_Controller_Event::getInstance()->sendNotifications(false);

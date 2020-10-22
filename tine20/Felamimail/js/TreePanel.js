@@ -742,13 +742,15 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     updateFolderStatus: function(folder) {
         var unreadcount = folder.get('cache_unreadcount'),
+            totalcount = folder.get('cache_totalcount'),
             progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_est') * 10) * 10,
             node        = this.getNodeById(folder.id),
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
             cacheStatus = folder.get('cache_status'),
             lastCacheStatus = folder.modified ? folder.modified.cache_status : null,
-            isSelected = folder.isCurrentSelection();
+            isSelected = folder.isCurrentSelection(),
+            account =  folder ? this.accountStore.getById(folder.get('account_id')) : this.accountStore.getById(node.id);
 
         this.setUnreadClass(folder.id);
             
@@ -756,9 +758,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             var domNode = Ext.DomQuery.selectNode('span[class=felamimail-node-statusbox-unread]', nodeEl);
             if (domNode) {
                 
-                // update unreadcount + visibity
-                Ext.fly(domNode).update(unreadcount).setVisible(unreadcount > 0);
-                
+                //draft folder show totalcount instead  
+                if(folder.get('globalname') === account.get('drafts_folder')) {
+                    Ext.fly(domNode).update(totalcount).setVisible(totalcount > 0);
+                } else {
+                    // update unreadcount + visibity
+                    Ext.fly(domNode).update(unreadcount).setVisible(unreadcount > 0);
+                }
+
                 // update progress
                 var progressEl = Ext.get(Ext.DomQuery.selectNode('img[class^=felamimail-node-statusbox-progress]', nodeEl));
                 progressEl.removeClass(['felamimail-node-statusbox-progress-pie', 'felamimail-node-statusbox-progress-loading']);

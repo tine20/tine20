@@ -389,6 +389,10 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         if (_.isRegExp(this.constraint)) {
             return node.get('path').match(this.constraint);
         }
+        
+        if (_.isFunction(this.constraint)) {
+            return this.constraint(node)
+        }
     },
 
     /**

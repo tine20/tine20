@@ -22,8 +22,8 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
     /**
      * setUp
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             $this->markTestSkipped('needs enabled invoices module');
         }
@@ -71,7 +71,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $this->_uit->deleteCustomers(array($customer['id']));
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         $this->_uit->getCustomer($customer['id']);
     }

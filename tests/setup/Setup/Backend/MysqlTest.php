@@ -92,7 +92,7 @@ class Setup_Backend_MysqlTest extends Setup_Backend_AbstractTest
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->assertEquals($statement, $this->_backend->getIndexDeclarations($index));
         
-        $this->setExpectedException('Zend_Db_Statement_Exception', '42000'); //42000: group_id and account_id fields missing - expecting Exception
+        $this->expectException('Zend_Db_Statement_Exception'); $this->expectExceptionMessageMatches('/42000/'); //42000: group_id and account_id fields missing - expecting Exception
         $this->_backend->addIndex($this->_table->name, $index);
     }    
 

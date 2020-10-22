@@ -40,16 +40,16 @@ class Tinebase_Server_HttpTests extends TestCase
         $out = ob_get_clean();
 
         $this->assertTrue(! empty($out), 'request should not be empty');
-        $this->assertNotContains('Not Authorised', $out);
-        $this->assertNotContains('Method not found', $out);
-        $this->assertNotContains('No Application Controller found', $out);
-        $this->assertNotContains('"error"', $out);
-        $this->assertNotContains('PHP Fatal error', $out);
+        $this->assertStringNotContainsString('Not Authorised', $out);
+        $this->assertStringNotContainsString('Method not found', $out);
+        $this->assertStringNotContainsString('No Application Controller found', $out);
+        $this->assertStringNotContainsString('"error"', $out);
+        $this->assertStringNotContainsString('PHP Fatal error', $out);
 
         if ($returnFileLocation) {
-            $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+            $this->assertStringContainsString('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
         } else {
-            $this->assertContains('"name","description","status","reason","number_str","number_int","datetime","relations","container_id","tags","attachments","notes","seq","tags"', $out);
+            $this->assertStringContainsString('"name","description","status","reason","number_str","number_int","datetime","one_to_one","relations","container_id","tags","attachments","notes","seq","tags"', $out);
         }
     }
 
@@ -156,7 +156,7 @@ class Tinebase_Server_HttpTests extends TestCase
             $exportFilenamePath = $nodePath->streamwrapperpath . '/0_'
                 . str_replace([' ', DIRECTORY_SEPARATOR], '', $calendar->name . '.ics');
             $ics = file_get_contents($exportFilenamePath);
-            self::assertContains('Get Up!', $ics);
+            self::assertStringContainsString('Get Up!', $ics);
         }
 
         return $out;
@@ -165,8 +165,8 @@ class Tinebase_Server_HttpTests extends TestCase
     public function testExportEventsDownload()
     {
         $out = $this->testExportEvents(true);
-        self::assertContains('BEGIN:VCALENDAR', $out);
-        self::assertContains('Get Up!', $out);
+        self::assertStringContainsString('BEGIN:VCALENDAR', $out);
+        self::assertStringContainsString('Get Up!', $out);
     }
 
     public function testExportEventsDownloadZip()
@@ -197,8 +197,8 @@ class Tinebase_Server_HttpTests extends TestCase
         $tmpfileContent = file_get_contents($tempfile->path);
         $icsFilename =  str_replace([' ', DIRECTORY_SEPARATOR], '', $calendar->name . '.ics');
         $content = $this->_unzipContent($tmpfileContent, $icsFilename);
-        self::assertContains('BEGIN:VCALENDAR', $content);
-        self::assertContains('Get Down!', $content);
+        self::assertStringContainsString('BEGIN:VCALENDAR', $content);
+        self::assertStringContainsString('Get Down!', $content);
     }
 
     public function testExportEventsDownloadZipSplit()
@@ -222,15 +222,15 @@ class Tinebase_Server_HttpTests extends TestCase
         $tmpfileContent = file_get_contents($tempfile->path);
         $icsFilename =  str_replace([' ', DIRECTORY_SEPARATOR], '', '0_' . $calendar->name . '.ics');
         $content = $this->_unzipContent($tmpfileContent, $icsFilename);
-        self::assertContains('BEGIN:VCALENDAR', $content);
-        self::assertContains('Get ', $content);
-        self::assertContains('Down', $content);
+        self::assertStringContainsString('BEGIN:VCALENDAR', $content);
+        self::assertStringContainsString('Get ', $content);
+        self::assertStringContainsString('Down', $content);
 
         $icsFilename =  str_replace([' ', DIRECTORY_SEPARATOR], '', '1_' . $calendar->name . '.ics');
         $content = $this->_unzipContent($tmpfileContent, $icsFilename);
-        self::assertContains('BEGIN:VCALENDAR', $content);
-        self::assertContains('Get ', $content);
-        self::assertContains('Down', $content);
+        self::assertStringContainsString('BEGIN:VCALENDAR', $content);
+        self::assertStringContainsString('Get ', $content);
+        self::assertStringContainsString('Down', $content);
     }
 
     protected function _testCalendarWithTwoEvents()
@@ -263,7 +263,7 @@ class Tinebase_Server_HttpTests extends TestCase
             ['maxfilesize' => 1] // split after each event!
         );
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}}', $out);
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}}', $out);
     }
 
     public function testExportEventsDownloadReturnFileLocation()
@@ -271,7 +271,7 @@ class Tinebase_Server_HttpTests extends TestCase
         $out = $this->testExportEvents(true, true);
 
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
     }
 
     public function testExportEventsToFilemanagerSharedReturnFileLocation()
@@ -279,7 +279,7 @@ class Tinebase_Server_HttpTests extends TestCase
         $out = $this->testExportEvents(false, true);
 
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}}', $out);
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"fm_node","fm_path":"\/shared\/unittestexport"}}', $out);
     }
 
     public function testExportEventsToFilemanagerPersonalReturnFileLocation()
@@ -288,7 +288,7 @@ class Tinebase_Server_HttpTests extends TestCase
         $out = $this->testExportEvents(false, true, 'cal_default_vcalendar_report', $path);
 
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"fm_node","fm_path":"'
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"fm_node","fm_path":"'
             . str_replace('/', '\/', $path) . '"}}', $out);
     }
 
@@ -297,7 +297,7 @@ class Tinebase_Server_HttpTests extends TestCase
         $out = $this->testExportEvents(true, true, 'cal_default_vcalendar');
 
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
         // check download filename in Tempfile
         if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
             $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
@@ -312,7 +312,7 @@ class Tinebase_Server_HttpTests extends TestCase
         $out = $this->testExportEvents(true, true, 'cal_default_ods');
 
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
         // check download filename in Tempfile
         if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
             $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
@@ -326,7 +326,7 @@ class Tinebase_Server_HttpTests extends TestCase
     {
         $out = $this->_exportInternalContacts();
         $this->assertTrue(!empty($out), 'request should not be empty');
-        $this->assertContains('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
+        $this->assertStringContainsString('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
         // check download filename in Tempfile
         if (preg_match('/"tempfile_id":"([a-z0-9]+)"/', $out, $matches)) {
             $tempfile = Tinebase_TempFile::getInstance()->getTempFile($matches[1]);
@@ -365,8 +365,8 @@ class Tinebase_Server_HttpTests extends TestCase
     public function testExportContactPdf()
     {
         $out = $this->_exportInternalContacts('adb_pdf');
-        self::assertNotContains('Exception', $out);
-        self::assertContains('%PDF-1.4', $out);
+        self::assertStringNotContainsString('Exception', $out);
+        self::assertStringContainsString('%PDF-1.4', $out);
     }
 
     /**
@@ -391,10 +391,10 @@ class Tinebase_Server_HttpTests extends TestCase
         //echo $out;
 
         $this->assertTrue(empty($out), 'request should be empty - no message with this id + part should be found');
-        $this->assertNotContains('Not Authorised', $out);
-        $this->assertNotContains('Method not found', $out);
-        $this->assertNotContains('No Application Controller found', $out);
-        $this->assertNotContains('"error"', $out);
-        $this->assertNotContains('PHP Fatal error', $out);
+        $this->assertStringNotContainsString('Not Authorised', $out);
+        $this->assertStringNotContainsString('Method not found', $out);
+        $this->assertStringNotContainsString('No Application Controller found', $out);
+        $this->assertStringNotContainsString('"error"', $out);
+        $this->assertStringNotContainsString('PHP Fatal error', $out);
     }
 }

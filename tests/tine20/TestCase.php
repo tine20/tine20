@@ -20,7 +20,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestHelper.php';
  *
  * TODO separation of concerns: split into multiple classes/traits with cleanup / fixture / ... functionality
  */
-abstract class TestCase extends PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * transaction id if test is wrapped in an transaction
@@ -113,7 +113,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * set up tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         foreach ($this->_customfieldIdsToDelete as $cfd) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
@@ -137,7 +137,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
             $this->_deleteUsers();
@@ -205,7 +205,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * tear down after test class
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         Tinebase_Core::getDbProfiling();
     }
