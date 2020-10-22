@@ -728,6 +728,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_SKIP_IMAP_QUOTA = 'skipImapQuota';
 
     const TINE20_URL = 'tine20URL';
+    const TINE20_URL_USEFORJSCLIENT = 'tine20URLUseForJSClient';
 
     const FILTER_SYNC_TOKEN = 'filterSyncToken';
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL = 'cleanUpMaxTotal';
@@ -2528,7 +2529,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'               => array(),
         ),
-        self::TINE20_URL  => array(
+        self::TINE20_URL => [
             //_('Tine20 URL')
             'label' => 'Tine20 URL',
             //_('The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.')
@@ -2538,7 +2539,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => true,
             'setByAdminModule' => true,
             'setBySetupModule' => true,
-        ),
+        ],
+        self::TINE20_URL_USEFORJSCLIENT => [
+            //_('Tine20 URL Used For JS Client')
+            self::LABEL => 'Tine20 URL Used For JS Client',
+            //_('see https://github.com/tine20/tine20/issues/7218')
+            self::DESCRIPTION => 'see https://github.com/tine20/tine20/issues/7218',
+            self::TYPE                  => self::TYPE_BOOL,
+            self::DEFAULT_STR           => true,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::CREDENTIAL_CACHE_SHARED_KEY => [
             //_('shared credential cache cryptographic key')
             self::LABEL                 => 'shared credential cache cryptographic key',
