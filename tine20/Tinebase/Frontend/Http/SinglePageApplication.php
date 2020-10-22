@@ -5,9 +5,8 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
 class Tinebase_Frontend_Http_SinglePageApplication {
 
     /**
@@ -17,7 +16,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      * @param string        $template
      * @return \Zend\Diactoros\Response
      */
-    public static function getClientHTML($entryPoint, $template='Tinebase/views/singlePageApplication.html.twig', $context = []) {
+    public static function getClientHTML($entryPoint, $template='Tinebase/views/singlePageApplication.html.twig', $context = [])
+    {
         $entryPoints = is_array($entryPoint) ? $entryPoint : [$entryPoint];
 
         $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation('Tinebase'));
@@ -29,7 +29,10 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 $file .= (strpos($file, '?') ? '&' : '?') . 'version=' . Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
             }
 
-            $baseUrl = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NO_PROTO, false);
+            $baseUrl = Tinebase_Core::getUrl(
+                Tinebase_Core::GET_URL_NO_PROTO,
+                Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL_USEFORJSCLIENT)
+            );
 
             if (TINE20_BUILDTYPE == 'DEBUG') {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
