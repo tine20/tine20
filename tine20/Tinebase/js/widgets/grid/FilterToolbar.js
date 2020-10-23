@@ -507,7 +507,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
 
         for (var cls in dim) {
             this.el.select('.' + cls).setWidth(dim[cls]);
-            this.el.select('.' + cls + ' div[class^=x-form-field-wrap] *[id^=ext-comp-]').each(function(el) {
+            this.el.select('.' + cls + ' div[class^=x-form-field-wrap] *').each(function(el) {
                 var cmp = Ext.getCmp(el.id);
                 if (cmp && !cmp.isInnerFTBCmp) {
                     var width = dim[cls] + (cmp.FTBWidthCorrection || 0);

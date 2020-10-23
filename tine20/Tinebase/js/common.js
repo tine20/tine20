@@ -804,33 +804,6 @@ Tine.Tinebase.common = {
     },
 
     /**
-     * resolves an appName to applicationInstance or vice versa
-     * returns applicationinstance if getInstance is true
-     * @param {String/Tine.Tinebase.Application}    app 
-     * @param {Boolean}                             getInstance
-     */
-    resolveApp: function(app, getInstance) {
-        if(getInstance) {
-            return Ext.isObject(app) ? app : Tinebase.appMgr.get(app);
-        }
-        return Ext.isObject(app) ? app.name : app;
-    },
-    
-    /**
-     * resolves model to modelName or returns recordClass if an application was given
-     * @param {String/Tine.Tinebase.data.Record}    model
-     * @param {String/Tine.Tinebase.Application}    app
-     */
-    resolveModel: function(model, app) {
-        var modelName = Ext.isObject(model) ? model.getMeta('modelName') : model;
-        if(app) {
-            var appName = this.resolveApp(app);
-            return Tine[appName].Model[modelName];
-        }
-        return modelName;
-    },
-
-    /**
      * Confirm application restart
      *
      * @param Boolean closewindow
