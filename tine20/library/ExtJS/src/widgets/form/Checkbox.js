@@ -146,6 +146,9 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
     onClick : function(){
         if(this.el.dom.checked != this.checked){
             this.setValue(this.el.dom.checked);
+            if (this.blurOnChange) {
+                this.el.blur();
+            }
         }
     },
 

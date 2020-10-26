@@ -119,8 +119,10 @@ Tine.widgets.form.FieldManager = function() {
                         field.xtype = 'checkbox';
                         field.boxLabel = field.fieldLabel;
                         field.hideLabel = true;
+                        field.blurOnChange = true;
                     } else {
                         field.xtype = 'booleancombo';
+                        field.blurOnSelect = true;
                     }
                     break;
                 case 'integer':
