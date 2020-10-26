@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "e41cdea011170938c1badd037e450759",
@@ -811,12 +811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "15258fd24ee4c3da2e4681f41ce9404c74f8b24d"
+                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/15258fd24ee4c3da2e4681f41ce9404c74f8b24d",
-                "reference": "15258fd24ee4c3da2e4681f41ce9404c74f8b24d",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/2512f595e0f4c5235e99ef97603a8db902b3cc5f",
+                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f",
                 "shasum": ""
             },
             "require": {
@@ -853,7 +853,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-07-06T18:36:33+00:00"
+            "time": "2020-10-01T00:19:10+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -1151,12 +1151,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "4d8a7dde31b3e39b6b76189b94aa3badbbf67da5"
+                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4d8a7dde31b3e39b6b76189b94aa3badbbf67da5",
-                "reference": "4d8a7dde31b3e39b6b76189b94aa3badbbf67da5",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/9f15504105640b03277d7174b62fbfc0f5e608ab",
+                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab",
                 "shasum": ""
             },
             "require": {
@@ -1180,7 +1180,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-06-19T13:27:02+00:00"
+            "time": "2020-08-27T16:47:41+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1384,7 +1384,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3126,20 +3126,6 @@
                 "interfaces",
                 "interoperability",
                 "standards"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-07-06T13:19:58+00:00"
         },
@@ -5860,6 +5846,5 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
