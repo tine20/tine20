@@ -87,7 +87,8 @@ module.exports = {
                 options: {
                     plugins: [
                         "@babel/plugin-transform-runtime",
-                        "@babel/plugin-syntax-dynamic-import"
+                        "@babel/plugin-syntax-dynamic-import",
+                        "@babel/plugin-proposal-class-properties"
                     ],
                     presets: [
                         ["@babel/preset-env"/*, { "modules": false }*/]
