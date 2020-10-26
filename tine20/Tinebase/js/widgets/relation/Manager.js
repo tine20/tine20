@@ -81,7 +81,11 @@ Tine.widgets.relation.Manager = function() {
 
             // add generic relations when no config exists
             Tine.Tinebase.data.RecordMgr.each(function(rec) {
-                if (Tine.Tinebase.common.hasRight('run', rec.getMeta('appName')) && (ignoreApplications.indexOf(rec.getMeta('appName')) == -1) && (rec.getFieldNames().indexOf('relations') > -1)) {
+                if (Tine.Tinebase.common.hasRight('run', rec.getMeta('appName')) 
+                    && (ignoreApplications.indexOf(rec.getMeta('appName')) == -1) 
+                    && (rec.getFieldNames().indexOf('relations') > -1)
+                    && rec.getRecordName()
+                ) {
                     items[key].push({
                         ownModel: recordClass.getMeta('recordName'),
                         relatedApp: rec.getMeta('appName'),
@@ -102,9 +106,8 @@ Tine.widgets.relation.Manager = function() {
          * @return {String}
          */
         getKey: function(appName, modelName) {
-            var appName = Tine.Tinebase.common.resolveApp(appName);
-            var modelName = Tine.Tinebase.common.resolveModel(modelName);
-            return appName + modelName;
+            const recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName);
+            return recordClass ? recordClass.getMeta('appName') + recordClass.getMeta('modelName') : '';
         }
     };
 

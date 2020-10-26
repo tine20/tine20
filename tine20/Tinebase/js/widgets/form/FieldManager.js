@@ -74,7 +74,7 @@ Tine.widgets.form.FieldManager = function() {
             
             var field = {},
                 fieldType = fieldDefinition.type || 'textfield',
-                app = Tine.Tinebase.appMgr.get(fieldDefinition.appName),
+                app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || fieldDefinition.appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
             if (fieldType === 'virtual' && fieldDefinition.config) {

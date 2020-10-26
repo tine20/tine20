@@ -482,6 +482,9 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     },
     
     get: function(appName, modelName) {
+        if (! appName && _.isFunction(_.get(modelName, 'getMeta'))) {
+            return modelName;
+        }
         if (! appName) return;
         if (Ext.isFunction(appName.getMeta)) {
             return appName;

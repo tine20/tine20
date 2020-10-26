@@ -128,7 +128,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 if (Tine.Tinebase.common.hasRight('run', relation.relatedApp)) {
                     // TODO: leave label as it is?
                     var label = relation.text.replace(/ \(.+\)/,'');
-                    operators.push({operator: {linkType: 'relation', foreignRecordClass: Tine.Tinebase.common.resolveModel(relation.relatedModel, relation.relatedApp)}, label: label});
+                    operators.push({operator: {linkType: 'relation', foreignRecordClass: Tine.Tinebase.data.RecordMgr.get(relation.relatedApp, relation.relatedModel)}, label: label});
                 }
             }, this);
         }
@@ -221,7 +221,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         }
         
         this.ftb.setActiveSheet(filter.toolbar);
-        filter.formFields.value.setText((this.editDefinitionText));
+        filter.formFields.value.setText(window.i18n._(this.editDefinitionText));
     },
     
     /**
@@ -328,7 +328,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 
                 // change button text
                 if (filter.formFields.value && Ext.isFunction(filter.formFields.value.setText)) {
-                    filter.formFields.value.setText(i18n._(this.editDefinitionText));
+                    filter.formFields.value.setText(window.i18n._(this.editDefinitionText));
                 }
             }
             
@@ -619,6 +619,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     if (!filter.formFields.value) {
                         value = new Ext.Button({
                             text: i18n._(this.startDefinitionText),
+                            width: el.getWidth() -10,
                             filter: filter,
                             renderTo: el,
                             handler: this.onDefineRelatedRecord.createDelegate(this, [filter]),
@@ -630,7 +631,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
                         // change text if setRelatedRecordValue had child filters
                         if (filter.toolbar) {
-                            value.setText((this.editDefinitionText));
+                            value.setText(window.i18n._(this.editDefinitionText));
                         }
 
                     } else {
