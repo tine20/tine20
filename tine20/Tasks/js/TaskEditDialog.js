@@ -186,7 +186,6 @@ Ext.namespace('Tine.Tasks');
                         listeners: {render: function(field){field.focus(false, 250);}},
                         allowBlank: false
                     }], [new Ext.ux.form.DateTimeField({
-                            allowBlank: true,
                             defaultTime: '12:00',
                             fieldLabel: this.app.i18n._('Due date'),
                             name: 'due'
