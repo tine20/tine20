@@ -523,6 +523,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
                             method_exists($controller, 'get')) {
                         if ($oldData) {
+                            if (is_array($oldData)) $oldData = isset($oldData['id']) ? $oldData['id'] : '';
                             try {
                                 $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
                             } catch (Tinebase_Exception_NotFound $tenf) {
@@ -534,6 +535,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             $oldDataString = '';
                         }
                         if ($value) {
+                            if (is_array($value)) $value = isset($value['id']) ? $value['id'] : '';
                             try {
                                 $valueString = $controller->get($value, null, false, true)->getTitle();
                             } catch(Tinebase_Exception_NotFound $e) {

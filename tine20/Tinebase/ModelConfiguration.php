@@ -1622,6 +1622,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if ($fieldDef[self::TYPE] == 'record') {
                     $fieldDef['config']['length'] = 40;
                     $this->_recordFields[$fieldKey] = $fieldDef;
+                    if (!isset($fieldDef[self::DOCTRINE_IGNORE]) || !$fieldDef[self::DOCTRINE_IGNORE]) {
+                        $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_Record()];
+                    }
                 } else {
                     $this->_recordsFields[$fieldKey] = $fieldDef;
                     if (isset($fieldDef[self::CONFIG][self::STORAGE]) && self::TYPE_JSON === $fieldDef[self::CONFIG][self::STORAGE] &&
