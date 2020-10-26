@@ -26,7 +26,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     timeEditable: true,
     markedInvalid: false,
     minWidth: 160,
-
+    allowBlank: true,
+    
     /**
      * @cfg {Object} config to be applied to date field 
      */
