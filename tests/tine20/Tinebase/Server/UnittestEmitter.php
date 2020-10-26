@@ -9,7 +9,7 @@
  */
 
 use \Psr\Http\Message\ResponseInterface;
-use \Zend\Diactoros\Response\EmitterInterface;
+use \Zend\HttpHandlerRunner\Emitter\EmitterInterface;
 
 /**
  * Test helper Emitter
@@ -39,8 +39,9 @@ class Tinebase_Server_UnittestEmitter implements EmitterInterface
      *
      * @param ResponseInterface $response
      */
-    public function emit(ResponseInterface $response)
+    public function emit(ResponseInterface $response): bool
     {
         $this->response = $response;
+        return true;
     }
 }

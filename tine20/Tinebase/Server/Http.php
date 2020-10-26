@@ -108,7 +108,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             
             $response = $server->handle($_REQUEST);
             if ($response instanceof \Zend\Diactoros\Response) {
-                $emitter = new Zend\Diactoros\Response\SapiEmitter();
+                $emitter = new \Zend\HttpHandlerRunner\Emitter\SapiEmitter();
                 $emitter->emit($response);
             }
             

@@ -360,9 +360,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function initUser(Tinebase_Model_FullUser $_user, $fixCookieHeader = true)
     {
         Tinebase_Core::set(Tinebase_Core::USER, $_user);
-        $ravenClient = Tinebase_Core::getSentry();
-        if ($ravenClient) {
-            $ravenClient->tags['user'] = $_user->accountLoginName;
+        if (Tinebase_Core::isRegistered('SENTRY')) {
+            Sentry\configureScope(function (Sentry\State\Scope $scope): void {
+                $scope->setTag('user', $_user->accountLoginName);
+            });
         }
         
         if (Tinebase_Session_Abstract::getSessionEnabled()) {
