@@ -44,7 +44,7 @@ Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
     
     initComponent: function(){
         this.recordClass = Tine.Filemanager.Model.Node;
-        this.recordProxy = Tine.Filemanager.fileRecordBackend;
+        this.recordProxy = Tine.Filemanager.nodeBackend;
 
         if (null === this.app) {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');

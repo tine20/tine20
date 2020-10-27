@@ -19,17 +19,13 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
      */
     app: null,
 
-    /**
-     * @property {Tine.Filemanager.Model.Node} recordClass
-     */
-    recordClass: Tine.Filemanager.Model.Node,
-
     requiredGrant: 'editGrant',
     layout: 'fit',
     border: false,
 
     initComponent: function() {
         this.app = this.app || Tine.Tinebase.appMgr.get('Filemanager');
+        this.recordClass = Tine.Filemanager.Model.Node;
         this.title = this.title || this.app.i18n._('Grants');
 
         this.editDialog.on('load', this.onRecordLoad, this);

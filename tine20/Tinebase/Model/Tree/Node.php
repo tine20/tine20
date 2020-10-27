@@ -185,7 +185,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             ],
             'islink'                        => [
                 'type'                          => self::TYPE_BOOLEAN,
-                'validators'                    => [Zend_Filter_Input::DEFAULT_VALUE => 0],
+                'validators'                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 0
+                ],
                 self::DEFAULT_VAL               => 0,
                 self::UNSIGNED                  => true,
             ],

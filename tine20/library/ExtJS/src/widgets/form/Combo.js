@@ -215,7 +215,7 @@ Ext.form.ComboBox = Ext.extend(Ext.form.TriggerField, {
      * </ul></div>
      * <p>See also <code>{@link #queryParam}</code>.</p>
      */
-    triggerAction : 'query',
+    triggerAction : 'all',
     /**
      * @cfg {Number} minChars The minimum number of characters the user must type before autocomplete and
      * {@link #typeAhead} activate (defaults to <tt>4</tt> if <tt>{@link #mode} = 'remote'</tt> or <tt>0</tt> if
@@ -480,6 +480,26 @@ var combo = new Ext.form.ComboBox({
             if(!Ext.isDefined(this.initialConfig.minChars)){
                 this.minChars = 0;
             }
+        }
+
+        if (this.expandOnFocus) {
+            this.lazyInit = false;
+            this.on('focus', function(){
+                this.onTriggerClick();
+            });
+        }
+
+        // NOTE: we don't blur the element in the UI as it looks ugly to loose focus class
+        //       but we trigger blur event chain
+        if (this.blurOnSelect){
+            this.on('select', function(){
+                _.delay(() => {
+                    const focusClass = this.focusClass;
+                    this.focusClass = '';
+                    Ext.form.TriggerField.superclass.onBlur.call(this);
+                    this.focusClass = focusClass;
+                }, 100)
+            }, this);
         }
     },
 

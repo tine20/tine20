@@ -1,0 +1,22 @@
+.x-form-trigger.x-form-trigger-plugin {
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    background-size: 11px;
+    width: 17px;
+    height: 16px;
+    position: absolute;
+    right: 0px;
+    top: 5px;
+}
+
+.x-form-field-trigger-wrap + .x-form-trigger.x-form-trigger-plugin {
+    right: 17px;
+}
+
+.x-form-field-twin-trigger-wrap + .x-form-trigger.x-form-trigger-plugin {
+    right: 36px;
+}
+
+.x-item-disabled + .x-form-trigger.x-form-trigger-plugin {
+    opacity: .6;
+}

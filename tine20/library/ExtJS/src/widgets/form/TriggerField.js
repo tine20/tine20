@@ -226,6 +226,7 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
     },
 
     // private
+    // clicking in list would blur field -> see minicBlur
     onBlur : Ext.emptyFn,
 
     // private
@@ -349,6 +350,11 @@ Ext.form.TwinTriggerField = Ext.extend(Ext.form.TriggerField, {
         this.triggers = ts.elements;
     },
 
+    onRender : function(ct, position){
+        Ext.form.TwinTriggerField.superclass.onRender.apply(this, arguments);
+        this.wrap.addClass('x-form-field-twin-trigger-wrap');
+    },
+    
     getTriggerWidth: function(){
         var tw = 0;
         Ext.each(this.triggers, function(t, index){

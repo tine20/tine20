@@ -22,8 +22,6 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
     filterMode : 'filterToolbar',
 
-    recordClass : Tine.Filemanager.Model.Node,
-
     allowMultiSelection : false,
 
     ddGroup: 'fileDDGroup',
@@ -35,6 +33,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     hasGrid: true,
 
     initComponent: function() {
+        this.recordClass= Tine.Filemanager.Model.Node;
         this.on('nodedragover', this.onNodeDragOver, this);
 
         if (! this.app) {
@@ -246,7 +245,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         var nodes = dropEvent.data.nodes,
             target = dropEvent.target;
 
-        Tine[this.appName].fileRecordBackend.copyNodes(nodes, target, !(dropEvent.rawEvent.ctrlKey  || dropEvent.rawEvent.altKey));
+        Tine[this.appName].nodeBackend.copyNodes(nodes, target, !(dropEvent.rawEvent.ctrlKey  || dropEvent.rawEvent.altKey));
 
         dropEvent.dropStatus = true;
         return true;
@@ -609,7 +608,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 tempFileIds: [],
                 forceOverwrite: false
         };
-        Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, addToGridStore);
+        Tine.Filemanager.nodeBackend.createNodes(params, uploadKeyArray, addToGridStore);
     },
 
 

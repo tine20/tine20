@@ -17,18 +17,7 @@ require('Tinebase/js/widgets/container/GrantsGrid');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Tree_NodeArray, {
-    appName: 'Filemanager',
-    modelName: 'Node',
-    idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('File', 'Files', n); gettext('File');
-    recordName: 'File',
-    recordsName: 'Files',
-    // ngettext('Folder', 'Folders', n); gettext('Folder');
-    containerName: 'Folder',
-    containersName: 'Folders',
-
+Tine.Filemanager.Model.NodeMixin = {
     /**
      * virtual nodes are part of the tree but don't exists / are editable
      *
@@ -50,24 +39,71 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
                 (this.get('type') === 'folder' ? '/' : '');
 
         return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#/Filemanager/showNode', encodedPath].join('/');
+    },
+    
+    statics: {
+        getExtension: function(filename) {
+            return filename.split('.').pop();
+        },
+
+        registerStyleProvider: function(provider) {
+            const ns = Tine.Filemanager.Model.Node;
+            ns._styleProviders = ns._styleProviders || [];
+            ns._styleProviders.push(provider);
+        },
+
+        getStyles: function(node) {
+            const ns = Tine.Filemanager.Model.Node;
+            return _.uniq(_.compact(_.map(ns._styleProviders || [], (styleProvider) => {
+                return styleProvider(node);
+            })));
+        },
+
+        createFromFile: function(file) {
+            return new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
+                name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
+                size: file.size || 0,
+                contenttype: file.type ? file.type : file.fileType, // missing if safari and chrome 
+            }));
+        },
+        
+        getDefaultData: function (defaults) {
+            return _.assign({
+                type: 'file',
+                size: 0,
+                creation_time: new Date(),
+                created_by: Tine.Tinebase.registry.get('currentAccount'),
+                revision: 0,
+                revision_size: 0,
+                isIndexed: false
+            }, defaults);
+        },
+
+        /**
+         * get filtermodel of Node records
+         *
+         * @namespace Tine.Filemanager.Model
+         * @static
+         * @return {Object} filterModel definition
+         */
+        getFilterModel: function() {
+            var app = Tine.Tinebase.appMgr.get('Filemanager');
+
+            return [
+                {label : i18n._('Quick Search'), field : 'query', operators : [ 'contains' ]},
+//        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
+                {label: app.i18n._('Content Type'), field: 'contenttype'},
+                {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
+                {label: app.i18n._('Description'), field: 'description', valueType: 'fulltext'},
+                {filtertype : 'tine.filemanager.pathfiltermodel', app : app},
+                {filtertype : 'tinebase.tag', app : app},
+                {label : app.i18n._('Name'), field : 'name', operators : [ 'contains' ]}
+            ].concat(Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase') ? [
+                {label : app.i18n._('File Contents'), field : 'content', operators : [ 'wordstartswith' ]},
+                {label : i18n._('Indexed'), field : 'isIndexed', valueType: 'bool'}
+            ] : []);
+        }
     }
-});
-
-Tine.Filemanager.Model.Node.getExtension = function(filename) {
-    return filename.split('.').pop();
-};
-
-Tine.Filemanager.Model.Node.registerStyleProvider = function(provider) {
-    const ns = Tine.Filemanager.Model.Node;
-    ns._styleProviders = ns._styleProviders || [];
-    ns._styleProviders.push(provider);
-};
-
-Tine.Filemanager.Model.Node.getStyles = function(node) {
-    const ns = Tine.Filemanager.Model.Node;
-    return _.uniq(_.compact(_.map(ns._styleProviders || [], (styleProvider) => {
-        return styleProvider(node);
-    })));
 };
 
 // register grants for nodes
@@ -86,31 +122,6 @@ Ext.override(Tine.widgets.container.GrantsGrid, {
     publishGrantTitle: 'Publish', // i18n._('Publish')
     publishGrantDescription: 'The grant to create anonymous download links for files', // i18n._('The grant to create anonymous download links for files')
 });
-
-/**
- * create Node from File
- * 
- * @param {File} file
- */
-Tine.Filemanager.Model.Node.createFromFile = function(file) {
-    return new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
-        name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
-        size: file.size || 0,
-        contenttype: file.type ? file.type : file.fileType, // missing if safari and chrome 
-    }));
-};
-
-Tine.Filemanager.Model.Node.getDefaultData = function (defaults) {
-    return _.assign({
-        type: 'file',
-        size: 0,
-        creation_time: new Date(),
-        created_by: Tine.Tinebase.registry.get('currentAccount'),
-        revision: 0,
-        revision_size: 0,
-        isIndexed: false
-    }, defaults);
-};
 
 // NOTE: atm the activity records are stored as Tinebase_Model_Tree_Node records
 Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision', function(revision, metadata, record) {
@@ -131,15 +142,7 @@ Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision', 
     }
 });
 
-
-/**
- * default ExampleRecord backend
- */
-Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, {
-    appName: 'Filemanager',
-    modelName: 'Node',
-    recordClass: Tine.Filemanager.Model.Node,
-    
+Tine.Filemanager.nodeBackendMixin = {
     /**
      * creating folder
      * 
@@ -370,7 +373,7 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
                 app.getMainScreen().getWestPanel().setDisabled(false);
                 app.getMainScreen().getNorthPanel().setDisabled(false);
                 
-                Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
+                Tine.Filemanager.nodeBackend.handleRequestException(nodeData.data, request);
             }
         });
     },
@@ -413,7 +416,7 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
                         gridStore.add(nodeRecord);
                     }
                     
-                    fileRecord = Tine.Filemanager.fileRecordBackend.updateNodeRecord(nodeData[i], fileRecord);
+                    fileRecord = Tine.Filemanager.nodeBackend.updateNodeRecord(nodeData[i], fileRecord);
                     nodeRecord.fileRecord = fileRecord;
                 }
             }
@@ -427,7 +430,7 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
 
             nodeData.data.uploadKeyArray = this.uploadKeyArray;
             nodeData.data.addToGridStore = this.addToGridStore;
-            Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
+            Tine.Filemanager.nodeBackend.handleRequestException(nodeData.data, request);
 
         }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});
 
@@ -516,7 +519,7 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
     /**
      * copies uploaded temporary file to target location
      *
-     * @param proxy  {Tine.Filemanager.fileRecordBackend}
+     * @param proxy  {Tine.Filemanager.nodeBackend}
      * @param upload  {Ext.ux.file.Upload}
      * @param file  {Ext.ux.file.Upload.file}
      */
@@ -565,33 +568,11 @@ Tine.Filemanager.FileRecordBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, 
         }
         
         return nodeRecord;
-    }
-});
-Tine.Filemanager.fileRecordBackend = new Tine.Filemanager.FileRecordBackend({});
+    },
+    
+    statics: {
 
-/**
- * get filtermodel of Node records
- * 
- * @namespace Tine.Filemanager.Model
- * @static
- * @return {Object} filterModel definition
- */ 
-Tine.Filemanager.Model.Node.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('Filemanager');
-       
-    return [
-        {label : i18n._('Quick Search'), field : 'query', operators : [ 'contains' ]},
-//        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
-        {label: app.i18n._('Content Type'), field: 'contenttype'},
-        {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
-        {label: app.i18n._('Description'), field: 'description', valueType: 'fulltext'},
-        {filtertype : 'tine.filemanager.pathfiltermodel', app : app},
-        {filtertype : 'tinebase.tag', app : app},
-        {label : app.i18n._('Name'), field : 'name', operators : [ 'contains' ]}
-    ].concat(Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase') ? [
-        {label : app.i18n._('File Contents'), field : 'content', operators : [ 'wordstartswith' ]},
-        {label : i18n._('Indexed'), field : 'isIndexed', valueType: 'bool'}
-    ] : []);
+    }
 };
 
 /**

@@ -64,7 +64,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
             if (fieldDefinition.type === 'virtual') {
-                fieldDefinition = fieldDefinition.config;
+                fieldDefinition = fieldDefinition.config || {};;
             }
 
             // don't show multiple record fields

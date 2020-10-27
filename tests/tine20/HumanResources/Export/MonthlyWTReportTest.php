@@ -65,7 +65,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
                     'name' => 'monthlyWTReport'
                 ]))->getFirstRecord()->getId()
         ]);
-        $obData = ob_get_clean(); ob_end_clean();
+        $obData = ob_get_clean();
 
         $this->assertGreaterThan(4000, strlen($obData));
     }

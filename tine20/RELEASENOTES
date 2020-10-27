@@ -3,7 +3,79 @@ TINE 2.0 RELEASENOTES
 =====================
                     
   Release:     Amon (2020.11)
-  Last change: 2020-09-09
+  Last change: 2020-10-27
 
-#GENERAL CHANGES (Administrative)
----
+# GENERAL CHANGES (Administrative)
+
+## MySQL 8 Support
+
+## PHP 7.4 Support
+
+Support PHP < 7.2 has been dropped.
+
+## Clear Cache (CLI)
+
+The Tinebase.clearCache function has been removed - please use this command now:
+
+    $ setup.php --clear_cache [-v]
+
+# GENERAL CHANGES (User Interface)
+
+## Minor Layout Changes
+
+- Toolbar background color
+- Application Tabs background colors
+
+## Inline Editor
+
+For example for XML in Import/Export-Definitions Editor.
+
+## Filemanager Folder Relations
+
+# Admin
+
+## Import/Export-Definitions Editor
+
+## DB-Logger
+
+# Adressbook
+
+## VCARD Exports
+
+# Crm
+
+## Notification-Features
+
+More configuration for Notifications.
+
+# Calendar
+
+## Notification-Features
+
+Configuration for Muting Notifications.
+
+## Customizable Calendar Colors
+
+## Configuration for Week View Days
+
+- define visible week days
+
+## VCALENDAR/ICS Exports
+
+- Multiple Calendars at once
+- Save Export in Filemanager (File Location)
+- ICS Report export contains ALL events of a calendar
+
+# Felamimail
+
+## Multiple Signatures
+
+## Auto-Save as Draft
+
+## Show Total Message Count Of Draft Folder
+
+# Human Resources
+
+## FreeTime Planning
+
+

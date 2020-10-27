@@ -135,7 +135,7 @@ Tine.Filemanager.nodeActions.actionUpdater = function(action, grants, records, i
 //     handler: function() {
 //         var record = this.initialConfig.selections[0];
 //         // arg - does not trigger tree children reload!
-//         Tine.Filemanager.fileRecordBackend.loadRecord(record);
+//         Tine.Filemanager.nodeBackend.loadRecord(record);
 //     }
 // };
 
@@ -169,7 +169,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
             
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
                 return new Promise((resolve, reject) => {
-                    Tine.Filemanager.fileRecordBackend.createFolder(currentPath + '/' + localRecord.get('name'), {
+                    Tine.Filemanager.nodeBackend.createFolder(currentPath + '/' + localRecord.get('name'), {
                         success: resolve,
                         failure: reject
                     });
@@ -184,7 +184,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                     }
 
                     var filename = currentPath + '/' + text;
-                    Tine.Filemanager.fileRecordBackend.createFolder(filename);
+                    Tine.Filemanager.nodeBackend.createFolder(filename);
                 }
             }, this);
         }
@@ -279,7 +279,7 @@ Tine.Filemanager.nodeActions.Rename = {
     executor: function(record, text) {
         // @TODO validate filename
         var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
-        Tine.Filemanager.fileRecordBackend.copyNodes([record], targetPath, true);
+        Tine.Filemanager.nodeBackend.copyNodes([record], targetPath, true);
     }
 };
 
@@ -354,7 +354,7 @@ Tine.Filemanager.nodeActions.Delete = {
             scope: this,
             handler: function (button) {
                 if (nodes && button == 'yes') {
-                    Tine.Filemanager.fileRecordBackend.deleteItems(nodes);
+                    Tine.Filemanager.nodeBackend.deleteItems(nodes);
                 }
 
                 for (var i = 0; i < nodes.length; i++) {
@@ -406,7 +406,7 @@ Tine.Filemanager.nodeActions.Move = {
         });
 
         filePickerDialog.on('apply', function(node) {
-            Tine.Filemanager.fileRecordBackend.copyNodes(records, node[0], true);
+            Tine.Filemanager.nodeBackend.copyNodes(records, node[0], true);
         });
 
         filePickerDialog.openWindow();

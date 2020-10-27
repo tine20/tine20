@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
 {
+    const FLD_ADB_RECORD = 'adb_record';
     const FLD_EXAMPLE_RECORD = 'example_record';
     const FLD_NAME = 'name';
 
@@ -56,8 +57,8 @@ class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
         ],
 
         self::ASSOCIATIONS => [
-            // this morphs into a one_to_one since example_record is unique too
             ClassMetadataInfo::MANY_TO_ONE  => [
+                // this morphs into a one_to_one since example_record is unique too
                 self::FLD_EXAMPLE_RECORD        => [
                     self::TARGET_ENTITY             => ExampleApplication_Model_ExampleRecord::class,
                     self::FIELD_NAME                => self::FLD_EXAMPLE_RECORD,
@@ -65,6 +66,16 @@ class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
                         self::NAME                      => self::FLD_EXAMPLE_RECORD,
                         self::REFERENCED_COLUMN_NAME    => 'id',
                         self::ON_DELETE                 => 'CASCADE',
+                    ]],
+                ],
+
+                // this morphs into a one_to_one since adb_record is unique too
+                self::FLD_ADB_RECORD        => [
+                    self::TARGET_ENTITY             => Addressbook_Model_Contact::class,
+                    self::FIELD_NAME                => self::FLD_ADB_RECORD,
+                    self::JOIN_COLUMNS              => [[
+                        self::NAME                      => self::FLD_ADB_RECORD,
+                        self::REFERENCED_COLUMN_NAME    => 'id',
                     ]],
                 ]
             ],
@@ -92,6 +103,18 @@ class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
                     self::APP_NAME                  => ExampleApplication_Config::APP_NAME,
                     self::MODEL_NAME                => ExampleApplication_Model_ExampleRecord::MODEL_NAME_PART,
                     self::IS_DEPENDENT              => true, // TODO do we need this?
+                ]
+            ],
+            self::FLD_ADB_RECORD            => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME                => 'Contact', //Addressbook_Model_Contact::MODEL_NAME_PART,
                 ]
             ],
         ]

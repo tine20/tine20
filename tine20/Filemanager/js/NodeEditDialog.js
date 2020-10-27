@@ -29,8 +29,6 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'NodeEditWindow_',
     appName: 'Filemanager',
-    recordClass: Tine.Filemanager.Model.Node,
-    recordProxy: Tine.Filemanager.fileRecordBackend,
     tbarItems: null,
     evalGrants: true,
     showContainerSelector: false,
@@ -44,6 +42,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Filemanager');
+        this.recordClass = Tine.Filemanager.Model.Node;
+        this.recordProxy = Tine.Filemanager.nodeBackend;
         this.downloadAction = Tine.Filemanager.nodeActionsMgr.get('download');
 
         this.tbarItems = [this.downloadAction];
@@ -126,6 +126,10 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 region: 'center',
                 layout: 'hfit',
                 border: false,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key: ['Filemanager-Node-EditDialog-NodeTab-CenterPanel']
+                }],
                 items: [{
                     xtype: 'fieldset',
                     layout: 'hfit',
