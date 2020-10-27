@@ -439,9 +439,6 @@ class Setup_Controller
 
         /** @var Tinebase_Model_Application $application */
         foreach ($applicationController->getApplications() as $application) {
-            if ($application->status !== Tinebase_Application::ENABLED) {
-                continue;
-            }
 
             $stateUpdates = json_decode($applicationController->getApplicationState($application,
                 Tinebase_Application::STATE_UPDATES, true), true);
@@ -526,7 +523,7 @@ class Setup_Controller
                 Setup_Update_Abstract::FUNCTION_CONST   => 'updateAllImportExportDefinitions',
             ]);
 
-            ksort($updatesByPrio);
+            ksort($updatesByPrio, SORT_NUMERIC);
             $db = Setup_Core::getDb();
             $classes = [self::class => $this];
 
