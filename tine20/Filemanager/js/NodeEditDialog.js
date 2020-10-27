@@ -126,6 +126,10 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 region: 'center',
                 layout: 'hfit',
                 border: false,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key: ['Filemanager-Node-EditDialog-NodeTab-CenterPanel']
+                }],
                 items: [{
                     xtype: 'fieldset',
                     layout: 'hfit',
