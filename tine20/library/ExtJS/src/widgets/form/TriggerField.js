@@ -97,7 +97,7 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
 
     getTriggerWidth: function(){
         var tw = this.trigger.getWidth();
-        if(!this.hideTrigger && tw === 0){
+        if(!(this.hideTrigger || this.readOnly) && tw === 0){
             tw = this.defaultTriggerWidth;
         }
         return tw;
@@ -360,7 +360,7 @@ Ext.form.TwinTriggerField = Ext.extend(Ext.form.TriggerField, {
         Ext.each(this.triggers, function(t, index){
             var triggerIndex = 'Trigger' + (index + 1),
                 w = t.getWidth();
-            if(w === 0 && !this['hidden' + triggerIndex]){
+            if(w === 0 && !t['hidden' + triggerIndex]){
                 tw += this.defaultTriggerWidth;
             }else{
                 tw += w;
