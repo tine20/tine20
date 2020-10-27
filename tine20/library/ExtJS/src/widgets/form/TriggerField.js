@@ -226,6 +226,7 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
     },
 
     // private
+    // clicking in list would blur field -> see minicBlur
     onBlur : Ext.emptyFn,
 
     // private
