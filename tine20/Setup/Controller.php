@@ -437,6 +437,9 @@ class Setup_Controller
         $updatesByPrio = [];
         $maxMajorV = Tinebase_Config::TINEBASE_VERSION;
 
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Checking for updates up to major version: ' . $maxMajorV);
+
         /** @var Tinebase_Model_Application $application */
         foreach ($applicationController->getApplications() as $application) {
 
@@ -472,6 +475,9 @@ class Setup_Controller
                 }
             }
         }
+
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got updates: ' . print_r($updatesByPrio, true));
 
         return $updatesByPrio;
     }
