@@ -1291,6 +1291,17 @@ class Addressbook_JsonTest extends TestCase
         $klaus = $this->_tagImportHelper('discard');
         $this->assertEquals(2, count($klaus['tags']), 'klaus should have both tags: ' . print_r($klaus['tags'], TRUE));
     }
+
+    public function testQueryFilterReturnedFromSrv()
+    {
+        $result = $this->_uit->searchContacts(json_decode('[{"condition":"OR","filters":[{"field":"foreignRecord","operator":"AND","value":{"appName":"Addressbook","modelName":"Contact","linkType":"relation","filters":[{"field":"foreignRecord","operator":"AND","value":{"appName":"Addressbook","modelName":"Contact","linkType":"relation","filters":[{"field":"query","operator":"contains","value":"adf","id":"ext-record-206"}]},"id":"ext-record-110"}]},"id":"ext-record-91"}],"id":"FilterPanel"},{"field":"query","operator":"contains","value":"","id":"quickFilter"}]', true), []);
+
+        $this->assertArrayHasKey('filter', $result);
+        $filters = $result['filter'][0]['filters'][0]['value']['filters'][0]['value']['filters'];
+        // make sure the query filter is not getting expanded
+        $count = count($filters);
+        $this->assertTrue(2 <= $count && 3 >= $count, '2019.11 should find 2, 2020.11+ should find 3 filters, found: ' . $count);
+    }
     
     /**
      * testImportMergeTheirsWithTag
