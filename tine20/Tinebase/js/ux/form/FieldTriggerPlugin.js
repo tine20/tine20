@@ -20,7 +20,9 @@ class FieldTriggerPlugin {
         this.field = field
 
         await field.afterIsRendered()
-        this.#trigger = field.el.parent('.x-form-element').createChild(this.triggerConfig ||
+        const wrap = field.el.parent('.x-form-element') ||
+            field.el.parent('.x-grid-editor')
+        this.#trigger = wrap.createChild(this.triggerConfig ||
             {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin " + this.triggerClass})
 
         field.mon(this.#trigger, 'click', this.onTriggerClick, this, {preventDefault:true});
