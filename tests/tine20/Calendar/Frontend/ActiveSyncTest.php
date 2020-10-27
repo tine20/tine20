@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -464,10 +464,12 @@ Zeile 3</AirSyncBase:Data>
     }
 
     /**
-     * (non-PHPdoc)
-     * @see ActiveSync_TestCase::testCreateEntry()
+     * @param null|Syncroton_Model_Folder $syncrotonFolder
+     * @param null|string $xmlInput
+     * @param string $assertSubject
+     * @return array
      */
-    public function testCreateEntry($syncrotonFolder = null)
+    public function testCreateEntry($syncrotonFolder = null, $xmlInput = null, $assertSubject = 'Repeat')
     {
         if ($syncrotonFolder === null) {
             $syncrotonFolder = $this->testCreateFolder();
@@ -477,7 +479,8 @@ Zeile 3</AirSyncBase:Data>
         
         $now = Tinebase_DateTime::now();
         $thisYear = $now->format('Y');
-        $xmlString = preg_replace('/2012/', $thisYear, $this->_testXMLInput);
+        $xmlString = $xmlInput ? $xmlInput : $this->_testXMLInput;
+        $xmlString = preg_replace('/2012/', $thisYear, $xmlString);
         $xml = new SimpleXMLElement($xmlString);
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
@@ -487,7 +490,7 @@ Zeile 3</AirSyncBase:Data>
         
         $this->assertEquals(0,         $syncrotonEvent->allDayEvent, 'alldayEvent');
         $this->assertEquals(2,         $syncrotonEvent->busyStatus);
-        $this->assertEquals('Repeat',  $syncrotonEvent->subject);
+        $this->assertEquals($assertSubject,     $syncrotonEvent->subject);
         $this->assertEquals(15,        $syncrotonEvent->reminder);
         $this->assertEquals(2,         $syncrotonEvent->sensitivity);
         $this->assertTrue($syncrotonEvent->endTime instanceof DateTime);
@@ -512,7 +515,7 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(2, count($syncrotonEvent->exceptions));
         $this->assertTrue($syncrotonEvent->exceptions[0] instanceof Syncroton_Model_EventException);
         $this->assertFalse(isset($syncrotonEvent->exceptions[0]->deleted), 'exception deleted with value of 0 should not be set');
-        $this->assertEquals('Repeat mal anders', $syncrotonEvent->exceptions[0]->subject);
+        $this->assertEquals($assertSubject . ' mal anders', $syncrotonEvent->exceptions[0]->subject);
         $this->assertEquals($thisYear . '1125T130000Z', $syncrotonEvent->exceptions[0]->exceptionStartTime->format('Ymd\THis\Z'));
         $this->assertEquals($thisYear . '1125T170000Z', $syncrotonEvent->exceptions[0]->endTime->format('Ymd\THis\Z'));
         $this->assertEquals($thisYear . '1125T140000Z', $syncrotonEvent->exceptions[0]->startTime->format('Ymd\THis\Z'));
@@ -521,6 +524,13 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals($thisYear . '1124T130000Z', $syncrotonEvent->exceptions[1]->exceptionStartTime->format('Ymd\THis\Z'));
         
         return array($serverId, $syncrotonEvent);
+    }
+
+    public function testCreateEntryWithEmojiSubject()
+    {
+        $subject = "\xF0\x9F\xA5\xB0";
+        $xmlString = str_replace('Repeat', $subject, $this->_testXMLInput);
+        $this->testCreateEntry(null, $xmlString, $subject);
     }
     
     public function testCreateEntryPalmPreV12($syncrotonFolder = null)
