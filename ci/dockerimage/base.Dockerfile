@@ -17,7 +17,7 @@ RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/
                                   php7-sockets php7-zip php7-xsl php7-intl php7-gd php7-opcache php7-gettext php7-iconv \
                                   php7-ldap php7-pecl-igbinary php7-pecl-yaml php7-simplexml php7-ctype php7-xml \
                                   php7-xmlreader php7-curl php7-tokenizer php7-xmlwriter php7-fileinfo php7-posix \
-                                  | sha256sum >> /cachehash
+                                  php7-json | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community \
                                   php7-pecl-redis=4.3.0-r2 | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv \
@@ -44,7 +44,7 @@ RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PH
                        php7 php7-fpm php7-bcmath php7-exif php7-mysqli php7-pcntl php7-pdo_mysql php7-soap php7-sockets \
                        php7-zip php7-xsl php7-intl php7-gd php7-opcache php7-gettext php7-iconv php7-ldap \
                        php7-pecl-igbinary php7-pecl-yaml php7-simplexml php7-ctype php7-xml php7-xmlreader php7-curl \
-                       php7-tokenizer php7-xmlwriter php7-fileinfo php7-posix
+                       php7-tokenizer php7-xmlwriter php7-fileinfo php7-posix php7-json
 # todo check if the new redis version 5.2.2 (alpine v3.12) also works
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community --no-cache php7-pecl-redis=4.3.0-r2
 
