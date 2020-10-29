@@ -113,6 +113,7 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
         }else{
             this.checked = this.el.dom.checked;
         }
+        this.el.dom.disabled = this.readOnly || this.disabled;
         // Need to repaint for IE, otherwise positioning is broken
         if(Ext.isIE){
             this.wrap.repaint();
@@ -142,6 +143,21 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
         return this.checked;
     },
 
+    setReadOnly: function(readOnly){
+        if (this.rendered) {
+            this.el.dom.disabled = readOnly || this.disabled;
+        }
+        return Ext.form.Checkbox.superclass.setReadOnly.call(this, readOnly);
+    },
+    
+    setDisabled: function(disabled){
+        Ext.form.Checkbox.superclass.setDisabled.call(this, disabled);
+        if (this.rendered) {
+            this.el.dom.disabled = this.readOnly || disabled;
+        }
+        return this;
+    },
+    
 	// private
     onClick : function(){
         if(this.el.dom.checked != this.checked){
