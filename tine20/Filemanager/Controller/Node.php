@@ -65,6 +65,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected $_throwOnGetQuarantined = true;
 
     protected $_createNodeInBackendInterceptor = [];
+    protected $_moveNodesHook = [];
 
     protected $_allowedProperties = ['name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'];
     
@@ -906,6 +907,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $this->_createNodeInBackendInterceptor[$key] = $callable;
     }
 
+    public function registerMoveNodesHook($key, $callable)
+    {
+        $this->_moveNodesHook[$key] = $callable;
+    }
+
     /**
      * create node in backend
      * 
@@ -1351,6 +1357,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function moveNodes($_sourceFilenames, $_destinationFilenames, $_forceOverwrite = FALSE)
     {
+        $hookResult = [];
+        foreach ($this->_moveNodesHook as $hook) {
+            $hookResult[] = call_user_func($hook);
+        }
+        
         return $this->_copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, 'move', $_forceOverwrite);
     }
     
