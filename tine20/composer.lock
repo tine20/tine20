@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "95e6b47765fda16a78a47ef3c4dd06a0",
@@ -778,12 +778,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "ced089434df320de6df9b610854b8fba8bfe1d1e"
+                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/ced089434df320de6df9b610854b8fba8bfe1d1e",
-                "reference": "ced089434df320de6df9b610854b8fba8bfe1d1e",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/2512f595e0f4c5235e99ef97603a8db902b3cc5f",
+                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f",
                 "shasum": ""
             },
             "require": {
@@ -820,7 +820,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-02-22T17:12:02+00:00"
+            "time": "2020-10-01T00:19:10+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -1275,7 +1275,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1307,7 +1307,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -4346,6 +4346,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-12-04T08:55:13+00:00"
         },
         {
@@ -5173,6 +5174,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.0.8"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
