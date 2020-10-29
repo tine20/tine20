@@ -9,6 +9,7 @@ env:
   - DB=mysql
 
 before_script:
+  - composer self-update --rollback
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS tine20;" -uroot; fi
   - cd tine20
   - composer install
