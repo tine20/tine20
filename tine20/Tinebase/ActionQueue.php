@@ -177,7 +177,7 @@
             __LINE__ . '::' . __METHOD__ . " executing action: '{$message['action']}'");
         
         list($appName, $actionName) = explode('.', $message['action']);
-        $controller = Tinebase_Core::getApplicationInstance($appName);
+        $controller = Tinebase_Core::getApplicationInstance($appName, '', true);
     
         if (! method_exists($controller, $actionName)) {
             throw new Tinebase_Exception_NotFound('Could not execute action, requested action does not exist');

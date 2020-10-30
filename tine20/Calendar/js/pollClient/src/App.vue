@@ -287,7 +287,8 @@ export default {
               status: status.status,
               user_type: status.user_type,
               user_id: status.user_id,
-              status_authkey: status.status_authkey
+              status_authkey: status.status_authkey,
+              seq: attendee.seq
             }
             payload.status.push(datePayload)
           })
