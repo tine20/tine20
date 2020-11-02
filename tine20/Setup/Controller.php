@@ -1818,7 +1818,7 @@ class Setup_Controller
             throw new Setup_Exception("backupDir or backupUrl param required");
         }
 
-        if (! $mysqlBackupFile || ! file_exists($mysqlBackupFile)) {
+        if (! $mysqlBackupFile || ! file_exists($mysqlBackupFile) || filesize($mysqlBackupFile) === 0) {
             throw new Setup_Exception("$mysqlBackupFile not found");
         }
 
