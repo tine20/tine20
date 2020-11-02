@@ -421,10 +421,14 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      */
     getTreePath: function(containerPath) {
         var _ = window.lodash,
+            currentAccount = Tine.Tinebase.registry.get('currentAccount'),
             treePath = '/' + this.getRootNode().id + containerPath
-            .replace(new RegExp('^' + _.escapeRegExp(Tine.Tinebase.container.getMyFileNodePath())), '/myUser')
-            .replace(/^\/personal/, '/otherUsers')
-            .replace(/\/$/, '');
+                .replace(/[0-9a-f]{40}\/folders\//, '')
+                .replace(new RegExp('^/personal/(' 
+                    + _.escapeRegExp(currentAccount.accountLoginName) + '|'
+                    + _.escapeRegExp(currentAccount.accountId) + ')' ), '/myUser')
+                .replace(/^\/personal/, '/otherUsers')
+                .replace(/\/$/, '');
 
         return treePath;
     },
