@@ -8,10 +8,12 @@ function login() {
 function build_image() {
     TARGET=$1
     CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+    MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
 
     echo "docker build ${TARGET} image"
 
     docker pull "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" || echo "no cache image for ${TARGET}"
+    docker pull "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" || echo "no major cache image for ${TARGET}"
 
     ALPINE_PHP_REPOSITORY_VERSION=v3.12
     if [ ${PHP_IMAGE_TAG} = "7.4-fpm-alpine" ] ; then
@@ -44,6 +46,7 @@ function build_image() {
         --build-arg GERRIT_PASSWORD="${GERRIT_PASSWORD}" \
         --build-arg ALPINE_PHP_REPOSITORY_VERSION=ALPINE_PHP_REPOSITORY_VERSION \
         --cache-from "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" \
+        --cache-from "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" \
         .
 }
 
