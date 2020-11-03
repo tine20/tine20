@@ -63,6 +63,7 @@
     ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci
     ARG_TEST: AllTests
     ARG_FILTER: $PHPUNIT_FILTER
+    ARG_TEST_PATH_FROM_TINE20ROOT: tests/tine20/
   services:
     - *abstract_jobs-db_service
     - *abstract_jobs-redis_service
@@ -78,7 +79,8 @@
   image:
     name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}
   script:
-    - cd ${TINE20ROOT}/tests/tine20/
+    - echo cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
+    - cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
     - cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --debug";
       if test -n "${ARG_FILTER}"; then cmd="${cmd} --filter ${ARG_FILTER}"; fi;
       if test -n "${ARG_EXCLUDE_GROUP}"; then cmd="${cmd} --exclude-group ${ARG_EXCLUDE_GROUP}"; fi;
@@ -168,7 +170,6 @@
     - when: on_success
 
 .abstract_jobs.customapp.merge_nothing:
-  stage: merge
   script:
     - echo At least one job must run for the pipeline to be successful.
   rules:
