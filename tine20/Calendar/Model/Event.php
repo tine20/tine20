@@ -883,6 +883,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
     }
 
+    /**
+     * @return boolean
+     */
     public function isReplicable()
     {
         $container = $this->container_id;
@@ -893,7 +896,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             try {
                 $container = Tinebase_Container::getInstance()->getContainerById($container);
             } catch (Tinebase_Exception_NotFound $e) {
-                Tinebase_Exception::log($e);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                 return false;
             }
         }
