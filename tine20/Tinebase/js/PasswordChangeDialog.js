@@ -123,11 +123,12 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                 scope: this
                             });
                         } else {
+                            this.loadMask.hide();
                             Ext.MessageBox.show({
                                 title: i18n._('Failure'),
                                 msg: String.format(i18n._('{0} mismatch, please correct.'), this.passwordLabel),
                                 buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR 
+                                icon: Ext.MessageBox.ERROR
                             });
                         }
                     }
