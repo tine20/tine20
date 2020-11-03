@@ -25,3 +25,4 @@ FROM ${BUILD_IMAGE} as build-copy
 FROM ${BASE_IMAGE} as built
 ARG TINE20ROOT=/usr/share
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
+HEALTHCHECK --timeout=120s CMD curl --silent --fail http://127.0.0.1:80/health

@@ -180,6 +180,20 @@ workflow:
       when: on_success
     - when: never
 
+"test with health check":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-built-commit
+  stage: built_test_and_deploy
+  timeout: 10m
+  script:
+    - sleep 120s
+    - curl -v --fail http://127.0.0.1:80/health
+  rules:
+    - if: $TEST_WITH_HEALTH_CHECK == "true"
+      when: on_success
+    - when: never
+
 # Pushes base-commit as base, source-commit as source and test-source-commit as test-source to aws ecr.
 # They are used for caching.
 # Only images which passed the source test are pushed.

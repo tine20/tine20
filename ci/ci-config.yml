@@ -66,3 +66,6 @@ variables:
 
   # add a php unit filter to all php unit test jobs e.g. "CashBook"
   PHPUNIT_FILTER: ""
+
+  # test if tine20 /health api dose not return a 500
+  TEST_WITH_HEALTH_CHECK: "true"
