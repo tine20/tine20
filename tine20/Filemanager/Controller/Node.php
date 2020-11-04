@@ -634,13 +634,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param integer|null $_revision
      * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
+     * @throws Filemanager_Exception
+     * @throws Filemanager_Exception_Quarantined
      */
     public function getFileNode(Tinebase_Model_Tree_Node_Path $_path, $_revision = null)
     {
         $this->_backend->checkPathACL($_path, 'get');
         
         if (! $this->_backend->fileExists($_path->statpath, $_revision)) {
-            throw new Filemanager_Exception('File does not exist,');
+            throw new Tinebase_Exception_NotFound('File does not exist,');
         }
         
         if (! $this->_backend->isFile($_path->statpath)) {
