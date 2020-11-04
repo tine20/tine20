@@ -231,6 +231,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         'class': eventClass,
         dtstart: dtstart,
         dtend: dtstart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
+        status: 'CONFIRMED',
         container_id: container,
         transp: 'OPAQUE',
         editGrant: true,
