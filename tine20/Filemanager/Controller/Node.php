@@ -1357,6 +1357,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function moveNodes($_sourceFilenames, $_destinationFilenames, $_forceOverwrite = FALSE)
     {
+        // yeah, really...
+        new Filemanager_Model_Node([], true);
+        // we need to save the result of the hook, it might be a scoped object that gets destructed at the end of scope
         $hookResult = [];
         foreach ($this->_moveNodesHook as $hook) {
             $hookResult[] = call_user_func($hook);
