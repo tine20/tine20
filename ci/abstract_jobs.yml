@@ -80,6 +80,7 @@
   image:
     name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}
   script:
+    - test -f ${TINE20ROOT}/scripts/postInstallGitlab.sh && ${TINE20ROOT}/scripts/postInstallGitlab.sh
     - echo cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
     - cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
     - cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --debug";
