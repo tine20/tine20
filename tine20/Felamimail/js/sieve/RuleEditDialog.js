@@ -377,6 +377,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             xtype: 'textfield',
                             emptyText: 'test@example.org',
                             width: 200,
+                            maxLength: 255,
                             hideLabel: true
                         }, {
                             name: 'action_argument_redirect_copy',
@@ -390,6 +391,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             name: 'action_argument_reject',
                             xtype: 'textarea',
                             width: 300,
+                            maxLength: 255,
                             height: 60,
                             hideLabel: true
                         }]
