@@ -1108,9 +1108,14 @@ class Setup_Controller
         try {
             Tinebase_Model_Role::setIsReplicable(false);
             if (null !== $this->_superUserRoleName) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Removing superuser role ' . $this->_superUserRoleName);
                 // TODO: check: will the role membership be deleted? How? DB constraint?
                 $roleController->delete($roleController->getRoleByName($this->_superUserRoleName));
             }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Superuser role ' . $this->_superUserRoleName
+                . ' not found - skipping deletion');
         } finally {
             Tinebase_Model_Role::setIsReplicable(true);
             $roleController->modlogActive($oldModLog);
@@ -1629,7 +1634,8 @@ class Setup_Controller
      */
     protected function _updateRedirectSettings($_data)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
         $keys = array(Tinebase_Config::REDIRECTURL, Tinebase_Config::REDIRECTALWAYS, Tinebase_Config::REDIRECTTOREFERRER);
         foreach ($keys as $key) {
             if ((isset($_data[$key]) || array_key_exists($key, $_data))) {
