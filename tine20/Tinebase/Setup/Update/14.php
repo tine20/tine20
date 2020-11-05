@@ -25,10 +25,23 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
 
     public function update001()
     {
-        Setup_SchemaTool::updateSchema([
-            Tinebase_Model_Tree_FileObject::class,
-            Tinebase_Model_Tree_Node::class
-        ]);
+        try {
+            Setup_SchemaTool::updateSchema([
+                Tinebase_Model_Tree_FileObject::class,
+                Tinebase_Model_Tree_Node::class
+            ]);
+        } catch (Exception $e) {
+            // sometimes this fails with: "PDOException: SQLSTATE[42000]: Syntax error or access violation:
+            //                            1091 Can't DROP FOREIGN KEY `main_tree_nodes::parent_id--tree_nodes::id`;
+            //                            check that it exists"
+            // -> maybe some doctrine problem?
+            // -> we just try it again
+            Tinebase_Exception::log($e);
+            Setup_SchemaTool::updateSchema([
+                Tinebase_Model_Tree_FileObject::class,
+                Tinebase_Model_Tree_Node::class
+            ]);
+        }
 
         $this->addApplicationUpdate('Tinebase', '14.1', self::RELEASE014_UPDATE001);
     }
