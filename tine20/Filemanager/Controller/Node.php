@@ -122,8 +122,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_Controller_Record_Abstract::update()
+     * @param Tinebase_Record_Interface $_record
+     * @param bool $_duplicateCheck
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     *
+     * @refactor should be improved:
+     *   1) move notification update stuff to separate function
+     *   2) remove code duplication (xprops loops)
+     *   3) find out, why xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) does not return an array in some cases
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
@@ -137,13 +144,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
             $usersNotificationSettings = null;
             $currentUserId = Tinebase_Core::getUser()->getId();
-            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
-                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+            if (is_array($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
+                foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
+                    if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
                         isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
                         Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
-                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
-                    $usersNotificationSettings = $xpNotification;
-                    break;
+                        $currentUserId === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                        $usersNotificationSettings = $xpNotification;
+                        break;
+                    }
                 }
             }
 
@@ -160,20 +169,23 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
 
             $found = false;
-            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
-                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+            if (is_array($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
+                foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
+                    if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
                         isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
                         Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
-                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
-                    if (null !== $usersNotificationSettings) {
-                        $xpNotification = $usersNotificationSettings;
-                    } else {
-                        unset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[$key]);
+                        $currentUserId === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                        if (null !== $usersNotificationSettings) {
+                            $xpNotification = $usersNotificationSettings;
+                        } else {
+                            unset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[$key]);
+                        }
+                        $found = true;
+                        break;
                     }
-                    $found = true;
-                    break;
                 }
             }
+
             if (false === $found && null !== $usersNotificationSettings) {
                 $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $usersNotificationSettings;
             }
