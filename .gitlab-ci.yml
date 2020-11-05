@@ -81,6 +81,20 @@ workflow:
       when: on_success
     - when: never
 
+"php unit: setup tests source":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-source-commit
+    ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
+  stage: build_and_source_test
+  timeout: 30m
+  rules:
+    - if: $PHP_UNIT_SETUP_TESTS == "true"
+      when: on_success
+    - changes:
+        - tine20/Setup/**/*
+    - when: never
+
 "phpstan: code analyses":
   stage: build_and_source_test
   image:
@@ -163,6 +177,20 @@ workflow:
   timeout: 30m
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
+      when: on_success
+    - when: never
+
+"test with health check":
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-built-commit
+  stage: built_test_and_deploy
+  timeout: 10m
+  script:
+    - sleep 120s
+    - curl -v --fail http://127.0.0.1:80/health
+  rules:
+    - if: $TEST_WITH_HEALTH_CHECK == "true"
       when: on_success
     - when: never
 

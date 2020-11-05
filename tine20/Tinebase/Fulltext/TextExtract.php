@@ -85,8 +85,8 @@ class Tinebase_Fulltext_TextExtract
         $tempFileName = Tinebase_TempFile::getTempPath();
         $blobFileName = $_fileObject->getFilesystemPath();
 
-        // tika may complain, aka not return status 0 if file is empty
-        if (($fSize = filesize($blobFileName)) === 0 || false === $fSize) {
+        // tika may complain, aka not return status 0 if file is empty or unreadable
+        if (! is_readable($blobFileName) || ($fSize = filesize($blobFileName)) === 0 || false === $fSize) {
             return $tempFileName;
         }
 

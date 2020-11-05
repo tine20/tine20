@@ -389,7 +389,7 @@ var form = new Ext.form.FormPanel({
      * @return {Boolean} True if the value is valid, else false
      */
     isValid : function(preventMark){
-        if(this.disabled){
+        if(this.disabled || this.hidden || this.readOnly){
             return true;
         }
         var restore = this.preventMark;
@@ -404,7 +404,7 @@ var form = new Ext.form.FormPanel({
      * @return {Boolean} True if the value is valid, else false
      */
     validate : function(){
-        if(this.disabled || this.validateValue(this.processValue(this.getRawValue()))){
+        if(this.disabled || this.hidden || this.readOnly || this.validateValue(this.processValue(this.getRawValue()))){
             this.clearInvalid();
             return true;
         }

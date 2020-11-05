@@ -9,6 +9,16 @@
     top: 5px;
 }
 
+.x-grid-editor .x-form-trigger.x-form-trigger-plugin {
+    background-position: 0px 3px !important;
+    top: -1px;
+}
+
+.x-small-editor .x-form-trigger.x-form-trigger-plugin:hover {
+    background-position: 0px 2px !important;
+    background-size: 13px !important;
+}
+
 .x-form-field-trigger-wrap + .x-form-trigger.x-form-trigger-plugin {
     right: 17px;
 }

@@ -295,7 +295,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             ],
             'available_revisions'           => [
                 self::DOCTRINE_IGNORE           => true,
-                'type'                          => 'string',
+                self::TYPE                      => self::TYPE_VIRTUAL,
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],

@@ -152,7 +152,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function moveNodes($sourceFilenames, $destinationFilenames, $forceOverwrite)
     {
         $nodes = Filemanager_Controller_Node::getInstance()->moveNodes((array)$sourceFilenames, $destinationFilenames, $forceOverwrite);
-        
+
         return $this->_multipleRecordsToJson($nodes);
     }
 

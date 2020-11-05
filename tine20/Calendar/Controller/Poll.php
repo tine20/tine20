@@ -744,7 +744,10 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 $returnAttendees->addRecord($returnAttendee);
             }
 
-            $this->_sendPollConfirmationMail($poll, $contact);
+            Tinebase_ActionQueue::getInstance()->queueAction(self::class . '.sendPollConfirmationMail',
+                $poll,
+                $contact
+            );
 
             // @TODO: queue some sort of notification for organizer?
 
@@ -873,7 +876,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         return $response;
     }
 
-    protected function _sendPollConfirmationMail(Calendar_Model_Poll $poll, Addressbook_Model_Contact $contact)
+    public function sendPollConfirmationMail(Calendar_Model_Poll $poll, Addressbook_Model_Contact $contact)
     {
         $alternativeEvents = $this->getPollEvents($poll->getId());
         $event = $alternativeEvents->getFirstRecord();
@@ -903,8 +906,13 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
         $subject = sprintf($translate->_('Attendance Confirmation for Poll "%1$s"'), $renderContext['name']);
 
-        Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
-            $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
+        try {
+            Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
+                $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
+        } catch (Zend_Mail_Protocol_Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ': ' . $e->getMessage());
+        }
     }
 
     public function sendDefiniteEventNotifications(Calendar_Model_Poll $poll, Calendar_Model_Event $definiteEvent)
@@ -945,8 +953,13 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             $subject = sprintf($translate->_('%1$s is scheduled for %2$s'), $renderContext['name'], $renderContext['sstart']);
 
-            Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
-                $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
+            try {
+                Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
+                    $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
+            } catch (Zend_Mail_Protocol_Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ': ' . $e->getMessage());
+            }
         }
     }
 }

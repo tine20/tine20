@@ -65,6 +65,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected $_throwOnGetQuarantined = true;
 
     protected $_createNodeInBackendInterceptor = [];
+    protected $_moveNodesHook = [];
 
     protected $_allowedProperties = ['name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'];
     
@@ -130,8 +131,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_Controller_Record_Abstract::update()
+     * @param Tinebase_Record_Interface $_record
+     * @param bool $_duplicateCheck
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     *
+     * @refactor should be improved:
+     *   1) move notification update stuff to separate function
+     *   2) remove code duplication (xprops loops)
+     *   3) find out, why xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) does not return an array in some cases
      */
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
@@ -145,13 +153,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
             $usersNotificationSettings = null;
             $currentUserId = Tinebase_Core::getUser()->getId();
-            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
-                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+            if (is_array($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
+                foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
+                    if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
                         isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
                         Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
-                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
-                    $usersNotificationSettings = $xpNotification;
-                    break;
+                        $currentUserId === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                        $usersNotificationSettings = $xpNotification;
+                        break;
+                    }
                 }
             }
 
@@ -168,20 +178,23 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
 
             $found = false;
-            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
-                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+            if (is_array($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
+                foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
+                    if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
                         isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
                         Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
-                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
-                    if (null !== $usersNotificationSettings) {
-                        $xpNotification = $usersNotificationSettings;
-                    } else {
-                        unset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[$key]);
+                        $currentUserId === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                        if (null !== $usersNotificationSettings) {
+                            $xpNotification = $usersNotificationSettings;
+                        } else {
+                            unset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[$key]);
+                        }
+                        $found = true;
+                        break;
                     }
-                    $found = true;
-                    break;
                 }
             }
+
             if (false === $found && null !== $usersNotificationSettings) {
                 $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $usersNotificationSettings;
             }
@@ -668,13 +681,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param integer|null $_revision
      * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
+     * @throws Filemanager_Exception
+     * @throws Filemanager_Exception_Quarantined
      */
     public function getFileNode(Tinebase_Model_Tree_Node_Path $_path, $_revision = null)
     {
         $this->_backend->checkPathACL($_path, 'get');
         
         if (! $this->_backend->fileExists($_path->statpath, $_revision)) {
-            throw new Filemanager_Exception('File does not exist,');
+            throw new Tinebase_Exception_NotFound('File does not exist,');
         }
         
         if (! $this->_backend->isFile($_path->statpath)) {
@@ -901,6 +917,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function registerCreateNodeInBackendInterceptor($key, $callable)
     {
         $this->_createNodeInBackendInterceptor[$key] = $callable;
+    }
+
+    public function registerMoveNodesHook($key, $callable)
+    {
+        $this->_moveNodesHook[$key] = $callable;
     }
 
     /**
@@ -1348,6 +1369,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function moveNodes($_sourceFilenames, $_destinationFilenames, $_forceOverwrite = FALSE)
     {
+        // yeah, really...
+        new Filemanager_Model_Node([], true);
+        // we need to save the result of the hook, it might be a scoped object that gets destructed at the end of scope
+        $hookResult = [];
+        foreach ($this->_moveNodesHook as $hook) {
+            $hookResult[] = call_user_func($hook);
+        }
+        
         return $this->_copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, 'move', $_forceOverwrite);
     }
     

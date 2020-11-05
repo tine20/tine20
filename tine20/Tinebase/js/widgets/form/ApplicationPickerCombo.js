@@ -18,7 +18,7 @@ Tine.Tinebase.widgets.form.ApplicationPickerCombo = Ext.extend(Ext.form.ComboBox
     selectedRecord: null,
 
     // private
-    displayField: 'name',
+    displayField: 'title',
     valueField: 'id',
     mode: 'local',
     forceSelection: true,
@@ -27,7 +27,7 @@ Tine.Tinebase.widgets.form.ApplicationPickerCombo = Ext.extend(Ext.form.ComboBox
         this.fieldLabel = window.i18n._('Application');
 
         const userApplications = _.map(Tine.Tinebase.appMgr.getAll().items, function(app) {
-            return {id: app.id, name: app.i18n._(app.appName)};
+            return {id: app.id, title: Tine.Tinebase.appMgr.get(app.name).getTitle(), name : app.appName};
         });
 
         this.store = new Ext.data.JsonStore({

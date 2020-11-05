@@ -449,8 +449,9 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         }
 
         if ($_throwExceptionOnInvalidData) {
-            $e = new Tinebase_Exception_Record_Validation('Some fields ' . implode(',', array_keys($inputFilter->getMessages()))
-                . ' have invalid content');
+            $e = new Tinebase_Exception_Record_Validation('Some fields ('
+                . implode(',', array_keys($inputFilter->getMessages()))
+                . ') have invalid content (' . get_class($this) . ')');
 
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " "
                 . $e->getMessage()

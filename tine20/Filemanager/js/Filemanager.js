@@ -57,8 +57,11 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
                     store.un('load', highlight);
                     var sm = grid.getSelectionModel(),
                         idx = store.find('path', path);
-                    if (idx) {
-                        sm.selectRow(idx);
+                    if (idx >= 0) {
+                        sm.clearSelections();
+                        const row = grid.getView().getRow(idx);
+                        Ext.fly(row).highlight('#ffffff', {easing: 'bounceOut', duration: 1, endColor: '#dbecf4'});
+                        _.delay(() => { sm.selectRow(idx); }, 1000);
                     }
                 };
 
