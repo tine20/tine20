@@ -3,7 +3,7 @@
 
 # Tine 2.0 - Community Edition
 
-Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](http://www.tine20.com).
+Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](https://www.tine20.com/en.html).
 
 ## Official Community resources
 * [Tine2.0 Contributors Guide](https://github.com/tine20/tine20/blob/master/CONTRIBUTING.md)
@@ -56,8 +56,8 @@ who prefer stability and support over innovation we created our [Tine 2.0 Busine
 Once a year we take a subset of well proven and stable applications and features from our community edition and build
 a new major release of our business edition.
 
-Each [Tine 2.0 Business Edition](http://www.tine20.com) is maintained with security patches and bug fixes for at least two 
-years. Our [partners](https://www.tine20.com/partner/) offer a wide range of commercial support for different business needs.
+Each [Tine 2.0 Business Edition](https://www.tine20.com/en.html) is maintained with security patches and bug fixes for at least two 
+years. Our [partners](https://www.tine20.com/en/contact.html/) offer a wide range of commercial support for different business needs.
 
 ## Quickstart with Docker Compose
 
