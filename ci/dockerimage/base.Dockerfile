@@ -89,3 +89,4 @@ COPY ci/dockerimage/scripts/* /usr/local/bin/
 WORKDIR ${TINE20ROOT}
 ENV TINE20ROOT=${TINE20ROOT}
 CMD ["/usr/local/bin/entrypoint"]
+HEALTHCHECK --timeout=30s CMD curl --silent --fail http://127.0.0.1:80/ADMIN/fpm-ping
