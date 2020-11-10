@@ -19,7 +19,8 @@ class Calendar_Convert_Event_VCalendar_DavDroid extends Calendar_Convert_Event_V
 {
     // DAVdroid/0.7.3
     // DAVx5/2.2.1-gplay
-    const HEADER_MATCH = '/(DAVdroid|DAVx5)\/(?P<version>.*)/';
+    // OpenSync/1.5.0.3-ose
+    const HEADER_MATCH = '/(DAVdroid|DAVx5|OpenSync)\/(?P<version>.*)/';
     
     protected $_supportedFields = array(
         'seq',
