@@ -1017,8 +1017,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) .
             ' AS be ON e.base_event_id = be.id LEFT JOIN ' .
             $this->_db->quoteIdentifier($this->_tablePrefix . Calendar_Backend_Sql_Attendee::TABLENAME) .
-            ' AS at ON be.id = at.cal_event_id and at.displaycontainer_id = "' . $this->_db->quote($containerId) . '" '
-            . $this->_db->quoteInto('WHERE e.id IN (?)', $eventIds))->fetchAll(Zend_Db::FETCH_NUM);
+            ' AS at ON be.id = at.cal_event_id and at.displaycontainer_id = ' . $this->_db->quote($containerId) .
+            $this->_db->quoteInto(' WHERE e.id IN (?)', $eventIds))->fetchAll(Zend_Db::FETCH_NUM);
 
         $result = [];
         foreach ($events as $event) {
