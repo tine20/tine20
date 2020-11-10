@@ -118,7 +118,15 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         }, [
             'cacheFile' => Tinebase_Core::getCacheDir() . '/route.cache.'
                 . $appsHash,
-            'cacheDisabled' => TINE20_BUILDTYPE === 'DEVELOPMENT',
+            'cacheDisabled' => $this->_isCacheDisabled(),
         ]);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isCacheDisabled()
+    {
+        return TINE20_BUILDTYPE === 'DEVELOPMENT' || Tinebase_Core::inMaintenanceMode();
     }
 }

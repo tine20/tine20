@@ -1,1 +1,0 @@
-C:37:"PHPUnit\Runner\DefaultTestResultCache":298:{a:2:{s:7:"defects";a:2:{s:47:"ExampleApplication_ControllerTest::testOneToOne";i:4;s:52:"Addressbook_JsonTest::testQueryFilterReturnedFromSrv";i:3;}s:5:"times";a:2:{s:47:"ExampleApplication_ControllerTest::testOneToOne";d:0.357;s:52:"Addressbook_JsonTest::testQueryFilterReturnedFromSrv";d:2.928;}}}
