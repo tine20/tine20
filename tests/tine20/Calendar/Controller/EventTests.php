@@ -1325,6 +1325,66 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentEvent->getId());
     }
+
+    public function testGetChangesForRecurEventsForOneself()
+    {
+        Tinebase_Core::setUser($this->_personas['sclever']);
+
+        $event = $this->_getEvent(true);
+        $event->container_id = $this->_getPersonasDefaultCals('sclever')->id;
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtend->getClone()->addDay(3)->toString();
+        $persistentEvent = $this->_controller->create($event);
+        $exception = clone $persistentEvent;
+        $exception->dtstart->addDay(1);
+        $exception->dtend->addDay(1);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->setRecurId($persistentEvent->getId());
+        $this->_controller->create($exception);
+
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id /*accountId*/, true);
+
+        $changes = $collection->getChild($this->_getPersonasDefaultCals('sclever')->id)->getChanges(-1);
+
+        $this->assertArrayHasKey('create', $changes);
+        $this->assertArrayHasKey($persistentEvent->getId(), $changes['create']);
+        $this->assertSame($persistentEvent->getId() . '.ics', $changes['create'][$persistentEvent->getId()]);
+        $this->assertCount(1, $changes['create']);
+    }
+
+    public function testGetChangesForRecurEventsAsAttendee()
+    {
+        $event = $this->_getEvent(true);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtend->getClone()->addDay(3)->toString();
+        $event->attendee = [[
+                'user_id'   => $this->_personas['sclever']->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        ]];
+        $persistentEvent = $this->_controller->create($event);
+        $exception = clone $persistentEvent;
+        $exception->dtstart->addDay(1);
+        $exception->dtend->addDay(1);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->setRecurId($persistentEvent->getId());
+        $this->_controller->create($exception);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id /*accountId*/, true);
+
+        $changes = $collection->getChild($this->_getPersonasDefaultCals('sclever')->id)->getChanges(-1);
+
+        $this->assertArrayHasKey('create', $changes);
+        $this->assertArrayHasKey($persistentEvent->getId(), $changes['create']);
+        $this->assertSame($persistentEvent->getId() . '.ics', $changes['create'][$persistentEvent->getId()]);
+        $this->assertCount(1, $changes['create']);
+    }
     
     /**
      * @todo use exception api once we have it!
