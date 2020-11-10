@@ -152,8 +152,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         // check if there is already an existing event with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an event gets moved to another container
-        $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID($event->uid,
-            $event->hasExternalOrganizer(), 'sync', null, true);
+        if (null === ($existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID(
+                $event->uid, $event->hasExternalOrganizer(), 'sync', null, true))) {
+            $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventById($event->uid,
+                $event->hasExternalOrganizer(), 'sync', null, true);
+        }
         
         if ($existingEvent === null) {
             self::checkWriteAccess($converter);
