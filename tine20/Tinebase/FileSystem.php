@@ -3824,7 +3824,7 @@ class Tinebase_FileSystem implements
             $node = $this->get($nodeId, true);
             $notificationProps = $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION);
 
-            if (count($notificationProps) === 0) {
+            if (! is_array($notificationProps) || count($notificationProps) === 0) {
                 continue;
             }
 
@@ -3838,7 +3838,7 @@ class Tinebase_FileSystem implements
                 return true;
             });
 
-            foreach($notificationProps as $notificationProp) {
+            foreach ($notificationProps as $notificationProp) {
 
                 $notifyUsers = array();
 
