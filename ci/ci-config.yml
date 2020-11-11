@@ -66,3 +66,6 @@ variables:
 
   # add a php unit filter to all php unit test jobs e.g. "CashBook"
   PHPUNIT_FILTER: ""
+
+  # Run all tests, test failures are ignored, dose not allow push
+  RUN_ALL_TESTS: "false"
