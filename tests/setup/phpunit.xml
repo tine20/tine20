@@ -5,6 +5,7 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
+         cacheResult="false"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="bootstrap.php">
 </phpunit>
