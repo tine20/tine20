@@ -407,7 +407,7 @@ class Tinebase_Core
 
         $controllerName = $appNameString;
         if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && ! $modelName)) {
-            // only app controllers are called "App_Controller_Model"
+            // app controllers are called "App_Controller_Model", most Tinebase controllers are just "Tinebase_Model"
             $controllerName .= '_Controller';
         }
         
@@ -421,10 +421,13 @@ class Tinebase_Core
             $modelName = preg_replace('/^' . $appName . '_' . 'Model_/', '', $modelName);
             $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
-                throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerNameModel . ')!');
-            } else {
-                $controllerName = $controllerNameModel;
+                $controllerNameModel = $controllerName . '_Controller_' . $modelName;
+                if (! class_exists($controllerNameModel)) {
+                    throw new Tinebase_Exception_NotFound('No Application Controller found (checked classes '
+                        . $controllerName . '_' . $modelName . ' and ' . $controllerNameModel . ')!');
+                }
             }
+            $controllerName = $controllerNameModel;
         } else if (! class_exists($controllerName)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Use generic application controller');
