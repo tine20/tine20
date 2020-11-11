@@ -115,6 +115,14 @@
 
 # basic docker setup.
 .abstract_jobs.docker:
+  tags:
+    - dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:19.03.1-dind
   image: $REGISTRY/docker:19.03.1
   before_script:
     - source ci/build.sh
