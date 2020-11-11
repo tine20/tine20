@@ -1710,10 +1710,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function reportPresence()
     {
-        Tinebase_Presence::getInstance()->reportPresence();
+        $success = Tinebase_Presence::getInstance()->reportPresence();
 
         return array(
-            'success' => true
+            'success' => $success
         );
     }
 
