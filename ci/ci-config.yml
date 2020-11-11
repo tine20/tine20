@@ -69,3 +69,6 @@ variables:
 
   # test if tine20 /health api dose not return a 500
   TEST_WITH_HEALTH_CHECK: "true"
+  
+  # Run all tests, test failures are ignored, dose not allow push
+  RUN_ALL_TESTS: "false"
