@@ -49,6 +49,8 @@ workflow:
   stage: build_and_source_test
   timeout: 45m
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "true"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
@@ -63,6 +65,8 @@ workflow:
   timeout: 45m
   parallel: 5
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "false"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
@@ -77,6 +81,8 @@ workflow:
   stage: build_and_source_test
   timeout: 30m
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
     - if: $PHP_UNIT_SERVERTESTS == "true"
       when: on_success
     - when: never
@@ -89,6 +95,8 @@ workflow:
   stage: build_and_source_test
   timeout: 30m
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
     - if: $PHP_UNIT_SETUP_TESTS == "true"
       when: on_success
     - changes:
@@ -110,6 +118,8 @@ workflow:
       - code-quality-report.json
     expire_in: 1 days
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
     - if: $PHP_STAN_ANALYSES == "true"
       when: on_success
     - when: never
@@ -151,6 +161,8 @@ workflow:
   rules:
     - if: $DOCKER_BUILD_BUILD != "true"
       when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: always
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
     - when: never
@@ -168,6 +180,8 @@ workflow:
   rules:
     - if: $DOCKER_BUILD_BUILD != "true"
       when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: always
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
       when: on_success
     - when: never
@@ -182,6 +196,8 @@ workflow:
   rules:
     - if: $DOCKER_BUILD_BUILD != "true"
       when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: always
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
       when: on_success
     - when: never
@@ -214,6 +230,8 @@ workflow:
     - tag_commit_as_branch_image source
     - tag_commit_as_branch_image test-source
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: never
     - if: $NO_PUSH == "true"
       when: never
     - when: on_success
@@ -234,6 +252,8 @@ workflow:
     - tag_commit_as_branch_image build
     - tag_commit_as_branch_image test-built
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: never
     - if: $NO_PUSH == "true"
       when: never
     - if: $DOCKER_BUILD_BUILD == "true"
@@ -251,6 +271,8 @@ workflow:
     - tag_commit_as_gitlab_image built
     - tag_commit_as_gitlab_image dev
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: never
     - if: $NO_PUSH == "true"
       when: never
     - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
@@ -272,6 +294,8 @@ workflow:
     - tag_commit_as_dockerhub_image built tine20
     - tag_commit_as_dockerhub_image dev dev
   rules:
+    - if: $RUN_ALL_TESTS == "true"
+      when: never
     - if: $NO_PUSH == "true"
       when: never
     - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
