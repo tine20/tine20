@@ -164,6 +164,8 @@ docker_build_dev:
       when: on_success
     - if: $PHP_UNIT_SETUP_TESTS == "true"
       when: on_success
+    - if: $PHP_UNIT_SETUP_TESTS == "never"
+      when: never
     - changes:
         - tine20/Setup/**/*
     - when: never
