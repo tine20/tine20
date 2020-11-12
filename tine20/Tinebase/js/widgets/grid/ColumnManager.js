@@ -60,7 +60,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
                 fieldDefinition = _.get(modelConfig, 'fields.' + fieldName , {}),
                 fieldType = fieldDefinition.type || 'string',
-                app = Tine.Tinebase.appMgr.get(appName),
+                app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
             if (fieldDefinition.type === 'virtual') {

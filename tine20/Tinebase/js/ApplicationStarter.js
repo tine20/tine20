@@ -311,7 +311,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 break;
             case 'keyfield':
                 filter.filtertype = 'tine.widget.keyfield.filter';
-                filter.app = {name: appName};
+                filter.app = {name: _.get(fieldconfig, 'owningApp', appName)};
                 filter.keyfieldName = fieldconfig.name;
                 break;
             case 'date':
@@ -357,7 +357,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
         var appName = modelConfig.appName;
         var modelName = modelConfig.modelName;
         
-        var app = Tine.Tinebase.appMgr.get(appName);
+        var app = Tine.Tinebase.appMgr.get(_.get(fieldconfig, 'owningApp') || appName);
         if (! app) {
             Tine.log.error('Application ' + appName + ' not found!');
             return null;
