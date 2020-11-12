@@ -660,7 +660,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 var column = _.find(columns, { id: value.id });
                 if (column) {
                     // apply custom cfg
-                    column = Ext.applyIf(column, value);
+                    column = Ext.apply(column, value);
                 }
             });
 
