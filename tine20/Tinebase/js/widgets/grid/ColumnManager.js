@@ -72,6 +72,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 return null;
             }
 
+            if (fieldDefinition.disabled) {
+                return null;
+            }
+            
             // don't show parent property in dependency of an editDialog
             if (this.editDialog && fieldDefinition.hasOwnProperty('config') && fieldDefinition.config.isParent) {
                 return null;
