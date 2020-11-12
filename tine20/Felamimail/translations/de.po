@@ -1872,6 +1872,12 @@ msgstr "Ja, es ist SPAM"
 msgid "No, it is not"
 msgstr "Nein, kein SPAM"
 
+msgid "It is SPAM"
+msgstr "Es ist SPAM"
+
+msgid "It is not SPAM"
+msgstr "Kein SPAM"
+
 msgid "About SPAM"
 msgstr "Über SPAM"
 
