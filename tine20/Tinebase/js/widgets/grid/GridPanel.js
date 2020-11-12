@@ -605,6 +605,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 columns = columns.concat(this.getCustomfieldColumns());
             }
 
+            if (_.find(columns, {dataIndex: 'tags'})) {
+                var tagsCol = _.find(columns, {dataIndex: 'tags'});
+                _.remove(columns, tagsCol);
+                columns.unshift(tagsCol);
+            }
+            
             if (_.find(columns, {dataIndex: 'attachments'})) {
                 var attachCol = _.find(columns, {dataIndex: 'attachments'});
                 _.remove(columns, attachCol);
