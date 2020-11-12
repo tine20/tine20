@@ -109,7 +109,13 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         /** @var Tinebase_Model_Alarm $alarm */
         foreach ($alarms as $alarm) {
             list($appName, , $itemName) = explode('_', $alarm->model);
-            $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+            try {
+                $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                    ' ' . $tead->getMessage());
+                continue;
+            }
 
             Tinebase_Lock::keepLocksAlive();
 
