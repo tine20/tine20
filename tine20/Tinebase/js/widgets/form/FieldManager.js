@@ -65,6 +65,10 @@ Tine.widgets.form.FieldManager = function() {
             fieldDefinition.appName = appName;
             fieldDefinition.fieldName = fieldName;
             
+            if (_.get(fieldDefinition, 'disabled')) {
+                return null;
+            }
+            
             return this.getByFieldDefinition(fieldDefinition, category, config);
         },
 
@@ -84,7 +88,7 @@ Tine.widgets.form.FieldManager = function() {
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
             field.name = fieldDefinition.fieldName || fieldDefinition.name;
-            field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
+            field.readOnly = !! fieldDefinition.readOnly || !! _.get(fieldDefinition, 'uiconfig.readOnly');
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
             // make field available via recordForm.formfield_NAME
             field.ref = '../../formfield_' + field.name;

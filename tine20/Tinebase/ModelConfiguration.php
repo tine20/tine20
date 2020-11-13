@@ -408,10 +408,10 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * - copyOmit: If this is set to true, the field won't be used on copy the record
      *       @type: Boolean, @default: NULL
      *
-     * - readOnly: If this is set to true, the field can't be updated and will be shown as readOnly in the frontend
+     * - readOnly: If this is set to true, the field can't be updated in BE and will be shown as readOnly in the frontend
      *       @type: Boolean, @default: NULL
      *
-     * - disabled: If this is set to true, the field can't be updated and will be shown as readOnly in the frontend
+     * - disabled: UI Only - If this is set to true, the field will not be shown in the frontend
      *       @type: Boolean, @default: NULL
      *
      * - group: Add this field to a group. Each group will be shown as a separate FieldSet of the
