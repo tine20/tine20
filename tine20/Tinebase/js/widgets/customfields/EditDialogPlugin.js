@@ -23,8 +23,14 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
      * @type Tine.widgets.dialog.EditDialog editDialog
      */
     editDialog: null,
-    
+
+    // private
+    isInitialised: false,
+
     init: function(editDialog) {
+        if (this.isInitialised) {
+            return;
+        }
         this.editDialog = editDialog;
         
         // edit dialog without recordClass cannot have custom fields
@@ -40,9 +46,10 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         
         // fill/buffer all cf's with values
         this.editDialog.on('load', this.onRecordLoad, this);
-        
+
         // get all cf values
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createSequence(this.onRecordUpdate, this);
+        this.isInitialised = true;
     },
     
     /**
@@ -97,11 +104,11 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         
         this.customfieldsValue.toString = function() {
             return Ext.util.JSON.encode(this.customfieldsValue);
-        }
+        };
         
         this.editDialog.record.set('customfields', this.customfieldsValue);
     },
-    
+
     /**
      * create cf tab on demand
      */
@@ -198,4 +205,4 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
     }
 };
 
-Ext.preg('tinebase.widgets.customfield.editdialogplugin', Tine.widgets.customfields.EditDialogPlugin)
+Ext.preg('tinebase.widgets.customfield.editdialogplugin', Tine.widgets.customfields.EditDialogPlugin);
