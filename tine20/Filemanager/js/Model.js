@@ -77,31 +77,6 @@ Tine.Filemanager.Model.NodeMixin = {
                 revision_size: 0,
                 isIndexed: false
             }, defaults);
-        },
-
-        /**
-         * get filtermodel of Node records
-         *
-         * @namespace Tine.Filemanager.Model
-         * @static
-         * @return {Object} filterModel definition
-         */
-        getFilterModel: function() {
-            var app = Tine.Tinebase.appMgr.get('Filemanager');
-
-            return [
-                {label : i18n._('Quick Search'), field : 'query', operators : [ 'contains' ]},
-//        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
-                {label: app.i18n._('Content Type'), field: 'contenttype'},
-                {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
-                {label: app.i18n._('Description'), field: 'description', valueType: 'fulltext'},
-                {filtertype : 'tine.filemanager.pathfiltermodel', app : app},
-                {filtertype : 'tinebase.tag', app : app},
-                {label : app.i18n._('Name'), field : 'name', operators : [ 'contains' ]}
-            ].concat(Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase') ? [
-                {label : app.i18n._('File Contents'), field : 'content', operators : [ 'wordstartswith' ]},
-                {label : i18n._('Indexed'), field : 'isIndexed', valueType: 'bool'}
-            ] : []);
         }
     }
 };

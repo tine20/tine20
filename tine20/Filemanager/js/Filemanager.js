@@ -87,6 +87,23 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     }
 });
 
+// special wording for contents filter
+Tine.widgets.grid.FilterRegistry.register('Filemanager', 'Node', {label : 'File Contents', field : 'content', operators : [ 'wordstartswith' ]},);
+
+// remove content filters if indexing is not enabled
+Tine.Tinebase.appMgr.isInitialised('Filemanager').then(() => {
+    if (! Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
+        const nodeFilterModels = [
+            Tine.widgets.grid.FilterRegistry.get('Filemanager', 'Node'),
+            Tine.widgets.grid.FilterRegistry.get('Tinebase', 'Tree_Node')
+        ];
+        _.each(nodeFilterModels, (filterModel) => {
+            _.remove(filterModel, _.find(filterModel, {field: 'content'}));
+            _.remove(filterModel, _.find(filterModel, {field: 'isIndexed'}));
+        });
+    }
+});
+
 /**
  * @namespace Tine.Filemanager
  * @class Tine.Filemanager.MainScreen

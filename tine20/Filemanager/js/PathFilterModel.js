@@ -47,6 +47,7 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Filemanager');
         this.label = this.app.i18n._('path');
         
         Tine.Filemanager.PathFilterModel.superclass.initComponent.call(this);
@@ -89,4 +90,3 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
 });
 
 Tine.widgets.grid.FilterToolbar.FILTERS['tine.filemanager.pathfiltermodel'] = Tine.Filemanager.PathFilterModel;
-

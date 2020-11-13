@@ -49,7 +49,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      * initial path
      * @cfg {String} initialPath
      */
-    initialPath: 'null',
+    initialPath: null,
     
     // private
     app: null,
