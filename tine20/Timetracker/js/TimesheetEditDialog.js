@@ -293,6 +293,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     items: [{
                         xtype: 'columnform',
                         labelAlign: 'top',
+                        plugins: [{
+                            ptype: 'ux.itemregistry',
+                            key: 'Timetracker.Timesheet.CustomField',
+                        }],
                         formDefaults: {
                             xtype: 'textfield',
                             anchor: '100%',

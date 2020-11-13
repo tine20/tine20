@@ -23,8 +23,14 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
      * @type Tine.widgets.dialog.EditDialog editDialog
      */
     editDialog: null,
-    
+
+    // private
+    isInitialised: false,
+
     init: function(editDialog) {
+        if (this.isInitialised) {
+            return;
+        }
         this.editDialog = editDialog;
         
         // edit dialog without recordClass cannot have custom fields
@@ -40,11 +46,15 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         
         // fill/buffer all cf's with values
         this.editDialog.on('load', this.onRecordLoad, this);
-        
+
+        // load cf for mainTab in editDialog
+        this.loadCfForm();
+
         // get all cf values
         this.editDialog.onRecordUpdate = this.editDialog.onRecordUpdate.createSequence(this.onRecordUpdate, this);
+        this.isInitialised = true;
     },
-    
+
     /**
      * dispatch values from customfield property
      */
@@ -97,11 +107,29 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         
         this.customfieldsValue.toString = function() {
             return Ext.util.JSON.encode(this.customfieldsValue);
-        }
+        };
         
         this.editDialog.record.set('customfields', this.customfieldsValue);
     },
-    
+
+    /**
+     * match item with the key of customfield".
+     */
+    loadCfForm: function() {
+        var _ = window.lodash,
+            modelName = this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName'),
+            allCfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName);
+
+        _.each(allCfConfigs, _.bind(function (fields) {
+            if(_.get(fields, 'data.definition.uiconfig.key')) {
+                var pos = _.get(fields, 'data.definition.uiconfig.order');
+                Ext.ux.ItemRegistry.registerItem(_.get(fields, 'data.definition.uiconfig.key'),
+                    Tine.widgets.customfields.Field.get(this.app, fields, {}, this.editDialog)
+                    , pos ? pos : '0/0');
+            }
+        }, this));
+    },
+
     /**
      * create cf tab on demand
      */
@@ -198,4 +226,4 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
     }
 };
 
-Ext.preg('tinebase.widgets.customfield.editdialogplugin', Tine.widgets.customfields.EditDialogPlugin)
+Ext.preg('tinebase.widgets.customfield.editdialogplugin', Tine.widgets.customfields.EditDialogPlugin);
