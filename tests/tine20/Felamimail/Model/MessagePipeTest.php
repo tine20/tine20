@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -21,7 +21,6 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
      * @throws Tinebase_Exception_Record_NotAllowed
      * @throws Exception
      */
-
     public function testMessagePipeCopyToAnotherAccount()
     {
         $pipe = 'spam'; // both 'spam/ham pipe implement the same strategy
@@ -57,73 +56,22 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
     }
 
     /**
-     * test message pipe spam/ham with copy mail with attachment
-     * - copy mail to configured sent folder of current user
-     * - original message gets appended as attachment
+     * test message pipe spam/ham with copy mail to local directory
      *
      * @throws Tinebase_Exception_Record_NotAllowed
      * @throws Exception
      */
-    public function testMessagePipeCopyWithAttachment()
+    public function testMessagePipeCopyToLocalDir()
     {
-        $pipe = 'spam'; // both 'spam/ham pipe implement the same strategy
-        $targetFolder = 'Sent';
+        $this->_testNeedsTransaction();
+        $tmp = Tinebase_Core::getTempDir();
+
         $config = [
             'spam' => [
                 'strategy' => 'copy',
                 'config' => [
                     'target' => [
-                        'folder' => '#sent'
-                    ],
-                ]
-            ],
-            'ham' => [
-                'strategy' => 'copy',
-                'config' => [
-                    'target' => [
-                        'folder' => '#sent'
-                    ],
-                ]
-            ]
-        ];
-
-        $message = $this->_messagePipeTestHelper($config[$pipe], $targetFolder);
-        $copiedMessage = $this->_searchForMessageBySubject($config[$pipe]['config']['wrap']['subject']);
-        
-        // check attachment name
-        $copiedMessageComplete = $this->_json->getMessage($copiedMessage['id']);
-        $this->assertEquals(1, count($copiedMessageComplete['attachments']));
-        $this->assertEquals('SPAM? (15) *** test messagePipe', $copiedMessageComplete['attachments'][0]['subject'], 'attachment subject is missing ');
-
-        $copiedMessage = $this->_json->getMessage($copiedMessage['id']);
-        $this->assertTrue((isset($copiedMessage['structure']) || array_key_exists('structure', $copiedMessage)), 'structure should be set when fetching complete message: ' . print_r($copiedMessage, TRUE));
-        $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $copiedMessage['structure']['parts'][2]['contentType']);
-    }
-
-    /**
-     * test message pipe spam/ham with copy mail with attachment
-     * - copy mail to configured sent folder of current user
-     * - original message gets appended as attachment
-     *
-     * @throws Tinebase_Exception_Record_NotAllowed
-     * @throws Exception
-     */
-    public function testMessagePipeCopyWithWrap()
-    {
-        self::markTestSkipped('TODO implement me');
-
-        $pipe = 'spam'; // both 'spam/ham pipe implement the same strategy
-        $targetFolder = 'Sent';
-        $config = [
-            'spam' => [
-                'strategy' => 'copy',
-                'config' => [
-                    'target' => [
-                        'folder' => '#sent'
-                    ],
-                    'wrap' => [
-                        'to' => 'sclever@' . $this->_mailDomain,
-                        'subject' => 'This message is SPAM'
+                        'local_directory' => $tmp . '/spam'
                     ]
                 ]
             ],
@@ -131,27 +79,27 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
                 'strategy' => 'copy',
                 'config' => [
                     'target' => [
-                        'folder' => '#sent'
-                    ],
-                    'wrap' => [
-                        'to' => 'pwulf@' . $this->_mailDomain,
-                        'subject' => 'This message is no SPAM'
+                        'local_directory' => $tmp . '/ham'
                     ]
                 ]
             ]
         ];
 
-//        $message = $this->_messagePipeTestHelper($config[$pipe], $targetFolder);
-//        $copiedMessage = $this->_searchForMessageBySubject($config[$pipe]['config']['wrap']['subject']);
-//
-//        // check attachment name
-//        $copiedMessageComplete = $this->_json->getMessage($copiedMessage['id']);
-//        $this->assertEquals(1, count($copiedMessageComplete['attachments']));
-//        $this->assertEquals('SPAM? (15) *** test messagePipe', $copiedMessageComplete['attachments'][0]['subject'], 'attachment subject is missing ');
-//
-//        $copiedMessage = $this->_json->getMessage($copiedMessage['id']);
-//        $this->assertTrue((isset($copiedMessage['structure']) || array_key_exists('structure', $copiedMessage)), 'structure should be set when fetching complete message: ' . print_r($copiedMessage, TRUE));
-//        $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $copiedMessage['structure']['parts'][2]['contentType']);
+        // send message and copy to spam dir
+        $message = $this->_messagePipeTestHelper($config['spam'], 'spam');
+        $this->_assertMessageInFolder('INBOX', $message['subject']);
+        // assert eml in $tmp . '/spam'
+        self::assertTrue(is_dir($tmp . '/spam'), 'no spam dir found');
+        $filename = $tmp . '/spam/' . $message->headers['message-id'] . '.eml';
+        self::assertTrue(file_exists($filename), 'eml file not found: ' . $filename);
+
+        // send message and copy to ham dir
+        $message = $this->_messagePipeTestHelper($config['ham'], 'ham');
+        $this->_assertMessageInFolder('INBOX', $message['subject']);
+        // assert eml in $tmp . '/ham'
+        self::assertTrue(is_dir($tmp . '/ham'), 'no ham dir found');
+        $filename = $tmp . '/ham/' . $message->headers['message-id'] . '.eml';
+        self::assertTrue(file_exists($filename), 'eml file not found: ' . $filename);
     }
 
     /**
@@ -202,7 +150,7 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
             'ham' => [
                 'strategy' => 'rewrite_subject',
                 'config' => [
-                    'pattern' => '/^SPAM\? \([^)]+\) \*\*\* /',
+                    'pattern' => '/^SPAM\? \(.+\) \*\*\* /',
                     'replacement' => '',
                 ]
             ]
@@ -221,7 +169,10 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
      *
      * @param array $_config
      * @param string $_folderName
-     * @return array|NULL
+     * @param Felamimail_Model_Account $_account
+     *
+     * @return Felamimail_Model_Message|NULL
+     *
      * @throws Felamimail_Exception_IMAPServiceUnavailable
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
@@ -230,13 +181,13 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
      * @throws Tinebase_Exception_Record_Validation
      * @throws Zend_Mail_Transport_Exception
      */
-    public function _messagePipeTestHelper($_config, $_folderName, $_account = null)
+    public function _messagePipeTestHelper($_config, $_folderName, Felamimail_Model_Account $_account = null)
     {
         // set spam strategy config
         $this->_setFeatureForTest(Felamimail_Config::getInstance(), Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY);
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'subject');
         $config = [
-            'pattern' => '/^SPAM\? \([^)]+\) \*\*\* /',
+            'pattern' => '/^SPAM\? \(.+\) \*\*\* /',
         ];
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY_CONFIG, $config);
 
