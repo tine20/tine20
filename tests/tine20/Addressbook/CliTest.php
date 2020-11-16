@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -104,6 +104,15 @@ class Addressbook_CliTest extends TestCase
         return $out;
     }
 
+    /**
+     * @param $_name
+     * @param $_id
+     * @return false|string
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Console_Getopt_Exception
+     */
     protected function _doSetListRoleIdByName($_name, $_id)
     {
         $opts = new Zend_Console_Getopt('abp:');
@@ -115,7 +124,6 @@ class Addressbook_CliTest extends TestCase
         ob_start();
         $this->_cli->setListRoleIdByName($opts);
         $result = ob_get_clean();
-        ob_end_clean();
 
         $listRole = Addressbook_Controller_ListRole::getInstance()->get($_id);
         static::assertSame($_name, $listRole->name);
