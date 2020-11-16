@@ -22,7 +22,7 @@ class Tinebase_ImportExportDefinitionTest extends TestCase
         self::assertTrue(isset($jsonRecord['plugin_options_definition']));
         self::assertEquals([
             'sources' => [
-                'label' => 'Containers to export',
+                'label' => 'Calendars to export',
                 'type' => 'containers',
                 'config' => [
                     'appName' => 'Calendar',
