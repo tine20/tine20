@@ -154,11 +154,16 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         // or when an event gets moved to another container
         if (null === ($existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID(
                 $event->uid, $event->hasExternalOrganizer(), 'sync', null, true))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Did not find existing event by UID - trying to find one by id (' . $event->uid . ')');
             $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventById($event->uid,
                 $event->hasExternalOrganizer(), 'sync', null, true);
         }
         
         if ($existingEvent === null) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Creating new event');
+
             self::checkWriteAccess($converter);
             $retry = false;
             try {
@@ -196,6 +201,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             
             $vevent = new self($container, $event);
         } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Update existing event');
 
             if ($existingEvent->hasExternalOrganizer() && is_numeric($existingEvent->external_seq) &&
                     (int)$event->external_seq < (int)$existingEvent->external_seq) {
