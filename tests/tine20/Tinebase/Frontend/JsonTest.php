@@ -442,8 +442,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
             if ($result['name'] == 'defaultapp') {
                 $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $result['value']);
                 $this->assertTrue(is_array($result['options']));
-                $this->assertEquals(3, count($result['options']));
-                $this->assertContains('option1', $result['options'][1][1]);
+                // ignore DB options. NOTE: if we need them we could introduce a flag to keep db options
+                $this->assertGreaterThan(3, count($result['options']));
             } else if ($result['name'] == Tinebase_Preference::TIMEZONE) {
                 $this->assertTrue(is_array($result['options'][0]), 'options should be arrays');
             }
