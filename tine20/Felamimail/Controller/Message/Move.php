@@ -63,9 +63,10 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * @param mixed  $_messages
      * @param mixed  $_targetFolder can be one of: folder_id, Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
      * @param boolean $keepOriginalMessages
+     * @param boolean $checkCopyPreventionConfig
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function moveMessages($_messages, $_targetFolder, $keepOriginalMessages = false)
+    public function moveMessages($_messages, $_targetFolder, $keepOriginalMessages = false, $checkCopyPreventionConfig = true)
     {
         if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
@@ -80,7 +81,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
                 'filter'     => $_messages,
                 'function'   => 'processMoveIteration',
             ));
-            $iterateResult = $iterator->iterate($targetFolder, $keepOriginalMessages);
+            $iterateResult = $iterator->iterate($targetFolder, $keepOriginalMessages, $checkCopyPreventionConfig);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Moved/copied ' . $iterateResult['totalcount'] . ' message(s).');
@@ -88,7 +89,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $result = (! empty($iterateResult['results'])) ? array_pop($iterateResult['results']) : new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         } else {
             $messages = $this->_convertToRecordSet($_messages, TRUE);
-            $result = $this->processMoveIteration($messages, $targetFolder, $keepOriginalMessages);
+            $result = $this->processMoveIteration($messages, $targetFolder, $keepOriginalMessages, $checkCopyPreventionConfig);
         }
 
         return $result;
@@ -100,9 +101,10 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * @param Tinebase_Record_RecordSet $_messages
      * @param  mixed  $_targetFolder can be one of: Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
      * @param boolean $keepOriginalMessages
+     * @param boolean $checkCopyPreventionConfig
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function processMoveIteration($_messages, $_targetFolder, $keepOriginalMessages = false)
+    public function processMoveIteration($_messages, $_targetFolder, $keepOriginalMessages = false, $checkCopyPreventionConfig = true)
     {
         $folderName = ($_targetFolder instanceof Felamimail_Model_Folder ? $_targetFolder->globalname : $_targetFolder);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -112,7 +114,12 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         
         $movedMessages = FALSE;
         foreach (array_unique($_messages->folder_id) as $folderId) {
-            $movedMessages = ($this->_moveMessagesByFolder($_messages, $folderId, $_targetFolder, $keepOriginalMessages) || $movedMessages);
+            $movedMessages = ($this->_moveMessagesByFolder($_messages,
+                    $folderId,
+                    $_targetFolder,
+                    $keepOriginalMessages,
+                    $checkCopyPreventionConfig
+                ) || $movedMessages);
         }
         
         if (! $movedMessages) {
@@ -144,10 +151,15 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
      * @param string $_folderId
      * @param Felamimail_Model_Folder|string $_targetFolder
      * @param boolean $keepOriginalMessages
+     * @param boolean $checkCopyPreventionConfig
      * @return boolean did we move messages?
      * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _moveMessagesByFolder(Tinebase_Record_RecordSet $_messages, $_folderId, $_targetFolder, $keepOriginalMessages = false)
+    protected function _moveMessagesByFolder(Tinebase_Record_RecordSet $_messages,
+                                             $_folderId,
+                                             $_targetFolder,
+                                             $keepOriginalMessages = false,
+                                             $checkCopyPreventionConfig = true)
     {
         $messagesInFolder = $_messages->filter('folder_id', $_folderId);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
@@ -160,8 +172,9 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             // no need to move
             $result = FALSE;
         } else if ($messagesInFolder->getFirstRecord()->account_id == $_targetFolder->account_id) {
-            if (Felamimail_Config::getInstance()->get(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT) &&
-                $keepOriginalMessages
+            if (Felamimail_Config::getInstance()->get(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT)
+                && $keepOriginalMessages
+                && $checkCopyPreventionConfig
             ) {
                 $translation = Tinebase_Translation::getTranslation('Felamimail');
                 throw new Tinebase_Exception_SystemGeneric($translation->_('It is not allowed to copy e-mails in the same account.'));
