@@ -1111,6 +1111,30 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $_exception->last_modified_time = $currBaseEvent->last_modified_time;
     }
 
+    public function getExistingEventById($_id, $_assumeExternalOrganizer, $_action, $_grant, $_getDeleted = false)
+    {
+        $filters = new Calendar_Model_EventFilter(array(
+            array('field' => 'id',          'operator' => 'equals', 'value' => $_id),
+        ));
+        if ($_getDeleted) {
+            $filters->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
+                Tinebase_Model_Filter_Bool::VALUE_NOTSET));
+        }
+
+        $event = null;
+        if ($_assumeExternalOrganizer) {
+            $event = $this->_getExistingEventByUIDExternal($filters);
+        }
+        if (null === $event) {
+            $event = $this->_getExistingEventByUIDInternal($filters, $_action, $_grant);
+        }
+        if (null === $event && !$_assumeExternalOrganizer) {
+            $event = $this->_getExistingEventByUIDExternal($filters);
+        }
+
+        return $event;
+    }
+
     public function getExistingEventByUID($_uid, $_assumeExternalOrganizer, $_action, $_grant, $_getDeleted = false)
     {
         $filters = new Calendar_Model_EventFilter(array(
