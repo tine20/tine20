@@ -238,7 +238,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // ensure that all attendee are free
                 $this->checkBusyConflicts($_record);
             }
-            
+
+            // skip sending notifications in parent
             $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
             
@@ -256,7 +257,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $createdEvent->mute = $_record->mute;
         if ($this->_sendNotifications) {
             $this->doSendNotifications($createdEvent, Tinebase_Core::getUser(), 'created');
-        }        
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Skip sending notifications');
+        }
 
         return $createdEvent;
     }
@@ -3091,7 +3095,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if ($_event->mute) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' skip sending notifications as event is muted');
+                . ' Skip sending notifications as event is muted');
 
             return;
         }
