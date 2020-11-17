@@ -768,6 +768,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             
             try {
                 $messages = $_imap->getSummary($messageSequenceStart, $messageSequenceEnd, false);
+
+
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
                 // imap server might have gone away during update
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
@@ -801,6 +803,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 .  ' ' . print_r($message, TRUE));
 
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+            if (array_key_exists('header', $message) && array_key_exists('received', $message['header'])) {
+                $received = explode(';', $message['header']['received'][0]);
+                $message['received'] = isset($received[1]) ? date("d-M-Y H:i:s O", strtotime($received[1])) : $message['received'];
+            }
+            
             try {
                 if ($this->addMessage($message, $_folder)) {
                     $_folder->cache_job_actions_done++;
