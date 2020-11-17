@@ -95,6 +95,35 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     }
 
     /**
+     * testNotificationToResponsible
+     */
+    public function testNotificationWithOutResponsibles()
+    {
+        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,true);
+
+        self::flushMailer();
+        $lead = $this->_getLead();
+        // give sclever access to lead container
+        $this->_setPersonaGrantsForTestContainer($lead['container_id'], 'sclever');
+        $lead = $this->_leadController->create($lead);
+        $messages = self::getMessages();
+        $this->assertEquals(2, count($messages));
+        $bodyText = $messages[0]->getBodyText()->getContent();
+        $this->assertContains('**PHPUnit **', $bodyText);
+
+        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,false);
+        self::flushMailer();
+
+        $lead['turnover'] = '235';
+        $lead = $this->_leadController->update($lead);
+        $messages = self::getMessages();
+        // one message from the update user!
+        $this->assertEquals(1, count($messages));
+        $bodyText = $messages[0]->getBodyText()->getContent();
+        $this->assertContains('**PHPUnit **', $bodyText);
+        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,true);
+    }
+    /**
      * testNoNotificationConfig
      */
    public function testNoNotificationConfigResponsible()
