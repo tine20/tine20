@@ -1208,81 +1208,8 @@ msgstr "Alle Kontakte"
 msgid "GENDER_Contact"
 msgstr "male"
 
-#~ msgid "Print {0}"
-#~ msgstr "{0} Drucken"
+msgid "Addressbooks to export"
+msgstr "Zu exportierende Adressbücher"
 
-#~ msgid "Emails"
-#~ msgstr "E-Mail"
-
-#~ msgid "Enabled Features in Calendar Application."
-#~ msgstr "Feature in der Kalender Applikation aktivieren."
-
-#~ msgid "Uploaded new contact image."
-#~ msgstr "Ein neues Kontaktbild wurde hochgeladen."
-
-#~ msgid "Deleted contact image."
-#~ msgstr "Lösche Kontaktbild"
-
-#~ msgid "List Type"
-#~ msgstr "Gruppen Typ"
-
-#~ msgid "The contact is hidden if it is ... (one of: disabled, expired or never"
-#~ msgstr "Der Kontakt ausgeblendet wenn er ... ist. (eines von : deaktiviert, abgelaufen oder niemals)"
-
-#~ msgid "Resource"
-#~ msgid_plural "Resources"
-#~ msgstr[0] "Ressource"
-#~ msgstr[1] "Ressourcen"
-
-#~ msgid "Dear Mister"
-#~ msgstr "Sehr geehrter Herr"
-
-#~ msgid "Dear Miss"
-#~ msgstr "Sehr geehrte Dame"
-
-#~ msgid "Dear"
-#~ msgstr "Sehr geehrte Damen und Herren"
-
-#~ msgid "Mister"
-#~ msgstr "Herr"
-
-#~ msgid "Misses"
-#~ msgstr "Frau"
-
-#~ msgid "Export as pdf"
-#~ msgstr "Als PDF exportieren"
-
-#~ msgid "Select contact"
-#~ msgstr "Kontakt auswählen"
-
-#~ msgid "Info"
-#~ msgstr "Info"
-
-#~ msgid "Insecure link"
-#~ msgstr "Unsicherer Link"
-
-#~ msgid "Please review this link in edit dialog."
-#~ msgstr "Bitte überprüfen Sie den Link im Detail-Dialog."
-
-#~ msgid "Export {0}"
-#~ msgid_plural "Export {0}"
-#~ msgstr[0] "{0} exportieren"
-#~ msgstr[1] "{0} exportieren"
-
-#~ msgid "Export as PDF"
-#~ msgstr "Als PDF exportieren"
-
-#~ msgid "Export as CSV"
-#~ msgstr "Als CSV exportieren"
-
-#~ msgid "Export as ODS"
-#~ msgstr "Als ODS exportieren"
-
-#~ msgid "Export as XLS"
-#~ msgstr "Als XLS exportieren"
-
-#~ msgid "Export as DOC"
-#~ msgstr "Exportieren als DOC"
-
-#~ msgid "Export as ..."
-#~ msgstr "Exportieren als ..."
+msgid "Export target"
+msgstr "Exportzielr"

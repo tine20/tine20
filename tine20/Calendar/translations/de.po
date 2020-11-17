@@ -2596,3 +2596,9 @@ msgid "You are about to change the status of the event itself and not just "
 "attendee?"
 msgstr "Sie sind dabei, den Gesamtterminstatus (nicht nur Ihren eigenen) "
 "zu ändern. Wollen sie wirklich den Status für alle Teilnehmer ändern?"
+
+msgid "Calendars to export"
+msgstr "Zu exportierende Kalender"
+
+msgid "Export target"
+msgstr "Exportzielr"
