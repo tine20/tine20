@@ -281,8 +281,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     'account_id'      => '0',
                     'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                     Tinebase_Model_Grants::GRANT_READ    => true,
-                    Tinebase_Model_Grants::GRANT_EXPORT  => true,
-                    Tinebase_Model_Grants::GRANT_SYNC    => true,
+                    // TODO allow to configure export/sync for anyone on shared containers
+//                    Tinebase_Model_Grants::GRANT_EXPORT  => true,
+//                    Tinebase_Model_Grants::GRANT_SYNC    => true,
                 ), TRUE));
             }
         } else {
