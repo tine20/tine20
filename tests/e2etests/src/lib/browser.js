@@ -92,15 +92,13 @@ module.exports = {
             + appName + ' to "' + value + '"');
 
         await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
-        await page.waitFor(2000);
         const frame = await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
         await expect(frame).toClick('.x-menu-item-icon.action_adminMode');
         const preferencePopup = await this.getNewWindow();
-        await preferencePopup.waitFor(() => document.querySelector('.ext-el-mask'));
-        await preferencePopup.waitFor(() => !document.querySelector('.ext-el-mask'));
         await preferencePopup.waitForSelector('.x-tree-node');
+        //wait for finish load dialog
+        await expect(preferencePopup).toMatchElement('input[name=timezone]');
         await expect(preferencePopup).toClick('span', {text: appName});
-        await preferencePopup.waitFor(1000);
 
         // change setting to YES
         await expect(preferencePopup).toMatchElement('input[name=' + preference + ']');
