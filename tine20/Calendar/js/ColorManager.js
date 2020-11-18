@@ -262,7 +262,7 @@ Ext.ux.ItemRegistry.registerItem('Calendar-MainScreenPanel-ViewBtnGrp', Tine.Cal
 Tine.Calendar.colorStrategies = {};
 Tine.Calendar.colorStrategies['container'] = {
     getName: function() {
-        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Color by Organizer Calendar');
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Color by Calendar');
     },
     getColor: function(event, attendeeRecord) {
         var container = null,
