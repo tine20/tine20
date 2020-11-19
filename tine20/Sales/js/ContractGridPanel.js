@@ -47,6 +47,10 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array} of Ext.Action
      */
     getActionToolbarItems: function() {
+        if (! this.app.featureEnabled('invoicesModule')) {
+            return [];
+        }
+
         this.actions_bill = new Ext.Action({
             text: this.app.i18n._('Bill Contract'),
             iconCls: 'action_bill',
@@ -139,10 +143,10 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array}
      */
     getContextMenuItems: function() {
-        var items = [
+        var items = this.app.featureEnabled('invoicesModule') ? [
             '-',
             this.actions_bill
-            ];
+            ] : [];
         
         return items;
     }

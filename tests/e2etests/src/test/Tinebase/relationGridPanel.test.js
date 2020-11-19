@@ -21,8 +21,6 @@ describe('Mainpage', () => {
         await popupWindow.click('.x-form-trigger.undefined');
         await popupWindow.waitForSelector('.x-panel.x-panel-noborder.x-grid-panel');
         await popupWindow.waitFor(3000);
-        await popupWindow.click('.x-window-bwrap .x-grid3-cell-inner.x-grid3-col-name',{clickCount:2});
-        await popupWindow.waitFor(3000);
         await popupWindow.click('.x-window-bwrap .x-grid3-cell-inner.x-grid3-col-name');
         await popupWindow.waitFor(3000);
         await expect(popupWindow).toClick('.x-window.x-window-plain.x-resizable-pinned button',{text: 'Ok'});

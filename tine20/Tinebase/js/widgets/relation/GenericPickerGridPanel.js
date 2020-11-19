@@ -807,9 +807,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     onAddRecordFromCombo: async function(node) {
         var record = null;
+        const pickerCombo = this.getActiveSearchCombo();
 
         if (this.getActiveSearchCombo().hasOwnProperty('store')) {
-            record = this.getActiveSearchCombo().store.getById(this.getActiveSearchCombo().getValue())
+            record = pickerCombo.store.getById(pickerCombo.getValue())
         } else {
             if(node.leaf === false) {
                 record =  await Tine.Filemanager.getNode(node.id);
@@ -830,11 +831,14 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.onAddRecord(record, relconf);
 
-        if (Ext.isFunction(this.getActiveSearchCombo().collapse)) {
-            this.getActiveSearchCombo().collapse();
+        if (Ext.isFunction(pickerCombo.collapse)) {
+            pickerCombo.collapse();
         }
-        if (Ext.isFunction(this.getActiveSearchCombo().reset)) {
-            this.getActiveSearchCombo().reset();
+        if (Ext.isFunction(pickerCombo.reset)) {
+            pickerCombo.reset();
+        }
+        if (Ext.isFunction(pickerCombo.focus)) {
+            _.delay(() => {pickerCombo.focus()}, 250);
         }
     },
 

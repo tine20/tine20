@@ -488,12 +488,15 @@ var combo = new Ext.form.ComboBox({
                 this.onTriggerClick();
             });
         }
-
         // NOTE: we don't blur the element in the UI as it looks ugly to loose focus class
         //       but we trigger blur event chain
         if (this.blurOnSelect){
-            this.on('select', function(){
+            this.on('select', function() {
+                // prevent loop as bluring might select again
+                if (new Date().getTime() - 1000 < this.blurOnSelectLastRun) return;
+                
                 _.delay(() => {
+                    this.blurOnSelectLastRun = new Date().getTime();
                     const focusClass = this.focusClass;
                     this.focusClass = '';
                     Ext.form.TriggerField.superclass.onBlur.call(this);

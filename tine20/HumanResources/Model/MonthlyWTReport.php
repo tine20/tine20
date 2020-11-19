@@ -102,7 +102,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_EMPLOYEE_ID              => [
                 self::LABEL                         => 'Employee', // _('Employee')
                 self::TYPE                          => self::TYPE_RECORD,
-                self::DISABLED                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY          => false,
                     Zend_Filter_Input::PRESENCE             => Zend_Filter_Input::PRESENCE_REQUIRED,
@@ -116,7 +118,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_MONTH                    => [
                 self::LABEL                         => 'Month', // _('Month')
                 self::TYPE                          => self::TYPE_STRING,
-                self::DISABLED                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
                 self::LENGTH                        => 7, // 2019-01 => char(7) => TODO set collation latin1(? 1 byte), type char not varchar
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY          => false,
@@ -127,7 +131,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_DAILY_WT_REPORTS         => [
                 self::LABEL                         => 'Daily Working Time Reports', // _('Daily Working Time Reports')
                 self::TYPE                          => self::TYPE_RECORDS,
-                self::DISABLED                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::CONFIG                        => [
                     self::APP_NAME                      => HumanResources_Config::APP_NAME,
@@ -138,7 +144,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_WORKING_TIME_BALANCE_PREVIOUS => [
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
-                self::DISABLED                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
                 self::LABEL                         => 'Working Time Balance Previous Month', // _('Working Time Balance Previous Month')
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,
@@ -146,7 +154,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_WORKING_TIME_ACTUAL      => [
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
-                self::DISABLED                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
                 self::LABEL                         => 'Actual Working Time', // _('Actual Working Time')
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,
@@ -154,7 +164,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_WORKING_TIME_TARGET      => [
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
-                self::DISABLED                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
                 self::LABEL                         => 'Target Working Time', // _('Target Working Time')
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,
@@ -169,7 +181,9 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_WORKING_TIME_BALANCE     => [
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
-                self::DISABLED                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
                 self::LABEL                         => 'Total Working Time Balance', // _('Total Working Time Balance')
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,

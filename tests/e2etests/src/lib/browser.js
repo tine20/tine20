@@ -125,6 +125,7 @@ module.exports = {
             //ignoreDefaultArgs: ['--enable-automation'],
             //slowMo: 250,
             //defaultViewport: {width: 1366, height: 768},
+            // ignoreHTTPSErrors: true,
             args: ['--lang=de-DE,de']
         });
 

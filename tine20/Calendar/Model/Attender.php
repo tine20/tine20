@@ -448,7 +448,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             
             $_event->attendee->removeRecord($attendeeToDelete);
         }
-        
+
+        /* that's what I had in mind, but churchedition comes with custom system roles ...
+        $systemRoles = Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES}->records
+            ->filter('system', true)->getArrayOfIds(); */
+        $systemRoles = ['REQ', 'OPT'];
+
         // attendees to keep and update
         $attendeesToKeep   = array_diff_key($emailsOfCurrentAttendees, $attendeesToDelete);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to keep " . print_r(array_keys($attendeesToKeep), true));
@@ -458,7 +463,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
             // update object by reference
             $attendeeToKeep->status = isset($newSettings['partStat']) ? $newSettings['partStat'] : $attendeeToKeep->status;
-            $attendeeToKeep->role   = $newSettings['role'];
+            $attendeeToKeep->role   = isset($newSettings['role']) && in_array($newSettings['role'], $systemRoles) &&
+                (!isset($attendeesToKeep['role']) || in_array($attendeesToKeep['role'], $systemRoles)) ? $newSettings['role'] : $attendeesToKeep['role'];
         }
 
         // new attendess to add to event

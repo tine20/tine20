@@ -23,12 +23,41 @@
   alias: ldap
   entrypoint: ["/container/tool/run", "--copy-service"]
 
+.copy_source: &abstract_jobs-copy_source |
+  if test "${ARG_COPY_SOURCE}" == "true"; then
+    apk add rsync;
+    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/;
+    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/;
+    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/;
+    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d/;
+    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/crond.ini /etc/supervisor.d/;
+    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/;
+    cp ${CI_PROJECT_DIR}/ci/dockerimage/scripts/* /usr/local/bin/;
+    cp ${CI_PROJECT_DIR}/phpstan.neon ${TINE20ROOT}/phpstan.neon;
+    cp ${CI_PROJECT_DIR}/phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon;
+    rsync -a -I --delete ${CI_PROJECT_DIR}/docs/config/ /config;
+    rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/conf.d/ /etc/confd/conf.d;
+    rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/templates/ /etc/confd/templates;
+    rsync -a -I --delete ${CI_PROJECT_DIR}/scripts/ ${TINE20ROOT}/scripts/;
+    rsync -a -I --delete ${CI_PROJECT_DIR}/tests/ ${TINE20ROOT}/tests/;
+    rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_PROJECT_DIR}/tine20/ ${TINE20ROOT}/tine20/;
+    if test -n "${CUSTOM_APP_NAME}"; then
+      cd ${TINE20ROOT}/tine20;
+      apk add jq;
+      echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
+      composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
+      echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
+      composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
+    fi
+  fi
+
 # Has a db, redis and installs tine. Then runs a php unit test.
 # $ARG_IMAGE e.g. test-built-commit
 # $ARG_EXCLUDE_GROUP optional e.g. longrunning,needsbuild,nogitlabci
 # $ARG_TEST e.g. AllTests
 # $ARG_FILTER optional e.g. CashBook
 # $ARG_GROUP optional e.g nogitlab
+# $ARG_COPY_SOURCE copy source from gitlab repo onto image
 .abstract_jobs.php_unit:
   variables:
     MYSQL_HOST: db
@@ -71,6 +100,7 @@
     - *abstract_jobs-postfix_service
     - *abstract_jobs-dovecot_service
   before_script:
+    - *abstract_jobs-copy_source
     - cp /etc/hosts "${CI_PROJECT_DIR}/hosts_${CI_JOB_ID}"
     - /usr/sbin/confd -onetime -backend env
     - tine20_await_db
@@ -113,8 +143,20 @@
     - *abstract_jobs-dovecot_service
     - *abstract_jobs-ldap_service
 
+.abstract_jobs.copy_source:
+  before_script:
+    - *abstract_jobs-copy_source
+
 # basic docker setup.
 .abstract_jobs.docker:
+  tags:
+    - dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:19.03.1-dind
   image: $REGISTRY/docker:19.03.1
   before_script:
     - source ci/build.sh

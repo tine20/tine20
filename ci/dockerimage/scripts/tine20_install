@@ -9,4 +9,5 @@ php /usr/share/tine20/setup.php --install --config /etc/tine20/config.inc.php ${
   smtp="${TINE20_EMAIL_SMTP}" \
   sieve="${TINE20_EMAIL_SIEVE}" \
   authentication="${TINE20_AUTHENTICATION}" \
-  accounts="${TINE20_ACCOUNTS}"
+  accounts="${TINE20_ACCOUNTS}" \
+  license="${TINE20_LICENSE_PATH}"

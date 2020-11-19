@@ -49,7 +49,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      * initial path
      * @cfg {String} initialPath
      */
-    initialPath: 'null',
+    initialPath: null,
     
     // private
     app: null,
@@ -64,6 +64,8 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     initComponent: function () {
         this.allowMultiple = this.hasOwnProperty('singleSelect') ? ! this.singleSelect : this.allowMultiple;
         this.requiredGrants = this.requiredGrants ? this.requiredGrants : (this.mode === 'source' ? ['readGrant'] : ['editGrant']);
+        
+        this.allowCreateNewFile = this.mode === 'target' && this.constraint !== 'folder';
         
         var model = Tine.Filemanager.Model.Node;
         this.app = Tine.Tinebase.appMgr.get(model.getMeta('appName'));
@@ -129,7 +131,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             }, {
                 region: 'north',
                 border: false,
-                hidden: this.mode !== 'target' || this.constraint === 'folder',
+                hidden: !this.allowCreateNewFile,
                 layout: 'hbox',
                 height: 38,
                 frame: true,
@@ -327,7 +329,9 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             plugins: [this.getTreePanel().getFilterPlugin()]
         });
 
-        gridPanel.getStore().on('load', this.checkState, this);
+        if (this.allowCreateNewFile) {
+            gridPanel.getStore().on('load', this.checkState, this);
+        }
         
         gridPanel.getGrid().reconfigure(gridPanel.getStore(), this.getColumnModel());
         gridPanel.getGrid().getSelectionModel().singleSelect = !this.allowMultiple;

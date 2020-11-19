@@ -90,8 +90,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.recordProxy = this.recordProxy || Tine.Filemanager.nodeBackend;
 
-        this.gridConfig.cm = this.getColumnModel();
-
+        this.initCustomCols();
+        this.modelConfig = this.recordClass.getModelConfiguration();
+        this.initGenericColumnModel();
+        
         this.defaultFilters = this.defaultFilters || [
             {field: 'query', operator: 'contains', value: ''},
             {field: 'path', operator: 'equals', value: Tine.Tinebase.container.getMyFileNodePath()}
@@ -242,138 +244,86 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         return filteredContainers.length === 1 ? this.onNodeDrop(target, dd, e, data) : false;
     },
-    
-    /**
-     * returns cm
-     *
-     * @return Ext.grid.ColumnModel
-     * @private
-     */
-    getColumnModel: function(){
-        var columns = [{
-                id: 'tags',
-                header: this.app.i18n._('Tags'),
-                dataIndex: 'tags',
-                width: 50,
-                renderer: Tine.Tinebase.common.tagsRenderer,
-                sortable: false,
-                hidden: false
-            }, {
-                id: 'name',
-                header: this.app.i18n._("Name"),
-                width: 70,
-                sortable: true,
-                dataIndex: 'name',
-                renderer: Ext.ux.PercentRendererWithName,
-                editor: Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'name', Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID, {
-                    listeners: {
-                        show: (field) => {
-                            const record = this.selectionModel.getSelected();
-                            const value = String(field.getValue());
-                            const match = value.match(/\..*/);
-                            const end = match && record.get('type') === 'file' ? match.index : value.length;
-                            field.selectText(0, end);
-                        }
-                    }
-                })
-            },{
-                id: 'hash',
-                header: this.app.i18n._("MD5 Hash"),
-                width: 40,
-                sortable: true,
-                dataIndex: 'hash',
-                hidden: true
-            },{
-                id: 'size',
-                header: this.app.i18n._("Size"),
-                width: 40,
-                sortable: true,
-                dataIndex: 'size',
-                renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
-            },{
-                id: 'contenttype',
-                header: this.app.i18n._("Content type"),
-                width: 50,
-                sortable: true,
-                dataIndex: 'contenttype',
-                renderer: function(value, metadata, record) {
 
-                    var app = Tine.Tinebase.appMgr.get('Filemanager');
-                    if(record.data.type === 'folder') {
-                        return app.i18n._("Folder");
-                    }
-                    else {
-                        return value;
+    initCustomCols: function() {
+        this.customColumnData = [{
+            id: 'tags',
+            width: 30
+        }, {
+            id: 'name',
+            width: 100,
+            renderer: Ext.ux.PercentRendererWithName,
+            editor: Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'name', Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID, {
+                listeners: {
+                    show: (field) => {
+                        const record = this.selectionModel.getSelected();
+                        const value = String(field.getValue());
+                        const match = value.match(/\..*/);
+                        const end = match && record.get('type') === 'file' ? match.index : value.length;
+                        field.selectText(0, end);
                     }
                 }
-            },{
-                id: 'creation_time',
-                header: this.app.i18n._("Creation Time"),
-                width: 50,
-                sortable: true,
-                dataIndex: 'creation_time',
-                renderer: Tine.Tinebase.common.dateTimeRenderer
-            },{
-                id: 'created_by',
-                header: this.app.i18n._("Created By"),
-                width: 50,
-                sortable: true,
-                dataIndex: 'created_by',
-                renderer: Tine.Tinebase.common.usernameRenderer
-            },{
-                id: 'last_modified_time',
-                header: this.app.i18n._("Last Modified Time"),
-                width: 80,
-                sortable: true,
-                dataIndex: 'last_modified_time',
-                renderer: Tine.Tinebase.common.dateTimeRenderer
-            },{
-                id: 'last_modified_by',
-                header: this.app.i18n._("Last Modified By"),
-                width: 50,
-                sortable: true,
-                dataIndex: 'last_modified_by',
-                renderer: Tine.Tinebase.common.usernameRenderer
+            })
+        },{
+            id: 'hash',
+            width: 40,
+        },{
+            id: 'size',
+            width: 30,
+            renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
+        },{
+            id: 'contenttype',
+            width: 50,
+            renderer: function(value, metadata, record) {
+
+                var app = Tine.Tinebase.appMgr.get('Filemanager');
+                if(record.data.type === 'folder') {
+                    return app.i18n._("Folder");
+                }
+                else {
+                    return value;
+                }
             }
-        ];
+        }, {
+            id: 'creation_time',
+            width: 40,
+            hidden: false
+        }, {
+            id: 'created_by',
+            width: 50,
+            hidden: false
+        }, {
+            id: 'last_modified_time',
+            width: 40,
+            hidden: false
+        }, {
+            id: 'last_modified_by',
+            width: 50,
+            hidden: false
+        }, {
+            id: 'revision_size',
+            tooltip: this.app.i18n._("Total size of all available revisions"),
+            width: 40,
+            renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
+        }, {
+            id: 'isIndexed',
+            tooltip: this.app.i18n._("File contents is part of the search index"),
+            width: 40,
+            renderer: function(value, i, node) {
+                return node.get('type') == 'file' ? Tine.Tinebase.common.booleanRenderer(value) : '';
+            }
+        }];
 
-        if (Tine.Tinebase.configManager.get('filesystem.modLogActive', 'Tinebase')) {
-            columns.push({
-                id: 'revision_size',
-                header: this.app.i18n._("Revision Size"),
-                tooltip: this.app.i18n._("Total size of all available revisions"),
-                width: 40,
-                sortable: true,
-                dataIndex: 'revision_size',
-                hidden: true,
-                renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
-            });
+        this.hideColumns = _.isArray(this.hideColumns) ? this.hideColumns : [];
+        if (! Tine.Tinebase.configManager.get('filesystem.modLogActive', 'Tinebase')) {
+            this.hideColumns.push('revision_size');
         }
-
-        if (Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
-            columns.push({
-                id: 'isIndexed',
-                header: this.app.i18n._("Indexed"),
-                tooltip: this.app.i18n._("File contents is part of the search index"),
-                width: 40,
-                sortable: true,
-                dataIndex: 'isIndexed',
-                hidden: true,
-                renderer: function(value, i, node) {
-                    return node.get('type') == 'file' ? Tine.Tinebase.common.booleanRenderer(value) : '';
-                }
-            });
+        
+        if (! Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
+            this.hideColumns.push('isIndexed');
         }
-
-        return new Ext.grid.ColumnModel({
-            defaults: {
-                sortable: true,
-                resizable: true
-            },
-            columns: columns
-        });
     },
-
+    
     /**
      * status column renderer
      * @param {string} value

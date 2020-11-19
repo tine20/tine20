@@ -565,7 +565,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $periods = [];
         $aggregatedPeriods = [];
 
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $eventRecord = new Calendar_Model_Event([], TRUE);
             $eventRecord->setFromJsonInUsersTimezone($event);
 
@@ -608,6 +608,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach ($periods as $eventId => $eventPeriods) {
             $seekTo = 0;
             foreach ($eventPeriods as $period) {
+                if (! isset($period['from']) || ! isset($period['until'])
+                    || ! $period['from'] || ! $period['until'])
+                {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' Invalid event period: ' . print_r($period, true));
+                    break;
+                }
                 $period['from']->setTimezone($userTimeZone);
                 $period['until']->setTimezone($userTimeZone);
                 if ($period['from']->compare($allFb->getLastRecord()->dtend) !== -1) {

@@ -18,9 +18,10 @@
  */
 class Tasks_Convert_Task_VCalendar_DavDroid extends Tasks_Convert_Task_VCalendar_Abstract
 {
-    // DAVdroid/0.7.2
+    // DAVdroid/0.7.3
     // DAVx5/2.2.1-gplay
-    const HEADER_MATCH = '/(DAVdroid|DAVx5)\/(?P<version>.*)/';
+    // OpenSync/1.5.0.3-ose
+    const HEADER_MATCH = '/(DAVdroid|DAVx5|OpenSync)\/(?P<version>.*)/';
     
     protected $_supportedFields = array(
         'seq',

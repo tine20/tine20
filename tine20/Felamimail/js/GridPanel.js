@@ -136,7 +136,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
-        
+        this.contextMenu.on('beforeshow', this.onDisplaySpamActions, this);
         this.initPagingToolbar();
 
         this.sendFolderGridStateId = this.gridConfig.stateId + '-SendFolder';
@@ -239,7 +239,27 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function() {
+        
+        this.action_spam = new Ext.Action({
+            requiredGrant: 'editGrant',
+            actionType: 'edit',
+            text: this.app.i18n._('It is SPAM'),
+            handler:this.processSpamStrategy.bind(this, 'spam'),
+            iconCls: 'felamimail-action-spam',
+            allowMultiple: true,
+            disabled: true
+        });
 
+        this.action_ham = new Ext.Action({
+            requiredGrant: 'editGrant',
+            actionType: 'edit',
+            text: this.app.i18n._('It is not SPAM'),
+            handler: this.processSpamStrategy.bind(this, 'ham'),
+            iconCls: 'felamimail-action-ham',
+            allowMultiple: true,
+            disabled: true
+        });
+        
         this.action_write = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
@@ -370,7 +390,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_print,
             this.action_printPreview,
             this.action_copyRecord,
-            this.action_moveRecord
+            this.action_moveRecord,
+            this.action_spam,
+            this.action_ham
         ]);
         
         this.contextMenu = new Ext.menu.Menu({
@@ -387,8 +409,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_copyRecord,
                 this.action_moveRecord,
                 this.action_deleteRecord,
-                this.action_fileRecord
-            ]
+                this.action_fileRecord,
+                this.action_spam,
+                this.action_ham
+            ],
         });
     },
     
@@ -691,7 +715,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         return result;
     },
-    
+
     /**
      * executed when user clicks refresh btn
      */
@@ -1679,5 +1703,53 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
         return result;
+    },
+
+    /**
+     * process spam strategy and refresh grid panel
+     *
+     * @param option
+     */
+    processSpamStrategy: async function (option) {
+        // this is needed to prevent grid reloads while messages are moved or deleted
+        this.movingOrDeleting = true;
+        
+        var sm = this.getGrid().getSelectionModel();
+        let msgs = sm.getSelectionsCollection();
+        
+        try {
+            await msgs.each(function(msg) {
+                 Tine.Felamimail.processSpam(msg,option);
+            },  this);
+        } finally {
+            this.app.getMainScreen().getCenterPanel().doRefresh();
+            this.movingOrDeleting = false;
+        }
+    },
+
+    /**
+     * - hide spam actions if the current folder is trash/junk folder
+     * - disable spam actions if the message has no spam flag
+     */
+    onDisplaySpamActions: function () {
+        let sm = this.getGrid().getSelectionModel(),
+            msgs = sm.getSelectionsCollection(),
+            folder = this.getCurrentFolderFromTree(),
+            account = this.app.getAccountStore().getById(folder.get('account_id'));
+
+        this.action_spam.show();
+        this.action_ham.show();
+
+        if (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/junk/i)) {
+            this.action_spam.hide();
+            this.action_ham.hide();
+        }
+        
+        msgs.each(function(msg) {
+            if (!msg.get('is_spam_suspicions')) {
+                this.action_spam.disable();
+                this.action_ham.disable();
+            }
+        }, this);
     }
 });

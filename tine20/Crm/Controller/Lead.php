@@ -293,6 +293,10 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
 
         // if no responsibles are defined, send message to all readers of container
         if (count($recipients) === 0) {
+            if (!(Crm_Config::getInstance()->get(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS))) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending of Lead notifications all people having read access to container disabled by config.');
+                return $recipients;
+            }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
                 $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id);
                 

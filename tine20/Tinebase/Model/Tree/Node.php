@@ -151,7 +151,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::QUERY_FILTER  => true,
                 'options'           => [
                     'idProperty'        => 'object_id',
-                ]
+                ],
             ],
             'isIndexed'         => [
                 'filter'            => Tinebase_Model_Tree_Node_IsIndexedFilter::class,
@@ -172,6 +172,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             ],
             'name'                          => [
                 'type'                          => 'string',
+                self::LABEL                     => 'Name', // _('Name')
                 self::LENGTH                    => 255,
                 self::QUERY_FILTER              => true,
                 'validators'                    => ['presence' => 'required'],
@@ -278,6 +279,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 ]
             ],
             'contenttype'                   => [
+                self::LABEL                     => 'Content type', // _('Content type')
                 self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
@@ -300,20 +302,25 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'hash'                          => [
+                self::LABEL                     => 'MD5 Hash', // _('MD5 Hash')
                 self::DOCTRINE_IGNORE           => true,
+                self::SHY                       => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
 
             'isIndexed'                     => [
+                self::LABEL                     => 'Indexed', // _('Indexed')
                 self::DOCTRINE_IGNORE           => true,
+                self::SHY                       => true,
                 'type'                          => 'string',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
             ],
             'size'                          => [
+                self::LABEL                     => 'Size', // _('Size')
                 self::DOCTRINE_IGNORE           => true,
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
@@ -328,7 +335,9 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 ]
             ],
             'revision_size'                 => [
+                self::LABEL                     => 'Revision Size', // _('Revision Size')
                 self::DOCTRINE_IGNORE           => true,
+                self::SHY                       => true,
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -393,7 +402,9 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::FILTER_DEFINITION         => [
+                    self::LABEL                     => 'Path', // _('Path')
                     self::FILTER                    => Tinebase_Model_Tree_Node_PathFilter::class,
+                    'jsConfig'                      => ['filtertype' => 'tine.filemanager.pathfiltermodel']
                 ]
             ],
             'account_grants'                => [

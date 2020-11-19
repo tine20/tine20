@@ -541,8 +541,9 @@ Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(funct
 
 Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
 
-Ext.form.TriggerField.prototype.cmpRegForResize = [];
 
+
+Ext.form.TriggerField.prototype.cmpRegForResize = [];
 
 Ext.form.TriggerField.prototype.initComponent = Ext.form.TriggerField.prototype.initComponent.createSequence(function() {
     Ext.form.TriggerField.prototype.cmpRegForResize.push(this);

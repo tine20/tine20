@@ -19,8 +19,11 @@ variables:
   # tag used on docker hub
   DOCKERHUB_TAG: "dev"
 
-  # whether to build the built, and dev image. needed for built tests
+  # whether to build the built image. needed for built tests and docker build dev
   DOCKER_BUILD_BUILD: "true"
+
+  # whether to build the dev image. needed for built tests
+  DOCKER_BUILD_DEV: "false"
 
   # install one custom app via composer: vendor
   CUSTOM_APP_VENDOR: "metaways"
@@ -66,3 +69,9 @@ variables:
 
   # add a php unit filter to all php unit test jobs e.g. "CashBook"
   PHPUNIT_FILTER: ""
+
+  # test if tine20 /health api dose not return a 500
+  TEST_WITH_HEALTH_CHECK: "true"
+  
+  # Run all tests, test failures are ignored, dose not allow push
+  RUN_ALL_TESTS: "false"

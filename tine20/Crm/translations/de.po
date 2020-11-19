@@ -762,6 +762,9 @@ msgstr "Versendet Benachrichtigungen zum Partner"
 msgid "send notification"
 msgstr "Versendet Benachrichtigungen"
 
+msgid "send notification to all access container"
+msgstr "Versendet Benachrichtigungen an alle, die Zugriff auf den Container haben"
+
 msgid "controls sending notification of Leads"
 msgstr "Steuert das versenden von Benachrichtigungen für Leads"
 

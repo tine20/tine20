@@ -2588,11 +2588,23 @@ msgstr ""
 "die Taste \"Benachrichtigung werden nicht unterdrückt\", um zu "
 "\"Benachrichtigung werden unterdrückt\" zu wechseln."
 
+#: js/ColorManager.js:220
+msgid "Color by Calendar"
+msgstr "Farbe nach Kalender"
+
 msgid "Update Status for all Attendee?"
 msgstr "Status für alle Teilnehmer ändern?"
 
-msgid "You are about to change the status of the event itself and not just "
-"your own status. Do you really want to change the event status for all "
+msgid ""
+"You are about to change the status of the event itself and not just your "
+"own status. Do you really want to change the event status for all "
 "attendee?"
-msgstr "Sie sind dabei, den Gesamtterminstatus (nicht nur Ihren eigenen) "
-"zu ändern. Wollen sie wirklich den Status für alle Teilnehmer ändern?"
+msgstr ""
+"Sie sind dabei, den Gesamtterminstatus (nicht nur Ihren eigenen) zu "
+"ändern. Wollen sie wirklich den Status für alle Teilnehmer ändern?"
+
+msgid "Calendars to export"
+msgstr "Zu exportierende Kalender"
+
+msgid "Export target"
+msgstr "Exportzielr"

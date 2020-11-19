@@ -37,6 +37,9 @@ class Tinebase_ModelConfiguration_Const {
     const DEFAULT_VAL = 'default';
     const DEGREE = 'degree';
     const DEPENDENT_RECORDS = 'dependentRecords';
+    /**
+     * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
+     */
     const DISABLED = 'disabled';
     const DOCTRINE_IGNORE = 'doctrineIgnore';
 
@@ -98,6 +101,9 @@ class Tinebase_ModelConfiguration_Const {
 
     const QUERY_FILTER = 'queryFilter';
 
+    /**
+     * If this is set to true, the field can't be updated in BE and will be shown as readOnly in the frontend
+     */
     const READ_ONLY = 'readOnly';
     const REFERENCED_COLUMN_NAME = 'referencedColumnName';
     const REF_ID_FIELD = 'refIdField';
@@ -107,6 +113,9 @@ class Tinebase_ModelConfiguration_Const {
     const RECORDS_NAME = 'recordsName';
     const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
+    /**
+     * frontends do not show this field in grids per default
+     */
     const SHY = 'shy';
     const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
     const SPECIAL_TYPE = 'specialType';

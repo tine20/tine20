@@ -9,9 +9,10 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-use \Interop\Http\Server\RequestHandlerInterface;
-use \Interop\Http\Server\MiddlewareInterface;
+use \Psr\Http\Server\RequestHandlerInterface;
+use \Psr\Http\Server\MiddlewareInterface;
 use \Psr\Http\Message\ServerRequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 use \Zend\Diactoros\Response;
 
 /**
@@ -27,11 +28,11 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
      * to the next middleware component to create the response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Interop\Http\Server\RequestHandlerInterface $delegate
+     * @param \Psr\Http\Server\RequestHandlerInterface $delegate
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . ' processing...');
