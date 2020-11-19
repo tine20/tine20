@@ -98,6 +98,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         Tinebase_Container::getInstance()->getDefaultContainer('Filemanager_Model_Node');
 
         $this->_createdNodesJson = null;
+
+        copy(dirname(dirname(__FILE__)) . '/files/test.txt', dirname(dirname(__FILE__)) . '/files/test.txt.bkp');
     }
     
     /**
@@ -130,6 +132,13 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_personalContainer  = null;
         $this->_sharedContainer    = null;
         $this->_otherUserContainer = null;
+
+        clearstatcache();
+        if (!is_file(dirname(dirname(__FILE__)) . '/files/test.txt')) {
+            rename(dirname(dirname(__FILE__)) . '/files/test.txt.bkp', dirname(dirname(__FILE__)) . '/files/test.txt');
+        } else {
+            unlink(dirname(dirname(__FILE__)) . '/files/test.txt.bkp');
+        }
     }
 
     /**
@@ -982,6 +991,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $this->assertEquals('text/plain', $result['contenttype'], print_r($result, true));
         $this->assertEquals(17, $result['size']);
+        $this->assertFalse(is_file(dirname(dirname(__FILE__)) . '/files/test.txt'));
         
         return $result;
     }

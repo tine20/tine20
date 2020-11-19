@@ -2851,7 +2851,7 @@ class Tinebase_FileSystem implements
             $tempStream = $tempFile;
         } else if (is_string($tempFile) || is_array($tempFile)) {
             $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFile);
-            return $this->copyTempfile($tempFile, $path);
+            return $this->copyTempfile($tempFile, $path, $deleteTempFileAfterCopy);
         } else if ($tempFile instanceof Tinebase_Model_Tree_Node) {
             if (isset($tempFile->hash)) {
                 $hashFile = $this->getRealPathForHash($tempFile->hash);
@@ -2859,7 +2859,7 @@ class Tinebase_FileSystem implements
             } else if (is_resource($tempFile->stream)) {
                 $tempStream = $tempFile->stream;
             } else {
-                return $this->copyTempfile($tempFile->tempFile, $path);
+                return $this->copyTempfile($tempFile->tempFile, $path, $deleteTempFileAfterCopy);
             }
         } else if ($tempFile instanceof Tinebase_Model_TempFile) {
             $tempStream = fopen($tempFile->path, 'r');
