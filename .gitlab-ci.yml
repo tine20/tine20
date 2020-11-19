@@ -101,7 +101,6 @@ docker_build_dev:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
-    ARG_COPY_SOURCE: "true"
     NODE_TOTAL: 1
     NODE_INDEX: 1
   stage: test
@@ -121,7 +120,6 @@ docker_build_dev:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
-    ARG_COPY_SOURCE: "true"
   stage: test
   needs:
     - docker_build_base_source_test-source
@@ -140,7 +138,6 @@ docker_build_dev:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
-    ARG_COPY_SOURCE: "true"
     ARG_TEST: AllServerTests
   stage: test
   needs:
@@ -157,7 +154,6 @@ docker_build_dev:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
-    ARG_COPY_SOURCE: "true"
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
   stage: test
   needs:
@@ -175,7 +171,6 @@ docker_build_dev:
     - when: never
 
 "phpstan: code analyses":
-  extends: .abstract_jobs.copy_source
   stage: test
   needs:
     - docker_build_base_source_test-source
