@@ -98,7 +98,7 @@ Tine.widgets.form.RecordForm.getFormHeight = function(recordClass) {
     Ext.each(fieldDefinitions, function(fieldDefinition) {
         var app = Tine.Tinebase.appMgr.get(recordClass.getMeta('appName')),
             field = Tine.widgets.form.FieldManager.get(app, recordClass, fieldDefinition.fieldName, 'editDialog'),
-            height = field.height+25 || 42;
+            height = field ? (field.height+25 || 42) : 0;
 
         formHeight += height;
     });
