@@ -120,7 +120,8 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
             $tempFile = Tinebase_TempFile::getInstance()->createTempFile($exportFilename);
             $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($this->_fileLocation->fm_path,
                 Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
-            Tinebase_FileSystem::getInstance()->copyTempfile($tempFile, $nodePath->statpath . '/' . $index . '_' . $filename);
+            $targetPath = $nodePath->statpath . '/' . $index . '_' . $filename;
+            Tinebase_FileSystem::getInstance()->copyTempfile($tempFile, $targetPath);
         }
     }
 
