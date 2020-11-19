@@ -109,7 +109,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(2, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertContains('**PHPUnit **', $bodyText);
+        $this->assertStringContainsString('**PHPUnit **', $bodyText);
 
         Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,false);
         self::flushMailer();
@@ -120,7 +120,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         // one message from the update user!
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertContains('**PHPUnit **', $bodyText);
+        $this->assertStringContainsString('**PHPUnit **', $bodyText);
         Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,true);
     }
     /**
