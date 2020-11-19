@@ -14,6 +14,13 @@
 #   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 #   NPM_INSTALL_COMMAND="npm --no-optional install" - used set npm proxy in the ci
 #   NODE_TLS_REJECT_UNAUTHORIZED=1 - needed to use the npm proxy
+#
+#   - indended for custom app testing
+#   - adds one composer git repo and requires one composer packet if CUSTOM_APP_NAME ist set
+#   CUSTOM_APP_VENDOR=metaways
+#   CUSTOM_APP_NAME="" - e.g. tine20-exampleapp
+#   CUSTOM_APP_GIT_URL="" - e.g. "https://gitlab.metaways.net/tine20/tine20-exampleapp.git"
+#   CUSTOM_APP_VERSION=dev-master - e.g "dev-master#${CI_COMMIT_SHA}"
 
 ARG BASE_IMAGE=base
 
@@ -57,6 +64,7 @@ COPY tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
 COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
 COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
 
+RUN printf "machine ${GERRIT_URL}\nlogin ${GERRIT_USER}\npassword ${GERRIT_PASSWORD}\n" > /root/.netrc
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
 RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
 
@@ -69,6 +77,18 @@ RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
 COPY tine20 ${TINE20ROOT}/tine20/
 COPY tests ${TINE20ROOT}/tests/
 COPY scripts ${TINE20ROOT}/scripts/
+
+# install custom app specified by env
+RUN if test -n "${CUSTOM_APP_NAME}"; \
+    then cd ${TINE20ROOT}/tine20; \
+    apk add jq; \
+    echo jq 'del(.repositories[]|select(.url=="https://gerrit.tine20.com/customers/p/'${CUSTOM_APP_NAME}'.git"))' $TINE20ROOT/tine20/composer.json '>' /tmp/replace-composer.json '&&' mv /tmp/replace-composer.json $TINE20ROOT/tine20/composer.json; \
+    jq 'del(.repositories[]|select(.url=="https://gerrit.tine20.com/customers/p/'${CUSTOM_APP_NAME}'.git"))' $TINE20ROOT/tine20/composer.json > /tmp/replace-composer.json && mv /tmp/replace-composer.json $TINE20ROOT/tine20/composer.json; \
+    echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
+    composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}"; \
+    echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}"; \
+    composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}"; \
+    fi
 
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest --no-scripts
 
