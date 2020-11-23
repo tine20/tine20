@@ -247,7 +247,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             handler:this.processSpamStrategy.bind(this, 'spam'),
             iconCls: 'felamimail-action-spam',
             allowMultiple: true,
-            disabled: true
+            hidden: !this.app.featureEnabled('featureSpamSuspicionStrategy')
+
         });
 
         this.action_ham = new Ext.Action({
@@ -257,7 +258,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             handler: this.processSpamStrategy.bind(this, 'ham'),
             iconCls: 'felamimail-action-ham',
             allowMultiple: true,
-            disabled: true
+            hidden: !this.app.featureEnabled('featureSpamSuspicionStrategy')
         });
         
         this.action_write = new Ext.Action({
@@ -1711,19 +1712,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param option
      */
     processSpamStrategy: async function (option) {
-        // this is needed to prevent grid reloads while messages are moved or deleted
-        this.movingOrDeleting = true;
-        
-        var sm = this.getGrid().getSelectionModel();
-        let msgs = sm.getSelectionsCollection();
-        
-        try {
-            await msgs.each(function(msg) {
-                 Tine.Felamimail.processSpam(msg,option);
-            },  this);
-        } finally {
-            this.app.getMainScreen().getCenterPanel().doRefresh();
-            this.movingOrDeleting = false;
+        let sm = this.getGrid().getSelectionModel();
+        let msgs =  sm.getCount() > 0 ? sm.getSelectionsCollection() : null;
+
+        if (msgs) {
+            try {
+                // this is needed to prevent grid reloads while messages are moved or deleted
+                this.movingOrDeleting = true;
+
+                await msgs.each(function (msg) {
+                    Tine.Felamimail.processSpam(msg, option);
+                }, this);
+            } finally {
+                this.app.getMainScreen().getCenterPanel().doRefresh();
+                this.movingOrDeleting = false;
+            }
         }
     },
 
@@ -1732,24 +1735,33 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * - disable spam actions if the message has no spam flag
      */
     onDisplaySpamActions: function () {
-        let sm = this.getGrid().getSelectionModel(),
-            msgs = sm.getSelectionsCollection(),
-            folder = this.getCurrentFolderFromTree(),
-            account = this.app.getAccountStore().getById(folder.get('account_id'));
+        if (!this.app.featureEnabled('featureSpamSuspicionStrategy')) {
+            return ;
+        }
+
+        let sm = this.getGrid().getSelectionModel();
+        let msgs =  sm.getCount() > 0 ? sm.getSelectionsCollection() : null;
+        let folder = this.getCurrentFolderFromTree();
+        let account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) : null;
 
         this.action_spam.show();
         this.action_ham.show();
 
-        if (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/junk/i)) {
+        if (folder && account && (
+            folder.get('globalname') === account.get('trash_folder')
+            || folder.get('localname').match(/junk/i)
+        )) {
             this.action_spam.hide();
             this.action_ham.hide();
         }
-        
-        msgs.each(function(msg) {
-            if (!msg.get('is_spam_suspicions')) {
-                this.action_spam.disable();
-                this.action_ham.disable();
-            }
-        }, this);
+
+        if (msgs) {
+            msgs.each(function (msg) {
+                if (!msg.get('is_spam_suspicions')) {
+                    this.action_spam.disable();
+                    this.action_ham.disable();
+                }
+            }, this);
+        }
     }
 });
