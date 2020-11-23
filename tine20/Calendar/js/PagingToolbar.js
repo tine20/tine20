@@ -58,7 +58,7 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             'refresh'
         );
         if (! Ext.isDate(this.dtStart)) {
-            this.dtStart = new Date();
+            this.dtStart = new Date().clearTime();
         }
         
         this.periodPicker = new Tine.Calendar.PagingToolbar[Ext.util.Format.capitalize(this.view) + 'PeriodPicker']({
@@ -66,7 +66,7 @@ Tine.Calendar.PagingToolbar = Ext.extend(Ext.Toolbar, {
             listeners: {
                 scope: this,
                 change: function(picker, view, period) {
-                    this.dtStart = period.from.clone();
+                    this.dtStart = period.from.clearTime(true);
                     this.fireEvent('change', this, view, period);
                 },
                 menushow: function(){this.periodPickerActive = true; },
@@ -272,10 +272,9 @@ Tine.Calendar.PagingToolbar.DayPeriodPicker = Ext.extend(Tine.Calendar.PagingToo
         });
     },
     update: function(period) {
-        let dtStart = _.get(period, 'from', period);
-        this.dtStart = dtStart.clearTime(true);
+        this.dtStart = _.get(period, 'from', period).clearTime(true);
         if (this.button && this.button.rendered) {
-            this.button.setText(dtStart.format(Ext.DatePicker.prototype.format));
+            this.button.setText(this.dtStart.format(Ext.DatePicker.prototype.format));
         }
     },
     render: function() {
@@ -371,7 +370,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         
     },
     update: function(period) {
-        let dtStart = _.get(period, 'from', period);
+        let dtStart = _.get(period, 'from', period).clearTime(true);
 
         // const state = Ext.state.Manager.get('cal-pgtb-pp-wkbtn');
         const state = this.tb.periodBtn.getState();
@@ -570,12 +569,11 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
         });
     },
     update: function(period) {
-        let dtStart = _.get(period, 'from', period);
-        this.dtStart = dtStart.clone();
+        this.dtStart = _.get(period, 'from', period).clearTime(true);
         if (this.button && this.button.rendered) {
-            var monthName = Ext.DatePicker.prototype.monthNames[dtStart.getMonth()];
-            this.button.setText(monthName + dtStart.format(' Y'));
-            this.dateMenu.picker.setValue(dtStart.clone());
+            var monthName = Ext.DatePicker.prototype.monthNames[this.dtStart.getMonth()];
+            this.button.setText(monthName + this.dtStart.format(' Y'));
+            this.dateMenu.picker.setValue(this.dtStart.clone());
         }
     },
     render: function() {
@@ -632,10 +630,9 @@ Tine.Calendar.PagingToolbar.YearPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         
     },
     update: function(period) {
-        let dtStart = _.get(period, 'from', period);
-        this.dtStart = dtStart.clearTime(true);
+        this.dtStart =  _.get(period, 'from', period).clearTime(true);
         if (this.field && this.field.rendered) {
-            this.field.setValue(dtStart.format('Y'));
+            this.field.setValue(this.dtStart.format('Y'));
         }
     },
     render: function() {
