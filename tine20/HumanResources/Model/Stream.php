@@ -158,4 +158,20 @@ class HumanResources_Model_Stream extends Tinebase_Record_NewAbstract
             ]
         ],
     ];
+
+    /**
+     * can be reimplemented by subclasses to modify values during setFromJson
+     * @param array $_data the json decoded values
+     * @return void
+     */
+    protected function _setFromJson(array &$_data)
+    {
+        if (isset($_data[self::FLD_STREAM_MODALITIES]) && is_array($_data[self::FLD_STREAM_MODALITIES])) {
+            foreach ($_data[self::FLD_STREAM_MODALITIES] as &$streamModality) {
+                if (isset($streamModality[HumanResources_Model_StreamModality::FLD_END])) {
+                    unset($streamModality[HumanResources_Model_StreamModality::FLD_END]);
+                }
+            }
+        }
+    }
 }
