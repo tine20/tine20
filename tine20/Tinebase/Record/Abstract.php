@@ -1289,6 +1289,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * set read only fields
      *
      * @param array $readOnlyFields
+     * @deprecated is defined by modelconfig and should not be changed afterwards
      */
     public function setReadOnlyFields($readOnlyFields)
     {
