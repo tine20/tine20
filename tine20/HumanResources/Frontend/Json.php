@@ -87,9 +87,26 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             HumanResources_Model_Stream::class);
     }
 
-    public function saveStream($data)
+    /**
+     * Return a single stream
+     *
+     * @param   string $id
+     * @return  array stream data
+     */
+    public function getStream($id)
     {
-        return $this->_save($data, HumanResources_Controller_Stream::getInstance(), HumanResources_Model_Stream::class);
+        return $this->_get($id, HumanResources_Controller_Stream::getInstance());
+    }
+    
+    /**
+     * creates/updates a stream
+     *
+     * @param  array $recordData
+     * @return array created/updated stream
+     */
+    public function saveStream($recordData)
+    {
+        return $this->_save($recordData, HumanResources_Controller_Stream::getInstance(), HumanResources_Model_Stream::class);
     }
 
     public function generateStreamReport($streamId)

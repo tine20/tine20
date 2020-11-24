@@ -47,6 +47,8 @@ class HumanResources_Model_StreamModalReport extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION               => 1,
+        self::RECORD_NAME           => 'Modality Report',
+        self::RECORDS_NAME          => 'Modality Reports', // ngettext('Modality Report', 'Modality Reports', n)
         self::HAS_RELATIONS         => true,
         self::COPY_RELATIONS        => false,
         self::MODLOG_ACTIVE         => true,
@@ -81,6 +83,7 @@ class HumanResources_Model_StreamModalReport extends Tinebase_Record_NewAbstract
             self::FLD_STREAM_MODALITY_ID    => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'],
+                self::DISABLED                  => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME                => HumanResources_Model_StreamModality::MODEL_NAME_PART,
