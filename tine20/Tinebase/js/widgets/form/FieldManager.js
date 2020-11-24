@@ -207,6 +207,8 @@ Tine.widgets.form.FieldManager = function() {
                     if (category === 'editDialog') {
                         field.xtype = 'wdgt.pickergrid';
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
+                        field.allowCreateNew = _.get(fieldDefinition, 'config.dependentRecords', false);
+                        field.enableTbar = !_.get(fieldDefinition, 'config.dependentRecords', false);
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
                         field.hideHeaders = true;
