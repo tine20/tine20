@@ -697,7 +697,7 @@ msgstr "Tage der Krankmeldung"
 
 #: Model/DailyWTReport.php:189
 msgid "Working Time Correction"
-msgstr "Arbeitszeit (Berichtigt)"
+msgstr "Arbeitszeitkorrektur"
 
 #: Model/DailyWTReport.php:198
 msgid "Actual Working Time"
@@ -717,7 +717,7 @@ msgstr "Anmerkung"
 
 #: Model/DailyWTReport.php:225
 msgid "Is Cleared"
-msgstr "Ist Freigegeben"
+msgstr "Ist Abgerechnet"
 
 #: Model/DailyWTReport.php:233
 msgid "Cleared in"
