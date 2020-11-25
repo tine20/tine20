@@ -165,7 +165,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     protected function _assertRootNodes($searchResult)
     {
         foreach ($searchResult['results'] as &$result) {
-            if (isset($result['efile_file_metadata'])) {
+            if (array_key_exists('efile_file_metadata', $result)) {
                 unset($result['efile_file_metadata']);
             }
         }
