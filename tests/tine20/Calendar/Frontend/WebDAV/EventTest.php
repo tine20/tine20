@@ -85,6 +85,44 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         return $event;
     }
 
+    public function testUndeleteEventByCreate()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        $event = $this->_getEvent();
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        Calendar_Controller_Event::getInstance()->delete($event);
+
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+        $vcalendar = $converter->fromTine20Model($event);
+
+        Calendar_Frontend_WebDAV_Event::create($this->_getTestCalendar(), $event->getId() . '.ics', $vcalendar->serialize());
+        $this->assertSame($event->getId(), Calendar_Controller_Event::getInstance()->get($event->getId())->getId());
+    }
+
+    public function testUndeleteEventByCreateFail()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        $event = $this->_getEvent();
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        Calendar_Controller_Event::getInstance()->delete($event);
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+        $vcalendar = $converter->fromTine20Model($event);
+
+
+        $this->setExpectedException(Sabre\DAV\Exception\PreconditionFailed::class,
+            'only organizer may recover deleted events');
+        
+        Calendar_Frontend_WebDAV_Event::create($this->_getPersonasDefaultCals('sclever'), $event->getId() . '.ics',
+            $vcalendar->serialize());
+    }
+
     /**
      * test create event for different users from same file (same id) in their personal folder (no grants for the other user)
      *

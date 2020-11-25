@@ -211,6 +211,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' recovering already deleted event');
 
+                if (!$existingEvent->hasExternalOrganizer() &&
+                        (!$existingEvent->organizer instanceof Addressbook_Model_Contact ||
+                            $existingEvent->organizer->account_id !== $container->getOwner())) {
+                    throw new Sabre\DAV\Exception\PreconditionFailed('only organizer may recover deleted events');
+                }
+
                 // @TODO have a undelete/recover workflow beginning in controller
                 $existingEvent->is_deleted = 0;
                 $existingEvent->deleted_by = NULL;
