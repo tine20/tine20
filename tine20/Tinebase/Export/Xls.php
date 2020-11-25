@@ -282,8 +282,11 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         $templateFile = $this->_getTemplateFilename();
 
         if ($templateFile !== NULL) {
-            // autodetection works much better with file ending, thanks to phpspreadsheet we can simply use the reader version! (at least until ms will change the file endings) :-)
+            // autodetection works much better with file ending, thanks to phpspreadsheet we can simply use the reader
+            //   version! (at least until ms will change the file endings) :-)
             $tmpFile = Tinebase_TempFile::getTempPath() . '.' . strtolower($this->_excelVersion);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Copy template file to temp path: '
+                . $templateFile . ' -> ' . $tmpFile);
             if (false === copy($templateFile, $tmpFile)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not copy template file to temp path');
                 throw new Tinebase_Exception('could not copy template file to temp path');
