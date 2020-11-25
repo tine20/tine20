@@ -380,10 +380,10 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'default'               => null,
         ),
         self::SPAM_INFO_DIALOG_CONTENT => array(
-            //_('Spam Alert Information')
-            'label'                 => 'Spam Alert Information',
-            // _('Spam Alert Information')
-            'description'           => 'Spam alert information',
+            //_('Confirm SPAM Suspicion Message')
+            'label'                 => 'Confirm SPAM Suspicion Message',
+            // _('Message for users when they press the info button in a SPAM suspicion toolbar.')
+            'description'           => 'Message for users when they press the info button in a SPAM suspicion toolbar.',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
