@@ -116,8 +116,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $vcalendar = $converter->fromTine20Model($event);
 
 
-        $this->setExpectedException(Sabre\DAV\Exception\PreconditionFailed::class,
-            'only organizer may recover deleted events');
+        $this->expectException(Sabre\DAV\Exception\PreconditionFailed::class);
+        $this->expectExceptionMessage('only organizer may recover deleted events');
         
         Calendar_Frontend_WebDAV_Event::create($this->_getPersonasDefaultCals('sclever'), $event->getId() . '.ics',
             $vcalendar->serialize());
