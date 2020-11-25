@@ -164,6 +164,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     protected function _assertRootNodes($searchResult)
     {
+        foreach ($searchResult['results'] as &$result) {
+            if (isset($result['efile_file_metadata'])) {
+                unset($result['efile_file_metadata']);
+            }
+        }
         $translate = Tinebase_Translation::getTranslation('Filemanager');
         $this->assertEquals(3, $searchResult['totalcount'], 'did not get root nodes: ' . print_r($searchResult, true));
         $this->assertEquals(array(
