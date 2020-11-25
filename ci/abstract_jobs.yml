@@ -165,6 +165,7 @@
     - source ci/build.sh
     - export DOCKER_BUILDKIT=0
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
+    - login
 
 
 # merge job for customapps
