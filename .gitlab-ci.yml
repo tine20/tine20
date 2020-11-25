@@ -11,6 +11,7 @@ stages:
   - test
   - deploy
   - housekeeping
+  - housekeeping-cleanup
 
 workflow:
   rules:
@@ -321,4 +322,19 @@ docker_populate_cache:
     - docker_populate_cache built
     - docker_populate_cache test-built
     - docker_populate_cache dev
-  allow_failure: true
+
+docker_cleanup_images:
+  extends: .abstract_jobs.docker
+  stage: housekeeping-cleanup
+  script:
+    - docker_untag_image base-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
+    - docker_untag_image source-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
+    - docker_untag_image test-source-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
+    - docker_untag_image build-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
+    - docker_untag_image built-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
+    - docker_untag_image test-built-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
+    - docker_untag_image dev-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
+  rules:
+    - if: $DOCKER_CLEANUP_IMAGES == "true"
+      when: always
+    - when: never
