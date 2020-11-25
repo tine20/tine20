@@ -1,8 +1,4 @@
 # This is the main gitlab ci configuration. (https://docs.gitlab.com/ee/ci/yaml/)
-#
-# First we build all images. Then we run all tests. Test can already run during build if there image is ready.
-# (see https://docs.gitlab.com/ee/ci/yaml/#needs). Then we push all images, if all test succeed
-#
 
 include:
   - local: '/ci/abstract_jobs.yml'
@@ -14,6 +10,7 @@ stages:
   - build3
   - test
   - deploy
+  - housekeeping
 
 workflow:
   rules:
@@ -31,26 +28,48 @@ workflow:
 # Gitlab currently dose not support needs in the same stage.
 # Therefore we need multiple build stages.
 
-docker_build_base_source_test-source:
+.docker_build_source:
   extends: .abstract_jobs.docker
   stage: build1
   script:
     - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
-    - build_image base
+    - build_or_reuse_image base $REUSE_IMAGES
     - use_cached_image_when_nothing_changed base
     - push_image base
-    - build_image source
+    - build_or_reuse_image source $REUSE_IMAGES
     - use_cached_image_when_nothing_changed source
     - push_image source
-    - build_image test-source
+    - build_or_reuse_image test-source $REUSE_IMAGES
     - push_image test-source
   timeout: 60m
+docker_build_source_reuse:
+  extends: .docker_build_source
+  variables:
+    REUSE_IMAGES: "true"
+  rules:
+    - if: &TESTS_NEEDING_BUILT_IMAGE $RUN_ALL_TESTS == "true" || $PHP_UNIT_ALL_TESTS_BUILT == "true" || $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true" || $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
+      when: never
+    - if: &DEPLOYS_NEEDING_BUILT_IMAGE $PUSH_BUILT_IMAGE_TO_GITLAB == "true"
+      when: never
+    - if: &DEPLOYS_NEEDING_DEV_IMAGE $PUSH_DEV_IMAGE_TO_GITLAB == "true" || $PUSH_TO_DOCKERHUB == "true"
+      when: never
+    - when: on_success
+docker_build_source_build:
+  extends: .docker_build_source
+  variables:
+    REUSE_IMAGES: "false"
+  rules:
+    - if: *TESTS_NEEDING_BUILT_IMAGE
+      when: on_success
+    - if: *DEPLOYS_NEEDING_BUILT_IMAGE
+      when: on_success
+    - if: *DEPLOYS_NEEDING_DEV_IMAGE
+      when: on_success
+    - when: never
 
-docker_build_build_built_test-built:
+docker_build_built:
   extends: .abstract_jobs.docker
   stage: build2
-  needs:
-    - docker_build_base_source_test-source
   script:
     - build_image build
     - use_cached_image_when_nothing_changed build
@@ -61,7 +80,11 @@ docker_build_build_built_test-built:
     - build_image test-built
     - push_image test-built
   rules:
-    - if: $DOCKER_BUILD_BUILD == "true"
+    - if: *TESTS_NEEDING_BUILT_IMAGE
+      when: on_success
+    - if: *DEPLOYS_NEEDING_BUILT_IMAGE
+      when: on_success
+    - if: *DEPLOYS_NEEDING_DEV_IMAGE
       when: on_success
     - when: never
   timeout: 60m # time run: 28m
@@ -69,33 +92,18 @@ docker_build_build_built_test-built:
 docker_build_dev:
   extends: .abstract_jobs.docker
   stage: build3
-  needs:
-    - docker_build_build_built_test-built
   script:
     - build_image dev
     - use_cached_image_when_nothing_changed dev
     - push_image dev
   rules:
-    - if: $DOCKER_BUILD_BUILD == "true" && $DOCKER_BUILD_DEV == "true"
+    - if: *DEPLOYS_NEEDING_DEV_IMAGE
       when: on_success
     - when: never
   timeout: 60m # time run: 28m
 
 # ============ stage: test ===========================
 # This stage runs all tests.
-#
-# If your job only needs the source image u should use:
-#   need:
-#    docker_build_base_source_test-source
-# Other wise you should use:
-#   need:
-#     - docker_build_build_built_test-built
-#   rules:
-#     - if: $DOCKER_BUILD_BUILD != "true"
-#       when: never
-#   as first rules.
-#
-# For test needing tine to be installed and run. You should extend .abstract_jobs.php_unit (ci/abstract_jobs.yml)
 
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit
@@ -105,8 +113,6 @@ docker_build_dev:
     NODE_TOTAL: 1
     NODE_INDEX: 1
   stage: test
-  needs:
-    - docker_build_base_source_test-source
   timeout: 45m
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
@@ -125,8 +131,6 @@ docker_build_dev:
     ARG_IMAGE: test-source-commit
     ARG_COPY_SOURCE: "true"
   stage: test
-  needs:
-    - docker_build_base_source_test-source
   timeout: 45m
   parallel: 5
   rules:
@@ -147,8 +151,6 @@ docker_build_dev:
     ARG_COPY_SOURCE: "true"
     ARG_TEST: AllServerTests
   stage: test
-  needs:
-    - docker_build_base_source_test-source
   timeout: 30m
   rules:
     - if: $PHP_UNIT_SERVERTESTS == "never"
@@ -166,8 +168,6 @@ docker_build_dev:
     ARG_COPY_SOURCE: "true"
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
   stage: test
-  needs:
-    - docker_build_base_source_test-source
   timeout: 30m
   rules:
     - if: $PHP_UNIT_SETUP_TESTS == "never"
@@ -183,8 +183,6 @@ docker_build_dev:
 "phpstan: code analyses":
   extends: .abstract_jobs.copy_source
   stage: test
-  needs:
-    - docker_build_base_source_test-source
   image:
     name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
   script:
@@ -213,14 +211,10 @@ docker_build_dev:
   variables:
     ARG_IMAGE: test-built-commit
   stage: test
-  needs:
-    - docker_build_build_built_test-built
   parallel: 5
   timeout: 45m
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "never"
-      when: never
-    - if: $DOCKER_BUILD_BUILD != "true"
       when: never
     - if: $RUN_ALL_TESTS == "true"
       when: on_success
@@ -235,15 +229,11 @@ docker_build_dev:
     ARG_EXCLUDE_GROUP: ""
     ARG_GROUP: "nogitlabci"
   stage: test
-  needs:
-    - docker_build_build_built_test-built
   parallel: 5
   allow_failure: true
   timeout: 30m
   rules:
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "never"
-      when: never
-    - if: $DOCKER_BUILD_BUILD != "true"
       when: never
     - if: $RUN_ALL_TESTS == "true"
       when: on_success
@@ -256,14 +246,10 @@ docker_build_dev:
   variables:
     ARG_IMAGE: test-built-commit
   stage: test
-  needs:
-    - docker_build_build_built_test-built
   parallel: 5
   timeout: 30m
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "never"
-      when: never
-    - if: $DOCKER_BUILD_BUILD != "true"
       when: never
     - if: $RUN_ALL_TESTS == "true"
       when: on_success
@@ -272,53 +258,6 @@ docker_build_dev:
     - when: never
 
 # ============ stage: deploy ===========================
-
-# Pushes base-commit as base, source-commit as source and test-source-commit as test-source to aws ecr.
-# They are used for caching.
-# The ecr registry is vital for the ci. So this is more an internal push.
-"docker: push base, source, test-source and dependency image":
-  extends: .abstract_jobs.docker
-  stage: deploy
-  script:
-    - tag_commit_as_branch_image base
-    - tag_commit_as_branch_image source
-    - tag_commit_as_branch_image test-source
-  rules:
-    - if: $NO_PUSH == "true"
-      when: never
-    - when: on_success
-  timeout: 20m # time run: 3m
-
-# Pushes build-commit as build, built-commit as built and test-built-commit as test-built and dev-commit as dev to aws ecr.
-# They are used for caching.
-# The ecr registry is vital for the ci. So this is more an internal push.
-"docker: push built, build and test-build image":
-  extends: .abstract_jobs.docker
-  stage: deploy
-  script:
-    - tag_commit_as_branch_image built
-    - tag_commit_as_branch_image build
-    - tag_commit_as_branch_image test-built
-  rules:
-    - if: $NO_PUSH == "true"
-      when: never
-    - if: $DOCKER_BUILD_BUILD == "true"
-      when: on_success
-    - when: never
-  timeout: 20m # time run: 3m
-
-"docker: push dev image":
-  extends: .abstract_jobs.docker
-  stage: deploy
-  script:
-    - tag_commit_as_branch_image dev
-  rules:
-    - if: $NO_PUSH == "true"
-      when: never
-    - if: $DOCKER_BUILD_BUILD == "true" && $DOCKER_BUILD_DEV == "true"
-      when: on_success
-    - when: never
-  timeout: 20m # time run: 3m
 
 # pushes built-commit as built to our gitlab registry.
 # They can be accessed essayer.
@@ -329,13 +268,7 @@ docker_build_dev:
   script:
     - tag_commit_as_gitlab_image built
   rules:
-    - if: $NO_PUSH == "true"
-      when: never
-    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $DOCKER_BUILD_BUILD == "true"
+    - if: $PUSH_BUILT_IMAGE_TO_GITLAB == "true"
       when: on_success
     - when: never
   timeout: 20m
@@ -349,13 +282,7 @@ docker_build_dev:
   script:
     - tag_commit_as_gitlab_image dev
   rules:
-    - if: $NO_PUSH == "true"
-      when: never
-    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $DOCKER_BUILD_BUILD == "true" && $DOCKER_BUILD_DEV == "true"
+    - if: $PUSH_DEV_IMAGE_TO_GITLAB == "true"
       when: on_success
     - when: never
   timeout: 20m
@@ -363,30 +290,11 @@ docker_build_dev:
 # pushing built-commit as tine20/tine20 to dockerhub.
 # The tag is also overwritten and set to $DOCKERHUB_TAG
 # This job should only be triggered by a schedule or a manual pipeline trigger
-"docker push built image to dockerhub":
+"docker push built and dev image to dockerhub":
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - tag_commit_as_dockerhub_image built tine20
-  rules:
-    - if: $NO_PUSH == "true"
-      when: never
-    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $PUSH_TO_DOCKERHUB == "true" && $DOCKER_BUILD_BUILD == "true"
-      when: on_success
-    - when: never
-  timeout: 20m
-
-# pushing dev as tine20/dev to dockerhub.
-# The tag is also overwritten and set to $DOCKERHUB_TAG
-# This job should only be triggered by a schedule or a manual pipeline trigger
-"docker push dev image to dockerhub":
-  extends: .abstract_jobs.docker
-  stage: deploy
-  script:
     - tag_commit_as_dockerhub_image dev dev
   rules:
     - if: $NO_PUSH == "true"
@@ -395,7 +303,22 @@ docker_build_dev:
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
-    - if: $PUSH_TO_DOCKERHUB == "true" && $DOCKER_BUILD_BUILD == "true" && $DOCKER_BUILD_DEV == "true"
+    - if: $PUSH_TO_DOCKERHUB == "true"
       when: on_success
     - when: never
   timeout: 20m
+
+# ============ stage: housekeeping ===========================
+
+docker_populate_cache:
+  extends: .abstract_jobs.docker
+  stage: housekeeping
+  script:
+    - docker_populate_cache base
+    - docker_populate_cache source
+    - docker_populate_cache test-source
+    - docker_populate_cache build
+    - docker_populate_cache built
+    - docker_populate_cache test-built
+    - docker_populate_cache dev
+  allow_failure: true
