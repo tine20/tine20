@@ -531,7 +531,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
             var folder = this.app.getFolderStore().getById(node.id);
-            this.app.checkMailsDelayedTask.delay(0);
+            if (folder) {
+                if (folder.get('cache_status') === 'pending') {
+                    this.app.checkMails(folder, Ext.emptyFn);
+                }
+                // lasy wait for selection change
+                _.delay(() => {this.updateFolderStatus(folder);}, 100);
+            }
         }
     },
     
@@ -769,11 +775,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 var progressEl = Ext.get(Ext.DomQuery.selectNode('img[class^=felamimail-node-statusbox-progress]', nodeEl));
                 progressEl.removeClass(['felamimail-node-statusbox-progress-pie', 'felamimail-node-statusbox-progress-loading']);
                 if (! Ext.isNumber(progress)) {
-                    progressEl.setStyle('background-position', 0 + 'px');
                     progressEl.addClass('felamimail-node-statusbox-progress-loading');
                 } else {
-                    progressEl.setStyle('background-position', progress + '%');
                     progressEl.addClass('felamimail-node-statusbox-progress-pie');
+                    progressEl.addClass('felamimail-node-statusbox-progress-pie-' + progress);
                 }
                 progressEl.setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete');
             }
