@@ -38,7 +38,6 @@ Tine.Felamimail.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPan
  * <pre>
  * low priority:
  * TODO         make inbox/drafts/templates configurable in account
- * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  * TODO         disable delete action in account ctx menu if user has no manage_accounts right
  * </pre>
  * 

@@ -91,7 +91,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      * 
      * @param {Array} all filters
      */
-    setValue: function(filters) {
+    setValue: function(filters, options) {
         if (! this.selectNodes) {
             return null;
         }
@@ -125,7 +125,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             }
 
             this.treePanel.getSelectionModel().suspendEvents();
-            this.selectValue(filter.value);
+            this.selectValue(filter.value, options);
         }, this);
     },
     
@@ -134,7 +134,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      * 
      * @param {String} value
      */
-    selectValue: function(value) {
+    selectValue: function(value, options) {
         var values = Ext.isArray(value) ? value : [value];
             
             
@@ -193,7 +193,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                     }).defer(10, this);
                     
                 }
-            }.createDelegate(this), true);
+            }.createDelegate(this), true, options);
         }, this);
     },
     
@@ -205,7 +205,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      * (bSuccess, oSelNode) where bSuccess is if the selection was successful and oSelNode is the selected node.
      * @param {keep} bool keep current selection
      */
-    selectPath : function(path, attr, callback, keep){
+    selectPath : function(path, attr, callback, keep, options){
         attr = attr || 'id';
         var keys = path.split(this.pathSeparator),
             v = keys.pop();
@@ -215,7 +215,8 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 if (success && node) {
                     var n = node.findChild(attr, v) || node.findChild('path', node.attributes.path + '/' + v);
                     if (n) {
-                        n.getOwnerTree().getSelectionModel().select(n, false, keep);
+                        const sm = n.getOwnerTree().getSelectionModel();
+                        sm.select(n, false, keep, !_.get(options, 'preserveCursor', false));
                         if (callback) {
                             callback(true, n);
                         }
