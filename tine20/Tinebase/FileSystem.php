@@ -2843,7 +2843,7 @@ class Tinebase_FileSystem implements
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function copyTempfile($tempFile, $path, $deleteTempFileAfterCopy = false)
+    public function copyTempfile($tempFile, &$path, $deleteTempFileAfterCopy = false)
     {
         if ($tempFile === null) {
             $tempStream = fopen('php://memory', 'r');
@@ -2937,13 +2937,15 @@ class Tinebase_FileSystem implements
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public function copyStream($in, $path)
+    public function copyStream($in, &$path)
     {
         $deleteFile = !$this->fileExists($path);
         try {
             if (!$handle = $this->fopen($path, 'w')) {
                 throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $path . ')');
             }
+
+            $path = stream_context_get_options($handle)['tine20']['path'];
 
             if (!is_resource($in)) {
                 throw new Tinebase_Exception_UnexpectedValue('source needs to be of type stream');

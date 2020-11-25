@@ -886,7 +886,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertEquals($inboxBefore['cache_unreadcount'], $inboxAfter['cache_unreadcount']);
         $this->assertEquals($inboxBefore['cache_totalcount'], $inboxAfter['cache_totalcount']);
 
-        $this->_assertMessageInFolder($moveToFolderName, $message['subject']);
+        $movedMessage = $this->_assertMessageInFolder($moveToFolderName, $message['subject']);
+        self::assertEquals($message['received'], $movedMessage['received'], 'received date different');
     }
 
     protected function _moveMessageToFolder($moveToFolderName, $keepOriginalMessages = false, $account = null)

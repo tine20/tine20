@@ -25,6 +25,7 @@
 
 .copy_source: &abstract_jobs-copy_source |
   if test "${ARG_COPY_SOURCE}" == "true"; then
+    echo "copy src to container ...";
     apk add rsync;
     cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/;
     cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/;
@@ -41,8 +42,10 @@
     rsync -a -I --delete ${CI_PROJECT_DIR}/scripts/ ${TINE20ROOT}/scripts/;
     rsync -a -I --delete ${CI_PROJECT_DIR}/tests/ ${TINE20ROOT}/tests/;
     rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_PROJECT_DIR}/tine20/ ${TINE20ROOT}/tine20/;
+    rm -r ${TINE20ROOT}/tine20/vendor/metaways
+    cd ${TINE20ROOT}/tine20;
+    composer install --no-ansi --no-progress --no-suggest --no-scripts
     if test -n "${CUSTOM_APP_NAME}"; then
-      cd ${TINE20ROOT}/tine20;
       apk add jq;
       echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
       composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
