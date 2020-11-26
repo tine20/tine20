@@ -230,20 +230,19 @@
 }
 
 .felamimail-node-statusbox-progress {
-    width: 16px;
-    height: 16px;
-    margin-top: 1px;
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
     background-repeat: no-repeat;
     vertical-align: top;
     margin-right: 5px;
 }
 
 .felamimail-node-statusbox-progress-pie {
-    background-image:url(../../images/progress-pie.gif);
-}
-
-.felamimail-node-statusbox-progress-loading {
-    background-image:url(../../library/ExtJS/resources/images/default/tree/loading.gif);
+    background-size: contain;
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
 }
 
 .ext-gecko .felamimail-node-statusbox-unread {
