@@ -113,7 +113,6 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
     triggerAction: 'all',
     pageSize: 50,
-    minChars: 3,
     forceSelection: true,
     minListWidth: 300,
 
