@@ -858,7 +858,7 @@ var menu = new Ext.menu.Menu({
             return;
         }
         this.innerList.update(this.loadingText ?
-               '<div class="loading-indicator">'+this.loadingText+'</div>' : '');
+               '<div class="loading-indicator"><div class="loading-indicator-wait"></div>'+this.loadingText+'</div>' : '');
         this.restrictHeight();
         this.selectedIndex = -1;
     },
