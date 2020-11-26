@@ -1131,6 +1131,7 @@ textarea.x-form-invalid,
 }
 
 .tine-viewport-waitcycle,
+.loading-indicator-wait,
 .x-tree-node-loading .x-tree-node-icon,
 .x-mask-wait,
 .x-btn-wait + div,
@@ -1171,6 +1172,7 @@ div.x-btn-wait,
 }
 
 .x-tree-node-loading .x-tree-node-icon,
+.loading-indicator-wait,
 .tine-viewport-waitcycle,
 .x-mask-wait,
 .x-item-disabled .x-tbar-loading + div,
@@ -1225,4 +1227,16 @@ div.x-btn-wait,
     width: 16px;
     margin: 0px;
     background-image: none !important;
+}
+
+.loading-indicator-wait {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 14px;
+    height: 14px;
+}
+
+.x-combo-list-inner .loading-indicator {
+    background: none;
 }
