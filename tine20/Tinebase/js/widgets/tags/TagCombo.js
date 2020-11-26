@@ -37,7 +37,6 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     triggerAction: 'all',
     displayField: 'name',
     valueField: 'id',
-    minChars: 3,
     
     /**
      * @private
