@@ -408,7 +408,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             this.applyingState = false;
         }
 
-        let node = this.getNodeById(state.selected);
+        let node = this.getNodeById(_.get(state, 'selected'));
 
         if(node) {
             node.select();
