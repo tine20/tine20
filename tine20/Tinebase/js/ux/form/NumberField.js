@@ -88,7 +88,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
             var decimalString = split[1];
         }
         
-        while (decimalString.length < this.decimalPrecision) {
+        while (this.allowDecimals && decimalString.length < this.decimalPrecision) {
             decimalString += '0';
         }
 
