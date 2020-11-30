@@ -125,6 +125,7 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
                 {header: this.app.i18n._('Estimated end'), id: 'end_scheduled', dataIndex: 'end_scheduled', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
                 {header: this.app.i18n._('End'), id: 'end', dataIndex: 'end', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
+                {header: this.app.i18n._('Start'), id: 'start', dataIndex: 'start', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
                 {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.money, sortable: false },
                 {header: this.app.i18n._('Resubmission Date'), id: 'resubmission_date', dataIndex: 'resubmission_date', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true }
                 
