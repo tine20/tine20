@@ -228,9 +228,25 @@ class Courses_JsonTest extends TestCase
         $courseUpdated = $this->_json->saveCourse($courseData);
         self::assertTrue(isset($courseUpdated['members'][0]['additionalGroups']));
         if ($checkWithNoRight) {
-            self::assertEquals([], $courseUpdated['members'][0]['additionalGroups']);
+            self::assertEquals([], $courseUpdated['members'][0]['additionalGroups'],
+                print_r($courseUpdated['members'], true));
         } else {
-            self::assertEquals($memberships, $courseUpdated['members'][0]['additionalGroups']);
+            self::assertEquals($memberships, $courseUpdated['members'][0]['additionalGroups'],
+                print_r($courseUpdated['members'], true));
+        }
+
+        // add new member - assert that this api returns the additionalGroups, too
+        $result = $this->_json->addNewMember(array(
+            'accountFirstName' => 'jams',
+            'accountLastName'  => 'hot',
+        ), $courseUpdated);
+        $teacher = Tinebase_Translation::getTranslation('Courses')->_('Teacher');
+        foreach ($result['results'] as $member) {
+            if (! $checkWithNoRight && strpos($member['name'], $teacher) !== false) {
+                self::assertEquals($memberships, $member['additionalGroups'], print_r($member, true));
+            } else {
+                self::assertEquals([], $member['additionalGroups'], print_r($member, true));
+            }
         }
 
         // remove memberships

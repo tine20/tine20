@@ -73,6 +73,8 @@ Ext.ux.grid.CheckColumn = function(config){
 };
 
 Ext.extend(Ext.ux.grid.CheckColumn, Ext.util.Observable, {
+    readOnly: false,
+
     init : function(grid){
         this.grid = grid;
         this.grid.on('render', function(){
@@ -95,7 +97,7 @@ Ext.extend(Ext.ux.grid.CheckColumn, Ext.util.Observable, {
             return false;
         }
 
-        return !this.grid.readOnly;
+        return !this.grid.readOnly && ! this.readOnly;
     },
 
     onMouseDown : function(e, t){

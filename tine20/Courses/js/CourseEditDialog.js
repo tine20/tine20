@@ -122,7 +122,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var members = (response.responseText) ? Ext.util.JSON.decode(response.responseText) : response;
         if (members.results.length > 0) {
-            this.membersStore.loadData({results: members.results});
+            this.loadMembersIntoStore(members.results);
         }
         this.hideLoadMask();
     },
@@ -132,12 +132,13 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     updateToolbars: function() {
     },
-    
+
     /**
-     * onRecordLoad
+     * load members into members store / handle additional groups
+     *
+     * @param Array members
      */
-    onRecordLoad: function() {
-        let members = this.record.get('members') || [];
+    loadMembersIntoStore: function(members) {
         if (members.length > 0) {
             _.each(members, function(member) {
                 _.each(member.additionalGroups, function(groupId) {
@@ -146,7 +147,15 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
             this.membersStore.loadData({results: members});
         }
-        
+    },
+
+    /**
+     * onRecordLoad
+     */
+    onRecordLoad: function() {
+        let members = this.record.get('members') || [];
+        this.loadMembersIntoStore(members);
+
         // only activate import and ok buttons if editing existing course / user has the appropriate right
         var disabled = ! this.record.get('id') 
             || ! Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts')
@@ -310,11 +319,11 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             _.each(this.additionalGroups, function(group) {
                 let fieldName = 'group_' + group.id;
                 columns.push(new Ext.ux.grid.CheckColumn({
-                    listeners: {checkchange: _.bind(me.onGroupMembershipCheckChange, me)},
                     id: fieldName,
                     header: group.name,
                     width: 100,
-                    dataIndex: fieldName
+                    dataIndex: fieldName,
+                    readOnly: ! Tine.Tinebase.common.hasRight('set_additional_memberships', 'Courses', '')
                 }));
                 membersFields.push(fieldName);
             });
@@ -357,10 +366,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         return this.membersGrid;
     },
-
-    onGroupMembershipCheckChange: function() {
-        console.log('check!');
-    }
 });
 
 /**
