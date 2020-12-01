@@ -1,7 +1,12 @@
 # defines function to be used by the ci
 
 function login() {
-  docker login "${REGISTRY}" --username "${REGISTRY_USER}" --password "${REGISTRY_PASSWORD}"
+    if [ ! -z "${REGISTRY_USER}" ] && [ ! -z "${REGISTRY_PASSWORD}" ]; then
+        echo docker login ...
+        docker login "${REGISTRY}" --username "${REGISTRY_USER}" --password "${REGISTRY_PASSWORD}"
+    else
+        echo no registry credentials.
+    fi
 }
 
 function build_or_reuse_image() {
