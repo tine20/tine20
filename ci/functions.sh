@@ -1,7 +1,7 @@
 # defines function to be used by the ci
 
-function login() {
-    if [ ! -z "${REGISTRY_USER}" ] && [ ! -z "${REGISTRY_PASSWORD}" ]; then
+function docker_login() {
+      if [ ! -z "${REGISTRY_USER}" ] && [ ! -z "${REGISTRY_PASSWORD}" ]; then
         echo docker login ...
         docker login "${REGISTRY}" --username "${REGISTRY_USER}" --password "${REGISTRY_PASSWORD}"
     else
@@ -162,4 +162,19 @@ function tag_image() {
   docker pull "${FROM_IMAGE}"
   docker tag "${FROM_IMAGE}" "${DESTINATION_IMAGE}"
   docker push "${DESTINATION_IMAGE}"
+}
+
+function docker_untag_image() {
+	image=$1
+	tag=$2
+
+	digest=$(curl -X HEAD -I -v --user ${REGISTRY_USER}:${REGISTRY_PASSWORD} -H "Accept: application/vnd.docker.distribution.manifest.v2+json" https://${REGISTRY}/v2/${image}/manifests/${tag} | awk 'BEGIN {FS=": "}/^docker-content-digest/{print $2}' | tr -d '\r' )
+	if [ -z ${digest} ]; then
+		return 1
+	fi
+
+	docker pull ${REGISTRY}/cleanup-manifest:latest
+	docker tag ${REGISTRY}/cleanup-manifest:latest ${REGISTRY}/${image}:${tag}
+
+	curl -X DELETE -v --user ${REGISTRY_USER}:${REGISTRY_PASSWORD} https://${REGISTRY}/v2/${image}/manifests/${digest}
 }
