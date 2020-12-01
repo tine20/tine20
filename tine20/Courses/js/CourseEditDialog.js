@@ -320,11 +320,11 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             _.each(this.additionalGroups, function(group) {
                 let fieldName = 'group_' + group.id;
                 columns.push(new Ext.ux.grid.CheckColumn({
-                    listeners: {checkchange: _.bind(me.onGroupMembershipCheckChange, me)},
                     id: fieldName,
                     header: group.name,
                     width: 100,
-                    dataIndex: fieldName
+                    dataIndex: fieldName,
+                    readOnly: ! Tine.Tinebase.common.hasRight('set_additional_memberships', 'Courses', '')
                 }));
                 membersFields.push(fieldName);
             });
@@ -367,10 +367,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         return this.membersGrid;
     },
-
-    onGroupMembershipCheckChange: function() {
-        console.log('check!');
-    }
 });
 
 /**
