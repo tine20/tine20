@@ -206,11 +206,20 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'record':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
+                        if (category === 'editDialog' && fieldDefinition.config.dependentRecords) {
+                            field.xtype = 'tw-recordEditField';
+                            field.appName = fieldDefinition.config.appName;
+                            field.modelName = fieldDefinition.config.modelName;
+                            field.fieldName = fieldDefinition.fieldName;
+                            break;
+                        } 
+                        
                         var picker = Tine.widgets.form.RecordPickerManager.get(
                             fieldDefinition.config.appName,
                             fieldDefinition.config.modelName,
                             Ext.apply(field, config)
                         );
+
                         field = picker;
                     }
                     break;
