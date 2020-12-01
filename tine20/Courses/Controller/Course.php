@@ -296,9 +296,15 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $groupIds = Courses_Config::getInstance()->get(Courses_Config::ADDITIONAL_GROUP_MEMBERSHIPS, []);
         $additionalGroups = new Tinebase_Record_RecordSet(Tinebase_Model_Group::class);
         foreach ($groupIds as $groupId) {
-            $group = Tinebase_Group::getInstance()->getGroupById($groupId);
-            $group->members = Tinebase_Group::getInstance()->getGroupMembers($groupId);
-            $additionalGroups->addRecord($group);
+            try {
+                $group = Tinebase_Group::getInstance()->getGroupById($groupId);
+                $group->members = Tinebase_Group::getInstance()->getGroupMembers($groupId);
+                $additionalGroups->addRecord($group);
+            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Skipping group: '
+                    . $ternd->getMessage());
+            }
         }
         return $additionalGroups;
     }
