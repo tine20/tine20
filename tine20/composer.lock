@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a391f42e7fbe4841728fe76779294cc3",
+    "content-hash": "1e481c3938b5992817bb6e3366a8f3ba",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -4153,11 +4153,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl39",
+            "version": "1.12.20pl41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "79c11374a4422d8f26fe794d82483e363afac71f"
+                "reference": "252e2b9b53fa3e948267e45479fa57352221bcbf"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -4174,7 +4174,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2020-05-07T15:40:15+00:00"
+            "time": "2020-12-01T10:50:44+00:00"
         }
     ],
     "packages-dev": [
@@ -5771,40 +5771,40 @@
     ],
     "aliases": [
         {
-            "package": "doctrine/dbal",
-            "version": "2.5.13.0-patch6",
             "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0"
+            "alias_normalized": "2.5.13.0",
+            "version": "2.5.13.0-patch6",
+            "package": "doctrine/dbal"
         },
         {
-            "package": "doctrine/orm",
-            "version": "2.5.14.0-patch1",
             "alias": "v2.5.14",
-            "alias_normalized": "2.5.14.0"
+            "alias_normalized": "2.5.14.0",
+            "version": "2.5.14.0-patch1",
+            "package": "doctrine/orm"
         },
         {
-            "package": "phpoffice/phpspreadsheet",
-            "version": "1.10.1.0-patch3",
             "alias": "1.10.1",
-            "alias_normalized": "1.10.1.0"
+            "alias_normalized": "1.10.1.0",
+            "version": "1.10.1.0-patch3",
+            "package": "phpoffice/phpspreadsheet"
         },
         {
-            "package": "phpoffice/phpword",
-            "version": "0.14.0.0",
             "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0"
+            "alias_normalized": "0.13.0.0",
+            "version": "0.14.0.0",
+            "package": "phpoffice/phpword"
         },
         {
-            "package": "sabre/vobject",
-            "version": "3.5.3.0-patch1",
             "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0"
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
         },
         {
-            "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch39",
             "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0"
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch41",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "stable",
@@ -5838,5 +5838,5 @@
         "php": "7.2.5",
         "ext-filter": "7.2"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }
