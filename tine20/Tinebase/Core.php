@@ -2302,6 +2302,8 @@ class Tinebase_Core
 
     /**
      * @return bool
+     *
+     * @deprecated use isReplica
      */
     public static function isReplicationSlave()
     {
@@ -2333,6 +2335,7 @@ class Tinebase_Core
 
     /**
      * @return bool
+     * @deprecated use isReplicationPrimary
      */
     public static function isReplicationMaster()
     {
