@@ -1131,12 +1131,14 @@ textarea.x-form-invalid,
 }
 
 .tine-viewport-waitcycle,
+.loading-indicator-wait,
 .x-tree-node-loading .x-tree-node-icon,
 .x-mask-wait,
 .x-btn-wait + div,
 div.x-btn-wait,
 .x-item-disabled .x-tbar-loading + div,
 .tinebase-download-link-anim .tinebase-download-link-wait,
+.felamimail-node-statusbox-progress-loading,
 .x-item-disabled .x-tbar-loading {
     animation-name: loading-animation;
     animation-duration: 1000ms;
@@ -1170,17 +1172,45 @@ div.x-btn-wait,
 }
 
 .x-tree-node-loading .x-tree-node-icon,
+.loading-indicator-wait,
 .tine-viewport-waitcycle,
 .x-mask-wait,
 .x-item-disabled .x-tbar-loading + div,
 .x-item-disabled div.x-tbar-loading,
 div.x-btn-wait,
 .tinebase-download-link-anim .tinebase-download-link-wait,
+.felamimail-node-statusbox-progress-loading,
 .x-btn-wait + div {
     box-sizing: border-box;
     border: 2px solid #ccc !important;
     border-top: 2px solid #2196f3 !important;
     border-radius: 100%;
+}
+
+.x-pie-0 { background-image: url(../../images/icon-set/icon_pie_0percent-small.svg); }
+.x-pie-10 { background-image: url(../../images/icon-set/icon_pie_10percent-small.svg); }
+.x-pie-20 { background-image: url(../../images/icon-set/icon_pie_20percent-small.svg); }
+.x-pie-30 { background-image: url(../../images/icon-set/icon_pie_30percent-small.svg); }
+.x-pie-40 { background-image: url(../../images/icon-set/icon_pie_40percent-small.svg); }
+.x-pie-50 { background-image: url(../../images/icon-set/icon_pie_50percent-small.svg); }
+.x-pie-60 { background-image: url(../../images/icon-set/icon_pie_60percent-small.svg); }
+.x-pie-70 { background-image: url(../../images/icon-set/icon_pie_70percent-small.svg); }
+.x-pie-80 { background-image: url(../../images/icon-set/icon_pie_80percent-small.svg); }
+.x-pie-90 { background-image: url(../../images/icon-set/icon_pie_90percent-small.svg); }
+.x-pie-100 { background-image: url(../../images/icon-set/icon_pie_100percent-small.svg); }
+
+.MD, .LG > {
+    .x-pie-0 { background-image: url(../../images/icon-set/icon_pie_0percent.svg); }
+    .x-pie-10 { background-image: url(../../images/icon-set/icon_pie_10percent.svg); }
+    .x-pie-20 { background-image: url(../../images/icon-set/icon_pie_20percent.svg); }
+    .x-pie-30 { background-image: url(../../images/icon-set/icon_pie_30percent.svg); }
+    .x-pie-40 { background-image: url(../../images/icon-set/icon_pie_40percent.svg); }
+    .x-pie-50 { background-image: url(../../images/icon-set/icon_pie_50percent.svg); }
+    .x-pie-60 { background-image: url(../../images/icon-set/icon_pie_60percent.svg); }
+    .x-pie-70 { background-image: url(../../images/icon-set/icon_pie_70percent.svg); }
+    .x-pie-80 { background-image: url(../../images/icon-set/icon_pie_80percent.svg); }
+    .x-pie-90 { background-image: url(../../images/icon-set/icon_pie_90percent.svg); }
+    .x-pie-100 { background-image: url(../../images/icon-set/icon_pie_100percent.svg); }
 }
 
 .x-btn-medium.x-btn-icon-medium-top div.x-btn-wait {
@@ -1211,4 +1241,16 @@ div.x-btn-wait,
     width: 16px;
     margin: 0px;
     background-image: none !important;
+}
+
+.loading-indicator-wait {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 14px;
+    height: 14px;
+}
+
+.x-combo-list-inner .loading-indicator {
+    background: none;
 }

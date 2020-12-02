@@ -1,7 +1,44 @@
 # defines function to be used by the ci
 
-function login() {
-  docker login "${REGISTRY}" --username "${REGISTRY_USER}" --password "${REGISTRY_PASSWORD}"
+function docker_login() {
+      if [ ! -z "${REGISTRY_USER}" ] && [ ! -z "${REGISTRY_PASSWORD}" ]; then
+        echo docker login ...
+        docker login "${REGISTRY}" --username "${REGISTRY_USER}" --password "${REGISTRY_PASSWORD}"
+    else
+        echo no registry credentials.
+    fi
+}
+
+function build_or_reuse_image() {
+    TARGET=$1
+    REUSE=$2
+    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+    MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
+
+    if [ "${REUSE}" = "false" ]; then
+        echo "building image ..."
+        build_image $TARGET
+        return 0
+    fi
+
+    echo "reusing image ..."
+    # todo curl head, dose not work with aws ecr
+    if docker pull "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}"; then
+        echo "using branch image ..."
+        docker tag "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}"
+        return 0
+    fi
+
+    echo "can not reuse branch image, trying major branch image ..."
+    # todo curl head, dose not work with aws ecr
+    if docker pull "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}"; then
+        echo "using major branch image ..."
+        docker tag "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}"
+        return 0
+    fi
+    
+    echo "can not reuse major branch image. building image ..."
+    build_image $TARGET
 }
 
 # build a docker image with cache and cache invalidators (see dockerimage readme.md)
@@ -19,7 +56,6 @@ function build_image() {
     if [ ${PHP_IMAGE_TAG} = "7.4-fpm-alpine" ] ; then
         ALPINE_PHP_REPOSITORY_VERSION=edge
     fi
-
 
     docker build ${DOCKER_ADDITIONAL_BUILD_ARGS} \
         --target "${TARGET}" \
@@ -88,10 +124,10 @@ function tag_major_as_commit_image() {
 }
 
 # renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" to name:"${CI_COMMIT_REF_NAME}-${PHP_IMAGE_TAG}" and pushes it
-function tag_commit_as_branch_image() {
+function docker_populate_cache() {
     NAME=$1
 
-    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" "${REGISTRY}" "${NAME}" "${CI_COMMIT_REF_NAME}-${PHP_IMAGE_TAG}"
+    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" "${REGISTRY}" "${NAME}" "${CI_COMMIT_REF_NAME}-${PHP_IMAGE_TAG}" || true
 }
 
 # renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" name:"${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" and pushes it to docker hub
@@ -126,4 +162,19 @@ function tag_image() {
   docker pull "${FROM_IMAGE}"
   docker tag "${FROM_IMAGE}" "${DESTINATION_IMAGE}"
   docker push "${DESTINATION_IMAGE}"
+}
+
+function docker_untag_image() {
+	image=$1
+	tag=$2
+
+	digest=$(curl -X HEAD -I -v --user ${REGISTRY_USER}:${REGISTRY_PASSWORD} -H "Accept: application/vnd.docker.distribution.manifest.v2+json" https://${REGISTRY}/v2/${image}/manifests/${tag} | awk 'BEGIN {FS=": "}/^docker-content-digest/{print $2}' | tr -d '\r' )
+	if [ -z ${digest} ]; then
+		return 1
+	fi
+
+	docker pull ${REGISTRY}/cleanup-manifest:latest
+	docker tag ${REGISTRY}/cleanup-manifest:latest ${REGISTRY}/${image}:${tag}
+
+	curl -X DELETE -v --user ${REGISTRY_USER}:${REGISTRY_PASSWORD} https://${REGISTRY}/v2/${image}/manifests/${digest}
 }

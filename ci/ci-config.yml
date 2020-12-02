@@ -13,17 +13,25 @@ variables:
   # do not push any images. Commit images will still be pushed. But they are tagged per pipeline
   NO_PUSH: "false"
 
-  # push the built result to docker hub. should be only set to true by schedules
+  # push the built result to docker hub. should be only set to true by schedules. force build all images
   PUSH_TO_DOCKERHUB: "false"
+
+  # push the built image to gitlab. force build built and source image
+  PUSH_BUILT_IMAGE_TO_GITLAB: "false"
+
+  # push the dev image to gitlab. force build all images
+  PUSH_DEV_IMAGE_TO_GITLAB: "false"
 
   # tag used on docker hub
   DOCKERHUB_TAG: "dev"
 
   # whether to build the built image. needed for built tests and docker build dev
-  DOCKER_BUILD_BUILD: "true"
+  DOCKER_BUILD_BUILD: "false"
+  # todo remove this var and run job only if another job requires build.
 
   # whether to build the dev image. needed for built tests
   DOCKER_BUILD_DEV: "false"
+  # todo remove this var and run job only if another job requires build.
 
   # install one custom app via composer: vendor
   CUSTOM_APP_VENDOR: "metaways"
@@ -44,7 +52,7 @@ variables:
   PHP_UNIT_ALL_TESTS_SOURCE: "true"
 
   # enable or disable php unit test on built (with built js, and clean files) image.
-  PHP_UNIT_ALL_TESTS_BUILT: "true"
+  PHP_UNIT_ALL_TESTS_BUILT: "false"
 
   # enable or disable run all test with ldap backend enabled. Not connected with PHP_UNIT_ALL_TESTS_BUILT.
   PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP: "false"
@@ -71,7 +79,7 @@ variables:
   PHPUNIT_FILTER: ""
 
   # test if tine20 /health api dose not return a 500
-  TEST_WITH_HEALTH_CHECK: "true"
+  TEST_WITH_HEALTH_CHECK: "false"
   
   # Run all tests, test failures are ignored, dose not allow push
   RUN_ALL_TESTS: "false"

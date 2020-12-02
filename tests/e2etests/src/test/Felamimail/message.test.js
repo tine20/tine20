@@ -102,7 +102,7 @@ describe('message', () => {
 });
 
 // skip... is to unstable
-describe.skip('email note preference', () => {
+describe('email note preference', () => {
     test('open Felamimail settings and set note=yes', async () => {
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toClick('.x-menu-item-text', {text: 'E-Mail'});

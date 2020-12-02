@@ -21,10 +21,9 @@ describe('mainScreen', () => {
                 //console.log('Application ' + Apps[i] + ' don´t install');
             }
         }
-        await expect(page).toClick('span', {text: 'Tine 2.0'});
-        await page.waitFor(500);
-        await expect(page).toClick('span', {text: 'Adressbuch'});
-        await page.waitFor(5000);
+        await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+        await expect(page).toClick('.x-menu-item-text', {text: 'Adressbuch'});
+        await page.waitFor(5000);// wait for screenshot
         await page.screenshot({path: 'screenshots/2_allgemeines/1_allgemein_alle_reiter.png'});
     })
 });

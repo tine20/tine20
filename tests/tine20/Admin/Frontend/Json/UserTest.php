@@ -168,6 +168,20 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         }
     }
 
+    public function testSaveAccountWithoutEmail()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $accountData = $this->_getUserArrayWithPw();
+        unset($accountData['accountEmailAddress']);
+        $account = $this->_json->saveUser($accountData);
+
+        self::assertEmpty($account['accountEmailAddress']);
+        // assert no email account has been created
+        self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user found!');
+        self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user found!');
+    }
+
     /**
      * try to save a hidden account
      */

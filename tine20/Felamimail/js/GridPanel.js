@@ -915,8 +915,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
-            msgsIds = [],
-            foldersNeedUpdate = false;
+            msgsIds = [];
         
         if (sm.isFilterSelect) {
             var msgs = this.getStore(),
@@ -935,16 +934,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (currFolder) {
                 currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
                 currFolder.set('cache_totalcount', currFolder.get('cache_totalcount') - 1);
-                if (sm.isFilterSelect && sm.getCount() > 50 && currFolder.get('cache_status') !== 'pending') {
-                    Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - Set cache status to pending for folder ' + currFolder.get('globalname'));
-                    currFolder.set('cache_status', 'pending');
-                    foldersNeedUpdate = true;
-                }
+                currFolder.set('cache_status', 'pending');
                 currFolder.commit();
             }
-            if (folder) {
-                increaseUnreadCountInTargetFolder += diff;
-            }
+            increaseUnreadCountInTargetFolder += diff;
            
             msgsIds.push(msg.id);
             if (! keepOriginalMessages) {
@@ -952,19 +945,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         },  this);
         
-        if (folder && increaseUnreadCountInTargetFolder > 0) {
+        if (folder) {
             // update unread count of target folder (only when moving)
             folder.set('cache_unreadcount', folder.get('cache_unreadcount') + increaseUnreadCountInTargetFolder);
-            if (foldersNeedUpdate) {
-                Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - Set cache status to pending for target folder ' + folder.get('globalname'));
-                folder.set('cache_status', 'pending');
-            }
+            folder.set('cache_status', 'pending');
             folder.commit();
-        }
-        
-        if (foldersNeedUpdate) {
-            Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - update message cache for "pending" folders');
-            this.app.checkMailsDelayedTask.delay(1000);
         }
 
         if (! keepOriginalMessages) {
@@ -973,6 +958,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (nextRecord !== null) {
             sm.selectRecords([nextRecord]);
         }
+        
+        this.app.checkMailsDelayedTask.delay(1000);
         
         var callbackFn = this.onAfterDelete.createDelegate(this, [msgsIds]);
         

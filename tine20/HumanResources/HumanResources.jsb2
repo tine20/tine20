@@ -86,10 +86,6 @@
         {
           "text": "WorkingTimeSchemeEditDialog.js",
           "path": "js/"
-        },
-        {
-          "text": "StreamEditDialog.js",
-          "path": "js/"
         }
       ]
     },

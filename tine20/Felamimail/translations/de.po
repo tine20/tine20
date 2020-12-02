@@ -1878,8 +1878,8 @@ msgstr "Es ist SPAM"
 msgid "It is not SPAM"
 msgstr "Kein SPAM"
 
-msgid "About SPAM"
-msgstr "Über SPAM"
+msgid "Confirm SPAM Suspicion"
+msgstr "SPAM Verdacht bestätigen"
 
 msgid "This message might be SPAM"
 msgstr "Bei dieser Nachricht könnte es sich um SPAM handeln"

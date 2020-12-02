@@ -205,11 +205,38 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.searchCombo = new Tine.Felamimail.ContactSearchCombo({
             lazyInit: false,
+            lastInputEventValue: '',
             listeners: {
                 scope: this,
                 specialkey: this.onSearchComboSpecialkey,
                 select: this.onSearchComboSelect,
+                render: (combo) => {
+                    combo.getEl().on('input', (e, dom) => {
+                        const value = this.searchCombo.getValue();
+                        if (Math.abs(value.length - this.searchCombo.lastInputEventValue.length) > 5 && (value.match(/@/g) || []).length > 1) {
+                            import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
+                                if (!this.loadMask) {
+                                    this.loadMask = new Ext.LoadMask(Ext.getBody(), {msg: app.i18n._('Loading Mail Addresses')});
+                                }
+                                this.loadMask.show();
+                                
+                                const parsed = addrs.parseAddressList(value.replace(';', ','));
+                                const emails = _.map(parsed, (p) => { return (p.name ? `"${p.name}" <${p.address}>` : p.address) });
+                                
+                                this._addRecipients(emails, this.activeEditor ? this.activeEditor.record.data.type : this.lastActiveEditor.record.data.type);
+                                this.setFixedHeight(false);
+                                this.ownerCt.doLayout();
+                                this.store.remove(this.activeEditor ? this.activeEditor.record : this.lastEditedRecord);
+                                this.addRowAndDoLayout(this.activeEditor ? this.activeEditor.record : this.lastEditedRecord);
+                            }).then(() => {
+                                this.loadMask.hide();
+                            });
+                        }
+                        this.searchCombo.lastInputEventValue = value;
+                    })
+                },
                 blur: function(combo) {
+                    this.lastInputEventValue = '';
                     Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboBlur()');
                     this.getView().el.select('.x-grid3-td-address-editing').removeClass('x-grid3-td-address-editing');
                     // need to update record because it might not be updated otherwise (for example: delete value, click into next row or subject)

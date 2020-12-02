@@ -222,7 +222,7 @@ Ext.form.ComboBox = Ext.extend(Ext.form.TriggerField, {
      * <tt>{@link #mode} = 'local'</tt>, does not apply if
      * <tt>{@link Ext.form.TriggerField#editable editable} = false</tt>).
      */
-    minChars : 4,
+    minChars : 1,
     /**
      * @cfg {Boolean} autoSelect <tt>true</tt> to select the first result gathered by the data store (defaults
      * to <tt>true</tt>).  A false value would require a manual selection from the dropdown list to set the components value
@@ -240,7 +240,7 @@ Ext.form.ComboBox = Ext.extend(Ext.form.TriggerField, {
      * sending the query to filter the dropdown list (defaults to <tt>500</tt> if <tt>{@link #mode} = 'remote'</tt>
      * or <tt>10</tt> if <tt>{@link #mode} = 'local'</tt>)
      */
-    queryDelay : 500,
+    queryDelay : 150,
     /**
      * @cfg {Number} pageSize If greater than <tt>0</tt>, a {@link Ext.PagingToolbar} is displayed in the
      * footer of the dropdown list and the {@link #doQuery filter queries} will execute with page start and
@@ -324,7 +324,7 @@ var combo = new Ext.form.ComboBox({
      * @cfg {Number} typeAheadDelay The length of time in milliseconds to wait until the typeahead text is displayed
      * if <tt>{@link #typeAhead} = true</tt> (defaults to <tt>250</tt>)
      */
-    typeAheadDelay : 250,
+    typeAheadDelay : 75,
     /**
      * @cfg {String} valueNotFoundText When using a name/value combo, if the value passed to setValue is not found in
      * the store, valueNotFoundText will be displayed as the field text if defined (defaults to undefined). If this
@@ -881,7 +881,7 @@ var menu = new Ext.menu.Menu({
             return;
         }
         this.innerList.update(this.loadingText ?
-               '<div class="loading-indicator">'+this.loadingText+'</div>' : '');
+               '<div class="loading-indicator"><div class="loading-indicator-wait"></div>'+this.loadingText+'</div>' : '');
         this.restrictHeight();
         this.selectedIndex = -1;
     },

@@ -135,7 +135,7 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
         if (Ext.isArray(store.proxy.jsonReader.jsonData.filter)) {
             
             // filter plugin has to 'pick' its records
-            this.setValue(store.proxy.jsonReader.jsonData.filter);
+            this.setValue(store.proxy.jsonReader.jsonData.filter, options);
         }
     }
 });

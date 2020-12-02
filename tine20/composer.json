@@ -88,7 +88,6 @@
     "ezyang/htmlpurifier": "dev-master",
     "firebase/php-jwt": "^5",
     "giggsey/libphonenumber-for-php": "^8",
-    "psr/http-server-middleware": "^1.0",
     "jumbojett/openid-connect-php": "dev-master",
     "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
@@ -97,6 +96,7 @@
     "phpoffice/phpexcel": "1.8.*",
     "phpoffice/phpspreadsheet": "1.10.1pl3 as 1.10.1",
     "phpoffice/phpword": "v0.14.0 as v0.13.0",
+    "psr/http-server-middleware": "^1.0",
     "sabre/dav": "1.8.*",
     "sabre/vobject": "3.5.3pl1 as 2.1.0",
     "sentry/sentry": "^1.8",
@@ -112,7 +112,7 @@
     "zendframework/zend-diactoros": "^1.6",
     "zendframework/zend-http": "2.5.*",
     "zendframework/zend-stratigility": "^3.2",
-    "zendframework/zendframework1": "1.12.20pl39 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl41 as 1.12.20"
   },
   "require-dev": {
     "phing/phing": "2.16.*",

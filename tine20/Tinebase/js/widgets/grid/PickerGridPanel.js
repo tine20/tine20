@@ -109,6 +109,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     readOnly: false,
 
     /**
+     * @cfg {Bool} allowCreateNew
+     * allow to create new records (local mode only atm.!)
+     */
+    allowCreateNew: false,
+    
+    /**
      * config spec for additionalFilters - passed to RecordPicker
      *
      * @type: {object} e.g.
@@ -136,6 +142,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.searchComboConfig.additionalFilterSpec = this.additionalFilterSpec;
         
         this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
+        this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || _('Record') : _('Record'));
+        
         if (String(this.labelField).match(/{/)) {
             this.labelField = this.labelField.match(/(?:{{\s*)(\w+)/)[1];
         }
@@ -222,13 +230,21 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * init actions and toolbars
      */
     initActionsAndToolbars: function() {
+
+        this.actionCreate = new Ext.Action({
+            text: String.format(i18n._('Create {0}'), this.recordName),
+            hidden: !this.recordClass || !this.allowCreateNew,
+            scope: this,
+            handler: this.onCreate,
+            iconCls: 'action_add'
+        });
         
         this.actionRemove = new Ext.Action({
-            text: i18n._('Remove record'),
+            text: String.format(i18n._('Remove {0}'), this.recordName),
             disabled: true,
             scope: this,
             handler: this.onRemove,
-            iconCls: 'action_deleteContact',
+            iconCls: 'action_delete',
             actionUpdater: this.actionRemoveUpdater
         });
 
@@ -238,6 +254,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             evalGrants: this.evalGrants
         });
         this.actionUpdater.addActions([
+            this.actionCreate,
             this.actionRemove
         ]);
 
@@ -245,7 +262,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.actionUpdater.updateActions(sm);
         }, this);
 
-        var contextItems = [this.actionRemove];
+        var contextItems = [this.actionCreate, this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -267,6 +284,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (this.enableBbar) {
             this.bbar = new Ext.Toolbar({
                 items: [
+                    this.actionCreate,
                     this.actionRemove
                 ].concat(this.contextMenuItems)
             });
@@ -445,6 +463,23 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         picker.reset();
+    },
+
+    onCreate: function() {
+        const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.recordDefaults || {}), this.recordClass);
+        const editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
+
+        editDialogClass.openWindow({
+            mode: 'local',
+            record: Ext.encode(record.data),
+            recordId: record.getId(),
+            listeners: {
+                update: (recordData) => {
+                    const record = Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
+                    this.store.add(record);
+                }
+            }
+        });
     },
     
     /**
