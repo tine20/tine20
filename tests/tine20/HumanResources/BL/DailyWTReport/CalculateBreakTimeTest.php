@@ -116,6 +116,30 @@ class HumanResources_BL_DailyWTReport_CalculateBreakTimeTest extends TestCase
         }
     }
 
+    public function testBreakUpOneTimeSlot()
+    {
+        $data = $this->_executePipe([
+            [
+                'start_time'        => '09:00:00',
+                'duration'          => 540,
+            ]
+        ]);
+
+        $this->_checkResult($data, [
+            self::TIME_SLOTS            => [
+                self::COUNT                 => 3,
+                self::DURATION_IN_SEC       => [
+                    0 => 4 * 3600,
+                    1 => 2 * 3600,
+                    2 => (int)(2.25 * 3600)
+                ],
+            ],
+            self::RESULT_PROPERTIES     => [
+                'break_time_deduction'      => 45 * 60,
+            ],
+        ]);
+    }
+
     public function testSumUp()
     {
         $data = $this->_executePipe([
