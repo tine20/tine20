@@ -230,7 +230,8 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::DISABLED              => true,
             ],
             // WorkingTime - passiert, wenn MA zu wenig pause gemacht hat
-            'break_time_deduction' => [self::TYPE                  => self::TYPE_INTEGER,
+            'break_time_deduction' => [
+                self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Break Deduction Time', // _('Break Deduction Time')
                 self::NULLABLE              => true,
