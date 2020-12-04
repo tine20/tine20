@@ -116,16 +116,22 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             return true;
         }
 
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
-            ['field' => 'employment_end', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMonth(2)]
-        ], '', [Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL => true]);
-        $iterator = new Tinebase_Record_Iterator(array(
-            'iteratable' => $this,
-            'controller' => HumanResources_Controller_Employee::getInstance(),
-            'filter'     => $filter,
-            'function'   => 'calculateReportsForEmployees',
-        ));
-        $iterator->iterate();
+        Tinebase_Core::acquireMultiServerLock(__METHOD__);
+
+        try {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                ['field' => 'employment_end', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMonth(2)]
+            ], '', [Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL => true]);
+            $iterator = new Tinebase_Record_Iterator(array(
+                'iteratable' => $this,
+                'controller' => HumanResources_Controller_Employee::getInstance(),
+                'filter' => $filter,
+                'function' => 'calculateReportsForEmployees',
+            ));
+            $iterator->iterate();
+        } finally {
+            Tinebase_Core::releaseMultiServerLock(__METHOD__);
+        }
 
         return true;
     }
@@ -484,7 +490,6 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             ]],
             ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $this->_startDate->format('Y-m-d')],
             ['field' => 'date', 'operator' => 'before_or_equals', 'value' => $this->_endDate->format('Y-m-d')],
-
         ]);
 
         $result = [];
