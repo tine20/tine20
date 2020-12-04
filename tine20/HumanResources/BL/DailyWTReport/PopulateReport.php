@@ -56,6 +56,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             }
             $duration = $timeSlot->durationInSec();
             $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
+                'id' => Tinebase_Record_Abstract::generateUID(),
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => HumanResources_Model_WageType::ID_SALARY,
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $duration,
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_START => $timeSlot->start->format('H:i:s'),
@@ -80,6 +81,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
 
         if ($_data->feastTimes) {
             $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
+                'id' => Tinebase_Record_Abstract::generateUID(),
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => HumanResources_Model_WageType::ID_FEAST,
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
             ]));
@@ -96,6 +98,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             });
             $wageType = $_data->freeTimes->getFirstRecord()->type->wage_type;
             $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
+                'id' => Tinebase_Record_Abstract::generateUID(),
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $wageType,
                 HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
             ]));
