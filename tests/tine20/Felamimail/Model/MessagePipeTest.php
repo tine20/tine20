@@ -23,9 +23,8 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
      */
     public function testMessagePipeCopyToAnotherAccount()
     {
-        $pipe = 'spam'; // both 'spam/ham pipe implement the same strategy
-        $targetFolder = 'spam'; // 'spam': folder called spam , '#spam': user configured spam folder
-        $account = $this->_createSharedAccount(); // create shared account
+        // create shared account
+        $account = $this->_createSharedAccount(); 
         
         $config = [
             'spam' => [
@@ -48,11 +47,32 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
             ]
         ];
         
-        // send message and copy to other folder of shared aacount
+        // move to root
+        $pipe = 'spam';
+        // 'spam': folder called spam , '#spam': user configured spam folder
+        $targetFolder = 'spam'; 
         $message = $this->_messagePipeTestHelper($config[$pipe], $targetFolder, $account);
-        
-        $this->_assertMessageInFolder('INBOX', $message['subject']);
         $this->_assertMessageInFolder($targetFolder, $message['subject'], $account);
+
+        $pipe = 'ham';
+        $targetFolder = 'ham';
+        $message = $this->_messagePipeTestHelper($config[$pipe], $targetFolder, $account);
+        $this->_assertMessageInFolder($targetFolder, $message['subject'], $account);
+
+        // move to sub folder
+        $pipe = 'spam';
+        $targetFolder = 'INBOX.SPAM'; // 'spam': folder called spam , '#spam': user configured spam folder
+        $config[$pipe]['config']['target']['folder'] = 'INBOX/SPAM';
+        $message = $this->_messagePipeTestHelper($config[$pipe], $targetFolder, $account);
+        $this->_assertMessageInFolder($targetFolder, $message['subject'], $account);
+
+        $pipe = 'ham'; 
+        $targetFolder = 'INBOX.HAM';
+        $config[$pipe]['config']['target']['folder'] = 'INBOX/HAM';
+        $message = $this->_messagePipeTestHelper($config[$pipe], $targetFolder, $account);
+        $this->_assertMessageInFolder($targetFolder, $message['subject'], $account);
+
+   
     }
 
     /**
@@ -169,17 +189,15 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
      *
      * @param array $_config
      * @param string $_folderName
-     * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Account|null $_account
      *
      * @return Felamimail_Model_Message|NULL
      *
-     * @throws Felamimail_Exception_IMAPServiceUnavailable
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_NotAllowed
      * @throws Tinebase_Exception_Record_Validation
-     * @throws Zend_Mail_Transport_Exception
      */
     public function _messagePipeTestHelper($_config, $_folderName, Felamimail_Model_Account $_account = null)
     {
@@ -190,9 +208,9 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
             'pattern' => '/^SPAM\? \(.+\) \*\*\* /',
         ];
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY_CONFIG, $config);
-
+        
+        $this->_getFolder('INBOX', true, $_account);
         $this->_foldersToClear[] = ['INBOX', 'Sent', 'Trash'];
-        $this->_getFolder($_folderName, true, $_account);
         
         $subject = 'SPAM? (15) *** test messagePipe';
         

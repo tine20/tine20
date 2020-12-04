@@ -76,13 +76,15 @@ class Felamimail_Model_MessagePipeMove implements Tinebase_BL_ElementInterface, 
             }
             $_targetFolder = $_account->{$propertyName};
         }
-
+        
         try {
+            $_targetFolder = str_replace('/', '.', $_targetFolder);
             $folder = Felamimail_Controller_Folder::getInstance()
                 ->getByBackendAndGlobalName($_account['id'], $_targetFolder);
         } catch (Tinebase_Exception_NotFound $e) {
+            $splitFolderName = Felamimail_Model_Folder::extractLocalnameAndParent($_targetFolder, '.');
             $folder = Felamimail_Controller_Folder::getInstance()
-                ->create($_account['id'], $_targetFolder);
+                ->create($_account['id'],  $splitFolderName['localname'], $splitFolderName['parent']);
         }
 
         return $folder;
