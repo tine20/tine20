@@ -1886,3 +1886,30 @@ msgstr "Bei dieser Nachricht könnte es sich um SPAM handeln"
 
 msgid "GENDER_Message"
 msgstr "female"
+
+msgid "Test IMAP Connection"
+msgstr "IMAP-Verbindung testen"
+
+msgid "Test SMTP Connection"
+msgstr "SMTP-Verbindung testen"
+
+msgid "Server connection failed. Do you still want to save this setting and exit?"
+msgstr "Server-Verbindung fehlgeschlagen. Möchten Sie die Einstellungen trotzdem speichern?"
+
+msgid "Connection succeed"
+msgstr "Verbindung erfolgreich"
+
+msgid "Connection failed"
+msgstr "Verbindung fehlgeschlagen"
+
+msgid "{server} Connection Status"
+msgstr "{server} Verbindungsstatus"
+
+msgid "Credentials missing"
+msgstr "Zugangsdaten fehlen"
+
+msgid "Hostname missing"
+msgstr "Hostname fehlt"
+
+msgid "Connecting to {0} server..."
+msgstr "Verbindung zu {0} Server wird aufgebaut..."

@@ -376,7 +376,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
                     inputType: 'password'
-                }]]
+                }, 
+                this.imapButton = new Ext.Button({
+                    text: this.app.i18n._('Test IMAP Connection'),
+                    handler: () => {
+                        this.testConnection('IMAP');
+                    }
+                })]]
             }, {
                 title: this.app.i18n._('SMTP'),
                 autoScroll: true,
@@ -433,7 +439,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
                     inputType: 'password'
-                }]]
+                },
+                    this.smtpButton = new Ext.Button({
+                    text: this.app.i18n._('Test SMTP Connection'),
+                    handler: () => {
+                        this.testConnection('SMTP');
+                    }
+                })]]
             }, {
                 title: this.app.i18n._('Sieve'),
                 autoScroll: true,
@@ -699,7 +711,102 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
         }
         return this.grantsStore;
-    }
+    },
+
+    /**
+     * generic apply changes handler
+     */
+    onApplyChanges: async function(closeWindow) {
+
+        let result = true;
+        let errorMessage = '';
+        
+        await(_.reduce(['IMAP', 'SMTP'], (pre, server) => {
+            return pre.then(async () => {
+                await this.testConnection(server, false)
+                    .catch((e)=> {
+                        result = false;
+                        errorMessage = errorMessage + '</b><br>' + e.message;
+                    });
+            })
+        }, Promise.resolve()));
+        
+        if(!result) {
+            Ext.MessageBox.show({
+                title: this.app.i18n._('Warning'),
+                msg: this.app.i18n._(
+                    'Server connection failed. Do you still want to save this setting and exit?')
+                    + '<br>'
+                    + errorMessage,
+                buttons: Ext.MessageBox.YESNO,
+                fn: (btn) => {
+                    if (btn === 'yes') {
+                        Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
+                    }
+                },
+                icon: Ext.MessageBox.WARNING
+            });
+        } else {
+            Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+        }
+    },
+
+    /**
+     * test IMAP or SMTP connection
+     *
+     */
+    testConnection: async function (server, showDialog = true) {
+
+        let message = this.app.i18n._('Connection succeed');
+        let fields = {
+            'SMTP': {
+                'smtp_hostname': '',
+                'smtp_port': '',
+                'smtp_ssl': '',
+                'smtp_auth': '',
+                'smtp_user': '',
+                'smtp_password': '',
+                'user': '', //use Imap username if not set
+                'password': '' //use Imap password if not set
+            },
+            'IMAP': {
+                'host': '',
+                'port': '',
+                'ssl': '',
+                'user': '',
+                'password': ''
+            }
+        };
+        
+        _.each(fields[server], (val, key) => {
+            fields[server][key] = this.getForm().findField(key).getValue();
+        }, this);
+        
+        try {
+            if (!this['connectLoadMask' + server]) {
+                this['connectLoadMask' + server] = new Ext.LoadMask(this.getEl(), {
+                    msg: String.format(this.app.i18n._('Connecting to {0} server...'), server)
+                });
+            }
+            this['connectLoadMask' + server].show();
+            
+            await Tine.Felamimail[server === 'SMTP' ? 'testSmtpSettings' : 'testIMapSettings'](this.record.id, fields[server]);
+        } catch (e) {
+            message = this.app.i18n._hidden(_.get(e,'message',this.app.i18n._('Connection failed')));
+            return Promise.reject(new Error(message));
+        } finally {
+            this['connectLoadMask' + server].hide();
+            
+            if (showDialog) {
+                Ext.MessageBox.alert(
+                    this.app.formatMessage('{server} Connection Status',{server : server}),
+                    message
+                ).setIcon(result ? Ext.MessageBox.INFO : Ext.MessageBox.WARNING);
+            }
+        }
+        
+        return message;
+    },
 });
 
 /**
