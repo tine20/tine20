@@ -607,7 +607,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         iconCls: 'action_about',
                         handler: () => {
                             Ext.Msg.alert(
-                                i18n._('Confirm SPAM Suspicion'),
+                                this.app.i18n._('Confirm SPAM Suspicion'),
                                 Tine.Tinebase.configManager.get('spamInfoDialogContent', 'Felamimail')
                             );
                         }

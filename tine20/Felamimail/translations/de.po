@@ -1277,6 +1277,9 @@ msgstr "Die Migration wurde noch nicht freigegeben"
 msgid "It is not possible to convert the account to this type yet."
 msgstr "Es ist noch nicht möglich, das Konto in diesen Typ umzuwandeln."
 
+msgid "It is not possible to convert the account to this type."
+msgstr "Es ist nicht möglich, das Konto in diesen Typ umzuwandeln."
+
 #: js/AccountEditDialog.js:599
 msgid "System accounts cannot be created manually."
 msgstr "Systemkonten können nicht manuell angelegt werden."
