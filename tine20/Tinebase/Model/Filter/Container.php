@@ -260,7 +260,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     /**
      * resolves a single path
      * 
-     * @param  String $_path
+     * @param  string $_path
      * @return array of container ids
      */
     protected function _resolvePath($_path)
@@ -299,21 +299,29 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         $modelName = $this->_options['modelName'];
         
         switch ($_node) {
-            case 'all':        return Tinebase_Container::getInstance()->getContainerByACL($currentAccount,
-                $modelName, $this->_requiredGrants, TRUE, $this->_options['ignoreAcl']);
-            case 'personal':   return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount,
-                $modelName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
-            case 'shared':     return $this->_getSharedContainer($currentAccount, $modelName);
+            case 'all':
+                return Tinebase_Container::getInstance()->getContainerByACL($currentAccount,
+                    $modelName, $this->_requiredGrants, TRUE, $this->_options['ignoreAcl']);
+            case 'personal':
+                return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount,
+                    $modelName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+            case 'shared':
+                return $this->_getSharedContainer($currentAccount, $modelName);
             case Tinebase_Model_Container::TYPE_OTHERUSERS:
                 return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $modelName,
                     $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
-            case 'internal':
-                // @todo remove legacy code
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' Trying to fetch obsolete "/internal" node. Please make sure this filter is no longer used because this is deprecated.');
-                $adminConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-                return array($adminConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK]);
-            default:           throw new Tinebase_Exception_UnexpectedValue('specialNode ' . $_node . ' not supported.');
+            default:
+                if (preg_match('/shared\/(.+)/', $_node, $matches)) {
+                    // try to find by name
+                    $container = Tinebase_Container::getInstance()->getContainerByName(
+                        $modelName,
+                        $matches[1],
+                        Tinebase_Model_Container::TYPE_SHARED,
+                        $_ownerId
+                    );
+                    return [$container->getId()];
+                }
+                throw new Tinebase_Exception_UnexpectedValue('specialNode ' . $_node . ' not supported / not found.');
         }
     }
 
