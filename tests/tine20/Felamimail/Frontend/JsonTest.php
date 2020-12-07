@@ -2498,7 +2498,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $fields = [
             'host' => $config['host'],
             'port' => $config['port'],
-            'ssl' => $config['ssl'],
+            'ssl' => isset($config['ssl']) ? $config['ssl'] : 'none',
             'user' => '',
             'password' => ''
         ];
