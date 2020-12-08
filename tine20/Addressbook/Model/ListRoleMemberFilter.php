@@ -40,7 +40,11 @@ class Addressbook_Model_ListRoleMemberFilter extends Tinebase_Model_Filter_Abstr
             /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
             /* select */ array()
         );
-        $_select->where($db->quoteIdentifier($correlationName . '.list_role_id') . ' IN (?)', (array) $this->_value);
+        if (empty($this->_value)) {
+            $_select->where($db->quoteIdentifier($correlationName . '.list_role_id') . ' IS NULL');
+        } else {
+            $_select->where($db->quoteIdentifier($correlationName . '.list_role_id') . ' IN (?)', (array)$this->_value);
+        }
     }
     
     /**
