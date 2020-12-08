@@ -160,7 +160,7 @@
     DOCKER_TLS_CERTDIR: ""
   services:
     - docker:19.03.1-dind
-  image: $REGISTRY/docker:19.03.1
+  image: $REGISTRY/docker:19.03.1-r1
   before_script:
     - source ci/functions.sh
     - export DOCKER_BUILDKIT=0
