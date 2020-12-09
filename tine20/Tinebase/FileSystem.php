@@ -3569,7 +3569,7 @@ class Tinebase_FileSystem implements
         $status = ['missing' => 0, 'created' => 0, 'missing_files' => []];
 
         if (! $this->isPreviewActive()) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
+            $status['missing_files'] = 'previews are disabled';
             return $status;
         }
 
