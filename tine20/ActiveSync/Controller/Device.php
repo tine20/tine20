@@ -200,5 +200,26 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        if (ActiveSync_Config::getInstance()->{ActiveSync_Config::LAST_PING_MONITORING_NOTIFICATION_TO_USER}) {
+            $translation = Tinebase_Translation::getTranslation('ActiveSync');
+            $locale = $translation->getLocale();
+            $twig = new Tinebase_Twig($locale, $translation);
+            if (!isset($owner)) {
+                $owner = Tinebase_User::getInstance()->getFullUserById($device->owner_id);
+            }
+
+            $textTemplate = $twig->load('ActiveSync/views/lastPingNotificationToUserEmail.twig');
+            $subject = sprintf($translation->_('%1$s ActiveSync failure'),
+                Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE});
+
+            try {
+                Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(),
+                    [new Addressbook_Model_Contact(['email' => $owner->accountEmailAddress], true)],
+                    $subject, $textTemplate->render([]));
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
     }
 }
