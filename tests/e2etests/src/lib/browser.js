@@ -91,6 +91,7 @@ module.exports = {
         console.log('setting preference ' + preference + ' of app '
             + appName + ' to "' + value + '"');
 
+        await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
         await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
         const frame = await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
         await expect(frame).toClick('.x-menu-item-icon.action_adminMode');
