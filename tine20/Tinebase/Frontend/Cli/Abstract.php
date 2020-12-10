@@ -409,6 +409,7 @@ class Tinebase_Frontend_Cli_Abstract
     
     /**
      * import records
+     * Usage example: php tine20.php --method Addressbook.import /path/to/import.vcf -- definition=adb_import_vcard
      *
      * @param Zend_Console_Getopt   $_opts
      * @return array import result
@@ -445,7 +446,8 @@ class Tinebase_Frontend_Cli_Abstract
             $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($args['model']);
             $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $args);
         } else {
-            echo "You need to define a plugin OR a definition OR a model at least! \n";
+            echo "You need to define a plugin OR a definition OR a model at least!\n";
+            echo "Usage example: php tine20.php --method Addressbook.import /path/to/import.vcf -- definition=adb_import_vcard\n";
             exit;
         }
         
