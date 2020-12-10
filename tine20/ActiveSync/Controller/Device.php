@@ -203,7 +203,7 @@ class ActiveSync_Controller_Device extends Tinebase_Controller_Record_Abstract
 
         if (ActiveSync_Config::getInstance()->{ActiveSync_Config::LAST_PING_MONITORING_NOTIFICATION_TO_USER}) {
             $translation = Tinebase_Translation::getTranslation('ActiveSync');
-            $locale = $translation->getLocale();
+            $locale = Tinebase_Translation::getLocale($translation->getLocale());
             $twig = new Tinebase_Twig($locale, $translation);
             if (!isset($owner)) {
                 $owner = Tinebase_User::getInstance()->getFullUserById($device->owner_id);
