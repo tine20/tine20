@@ -31,6 +31,17 @@ Ext.ns('Tine.widgets.grid');
  */
 Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
+     * @cfg {Class} editDialogClass (optional)
+     * editDialogClass having a static openWindow method
+     */
+    editDialogClass: null,
+
+    /**
+     * @cfg {Object} editDialogConfig (optional)
+     */
+    editDialogConfig: null,
+
+    /**
      * @cfg {bool}
      * enable bottom toolbar
      */
@@ -154,7 +165,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initActionsAndToolbars();
 
         this.on('afterrender', this.onAfterRender, this);
-        this.on('rowdblclick', this.onRowDblClick,     this);
+        this.on('rowdblclick', this.onRowDblClick, this);
 
         Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
     },
@@ -469,8 +480,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.recordDefaults || {}), this.recordClass);
         const editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
 
-        editDialogClass.openWindow({
-            mode: 'local',
+        editDialogClass.openWindow(_.assign({
             record: Ext.encode(record.data),
             recordId: record.getId(),
             listeners: {
@@ -479,7 +489,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     this.store.add(record);
                 }
             }
-        });
+        }, this.editDialogConfig || {}));
     },
     
     /**
@@ -575,13 +585,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     validate: function() { return true; },
 
     // NOTE: picker picks independed records - so lets support to open them w.o. restirctions
+    // NO: it might also pick / create /edit depended records - how to detect this?
     onRowDblClick: function(grid, row, col) {
         var me = this,
-            editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(me.recordClass),
+            editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(me.recordClass),
             record = me.store.getAt(row);
 
         if (editDialogClass) {
-            editDialogClass.openWindow({
+            editDialogClass.openWindow(_.assign({
                 record: record,
                 recordId: record.getId(),
                 listeners: {
@@ -603,7 +614,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         me.fireEvent('update', this, updatedRecord);
                     }
                 }
-            });
+            }, this.editDialogConfig || {}));
         }
     }
 });
