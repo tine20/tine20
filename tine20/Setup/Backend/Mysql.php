@@ -443,7 +443,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         $ignoreTables = '';
         if (count($option['structTables']) > 0) {
-            $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data ' .
+            $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data --no-tablespaces ' .
                 escapeshellarg($this->_config->database->dbname);
             foreach($option['structTables'] as $table) {
                 $structDump .= ' ' . escapeshellarg($table);
@@ -457,7 +457,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
               ."mysqldump --defaults-extra-file=$mycnf "
               .$ignoreTables
               ."--single-transaction --max_allowed_packet=512M "
-              ."--opt "
+              ."--opt --no-tablespaces "
               . escapeshellarg($this->_config->database->dbname)
               . ($structDump!==false?'; ' . $structDump . '; }':'')
               ." | bzip2 > $backupDir/tine20_mysql.sql.bz2";
