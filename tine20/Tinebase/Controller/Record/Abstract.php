@@ -1406,15 +1406,6 @@ abstract class Tinebase_Controller_Record_Abstract
         $addRelations = [];
         $removeRelations = [];
 
-        if (null !== $record->relations) {
-            if (is_array($record->relations)) {
-                $record->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $record->relations);
-            }
-            $relationsNull = false;
-        } else {
-            $relationsNull = true;
-        }
-
         foreach (array_keys($mc->getVirtualFields()) as $virtualField) {
             if (!isset($properties[$virtualField][TMCC::CONFIG][TMCC::TYPE]) || (TMCC::TYPE_RELATION !==
                     $properties[$virtualField][TMCC::CONFIG][TMCC::TYPE] && TMCC::TYPE_RELATIONS !==
@@ -1432,30 +1423,34 @@ abstract class Tinebase_Controller_Record_Abstract
             }
 
             if (null === $record->{$virtualField}) {
-                if (!$relationsNull && $existingRelations->count() > 0) {
+                if ($existingRelations->count() > 0) {
                     $addRelations[] = $existingRelations;
                 }
                 continue;
             }
 
+            $toAdd = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
             foreach ($record->{$virtualField} as $item) {
                 if (is_array($item)) {
                     $item = $item['id'];
                 }
                 if (null === ($existingRel = $existingRelations->find('related_id', $item))) {
                     $relationsModified = true;
-                    $addRelations[] = new Tinebase_Model_Relation([
-                        'related_model'     => $model,
-                        'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                        'related_id'        => $item,
-                        'related_degree'    => $degree,
-                        'type'              => $type,
-                    ], true);
+                    $toAdd->addRecord(new Tinebase_Model_Relation([
+                            'related_model'     => $model,
+                            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                            'related_id'        => $item,
+                            'related_degree'    => $degree,
+                            'type'              => $type,
+                        ], true));
                 } else {
                     $existingRelations->removeById($existingRel->getId());
                 }
             }
 
+            if ($toAdd->count() > 0) {
+                $addRelations[] = $toAdd;
+            }
             if ($existingRelations->count() > 0) {
                 $relationsModified = true;
                 $removeRelations[] = $existingRelations;
@@ -1463,19 +1458,27 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if ($relationsModified) {
-            if ($relationsNull) {
+            if (null !== $record->relations) {
+                if (is_array($record->relations)) {
+                    $record->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $record->relations);
+                }
+            } else {
                 if (null !== $currentRecord) {
-                    $record->relations = $currentRecord->relations;
+                    $record->relations = clone $currentRecord->relations;
                 } else {
                     $record->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
                 }
             }
 
+            /** @var Tinebase_Record_RecordSet $add */
             foreach ($addRelations as $add) {
-                if ($add instanceof Tinebase_Record_RecordSet) {
-                    $record->relations->mergeById($add);
-                } else {
-                    $record->relations->addRecord($add);
+                $firstRecord = $add->getFirstRecord();
+                $existingRelations = $record->relations->filter('related_model', $firstRecord->related_model)
+                    ->filter('type', $firstRecord->type)->filter('degree', $firstRecord->degree);
+                foreach ($add as $toAdd) {
+                    if ($existingRelations->find('related_id', $toAdd->related_id) === null) {
+                        $record->relations->addRecord($toAdd);
+                    }
                 }
             }
 
