@@ -416,6 +416,66 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->fail('got duplicate exception: ' . print_r($ted->toArray(), true));
         }
     }
+
+    public function testStreamVirtualProp()
+    {
+        $ta1 = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
+            'title' => Tinebase_Record_Abstract::generateUID()
+        ]));
+        $ta2 = Timetracker_Controller_Timeaccount::getInstance()->create(new Timetracker_Model_Timeaccount([
+            'title' => Tinebase_Record_Abstract::generateUID()
+        ]));
+
+        $stream = $this->_json->saveStream([
+            HumanResources_Model_Stream::FLD_TYPE => 'velocity stream',
+            HumanResources_Model_Stream::FLD_TITLE => 'my unittest stream',
+            HumanResources_Model_Stream::FLD_STREAM_MODALITIES => [
+                [
+                    HumanResources_Model_StreamModality::FLD_START => Tinebase_DateTime::now()->toString('Y-m-d'),
+                    HumanResources_Model_StreamModality::FLD_INTERVAL => HumanResources_Model_StreamModality::INT_WEEKLY,
+                    HumanResources_Model_StreamModality::FLD_NUM_INTERVAL => 10,
+                    HumanResources_Model_StreamModality::FLD_HOURS_INTERVAL => 16,
+                ], [
+                    HumanResources_Model_StreamModality::FLD_START => Tinebase_DateTime::now()->subYear(1)->toString('Y-m-d'),
+                    HumanResources_Model_StreamModality::FLD_INTERVAL => HumanResources_Model_StreamModality::INT_WEEKLY,
+                    HumanResources_Model_StreamModality::FLD_NUM_INTERVAL => 10,
+                    HumanResources_Model_StreamModality::FLD_HOURS_INTERVAL => 16,
+                ]
+            ],
+            HumanResources_Model_Stream::FLD_RESPONSIBLES => [
+                Tinebase_Core::getUser()->contact_id,
+                Addressbook_Controller_Contact::getInstance()->get($this->_personas['sclever']->contact_id)->toArray(false)
+            ],
+            HumanResources_Model_Stream::FLD_TIME_ACCOUNTS => [
+                $ta1->getId()
+            ]
+        ]);
+
+        $this->assertArrayHasKey('relations', $stream);
+        $this->assertCount(3, $stream['relations']);
+        $this->assertArrayHasKey(HumanResources_Model_Stream::FLD_TIME_ACCOUNTS, $stream);
+        $this->assertCount(1, $stream[HumanResources_Model_Stream::FLD_TIME_ACCOUNTS]);
+        $taRelation = null;
+        foreach ($stream['relations'] as $rel) {
+            if ($rel['related_model'] === Timetracker_Model_Timeaccount::class) {
+                $taRelation = $rel;
+                break;
+            }
+        }
+        $this->assertNotNull($taRelation, 'time account relation not found');
+
+        unset($taRelation['id']);
+        unset($taRelation['relatedRecord']);
+        $taRelation['related_id'] = $ta2->getId();
+        $stream[HumanResources_Model_Stream::FLD_TIME_ACCOUNTS][] = $ta2->getId();
+        $stream['relations'][] = $taRelation;
+
+        $stream = $this->_json->saveStream($stream);
+        $this->assertArrayHasKey('relations', $stream);
+        $this->assertCount(4, $stream['relations']);
+        $this->assertArrayHasKey(HumanResources_Model_Stream::FLD_TIME_ACCOUNTS, $stream);
+        $this->assertCount(2, $stream[HumanResources_Model_Stream::FLD_TIME_ACCOUNTS]);
+    }
     
     /**
      * test working time
