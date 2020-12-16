@@ -447,7 +447,19 @@ class HumanResources_JsonTests extends HumanResources_TestCase
                 Addressbook_Controller_Contact::getInstance()->get($this->_personas['sclever']->contact_id)->toArray(false)
             ],
             HumanResources_Model_Stream::FLD_TIME_ACCOUNTS => [
-                $ta1->getId()
+                $ta1->toArray()
+            ],
+            'relations' => [
+                [
+                    'own_model' => HumanResources_Model_Stream::class,
+                    'own_backend'=> 'Sql',
+                    'own_id' => 'asdf',
+                    'related_degree' => 'sibling',
+                    'related_model' => Timetracker_Model_Timeaccount::class,
+                    'related_backend' => 'Sql',
+                    'related_id' => $ta1->getId(),
+                    'type' => 'Timeaccount',
+                ]
             ]
         ]);
 
