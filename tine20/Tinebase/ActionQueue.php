@@ -6,7 +6,7 @@
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -28,10 +28,11 @@
  * @method boolean|string peekJobId()
  *
  */
- class Tinebase_ActionQueue implements Tinebase_Controller_Interface
+ class Tinebase_ActionQueue
  {
      const BACKEND_DIRECT = 'Direct';
      const BACKEND_REDIS  = 'Redis';
+     const QUEUE_LONG_RUN = Tinebase_Config::ACTIONQUEUE_LONG_RUNNING;
      
      /**
       * holds queue instance
@@ -39,6 +40,9 @@
       * @var Tinebase_ActionQueue_Backend_Interface
       */
      protected $_queue = NULL;
+
+     protected $_ququeName = null;
+     protected $_config;
 
      /**
       * @var array
@@ -51,11 +55,11 @@
      public static $waitForTransactionManager = true;
      
     /**
-     * holds the instance of the singleton
+     * holds the instances of the singleton
      *
-     * @var Tinebase_ActionQueue
+     * @var array Tinebase_ActionQueue
      */
-    private static $_instance = NULL;
+    private static $_instances = [];
 
     /**
      * don't clone. Use the singleton.
@@ -64,29 +68,57 @@
     private function __clone() 
     {
     }
-    
+
+    /**
+     * ATTENTION this needs to return really all instances! once we start introducing a 3rd and Nth queue...
+     * FIXME make it generic
+     * @return array<self>
+     */
+    public static function getAllInstances()
+    {
+        $instances = [static::getInstance()];
+        if (($config = Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE}) &&
+                $config->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
+            $longRunningFound = false;
+            if ($config->{Tinebase_Config::ACTIONQUEUE_QUEUES}) {
+                foreach ($config->{Tinebase_Config::ACTIONQUEUE_QUEUES} as $name => $subConfig) {
+                    $instances[] = static::getInstance($name);
+                    if (self::QUEUE_LONG_RUN === $name) {
+                        $longRunningFound = true;
+                    }
+                }
+            }
+            if (!$longRunningFound && $config->{Tinebase_Config::ACTIONQUEUE_LONG_RUNNING}) {
+                $instances[] = static::getInstance(self::QUEUE_LONG_RUN);
+            }
+        }
+        return $instances;
+    }
+
     /**
      * the singleton pattern
      *
+     * @param string|null $_queue
      * @param string|null $_forceBackend
      * @return Tinebase_ActionQueue
      */
-    public static function getInstance()
+    public static function getInstance($_queue = null, $_forceBackend = null)
     {
-        $_forceBackend = null;
-        if (self::$_instance === NULL || (func_num_args() > 0 && null !== ($_forceBackend = func_get_arg(0)))) {
-            self::$_instance = new Tinebase_ActionQueue($_forceBackend);
+        if (null === $_queue) $_queue = 0;
+        if (!isset(self::$_instances[$_queue]) || null !== $_forceBackend) {
+            self::$_instances[$_queue] = new Tinebase_ActionQueue($_queue ?: null, $_forceBackend);
         }
         
-        return self::$_instance;
+        return self::$_instances[$_queue];
     }
     
     /**
      * destroy instance of this class
      */
-    public static function destroyInstance()
+    public static function destroyInstance($_queue = null)
     {
-        self::$_instance = NULL;
+        if (null === $_queue) $_queue = 0;
+        unset(self::$_instances[$_queue]);
     }
 
      /**
@@ -117,46 +149,60 @@
     /**
      * constructor
      *
+     * @param string|null $_queue
      * @param string|null $_forceBackend
      */
-    protected function __construct($_forceBackend = null)
+    protected function __construct($_queue, $_forceBackend = null)
     {
-        $options = null;
+        $options = [];
         $backend = null === $_forceBackend ? self::BACKEND_DIRECT : $_forceBackend;
-        $config = Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE};
+        $this->_config = Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE};
 
         /** @noinspection PhpUndefinedFieldInspection */
-        if (null === $_forceBackend && $config && isset($config->{Tinebase_Config::ACTIONQUEUE_BACKEND}) && $config->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
+        if ($this->_config && $this->_config->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $options = $config->toArray();
-            
-            $backend = (isset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]) || array_key_exists(Tinebase_Config::ACTIONQUEUE_BACKEND, $options)) ? ucfirst(strtolower($options[Tinebase_Config::ACTIONQUEUE_BACKEND])) : $backend;
+            $options = $this->_config->toArray();
+
+            if (null === $_forceBackend) {
+                $backend = (isset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]) || array_key_exists(Tinebase_Config::ACTIONQUEUE_BACKEND, $options)) ? ucfirst(strtolower($options[Tinebase_Config::ACTIONQUEUE_BACKEND])) : $backend;
+            }
             unset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]);
             unset($options[Tinebase_Config::ACTIONQUEUE_ACTIVE]);
+
+            if (null !== $_queue) {
+                if (!isset($options['queueName'])) {
+                    $options['queueName'] = Tinebase_ActionQueue_Backend_Redis::QUEUE_NAME;
+                }
+
+                if (self::QUEUE_LONG_RUN !== $_queue ||
+                        isset($this->_config->{Tinebase_Config::ACTIONQUEUE_QUEUES}[$_queue])) {
+                    if (!isset($this->_config->{Tinebase_Config::ACTIONQUEUE_QUEUES}[$_queue])) {
+                        throw new Tinebase_Exception($_queue . ' is not configured in ' .
+                            Tinebase_Config::ACTIONQUEUE_QUEUES);
+                    }
+                    $options['queueName'] =
+                        isset($this->_config->{Tinebase_Config::ACTIONQUEUE_QUEUES}[$_queue]['queueName']) ?
+                            $this->_config->{Tinebase_Config::ACTIONQUEUE_QUEUES}[$_queue]['queueName'] : $_queue;
+                } else {
+                    $options['queueName'] .= $this->_config->{self::QUEUE_LONG_RUN} ?: '';
+                }
+
+                $this->_ququeName = $_queue;
+            }
         }
-        
         $className = 'Tinebase_ActionQueue_Backend_' . $backend;
-        
+
         if (!class_exists($className)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
                 __METHOD__ . '::' . __LINE__ . " Queue class name {$className} not found. Falling back to direct execution.");
-            
+
             $className = Tinebase_ActionQueue_Backend_Direct::class;
         }
-    
-        $this->_queue = $this->_createQueueBackendInstance($className, $options);
+        $this->_queue = new $className($options);
 
         if (! $this->_queue instanceof Tinebase_ActionQueue_Backend_Interface) {
             throw new Tinebase_Exception_UnexpectedValue('backend does not implement Tinebase_ActionQueue_Backend_Interface');
         }
-    }
-
-    /**
-     * to allow overwrite
-     */
-    protected function _createQueueBackendInstance($className, $options)
-    {
-        return new $className($options);
     }
 
      /**
@@ -280,8 +326,12 @@
 
     public function cleanDaemonStruct()
     {
-        // 15 minutes
-        $this->_queue->cleanDaemonStruct(15 * 60);
+        if (null !== $this->_ququeName && $this->_config->{Tinebase_Config::ACTIONQUEUE_CLEAN_DS . $this->_ququeName}) {
+            $this->_queue->cleanDaemonStruct($this->_config->{Tinebase_Config::ACTIONQUEUE_CLEAN_DS . $this->_ququeName});
+        } else {
+            // 15 minutes
+            $this->_queue->cleanDaemonStruct(15 * 60);
+        }
     }
 
     /**

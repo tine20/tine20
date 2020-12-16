@@ -738,6 +738,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_ACTIVE = 'active';
     const ACTIONQUEUE_BACKEND = 'backend';
+    const ACTIONQUEUE_CLEAN_DS = 'cleanDS';
+    const ACTIONQUEUE_CLEAN_DS_LONG_RUNNING = 'cleanDSlongRunning';
     const ACTIONQUEUE_HOST = 'host';
     const ACTIONQUEUE_LONG_RUNNING = 'longRunning';
     const ACTIONQUEUE_PORT = 'port';
@@ -752,6 +754,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE_LR_MONITORING_DURATION_CRIT = 'LRdurationCrit';
     const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT = 'LRlastUpdateCrit';
     const ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT = 'LRdaemonStructSizeCrit';
+    const ACTIONQUEUE_QUEUES = 'queues';
 
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
@@ -1123,6 +1126,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'type'                              => Tinebase_Config::TYPE_STRING,
                     'default'                           => 'Direct',
                 ],
+                self::ACTIONQUEUE_CLEAN_DS_LONG_RUNNING => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 5 * 60 * 60, // 5 hours
+                ],
                 self::ACTIONQUEUE_HOST          => [
                     'type'                              => Tinebase_Config::TYPE_STRING,
                     'default'                           => 'localhost',
@@ -1178,6 +1185,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT=> [
                     'type'                              => Tinebase_Config::TYPE_INT,
                     'default'                           => 3,
+                ],
+                self::ACTIONQUEUE_QUEUES            => [
+                    'type'                              => Tinebase_Config::TYPE_ARRAY,
+                    'default'                           => [],
                 ],
             ],
             'default'                           => [],

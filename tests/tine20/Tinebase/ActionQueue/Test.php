@@ -38,9 +38,9 @@ class Tinebase_ActionQueue_Test extends TestCase
         $config->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_BACKEND} = 'Test';
 
         Tinebase_ActionQueue::destroyInstance();
-        Tinebase_ActionQueueLongRun::destroyInstance();
-        $this->_uit = Tinebase_ActionQueue::getInstance('Test');
-        Tinebase_ActionQueueLongRun::getInstance('Test');
+        Tinebase_ActionQueue::destroyInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN);
+        $this->_uit = Tinebase_ActionQueue::getInstance(null, 'Test');
+        Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN, 'Test');
     }
 
     protected function tearDown(): void
@@ -52,7 +52,7 @@ class Tinebase_ActionQueue_Test extends TestCase
         parent::tearDown();
 
         Tinebase_ActionQueue::destroyInstance();
-        Tinebase_ActionQueueLongRun::destroyInstance();
+        Tinebase_ActionQueue::destroyInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN);
     }
 
     protected function checkMonitoringCheckQueueOutput($expectedOutput, $expectedReturn)

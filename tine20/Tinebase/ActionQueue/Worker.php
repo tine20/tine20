@@ -22,7 +22,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
     protected $_stopped = false;
 
-    protected $_isLongRunning = false;
+    protected $_queueName = null;
 
     /** 
      * default configurations of this daemon
@@ -41,6 +41,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             'maxChildren'     => 10,
             'shutDownWait'    => 60,
             'longRunning'     => false,
+            'queueName'       => false,
         )
     );
     
@@ -89,8 +90,11 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
         Tinebase_Core::set(Tinebase_Core::LOGGER, $this->_getLogger());
 
         if ($this->_getConfig()->tine20->longRunning) {
-            $this->_actionQueue = Tinebase_ActionQueueLongRun::getInstance();
-            $this->_isLongRunning = true;
+            $this->_actionQueue = Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN);
+            $this->_queueName = Tinebase_ActionQueue::QUEUE_LONG_RUN;
+        } elseif ($this->_getConfig()->tine20->queueName) {
+            $this->_actionQueue = Tinebase_ActionQueue::getInstance($this->_getConfig()->tine20->queueName);
+            $this->_queueName = $this->_getConfig()->tine20->queueName;
         } else {
             $this->_actionQueue = Tinebase_ActionQueue::getInstance();
         }
@@ -299,7 +303,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
             exec(PHP_BINARY . ' -d include_path=' . escapeshellarg(get_include_path()) .
                 ' ' . $this->_tineExecutable . ' --method Tinebase.executeQueueJob jobId=' . escapeshellarg($jobId)
-                . ($this->_isLongRunning ? ' longRunning=true':''), $output, $exitCode);
+                . ($this->_queueName ? ' queueName=' . $this->_queueName:''), $output, $exitCode);
             if ($exitCode != 0) {
                 throw new Exception('Problem during execution with shell: ' . join(PHP_EOL, $output));
             }

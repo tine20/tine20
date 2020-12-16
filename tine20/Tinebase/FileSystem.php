@@ -785,7 +785,7 @@ class Tinebase_FileSystem implements
         }
 
         if (true === Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM)->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT}) {
-            Tinebase_ActionQueueLongRun::getInstance()->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
+            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
         }
 
         return $newFileObject;

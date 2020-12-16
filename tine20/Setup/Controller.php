@@ -808,14 +808,17 @@ class Setup_Controller
 
         // check action queue is empty and wait for it to finish
         $timeStart = time();
-        while (Tinebase_ActionQueue::getInstance()->getQueueSize() > 0 && time() - $timeStart < 300) {
-            usleep(10000);
-        }
-        if (time() - $timeStart >= 300) {
-            throw new Tinebase_Exception('waited for Action Queue to become empty for more than 300 sec');
+        foreach (Tinebase_ActionQueue::getAllInstances() as $actionQueue) {
+            while ($actionQueue->getQueueSize() > 0 && time() - $timeStart < 300) {
+                usleep(10000);
+            }
+            if (time() - $timeStart >= 300) {
+                throw new Tinebase_Exception('waited for Action Queue to become empty for more than 300 sec');
+            }
         }
         // set action to direct
-        Tinebase_ActionQueue::getInstance('Direct');
+        Tinebase_ActionQueue::getInstance(null, Tinebase_ActionQueue::BACKEND_DIRECT);
+        Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN, Tinebase_ActionQueue::BACKEND_DIRECT);
 
         $roleController = Tinebase_Acl_Roles::getInstance();
         $applicationController = Tinebase_Application::getInstance();
