@@ -2813,6 +2813,7 @@ class Setup_Controller
                 unlink($directoryIterator->getPathname());
             }
         }
+        clearstatcache();
 
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
