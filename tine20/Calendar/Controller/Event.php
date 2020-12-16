@@ -2771,15 +2771,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // attach to display calendar if attender has/is a useraccount
         if ($userAccountId) {
-            if ($calendar->type == Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
+            if ($calendar->type === Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 // if attender has admin grant to (is owner of) personal physical container, this phys. cal also gets displ. cal
                 $attender->displaycontainer_id = $calendar->getId();
-            } else if ($attender->displaycontainer_id && $userAccountId == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                // allow user to set his own displ. cal
-                $attender->displaycontainer_id = $attender->displaycontainer_id;
-            } else {
-                $displayCalId = self::getDefaultDisplayContainerId($userAccountId);
-                $attender->displaycontainer_id = $displayCalId;
+
+                // allow user to set his own *personal* displ. cal
+                // otherwise set default display container
+            } elseif (!$attender->displaycontainer_id || $userAccountId !== Tinebase_Core::getUser()->getId() || !Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN) ||
+                    Tinebase_Container::getInstance()->get($attender->displaycontainer_id)->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
+                $attender->displaycontainer_id = self::getDefaultDisplayContainerId($userAccountId);
             }
 
         } else if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
@@ -2893,11 +2893,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         // update display calendar if attender has/is a useraccount
         if ($userAccountId) {
-            if ($calendar->type == Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
+            if ($calendar->type === Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 // if attender has admin grant to personal physical container, this phys. cal also gets displ. cal
                 $attender->displaycontainer_id = $calendar->getId();
-            } else if ($userAccountId == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                // allow user to set his own displ. cal
+            } else if ($userAccountId === Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN) &&
+                    Tinebase_Container::getInstance()->get($attender->displaycontainer_id)->type === Tinebase_Model_Container::TYPE_PERSONAL) {
+                // allow user to set his own *personal* displ. cal
                 $attender->displaycontainer_id = $attender->displaycontainer_id;
             } else {
                 $attender->displaycontainer_id = $currentAttender->displaycontainer_id;
