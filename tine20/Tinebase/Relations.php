@@ -132,10 +132,6 @@ class Tinebase_Relations
         $relations->own_backend = $_backend;
         $relations->own_id      = $_id;
         
-        // convert related_record to record objects
-        // @todo move this to a relation json class / or to model->setFromJson
-        $this->_relatedRecordToObject($relations);
-        
         // compute relations to add/delete
         $currentRelations = $this->getRelations($_model, $_backend, $_id, NULL, array(), $_ignoreACL);
         $currentIds   = $currentRelations->getArrayOfIds();
@@ -171,8 +167,10 @@ class Tinebase_Relations
             if (isset($emptyRelatedId[$idx])) {
                 // create related record
                 $relation->related_id = null;
+                $this->_relatedRecordToObject($relation);
                 $this->_setAppRecord($relation, $_doCreateUpdateCheck);
             } else if ($_inspectRelated && ! empty($relation->related_id) && ! empty($relation->related_record)) {
+                $this->_relatedRecordToObject($relation);
                 // update related record
                 $this->_setAppRecord($relation, $_doCreateUpdateCheck);
             }
@@ -185,7 +183,8 @@ class Tinebase_Relations
             $update = $relations->getById($relationId);
             
             // update related records if explicitly needed
-            if ($_inspectRelated && isset($current->related_record) && isset($update->related_record)) {
+            if ($_inspectRelated && isset($current->related_record) && !empty($update->related_record)) {
+                $this->_relatedRecordToObject($update);
                 // @todo do we need to omit so many fields?
                 if (! $current->related_record->isEqual(
                     $update->related_record, 
@@ -517,25 +516,19 @@ class Tinebase_Relations
      * @param  Tinebase_Model_Relation|Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _relatedRecordToObject($_relations)
+    protected function _relatedRecordToObject(Tinebase_Model_Relation $relation)
     {
-        if(! $_relations instanceof Tinebase_Record_RecordSet) {
-            $_relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array($_relations));
+        if (! is_string($relation->related_model)) {
+            throw new Tinebase_Exception_InvalidArgument('missing relation model');
         }
-        
-        foreach ($_relations as $relation) {
-            if (! is_string($relation->related_model)) {
-                throw new Tinebase_Exception_InvalidArgument('missing relation model');
-            }
 
-            if (empty($relation->related_record) || $relation->related_record instanceof $relation->related_model) {
-                continue;
-            }
-            
-            $data = Zend_Json::encode($relation->related_record);
-            $relation->related_record = new $relation->related_model();
-            $relation->related_record->setFromJsonInUsersTimezone($data);
+        if (empty($relation->related_record) || $relation->related_record instanceof $relation->related_model) {
+            return;
         }
+
+        $data = Zend_Json::encode($relation->related_record);
+        $relation->related_record = new $relation->related_model();
+        $relation->related_record->setFromJsonInUsersTimezone($data);
     }
     
     /**
