@@ -766,12 +766,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
 
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
 
-        try {
-            $vevent = $this->_converter->fromTine20Model($event)->serialize();
-            $this->fail('should throw Tinebase_Exception_Record_Validation because of bad TZ');
-        } catch (Tinebase_Exception_Record_Validation $terv) {
-            $this->assertEquals('Bad Timezone: AWSTTTT', $terv->getMessage());
-        }
+        $vevent = $this->_converter->fromTine20Model($event)->serialize();
+        self::assertStringContainsString('TZID:' . Tinebase_Core::getUserTimezone(), $vevent);
     }
 
     /**
