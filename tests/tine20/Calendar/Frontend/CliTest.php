@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -13,7 +13,7 @@
  * 
  * @package     Calendar
  */
-class Calendar_Frontend_CliTest extends TestCase
+class Calendar_Frontend_CliTest extends Calendar_TestCase
 {
     /**
      * Backend
@@ -28,8 +28,8 @@ class Calendar_Frontend_CliTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp(): void
-{
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->_cli = new Calendar_Frontend_Cli();
@@ -72,5 +72,43 @@ class Calendar_Frontend_CliTest extends TestCase
         foreach ($expectedStrings as $expected => $failMessage) {
             self::assertStringContainsString($expected, $out, $failMessage);
         }
+    }
+
+    public function testExportVCalendar()
+    {
+        $this->_testNeedsTransaction();
+
+        $this->_importDemoData(
+            'Calendar',
+            Calendar_Model_Event::class, [
+            'definition' => 'cal_import_event_csv',
+            'file' => 'event.csv'
+        ], $this->_getTestCalendar()
+        );
+
+        // export container to filemanager path
+        Tinebase_FileSystem::getInstance()->mkdir('/Filemanager/folders/shared/unittestexport');
+
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments([
+            'type=personal',
+            'fm_path=/shared/unittestexport/',
+        ]);
+
+        ob_start();
+        $this->_cli->exportVCalendar($opts);
+        $out = ob_get_clean();
+
+        // check if file exists in path and has the right contents
+        $filename = Tinebase_Core::getUser()->accountLoginName . '_' . substr($this->_getTestCalendar()->getId(), 0, 8) . '.ics';
+        $exportFilenamePath = 'Filemanager/folders/shared/unittestexport/'
+            . $filename;
+        $ics = file_get_contents('tine20:///' . $exportFilenamePath);
+        self::assertStringContainsString('Anforderungsanalyse', $ics, 'output: ' . $out);
+        self::assertStringContainsString('BEGIN:VCALENDAR', $ics, 'output: ' . $out);
+        self::assertStringContainsString('BEGIN:VTIMEZONE', $ics, 'output: ' . $out);
+        // 4 events + 1 time in header
+        self::assertEquals(5, substr_count($ics, 'X-CALENDARSERVER-ACCESS:PUBLIC'),
+            'X-CALENDARSERVER-ACCESS:PUBLIC should appear once in header');
     }
 }
