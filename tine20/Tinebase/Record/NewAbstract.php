@@ -872,7 +872,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function isEqual($_record, array $_toOmit = [])
     {
-        $diff = $this->diff($_record);
+        $diff = $this->diff($_record, $_toOmit);
         return ($diff) ? $diff->isEmpty($_toOmit) : false;
     }
 
