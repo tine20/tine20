@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -1927,7 +1927,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $_account->organization = $contact->org_name;
             }
         } catch (Addressbook_Exception_NotFound $aenf) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not get system account user contact: ' . $aenf->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Could not get system account user contact: ' . $aenf->getMessage());
         }
     }
 
@@ -1942,10 +1943,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        // TODO fix me! system account resolving is mssing, add it here?!
+        // TODO fix me! system account resolving is missing, add it here?!
         throw new Tinebase_Exception_NotImplemented('do not use this function');
     }
 
+    /**
+     * @param Addressbook_Model_List $list
+     * @return false|Tinebase_Record_Interface
+     */
     public function getAccountForList(Addressbook_Model_List $list)
     {
         $account = Felamimail_Controller_Account::getInstance()->search(
@@ -1955,8 +1960,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             ]))->getFirstRecord();
 
         if (null === $account) {
-            $e = new Tinebase_Exception('no felamimail account found for list ' . $list->getId());
-            Tinebase_Exception::log($e);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' No felamimail account found for list ' . $list->getId());
             return false;
         }
 
