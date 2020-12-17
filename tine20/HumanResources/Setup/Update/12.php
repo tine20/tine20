@@ -17,6 +17,7 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE012_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE012_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE012_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -31,6 +32,10 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE012_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -242,5 +247,16 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '12.11', self::RELEASE012_UPDATE006);
+    }
+
+    public function update007()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_FreeTime::class,
+            HumanResources_Model_FreeTimeType::class,
+        ]);
+
+        // this "app version" is legacy anyway... whatever
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '13.0', self::RELEASE012_UPDATE007);
     }
 }

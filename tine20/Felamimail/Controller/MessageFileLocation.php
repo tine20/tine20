@@ -167,8 +167,10 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
         try {
             $this->create($locationToCreate);
         } catch (Zend_Db_Statement_Exception $zdse) {
-            if (Tinebase_Exception::isDbDuplicate($zdse) && Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+            if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                }
             } else {
                 throw $zdse;
             }

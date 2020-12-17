@@ -460,8 +460,10 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      */
     protected function _getAttachmentFilename($string)
     {
-        $filename = str_replace([' ', '/'], '_', $string);
-        $filename = iconv("UTF-8", "ascii//TRANSLIT", $filename);
+        $string = str_replace([' ', '/'], '_', $string);
+        if (false === ($filename = @iconv("UTF-8", "ascii//TRANSLIT", $string))) {
+            $filename = iconv("UTF-8", "ascii//IGNORE", $string);
+        }
 
         return $filename;
     }

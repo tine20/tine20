@@ -18,6 +18,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      */
     protected $objects = array();
 
+    protected $_ifMatchHeader;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -53,6 +55,9 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
 
         $_SERVER['REQUEST_URI'] = 'lars';
+
+        $this->_ifMatchHeader = new Zend\Http\Header\IfMatch('shalala');
+        Tinebase_Core::getRequest()->getHeaders()->addHeader($this->_ifMatchHeader);
     }
 
     public function tearDown(): void
@@ -60,6 +65,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         parent::tearDown();
         Tinebase_Core::getPreference('Calendar')->resetAppPrefsCache();
         Tinebase_Core::set(Tinebase_Core::PREFERENCES, null);
+        Tinebase_Core::getRequest()->getHeaders()->removeHeader($this->_ifMatchHeader);
     }
 
     /**
@@ -1013,6 +1019,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         // move event (origin container)
         Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", stream_get_contents($event->get()));
         $oldEvent = new Calendar_Frontend_WebDAV_Event($this->objects['sharedContainer'], "$id.ics");
+
         $oldEvent->delete();
         
         $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");

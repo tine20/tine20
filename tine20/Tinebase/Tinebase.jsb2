@@ -754,6 +754,10 @@
             "path": "js/widgets/relation/"
         },
         {
+          "text": "PickerGridPanel.js",
+          "path": "js/widgets/relation/"
+        },
+        {
           "text": "RecordRenderer.js",
           "path": "js/widgets/printer/"
         },

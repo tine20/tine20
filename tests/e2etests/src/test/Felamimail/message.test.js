@@ -110,7 +110,7 @@ describe('email note preference', () => {
         await lib.setPreference(page,'E-Mail', 'autoAttachNote', 'ja');
     });
     test('open compose dialog and check button pressed', async () => {
-        await page.waitFor(2000);
+        await page.waitFor(3000);
         let popupWindow = await lib.getEditDialog('Verfassen');
         await popupWindow.waitForSelector('.x-btn.x-btn-text-icon.x-btn-pressed');
         await popupWindow.close();

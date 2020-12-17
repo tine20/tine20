@@ -236,27 +236,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
 
             $vevent = new self($container, $existingEvent);
-            /** @var Calendar_Model_Event $existingEvent */
-            $existingEvent = clone $existingEvent;
-            $existingEvent->alarms = $event->alarms;
-            $existingEvent->transp = $event->transp;
-            if (null === ($contactId = $container->getOwner())) {
-                $contactId = Tinebase_Core::getUser()->contact_id;
-            } else {
-                $contactId = Tinebase_User::getInstance()->getUserById($contactId)->contact_id;
-            }
-            if (null !== ($attender = $event->attendee->find('user_id', $contactId))) {
-                if (null !== ($oldAttender = $existingEvent->attendee->find('user_id', $contactId))) {
-                    $existingEvent->attendee->removeRecord($oldAttender);
-                    $attender->setId($oldAttender->getId());
-                }
-                $existingEvent->attendee->addRecord($attender);
-            }
+            $event = static::_allowOnlyAttendeeProperties($existingEvent, $event, $container);
 
             $calCtrl = Calendar_Controller_Event::getInstance();
             $oldCalenderAcl = $calCtrl->doContainerACLChecks();
             try {
-                if ($existingEvent->hasExternalOrganizer()) {
+                if ($event->hasExternalOrganizer()) {
                     $calCtrl->doContainerACLChecks(false);
                 }
                 $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVObject($vobjectData);
@@ -270,9 +255,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                         break;
                     }
                 }
-                $vcalendar = $converter->fromTine20Model($existingEvent);
+                $vcalendar = $converter->fromTine20Model($event);
                 if (null !== $xTine20Container) {
                     static::_addXPropsToVEvent($vcalendar, $xTine20Container);
+                }
+                // set a dummy if-match header
+                if (!Tinebase_Core::getRequest()->getHeaders()->has('If-Match')) {
+                    Tinebase_Core::getRequest()->getHeaders()->addHeader(new Zend\Http\Header\IfMatch('dummy'));
                 }
                 $vevent->put($vcalendar->serialize());
             } finally {
@@ -281,6 +270,28 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         }
         
         return $vevent;
+    }
+
+    protected static function _allowOnlyAttendeeProperties(Calendar_Model_Event $_origEvent, Calendar_Model_Event $_event, Tinebase_Model_Container $_container)
+    {
+        $event = clone $_origEvent;
+        $event->alarms = $_event->alarms;
+        $event->transp = $_event->transp;
+        if (null === ($contactId = $_container->getOwner())) {
+            $contactId = Tinebase_Core::getUser()->contact_id;
+        } else {
+            $contactId = Tinebase_User::getInstance()->getUserById($contactId)->contact_id;
+        }
+        /** @var Calendar_Model_Attender $attender */
+        if (null !== ($attender = $_event->attendee->find('user_id', $contactId))) {
+            if (null !== ($oldAttender = $event->attendee->find('user_id', $contactId))) {
+                $event->attendee->removeRecord($oldAttender);
+                $attender->setId($oldAttender->getId());
+            }
+            $event->attendee->addRecord($attender);
+        }
+
+        return $event;
     }
 
     /**
@@ -510,52 +521,77 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         }
         // Converting to UTF-8, if needed
         $cardData = Sabre\DAV\StringUtil::ensureUTF8($cardData);
-        
-        #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VEVENT', 'VFREEBUSY'));
-        
         $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVObject($cardData);
+        $xTine20Container = null;
         foreach ($vobject->children() as $component) {
             if (isset($component->{'X-TINE20-CONTAINER'})) {
-                $xTine20Container = $component->{'X-TINE20-CONTAINER'};
+                $xTine20Container = $component->{'X-TINE20-CONTAINER'}->getValue();
                 break;
             }
         }
-        
-        // concurrency management is based on etag in CalDAV
-        $event = $this->_getConverter()->toTine20Model($vobject, $this->getRecord(), array(
+
+        // clone, otherwise $this->_event and $event would be the same object
+        $event = $this->_getConverter()->toTine20Model($vobject, clone $this->getRecord(), array(
             Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
 
-
         $currentEvent = $this->getRecord();
+        if (null !== $xTine20Container && $currentEvent->container_id !== $xTine20Container &&
+                $currentEvent->attendee->find('displaycontainer_id', $xTine20Container) === null) {
+            $xTine20Container = null;
+        }
+        $inDisplayContainer = $currentEvent->attendee->find('displaycontainer_id', $this->_container->getId()) !== null;
+        $currentOwnAttendee = Calendar_Model_Attender::getOwnAttender($currentEvent->attendee);
+        $xTine20ContainerAttendee = $xTine20Container ?
+            $currentEvent->attendee->find('displaycontainer_id', $xTine20Container) : null;
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($currentEvent->container_id);
+        $currentContainer->resolveGrantsAndPath();
 
-        // client sends CalDAV event -> handle a container move
-        if (isset($xTine20Container)) {
-            if ($xTine20Container->getValue() == $currentContainer->getId()) {
+        // no If-Match header -> no moves / displaycontainer changes
+        if (!Tinebase_Core::getRequest()->getHeaders()->has('If-Match')) {
+            $event = static::_allowOnlyAttendeeProperties($currentEvent, $event, $this->_container);
+
+            // no xTineContainer
+        } elseif (null === $xTine20Container) {
+            // target container is not a current displaycontainer and we have admin on origin container or are organizer
+            // move to target container
+            if (!$inDisplayContainer && ($currentContainer->account_grants->{Tinebase_Model_Grants::GRANT_ADMIN} ||
+                    $currentEvent->organizer === Tinebase_Core::getUser()->contact_id ||
+                    $currentEvent->organizer === Calendar_Controller_MSEventFacade::getInstance()->getCalendarUser()->user_id)) {
                 $event->container_id = $this->_container->getId();
-            } else {
-                // @TODO allow organizer to move original cal when he edits the displaycal event?
-                if ($this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
-                    Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event, $this->_container->getId());
+            // target container is not a current displaycontainer and is not the origin container ( and we are not organizer or admin on origin)
+                // set as new displaycontainer for OUR attendee (not currentCalendarUsers attendee!)
+            } elseif (!$inDisplayContainer && $currentOwnAttendee && $event->container_id !== $this->_container->getId()) {
+                Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event, $this->_container->getId(),
+                    $currentOwnAttendee);
+            } // else do nothing
+
+        } else { // we have a xTineContainer
+            // the xTineContainer is the origin container => do the move
+            if ($event->container_id === $xTine20Container) {
+                // grant check?
+                /* ($currentContainer->account_grants->{Tinebase_Model_Grants::GRANT_ADMIN} ||
+                    $currentEvent->organizer === Calendar_Controller_MSEventFacade::getInstance()->getCalendarUser()->user_id)) {
+*/
+                $event->container_id = $this->_container->getId();
+
+                // WE (not the currentCalendarUser) are an attendee and xTineContainer was our displaycontainer
+                // => change our displaycontainer
+            } elseif ($currentOwnAttendee && $currentOwnAttendee->displaycontainer_id === $xTine20Container) {
+                if ($xTine20Container !== $this->_container->getId()) {
+                    Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event,
+                        $this->_container->getId(), $currentOwnAttendee);
                 }
-            }
-        }
 
-        // event was created by current user -> allow container move
-        else if ($currentEvent->created_by == Tinebase_Core::getUser()->getId()) {
-            $event->container_id = $this->_container->getId();
-        }
-
-        // client sends event from iMIP invitation -> only allow displaycontainer move
-        else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " X-TINE20-CONTAINER not present -> restrict container moves");
-            if ($this->_container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
-                Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event, $this->_container->getId());
+                // problem here is:
+                // secretary has admin on boss calendar, boss forwards imip to secretary with secretary being an attendee too
+                // now what?!
+            } elseif ($xTine20ContainerAttendee && $xTine20Container !== $this->_container->getId()) {
+                Calendar_Controller_MSEventFacade::getInstance()->setDisplaycontainer($event,
+                    $this->_container->getId(), $xTine20ContainerAttendee);
             }
         }
 

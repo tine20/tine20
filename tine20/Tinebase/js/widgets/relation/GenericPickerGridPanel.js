@@ -304,7 +304,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     onEditInNewWindow: async function() {
         var _ = window.lodash,
-            record = this.getRelatedRecord(this.getSelectionModel().getSelected()),
+            relation = this.getSelectionModel().getSelected(),
+            record = this.getRelatedRecord(relation),
+            recordClass = Tine.Tinebase.data.RecordMgr.get(record.appName, record.modelName),
             openMethod = record ? _.get(Tine, record.appName + '.' + record.modelName + 'EditDialog.openWindow') : null;
 
         if (! record) {
@@ -327,10 +329,19 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
 
             loadMask.hide();
             loadMask.destroy();
-        }else if (openMethod) {
+        } else if (openMethod) {
             openMethod({
                 record: record,
-                mode: 'remote'
+                mode: 'remote',
+                listeners: {
+                    update: (recordData) => {
+                        const record = Tine.Tinebase.data.Record.setFromJson(recordData, recordClass);
+                        record.data.relations = null;
+                        delete record.data.relations;
+                        relation.set('related_record', record.data);
+                        relation.commit();
+                    }
+                }
             });
         } else {
             Ext.MessageBox.show({
@@ -806,10 +817,10 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * is called when selecting a record in the searchCombo (relationpickercombo)
      */
     onAddRecordFromCombo: async function(node) {
-        var record = null;
+        let record = null;
         const pickerCombo = this.getActiveSearchCombo();
 
-        if (this.getActiveSearchCombo().hasOwnProperty('store')) {
+        if (pickerCombo.hasOwnProperty('store')) {
             record = pickerCombo.store.getById(pickerCombo.getValue())
         } else {
             if(node.leaf === false) {
@@ -823,12 +834,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             return;
         }
         
-        if (Ext.isArray(this.constraintsConfig[this.activeModel])) {
-            var relconf = {type: this.constraintsConfig[this.activeModel][0]['type']};
-        } else {
-            var relconf = {};
-        }
-        
+        const relconf = Ext.isArray(this.constraintsConfig[this.activeModel]) ?
+            {type: this.constraintsConfig[this.activeModel][0]['type']} : {};
+
         this.onAddRecord(record, relconf);
 
         if (Ext.isFunction(pickerCombo.collapse)) {
@@ -850,7 +858,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Tine.Tinebase.data.Record} record
      * @param {Object} relconf
      */
-    onAddRecord: function(record, relconf) {
+    onAddRecord: async function(record, relconf) {
         if (record) {
             if (! relconf) {
                 relconf = {};
@@ -859,46 +867,31 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 record.data.relations = null;
                 delete record.data.relations;
             }
-            var rc = this.getActiveSearchCombo().recordClass;
-            var relatedPhpModel = rc.getPhpClassName();
 
-            var app = rc.getMeta('appName'), model = rc.getMeta('modelName'), f = app + model;
-            var type = '';
+            const rc = Tine.Tinebase.data.RecordMgr.get(relconf.related_model) || this.getActiveSearchCombo().recordClass;
+            const appName = rc.getMeta('appName');
+            const model = rc.getMeta('modelName');
+            const f = appName + model;
+            const type = relconf.type
+                || _.get(this.constraintsConfig, f + '[0].type', ''); // per default the first defined type is used
 
-            if (this.constraintsConfig[f] && this.constraintsConfig[f].length) {
-                // per default the first defined type is used
-                var type = this.constraintsConfig[f][0].type;
-            }
-            
-            var rc = this.getActiveSearchCombo().recordClass,
-                relatedPhpModel = rc.getPhpClassName(),
-                appName = rc.getMeta('appName'), 
-                model = rc.getMeta('modelName'), 
-                f = appName + model,
-                type = '';
-
-            var relationRecord = new Tine.Tinebase.Model.Relation(Ext.apply(this.getRelationDefaults(), Ext.apply({
+            const relationRecord = new Tine.Tinebase.Model.Relation(Ext.apply(this.getRelationDefaults(), Ext.apply({
                 related_record: record.data || record,
                 related_id: record.id,
-                related_model: relatedPhpModel,
+                related_model: rc.getPhpClassName(),
                 type: type,
                 related_degree: 'sibling'
             }, relconf)), Ext.id());
             
-            var mySideValid = true;
-            
+            let mySideValid = true;
             if (this.constraintsConfig[f]) {
-                if (this.constraintsConfig[f].length) {
-                    // per default the first defined type is used
-                    var type = this.constraintsConfig[f][0].type;
-                }
                 // validate constrains config from own side
                 mySideValid = this.checkLocalConstraints(appName, model, relationRecord, type);
             }
             
             // if my side is not valid, it's ok to skip related constraints validation, the relation is marked invalid already
             if (mySideValid) {
-                this.validateRelatedConstrainsConfig(record, relationRecord);
+                await this.validateRelatedConstrainsConfig(record, relationRecord);
             } else {
                 this.onAddNewRelationToStore(relationRecord, record);
             }
@@ -912,62 +905,71 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Tine.Tinebase.Model.Relation} relationRecord
      */
     validateRelatedConstrainsConfig: function(record, relationRecord) {
-        var rc = relationRecord.get('related_model').split(/_Model_/);
-        var rc = Tine[rc[0]].Model[rc[1]];
+        return new Promise((fulfill, reject) => {
+            const rc = Tine.Tinebase.data.RecordMgr.get(relationRecord.get('related_model'))
+                || this.getActiveSearchCombo().recordClass;
 
-        var appName = rc.getMeta('appName'); 
-        var model = rc.getMeta('modelName'); 
-        var relatedApp = Tine.Tinebase.appMgr.get(appName); 
-        var relatedConstrainsConfig = relatedApp.getRegistry().get('relatableModels');
-        var ownRecordClassName = this.editDialog.recordClass.getMeta('modelName');
-        var relatedRecordProxy = this.getActiveSearchCombo().recordProxy
-            || Tine[appName][(model.toLowerCase() + 'Backend')]
-            || new Tine.Tinebase.data.RecordProxy({
-                appName: appName,
-                modelName: model,
-                recordClass: rc
-            });
-        
-        if (! Ext.isFunction(record.get)) {
-            record = relatedRecordProxy.recordReader({responseText: Ext.encode(record)});
-        }
-        
-        if (relatedConstrainsConfig) {
-            for (var index = 0; index < relatedConstrainsConfig.length; index++) {
-                var rcc = relatedConstrainsConfig[index];
-                
-                if ((rcc.relatedApp == this.app.name) && (rcc.relatedModel == ownRecordClassName)) {
-                    var myRelatedConstrainsConfig = rcc;
-                    break;
+            var appName = rc.getMeta('appName');
+            var model = rc.getMeta('modelName');
+            var relatedApp = Tine.Tinebase.appMgr.get(appName);
+            var relatedConstrainsConfig = relatedApp.getRegistry().get('relatableModels');
+            var ownRecordClassName = this.editDialog.recordClass.getMeta('modelName');
+
+            var relatedRecordProxy = _.get(this.searchCombos, appName+model + '.recordProxy')
+                || Tine[appName][(model.toLowerCase() + 'Backend')]
+                || new Tine.Tinebase.data.RecordProxy({
+                    appName: appName,
+                    modelName: model,
+                    recordClass: rc
+                });
+
+            if (! Ext.isFunction(record.get)) {
+                record = relatedRecordProxy.recordReader({responseText: Ext.encode(record)});
+            }
+
+            if (relatedConstrainsConfig) {
+                for (var index = 0; index < relatedConstrainsConfig.length; index++) {
+                    var rcc = relatedConstrainsConfig[index];
+
+                    if ((rcc.relatedApp == this.app.name) && (rcc.relatedModel == ownRecordClassName)) {
+                        var myRelatedConstrainsConfig = rcc;
+                        break;
+                    }
                 }
             }
-        }
-        
-        // validate constrains config from other side if a config exists
-        if (myRelatedConstrainsConfig) {
-            // if relations hasn't been fetched already, fetch them now
-            if (! Ext.isArray(record.data.relations) || record.data.relations.length === 0) {
-                relatedRecordProxy.loadRecord(record, { 
-                    success: function(record) {
-                        // if record has relations, validate each relation
-                        if (Ext.isArray(record.get('relations')) && record.get('relations').length > 0) {
-                            this.onValidateRelatedConstrainsConfig(myRelatedConstrainsConfig.config, relationRecord, appName, model, record);
-                        } else {
-                            // if there aren't any relations, no validation is needed
-                            this.onAddNewRelationToStore(relationRecord, record);
+
+            // validate constrains config from other side if a config exists
+            if (myRelatedConstrainsConfig) {
+                // if relations hasn't been fetched already, fetch them now
+                if (! Ext.isArray(record.data.relations) || record.data.relations.length === 0) {
+                    relatedRecordProxy.loadRecord(record, {
+                        scope: this,
+                        success: function(record) {
+                            // if record has relations, validate each relation
+                            if (Ext.isArray(record.get('relations')) && record.get('relations').length > 0) {
+                                this.onValidateRelatedConstrainsConfig(myRelatedConstrainsConfig.config, relationRecord, appName, model, record);
+                            } else {
+                                // if there aren't any relations, no validation is needed
+                                this.onAddNewRelationToStore(relationRecord, record);
+                            }
+                            fulfill();
+                        },
+                        // don't break on failure, use given record instead
+                        failure: function() {
+                            this.onAddNewRelationToStore.createDelegate(this, [relationRecord, record])
+                            fulfill();
                         }
-                    },
-                    // don't break on failure, use given record instead
-                    failure: this.onAddNewRelationToStore.createDelegate(this, [relationRecord, record]),
-                    scope: this
-                });
-            
+                    });
+
+                } else {
+                    this.onValidateRelatedConstrainsConfig(myRelatedConstrainsConfig.config, relationRecord, appName, model, record);
+                    fulfill();
+                }
             } else {
-                this.onValidateRelatedConstrainsConfig(myRelatedConstrainsConfig.config, relationRecord, appName, model, record);
+                this.onAddNewRelationToStore(relationRecord, record);
+                fulfill();
             }
-        } else {
-            this.onAddNewRelationToStore(relationRecord, record);
-        }
+        });
     },
     
     /**

@@ -78,15 +78,27 @@ class Felamimail_Model_MessagePipeMove implements Tinebase_BL_ElementInterface, 
         }
 
         try {
+            $_targetFolder = str_replace('/', $_account->delimiter, $_targetFolder);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' looking for folder ' . $_targetFolder);
             $folder = Felamimail_Controller_Folder::getInstance()
-                ->getByBackendAndGlobalName($_account['id'], $_targetFolder);
+                ->getByBackendAndGlobalName($_account->getId(), $_targetFolder);
         } catch (Tinebase_Exception_NotFound $e) {
-            $folder = Felamimail_Controller_Folder::getInstance()
-                ->create($_account['id'], $_targetFolder);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $_targetFolder);
+            $splitFolderName = Felamimail_Model_Folder::extractLocalnameAndParent($_targetFolder, $_account->delimiter);
+            
+            $parentSubs = Felamimail_Controller_Cache_Folder::getInstance()
+                ->update($_account, $splitFolderName['parent'], TRUE);
+            $folder = $parentSubs->filter('globalname', $_targetFolder)->getFirstRecord();
+            
+            if ($folder === NULL) {
+                $folder = Felamimail_Controller_Folder::getInstance()
+                    ->create($_account->getId(), $splitFolderName['localname'], $splitFolderName['parent']);
+            }
         }
 
         return $folder;
     }
+    
     public function getNewBLElement()
     {
         return $this;

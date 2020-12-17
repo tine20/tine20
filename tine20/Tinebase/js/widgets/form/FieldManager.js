@@ -180,6 +180,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.useAccountRecord = true;
                     break;
                 case 'relation':
+                case 'relations':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
                         field.xtype = 'tinerelationpickercombo';
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
@@ -191,6 +192,16 @@ Tine.widgets.form.FieldManager = function() {
                         }
                         // TODO pass degree and other options in config?
                         field.relationDegree = 'sibling';
+
+                        if (fieldType === 'relations') {
+                            _.assign(field, {
+                                xtype: 'tinerelationpickergridpanel',
+                                isFormField: true,
+                                fieldName: fieldDefinition.fieldName,
+                                hideHeaders: true,
+                                height: 80 /* 4 records */ + 2 * 26 /* 2 toolbars */
+                            });
+                        }
                     }
                     break;
                 case 'record':
@@ -212,7 +223,10 @@ Tine.widgets.form.FieldManager = function() {
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
                         field.hideHeaders = true;
-                        field.height = 170; // 5 records
+                        field.height = 80 /* 4 records */ + field.enableTbar * 26  +  26 /* 2 toolbars */
+                        if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
+                            _.set(field, 'editDialogConfig.mode', 'local');
+                        }
                     } else {
                         var picker = Tine.widgets.form.RecordsPickerManager.get(
                             fieldDefinition.config.appName,
