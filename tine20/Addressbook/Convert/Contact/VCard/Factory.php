@@ -32,6 +32,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_CARDDAVSYNC    = 'org.dmfs.carddav.sync';
     const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
     const CLIENT_CARDBOOK       = 'CardBook';
+    const CLIENT_TBSYNC         = 'com.github.jobisoft.tbsync';
     
     /**
      * cache parsed user-agent strings
@@ -94,6 +95,9 @@ class Addressbook_Convert_Contact_VCard_Factory
 
             case self::CLIENT_CARDBOOK:
                 return new Addressbook_Convert_Contact_VCard_CardBook($_version);
+
+            case self::CLIENT_TBSYNC:
+                return new Addressbook_Convert_Contact_VCard_TbSync($_version);
 	    }
     }
     
@@ -171,6 +175,11 @@ class Addressbook_Convert_Contact_VCard_Factory
         // CardBook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_CardBook::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_CARDBOOK;
+            $version = $matches['version'];
+
+        // TbSync
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_TbSync::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = self::CLIENT_TBSYNC;
             $version = $matches['version'];
 
         // generic client
