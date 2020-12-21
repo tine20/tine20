@@ -84,7 +84,7 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
             $this->_exportFileHandle = null;
             $number = count($this->_exportFilenames) + 1;
             // TODO invent a helper function for filename generation (with numbers)
-            if (preg_match('/(n[0-9]+)*(.ics)$/i', $this->_currentExportFilename, $matches)) {
+            if (preg_match('/(n[0-9]+)*(.' . preg_quote($this->_format) . ')$/i', $this->_currentExportFilename, $matches)) {
                 $this->_currentExportFilename = str_replace($matches[0], 'n' . $number . $matches[2],
                     $this->_currentExportFilename);
             } else {

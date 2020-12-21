@@ -2142,16 +2142,11 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         $filter[] = array('field' => 'type', 'value' => array(Calendar_Model_Attender::USERTYPE_RESOURCE));
         $result = $this->_uit->searchAttenders($filter, $paging, [$persistentEvent->toArray()], array());
-        $this->assertTrue(
-            !isset($result[Calendar_Model_Attender::USERTYPE_USER]) &&
-            !isset($result[Calendar_Model_Attender::USERTYPE_GROUP]) &&
-            isset($result[Calendar_Model_Attender::USERTYPE_RESOURCE]) &&
-            count($result[Calendar_Model_Attender::USERTYPE_RESOURCE]) === 3 &&
-            count($result[Calendar_Model_Attender::USERTYPE_RESOURCE]['results']) === 0 &&
-            isset($result['freeBusyInfo']) &&
-            array_pop($result['freeBusyInfo']) === null,
-            print_r($result, true)
-        );
+        self::assertTrue(!isset($result[Calendar_Model_Attender::USERTYPE_USER]), 'USERTYPE_USER is set ' . print_r($result, true));
+        self::assertTrue(!isset($result[Calendar_Model_Attender::USERTYPE_GROUP]), 'USERTYPE_GROUP is set ' . print_r($result, true));
+        self::assertTrue(isset($result[Calendar_Model_Attender::USERTYPE_RESOURCE]), 'USERTYPE_RESOURCE is not set ' . print_r($result, true));
+        self::assertCount(3, $result[Calendar_Model_Attender::USERTYPE_RESOURCE], print_r($result, true));
+        self::assertTrue(isset($result['freeBusyInfo']), 'freeBusyInfo is not set ' . print_r($result, true));
 
         $filter = [
             ['field' => 'query', 'operator' => 'contains', 'value' => ''],
