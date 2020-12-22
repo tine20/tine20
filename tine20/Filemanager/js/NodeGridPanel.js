@@ -295,9 +295,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             const match = value.match(/\..*/);
                             const end = match && record.get('type') === 'file' ? match.index : value.length;
                             field.selectText(0, end);
-                        },
-                        beforeedit: (stuff) => {
-                            console.log(stuff);
                         }
                     }
                 }),
