@@ -6,20 +6,54 @@
 #
 # ARGS:
 #   TINE20ROOT=/usr/share
-#   ALPINE_PHP_REPOSITORY_VERSION=v3.12 from which alpine versions repository php should be installed
+#   ALPINE_PHP_REPOSITORY_BRANCH=v3.12 from which alpine versions repository php should be installed
+#   ALPINE_PHP_PACKAGE=php7 php package prefix
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM alpine:3.12 as cache-invalidator
-ARG ALPINE_PHP_REPOSITORY_VERSION=v3.12
+ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
+ARG ALPINE_PHP_REPOSITORY_REPOSITORY=main
+ARG ALPINE_PHP_PACKAGE=php7
 RUN apk add --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl | sha256sum >> /cachehash
-RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_VERSION}/main \
-                                  php7 php7-fpm php7-bcmath php7-exif php7-mysqli php7-pcntl php7-pdo_mysql php7-soap \
-                                  php7-sockets php7-zip php7-xsl php7-intl php7-gd php7-opcache php7-gettext php7-iconv \
-                                  php7-ldap php7-pecl-igbinary php7-pecl-yaml php7-simplexml php7-ctype php7-xml \
-                                  php7-xmlreader php7-curl php7-tokenizer php7-xmlwriter php7-fileinfo php7-posix \
-                                  php7-json | sha256sum >> /cachehash
-RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community \
-                                  php7-pecl-redis=4.3.0-r2 | sha256sum >> /cachehash
+RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+                                  ${ALPINE_PHP_PACKAGE} \
+                                  ${ALPINE_PHP_PACKAGE}-fpm \
+                                  ${ALPINE_PHP_PACKAGE}-bcmath \
+                                  ${ALPINE_PHP_PACKAGE}-exif \
+                                  ${ALPINE_PHP_PACKAGE}-mysqli \
+                                  ${ALPINE_PHP_PACKAGE}-pcntl \
+                                  ${ALPINE_PHP_PACKAGE}-pdo_mysql \
+                                  ${ALPINE_PHP_PACKAGE}-soap \
+                                  ${ALPINE_PHP_PACKAGE}-sockets \
+                                  ${ALPINE_PHP_PACKAGE}-zip \
+                                  ${ALPINE_PHP_PACKAGE}-xsl \
+                                  ${ALPINE_PHP_PACKAGE}-intl \
+                                  ${ALPINE_PHP_PACKAGE}-gd \
+                                  ${ALPINE_PHP_PACKAGE}-opcache \
+                                  ${ALPINE_PHP_PACKAGE}-gettext \
+                                  ${ALPINE_PHP_PACKAGE}-iconv \
+                                  ${ALPINE_PHP_PACKAGE}-ldap \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-igbinary \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-yaml \
+                                  ${ALPINE_PHP_PACKAGE}-simplexml \
+                                  ${ALPINE_PHP_PACKAGE}-ctype \
+                                  ${ALPINE_PHP_PACKAGE}-xml \
+                                  ${ALPINE_PHP_PACKAGE}-xmlreader \
+                                  ${ALPINE_PHP_PACKAGE}-curl \
+                                  ${ALPINE_PHP_PACKAGE}-tokenizer \
+                                  ${ALPINE_PHP_PACKAGE}-xmlwriter \
+                                  ${ALPINE_PHP_PACKAGE}-fileinfo \
+                                  ${ALPINE_PHP_PACKAGE}-posix \
+                                  ${ALPINE_PHP_PACKAGE}-json \
+                                  ${ALPINE_PHP_PACKAGE}-phar \
+                                  | sha256sum >> /cachehash
+RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ]; then \
+        apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community \
+                                  php7-pecl-redis=4.3.0-r2 | sha256sum >> /cachehash; \
+    else \
+        apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-redis | sha256sum >> /cachehash; \
+    fi
 RUN apk add --no-cache --simulate --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv \
                                   | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli \
@@ -27,7 +61,9 @@ RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM alpine:3.12 as base
-ARG ALPINE_PHP_REPOSITORY_VERSION=v3.12
+ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
+ARG ALPINE_PHP_REPOSITORY_REPOSITORY=main
+ARG ALPINE_PHP_PACKAGE=php7
 ARG TINE20ROOT=/usr/share
 
 #todo version vars | move tika to lib
@@ -40,19 +76,49 @@ RUN mkdir /usr/local/lib/container
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 RUN apk add --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl
-RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_VERSION}/main \
-                       php7 php7-fpm php7-bcmath php7-exif php7-mysqli php7-pcntl php7-pdo_mysql php7-soap php7-sockets \
-                       php7-zip php7-xsl php7-intl php7-gd php7-opcache php7-gettext php7-iconv php7-ldap \
-                       php7-pecl-igbinary php7-pecl-yaml php7-simplexml php7-ctype php7-xml php7-xmlreader php7-curl \
-                       php7-tokenizer php7-xmlwriter php7-fileinfo php7-posix php7-json
-# todo check if the new redis version 5.2.2 (alpine v3.12) also works
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community --no-cache php7-pecl-redis=4.3.0-r2
-
+RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+                                  ${ALPINE_PHP_PACKAGE} \
+                                  ${ALPINE_PHP_PACKAGE}-fpm \
+                                  ${ALPINE_PHP_PACKAGE}-bcmath \
+                                  ${ALPINE_PHP_PACKAGE}-exif \
+                                  ${ALPINE_PHP_PACKAGE}-mysqli \
+                                  ${ALPINE_PHP_PACKAGE}-pcntl \
+                                  ${ALPINE_PHP_PACKAGE}-pdo_mysql \
+                                  ${ALPINE_PHP_PACKAGE}-soap \
+                                  ${ALPINE_PHP_PACKAGE}-sockets \
+                                  ${ALPINE_PHP_PACKAGE}-zip \
+                                  ${ALPINE_PHP_PACKAGE}-xsl \
+                                  ${ALPINE_PHP_PACKAGE}-intl \
+                                  ${ALPINE_PHP_PACKAGE}-gd \
+                                  ${ALPINE_PHP_PACKAGE}-opcache \
+                                  ${ALPINE_PHP_PACKAGE}-gettext \
+                                  ${ALPINE_PHP_PACKAGE}-iconv \
+                                  ${ALPINE_PHP_PACKAGE}-ldap \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-igbinary \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-yaml \
+                                  ${ALPINE_PHP_PACKAGE}-simplexml \
+                                  ${ALPINE_PHP_PACKAGE}-ctype \
+                                  ${ALPINE_PHP_PACKAGE}-xml \
+                                  ${ALPINE_PHP_PACKAGE}-xmlreader \
+                                  ${ALPINE_PHP_PACKAGE}-curl \
+                                  ${ALPINE_PHP_PACKAGE}-tokenizer \
+                                  ${ALPINE_PHP_PACKAGE}-xmlwriter \
+                                  ${ALPINE_PHP_PACKAGE}-fileinfo \
+                                  ${ALPINE_PHP_PACKAGE}-posix \
+                                  ${ALPINE_PHP_PACKAGE}-json \
+                                  ${ALPINE_PHP_PACKAGE}-phar
+RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ]; then \
+        apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community php7-pecl-redis=4.3.0-r2; \
+    else \
+        apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-redis; \
+    fi
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli
-
 # fix alpine iconv problem e.g. could not locate filter
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
+RUN if [ ${ALPINE_PHP_PACKAGE} == php8 ]; then ln -s /usr/bin/php8 /usr/bin/php; fi
 
 RUN addgroup -S -g 150 tine20 && \
     adduser -S -H -D -s /bin/ash -g "tine20 user" -G tine20 -u 150 tine20 && \
@@ -66,6 +132,8 @@ RUN addgroup -S -g 150 tine20 && \
     mkdir -p /var/lib/tine20/sessions && \
     mkdir -p /var/run/tine20 && \
     mkdir -p /run/nginx && \
+    mkdir -p /etc/php7/php-fpm.d/ && \
+    mkdir -p /etc/php8/php-fpm.d/ && \
     mkdir -p ${TINE20ROOT}/tine20 && \
     touch /var/log/tine20/tine20.log && \
     chown tine20:tine20 /var/log/tine20 && \

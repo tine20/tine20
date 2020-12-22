@@ -24,7 +24,7 @@ workflow:
 # ============ stage: build1-3 ===========================
 # This stage builds all docker images
 #
-# The images are named according to $REGISTRY/$NAME-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG.
+# The images are named according to $REGISTRY/$NAME-commit:$CI_PIPELINE_ID-$PHP_VERSION.
 #
 # Gitlab currently dose not support needs in the same stage.
 # Therefore we need multiple build stages.
@@ -85,14 +85,12 @@ docker_build_built:
       when: on_success
     - if: *DEPLOYS_NEEDING_BUILT_IMAGE
       when: on_success
-    - if: *DEPLOYS_NEEDING_DEV_IMAGE
-      when: on_success
     - when: never
   timeout: 60m # time run: 28m
 
 docker_build_dev:
   extends: .abstract_jobs.docker
-  stage: build3
+  stage: build2
   script:
     - build_image dev
     - use_cached_image_when_nothing_changed dev
@@ -181,11 +179,30 @@ docker_build_dev:
         - tine20/Setup/**/*
     - when: never
 
+"check php version":
+  stage: test
+  image:
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_VERSION"
+  script:
+    - echo "PHP version shoud be ${PHP_VERSION}."
+    - echo "PHP version is $(php -r 'echo PHP_VERSION;')"
+    - "[[ $(php -r 'echo PHP_VERSION;') == $PHP_VERSION.* ]]"
+  rules:
+    - if: $CHECK_PHP_VERSION == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $CHECK_PHP_VERSION == "true"
+      when: on_success
+    - when: never
+  allow_failure: true
+  timeout: 20m # time run: 4m
+
 "phpstan: code analyses":
   extends: .abstract_jobs.copy_source
   stage: test
   image:
-    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_IMAGE_TAG"
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_VERSION"
   script:
     - cd $TINE20ROOT
     - composer require phpstan/phpstan
@@ -206,6 +223,9 @@ docker_build_dev:
     - when: never
   allow_failure: true
   timeout: 20m # time run: 4m
+
+
+
 
 "php unit: all tests built":
   extends: .abstract_jobs.php_unit
@@ -328,13 +348,13 @@ docker_cleanup_images:
   extends: .abstract_jobs.docker
   stage: housekeeping-cleanup
   script:
-    - docker_untag_image base-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
-    - docker_untag_image source-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
-    - docker_untag_image test-source-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
-    - docker_untag_image build-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
-    - docker_untag_image built-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
-    - docker_untag_image test-built-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
-    - docker_untag_image dev-commit $CI_PIPELINE_ID-$PHP_IMAGE_TAG || true
+    - docker_untag_image base-commit $CI_PIPELINE_ID-$PHP_VERSION || true
+    - docker_untag_image source-commit $CI_PIPELINE_ID-$PHP_VERSION || true
+    - docker_untag_image test-source-commit $CI_PIPELINE_ID-$PHP_VERSION || true
+    - docker_untag_image build-commit $CI_PIPELINE_ID-$PHP_VERSION || true
+    - docker_untag_image built-commit $CI_PIPELINE_ID-$PHP_VERSION || true
+    - docker_untag_image test-built-commit $CI_PIPELINE_ID-$PHP_VERSION || true
+    - docker_untag_image dev-commit $CI_PIPELINE_ID-$PHP_VERSION || true
   rules:
     - if: $DOCKER_CLEANUP_IMAGES == "true"
       when: always

@@ -80,3 +80,9 @@ variables:
 
   # Run all tests, test failures are ignored, dose not allow push
   RUN_ALL_TESTS: "false"
+
+  # Test if the image was build with the correct php version
+  CHECK_PHP_VERSION: "false"
+
+  # php version to use
+  PHP_VERSION: "7.3"
