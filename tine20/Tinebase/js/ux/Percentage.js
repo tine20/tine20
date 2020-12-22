@@ -186,8 +186,10 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         }
     }
 
-    metadata.css += ' ' + Tine.Filemanager.Model.Node.getStyles(record).join(' ');
-    
+    if (Tine.Tinebase.common.hasRight('run', 'Filemanager')) {
+        metadata.css += ' ' + Tine.Filemanager.Model.Node.getStyles(record).join(' ');
+    }
+
     if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
 
         var fileName = value;
