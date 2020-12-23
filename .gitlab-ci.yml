@@ -333,13 +333,14 @@ docker_populate_cache:
   extends: .abstract_jobs.docker
   stage: housekeeping
   script:
-    - docker_populate_cache base
-    - docker_populate_cache source
-    - docker_populate_cache test-source
-    - docker_populate_cache build
-    - docker_populate_cache built
-    - docker_populate_cache test-built
-    - docker_populate_cache dev
+    - docker_populate_cache base || true
+    - docker_populate_cache source || true
+    - docker_populate_cache test-source || true
+    - docker_populate_cache build || true
+    - docker_populate_cache built || true
+    - docker_populate_cache test-built || true
+    - docker_populate_cache dev || true
+  allow_failure: true # a failure is a problem, but the pipeline should not fail
 
 docker_cleanup_images:
   extends: .abstract_jobs.docker
@@ -356,3 +357,4 @@ docker_cleanup_images:
     - if: $DOCKER_CLEANUP_IMAGES == "true"
       when: always
     - when: never
+  allow_failure: true # a failure is a problem, but the pipeline should not fail
