@@ -317,14 +317,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'adr_one_street'                => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 192,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Street', // _('Street')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_street2'               => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 192,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Street 2', // _('Street 2')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -527,7 +527,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'n_prefix'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Title', // _('Title')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -556,7 +556,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'org_unit'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Unit', // _('Unit')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -779,7 +779,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'title'                         => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Job Title', // _('Job Title')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],

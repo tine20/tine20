@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Martin Jatho <m.jatho@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Filemanager');
 
@@ -46,7 +46,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     autoExpandColumn: 'name',
     showProgress: true,
     enableDD: true,
-    
+
     recordClass: 'Filemanager.Node',
     listenMessageBus: true,
     hasDetailsPanel: false,
@@ -93,7 +93,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.initCustomCols();
         this.modelConfig = this.recordClass.getModelConfiguration();
         this.initGenericColumnModel();
-        
+
         this.defaultFilters = this.defaultFilters || [
             {field: 'query', operator: 'contains', value: ''},
             {field: 'path', operator: 'equals', value: Tine.Tinebase.container.getMyFileNodePath()}
@@ -121,6 +121,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
         this.getStore().on('load', this.onLoad.createDelegate(this));
+        this.getGrid().on('beforeedit', this.onBeforeEdit, this);
 
         // // cope with empty selections - dosn't work. It's confusing if e.g. the delte btn is enabled with no selections
         // this.selectionModel.on('selectionchange', function(sm) {
@@ -136,6 +137,27 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         //         this.actionUpdater.updateActions(record);
         //     }
         // }, this);
+    },
+
+    /**
+     * check if record can be edited
+     *
+     * @param row
+     * @returns {boolean}
+     */
+    onBeforeEdit: function(row) {
+        const record = row.record;
+
+        // TODO do we have a function to find out top level nodes?
+        if (record.id && record.get('path') && (
+            ['myUser', 'otherUsers', 'shared'].indexOf(record.get('id')) !== -1
+            || record.get('path').match(/^\/personal\/\w+$/)
+        )) {
+            // do not allow to edit user/shared top level nodes
+            return false;
+        }
+
+        return true;
     },
 
     /**
@@ -318,12 +340,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! Tine.Tinebase.configManager.get('filesystem.modLogActive', 'Tinebase')) {
             this.hideColumns.push('revision_size');
         }
-        
+
         if (! Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
             this.hideColumns.push('isIndexed');
         }
     },
-    
+
     /**
      * status column renderer
      * @param {string} value
