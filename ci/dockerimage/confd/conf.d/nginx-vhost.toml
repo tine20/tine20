@@ -7,4 +7,5 @@ mode = "0644"
 keys = [
     "/server/name",
     "/client/max/body/size",
+    "/tine20/config/dir"
 ]
