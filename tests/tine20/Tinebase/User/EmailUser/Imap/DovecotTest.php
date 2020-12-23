@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tinebase_DovecotTest
  */
-class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
 {
     /**
      * email user backend
@@ -160,6 +160,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testSavingDuplicateAccount()
     {
+        $this->_skipIfLDAPBackend();
+
         $user = $this->_addUser();
         $userId = $user->getId();
         $this->_objects['emailUserIds'][] = $userId;
@@ -232,6 +234,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testDuplicateUserId()
     {
+        $this->_skipIfLDAPBackend();
+
         $emailDomain = TestServer::getPrimaryMailDomain();
         $user = $this->_addUser('testuser@' . $emailDomain);
 
@@ -255,6 +259,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testInstanceName()
     {
+        $this->_skipIfLDAPBackend();
+
         // check if is instanceName in config
         if (empty($this->_config['instanceName'])) {
             self::markTestSkipped('no instanceName set in config');

@@ -123,16 +123,18 @@ class Admin_JsonTest extends TestCase
      * try to save an account
      * 
      * @return array
-     *
-     * @group nogitlabci_ldap
      */
     public function testSaveAccount()
     {
-        $this->testAddGroup();
-
-
         $accountData = $this->_getUserArrayWithPw();
-        $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup')->getId();
+        try {
+            $group = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup');
+            $accountData['accountPrimaryGroup'] = $group->getId();
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            $group = $this->testAddGroup();
+            $accountData['accountPrimaryGroup'] = $group['id'];
+        }
+
         $accountData['accountFirstName'] = 'PHPUnitup';
         $accountData['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] = 100;
         
@@ -142,9 +144,14 @@ class Admin_JsonTest extends TestCase
         $this->assertEquals('PHPUnitup', $account['accountFirstName']);
         $this->assertEquals(Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup')->getId(), $account['accountPrimaryGroup']['id']);
         $this->assertTrue(! empty($account['accountId']), 'no account id');
-        // check password
-        $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], $accountData['accountPassword']);
-        $this->assertTrue($authResult->isValid());
+        // FIXME make auth check work for ldap backends!
+        if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP &&
+            Tinebase_User::getConfiguredBackend() !== Tinebase_User::ACTIVEDIRECTORY
+        ) {
+            // check password
+            $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], $accountData['accountPassword']);
+            $this->assertTrue($authResult->isValid(), 'auth fail: ' . print_r($authResult->getMessages(), true));
+        }
         $this->assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA])
             && $account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] === 100,
             'failed to set/get account filesystem personal quota');
@@ -219,8 +226,6 @@ class Admin_JsonTest extends TestCase
 
     /**
      * try to get all accounts
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetAccounts()
     {
@@ -235,8 +240,6 @@ class Admin_JsonTest extends TestCase
      * testGetUserCount
      * 
      * @see 0006544: fix paging in admin/users grid
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetUserCount()
     {
@@ -272,8 +275,6 @@ class Admin_JsonTest extends TestCase
      * try to create an account with existing login name 
      *
      * @see 0006770: check if username already exists when creating new user / changing username
-     *
-     * @group nogitlabci_ldap
      */
     public function testSaveAccountWithExistingName()
     {
@@ -322,8 +323,6 @@ class Admin_JsonTest extends TestCase
      * testUpdateUserWithoutContainerACL
      * 
      * @see 0006254: edit/create user is not possible
-     *
-     * @group nogitlabci_ldap
      */
     public function testUpdateUserWithoutContainerACL()
     {
@@ -357,8 +356,6 @@ class Admin_JsonTest extends TestCase
      * testUpdateUserRemoveGroup
      * 
      * @see 0006762: user still in admin role when admin group is removed
-     *
-     * @group nogitlabci_ldap
      */
     public function testUpdateUserRemoveGroup()
     {
@@ -421,8 +418,6 @@ class Admin_JsonTest extends TestCase
 
     /**
      * try to set account state
-     *
-     * @group nogitlabci_ldap
      */
     public function testSetAccountState()
     {
@@ -439,8 +434,6 @@ class Admin_JsonTest extends TestCase
      * test send deactivation notification
      * 
      * @see 0009956: send mail on account deactivation
-     *
-     * @group nogitlabci_ldap
      */
     public function testAccountDeactivationNotification()
     {
@@ -473,11 +466,11 @@ class Admin_JsonTest extends TestCase
     
     /**
      * try to reset password
-     *
-     * @group nogitlabci_ldap
      */
     public function testResetPassword()
     {
+        $this->_skipIfLDAPBackend();
+
         $userArray = $this->testSaveAccount();
 
         $pw = 'dpIg6komP';
@@ -491,8 +484,6 @@ class Admin_JsonTest extends TestCase
      * try to reset pin
      *
      * @see 0013320: allow admin to reset pin for accounts
-     *
-     * @group nogitlabci_ldap
      */
     public function testResetPin()
     {
@@ -670,8 +661,6 @@ class Admin_JsonTest extends TestCase
     
     /**
      * try to get all access log entries
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetAccessLogsWithDeletedUser()
     {
@@ -751,8 +740,6 @@ class Admin_JsonTest extends TestCase
 
     /**
      * try to add role and set members/rights
-     *
-     * @group nogitlabci_ldap
      */
     public function testAddRole()
     {
@@ -790,8 +777,6 @@ class Admin_JsonTest extends TestCase
 
     /**
      * try to get role rights
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetRoleRights()
     {
@@ -806,8 +791,6 @@ class Admin_JsonTest extends TestCase
     
     /**
      * try to save role
-     *
-     * @group nogitlabci_ldap
      */
     public function testUpdateRole()
     {
@@ -833,8 +816,6 @@ class Admin_JsonTest extends TestCase
     
     /**
      * try to delete roles
-     *
-     * @group nogitlabci_ldap
      */
     public function testDeleteRoles()
     {
@@ -1359,8 +1340,6 @@ class Admin_JsonTest extends TestCase
 
     /**
      * testChangeContactEmailCheckPrimaryDomain
-     *
-     * @group nogitlabci_ldap
      */
     public function testChangeContactEmailCheckPrimaryDomain()
     {
@@ -1381,6 +1360,8 @@ class Admin_JsonTest extends TestCase
 
     public function testAdditionalDomainInUserAccount()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         if (! TestServer::isEmailSystemAccountConfigured()) {
             self::markTestSkipped('imap systemaccount config required');
         }
@@ -1523,11 +1504,11 @@ class Admin_JsonTest extends TestCase
 
     /**
      * @see 0011504: deactivated user is removed from group when group is saved
-     *
-     * @group nogitlabci_ldap
      */
     public function testDeactivatedUserGroupSave()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         // deactivate user
         $userArray = $this->testSaveAccount();
 
@@ -1546,16 +1527,18 @@ class Admin_JsonTest extends TestCase
         $groupArray['container_id'] = $groupArray['container_id']['id'];
         $groupArray['members'] = array($userArray['accountId']);
         $groupArray = array_merge($groupArray, $additionalData);
-        return $this->_json->saveGroup($groupArray);
+        $savedGroup = $this->_json->saveGroup($groupArray);
+        $this->_groupIdsToDelete[] = $savedGroup['id'];
+        return $savedGroup;
     }
 
     /**
      * @see 0011504: deactivated user is removed from group when group is saved
-     *
-     * @group nogitlabci_ldap
      */
     public function testBlockedUserGroupSave()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         // deactivate user
         $userArray = $this->testSaveAccount();
         $userArray['lastLoginFailure'] = Tinebase_DateTime::now()->toString();
@@ -1569,6 +1552,8 @@ class Admin_JsonTest extends TestCase
 
     public function testAccountOnlyGroup()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         $userArray = $this->testSaveAccount();
         $savedGroup = $this->_saveGroup($userArray, ['account_only' => 0]);
         self::assertEquals('0', $savedGroup['account_only']);
@@ -1580,11 +1565,11 @@ class Admin_JsonTest extends TestCase
 
     /**
      * test set expired status
-     *
-     * @group nogitlabci_ldap
      */
     public function testSetUserExpiredStatus()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         $userArray = $this->testSaveAccount();
         $result = Admin_Controller_User::getInstance()->setAccountStatus($userArray['accountId'], Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED);
         $this->assertEquals(1, $result);
