@@ -98,6 +98,10 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
     getInfoBarStrategy: function() {
         let p = Tine.Calendar.ColorManager.colorStrategyBtn.prototype;
         let name = Ext.state.Manager.get(p.stateId, p).infoBarColorStrategy;
+        if (! Tine.Calendar.infoBarColorStrategies[name]) {
+            // fallback to default value
+            name = 'response';
+        }
 
         return Tine.Calendar.infoBarColorStrategies[name];
     },
@@ -256,7 +260,7 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
         }, []);
 
         this.menu.items.push({
-            text: this.app.i18n._('Side bar'),
+            text: this.app.i18n._('Side bar color'),
             menu: sidebarItems
         });
 
@@ -406,7 +410,7 @@ Tine.Calendar.infoBarColorStrategies['response'] = {
 
 Tine.Calendar.infoBarColorStrategies['tag'] = {
     getName: function() {
-        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by Tags');
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by tags');
     },
     getColors: function(event, attendeeRecord) {
         let tags = event.get('tags');
@@ -424,7 +428,7 @@ Tine.Calendar.infoBarColorStrategies['tag'] = {
 
 Tine.Calendar.infoBarColorStrategies['attendees'] = {
     getName: function() {
-        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by attendees');
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by attendee');
     },
     getColors: function(event, attendeeRecord) {
         let attendees = event.get('attendee');
