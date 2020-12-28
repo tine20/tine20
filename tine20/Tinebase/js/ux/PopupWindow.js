@@ -134,14 +134,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
 
-        // browser zoom level does not affect window size
-        this.evalDevicePixelRatio = ! Ext.isSafari;
-
-        if (this.evalDevicePixelRatio && window.devicePixelRatio) {
-            this.width = this.width * window.devicePixelRatio;
-            this.height = this.height * window.devicePixelRatio;
-        }
-
         //limit the window size
         this.width = Math.min(screen.availWidth, this.width);
         this.height = Math.min(screen.availHeight, this.height);
@@ -208,31 +200,63 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      * @param height
      */
     openWindow: function (windowName, url, width, height) {
+        var dualScreenLeft,
+            dualScreenTop,
+            w,
+            h,
+            left,
+            top,
+            popup;
+
         windowName = Ext.isString(windowName) ? windowName.replace(/[^a-zA-Z0-9_]/g, '') : windowName;
 
         // thanks to http://www.nigraphic.com/blog/java-script/how-open-new-window-popup-center-screen
 
         // Determine offsets in case of dualscreen
-        const dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-        const dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+        dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+        dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
 
         // Window should be opened on mid of tine window
-        const w = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-        const h = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+        w = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        h = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
 
         // Determine correct left and top values including dual screen setup
-        const left = ((w / 2) - (width / 2)) + dualScreenLeft;
-        const top = ((h / 2) - (height / 2)) + dualScreenTop;
+        left = ((w / 2) - (width / 2)) + dualScreenLeft;
+        top = ((h / 2) - (height / 2)) + dualScreenTop;
 
-        return popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left +
-            ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
+        try {
+            popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left +
+                ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
+        }
+        catch(e) {
+            Tine.log.info('window.open Exception: ');
+            Tine.log.info(e);
+
+            popup = null;
+
+        }
+
+        if (! popup) {
+            var openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + top + ",left=" + left +
+                ",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
+
+            var exception = {
+                openCode: openCode,
+                popup: null
+            };
+
+            Tine.log.error('could not open popup window. openCode: ' + openCode);
+            throw exception;
+        }
+
+        return popup;
+
     },
 
     getState : function() {
-        const r = this.evalDevicePixelRatio ? window.devicePixelRatio : 1;
         return {
-            width: this.popup.innerWidth / r,
-            height: this.popup.innerHeight / r
+            width: this.popup.innerWidth,
+            height: this.popup.innerHeight
         };
     },
 
