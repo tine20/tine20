@@ -119,7 +119,7 @@
     - tine20_install
     - supervisord
   image:
-    name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}
+    name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_VERSION}
   script:
     - test -f ${TINE20ROOT}/scripts/postInstallGitlab.sh && ${TINE20ROOT}/scripts/postInstallGitlab.sh
     - echo cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}

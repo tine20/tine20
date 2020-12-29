@@ -23,17 +23,17 @@ function build_or_reuse_image() {
 
     echo "reusing image ..."
     # todo curl head, dose not work with aws ecr
-    if docker pull "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}"; then
+    if docker pull "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"; then
         echo "using branch image ..."
-        docker tag "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}"
+        docker tag "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
         return 0
     fi
 
     echo "can not reuse branch image, trying major branch image ..."
     # todo curl head, dose not work with aws ecr
-    if docker pull "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}"; then
+    if docker pull "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"; then
         echo "using major branch image ..."
-        docker tag "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}"
+        docker tag "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
         return 0
     fi
     
@@ -49,27 +49,44 @@ function build_image() {
 
     echo "docker build ${TARGET} image"
 
-    docker pull "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" || echo "no cache image for ${TARGET}"
-    docker pull "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" || echo "no major cache image for ${TARGET}"
+    docker pull "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" || echo "no cache image for ${TARGET}"
+    docker pull "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" || echo "no major cache image for ${TARGET}"
 
-    ALPINE_PHP_REPOSITORY_VERSION=v3.12
-    if [ ${PHP_IMAGE_TAG} = "7.4-fpm-alpine" ] ; then
-        ALPINE_PHP_REPOSITORY_VERSION=edge
-    fi
+    case "${PHP_VERSION}" in
+        7.3)
+            ALPINE_PHP_REPOSITORY_BRANCH=v3.12
+            ALPINE_PHP_REPOSITORY_REPOSITORY=main
+            ALPINE_PHP_PACKAGE=php7
+            ;;
+        7.4)
+            ALPINE_PHP_REPOSITORY_BRANCH=edge
+            ALPINE_PHP_REPOSITORY_REPOSITORY=main
+            ALPINE_PHP_PACKAGE=php7
+            ;;
+        8.0)
+            ALPINE_PHP_REPOSITORY_BRANCH=edge
+            ALPINE_PHP_REPOSITORY_REPOSITORY=community
+            ALPINE_PHP_PACKAGE=php8
+            ;;
+        *)
+            echo "Unsupported php version: ${PHP_VERSION}!"
+            exit 1
+            ;;
+    esac
 
     docker build ${DOCKER_ADDITIONAL_BUILD_ARGS} \
         --target "${TARGET}" \
-        --tag "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" \
+        --tag "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
         --file "ci/dockerimage/${TARGET}.Dockerfile" \
         --build-arg "BUILDKIT_INLINE_CACHE=1" \
-        --build-arg "BASE_IMAGE=${REGISTRY}/base-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" \
+        --build-arg "BASE_IMAGE=${REGISTRY}/base-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
         --build-arg "BASE_CACHE_INVALIDATOR=base-cache-invalidator-commit" \
-        --build-arg "DEPENDENCY_IMAGE=${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" \
+        --build-arg "DEPENDENCY_IMAGE=${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
         --build-arg "DEPENDENCY_CACHE_INVALIDATOR=dependency-cache-invalidator-commit" \
-        --build-arg "SOURCE_IMAGE=${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" \
+        --build-arg "SOURCE_IMAGE=${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
         --build-arg "SOURCE_ICON_SET_PROVIDER=source-icon-set-provider-commit" \
-        --build-arg "BUILD_IMAGE=${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" \
-        --build-arg "BUILT_IMAGE=${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" \
+        --build-arg "BUILD_IMAGE=${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
+        --build-arg "BUILT_IMAGE=${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
         --build-arg "DEV_CACHE_INVALIDATOR=dev-cache-invalidator-commit" \
         --build-arg "NODE_TLS_REJECT_UNAUTHORIZED=0" \
         --build-arg NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND}" \
@@ -80,9 +97,11 @@ function build_image() {
         --build-arg GERRIT_URL="${GERRIT_URL}" \
         --build-arg GERRIT_USER="${GERRIT_USER}" \
         --build-arg GERRIT_PASSWORD="${GERRIT_PASSWORD}" \
-        --build-arg ALPINE_PHP_REPOSITORY_VERSION=ALPINE_PHP_REPOSITORY_VERSION \
-        --cache-from "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" \
-        --cache-from "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" \
+        --build-arg "ALPINE_PHP_REPOSITORY_BRANCH=${ALPINE_PHP_REPOSITORY_BRANCH}" \
+        --build-arg "ALPINE_PHP_REPOSITORY_REPOSITORY=${ALPINE_PHP_REPOSITORY_REPOSITORY}" \
+        --build-arg "ALPINE_PHP_PACKAGE=${ALPINE_PHP_PACKAGE}" \
+        --cache-from "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" \
+        --cache-from "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" \
         .
 }
 
@@ -94,18 +113,18 @@ function use_cached_image_when_nothing_changed() {
     CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
 
     echo "docker inspect ${TARGET}"
-    if docker pull -q "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}"; then
-        NEW_LAYER=$(docker inspect --format "{{range .RootFS.Layers}}{{.}}{{end}}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}")
-        ORIGINAL_LAYER=$(docker inspect --format "{{range .RootFS.Layers}}{{.}}{{end}}" "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}")
+    if docker pull -q "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"; then
+        NEW_LAYER=$(docker inspect --format "{{range .RootFS.Layers}}{{.}}{{end}}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}")
+        ORIGINAL_LAYER=$(docker inspect --format "{{range .RootFS.Layers}}{{.}}{{end}}" "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}")
 
         echo "docker inspect new image:"
-        docker inspect "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}"
+        docker inspect "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
         echo "docker inspect original image:"
-        docker inspect "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}"
+        docker inspect "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
 
         if test ${NEW_LAYER} = ${ORIGINAL_LAYER}; then
-            docker tag "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}"
-            echo "Building ${TARGET} did not result in changes, using ${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_IMAGE_TAG}"
+            docker tag "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+            echo "Building ${TARGET} did not result in changes, using ${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
         fi
     fi
 }
@@ -114,37 +133,37 @@ function use_cached_image_when_nothing_changed() {
 function push_image() {
     TARGET=$1
 
-    docker push "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}"
+    docker push "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
 }
 
 function tag_major_as_commit_image() {
     NAME=$1
 
-    tag_image "${REGISTRY}" "${NAME}" "${MAJOR_COMMIT_REF_NAME}-${PHP_IMAGE_TAG}" "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}"
+    tag_image "${REGISTRY}" "${NAME}" "${MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}" "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_VERSION}"
 }
 
-# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" to name:"${CI_COMMIT_REF_NAME}-${PHP_IMAGE_TAG}" and pushes it
+# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_VERSION}" to name:"${CI_COMMIT_REF_NAME}-${PHP_VERSION}" and pushes it
 function docker_populate_cache() {
     NAME=$1
 
-    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" "${REGISTRY}" "${NAME}" "${CI_COMMIT_REF_NAME}-${PHP_IMAGE_TAG}" || true
+    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_VERSION}" "${REGISTRY}" "${NAME}" "${CI_COMMIT_REF_NAME}-${PHP_VERSION}" || true
 }
 
-# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" name:"${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" and pushes it to docker hub
+# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_VERSION}" name:"${CI_PIPELINE_ID}-${PHP_VERSION}" and pushes it to docker hub
 function tag_commit_as_gitlab_image() {
     NAME=$1
 
     docker login -u "${CI_REGISTRY_USER}" -p "${CI_REGISTRY_PASSWORD}" "${CI_REGISTRY}"
-    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" "${CI_REGISTRY}/tine20/tine20" "$NAME" "${CI_COMMIT_REF_NAME}-${PHP_IMAGE_TAG}"
+    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_VERSION}" "${CI_REGISTRY}/tine20/tine20" "$NAME" "${CI_COMMIT_REF_NAME}-${PHP_VERSION}"
 }
 
-# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" DOCKERHUB_NAME:DOCKERHUB_TAG
+# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_VERSION}" DOCKERHUB_NAME:DOCKERHUB_TAG
 function tag_commit_as_dockerhub_image() {
     NAME=$1
     DOCKERHUB_NAME=$2
 
     docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_TOKEN}" "docker.io"
-    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_IMAGE_TAG}" "docker.io/tine20" "${DOCKERHUB_NAME}" "${DOCKERHUB_TAG}"
+    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_VERSION}" "docker.io/tine20" "${DOCKERHUB_NAME}" "${DOCKERHUB_TAG}"
 }
 
 # impl for all tag functions
