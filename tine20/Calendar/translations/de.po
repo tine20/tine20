@@ -2607,4 +2607,16 @@ msgid "Calendars to export"
 msgstr "Zu exportierende Kalender"
 
 msgid "Export target"
-msgstr "Exportzielr"
+msgstr "Exportziel"
+
+msgid "Side bar color"
+msgstr "Farbe der Seitenleiste"
+
+msgid "Colors by response"
+msgstr "Farbe nach Teilnehmerstatus"
+
+msgid "Colors by tags"
+msgstr "Farbe nach Tags"
+
+msgid "Colors by attendee"
+msgstr "Farbe nach Teilnehmern"

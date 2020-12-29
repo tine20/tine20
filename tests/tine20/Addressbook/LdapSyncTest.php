@@ -88,7 +88,8 @@ class Addressbook_LdapSyncTest extends TestCase
     /**
      * test sync to sync backend works, we need to match filter {n_fn contains "test"}
      *
-     * @group nogitlabci_ldap
+     * @group nogitlabci
+     * need to support in ci setup: https://wiki.mozilla.org/MailNews:Mozilla_LDAP_Address_Book_Schema
      */
     public function testSyncBackend()
     {

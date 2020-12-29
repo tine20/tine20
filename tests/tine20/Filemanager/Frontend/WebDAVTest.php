@@ -245,11 +245,11 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     /**
      * test (UN)LOCK functionality of WebDAV
      * @group ServerTests
-     *
-     * @group nogitlabci_ldap
      */
     public function testUNandLOCKQueries()
     {
+        $this->_skipIfLDAPBackend('FIXME: auth has a problem with LDAP backend');
+
         $credentials = TestServer::getInstance()->getTestCredentials();
 
         Tinebase_FileSystem::getInstance()->createAclNode('Filemanager/folders/shared/unittestdirectory');
