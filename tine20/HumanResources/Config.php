@@ -61,6 +61,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      *
      * @string
      */
+    const FEATURE_STREAMS = 'featureStreams';
+
+    /**
+     * enable working time tracking
+     *
+     * @string
+     */
     const FEATURE_WORKING_TIME_ACCOUNTING = 'workingTimeAccounting';
 
     /**
@@ -152,6 +159,14 @@ class HumanResources_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],
+                self::FEATURE_STREAMS => [
+                    self::LABEL                 => 'Enable Streams',
+                    //_('Enable Streams')
+                    self::DESCRIPTION           => 'Activate working streams',
+                    //_('Activate working streams')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
                 self::FEATURE_WORKING_TIME_ACCOUNTING => [
                     self::LABEL                 => 'Enable Working Time Tracking',
                     //_('Enable Working Time Tracking')
@@ -160,7 +175,6 @@ class HumanResources_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
-
             ],
             self::DEFAULT_STR => [],
         ],

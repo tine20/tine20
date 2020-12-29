@@ -79,19 +79,44 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 HumanResources_Model_WageType::MODEL_NAME_PART,
             ]);
         }
+        if (! HumanResources_Config::getInstance()->featureEnabled(
+            HumanResources_Config::FEATURE_STREAMS)
+        ) {
+            $this->_configuredModels = array_diff($this->_configuredModels, [
+                HumanResources_Model_Stream::MODEL_NAME_PART,
+                HumanResources_Model_StreamModality::MODEL_NAME_PART,
+                HumanResources_Model_StreamModalReport::MODEL_NAME_PART,
+            ]);
+        }
     }
 
+    /**
+     * @param $filter
+     * @param $paging
+     * @return array
+     */
     public function searchStreams($filter, $paging)
     {
         return $this->_search($filter, $paging, HumanResources_Controller_Stream::getInstance(),
             HumanResources_Model_Stream::class);
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     public function saveStream($data)
     {
         return $this->_save($data, HumanResources_Controller_Stream::getInstance(), HumanResources_Model_Stream::class);
     }
 
+    /**
+     * @param $streamId
+     * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
     public function generateStreamReport($streamId)
     {
         $stremCtrl = HumanResources_Controller_Stream::getInstance();
@@ -113,6 +138,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($stremCtrl->get($streamId));
     }
 
+    /**
+     * @param $data
+     * @return array
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
     public function saveMonthlyWTReport($data)
     {
         if (!isset($data['id']) || empty($data['id'])) {
