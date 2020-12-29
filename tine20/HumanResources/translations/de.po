@@ -1233,3 +1233,21 @@ msgstr "Pausenzeiten"
 
 msgid "Work Time Limits"
 msgstr "Arbeitzeitlimits"
+
+msgid "Free Time Planning"
+msgstr "Abwesenheitsplanung"
+
+msgid "Add Free Time"
+msgstr "Abwesenheit hinzufügen"
+
+msgid "Edit Free Time"
+msgstr "Abwesenheit bearbeiten"
+
+msgid "Delete Free Time"
+msgstr "Abwesenheit löschen"
+
+msgid "Freetime"
+msgstr "Abwesenheit"
+
+msgid "Free Time"
+msgstr "Abwesenheit"
