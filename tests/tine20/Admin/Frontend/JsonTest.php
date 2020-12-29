@@ -167,8 +167,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     
     /**
      * try to get all access log entries
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetAccessLogsWithDeletedUser()
     {
@@ -248,8 +246,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     /**
      * try to add role and set members/rights
-     *
-     * @group nogitlabci_ldap
      */
     public function testAddRole()
     {
@@ -287,8 +283,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     /**
      * try to get role rights
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetRoleRights()
     {
@@ -303,8 +297,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     
     /**
      * try to save role
-     *
-     * @group nogitlabci_ldap
      */
     public function testUpdateRole()
     {
@@ -330,8 +322,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     
     /**
      * try to delete roles
-     *
-     * @group nogitlabci_ldap
      */
     public function testDeleteRoles()
     {
@@ -995,11 +985,11 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     /**
      * @see 0011504: deactivated user is removed from group when group is saved
-     *
-     * @group nogitlabci_ldap
      */
     public function testDeactivatedUserGroupSave()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         // deactivate user
         $userArray = $this->_createTestUser();
 
@@ -1027,11 +1017,11 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     /**
      * @see 0011504: deactivated user is removed from group when group is saved
-     *
-     * @group nogitlabci_ldap
      */
     public function testBlockedUserGroupSave()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         // deactivate user
         $userArray = $this->_createTestUser();
         $userArray['lastLoginFailure'] = Tinebase_DateTime::now()->toString();
@@ -1045,6 +1035,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     public function testAccountOnlyGroup()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         $userArray = $this->_createTestUser();
         $savedGroup = $this->_saveGroup($userArray, ['account_only' => 0]);
         self::assertEquals('0', $savedGroup['account_only']);
