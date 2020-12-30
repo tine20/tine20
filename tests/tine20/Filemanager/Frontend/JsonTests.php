@@ -13,6 +13,7 @@
  * Test class for Filemanager_Frontend_Json
  *
  * @package     Filemanager
+ * @group nodockerci
  */
 class Filemanager_Frontend_JsonTests extends TestCase
 {
@@ -2570,6 +2571,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     /**
      * testPinProtection with area lock
+     * @group nodockerci
      */
     public function testPinProtection()
     {
