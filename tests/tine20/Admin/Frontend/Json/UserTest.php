@@ -353,13 +353,15 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      */
     public function testResetPassword()
     {
+        $this->_skipIfLDAPBackend();
+
         $userArray = $this->_createTestUser();
 
         $pw = 'dpIg6komP';
         $this->_json->resetPassword($userArray, $pw, false);
 
         $authResult = Tinebase_Auth::getInstance()->authenticate($userArray['accountLoginName'], $pw);
-        $this->assertTrue($authResult->isValid());
+        $this->assertTrue($authResult->isValid(), 'auth fail: ' . print_r($authResult->getMessages(), true));
     }
 
     /**
