@@ -134,6 +134,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
      * test employee import update
      * 
      * @group longrunning
+     * @group nodockerci
      */
     public function testImportUpdate()
     {
@@ -158,6 +159,8 @@ class HumanResources_CliTests extends HumanResources_TestCase
     
     /**
      * tests set_contracts_end_date
+     * @group nogitlabci
+     * @group nodockerci
      */
     public function testSetContractsEndDate()
     {
