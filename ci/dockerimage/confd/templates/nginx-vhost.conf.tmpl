@@ -14,7 +14,7 @@ server {
 
     set $PHP_VALUE "include_path={{getv "/tine20/config/dir" "/etc/tine20"}}:/usr/share/tine20
                     max_execution_time = 1800
-                    memory_limit = 256M";
+                    memory_limit = 400M";
 
     if ($request_method != (GET|POST) ) {
         rewrite ^$ /index.php?frontend=webdav last;
