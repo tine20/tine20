@@ -1248,6 +1248,3 @@ msgstr "Abwesenheit löschen"
 
 msgid "Freetime"
 msgstr "Abwesenheit"
-
-msgid "Free Time"
-msgstr "Abwesenheit"
