@@ -372,6 +372,7 @@ class Admin_CliTest extends TestCase
      * testImportUsersWithEmailUser
      *
      * @group longrunning
+     * @group nodockerci
      */
     public function testImportUsersWithEmailUser()
     {
@@ -409,6 +410,7 @@ class Admin_CliTest extends TestCase
      * testImportUsersAdvanced
      *
      * @group longrunning
+     * @group nodockerci
      */
     public function testImportUsersAdvanced()
     {

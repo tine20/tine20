@@ -20,6 +20,9 @@ class Tinebase_FileSystem_Preview_ServiceV2LiveTest extends TestCase
         $this->_previewService = Tinebase_Core::getPreviewService();
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testMergePdfFiles()
     {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} != true

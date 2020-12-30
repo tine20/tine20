@@ -1959,6 +1959,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
     /**
      * @group longrunning
+     * @group nodockerci
      */
     public function testRruleModLogUndo()
     {

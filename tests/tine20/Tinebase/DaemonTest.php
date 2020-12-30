@@ -67,6 +67,9 @@ class Tinebase_DaemonTest extends PHPUnit_Framework_TestCase
         $this->_stopDaemon();
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testStart()
     {
         $this->_startDaemon();

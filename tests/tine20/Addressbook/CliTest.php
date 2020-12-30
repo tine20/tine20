@@ -236,6 +236,7 @@ class Addressbook_CliTest extends TestCase
 
     /**
      * @group longrunning
+     * @group nodockerci
      */
     public function testUpdateGeodata()
     {
