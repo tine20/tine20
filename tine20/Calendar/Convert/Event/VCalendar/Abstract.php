@@ -109,23 +109,33 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             'CALSCALE' => 'GREGORIAN'
         ));
 
-        $originatorTz = $_record ? $_record->originator_tz : NULL;
-        if (empty($originatorTz)) {
-            throw new Tinebase_Exception_Record_Validation('originator_tz needed for conversion to Sabre\VObject\Component');
-        }
-
-        try {
-            $vcalendar->add(new Sabre_VObject_Component_VTimezone($originatorTz));
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            throw new Tinebase_Exception_Record_Validation('Bad Timezone: ' . $originatorTz);
-        }
+        $this->_setVTimezone($_record, $vcalendar);
 
         if (isset($this->_method)) {
             $vcalendar->add('METHOD', $this->_method);
         }
 
         return $vcalendar;
+    }
+
+    /**
+     * @param Calendar_Model_Event $event
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
+     */
+    protected function _setVTimezone(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar)
+    {
+        $originatorTz = $event ? $event->originator_tz : Tinebase_Core::getUserTimezone();
+
+        try {
+            $vtimezone = new Sabre_VObject_Component_VTimezone($originatorTz);
+        } catch (Exception $e) {
+            $userTz = Tinebase_Core::getUserTimezone();
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ .
+                '::' . __LINE__ . ' Could not add event tz: ' . $e->getMessage() . ' - use default user tz: ' . $userTz);
+            $vtimezone = new Sabre_VObject_Component_VTimezone($userTz);
+        }
+
+        $vcalendar->add($vtimezone);
     }
 
     /**
@@ -190,7 +200,16 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     {
         // clone the event and change the timezone
         $event = clone $_event;
-        $event->setTimezone($event->originator_tz);
+        try {
+            $event->setTimezone($event->originator_tz);
+        } catch (Exception $e) {
+            $userTz = Tinebase_Core::getUserTimezone();
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ .
+                '::' . __LINE__ . ' Could not set event tz: ' . $e->getMessage() . ' - use default user tz: ' . $userTz);
+            $event->setTimezone($userTz);
+            $event->originator_tz = $userTz;
+            $_event->originator_tz = $userTz;
+        }
         
         $lastModifiedDateTime = $_event->last_modified_time ? $_event->last_modified_time : $_event->creation_time;
         if (! $event->creation_time instanceof Tinebase_DateTime) {

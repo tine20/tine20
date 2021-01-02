@@ -938,13 +938,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     /**
      * skips this test if LDAP or AD user backend is configured
+     *
+     * @param string $message
      */
-    protected function _skipIfLDAPBackend()
+    protected function _skipIfLDAPBackend($message = 'Does not work with LDAP/AD backend')
     {
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
         ) {
-            self::markTestSkipped('Does not work with LDAP/AD backend');
+            self::markTestSkipped($message);
         }
     }
 

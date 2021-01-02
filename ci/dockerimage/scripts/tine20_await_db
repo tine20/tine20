@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-$conf = include('/etc/tine20/config.inc.php');
+$conf = include(getenv("TINE20_CONFIG_PATH") ?: "/etc/tine20/config.inc.php");
 
 if ( ! (is_array($conf) && key_exists('database', $conf) && is_array($conf['database']))) {
     return;

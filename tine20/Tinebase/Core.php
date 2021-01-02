@@ -1077,11 +1077,7 @@ class Tinebase_Core
         }
         
         $dbConfig = $config->database;
-        
-        if (!empty($dbConfig->password)) {
-            self::getLogger()->addReplacement($dbConfig->password);
-        }
-        
+
         if (! defined('SQL_TABLE_PREFIX')) {
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
         }
@@ -1108,6 +1104,10 @@ class Tinebase_Core
      */
     public static function createAndConfigureDbAdapter($dbConfigArray, $dbBackend = NULL)
     {
+        if (!empty($dbConfigArray['password'])) {
+            self::getLogger()->addReplacement($dbConfigArray['password']);
+        }
+
         if ($dbBackend === NULL) {
             $constName = 'self::' . strtoupper($dbConfigArray['adapter']);
             if (empty($dbConfigArray['adapter']) || ! defined($constName)) {

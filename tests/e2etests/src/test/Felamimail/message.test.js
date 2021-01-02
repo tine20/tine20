@@ -101,7 +101,6 @@ describe('message', () => {
     });
 });
 
-// skip... is to unstable
 describe('email note preference', () => {
     test('open Felamimail settings and set note=yes', async () => {
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
@@ -115,11 +114,11 @@ describe('email note preference', () => {
         await popupWindow.waitForSelector('.x-btn.x-btn-text-icon.x-btn-pressed');
         await popupWindow.close();
     });
-    test('open Felamimail settings and set note=no', async () => {
+    test.skip('open Felamimail settings and set note=no', async () => {
         await page.waitFor(2000);
         await lib.setPreference(page,'E-Mail', 'autoAttachNote', 'nein');
     });
-    test('open editDialog and check button unpressed', async () => {
+    test.skip('open editDialog and check button unpressed', async () => {
         await page.waitFor(2000);
         let popupWindow = await lib.getEditDialog('Verfassen');
         if (await popupWindow.$('.x-btn.x-btn-text-icon.x-btn-pressed') !== null) return Promise.reject('Error: The button is pressed');

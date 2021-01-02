@@ -17,8 +17,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * try to save an account
      *
      * @return array
-     *
-     * @group nogitlabci_ldap
      */
     public function testSaveAccount()
     {
@@ -29,9 +27,16 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $this->assertEquals('PHPUnitup', $account['accountFirstName'], print_r($account, true));
         $this->assertEquals(Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup')->getId(), $account['accountPrimaryGroup']['id']);
         $this->assertTrue(! empty($account['accountId']), 'no account id');
-        // check password
-        $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], $accountData['accountPassword']);
-        $this->assertTrue($authResult->isValid());
+
+        // FIXME make auth check work for ldap backends!
+        if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP &&
+            Tinebase_User::getConfiguredBackend() !== Tinebase_User::ACTIVEDIRECTORY
+        ) {
+            // check password
+            $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], $accountData['accountPassword']);
+            $this->assertTrue($authResult->isValid(), 'auth fail: ' . print_r($authResult->getMessages(), true));
+        }
+
         $this->assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA])
             && $account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] === 100,
             'failed to set/get account filesystem personal quota');
@@ -89,8 +94,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     /**
      * try to get all accounts
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetAccounts()
     {
@@ -105,8 +108,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * testGetUserCount
      *
      * @see 0006544: fix paging in admin/users grid
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetUserCount()
     {
@@ -142,8 +143,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * try to create an account with existing login name
      *
      * @see 0006770: check if username already exists when creating new user / changing username
-     *
-     * @group nogitlabci_ldap
      */
     public function testSaveAccountWithExistingName()
     {
@@ -203,8 +202,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * testUpdateUserWithoutContainerACL
      *
      * @see 0006254: edit/create user is not possible
-     *
-     * @group nogitlabci_ldap
      */
     public function testUpdateUserWithoutContainerACL()
     {
@@ -243,8 +240,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * testUpdateUserRemoveGroup
      *
      * @see 0006762: user still in admin role when admin group is removed
-     *
-     * @group nogitlabci_ldap
      */
     public function testUpdateUserRemoveGroup()
     {
@@ -307,8 +302,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     /**
      * try to set account state
-     *
-     * @group nogitlabci_ldap
      */
     public function testSetAccountState()
     {
@@ -325,8 +318,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * test send deactivation notification
      *
      * @see 0009956: send mail on account deactivation
-     *
-     * @group nogitlabci_ldap
      */
     public function testAccountDeactivationNotification()
     {
@@ -359,8 +350,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     /**
      * try to reset password
-     *
-     * @group nogitlabci_ldap
      */
     public function testResetPassword()
     {
@@ -377,8 +366,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * try to reset pin
      *
      * @see 0013320: allow admin to reset pin for accounts
-     *
-     * @group nogitlabci_ldap
      */
     public function testResetPin()
     {
@@ -411,8 +398,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     /**
      * testChangeContactEmailCheckPrimaryDomain
-     *
-     * @group nogitlabci_ldap
      */
     public function testChangeContactEmailCheckPrimaryDomain()
     {
@@ -468,8 +453,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     /**
      * test set expired status
-     *
-     * @group nogitlabci_ldap
      */
     public function testSetUserExpiredStatus()
     {

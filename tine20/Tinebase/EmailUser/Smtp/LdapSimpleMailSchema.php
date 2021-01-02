@@ -171,18 +171,27 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                 continue;
             }
 
+            $value = $_user['smtpUser'][$property_name];
+            if ($value instanceof Tinebase_Record_RecordSet) {
+                $value = $value->email;
+            }
+
             $existing = $this->_getPropertiesFromLdapRawData($ldapName);
 
-            if (is_array($_user['smtpUser'][$property_name])) {
-                foreach (array_diff($_user['smtpUser'][$property_name], $existing) as $property) {
-                    $this->_addPropertyToLdapRawData($property_name, $property);
+            if (is_array($value)) {
+                if (!empty($value)) {
+                    foreach (array_diff($value, $existing) as $property) {
+                        $this->_addPropertyToLdapRawData($property_name, (string) $property);
+                    }
                 }
-                foreach (array_diff($existing, $_user['smtpUser'][$property_name]) as $property) {
-                    $this->_deletePropertyFromLdapRawData($property_name, $property);
+                if (!empty($existing)) {
+                    foreach (array_diff($existing, $value) as $property) {
+                        $this->_deletePropertyFromLdapRawData($property_name, (string) $property);
+                    }
                 }
             }
             elseif (substr($ldapName, -8) == ':boolean') {
-                if ($_user['smtpUser'][$property_name] == 1) {
+                if ($value == 1) {
                     $this->_deletePropertyFromLdapRawData($property_name, false);
                     $this->_addPropertyToLdapRawData($property_name, true);
                 }
@@ -194,7 +203,6 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                     }
                 }
             }
-
         }
 
         $this->_saveOrUpdateSpecialResultToLdap();
@@ -215,7 +223,31 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
         }
 
         foreach ($this->_propertyMapping as $property => $ldapName) {
-            $originalUser[$property] = $this->_getPropertiesFromLdapRawData($ldapName);
+            $ldapProp = $this->_getPropertiesFromLdapRawData($ldapName);
+            if ($property == 'emailAliases') {
+                $aliases = [];
+                foreach($ldapProp as $mail) {
+                    $aliases[] = [
+                        'email' => $mail,
+                        'dispatch_address' => 1
+                    ];
+                }
+                $ldapProp = new Tinebase_Record_RecordSet(
+                    Tinebase_Model_EmailUser_Alias::class,
+                    $aliases
+                );
+            }
+            else if ($property == 'emailForwards') {
+                $forwards = [];
+                foreach($ldapProp as $mail) {
+                    $forwards[] = ['email' => $mail];
+                }
+                $ldapProp = new Tinebase_Record_RecordSet(
+                    Tinebase_Model_EmailUser_Forward::class,
+                    $forwards
+                );
+            }
+            $originalUser[$property] = $ldapProp;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' simpleMail - Tinebase_EmailUser combined with ldap: '. print_r($originalUser, true));

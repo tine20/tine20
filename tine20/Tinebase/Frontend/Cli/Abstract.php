@@ -675,6 +675,10 @@ class Tinebase_Frontend_Cli_Abstract
             throw new Tinebase_Exception_InvalidArgument('type (personal|shared) or container_id required');
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Got ' . count($containers) . ' containers for export');
+        }
+
         foreach ($containers as $containerId) {
             $this->_exportContainerAsVObject($containerId, $args, $_model, $_exportClass);
         }
@@ -696,9 +700,17 @@ class Tinebase_Frontend_Cli_Abstract
     protected function _getVObjectExportFilename($container, $args, $extension)
     {
         $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
-        $owner = $container->type === Tinebase_Model_Container::TYPE_SHARED
-            ? 'shared'
-            : Tinebase_User::getInstance()->getFullUserById($container->owner_id)->accountLoginName;
+        if ($container->type === Tinebase_Model_Container::TYPE_SHARED) {
+            $owner = 'shared';
+        } else {
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserById($container->owner_id);
+                $owner = $user->accountLoginName;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $owner = $container->owner_id;
+            }
+        }
+
         return $path . DIRECTORY_SEPARATOR . $owner
             // . '_' . $container->name
             . '_' . substr($container->getId(), 0, 8) . '.' . $extension;
@@ -731,13 +743,25 @@ class Tinebase_Frontend_Cli_Abstract
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
             ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
         ]);
+
         $export = new $exportClass($filter, null, $options);
         $filename = $export->generate();
         if (! $filename) {
             // TODO refactor function signature - write does not write content to file but to stdout/browser
             $export->write();
         } else {
-            echo 'Exported container ' . $containerId . ' into file ' . $filename . "\n";
+            if ($options['fm_path']) {
+                foreach ((array) $filename as $file) {
+                    $tempFile = Tinebase_TempFile::getInstance()->createTempFile($file);
+                    $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($options['fm_path'] ,
+                        Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+                    $targetPath = $nodePath->statpath . '/' . basename($file);
+                    Tinebase_FileSystem::getInstance()->copyTempfile($tempFile, $targetPath);
+                    echo 'Exported container ' . $containerId . ' to Filemanager path ' . $options['fm_path'] . '/' . basename($file) ."\n";
+                }
+            } else {
+                echo 'Exported container ' . $containerId . ' into file ' . $filename . "\n";
+            }
         }
     }
 }

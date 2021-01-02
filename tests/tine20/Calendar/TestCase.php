@@ -59,7 +59,7 @@ abstract class Calendar_TestCase extends TestCase
      * set up tests
      */
     public function setUp(): void
-{
+    {
         parent::setUp();
         
         $this->_backend = new Calendar_Backend_Sql();

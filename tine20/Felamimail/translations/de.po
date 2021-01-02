@@ -1916,11 +1916,17 @@ msgstr "Verbindung fehlgeschlagen"
 msgid "{server} Connection Status"
 msgstr "{server} Verbindungsstatus"
 
-msgid "Credentials missing"
-msgstr "Zugangsdaten fehlen"
+msgid "IMAP Credentials missing"
+msgstr "IMAP Zugangsdaten fehlen"
 
-msgid "Hostname missing"
-msgstr "Hostname fehlt"
+msgid "SMTP Credentials missing"
+msgstr "SMTP Zugangsdaten fehlen"
+
+msgid "IMAP Hostname missing"
+msgstr "IMAP Hostname fehlt"
+
+msgid "SMTP Hostname missing"
+msgstr "SMTP Hostname fehlt"
 
 msgid "Connecting to {0} server..."
 msgstr "Verbindung zu {0} Server wird aufgebaut..."
