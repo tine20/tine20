@@ -18,8 +18,9 @@
  */
 class Addressbook_Convert_Contact_VCard_TbSync extends Addressbook_Convert_Contact_VCard_Abstract
 {
+    // Thunderbird CalDAV/CardDAV
     // Thunderbird CalDAV/CardDAV Lightning/68.10.0
-    const HEADER_MATCH = '/Thunderbird CalDAV\/CardDAV Lightning\/(?P<version>.*)/';
+    const HEADER_MATCH = '/Thunderbird CalDAV\/CardDAV/';
 
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,
