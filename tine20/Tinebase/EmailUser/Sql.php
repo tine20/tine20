@@ -160,7 +160,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             $cond = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'client_idnr') . ' = ?', $this->_clientId);
         } else {
             if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
-                $cond = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
+                $domains = Tinebase_EmailUser::getAllowedDomains();
+                if (count($domains) === 0) {
+                    $domains = [$this->_config['domain']];
+                }
+                $cond = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' IN (?)', $domains);
             } else {
                 $cond = $this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " =''";
             }
