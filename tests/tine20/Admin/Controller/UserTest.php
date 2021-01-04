@@ -26,13 +26,18 @@ class Admin_Controller_UserTest extends TestCase
         ));
         $pw = Tinebase_Record_Abstract::generateUID(12);
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        $this->_usernamesToDelete[] = $user->accountLoginName;
         // remove user from tine20 table and add again
         $backend = new Tinebase_User_Sql();
         $backend->deleteUserInSqlBackend($user);
 
-        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
-        $this->_usernamesToDelete[] = $user->accountLoginName;
-        self::assertEquals($user->accountEmailAddress, $userToCreate->accountEmailAddress);
+        try {
+            $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+            self::fail('should throw an exception: "email address already exists". user: ' . print_r($user->toArray(), true));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            self::assertEquals($translate->_('Email account already exists'), $tesg->getMessage());
+        }
     }
 
     public function testAddAccountWithEmailUserXprops()
@@ -158,6 +163,20 @@ class Admin_Controller_UserTest extends TestCase
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             $translate = Tinebase_Translation::getTranslation('Admin');
             self::assertEquals($translate->_('Password is needed for system account creation'), $tesg->getMessage());
+        }
+    }
+
+    public function testAddUserWithExistingMail()
+    {
+        $pw = Tinebase_Record_Abstract::generateUID(10);
+        $userToCreate = TestCase::getTestUser();
+        $userToCreate->accountEmailAddress = Tinebase_Core::getUser()->accountEmailAddress;
+        try {
+            $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+            self::fail('should throw an exception: "email address already exists". user: ' . print_r($user->toArray(), true));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            self::assertEquals($translate->_('Email account already exists'), $tesg->getMessage());
         }
     }
 }
