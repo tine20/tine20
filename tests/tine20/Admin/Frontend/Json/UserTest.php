@@ -450,7 +450,14 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     public function testUmlautsInDomainAndEmailAddress()
     {
-        $this->testAdditionalDomainInUserAccount('myümläutdomain.de', 'müller');
+        $umlautDomain = 'myümläutdomain.de';
+        $this->testAdditionalDomainInUserAccount($umlautDomain, 'müller');
+
+        // check if umlaut domain is in registry
+        Tinebase_EmailUser::clearCaches();
+        $tbJson = new Tinebase_Frontend_Json();
+        $registry = $tbJson->getRegistryData();
+        self::assertEquals($umlautDomain, $registry['additionaldomains']);
     }
 
     /**

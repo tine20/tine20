@@ -943,7 +943,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
-        $smtpConfig = $manageSmtpEmailUser ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+        $smtpConfig = $manageSmtpEmailUser
+            ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)
+            : $smtpConfig = array();
 
         $userRegistryData = array(
             'accountBackend' => Tinebase_User::getConfiguredBackend(),
