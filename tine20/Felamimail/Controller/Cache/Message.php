@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -897,7 +897,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     public function addMessage(array $_message, Felamimail_Model_Folder $_folder, $_updateFolderCounter = true)
     {
         if (! (isset($_message['header']) || array_key_exists('header', $_message)) || ! is_array($_message['header'])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Email uid ' . $_message['uid'] . ' has no headers. Skipping ...');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Email uid ' . $_message['uid'] . ' has no headers. Skipping ...');
             return false;
         }
         
@@ -953,7 +954,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $attachments = $this->getAttachments($message);
         $message->has_attachment = (count($attachments) > 0) ? true : false;
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Adding message to cache: ' . print_r($message->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' Raw data: ' . print_r($_message, true));
+
         return $message;
     }
 
