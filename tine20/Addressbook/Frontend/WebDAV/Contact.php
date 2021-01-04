@@ -262,7 +262,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . " update by generic client not allowed. See Addressbook_Convert_Contact_VCard_Factory for supported clients.");
-            throw new DAV\Exception\Forbidden('Update denied for unknow client');
+            throw new DAV\Exception\Forbidden('Update denied for unknown client');
         }
         
         $contact = $this->_converter->toTine20Model($cardData, $this->getRecord(), array(
@@ -271,6 +271,10 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         
         try {
             $this->_contact = Addressbook_Controller_Contact::getInstance()->update($contact, false);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            throw new Sabre\DAV\Exception\NotFound('Contact not found');
         } catch (Tinebase_Exception_AccessDenied $tead) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
@@ -280,7 +284,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tesg->getMessage());
             throw new DAV\Exception\PreconditionFailed($tesg->getMessage());
         }
-        $this->_vcard   = null;
+        $this->_vcard = null;
         
         return $this->getETag();
     }
