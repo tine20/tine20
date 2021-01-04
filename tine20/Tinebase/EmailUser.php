@@ -532,4 +532,17 @@ class Tinebase_EmailUser
             && $imapConfig['useSystemAccount']
         );
     }
+
+    /**
+     * @param Tinebase_Model_FullUser $user
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public static function checkIfEmailUserExists(Tinebase_Model_FullUser $user)
+    {
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        if ($emailUserBackend->emailAddressExists($user)) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+        }
+    }
 }

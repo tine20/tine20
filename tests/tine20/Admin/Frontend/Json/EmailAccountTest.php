@@ -222,7 +222,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $account = $this->testEmailAccountApiSharedAccount(false);
 
         try {
-            static::expectException(Tinebase_Exception_SystemGeneric::class); $this->expectExceptionMessageMatches('/email account already exists/');
+            static::expectException(Tinebase_Exception_SystemGeneric::class);
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            $this->expectExceptionMessageMatches('/' . $translate->_('Email account already exists') . '/');
             $this->testEmailAccountApiSharedAccount(true, [
                 'email' => $account->email
             ]);
@@ -260,7 +262,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             $this->_json->saveEmailAccount($accountdata);
             self::fail('it should not be possible to create accounts with duplicate email addresses');
         } catch (Tinebase_Exception_SystemGeneric $ted) {
-            self::assertEquals('email account already exists', $ted->getMessage());
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            self::assertEquals($translate->_('Email account already exists'), $ted->getMessage());
         }
     }
 
@@ -334,7 +337,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             $this->_json->saveEmailAccount($account);
             self::fail('it should not be possible to update accounts with duplicate email addresses');
         } catch (Tinebase_Exception_SystemGeneric $ted) {
-            self::assertEquals('email account already exists', $ted->getMessage());
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            self::assertEquals($translate->_('Email account already exists'), $ted->getMessage());
         }
     }
 

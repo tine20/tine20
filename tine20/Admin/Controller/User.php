@@ -227,6 +227,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $deactivated = false;
 
         $this->_checkSystemEmailAccountCreation($_user, $oldUser, $_password);
+        $this->_checkSystemEmailAccountDuplicate($_user, $oldUser);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
@@ -287,12 +288,36 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     protected function _checkSystemEmailAccountCreation($user, $oldUser, $password)
     {
-        if (Tinebase_EmailUser::isEmailSystemAccountConfigured()
-            && empty($oldUser->accountEmailAddress)
+        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            return;
+        }
+
+        if ((! $oldUser || empty($oldUser->accountEmailAddress))
             && ! empty($user->accountEmailAddress)
-            && ! $password ) {
+            && empty($password)
+        ) {
             $translate = Tinebase_Translation::getTranslation('Admin');
             throw new Tinebase_Exception_SystemGeneric($translate->_('Password is needed for system account creation'));
+        }
+    }
+
+    /**
+     * @param $user
+     * @param $oldUser
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkSystemEmailAccountDuplicate($user, $oldUser = null)
+    {
+        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            return;
+        }
+
+        if ((! $oldUser || empty($oldUser->accountEmailAddress))
+            && ! empty($user->accountEmailAddress)
+        ) {
+            if (! $oldUser || $oldUser->accountEmailAddress !== $user->accountEmailAddress) {
+                Tinebase_EmailUser::checkIfEmailUserExists($user);
+            }
         }
     }
 
@@ -390,6 +415,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $this->_checkLoginNameExistance($_user);
             $this->_checkLoginNameLength($_user);
             $this->_checkPrimaryGroupExistance($_user);
+            $this->_checkSystemEmailAccountCreation($_user, null, $_password);
+            $this->_checkSystemEmailAccountDuplicate($_user);
+
         } catch (Tinebase_Exception_SystemGeneric $sytemEx) {
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
