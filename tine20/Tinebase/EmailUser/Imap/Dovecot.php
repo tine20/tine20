@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Fronk
  * 
  * example dovecot db schema:
@@ -341,8 +341,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'instancename') . ' = ?',
                 $this->_config['instanceName']);
         } else if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
-            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',
-                $this->_config['domain']);
+            $domains = Tinebase_EmailUser::getAllowedDomains();
+            if (count($domains) === 0) {
+                $domains = [$this->_config['domain']];
+            }
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' IN (?)',
+                $domains);
         } else {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
         }
@@ -444,14 +448,17 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
 
         $emailUsername = $this->getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
 
-        list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
-        $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
+        if (strpos($_newUserProperties->accountEmailAddress, '@') !== false) {
+            list($localPart, $domain) = explode('@', $_newUserProperties->accountEmailAddress, 2);
+        } else {
+            list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
+            $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
+        }
+        $rawData['domain'] = $domain;
 
         if (isset($this->_config['instanceName'])) {
             $rawData['instancename'] = $this->_config['instanceName'];
         }
-
-        $rawData['domain'] = $domain;
 
         $rawData[$this->_propertyMapping['emailHome']] = $this->_getEmailHome($emailUsername, $localPart, $domain);
         $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
@@ -473,8 +480,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         $select = $this->_db->select()->from(array($this->_userTable), 'domain')->distinct();
         $this->_appendDomainOrClientIdOrInstanceToSelect($select);
 
-        $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
-        return $result;
+        return $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
     }
 
     public function setMasterPassword($username, $password, $type = 'sieve')

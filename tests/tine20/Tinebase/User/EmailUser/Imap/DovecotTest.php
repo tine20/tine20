@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -178,11 +178,12 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
      * add user with email data
      *
      * @param string $username
+     * @param array $userdata
      * @return Tinebase_Model_FullUser
      */
-    protected function _addUser($username = null)
+    protected function _addUser($username = null, $userdata = [])
     {
-        $user = TestCase::getTestUser();
+        $user = TestCase::getTestUser($userdata);
         if ($username) {
             $user->accountLoginName = $username;
         }
@@ -268,13 +269,37 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         $user = $this->_addUser();
 
         // check email tables (username + instancename)
-        $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
         $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
-        $rawDovecotUser = $dovecot->getRawUserById($emailUser);
-
+        $rawDovecotUser = $this->_getRawDovecotUser($user, $emailUser);
         self::assertTrue(is_array($rawDovecotUser), 'did not fetch dovecotuser: ' . print_r($rawDovecotUser, true));
         self::assertEquals($emailUser->getId() . '@' . $this->_config['instanceName'], $rawDovecotUser['username']);
         self::assertTrue(isset($rawDovecotUser['instancename']), 'instancename missing: ' . print_r($rawDovecotUser, true));
         self::assertEquals($this->_config['instanceName'], $rawDovecotUser['instancename']);
+    }
+
+    protected function _getRawDovecotUser($user, $emailUser = null)
+    {
+        $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
+        if ($emailUser === null) {
+            $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+        }
+        return $dovecot->getRawUserById($emailUser);
+    }
+
+    public function testAddUserWithSecondaryDomain()
+    {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (! isset($smtpConfig['secondarydomains']) || empty($smtpConfig['secondarydomains'])) {
+            self::markTestIncomplete('secondarydomains config needed for this test');
+        }
+        $domains = explode(',', $smtpConfig['secondarydomains']);
+        $secEmailDomain = array_shift($domains);
+        $username = 'phpunit' . Tinebase_Record_Abstract::generateUID(6);
+        $user = $this->_addUser($username, [
+            'accountEmailAddress'   => $username . '@' . $secEmailDomain,
+        ]);
+        $rawDovecotUser = $this->_getRawDovecotUser($user);
+        self::assertNotNull($rawDovecotUser, 'could not find dovecot user');
+        self::assertEquals($secEmailDomain, $rawDovecotUser['domain'], 'secondary domain expected: ' . print_r($rawDovecotUser, true));
     }
 }
