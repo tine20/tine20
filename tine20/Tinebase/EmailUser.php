@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about splitting email user model in two (imap + smtp)
@@ -329,9 +329,10 @@ class Tinebase_EmailUser
      * get config for type IMAP/SMTP
      *
      * @param string $_configType
+     * @param boolean $convertDomainsToUnicode
      * @return array
      */
-    public static function getConfig($_configType)
+    public static function getConfig($_configType, $convertDomainsToUnicode = false)
     {
         if (!isset(self::$_configs[$_configType])) {
             self::$_configs[$_configType] = Tinebase_Config::getInstance()->get($_configType, new Tinebase_Config_Struct())->toArray();
@@ -342,6 +343,18 @@ class Tinebase_EmailUser
             {
                 self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl(self::$_configs[Tinebase_Config::SMTP]['secondarydomains']);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Secondarydomains from ldap (config): '. print_r(self::$_configs[Tinebase_Config::SMTP]['secondarydomains'], true));
+            }
+        }
+
+        if ($convertDomainsToUnicode) {
+            foreach (['primarydomain', 'secondarydomains', 'additionaldomains'] as $domainKey) {
+                if (isset(self::$_configs[$_configType][$domainKey])) {
+                    $domains = explode(',', self::$_configs[$_configType][$domainKey]);
+                    foreach ($domains as $idx => $domain) {
+                        $domains[$idx] = Tinebase_Helper::convertDomainToUnicode($domain);
+                    }
+                    self::$_configs[$_configType][$domainKey] = implode(',', $domains);
+                }
             }
         }
 
@@ -518,5 +531,18 @@ class Tinebase_EmailUser
             && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig))
             && $imapConfig['useSystemAccount']
         );
+    }
+
+    /**
+     * @param Tinebase_Model_FullUser $user
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public static function checkIfEmailUserExists(Tinebase_Model_FullUser $user)
+    {
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        if ($emailUserBackend->emailAddressExists($user)) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+        }
     }
 }

@@ -316,6 +316,8 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * testMonitoringCheckCron
+     *
+     * @group nodockerci
      */
     public function testMonitoringCheckCron()
     {

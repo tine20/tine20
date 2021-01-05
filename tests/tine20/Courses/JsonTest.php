@@ -349,6 +349,7 @@ class Courses_JsonTest extends TestCase
      * @see 0006672: allow to import (csv) files with only CR linebreaks
      * @group nogitlabci
      * gitlabci: stream_filter_append(): unable to create or locate filter "convert.iconv.MAC-CENTRALEUROPE/UTF-8//IGNORE"
+     * @group nodockerci
      */
     public function testImportMembersIntoCourse4()
     {

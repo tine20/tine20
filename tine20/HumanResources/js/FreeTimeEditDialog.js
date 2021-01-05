@@ -74,14 +74,16 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.HumanResources.FreeTimeEditDialog.superclass.checkStates.apply(this, arguments);
 
         // record vs. recordData!
-        var type = this.typePicker.selectedRecord || this.record.get('type') || {};
-        var employee = this.employeePicker.selectedRecord || this.record.get('employee_id');
-        var employeeName = _.get(employee, 'data.n_fn', _.get(employee, 'n_fn', this.app.i18n._('Employee')));
-        var typeString = _.get(type, 'data.name', _.get(type, 'name', type)) || 'Free Time';
-        var isNewRecord = !this.record.get('creation_time');
+        let type = this.typePicker.selectedRecord || this.record.get('type') || {};
+        let employee = this.employeePicker.selectedRecord || this.record.get('employee_id');
+        let employeeName = _.get(employee, 'data.n_fn', _.get(employee, 'n_fn', this.app.i18n._('Employee')));
+        let typeString = _.get(type, 'data.name', _.get(type, 'name', type)) || this.app.i18n._('Free Time');
+        if (Ext.isObject(typeString)) {
+            typeString = this.app.i18n._('Free Time');
+        }
+        let isNewRecord = !this.record.get('creation_time');
 
         if (!isNewRecord) {
-            // this.accountPicker.hide();
             this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), employeeName));
         } else {
             this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'),  this.app.i18n._hidden(typeString), employeeName));

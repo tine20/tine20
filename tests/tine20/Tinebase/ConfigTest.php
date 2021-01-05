@@ -166,6 +166,8 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * testApplicationDefaultConfig
+     *
+     * @group nodockerci
      */
     public function testApplicationDefaultConfig()
     {
@@ -266,6 +268,9 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, Tinebase_Config::getInstance()->{Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME});
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testConfDFolder()
     {
         $config = Tinebase_Core::getConfig();
@@ -313,6 +318,9 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array("www.test.de", "www.tine20.net"), Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()));
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testConfigStructure()
     {
         $defaultConfigFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'

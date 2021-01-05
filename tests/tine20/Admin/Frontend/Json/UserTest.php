@@ -353,13 +353,15 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      */
     public function testResetPassword()
     {
+        $this->_skipIfLDAPBackend();
+
         $userArray = $this->_createTestUser();
 
         $pw = 'dpIg6komP';
         $this->_json->resetPassword($userArray, $pw, false);
 
         $authResult = Tinebase_Auth::getInstance()->authenticate($userArray['accountLoginName'], $pw);
-        $this->assertTrue($authResult->isValid());
+        $this->assertTrue($authResult->isValid(), 'auth fail: ' . print_r($authResult->getMessages(), true));
     }
 
     /**
@@ -448,7 +450,14 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     public function testUmlautsInDomainAndEmailAddress()
     {
-        $this->testAdditionalDomainInUserAccount('myümläutdomain.de', 'müller');
+        $umlautDomain = 'myümläutdomain.de';
+        $this->testAdditionalDomainInUserAccount($umlautDomain, 'müller');
+
+        // check if umlaut domain is in registry
+        Tinebase_EmailUser::clearCaches();
+        $tbJson = new Tinebase_Frontend_Json();
+        $registry = $tbJson->getRegistryData();
+        self::assertEquals($umlautDomain, $registry['additionaldomains']);
     }
 
     /**

@@ -750,7 +750,7 @@ class Tinebase_Frontend_Cli_Abstract
             // TODO refactor function signature - write does not write content to file but to stdout/browser
             $export->write();
         } else {
-            if ($options['fm_path']) {
+            if (isset($options['fm_path'])) {
                 foreach ((array) $filename as $file) {
                     $tempFile = Tinebase_TempFile::getInstance()->createTempFile($file);
                     $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($options['fm_path'] ,

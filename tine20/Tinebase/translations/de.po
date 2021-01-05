@@ -4875,3 +4875,6 @@ msgstr "quarantänisiert"
 
 msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
 msgstr "Diese Datei kann ihren Computer potentiell schädigen. Daher wurde sie quarantänisiert und kann nicht bearbeitet oder heruntergeladen werden." 
+
+msgid "Email account already exists"
+msgstr "Das E-Mail-Konto existiert bereits"
