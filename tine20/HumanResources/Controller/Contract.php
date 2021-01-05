@@ -286,7 +286,12 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
                     $employee['n_fn'] . ' ' . $_record->start_date->getClone()
                         ->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d');
 
-                $recordWts = $wtsController->create($recordWts);
+                try {
+                    $recordWts = $wtsController->create($recordWts);
+                } catch (Tinebase_Exception_Duplicate $ted) {
+                    $recordWts->setId($ted->getData()->getFirstRecord()->getId());
+                    $wtsController->update($recordWts);
+                }
             }
             $_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME} = $recordWts->getId();
         }

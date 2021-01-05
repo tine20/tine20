@@ -6,7 +6,7 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -32,12 +32,17 @@ class Tinebase_Record_Expander_Factory
         if (!$mc->hasField($_property)) {
             throw new Tinebase_Exception_InvalidArgument($_model . ' doesn\'t have property ' . $_property);
         }
-        if (null === ($propModel = $mc->getFieldModel($_property)) ) {
-            throw new Tinebase_Exception_NotImplemented($_model . '::' . $_property . ' has a unknown model');
-        }
         $fieldDef = $mc->getFields()[$_property];
         if (!isset($fieldDef[MCC::TYPE])) {
             throw new Tinebase_Exception_InvalidArgument($_model . '::' . $_property . ' has not type');
+        }
+        // hrmpf legacy
+        if (isset($fieldDef[MCC::CONFIG][MCC::FUNCTION])) {
+            return new Tinebase_Record_Expander_VirtualFunction($fieldDef[MCC::CONFIG],
+                null, $_property, $_definition, $_rootExpander);
+        }
+        if (null === ($propModel = $mc->getFieldModel($_property)) ) {
+            throw new Tinebase_Exception_NotImplemented($_model . '::' . $_property . ' has a unknown model');
         }
 
         $prio = null;
