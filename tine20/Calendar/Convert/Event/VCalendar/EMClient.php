@@ -18,7 +18,7 @@
 class Calendar_Convert_Event_VCalendar_EMClient extends Calendar_Convert_Event_VCalendar_Abstract
 {
     // eM Client/5.0.17595.0
-    const HEADER_MATCH = '/eM Client\/(?P<version>.*)/';
+    const HEADER_MATCH = '/e[Mm] ?Client\/(?P<version>.*)/';
     
     protected $_supportedFields = array(
         'seq',
