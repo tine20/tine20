@@ -19,7 +19,7 @@
     "@caohenghu/vue-colorpicker": "^1.2.4",
     "ace-builds": "^1.4.11",
     "async": "^3.2.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.14.0",
     "ciena-dagre": "^1.0.10",
