@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->
-    <version>13.0</version>
+    <version>13.1</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
@@ -495,7 +495,7 @@
         <!-- resources -->
         <table>
             <name>cal_resources</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -604,6 +604,11 @@
                     <name>suppress_notification</name>
                     <type>boolean</type>
                     <default>false</default>
+                </field>
+                <field>
+                    <name>color</name>
+                    <type>text</type>
+                    <length>7</length>
                 </field>
                 <index>
                     <name>id</name>

@@ -41,7 +41,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 xprops: {Tinebase: {Container: {GrantsModel: 'Calendar_Model_ResourceGrants'}}}
             }
         });
-        
+
         return {
             xtype: 'tabpanel',
             plain:true,
@@ -118,6 +118,11 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             xtype: 'checkbox',
                             fieldLabel: this.app.i18n._('Suppress notification'),
                             name: 'suppress_notification'
+                        }, {
+                            xtype: 'colorfield',
+                            allowBlank: true,
+                            fieldLabel: this.app.i18n._('Color'),
+                            name: 'color'
                         }],
                         [{
                         columnWidth: 1,

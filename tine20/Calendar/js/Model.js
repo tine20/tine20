@@ -1010,7 +1010,8 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     {name: 'grants'},
     { name: 'attachments'},
     { name: 'relations',   omitDuplicateResolving: true},
-    { name: 'customfields', omitDuplicateResolving: true}
+    { name: 'customfields', omitDuplicateResolving: true},
+    {name: 'color'}
 ]), {
     appName: 'Calendar',
     modelName: 'Resource',

@@ -2620,3 +2620,9 @@ msgstr "Farbe nach Tags"
 
 msgid "Colors by attendee"
 msgstr "Farbe nach Teilnehmern"
+
+msgid "Colors by resource"
+msgstr "Farbe nach Ressource"
+
+msgid "Color"
+msgstr "Farbe"

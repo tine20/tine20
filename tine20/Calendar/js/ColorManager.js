@@ -401,7 +401,9 @@ Tine.Calendar.infoBarColorStrategies['response'] = {
         }
         let colors = [];
         _.forEach(attendees, function (att) {
-            colors.push(colorMapping[att.status] ?? 'C0C0C0');
+            if (att.user_type === 'user' || att.user_type === 'groupmember') {
+                colors.push(colorMapping[att.status] ?? 'C0C0C0');
+            }
         });
 
         return colors;
@@ -435,8 +437,32 @@ Tine.Calendar.infoBarColorStrategies['attendees'] = {
 
         let colors = [];
         _.forEach(attendees, function (att) {
+            if (att.user_type !== 'user' && att.user_type !== 'groupmember') {
+                return;
+            }
             let container = att.displaycontainer_id;
             let color = container ? String(container.color).replace('#', '') : 'C0C0C0';
+            colors.push(color);
+        });
+
+        return colors;
+    }
+};
+
+Tine.Calendar.infoBarColorStrategies['resource'] = {
+    getName: function() {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by resource');
+    },
+    getColors: function(event, attendeeRecord) {
+        let attendees = event.get('attendee');
+
+        let colors = [];
+        _.forEach(attendees, function (att) {
+            if (att.user_type !== 'resource') {
+                return;
+            }
+            let user = att.user_id;
+            let color = user ? String(user.color).replace('#', '') : 'C0C0C0';
             colors.push(color);
         });
 
