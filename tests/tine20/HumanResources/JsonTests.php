@@ -56,6 +56,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals(1, count($savedEmployee['contracts']));
         static::assertTrue(is_array($savedEmployee['contracts'][0]['working_time_scheme']));
+        $this->assertArrayHasKey('is_editable', $savedEmployee['contracts'][0]);
         $this->assertEquals(1, count($savedEmployee['costcenters']));
 
         // check if accounts has been created properly on aftercreate
