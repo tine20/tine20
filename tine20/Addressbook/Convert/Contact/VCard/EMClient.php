@@ -18,7 +18,7 @@
 class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Contact_VCard_Abstract
 {
     // eM Client/5.0.17595.0
-    const HEADER_MATCH = '/eM Client\/(?P<version>.*)/';
+    const HEADER_MATCH = '/e[Mm] ?Client\/(?P<version>.*)/';
     
     protected $_emptyArray = array(
         'adr_one_countryname'   => null,
