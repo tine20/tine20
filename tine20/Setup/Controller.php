@@ -2562,10 +2562,7 @@ class Setup_Controller
 
         // setup cache (via tinebase because it is disabled in setup by default)
         Tinebase_Core::setupCache(TRUE);
-        
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache ...');
-        
-        Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        Tinebase_Controller::getInstance()->cleanupCache(Zend_Cache::CLEANING_MODE_ALL);
         $cachesCleared[] = 'TinebaseCache';
 
         Tinebase_Application::getInstance()->resetClassCache();
