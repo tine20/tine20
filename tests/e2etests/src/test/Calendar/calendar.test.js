@@ -24,12 +24,12 @@ describe('ColorPicker', () => {
         await page.waitFor(1000);  //wait to expand tree
         await addTestCalendar(page,'Meine Kalender', privat);
     });
-    test('change color on private calendar', async () => {
+    test.skip('change color on private calendar', async () => {
         await expect(page).toMatchElement('span', {text: privat});
         await changeColor(page, privat,'008080');
         await changeColor(page, privat,'008080', true);
     });
-    test('change color on shared calendar', async () => {
+    test.skip('change color on shared calendar', async () => {
         await expect(page).toMatchElement('span', {text: shared});
         await changeColor(page, shared,'008080');
         await changeColor(page, shared,'008080', true);
