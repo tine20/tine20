@@ -791,9 +791,8 @@ Tine.Tinebase.common = {
      */
     linkifyText: function(text, cb, scope) {
         require.ensure(["linkifyjs", "linkifyjs/html"], function() {
-            var linkify = require('linkifyjs');
-            var linkifyHtml = require('linkifyjs/html');
-            var linkifyed = linkifyHtml(text);
+            const linkifyHtml = require('linkifyjs/html');
+            let linkifyed = linkifyHtml(text);
 
             if (Ext.isFunction(cb)) {
                 cb.call(scope || window, linkifyed);
