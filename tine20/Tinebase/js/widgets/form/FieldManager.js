@@ -122,6 +122,7 @@ Tine.widgets.form.FieldManager = function() {
                     if (category === 'editDialog') {
                         field.xtype = 'checkbox';
                         field.boxLabel = field.fieldLabel;
+                        field.checked = field['default'];
                         field.hideLabel = true;
                         field.blurOnChange = true;
                     } else {
@@ -206,14 +207,16 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'record':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
+                        if (fieldDefinition.config.additionalFilterSpec) {
+                            field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
+                        }
                         if (category === 'editDialog' && fieldDefinition.config.dependentRecords) {
                             field.xtype = 'tw-recordEditField';
                             field.appName = fieldDefinition.config.appName;
                             field.modelName = fieldDefinition.config.modelName;
                             field.fieldName = fieldDefinition.fieldName;
                             break;
-                        } 
-                        
+                        }
                         var picker = Tine.widgets.form.RecordPickerManager.get(
                             fieldDefinition.config.appName,
                             fieldDefinition.config.modelName,
@@ -225,6 +228,9 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'records':
                     if (category === 'editDialog') {
+                        if (fieldDefinition.config.additionalFilterSpec) {
+                            field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
+                        }
                         field.xtype = 'wdgt.pickergrid';
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
                         field.allowCreateNew = _.get(fieldDefinition, 'config.dependentRecords', false);
