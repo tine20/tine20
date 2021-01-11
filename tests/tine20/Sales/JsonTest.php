@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -38,7 +38,7 @@ class Sales_JsonTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
         
         $this->_instance = new Sales_Frontend_Json();
@@ -452,10 +452,10 @@ class Sales_JsonTest extends TestCase
     {
         $data = $this->_instance->getRegistryData();
 
-        $this->assertTrue(isset($data['defaultContainer']));
-        $this->assertTrue(isset($data['defaultContainer']['path']));
-        $this->assertTrue(isset($data['defaultContainer']['account_grants']));
-        $this->assertTrue(is_array($data['defaultContainer']['account_grants']));
+        $this->assertTrue(isset($data['defaultContractContainer']));
+        $this->assertTrue(isset($data['defaultContractContainer']['path']));
+        $this->assertTrue(isset($data['defaultContractContainer']['account_grants']));
+        $this->assertTrue(is_array($data['defaultContractContainer']['account_grants']));
     }
 
     /**
