@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Felamimail');
@@ -242,14 +242,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 height = 500;
                             }
 
-                            // TODO fix linkify? this destroys the textarea
-                            /*
-                            Tine.Tinebase.common.linkifyText(body, function(linkified) {
-                                var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
-                                Ext.fly(bodyEl).update(linkified);
-                            }, this.panel);
-                            */
-
                             body = '<textarea ' +
                                 'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                                 'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
@@ -257,6 +249,11 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         } else if (messageData.body_content_type != 'text/html' || messageData.body_content_type_of_body_property_of_this_record == 'text/plain') {
                             // message content is text and account format non-text
                             body = Ext.util.Format.nl2br(body);
+                        } else {
+                            Tine.Tinebase.common.linkifyText(body, function(linkified) {
+                                var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
+                                Ext.fly(bodyEl).update(linkified);
+                            }, this.panel);
                         }
                     }
                     return body;
