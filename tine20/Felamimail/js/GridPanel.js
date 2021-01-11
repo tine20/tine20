@@ -980,21 +980,42 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * get next message in grid
      * 
-     * @param {Ext.util.MixedCollection} msgs
+     * @param msgs
      * @return Tine.Felamimail.Model.Message
      */
     getNextMessage: function(msgs) {
-        
         var nextRecord = null;
         
-        if (msgs.getCount() == 1 && this.getStore().getCount() > 1) {
-            // select next message (or previous if it was the last or BACKSPACE)
-            var lastIdx = this.getStore().indexOf(msgs.last()),
-                direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
+        if (msgs.getCount() >= 1 && this.getStore().getCount() > 1) {
+            if (msgs.getCount() === 1) {
+                // select next message (or previous if it was the last or BACKSPACE)
+                var lastIdx = this.getStore().indexOf(msgs.last()),
+                    direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
+
+                nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
+                if (! nextRecord) {
+                    nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
+                }
+            }
             
-            nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
-            if (! nextRecord) {
-                nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
+            if (msgs.getCount() > 1) {
+                const sm = this.getGrid().getSelectionModel();
+                msgs.each(function (msg) {
+                    let idx = this.getStore().indexOfId(msg.id);
+                    nextRecord = this.getStore().getAt(idx + 1);
+                    
+                    // return the first unselected row as nextRecord
+                    if (!sm.isSelected(idx + 1)) {
+                        return false;
+                    }
+                    
+                    //select the previous row before the first selected one, if user select till the last row
+                    if (idx === (this.getStore().getCount() - 1)) {
+                        idx = this.getStore().indexOfId(msgs.items[0].id);
+                        nextRecord = this.getStore().getAt(idx - 1) || null;
+                        return false;
+                    }
+                }, this)
             }
         }
         
@@ -1699,21 +1720,38 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param option
      */
     processSpamStrategy: async function (option) {
-        let sm = this.getGrid().getSelectionModel();
-        let msgs =  sm.getCount() > 0 ? sm.getSelectionsCollection() : null;
-
-        if (msgs) {
-            try {
-                // this is needed to prevent grid reloads while messages are moved or deleted
-                this.movingOrDeleting = true;
-
-                await msgs.each(function (msg) {
-                    Tine.Felamimail.processSpam(msg, option);
-                }, this);
-            } finally {
-                this.app.getMainScreen().getCenterPanel().doRefresh();
-                this.movingOrDeleting = false;
+        const sm = this.getGrid().getSelectionModel();
+        const msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
+        const nextRecord = sm.isFilterSelect ? null : this.getNextMessage(msgs);
+        
+        try {
+            const promises = [];
+            
+            msgs.each(function (msg) {
+                if ('spam' === option) {
+                    this.getStore().remove(msg);
+                    this.deleteQueue.push(msg.id);
+                }
+                
+                if ('ham' === option) {
+                    let subject = msg.get('subject').replace(/^SPAM\? \(.+\) \*\*\* /, '');
+                    msg.set('subject', subject);
+                    msg.set('is_spam_suspicions', false);
+                    msg.commit();
+                    this.editBuffer.push(msg);
+                }
+                
+                promises.push(Tine.Felamimail.processSpam(msg, option));
+            }, this);
+            
+            if (nextRecord && 'spam' === option) {
+                sm.selectRecords([nextRecord]);
             }
+            
+            this.doRefresh();
+            await Promise.allSettled(promises);
+        } catch (e) {
+            this.doRefresh();
         }
     },
 
@@ -1726,10 +1764,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return ;
         }
 
-        let sm = this.getGrid().getSelectionModel();
-        let msgs =  sm.getCount() > 0 ? sm.getSelectionsCollection() : null;
-        let folder = this.getCurrentFolderFromTree();
-        let account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) : null;
+        const sm = this.getGrid().getSelectionModel();
+        const msgs =  sm.getCount() > 0 ? sm.getSelectionsCollection() : null;
+        const folder = this.getCurrentFolderFromTree();
+        const account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) : null;
 
         this.action_spam.show();
         this.action_ham.show();
@@ -1745,7 +1783,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (msgs) {
             msgs.each(function (msg) {
                 if (!msg.get('is_spam_suspicions')) {
-                    this.action_spam.disable();
                     this.action_ham.disable();
                 }
             }, this);

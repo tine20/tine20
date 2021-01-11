@@ -577,13 +577,9 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
      * @param option
      */
     processSpamStrategy: async function (option) {
-        try {
-            await Tine.Felamimail.processSpam(this.record.data,option);
-            this.spamToolbar.hide();
-            this.messageRecordPanel.doLayout();
-        } finally {
-            this.app.getMainScreen().getCenterPanel().doRefresh();
-        }
+        this.spamToolbar.hide();
+        this.messageRecordPanel.doLayout();
+        await this.app.getMainScreen().getCenterPanel().processSpamStrategy(option);
     },
 
     /**
