@@ -269,10 +269,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setState($name, $value)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
-        Tinebase_State::getInstance()->setState($name, $value);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
+
+        try {
+            Tinebase_State::getInstance()->setState($name, $value);
+            $success = true;
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' Failed to set state: ' . $tead->getMessage());
+            $success = false;
+        }
         
-        return ['success' => true];
+        return ['success' => $success];
     }
     
     /**
