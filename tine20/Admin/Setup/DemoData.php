@@ -122,7 +122,9 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $groupArray['container_id'] = $internalAddressbook->getId();
             $members = array();
             foreach ($groupArray['members'] as $member) {
-                $members[] = $this->_personas[$member]->getId();
+                if (isset($this->_personas[$member]) && is_object($this->_personas[$member])) {
+                    $members[] = $this->_personas[$member]->getId();
+                }
             }
             
             try {
@@ -204,7 +206,12 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $pwd = $this->_getUserPassword($user);
                 $user->imapUser = new Tinebase_Model_EmailUser(['emailPassword' => $pwd]);
                 $user->smtpUser = new Tinebase_Model_EmailUser(['emailPassword' => $pwd]);
-                $user = Admin_Controller_User::getInstance()->create($user, $pwd, $pwd);
+                try {
+                    $user = Admin_Controller_User::getInstance()->create($user, $pwd, $pwd);
+                } catch (Tinebase_Exception_SystemGeneric $tesg) {
+                    echo 'User/Email ' . $user->accountLoginName . '  already exists. Skipping...' . PHP_EOL;
+                    continue;
+                }
             }
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
