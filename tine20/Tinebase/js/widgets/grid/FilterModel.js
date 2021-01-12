@@ -132,6 +132,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         this.app = Tine.Tinebase.appMgr.get(this.app);
 
         if (this.app) {
+            this.itemName = this.itemName || this.label;
             this.label = this.app.i18n._hidden(this.label);
         }
         
@@ -234,10 +235,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         var me = this,
             app = Tine.Tinebase.appMgr.get(me.app),
             i18n = app ? app.i18n : window.i18n,
-            gender = this.gender || i18n._hidden('GENDER_' + me.label);
+            gender = this.gender || i18n._hidden('GENDER_' + (me.itemName || me.label));
 
         return String(gender).match(/^GENDER_/) ? 'other' : gender;
     },
+    
     /**
      * operator renderer
      * 
@@ -261,6 +263,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 {operator: 'less',          label: i18n._('is less than')},
                 {operator: 'not',           label: i18n._('is not')},
                 {operator: 'in',            label: formatMessage('{gender, select, male {one of} female {one of} other {one of}}', {gender: gender})},
+                {operator: 'allOf',         label: formatMessage('{gender, select, male {all of} female {all of} other {all of}}', {gender: gender})},
                 {operator: 'notin',         label: formatMessage('{gender, select, male {none of} female {none of} other {none of}}', {gender: gender})},
                 {operator: 'before',        label: i18n._('is before')},
                 {operator: 'after',         label: i18n._('is after')},

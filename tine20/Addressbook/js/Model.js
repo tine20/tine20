@@ -158,8 +158,8 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
     var filters = [
         {label: i18n._('Quick Search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
-        {filtertype: 'addressbook.listMember', app: app},
-        {filtertype: 'addressbook.listRoleMember', app: app},
+        {filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Addressbook.Model.List, multipleForeignRecords: true, ownField: 'list' },
+        {filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Addressbook.Model.ListRole, multipleForeignRecords:true, ownField: 'list_role_id' },
         {label: app.i18n._('Title'),                                                    field: 'n_prefix' },
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
@@ -352,7 +352,7 @@ Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
     modelName: 'ListRole',
     titleProperty: 'name',
     // ngettext('List Function', 'List Functions', n); gettext('List Functions');
-    recordName: 'List Function',
+    recordName: 'List Function', // _('GENDER_List Function')
     recordsName: 'List Functions'
 });
 

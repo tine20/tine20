@@ -1208,6 +1208,12 @@ msgstr "Alle Kontakte"
 msgid "GENDER_Contact"
 msgstr "male"
 
+msgid "GENDER_List"
+msgstr "female"
+
+msgid "GENDER_List Function"
+msgstr "female"
+
 msgid "Addressbooks to export"
 msgstr "Zu exportierende Adressbücher"
 
