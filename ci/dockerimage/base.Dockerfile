@@ -14,6 +14,7 @@ FROM alpine:3.12 as cache-invalidator
 ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
 ARG ALPINE_PHP_REPOSITORY_REPOSITORY=main
 ARG ALPINE_PHP_PACKAGE=php7
+ARG CACHE_BUST=0
 RUN apk add --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
                                   ${ALPINE_PHP_PACKAGE} \

@@ -47,86 +47,21 @@ function build_image() {
     CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
     MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
 
-    echo "docker build ${TARGET} image"
+    IMAGE="${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    CACHE_IMAGE="${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
+    MAJOR_CACHE_IMAGE="${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
 
-    docker pull "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" || echo "no cache image for ${TARGET}"
-    docker pull "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" || echo "no major cache image for ${TARGET}"
+    # config via env
+    PHP_VERSION=${PHP_VERSION}
+    BASE_IMAGE="${REGISTRY}/base-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    SOURCE_IMAGE="${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    BUILD_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    BUILT_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
 
-    case "${PHP_VERSION}" in
-        7.3)
-            ALPINE_PHP_REPOSITORY_BRANCH=v3.12
-            ALPINE_PHP_REPOSITORY_REPOSITORY=main
-            ALPINE_PHP_PACKAGE=php7
-            ;;
-        7.4)
-            ALPINE_PHP_REPOSITORY_BRANCH=edge
-            ALPINE_PHP_REPOSITORY_REPOSITORY=main
-            ALPINE_PHP_PACKAGE=php7
-            ;;
-        8.0)
-            ALPINE_PHP_REPOSITORY_BRANCH=edge
-            ALPINE_PHP_REPOSITORY_REPOSITORY=community
-            ALPINE_PHP_PACKAGE=php8
-            ;;
-        *)
-            echo "Unsupported php version: ${PHP_VERSION}!"
-            exit 1
-            ;;
-    esac
+    apk add bash util-linux
 
-    docker build ${DOCKER_ADDITIONAL_BUILD_ARGS} \
-        --target "${TARGET}" \
-        --tag "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
-        --file "ci/dockerimage/${TARGET}.Dockerfile" \
-        --build-arg "BUILDKIT_INLINE_CACHE=1" \
-        --build-arg "BASE_IMAGE=${REGISTRY}/base-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
-        --build-arg "BASE_CACHE_INVALIDATOR=base-cache-invalidator-commit" \
-        --build-arg "DEPENDENCY_IMAGE=${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
-        --build-arg "DEPENDENCY_CACHE_INVALIDATOR=dependency-cache-invalidator-commit" \
-        --build-arg "SOURCE_IMAGE=${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
-        --build-arg "SOURCE_ICON_SET_PROVIDER=source-icon-set-provider-commit" \
-        --build-arg "BUILD_IMAGE=${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
-        --build-arg "BUILT_IMAGE=${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}" \
-        --build-arg "DEV_CACHE_INVALIDATOR=dev-cache-invalidator-commit" \
-        --build-arg "NODE_TLS_REJECT_UNAUTHORIZED=0" \
-        --build-arg NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND}" \
-        --build-arg "CUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}" \
-        --build-arg "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}" \
-        --build-arg "CUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}" \
-        --build-arg "CUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" \
-        --build-arg GERRIT_URL="${GERRIT_URL}" \
-        --build-arg GERRIT_USER="${GERRIT_USER}" \
-        --build-arg GERRIT_PASSWORD="${GERRIT_PASSWORD}" \
-        --build-arg "ALPINE_PHP_REPOSITORY_BRANCH=${ALPINE_PHP_REPOSITORY_BRANCH}" \
-        --build-arg "ALPINE_PHP_REPOSITORY_REPOSITORY=${ALPINE_PHP_REPOSITORY_REPOSITORY}" \
-        --build-arg "ALPINE_PHP_PACKAGE=${ALPINE_PHP_PACKAGE}" \
-        --cache-from "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" \
-        --cache-from "${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" \
-        .
-}
-
-# If no layer changed during the build used the cache image.
-# If no layer changed during the build the content has not changed. But docker uses a new image sha. The old image is
-# identical. By using it we keep the same image sha if nothing has changed.
-function use_cached_image_when_nothing_changed() {
-    TARGET=$1
-    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-
-    echo "docker inspect ${TARGET}"
-    if docker pull -q "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"; then
-        NEW_LAYER=$(docker inspect --format "{{range .RootFS.Layers}}{{.}}{{end}}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}")
-        ORIGINAL_LAYER=$(docker inspect --format "{{range .RootFS.Layers}}{{.}}{{end}}" "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}")
-
-        echo "docker inspect new image:"
-        docker inspect "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-        echo "docker inspect original image:"
-        docker inspect "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
-
-        if test ${NEW_LAYER} = ${ORIGINAL_LAYER}; then
-            docker tag "${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}" "${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-            echo "Building ${TARGET} did not result in changes, using ${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
-        fi
-    fi
+    ./ci/dockerimage/make.sh -u -p -i "${IMAGE}" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" "${TARGET}"
 }
 
 # push image to build registry(ecr)

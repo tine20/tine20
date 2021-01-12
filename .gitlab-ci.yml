@@ -35,13 +35,8 @@ workflow:
   script:
     - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
     - build_or_reuse_image base $REUSE_IMAGES
-    - use_cached_image_when_nothing_changed base
-    - push_image base
     - build_or_reuse_image source $REUSE_IMAGES
-    - use_cached_image_when_nothing_changed source
-    - push_image source
     - build_or_reuse_image test-source $REUSE_IMAGES
-    - push_image test-source
   timeout: 60m
 docker_build_source_reuse:
   extends: .docker_build_source
@@ -71,30 +66,26 @@ docker_build_source_build:
 docker_build_built:
   extends: .abstract_jobs.docker
   stage: build2
+  variables:
+    KUBERNETES_CPU_REQUEST: 1
+    KUBERNETES_MEMORY_REQUEST: 2Gi
   script:
     - build_image build
-    - use_cached_image_when_nothing_changed build
     - build_image built
-    - use_cached_image_when_nothing_changed built
-    - push_image build
-    - push_image built
     - build_image test-built
-    - push_image test-built
   rules:
     - if: *TESTS_NEEDING_BUILT_IMAGE
       when: on_success
     - if: *DEPLOYS_NEEDING_BUILT_IMAGE
       when: on_success
     - when: never
-  timeout: 60m # time run: 28m
+  timeout: 120m
 
 docker_build_dev:
   extends: .abstract_jobs.docker
   stage: build2
   script:
     - build_image dev
-    - use_cached_image_when_nothing_changed dev
-    - push_image dev
   rules:
     - if: *DEPLOYS_NEEDING_DEV_IMAGE
       when: on_success
