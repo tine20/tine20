@@ -22,16 +22,14 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     /**
      * @var array list of allowed operators
      */
-    protected $_operators = array(
-        0 => 'AND',
-        1 => 'OR',
-        2 => 'equals', //expects ID as value
-        3 => 'in', //expects IDs as value
-        4 => 'not', //expects ID as value
-        5 => 'notin', //expects IDs as value
-        6 => 'notDefinedBy:AND',
-        7 => 'notDefinedBy:OR',
-    );
+    protected $_operators = [
+        'equals', //expects ID as value
+        'in', //expects IDs as value
+        'not', //expects ID as value
+        'notin', //expects IDs as value
+        'definedBy',
+        'notDefinedBy',
+    ];
     
     /**
      * @var Tinebase_Model_Filter_FilterGroup
@@ -59,7 +57,61 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      * if the value was null
      */
     protected $_valueIsNull = false;
-        
+
+    protected $_conditionSubFilter = 'AND';
+
+    protected $_oneOfSetOperator = true;
+
+    protected $_orgOperator = '';
+
+    /**
+     * sets operator
+     *
+     * @param string $_operator
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function setOperator($_operator)
+    {
+        $this->_orgOperator = $_operator;
+
+        switch($_operator) {
+            case 'definedBy':
+            case 'notDefinedBy':
+                $_operator = $this->_parseOperator($_operator, [
+                    'setOperator'   => [
+                        'oneOf'         => true,
+                        'allOf'         => true,
+                    ],
+                    'condition'     => [
+                        'and'           => true,
+                        'or'            => true,
+                    ]
+                ], $operatorParams);
+                if (isset($operatorParams['setOperator']) && 'oneOf' !== $operatorParams['setOperator']) {
+                    $this->_oneOfSetOperator = false;
+                }
+                if (isset($operatorParams['condition']) && 'and' !== $operatorParams['condition']) {
+                    $this->_conditionSubFilter = 'OR';
+                }
+                break;
+
+            // legacy handling
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case 'OR':
+                $this->_conditionSubFilter = 'OR';
+            case 'AND':
+                $_operator = 'definedBy';
+                break;
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case 'notDefinedBy:OR':
+                $this->_conditionSubFilter = 'OR';
+            case 'notDefinedBy:AND':
+                $_operator = 'notDefinedBy';
+                break;
+        }
+        parent::setOperator($_operator);
+    }
+
     /**
      * creates corresponding filtergroup
      *
@@ -121,7 +173,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             $this->_options['filtergroup'],
             $this->_value,
-            strpos($this->_operator, 'OR') !== false ? 'OR' : 'AND',
+            $this->_conditionSubFilter,
             $this->_options
         );
     }
@@ -157,7 +209,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     {
         $result = array(
             'field'     => $this->_field,
-            'operator'  => $this->_operator,
+            'operator'  => $this->_orgOperator,
         );
         
         if ($this->_id) {
