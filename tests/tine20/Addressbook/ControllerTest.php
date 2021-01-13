@@ -952,6 +952,23 @@ class Addressbook_ControllerTest extends TestCase
 
         $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'definedBy', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $list1->getId()]
+            ]]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'definedBy?condition=and&setOperator=allOf', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $list1->getId()]
+            ]]
+        ]));
+        static::assertSame(1, $result->count(), 'search result count mismatch');
+        static::assertSame($contact1->getId(), $result->getFirstRecord()->getId(), 'search result id mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
             ['field' => 'list', 'operator' => 'AND', 'value' => [
                 ['field' => 'id', 'operator' => 'equals', 'value' => $list2->getId()]
             ]]
@@ -963,6 +980,32 @@ class Addressbook_ControllerTest extends TestCase
             Addressbook_Model_Contact::class, [
             ['field' => 'list', 'operator' => 'AND', 'value' => [
                 ['field' => 'id', 'operator' => 'in', 'value' => [$list1->getId(), $list2->getId()]]
+            ]]
+        ]));
+        static::assertSame(2, $result->count(), 'search result count mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'definedBy?condition=and&setOperator=allOf', 'value' => [
+                ['field' => 'id', 'operator' => 'in', 'value' => [$list1->getId(), $list2->getId()]]
+            ]]
+        ]));
+        static::assertSame(0, $result->count(), 'search result count mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'definedBy?condition=or&setOperator=allOf', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $list1->getId()],
+                ['field' => 'id', 'operator' => 'equals', 'value' => $list2->getId()]
+            ]]
+        ]));
+        static::assertSame(0, $result->count(), 'search result count mismatch');
+
+        $result = $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'list', 'operator' => 'definedBy?condition=or', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $list1->getId()],
+                ['field' => 'id', 'operator' => 'equals', 'value' => $list2->getId()]
             ]]
         ]));
         static::assertSame(2, $result->count(), 'search result count mismatch');
