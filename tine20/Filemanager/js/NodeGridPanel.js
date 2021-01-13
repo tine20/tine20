@@ -510,11 +510,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 enableToggle: true
             });
 
-            postal.subscribe({
+            this.postalSubscriptions = [];
+            this.postalSubscriptions.push(postal.subscribe({
                 channel: 'areaLocks',
                 topic: this.dataSafeAreaName +'.*',
                 callback: this.applyDataSafeState.createDelegate(this)
-            });
+            }));
 
             this.applyDataSafeState();
         }
@@ -588,6 +589,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.actionUpdater.addActions(actions);
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     /**
      * fm specific delete handler
      */

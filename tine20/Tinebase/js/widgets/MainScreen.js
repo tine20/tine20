@@ -70,13 +70,19 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     initMessageBus: function() {
         if (Tine.Tinebase.areaLocks.hasLock(this.app.appName)) {
-            postal.subscribe({
+            this.postalSubscriptions = [];
+            this.postalSubscriptions.push(postal.subscribe({
                 channel: "areaLocks",
                 topic: this.app.appName + '.*',
                 callback: this.onAreaLockChange.createDelegate(this)
-            });
+            }));
         }
     },
 

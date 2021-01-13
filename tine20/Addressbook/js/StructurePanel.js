@@ -74,6 +74,11 @@ Tine.Addressbook.StructurePanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Addressbook.StructurePanel.superclass.initComponent.call(this);
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     initGrid: function() {
         var me = this,
             view = {};
@@ -118,11 +123,12 @@ Tine.Addressbook.StructurePanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     // NOTE: not yet, reloading(relayout) resets viewport
     initMessageBus: function() {
-        postal.subscribe({
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: '*.*.update',
             callback: this.onRecordChanges.createDelegate(this)
-        });
+        }));
     },
 
     /**
