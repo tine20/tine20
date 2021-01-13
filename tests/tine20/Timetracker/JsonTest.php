@@ -174,6 +174,27 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(1, $searchResult['totalcount']);
     }
 
+    public function testSearchTimesheetsWithTimeaccountForeignIdFilter()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+
+        $filter = array(
+            array('field' => 'timeaccount_id', 'operator' => 'definedBy?a=b', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $timesheetData['timeaccount_id']['id']]
+            ]),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount']);
+
+        // this is deprected and eventually should be removed together with Tinebase_Model_Filter_FilterGroup::createFilter ->
+        $filter = array(
+            array('field' => 'timeaccount_id', 'operator' => 'contains', 'value' => $timesheetData['timeaccount_id']['title']),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount']);
+    }
+
     /**
      * try to get a Timesheet with a tag filter
      *
