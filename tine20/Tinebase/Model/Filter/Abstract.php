@@ -234,8 +234,8 @@ abstract class Tinebase_Model_Filter_Abstract
     {
         $_operatorParams = [];
         $urlParts = parse_url($_operator);
-        if (isset($urlParts[PHP_URL_QUERY])) {
-            parse_str($urlParts[PHP_URL_QUERY], $res);
+        if (isset($urlParts['query'])) {
+            parse_str($urlParts['query'], $res);
             foreach ($res as $key => $val) {
                 if (isset($_allowedParams[$key])) {
                     if (!is_array($_allowedParams[$key]) || isset($_allowedParams[$key][$val])) {
@@ -244,7 +244,7 @@ abstract class Tinebase_Model_Filter_Abstract
                 }
             }
         }
-        return $urlParts[PHP_URL_PATH];
+        return $urlParts['path'];
     }
     
     /**

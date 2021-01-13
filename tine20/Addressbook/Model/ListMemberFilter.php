@@ -41,7 +41,19 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_ForeignRe
         } else {
             $this->_options['filtergroup'] = Addressbook_Model_List::class;
         }
-        return parent::_setFilterGroup();
+
+        parent::_setFilterGroup();
+
+        if ('OR' === $this->_conditionSubFilter) {
+            $outerFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                $this->_options['filtergroup'],
+                [],
+                'AND',
+                $this->_options
+            );
+            $outerFilter->addFilterGroup($this->_filterGroup);
+            $this->_filterGroup = $outerFilter;
+        }
     }
 
     /**

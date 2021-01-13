@@ -75,8 +75,21 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         $this->_orgOperator = $_operator;
 
         switch($_operator) {
-            case 'definedBy':
-            case 'notDefinedBy':
+            // legacy handling
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case 'OR':
+                $this->_conditionSubFilter = 'OR';
+            case 'AND':
+                $_operator = 'definedBy';
+                break;
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case 'notDefinedBy:OR':
+                $this->_conditionSubFilter = 'OR';
+            case 'notDefinedBy:AND':
+                $_operator = 'notDefinedBy';
+                break;
+
+            default:
                 $_operator = $this->_parseOperator($_operator, [
                     'setOperator'   => [
                         'oneOf'         => true,
@@ -93,20 +106,6 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                 if (isset($operatorParams['condition']) && 'and' !== $operatorParams['condition']) {
                     $this->_conditionSubFilter = 'OR';
                 }
-                break;
-
-            // legacy handling
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 'OR':
-                $this->_conditionSubFilter = 'OR';
-            case 'AND':
-                $_operator = 'definedBy';
-                break;
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 'notDefinedBy:OR':
-                $this->_conditionSubFilter = 'OR';
-            case 'notDefinedBy:AND':
-                $_operator = 'notDefinedBy';
                 break;
         }
         parent::setOperator($_operator);
