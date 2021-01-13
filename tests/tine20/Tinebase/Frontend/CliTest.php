@@ -301,8 +301,6 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * testMonitoringCheckConfig
-     *
-     * @group nogitlabci
      */
     public function testMonitoringCheckConfig()
     {
