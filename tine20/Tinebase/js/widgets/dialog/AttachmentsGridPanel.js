@@ -84,17 +84,23 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         }
 
         Tine.widgets.dialog.AttachmentsGridPanel.superclass.initComponent.call(this);
-        
-        postal.subscribe({
+
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: 'Tinebase.Tree_Node.*',
             callback: this.onAttachmentChanges.createDelegate(this)
-        });
+        }));
 
         this.on('rowdblclick', this.onRowDbClick, this);
         this.on('keydown', this.onKeyDown, this);
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     /**
      * bus notified about record changes
      */

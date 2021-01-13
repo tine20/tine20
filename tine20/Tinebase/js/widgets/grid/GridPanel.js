@@ -457,12 +457,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     initMessageBus: function() {
-        postal.subscribe({
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
             callback: this.onRecordChanges.createDelegate(this)
-        });
+        }));
     },
 
     /**

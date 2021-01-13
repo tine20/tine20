@@ -72,25 +72,30 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 handler : this.dropIntoTree
             });
         }
-
-        postal.subscribe({
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
             callback: this.onRecordChanges.createDelegate(this)
-        });
+        }));
 
         this.dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock(this.dataSafeAreaName);
         if (this.dataSafeEnabled) {
-            postal.subscribe({
+            this.postalSubscriptions.push(postal.subscribe({
                 channel: 'areaLocks',
                 topic: this.dataSafeAreaName +'.*',
                 callback: this.applyDataSafeState.createDelegate(this)
-            });
+            }));
 
             this.dataSafeIsLocked = Tine.Tinebase.areaLocks.isLocked(this.dataSafeAreaName)
         }
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     onRecordChanges: function(data, e) {
         if (data.type == 'folder') {
             var _ = window.lodash,
