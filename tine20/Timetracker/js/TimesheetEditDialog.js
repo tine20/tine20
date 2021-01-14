@@ -68,13 +68,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     
     onTimeaccountSelect: function(field, timeaccount) {
         this.onTimeaccountUpdate(field, timeaccount);
-        //set factor from timeaccount except it was manually changed before
-        if (!this.factorChanged) {
-            this.factor = timeaccount.data.accounting_time_factor;
+        // set factor from timeaccount except it was manually changed before
+        if (timeaccount) {
+            if (!this.factorChanged) {
+                this.factor = timeaccount.data.accounting_time_factor;
+            }
+            this.getForm().findField('accounting_time_factor').setValue(this.factor);
+
+            this.calculateAccountingTime();
         }
-        this.getForm().findField('accounting_time_factor').setValue(this.factor);
-        
-        this.calculateAccountingTime();
     },
 
     /**
