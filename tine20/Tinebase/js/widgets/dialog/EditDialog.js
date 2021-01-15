@@ -363,7 +363,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
         // added possibility to disable using customfield plugin
         if (this.disableCfs !== true) {
-            this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+            const cfPlugin = new Tine.widgets.customfields.EditDialogPlugin({});
+            this.plugins.push(cfPlugin);
+            this.initPlugin(cfPlugin);
+            
         }
         Ext.ux.pluginRegistry.addRegisteredPlugins(this);
 
