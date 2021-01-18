@@ -3,13 +3,13 @@
         'host'          => 'localhost',
         'dbname'        => 'tine20',
         'username'      => 'root',
-        'password'      => '',
+        'password'      => 'root',
         'tableprefix'   => 'tine20_',
         'adapter'       => 'pdo_mysql',
     ),
    'login' => array(
-       'username'      => 'travis',
-       'password'      => 'travis'
+       'username'      => 'github',
+       'password'      => 'github'
     ),
     'caching' => array (
         'active' => false,

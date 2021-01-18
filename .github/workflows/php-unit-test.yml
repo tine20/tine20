@@ -13,28 +13,36 @@ defaults:
 jobs:
 
   test:
-    name: test tine20
-    runs-on: ubuntu-18.04
-    services:
-      php:
-        image: php:7.4
-   
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-18.04]
+        php-versions: ['7.2', '7.4']
+
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     steps:
-    - name: checkout tine20
+    - name: Checkout
       uses: actions/checkout@v2
 
-    - name: install tine20
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+
+    - name: Run mysql
       run: |
-        sudo systemctl enable mysql.service
         sudo systemctl start mysql.service
-        mysql -uroot -h127.0.0.1 -proot -e 'CREATE DATABASE IF NOT EXISTS tine20;'        
+        mysql -uroot -proot --host 127.0.0.1  -e 'CREATE DATABASE IF NOT EXISTS tine20;'  
+
+    - name: Install tine20
+      run: |      
         cd tine20
         composer install --ignore-platform-reqs
-        cp config.inc.travis.php config.inc.php
-        cp install.properties.travis install.properties
+        cp config.inc.github.php config.inc.php
+        cp install.properties.github install.properties
         vendor/bin/phing tine-install
 
-    - name: unit test
+    - name: Unit tests
       run: |
-        cd ../tests/tine20
-        ../../tine20/vendor/bin/phpunit --color TravisTests.php
+        cd tests/tine20
+        ../../tine20/vendor/bin/phpunit --color GithubTests.php
