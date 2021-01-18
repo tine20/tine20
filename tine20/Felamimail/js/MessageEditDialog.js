@@ -1786,6 +1786,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 reject(me.app.i18n._('No recipients set.'));
             }
 
+            if (me.record.get('massMailingFlag') && (cc.length > 0 || bcc.length > 0)) {
+                reject(me.app.i18n._('Mass mailing is not allowed for CC or BCC recipients. Please remove them.'));
+            }
+
             if (me.button_toggleEncrypt.pressed && me.mailvelopeEditor) {
                 // always add own address so send message can be decrypted
                 all.push(me.record.get('from_email'));

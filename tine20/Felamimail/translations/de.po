@@ -1944,3 +1944,6 @@ msgstr "Besten Dank."
 
 msgid "Your %1$s Team"
 msgstr "Ihr %1$s Team"
+
+msgid "Mass mailing is not allowed for CC or BCC recipients. Please remove them."
+msgstr "Massen-Mails werden nicht an die eingetragenen CC und/oder BCC Empfänger geschickt. Bitte entfernen Sie diese."
