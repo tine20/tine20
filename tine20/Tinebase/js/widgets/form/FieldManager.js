@@ -296,6 +296,10 @@ Tine.widgets.form.FieldManager = function() {
                     field.initialPath = fieldDefinition.config.initialPath;
                     field.fileName = fieldDefinition.config.fileName;
                     break;
+                case 'hexcolor':
+                    field.xtype = 'colorfield';
+                    field.width = 80;
+                    break;
                 default:
                     field.xtype = 'textfield';
                     if (fieldDefinition.length) {

@@ -874,6 +874,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'application'           => Tinebase_Model_Filter_Text::class,
         'numberableStr'         => Tinebase_Model_Filter_Text::class,
         'numberableInt'         => Tinebase_Model_Filter_Int::class,
+        'hexcolor'              => Tinebase_Model_Filter_Text::class,
     );
 
     /**
@@ -896,6 +897,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_validatorMapping = array(
         'record'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'relation'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'hexcolor'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '#969696', Zend_Filter_Input::VALIDATE => array('Regex' => '/^#[0-9a-fA-F]{6}$/'))
     );
 
     /**

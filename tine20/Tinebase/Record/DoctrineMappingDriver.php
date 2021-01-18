@@ -46,6 +46,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_USER                  => 'string',
         MCC::TYPE_BOOLEAN               => 'boolean',
         MCC::TYPE_MONEY                 => 'float',
+        MCC::TYPE_HEX_COLOR             => 'string',
         // TODO replace that with a single type 'datetime_separated'?
 //        'datetime_separated' => 'date',
         'datetime_separated_date' => 'date',
@@ -193,6 +194,9 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         if (isset(self::$_typeMap[$config[self::TYPE]])) {
             if ($config[self::TYPE] === self::TYPE_CONTAINER) {
                 $config[self::LENGTH] = 40;
+            }
+            if ($config[self::TYPE] === self::TYPE_HEX_COLOR) {
+                $config[self::LENGTH] = 7;
             }
             $config[self::TYPE] = self::$_typeMap[$config[self::TYPE]];
             $config['doctrineIgnore'] = $defaultDoctrineIgnore;
