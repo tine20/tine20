@@ -1412,8 +1412,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // save draft in draft folder
-        $draft = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
-        return $draft;
+        return Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
     }
 
     /**
