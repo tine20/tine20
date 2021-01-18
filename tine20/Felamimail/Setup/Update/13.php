@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Tine 2.0
  *
  * @package     Felamimail
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
@@ -14,6 +13,7 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -28,6 +28,10 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE013_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -93,8 +97,30 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
             $this->setTableVersion('felamimail_cache_message', 12);
         }
 
-        // TODO also add new fields to accounts here
-
         $this->addApplicationUpdate('Felamimail', '13.2', self::RELEASE013_UPDATE003);
+    }
+
+    public function update004()
+    {
+        if ($this->getTableVersion('felamimail_cache_message') < 13) {
+            foreach (['from_email', 'from_name'] as $indexName) {
+                $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>' . $indexName . '</name>
+                        <field>
+                            <name>' . $indexName . '</name>
+                        </field>
+                    </index>
+                ');
+                try {
+                    $this->_backend->addIndex('felamimail_cache_message', $declaration);
+                } catch (Exception $e) {
+                    // Ignore
+                }
+            }
+            $this->setTableVersion('felamimail_cache_message', 13);
+        }
+
+        $this->addApplicationUpdate('Felamimail', '13.2', self::RELEASE013_UPDATE004);
     }
 }
