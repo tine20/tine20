@@ -814,8 +814,8 @@ class Tinebase_Core
                 @mkdir($tmpdir, 0777, true);
             }
         }
-        
-        return $tmpdir;
+
+        return rtrim($tmpdir, DIRECTORY_SEPARATOR);
     }
     
     /**
