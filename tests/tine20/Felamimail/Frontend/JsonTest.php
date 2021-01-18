@@ -1029,7 +1029,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $attachment = $fullMessage['attachments'][0];
         self::assertEquals('text/html', $attachment['content-type']);
         self::assertEquals('test.eml', $attachment['filename']);
-        self::assertEquals(51882, $attachment['size']);
+        self::assertGreaterThanOrEqual(51882, $attachment['size']);
     }
 
     /**
