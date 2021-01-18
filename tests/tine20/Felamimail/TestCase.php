@@ -376,7 +376,7 @@ abstract class Felamimail_TestCase extends TestCase
             $messageToSend['attachments'] = [];
             for ($i = 1; $i <= $_attachments; $i++) {
                 $filename = 'test' . $i . '.txt';
-                $tempFiles[$i] = $this->_createTempFile($filename);
+                $tempFiles[$i] = $this->_getTempFile(null, $filename);
                 $messageToSend['attachments'][] = array(
                     'tempFile' => array(
                         'id' => $tempFiles[$i]->getId(),
@@ -437,19 +437,6 @@ abstract class Felamimail_TestCase extends TestCase
         $message = $this->_searchForMessage($folderName, $subject, $account);
         $this->assertTrue(empty($message), 'Message with subject "' . $subject . '" found in folder ' . $folderName);
         return $message;
-    }
-
-    /**
-     * @param string $tempfileName
-     * @return Tinebase_Model_TempFile
-     *
-     * @refactor TODO use \TestCase::_getTempFile
-     */
-    protected function _createTempFile($tempfileName = 'test.txt')
-    {
-        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
-        file_put_contents($tempfilePath, 'some content');
-        return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
     }
 
     /**

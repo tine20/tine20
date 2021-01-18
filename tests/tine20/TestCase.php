@@ -514,14 +514,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     
     /**
      * get test temp file
-     * 
+     *
+     * @param string|null $path
+     * @param string $filename
+     * @param string $type
+     *
      * @return Tinebase_Model_TempFile
      */
-    protected function _getTempFile()
+    protected function _getTempFile($path = null, $filename = 'test.txt', $type = 'text/plain')
     {
         $tempFileBackend = new Tinebase_TempFile();
-        $handle = fopen(dirname(__FILE__) . '/Filemanager/files/test.txt', 'r');
-        $tempfile = $tempFileBackend->createTempFileFromStream($handle);
+        $handle = fopen($path ? $path : dirname(__FILE__) . '/Filemanager/files/test.txt', 'r');
+        $tempfile = $tempFileBackend->createTempFileFromStream($handle, $filename, $type);
         fclose($handle);
         return $tempfile;
     }

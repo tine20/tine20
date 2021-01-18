@@ -113,8 +113,8 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         $result = $this->_export('stdout=1');
 
         self::assertStringContainsString('Early to bed and early to rise', $result);
-        self::assertStringContainsString('ATTACH;ENCODING=BASE64;VALUE=BINARY;FILENAME=tempfile.tmp', $result);
-        self::assertStringContainsString('X-APPLE-FILENAME=tempfile.tmp;FMTTYPE=text/plain:dGVzdCBmaWxlIGNvbn', $result);
+        self::assertStringContainsString('ATTACH;ENCODING=BASE64;VALUE=BINARY;FILENAME=test.txt', $result);
+        self::assertStringContainsString('APPLE-FILENAME=test.txt;FMTTYPE=text/plain:dGVzdCBmaWxlIGNvbn', $result);
     }
 
     public function testExportIntoFile()
