@@ -89,6 +89,7 @@ class Tinebase_Twig
         $tbConfig = Tinebase_Config::getInstance();
 
         $globals = [
+            'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
             'branding'          => [
                 'logo'              => Tinebase_Core::getInstallLogo(),
                 'title'             => $tbConfig->{Tinebase_Config::BRANDING_TITLE},
