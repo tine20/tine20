@@ -257,30 +257,4 @@ class Tinebase_AuthTest extends TestCase
         static::assertSame($result[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN],
             $checkResult[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN]);
     }
-
-    /**
-     * @see 0013272: add pin column, backend and config
-     */
-    public function testPinAuth()
-    {
-        $user = Tinebase_Core::getUser();
-
-        try {
-            Tinebase_User::getInstance()->setPin($user, 'abcd1234');
-            self::fail('expected exception - it is not allowed to have non-numbers in pin');
-        } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            self::assertEquals('Only numbers are allowed for PINs', $tesg->getMessage());
-        }
-
-        Tinebase_User::getInstance()->setPin($user, '1234');
-        $authAdapter = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
-        $authAdapter->setIdentity($user->accountLoginName);
-        $authAdapter->setCredential('');
-        $result = $authAdapter->authenticate();
-        $this->assertFalse($result->isValid(), 'empty pin should always fail');
-
-        $authAdapter->setCredential('1234');
-        $result = $authAdapter->authenticate();
-        $this->assertTrue($result->isValid());
-    }
 }

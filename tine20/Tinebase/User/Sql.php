@@ -210,6 +210,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         $result = new Tinebase_Record_RecordSet($_accountClass, $rows, TRUE);
+        $result->runConvertToRecord();
         
         return $result;
     }
@@ -348,8 +349,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($row, true));
 
         try {
+            /** @var Tinebase_Model_User $account */
             $account = new $_accountClass(NULL, TRUE);
             $account->setFromArray($row);
+            $account->runConvertToRecord();
         } catch (Tinebase_Exception_Record_Validation $e) {
             $validation_errors = $account->getValidationErrors();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . "\n" .
@@ -374,6 +377,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $stmt = $select->query();
         $data = (array) $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_FullUser', $data, true);
+        $result->runConvertToRecord();
         return $result;
     }
     
@@ -433,6 +437,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'contact_id',
             'openid',
             'visibility',
+            'mfa_configs',
             'NOW()', // only needed for debugging
         );
 
@@ -1046,6 +1051,21 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->visibility = 'hidden';
             $_user->contact_id = null;
         }
+        if ($oldUser->mfa_configs && $_user->mfa_configs) {
+            if (!$_user->mfa_configs->isValid()) {
+                throw new Tinebase_Exception_Backend('mfa configs are not valid: ' .
+                    print_r($_user->mfa_configs->getValidationErrors(), true));
+            }
+            foreach ($oldUser->mfa_configs->filter(Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS,
+                    Tinebase_Model_MFA_PinUserConfig::class) as $pin2FAUserCfg) {
+                if ($newCfg = $_user->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
+                        $pin2FAUserCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) {
+                    $newCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                        ->{Tinebase_Model_MFA_PinUserConfig::FLD_HASHED_PIN} = $pin2FAUserCfg
+                        ->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->getHashedPin();
+                }
+            }
+        }
         $accountData = $this->_recordToRawData($_user);
         // don't update id
         unset($accountData['id']);
@@ -1190,6 +1210,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     protected function _recordToRawData(Tinebase_Record_Interface $_user)
     {
+        $_user->runConvertToData();
+
         $accountData = array(
             'id'                => $_user->accountId,
             'login_name'        => $_user->accountLoginName,
@@ -1215,6 +1237,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'deleted_by'            => $_user->deleted_by,
             'seq'                   => $_user->seq,
             'xprops'                => $_user->xprops,
+            'mfa_configs'     => $_user->mfa_configs,
         );
         
         $unsetIfEmpty = array('seq', 'creation_time', 'created_by', 'last_modified_by', 'last_modified_time');
@@ -1226,9 +1249,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         if (!$this->_userHasXpropsField()) {
             unset($accountData['xprops']);
-        } elseif (isset($accountData['xprops']) && is_array($accountData['xprops'])) {
-            $accountData['xprops'] = json_encode($accountData['xprops']);
         }
+
+        $_user->runConvertToRecord();
         
         return $accountData;
     }
@@ -1420,6 +1443,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $queryResult = $stmt->fetchAll();
         
         $result = new Tinebase_Record_RecordSet($_accountClass, $queryResult, TRUE);
+        $result->runConvertToRecord();
         
         return $result;
     }

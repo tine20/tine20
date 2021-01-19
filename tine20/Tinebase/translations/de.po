@@ -4034,6 +4034,9 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
 "eingeben"
 
+msgid "{{ code }} is your {{ app.branding.title }} security code."
+msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
+
 #: js/AreaLocks/PinProvider.es6.js:17 js/PasswordChangeDialog.js:34
 msgid "PIN"
 msgstr "PIN"

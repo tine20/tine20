@@ -490,26 +490,23 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * reset password for given account
-     *
+     * returns possible mfa adapter for given user
+     * 
      * @param array|string $account Tinebase_Model_FullUser data or account id
-     * @param string $password the new password
-     * @return array
+     * @retujrn array id => user_config_class
      */
-    public function resetPin($account, $password)
+    public function getPossibleMFAs($account)
     {
-        if (is_array($account)) {
-            $account = new Tinebase_Model_FullUser($account);
-        } else {
-            $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->getFullUserById($account);
+        $result = [];
+
+        $mfas = Tinebase_Config::getInstance()->{Tinebase_Config::MFA};
+        foreach($mfas->records as $mfaConfig) {
+            $result[] = [
+                'mfa_config_id' => $mfaConfig->id,
+                'config_class' => $mfaConfig->user_config_class,
+            ];
         }
-
-        $controller = Admin_Controller_User::getInstance();
-        $controller->setAccountPin($account, $password);
-
-        $result = array(
-            'success' => TRUE
-        );
+        
         return $result;
     }
 

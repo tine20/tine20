@@ -2619,8 +2619,9 @@ Steuernummer 33/111/32212";
 
         // lock projects
         $this->_createAreaLockConfig([
-            'area' => 'Projects'
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => ['Projects']
         ]);
+
         Projects_Controller_Project::getInstance()->resetValidatedAreaLock();
 
         // fetch & save contact again
@@ -2634,8 +2635,8 @@ Steuernummer 33/111/32212";
 
         // unlock projects
         $user = Tinebase_Core::getUser();
-        Tinebase_User::getInstance()->setPin($user, '1234');
-        Tinebase_AreaLock::getInstance()->unlock('Projects', '1234');
+        $this->_setPin();
+        Tinebase_AreaLock::getInstance()->unlock('Projects', 'userpin', '1234', $user);
 
         // save contact again
         $contactWithUnlockedProjectSaved = $this->_uit->saveContact($contactWithLockedProjectSaved);

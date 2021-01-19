@@ -207,6 +207,29 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     }
 
     /**
+     * checks whether either no area_login lock is set or if it is unlocked already
+     */
+    final static public function checkLoginAreaLock(): bool
+    {
+        return !Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
+            !Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+    }
+
+    final static protected function _checkAreaLock($_method)
+    {
+        if (Tinebase_AreaLock::getInstance()->hasLock($_method)) {
+            if (Tinebase_AreaLock::getInstance()->isLocked($_method)) {
+                $teal = new Tinebase_Exception_AreaLocked('Application is locked: '
+                    . $_method);
+                $cfg = Tinebase_AreaLock::getInstance()->getLastAuthFailedAreaConfig();
+                $teal->setArea($cfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+                $teal->setMFAUserConfigs($cfg->getUserMFAIntersection(Tinebase_Core::getUser()));
+                throw $teal;
+            }
+        }
+    }
+
+    /**
      * @param int $code
      */
     public static function setHttpHeader($code)

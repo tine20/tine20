@@ -140,6 +140,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return true;
     }
 
+    protected function _throwMFAException(Tinebase_Model_AreaLockConfig $config, Tinebase_Record_RecordSet $feCfg)
+    {
+        $e = new Tinebase_Exception_AreaLocked('mfa required');
+        $e->setArea($config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+        $e->setMFAUserConfigs($feCfg);
+        throw $e;
+    }
+
     /**
      * create new user session (via openID connect)
      *
@@ -876,16 +884,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             return false;
         }
 
-        if (! $this->_validateSecondFactor($accessLog, $user)) {
-            $authResult = new Zend_Auth_Result(
-                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
-                $user->accountLoginName,
-                array('Second factor authentication failed.')
-            );
-            $accessLog->result = Tinebase_Auth::FAILURE;
-            $this->_loginFailed($authResult, $accessLog);
-            return false;
-        }
+        $this->_validateSecondFactor($accessLog, $user);
 
         return $user;
     }
@@ -895,29 +894,66 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Tinebase_Model_FullUser $user
      * @return bool
      */
-    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user)
+    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
     {
-        if (! Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
-            || $accessLog->clienttype !== 'JSON-RPC'
+        $areaLock = Tinebase_AreaLock::getInstance();
+        if ($accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE ||
+                ! $areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
+                ! $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
         ) {
             // no login lock or non json access
-            return true;
+            return;
+        }
+
+        $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
+             $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
+        }
+
+        $areaConfig = $areaLock->getLastAuthFailedAreaConfig();
+
+
+        // user has no 2FA config -> currently its sort of optional -> no check
+        if (count($userConfigIntersection->mfa_configs) === 0) {
+            $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+            return;
         }
 
         $context = $this->getRequestContext();
-        $password = $context['otp'];
-        try {
-            Tinebase_AreaLock::getInstance()->unlock(
-                Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-                $password,
-                $user->accountLoginName
-            );
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            return false;
+        $mfaId = $context['MFAId'];
+        $password = $context['MFAPassword'];
+
+        // check if FE send mfa or if we only have one 2FA configured anyway
+        if ((!empty($mfaId) && $userConfigIntersection->getById($mfaId)) || (1 === $userConfigIntersection->count() &&
+                ($mfaId = $userConfigIntersection->getFirstRecord()->getId()))) {
+            // FE send provider and password -> validate it
+            if (!empty($password)) {
+                $areaLock->unlock(
+                    Tinebase_Model_AreaLockConfig::AREA_LOGIN,
+                    $mfaId,
+                    $password,
+                    $user
+                );
+
+                return;
+            } else {
+                $userCfg = $userConfigIntersection->getById($mfaId);
+                if (!Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                        ->sendOut($userCfg)) {
+                    throw new Tinebase_Exception('mfa send out failed');
+                } else {
+                    // success, FE to render input field
+                    $this->_throwMFAException($areaConfig, new Tinebase_Record_RecordSet(
+                        Tinebase_Model_MFA_UserConfig::class, [$userConfigIntersection->getById($mfaId)]));
+                }
+            }
+        } else {
+            // FE to render selection which 2FA to use
+            $this->_throwMFAException($areaConfig, $userConfigIntersection);
         }
 
-        return true;
+        // must never reach this
+        assert(false, 'should return true or throw, line must not be reached');
     }
 
     /**

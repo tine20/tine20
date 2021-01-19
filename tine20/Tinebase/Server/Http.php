@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -37,6 +37,8 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
+        Tinebase_AreaLock::getInstance()->activatedByFE();
+
         $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
         
@@ -63,29 +65,31 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             // register additional HTTP apis only available for authorised users
             if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
 
-                $definitions = self::_getModelConfigMethods('Tinebase_Server_Http');
-                $server->loadFunctions($definitions);
-
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
-                }
 
-                $applicationParts = explode('.', $this->getRequestMethod());
-                $applicationName = ucfirst($applicationParts[0]);
-                
-                if (Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
-                    try {
-                        if (class_exists($applicationName.'_Frontend_Http')) {
-                            $server->setClass($applicationName . '_Frontend_Http', $applicationName);
-                        } else {
-                            $server->setClass('Tinebase_Frontend_Http_Generic', $applicationName);
+                    // only load restricted apis if no area_login lock is set or if it is unlocked already
+                } elseif (self::checkLoginAreaLock()) {
+
+                    $definitions = self::_getModelConfigMethods('Tinebase_Server_Http');
+                    $server->loadFunctions($definitions);
+
+                    $applicationParts = explode('.', $this->getRequestMethod());
+                    $applicationName = ucfirst($applicationParts[0]);
+
+                    if (Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
+                        try {
+                            if (class_exists($applicationName . '_Frontend_Http')) {
+                                $server->setClass($applicationName . '_Frontend_Http', $applicationName);
+                            } else {
+                                $server->setClass('Tinebase_Frontend_Http_Generic', $applicationName);
+                            }
+                        } catch (Exception $e) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Failed to add HTTP API for application '$applicationName' Exception: \n" . $e);
+                            Tinebase_Exception::log($e, false);
                         }
-                    } catch (Exception $e) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
-                        Tinebase_Exception::log($e, false);
                     }
                 }
-                
             } else {
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.login';
@@ -99,6 +103,8 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             }
 
             $this->_method = $this->getRequestMethod();
+
+            self::_checkAreaLock($this->_method);
             
             $response = $server->handle($_REQUEST);
             if ($response instanceof \Zend\Diactoros\Response) {
@@ -113,7 +119,12 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 . ' Attempt to request a privileged Http-API method without valid session from "'
                 . $_SERVER['REMOTE_ADDR']);
 
-            if (! headers_sent()) {
+            if (!headers_sent()) {
+                header('HTTP/1.0 403 Forbidden');
+            }
+
+        } catch (Tinebase_Exception_AreaLocked $e) {
+            if (!headers_sent()) {
                 header('HTTP/1.0 403 Forbidden');
             }
 

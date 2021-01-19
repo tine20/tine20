@@ -110,6 +110,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected $_listsToDelete = [];
 
+    protected $_pin = '1234';
+
     /**
      * set up tests
      */
@@ -893,21 +895,64 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         ) . '/' . $userId;
     }
 
+    protected function _setPin()
+    {
+        if (!Tinebase_Core::getUser()->mfa_configs) {
+            Tinebase_Core::getUser()->mfa_configs =
+                new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        }
+        if (!($pinCfg = Tinebase_Core::getUser()->mfa_configs->find(
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID, 'pin'))) {
+            $pinCfg = new Tinebase_Model_MFA_UserConfig([
+                Tinebase_Model_MFA_UserConfig::FLD_ID => 'userpin',
+                Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'pin',
+                Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                    Tinebase_Model_MFA_PinUserConfig::class,
+                Tinebase_Model_MFA_UserConfig::FLD_CONFIG => new Tinebase_Model_MFA_PinUserConfig()
+            ]);
+            Tinebase_Core::getUser()->mfa_configs->addRecord($pinCfg);
+        }
+
+        $pinCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG} = new Tinebase_Model_MFA_PinUserConfig([
+            Tinebase_Model_MFA_PinUserConfig::FLD_HASHED_PIN => Hash_Password::generate('SSHA256', $this->_pin)
+        ]);
+    }
+
     /**
      * @param array $config
      */
-    protected function _createAreaLockConfig($config = [])
+    protected function _createAreaLockConfig($config = [], $mfaConfig = [])
     {
         $config = array_merge([
-            'area' => Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-            'provider' => Tinebase_Model_AreaLockConfig::PROVIDER_PIN,
-            'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
+            Tinebase_Model_AreaLockConfig::FLD_AREA_NAME => 'login',
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => [Tinebase_Model_AreaLockConfig::AREA_LOGIN],
+            Tinebase_Model_AreaLockConfig::FLD_MFAS => ['pin'],
+            Tinebase_Model_AreaLockConfig::FLD_VALIDITY => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
         ], $config);
         $locks = new Tinebase_Config_KeyField([
-            'records' => new Tinebase_Record_RecordSet('Tinebase_Model_AreaLockConfig', [$config])
+            'records' => new Tinebase_Record_RecordSet(Tinebase_Model_AreaLockConfig::class, [$config])
         ]);
         Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, $locks);
-        $this->_areaLocksToInvalidate[] = $config['area'];
+
+        $mfaConfig = array_merge([
+            Tinebase_Model_MFA_Config::FLD_ID => 'pin',
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_PinConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG =>
+                new Tinebase_Model_MFA_PinConfig(),
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_PinAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_PinUserConfig::class,
+        ], $mfaConfig);
+        $mfas = new Tinebase_Config_KeyField([
+            'records' => new Tinebase_Record_RecordSet(Tinebase_Model_MFA_Config::class, [$mfaConfig])
+        ]);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::MFA, $mfas);
+
+        $this->_areaLocksToInvalidate[] = $config[Tinebase_Model_AreaLockConfig::FLD_AREAS][0];
+        Tinebase_AreaLock::destroyInstance();
+        Tinebase_AreaLock::getInstance()->activatedByFE();
     }
 
     /**

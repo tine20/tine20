@@ -46,7 +46,7 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' in an auth route');
 
-            if (null === ($user = Tinebase_Core::getUser())) {
+            if (null === ($user = Tinebase_Core::getUser()) || !Tinebase_Server_Abstract::checkLoginAreaLock()) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . ' returning with HTTP 401 unauthorized');
 

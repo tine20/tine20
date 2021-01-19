@@ -6,7 +6,7 @@
  * @subpackage  Adapter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -23,25 +23,16 @@ class Tinebase_AreaLock_Session implements Tinebase_AreaLock_Interface
     const AREALOCK_VALIDITY_SESSION_NAMESPACE = 'areaLockValidity';
 
     /**
-     * @var null|Tinebase_Model_AreaLockConfig
+     * @var Tinebase_Model_AreaLockConfig
      */
-    protected $_config = null;
+    protected $_config;
 
-    /**
-     * Tinebase_AreaLock_Session constructor.
-     * @param Tinebase_Model_AreaLockConfig $config
-     */
     public function __construct(Tinebase_Model_AreaLockConfig $config)
     {
         $this->_config = $config;
     }
 
-    /**
-     * @param string $area
-     * @return Tinebase_DateTime
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    public function saveValidAuth($area)
+    public function saveValidAuth(): Tinebase_DateTime
     {
         switch (strtolower($this->_config->validity)) {
             case Tinebase_Model_AreaLockConfig::VALIDITY_SESSION:
@@ -58,33 +49,30 @@ class Tinebase_AreaLock_Session implements Tinebase_AreaLock_Interface
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' saveValidAreaLock until ' . $sessionValidity->toString() . ' (' . $this->_config->validity . ')');
-        Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE}[$area] = $sessionValidity->toString();
+        Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE}[$this->_config->getKey()] =
+            $sessionValidity->toString();
 
         return $sessionValidity;
     }
 
-    /**
-     * @param $area
-     * @return bool
-     */
-    public function hasValidAuth($area)
+    public function hasValidAuth(): bool
     {
         if (!Tinebase_Session::isStarted()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' No session started to check auth in session');
             }
-            return true;
+            return false;
         }
         if (!Tinebase_Session::getSessionEnabled()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Session not enabled to check auth in session');
             }
-            return true;
+            return false;
         }
 
-        if ($validUntil = $this->getAuthValidity($area)) {
+        if ($validUntil = $this->getAuthValidity()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " valid until: " . $validUntil . ' now: ' . Tinebase_DateTime::now());
 
@@ -94,33 +82,28 @@ class Tinebase_AreaLock_Session implements Tinebase_AreaLock_Interface
         }
     }
 
-    /**
-     * @param $area
-     * @return bool|Tinebase_DateTime
-     */
-    public function getAuthValidity($area)
+    public function getAuthValidity(): ?Tinebase_DateTime
     {
         $areaLocksInSession = Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE};
-        if (!isset($areaLocksInSession[$area])) {
-            return false;
+        $key = $this->_config->getKey();
+        if (!isset($areaLocksInSession[$key])) {
+            return null;
         }
 
-        $currentValidUntil = $areaLocksInSession[$area];
+        $currentValidUntil = $areaLocksInSession[$key];
         if (is_string($currentValidUntil)) {
             return new Tinebase_DateTime($currentValidUntil);
         }
 
-        return false;
+        return null;
     }
 
-    /**
-     * @param string $area
-     */
-    public function resetValidAuth($area)
+    public function resetValidAuth(): void
     {
         $areaLocksInSession = Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE};
-        if (isset($areaLocksInSession[$area])) {
-            unset($areaLocksInSession[$area]);
+        $key = $this->_config->getKey();
+        if (isset($areaLocksInSession[$key])) {
+            unset($areaLocksInSession[$key]);
             Tinebase_Session::getSessionNamespace()->{self::AREALOCK_VALIDITY_SESSION_NAMESPACE} = $areaLocksInSession;
         }
     }

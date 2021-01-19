@@ -38,6 +38,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AREA_LOCKS = 'areaLocks';
 
     /**
+     * MFA providers
+     *
+     * @var string
+     */
+    const MFA = 'mfa';
+
+    /**
      * authentication backend config
      *
      * @var string
@@ -827,9 +834,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Configured Area Locks')
             'description'           => 'Configured Area Locks',
             'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'Tinebase_Model_AreaLockConfig'),
-            'clientRegistryInclude' => true,
-            'setBySetupModule'      => true,
+            'options'               => array('recordModel' => Tinebase_Model_AreaLockConfig::class),
+            'clientRegistryInclude' => true, // this will be cleaned in getClientRegistryConfig()! // TODO make this as a hook or something
+            'setBySetupModule'      => false,
+            'setByAdminModule'      => false,
+            'default'               => [],
+        ),
+        self::MFA => array(
+            //_('MFA')
+            'label'                 => 'MFA',
+            //_('Configured MFAs')
+            'description'           => 'Configured MFAs',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => Tinebase_Model_MFA_Config::class),
+            'clientRegistryInclude' => false,
+            'setBySetupModule'      => false,
             'setByAdminModule'      => false,
             'default'               => [],
         ),
@@ -2897,6 +2916,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Got ' . count($clientProperties[$application->name]) . ' config items for ' . $application->name . '.');
+            }
+        }
+
+        // TODO replace this with a hook in the config itself or something
+        if (isset($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']) &&
+                $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records) {
+            /** @var Tinebase_Model_AreaLockConfig $record */
+            foreach($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records as $idx => $record) {
+                $result = [];
+                /** @var Tinebase_Model_MFA_UserConfig $usrCfg */
+                foreach ($record->getUserMFAIntersection(Tinebase_Core::getUser()) as $usrCfg) {
+                    $result[] = $usrCfg->toFEArray();
+                }
+                $record->{Tinebase_Model_AreaLockConfig::FLD_MFAS} = $result;
             }
         }
         

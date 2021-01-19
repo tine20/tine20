@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo add more providers (in separate test classes?)
@@ -23,21 +23,18 @@ class Tinebase_AreaLockTest extends TestCase
     protected $_uit = null;
 
     /**
-     * @var string
-     */
-    protected $_pin = '1234';
-
-    /**
      * set up tests
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
+        Tinebase_AreaLock::destroyInstance();
         $this->_uit = Tinebase_AreaLock::getInstance();
+        $this->_uit->activatedByFE();
     }
 
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
         Tinebase_AreaLock::destroyInstance();
     }
@@ -45,13 +42,17 @@ class Tinebase_AreaLockTest extends TestCase
     public function testGetState()
     {
         $this->_createAreaLockConfig();
-        $state = $this->_uit->getState(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        $states = $this->_uit->getState(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        $this->assertTrue($states instanceof Tinebase_Record_RecordSet);
+        $this->assertSame(1, $states->count());
+        $state = $states->getFirstRecord();
         self::assertEquals(new Tinebase_DateTime('1970-01-01'), $state->expires);
-        self::assertEquals(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $state->area);
+        self::assertEquals('login', $state->area);
 
         $this->_setPin();
-        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
-        $state = $this->_uit->getState(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin',
+            $this->_pin, Tinebase_Core::getUser());
+        $state = $this->_uit->getState(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->getFirstRecord();
         self::assertEquals(new Tinebase_DateTime('2150-01-01'), $state->expires);
     }
 
@@ -61,47 +62,46 @@ class Tinebase_AreaLockTest extends TestCase
     public function testUnlock()
     {
         $this->_createAreaLockConfig();
+        $this->_setPin();
 
         $incorrectPin = '5678';
         try {
-            $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $incorrectPin);
+            $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin', $incorrectPin,
+                Tinebase_Core::getUser());
             self::fail('wrong pin should throw exception - ' . print_r($state->toArray(), true));
         } catch (Exception $e) {
             self::assertTrue($e instanceof Tinebase_Exception_AreaUnlockFailed);
-            self::assertEquals(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $e->getArea());
+            self::assertEquals('login', $e->getArea());
         }
 
-        $this->_setPin();
-        $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
+        $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin', $this->_pin,
+            Tinebase_Core::getUser());
         // @ŧodo expect session lifetime as expiry date?
         self::assertEquals(new Tinebase_DateTime('2150-01-01'), $state->expires, 'area should be unlocked');
-    }
-    
-    protected function _setPin()
-    {
-        $user = Tinebase_Core::getUser();
-        Tinebase_User::getInstance()->setPin($user, $this->_pin);
     }
 
     public function testLock()
     {
         $this->_createAreaLockConfig();
         $this->_setPin();
-        $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
+        $state = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin', $this->_pin,
+            Tinebase_Core::getUser());
         self::assertEquals(new Tinebase_DateTime('2150-01-01'), $state->expires);
 
-        $state = $this->_uit->lock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
+        $state = $this->_uit->lock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
         self::assertEquals(new Tinebase_DateTime('1970-01-01'), $state->expires);
     }
 
     public function isLocked()
     {
         $this->_createAreaLockConfig();
-        $isLocked = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
+        $isLocked = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin', $this->_pin,
+            Tinebase_Core::getUser());
         self::assertTrue($isLocked);
 
         $this->testUnlock();
-        $isLocked = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
+        $isLocked = $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin', $this->_pin,
+            Tinebase_Core::getUser());
         self::assertFalse($isLocked);
     }
 
@@ -112,10 +112,12 @@ class Tinebase_AreaLockTest extends TestCase
     public function testAppProtection($validity = Tinebase_Model_AreaLockConfig::VALIDITY_SESSION)
     {
         Tasks_Controller_Task::getInstance()->resetValidatedAreaLock();
+
         $this->_createAreaLockConfig([
-            'area' => 'Tasks',
-            'validity' => $validity,
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => ['Tasks'],
+            Tinebase_Model_AreaLockConfig::FLD_VALIDITY => $validity,
         ]);
+        $this->_setPin();
 
         // try to access app
         try {
@@ -123,11 +125,14 @@ class Tinebase_AreaLockTest extends TestCase
             self::fail('it should not be possible to access app without PIN');
         } catch (Tinebase_Exception $te) {
             self::assertTrue($te instanceof Tinebase_Exception_AreaLocked);
-            self::assertEquals('Tasks', $te->getArea());
+            self::assertStringContainsString('Tasks.Tasks_Model_Task.get', $te->getMessage());
+            self::assertEquals('login', $te->getArea());
+            $exception = $te->toArray();
+            $this->assertArrayHasKey('mfaUserConfigs', $exception);
+            $this->assertCount(1, $exception['mfaUserConfigs']);
         }
 
-        $this->_setPin();
-        $this->_uit->unlock('Tasks', $this->_pin);
+        $this->_uit->unlock('Tasks', 'userpin', $this->_pin, Tinebase_Core::getUser());
 
         // try to access app again
         $result = Tasks_Controller_Task::getInstance()->getAll();
@@ -152,9 +157,9 @@ class Tinebase_AreaLockTest extends TestCase
             'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE,
         ]);
         $this->_setPin();
-        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
+        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin', $this->_pin, Tinebase_Core::getUser());
         sleep(3);
-        self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'should be unlocked for at least 5 secs'));
+        self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN), 'should be unlocked for at least 5 secs');
         Tinebase_Presence::getInstance()->reportPresence();
         sleep(3);
         self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN), 'should still be unlocked - presence was reported');
@@ -172,7 +177,7 @@ class Tinebase_AreaLockTest extends TestCase
             'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME,
         ]);
         $this->_setPin();
-        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $this->_pin);
+        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin', $this->_pin, Tinebase_Core::getUser());
         self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN));
         sleep(6);
 
@@ -189,7 +194,7 @@ class Tinebase_AreaLockTest extends TestCase
         $states = $this->_uit->getAllStates();
         self::assertEquals(1, count($states));
         $state = $states->getFirstRecord();
-        self::assertEquals(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $state->area);
+        self::assertEquals('login', $state->area);
         self::assertEquals(new Tinebase_DateTime('1970-01-01'), $state->expires);
     }
 
@@ -198,11 +203,14 @@ class Tinebase_AreaLockTest extends TestCase
      */
     public function testUserPasswordProvider()
     {
+        static::markTestSkipped('password provider currently not implemented');
+
         $this->_createAreaLockConfig([
             'provider' => Tinebase_Model_AreaLockConfig::PROVIDER_USERPASSWORD
         ]);
         $credentials = TestServer::getInstance()->getTestCredentials();
-        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, $credentials['password']);
+        $this->_uit->unlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN, 'userpin', $credentials['password'],
+            Tinebase_Core::getUser());
         self::assertFalse($this->_uit->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN));
     }
 

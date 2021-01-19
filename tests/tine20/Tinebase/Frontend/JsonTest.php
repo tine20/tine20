@@ -746,16 +746,19 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testAreaLockProviderConfigRemovedFromRegistryData()
     {
-        $this->_createAreaLockConfig([
-            'provider_config' => [
-                'confidential' => 'secret!'
-            ],
-        ]);
+        $this->_createAreaLockConfig();
+
+        $this->assertSame(['pin'], Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS}->records
+            ->getFirstRecord()->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
+
         $registryData = $this->_instance->getAllRegistryData();
         $registryConfigValue = $registryData['Tinebase']['config'][Tinebase_Config::AREA_LOCKS]['value'];
         self::assertTrue(isset($registryConfigValue['records'][0]));
         self::assertFalse(isset($registryConfigValue['records'][0]['provider_config']),
             'confidental data should be removed: ' . print_r($registryConfigValue, true));
+
+        $this->assertSame(['pin'], Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS}->records
+            ->getFirstRecord()->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
     }
 
     /**
@@ -927,21 +930,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $result = $this->_instance->searchTags($filter, array());
         
         $this->assertEquals(0, $result['totalCount']);
-    }
-
-    /**
-     * @see 0013314: allow users to change pin
-     */
-    public function testChangePin()
-    {
-        $result = $this->_instance->changePin('', '1234');
-        self::assertTrue($result['success']);
-
-        $result = $this->_instance->changePin('', '1234');
-        self::assertFalse($result['success']);
-
-        $result = $this->_instance->changePin('1234', '5678');
-        self::assertTrue($result['success']);
     }
 
     public function testGetTerminationDeadline()

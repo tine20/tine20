@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -39,7 +39,7 @@
  * @property    Tinebase_Model_EmailUser    smtpUser
  * @property    Tinebase_DateTime           accountLastPasswordChange      date when password was last changed
  * @property    bool                         password_must_change
- *
+ * @property    Tinebase_Record_RecordSet   mfa_configs
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
 {
@@ -216,11 +216,21 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                     self::VISIBILITY_DISPLAYED,
                 ], Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED],
             ],
-            'password_must_change' => [
-                'type'                  => 'boolean',
-                'default'               => false,
-                'validators'            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            'password_must_change'          => [
+                'type'                          => 'boolean',
+                'default'                       => false,
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
+            'mfa_configs'             => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::CONFIG                    => [
+                    self::STORAGE                   => self::TYPE_JSON,
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => Tinebase_Model_MFA_UserConfig::MODEL_NAME_PART,
+                ],
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                     => 'Area lock configurations', // _('Area lock configurations')
+            ]
         ],
     ];
 

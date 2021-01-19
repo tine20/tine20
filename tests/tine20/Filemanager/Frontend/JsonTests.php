@@ -2576,7 +2576,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     public function testPinProtection()
     {
         $this->_createAreaLockConfig([
-            'area' => Tinebase_Model_AreaLockConfig::AREA_DATASAFE,
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => [Tinebase_Model_AreaLockConfig::AREA_DATASAFE],
         ]);
         $folder = $this->testCreateContainerNodeInSharedFolder('protected');
 
@@ -2619,8 +2619,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         // unlock
         $user = Tinebase_Core::getUser();
-        Tinebase_User::getInstance()->setPin($user, 1234);
-        Tinebase_AreaLock::getInstance()->unlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE, 1234);
+        $this->_setPin();
+        Tinebase_AreaLock::getInstance()->unlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE,
+            'userpin', '1234', Tinebase_Core::getUser());
 
         $result = $this->_getUit()->searchNodes($filter, array());
         $protectedNodes = array_filter($result['results'], function($item) use ($folder) {
