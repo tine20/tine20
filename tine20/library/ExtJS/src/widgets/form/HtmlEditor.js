@@ -727,6 +727,10 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             ss['background-attachment'] = 'fixed'; // w3c
             dbody.bgProperties = 'fixed'; // ie
 
+            if(this.enableFont && !Ext.isSafari2 && this.defaultFont) {
+                ss['font-family'] = this.defaultFont;
+            }
+
             Ext.DomHelper.applyStyles(dbody, ss);
 
             doc = this.getDoc();
@@ -821,7 +825,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         var adjust = btn.getItemId() == 'increasefontsize' ? 1 : -1,
             doc = this.getDoc(),
             v = parseInt(doc.queryCommandValue('FontSize') || 2, 10);
-        if((Ext.isSafari && !Ext.isSafari2) || Ext.isChrome || Ext.isAir){
+        if((Ext.isSafari && !Ext.isSafari2) || Ext.isAir){
             // Safari 3 values
             // 1 = 10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px
             if(v <= 10){
@@ -872,7 +876,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             doc = this.getDoc();
 
         if(this.enableFont && !Ext.isSafari2){
-            var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase();
+            var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase().replace(/"/g, '');
+            
             if(name != this.fontSelect.dom.value){
                 this.fontSelect.dom.value = name;
             }
