@@ -503,8 +503,18 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                                 'customfield_id'    => $customField->getId(),
                                 'value'             => $value
                             ));
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating value for ' . $customField->name . ' -> ' . $value);
-                            $this->_backendValue->create($cf);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__ . ' Creating value for ' . $customField->name . ' -> ' . $value);
+                            try {
+                                $this->_backendValue->create($cf);
+                            } catch (Zend_Db_Statement_Exception $zdse) {
+                                    if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                            __METHOD__ . '::' . __LINE__ . ' CF Value already exists');
+                                    } else {
+                                        throw $zdse;
+                                    }
+                            }
                         }
                         break;
                     default:
