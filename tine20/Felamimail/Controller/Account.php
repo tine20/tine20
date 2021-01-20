@@ -750,7 +750,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * @param $_record
      * @param $_oldRecord
-     * @throws Tinebase_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _convertToUserInternal($_record, $_oldRecord)
     {
@@ -760,7 +760,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         if (! $_record->user_id) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            throw new Tinebase_Exception_UnexpectedValue($translation->_('userInternal accounts need to have an user_id set'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Internal user accounts need a valid user'));
         }
 
         $this->_transferEmailUserIdXprops($_record, $_oldRecord);
@@ -770,7 +770,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $systemEmailUser = $this->_getEmailSystemUser($_record->user_id);
             if (! $systemEmailUser->getId()) {
                 $translation = Tinebase_Translation::getTranslation('Felamimail');
-                throw new Tinebase_Exception_UnexpectedValue($translation->_('System account of user is missing'));
+                throw new Tinebase_Exception_SystemGeneric($translation->_('System account of user is missing'));
             }
             $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);

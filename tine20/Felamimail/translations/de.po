@@ -1951,6 +1951,10 @@ msgstr ""
 "Massen-Mails werden nicht an die eingetragenen CC und/oder BCC Empfänger "
 "geschickt. Bitte entfernen Sie diese."
 
+#: Controller/Account.php:275
+msgid "Internal user accounts need a valid user"
+msgstr "Das persönliche Systemkonto benötigt einen validen Benutzer"
+
 msgid "IMAP Credentials missing"
 msgstr "IMAP Zugangsdaten fehlen"
 
