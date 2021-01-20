@@ -199,7 +199,7 @@ class Felamimail_Controller_Cache_MessageTest extends \PHPUnit\Framework\TestCas
         for($i = 0; $i < 3; $i++) {
             $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
         }
-        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
+        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart_alternative.eml';
         
         // update message cache
         $loopCount = 1;
@@ -214,6 +214,7 @@ class Felamimail_Controller_Cache_MessageTest extends \PHPUnit\Framework\TestCas
         $result = $this->_imap->search(array(
             $this->_headerValueToDelete
         ));
+        self::assertGreaterThan(0, count($result), 'did not find message on imap (header value: ' . $this->_headerValueToDelete .')');
         
         $this->_imap->selectFolder($this->_folder->globalname);
         
@@ -241,7 +242,7 @@ class Felamimail_Controller_Cache_MessageTest extends \PHPUnit\Framework\TestCas
         $this->_controller->updateCache($this->_folder, 30, 1);
         
         $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
-        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
+        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart_alternative.eml';
         
         // update message cache + check folder status after update
         $updatedFolder = $this->_controller->updateCache($this->_folder, 0);

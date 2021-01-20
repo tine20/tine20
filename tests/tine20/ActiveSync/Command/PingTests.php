@@ -336,7 +336,7 @@ class ActiveSync_Command_PingTests extends TestCase
         $emailTest = new Felamimail_Controller_MessageTest();
         $emailTest->setUp();
         $inbox = $emailTest->getFolder('INBOX');
-        $emailTest->messageTestHelper('multipart_alternative.eml', 'multipart/alternative', $inbox);
+        $emailTest->messageTestHelper('multipart_alternative.eml', null, $inbox);
         
         $ping = new Syncroton_Command_Ping($doc, $this->_device, null);
         $ping->handle();

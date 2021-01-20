@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Group
  */
-class Felamimail_Controller_MessageTest extends TestCase
+class Felamimail_Controller_MessageTest extends Felamimail_TestCase
 {
     /**
      * @var Felamimail_Controller_Message
@@ -74,6 +74,7 @@ class Felamimail_Controller_MessageTest extends TestCase
 {
         $this->_account = $this->_getTestUserFelamimailAccount();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
+        $this->_json = new Felamimail_Frontend_Json();
 
         $this->_folder = $this->getFolder($this->_testFolderName);
         try {
@@ -113,6 +114,7 @@ class Felamimail_Controller_MessageTest extends TestCase
 {
         try {
             Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+            Felamimail_Controller_Message::getInstance()->delete($this->_createdMessages->getArrayOfIds());
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // do nothing
         }
@@ -275,7 +277,7 @@ class Felamimail_Controller_MessageTest extends TestCase
             
         );
         
-        $message = $this->messageTestHelper('multipart_alternative.eml', 'multipart/alternative');
+        $message = $this->messageTestHelper('multipart_alternative.eml');
         $structure = $message['structure'];
         $lines = $this->_getLinesFromPartsAndRemoveFromStructure($structure);
         
@@ -962,7 +964,7 @@ class Felamimail_Controller_MessageTest extends TestCase
      */
     public function testGetBodyPartIdMultipartAlternative()
     {
-        $cachedMessage = $this->messageTestHelper('multipart_alternative.eml', 'multipart/alternative');
+        $cachedMessage = $this->messageTestHelper('multipart_alternative.eml');
         $cachedMessage->parseBodyParts();
 
         $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
@@ -1788,36 +1790,23 @@ class Felamimail_Controller_MessageTest extends TestCase
 
     public function testRewriteMessageSubject2()
     {
-        $message = new Felamimail_Model_Message([
-            'account_id' => $this->_account->getId(),
-            'folder_id' => $this->_folder,
-            'subject' => 'SPAM? (15) *** test rewrite with standard headers',
-            'to' => [
-                Tinebase_Core::getUser()->accountEmailAddress,
-            ],
-            'body' => 'test body',
-            'headers' => [
-                'return-path' => "<tine20admin@mail.test>",
-                'delivered-to' => '8228db4c5a04c3515f482afa83163f3e5b01c39c@tine.test',
-                'received' =>[
-                    'from 826c75cbbb35.localdomain ([172.118.0.4]) by 639732083f37 with LMTP id uMaCA2azUF+lAQAAsP0Baw (envelope-from <tine20admin@mail.test>) for <8228db4c5a04c3515f482afa83163f3e5b01c39c@tine.test>; Thu, 03 Sep 2020 09:12:06 +0000',
-                    'from localhost (tine20.tine20docker_default [172.118.0.5]) by 826c75cbbb35.localdomain (Postfix) with ESMTP id 080A3AC3EAA for <tine20admin@mail.test>; Thu,  3 Sep 2020 09:12:06 +0000 (UTC)',
-                ],
-                'subject' => 'SPAM? (15) *** test rewrite with standard headers',
-                'from' => 'Tine 2.0 Admin Account" <tine20admin@mail.test>',
-                'to' => 'tine20admin@mail.test',
-                'user-agent' => 'Tine 2.0 Email Client (version : 0 () - none)',
-                'message-id' => '<5483c57c54a34da2e6bf5b56230010a114870238@mail.test>',
-                'x-mailgenerator' => 'Tine 2.0',
-                'date' => 'Thu, 03 Sep 2020 09:12:05 +0000',
-                'content-type' => 'multipart/alternative; boundary="=_b7fd53536a7a1a8e490855862b2bb4c7"',
-                'mime-version' => '1.0',
-            ]
-        ]);
-
-        $newSubject = 'i like your new subject';
-        $rewrittenMessage = $this->_getController()->rewriteMessageSubject($message, $newSubject);
+        $cachedMessage = $this->messageTestHelper('multipart_alternative.eml');
+        $completeCachedMessage = $this->_getController()->getCompleteMessage($cachedMessage);
+        $newSubject = 'I like your new subject ' . Tinebase_Record_Abstract::generateUID(10);
+        $rewrittenMessage = $this->_getController()->rewriteMessageSubject($cachedMessage, $newSubject);
+        $this->_createdMessages->addRecord($rewrittenMessage);
+   
         self::assertEquals($newSubject, $rewrittenMessage->subject);
-        self::assertNotEquals($message->messageuid, $rewrittenMessage->messageuid);
+        self::assertNotEquals($cachedMessage->messageuid, $rewrittenMessage->messageuid);
+
+        // get updated cache message
+        $messageBySubject = $this->_searchForMessageBySubject($newSubject, $this->_testFolderName);
+        $rewrittenMessageFromCache = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageBySubject['id']);
+        $this->_createdMessages->addRecord($rewrittenMessageFromCache);
+
+        self::assertEquals($completeCachedMessage->body, $rewrittenMessageFromCache->body,
+            'body mismatch: ' . print_r($rewrittenMessageFromCache->toArray(), true));
+        self::assertEquals('2009-04-09 21:12:42', $rewrittenMessageFromCache->received->toString(),
+            'received date mismatch: ' . print_r($rewrittenMessageFromCache->toArray(), true));
     }
 }
