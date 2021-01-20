@@ -1725,9 +1725,7 @@ class Felamimail_Controller_MessageTest extends TestCase
         $cachedMessage = $this->messageTestHelper('winmail_dat_richtext.eml');
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
     
-        $this->assertEquals(1, count($message->attachments));
-    
-        $this->assertEquals('winmail.dat', $message->attachments[0]['filename']);
+        self::assertCount(0, $message->attachments, 'winmail.dat should not be attached: ' . print_r($message->attachments, true));
     }
     
     /**

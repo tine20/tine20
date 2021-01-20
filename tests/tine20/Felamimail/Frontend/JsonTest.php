@@ -1044,7 +1044,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $subject = 'attachment test';
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
         $tempfileName = 'jsontest' . Tinebase_Record_Abstract::generateUID(10);
-        $tempFile = $this->_createTempFile($tempfileName);
+        $tempFile = $this->_getTempFile(null, $tempfileName);
         $messageToSend['attachments'] = array(
             array('tempFile' => array('id' => $tempFile->getId(), 'type' => $tempFile->type))
         );
@@ -1056,7 +1056,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertTrue(count($fullMessage['attachments']) === 1);
         $attachment = $fullMessage['attachments'][0];
         $this->assertStringContainsString($tempfileName, $attachment['filename'], 'wrong attachment filename: ' . print_r($attachment, TRUE));
-        $this->assertEquals(16, $attachment['size'], 'wrong attachment size: ' . print_r($attachment, TRUE));
+        $this->assertEquals(24, $attachment['size'], 'wrong attachment size: ' . print_r($attachment, TRUE));
 
         return $fullMessage;
     }
@@ -1320,7 +1320,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
         // check node contents
         $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
-        self::assertEquals('some content', $content);
+        self::assertEquals('test file content', $content);
 
         // test to file it again to the same location
         $result = $this->_json->fileAttachments($message['id'], [$location], $message['attachments']);
@@ -1922,7 +1922,23 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($message['attachments']), 'no attachment set: ' . print_r($message, true));
         self::assertEquals(1, count($message['attachments']), 'no attachment set: ' . print_r($message, true));
         self::assertEquals('foobar1.txt', $message['attachments'][0]['filename']);
-        self::assertEquals(16, $message['attachments'][0]['size']);
+        self::assertEquals(24, $message['attachments'][0]['size']);
+    }
+
+    /**
+     * attach winmail.dat without contents -> attachments should be empty!
+     */
+    public function testEmptyWinmailAttachment()
+    {
+        $messageToSend = $this->_getMessageData('' , __METHOD__);
+        $tempFile = $this->_getTempFile(dirname(__FILE__) . '/../files/empty_winmail.dat', 'winmail.dat', 'application/ms-tnef');
+        $messageToSend['attachments'] = array(
+            array('tempFile' => array('id' => $tempFile->getId(), 'type' => 'application/ms-tnef'))
+        );
+        $this->_json->saveMessage($messageToSend);
+        $message = $this->_searchForMessageBySubject($messageToSend['subject']);
+        $complete = $this->_json->getMessage($message['id']);
+        self::assertEquals(0, count($complete['attachments']));
     }
 
     /**
@@ -2000,7 +2016,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($message['attachments']), 'no attachment set: ' . print_r($message, true));
         self::assertEquals(1, count($message['attachments']), 'no attachment set: ' . print_r($message, true));
         self::assertEquals('test.txt', $message['attachments'][0]['filename']);
-        self::assertEquals(16, $message['attachments'][0]['size']);
+        self::assertEquals(20, $message['attachments'][0]['size']);
     }
 
     public function testAttachmentMethodFilemanagerSystemLink()
@@ -2036,7 +2052,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     protected function _testAttachmentType($type, $withSignature = false)
     {
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
-        $tempfile = $this->_createTempFile('foobar1.txt');
+        $tempfile = $this->_getTempFile(null, 'foobar1.txt');
 
         if (in_array($type, array('tempfile', 'download_public', 'download_protected'))) {
             // attach uploaded tempfile
@@ -2296,7 +2312,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
     public function testFileMessageOnSend()
     {
-        $message = $this->_getMessageData();
+        $message = $this->_getMessageData('' , __METHOD__);
         $message['fileLocations'] = [
             [
                 'model' => Addressbook_Model_Contact::class,

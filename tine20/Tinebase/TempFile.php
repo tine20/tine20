@@ -388,12 +388,18 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         return $this->createTempFile($path, $node->name, $node->contenttype, $node->size);
     }
 
-    public function createTempFileFromStream($stream)
+    /**
+     * @param resource $stream
+     * @param string $name
+     * @param string $type
+     * @return Tinebase_Model_TempFile
+     */
+    public function createTempFileFromStream($stream, $name = 'tempfile.tmp', $type = 'unknown')
     {
         $content = stream_get_contents($stream);
         $path = self::getTempPath();
         file_put_contents($path, $content);
-        return $this->createTempFile($path);
+        return $this->createTempFile($path, $name, $type);
     }
 
     /**

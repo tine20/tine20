@@ -226,7 +226,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $_message->has_attachment = true;
         }
 
-        $attachments = array_merge($attachments, $this->getAttachments($_message, $_partId));
+        $attachments = array_merge($attachments, $this->getAttachments($_message, $_partId, true));
 
         if ($_partId === null) {
             $message = $_message;
@@ -1005,9 +1005,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get attachments of message
      *
      * @param array $_structure
+     * @param string $_partId
+     * @param boolean $_skipEmptyAttachments
      * @return array
      */
-    public function getAttachments($_messageId, $_partId = null)
+    public function getAttachments($_messageId, $_partId = null, $_skipEmptyAttachments = false)
     {
         if (!$_messageId instanceof Felamimail_Model_Message) {
             $message = $this->_backend->get($_messageId);
@@ -1067,6 +1069,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
                         if (!empty($expanded)) {
                             $attachments = array_merge($attachments, $expanded);
+                        } else if ($_skipEmptyAttachments) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . ' Skipping empty winmail.dat attachment.');
+                            continue;
                         }
                     }
                 }
