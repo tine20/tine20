@@ -243,7 +243,14 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                     $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) {
                 Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
-                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                    try {
+                        Felamimail_Sieve_AdbList::setScriptForList($list);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
+                            __LINE__ . ' ' . $tenf->getMessage());
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                            __LINE__ . ' List: ' . print_r($list->toArray(), true));
+                    }
                 }, [$list]);
             }
 

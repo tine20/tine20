@@ -139,7 +139,7 @@ class Felamimail_Sieve_AdbList
         $account = Felamimail_Controller_Account::getInstance()->getAccountForList($list);
 
         if (! $account) {
-            throw new Tinebase_Exception_NotFound('account of list not found');
+            throw new Tinebase_Exception_NotFound('account of list ' . $list->getId() . ' not found');
         }
 
         $sieveRule = static::createFromList($list)->__toString();
