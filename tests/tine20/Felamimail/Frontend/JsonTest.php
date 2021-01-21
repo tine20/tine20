@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -25,7 +25,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     protected $_pathsToDelete = array();
 
     protected function tearDown(): void
-{
+    {
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
             try {
@@ -944,6 +944,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
     public function testMoveMessageToFolderWithUmlaut()
     {
+        $this->_createdFolders = [$this->_testFolderName . '.Info Gemeindebüro'];
         $result = $this->_json->addFolder('Info Gemeindebüro', $this->_testFolderName, $this->_account->getId());
         $this->testMoveMessage($result['globalname']);
     }

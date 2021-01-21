@@ -158,7 +158,6 @@ abstract class Felamimail_TestCase extends TestCase
 
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
-                //echo "delete $folderName\n";
                 try {
                     $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
                 } catch (Zend_Mail_Storage_Exception $zmse) {
