@@ -27,7 +27,8 @@ class Addressbook_Export_CsvTest extends TestCase
             'adr_one_street'   => 'Montgomerie',
             'n_given'           => 'Paul',
             'n_family'          => 'test',
-            'email'             => 'tmpPaul@test.de'
+            'email'             => 'tmpPaul@test.de',
+            'tel_home'          => '1234'
         )));
         Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'adr_one_street'   => 'Montgomerie',
@@ -72,6 +73,29 @@ class Addressbook_Export_CsvTest extends TestCase
             static::assertTrue(is_array($row), 'could not read csv: ');
             static::assertEquals('Paul', $row[0]);
             static::assertEquals('tmppaul@test.de', $row[1]);
+        } finally {
+            fclose($fh);
+        }
+    }
+
+    public function testNewCsvTwigExport()
+    {
+        $fh = $this->_genericExportTest([
+            'definition' => __DIR__ . '/definitions/adb_csv_test_twig.xml',
+        ]);
+        try {
+            rewind($fh);
+
+            $row = fgetcsv($fh, 0, "\t", '"');
+            static::assertTrue(is_array($row), 'could not read csv ');
+            static::assertEquals('Adam', $row[0]);
+            static::assertEquals('tmpadam@test.de', $row[1]);
+
+            $row = fgetcsv($fh, 0, "\t", '"');
+            static::assertTrue(is_array($row), 'could not read csv: ');
+            static::assertEquals('Paul', $row[0]);
+            static::assertEquals('tmppaul@test.de', $row[1]);
+            static::assertSame('0000001234', $row[2]);
         } finally {
             fclose($fh);
         }

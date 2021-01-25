@@ -771,7 +771,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (true !== $this->_hasTemplate && $this->_config->columns) {
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
                 if ($column->twig) {
-                    $source .= ($source!=='' ? ',"' : '""') . (string)$column->twig . '"';
+                    $source .= ($source!=='[' ? ',' : '') . (string)$column->twig;
                 }
             }
         }
@@ -1405,6 +1405,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }
                 } elseif ($column->recordProperty) {
                     $this->_writeValue($this->_convertToString($_record->{$column->recordProperty}));
+                } elseif ($column->identifier) {
+                    $this->_writeValue($this->_convertToString($_record->{$column->identifier}));
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                         ' pointless column found: ' . print_r($column, true));

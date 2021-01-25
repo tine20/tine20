@@ -62,7 +62,7 @@ class Tinebase_Helper_ZendConfig
             return [];
         } elseif (!$data instanceof Zend_Config) {
             throw new Tinebase_Exception_InvalidArgument('bad configuration, expected Zend_Config value');
-        } elseif (is_int($data->key())) {
+        } elseif ($data->rewind() || is_int($data->key())) {
             $result = [];
             do {
                 $result[] = $child = $data->current();
@@ -70,6 +70,7 @@ class Tinebase_Helper_ZendConfig
                     throw new Tinebase_Exception_InvalidArgument('bad configuration, expected Zend_Config value');
                 }
             } while ($data->next() || $data->valid());
+            $data->rewind();
             return $result;
         } else {
             return [$data];
