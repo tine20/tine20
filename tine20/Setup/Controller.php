@@ -1905,6 +1905,7 @@ class Setup_Controller
      *
      * @param array $_applications list of application names
      * @param array $_options
+     * @return integer number of uninstalled apps
      * @throws Tinebase_Exception
      */
     public function uninstallApplications($_applications, $_options = [])
@@ -1973,6 +1974,8 @@ class Setup_Controller
         if (true === $deactivatedForeignKeyCheck) {
             $this->_backend->setForeignKeyChecks(1);
         }
+
+        return count($applications);
     }
     
     /**
@@ -2465,6 +2468,8 @@ class Setup_Controller
                             if(isset($_applications[$app])) {
                                 unset($_applications[$app]);
                                 $changed = true;
+                                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                                    ' App ' . $name . ' still depends on: ' . $app . ' - so it cannot be uninstalled.');
                             }
                         }
                     }
@@ -2474,7 +2479,7 @@ class Setup_Controller
         
         // get all apps to uninstall ($name => $dependencies)
         $appsToSort = array();
-        foreach($_applications as $name => $xml) {
+        foreach ($_applications as $name => $xml) {
             if ($name !== 'Tinebase') {
                 $appsToSort[$name] = array();
                 $depends = $xml ? (array)$xml->depends : array();
@@ -2488,16 +2493,15 @@ class Setup_Controller
                 }
             }
         }
-        
+
         // re-sort apps
         $count = 0;
         while (count($appsToSort) > 0 && $count < MAXLOOPCOUNT) {
-
-            foreach($appsToSort as $name => $depends) {
+            foreach ($appsToSort as $name => $depends) {
                 // don't uninstall if another app depends on this one
                 $otherAppDepends = FALSE;
-                foreach($appsToSort as $innerName => $innerDepends) {
-                    if(in_array($name, $innerDepends)) {
+                foreach ($appsToSort as $innerName => $innerDepends) {
+                    if (in_array($name, $innerDepends)) {
                         $otherAppDepends = TRUE;
                         break;
                     }
