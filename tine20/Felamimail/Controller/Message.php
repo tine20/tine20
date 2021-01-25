@@ -670,7 +670,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $cacheId = $this->_getMessageBodyCacheId($message, $_partId, $_contentType, $_account);
 
             if ($cache->test($cacheId)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting Message from cache.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Getting Message from cache.');
                 return $cache->load($cacheId);
             }
         }
@@ -1501,18 +1502,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($message->account_id);
-
-        $updatedMessage = clone($message);
-        $updatedMessage->subject = $newSubject;
         $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $mailToAppend = Felamimail_Controller_Message_Send::getInstance()->createMailForSending(
-            $updatedMessage,
-            $account,
-            $_nonPrivateRecipients,
-            true
-        );
-        $transport = new Felamimail_Transport();
-        $mailAsString = $transport->getRawMessage($mailToAppend);
+        $updatedMessage = clone($message);
+
+        $mailAsString = $this->getMessageRawContent($updatedMessage);
+        $mailAsString = $this->_replaceHeaderInRawMessage($mailAsString, 'subject', $newSubject);
+
         $uid = $imap->appendMessage(
             $mailAsString,
             Felamimail_Model_Folder::encodeFolderName($folder->globalname),
@@ -1530,61 +1525,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $imap->addFlags([$message->messageuid], [Zend_Mail_Storage::FLAG_DELETED]);
         }
 
+        $updatedMessage->subject = $newSubject;
         return $updatedMessage;
     }
 
-    /**
-     * copy message with
-     * @param Felamimail_Model_Message $message
-     * @param $wrapTo
-     * @param $targetFolder
-     * @return Felamimail_Model_Message
-     * @throws Felamimail_Exception
-     * @throws Felamimail_Exception_IMAP
-     * @throws Felamimail_Exception_IMAPInvalidCredentials
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_Validation
-     * @throws Zend_Mail_Transport_Exception
-     */
-    public function copyMessageWithAttachment(Felamimail_Model_Message $message, $wrapTo, $targetFolder)
+    protected function _replaceHeaderInRawMessage($mailAsString, $header, $newValue)
     {
-        $account = Felamimail_Controller_Account::getInstance()->get($message->account_id);
-
-        $updatedMessage = clone($message);
-        $updatedMessage->subject = $wrapTo['subject'];
-        $updatedMessage->to = $wrapTo['to'];
-        $updatedMessage->original_id = $message->getId(); // doesnt work
-        $updatedMessage->attachments =  [new Tinebase_Model_TempFile([
-            'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
-            'name'  => $message->subject,
-        ], TRUE)];
-
-        $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $mailToAppend = Felamimail_Controller_Message_Send::getInstance()->createMailForSending(
-            $updatedMessage,
-            $account,
-            $_nonPrivateRecipients,
-            true
-        );
-        $transport = new Felamimail_Transport();
-        $mailAsString = $transport->getRawMessage($mailToAppend);
-        $uid = $imap->appendMessage(
-            $mailAsString,
-            Felamimail_Model_Folder::encodeFolderName($targetFolder->globalname),
-            []
-        );
-
-        if ($uid) {
-            $updatedMessage->messageuid = $uid;
-        } else {
-            throw new Felamimail_Exception_IMAP('appendMessage failed');
-        }
-
-        // remove old message
-        if ($message->messageuid) {
-            $imap->addFlags([$message->messageuid], [Zend_Mail_Storage::FLAG_DELETED]);
-        }
-        
-        return $updatedMessage;
+        return preg_replace(
+            // find header (also replaces multiline headers!)
+            '/(\n' . ucfirst($header) . ':) .*\n( .*\n)*/',
+            '${1} ' . mb_encode_mimeheader($newValue) . "\n",
+            $mailAsString);
     }
 }
