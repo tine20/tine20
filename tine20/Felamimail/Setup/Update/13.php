@@ -121,6 +121,6 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
             $this->setTableVersion('felamimail_cache_message', 13);
         }
 
-        $this->addApplicationUpdate('Felamimail', '13.2', self::RELEASE013_UPDATE004);
+        $this->addApplicationUpdate('Felamimail', '13.3', self::RELEASE013_UPDATE004);
     }
 }
