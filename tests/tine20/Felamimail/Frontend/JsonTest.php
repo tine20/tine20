@@ -2017,7 +2017,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($message['attachments']), 'no attachment set: ' . print_r($message, true));
         self::assertEquals(1, count($message['attachments']), 'no attachment set: ' . print_r($message, true));
         self::assertEquals('test.txt', $message['attachments'][0]['filename']);
-        self::assertEquals(20, $message['attachments'][0]['size']);
+        if (PHP_VERSION_ID >= 70400) {
+            self::assertEquals(24, $message['attachments'][0]['size']);
+        } else {
+            self::assertEquals(20, $message['attachments'][0]['size']);
+        }
     }
 
     public function testAttachmentMethodFilemanagerSystemLink()
