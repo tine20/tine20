@@ -114,10 +114,18 @@ class Setup_Update_Abstract
      * @param string $_version new version number
      * @param string $_updateKey update key to add to application state
      * @return Tinebase_Model_Application
+     * @throws Setup_Exception
      */
     public function addApplicationUpdate($_applicationName, $_version, $_updateKey)
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+        if (version_compare($application->version, $_version) < 0) {
+            $application->version = $_version;
+        } else {
+            throw new Setup_Exception('Cannot update to lower or equal version: '
+                . $_version . ' needs to be greater than ' . $application->version);
+        }
+
         if (!($state = json_decode(Tinebase_Application::getInstance()->getApplicationState($application->getId(),
                 Tinebase_Application::STATE_UPDATES, true), true))) {
             $state = [];
@@ -126,13 +134,9 @@ class Setup_Update_Abstract
         Tinebase_Application::getInstance()->setApplicationState($application->getId(),
             Tinebase_Application::STATE_UPDATES, json_encode($state));
 
-        if (version_compare($application->version, $_version) < 0) {
-            $application->version = $_version;
-            return Tinebase_Application::getInstance()->updateApplication($application);
-        }
-        return $application;
+        Tinebase_Application::getInstance()->updateApplication($application);
     }
-    
+
     /**
      * get version number of a given table
      * version is stored in database table "applications_tables"
