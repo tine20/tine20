@@ -522,9 +522,9 @@ class Setup_Frontend_Cli
             }
         }
         
-        $controller->uninstallApplications($applications->name);
+        $uninstallCount = $controller->uninstallApplications($applications->name);
         
-        echo "Successfully uninstalled " . count($applications) . " applications.\n";
+        echo "Successfully uninstalled " . $uninstallCount . " applications.\n";
     }
     
     /**
