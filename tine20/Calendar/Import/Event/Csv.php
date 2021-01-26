@@ -159,6 +159,7 @@ class Calendar_Import_Event_Csv extends Tinebase_Import_Csv_Generic
     protected function _createResourceAttender($importedRecord)
     {
         $config =Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+        $primaryDomain = isset($config['primarydomain']) ? $config['primarydomain'] : 'tine20.test';
         if (empty($this->_resources)) {
             return;
         }
@@ -169,9 +170,6 @@ class Calendar_Import_Event_Csv extends Tinebase_Import_Csv_Generic
 
         $name_check = [];
         foreach (explode(';', $this->_resources) as $resource) {
-
-
-            //$resource_data_all = $resource_Controller->getAll();
             foreach ($resource_Controller->getAll() as $resource_data) {
 
                 if ($resource == $resource_data['name']) {
@@ -184,7 +182,7 @@ class Calendar_Import_Event_Csv extends Tinebase_Import_Csv_Generic
                 $resource_Model = new Calendar_Model_Resource(array(
                     'name' => $resource,
                     'description' => 'Import Csv resource',
-                    'email' => $resource . '@' . $config['primarydomain'],
+                    'email' => $resource . '@' . $primaryDomain,
                     'is_location' => TRUE,
                     'grants' => [
                         array_merge([
