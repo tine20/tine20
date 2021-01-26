@@ -146,7 +146,7 @@ class Felamimail_Controller_FolderTest extends \PHPUnit\Framework\TestCase
             Felamimail_Controller_Folder::getInstance()->create($this->_account->getId(), 'test', 'INBOX');
             self::fail('exception expected for duplicate folders');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            self::assertEquals('Folder with this name already exists!', $tesg->getMessage());
+            self::assertEquals('Folder with name INBOX.test already exists!', $tesg->getMessage());
         }
     }
 

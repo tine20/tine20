@@ -49,8 +49,8 @@ msgid "userInternal accounts need to have an email set"
 msgstr "Das persönliche Systemkonto benötigen eine E-Mail-Adresse"
 
 #: Controller/Account.php:275
-msgid "userInternal accounts need to have an user_id set"
-msgstr "Das persönliche Systemkonto benötigen eine User-ID"
+msgid "Internal user accounts need a valid user"
+msgstr "Das persönliche Systemkonto benötigt einen validen Benutzer"
 
 #: Controller/Account.php:499
 msgid "Migration of this account has not been approved!"
@@ -1951,9 +1951,11 @@ msgstr ""
 "Massen-Mails werden nicht an die eingetragenen CC und/oder BCC Empfänger "
 "geschickt. Bitte entfernen Sie diese."
 
-#: Controller/Account.php:275
-msgid "Internal user accounts need a valid user"
-msgstr "Das persönliche Systemkonto benötigt einen validen Benutzer"
+msgid "Folder with name {0} already exists!"
+msgstr "Ordner mit dem Namen {0} ist bereits vorhanden!"
+
+msgid "userInternal accounts need to have an user_id set"
+msgstr "Das persönliche Systemkonto benötigen eine User-ID"
 
 msgid "IMAP Credentials missing"
 msgstr "IMAP Zugangsdaten fehlen"
