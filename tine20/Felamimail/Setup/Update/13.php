@@ -14,6 +14,7 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE013_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -32,6 +33,12 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+        ],
+        self::PRIO_NORMAL_APP_UPDATE => [
+            self::RELEASE013_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -122,5 +129,10 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Felamimail', '13.3', self::RELEASE013_UPDATE004);
+    }
+
+    public function update005()
+    {
+        $this->addApplicationUpdate('Felamimail', '13.4', self::RELEASE013_UPDATE005);
     }
 }

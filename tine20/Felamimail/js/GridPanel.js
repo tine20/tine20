@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -87,6 +87,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * needed to apply second grid state for send folders
      */
     sendFolderGridStateId: null,
+
+    sentFolderSelected: false,
 
     /**
      * Return CSS class to apply to rows depending upon flags
@@ -1383,13 +1385,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         const isSendFolderPath = this.isSendFolderPathInFilterParams(options.params);
 
-        if (isSendFolderPath) {
+        if (isSendFolderPath && ! this.sentFolderSelected) {
             this.changeFilterInParams(options.params, 'query', 'to');
             this.changeGridState(this.sendFolderGridStateId);
+            this.sentFolderSelected = true;
 
-        } else {
+        } else if (! isSendFolderPath && this.sentFolderSelected) {
             this.changeFilterInParams(options.params, 'to', 'query');
             this.changeGridState(this.gridConfig.stateId);
+            this.sentFolderSelected = false;
         }
     },
 
