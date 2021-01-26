@@ -4,7 +4,7 @@
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -184,6 +184,7 @@ Ext.namespace('Tine.Tasks');
                         fieldLabel: this.app.i18n._('Summary'),
                         name: 'summary',
                         listeners: {render: function(field){field.focus(false, 250);}},
+                        maxLength: 255,
                         allowBlank: false
                     }], [new Ext.ux.form.DateTimeField({
                             defaultTime: '12:00',
