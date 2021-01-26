@@ -1820,8 +1820,8 @@ msgstr "Anhang (eines Datensatzes)"
 msgid "Save as Record Attachment"
 msgstr "Als Datensatz Anhang speichern"
 
-msgid "Folder with this name already exists!"
-msgstr "Ordner mit dem Namen ist bereits vorhanden!"
+msgid "Folder with name {0} already exists!"
+msgstr "Ordner mit dem Namen {0} ist bereits vorhanden!"
 
 msgid "Failure on create folder"
 msgstr "Fehler beim anlegen des Ordners"
