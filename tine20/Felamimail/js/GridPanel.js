@@ -755,18 +755,28 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * delete messages handler
+     * delete messages handler:
+     * delete messages from trash/drafts folder, move messages to trash from other folders
      * 
      * @return {Boolean}
      */
     onDeleteRecords: function() {
-        var account = this.app.getActiveAccount(),
-            trashId = (account) ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null,
-            trashConfigured = (account.get('trash_folder'));
-            
-        return (trash && ! trash.isCurrentSelection())
-            || (! trash && trashConfigured)
+        const account = this.app.getActiveAccount();
+        const trashId = (account) ? account.getTrashFolderId() : null;
+        const trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
+        const draftsFolderId = account.getSpecialFolderId('drafts_folder');
+        const draftsFolder = draftsFolderId ? this.app.getFolderStore().getById(draftsFolderId) : null;
+
+        let moveMessages;
+
+        if (draftsFolder && draftsFolder.isCurrentSelection()) {
+            moveMessages = false;
+        } else {
+            const trashConfigured = account.get('trash_folder');
+            moveMessages = trash && ! trash.isCurrentSelection() || ! trash && trashConfigured;
+        }
+
+        return moveMessages
                 ? this.moveSelectedMessages(trash, true, false)
                 : this.deleteSelectedMessages();
     },
