@@ -71,7 +71,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $this->_account = $this->_getTestUserFelamimailAccount();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
         $this->_json = new Felamimail_Frontend_Json();
@@ -111,7 +111,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         try {
             Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
             Felamimail_Controller_Message::getInstance()->delete($this->_createdMessages->getArrayOfIds());
