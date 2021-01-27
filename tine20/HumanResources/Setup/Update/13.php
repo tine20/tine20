@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class HumanResources_Setup_Update_13 extends Setup_Update_Abstract
@@ -23,6 +23,10 @@ class HumanResources_Setup_Update_13 extends Setup_Update_Abstract
 
     public function update001()
     {
-        $this->addApplicationUpdate('HumanResources', '13.0', self::RELEASE013_UPDATE001);
+        try {
+            $this->addApplicationUpdate('HumanResources', '13.0', self::RELEASE013_UPDATE001);
+        } catch (Setup_Exception $se) {
+            // ... version was already increased to 13.0 in 12.php ...
+        }
     }
 }
