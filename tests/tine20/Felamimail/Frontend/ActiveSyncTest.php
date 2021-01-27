@@ -12,6 +12,8 @@
  * Test class for Felamimail_Frontend_ActiveSync
  * 
  * @package     Felamimail
+ *
+ * TODO extend Felamimail_TestCase
  */
 class Felamimail_Frontend_ActiveSyncTest extends TestCase
 {
@@ -45,26 +47,21 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * @var string
      */
     protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email"><Collections><Collection><Class>Email</Class><SyncKey>17</SyncKey><CollectionId>Inbox</CollectionId><Commands><Change><ClientId>1</ClientId><ApplicationData/></Change></Commands></Collection></Collections></Sync>';
-    
+
     /**
-     * Runs the test methods of this class.
+     * folders to delete in tearDown()
      *
-     * @access public
-     * @static
+     * @var array
      */
-    public static function main()
-    {
-        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 ActiveSync Controller Email Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
+    protected $_createdFolders = array();
+
     /**
      * set up test environment
      * 
      * @todo move setup to abstract test case
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
         
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
@@ -99,14 +96,23 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }
         
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         Felamimail_Controller_Message::getInstance()->delete($this->_createdMessages->getArrayOfIds());
-        
+
+        if (count($this->_createdFolders) > 0) {
+            foreach ($this->_createdFolders as $folderName) {
+                try {
+                    Felamimail_Controller_Folder::getInstance()->delete($this->_getTestUserFelamimailAccount(), $folderName);
+                } catch (Zend_Mail_Storage_Exception $zmse) {
+                    // already deleted
+                }
+            }
+        }
         parent::tearDown();
     }
     
@@ -851,6 +857,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $emailAccount = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         try {
             $subfolder = Felamimail_Controller_Folder::getInstance()->create($emailAccount->getId(), 'sub', 'INBOX');
+            $this->_createdFolders[] = $subfolder->globalname;
         } catch (Zend_Mail_Storage_Exception $zmse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $zmse);
         }
