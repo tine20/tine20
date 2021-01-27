@@ -119,13 +119,6 @@ class Setup_Update_Abstract
     public function addApplicationUpdate($_applicationName, $_version, $_updateKey)
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
-        if (version_compare($application->version, $_version) < 0) {
-            $application->version = $_version;
-        } else {
-            throw new Setup_Exception('Cannot update to lower or equal version: '
-                . $_version . ' needs to be greater than ' . $application->version);
-        }
-
         if (!($state = json_decode(Tinebase_Application::getInstance()->getApplicationState($application->getId(),
                 Tinebase_Application::STATE_UPDATES, true), true))) {
             $state = [];
@@ -134,7 +127,14 @@ class Setup_Update_Abstract
         Tinebase_Application::getInstance()->setApplicationState($application->getId(),
             Tinebase_Application::STATE_UPDATES, json_encode($state));
 
-        Tinebase_Application::getInstance()->updateApplication($application);
+        if (version_compare($application->version, $_version) < 0) {
+            $application->version = $_version;
+            return Tinebase_Application::getInstance()->updateApplication($application);
+        } else if (version_compare($application->version, $_version) === 0) {
+            throw new Setup_Exception('Cannot update to equal version: '
+                . $_version . ' Version update missing in update script?');
+        }
+        return $application;
     }
 
     /**
