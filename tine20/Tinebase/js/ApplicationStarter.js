@@ -219,12 +219,12 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             fieldconfig = fieldconfig.config || {};
         }
 
-        var appName = modelConfig.appName;
-        var modelName = modelConfig.modelName;
-        
-        var app = Tine.Tinebase.appMgr.get(_.get(fieldconfig, 'owningApp') || appName);
+        const appName = modelConfig.appName;
+        const modelName = modelConfig.modelName;
+        const owningAppName = _.get(fieldconfig, 'owningApp') || appName;
+        const app = Tine.Tinebase.appMgr.get(owningAppName);
         if (! app) {
-            Tine.log.error('Application ' + appName + ' not found!');
+            Tine.log.error('Application ' + owningAppName + ' not found!');
             return null;
         }
         
