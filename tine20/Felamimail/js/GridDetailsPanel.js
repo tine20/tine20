@@ -52,6 +52,7 @@ Ext.ns('Tine.Felamimail');
     initDefaultTemplate: function() {
         this.defaultTpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
+                '<div class="preview-panel-felamimail-preparedPart"></div>',
                 '<div class="preview-panel-felamimail-body">{[values ? values.msg : ""]}</div>',
             '</div>'
         );
@@ -178,13 +179,12 @@ Ext.ns('Tine.Felamimail');
             return;
         }
         
-        var bodyEl = this.singleRecordPanel.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0],
+        var bodyEl = this.singleRecordPanel.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-preparedPart]')[0],
             detailsPanel = Tine.Felamimail.MimeDisplayManager.create(mainType, {
                 detailsPanel: this,
                 preparedPart: firstPreparedPart
             });
             
-        // quick hack till we have a card body here 
         Ext.fly(bodyEl).update('');
         detailsPanel.render(bodyEl);
     }

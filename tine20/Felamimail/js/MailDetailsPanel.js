@@ -179,6 +179,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             '</div>',
             '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, values)]}</div>',
             '<div class="preview-panel-felamimail-filelocations">{[this.showFileLocations(values)]}</div>',
+            '<div class="preview-panel-felamimail-preparedPart"></div>',
             '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
             '</div>',{
                 app: this.app,
