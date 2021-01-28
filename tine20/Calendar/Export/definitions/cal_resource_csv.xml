@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Calendar_Model_Resource</model>
+    <name>cal_resource_csv</name>
+    <!-- _('Resource CSV') -->
+    <label>Resource CSV</label>
+    <order>100</order>
+    <type>export</type>
+    <plugin>Calendar_Export_Resource_Csv</plugin>
+    <icon_class>tinebase-action-export-csv</icon_class>
+</config>
