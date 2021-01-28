@@ -315,7 +315,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             description = '';
         
         if (r){
-            text = r.getTitle();
+            text = (typeof r.getComboBoxTitle === "function") ? r.getComboBoxTitle() : r.getTitle();
             description = r.get('description') || description;
             this.selectedRecord = r;
             if (this.allowLinkingItself === false) {
