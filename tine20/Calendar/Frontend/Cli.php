@@ -79,7 +79,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * exports resources as CSV
+     * exports all resources as CSV
      * examples:
      *      --method Calendar.exportResources --username=USER
      *
@@ -88,8 +88,40 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function exportResources($_opts)
     {
+        $this->_checkAdminRight();
+
+        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(false);
         $this->_export(Calendar_Export_Resource_Csv::class, null, [
             'definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('cal_resource_csv')
+        ]);
+    }
+
+    /**
+     * exports all shared calendars as CSV
+     * examples:
+     *      --method Calendar.exportSharedCalendars --username=USER
+     *
+     * @param $_opts
+     * @return boolean
+     */
+    public function exportSharedCalendars($_opts)
+    {
+        $this->_checkAdminRight();
+
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Container::class, [
+           ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED],
+           ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class],
+           ['field' => 'application_id', 'operator' => 'equals',
+               'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()],
+           // ignore invitation calendars
+           ['field' => 'name', 'operator' => 'notcontains', 'value' => '@'],
+        ], [
+            'ignoreAcl' => true,
+        ]);
+        $this->_export(Calendar_Export_Container_Csv::class, $filter, [
+            'definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('cal_shared_calendar_csv'),
+            'ignoreAcl' => true,
         ]);
     }
 

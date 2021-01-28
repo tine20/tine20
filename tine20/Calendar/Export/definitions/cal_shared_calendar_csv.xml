@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Tinebase_Model_Container</model>
+    <name>cal_shared_calendar_csv</name>
+    <!-- _('Shared Calendar CSV') -->
+    <label>Shared Calendar CSV</label>
+    <order>100</order>
+    <type>export</type>
+    <plugin>Calendar_Export_Container_Csv</plugin>
+    <icon_class>tinebase-action-export-csv</icon_class>
+</config>
