@@ -64,6 +64,12 @@ Ext.ux.file.Upload = function(config) {
          'update'
     );
         
+    this.status = '';
+    this.promise = new Promise((resolve, reject) => {
+        this.resolveFn = resolve;
+        this.rejectFn = reject;
+    });
+    
     if (! this.file && this.fileSelector) {
         this.file = this.fileSelector.getFileList()[0];
     }
@@ -391,6 +397,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             }
             this.fireEvent('uploadcomplete', this, this.fileRecord);
             this.fireEvent('update', 'uploadcomplete', this, this.fileRecord);
+            this.resolveFn(this);
 
         }       
         else {
@@ -401,6 +408,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('tempFile', response);
             this.fileRecord.commit(false);
             this.fireEvent('update', 'uploadfailure', this, this.fileRecord);
+            this.rejectFn(this);
                        
         }
                 
@@ -505,6 +513,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 this.fileRecord.endEdit();
 
                 this.fireEvent('update', 'uploadfailure', this, this.fileRecord);
+                this.rejectFn(this);
             }
             else {
                 window.setTimeout((function() {
@@ -519,6 +528,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.endEdit();
 
             this.fireEvent('update', 'uploadfailure', this, this.fileRecord);
+            this.rejectFn(this);
         }
     },
     
@@ -585,7 +595,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             status: status,
             progress: 0,
             input: this.file,
-            uploadKey: this.id
+            uploadKey: this.id,
+            promise: this.promise
         });
         
         this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
@@ -751,6 +762,7 @@ Ext.ux.file.Upload.file = Ext.data.Record.create([
     {name: 'input', system: true},
     {name: 'url', system: true},
     {name: 'request', system: true},
+    {name: 'promise', system: true},
     {name: 'path', system: true},
     {name: 'tempFile', system: true}
 ]);
