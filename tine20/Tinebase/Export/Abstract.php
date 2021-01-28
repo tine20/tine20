@@ -810,7 +810,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getLastModifiedTimeStamp()
     {
-        return filemtime($this->_templateFileName);
+        if (is_file($this->_templateFileName)) {
+            return filemtime($this->_templateFileName);
+        } else {
+            return time();
+        }
     }
 
     protected function _getCurrentState()
