@@ -79,6 +79,21 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * exports resources as CSV
+     * examples:
+     *      --method Calendar.exportResources --username=USER
+     *
+     * @param $_opts
+     * @return boolean
+     */
+    public function exportResources($_opts)
+    {
+        $this->_export(Calendar_Export_Resource_Csv::class, null, [
+            'definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('cal_resource_csv')
+        ]);
+    }
+
+    /**
      * exports calendars as ICS (VCALENDAR)
      * examples:
      *      --method Calendar.exportVCalendar --username=USER -- container_id=CALID filename=/my/export/file.ics

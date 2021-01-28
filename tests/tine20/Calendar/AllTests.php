@@ -42,6 +42,8 @@ class Calendar_AllTests
         $suite->addTestSuite('Calendar_JsonTests');
         $suite->addTestSuite('Calendar_Export_OdsTests');
         $suite->addTestSuite('Calendar_Export_DocTest');
+        $suite->addTestSuite(Calendar_Export_ResourceCsvTest::class);
+        $suite->addTestSuite(Calendar_Export_VCalendarReportTest::class);
         $suite->addTestSuite(Calendar_Export_VCalendarTest::class);
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_AllTests');
         $suite->addTestSuite('Calendar_Setup_DemoDataTests');

@@ -87,7 +87,7 @@ class Addressbook_Export_VCardTest extends TestCase
         mkdir($path);
         $output = $this->_export('path=' . $path . ' type=personal', false);
 
-        self::assertStringContainsString('Exported container ' . $this->_getTestAddressbook()->getId() . ' into file', $output);
+        self::assertStringContainsString('Exported into file', $output);
 
         // loop files in export dir
         $exportFilesFound = 0;
