@@ -748,6 +748,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($this->_config->columns) {
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
                 if ($column->twig) {
+                    if (!$this->_templateFileName) {
+                        // cache busting, mostly for unittest
+                        $this->_templateFileName = Tinebase_Record_Abstract::generateUID();
+                    }
                     return true;
                 }
             }
