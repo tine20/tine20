@@ -36,7 +36,11 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      * @cfg {String}
      */
     defaultImage: 'images/icon-set/icon_undefined_contact.svg',
-    
+
+    /**
+     * @cfg {Array} extra context actions
+     */
+    extraContextActions: null,
     
     defaultAutoCreate: {tag: 'div', cls: 'ux-imagefield-ct', cn: [
         {tag: 'img', cls: 'ux-imagefield-img'},
@@ -273,7 +277,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                 scope: this,
                 handler: this.downloadImage
                 
-            }]
+            }].concat(this.extraContextActions || [])
         });
         this.ctxMenu.showAt(e.getXY());
         
