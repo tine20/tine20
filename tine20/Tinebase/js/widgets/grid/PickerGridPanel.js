@@ -323,8 +323,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.configColumns.remove(nonPluginColumns[i]);
         }
         this.plugins = this.configColumns;
-
-        this.enableHdMenu = false;
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}))
     
         // on selectionchange handler

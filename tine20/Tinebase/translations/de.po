@@ -2943,6 +2943,12 @@ msgstr "Auswahl"
 msgid "Select item"
 msgstr "Auswahl"
 
+msgid "Select all"
+msgstr "Alle auswählen"
+
+msgid "Deselect all"
+msgstr "Alle abwählen"
+
 #: js/widgets/file/SelectionDialog.js:224
 msgid "Places"
 msgstr "Orte"

@@ -1540,7 +1540,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // activate grid header menu for column selection
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-        this.gridConfig.enableHdMenu = false;
 
         if (this.stateful) {
             this.gridConfig.stateful = true;
