@@ -22,7 +22,13 @@ Tine.Timetracker.TimeaccountPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.
      * @cfg {Bool} showClosed
      */
     showClosed: false,
-    
+
+    /**
+     * @cfg {bool} blurOnSelect
+     * blur this combo when record got selected, useful to be used in editor grids (defaults to false)
+     */
+    blurOnSelect: true,
+
     /**
      * @property showClosedBtn
      * @type Ext.Button

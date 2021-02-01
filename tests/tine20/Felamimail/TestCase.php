@@ -257,7 +257,7 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @param string $_subject
      * @param string $_folderName
-     * @return string|null message data
+     * @return string|null|array message data
      */
     protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX', $_doAssertions = true)
     {

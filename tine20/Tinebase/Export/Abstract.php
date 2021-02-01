@@ -748,6 +748,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($this->_config->columns) {
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
                 if ($column->twig) {
+                    if (!$this->_templateFileName) {
+                        // cache busting, mostly for unittest
+                        $this->_templateFileName = Tinebase_Record_Abstract::generateUID();
+                    }
                     return true;
                 }
             }
@@ -794,7 +798,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (true !== $this->_hasTemplate && $this->_config->columns) {
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
                 if ($column->twig) {
-                    $source .= ($source!=='' ? ',"' : '""') . (string)$column->twig . '"';
+                    $source .= ($source!=='[' ? ',' : '') . (string)$column->twig;
                 }
             }
         }
@@ -806,7 +810,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getLastModifiedTimeStamp()
     {
-        return filemtime($this->_templateFileName);
+        if (is_file($this->_templateFileName)) {
+            return filemtime($this->_templateFileName);
+        } else {
+            return time();
+        }
     }
 
     protected function _getCurrentState()
@@ -1430,6 +1438,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }
                 } elseif ($column->recordProperty) {
                     $this->_writeValue($this->_convertToString($_record->{$column->recordProperty}));
+                } elseif ($column->identifier) {
+                    $this->_writeValue($this->_convertToString($_record->{$column->identifier}));
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                         ' pointless column found: ' . print_r($column, true));

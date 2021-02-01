@@ -1308,6 +1308,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         } else {
             $date = date_create($dateString);
         }
+        if (! $date) {
+            throw new Tinebase_Exception_UnexpectedValue('Could not create DateTime from date string: ' . $dateString);
+        }
         $date->setTimezone(new DateTimeZone('UTC'));
         return $date;
     }

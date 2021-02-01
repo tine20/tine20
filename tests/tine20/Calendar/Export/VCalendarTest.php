@@ -154,7 +154,7 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         mkdir($path);
         $output = $this->_export('path=' . $path . ' type=personal', false);
 
-        self::assertStringContainsString('Exported container ' . $this->_getTestCalendar()->getId() . ' into file', $output);
+        self::assertStringContainsString('Exported into file', $output);
 
         // loop files in export dir
         $exportFilesFound = 0;

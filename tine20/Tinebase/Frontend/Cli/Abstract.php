@@ -744,6 +744,11 @@ class Tinebase_Frontend_Cli_Abstract
             ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
         ]);
 
+        $this->_export($exportClass, $filter, $options);
+    }
+
+    protected function _export($exportClass, $filter = null, $options = [])
+    {
         $export = new $exportClass($filter, null, $options);
         $filename = $export->generate();
         if (! $filename) {
@@ -757,10 +762,10 @@ class Tinebase_Frontend_Cli_Abstract
                         Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
                     $targetPath = $nodePath->statpath . '/' . basename($file);
                     Tinebase_FileSystem::getInstance()->copyTempfile($tempFile, $targetPath);
-                    echo 'Exported container ' . $containerId . ' to Filemanager path ' . $options['fm_path'] . '/' . basename($file) ."\n";
+                    echo 'Exported to Filemanager path ' . $options['fm_path'] . '/' . basename($file) ."\n";
                 }
             } else {
-                echo 'Exported container ' . $containerId . ' into file ' . $filename . "\n";
+                echo 'Exported into file ' . $filename . "\n";
             }
         }
     }

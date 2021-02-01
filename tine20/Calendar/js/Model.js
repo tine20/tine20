@@ -244,7 +244,9 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     if (prefs.get('defaultalarmenabled')) {
         data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
     }
-    
+
+    app.emit('createEvent', data);
+
     return data;
 };
 
@@ -1010,7 +1012,8 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     {name: 'grants'},
     { name: 'attachments'},
     { name: 'relations',   omitDuplicateResolving: true},
-    { name: 'customfields', omitDuplicateResolving: true}
+    { name: 'customfields', omitDuplicateResolving: true},
+    {name: 'color'}
 ]), {
     appName: 'Calendar',
     modelName: 'Resource',
