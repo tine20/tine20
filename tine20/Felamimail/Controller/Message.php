@@ -1513,9 +1513,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Felamimail_Model_Folder::encodeFolderName($folder->globalname),
             []
         );
-
+        
         if ($uid) {
             $updatedMessage->messageuid = $uid;
+
+            //append flags from original message to updated message
+            foreach ($updatedMessage->flags as $flag) {
+               $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
+                
+              if (in_array($flag, $supportedFlags)) {
+                   $imap->addFlags($updatedMessage->messageuid, [$flag]);
+                }
+            }
         } else {
             throw new Felamimail_Exception_IMAP('appendMessage failed');
         }
