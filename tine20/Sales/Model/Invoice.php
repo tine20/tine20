@@ -194,16 +194,19 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'label' => 'Sales Tax', // _('Sales Tax')
                 'type'  => 'float',
                 'specialType' => 'percent',
-                'default' => 16,
+                'defaultConfig' => [
+                    'appName' => 'Tinebase',
+                    'config' => Tinebase_Config::SALES_TAX
+                ],
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
             'inventory_change' => array(
-                    'label' => 'Inventory Change', // _('Inventory Change')
-                    'type'  => 'money',
-                    'default' => 0,
-                    'inputFilters' => array('Zend_Filter_Empty' => 0),
-                    'shy' => TRUE,
+                'label' => 'Inventory Change', // _('Inventory Change')
+                'type'  => 'money',
+                'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'shy' => TRUE,
             ),
             'positions' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
