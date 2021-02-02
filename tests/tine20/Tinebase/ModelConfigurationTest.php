@@ -1,15 +1,13 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * Tine 2.0 - http://www.tine20.com
+ *
+ * Test class for Tinebase_ModelConfiguration, using the test class from hr
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- */
-
-/**
- * Test class for Tinebase_ModelConfiguration, using the test class from hr
  */
 class Tinebase_ModelConfigurationTest extends TestCase
 {
@@ -129,5 +127,17 @@ class Tinebase_ModelConfigurationTest extends TestCase
 
         $filterModel = $cObj->getFilterModel();
         self::assertFalse(isset($filterModel['_filterModel']['relations']), print_r($filterModel, true));
+    }
+
+    /**
+     * test config value as default
+     */
+    public function testConfigViaDefault()
+    {
+        $invoice = new Sales_Model_Invoice([], true);
+        $cObj = $invoice->getConfiguration();
+        $fields = $cObj->getFields();
+        self::assertTrue(isset($fields['sales_tax']['default']), print_r($fields['sales_tax'], true));
+        self::assertEquals(19.0, $fields['sales_tax']['default'], print_r($fields['sales_tax'], true));
     }
 }
