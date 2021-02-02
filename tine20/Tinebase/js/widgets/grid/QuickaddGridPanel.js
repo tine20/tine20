@@ -103,7 +103,6 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * init grid
      */
     initGrid: function() {
-        this.enableHdMenu = false;
         this.plugins = this.plugins || [];
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
         

@@ -633,7 +633,7 @@ class Tinebase_Frontend_Cli_Abstract
                 try {
                     Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
                 } catch (Zend_Db_Statement_Exception $zdse) {
-                    if (! Tinebase_Exception::isDbDuplicate($e)) {
+                    if (! Tinebase_Exception::isDbDuplicate($zdse)) {
                         throw $zdse;
                     }
                 }

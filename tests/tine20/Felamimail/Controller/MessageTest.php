@@ -1808,5 +1808,8 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             'body mismatch: ' . print_r($rewrittenMessageFromCache->toArray(), true));
         self::assertEquals('2009-04-09 21:12:42', $rewrittenMessageFromCache->received->toString(),
             'received date mismatch: ' . print_r($rewrittenMessageFromCache->toArray(), true));
+        self::assertEquals($completeCachedMessage->flags, $rewrittenMessageFromCache->flags,
+            'flags mismatch: ' . print_r($rewrittenMessageFromCache->toArray(), true));
+
     }
 }

@@ -1800,33 +1800,68 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const sm = this.getGrid().getSelectionModel();
         const msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
         const nextRecord = sm.isFilterSelect ? null : this.getNextMessage(msgs);
+        const account = this.app.getActiveAccount();
         
         try {
             const promises = [];
+            let increaseUnreadCountInTargetFolder = 0;
+            
+            this.movingOrDeleting = true;
             
             msgs.each(function (msg) {
-                if ('spam' === option) {
-                    this.getStore().remove(msg);
-                    this.deleteQueue.push(msg.id);
-                }
-                
-                if ('ham' === option) {
-                    let subject = msg.get('subject').replace(/^SPAM\? \(.+\) \*\*\* /, '');
-                    msg.set('subject', subject);
-                    msg.set('is_spam_suspicions', false);
-                    msg.commit();
-                    this.editBuffer.push(msg);
+                const currFolder = this.app.getFolderStore().getById(msg.get('folder_id'));
+
+                if (currFolder) {
+                    if ('spam' === option) {
+                        this.getStore().remove(msg);
+                        this.deleteQueue.push(msg.id);
+    
+                        //spam strategy will execute move message , ham will remain in current folder
+                        const isSeen = msg.hasFlag('\\Seen');
+                        const diff = isSeen ? 0 : 1;
+                        
+                        currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
+                        currFolder.set('cache_totalcount', currFolder.get('cache_totalcount') - 1);
+                        currFolder.set('cache_status', 'pending');
+                        currFolder.commit();
+                        
+                        increaseUnreadCountInTargetFolder += diff;
+                    }
+                    
+                    if ('ham' === option) {
+                        let subject = msg.get('subject').replace(/^SPAM\? \(.+\) \*\*\* /, '');
+                        msg.set('subject', subject);
+                        msg.set('is_spam_suspicions', false);
+                        msg.commit();
+                        this.editBuffer.push(msg.id);
+                    }
+                    
                 }
                 
                 promises.push(Tine.Felamimail.processSpam(msg, option));
+
             }, this);
             
-            if (nextRecord && 'spam' === option) {
+            // update unread count of trash folder (only needed for spam Strategy)
+            if ('spam' === option) {
+                const trashFolderId = account ? account.getTrashFolderId() : null;
+                const targetFolder = trashFolderId ? this.app.getFolderStore().getById(trashFolderId) : null;
+                
+                if (targetFolder) {
+                    targetFolder.set('cache_unreadcount', targetFolder.get('cache_unreadcount') + increaseUnreadCountInTargetFolder);
+                    targetFolder.set('cache_status', 'pending');
+                    targetFolder.commit();
+                }
+            }
+            
+            if ('spam' === option && nextRecord) {
                 sm.selectRecords([nextRecord]);
             }
             
-            this.doRefresh();
             await Promise.allSettled(promises);
+            
+            this.movingOrDeleting = false;
+            this.doRefresh();
         } catch (e) {
             this.doRefresh();
         }

@@ -369,7 +369,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             e.stopEvent();
         }
         
-        if (e.getKey() == e.RIGHT && selections.length === 1 && selections[0].get('type') === 'folder') {
+        if ((e.getKey() == e.RIGHT || e.getKey() == e.ENTER) && selections.length === 1 && selections[0].get('type') === 'folder') {
             this.expandFolder(selections[0]);
             e.stopEvent();
         }

@@ -1,21 +1,15 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
+ * the class provides functions to handle config options
+ *
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- */
-
-/**
- * the class provides functions to handle config options
- * 
- * @package     Tinebase
- * @subpackage  Config
- * 
+ *
  * @todo remove all deprecated stuff
  */
 class Tinebase_Config extends Tinebase_Config_Abstract
@@ -133,14 +127,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const IMAP = 'imap';
 
-    const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
-
     /**
-     * trusted proxy config
+     * imap useSystemAccount
      *
      * @var string
      */
-    const TRUSTED_PROXIES = 'trustedProxies';
+    const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
+
+    /**
+     * default sales tax
+     *
+     * @var string
+     */
+    const SALES_TAX = 'salesTax';
 
     /**
      * smtp conf name
@@ -155,6 +154,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SIEVE = 'sieve';
+
+    /**
+     * trusted proxy config
+     *
+     * @var string
+     */
+    const TRUSTED_PROXIES = 'trustedProxies';
 
     /**
      * user backend config
@@ -1565,6 +1571,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => array()
+        ),
+        self::SALES_TAX => array(
+            //_('Sales Tax Default')
+            'label'                 => 'Sales Tax Default',
+            //_('Sales tax that is used as default value in Tine 2.0 apps like Sales.')
+            'description'           => 'Sales tax that is used as default value in Tine 2.0 apps like Sales.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_FLOAT,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            Tinebase_Config_Abstract::DEFAULT_STR => 19.0,
         ),
         self::SENTRY_URI => array(
             //_('Sentry service URI')

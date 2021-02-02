@@ -431,7 +431,14 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      *       @type boolean, @default: null
      * 
      * - sortable: If this is set to false, no sort by this field is possible in the gridpanel, defaults to true
-     * 
+     *
+     * - default: Default value for a field if empty
+     *      @type: mixed (same as field)
+     *
+     * - defaultConfig: config field name (+ app) for fetching value for a field if empty
+     *      @type: Array
+     *      @example: ['appName' => 'Tinebase', 'config' => Tinebase_Config::SALES_TAX]
+     *
      *   // TODO: generalize, currently only in ContractGridPanel, take it from there:
      * - showInDetailsPanel: auto show in details panel if any is defined in the js gridpanel class
      * 
@@ -644,6 +651,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     // legacy
     protected $_application = NULL;
     protected $_applicationName = NULL;
+
     /**
      * the name of the model (if the class has the name "Calendar_Model_Event", this will be resolved to "Event")
      *
@@ -1252,8 +1260,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
 
             // set default value
-            // TODO: implement complex default values
-            if ((isset($fieldDef['default']))) {
+            if (isset($fieldDef['defaultConfig'])) {
+                $config = Tinebase_Config::getAppConfig($fieldDef['defaultConfig']['appName']);
+                $fieldDef['default'] = $config->get($fieldDef['defaultConfig']['config']);
+            }
+            // TODO: implement complex default values (maybe use defaultConfig for this?)
+            if (isset($fieldDef['default'])) {
 //                 // allows dynamic default values
 //                 if (is_array($fieldDef['default'])) {
 //                     switch ($fieldDef[self::TYPE]) {
@@ -1265,8 +1277,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 //                     }
 //                 } else {
                     $this->_defaultData[$fieldKey] = $fieldDef['default'];
-                    
-//                 }
             }
 
             // TODO: Split this up in multiple functions

@@ -838,12 +838,20 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param $accountId
      * @param $fields
-     * @return Felamimail_Model_Account
+     * @return array
      * @throws Tinebase_Exception_SystemGeneric
      */
     public function testIMapSettings($accountId , $fields)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+
+        if ($account->type !== Felamimail_Model_Account::TYPE_USER) {
+            // only check user defined accounts
+            return [
+                'status' => 'success'
+            ];
+        }
+
         $params = [];
         
         if (is_array($fields)) {
@@ -883,8 +891,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } catch (Exception $e) {
             throw new Tinebase_Exception_SystemGeneric($e->getMessage());
         }
-        
-        return $account;
+
+        return [
+            'status' => 'success'
+        ];
     }
 
     /**
@@ -892,13 +902,20 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param $accountId
      * @param $fields
-     * @return Felamimail_Model_Account
+     * @return array
      * @throws Tinebase_Exception_SystemGeneric
      * @throws Zend_Exception
      */
     public function testSmtpSettings($accountId, $fields)
     {
-        
+        $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+        if ($account->type !== Felamimail_Model_Account::TYPE_USER) {
+            // only check user defined accounts
+            return [
+                'status' => 'success'
+            ];
+        }
+
         if ('' === $fields['smtp_user'] && isset($fields['user'])) {
             $fields['smtp_user'] = $fields['user'];
         }
@@ -916,8 +933,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Credentials missing'));
         }
 
-        $account = Felamimail_Controller_Account::getInstance()->get($accountId);
-        
         foreach ($fields as $key => $field) {
             $account[$key] = $fields[$key];
         }
@@ -944,8 +959,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } catch (Exception $e) {
             throw new Tinebase_Exception_SystemGeneric($e->getMessage());
         }
-        
-        return $account;
+
+        return [
+            'status' => 'success'
+        ];
     }
-    
 }

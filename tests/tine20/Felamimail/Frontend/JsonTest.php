@@ -2536,7 +2536,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         
         $result = $this->_json->testImapSettings($account->getId(), $fields);
         
-        self::assertEquals('success', $result['imap_status'], 'connection failed');
+        self::assertEquals('success', $result['status'], 'connection failed');
     }
 
     public function testSmtpSettingsConnection()
@@ -2558,6 +2558,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_json->testSmtpSettings($account->getId(), $fields);
 
         $result = $this->_json->testSmtpSettings($account->getId(), $fields);
-        self::assertEquals($result['smtp_user'], $config['user'], 'IMAP username should be used if not set');
+        self::assertEquals('success', $result['status'], 'connection failed');
     }
 }

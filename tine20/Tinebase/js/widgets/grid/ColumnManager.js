@@ -63,6 +63,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
+            if (! app) { // e.g. no access to owningApp
+                return null;
+            }
+            
             if (fieldDefinition.type === 'virtual') {
                 fieldDefinition = fieldDefinition.config || {};;
             }

@@ -1973,7 +1973,7 @@ msgid "Import Messages"
 msgstr "Nachrichten importieren"
 
 msgid "No target folder selected"
-msgstr "Kein Zielordner ausgeählt"
+msgstr "Kein Zielordner ausgewählt"
 
 msgid "You need to select a target folder for the messages."
 msgstr "Sie müssen einen Zielordner für die Nachrichten auswählen."
@@ -1982,7 +1982,7 @@ msgid "Wrong File Type"
 msgstr "Falscher Dateityp"
 
 msgid "Files of type eml allowed only."
-msgstr "Nur Datien vom Typ eml sind erlaubt."
+msgstr "Nur Dateien vom Typ eml sind erlaubt."
 
 msgid "Importing Messages..."
 msgstr "Importiere Nachrichten..."
