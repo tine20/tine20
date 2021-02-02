@@ -590,6 +590,20 @@ ul.x-tab-strip-top {
   border-color: @tbColor;
 }
 
+.x-grid3-check-col {
+  background-image: url('../../images/icon-set/icon_check-box.svg');
+}
+
+.x-grid3-check-col-on {
+  background-image: url('../../images/icon-set/icon_check-box-check.svg');
+}
+
+.x-grid3-cell-inner {
+  .x-grid3-check-col, .x-grid3-check-col-on {
+    background-size: 18px;
+  }
+}
+
 .x-form-focus, textarea.x-form-focus {
   border-color: @focusColor;
 }
@@ -759,6 +773,14 @@ a.x-grid3-hd-btn:hover {
   background-image: url('../../images/icon-set/icon_arrow_up.svg');
   background-size: 12px;
   background-position-y: center;
+}
+
+.xg-hmenu-sort-asc .x-menu-item-icon {
+  background-image: url('../../images/icon-set/icon_sort_a-to-z.svg');
+}
+
+.xg-hmenu-sort-desc .x-menu-item-icon {
+  background-image: url('../../images/icon-set/icon_sort_z-to-a.svg');
 }
 
 .x-grid3-row-selected {
