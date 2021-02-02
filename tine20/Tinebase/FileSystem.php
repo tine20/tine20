@@ -2821,9 +2821,7 @@ class Tinebase_FileSystem implements
 
         // hard delete is ok here
         $this->_fileObjectBackend->delete($fileObjectIds);
-        if (true === $this->_indexingActive) {
-            Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($fileObjectIds);
-        }
+        Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($fileObjectIds);
 
         return $count;
     }

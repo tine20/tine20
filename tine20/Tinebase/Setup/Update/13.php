@@ -15,6 +15,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE013_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE013_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -39,6 +40,10 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE013_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ]
     ];
@@ -105,5 +110,22 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         );
         
         $this->addApplicationUpdate('Tinebase', '13.4', self::RELEASE013_UPDATE005);
+    }
+
+    /**
+     * delete too big entries from external_fulltext table
+     */
+    public function update006()
+    {
+        $maxBlobSize = Tinebase_Fulltext_Indexer::getMaxBlobSize();
+        if ($maxBlobSize > 0) {
+            $db = Tinebase_Core::getDb();
+            $deleted = $db->delete(SQL_TABLE_PREFIX . 'external_fulltext',
+                $db->quoteInto('LENGTH(text_data) > ?', $maxBlobSize)
+            );
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removed ' . $deleted
+                . ' records from external_fulltext which are bigger than ' . $maxBlobSize);
+        }
+        $this->addApplicationUpdate('Tinebase', '13.5', self::RELEASE013_UPDATE006);
     }
 }
