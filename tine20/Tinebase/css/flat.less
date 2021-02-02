@@ -738,9 +738,21 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
   background-color: @gridHd;
 }
 
-td.x-grid3-hd-over, td.sort-asc, td.sort-desc {
+td.x-grid3-hd-over, td.sort-asc, td.sort-desc, td.x-grid3-hd-menu-open .x-grid3-hd-inner {
   background-image: none;
   background-color: @gridHdActive;
+}
+
+.x-grid3-hd-btn,
+.x-grid3-hd-over .x-grid3-hd-btn {
+  background-image: url('../../images/icon-set/icon_arrow_down.svg');
+  background-size: 12px;
+  background-color: inherit;
+}
+
+a.x-grid3-hd-btn:hover {
+  background-position: 0% 50%;
+  background-size: 14px;
 }
 
 .sort-asc .x-grid3-sort-icon {

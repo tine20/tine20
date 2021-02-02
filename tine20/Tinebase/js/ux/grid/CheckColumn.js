@@ -81,8 +81,37 @@ Ext.extend(Ext.ux.grid.CheckColumn, Ext.util.Observable, {
             var view = this.grid.getView();
             view.mainBody.on('mousedown', this.onMouseDown, this);
         }, this);
+        this.grid.afterIsRendered().then(() => {
+            if (! this.grid.checkColumnAllActionsAdded) {
+                this.grid.view.hmenu.add('-', this.selectAllAction = new Ext.Action({
+                    text: window.i18n._('Select all'),
+                    iconCls: 'x-grid3-check-col-on',
+                    handler: this.setAllSeleted.bind(this, true)
+                }), this.deselectAllAction = new Ext.Action({
+                    text: window.i18n._('Deselect all'),
+                    iconCls: 'x-grid3-check-col',
+                    handler: this.setAllSeleted.bind(this, false)
+                }));
+
+                this.grid.view.hmenu.on('beforeshow', () => {
+                    const index = this.grid.view.hdCtxIndex;
+                    const col = this.grid.view.cm.columns[index];
+                    
+                    this.selectAllAction.setDisabled(col.constructor !== this.constructor);
+                    this.deselectAllAction.setDisabled(col.constructor !== this.constructor);
+                });
+                this.grid.checkColumnAllActionsAdded = true;
+            }
+        });
     },
 
+    setAllSeleted: function(selected) {
+        const index = this.grid.view.hdCtxIndex;
+        const col = this.grid.view.cm.columns[index];
+        const store = this.grid.view.ds;
+        store.each((r) => { r.set(col.dataIndex, selected)});
+    },
+    
     /**
      * Validate action is valid or not here
      *
