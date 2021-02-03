@@ -1352,7 +1352,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'actionQueueLR' => ['dataWarn' => 60, 'dataErr' => 5 * 60],
             ];
 
-            foreach (['actionQueue' => Tinebase_ActionQueue::getInstance(), 'actionQueueLR' => Tinebase_ActionQueueLongRun::getInstance()] as $qName => $actionQueue) {
+            foreach (['actionQueue' => Tinebase_ActionQueue::getInstance(), 'actionQueueLR' => Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)] as $qName => $actionQueue) {
 
                 $missingQueueKeys = [];
                 $missingDaemonKeys = [];
@@ -1446,7 +1446,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'action'    => 'Tinebase.measureActionQueue',
                 'params'    => [microtime(true)]
             ]);
-            Tinebase_ActionQueueLongRun::getInstance()->executeAction([
+            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->executeAction([
                 'action'    => 'Tinebase.measureActionQueueLongRun',
                 'params'    => [microtime(true)]
             ]);

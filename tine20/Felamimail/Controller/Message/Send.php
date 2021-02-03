@@ -1123,6 +1123,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (! $attachment) {
             throw new Tinebase_Exception_NotFound('node attachment not found');
         }
+        /* @var $stream \GuzzleHttp\Psr7\CachingStream */
         $stream = $attachment['contentstream'];
         $stream->rewind();
         $content = $stream->getContents();

@@ -407,8 +407,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             throw new Tinebase_Exception_InvalidArgument('mandatory parameter "jobId" is missing');
         }
 
-        if (isset($args[1]) && $args[1] === 'longRunning=true') {
-            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+        if (isset($args[1]) ) {
+            $actionQueue = Tinebase_ActionQueue::getInstance(preg_replace('/^queueName=/', '', $args[1]));
         } else {
             $actionQueue = Tinebase_ActionQueue::getInstance();
         }
@@ -1244,7 +1244,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if (! $actionQueue->hasAsyncBackend()) {
                 $message = 'QUEUE INACTIVE';
             } else {
-                $actionLRQueue = Tinebase_ActionQueueLongRun::getInstance();
+                $actionLRQueue = Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN);
                 try {
                     if (null === ($lastDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION))) {
