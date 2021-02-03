@@ -285,6 +285,7 @@ function generatePOTFiles($_verbose)
           --language=Python \
           --from-code=utf-8 \
           --keyword=formatMessage \
+          --keyword=translate \
           --files-from=- \
           2> /dev/null`;
 
