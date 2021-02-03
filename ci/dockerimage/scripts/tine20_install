@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if ! [ -f ${TINE20_LICENSE_PATH} ] && [ ${TINE20_LICENSE_PATH} != "" ]; then
+    TINE20_LICENSE_PATH=""
+    echo "TINE20_LICENSE_PATH is not a file, ommiting it."
+fi
+
 php /usr/share/tine20/setup.php --install --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} ${TINE20_APPLICATION_TO_INSTALL:-"ActiveSync,Calendar,Felamimail,CoreData,Filemanager,Sales,Timetracker,Tasks,Crm,HumanResources,Inventory"} -- \
   adminLoginName="${TINE20_LOGIN_USERNAME:-tine20admin}" \
   adminPassword="${TINE20_LOGIN_PASSWORD:-tine20admin}" \
