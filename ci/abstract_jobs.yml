@@ -10,16 +10,16 @@
   name: "$REDIS_IMAGE"
   alias: cache
 .postfix_service: &abstract_jobs-postfix_service
-  name: dockerregistry.metaways.net/tine20/docker/postfix:1.0.0
+  name: ${UTIL_REGISTRY}/postfix:1.0.0
   alias: postfix
   # fix service service discovery https://gitlab.com/gitlab-org/gitlab-runner/issues/1042#note_144420147
   entrypoint: ["/bin/sh", "-c", "while [ ! -f /$CI_PROJECT_DIR/hosts_$CI_JOB_ID ]; do sleep 1; done && cat /$CI_PROJECT_DIR/hosts_$CI_JOB_ID > /etc/hosts && postconf -e 'smtp_host_lookup = native' 'lmtp_host_lookup = native' && /bin/sh /root/docker-entrypoint.sh"]
 .dovecot_service: &abstract_jobs-dovecot_service
-  name: dockerregistry.metaways.net/tine20/docker/dovecot:1.0.1
+  name: ${UTIL_REGISTRY}/dovecot:1.0.1
   alias: dovecot
   entrypoint: ["/bin/sh", "-c", "while [ ! -f /$CI_PROJECT_DIR/hosts_$CI_JOB_ID ]; do sleep 1; done && cat /$CI_PROJECT_DIR/hosts_$CI_JOB_ID > /etc/hosts && /bin/sh /root/docker-entrypoint.sh"]
 .ldap_service: &abstract_jobs-ldap_service
-  name: dockerregistry.metaways.net/tine20/docker/ldap:1.0.0
+  name: ${UTIL_REGISTRY}/ldap:1.0.0
   alias: ldap
   entrypoint: ["/container/tool/run", "--copy-service"]
 
@@ -174,8 +174,9 @@
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
   services:
-    - docker:19.03.1-dind
-  image: $REGISTRY/docker:19.03.1-r1
+    - name: ${UTIL_REGISTRY}/docker:19.03.1-dind
+      alias: docker
+  image: ${UTIL_REGISTRY}/docker:19.03.1-r1
   before_script:
     - source ci/functions.sh
     - export DOCKER_BUILDKIT=0
@@ -196,7 +197,7 @@
 # .abstract_jobs.customapp.merge_nothing might also be needed in no job runs for a merge merge request
 .abstract_jobs.customapp.merge_upwards:
   image:
-    name: alpine/git
+    name: ${UTIL_REGISTRY}/alpine/git
     entrypoint: ["/bin/sh", "-c"]
   script:
     - apk add jq curl
