@@ -256,6 +256,42 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }
     },
 
+    onDurationChange: function() {
+        this.calculateAccountingTime();
+        
+        // adopt endtime if starttime is set
+        const startTime = +this.getForm().findField('start_time').getValue();
+        if (startTime) {
+            const endTimeField = this.getForm().findField('end_time');
+            endTimeField.setValue(
+                new Date(startTime + this.getForm().findField('duration').getValue()*60000).format(endTimeField.format)
+            );
+        }
+    },
+    
+    onStartTimeChange: function() {
+        // adopt end_time if duration is set
+        const duration = +this.getForm().findField('duration').getValue()*60000;
+        if (duration) {
+            const startTime = +this.getForm().findField('start_time').getValue();
+            const endTimeField = this.getForm().findField('end_time');
+            endTimeField.setValue(
+                new Date(startTime + duration).format(endTimeField.format)
+            );
+        }
+    },
+    
+    onEndTimeChange: function() {
+        // adopt duration if starttime is set
+        const startTime = +this.getForm().findField('start_time').getValue();
+        const endTime = +this.getForm().findField('end_time').getValue();
+        if (startTime && endTime) {
+            const duration = (endTime - startTime)/60000;
+            this.getForm().findField('duration').setValue(duration);
+            this.calculateAccountingTime();
+        }
+    },
+    
     /**
      * returns dialog
      * 
@@ -324,13 +360,27 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 enableKeyEvents: true,
                                 listeners: {
                                     scope: this,
-                                    blur: this.calculateAccountingTime,
-                                    spin: this.calculateAccountingTime,
+                                    blur: this.onDurationChange,
+                                    spin: this.onDurationChange,
                                 }
                             }),
                             fieldManager('start_date', {disabled: this.record.get('workingtime_is_cleared') ? true : false}), 
-                            fieldManager('start_time', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
-                            fieldManager('end_time', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
+                            fieldManager('start_time', {
+                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                listeners: {
+                                    scope: this,
+                                    blur: this.onStartTimeChange,
+                                    select: this.onStartTimeChange,
+                                }
+                            }),
+                            fieldManager('end_time', {
+                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                listeners: {
+                                    scope: this,
+                                    blur: this.onEndTimeChange,
+                                    select: this.onEndTimeChange,
+                                }
+                            }),
                         ], [
                             fieldManager('description', {
                                 disabled: this.record.get('workingtime_is_cleared') ? true : false,
