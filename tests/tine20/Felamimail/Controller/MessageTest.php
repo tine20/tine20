@@ -114,7 +114,9 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     {
         try {
             Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
-            Felamimail_Controller_Message::getInstance()->delete($this->_createdMessages->getArrayOfIds());
+            if ($this->_createdMessages instanceof Tinebase_Record_RecordSet) {
+                Felamimail_Controller_Message::getInstance()->delete($this->_createdMessages->getArrayOfIds());
+            }
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // do nothing
         }
