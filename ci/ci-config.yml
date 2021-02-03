@@ -73,10 +73,10 @@ variables:
   PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE: "false"
 
   # database image used by tests
-  DATABASE_IMAGE: "mariadb:10.4.1"
+  DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.4.1"
 
   # redis image used by tests
-  REDIS_IMAGE: "redis:5.0.5"
+  REDIS_IMAGE: "${UTIL_REGISTRY}/redis:5.0.5"
 
   # add a php unit filter to all php unit test jobs e.g. "CashBook"
   PHPUNIT_FILTER: ""
