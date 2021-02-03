@@ -58,8 +58,13 @@ class Calendar_Export_Container_Csv extends Tinebase_Export_CsvNew
             if ($grant->{$matchGrant}) {
                 if ($grant->account_type === $type) {
                     try {
-                        $user = Tinebase_User::getInstance()->getFullUserById($grant->account_id);
-                        $users[] = $user->accountLoginName;
+                        if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                            $group = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                            $users[] = $group->name;
+                        } else {
+                            $user = Tinebase_User::getInstance()->getFullUserById($grant->account_id);
+                            $users[] = $user->accountLoginName;
+                        }
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // no longer valid
                     }
