@@ -131,25 +131,20 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             switch (config.type) {
                 case 'record':
                     if (Tine.Tinebase.common.hasRight('view', config.config.appName, config.config.modelName.toLowerCase())) {
-                        if (config.config.appName == appName && config.config.modelName == modelName) {
-                            // pointing to same model
-                            gridRenderer = function (value, row, record) {
-                                var title = value && config.config.titleProperty ? value[config.config.titleProperty] : '';
-                                return Ext.util.Format.htmlEncode(title);
-                            };
-                        } else {
-                            gridRenderer = function (value, row, record) {
-                                var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
-                                if (foreignRecordClass) {
-                                    const titleProperty = foreignRecordClass.getMeta('titleProperty');
-                                    let value = record ? record.get(field) : '';
-                                    value = _.isFunction(_.get(value, 'getTitle')) ? value.getTitle() : _.get(value, titleProperty, '');
-                                    return Ext.util.Format.htmlEncode(value);
-                                } else {
-                                    return value;
+                        gridRenderer = function (value, row, record) {
+                            var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
+
+                            if (foreignRecordClass) {
+                                const record = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
+                                const titleProperty = foreignRecordClass.getMeta('titleProperty');
+                                value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
+
+                                if (_.get(record, 'data.is_deleted', false)) {
+                                    value = '<span style="text-decoration: line-through;">' + value + '</sspan>';
                                 }
-                            };
-                        }
+                            }
+                            return value;
+                        };
                     } else {
                         gridRenderer = null;
                     }
