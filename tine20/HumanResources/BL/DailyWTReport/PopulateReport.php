@@ -76,17 +76,21 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
         if ($dayOfWeek === -1) $dayOfWeek = 6;
         $_data->result->working_time_target = $_data->workingTimeModel
             ->{HumanResources_Model_WorkingTimeScheme::FLDS_JSON}['days'][$dayOfWeek];
-        $workingTimeTarget = $_data->result->working_time_target_correction !== null ?
-            $_data->result->working_time_target_correction : $_data->result->working_time_target;
+        $workingTimeTarget = $_data->result->working_time_target +
+            ($_data->result->working_time_target_correction ?: 0);
 
         if ($_data->feastTimes) {
-            $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
-                'id' => Tinebase_Record_Abstract::generateUID(),
-                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => HumanResources_Model_WageType::ID_FEAST,
-                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
-            ]));
+            if ($workingTimeTarget > 0) {
+                $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
+                    'id' => Tinebase_Record_Abstract::generateUID(),
+                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE =>
+                        HumanResources_Model_WageType::ID_FEAST,
+                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
+                ]));
+            }
             $_data->result->system_remark = $_data->feastTimes->getFirstRecord()->summary;
-            $_data->result->working_time_total += $_data->result->working_time_target;
+            $_data->result->working_time_total += $workingTimeTarget;
+            $_data->result->working_time_actual += $workingTimeTarget;
         } elseif ($_data->freeTimes) {
             $_data->freeTimes->sort(function($r1, $r2) {
                 if ($r1->type->wage_type === HumanResources_Model_WageType::ID_SICK && $r2->type->wage_type !==
@@ -97,13 +101,16 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
                 return strcmp((string)$r1->getId(), (string)$r2->getId());
             });
             $wageType = $_data->freeTimes->getFirstRecord()->type->wage_type;
-            $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
-                'id' => Tinebase_Record_Abstract::generateUID(),
-                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $wageType,
-                HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
-            ]));
+            if ($workingTimeTarget > 0) {
+                $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
+                    'id' => Tinebase_Record_Abstract::generateUID(),
+                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE => $wageType,
+                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
+                ]));
+            }
             $_data->result->system_remark = $this->getWageType($wageType)->name;
-            $_data->result->working_time_total += $_data->result->working_time_target;
+            $_data->result->working_time_total += $workingTimeTarget;
+            $_data->result->working_time_actual += $workingTimeTarget;
         }
     }
 

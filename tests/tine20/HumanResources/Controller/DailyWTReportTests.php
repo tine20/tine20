@@ -56,6 +56,39 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         static::assertSame(0, $reportResult['updated']);
         static::assertSame(0, $reportResult['errors'], print_r($reportResult, true));
         static::assertSame($days, $reportResult['created']);
+
+        $feJson = new HumanResources_Frontend_Json();
+        $reportDaily = $feJson->searchDailyWTReports([
+            ['field' => 'employee_id', 'operator' => 'in', 'value' => [$this->employee->getId()]]
+        ], null);
+        $this->assertArrayHasKey('results', $reportDaily);
+        $this->assertArrayHasKey(0, $reportDaily['results']);
+        $this->assertArrayHasKey('employee_id', $reportDaily['results'][0]);
+        $this->assertArrayHasKey('id', $reportDaily['results'][0]['employee_id']);
+        $reportMonthly = $feJson->searchMonthlyWTReports([
+            ['field' => 'employee_id', 'operator' => 'in', 'value' => [$this->employee->getId()]]
+        ], null);
+        $this->assertArrayHasKey('results', $reportMonthly);
+        $this->assertArrayHasKey(0, $reportMonthly['results']);
+        $this->assertArrayHasKey('employee_id', $reportMonthly['results'][0]);
+        $this->assertArrayHasKey('id', $reportMonthly['results'][0]['employee_id']);
+
+        HumanResources_Controller_Employee::getInstance()->delete($this->employee->getId());
+
+        $reportDailyDeleted = $feJson->searchDailyWTReports([
+            ['field' => 'employee_id', 'operator' => 'in', 'value' => [$this->employee->getId()]]
+        ], null);
+        $this->assertArrayHasKey('results', $reportDailyDeleted);
+        $this->assertArrayHasKey(0, $reportDailyDeleted['results']);
+        $this->assertArrayHasKey('employee_id', $reportDailyDeleted['results'][0]);
+        $this->assertArrayHasKey('id', $reportDailyDeleted['results'][0]['employee_id']);
+        $reportMonthlyDeleted = $feJson->searchMonthlyWTReports([
+            ['field' => 'employee_id', 'operator' => 'in', 'value' => [$this->employee->getId()]]
+        ], null);
+        $this->assertArrayHasKey('results', $reportMonthlyDeleted);
+        $this->assertArrayHasKey(0, $reportMonthlyDeleted['results']);
+        $this->assertArrayHasKey('employee_id', $reportMonthlyDeleted['results'][0]);
+        $this->assertArrayHasKey('id', $reportMonthlyDeleted['results'][0]['employee_id']);
     }
 
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEnd()
@@ -161,8 +194,9 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event([
             'summary' => 'unittest feast',
             'container_id' => $contract->feast_calendar_id,
-            'dtstart' => '2018-08-01 00:00:00',
-            'dtend' => '2018-08-01 23:59:59',
+            'dtstart' => '2010-08-01 00:00:00',
+            'dtend' => '2010-08-01 23:59:59',
+            'rrule' => 'FREQ=MONTHLY;BYMONTHDAY=1'
         ]));
 
         $end = new Tinebase_DateTime('2018-08-01 23:59:59');

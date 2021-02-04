@@ -126,6 +126,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::DEFAULT_VAL       => false,
                 self::LABEL             => 'System', // _('System')
+                self::DISABLED          => true,
             ],
             'wage_type' => [
                 self::TYPE              => self::TYPE_RECORD,

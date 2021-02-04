@@ -110,6 +110,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                 self::CONFIG                        => [
                     self::APP_NAME                      => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME                    => HumanResources_Model_Employee::MODEL_NAME_PART,
+                    self::RESOLVE_DELETED               => true,
                 ],
                 self::QUERY_FILTER                  => true,
             ],

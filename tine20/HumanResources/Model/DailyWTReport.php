@@ -142,6 +142,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 'config' => [
                     'appName'     => 'HumanResources',
                     'modelName'   => 'Employee',
+                    self::RESOLVE_DELETED => true,
                 ],
                 self::DISABLED              => true,
                 self::QUERY_FILTER          => true,

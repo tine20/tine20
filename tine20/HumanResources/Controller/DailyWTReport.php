@@ -408,15 +408,21 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     {
         if (!isset($this->_feastDays[$feastCalendarId])) {
             $this->_feastDays[$feastCalendarId] = [];
+            /** @var Calendar_Model_EventFilter $filter */
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
                 ['field' => 'container_id', 'operator' => 'equals', 'value' => $feastCalendarId],
-                ['field' => 'dtstart', 'operator' => 'before_or_equals', 'value' => $this->_endDate],
-                ['field' => 'dtend', 'operator' => 'after_or_equals', 'value' => $this->_startDate],
-
+                ['field' => 'period', 'operator' => 'within', 'value' => [
+                    'from' => $this->_startDate,
+                    'until' => $this->_endDate,
+                ]]
             ]);
+
+            $events = Calendar_Controller_Event::getInstance()->search($filter);
+            Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $filter);
+
             // turn off acl?
             /** @var Calendar_Model_Event $event */
-            foreach (Calendar_Controller_Event::getInstance()->search($filter) as $event) {
+            foreach ($events as $event) {
                 $event->dtstart->setTimezone($event->originator_tz);
                 $day = $event->dtstart->format('Y-m-d');
                 if (!isset($this->_feastDays[$feastCalendarId][$day])) {
