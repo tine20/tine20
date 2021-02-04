@@ -1202,6 +1202,9 @@ msgstr ""
 "Arbeitszeit wird ausgewertet von {{start_time|date(\"H:i\")}} bis "
 "{{end_time|date(\"H:i\")}}."
 
+msgid "Monthly Report"
+msgstr "Monatsbericht"
+
 msgid "Absence reason"
 msgid_plural "Absence reasons"
 msgstr[0] "Abwesenheitsgrund"
