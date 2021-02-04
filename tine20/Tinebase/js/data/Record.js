@@ -539,12 +539,17 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         totalProperty: 'totalcount'
     }, recordClass);
 
-    var recordData = {results: _.compact([
-            Ext.isString(json) ? Ext.decode(json) : json
-        ])},
-        data = jsonReader.readRecords(recordData),
-        record = data.records[0],
-        recordId = _.get(record, 'data.' + _.get(record, 'idProperty'), Tine.Tinebase.data.Record.generateUID());
+    try {
+        var recordData = {
+                results: _.compact([
+                    Ext.isString(json) ? Ext.decode(json) : json
+                ])
+            },
+            data = jsonReader.readRecords(recordData),
+            record = data.records[0];
+    } catch (e) {}
+
+    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty'), Tine.Tinebase.data.Record.generateUID());
 
     if (! record) {
         record = new recordClass({}, recordId);
