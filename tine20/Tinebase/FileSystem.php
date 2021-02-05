@@ -726,23 +726,29 @@ class Tinebase_FileSystem implements
         if (is_file($_hashFile)) {
             $updatedFileObject->size = filesize($_hashFile);
 
-            if (function_exists('finfo_open')) {
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_file($finfo, $_hashFile);
-                if ($mimeType !== false) {
-                    if (PHP_VERSION_ID >= 70300 && ($mimeLen = strlen($mimeType)) % 2 === 0 &&
+            if (null === ($mimeType = Tinebase_MimeType::getInstance()
+                    ->getMimeTypeForExtention(pathinfo($_node->name, PATHINFO_EXTENSION)))) {
+                if (function_exists('finfo_open')) {
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_file($finfo, $_hashFile);
+                    if ($mimeType !== false) {
+                        if (PHP_VERSION_ID >= 70300 && ($mimeLen = strlen($mimeType)) % 2 === 0 &&
                             substr($mimeType, 0, $mimeLen / 2) === substr($mimeType, $mimeLen / 2)) {
-                        $mimeType = substr($mimeType, 0, $mimeLen / 2);
+                            $mimeType = substr($mimeType, 0, $mimeLen / 2);
+                        }
                     }
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                            " Setting file contenttype to " . $mimeType);
-                    $updatedFileObject->contenttype = $mimeType;
+                    finfo_close($finfo);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' finfo_open() is not available: Could not get file information.');
                 }
-                finfo_close($finfo);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' finfo_open() is not available: Could not get file information.');
+            }
+
+            if (null !== $mimeType) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        " Setting file contenttype to " . $mimeType);
+                $updatedFileObject->contenttype = $mimeType;
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
