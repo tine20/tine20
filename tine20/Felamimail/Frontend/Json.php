@@ -816,20 +816,21 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param $accountId
      * @param $fields
+     * @param bool $forceConnect
      * @return array
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function testIMapSettings($accountId , $fields)
+    public function testIMapSettings($accountId , $fields, $forceConnect = false)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($accountId);
-
-        if ($account->type !== Felamimail_Model_Account::TYPE_USER) {
-            // only check user defined accounts
+        
+        //only test connection for external user account by default 
+        if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER) {
             return [
                 'status' => 'success'
             ];
         }
-
+        
         $params = [];
         
         if (is_array($fields)) {
@@ -854,15 +855,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $params->password = isset($fields['password']) ? $fields['password'] : '';
         $params->port     = isset($fields['port'])     ? $fields['port']     : null;
         $params->ssl      = isset($fields['ssl'])      ? $fields['ssl']      : false;
-
-        //avoid null $_id error
-        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
-        $userInBackend = $emailUserBackend->getRawUserById($emailUser);
-        
-        if ($userInBackend) {
-            $params->account = $account;
-        }
         
         try {
             $backend = new Felamimail_Backend_Imap($params);
@@ -880,15 +872,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param $accountId
      * @param $fields
+     * @param bool $forceConnect
      * @return array
      * @throws Tinebase_Exception_SystemGeneric
      * @throws Zend_Exception
      */
-    public function testSmtpSettings($accountId, $fields)
+    public function testSmtpSettings($accountId, $fields, $forceConnect = false)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($accountId);
-        if ($account->type !== Felamimail_Model_Account::TYPE_USER) {
-            // only check user defined accounts
+        
+        //only test connection for external user account by default 
+        if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER) {
             return [
                 'status' => 'success'
             ];
