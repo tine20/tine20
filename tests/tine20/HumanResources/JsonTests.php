@@ -890,7 +890,34 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertGreaterThan(0, $result['totalcount'], 'should find employee with no employment_end');
     }
-    
+
+    public function testSearchFreeTimeTypes()
+    {
+        $result = $this->_json->searchFreeTimeTypes(null, null);
+        $this->assertArrayHasKey('results', $result);
+        $this->assertTrue(count($result['results']) > 0);
+        $this->assertArrayHasKey('wage_type', $result['results'][0]);
+        $this->assertArrayHasKey('name', $result['results'][0]['wage_type']);
+    }
+
+    public function testDeleteFreeTimeTypes()
+    {
+        $result = $this->_json->searchFreeTimeTypes(null, null);
+        $saved = $this->_json->saveFreeTimeType((new HumanResources_Model_FreeTimeType([
+                'abbreviation'  => 'a',
+                'name'          => 'unittest',
+                'wage_type'     => HumanResources_Model_WageType::ID_SICK
+            ]))->toArray()
+        );
+        $resultLarger = $this->_json->searchFreeTimeTypes(null, null);
+        $this->assertGreaterThan($result['totalcount'], $resultLarger['totalcount']);
+
+        $this->_json->deleteFreeTimeTypes([$saved['id']]);
+
+        $resultSame = $this->_json->searchFreeTimeTypes(null, null);
+        $this->assertSame($result['totalcount'], $resultSame['totalcount']);
+    }
+
     /**
      * @see: 0009574: vacation or sickness days can't be booked on the last working day
      *       https://forge.tine20.org/mantisbt/view.php?id=9574

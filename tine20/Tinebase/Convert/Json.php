@@ -228,9 +228,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 
                 $cfg = $resolveFields[$fields[0]];
 
-                if ($cfg['type'] === 'user') {
+                if ($cfg[MCC::TYPE] === 'user') {
                     $foreignRecords = Tinebase_User::getInstance()->getMultiple($foreignIds);
-                } else if ($cfg['type'] === 'container') {
+                } else if ($cfg[MCC::TYPE] === 'container') {
                     // TODO: resolve recursive records of records better in controller
                     // TODO: resolve containers
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -241,7 +241,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     continue;
                 } else {
                     try {
-                        $foreignRecords = $this->_getForeignRecords($foreignIds, $foreignRecordClassName);
+                        $foreignRecords = $this->_getForeignRecords($foreignIds, $foreignRecordClassName,
+                            isset($cfg[MCC::CONFIG][MCC::RESOLVE_DELETED]) ?
+                                $cfg[MCC::CONFIG][MCC::RESOLVE_DELETED] : false);
                     } catch (Tinebase_Exception_AccessDenied $tead) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                             . ' No right to access application of record ' . $foreignRecordClassName);
@@ -281,10 +283,10 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param $foreignRecordClassName
      * @return Tinebase_Record_RecordSet
      */
-    protected function _getForeignRecords($foreignIds, $foreignRecordClassName)
+    protected function _getForeignRecords($foreignIds, $foreignRecordClassName, $resovleDeleted = false)
     {
         $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
-        $foreignRecords = $controller->getMultiple($foreignIds);
+        $foreignRecords = $controller->getMultiple($foreignIds, false, null, $resovleDeleted);
         return $foreignRecords;
     }
 
