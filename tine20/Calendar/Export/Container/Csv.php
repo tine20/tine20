@@ -67,12 +67,30 @@ class Calendar_Export_Container_Csv extends Tinebase_Export_CsvNew
                         }
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         // no longer valid
+                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                        // no longer valid
                     }
                 } else if ($grant->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE && $type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
                     $users[] = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+                } else if ($grant->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP && $type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                    // add group users
+                    try {
+                        $members = Tinebase_Group::getInstance()->getGroupMembers($grant->account_id);
+                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                        // no longer valid
+                        continue;
+                    }
+                    foreach ($members as $userid) {
+                        try {
+                            $user = Tinebase_User::getInstance()->getFullUserById($userid);
+                            $users[] = $user->accountLoginName;
+                        } catch (Tinebase_Exception_NotFound $tenf) {
+                            // no longer valid
+                        }
+                    }
                 }
             }
         }
-        return implode(',', $users);
+        return implode(',', array_unique($users));
     }
 }
