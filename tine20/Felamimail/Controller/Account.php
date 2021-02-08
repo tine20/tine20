@@ -1576,7 +1576,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         if ($pwd && Felamimail_Config::getInstance()
             ->featureEnabled(Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS)) {
-            $this->_autoCreateMoveNotifications($systemAccount);
+            $this->autoCreateMoveNotifications($systemAccount);
         }
 
         // set as default account preference
@@ -1662,7 +1662,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _autoCreateMoveNotifications(Felamimail_Model_Account $_account)
+    public function autoCreateMoveNotifications(Felamimail_Model_Account $_account)
     {
         $translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $_account->sieve_notification_move = true;
