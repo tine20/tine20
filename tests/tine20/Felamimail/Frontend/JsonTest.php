@@ -1034,7 +1034,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $fullMessage = $this->_json->getMessage($forwardMessage['id']);
         self::assertTrue(count($fullMessage['attachments']) === 1, 'attachment not found: ' . print_r($fullMessage, true));
         $attachment = $fullMessage['attachments'][0];
-        self::assertEquals('text/html', $attachment['content-type']);
+        self::assertEquals('message/rfc822', $attachment['content-type']);
         self::assertEquals('test.eml', $attachment['filename']);
         self::assertGreaterThanOrEqual(51882, $attachment['size']);
     }
