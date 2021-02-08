@@ -93,6 +93,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
      */
     protected $_subFilterController = null;
 
+    protected $_passThroughFilter = null;
     
     /**
      * get a new single filter action
@@ -155,10 +156,19 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             case 'record':
                 if (is_array($_fieldOrData['value']['value'])) {
                     $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
-                    $this->_subFilterController = Tinebase_Core::getApplicationInstance($modelName);
-                    $this->_subFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
-                    $filterClass = null;
-                    $this->_operators = ['AND', 'OR', 'notDefinedBy:AND', 'notDefinedBy:OR'];
+                    $passThroughData = $_fieldOrData;
+                    $passThroughData['field'] = 'value';
+                    $passThroughData['value'] = $passThroughData['value']['value'];
+                    $filterGroup = get_class(Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName));
+                    if ($filterGroup === Tinebase_Model_Filter_FilterGroup::class) {
+                        $filterGroup = $modelName;
+                    }
+                    $passThroughData['options'] = [
+                        'tablename'     => $this->_correlationName,
+                        'controller'    => get_class(Tinebase_Core::getApplicationInstance($modelName)),
+                        'filtergroup'   => $filterGroup,
+                    ];
+                    $this->_passThroughFilter = new Tinebase_Model_Filter_ForeignId($passThroughData);
                 } else {
                     $filterClass = Tinebase_Model_Filter_Id::class;
                 }
@@ -184,6 +194,21 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         }
 
         parent::__construct($_fieldOrData, $_operator, $_value, $_options);
+    }
+
+    /**
+     * sets operator
+     *
+     * @param string $_operator
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function setOperator($_operator)
+    {
+        if (null !== $this->_passThroughFilter) {
+            $this->_operator = $_operator;
+        } else {
+            parent::setOperator($_operator);
+        }
     }
     
     /**
@@ -275,6 +300,9 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     $this->_valueFilter->appendFilterSql($_select, $_backend);
                 }
             }
+        }
+        if (null !== $this->_passThroughFilter) {
+            $this->_passThroughFilter->appendFilterSql($_select, $_backend);
         }
     }
     

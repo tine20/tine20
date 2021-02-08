@@ -169,11 +169,15 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     protected function _setFilterGroup()
     {
+        $options = $this->_options;
+        if (isset($options['tablename'])) {
+            unset($options['tablename']);
+        }
         $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             $this->_options['filtergroup'],
             $this->_value,
             $this->_conditionSubFilter,
-            $this->_options
+            $options
         );
     }
     
