@@ -368,7 +368,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => self::SIGNATURE_BELOW_QUOTE,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::SIGNATURE_ABOVE_QUOTE,
                     ['InArray', [self::SIGNATURE_ABOVE_QUOTE, self::SIGNATURE_BELOW_QUOTE]]
                 ],
             ],
