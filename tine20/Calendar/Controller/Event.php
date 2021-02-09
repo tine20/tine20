@@ -180,10 +180,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     public function checkBusyConflicts($_event)
     {
         $ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
-        
-        if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || empty($_event->attendee)) {
+
+        if ($_event->transp === Calendar_Model_Event::TRANSP_TRANSP) {
+            $attendees = $this->_getBusyUnavailableResourceAttendees($_event);
+        } else {
+            $attendees = $_event->attendee;
+        }
+
+        if (empty($attendees) || $attendees->count() === 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " Skipping free/busy check because event is transparent or has no attendee");
+                . " Skipping free/busy check because event has no attendee");
+
             return;
         }
 
@@ -192,7 +199,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             'until' => $_event->dtstart->getClone()->addMonth(2)
         ));
 
-        $fbInfo = $this->getFreeBusyInfo($periods, $_event->attendee, $ignoreUIDs);
+        $fbInfo = $this->getFreeBusyInfo($periods, $attendees, $ignoreUIDs);
         
         if (count($fbInfo) > 0) {
             $busyException = new Calendar_Exception_AttendeeBusy();
@@ -226,6 +233,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         try {
+            $declineResources = [];
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
@@ -237,12 +245,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($_checkBusyConflicts) {
                 // ensure that all attendee are free
                 $this->checkBusyConflicts($_record);
+            } else {
+                // ensure resources with busy_type "busy unavailable" do not get overbooked
+                $declineResources = $this->_checkResourceAvailability($_record);
             }
 
             // skip sending notifications in parent
             $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
-            
+
+            /** @var Calendar_Model_Event $createdEvent */
             $createdEvent = parent::create($_record);
             
             $this->_sendNotifications = $sendNotifications;
@@ -262,9 +274,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 . ' Skip sending notifications');
         }
 
+        $this->_processDeclineResources($createdEvent, $declineResources);
+
         return $createdEvent;
     }
-    
+
+    /**
+     * @param Calendar_Model_Event $event
+     * @param $declineResources
+     * @return Calendar_Model_Event
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _processDeclineResources(Calendar_Model_Event $event, $declineResources)
+    {
+        if (count($declineResources) > 0) {
+            $event->attendee->filter(function(Calendar_Model_Attender $attendee) use ($declineResources) {
+                if ($attendee->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE && in_array($attendee->user_id,
+                        $declineResources)) {
+                    $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
+                }
+            });
+
+            $event = $this->update($event);
+        }
+
+        return $event;
+    }
+
     /**
      * inspect creation of one record (after create)
      *
@@ -947,6 +984,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         /** @var Calendar_Model_Event $_record */
         try {
+            $declineResources = [];
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
@@ -978,7 +1016,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                                 . " Skipping free/busy check because event has not been rescheduled and no new attender has been added");
                         }
+                        // ensure resources with busy_type "busy unavailable" do not get overbooked
+                        $declineResources = $this->_checkResourceAvailability($_record);
                     }
+                } else {
+                    // ensure resources with busy_type "busy unavailable" do not get overbooked
+                    $declineResources = $this->_checkResourceAvailability($_record);
                 }
                 
                 parent::update($_record);
@@ -1015,9 +1058,67 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($this->_sendNotifications) {
             $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
+
+        $updatedEvent = $this->_processDeclineResources($updatedEvent, $declineResources);
+
         return $updatedEvent;
     }
-    
+
+    /**
+     * see taiga #2357 or rt #169467
+     * if a resource attendee has busy_type Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE and has not yet
+     * declined, check if there is a conflict. If so, decline this event and send notification
+     *
+     * @param Calendar_Model_Event $event
+     * @return array
+     */
+    protected function _checkResourceAvailability(Calendar_Model_Event $event)
+    {
+        $resourceIds = [];
+        $resourceAttendees = $this->_getBusyUnavailableResourceAttendees($event);
+
+        if ($resourceAttendees && $resourceAttendees->count() > 0) {
+            $periods = $this->getBlockingPeriods($event, array(
+                'from' => $event->dtstart,
+                'until' => $event->dtstart->getClone()->addMonth(2)
+            ));
+
+            $fbInfo = $this->getFreeBusyInfo($periods, $resourceAttendees, !empty($event->uid) ? [$event->uid] : []);
+            if ($fbInfo->count() > 0) {
+                /** @var Calendar_Model_Attender $attendee */
+                foreach ($resourceAttendees as $attendee) {
+                    if (null !== $fbInfo->find('user_id', $attendee->user_id->getId())) {
+                        $resourceIds[] = $attendee->user_id->getId();
+                    }
+                }
+            }
+        }
+
+        return $resourceIds;
+    }
+
+    /**
+     * returns attendees of type resource which have not declined and have busy_type busy_unavailable
+     *
+     * @param Calendar_Model_Event $event
+     * @return Tinebase_Record_RecordSet|null
+     */
+    protected function _getBusyUnavailableResourceAttendees(Calendar_Model_Event $event)
+    {
+        if (empty($event->attendee)) {
+            return;
+        }
+
+        $resourceAttendees = $event->attendee->filter(function (Calendar_Model_Attender $attendee) {
+            return $attendee->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE
+                && $attendee->status !== Calendar_Model_Attender::STATUS_DECLINED;
+        });
+        Calendar_Model_Attender::resolveAttendee($resourceAttendees, false);
+        return $resourceAttendees->filter(function (Calendar_Model_Attender $attendee) {
+            return $attendee->user_id->busy_type === Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE;
+        });
+    }
+
     /**
      * inspect update of one record (after update)
      *
