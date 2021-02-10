@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af47ea0cc61fc1fca9da96d8d5eee48e",
+    "content-hash": "22baca24d1cd44ba8c5b7ca00c1ae748",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -4218,11 +4218,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl42",
+            "version": "1.12.20pl43",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "f2d6de3a65adf1d2f6a16390dede3d286e392fc8"
+                "reference": "03f56fe32001a315944a5b6bb07a7fb244594d06"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -4239,7 +4239,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2021-01-12T10:25:49+00:00"
+            "time": "2021-02-10T08:49:03+00:00"
         }
     ],
     "packages-dev": [
@@ -5868,7 +5868,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch42",
+            "version": "1.12.20.0-patch43",
             "package": "zendframework/zendframework1"
         }
     ],
