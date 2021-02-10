@@ -123,7 +123,7 @@ class AbstractProvider extends Ext.util.Observable {
     let _ = window.lodash
     let expires = _.get(state, 'expires', 0)
     if (!_.isNumber(expires)) {
-      _.set(state, 'expires', new Date(expires).getTime())
+      _.set(state, 'expires', Date.parseDate(expires, Date.patterns.ISO8601Long).getTime())
     }
     Object.assign(this, state)
   }
