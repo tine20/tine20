@@ -48,6 +48,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return true;
     }
 
+    public function sanitizeFSMimeTypes()
+    {
+        $this->_checkAdminRight();
+        Tinebase_FileSystem::getInstance()->sanitizeMimeTypes();
+        return true;
+    }
+
     /**
      * @param Zend_Console_Getopt $opts
      * @return boolean success

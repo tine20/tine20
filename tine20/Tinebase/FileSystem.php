@@ -725,26 +725,7 @@ class Tinebase_FileSystem implements
 
         if (is_file($_hashFile)) {
             $updatedFileObject->size = filesize($_hashFile);
-
-            if (null === ($mimeType = Tinebase_MimeType::getInstance()
-                    ->getMimeTypeForExtention(pathinfo($_node->name, PATHINFO_EXTENSION)))) {
-                if (function_exists('finfo_open')) {
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_file($finfo, $_hashFile);
-                    if ($mimeType !== false) {
-                        if (PHP_VERSION_ID >= 70300 && ($mimeLen = strlen($mimeType)) % 2 === 0 &&
-                            substr($mimeType, 0, $mimeLen / 2) === substr($mimeType, $mimeLen / 2)) {
-                            $mimeType = substr($mimeType, 0, $mimeLen / 2);
-                        }
-                    }
-                    finfo_close($finfo);
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' finfo_open() is not available: Could not get file information.');
-                }
-            }
-
-            if (null !== $mimeType) {
+            if (null !== ($mimeType = $this->_getMimeType($_node->name, $_hashFile))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         " Setting file contenttype to " . $mimeType);
@@ -795,6 +776,31 @@ class Tinebase_FileSystem implements
         }
 
         return $newFileObject;
+    }
+
+    protected function _getMimeType($_fileName, $_realFilePath)
+    {
+        if (null === ($mimeType = Tinebase_MimeType::getInstance()
+                ->getMimeTypeForExtention(pathinfo($_fileName, PATHINFO_EXTENSION)))) {
+            if (function_exists('finfo_open')) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_file($finfo, $_realFilePath);
+                if ($mimeType !== false) {
+                    if (PHP_VERSION_ID >= 70300 && ($mimeLen = strlen($mimeType)) % 2 === 0 &&
+                        substr($mimeType, 0, $mimeLen / 2) === substr($mimeType, $mimeLen / 2)) {
+                        $mimeType = substr($mimeType, 0, $mimeLen / 2);
+                    }
+                } else {
+                    $mimeType = null;
+                }
+                finfo_close($finfo);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' finfo_open() is not available: Could not get file information.');
+            }
+        }
+
+        return $mimeType;
     }
 
     public function getEffectiveAndLocalQuota(Tinebase_Model_Tree_Node $node)
@@ -3667,6 +3673,49 @@ class Tinebase_FileSystem implements
         }
 
         return $status;
+    }
+
+    public function sanitizeMimeTypes()
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' starting to sanitize mime types');
+
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+
+        foreach ($treeNodeBackend->search(
+                new Tinebase_Model_Tree_Node_Filter([
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
+                ], '', ['ignoreAcl' => true])
+                , null, true) as $id) {
+
+            $raii = Tinebase_RAII::getTransactionManagerRAII();
+
+            /** @var Tinebase_Model_Tree_Node $node */
+            try {
+                $node = $treeNodeBackend->get($id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $raii->release();
+                continue;
+            }
+
+            $mimeType = $this->_getMimeType($node->name, $this->getRealPathForHash($node->hash));
+            if (null !== $mimeType && $node->contenttype !== $mimeType) {
+                try {
+                    $fObj = $this->_fileObjectBackend->get($node->object_id);
+                    $fObj->contenttype = $mimeType;
+                    $this->_fileObjectBackend->update($fObj);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    $raii->release();
+                    continue;
+                }
+
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' updated mimetype for object ' .
+                    $node->object_id);
+            }
+
+            $raii->release();
+        }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' done to sanitize mime types');
     }
 
     /**
