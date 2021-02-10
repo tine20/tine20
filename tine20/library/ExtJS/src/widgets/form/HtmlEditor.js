@@ -825,30 +825,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         var adjust = btn.getItemId() == 'increasefontsize' ? 1 : -1,
             doc = this.getDoc(),
             v = parseInt(doc.queryCommandValue('FontSize') || 2, 10);
-        if((Ext.isSafari && !Ext.isSafari2) || Ext.isAir){
-            // Safari 3 values
-            // 1 = 10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px
-            if(v <= 10){
-                v = 1 + adjust;
-            }else if(v <= 13){
-                v = 2 + adjust;
-            }else if(v <= 16){
-                v = 3 + adjust;
-            }else if(v <= 18){
-                v = 4 + adjust;
-            }else if(v <= 24){
-                v = 5 + adjust;
-            }else {
-                v = 6 + adjust;
-            }
-            v = v.constrain(1, 6);
-        }else{
-            if(Ext.isSafari){ // safari
-                adjust *= 2;
-            }
-            v = Math.max(1, v+adjust) + (Ext.isSafari ? 'px' : 0);
-        }
-        this.execCmd('FontSize', v);
+
+        this.execCmd('FontSize', Math.max(1, v+adjust));
     },
 
     // private
