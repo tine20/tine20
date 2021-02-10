@@ -2487,7 +2487,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             return;
         }
-        var records = sm.getSelections();
+        var records = sm.getSelectedRecords ? sm.getSelectedRecords() : sm.getSelections();
 
         if (this.disableDeleteConfirmation || (Tine[this.app.appName].registry.get('preferences')
             && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') !== null
