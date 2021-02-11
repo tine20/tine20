@@ -779,3 +779,9 @@ msgstr "Benachrichtigungen werden nicht unterdrückt"
 
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen werden unterdrückt"
+
+msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
+msgstr "Der Status dieses Leads wurde auf schreibgeschützt gesetzt. Es ist daher nicht möglich, diesen Lead zu aktualisieren."
+
+msgid "read-only"
+msgstr "schreibgeschützt"

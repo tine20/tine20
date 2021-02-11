@@ -156,7 +156,8 @@ Tine.Crm.Model.LeadState = Tine.Tinebase.data.Record.create([
     { name: 'value' },
     { name: 'system' },
     { name: 'probability', label: 'Probability', type: 'percentage' }, // i18n._('Probability')
-    { name: 'endslead', label: 'X Lead', type: 'bool'} // i18n._('X Lead')
+    { name: 'endslead', label: 'X Lead', type: 'bool'}, // i18n._('X Lead')
+    { name: 'readonly', label: 'read-only', type: 'bool'} // i18n._('read-only')
 ], {
     appName: 'Crm',
     modelName: 'LeadState',
