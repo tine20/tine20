@@ -408,6 +408,48 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
     },
 
+    onDeleteRecords: function() {
+        const sm = this.grid.getSelectionModel();
+        const records = _.map(this.getSelectedFreeTimes(), _.curry(Tine.Tinebase.data.Record.setFromJson)(_, Tine.HumanResources.Model.FreeTime));
+
+        if (this.disableDeleteConfirmation || (Tine[this.app.appName].registry.get('preferences')
+            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') !== null
+            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') == 0)
+        ) {
+            // don't show confirmation question for record deletion
+            this.deleteRecords(sm, records);
+        } else {
+            var recordNames = records[0].getTitle();
+            if (records.length > 1) {
+                recordNames += ', ...';
+            }
+
+            var i18nQuestion = this.i18nDeleteQuestion ?
+                this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
+                String.format(i18n.ngettext('Do you really want to delete the selected record?',
+                    'Do you really want to delete the selected records?', records.length), recordNames);
+            Ext.MessageBox.confirm(i18n._('Confirm'), i18nQuestion, function(btn) {
+                if (btn == 'yes') {
+                    this.deleteRecords(sm, records);
+                }
+            }, this);
+        }
+        
+    },
+
+    deleteRecords: async function(sm, rs) {
+        this.pagingToolbar.refresh.disable();
+        await Tine.HumanResources.deleteFreeTimes(_.map(rs, 'data.id'));
+        
+        const employeeIds = _.uniq(_.reduce(rs, (es, r) => {
+            return es.concat(this.store.getById(r.data.employee_id));
+        }, []));
+        
+        await this.resolveRecords(this.periodPicker.getValue().from.format('Y'), employeeIds)
+
+        this.grid.view.refresh();
+    },
+    
     /**
      * on update after edit
      *
@@ -421,7 +463,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         this.resolveRecords(this.periodPicker.getValue().from.format('Y'), [employee.getId()])
         
         .then(() => {
-            this.grid.refresh();
+            this.grid.view.refresh();
         });
     },
     
