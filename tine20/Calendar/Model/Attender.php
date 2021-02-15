@@ -608,6 +608,32 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             }
         }
     }
+
+    public static function enforceListIdForGroups(Tinebase_Record_RecordSet $_attendees)
+    {
+        $groups = [];
+        $lists = [];
+        foreach ($_attendees->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP) as $groupAttendee) {
+            if ($groupAttendee->user_id instanceof Tinebase_Record_Interface) {
+                if ($groupAttendee->user_id instanceof Tinebase_Model_Group && !empty($groupAttendee->user_id->list_id)) {
+                    $groupAttendee->user_id = Addressbook_Controller_List::getInstance()->get($groupAttendee->user_id->list_id);
+                }
+            } else {
+                if (!isset($groups[$groupAttendee->user_id]) && !isset($lists[$groupAttendee->user_id])) {
+                    try {
+                        $lists[$groupAttendee->user_id] = Addressbook_Controller_List::getInstance()
+                            ->get($groupAttendee->user_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $groups[$groupAttendee->user_id] = Tinebase_Group::getInstance()
+                            ->getGroupById($groupAttendee->user_id);
+                    }
+                }
+                if (isset($groups[$groupAttendee->user_id])) {
+                    $groupAttendee->user_id = $groups[$groupAttendee->user_id]->list_id;
+                }
+            }
+        }
+    }
     
    /**
     * check if contact with given email exists in addressbook and creates it if not
@@ -700,8 +726,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $listId = null;
         
             if ($groupAttender->user_id instanceof Addressbook_Model_List) {
-                $listId = $groupAttender->user_id->getId();
-            } else if ($groupAttender->user_id !== NULL) {
+                $groupAttender->user_id = $listId = $groupAttender->user_id->getId();
+            } elseif ($groupAttender->user_id instanceof Tinebase_Model_Group &&
+                    !empty($groupAttender->user_id->list_id)) {
+                $groupAttender->user_id = $listId = $groupAttender->user_id->list_id;
+            } elseif ($groupAttender->user_id !== NULL) {
                 try {
                     $list = Addressbook_Controller_List::getInstance()->get($groupAttender->user_id);
                     $listId = $list->getId();
@@ -710,7 +739,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
                     if (!empty($group->list_id)) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__  . ' fixme: depricated use of  group id');
-                        $listId = $group->list_id;
+                        $groupAttender->user_id = $listId = $group->list_id;
                     }
                 }
             } else {
