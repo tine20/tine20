@@ -1607,6 +1607,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     'length'                  => 40,
                     'appName'                 => 'Tinebase',
                     'modelName'               => 'User',
+                    'type'                    => 'record',
                     'recordClassName'         => Tinebase_Model_User::class,
                     'controllerClassName'     => Tinebase_User::class,
                     'filterClassName'         => Tinebase_Model_FullUserFilter::class,
