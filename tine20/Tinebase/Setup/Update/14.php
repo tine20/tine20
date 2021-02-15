@@ -11,12 +11,17 @@
 class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
 {
     const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
             self::RELEASE014_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],=
+            self::RELEASE014_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -44,5 +49,13 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '14.1', self::RELEASE014_UPDATE001);
+    }
+
+    public function update002()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_AuthToken::class,
+        ]);
+        $this->addApplicationUpdate('Tinebase', '14.2', self::RELEASE014_UPDATE002);
     }
 }
