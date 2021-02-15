@@ -122,7 +122,7 @@ Ext.ux.form.DurationSpinner.durationRenderer = function(value, config) {
         value = config.emptyOnZero ? '' : '00:00';
     } else if(! value.toString().match(/:/)) {
         if (config.baseUnit == 'seconds') {
-            value = value/60;
+            value = Math.round(value/60);
         }
         var isNegValue = value < 0,
             hours = Math.floor(Math.abs(value) / 60),
