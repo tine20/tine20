@@ -128,9 +128,9 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                 this.sm = this.gridPanel.grid.getSelectionModel();
             }
 
-            // return if no rows are selected
+            // select all if nothing is selected
             if (this.sm.getCount() === 0) {
-                return false;
+                this.sm.selectAll();
             }
 
             this.recordClass = this.recordClass || this.gridPanel.recordClass;
