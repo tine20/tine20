@@ -272,8 +272,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     onStartTimeChange: function() {
         // adopt end_time if duration is set
         const duration = +this.getForm().findField('duration').getValue()*60000;
-        if (duration) {
-            const startTime = +this.getForm().findField('start_time').getValue();
+        const startTime = +this.getForm().findField('start_time').getValue();
+        if (duration && startTime) {
             const endTimeField = this.getForm().findField('end_time');
             endTimeField.setValue(
                 new Date(startTime + duration).format(endTimeField.format)
