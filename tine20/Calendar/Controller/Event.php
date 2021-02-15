@@ -454,6 +454,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // map groupmembers to users
         $attendee = clone $_attendee;
+        Calendar_Model_Attender::enforceListIdForGroups($attendee);
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
         /*$groups = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
