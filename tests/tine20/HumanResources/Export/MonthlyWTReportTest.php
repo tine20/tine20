@@ -30,7 +30,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
                 'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
                     Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                         'model' => HumanResources_Model_MonthlyWTReport::class,
-                        'name' => 'monthlyWTReport'
+                        'name' => 'Monthly Report'
                     ]))->getFirstRecord()->getId()
             ]);
         $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(
@@ -62,7 +62,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
             'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => HumanResources_Model_MonthlyWTReport::class,
-                    'name' => 'monthlyWTReport'
+                    'name' => 'Monthly Report'
                 ]))->getFirstRecord()->getId()
         ]);
         $obData = ob_get_clean();

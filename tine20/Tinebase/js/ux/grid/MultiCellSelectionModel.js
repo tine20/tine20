@@ -326,6 +326,18 @@ Ext.extend(Ext.ux.grid.MultiCellSelectionModel, Ext.grid.AbstractSelectionModel,
         return this.selections.length > 0 ? [].concat(this.selections[0]) : null;
     },
 
+    getSelectedRecords : function() {
+        const rs = [];
+        _.each(this.getSelections(), (cell) => {
+            const r = this.grid.store.getAt(cell[0]);
+            if (rs.indexOf(r) < 0) {
+                rs.push(r);
+            }
+        });
+        
+        return rs;
+    },
+    
     /**
      * Calls the passed function with each selection. If the function returns false, iteration is
      * stopped and this function returns false. Otherwise it returns true.

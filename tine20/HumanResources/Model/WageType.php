@@ -51,7 +51,7 @@ class HumanResources_Model_WageType extends Tinebase_Record_Abstract
         self::VERSION                   => 1,
         self::RECORD_NAME               => 'Wage type',
         self::RECORDS_NAME              => 'Wage types', // ngettext('Wage type', 'Wage types', n)
-        self::TITLE_PROPERTY            => 'id',
+        self::TITLE_PROPERTY            => 'name',
         self::HAS_CUSTOM_FIELDS         => true,
         self::HAS_NOTES                 => true,
         self::HAS_TAGS                  => true,
@@ -92,6 +92,7 @@ class HumanResources_Model_WageType extends Tinebase_Record_Abstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::DEFAULT_VAL       => false,
                 self::LABEL             => 'System', // _('System')
+                self::DISABLED          => true,
             ],
             'wage_factor' => [
                 // @TODO: should be type percent!

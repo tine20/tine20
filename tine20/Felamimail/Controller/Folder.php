@@ -705,4 +705,33 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         return $this->_backend->search($filter);
     }
+
+    /**
+     * reload folder cache on primary account - only do this once an hour (with caching)
+     *
+     * @param Felamimail_Model_Account $account
+     * @return boolean
+     */
+    public function reloadFolderCacheOnAccount($account)
+    {
+        if (Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} !== $account->getId()) {
+            return false;
+        }
+
+        $cache = Tinebase_Core::getCache();
+        $cacheId = Tinebase_Helper::convertCacheId('_reloadFolderCacheOnPrimaryAccount' . $account->getId());
+        if ($cache->test($cacheId)) {
+            return $cache->load($cacheId);
+        }
+
+        try {
+            Felamimail_Controller_Cache_Folder::getInstance()->update($account->getId(), '', TRUE);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Could not update account folder cache: ' . $e->getMessage()
+            );
+        }
+        $cache->save(true, $cacheId, [], 3600);
+        return true;
+    }
 }

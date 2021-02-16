@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <model>HumanResources_Model_MonthlyWTReport</model>
-    <name>monthlyWTReport</name>
+    <!-- _('Monthly Report')   -->
+    <name>Monthly Report</name>
     <type>export</type>
     <favorite>true</favorite>
     <scope>single</scope>

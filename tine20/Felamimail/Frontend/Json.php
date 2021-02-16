@@ -501,7 +501,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
         // add signatures and remove ADB list type from result set
-        // TODO move this to a better place (default filter?)
+        // TODO move this to a better place (default filter? separate api?)
         foreach ($accounts['results'] as $idx => $account) {
             if (in_array($account['type'], [
                 Felamimail_Model_Account::TYPE_SHARED,
@@ -509,9 +509,16 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_SYSTEM,
             ])) {
-                $fullAccount = $this->getAccount($account['id']);
-                $this->_reloadFolderCacheOnPrimaryAccount($fullAccount);
-                $accounts['results'][$idx] = $fullAccount;
+                $account = Felamimail_Controller_Account::getInstance()->get($account['id']);
+                Felamimail_Controller_Folder::getInstance()->reloadFolderCacheOnAccount($account);
+                if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM &&
+                    Felamimail_Config::getInstance()->featureEnabled(
+                        Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS) &&
+                    ! $account->sieve_notification_move
+                ) {
+                    Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
+                }
+                $accounts['results'][$idx] = $this->_recordToJson($account);
             } else {
                 unset($accounts['results'][$idx]);
                 $accounts['totalcount']--;
@@ -523,35 +530,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $accounts;
     }
 
-    /**
-     * reload folder cache on primary account - only do this once an hour (with caching)
-     *
-     * @param $account
-     * @return boolean
-     */
-    protected function _reloadFolderCacheOnPrimaryAccount($account)
-    {
-        if (Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} !== $account['id']) {
-            return false;
-        }
-
-        $cache = Tinebase_Core::getCache();
-        $cacheId = Tinebase_Helper::convertCacheId('_reloadFolderCacheOnPrimaryAccount' . $account['id']);
-        if ($cache->test($cacheId)) {
-            return $cache->load($cacheId);
-        }
-
-        try {
-            $this->updateFolderCache($account['id'], '');
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' Could not update account folder cache: ' . $e->getMessage()
-            );
-        }
-        $cache->save(true, $cacheId, [], 3600);
-        return true;
-    }
-    
     /**
      * get account data
      *

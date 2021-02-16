@@ -1,8 +1,11 @@
 .x-grid3-cell.x-grid-mimeicon {
     background-repeat: no-repeat;
     background-size: 16px 16px;
-    padding-left: 16px;
     position: relative;
+}
+
+.x-grid3-cell.x-grid-mimeicon .x-grid3-cell-inner {
+    margin-left: 14px;
 }
 
 .x-grid3-cell .mime-icon-overlay {

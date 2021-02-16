@@ -476,8 +476,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
         if (! appName && modelName) {
             throw new Ext.Error('appName and modelName must be in the metadatas');
         }
-        
-//        console.log('register model "' + appName + '.' + modelName + '"');
+
         Tine.Tinebase.data.RecordManager.superclass.add.call(this, appName + '.' + modelName, record);
     },
     
@@ -539,12 +538,20 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         totalProperty: 'totalcount'
     }, recordClass);
 
-    var recordData = {results: _.compact([
-            Ext.isString(json) ? Ext.decode(json) : json
-        ])},
-        data = jsonReader.readRecords(recordData),
-        record = data.records[0],
-        recordId = _.get(record, 'data.' + _.get(record, 'idProperty'), Tine.Tinebase.data.Record.generateUID());
+    try {
+        var recordData = {
+                results: _.compact([
+                    Ext.isString(json) ? Ext.decode(json) : json
+                ])
+            },
+            data = jsonReader.readRecords(recordData),
+            record = data.records[0];
+    } catch (e) {
+        Tine.log.warn('Exception in setFromJson:');
+        Tine.log.warn(e);
+    }
+
+    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty'), Tine.Tinebase.data.Record.generateUID());
 
     if (! record) {
         record = new recordClass({}, recordId);

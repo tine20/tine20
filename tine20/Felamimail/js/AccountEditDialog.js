@@ -842,6 +842,46 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return message;
     },
 
+    /**
+     * load vacation record
+     *
+     */
+    loadVacationRecord: async function() {
+        let me = this;
+
+        if (!me.record.id) {
+            return;
+        }
+
+        if (!me.vacationRecordProxy) {
+            me.vacationRecordProxy = new Tine.Tinebase.data.RecordProxy({
+                appName: me.asAdminModule ? 'Admin' : 'Felamimail',
+                modelName: me.asAdminModule ? 'SieveVacation' : 'Vacation',
+                recordClass: Tine.Felamimail.Model.Vacation,
+                idProperty: 'id'
+            });
+        }
+
+        try {
+            me.vacationRecord = await me.vacationRecordProxy.promiseLoadRecord(me.record);
+            await me.afterIsRendered();
+
+            // mime type is always multipart/alternative
+            me.vacationRecord.set('mime', 'multipart/alternative');
+            if (me.record && me.record.get('signature')) {
+                me.vacationRecord.set('signature', me.record.get('signature'));
+            }
+
+            me.getForm().loadRecord(me.vacationRecord);
+            me.record.set('vacation',me.vacationRecord.data);
+
+            this.checkStates();
+        } catch (e) {
+            //deactivate the panel
+            me.vacationPanel.setDisabled(true);
+        }
+    },
+
     /*
      * load rule record
      *

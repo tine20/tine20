@@ -436,6 +436,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->attendee = clone $attendee;
         $persistentEvent = $this->_controller->create($event);
 
+        $this->assertSame(Tinebase_Group::getInstance()->getDefaultGroup()->list_id, $persistentEvent->attendee->find(
+            'user_type', Calendar_Model_Attender::USERTYPE_GROUP
+        )->user_id, 'group attendee should be stored by its list id, not its group id!');
+
         $period = new Calendar_Model_EventFilter(array(array(
             'field'     => 'period',
             'operator'  => 'within',

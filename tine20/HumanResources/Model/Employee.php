@@ -278,7 +278,6 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     'appName'       => 'HumanResources',
                     'modelName'     => 'Employee',
                     'idProperty'    => 'id',
-                    'titleProperty' => 'n_fn' // TODO add documentation
                 )
             ),
             'division_id' => array(

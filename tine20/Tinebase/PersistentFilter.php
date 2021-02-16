@@ -135,10 +135,15 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
     {
         $i18n = Tinebase_Translation::getTranslation($_appName);
         $i18nTinebase = Tinebase_Translation::getTranslation('Tinebase');
-        $pfilters = self::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName($_appName)->getId()),
-            array('field' => 'account_id',     'operator' => 'equals', 'value'  => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
-        )));
+        try {
+            $pfilters = self::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
+                array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName($_appName)->getId()),
+                array('field' => 'account_id', 'operator' => 'equals', 'value' => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
+            )));
+        } catch (Tinebase_Exception $e) {
+            Tinebase_Exception::log($e);
+            $pfilters = new Tinebase_Record_RecordSet(Tinebase_Model_PersistentFilter::class);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got ' . count($pfilters) . ' persistent filters');

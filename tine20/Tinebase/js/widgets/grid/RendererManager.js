@@ -90,27 +90,20 @@ Tine.widgets.grid.RendererManager = function() {
             switch (fieldType) {
                 case 'record':
                     if (Tine.Tinebase.common.hasRight('view', fieldDefinition.config.appName, fieldDefinition.config.modelName.toLowerCase())) {
-                        if (fieldDefinition.config.appName === appName && fieldDefinition.config.modelName === modelName) {
-                            // pointing to same model
-                            renderer = function (value, row, record) {
-                                var title = value && fieldDefinition.config.titleProperty ? value[fieldDefinition.config.titleProperty] : '';
-                                return Ext.util.Format.htmlEncode(title);
-                            };
-                        } else {
-                            renderer = function (value, row, record) {
-                                var foreignRecordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
+                        renderer = function (value, row, record) {
+                            var foreignRecordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
+                            
+                            if (foreignRecordClass) {
+                                const record = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
+                                const titleProperty = foreignRecordClass.getMeta('titleProperty');
+                                value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
                                 
-                                if (foreignRecordClass) {
-                                    let recordData = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
-                                    const titleProperty = foreignRecordClass.getMeta('titleProperty');
-                                    
-                                    value = _.isFunction(_.get(recordData, 'getTitle')) ? recordData.getTitle() : _.get(recordData, titleProperty, '');
-                                    return Ext.util.Format.htmlEncode(value);
-                                } else {
-                                    return value;
+                                if (_.get(record, 'data.is_deleted', false)) {
+                                    value = '<span style="text-decoration: line-through;">' + value + '</sspan>';
                                 }
-                            };
-                        }
+                            }
+                            return value;
+                        };
                     } else {
                         renderer = null;
                     }

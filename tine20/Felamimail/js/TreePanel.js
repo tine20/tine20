@@ -589,7 +589,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 this.contextMenuAccount.showAt(event.getXY());
             }
         } else {
-            if (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/junk/i)) {
+            if (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/^junk$/i)) {
                 this.contextMenuTrash.showAt(event.getXY());
             } else if (! folder.get('is_selectable')){
                 this.unselectableFolder.showAt(event.getXY());

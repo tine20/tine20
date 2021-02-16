@@ -82,7 +82,7 @@ Ext.extend(Ext.ux.grid.CheckColumn, Ext.util.Observable, {
             view.mainBody.on('mousedown', this.onMouseDown, this);
         }, this);
         this.grid.afterIsRendered().then(() => {
-            if (! this.grid.checkColumnAllActionsAdded) {
+            if (! this.grid.checkColumnAllActionsAdded && this.grid.view.hmenu) {
                 this.grid.view.hmenu.add('-', this.selectAllAction = new Ext.Action({
                     text: window.i18n._('Select all'),
                     iconCls: 'x-grid3-check-col-on',

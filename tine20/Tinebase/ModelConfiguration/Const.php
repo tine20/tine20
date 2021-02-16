@@ -111,6 +111,7 @@ class Tinebase_ModelConfiguration_Const {
     const RECORD_CLASS_NAME = 'recordClassName';
     const RECORD_NAME = 'recordName';
     const RECORDS_NAME = 'recordsName';
+    const RESOLVE_DELETED = 'resolveDeleted';
     const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
     /**
