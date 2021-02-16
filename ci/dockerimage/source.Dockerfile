@@ -20,6 +20,7 @@ ARG BASE_IMAGE=base
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BASE_IMAGE} as cache-invalidator
 ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
+ARG CACHE_BUST=0
 RUN apk add --no-cache --simulate git npm | sha256sum >> /cachehash
 RUN if [ ${ALPINE_PHP_PACKAGE} != php8 ]; then \
         apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
