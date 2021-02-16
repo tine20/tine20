@@ -1233,11 +1233,13 @@ class Setup_Frontend_Cli
             throw new Tinebase_Exception_Backend_Database('you are not using mysql');
         }
 
-        if (($ilp = $db->query('SELECT @@innodb_large_prefix')->fetchColumn()) !== '1') {
-            throw new Tinebase_Exception_Backend_Database('innodb_large_prefix seems not be turned on: ' . $ilp);
-        }
-        if (($iff = $db->query('SELECT @@innodb_file_format')->fetchColumn()) !== 'Barracuda') {
-            throw new Tinebase_Exception_Backend_Database('innodb_file_format seems not to be Barracuda: ' . $iff);
+        if (!Setup_Backend_Mysql::dbSupportsVersion($db, 'mysql > 8')) {
+            if (($ilp = $db->query('SELECT @@innodb_large_prefix')->fetchColumn()) !== '1') {
+                throw new Tinebase_Exception_Backend_Database('innodb_large_prefix seems not be turned on: ' . $ilp);
+            }
+            if (($iff = $db->query('SELECT @@innodb_file_format')->fetchColumn()) !== 'Barracuda') {
+                throw new Tinebase_Exception_Backend_Database('innodb_file_format seems not to be Barracuda: ' . $iff);
+            }
         }
         if (($ift = $db->query('SELECT @@innodb_file_per_table')->fetchColumn()) !== '1') {
             throw new Tinebase_Exception_Backend_Database('innodb_file_per_table seems not to be turned on: ' . $ift);
