@@ -1004,7 +1004,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     {
         // set this current billing date (user timezone)
         $this->_currentBillingDate = clone $currentDate;
-        $this->_currentBillingDate->setDate($this->_currentBillingDate->format('Y'), $this->_currentBillingDate->format('m'), 1);
+        $this->_currentBillingDate->setDate($this->_currentBillingDate->format('Y'),
+            $this->_currentBillingDate->format('m'), 1);
         $this->_currentBillingDate->setTime(0,0,0);
         
         // check all prerequisites needed for billing of the contract
@@ -1013,7 +1014,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Processing contract "' . $this->_currentBillingContract->number . '"');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Processing contract "'
+                . $this->_currentBillingContract->number . '"');
         }
         
         // fire event to allow other applications do some work before billing
@@ -1022,7 +1024,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // find product aggregates of the current contract
         $productAggregates = $this->_findProductAggregates();
         
-        // find month that needs to be billed next (note: _currentMonthToBill is the 01-01 00:00:00 of the next month, its the border, like last_autobill)
+        // note: _currentMonthToBill is the 01-01 00:00:00 of the next month, its the border, like last_autobill
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Find month that needs to be billed next');
+        }
+
         $this->_currentMonthToBill = null;
         foreach ($productAggregates as $productAggregate) {
             if ( null != $productAggregate->last_autobill ) {
@@ -1040,8 +1046,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
         
         // this contract has no productAggregates, maybe just time accounts? use last invoice to find already billed month
-        if ( null == $this->_currentMonthToBill ) {
-            // find newest invoice of contract (probably can be done more efficient!)
+        if (null == $this->_currentMonthToBill) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Find newest invoice of contract');
+            }
             $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
             // do not modify $newestInvoiceTime!!!! it does NOT get cloned!
             $newestInvoiceTime = null;
@@ -1055,9 +1063,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                 }
             }
-            
-            if ( null != $newestInvoice ) {
-                // we can only take the end_date because there are no product aggregates (that have a last_autobill set) in this contract, otherwise it might be one interval ahead!
+
+            if (null != $newestInvoice && $newestInvoice->end_date instanceof DateTime) {
+                // we can only take the end_date because there are no product aggregates (that have a last_autobill set)
+                // in this contract, otherwise it might be one interval ahead!
                 $this->_currentMonthToBill = clone $newestInvoice->end_date;
                 $this->_currentMonthToBill->addDay(4);
                 $this->_currentMonthToBill->subMonth(1);
@@ -1065,7 +1074,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
         
         $_addMonth = true;
-        if ( null == $this->_currentMonthToBill ) {
+        if (null == $this->_currentMonthToBill) {
             $this->_currentMonthToBill = clone $contract->start_date;
             $_addMonth = false;
         }
@@ -1075,15 +1084,18 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         if ($_addMonth) {
             $this->_currentMonthToBill->addMonth(1);
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' currentMonthToBill: ' . $this->_currentMonthToBill->toString());
+        }
+
         $doSleep = false;
         
-        if ( ($merge || $contract->merge_invoices) && $this->_currentMonthToBill->isEarlier($this->_currentBillingDate) ) {
+        if (($merge || $contract->merge_invoices) && $this->_currentMonthToBill->isEarlier($this->_currentBillingDate)) {
             $this->_currentMonthToBill = clone $this->_currentBillingDate;
         }
         
         while ( $this->_currentMonthToBill->isEarlierOrEquals($this->_currentBillingDate) ) {
-            
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $this->_currentMonthToBill: ' . $this->_currentMonthToBill
                     . ' $this->_currentBillingDate ' . $this->_currentBillingDate);
@@ -1093,7 +1105,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
             
             //required to have one sec difference in the invoice creation_time, can be optimized to look for milliseconds
-            if ( $doSleep ) {
+            if ($doSleep) {
                 sleep(1);
                 $doSleep = false;
             }
