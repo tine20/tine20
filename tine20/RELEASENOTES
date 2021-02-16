@@ -3,11 +3,13 @@ TINE 2.0 RELEASENOTES
 =====================
                     
   Release:     Amon (2020.11)
-  Last change: 2020-10-27
+  Last change: 2021-02-16
 
 # GENERAL CHANGES (Administrative)
 
 ## MySQL 8 Support
+
+But be carefull, MySQL 8.0.20 has a major bug (see https://bugs.mysql.com/bug.php?id=99398 for more information) and should not be used!
 
 ## PHP 7.4 Support
 
