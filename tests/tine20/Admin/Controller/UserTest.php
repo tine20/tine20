@@ -1,20 +1,19 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
+ *
+ * Test class for Admin_Controller_User
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- */
-
-/**
- * Test class for Admin_Controller_User
  */
 class Admin_Controller_UserTest extends TestCase
 {
     public function testAddUserWithAlreadyExistingEmailData()
     {
+        $this->_skipWithoutEmailSystemAccountConfig();
         $this->_skipIfLDAPBackend();
 
         $userToCreate = TestCase::getTestUser([
@@ -168,6 +167,8 @@ class Admin_Controller_UserTest extends TestCase
 
     public function testAddUserWithExistingMail()
     {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
         $pw = Tinebase_Record_Abstract::generateUID(10);
         $userToCreate = TestCase::getTestUser();
         $userToCreate->accountEmailAddress = Tinebase_Core::getUser()->accountEmailAddress;
