@@ -89,6 +89,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
 
         'filterModel'       => [],
 
+        self::TABLE         => [
+            self::NAME          => 'accounts'
+        ],
+
         'fields'            => [
             'accountLoginName'              => [
                 'type'                          => 'string',

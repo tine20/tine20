@@ -405,10 +405,12 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             /** @var Cell $cell */
             foreach($cellIter as $cell) {
                 if (false !== strpos($cell->getValue(), '${twig:') &&
-                        preg_match_all('/\${twig:([^}]+?)}/s', $cell->getValue(), $matches, PREG_SET_ORDER)) {
+                        preg_match_all('/(\${twig:(.+?[^}%])})([^}]|$)/s', $cell->getValue(), $matches, PREG_SET_ORDER)) {
                     foreach($matches as $match) {
-                        $this->_twigMapping[$i] = $match[0];
-                        $source .= ($i === 0 ? '' : ',') . '{{' . $match[1] . '}}';
+                        $this->_twigMapping[$i] = $match[1];
+                        $source .= ($i === 0 ? '' : ',') .
+                            (strpos($match[2], '{{') !== false || strpos($match[2], '{%') !== false ? $match[2]
+                                : '{{' . $match[2] . '}}');
                         ++$i;
                     }
                 }
@@ -418,11 +420,13 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         foreach($this->_spreadsheet->getActiveSheet()->getDrawingCollection() as $drawing) {
             $desc = $drawing->getDescription();
             if (false !== strpos($desc, '${twig:') &&
-                preg_match_all('/\${twig:([^}]+?)}/s', $desc, $matches, PREG_SET_ORDER)
+                preg_match_all('/(\${twig:(.+?[^}%])})([^}]|$)/s', $desc, $matches, PREG_SET_ORDER)
             ) {
                 foreach ($matches as $match) {
-                    $this->_twigMapping[$i] = $match[0];
-                    $source .= ($i === 0 ? '' : ',') . '{{' . $match[1] . '}}';
+                    $this->_twigMapping[$i] = $match[1];
+                    $source .= ($i === 0 ? '' : ',') .
+                        (strpos($match[2], '{{') !== false || strpos($match[2], '{%') !== false ? $match[2]
+                            : '{{' . $match[2] . '}}');
                     ++$i;
                 }
             }
