@@ -202,7 +202,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
             foreach($this->_cloneRow as $newRow) {
                 $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
-                $cell->setValue(preg_replace('/\$\{twig[^}]+\}/', '$0#' . $this->_rowCount, $newRow['value']));
+                $cell->setValue(preg_replace('/\$\{twig:.+?[^%=]\}/', '$0#' . $this->_rowCount, $newRow['value']));
                 $cell->setXfIndex($newRow['XFIndex']);
             }
 
@@ -231,7 +231,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
             foreach($this->_cloneGroupStartRow as $newRow) {
                 $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
-                $cell->setValue(preg_replace('/\$\{twig[^}]+\}/', '$0#' . $this->_rowCount, $newRow['value']));
+                $cell->setValue(preg_replace('/\$\{twig:.+?[^%=]\}/', '$0#' . $this->_rowCount, $newRow['value']));
                 $cell->setXfIndex($newRow['XFIndex']);
             }
 
@@ -262,7 +262,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
             foreach($this->_cloneGroupEndRow as $newRow) {
                 $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
-                $cell->setValue(preg_replace('/\$\{twig[^}]+\}/', '$0#' . $this->_rowCount, $newRow['value']));
+                $cell->setValue(preg_replace('/\$\{twig:.+?[^%=]\}/', '$0#' . $this->_rowCount, $newRow['value']));
                 $cell->setXfIndex($newRow['XFIndex']);
             }
 
@@ -405,11 +405,12 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             /** @var Cell $cell */
             foreach($cellIter as $cell) {
                 if (false !== strpos($cell->getValue(), '${twig:') &&
-                        preg_match_all('/(\${twig:(.+?[^}%])})([^}]|$)/s', $cell->getValue(), $matches, PREG_SET_ORDER)) {
+                        preg_match_all('/(\${twig:(.+?[^%=])})/s', $cell->getValue(), $matches, PREG_SET_ORDER)) {
                     foreach($matches as $match) {
                         $this->_twigMapping[$i] = $match[1];
                         $source .= ($i === 0 ? '' : ',') .
-                            (strpos($match[2], '{{') !== false || strpos($match[2], '{%') !== false ? $match[2]
+                            (strpos($match[2], '{{') !== false || strpos($match[2], '{%') !== false ?
+                                str_replace('=}', '}}', $match[2])
                                 : '{{' . $match[2] . '}}');
                         ++$i;
                     }
@@ -420,12 +421,13 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         foreach($this->_spreadsheet->getActiveSheet()->getDrawingCollection() as $drawing) {
             $desc = $drawing->getDescription();
             if (false !== strpos($desc, '${twig:') &&
-                preg_match_all('/(\${twig:(.+?[^}%])})([^}]|$)/s', $desc, $matches, PREG_SET_ORDER)
+                preg_match_all('/(\${twig:(.+?[^%=])})/s', $desc, $matches, PREG_SET_ORDER)
             ) {
                 foreach ($matches as $match) {
                     $this->_twigMapping[$i] = $match[1];
                     $source .= ($i === 0 ? '' : ',') .
-                        (strpos($match[2], '{{') !== false || strpos($match[2], '{%') !== false ? $match[2]
+                        (strpos($match[2], '{{') !== false || strpos($match[2], '{%') !== false ?
+                            str_replace('=}', '}}', $match[2])
                             : '{{' . $match[2] . '}}');
                     ++$i;
                 }
