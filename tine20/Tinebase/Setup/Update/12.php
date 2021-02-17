@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
@@ -339,7 +339,13 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         if (false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn() &&
                 ($str = $db->query('SHOW CREATE TABLE ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1)) &&
                 strpos($str, 'utf8mb4') !== false) {
-            (new Setup_Frontend_Cli())->_migrateUtf8mb4();
+            try {
+                (new Setup_Frontend_Cli())->_migrateUtf8mb4();
+            } catch (Exception $e) {
+                // catch problems here - update should not fail here
+                // TODO we should find a way to notify the admin about possible problems
+                Tinebase_Exception::log($e);
+            }
         }
 
         $this->addApplicationUpdate('Tinebase', '12.35', self::RELEASE012_UPDATE017);
