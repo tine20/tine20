@@ -41,6 +41,16 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
         $export->save($tempfile);
 
         $this->assertGreaterThan(4000, filesize($tempfile));
+
+
+        $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($tempfile);
+        $spreadsheet->setActiveSheetIndex(0);
+        $this->assertTrue(empty($spreadsheet->getActiveSheet()->getCell('B8')->getValue()));
+        $this->assertSame('10:00', $spreadsheet->getActiveSheet()->getCell('B9')->getValue());
+        $this->assertSame('10:00', $spreadsheet->getActiveSheet()->getCell('B14')->getValue());
+        $this->assertSame('10:00', $spreadsheet->getActiveSheet()->getCell('B15')->getValue());
+        $this->assertSame('15:00', $spreadsheet->getActiveSheet()->getCell('B16')->getValue());
+
         unlink($tempfile);
     }
 
