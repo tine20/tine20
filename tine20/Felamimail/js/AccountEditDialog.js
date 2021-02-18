@@ -218,6 +218,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return this.record.get('type') === 'system' || this.record.get('type') === 'shared' || this.record.get('type') === 'userInternal' || this.record.get('type') === 'adblist';
     },
     
+    isExternalUserAccount: function () {
+        return this.record.get('type') === 'user';
+    },
+    
     /**
      * returns dialog
      * 
@@ -404,13 +408,23 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'password',
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
-                    inputType: 'password'
+                    inputType: 'password',
+                    listeners: {
+                        scope: this,
+                        keyup: (field)=> {
+                            if ('' !== field.getValue()) {
+                                this.imapButton.setDisabled(false);
+                                this.smtpButton.setDisabled(false);
+                            }
+                        }
+                    }
                 }, 
                 this.imapButton = new Ext.Button({
                     text: this.app.i18n._('Test IMAP Connection'),
                     handler: () => {
-                        this.testConnection('IMAP');
-                    }
+                        this.testConnection('IMAP', true, true);
+                    },
+                    disabled: true
                 })]]
             }, {
                 title: this.app.i18n._('SMTP'),
@@ -467,13 +481,23 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'smtp_password',
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
-                    inputType: 'password'
+                    inputType: 'password',
+                    listeners: {
+                        scope: this,
+                        keyup: (field)=> {
+                            if ('' !== field.getValue()) {
+                                this.imapButton.setDisabled(false);
+                                this.smtpButton.setDisabled(false);
+                            }
+                        }
+                    }
                 },
                     this.smtpButton = new Ext.Button({
                     text: this.app.i18n._('Test SMTP Connection'),
                     handler: () => {
-                        this.testConnection('SMTP');
-                    }
+                        this.testConnection('SMTP',true, true);
+                    },
+                    disabled: true
                 })]]
             }, {
                 title: this.app.i18n._('Sieve'),
@@ -751,16 +775,20 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         let result = true;
         let errorMessage = '';
+        const password = this.getForm().findField('password').getValue();
         
-        await(_.reduce(['IMAP', 'SMTP'], (pre, server) => {
-            return pre.then(async () => {
-                await this.testConnection(server, false)
-                    .catch((e)=> {
-                        result = false;
-                        errorMessage = errorMessage + '</b><br>' + e.message;
-                    });
-            })
-        }, Promise.resolve()));
+        //only test connection for external user account
+        if (this.isExternalUserAccount() && '' !== password) {
+            await (_.reduce(['IMAP', 'SMTP'], (pre, server) => {
+                return pre.then(async () => {
+                    await this.testConnection(server, false)
+                        .catch((e) => {
+                            result = false;
+                            errorMessage = errorMessage + '</b><br>' + e.message;
+                        });
+                })
+            }, Promise.resolve()));
+        }
         
         if(!result) {
             Ext.MessageBox.show({
@@ -786,7 +814,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * test IMAP or SMTP connection
      *
      */
-    testConnection: async function (server, showDialog = true) {
+    testConnection: async function (server, showDialog = true, forceConnect = false) {
 
         let message = this.app.i18n._('Connection succeed');
         let fields = {
@@ -815,16 +843,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
         
         try {
+            //show load mask
             if (!this['connectLoadMask' + server]) {
                 this['connectLoadMask' + server] = new Ext.LoadMask(this.getEl(), {
                     msg: String.format(this.app.i18n._('Connecting to {0} server...'), server)
                 });
             }
+            
             this['connectLoadMask' + server].show();
             
-            if (!this.isSystemAccount() || '' !== fields[server]['password']) {
-                await Tine.Felamimail[server === 'SMTP' ? 'testSmtpSettings' : 'testIMapSettings'](this.record.id, fields[server]);
-            }
+            //test connection
+            await Tine.Felamimail[server === 'SMTP' ? 'testSmtpSettings' : 'testIMapSettings'](this.record.id, fields[server], forceConnect);
         } catch (e) {
             message = this.app.i18n._hidden(_.get(e,'message',this.app.i18n._('Connection failed')));
             return Promise.reject(new Error(message));
@@ -882,6 +911,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
 
+    
     /*
      * load rule record
      *

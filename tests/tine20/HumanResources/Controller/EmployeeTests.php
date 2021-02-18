@@ -76,28 +76,29 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
         $filter = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'is_employed', 'operator' => 'equals', 'value' => TRUE)
         ));
-        $result = $employeeController->search($filter);
+        $result = $employeeController->search($filter, new Tinebase_Model_Pagination([
+            'sort' => 'account_id',
+            'dir' => 'ASC',
+            'model' => HumanResources_Model_Employee::class,
+        ]));
         $msg = 'rwright and pwulf should have been found';
         $this->assertEquals(2, $result->count(), $msg);
+        $this->assertSame('Roberta Wright', $result->getFirstRecord()->n_fn);
+        $this->assertSame('Paul Wulf', $result->getLastRecord()->n_fn);
 
-        $names = $result->n_fn;
-
-        // just rwright and pwulf should have been found
-        $this->assertContains('Roberta Wright', $names, $msg);
-        $this->assertContains('Paul Wulf', $names, $msg);
 
         $filter = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'is_employed', 'operator' => 'equals', 'value' => FALSE)
         ));
-        $result = $employeeController->search($filter);
+        $result = $employeeController->search($filter, new Tinebase_Model_Pagination([
+            'sort' => 'account_id',
+            'dir' => 'DESC',
+            'model' => HumanResources_Model_Employee::class,
+        ]));
 
         $msg = 'jsmith and jmcblack should have been found';
         $this->assertEquals(2, $result->count(), $msg);
-
-        $names = $result->n_fn;
-
-        // just jsmith and jmcblack should have been found
-        $this->assertContains('John Smith', $names, $msg);
-        $this->assertContains('James McBlack', $names, $msg);
+        $this->assertSame('John Smith', $result->getFirstRecord()->n_fn);
+        $this->assertSame('James McBlack', $result->getLastRecord()->n_fn);
     }
 }

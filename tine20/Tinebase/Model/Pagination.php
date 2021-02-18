@@ -107,7 +107,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         $this->_externalSortMapping = $model::getSortExternalMapping();
         if (null !== ($mc = $model::getConfiguration())) {
             $this->_virtualFields = $mc->getVirtualFields();
-            $this->_recordFields = $mc->recordsFields;
+            $this->_recordFields = $mc->recordFields;
         }
         $this->sort = (array)$this->sort;
 
@@ -222,11 +222,11 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 }
                 $field = $relatedTableName . '.' . $field;
 
-            } elseif (isset($recordFields[$field]) && isset($recordFields[$field]['type']) &&
-                    $recordFields[$field]['type'] === 'record' && isset($recordFields[$field]['config']) &&
+            } elseif (isset($recordFields[$field]) && isset($recordFields[$field]['config']) &&
                     isset($recordFields[$field]['config']['appName']) &&
                     isset($recordFields[$field]['config']['modelName']) &&
-                    isset($recordFields[$field]['config']['type'])) {
+                    isset($recordFields[$field]['config']['type']) &&
+                    $recordFields[$field]['config']['type'] === 'record') {
 
                 ++$joinCount;
                 $db = $_select->getAdapter();
@@ -241,22 +241,28 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 }
 
                 $relatedTableName = $relatedMC->getTableName() . '_recPagi' . $joinCount;
+                if ($relatedModel === Tinebase_Model_User::class || $relatedModel === Tinebase_Model_FullUser::class) {
+                    $idProp = 'id';
+                    $relatedField = 'display_name';
+                } else {
+                    $idProp = $relatedMC->getIdProperty();
+                    if (is_array($relatedMC->defaultSortInfo) && isset($relatedMC->defaultSortInfo['field'])) {
+                        $relatedField = $relatedMC->defaultSortInfo['field'];
+                    } else {
+                        if (is_array($relatedMC->titleProperty)) {
+                            $relatedField = $relatedMC->titleProperty[1][0];
+                        } else {
+                            $relatedField = $relatedMC->titleProperty;
+                        }
+                    }
+                }
                 $_select->joinLeft(
                     [$relatedTableName => SQL_TABLE_PREFIX . $relatedMC->getTableName()],
                     $db->quoteIdentifier([$mc->getTableName(), $field]) . ' = ' .
-                    $db->quoteIdentifier([$relatedTableName, $relatedMC->getIdProperty()]),
+                    $db->quoteIdentifier([$relatedTableName, $idProp]),
                     []
                 );
-                if (is_array($relatedMC->defaultSortInfo) && isset($relatedMC->defaultSortInfo['field'])) {
-                    $field = $relatedMC->defaultSortInfo['field'];
-                } else {
-                    if (is_array($relatedMC->titleProperty)) {
-                        $field = $relatedMC->titleProperty[1][0];
-                    } else {
-                        $field = $relatedMC->titleProperty;
-                    }
-                }
-                $field = $relatedTableName . '.' . $field;
+                $field = $relatedTableName . '.' . $relatedField;
             } elseif (null !== ($cfCfg = $customfields->find('name', $field))) {
                 ++$joinCount;
                 $db = $_select->getAdapter();

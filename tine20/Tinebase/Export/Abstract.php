@@ -779,7 +779,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         $this->_extendTwigSetup();
 
-        $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
+        try {
+            $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
+        } catch (Twig_Error $e) {
+            throw new Tinebase_Exception_Backend('twig error: ' . $e->getMessage() . ' for twig source: ' .
+                $this->_getTwigSource());
+        }
     }
 
     protected function _extendTwigSetup()

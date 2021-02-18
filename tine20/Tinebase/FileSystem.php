@@ -265,7 +265,7 @@ class Tinebase_FileSystem implements
         if (isset($this->_statCacheById[$_id])) {
             return $this->_statCacheById[$_id];
         }
-        return $this->get($_id);
+        return $this->_statCacheById[$_id] = $this->get($_id);
     }
 
     /**

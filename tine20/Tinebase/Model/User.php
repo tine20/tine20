@@ -117,6 +117,10 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
 
         'filterModel'       => [],
 
+        self::TABLE         => [
+            self::NAME          => 'accounts'
+        ],
+
         'fields'            => [
             'accountDisplayName'            => [
                 'type'                          => 'string',
