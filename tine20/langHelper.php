@@ -6,8 +6,8 @@
  * @package     HelperScripts
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  * @todo        add filter for applications
  */
 
@@ -65,16 +65,21 @@ try {
 }
 
 // Check app Parameter
-if(!empty($opts->app)) {
-    if(!array_key_exists($opts->app, Tinebase_Translation::getTranslationDirs())) {
-        echo chr(10);
-        echo 'Application "' . $opts->app . '" not found!'. chr(10);
-        echo chr(10);
-        exit;
-    } else {
-        echo 'Working on Application "' . $opts->app . '"...'. chr(10) ;
+if (!empty($opts->app)) {
+    if (!array_key_exists($opts->app, Tinebase_Translation::getTranslationDirs())) {
+        $basedir = __DIR__ . DIRECTORY_SEPARATOR . $opts->app;
+        if (file_exists($basedir)) {
+            echo 'Creating translations dir for app "' . $opts->app . '".' . chr(10);
+            mkdir($basedir . DIRECTORY_SEPARATOR . 'translations');
+        } else {
+            echo chr(10);
+            echo 'Application "' . $opts->app . '" not found!' . chr(10);
+            echo chr(10);
+            exit;
+        }
     }
 
+    echo 'Working on Application "' . $opts->app . '"...'. chr(10) ;
 }
 
 if ($opts->wipe) {
