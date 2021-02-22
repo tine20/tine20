@@ -9,7 +9,8 @@ TINE 2.0 RELEASENOTES
 
 ## MySQL 8 Support
 
-But be carefull, MySQL 8.0.20 has a major bug (see https://bugs.mysql.com/bug.php?id=99398 for more information) and should not be used!
+But be careful, MySQL 8.0.20 has a major bug (see https://bugs.mysql.com/bug.php?id=99398 for more information) and should not be used!
+We mitigated the bug before, but removed that because it created other issues (see commit 77abad0).
 
 ## PHP 7.4 Support
 
