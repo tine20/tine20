@@ -401,9 +401,7 @@ Tine.Calendar.infoBarColorStrategies['response'] = {
         }
         let colors = [];
         _.forEach(attendees, function (att) {
-            if (att.user_type === 'user' || att.user_type === 'groupmember') {
-                colors.push(colorMapping[att.status] ?? 'C0C0C0');
-            }
+            colors.push(colorMapping[att.status] ?? 'C0C0C0');
         });
 
         return colors;
