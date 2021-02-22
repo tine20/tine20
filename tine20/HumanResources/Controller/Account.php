@@ -81,11 +81,11 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
             throw new Tinebase_Exception_Data('The year must be between 2006 and 2106');
         }
     
-        // borders
-        $year_starts = new Tinebase_DateTime($year . '-01-01 00:00:00');
-        $year_ends   = new Tinebase_DateTime($year . '-12-31 23:59:59');
-        
-        $validEmployeeIds = array_unique($this->_contractController->getValidContracts($year_starts, $year_ends, $employee)->employee_id);
+        // timezone problem here?
+        $validEmployeeIds = array_unique($this->_contractController->getValidContracts([
+            'from' => new Tinebase_DateTime($year . '-01-01 00:00:00'),
+            'until' => new Tinebase_DateTime($year . '-12-31 23:59:59'),
+        ], $employee)->employee_id);
         
         $existingFilter = new HumanResources_Model_AccountFilter(array(
             array('field' => 'year', 'operator' => 'equals', 'value' => $year)
@@ -118,41 +118,23 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
      */
     public function resolveVirtualFields(HumanResources_Model_Account $account)
     {
-        $yearBegins = new Tinebase_DateTime($account->year . '-01-01 00:00:00');
-        $yearEnds   = new Tinebase_DateTime($account->year . '-12-31 23:59:59');
+        $accountPeriod = $account->getAccountPeriod();
         
-        $contracts = $this->_contractController->getValidContracts($yearBegins, $yearEnds, $account->employee_id);
-        $contracts->sort('start_date', 'ASC');
+        $account->contracts = $this->_contractController->getValidContracts($accountPeriod, $account->employee_id);
         
-        // find out feast days by contract(s) of the accounts' year
-        $feastDays = $this->_contractController->getFeastDays($contracts, $yearBegins, $yearEnds);
-        
-        // find out vacation days by contract(s) and interval
-        $possibleVacationDays = round($this->_contractController->calculateVacationDays($contracts, $yearBegins, $yearEnds), 0);
         // find out free days (vacation, sickness)
         $freetimeController = HumanResources_Controller_FreeTime::getInstance();
-        $employeeId = is_object($account->employee_id) ? $account->employee_id->getId() : $account->employee_id;
         
         $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
         
         $freeTimes = $freetimeController->search($filter);
-    
-        $filter = new HumanResources_Model_FreeTimeFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_DateTime(array('field' => 'firstday_date', 'operator' => 'isnull', 'value' => TRUE)));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
-        $rebookedVacationTimes  = $freetimeController->search($filter);
         
-        $acceptedVacationTimes  = $freeTimes->filter('type', 'vacation')->filter('status', 'ACCEPTED');
         $unexcusedSicknessTimes = $freeTimes->filter('type', 'sickness')->filter('status', 'UNEXCUSED');
         $excusedSicknessTimes   = $freeTimes->filter('type', 'sickness')->filter('status', 'EXCUSED');
         
         $freedayController = HumanResources_Controller_FreeDay::getInstance();
         $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
-
-        $acceptedVacationFilter = clone $filter;
-        $acceptedVacationFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $acceptedVacationTimes->id)));
-        $acceptedVacationDays = $freedayController->search($acceptedVacationFilter);
         
         $unexcusedSicknessFilter = clone $filter;
         $unexcusedSicknessFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $unexcusedSicknessTimes->id)));
@@ -162,34 +144,74 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         $excusedSicknessFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $excusedSicknessTimes->id)));
         $excusedSicknessDays = $freedayController->search($excusedSicknessFilter);
         
-        $filter = new HumanResources_Model_FreeDayFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $rebookedVacationTimes->id)));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'date', 'operator' => 'isnull', 'value' => TRUE)));
-        $rebookedVacationDays = $freedayController->search($filter);
         
-        $datesToWorkOn = $this->_contractController->getDatesToWorkOn($contracts, $yearBegins, $yearEnds);
-        $datesToWorkOnReal = $this->_contractController->getDatesToWorkOn($contracts, $yearBegins, $yearEnds, TRUE);
-        $expiredVacationDays = 0;
+        $datesToWorkOn = $this->_contractController->getDatesToWorkOn($account->contracts, $accountPeriod['from'], $accountPeriod['until']);
+        $datesToWorkOnReal = $this->_contractController->getDatesToWorkOn($account->contracts, $accountPeriod['from'], $accountPeriod['until'], TRUE);
         
-        // add extra free times of this year, if not expired (defined by account)
-        if ($account->extra_free_times) {
-            $extraFreeTimes = $this->calculateExtraFreeTimes($account, $acceptedVacationDays);
-            $possibleVacationDays += $extraFreeTimes['remaining'];
-        }
-        
-        return array(
-            'possible_vacation_days'  => intval($possibleVacationDays),
-            'expired_vacation_days'   => isset($extraFreeTimes) ? $extraFreeTimes['expired'] : 0,
-            'rebooked_vacation_days'  => $rebookedVacationDays->count(),
-            'remaining_vacation_days' => $possibleVacationDays - $acceptedVacationDays->count() - $rebookedVacationDays->count(),
-            'taken_vacation_days'     => $acceptedVacationDays->count(),
+        return array_merge(array(
             'excused_sickness'        => $excusedSicknessDays->count(),
             'unexcused_sickness'      => $unexcusedSicknessDays->count(),
             'working_days'            => count($datesToWorkOn['results']),
             'working_hours'           => $datesToWorkOn['hours'],
             'working_days_real'       => count($datesToWorkOnReal['results']),
             'working_hours_real'      => $datesToWorkOnReal['hours']
-        );
+        ), $this->resolveVacation($account));
+    }
+
+    /**
+     * resolve vacation properties of given account
+     * 
+     * @param HumanResources_Model_Account $account
+     * @return array with property => value
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function resolveVacation($account)
+    {
+        $accountPeriod = $account->getAccountPeriod();
+        $contracts = $account->contracts ?: $this->_contractController->getValidContracts($accountPeriod, $account->employee_id);
+        
+        // find out vacation days by contract(s) and interval
+        $possibleVacationDays = round($this->_contractController->calculateVacationDays($contracts, $accountPeriod['from'], $accountPeriod['until']), 0);
+        // find out free days (vacation, sickness)
+        $freetimeController = HumanResources_Controller_FreeTime::getInstance();
+
+        $filter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
+
+        $freeTimes = $freetimeController->search($filter);
+        
+        $acceptedVacationTimes  = $freeTimes->filter('type', 'vacation')->filter('status', '/(ACCEPTED|REQUESTED|IN-PROCESS)/', true);
+
+        $freedayController = HumanResources_Controller_FreeDay::getInstance();
+        $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
+
+        $acceptedVacationFilter = clone $filter;
+        $acceptedVacationFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $acceptedVacationTimes->id)));
+        $acceptedVacationDays = $freedayController->search($acceptedVacationFilter);
+
+        $filter = new HumanResources_Model_FreeTimeFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_DateTime(array('field' => 'firstday_date', 'operator' => 'isnull', 'value' => TRUE)));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
+        $rebookedVacationTimes  = $freetimeController->search($filter);
+        
+        $filter = new HumanResources_Model_FreeDayFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $rebookedVacationTimes->id)));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'date', 'operator' => 'isnull', 'value' => TRUE)));
+        $rebookedVacationDays = $freedayController->search($filter);
+
+        // add extra free times of this year, if not expired (defined by account)
+        if ($account->extra_free_times) {
+            $extraFreeTimes = $this->calculateExtraFreeTimes($account, $acceptedVacationDays);
+//            $possibleVacationDays += $extraFreeTimes['remaining'];
+        }
+        
+        return [
+            'possible_vacation_days'  => intval($possibleVacationDays),
+            'expired_vacation_days'   => isset($extraFreeTimes) ? $extraFreeTimes['expired'] : 0,
+            'rebooked_vacation_days'  => $rebookedVacationDays->count(),
+            'remaining_vacation_days' => intval(floor($possibleVacationDays)) - $acceptedVacationDays->count() - $rebookedVacationDays->count(),
+            'taken_vacation_days'     => $acceptedVacationDays->count(),
+        ];
     }
     
     /**

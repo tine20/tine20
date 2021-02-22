@@ -68,14 +68,6 @@
           "path": "js/"
         },
         {
-          "text": "ExtraFreeTimeEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "ExtraFreeTimeGridPanel.js",
-          "path": "js/"
-        },
-        {
           "text": "AccountEditDialog.js",
           "path": "js/"
         },

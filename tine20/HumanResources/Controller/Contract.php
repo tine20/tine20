@@ -508,14 +508,13 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     
     /**
      * Get valid contracts for the period specified
-     * 
+     *
+     * @param Tinebase_DateTime[] $period
      * @param mixed $employeeId
-     * @param Tinebase_DateTime $firstDate
-     * @param Tinebase_DateTime $lastDate
      */
-    public function getValidContracts($firstDate = NULL, $lastDate = NULL, $employeeId = NULL)
+    public function getValidContracts($period, $employeeId = NULL)
     {
-        if (! ($firstDate && $lastDate)) {
+        if (! ($period['from'] && $period['until'])) {
             throw new Tinebase_Exception_InvalidArgument('All params are needed!');
         }
         
@@ -532,16 +531,18 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $subFilter2 = new HumanResources_Model_ContractFilter(array(), 'OR');
         
         $subFilter21 = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $lastDate)));
-        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $firstDate)));
+        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $period['until'])));
+        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $period['from'])));
         $subFilter22 = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $subFilter22->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $lastDate)));
+        $subFilter22->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $period['until'])));
         $subFilter22->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'isnull', 'value' => TRUE)));
         $subFilter2->addFilterGroup($subFilter21);
         $subFilter2->addFilterGroup($subFilter22);
         $filter->addFilterGroup($subFilter2);
-        
-        return $this->search($filter);
+
+        $contracts = $this->search($filter);
+        $contracts->sort('start_date', 'ASC');
+        return $contracts;
     }
     
     /**

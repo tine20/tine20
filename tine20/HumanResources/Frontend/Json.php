@@ -456,13 +456,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns feast days and freedays of an employee for the freetime edit dialog
      * 
-     * @param string $_employeeId
+     * @param string  $_employeeId
      * @param integer $_year
-     * @param string $_freeTimeId (filters out current freetimes, sets minDate)
-     *  NOTE: minDate/maxDate => year is used for remainingVacation calculation
-     *        remainingVacation is the sum of vacations from all contracts
-     *        of this year
-     * @param string $_accountId
+     * @param string  $_freeTimeId deprecated do not used anymore!
+     * @param string  $_accountId used for vacation calculations (account period might differ from $_year)
      */
     public function getFeastAndFreeDays($_employeeId, $_year = NULL, $_freeTimeId = NULL, $_accountId = NULL)
     {
@@ -477,20 +474,16 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // validate employeeId
         $employee = $eController->get($_employeeId);
-        $_freeTimeId = (strlen($_freeTimeId) == 40) ? $_freeTimeId : NULL;
         
         // set period to search for
         $minDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
-        if ($_year && (! $_freeTimeId)) {
+        if ($_year) {
             $minDate->setDate($_year, 1, 1);
-        } elseif ($_freeTimeId) {
-            // if a freetime id is given, take the year of the freetime
-            $myFreeTime = $ftController->get($_freeTimeId);
-            $minDate->setDate($myFreeTime->firstday_date->format('Y'), 1, 1);
         } else {
             $minDate->setDate($minDate->format('Y'), 1, 1);
         }
         
+        /* vacation computation -> shoud be extra call!*/
         if (! $_accountId) {
             // find account
             $filter = new HumanResources_Model_AccountFilter(array(
@@ -510,39 +503,17 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! $account) {
             throw new HumanResources_Exception_NoAccount();
         }
-        
-        $accountYear = $account->year;
-        $minAccountDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
-        $minAccountDate->setDate($accountYear, 1, 1);
-        $maxAccountDate = clone $minAccountDate;
-        $maxAccountDate->addYear(1)->subSecond(1);
+        $remainingVacation = HumanResources_Controller_Account::getInstance()->resolveVacation($account)['remaining_vacation_days'];
+        /* end vacation computation */
         
         $maxDate = clone $minDate;
         $maxDate->addYear(1)->subSecond(1);
-
-        // find contracts of the account year
-        $contracts = $cController->getValidContracts($minAccountDate, $maxAccountDate, $_employeeId);
-        $contracts->sort('start_date', 'ASC');
-        
-        if ($contracts->count() < 1) {
-            throw new HumanResources_Exception_NoContract();
-        }
-        
-        $remainingVacation = 0;
-        
-        $contracts->setTimezone(Tinebase_Core::getUserTimezone());
-        
-        // find out total amount of vacation days for the different contracts
-        foreach ($contracts as $contract) {
-            $remainingVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
-        }
-        
-        $remainingVacation = round($remainingVacation, 0);
-        $allVacation = $remainingVacation;
         
         // find contracts of the year in which the vacation days will be taken
-        $contracts = $cController->getValidContracts($minDate, $maxDate, $_employeeId);
-        $contracts->sort('start_date', 'ASC');
+        $contracts = $cController->getValidContracts([
+            'from' => $minDate,
+            'until' => $maxDate
+        ], $_employeeId);
         $excludeDates = array();
         
         if ($contracts->count() < 1) {
@@ -592,99 +563,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $feastDay->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
         }
         
-        // search free times for the account and the interval
-        
         // prepare free time filter, add employee_id
         $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
         $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
-        
-        // don't search for freetimes belonging to the freetime handled itself
-        if ($_freeTimeId) {
-            $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'not', 'value' => $_freeTimeId)));
-        }
-        
-        // prepare vacation times filter
-        $vacationTimesFilter = clone $freeTimeFilter;
-        $vacationTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation')));
-        
-        // search all vacation times belonging to the account, regardless which interval we want
-        $accountFreeTimesFilter = clone $vacationTimesFilter;
-        $accountFreeTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
-        $accountVacationTimeIds = $ftController->search($accountFreeTimesFilter)->id;
-        
-        // search all vacation times for the interval
-        $fddMin = clone $minDate;
-        $fddMin->subDay(1);
-        $fddMax = clone $maxDate;
-        $fddMax->addDay(1);
-        
-        $vacationTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $fddMin)));
-        $vacationTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $fddMax)));
-        $vacationTimes = $ftController->search($vacationTimesFilter);
-        
-        $acceptedVacationTimes = $vacationTimes->filter('status', 'ACCEPTED');
-        
-//        // search all sickness times for the interval
-//        $sicknessTimesFilter = clone $freeTimeFilter;
-//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'type', 'operator' => 'equals', 'value' => 'sickness')));
-//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'after', 'value' => $fddMin)));
-//        $sicknessTimesFilter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'firstday_date', 'operator' => 'before', 'value' => $fddMax)));
-//        $sicknessTimes = $ftController->search($sicknessTimesFilter);
-        
-        // search free days belonging the found free times
         
         // prepare free day filter
         $freeDayFilter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
         $freeDayFilter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'duration', 'operator' => 'equals', 'value' => 1)));
         
-        // find vacation days belonging to the account (date doesn't matter, may be from another year, just count the days)
-        if (count($accountVacationTimeIds)) {
-            $accountFreeDayFilter = clone $freeDayFilter;
-            $accountFreeDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $accountVacationTimeIds)));
-            $remainingVacation = $remainingVacation - $fdController->search($accountFreeDayFilter)->count();
-        }
-        
-//        // find all vacation days of the period
-//        $vacationDayFilter = clone $freeDayFilter;
-//        $vacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $vacationTimes->id)));
-//
-//        $vacationDays = $fdController->search($vacationDayFilter);
-        
-        // find out accepted vacation days. Vacation days will be substracted from remainingVacation only if they are accepted,
-        // but they will be shown in the freetime edit dialog
-        // TODO: discuss this
-        $acceptedVacationDayFilter = clone $freeDayFilter;
-        $acceptedVacationDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $acceptedVacationTimes->id)));
-        $acceptedVacationDays = $fdController->search($acceptedVacationDayFilter);
-        
-        // calculate extra vacation days
-        if ($account) {
-            $filter = new HumanResources_Model_ExtraFreeTimeFilter(array());
-            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())));
-            $account->extra_free_times = HumanResources_Controller_ExtraFreeTime::getInstance()->search($filter);
-            $extraFreeTimes = $aController->calculateExtraFreeTimes($account, $acceptedVacationDays);
-            $allVacation = $allVacation + $extraFreeTimes['remaining'];
-            $remainingVacation = $remainingVacation + $extraFreeTimes['remaining'];
-        } else {
-            $extraFreeTimes = NULL;
-        }
-        
-//        // find all sickness days of the period
-//        $sicknessDayFilter = clone $freeDayFilter;
-//        $sicknessDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $sicknessTimes->id)));
-//        $sicknessDays = $fdController->search($sicknessDayFilter);
-        
-        $ownFreeDays = NULL;
-
-        // "own" means the freeDays of the currently loaded freeTime!
-        if ($_freeTimeId) {
-            $ownFreeDaysFilter = clone $freeDayFilter;
-            $ownFreeDaysFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => array($_freeTimeId))));
-            $ownFreeDays = $fdController->search($ownFreeDaysFilter);
-            $remainingVacation = $remainingVacation - $ownFreeDays->count();
-            $ownFreeDays = $ownFreeDays->toArray();
-        }
-
         $allFreeTimes = $ftController->search($freeTimeFilter);
         $allFreeDayFilter = clone $freeDayFilter;
         $allFreeDayFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $allFreeTimes->id)));
@@ -694,13 +580,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // TODO: remove results property, just return results array itself
         return array(
             'results' => array(
-                'remainingVacation' => floor($remainingVacation),
-                'extraFreeTimes'    => $extraFreeTimes,
-//                'vacationDays'      => $vacationDays->toArray(),
-//                'sicknessDays'      => $sicknessDays->toArray(),
+                'remainingVacation' => intval(floor($remainingVacation)),
                 'excludeDates'      => $excludeDates,
-                'ownFreeDays'       => $ownFreeDays,
-                'allVacation'       => $allVacation,
                 'freeTimeTypes'     => $freeTimeTypes->toArray(),
                 'allFreeTimes'      => $allFreeTimes->toArray(),
                 'allFreeDays'       => $allFreeDays->toArray(),

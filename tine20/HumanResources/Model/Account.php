@@ -116,6 +116,9 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                 'nullable' => true,
             ),
             // virtual fields
+            'contracts' => array(
+                'type' => 'virtual',
+            ),
             'remaining_vacation_days' => array(
                 'type' => 'virtual',
                 'config' => array(
@@ -184,4 +187,21 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
             ),
         )
     );
+
+    /**
+     * returns period of this account
+     * 
+     * looks like we have a timezone problem here!
+     * this code is just factored out from existing code
+     * 
+     * @return Tinebase_DateTime[]
+     * @throws Exception
+     */
+    public function getAccountPeriod()
+    {
+        return [
+            'from' => new Tinebase_DateTime($this->year . '-01-01 00:00:00'),
+            'until' => new Tinebase_DateTime($this->year . '-12-31 23:59:59'),
+        ];
+    }
 }
