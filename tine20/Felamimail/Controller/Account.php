@@ -532,7 +532,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $accountCount = $this->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class));
             if ($accountCount == 1) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $_createdRecord->name . ' as new default email account.');
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account '
+                        . $_createdRecord->name . ' as new default email account.');
                 }
                 Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
             }
@@ -602,11 +603,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $_record->user_id = $_oldRecord->user_id;
         }
 
+        $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record, [], false);
         if ($_oldRecord->email !== $_record->email) {
             // check only with email address!
-            $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record, [], false);
             Tinebase_EmailUser::checkIfEmailUserExists($user);
             Tinebase_EmailUser_XpropsFacade::updateEmailUsers($_record);
+        } else {
+            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+            if (!$emailUserBackend->emailAddressExists($user)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' Re-create email user (missing from email backend)');
+                $this->_createSharedEmailUserAndCredentials($_record);
+                return;
+            }
         }
 
         if (! empty($_record->password)) {
