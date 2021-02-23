@@ -292,7 +292,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 
             $result = parent::update($_record);
 
-            if ($container->name !== $result->name || $container->hierarchy !== $result->hierarchy) {
+            if ($container->name !== $result->name || $container->hierarchy !== $result->hierarchy || $container->color !== $result->color) {
+                $container->color = $result->color;
                 $container->name = $result->name;
                 $container->hierarchy = $result->hierarchy;
 
