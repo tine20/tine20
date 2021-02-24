@@ -1217,8 +1217,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $keyFieldAppName = isset($fieldDef['config']['application']) ? $fieldDef['config']['application']
                     : $this->_applicationName;
                 if (Tinebase_Application::getInstance()->isInstalled($keyFieldAppName)) {
-                    if (!isset($fieldDef['name']) || !Tinebase_Config::getAppConfig($keyFieldAppName)
-                                ->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
+                    $appConfig = Tinebase_Config::getAppConfig($keyFieldAppName);
+                    if (!isset($fieldDef['name']) || ($appConfig && !
+                                $appConfig->get($fieldDef['name']) instanceof Tinebase_Config_KeyField)) {
                         throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
                             $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
                     }
@@ -1328,7 +1329,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if (!isset($this->_converters[$fieldKey])) {
                     $this->_converters[$fieldKey] = [];
                 }
-                $this->_converters[$fieldKey][] = new $converter();
+                if (! class_exists($converter)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
+                        . '::' . __LINE__ . ' Could not create converter ' . $converter . ' for model ' . $this->_modelName);
+                } else {
+                    $this->_converters[$fieldKey][] = new $converter();
+                }
             }
 
             if (isset($fieldDef['recursiveResolving'])) {
