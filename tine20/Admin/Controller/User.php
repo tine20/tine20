@@ -70,6 +70,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         return self::$_instance;
     }
 
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
+    }
+
     /**
      * get list of full accounts -> renamed to search full users
      *

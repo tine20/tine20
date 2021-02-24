@@ -234,9 +234,7 @@ class Tinebase_EmailUser
         
         $className = self::$_supportedBackends[$type];
         
-        $backend = new $className();
-        
-        return $backend;
+        return new $className();
     }
     
     /**
