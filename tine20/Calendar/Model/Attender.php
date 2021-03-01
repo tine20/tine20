@@ -465,7 +465,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             // update object by reference
             $attendeeToKeep->status = isset($newSettings['partStat']) ? $newSettings['partStat'] : $attendeeToKeep->status;
             $attendeeToKeep->role   = isset($newSettings['role']) && in_array($newSettings['role'], $systemRoles) &&
-                (!isset($attendeesToKeep['role']) || in_array($attendeesToKeep['role'], $systemRoles)) ? $newSettings['role'] : $attendeesToKeep['role'];
+                in_array($attendeeToKeep->role, $systemRoles) ? $newSettings['role'] : $attendeeToKeep->role;
         }
 
         // new attendess to add to event
