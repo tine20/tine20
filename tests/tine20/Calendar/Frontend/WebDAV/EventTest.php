@@ -91,6 +91,33 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         return $event;
     }
 
+    public function testExtendedAttendeeRole()
+    {
+        $attendeeRole = new Calendar_Model_AttendeeRole(
+            ['id' => 'TEST', 'value' => 'test', 'system' => false, 'order' => 100, 'color' => '#FF0000']
+        );
+        Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES}->records->addRecord($attendeeRole);
+        $raii = new Tinebase_RAII(function() use($attendeeRole) {
+            Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES}->records->removeRecord($attendeeRole);
+        });
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        $event = $this->_getEvent();
+        $event->attendee->find('user_id', $this->_getTestUserContact()->getId())->role = 'TEST';
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+        $this->assertSame('TEST', $event->attendee->find('user_id', $this->_getTestUserContact()->getId())->role);
+
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+        $vcalendar = $converter->fromTine20Model($event);
+        Calendar_Frontend_WebDAV_Event::create($this->_getTestCalendar(), $event->getId() . '.ics', $vcalendar->serialize());
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+        $this->assertSame('TEST', $updatedEvent->attendee->find('user_id', $this->_getTestUserContact()->getId())->role);
+
+        unset($raii);
+    }
+
     public function testUndeleteEventByCreate()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
