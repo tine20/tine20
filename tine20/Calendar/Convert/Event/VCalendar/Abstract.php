@@ -504,11 +504,12 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         foreach($event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();
 
+            $role = in_array($eventAttendee->role, ['REQ', 'OPT']) ? $eventAttendee->role : 'REQ';
             $parameters = array(
                 'CN'       => $eventAttendee->getName(),
                 'CUTYPE'   => $this->_getAttendeeCUType($eventAttendee),
                 'PARTSTAT' => $eventAttendee->status,
-                'ROLE'     => "{$eventAttendee->role}-PARTICIPANT",
+                'ROLE'     => "{$role}-PARTICIPANT",
                 'RSVP'     => $eventAttendee->isSame($this->_calendarUser) ? 'TRUE' : 'FALSE',
             );
             if (strpos($attendeeEmail, '@') !== false) {
