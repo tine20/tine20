@@ -577,6 +577,40 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * @param $mails
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function doMailsBelongToAccount($mails) {
+        $contactFilter = new Addressbook_Model_ContactFilter([
+            [
+                'field' => 'type',
+                'operator' => 'equals',
+                'value' => Addressbook_Model_Contact::CONTACTTYPE_USER
+            ],
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    [
+                        'field' => 'email',
+                        'operator' => 'in',
+                        'value' => $mails
+                    ],
+                    [
+                        'field' => 'email_home',
+                        'operator' => 'in',
+                        'value' => $mails
+                    ]
+                ]
+            ]
+        ]);
+
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
+        $usermails = array_filter(array_merge($contacts->email, $contacts->email_home));
+        return array_diff($mails, $usermails);
+    }
+
+    /**
      * delete one record
      * - don't delete if it belongs to an user account
      *

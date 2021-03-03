@@ -140,6 +140,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DISABLE_EXTERNAL_IMIP = 'disableExternalImip';
+
+    /**
+     * DISABLE_EXTERNAL_IMIP_NOTIFICATION
+     *
+     * @var string
+     */
+    const DISABLE_EXTERNAL_NOTIFICATIONS = 'disableExternalNotifications';
     
     /**
      * SKIP_DOUBLE_EVENTS
@@ -510,6 +517,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'label'                 => 'Disable iMIP for external organizers',
         //_('Disable iMIP for external organizers')
             'description'           => 'Disable iMIP for external organizers',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => false,
+        ),
+        self::DISABLE_EXTERNAL_NOTIFICATIONS => array(
+            //_('Disable notification for external organizers')
+            'label'                 => 'Disable notification for external organizers',
+            //_('Disable notification for external organizers')
+            'description'           => 'Disable notification for external organizers',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,

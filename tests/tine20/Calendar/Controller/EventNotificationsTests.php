@@ -381,6 +381,24 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('pwulf', 'declined');
     }
 
+    public function testSkipNotificationToNonAccounts()
+    {
+        $persistentEvent = $this->_createEventWithExternal();
+
+        // add alarm
+        $persistentEvent->summary = 'Update Event';
+
+        $origConf = Calendar_Config::getInstance()->get(Calendar_Config::DISABLE_EXTERNAL_NOTIFICATIONS);
+        Calendar_Config::getInstance()->set(Calendar_Config::DISABLE_EXTERNAL_NOTIFICATIONS,true);
+
+        self::flushMailer();
+        $this->_eventController->update($persistentEvent);
+
+        $this->_assertMail('externer@example.org');
+
+        Calendar_Config::getInstance()->set(Calendar_Config::DISABLE_EXTERNAL_NOTIFICATIONS,$origConf);
+    }
+
     /**
      * @param bool $externalOrganizer
      * @return Calendar_Model_Event
