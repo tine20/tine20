@@ -196,6 +196,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             }, {
                                 xtype: 'ux.displayfield',
                                 name: 'location',
+                                linkify: true,
                                 fieldLabel: this.app.i18n._('Location')
                             }, {
                                 xtype: 'ux.displayfield',

@@ -20,6 +20,7 @@ Ext.ns('Ext.ux.display');
 Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
     htmlEncode: true,
     nl2br: false,
+    linkify: false,
 
     // don't enumerate as form field
     markInvalid: null,
@@ -53,7 +54,10 @@ Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
         if (this.nl2br) {
             v = Ext.util.Format.nl2br(v);
         }
-        
+
+        if (this.linkify) {
+            Tine.Tinebase.common.linkifyText(v, this.getEl());
+        }
         return this.rendered ? (this.el.dom.innerHTML = (Ext.isEmpty(v) ? '' : v)) : (this.value = v);
     }
 
