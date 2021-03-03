@@ -82,7 +82,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $this->connectAndLogin($params);
 
-        if ($params->account) {
+        if ($params->account && $params->account->getId()) {
             $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($params->account, $this);
         } else {
             $capabilities['capabilities'] = [];

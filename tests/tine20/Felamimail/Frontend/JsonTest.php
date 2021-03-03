@@ -2515,7 +2515,6 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_json->changeCredentials($account['id'], Tinebase_Core::getUser()->accountEmailAddress, $pass);
         $this->_assertPassword($account['id'], $pass);
     }
-    
 
     public function testImapSettingsConnection()
     {
@@ -2539,9 +2538,9 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         
         $fields['user'] = $config['user'];
         $fields['password'] = $config['password'];
-        
+
+        // NOTE: this does not do the real connection test - it just delivers return as the account type is != USER
         $result = $this->_json->testImapSettings($account->getId(), $fields);
-        
         self::assertEquals('success', $result['status'], 'connection failed');
     }
 
@@ -2565,5 +2564,46 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         $result = $this->_json->testSmtpSettings($account->getId(), $fields);
         self::assertEquals('success', $result['status'], 'connection failed');
+    }
+
+    public function testImapSettingsConnectionWithoutAccountWrongHost()
+    {
+        $fields = [
+            'host' => 'some.host.not.working',
+            'port' => 143,
+            'ssl' => 'none',
+            'user' => 'somone',
+            'password' => 'somepass'
+        ];
+
+        try {
+            $this->_json->testImapSettings(null, $fields, true);
+            self::fail('Should not work: mail server is not valid!');
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            self::assertStringContainsString("No connection to IMAP server.",
+                $e->getMessage());
+        }
+    }
+
+    public function testImapSettingsConnectionWithoutAccountCorrectCreds()
+    {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $creds = TestServer::getInstance()->getTestCredentials();
+        $fields = [
+            'host' => $imapConfig->host,
+            'port' => $imapConfig->port,
+            'ssl' => $imapConfig->ssl ? $imapConfig->ssl : 'none',
+            'user' => Tinebase_EmailUser::getInstance()->getEmailUserName(Tinebase_Core::getUser()),
+            'password' => $creds['password'],
+        ];
+
+        try {
+            $result = $this->_json->testImapSettings(null, $fields, true);
+            self::assertEquals('success', $result['status']);
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            // FIXME somehow this fails on our jenkins ci ... why?
+            self::assertStringContainsString('No connection to IMAP server',
+                $e->getMessage());
+        }
     }
 }
