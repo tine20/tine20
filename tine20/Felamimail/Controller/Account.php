@@ -372,6 +372,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         // make sure that system account exists before copy
         if (! $emailUserBackend->userExists($systemEmailUser)) {
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
             throw new Tinebase_Exception_UnexpectedValue($translation->_('system account for user does not exist'));
         }
 
