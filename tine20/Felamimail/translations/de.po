@@ -46,7 +46,7 @@ msgstr "Gemeinsame Konten benötigen eine E-Mail-Adresse"
 
 #: Controller/Account.php:272
 msgid "userInternal accounts need to have an email set"
-msgstr "Das persönliche Systemkonto benötigen eine E-Mail-Adresse"
+msgstr "Das persönliche Systemkonto benötigt eine E-Mail-Adresse"
 
 #: Controller/Account.php:275
 msgid "Internal user accounts need a valid user"
