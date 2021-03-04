@@ -1682,6 +1682,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $this->_backend->update($_account);
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
+        } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
         } catch (Exception $e) {
             // skip creation at this point
             Tinebase_Exception::log($e);
