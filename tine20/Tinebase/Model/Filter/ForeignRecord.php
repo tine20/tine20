@@ -111,6 +111,11 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         parent::setOperator($_operator);
     }
 
+    public function getForeignIds()
+    {
+        return $this->_foreignIds;
+    }
+
     /**
      * creates corresponding filtergroup
      *
