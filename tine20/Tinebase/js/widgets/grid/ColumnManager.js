@@ -112,6 +112,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.align = 'right';
             }
 
+            if(fieldDefinition.type == 'hexcolor') {
+                config.width = 40;
+            }
+
             // If no label exists, don't use in grid
             if (! fieldDefinition.label) {
                 return null;

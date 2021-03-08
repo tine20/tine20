@@ -191,6 +191,10 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
 
     getTitle: function() {
         return this.get('summary') + (this.hasPoll() ? '\u00A0\uFFFD' : '');
+    },
+    
+    getComboBoxTitle: function() {
+        return this.get('summary') + ' (' + Tine.Tinebase.common.dateTimeRenderer(this.get('dtstart')) + ')';
     }
 });
 

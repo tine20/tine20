@@ -46,7 +46,7 @@ msgstr "Gemeinsame Konten benötigen eine E-Mail-Adresse"
 
 #: Controller/Account.php:272
 msgid "userInternal accounts need to have an email set"
-msgstr "Das persönliche Systemkonto benötigen eine E-Mail-Adresse"
+msgstr "Das persönliche Systemkonto benötigt eine E-Mail-Adresse"
 
 #: Controller/Account.php:275
 msgid "Internal user accounts need a valid user"
@@ -1820,8 +1820,8 @@ msgstr "Anhang (eines Datensatzes)"
 msgid "Save as Record Attachment"
 msgstr "Als Datensatz Anhang speichern"
 
-msgid "Folder with this name already exists!"
-msgstr "Ordner mit dem Namen ist bereits vorhanden!"
+msgid "Folder with name {0} already exists!"
+msgstr "Ordner mit dem Namen {0} ist bereits vorhanden!"
 
 msgid "Failure on create folder"
 msgstr "Fehler beim anlegen des Ordners"
@@ -1951,8 +1951,8 @@ msgstr ""
 "Massen-Mails werden nicht an die eingetragenen CC und/oder BCC Empfänger "
 "geschickt. Bitte entfernen Sie diese."
 
-msgid "Folder with name {0} already exists!"
-msgstr "Ordner mit dem Namen {0} ist bereits vorhanden!"
+msgid "Folder with this name already exists!"
+msgstr "Ordner mit dem Namen ist bereits vorhanden!"
 
 msgid "userInternal accounts need to have an user_id set"
 msgstr "Das persönliche Systemkonto benötigen eine User-ID"

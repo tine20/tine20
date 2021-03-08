@@ -130,14 +130,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }
 
             this.getForm().findField('timeaccount_description').setValue(timeaccount.data.description);
+
+            this.getForm().findField('is_billable').setDisabled(notBillable);
+            this.disableBillableFields(notBillable);
+            this.getForm().findField('is_cleared').setDisabled(notClearable);
+            this.disableClearedFields(notClearable);
         }
-
-        this.getForm().findField('is_billable').setDisabled(notBillable);
-        this.disableBillableFields(notBillable)
-        this.getForm().findField('is_cleared').setDisabled(notClearable);
-        this.disableClearedFields(notClearable);
-
-
+        
         if (this.record.id == 0 && timeaccount) {
             // set is_billable for new records according to the timeaccount setting
             this.getForm().findField('is_billable').setValue(timeaccount.data.is_billable);
@@ -412,7 +411,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     columnWidth: .25
                                 },
                                 items: [[
-                                    fieldManager('is_billable', {disabled: (this.useMultiple) ? false : true,
+                                    fieldManager('is_billable', {
+                                        //TODO: should we really disable it here?
+                                        disabled: (this.useMultiple) ? false : true,
                                         listeners: {
                                             scope: this,
                                             check: this.onCheckBillable

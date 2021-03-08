@@ -38,7 +38,8 @@ class Felamimail_Backend_Sieve extends Zend_Mail_Protocol_Sieve
         try {
             $this->authenticate($_config['username'], $_config['password']);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            throw new Felamimail_Exception_Sieve('Could not authenticate with user ' . $_config['username'] . ' (' . $zmpe->getMessage() . ').');
+            throw new Felamimail_Exception_SieveInvalidCredentials('Could not authenticate with user '
+                . $_config['username'] . ' (' . $zmpe->getMessage() . ').');
         }
     }
 }

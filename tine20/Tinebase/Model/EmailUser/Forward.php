@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   2020-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -46,4 +46,28 @@ class Tinebase_Model_EmailUser_Forward extends Tinebase_Record_NewAbstract
             ],
         ],
     ];
+
+    public function setFromArray(array &$_data)
+    {
+        if (isset($_data[self::FLDS_EMAIL])) {
+            $_data[self::FLDS_EMAIL] = Tinebase_Helper::convertDomainToPunycode($_data[self::FLDS_EMAIL]);
+        }
+
+        parent::setFromArray($_data);
+    }
+
+    /**
+     * @param bool $_recursive
+     * @return array
+     */
+    public function toArray($_recursive = TRUE)
+    {
+        $result = parent::toArray($_recursive);
+
+        if ($this->{self::FLDS_EMAIL}) {
+            $result[self::FLDS_EMAIL] = Tinebase_Helper::convertDomainToUnicode($this->{self::FLDS_EMAIL});
+        }
+
+        return $result;
+    }
 }

@@ -1801,6 +1801,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
         const nextRecord = sm.isFilterSelect ? null : this.getNextMessage(msgs);
         const account = this.app.getActiveAccount();
+        const msgsIds = [];
         
         try {
             const promises = [];
@@ -1815,6 +1816,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     if ('spam' === option) {
                         this.getStore().remove(msg);
                         this.deleteQueue.push(msg.id);
+                        msgsIds.push(msg.id);
     
                         //spam strategy will execute move message , ham will remain in current folder
                         const isSeen = msg.hasFlag('\\Seen');
@@ -1860,7 +1862,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             await Promise.allSettled(promises);
             
-            this.movingOrDeleting = false;
+            this.onAfterDelete(msgsIds);
             this.doRefresh();
         } catch (e) {
             this.doRefresh();

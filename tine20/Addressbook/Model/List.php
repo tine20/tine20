@@ -78,7 +78,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'List', // gettext('GENDER_List)
+        'recordName'        => 'List', // gettext('GENDER_List')
         'recordsName'       => 'Lists', // ngettext('List', 'Lists', n)
         'hasRelations'      => true,
         'hasCustomFields'   => true,

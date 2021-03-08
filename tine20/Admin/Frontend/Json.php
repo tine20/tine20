@@ -340,14 +340,20 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Core::getLogger()->addReplacement($password);
         }
 
-        // dehydrate primary group id
+        // dehydrate primary group id + groups
         if (isset($recordData['accountPrimaryGroup'])
             && is_array($recordData['accountPrimaryGroup'])
             && isset($recordData['accountPrimaryGroup']['id'])
         ) {
             $recordData['accountPrimaryGroup'] = $recordData['accountPrimaryGroup']['id'];
         }
-        
+
+        if (isset($recordData['groups']['results'])) {
+            $recordData['groups'] = array_map(function($group) {
+                return $group['id'];
+            }, $recordData['groups']['results']);
+        }
+
         $account = new Tinebase_Model_FullUser();
         
         // always re-evaluate fullname

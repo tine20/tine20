@@ -138,6 +138,12 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_DYNAMIC_RECORD = 'dynamicRecord';
     const TYPE_FLOAT = 'float';
     const TYPE_FULLTEXT = 'fulltext';
+
+    /**
+     * Colour in the web standard hexadecimal format (#000000 to #FFFFFF)
+     */
+    const TYPE_HEX_COLOR = 'hexcolor';
+
     const TYPE_INTEGER = 'integer';
     const TYPE_JSON = 'json';
     const TYPE_KEY_FIELD = 'keyfield';

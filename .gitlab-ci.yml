@@ -66,9 +66,6 @@ docker_build_source_build:
 docker_build_built:
   extends: .abstract_jobs.docker
   stage: build2
-  variables:
-    KUBERNETES_CPU_REQUEST: 1
-    KUBERNETES_MEMORY_REQUEST: 2Gi
   script:
     - build_image build
     - build_image built

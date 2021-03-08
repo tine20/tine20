@@ -874,6 +874,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'application'           => Tinebase_Model_Filter_Text::class,
         'numberableStr'         => Tinebase_Model_Filter_Text::class,
         'numberableInt'         => Tinebase_Model_Filter_Int::class,
+        'hexcolor'              => Tinebase_Model_Filter_Text::class,
     );
 
     /**
@@ -896,6 +897,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_validatorMapping = array(
         'record'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'relation'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'hexcolor'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '#969696', Zend_Filter_Input::VALIDATE => array('Regex' => '/^#[0-9a-fA-F]{6}$/'))
     );
 
     /**
@@ -1217,8 +1219,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $keyFieldAppName = isset($fieldDef['config']['application']) ? $fieldDef['config']['application']
                     : $this->_applicationName;
                 if (Tinebase_Application::getInstance()->isInstalled($keyFieldAppName)) {
-                    if (!isset($fieldDef['name']) || !Tinebase_Config::getAppConfig($keyFieldAppName)
-                                ->get($fieldDef['name']) instanceof Tinebase_Config_KeyField) {
+                    $appConfig = Tinebase_Config::getAppConfig($keyFieldAppName);
+                    if (!isset($fieldDef['name']) || ($appConfig && !
+                                $appConfig->get($fieldDef['name']) instanceof Tinebase_Config_KeyField)) {
                         throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
                             $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
                     }
@@ -1328,7 +1331,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if (!isset($this->_converters[$fieldKey])) {
                     $this->_converters[$fieldKey] = [];
                 }
-                $this->_converters[$fieldKey][] = new $converter();
+                if (! class_exists($converter)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
+                        . '::' . __LINE__ . ' Could not create converter ' . $converter . ' for model ' . $this->_modelName);
+                } else {
+                    $this->_converters[$fieldKey][] = new $converter();
+                }
             }
 
             if (isset($fieldDef['recursiveResolving'])) {

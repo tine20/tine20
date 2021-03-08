@@ -207,7 +207,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     }, {
                         width: 110,
                         xtype: 'extuxclearabledatefield',
-                        fieldLabel: this.app.i18n._('Birthday'),
+                        fieldLabel: this.app.i18n._('Birthday (private)'),
                         name: 'bday',
                         requiredGrant: 'privateDataGrant'
                     }

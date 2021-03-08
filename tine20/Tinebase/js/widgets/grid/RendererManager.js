@@ -212,6 +212,9 @@ Tine.widgets.grid.RendererManager = function() {
                         break;
                     }
                     break;
+                case 'hexcolor':
+                    renderer = Tine.Tinebase.common.colorRenderer;
+                    break;
                 case 'records':
                 case 'recodList':
                     //@Todo add records/list renderer!

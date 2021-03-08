@@ -8,7 +8,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
@@ -820,11 +820,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function testIMapSettings($accountId , $fields, $forceConnect = false)
+    public function testIMapSettings($accountId, $fields, $forceConnect = false)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($accountId);
         
-        //only test connection for external user account by default 
+        // only test connection for external user account by default
         if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER) {
             return [
                 'status' => 'success'
@@ -855,11 +855,34 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $params->password = isset($fields['password']) ? $fields['password'] : '';
         $params->port     = isset($fields['port'])     ? $fields['port']     : null;
         $params->ssl      = isset($fields['ssl'])      ? $fields['ssl']      : false;
-        
+        $params->account = $account;
+
+        $fieldsWithoutPw = $fields;
+        unset($fieldsWithoutPw['password']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            ' Trying connection with params: ' . print_r($fieldsWithoutPw, true)
+        );
+
         try {
             $backend = new Felamimail_Backend_Imap($params);
         } catch (Exception $e) {
-            throw new Tinebase_Exception_SystemGeneric($e->getMessage());
+
+            $fieldsWithoutPw = $fields;
+            unset($fieldsWithoutPw['password']);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Connection failed: ' . $e
+            );
+
+            switch ($e->getCode()) {
+                case 910: // Felamimail_Exception_IMAP
+                    throw new Tinebase_Exception_SystemGeneric('General IMAP error.');
+                case 911: // Felamimail_Exception_IMAPServiceUnavailable
+                    throw new Tinebase_Exception_SystemGeneric('No connection to IMAP server.');
+                case 912: // Felamimail_Exception_IMAPInvalidCredentials
+                    throw new Tinebase_Exception_SystemGeneric('Cannot login, user or password wrong.');
+                default:
+                    throw new Tinebase_Exception_SystemGeneric($e->getMessage());
+            }
         }
 
         return [

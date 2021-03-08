@@ -240,8 +240,8 @@ msgstr "Andere Daten"
 
 #: Export/Pdf.php:114 Model/Contact.php:397 js/ContactEditDialog.js:210
 #: js/ContactGrid.js:249 js/Model.js:27 js/Model.js:176
-msgid "Birthday"
-msgstr "Geburtstag"
+msgid "Birthday (private)"
+msgstr "Geburtstag (privat)"
 
 #: Export/Pdf.php:117 Model/Contact.php:766 js/ContactEditDialog.js:204
 #: js/ContactGrid.js:220 js/Model.js:31 js/Model.js:171
@@ -1218,4 +1218,4 @@ msgid "Addressbooks to export"
 msgstr "Zu exportierende Adressbücher"
 
 msgid "Export target"
-msgstr "Exportzielr"
+msgstr "Export Ziel"

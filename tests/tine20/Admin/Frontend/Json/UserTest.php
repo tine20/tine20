@@ -425,6 +425,12 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
             ? $smtpConfig['primarydomain'] : '';
     }
 
+    /**
+     * @param string $domain
+     * @param string $localPart
+     * @throws Admin_Exception
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     public function testAdditionalDomainInUserAccount($domain = 'anotherdomain.com', $localPart = 'somemail')
     {
         $this->_skipWithoutEmailSystemAccountConfig();
@@ -458,6 +464,35 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $tbJson = new Tinebase_Frontend_Json();
         $registry = $tbJson->getRegistryData();
         self::assertEquals($umlautDomain, $registry['additionaldomains']);
+    }
+
+    public function testUmlautDomainInAliases()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $umlautDomain = 'myümläutdomain.de';
+        $aliasAddress = 'alias@' . $umlautDomain;
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $secondaryDomains = $smtpConfig->secondarydomains . ',' . Tinebase_Helper::convertDomainToPunycode($umlautDomain);
+        $smtpConfig->secondarydomains = $secondaryDomains;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
+        // need to destroy user singleton because it still has the email plugin with the old config...
+        Admin_Controller_User::destroyInstance();
+        Tinebase_User::destroyInstance();
+        Tinebase_EmailUser::destroyInstance();
+
+        $user = $this->_createTestUser();
+        $userArray = $user->toArray();
+        $userArray['emailUser']['emailAliases'] = [
+            ['email' => $aliasAddress, 'dispatch_address' => true],
+        ];
+        $updatedUser = $this->_json->saveUser($userArray);
+        self::assertIsArray($updatedUser['emailUser']['emailAliases'],
+            'aliases not saved: ' . print_r($updatedUser['emailUser'], true));
+        self::assertCount(1, $updatedUser['emailUser']['emailAliases'],
+            'aliases not saved: ' . print_r($updatedUser['emailUser'], true));
+        self::assertequals($aliasAddress, $updatedUser['emailUser']['emailAliases'][0]['email'],
+            'aliases not correct: ' . print_r($updatedUser['emailUser'], true));
     }
 
     /**
