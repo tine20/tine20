@@ -198,12 +198,23 @@ Ext.extend(Ext.ux.grid.MultiCellSelectionModel, Ext.grid.AbstractSelectionModel,
 
         var view = this.grid.view;
         view.on("refresh", this.onRefresh, this);
+        view.on("rowupdated", this.onRowUpdated, this);
         view.on("rowremoved", this.onRemove, this);
     },
 
     // private
     onRefresh : function(){
         this.clearSelections();
+    },
+
+    //private
+    onRowUpdated: function onRowUpdated(v, index, r) {
+        var cols = this.grid.getColumnModel().getColumnCount();
+        for (var i = 0; i < cols; i++) {
+            if(this.isSelected([index, i])){
+                v.onCellSelect(index, i)
+            }
+        }
     },
 
     // private
