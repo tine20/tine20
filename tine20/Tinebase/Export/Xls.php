@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use PhpOffice\PhpSpreadsheet\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
@@ -45,13 +45,15 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     protected $_columnCount = 1;
 
     protected $_cloneRow;
-
     protected $_cloneRowStyles = array();
+    protected $_cloneRowMergedCells = [];
 
     protected $_cloneGroupStartRowStyles = null;
     protected $_cloneGroupStartRow = null;
+    protected $_cloneGroupStartMergedCells = [];
     protected $_cloneGroupEndRowStyles = null;
     protected $_cloneGroupEndRow = null;
+    protected $_cloneGroupEndMergedCells = [];
 
     protected $_excelVersion;
 
@@ -210,6 +212,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             foreach($this->_cloneRowStyles as $func => $value) {
                 call_user_func(array($rowDimension, $func), $value);
             }
+
+            foreach ($this->_cloneRowMergedCells as $mergedCell) {
+                $sheet->mergeCells($mergedCell[0] . $newRowOffset . ':' . $mergedCell[1] . $newRowOffset);
+            }
         }
     }
 
@@ -238,6 +244,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             $rowDimension = $sheet->getRowDimension($newRowOffset);
             foreach($this->_cloneGroupStartRowStyles as $func => $value) {
                 call_user_func(array($rowDimension, $func), $value);
+            }
+
+            foreach ($this->_cloneGroupStartMergedCells as $mergedCell) {
+                $sheet->mergeCells($mergedCell[0] . $newRowOffset . ':' . $mergedCell[1] . $newRowOffset);
             }
         }
 
@@ -269,6 +279,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             $rowDimension = $sheet->getRowDimension($newRowOffset);
             foreach($this->_cloneGroupEndRowStyles as $func => $value) {
                 call_user_func(array($rowDimension, $func), $value);
+            }
+
+            foreach ($this->_cloneGroupEndMergedCells as $mergedCell) {
+                $sheet->mergeCells($mergedCell[0] . $newRowOffset . ':' . $mergedCell[1] . $newRowOffset);
             }
         }
 
@@ -355,7 +369,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             } catch (\PhpOffice\PhpSpreadsheet\Exception $pe) {
                 continue;
             }
-            /** @var PhpOffice\PhpSpreadsheet\Cell $cell */
+            /** @var Cell $cell */
             foreach($cellIter as $cell) {
                 if (false !== strpos($cell->getValue(), $_search)) {
                     return $cell;
@@ -480,6 +494,11 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             throw new Tinebase_Exception_UnexpectedValue('block tags need to be in the same row');
         }
 
+        $endColumn = $this->_findAndStoreMergedCellsForCloning($this->_rowOffset,
+            \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($startColumn),
+            \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($endColumn),
+            $this->_cloneRowMergedCells);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found block...');
 
@@ -517,6 +536,48 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         }
     }
 
+    protected function _findAndStoreMergedCellsForCloning(int $rowOffset, int $startColumnIndex, int $endColumnIndex, &$store)
+    {
+        $endColumn = PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($endColumnIndex);
+        foreach ($this->_spreadsheet->getActiveSheet()->getMergeCells() as $mergeRange) {
+            $merged = PhpOffice\PhpSpreadsheet\Cell\Coordinate::rangeBoundaries($mergeRange);
+            foreach ($merged as &$val) {
+                foreach ($val as &$valVal) {
+                    $valVal = intval($valVal);
+                }
+            }
+
+            // if the end column is in a range, it needs to be set to the end of the range, only single line ranges are allowed
+            if ($merged[0][1] === $rowOffset && $merged[1][1] === $rowOffset &&
+                    $merged[0][0] <= $endColumnIndex && $merged[1][0] >= $endColumnIndex) {
+                $endColumnIndex = $merged[1][0];
+                $endColumn = PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($merged[1][0]);
+            }
+
+            // range needs to be either completely outside of our group boundaries, or be completely inside
+            // having range intersections is not valid and throws
+
+            // first check if we have any kind of intersection, either completely within or not
+            if ($merged[0][1] <= $rowOffset && $merged[0][0] <= $endColumnIndex &&
+                    $merged[1][1] >= $rowOffset && $merged[1][0] >= $startColumnIndex) {
+
+                // now check for not completely within and throw, otherwise we are fine
+                if ($merged[0][1] < $rowOffset || $merged[0][0] < $startColumnIndex ||
+                        $merged[1][1] > $rowOffset || $merged[1][0] > $endColumnIndex) {
+                    throw new Tinebase_Exception_UnexpectedValue('merged cells: ' . $mergeRange .
+                        ' badly intersects with group');
+                }
+
+                $store[] = [
+                    PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($merged[0][0]),
+                    PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($merged[1][0]),
+                ];
+            }
+        }
+
+        return $endColumn;
+    }
+
     protected function _findGroupStart()
     {
         if (null === ($block = $this->_findCell('${GROUP_START}'))) {
@@ -536,11 +597,15 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             throw new Tinebase_Exception_UnexpectedValue('block tags need to be in the same row');
         }
 
+        $endColumn = $this->_findAndStoreMergedCellsForCloning($rowOffset,
+            \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($startColumn),
+            \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($endColumn),
+            $this->_cloneGroupStartMergedCells);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found group start...');
 
         $sheet = $this->_spreadsheet->getActiveSheet();
-
         /** @var  $rowIterator */
         $rowIterator = $sheet->getRowIterator($rowOffset);
         $row = $rowIterator->current();
@@ -586,6 +651,11 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                 Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__ . ' block tags need to be in the same row');
             throw new Tinebase_Exception_UnexpectedValue('block tags need to be in the same row');
         }
+
+        $endColumn = $this->_findAndStoreMergedCellsForCloning($rowOffset,
+            \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($startColumn),
+            \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($endColumn),
+            $this->_cloneGroupEndMergedCells);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found group end...');
