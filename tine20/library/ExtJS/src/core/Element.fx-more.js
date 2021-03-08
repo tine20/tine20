@@ -90,7 +90,7 @@ function(){
 	        me.addClass(XMASKED);
 	        mask.setDisplayed(true);
 	        if(typeof msg == 'string'){
-                var mm = dh.append(dom, {cls : EXTELMASKMSG, cn:{tag:'div'}}, true);
+                var mm = dh.append(dom, {cls : EXTELMASKMSG, cn:[{tag:'div'},{tag:'div', cls:'ext-el-mask-wait x-mask-wait'}]}, true);
                 data(dom, 'maskMsg', mm);
 	            mm.dom.className = msgCls ? EXTELMASKMSG + " " + msgCls : EXTELMASKMSG;
 	            mm.dom.firstChild.innerHTML = msg;

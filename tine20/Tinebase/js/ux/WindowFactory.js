@@ -105,12 +105,13 @@ Ext.ux.WindowFactory.prototype = {
             c.width = Math.min(Ext.getBody().getBox().width, c.width);
 
             c.layout = c.layout || 'fit';
+            const cp = this.getCenterPanel(c);
             c.items = {
                 layout: 'card',
                 border: false,
                 activeItem: 0,
                 isWindowMainCardPanel: true,
-                items: [this.getCenterPanel(c)]
+                items: [cp]
             };
 
             // NOTE: is this still true ?? -> we can only handle one window yet
@@ -118,6 +119,9 @@ Ext.ux.WindowFactory.prototype = {
 
             win = new winConstructor(c);
             c.items.items[0].window = win;
+            if (cp.onWindowInject) {
+                cp.onWindowInject.call(cp, win);
+            }
         }
         
         // if initShow property is present and it is set to false don't show window, just return reference

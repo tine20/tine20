@@ -162,7 +162,7 @@ Ext.ux.PercentRenderer = function(percent) {
 Ext.ux.PercentRendererWithName = function(value, metadata, record) {
   
     var metaStyle = '',
-        dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock('Tinebase.datasafe');
+        dataSafeEnabled = Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName);
 
     if(record.fileRecord) {
         record = record.fileRecord;

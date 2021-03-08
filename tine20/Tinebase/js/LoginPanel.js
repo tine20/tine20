@@ -65,7 +65,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     getLoginPanel: function () {
         //Do we have a custom Logo for branding?
         var modSsl = Tine.Tinebase.registry.get('modSsl'),
-            secondFactor = Tine.Tinebase.registry.get('secondFactor'),
             logo = Tine.installLogo;
 
         if (! this.loginPanel) {
@@ -138,16 +137,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                                 render: this.setLastLoginUser.createDelegate(this)
                             }
                         }, {
-                            xtype: 'textfield',
-                            tabindex: 4,
-                            width: 170,
-                            inputType: 'password',
-                            hidden: secondFactor ? false : true,
-                            fieldLabel: i18n._('Two-Factor Authentication Code'),
-                            id: 'otp',
-                            name: 'otp',
-                            selectOnFocus: true
-                        }, {
                             xtype: 'displayfield',
                             style: {
                                 align: 'center',
@@ -155,29 +144,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                             },
                             value: i18n._('Certificate detected. Please, press Login button to proceed.'),
                             hidden: modSsl ? false : true
-                        }, {
-                            xtype: 'container',
-                            id:'contImgCaptcha',
-                            layout: 'form',
-                            style: { visibility:'hidden' },
-                            items:[{
-                                xtype: 'textfield',
-                                width: 170,
-                                labelSeparator: '',
-                                id: 'security_code',
-                                value: null,
-                                name: 'securitycode'
-                            }, {
-                                fieldLabel:(' '),
-                                labelSeparator: '',
-                                items:[
-                                    new Ext.Component({
-                                        autoEl: {
-                                            tag: 'img',
-                                            id: 'imgCaptcha'
-                                        }
-                                    })]
-                            }]
                         }, {
                             xtype: 'container',
                             layout: 'hbox',
@@ -490,6 +456,37 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         }
     },
 
+    onLoginFail: async function(response, request) {
+        const exception = _.get(JSON.parse(response.responseText), 'data', {});
+        const me = this;
+        
+        switch (exception.code) {
+            case 630:
+                const mfaDevices = exception.mfaUserConfigs
+                return Tine.Tinebase.areaLocks.unlock(exception.area, {
+                    mfaDevices,
+                    USERABORTMethod() { Ext.MessageBox.hide(); },
+                    unlockMethod(areaName, MFAUserConfigId, MFAPassword) {
+                        me.onLoginPress({MFAUserConfigId, MFAPassword});
+                    },
+                    triggerMFAMethod(MFAUserConfigId) {
+                        if (mfaDevices.length > 1) {
+                            me.onLoginPress({MFAUserConfigId});
+                        }
+                    }
+                });
+                break;
+            case 631:
+                return Tine.Tinebase.areaLocks.onMFAFail(exception.area, exception, {retryMethod () {
+                    me.onLoginPress();
+                }});
+                break;
+            default:
+                return Tine.Tinebase.ExceptionHandler.handleRequestException(response);
+                break;
+        }
+    },
+    
     onLoginSuccess: function(response) {
         var responseData = Ext.util.JSON.decode(response.responseText);
         if (responseData.success === true) {
@@ -554,7 +551,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     /**
      * do the actual login
      */
-    onLoginPress: function () {
+    onLoginPress: function (additionalParams) {
         var form = this.getLoginPanel().getForm(),
             values = form.getValues();
             
@@ -563,15 +560,14 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
 
             Ext.Ajax.request({
                 scope: this,
-                params : {
+                params : _.assign({
                     method: this.loginMethod,
                     username: values.username,
-                    password: values.password,
-                    securitycode: values.securitycode,
-                    otp: values.otp
-                },
+                    password: values.password
+                }, additionalParams),
                 timeout: 60000, // 1 minute
-                success: this.onLoginSuccess
+                success: this.onLoginSuccess,
+                failure: this.onLoginFail
             });
         } else {
 

@@ -215,6 +215,19 @@ Tine.widgets.grid.RendererManager = function() {
                 case 'hexcolor':
                     renderer = Tine.Tinebase.common.colorRenderer;
                     break;
+                case 'model':
+                    renderer = (classname, metaData, record) => {
+                        const recordClass = Tine.Tinebase.data.RecordMgr.get(classname);
+                        return recordClass ? recordClass.getRecordName() : classname;
+                    };
+                    break;
+                case 'dynamicRecord':
+                    const classNameField = fieldDefinition.config.refModelField;
+                    renderer = (configRecord, metaData, record) => {
+                        const configRcordClass = Tine.Tinebase.data.RecordMgr.get(record.get(classNameField));
+                        return Tine.Tinebase.data.Record.setFromJson(configRecord, configRcordClass).getTitle();
+                    };
+                    break;
                 case 'records':
                 case 'recodList':
                     //@Todo add records/list renderer!

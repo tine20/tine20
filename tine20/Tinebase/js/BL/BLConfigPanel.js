@@ -6,9 +6,6 @@
  * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-require('./BLClassnameRenderer');
-require('./BLConfigRecordRenderer');
-
 Ext.ns('Tine.Tinebase.BL');
 
 Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
@@ -30,25 +27,37 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
      * path to get/put data
      */
     dataPath: 'data.blpipe',
+    
+    /**
+     * cfg {Record} record class having a dynamicRecord field
+     */
+    recordClass: null,
 
-    quickaddMandatory: 'classname',
-    autoExpandColumn: 'configRecord',
+    /**
+     * @cfg {String} 
+     * property holding the dynamic record
+     */
+    dynamicRecordField: 'configRecord',
+    
 
     initComponent: function() {
         var _ = window.lodash,
             me = this;
-
+        
         if (! this.owningRecordClass && this.editDialog) {
             this.owningRecordClass = this.editDialog.recordClass;
         }
 
-        var fieldCfg = _.get(this.owningRecordClass.getField(this.owningField), 'fieldDefinition.config');
+        this.recordClass = this.recordClass  || Tine.Tinebase.data.RecordMgr.get(_.get(this.owningRecordClass.getField(this.owningField), 'fieldDefinition.config.recordClassName'));
+        this.modelConfig = this.modelConfig || _.get(this, 'recordClass.getModelConfiguration') ? this.recordClass.getModelConfiguration() : null;
+        this.classNameField = this.classNameField || _.get(this.recordClass.getField(this.dynamicRecordField), 'fieldDefinition.config.refModelField', 'classname');
+        this.title = this.hasOwnProperty('title') ? this.title : this.recordClass.getRecordsName();
+        this.quickaddMandatory = this.classNameField;
+        this.autoExpandColumn = this.dynamicRecordField;
+            
 
-        this.recordClass = Tine.Tinebase.data.RecordMgr.get(fieldCfg.recordClassName);
-
-
-        // @TODO: move to generic 'model' picker
-        this.BLElementConfigClassNames = _.get(this.recordClass.getField('classname'), 'fieldDefinition.config.availableModels', [])
+        // @TODO: move to fieldManager?
+        this.BLElementConfigClassNames = _.get(this.recordClass.getField(this.classNameField), 'fieldDefinition.config.availableModels', [])
         this.BLElementPicker = new Ext.form.ComboBox({
             store: _.reduce(this.BLElementConfigClassNames, function(arr, classname) {
                 var recordClass = Tine.Tinebase.data.RecordMgr.get(classname);
@@ -61,33 +70,27 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
             triggerAction: 'all',
             emptyText: i18n._('Add new Element...'),
             selectOnFocus:true,
+            blurOnSelect: true
         });
 
-        // @TODO: move to generic model/dynamicRecord renderers
-        this.columns = [
-            {
-                id:'classname',
-                header: i18n._('Type'),
-                width: 125,
-                sortable: false,
-                dataIndex: 'classname',
-                quickaddField: this.BLElementPicker,
-                renderer: Tine.widgets.grid.RendererManager.get('Tinebase', 'BLConfig', 'classname', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL)
-            }, {
-                id: 'configRecord',
-                header: i18n._('Config'),
-                width: 400,
-                sortable: false,
-                dataIndex: 'configRecord',
-                renderer: Tine.widgets.grid.RendererManager.get('Tinebase', 'BLConfig', 'configRecord', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL)
-        }];
-
+        _.assign(this, Tine.widgets.grid.GridPanel.prototype.initGenericColumnModel.call(this));
+        
         this.on('beforeaddrecord', this.onBeforeAddBLElementRecord, this);
         this.on('celldblclick', this.onCellDoubleClick, this);
 
         this.supr().initComponent.call(this);
     },
-
+    
+    customizeColumns: function(columns) {
+        _.each(columns, (col) => {
+            col.editor = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, col.dataIndex, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID);
+        });
+        _.assign(_.find(columns, {dataIndex: this.classNameField}), {
+            quickaddField: this.BLElementPicker,
+            editor: null // be cautious, fieldManager might return smth.
+        });
+    },
+    
     onRender: function() {
         this.supr().onRender.apply(this, arguments);
 
@@ -120,9 +123,9 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
 
     openEditDialog: function(configWrapper) {
 
-        var recordClass = Tine.Tinebase.data.RecordMgr.get(configWrapper.get('classname')),
+        var recordClass = Tine.Tinebase.data.RecordMgr.get(configWrapper.get(this.classNameField)),
             editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass),
-            configRecord = configWrapper.get('configRecord') || {};
+            configRecord = configWrapper.get(this.dynamicRecordField) || {};
 
         if (! configRecord.data) {
             configRecord = Tine.Tinebase.data.Record.setFromJson(configRecord, recordClass);
@@ -140,7 +143,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
                             updatedRecord = Tine.Tinebase.data.Record.setFromJson(updatedRecord, recordClass)
                         }
                         Tine.Tinebase.common.assertComparable(updatedRecord.data);
-                        configWrapper.set('configRecord', updatedRecord.data);
+                        configWrapper.set(this.dynamicRecordField, updatedRecord.data);
 
                         if (this.store.indexOf(configWrapper) < 0) {
                             this.store.add([configWrapper]);

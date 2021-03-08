@@ -804,7 +804,7 @@ Tine.Tinebase.tineInit = {
         // downloads in a cloud :-(
         Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isIOS && !Ext.isAndorid);
 
-        var AreaLocks = require('./AreaLocks.es6');
+        var AreaLocks = require('./AreaLocks');
         Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
 
         // load initial js of user enabled apps

@@ -286,7 +286,7 @@ Tine.Tinebase.ExceptionHandler = function() {
 
             // area is locked
             case 630:
-                Tine.Tinebase.areaLocks.lock(exception.area);
+                Tine.Tinebase.areaLocks.handleAreaLockException(exception);
                 break;
 
             // Tinebase_Exception_InvalidRelationConstraints

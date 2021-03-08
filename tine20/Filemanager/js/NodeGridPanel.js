@@ -58,8 +58,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     currentFolderNode: null,
-
-    dataSafeAreaName: 'Tinebase.datasafe',
+    
     dataSafeEnabled: false,
 
     /**
@@ -86,13 +85,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.gridConfig.enableDragDrop = false;
         }
 
-        this.dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock(this.dataSafeAreaName);
+        this.dataSafeEnabled = !!Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length;
 
         this.recordProxy = this.recordProxy || Tine.Filemanager.nodeBackend;
 
         this.initCustomCols();
         this.modelConfig = this.recordClass.getModelConfiguration();
-        this.initGenericColumnModel();
+        _.assign(this.gridConfig, this.initGenericColumnModel());
 
         this.defaultFilters = this.defaultFilters || [
             {field: 'query', operator: 'contains', value: ''},
@@ -511,13 +510,15 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             });
 
             this.postalSubscriptions = [];
-            this.postalSubscriptions.push(postal.subscribe({
-                channel: 'areaLocks',
-                topic: this.dataSafeAreaName +'.*',
-                callback: this.applyDataSafeState.createDelegate(this)
-            }));
+            _.each(Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName), (areaLock) => {
+                this.postalSubscriptions.push(postal.subscribe({
+                    channel: "areaLocks",
+                    topic: areaLock + '.*',
+                    callback: this.applyDataSafeState.createDelegate(this)
+                }));
+            });
 
-            this.applyDataSafeState();
+            this.afterIsRendered().then(() => {this.applyDataSafeState()})  ;
         }
 
         // grid only actions - work on node which is displayed (this.currentFolderNode)
@@ -619,39 +620,39 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onDataSafeToggle: function(button, e) {
         button.toggle(!button.pressed);
 
-        var me = this,
-            promise = !button.pressed ?
-                Tine.Tinebase.areaLocks.unlock(me.dataSafeAreaName) :
-                Tine.Tinebase.areaLocks.lock(me.dataSafeAreaName);
+        const areaLocks = Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName);
+        const promises = _.map(areaLocks, (areaLock) => {
+            return !button.pressed ?
+                Tine.Tinebase.areaLocks.unlock(areaLock) :
+                Tine.Tinebase.areaLocks.lock(areaLock);
+        });
 
-        me.getEl().mask('some text');
-        promise
-            .finally(function() {
-                me.getEl().unmask();
-            })
+        this.getEl().mask(button.pressed ? this.app.i18n._('Locking data safe...') : this.app.i18n._('Unlocking data safe...'));
+        Promise.all(promises).finally(() => {
+            this.getEl().unmask();
+        })
     },
 
     applyDataSafeState: function() {
         var me = this;
 
-        Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName).then(function(isLocked) {
-            // if state change -> reload
-            if (isLocked == me.action_dataSafe.items[0].pressed) {
-                _.defer(() => {
-                    me.loadGridData({
-                        preserveCursor:     false,
-                        preserveSelection:  false,
-                        preserveScroller:   false
-                    }
-                )});
-            }
+        const isLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
+        // if state change -> reload
+        if (isLocked == me.action_dataSafe.items[0].pressed) {
+            _.defer(() => {
+                me.loadGridData({
+                    preserveCursor:     false,
+                    preserveSelection:  false,
+                    preserveScroller:   false
+                }
+            )});
+        }
 
-            var cls = isLocked ? 'removeClass' : 'addClass';
-            me.action_dataSafe.each(function(btn) {btn[cls]('x-type-data-safe')});
-            me.action_dataSafe.each(function(btn) {btn.toggle(!isLocked)});
-            me.action_dataSafe.setText(isLocked ? me.app.i18n._('Open Data Safe') : me.app.i18n._('Close Data Safe'));
-            me.action_dataSafe.setIconClass(isLocked ? 'action_filemanager_data_safe_locked' : 'action_filemanager_data_safe_unlocked')
-        });
+        var cls = isLocked ? 'removeClass' : 'addClass';
+        me.action_dataSafe.each(function(btn) {btn[cls]('x-type-data-safe')});
+        me.action_dataSafe.each(function(btn) {btn.toggle(!isLocked)});
+        me.action_dataSafe.setText(isLocked ? me.app.i18n._('Open Data Safe') : me.app.i18n._('Close Data Safe'));
+        me.action_dataSafe.setIconClass(isLocked ? 'action_filemanager_data_safe_locked' : 'action_filemanager_data_safe_unlocked')
     },
 
     /**

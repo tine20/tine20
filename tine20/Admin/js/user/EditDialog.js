@@ -10,6 +10,8 @@
 
 Ext.ns('Tine.Admin.user');
 
+import MFAPanel from 'MFA/UserConfigPanel';
+
 /**
  * @namespace   Tine.Admin.user
  * @class       Tine.Admin.UserEditDialog
@@ -841,6 +843,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.initPasswordConfirmWindow();
         }
 
+        this.MFAPanel = new MFAPanel({
+            app: this.app,
+            height: 100,
+            title: false,
+            account: this.record.getId(),
+            editDialog: this,
+        });
+        
         var config = {
             xtype: 'tabpanel',
             deferredRender: false,
@@ -921,6 +931,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             return (this.passwordsMatch);
                         }
                     }], [{
+                        xtype: 'fieldset',
+                        title: this.app.i18n.gettext('Multi Factor Authentication Config'),
+                        autoHeight: true,
+                        checkboxToggle: false,
+                        columnWidth: 1,
+                        layout: 'hfit',
+                        items: [this.MFAPanel]
+                    }],  [{
                         vtype: 'email',
                         fieldLabel: this.app.i18n.gettext('E-mail'),
                         tabIndex: 5,
@@ -1151,10 +1169,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @return  {Ext.ux.Window}
  */
 Tine.Admin.UserEditDialog.openWindow = function (config) {
+    
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 600,
-        height: 400,
+        height: 520,
         name: Tine.Admin.UserEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Admin.UserEditDialog',
         contentPanelConstructorConfig: config

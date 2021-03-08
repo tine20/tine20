@@ -76,19 +76,19 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     },
     
     initMessageBus: function() {
-        if (Tine.Tinebase.areaLocks.hasLock(this.app.appName)) {
-            this.postalSubscriptions = [];
+        this.postalSubscriptions = [];
+        _.each(Tine.Tinebase.areaLocks.getLocks(this.app.appName), (areaLock) => {
             this.postalSubscriptions.push(postal.subscribe({
                 channel: "areaLocks",
-                topic: this.app.appName + '.*',
+                topic: areaLock + '.*',
                 callback: this.onAreaLockChange.createDelegate(this)
             }));
-        }
+        });
     },
 
     onAreaLockChange: function(data, e) {
         var topic = e.topic,
-            locked = !topic.match(/unlocked$/),
+            locked = Tine.Tinebase.areaLocks.getLocks(this.app.appName, true),
             cp = this.getCenterPanel(),
             grid = cp ? cp.getGrid() : null,
             store = grid.getStore();
@@ -213,7 +213,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     afterRender: function() {
         Tine.widgets.MainScreen.superclass.afterRender.call(this);
 
-        if (Tine.Tinebase.areaLocks.hasLock(this.app.appName)) {
+        if (Tine.Tinebase.areaLocks.getLocks(this.app.appName).length) {
             Tine.Tinebase.areaLocks.setOptions(this.app.appName, {
                 maskEl: this.getEl()
             });
