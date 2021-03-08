@@ -152,6 +152,72 @@ class Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * setContainerGrantsReadOnly
+     *
+     * - see setContainerGrants for filter params, application can be added via app=Addressbook
+     * - supports -v (verbose) and -d (dry-run) flags
+     * - sets all containers of all container-based models to read-only for all current grant-users of the container
+     * - default admin role gets admin grant for the containers
+     * - NOTE: this does not have an undo button!
+     * - HINT: use backup tine20_container_acl table first to be able to restore the previous acl:
+     *   $ mysqldump $DBCONNECT tine20 tine20_container_acl > $BACKUPFILE
+     *   $ mysql $DBCONNECT tine20 < $BACKUPFILE
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function setContainerGrantsReadOnly(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+        $data = $this->_parseArgs($_opts);
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
+        $containers = $this->_getContainers($data);
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $counter = 0;
+        foreach ($containers as $container) {
+            $currentGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($container, true);
+            if ($_opts->v) {
+                print_r($container->toArray());
+                print_r($currentGrants->toArray());
+            }
+            $newGrants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
+            foreach ($currentGrants as $grant) {
+                if ($grant->account_id === $adminGroup->getId()) {
+                    // skip
+                    continue;
+                }
+                $newGrants->addRecord(new Tinebase_Model_Grants([
+                    'readGrant' => true,
+                    'account_type' => $grant->account_type,
+                    'account_id' => $grant->account_id,
+                ]));
+            }
+            $adminGrants = new Tinebase_Model_Grants([
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                'account_id' => $adminGroup->getId(),
+            ]);
+            $adminGrants->sanitizeAccountIdAndFillWithAllGrants();
+            $newGrants->addRecord($adminGrants);
+
+            if ($_opts->v) {
+                if ($_opts->d) {
+                    echo "[DRY-RUN]";
+                }
+                echo "Setting container " . $container->name . " (ID " . $container->getId() . ") to read-only for non-admins:\n";
+                print_r($newGrants->toArray());
+            }
+            if (! $_opts->d) {
+                Tinebase_Container::getInstance()->setGrants($container, $newGrants, true);
+            }
+            $counter++;
+        }
+        if ($_opts->d) {
+            echo "[DRY-RUN]";
+        }
+        echo "Updated grants for " . $counter . " containers.\n";
+        return 0;
+    }
+
+    /**
      * create demo data
      * 
      * example usages: 
@@ -324,9 +390,9 @@ class Tinebase_Frontend_Cli_Abstract
     protected function _getContainers($_params)
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        $containerFilterData = array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()),
-        );
+        $containerFilterData = [
+            ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()]
+        ];
 
         foreach (['id', 'name', 'type'] as $field) {
             if (isset($_params[$field])) {
