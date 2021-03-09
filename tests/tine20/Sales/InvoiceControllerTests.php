@@ -238,6 +238,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(3.5, $c3InvoicePositions->getFirstRecord()->quantity);
         
         $invoice = $customer1Invoices->getFirstRecord();
+        self::assertEquals(Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX), $invoice->sales_tax, 'invoice sales_tax mismatch');
+
         $invoice->relations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $invoice->getId())->toArray();
         
         $filter = new Sales_Model_InvoicePositionFilter(array());
