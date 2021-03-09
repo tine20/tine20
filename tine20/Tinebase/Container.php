@@ -1460,7 +1460,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        foreach($grantsData as $grantData) {
+        foreach ($grantsData as $grantData) {
             $givenGrants = explode(',', $grantData['account_grants']);
             foreach($givenGrants as $grant) {
                 $grantData[$grant] = TRUE;
