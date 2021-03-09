@@ -2260,7 +2260,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         // check if message is attached to contact
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($contact);
-        self::assertEquals(1, count($attachments), print_r($contact->toArray(), true));
+        self::assertEquals(1, count($attachments), 'attachments not found in contact: ' . print_r($contact->toArray(), true));
     }
 
     public function testFileMessageOnSendWithEmail()
@@ -2281,7 +2281,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         // check if message is attached to contact
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($contact);
-        self::assertEquals(1, count($attachments), print_r($contact->toArray(), true));
+        self::assertEquals(1, count($attachments), 'attachments not found in contact: ' . print_r($contact->toArray(), true));
     }
 
     /**
