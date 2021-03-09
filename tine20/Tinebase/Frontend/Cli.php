@@ -319,7 +319,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * handle request (call -ApplicationName-_Cli.-MethodName- or -ApplicationName-_Cli.getHelp)
      *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean success
+     * @return boolean|integer success
      */
     public function handle($_opts)
     {
@@ -333,12 +333,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             } else if (method_exists($object, $method)) {
                 $result = call_user_func(array($object, $method), $_opts);
             } else {
-                $result = FALSE;
+                $result = 1;
                 echo "Method $method not found.\n";
             }
         } else {
             echo "Class $class does not exist.\n";
-            $result = FALSE;
+            $result = 2;
         }
         
         return $result;
