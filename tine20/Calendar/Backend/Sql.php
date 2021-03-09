@@ -211,7 +211,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $select->group($this->_tableName . '.' . 'id');
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
+
         if ($calendarFilter) {
             $select1 = clone $select;
             $select2 = clone $select;
@@ -224,8 +224,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 $select2
             ));
         }
-        
-        $_pagination->appendPaginationSql($select);
+
+        $_pagination->appendPaginationSql($select, $getDeleted);
         
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);

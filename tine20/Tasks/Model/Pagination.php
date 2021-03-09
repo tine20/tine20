@@ -21,7 +21,7 @@ class Tasks_Model_Pagination extends Tinebase_Model_Pagination
      * @param  Zend_Db_Select
      * @return void
      */
-    public function appendPaginationSql($_select)
+    public function appendPaginationSql($_select, $_getDeleted = false)
     {
         if ($this->isValid()) {
             if (!empty($this->sort) && !empty($this->dir) && $this->sort == 'due'){
@@ -30,6 +30,6 @@ class Tasks_Model_Pagination extends Tinebase_Model_Pagination
             }
         }
         
-        parent::appendPaginationSql($_select);
+        parent::appendPaginationSql($_select, $_getDeleted = false);
     }
 }
