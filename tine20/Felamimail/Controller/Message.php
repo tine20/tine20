@@ -1442,7 +1442,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Remove old draft with uid ' . $uid);
         $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $imap->selectFolder($draftFolder->globalname);
+        $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($draftFolder->globalname));
         $imap->addFlags([$uid], [Zend_Mail_Storage::FLAG_DELETED]);
 
         return true;
