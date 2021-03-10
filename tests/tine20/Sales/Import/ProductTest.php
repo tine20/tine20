@@ -38,6 +38,6 @@ class Sales_Import_ProductTest extends TestCase
             ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = Sales_Controller_Product::getInstance()->search($filter);
-        self::assertEquals(2, count($result));
+        self::assertGreaterThanOrEqual(2, count($result));
     }
 }

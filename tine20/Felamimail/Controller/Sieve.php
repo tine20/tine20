@@ -164,7 +164,15 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $this->_setSieveBackendAndAuthenticate($_accountId);
         
         $result = NULL;
-        $scripts = $this->_backend->listScripts();
+        try {
+            $scripts = $this->_backend->listScripts();
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            if (preg_match('/Authentication failed/', $zmpe->getMessage())) {
+                throw new Felamimail_Exception_SieveInvalidCredentials($zmpe->getMessage());
+            } else {
+                throw $zmpe;
+            }
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));

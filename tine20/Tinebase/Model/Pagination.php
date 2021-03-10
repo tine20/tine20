@@ -120,10 +120,10 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      * @param  Zend_Db_Select
      * @return void
      */
-    public function appendPaginationSql($_select)
+    public function appendPaginationSql($_select, $_getDeleted = false)
     {
         // check model for required joins etc.
-        $this->appendModelConfig($_select);
+        $this->appendModelConfig($_select, $_getDeleted);
 
         $this->appendLimit($_select);
         $this->appendSort($_select);
@@ -135,7 +135,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      * @param  Zend_Db_Select $_select
      * @return void
      */
-    public function appendModelConfig($_select)
+    public function appendModelConfig($_select, $_getDeleted = false)
     {
         if (empty($this->model) || empty($this->sort) || empty($this->dir)) {
             return;
@@ -200,7 +200,8 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                     $db->quoteIdentifier([$relationName, 'own_model']) . ' =  "' . $model . '" AND ' .
                     $db->quoteIdentifier([$relationName, 'related_model']) . ' = "' . $relatedModel . '" AND ' .
                     $db->quoteIdentifier([$relationName, 'type']) . $db->quoteInto(' = ?',
-                        $virtualFields[$field]['config']['type']),
+                        $virtualFields[$field]['config']['type']) .
+                    ($_getDeleted ? '' : ' AND ' . $db->quoteIdentifier([$relationName, 'is_deleted']) . ' = 0'),
                     []
                 );
 
@@ -259,7 +260,9 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 $_select->joinLeft(
                     [$relatedTableName => SQL_TABLE_PREFIX . $relatedMC->getTableName()],
                     $db->quoteIdentifier([$mc->getTableName(), $field]) . ' = ' .
-                    $db->quoteIdentifier([$relatedTableName, $idProp]),
+                    $db->quoteIdentifier([$relatedTableName, $idProp]) .
+                    ($relatedMC->modlogActive && ! $_getDeleted ?
+                        ' AND ' . $db->quoteIdentifier([$relatedTableName, 'is_deleted']) . ' = 0': ''),
                     []
                 );
                 $field = $relatedTableName . '.' . $relatedField;

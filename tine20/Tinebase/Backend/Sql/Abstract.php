@@ -568,7 +568,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $this->_addSecondarySort($pagination);
         $this->_appendForeignSort($pagination, $select);
-        $pagination->appendPaginationSql($select);
+        $pagination->appendPaginationSql($select, $getDeleted);
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
