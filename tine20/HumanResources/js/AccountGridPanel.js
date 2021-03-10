@@ -74,14 +74,12 @@ Tine.HumanResources.AccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             handler: this.createMissingAccounts.createDelegate(this)
         });
         
-        var button = Ext.apply(new Ext.Button(this.actions_createAccounts), {
+        this.actionUpdater.addActions([this.actions_createAccounts]);
+        
+        return [Ext.apply(new Ext.Button(this.actions_createAccounts), {
             scale: 'medium',
             rowspan: 2,
             iconAlign: 'top'
-        });
-        
-        var additionalActions = [this.actions_exportIPAggregate];
-        this.actionUpdater.addActions(additionalActions);
-        return [button];
+        })];
     }
 });
