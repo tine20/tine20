@@ -41,7 +41,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
      * @var bool
      */
     protected $_ignorePinProtection = false;
-    
+
 
     /**
      * set options

@@ -29,6 +29,8 @@
  */
 class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 {
+    public const TABLE_NAME = 'tree_fileobjects';
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
