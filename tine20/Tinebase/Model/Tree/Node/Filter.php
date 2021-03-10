@@ -43,29 +43,6 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_GrantsFilter
     protected $_ignorePinProtection = false;
 
     /**
-     * @var array filter model fieldName => definition
-     *
-    protected $_filterModel = array(
-
-
-
-        'parent_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'object_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'acl_node'              => array('filter' => 'Tinebase_Model_Filter_Text'),
-
-    // tree_fileobjects table
-
-
-    // tree_filerevisions table
-
-    // recursive search
-
-    // fulltext search
-
-
-    );*/
-
-    /**
      * set options
      *
      * @param array $_options

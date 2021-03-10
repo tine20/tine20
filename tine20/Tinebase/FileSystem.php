@@ -2912,6 +2912,7 @@ class Tinebase_FileSystem implements
     public function getParentByFilter(Tinebase_Model_Tree_Node $_child, Tinebase_Model_Tree_Node_Filter $_filter)
     {
         static $recursive = false;
+
         if (null === $_child->parent_id) {
             return null;
         }
