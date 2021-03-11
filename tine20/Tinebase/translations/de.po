@@ -4051,9 +4051,6 @@ msgstr "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr {mfaD
 msgid "{mfaDevice.device_name} secret"
 msgstr "{mfaDevice.device_name} Geheimnis"
 
-msgid "Token required"
-msgstr "Token erforderlich"
-
 msgid "This area is locked. To unlock it you need to provide your token from your device: {mfaDevice.device_name}"
 msgstr "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token vom Gerät {mfaDevice.device_name} eingeben"
 
