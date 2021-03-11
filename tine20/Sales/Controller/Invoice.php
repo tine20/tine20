@@ -1150,6 +1150,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     'end_date'      => $latestEndDate,
                     'positions'     => $invoicePositions->toArray(),
                     'date'          => clone $this->_currentMonthToBill,
+                    'sales_tax'     => Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX),
                 ));
                 
                 $invoice->relations = $relations;
