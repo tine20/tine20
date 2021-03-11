@@ -87,10 +87,10 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
                 $headerStr .= "$name: {$values[0]}\n";
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . " Response headers: " . $headerStr);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                __METHOD__ . '::' . __LINE__ . " Response body: " . $body->getContents());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response headers: " . $headerStr);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response body: " . $body->getContents());
+            }
         }
         return $response;
     }
