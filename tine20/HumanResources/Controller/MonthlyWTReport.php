@@ -43,6 +43,27 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
     }
 
     /**
+     * @param string|HumanResources_Model_Employee $employeeId
+     * @param strig|Date $month default current year
+     * @return HumanResources_Model_MonthlyWTReport|NULL
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getByEmployeeMonth($employeeId, $month=null)
+    {
+        $employeeId = !($employeeId instanceof HumanResources_Model_Employee) ?: $employeeId->getId();
+        $month = $month ?: Tinebase_DateTime::now();
+        $month = !($month instanceof DateTime) ?: $month->format('Y-m');
+
+        // find account
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
+            ['field' => HumanResources_Model_MonthlyWTReport::FLDS_MONTH,         'operator' => 'equals', 'value' => $month],
+            ['field' => HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID ,  'operator' => 'equals', 'value' => $employeeId]
+        ]);
+
+        return $this->search($filter)->getFirstRecord();
+    }
+    
+    /**
      * will recalculate the given monthly report and all reports that exist after the given one
      *
      * @param HumanResources_Model_MonthlyWTReport $_monthlyWTR

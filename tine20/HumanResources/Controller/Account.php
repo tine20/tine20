@@ -58,6 +58,27 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
     }
 
     /**
+     * @param string|HumanResources_Model_Employee $employeeId
+     * @param strig|Date $year default current year
+     * @return HumanResources_Model_Account|NULL
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getByEmployeeYear($employeeId, $year=null)
+    {
+        $employeeId = $employeeId instanceof HumanResources_Model_Employee ? $employeeId->getId() : $employeeId;
+        $year = $year ?: Tinebase_DateTime::now();
+        $year = $year instanceof DateTime ? $year->format('Y') : $year;
+        
+        // find account
+        $filter = new HumanResources_Model_AccountFilter([
+            ['field' => 'year',         'operator' => 'equals', 'value' => intval($year)],
+            ['field' => 'employee_id',  'operator' => 'equals', 'value' => $employeeId]
+        ]);
+
+        return $this->search($filter)->getFirstRecord();
+    }
+    
+    /**
      * creates missing accounts for all employees having a valid contract
      * if a year is given, missing accounts for this year will be built, otherwise the current and following year will be used
      *
@@ -167,6 +188,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
      */
     public function resolveVacation($account)
     {
+        if (!$account) throw new HumanResources_Exception_NoAccount();
         $accountPeriod = $account->getAccountPeriod();
         $contracts = $account->contracts ?: $this->_contractController->getValidContracts($accountPeriod, $account->employee_id);
         
