@@ -4034,11 +4034,20 @@ msgstr "Token"
 msgid "PIN required"
 msgstr "PIN erforderlich"
 
-#: js/AreaLocks/PinProvider.es6.js:16
-msgid "This area is locked. To unlock it you need to provide your PIN"
-msgstr ""
-"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
-"eingeben"
+msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret"
+msgstr "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr {mfaDevice.device_name} Geheimnis eingeben"
+
+msgid "{mfaDevice.device_name} secret"
+msgstr "{mfaDevice.device_name} Geheimnis"
+
+msgid "This area is locked. To unlock it you need to provide your token from your device: {mfaDevice.device_name}"
+msgstr "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token vom Gerät {mfaDevice.device_name} eingeben"
+
+msgid "Token from {mfaDevice.device_name}"
+msgstr "Token vom Gerät {mfaDevice.device_name}"
+
+msgid "{{ code }} is your {{ app.branding.title }} security code."
+msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
 
 #: js/AreaLocks/PinProvider.es6.js:17 js/PasswordChangeDialog.js:34
 msgid "PIN"

@@ -1502,7 +1502,7 @@ class Tinebase_Core
      * @param mixed $value
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function set($index, $value)
+    public static function set($index, $value, $returnCurrent=false)
     {
         if ($index === self::USER) {
             if ($value === null) {
@@ -1521,8 +1521,10 @@ class Tinebase_Core
                 Tinebase_Log_Formatter::resetUsername();
             }
         }
-        
+
+        $retVal = $returnCurrent ? self::get($index) : null;
         Zend_Registry::set($index, $value);
+        return $retVal;
     }
 
     /**
@@ -1685,7 +1687,7 @@ class Tinebase_Core
      */
     public static function setUser($user)
     {
-        self::set(self::USER, $user);
+        return self::set(self::USER, $user, true);
     }
 
     /**
