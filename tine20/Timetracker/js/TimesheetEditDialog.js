@@ -412,13 +412,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 },
                                 items: [[
                                     fieldManager('is_billable', {
-                                        //TODO: should we really disable it here?
-                                        disabled: (this.useMultiple) ? false : true,
+                                        columnWidth: .4,
                                         listeners: {
                                             scope: this,
                                             check: this.onCheckBillable
                                         }}),
-                                    fieldManager('accounting_time_factor', {decimalSeparator: ',', listeners: {
+                                    fieldManager('accounting_time_factor', {columnWidth: .1, decimalSeparator: ',', listeners: {
                                         scope: this,
                                         change: this.calculateAccountingTime
                                     }}),
@@ -429,14 +428,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                         }}),
                                     fieldManager('need_for_clarification'),
                                 ], [
-                                    fieldManager('is_cleared', {listeners: {
+                                    fieldManager('is_cleared', {columnWidth: .4, listeners: {
                                         scope: this,
                                         check: this.onClearedUpdate
                                     }}),
-                                    fieldManager('billed_in', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
-                                    this.useInvoice ? fieldManager('invoice_id') : {},
+                                    fieldManager(this.useInvoice ? 'invoice_id' : 'billed_in', {columnWidth: .5 }),
                                 ], [
-                                    fieldManager('workingtime_is_cleared', {disabled: true}),
+                                    fieldManager('workingtime_is_cleared', {columnWidth: .4, disabled: true}),
                                     fieldManager('workingtime_cleared_in', {disabled: true, columnWidth: .5}),
                                 ]]
                             }]
