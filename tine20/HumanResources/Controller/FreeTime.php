@@ -52,7 +52,49 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
 
         return self::$_instance;
     }
+    
+    /**
+     * returns remaining vacation days for given employee (mixed accounts)
+     * 
+     * @param string|HumanResources_Model_Employee $employeeId
+     * @return int
+     */
+    public function getRemainingVacationDays($employeeId)
+    {
+        $accountController = HumanResources_Controller_Account::getInstance();
+        $currentAccount = $accountController->getByEmployeeYear($employeeId);
+        $currentVacations = $accountController->resolveVacation($currentAccount);
+        $remainingPreviousVacationDays = 0;
+        $previousAccount = $accountController->getByEmployeeYear($employeeId, $currentAccount->year-1);
+        
+        if ($previousAccount) {
+            $previousVacations = $accountController->resolveVacation($previousAccount);
+            $remainingPreviousVacationDays = ($previousVacations['vacation_expiary_date']
+                > Tinebase_DateTime::now() ? $previousVacations['remaining_vacation_days'] : 0);
+        }
+        return $currentVacations['remaining_vacation_days'] + $remainingPreviousVacationDays;
+    }
 
+    /**
+     * returns taken vacation days for given period & employee (mixed accounts)
+     * 
+     * @param string|HumanResources_Model_Employee $employeeId
+     * @param DateTime[] $period [from => ..., until => ...]
+     * @return Tinebase_Record_RecordSet of HumanResources_Model_FreeDay
+     */
+    public function getTakenVacationDays($employeeId, $period)
+    {
+        $employeeId = $employeeId instanceof HumanResources_Model_Employee ? $employeeId->getId() : $employeeId;
+        $freeTimes = $this->search(new HumanResources_Model_FreeTimeFilter([
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId]
+        ]));
+        
+        return HumanResources_Controller_FreeDay::getInstance()->search(new HumanResources_Model_FreeDayFilter([
+            ['field' => 'freetime_id', 'operator' => 'equals', 'value' => $freeTimes->getId()],
+            ['field' => 'date',        'operator' => 'within', 'value' => $period]
+        ]));
+    }
+    
     /**
      * inspect update of one record (after setReleatedData)
      *

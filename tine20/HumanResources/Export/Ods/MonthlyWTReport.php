@@ -103,9 +103,25 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
     {
         $context['monthlyWTR'] = $this->_monthlyWTR;
         $context['weekSummary'] = $this->_weekSummary;
+        
+        // NOTE: we can't compute historic remaining vacations e.g. if you export a wtr from a few month ago
+        //       you'll see the current vacations and not the vacations which where left there
+        $context['currentRemainingVacationDays'] = HumanResources_Controller_FreeTime::getInstance()
+            ->getRemainingVacationDays($this->_monthlyWTR->employee_id);
+
+        $context['takenVactionsCurrentPeriod'] = HumanResources_Controller_FreeTime::getInstance()
+            ->getTakenVacationDays($this->_monthlyWTR->employee_id, $this->_monthlyWTR->getPeriod());
+        
         return parent::_getTwigContext($context);
     }
 
+    public function getDownloadFilename($_appName = null, $_format = null)
+    {
+        $name = parent::getDownloadFilename($_appName, $_format);
+        $name .= " {$this->_monthlyWTR->month} {$this->_monthlyWTR->employee_id->n_fn}.ods";
+        return preg_replace(['/^export_humanresources_/', '/\.ods(.+?)/', '/\s/'], ['', '', '_'], $name);
+    }
+    
     protected function _endGroup()
     {
         $week = $this->_lastGroupValue;
