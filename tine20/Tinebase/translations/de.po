@@ -1759,22 +1759,6 @@ msgstr "Wird entsperrt …"
 msgid "Click here to unlock this area."
 msgstr "Klicken Sie hier, um diesen Bereich zu entsperren."
 
-msgid "Choose MFA Deivce"
-msgstr "MFA Gerät auswählen"
-
-msgid "This area is locked. Which device should be used to unlock."
-msgstr "Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn zu entsperren"
-
-msgid "SMS security code required"
-msgstr "SMS Sicherheitscode benötigt"
-
-msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}"
-msgstr "Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via {mfaDevice.device_name} zum entsperren gesendet"
-
-msgid "Security code from {mfaDevice.device_name}"
-msgstr "Sicherheitscode von {mfaDevice.device_name}"
-
-
 #: js/AboutDialog.js:41 js/MainMenu.js:157
 #, python-brace-format
 msgid "About {0}"
@@ -2959,6 +2943,12 @@ msgstr "Auswahl"
 msgid "Select item"
 msgstr "Auswahl"
 
+msgid "Select all"
+msgstr "Alle auswählen"
+
+msgid "Deselect all"
+msgstr "Alle abwählen"
+
 #: js/widgets/file/SelectionDialog.js:224
 msgid "Places"
 msgstr "Orte"
@@ -4045,20 +4035,10 @@ msgid "PIN required"
 msgstr "PIN erforderlich"
 
 #: js/AreaLocks/PinProvider.es6.js:16
-msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret"
-msgstr "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr {mfaDevice.device_name} Geheimnis eingeben"
-
-msgid "{mfaDevice.device_name} secret"
-msgstr "{mfaDevice.device_name} Geheimnis"
-
-msgid "This area is locked. To unlock it you need to provide your token from your device: {mfaDevice.device_name}"
-msgstr "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token vom Gerät {mfaDevice.device_name} eingeben"
-
-msgid "Token from {mfaDevice.device_name}"
-msgstr "Token vom Gerät {mfaDevice.device_name}"
-
-msgid "{{ code }} is your {{ app.branding.title }} security code."
-msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
+msgid "This area is locked. To unlock it you need to provide your PIN"
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
+"eingeben"
 
 #: js/AreaLocks/PinProvider.es6.js:17 js/PasswordChangeDialog.js:34
 msgid "PIN"
@@ -4912,11 +4892,49 @@ msgstr ""
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
 
-msgid "Select all"
-msgstr "Alle auswählen"
+msgid ""
+"This area is locked. To unlock it you need to provide your {mfaDevice."
+"device_name} secret"
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr {mfaDevice."
+"device_name} Geheimnis eingeben"
 
-msgid "Deselect all"
-msgstr "Alle abwählen"
+msgid "{mfaDevice.device_name} secret"
+msgstr "{mfaDevice.device_name} Geheimnis"
+
+msgid ""
+"This area is locked. To unlock it you need to provide your token from your "
+"device: {mfaDevice.device_name}"
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token vom "
+"Gerät {mfaDevice.device_name} eingeben"
+
+msgid "Token from {mfaDevice.device_name}"
+msgstr "Token vom Gerät {mfaDevice.device_name}"
+
+msgid "{{ code }} is your {{ app.branding.title }} security code."
+msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
+
+msgid "Choose MFA Deivce"
+msgstr "MFA Gerät auswählen"
+
+msgid "This area is locked. Which device should be used to unlock."
+msgstr ""
+"Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn "
+"zu entsperren"
+
+msgid "SMS security code required"
+msgstr "SMS Sicherheitscode benötigt"
+
+msgid ""
+"This area is locked. To unlock it we send a securitycode to via "
+"{mfaDevice.device_name}"
+msgstr ""
+"Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via "
+"{mfaDevice.device_name} zum entsperren gesendet"
+
+msgid "Security code from {mfaDevice.device_name}"
+msgstr "Sicherheitscode von {mfaDevice.device_name}"
 
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr ""

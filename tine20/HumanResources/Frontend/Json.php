@@ -497,25 +497,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         /* vacation computation -> shoud be extra call!*/
-        if (! $_accountId) {
-            // find account
-            $filter = new HumanResources_Model_AccountFilter(array(
-                array('field' => 'year', 'operator' => 'equals', 'value' => intval($_year))
-            ));
-            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
-            
-            $account = $aController->search($filter)->getFirstRecord();
-        } else {
-            try {
-                $account = $aController->get($_accountId);
-            } catch (Exception $e) {
-                // throws a few lines later: HumanResources_Exception_NoAccount
-            }
-        }
-        
-        if (! $account) {
-            throw new HumanResources_Exception_NoAccount();
-        }
+        $account = $_accountId ? $aController->get($_accountId) : $aController->getByEmployeeYear($_employeeId, $_year);
         $remainingVacation = HumanResources_Controller_Account::getInstance()->resolveVacation($account)['remaining_vacation_days'];
         /* end vacation computation */
         
