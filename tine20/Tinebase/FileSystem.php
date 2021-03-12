@@ -970,7 +970,7 @@ class Tinebase_FileSystem implements
             }
 
             if ($rootSize < 0) $rootSize = 0;
-            if ($rootRevisionSize) $rootRevisionSize = 0;
+            if ($rootRevisionSize < 0) $rootRevisionSize = 0;
             $applicationController->setApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $rootSize);
             $applicationController->setApplicationState($tinebaseApplication,
