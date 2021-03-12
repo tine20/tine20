@@ -391,7 +391,30 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
         $select = $this->_getSelect(array('count' => 'COUNT(*)'));
-        $this->_addFilter($select, $_filter);
+
+        // clone the filter, as the filter is also used in the json frontend
+        // and the calendar filter is used in the UI to
+        $clonedFilters = clone $_filter;
+
+        // sort filters, roleFilter und statusFilter need to be processed after attenderFilter
+        $tempFilters = [];
+        // make sure $fund is NOT set at this point!
+        $func = function($filter) use (/*yes & !*/&$func, &$tempFilters) {
+            if ($filter instanceof Calendar_Model_EventFilter) {
+                $filter->filterWalk($func);
+            } elseif ($filter instanceof Calendar_Model_AttenderRoleFilter || $filter instanceof
+                Calendar_Model_AttenderStatusFilter) {
+                $tempFilters[] = $filter;
+            }
+        };
+        $clonedFilters->filterWalk($func);
+        foreach ($tempFilters as $tempFilter) {
+            $parent = $tempFilter->getParent();
+            $parent->removeFilter($tempFilter);
+            $parent->addFilter($tempFilter);
+        }
+
+        $this->_addFilter($select, $clonedFilters);
 
         $result = $this->_db->fetchOne($select);
         
