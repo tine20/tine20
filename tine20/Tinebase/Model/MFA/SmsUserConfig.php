@@ -31,7 +31,7 @@ class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Record_NewAbstract
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'SMS',
-        self::TITLE_PROPERTY                => 'Auth codes are send to: {{ cellphonenumber }}', //_('Auth codes are send to: {{ cellphonenumber }}')
+        self::TITLE_PROPERTY                => 'Security codes are send to: {{ cellphonenumber }}.', //_('Security codes are send to: {{ cellphonenumber }}.')
 
         self::FIELDS                        => [
             self::FLD_CELLPHONENUMBER           => [

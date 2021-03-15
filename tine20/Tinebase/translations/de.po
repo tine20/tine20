@@ -4052,6 +4052,21 @@ msgstr "Lizenz"
 msgid "Outdent Text"
 msgstr "Text ausrücken"
 
+msgid "Multi Factor Authentication Config"
+msgstr "Multi-Faktor-Authentifizierung"
+
+msgid "Cell Phone Number"
+msgstr "Mobilfunknummer"
+
+msgid "Security codes are send to: {{ cellphonenumber }}."
+msgstr "Sicherheitscodes werden an {{ cellphonenumber }} gesendet."
+
+msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+
+msgid "New PIN"
+msgstr "Neue PIN"
+
 #: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
 msgid "Indent Text"
 msgstr "Text einrücken"
