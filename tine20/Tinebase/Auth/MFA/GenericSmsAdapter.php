@@ -51,6 +51,18 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
 
         $tbConfig = Tinebase_Config::getInstance();
         $twig = new Twig_Environment(new Twig_Loader_Array());
+        $twig->addFilter(new Twig_SimpleFilter('alnum', function($data) {
+            return preg_replace('/[^0-9a-zA-Z]+/', '', $data);
+        }));
+        $twig->addFilter(new Twig_SimpleFilter('gsm7', function(string $data) {
+            static $converter = null;
+            if (null === $converter) $converter = new BenMorel\GsmCharsetConverter\Converter();
+            return $converter->cleanUpUtf8String($data, true);
+        }));
+        $twig->addFilter(new Twig_SimpleFilter('ucs2', function(string $data) {
+            return iconv('ucs-2', 'utf-8', iconv('utf-8', 'ucs-2//TRANSLIT', $data));
+        }));
+
         $message = $twig->createTemplate($message)->render([
             'app' => [
                 'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL),
@@ -78,13 +90,14 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
                 'cellphonenumber' => $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
                     ->{Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER},
             ]));
-        Tinebase_Session::getSessionNamespace()->{static::class} = [
-            'pin' => $pin,
-            'ttl' => time() + (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_TTL}
-        ];
 
         $response = $client->request();
         if (200 === $response->getStatus()) {
+            Tinebase_Session::getSessionNamespace()->{static::class} = [
+                'pin' => $pin,
+                'ttl' => time() + (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_TTL}
+            ];
+
             return true;
         }
 

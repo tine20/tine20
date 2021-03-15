@@ -82,6 +82,7 @@
     "ext-openssl": "*",
     "ext-xml": "*",
     "ext-zip": "*",
+    "benmorel/gsm-charset-converter": "^0.2.0",
     "composer/semver": "*",
     "doctrine/dbal": "v2.5.13pl6 as v2.5.13",
     "doctrine/orm": "2.5.14pl1 as v2.5.14",
