@@ -500,11 +500,13 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = [];
 
         $mfas = Tinebase_Config::getInstance()->{Tinebase_Config::MFA};
-        foreach($mfas->records as $mfaConfig) {
-            $result[] = [
-                'mfa_config_id' => $mfaConfig->id,
-                'config_class' => $mfaConfig->user_config_class,
-            ];
+        if (is_iterable($mfas->records)) {
+            foreach ($mfas->records as $mfaConfig) {
+                $result[] = [
+                    'mfa_config_id' => $mfaConfig->id,
+                    'config_class' => $mfaConfig->user_config_class,
+                ];
+            }
         }
         
         return $result;
