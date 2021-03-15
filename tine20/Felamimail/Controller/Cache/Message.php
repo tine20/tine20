@@ -172,6 +172,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 } catch (Felamimail_Exception_IMAPMessageNotFound $feimnf) {
                     $result->addRecord($folder);
                     continue;
+                } catch (Felamimail_Exception $fe) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ .  ' Error during updateMessageCache: ' . $fe->getMessage()
+                        . ' ... ignoring this folder for the moment: ' . $folder->getId());
+                    continue;
                 }
                 
                 if ($this->_messagesDeletedOnIMAP($folder) || $this->_messagesToBeAddedToCache($folder) || $this->_messagesMissingFromCache($folder) ) {
@@ -181,7 +186,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .  " Found " . count($result) . ' folders that need an update.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ .  " Found " . count($result) . ' folders that need an update.');
         
         return $result;
     }
@@ -447,15 +453,24 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                                 throw new Felamimail_Exception_IMAPMessageNotFound('Message not found on IMAP');
                             }
 
-                            // message does not exist on imap server anymore, remove from local cache
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " messageUid {$latestMessageUid} not found => remove from cache");
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . " MessageUid {$latestMessageUid} not found on IMAP server => remove from cache");
                             }
 
                             $lastFailedUid = $latestMessageUid;
 
                             $latestMessage = $this->_backend->get($latestMessageId);
-                            $this->_backend->delete($latestMessage);
+                            try {
+                                $this->_backend->delete($latestMessage);
+                            } catch (Zend_Db_Statement_Exception $zdse) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                        . " Might have a lock wait timeout - try again later (error: " . $zdse->getMessage() . ')');
+                                }
+                                $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE;
+                                break;
+                            }
 
                             $decrementMessagesCounter++;
                             if (!$latestMessage->hasSeenFlag()) {
