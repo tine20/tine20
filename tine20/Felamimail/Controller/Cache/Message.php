@@ -172,6 +172,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 } catch (Felamimail_Exception_IMAPMessageNotFound $feimnf) {
                     $result->addRecord($folder);
                     continue;
+                } catch (Felamimail_Exception $fe) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ .  ' Error during updateMessageCache: ' . $fe->getMessage()
+                        . ' ... ignoring this folder for the moment: ' . $folder->getId());
+                    continue;
                 }
                 
                 if ($this->_messagesDeletedOnIMAP($folder) || $this->_messagesToBeAddedToCache($folder) || $this->_messagesMissingFromCache($folder) ) {
@@ -181,7 +186,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .  " Found " . count($result) . ' folders that need an update.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ .  " Found " . count($result) . ' folders that need an update.');
         
         return $result;
     }
