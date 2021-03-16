@@ -9,6 +9,8 @@
 
 const { retryAllRejectedPromises } = require('promises-to-retry');
 
+const mailAdresses = require('../../Tinebase/js/node_modules/email-addresses');
+
 require('./MessageFileButton');
 
 Ext.namespace('Tine.Felamimail');
@@ -1648,17 +1650,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     extractMailFromString: function (string) {
-        string = String(string).trim();
-        if (Ext.form.VTypes.email(string)) {
-            return string;
-        }
-
-        let angleBracketExtraction = string.match(/<([^>;]+)>/i);
-        if (angleBracketExtraction && angleBracketExtraction[1] && Ext.form.VTypes.email(angleBracketExtraction)) {
-            return angleBracketExtraction;
-        }
-
-        return string;
+        //return import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
+        //    const parsed = addrs.parseOneAddress(string.replace(',', ''));
+        //    return parsed.address;
+        //});
+        return mailAdresses.parseOneAddress(string.replace(',', '')).address;
     },
 
     /**

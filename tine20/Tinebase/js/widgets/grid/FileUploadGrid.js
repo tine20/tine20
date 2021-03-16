@@ -595,6 +595,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 name: _.get(fileLocation, 'node_id.name'),
                 size: _.get(fileLocation, 'node_id.size'),
                 type: _.get(fileLocation, 'node_id.contenttype'),
+                id: _.get(fileLocation, 'node_id.id'),
                 status: 'uploading',
                 progress: 80
             });
@@ -602,7 +603,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
             Tine.Tinebase.createTempFile(fileLocation).then((tempFileData) => {
                 fileRecord.beginEdit();
-                fileRecord.set('id', tempFileData.id);
+                fileRecord.set('id', _.get(fileRecord, 'data.id', tempFileData.id));
                 fileRecord.set('tempFile', tempFileData);
                 fileRecord.set('status', 'complete');
                 fileRecord.set('progress', 100);
