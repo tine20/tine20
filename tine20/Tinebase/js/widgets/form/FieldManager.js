@@ -251,6 +251,13 @@ Tine.widgets.form.FieldManager = function() {
                         field = picker;
                     }
                     break;
+                case 'dynamicRecord':
+                    const classNameField = fieldDefinition.config.refModelField;
+                    field.xtype = 'tw-recordEditField';
+                    field.appName = fieldDefinition.config.appName;
+                    field.modelName = classNameField;
+                    field.fieldName = fieldDefinition.fieldName;
+                    break
                 case 'keyfield':
                     field.xtype = 'widget-keyfieldcombo';
                     field.app = app;

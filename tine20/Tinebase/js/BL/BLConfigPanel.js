@@ -83,7 +83,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
     
     customizeColumns: function(columns) {
         _.each(columns, (col) => {
-            col.editor = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, col.dataIndex, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID);
+            col.editor = Tine.widgets.form.FieldManager.get(this.recordClass.getMeta('appName'), this.recordClass, col.dataIndex, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID);
         });
         _.assign(_.find(columns, {dataIndex: this.classNameField}), {
             quickaddField: this.BLElementPicker,
