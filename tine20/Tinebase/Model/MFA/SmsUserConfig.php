@@ -36,7 +36,14 @@ class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Record_NewAbstract
         self::FIELDS                        => [
             self::FLD_CELLPHONENUMBER           => [
                 self::TYPE                          => self::TYPE_STRING,
-                self::LABEL                     => 'Cell Phone Number' // _('Cell Phone Number')
+                self::LABEL                         => 'Cell Phone Number', // _('Cell Phone Number')
+                self::INPUT_FILTERS                 => [
+                    Tinebase_Model_InputFilter_PhoneNumberWOPlus::class
+                ],
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
             ],
         ]
     ];

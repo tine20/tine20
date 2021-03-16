@@ -58,7 +58,7 @@ class Tinebase_Auth_MFATest extends TestCase
         $this->assertArrayHasKey('pin', $sessionData, 'session data not set properly');
         $this->assertStringContainsString('"body":"' . $sessionData['pin'] . ' is your ',
             $httpClientTestAdapter->lastRequestBody);
-        $this->assertStringContainsString('"recipients":["1234567890"],"route":"2345"',
+        $this->assertStringContainsString('"recipients":["491234567890"],"route":"2345"',
             $httpClientTestAdapter->lastRequestBody);
 
         $this->assertFalse($mfa->validate('shaaaaaaaaaalala', $this->_originalTestUser->mfa_configs->getFirstRecord()),
