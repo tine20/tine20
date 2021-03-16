@@ -67,7 +67,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 14,
+        self::VERSION       => 15,
         'recordName'        => 'Container',
         'recordsName'       => 'Containers', // ngettext('Container', 'Containers', n)
         'hasRelations'      => FALSE,
@@ -75,6 +75,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'hasNotes'          => FALSE,
         'hasTags'           => FALSE,
         'modlogActive'      => TRUE,
+        self::HAS_DELETED_TIME_UNIQUE =>  true,
         'hasAttachments'    => FALSE,
         'hasXProps'         => TRUE,
         'createModule'      => FALSE,
@@ -83,17 +84,25 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'appName'           => 'Tinebase',
         'modelName'         => 'Container',
         self::TABLE         => [
-            self::NAME          => 'container',
-            self::INDEXES       => [
+            self::NAME                  => 'container',
+            self::INDEXES               => [
                 'type'                      => [
-                    self::COLUMNS               => ['type'],
+                    self::COLUMNS               => ['type', 'application_id', 'owner_id'],
                 ],
-                'application_id'            => [
-                    self::COLUMNS               => ['application_id'],
+                'owner_id'                  => [ // is this really required? most (all?) queries will include a type?
+                    self::COLUMNS               => ['owner_id', 'application_id'],
                 ],
-                'owner_id'                  => [
-                    self::COLUMNS               => ['owner_id'],
-                ],
+            ],
+            self::UNIQUE_CONSTRAINTS    => [
+                'name'                      => [
+                    self::COLUMNS               => [
+                        'application_id',
+                        'name',
+                        'owner_id',
+                        'model',
+                        'deleted_time'
+                    ]
+                ]
             ],
         ],
 
@@ -130,11 +139,12 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                 self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
                 self::FILTER_DEFINITION => [],
             ),
+            // TODO should be an enum
             'type'              => array(
                 'label'             => 'Type', //_('Type')
                 self::TYPE          => self::TYPE_STRING,
                 self::LENGTH        => 32,
-                self::NULLABLE      => true,
+                self::NULLABLE      => false,
                 self::DEFAULT_VAL   => self::TYPE_PERSONAL,
                 'queryFilter'       => TRUE,
                 'validators'        => array(array('InArray', array(self::TYPE_PERSONAL, self::TYPE_SHARED))),
@@ -143,7 +153,11 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                 'label'             => 'Owner', // _('Owner')
                 self::TYPE          => self::TYPE_STRING,
                 self::LENGTH        => 40,
-                self::NULLABLE      => true,
+                self::NULLABLE      => false,
+                self::DEFAULT_VAL   => '',
+                self::CONVERTERS    => [
+                    Tinebase_Model_Converter_StringFakeNull::class
+                ],
                 'validators'        => array('allowEmpty' => true),
             ),
             'color'              => array(
@@ -186,7 +200,11 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                 'label'             => 'Model', // _('Model')
                 self::TYPE          => self::TYPE_STRING,
                 self::LENGTH        => 64,
-                self::NULLABLE      => true,
+                self::NULLABLE      => false,
+                self::DEFAULT_VAL   => '',
+                self::CONVERTERS    => [
+                    Tinebase_Model_Converter_StringFakeNull::class
+                ],
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
             ),

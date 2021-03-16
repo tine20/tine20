@@ -42,7 +42,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
      * @access protected
      */
     public function setUp(): void
-{
+    {
         $this->calDAVTests = new Calendar_Frontend_WebDAV_EventTest();
         $this->calDAVTests->setup();
 

@@ -23,7 +23,8 @@ class Crm_Import_CsvTest extends ImportTestCase
      * tear down tests
      */
     protected function tearDown(): void
-{
+    {
+        Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'metacrm_lead');
         parent::tearDown();
 
         // delete tasks

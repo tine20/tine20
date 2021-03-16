@@ -133,7 +133,8 @@ class Admin_Controller_UserTest extends TestCase
         static::assertSame($container->getId(),
             Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
 
-        $updateContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class, true);
+        $updateContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class,
+            true, __METHOD__);
 
         $user->container_id = $updateContainer->getId();
 

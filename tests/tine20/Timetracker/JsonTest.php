@@ -1469,12 +1469,9 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
         $this->assertEquals('', $timeaccount['price_unit']);
-        
-        $timeaccount->price_unit = 'days';
-        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
-        $this->assertEquals('days', $timeaccount['price_unit']);
-        
 
-
+        $timeaccountData['price_unit'] = 'days';
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccountData);
+        $this->assertEquals('days', $timeaccountData['price_unit']);
     }
 }
