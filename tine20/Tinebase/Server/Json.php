@@ -529,6 +529,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             '', //empty method
             'Tinebase.authenticate',
             'Tinebase.login',
+            'Tinebase.logout',
             'Tinebase.openIDCLogin',
             'Tinebase.getAvailableTranslations',
             'Tinebase.getTranslations',
