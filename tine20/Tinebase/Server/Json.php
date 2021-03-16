@@ -527,8 +527,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     {
         $anonymnousMethods = array(
             '', //empty method
-            'Tinebase.getRegistryData',
-            'Tinebase.getAllRegistryData',
             'Tinebase.authenticate',
             'Tinebase.login',
             'Tinebase.openIDCLogin',
@@ -537,6 +535,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.setLocale',
             'Tinebase.checkAuthToken'
         );
+        // area lock magic. only if anymous user comes along, these functions are anonymous. signed in users need to area login check here too!
+        if (!Tinebase_Core::isRegistered(Tinebase_Core::USER) || !is_object(Tinebase_Core::getUser())) {
+            $anonymnousMethods[] = 'Tinebase.getRegistryData';
+            $anonymnousMethods[] = 'Tinebase.getAllRegistryData';
+        }
         
         // check json key for all methods but some exceptions
         if ( !(in_array($method, $anonymnousMethods)) && ($jsonKey !== Tinebase_Core::get('jsonKey') || !self::userIsRegistered())) {
