@@ -119,14 +119,15 @@ class Crm_Export_OdsTest extends Crm_Export_AbstractTest
      */
     public function testExportOdsWithoutGrant()
     {
-        // remove all grants for container
-        $this->_container = Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class);
+        $this->_container = $this->_getTestContainer('Crm', Crm_Model_Lead::class);
+        $this->_objects['lead']['container_id'] = $this->_container->getId();
+        $this->_objects['lead'] = $this->_json->saveLead(Zend_Json::encode($this->_objects['lead']));
         Tinebase_Container::getInstance()->setGrants($this->_container, new Tinebase_Record_RecordSet($this->_container->getGrantClass(), array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ      => true,
         ))), TRUE, FALSE);
-        
+
         $this->_filename = $this->_instance->generate();
         
         $this->assertTrue(file_exists($this->_filename));

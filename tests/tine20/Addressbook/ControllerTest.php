@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -30,6 +30,8 @@ class Addressbook_ControllerTest extends TestCase
     protected $_instance = null;
 
     protected $_oldFileSystemConfig = null;
+
+    protected $_container;
     
     /**
      * Sets up the fixture.
@@ -44,7 +46,7 @@ class Addressbook_ControllerTest extends TestCase
 
         $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
 
-        $container = $this->_getTestContainer('Addressbook', 'Addressbook_Model_Contact');
+        $this->_container = $this->_getTestContainer('Addressbook', 'Addressbook_Model_Contact');
         
         $this->objects['initialContact'] = new Addressbook_Model_Contact(array(
             'adr_one_countryname'   => 'DE',
@@ -65,7 +67,7 @@ class Addressbook_ControllerTest extends TestCase
             'email_home'            => 'unittests@tine20.org',
             'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../Tinebase/ImageHelper/phpunit-logo.gif'),
             'note'                  => 'Bla Bla Bla',
-            'container_id'          => $container->id,
+            'container_id'          => $this->_container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -108,7 +110,7 @@ class Addressbook_ControllerTest extends TestCase
             'email_home'            => 'unittests@tine20.org',
             'jpegphoto'             => '',
             'note'                  => 'Bla Bla Bla',
-            'container_id'          => $container->id,
+            'container_id'          => $this->_container->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -145,7 +147,7 @@ class Addressbook_ControllerTest extends TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         if ($this->_instance) {
             $this->_instance->useNotes(true);
             if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
@@ -156,6 +158,10 @@ class Addressbook_ControllerTest extends TestCase
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
 
         parent::tearDown();
+
+        if ($this->_container) {
+            Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'container', 'id = "' . $this->_container->getId() . '"');
+        }
     }
     
     /**

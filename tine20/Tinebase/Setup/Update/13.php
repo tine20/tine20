@@ -16,8 +16,15 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE013_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE013_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE013_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
+        self::PRIO_TINEBASE_BEFORE_STRUCT => [
+            self::RELEASE013_UPDATE007           => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
+            ],
+        ],
         self::PRIO_TINEBASE_STRUCTURE   => [
             self::RELEASE013_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
@@ -127,5 +134,20 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
                 . ' records from external_fulltext which are bigger than ' . $maxBlobSize);
         }
         $this->addApplicationUpdate('Tinebase', '13.5', self::RELEASE013_UPDATE006);
+    }
+
+    public function update007()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $db = Tinebase_Core::getDb();
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container SET type = "personal" WHERE type IS NULL');
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container SET model = "" WHERE model IS NULL');
+
+        foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
+            Tinebase_Container::getInstance()->deleteDuplicateContainer($app->name);
+        }
+
+        $this->addApplicationUpdate('Tinebase', '13.6', self::RELEASE013_UPDATE007);
     }
 }
