@@ -104,6 +104,9 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             $this->_backend->dropCol('accounts', 'pin');
         }
 
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'config WHERE application_id = ' .
+            $this->getDb()->quote(Tinebase_Core::getTinebaseId()) . ' AND name = "areaLocks"');
+
         if ($this->getTableVersion('accounts') < 17) {
             $this->setTableVersion('accounts', 17);
         }

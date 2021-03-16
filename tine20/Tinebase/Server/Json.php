@@ -528,6 +528,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $anonymnousMethods = array(
             '', //empty method
             'Tinebase.authenticate',
+            'Tinebase.getRegistryData',
+            'Tinebase.getAllRegistryData',
             'Tinebase.login',
             'Tinebase.logout',
             'Tinebase.openIDCLogin',
@@ -536,18 +538,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.setLocale',
             'Tinebase.checkAuthToken'
         );
-        // area lock magic. only if anymous user comes along, these functions are anonymous. signed in users need to area login check here too!
-        if (!Tinebase_Core::isRegistered(Tinebase_Core::USER) || !is_object(Tinebase_Core::getUser())) {
-            $anonymnousMethods[] = 'Tinebase.getRegistryData';
-            $anonymnousMethods[] = 'Tinebase.getAllRegistryData';
-        }
-        
+
         // check json key for all methods but some exceptions
         if ( !(in_array($method, $anonymnousMethods)) && ($jsonKey !== Tinebase_Core::get('jsonKey') || !self::userIsRegistered())) {
-
             $request = Tinebase_Core::getRequest();
             if (!self::userIsRegistered()) {
-                if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
+                if (is_object(Tinebase_Core::getUser())) {
                     self::_checkAreaLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
                 }
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
@@ -564,6 +560,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
             
             throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
+        } elseif (is_object(Tinebase_Core::getUser()) && ($method === 'Tinebase.getAllRegistryData' || $method === 'Tinebase.getRegistryData')) {
+            self::_checkAreaLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
         }
     }
     
