@@ -252,6 +252,10 @@ Tine.widgets.form.FieldManager = function() {
                     }
                     break;
                 case 'dynamicRecord':
+                    // NOTE: this editor depends and the className _data_ and therefore can't be assigned statically
+                    //       as the editor api (get/setValue) does not know about the record the value comes from
+                    //       it's not possible to auto create a editor here
+                    // return null;
                     const classNameField = fieldDefinition.config.refModelField;
                     field.xtype = 'tw-recordEditField';
                     field.appName = fieldDefinition.config.appName;

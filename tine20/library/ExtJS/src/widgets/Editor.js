@@ -212,9 +212,10 @@ Ext.extend(Ext.Editor, Ext.Component, {
      * Starts the editing process and shows the editor.
      * @param {Mixed} el The element to edit
      * @param {String} value (optional) A value to initialize the editor with. If a value is not provided, it defaults
+     * @param {Record} record the field is part of
       * to the innerHTML of el.
      */
-    startEdit : function(el, value){
+    startEdit : function(el, value, record){
         if(this.editing){
             this.completeEdit();
         }
@@ -223,10 +224,10 @@ Ext.extend(Ext.Editor, Ext.Component, {
         if(!this.rendered){
             this.render(this.parentEl || document.body);
         }
-        if(this.fireEvent("beforestartedit", this, this.boundEl, v) !== false){
+        if(this.fireEvent("beforestartedit", this, this.boundEl, v, record) !== false){
             this.startValue = v;
             this.field.reset();
-            this.field.setValue(v);
+            this.field.setValue(v, record);
             this.realign(true);
             this.editing = true;
             this.show();

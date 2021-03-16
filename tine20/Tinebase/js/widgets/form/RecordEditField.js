@@ -14,6 +14,8 @@ Ext.ns('Tine.Tinebase.widgets.form.RecordEditField');
 Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
 
     itemCls: 'tw-recordEditField',
+    triggerClass: 'action_edit',
+    editable: false,
     
     initComponent: async function () {
         var _ = window.lodash;
@@ -24,11 +26,19 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         Tine.Tinebase.widgets.form.RecordEditField.superclass.initComponent.call(this);
     },
 
-    setValue : function(v){
+    setValue : function(v, owningRecord){
         this.recordData = _.get(v, 'data', v);
         
-        let record = Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass);
-        Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, record.getTitle());
+        // if the field is a dynamicReccord, get classname and adopt thi.recordClass
+        const owningRecordClass = _.get(owningRecord, 'constructor');
+        const owningRecordFieldDefinitions = _.get(owningRecordClass, 'getFieldDefinitions') ? owningRecordClass.getFieldDefinitions() : null;
+        const ownFieldDefinition = _.get(_.find(owningRecordFieldDefinitions, {name: this.fieldName}), 'fieldDefinition');
+        const classNameField = _.get(ownFieldDefinition, 'config.refModelField');
+        const className = _.get(owningRecord, 'data.'+classNameField);
+        this.recordClass = className ? Tine.Tinebase.data.RecordMgr.get(className) || this.recordClass : this.recordClass;
+
+        let valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
+        Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, valueRecord ? valueRecord.getTitle() : '');
     },
 
     onTriggerClick: function () {
@@ -45,6 +55,16 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
                         let record = !updatedRecord.data ? Tine.Tinebase.data.Record.setFromJson(updatedRecord, me.recordClass) : updatedRecord;
                         Tine.Tinebase.common.assertComparable(record);
                         this.setValue(record);
+                    },
+                    'cancel': () => {
+                        if (new Date().getTime() - 1000 < this.blurOnSelectLastRun) return;
+                        _.delay(() => {
+                            this.blurOnSelectLastRun = new Date().getTime();
+                            const focusClass = this.focusClass;
+                            this.focusClass = '';
+                            Ext.form.TriggerField.superclass.onBlur.call(this);
+                            this.focusClass = focusClass;
+                        }, 100);
                     }
                 }
             });
