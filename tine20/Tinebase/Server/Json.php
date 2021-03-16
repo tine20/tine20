@@ -543,6 +543,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
             $request = Tinebase_Core::getRequest();
             if (!self::userIsRegistered()) {
+                if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
+                    self::_checkAreaLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+                }
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
                     ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' .
                     $request->getRemoteAddress() . '". (session timeout?)');

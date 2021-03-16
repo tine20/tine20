@@ -86,9 +86,4 @@ class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Record_NewAbstract
     {
         return $this->toArray();
     }
-
-    public function getMessages()
-    {
-        // TODO: Implement getMessages() method.
-    }
 }
