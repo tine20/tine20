@@ -97,6 +97,10 @@ class AreaLocks extends Ext.util.Observable {
     const mfaDevices = opts.mfaDevices || await Tine.Tinebase_AreaLock.getUsersMFAUserConfigs(areaName)
     let selectedDevice = mfaDevices[0]
     
+    _.each(mfaDevices, (mfaDevice) => {
+      mfaDevice.device_name = mfaDevice.mfa_config_id + (mfaDevice.note ? ` (${mfaDevice.note})` : '')
+    })
+    
     if (mfaDevices.length > 1) {
       selectedDevice = _.find(mfaDevices, {
         mfa_config_id: await Tine.widgets.dialog.MultiOptionsDialog.getOption({
@@ -105,7 +109,6 @@ class AreaLocks extends Ext.util.Observable {
           height: 100 + mfaDevices.length * 30,
           allowCancel: true,
           options: _.map(mfaDevices, (mfaDevice) => {
-            mfaDevice.device_name = mfaDevice.mfa_config_id + (mfaDevice.note ? ` (${mfaDevice.note})` : '') 
             return { text: mfaDevice.device_name, name: mfaDevice.mfa_config_id };
           })
         })
