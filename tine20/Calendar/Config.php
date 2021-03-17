@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -188,7 +188,6 @@ class Calendar_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_POLLS = 'featurePolls';
 
-
     /**
      * EVENT_VIEW
      *
@@ -207,6 +206,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_EVENT_NOTIFICATION_CONFIRMATION = 'featureEventNotificationConfirmation';
+
+    /**
+     * @var string
+     */
+    const ORGANIZER_IMPLICIT_EDIT_GRANT = 'organizerImplicitEditGrant';
 
     /**
      * @var string
@@ -250,7 +254,6 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE = 30;
     const FREEBUSY_INFO_ALLOW_CALENDAR = 40;
     const FREEBUSY_INFO_ALLOW_ALL_ATTENDEE = 50;
-
 
     /**
      * (non-PHPdoc)
@@ -405,6 +408,16 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 'default' => 'REQ'
             )
         ),
+        self::ORGANIZER_IMPLICIT_EDIT_GRANT => [
+            //_('Organizer has implicit edit grant')
+            'label'                 => 'Organizer has implicit edit grant',
+            'description'           => 'Organizer has implicit edit grant',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => true,
+        ],
         self::RESOURCE_TYPES => array(
             //_('Resource Types Available')
             'label'                 => 'Resource Types Available',
