@@ -9,27 +9,27 @@ variables:
     value: "2020.11"
 
   RUN_CI_PIPELINE:
-    description: "Main toggle for gitlab ci. if false the ci will do nothing."
+    description: "Main toggle for gitlab ci. If false the ci will do nothing. This results in a failed pipeline."
     value: "true"
 
   NO_PUSH:
-    description: "Do not push any images. Commit images will still be pushed. But they are tagged per pipeline."
+    description: "Do not push any images. Commit images will still be pushed. Becouse they are needed for ci caching."
     value: "false"
 
   PUSH_TO_DOCKERHUB:
-    description: "Push the built result to docker hub. Should be only set to true by schedules. Force build all images."
+    description: "Push the built result to docker hub. Should be only set to true by schedules. Force builds all images."
     value: "false"
 
   PUSH_BUILT_IMAGE_TO_GITLAB:
-    description: "Push the built image to gitlab. Force build built and source image."
+    description: "Push the built image to gitlab. Force builds source and built image."
     value: "false"
 
   PUSH_DEV_IMAGE_TO_GITLAB:
-    description: "Push the dev image to gitlab. Force build all images."
+    description: "Push the dev image to gitlab. Force builds all images."
     value: "false"
 
   DOCKERHUB_TAG:
-    description: "Tag used on docker hub"
+    description: "Docker hub tag for this build."
     value: "dev"
 
   CUSTOM_APP_VENDOR:
@@ -63,7 +63,7 @@ variables:
     value: "false"
 
   PHP_UNIT_SERVERTESTS:
-    description: "Enable server tests."
+    description: "Enable or disable server tests."
     value: "true"
 
   PHP_UNIT_SETUP_TESTS:
@@ -87,11 +87,11 @@ variables:
     value: "${UTIL_REGISTRY}/mariadb:10.4.1"
 
   REDIS_IMAGE:
-    description: ""
+    description: "Rdis image to use druing tests."
     value: "${UTIL_REGISTRY}/redis:5.0.5"
 
   PHPUNIT_FILTER:
-    description: "Add a php unit filter to all php unit test jobs e.g. CashBook"
+    description: "Add a php unit filter to all php unit test jobs e.g. CashBook. This is used for customapp tests."
     value: ""
 
   TEST_WITH_HEALTH_CHECK:
@@ -99,13 +99,13 @@ variables:
     value: "false"
   
   RUN_ALL_TESTS:
-    description: "Run all tests, test failures are ignored, dose not allow push"
+    description: "Run all tests."
     value: "false"
 
   CHECK_PHP_VERSION:
-    description: "Test if the image was build with the correct php version"
+    description: "Test if the image was build with the correct php version."
     value: "false"
 
   PHP_VERSION:
-    description: "Php version to use"
+    description: "Php version to use."
     value: "7.3"
