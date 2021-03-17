@@ -9,35 +9,35 @@ variables:
     value: "2019.11"
 
   RUN_CI_PIPELINE:
-    description: "main toggle for gitlab ci. if false the ci will do nothing"
+    description: "Main toggle for gitlab ci. if false the ci will do nothing."
     value: "true"
 
   NO_PUSH:
-    description: "do not push any images. Commit images will still be pushed. But they are tagged per pipeline"
+    description: "Do not push any images. Commit images will still be pushed. But they are tagged per pipeline."
     value: "false"
 
   PUSH_TO_DOCKERHUB:
-    description: "push the built result to docker hub. should be only set to true by schedules. force build all images"
+    description: "Push the built result to docker hub. Should be only set to true by schedules. Force build all images."
     value: "false"
 
   PUSH_BUILT_IMAGE_TO_GITLAB:
-    description: "push the built image to gitlab. force build built and source image"
+    description: "Push the built image to gitlab. Force build built and source image."
     value: "false"
 
   PUSH_DEV_IMAGE_TO_GITLAB:
-    description: "push the dev image to gitlab. force build all images"
+    description: "Push the dev image to gitlab. Force build all images."
     value: "false"
 
   DOCKERHUB_TAG:
-    description: "tag used on docker hub"
+    description: "Tag used on docker hub"
     value: "dev"
 
   CUSTOM_APP_VENDOR:
-    description: "install one custom app via composer: vendor"
+    description: "Install one custom app via composer: vendor"
     value: "metaways"
 
   CUSTOM_APP_VERSION:
-    description: "install one custom app via composer: version"
+    description: "Install one custom app via composer: version"
     value: "dev-master"
 
   # install one custom app via composer: name
@@ -47,43 +47,43 @@ variables:
   # CUSTOM_APP_GIT_URL default should be nothing
 
   PHP_STAN_ANALYSES:
-    description: "enable php stan"
+    description: "Enable php stan."
     value: "true"
 
   PHP_UNIT_ALL_TESTS_SOURCE:
-    description: "enable or disable php unit tests on source (with webpack) image."
+    description: "Enable or disable php unit tests on source (with webpack) image."
     value: "true"
 
   PHP_UNIT_ALL_TESTS_BUILT:
-    description: "enable or disable php unit test on built (with built js, and clean files) image."
+    description: "Enable or disable php unit test on built (with built js, and clean files) image."
     value: "false"
 
   PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP:
-    description: "enable or disable run all test with ldap backend enabled. Not connected with PHP_UNIT_ALL_TESTS_BUILT."
+    description: "Enable or disable run all test with ldap backend enabled. Does not effect or is evected by PHP_UNIT_ALL_TESTS_BUILT."
     value: "false"
 
   PHP_UNIT_SERVERTESTS:
-    description: "enable server tests"
+    description: "Enable server tests."
     value: "true"
 
   PHP_UNIT_SETUP_TESTS:
-    description: "enable or disable php unit setup tests"
+    description: "Enable or disable php unit setup tests."
     value: "false"
 
   PHP_UNIT_NOGITLABCI_TESTS_BUILT:
-    description: "run test with nogitlabci group (test know to not work in gitlab)."
+    description: "Run test with nogitlabci group (test know to not work in gitlab)."
     value: "false"
 
   PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL:
-    description: "whether to run source test in parallel or not"
+    description: "Whether to run source test in parallel or not."
     value: "true"
 
   PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE:
-    description: "whether to run a source test with the postfixmultiinstance backend"
+    description: "Whether to run a source test with the postfixmultiinstance backend."
     value: "false"
 
   DATABASE_IMAGE:
-    description: "database image used by tests"
+    description: "Database image used by tests."
     value: "${UTIL_REGISTRY}/mariadb:10.4.1"
 
   REDIS_IMAGE:
@@ -91,7 +91,7 @@ variables:
     value: "${UTIL_REGISTRY}/redis:5.0.5"
 
   PHPUNIT_FILTER:
-    description: "add a php unit filter to all php unit test jobs e.g. CashBook"
+    description: "Add a php unit filter to all php unit test jobs e.g. CashBook"
     value: ""
 
   RUN_ALL_TESTS:
@@ -103,5 +103,5 @@ variables:
     value: "false"
 
   PHP_VERSION:
-    description: "php version to use"
+    description: "Php version to use"
     value: "7.3"
