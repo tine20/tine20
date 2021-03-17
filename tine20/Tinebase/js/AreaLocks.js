@@ -328,27 +328,33 @@ class AreaLocks extends Ext.util.Observable {
       }
     }
   }
-    
-  onMFAFail (areaName, e, opts) {
-    if (e.message !== 'USERABORT') {
-      Tine.log.error(e)
-      Ext.MessageBox.show({
-        title: window.i18n._('Failed'),
-        msg: e.message + '<br /><br />' + window.i18n._('Try again?'),
-        icon: Ext.MessageBox.WARNING,
-        buttons: Ext.MessageBox.YESNO,
-        fn: (btn) => {
-          if (btn === 'yes') {
-            const retryMethod = _.get(opts, 'retryMethod', _.bind(this.unlock, this))
-            return retryMethod(areaName)
+
+  async onMFAFail (areaName, e, opts) {
+    return new Promise((resolve, reject) => {
+      if (e.message !== 'USERABORT') {
+        Tine.log.error(e)
+        Ext.MessageBox.show({
+          title: window.i18n._hidden(e.message),
+          msg: window.i18n._('Try again?'),
+          icon: Ext.MessageBox.WARNING,
+          buttons: Ext.MessageBox.YESNO,
+          fn: (btn) => {
+            if (btn === 'yes') {
+              const retryMethod = _.get(opts, 'retryMethod', _.bind(this.unlock, this))
+              resolve(retryMethod(areaName, opts))
+            }
+            return this.onMFAFail(areaName, new Error('USERABORT'), opts).then(resolve).catch((e) => reject(e))
           }
+        })
+      } else {
+        // Note: we only reject if the USERABORTMethod is set to 'reject' as most userland code can't cope with the rejection
+        const userAbortMethod = _.get(opts, 'USERABORTMethod', (e) => { return e });
+        if (userAbortMethod === 'reject') {
+          reject(e)
         }
-      })
-    } else {
-      if (_.get(opts, 'USERABORTMethod')) {
-        return opts.USERABORTMethod()
+        resolve(userAbortMethod())
       }
-    }
+    });
   }
   
   isLocked (areaName, askServer) {
@@ -396,7 +402,7 @@ class AreaLocks extends Ext.util.Observable {
     const mfaDevices = exception.mfaUserConfigs
     
     this.manageMask(areaName)
-    this.unlock(areaName, mfaDevices)
+    return this.unlock(areaName, {mfaDevices, USERABORTMethod: 'reject'})
   }
 }
 

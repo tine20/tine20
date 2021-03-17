@@ -155,7 +155,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
             if ($mfa->validate($password, $userCfg)) {
                 $expires = $areaConfig->getBackend()->saveValidAuth();
             } else {
-                $teauf = new Tinebase_Exception_AreaUnlockFailed('Invalid authentication');
+                $teauf = new Tinebase_Exception_AreaUnlockFailed('Invalid authentication'); //_('Invalid authentication')
                 $teauf->setArea($areaConfig->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
                 $teauf->setMFAUserConfigs($areaConfig->getUserMFAIntersection($identity));
                 throw $teauf;

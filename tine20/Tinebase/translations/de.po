@@ -4933,6 +4933,12 @@ msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
 
+msgid "Invalid authentication"
+msgstr "Authentifikation fehlgeschlagen"
+
+msgid "Try again?"
+msgstr "Nochmal versuchen?"
+
 msgid "This area is locked. Which device should be used to unlock."
 msgstr ""
 "Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn "

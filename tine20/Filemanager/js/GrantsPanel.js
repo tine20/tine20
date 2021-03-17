@@ -41,7 +41,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         });
         this.pinProtectionCheckbox = new Ext.form.Checkbox({
             disabled: true,
-            hidden: ! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName),
+            hidden: ! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length,
             boxLabel: this.app.i18n._('This folder is part of the data safe')
         });
         this.pinProtectionDescription = new Ext.form.Label({

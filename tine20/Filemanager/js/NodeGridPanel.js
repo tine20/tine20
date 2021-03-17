@@ -628,7 +628,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
 
         this.getEl().mask(button.pressed ? this.app.i18n._('Locking data safe...') : this.app.i18n._('Unlocking data safe...'));
-        Promise.all(promises).finally(() => {
+        Promise.allSettled(promises).finally(() => {
             this.getEl().unmask();
         })
     },
