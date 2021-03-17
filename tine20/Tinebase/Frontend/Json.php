@@ -808,6 +808,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'setupRequired'     => Setup_Controller::getInstance()->setupRequired(),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
+            'allowBrowserPasswordManager'=> Tinebase_Config::getInstance()->get(Tinebase_Config::ALLOW_BROWSER_PASSWORD_MANAGER),
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
             'titlePostfix'      => Tinebase_Config::getInstance()->get(Tinebase_Config::PAGETITLEPOSTFIX),
             'redirectUrl'       => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL),

@@ -266,7 +266,6 @@ Tine.Voipmanager.SnomLocationEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     xtype: 'numberfield',
                     fieldLabel: this.app.i18n._('Admin Mode Password'),
                     name: 'admin_mode_password',
-                    /*inputType: 'password',*/
                     maxLength: 20,
                     anchor: '100%'
                 }]

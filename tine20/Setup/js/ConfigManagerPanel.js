@@ -210,7 +210,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             }, {
                 name: 'setupuser_password',
                 fieldLabel: this.app.i18n._('Password'),
-                inputType: 'password',
+                xtype: 'tw-passwordTriggerField',
                 allowBlank: false
             }] 
         }, {
@@ -241,7 +241,8 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 }, {
                     name: 'database_password',
                     fieldLabel: this.app.i18n._('Password'),
-                    inputType: 'password'
+                    xtype: 'tw-passwordTriggerField',
+                    clipboard: false
                 }, {
                     name: 'database_tableprefix',
                     fieldLabel: this.app.i18n._('Prefix')

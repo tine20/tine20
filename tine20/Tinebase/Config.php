@@ -435,6 +435,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const PASSWORD_CHANGE = 'changepw';
 
     /**
+     * ALLOW_BROWSER_PASSWORD_MANAGER
+     *
+     * @var string
+     */
+    const ALLOW_BROWSER_PASSWORD_MANAGER = 'allowBrowserPasswordManager';
+    
+    /**
      * USER_PASSWORD_POLICY
      *
      * @var string
@@ -1722,6 +1729,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'User may change password',
         //_('User may change password')
             'description'           => 'User may change password',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => TRUE
+        ),
+        self::ALLOW_BROWSER_PASSWORD_MANAGER => array(
+            //_('Browser password manager can be used')
+            'label'                 => 'Browser password manager can be used',
+            'description'           => 'Browser password manager can be used',
             'type'                  => 'bool',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,

@@ -45,23 +45,21 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
             anchor:'100%',
             id: 'changePasswordPanel',
             defaults: {
-                xtype: 'textfield',
-                inputType: 'password',
+                xtype: 'tw-passwordTriggerField',
                 anchor: '100%'
             },
             items: [{
                 id: 'oldPassword',
+                clipboard: false,
                 fieldLabel: String.format(i18n._('Old {0}'), this.passwordLabel),
                 name:'oldPassword'
             },{
                 id: 'newPassword',
-                xtype: 'tw-passwordTriggerField',
                 autocomplete: 'new-password',
                 fieldLabel: String.format(i18n._('New {0}'), this.passwordLabel),
                 name:'newPassword'
             },{
                 id: 'newPasswordSecondTime',
-                xtype: 'tw-passwordTriggerField',
                 autocomplete: 'new-password',
                 fieldLabel: String.format(i18n._('Repeat new {0}'), this.passwordLabel),
                 name:'newPasswordSecondTime'

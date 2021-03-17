@@ -18,6 +18,10 @@ Ext.ns('Tine.Tinebase.widgets.form');
  */
 Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTriggerField, {
     /**
+     * @cfg {Boolean} unLockable: true,
+     */
+    unLockable: true,
+    /**
      * @cfg {Boolean} locked: true,
      */
     locked: true,
@@ -25,7 +29,12 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
      * @cfg {Boolean} clipboard: true,
      */
     clipboard: true,
-
+    /**
+     * @cfg {Boolean} allowBrowserPasswordManager
+     */
+    allowBrowserPasswordManager: false,
+    hiddenPasswordChr: '●',
+    
     itemCls: 'tw-passwordTriggerField',
     enableKeyEvents: true,
 
@@ -33,10 +42,61 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         // NOTE: we need to have this in the instance - otherwise we'd overwrite the prototype
         this.defaultAutoCreate = {tag: "input", type: "password", size: "16", autocomplete: "off"};
 
-        this.defaultAutoCreate.type = this.locked ? 'password' : 'text';
+        this.defaultAutoCreate.type = (this.locked && this.allowBrowserPasswordManager) ? 'password' : 'text';
+        if (!this.allowBrowserPasswordManager) {
+            this.initPreventBrowserPasswordManager();
+        }
+
+        if (!this.unLockable) {
+            this.afterIsRendered().then(() => { this.getTrigger(0).hide(); });
+        }
+    
         Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.initComponent.apply(this, arguments);
     },
 
+    initPreventBrowserPasswordManager: function() {
+        if (! this.allowBrowserPasswordManager) {
+            this.afterIsRendered().then(() => {
+                this.el.on('keypress', this.transformInput, this);
+                this.el.on('keydown', this.transformInput, this);
+                this.el.on('paste', this.transformInput, this);
+            });
+            
+            this.getValue = () => {
+                return this.value;
+            };
+            
+            this.setValue = (value) => {
+                this.value = value;
+                this.afterIsRendered().then(() => {
+                    this.setRawValue(this.locked ? this.hiddenPasswordChr.repeat(this.value.length) : this.value);
+                });
+            }
+        }
+    },
+
+    transformInput: function(e) {
+        e = e.browserEvent || e;
+        if (! this.locked) return;
+        if (e.type === 'keydown' && _.indexOf([8 /*BACKSPACE*/, 46 /*DELETE*/], e.keyCode) < 0) return;
+        Ext.lib.Event.stopEvent(e);
+
+        let start = e.target.selectionStart;
+        const end = e.target.selectionEnd;
+        const valueArray = (this.getValue() || '').split('');
+        const replacement = e.clipboardData ? e.clipboardData.getData('text') : String.fromCharCode(e.keyCode);
+        
+        if (_.indexOf([8 /*BACKSPACE*/, 46 /*DELETE*/], e.keyCode) > -1) {
+            start = start - (e.keyCode === 8 /*BACKSPACE*/ && start === end);
+            valueArray.splice(start, Math.abs(end-start)||1);
+        } else {
+            valueArray.splice(start, end-start, replacement);
+            start = start + replacement.length;
+        }
+        this.setValue(valueArray.join(''));
+        this.selectText(start, start);
+    },
+    
     initTrigger: function () {
         Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.initTrigger.apply(this, arguments);
         this.triggers[0].set({'ext:qtip': i18n._('Cleartext/Hidden')});
@@ -50,13 +110,15 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
     },
 
     onTrigger1Click: function () {
-        if (this.el.dom.type === 'text') {
-            this.el.dom.type = 'password';
-            this.triggers[0].addClass('locked');
+        this.triggers[0][(this.locked ? 'remove' : 'add') + 'Class']('locked');
+        
+        if (this.allowBrowserPasswordManager) {
+            this.el.dom.type = this.locked ? 'text' : 'password';
         } else {
-            this.el.dom.type = 'text';
-            this.triggers[0].removeClass('locked');
+            this.value = this.locked ? this.value : this.getRawValue();
+            this.setRawValue(this.locked ? this.value : this.hiddenPasswordChr.repeat(this.value.length));
         }
+        this.locked = !this.locked;
     },
 
     onTrigger2Click: function () {

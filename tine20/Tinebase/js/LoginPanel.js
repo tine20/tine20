@@ -124,10 +124,12 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                                 }
                             }
                         }, {
-                            xtype: 'textfield',
+                            xtype: 'tw-passwordTriggerField',
+                            allowBrowserPasswordManager: this.allowBrowserPasswordManager,
+                            unLockable: !this.allowBrowserPasswordManager,
+                            clipboard: false,
                             tabindex: 3,
                             width: 170,
-                            inputType: 'password',
                             fieldLabel: i18n._('Password'),
                             name: 'password',
                             selectOnFocus: true,

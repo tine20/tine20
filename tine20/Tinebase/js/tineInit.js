@@ -309,7 +309,8 @@ Tine.Tinebase.tineInit = {
             var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
             Tine.loginPanel = new Tine.Tinebase.LoginPanel({
                 defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
-                defaultPassword: Tine.Tinebase.registry.get('defaultPassword')
+                defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
+                allowBrowserPasswordManager: Tine.Tinebase.registry.get('allowBrowserPasswordManager')
             });
             mainCardPanel.add(Tine.loginPanel);
         }
