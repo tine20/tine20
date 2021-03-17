@@ -509,6 +509,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     $classes[$jsonAppName] = $application->name;
                 }
             }
+        } elseif (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

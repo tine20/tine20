@@ -746,7 +746,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testAreaLockProviderConfigRemovedFromRegistryData()
     {
-        $this->_createAreaLockConfig();
+        $this->_createAreaLockConfig([Tinebase_Model_AreaLockConfig::FLD_AREAS => ['foo']]);
 
         $this->assertSame(['pin'], Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS}->records
             ->getFirstRecord()->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
@@ -759,6 +759,24 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         $this->assertSame(['pin'], Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS}->records
             ->getFirstRecord()->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
+    }
+
+    public function testAreaLockLoginExceptionInRegistryData()
+    {
+        $this->_createAreaLockConfig();
+
+        $this->_setPin();
+
+        $registryData = $this->_instance->getAllRegistryData();
+        $registryException = $registryData['Tinebase']['areaLockedException'];
+        $this->assertSame(630, $registryException['code']);
+        $this->assertSame('login', $registryException['area']);
+        $this->assertSame([[
+            'id' => 'userpin',
+            'mfa_config_id' => 'pin',
+            'config_class' => Tinebase_Model_MFA_PinUserConfig::class,
+            'config' => []
+        ]], $registryException['mfaUserConfigs']);
     }
 
     /**
