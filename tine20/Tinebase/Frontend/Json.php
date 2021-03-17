@@ -740,8 +740,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData = $this->_getAnonymousRegistryData();
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            $userRegistryData = $this->_getUserRegistryData();
-            $registryData += $userRegistryData;
+            if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) &&
+                    Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+                $areaConfig = Tinebase_AreaLock::getInstance()->getLastAuthFailedAreaConfig();
+                $e = new Tinebase_Exception_AreaLocked('mfa required');
+                $e->setArea($areaConfig->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+                $e->setMFAUserConfigs($areaConfig->getUserMFAIntersection(Tinebase_Core::getUser()));
+                $registryData['areaLockedException'] = $e->toArray();
+            } else {
+                $userRegistryData = $this->_getUserRegistryData();
+                $registryData += $userRegistryData;
+            }
         }
         
         return $registryData;
@@ -909,7 +918,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $registryData = array();
         
-        if (Tinebase_Core::getUser()) {
+        if (Tinebase_Core::getUser() && (!Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
+                !Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN))) {
             $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             

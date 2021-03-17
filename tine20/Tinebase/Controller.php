@@ -849,7 +849,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $areaConfig = $areaLock->getLastAuthFailedAreaConfig();
 
-
         // user has no 2FA config -> currently its sort of optional -> no check
         if (count($userConfigIntersection->mfa_configs) === 0) {
             $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
@@ -892,7 +891,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
         } else {
             // FE to render selection which 2FA to use
-            $this->_throwMFAException($areaConfig, $userConfigIntersection);
+            $this->_throwMFAException($areaConfig, $areaConfig->getUserMFAIntersection($user));
         }
 
         // must never reach this

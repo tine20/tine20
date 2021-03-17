@@ -536,7 +536,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.getAvailableTranslations',
             'Tinebase.getTranslations',
             'Tinebase.setLocale',
-            'Tinebase.checkAuthToken'
+            'Tinebase.checkAuthToken',
+            'Tinebase_AreaLock.unlock'
         );
 
         // check json key for all methods but some exceptions
@@ -560,8 +561,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
             
             throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
-        } elseif (is_object(Tinebase_Core::getUser()) && ($method === 'Tinebase.getAllRegistryData' || $method === 'Tinebase.getRegistryData')) {
-            self::_checkAreaLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
         }
     }
     
