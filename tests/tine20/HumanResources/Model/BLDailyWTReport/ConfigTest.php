@@ -23,6 +23,7 @@ class HumanResources_Model_BLDailyWTReport_ConfigTest extends TestCase
         $features = HumanResources_Config::getInstance()->get(HumanResources_Config::ENABLED_FEATURES);
         $features[HumanResources_Config::FEATURE_WORKING_TIME_ACCOUNTING] = true;
         HumanResources_Config::getInstance()->set(HumanResources_Config::ENABLED_FEATURES, $features);
+        Tinebase_AreaLock::destroyInstance();
 
         $tbJFE = new Tinebase_Frontend_Json();
         $registryData = $tbJFE->getAllRegistryData();
