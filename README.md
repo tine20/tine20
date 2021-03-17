@@ -14,7 +14,6 @@ Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Bus
 * [Package Downloads](https://github.com/tine20/tine20/releases)
 * [Twitter](https://twitter.com/tine20org)
 * [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
-* [Gitter chat room](https://gitter.im/tine20/Lobby)
 
 ## Other Community resources
 * [all in one docker image - by talsen-team](https://github.com/talsen-team/docker-app--tine20)
