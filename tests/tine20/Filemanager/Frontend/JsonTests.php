@@ -2620,8 +2620,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         // unlock
         $user = Tinebase_Core::getUser();
         $this->_setPin();
-        Tinebase_AreaLock::getInstance()->unlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE,
-            'userpin', '1234', Tinebase_Core::getUser());
+        Tinebase_AreaLock::getInstance()->unlock('login', 'userpin', '1234', Tinebase_Core::getUser());
 
         $result = $this->_getUit()->searchNodes($filter, array());
         $protectedNodes = array_filter($result['results'], function($item) use ($folder) {

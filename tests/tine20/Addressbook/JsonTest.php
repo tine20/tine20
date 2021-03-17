@@ -2636,7 +2636,7 @@ Steuernummer 33/111/32212";
         // unlock projects
         $user = Tinebase_Core::getUser();
         $this->_setPin();
-        Tinebase_AreaLock::getInstance()->unlock('Projects', 'userpin', '1234', $user);
+        Tinebase_AreaLock::getInstance()->unlock('login', 'userpin', '1234', $user);
 
         // save contact again
         $contactWithUnlockedProjectSaved = $this->_uit->saveContact($contactWithLockedProjectSaved);

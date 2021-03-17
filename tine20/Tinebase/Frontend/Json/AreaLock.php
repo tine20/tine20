@@ -17,15 +17,9 @@
  */
 class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 {
-    /**
-     * @param string $area
-     * @param string $mfaId
-     * @param string $password
-     * @return array
-     */
-    public function unlock(string $area, string $userMfaId, string $password = null): array
+    public function unlock(string $areaLockName, string $userMfaId, string $password = null): array
     {
-        $result = Tinebase_AreaLock::getInstance()->unlock($area, $userMfaId, $password, Tinebase_Core::getUser());
+        $result = Tinebase_AreaLock::getInstance()->unlock($areaLockName, $userMfaId, $password, Tinebase_Core::getUser());
 
         return $this->_recordToJson($result);
     }
@@ -39,31 +33,23 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
             ->sendOut($userCfg);
     }
 
-    /**
-     * @param string $area
-     * @return array
-     */
-    public function lock(string $area): array
+    public function lock(string $areaLockName): array
     {
-        $result = Tinebase_AreaLock::getInstance()->lock($area);
+        $result = Tinebase_AreaLock::getInstance()->lock($areaLockName);
 
         return $this->_recordToJson($result);
     }
 
-    /**
-     * @param string $area
-     * @return boolean
-     */
-    public function isLocked(string $area): bool
+    public function isLocked(string $areaLockName): bool
     {
-        return Tinebase_AreaLock::getInstance()->isLocked($area);
+        return Tinebase_AreaLock::getInstance()->isAreaLockLocked($areaLockName);
     }
 
-    public function getState(string $area): array
+    public function getState(string $areaLockName): array
     {
         $lockStates = Tinebase_AreaLock::getInstance()->getAllStates();
-        if (!$lockState = $lockStates->filter('area', $area)->getFirstRecord()) {
-            throw new Exception("no such area: $area");
+        if (!$lockState = $lockStates->filter('area', $areaLockName)->getFirstRecord()) {
+            throw new Exception("no such area: $areaLockName");
         }
         return $this->_recordToJson($lockState);
     }
@@ -77,17 +63,17 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
     /**
      * get configured MFA devices for current user
      */
-    public function getUsersMFAUserConfigs(?string $area): array
+    public function getUsersMFAUserConfigs(?string $areaLockName): array
     {
         $result = [];
 
         $mfas = Tinebase_Config::getInstance()->{Tinebase_Config::MFA}->records;
-        if ($area) {
+        if ($areaLockName) {
             $mfaIds = [];
-            foreach (Tinebase_AreaLock::getInstance()->getAreaConfigs($area) as $areaCfg) {
-                $mfaIds = array_merge($areaCfg->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
+            if ($areaLock = Tinebase_AreaLock::getInstance()->_getConfig()->records->find(
+                    Tinebase_Model_AreaLockConfig::FLD_AREA_NAME, $areaLockName)) {
+                $mfaIds = $areaLock->{Tinebase_Model_AreaLockConfig::FLD_MFAS};
             }
-            $mfaIds = array_unique($mfaIds);
             $mfas = $mfas->filter(function($val) use($mfaIds) {
                 return in_array($val->{Tinebase_Model_MFA_Config::FLD_ID}, $mfaIds);
             });

@@ -865,13 +865,19 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 ($mfaId = $userConfigIntersection->getFirstRecord()->getId()))) {
             // FE send provider and password -> validate it
             if (!empty($password)) {
-                $areaLock->unlock(
-                    Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-                    $mfaId,
-                    $password,
-                    $user
-                );
-
+                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(function($rec) use($mfaId) {
+                            return in_array($mfaId, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
+                        }) as $areaCfg) {
+                    if (!$areaCfg->getBackend()->hasValidAuth()) {
+                        $areaLock->unlock(
+                            $areaCfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
+                            $mfaId,
+                            $password,
+                            $user
+                        );
+                        break;
+                    }
+                }
                 return;
             } else {
                 $userCfg = $userConfigIntersection->getById($mfaId);
