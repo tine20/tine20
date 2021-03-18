@@ -82,7 +82,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                     this.loadMask.show();
 
                     if (form.isValid()) {
-                        values = form.getValues();
+                        values = form.getFieldValues();
                         if (values.newPassword == values.newPasswordSecondTime) {
                             Ext.Ajax.request({
                                 params: {

@@ -230,7 +230,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onPasswordConfirm: function () {
         var confirmForm = this.passwordConfirmWindow.items.first().getForm(),
-            confirmValues = confirmForm.getValues(),
+            confirmValues = confirmForm.getFieldValues(),
             passwordStatus = confirmForm.findField('passwordStatus'),
             passwordField = (this.getForm()) ? this.getForm().findField('accountPassword') : null;
         

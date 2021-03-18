@@ -555,7 +555,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      */
     onLoginPress: function (additionalParams) {
         var form = this.getLoginPanel().getForm(),
-            values = form.getValues();
+            values = form.getFieldValues();
             
         if (form.isValid()) {
             Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'));
