@@ -96,7 +96,7 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     onApplyChanges: function() {
         var form = this.getForm();
         if(form.isValid()) {
-            var values = form.getValues();
+            var values = form.getFieldValues();
             
             if (this.sendRequest) {
                 this.loadMask.show();
