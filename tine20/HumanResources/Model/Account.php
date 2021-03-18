@@ -97,18 +97,6 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                 'group' => 'Account',
                 'type'    => 'integer'
             ),
-            'extra_free_times' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-                'label'      => 'Extra free times', // _('Extra free times')
-                'type'       => 'records',
-                'config'     => array(
-                    'appName'     => 'HumanResources',
-                    'modelName'   => 'ExtraFreeTime',
-                    'refIdField'  => 'account_id',
-                    'paging'      => array('sort' => 'creation_time', 'dir' => 'ASC'),
-                    'dependentRecords' => TRUE
-                ),
-            ),
             'description' => array(
                 'label' => 'Description', //_('Description')
                 'group' => 'Miscellaneous', //_('Miscellaneous')
@@ -137,19 +125,13 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                     'type' => 'integer'
                 )
             ),
-            'expired_vacation_days' => array(
+            'vacation_expiary_date' => array(
                 'type' => 'virtual',
                 'config' => array(
-                    'type' => 'integer'
+                    'type' => 'date'
                 )
             ),
             'excused_sickness' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'type' => 'integer'
-                )
-            ),
-            'rebooked_vacation_days' => array(
                 'type' => 'virtual',
                 'config' => array(
                     'type' => 'integer'
