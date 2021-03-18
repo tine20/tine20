@@ -100,7 +100,9 @@ class AreaLocks extends Ext.util.Observable {
     _.each(mfaDevices, (mfaDevice) => {
       mfaDevice.device_name = mfaDevice.mfa_config_id + (mfaDevice.note ? ` (${mfaDevice.note})` : '')
     })
-    
+    if (mfaDevices.length < 1) {
+      throw new Error('NOVALIDMFA');
+    }
     if (mfaDevices.length > 1) {
       selectedDevice = _.find(mfaDevices, {
         mfa_config_id: await Tine.widgets.dialog.MultiOptionsDialog.getOption({
@@ -331,6 +333,15 @@ class AreaLocks extends Ext.util.Observable {
 
   async onMFAFail (areaName, e, opts) {
     return new Promise((resolve, reject) => {
+      if (e.message === 'NOVALIDMFA') {
+        Ext.MessageBox.show({
+          title: window.i18n._('MFA device missing'),
+          msg: window.i18n._('No matching MFA device for this area found. Configure a matching device please.'),
+          icon: Ext.MessageBox.INFO,
+          buttons: Ext.MessageBox.OK
+        });
+        return resolve();
+      }
       if (e.message !== 'USERABORT') {
         Tine.log.error(e)
         Ext.MessageBox.show({
@@ -341,7 +352,7 @@ class AreaLocks extends Ext.util.Observable {
           fn: (btn) => {
             if (btn === 'yes') {
               const retryMethod = _.get(opts, 'retryMethod', _.bind(this.unlock, this))
-              resolve(retryMethod(areaName, opts))
+              return resolve(retryMethod(areaName, opts))
             }
             return this.onMFAFail(areaName, new Error('USERABORT'), opts).then(resolve).catch((e) => reject(e))
           }
@@ -350,9 +361,9 @@ class AreaLocks extends Ext.util.Observable {
         // Note: we only reject if the USERABORTMethod is set to 'reject' as most userland code can't cope with the rejection
         const userAbortMethod = _.get(opts, 'USERABORTMethod', (e) => { return e });
         if (userAbortMethod === 'reject') {
-          reject(e)
+          return reject(e)
         }
-        resolve(userAbortMethod())
+        return resolve(userAbortMethod())
       }
     });
   }
