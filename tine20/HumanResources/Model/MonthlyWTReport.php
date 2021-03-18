@@ -216,4 +216,18 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
 
         return $result;
     }
+
+    /**
+     * @return DateTime[]
+     */
+    public function getPeriod()
+    {
+        $from = new Tinebase_DateTime("{$this->{self::FLDS_MONTH}}-01 00:00:00");
+        $until = $from->getClone()->addMonth(1)->subSecond(1);
+
+        return [
+            'from' => $from,
+            'until' => $until
+        ];
+    }
 }

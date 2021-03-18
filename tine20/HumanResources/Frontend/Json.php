@@ -46,7 +46,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Employee',
         'Account',
         HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
-        'ExtraFreeTime',
         'FreeDay',
         'FreeTime',
         HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
@@ -272,15 +271,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $employee;
-    }
-
-    /**
-     * book remaining vacation days for the next year
-     * 
-     * @param array $ids
-     */
-    public function bookRemaining($ids) {
-        return array('success' => HumanResources_Controller_Account::getInstance()->bookRemainingVacation($ids));
     }
     
     /**
@@ -559,6 +549,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         // prepare free time filter, add employee_id
+        // @TODO limit freetimes/freedays to given period (be aware might be multiple accounts)
         $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(), 'AND');
         $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
         

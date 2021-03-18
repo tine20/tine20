@@ -608,24 +608,15 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertEquals(15, $account2014['possible_vacation_days']);
         $this->assertEquals(175, $account2014['working_days']);
         
-        // add 5 extra free days to the account with different expiration dates, 2 days aren't expired already
         $tomorrow = Tinebase_DateTime::now();
         $tomorrow->addDay(1);
         $yesterday = Tinebase_DateTime::now();
         $yesterday->subDay(1);
         
-        $eft1 = new HumanResources_Model_ExtraFreeTime(array('days' => 2, 'account_id' => $accountId2013, 'expires' => $tomorrow));
-        $eft2 = new HumanResources_Model_ExtraFreeTime(array('days' => 3, 'account_id' => $accountId2013, 'expires' => $yesterday));
-        
-        $eftController = HumanResources_Controller_ExtraFreeTime::getInstance();
-        $eftController->create($eft1);
-        $eftController->create($eft2);
-        
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(25, $account2013['possible_vacation_days']);
         $this->assertEquals(25, $account2013['remaining_vacation_days']);
         $this->assertEquals(250, $account2013['working_days']);
-        $this->assertEquals(3, $account2013['expired_vacation_days'], 'There should be 3 expired vacation days at first!');
         
         // the extra freetimes added to the account2013 should not affect account 2014
         $account2014 = $json->getAccount($accountId2014);
@@ -649,12 +640,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         );
         
         $freetime = $this->_json->saveFreeTime($freetime);
-        
-        // so the 3 days haven't been expired, because 3 vacation days have been booked before
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(25, $account2013['possible_vacation_days'], 'There should be 25 possible vacation days after all!');
         $this->assertEquals(22, $account2013['remaining_vacation_days'], 'There should be 25 remaining vacation days after all!');
-        $this->assertEquals(0, $account2013['expired_vacation_days'], 'There should be no expired vacation days after all!');
         $this->assertEquals(3, $account2013['taken_vacation_days'], 'He took 3 vacation days');
         
         
@@ -765,8 +753,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $result = $this->_json->getFeastAndFreeDays($employee->getId(), "2013");
         $res = $result['results'];
-//        $this->assertEquals(7, count($res['vacationDays'])); // not used in client
-//        $this->assertEquals(2, count($res['sicknessDays'])); // not used in client
         $this->assertEquals(21, $res['remainingVacation']);
     }
     
@@ -1100,16 +1086,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account = $res['results'][0];
         $date->subDay(1); // 31.7.2014
         
-        $extraFreeTime = HumanResources_Controller_ExtraFreeTime::getInstance()->create(new HumanResources_Model_ExtraFreeTime(array(
-            'account_id' => $account['id'],
-            'days' => 4,
-            'expires' => clone $date,
-            'type' => 'payed'
-        )));
-        
         $res = $this->_json->getFeastAndFreeDays($recordData['id'], 2014);
         
-        // at this point, vacation days are not created, so the extra freetime is expired
         $this->assertEquals(28, $res['results']['remainingVacation']);
         
         // create vacation days
@@ -1239,7 +1217,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account = $this->_json->getAccount($account['id']);
         
         $this->assertEquals(28, $account['possible_vacation_days']);
-        $this->assertEquals(0, $account['expired_vacation_days']);
         $this->assertEquals(17, $account['remaining_vacation_days']);
         $this->assertEquals(11, $account['taken_vacation_days']);
         $this->assertEquals(14, $account['excused_sickness']);
