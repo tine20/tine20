@@ -4,7 +4,6 @@ const lib = require('../../lib/browser');
 require('dotenv').config();
 
 beforeAll(async () => {
-    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Crm');
     await page.screenshot({path: 'screenshots/7_crm/1_crm_leadtabellen.png'});
 });
@@ -17,12 +16,12 @@ describe('mainScreen', () => {
 
 });
 
-describe('Edit Contact', () => {
-    test('open EditDialog', async () => {
+describe('Edit Lead', () => {
+    test.skip('open EditDialog', async () => {
         var [button] = await lib.getElement('button', page, 'Lead hinzufügen');
         await button.click();
         //console.log('Klick Button');
-        newPage = await lib.getNewWindow();
+        let newPage = await lib.getNewWindow();
         await newPage.setViewport({
             width: 1366,
             height: 768,
@@ -49,9 +48,6 @@ describe('Edit Contact', () => {
         await expect(newPage).toClick('.x-combo-list-item', {text: 'Getränke'}); // need DemoDaten!
         await newPage.waitFor(500);
         await newPage.screenshot({path: 'screenshots/7_crm/5_crm_lead_produkte_zugewiesen.png'});
-
-
-        //console.log('Get Popup');
     });
 
     /*
@@ -65,8 +61,7 @@ describe('Edit Contact', () => {
             await newPage.waitFor(1000);
             await newPage.screenshot({path: 'screenshots/5_aufgaben/3_aufgaben_alarm.png'});
         })
-        */
-
+    */
 });
 
 afterAll(async () => {

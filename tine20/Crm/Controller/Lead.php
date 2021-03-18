@@ -372,7 +372,28 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $this->_checkReadonlyState($_oldRecord);
         $this->_setTurnover($_record);
+    }
+
+    /**
+     * Check if old record lead state has a readonly flag and throw a exception
+     * if the record was already set to a readonly state.
+     * 
+     * @param $_record
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkReadonlyState($_record)
+    {
+        $leadState = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getValue($_record->leadstate_id);
+        $readonly = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getKeyfieldRecordByValue($leadState)['readonly'];
+        
+        if ($readonly) {
+            $translate = Tinebase_Translation::getTranslation('Crm');
+            // _('This Lead state is set to read-only therefore updating this Lead is not possible.')
+            throw new Tinebase_Exception_SystemGeneric(
+                $translate->_('This Lead state is set to read-only therefore updating this Lead is not possible.'));
+        }
     }
     
     /**

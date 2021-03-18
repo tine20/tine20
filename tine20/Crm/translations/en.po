@@ -740,3 +740,6 @@ msgstr "Your are sure, that some changes can send a notification?"
 
 msgid "Mute Notification"
 msgstr "Mute Notification"
+
+msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
+msgstr "This Lead state is set to read-only therefore updating this Lead is not possible."
