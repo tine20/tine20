@@ -1,0 +1,8 @@
+# aliases for git working with this repo - put them into your ~/.gitconfig (for example)
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	p = push origin master
+	l = log --oneline
+    pacm = "!f() { git push -o merge_request.create  -o merge_request.remove_source_branch -o merge_request.target=${1:-$(cat $(git rev-parse --show-toplevel)/ci/ci-config.yml | grep -A 2 MAJOR_COMMIT_REF_NAME: | sed -n 's/^.*value: //p' | sed -e 's/\"//g')} --set-upstream origin $(git rev-parse --abbrev-ref HEAD);};f"
