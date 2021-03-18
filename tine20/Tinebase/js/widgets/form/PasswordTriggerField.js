@@ -63,7 +63,8 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             });
             
             this.getValue = () => {
-                return this.value;
+                return this.locked ? this.value || ''
+                    : Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.getValue.call(this);
             };
             
             this.setValue = (value) => {
