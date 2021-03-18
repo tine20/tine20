@@ -24,6 +24,8 @@ class Tinebase_ActionQueue_Backend_Test implements Tinebase_ActionQueue_Backend_
     public static $_daemonStructSizeCall = null;
     public static $_queueKeys = [];
 
+    public $messages = [];
+
     /**
      * Constructor
      *
@@ -40,7 +42,7 @@ class Tinebase_ActionQueue_Backend_Test implements Tinebase_ActionQueue_Backend_
      */
     public function send($message)
     {
-        // TODO: Implement send() method.
+        $this->messages[] = $message;
     }
 
     /**
@@ -127,5 +129,10 @@ class Tinebase_ActionQueue_Backend_Test implements Tinebase_ActionQueue_Backend_
     public function iterateAllData()
     {
         return false;
+    }
+
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }
