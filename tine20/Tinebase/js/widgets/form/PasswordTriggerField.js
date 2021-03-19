@@ -57,9 +57,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
     initPreventBrowserPasswordManager: function() {
         if (! this.allowBrowserPasswordManager) {
             this.afterIsRendered().then(() => {
+                this.el.on('paste', this.transformInput, this);
                 this.el.on('keypress', this.transformInput, this);
                 this.el.on('keydown', this.transformInput, this);
-                this.el.on('paste', this.transformInput, this);
             });
             
             this.getValue = () => {
@@ -80,6 +80,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         e = e.browserEvent || e;
         if (! this.locked) return;
         if (e.type === 'keydown' && _.indexOf([8 /*BACKSPACE*/, 46 /*DELETE*/], e.keyCode) < 0) return;
+        if (e.type === 'keypress' && e.metaKey /* APPLE CMD*/ && e.keyCode == 118 /*v*/) return;
         Ext.lib.Event.stopEvent(e);
 
         let start = e.target.selectionStart;
@@ -95,7 +96,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             start = start + replacement.length;
         }
         this.setValue(valueArray.join(''));
-        this.selectText(start, start);
+        _.defer(() => {this.selectText(start, start)});
     },
     
     initTrigger: function () {

@@ -121,6 +121,7 @@ class Tinebase_ModelConfiguration_Const {
     const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
     const SPECIAL_TYPE = 'specialType';
     const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
+    const SPECIAL_TYPE_PASSWORD = 'password';
     const STORAGE = 'storage';
     const SUPPORTED_FORMATS = 'supportedFormats';
     const SYSTEM = 'system';
