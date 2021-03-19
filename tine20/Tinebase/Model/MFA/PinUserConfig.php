@@ -34,13 +34,14 @@ class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Record_NewAbstract
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'PIN',
-        self::TITLE_PROPERTY                => 'Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}', //_('Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}')
+        self::TITLE_PROPERTY                => 'Static PIN for user: ●●●●●●', //_('{% true %}Static PIN for user: ●●●●●●')
         
         self::FIELDS                        => [
             self::FLD_PIN                       => [
                 self::TYPE                          => self::TYPE_STRING,
                 self::LABEL                         => 'New PIN', // _('New PIN')
                 self::REF_MODEL_FIELD               => self::FLD_HASHED_PIN,
+                self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_PASSWORD,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Tinebase_Auth_MFA_PinValidator::class,

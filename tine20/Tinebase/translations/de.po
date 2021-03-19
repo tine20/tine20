@@ -4061,8 +4061,8 @@ msgstr "Mobilfunknummer"
 msgid "Security codes are send to: {{ cellphonenumber }}."
 msgstr "Sicherheitscodes werden an {{ cellphonenumber }} gesendet."
 
-msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
-msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+msgid "Static PIN for user: ●●●●●●"
+msgstr "Statischer PIN: ●●●●●●"
 
 msgid "New PIN"
 msgstr "Neue PIN"

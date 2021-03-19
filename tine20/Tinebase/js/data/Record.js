@@ -175,7 +175,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
 
         if (Tine.Tinebase.data.TitleRendererManager.has(this.appName, this.modelName)) {
             return Tine.Tinebase.data.TitleRendererManager.get(this.appName, this.modelName)(this);
-        } else if (String(this.titleProperty).match(/{/)) {
+        } else if (String(this.titleProperty).match(/[{ ]/)) {
             if (! this.constructor.titleTwing) {
                 var twingEnv = getTwingEnv();
                 var loader = twingEnv.getLoader();

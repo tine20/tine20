@@ -34,6 +34,10 @@ Tine.widgets.form.FieldManager = function() {
          */
         CATEGORY_PROPERTYGRID: 'propertyGrid',
 
+        specialTypeMap: {
+            password : 'tw-passwordTriggerField'
+        },
+        
         /**
          * get form field of well known field names
          *
@@ -45,7 +49,7 @@ Tine.widgets.form.FieldManager = function() {
 
             return field;
         },
-
+        
         /**
          * get form field by data type
          *
@@ -312,7 +316,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.width = 80;
                     break;
                 default:
-                    field.xtype = 'textfield';
+                    field.xtype = this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
                     if (fieldDefinition.length) {
                         field.maxLength = fieldDefinition.length;
                     }
