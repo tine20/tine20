@@ -15,10 +15,10 @@
  * @package     Tinebase
  * @subpackage  InputFilter
  */
-class Tinebase_Model_InputFilter_PhoneNumberWOPlus implements Zend_Filter_Interface
+class Tinebase_Model_InputFilter_PhoneNumber implements Zend_Filter_Interface
 {
     public function filter($value)
     {
-        return str_replace('+', '', Addressbook_Model_Contact::normalizeTelephoneNum($value));
+        return Addressbook_Model_Contact::normalizeTelephoneNum($value);
     }
 }

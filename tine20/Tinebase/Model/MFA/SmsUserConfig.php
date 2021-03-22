@@ -15,8 +15,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  */
-class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Record_NewAbstract
-    implements Tinebase_Auth_MFA_UserConfigInterface
+class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Auth_MFA_AbstractUserConfig
 {
     const MODEL_NAME_PART = 'MFA_SmsUserConfig';
 
@@ -38,7 +37,7 @@ class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_STRING,
                 self::LABEL                         => 'Cell Phone Number', // _('Cell Phone Number')
                 self::INPUT_FILTERS                 => [
-                    Tinebase_Model_InputFilter_PhoneNumberWOPlus::class
+                    Tinebase_Model_InputFilter_PhoneNumber::class
                 ],
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
@@ -54,9 +53,4 @@ class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
-
-    public function toFEArray(): array
-    {
-        return $this->toArray();
-    }
 }
