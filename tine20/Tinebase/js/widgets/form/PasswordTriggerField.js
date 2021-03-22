@@ -79,8 +79,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
     transformInput: function(e) {
         e = e.browserEvent || e;
         if (! this.locked) return;
-        if (e.type === 'keydown' && _.indexOf([8 /*BACKSPACE*/, 46 /*DELETE*/], e.keyCode) < 0) return;
-        if (e.type === 'keypress' && e.metaKey /* APPLE CMD*/ && e.keyCode == 118 /*v*/) return;
+        if (e.type === 'keydown' && _.indexOf([8 /* BACKSPACE */, 46 /* DELETE */], e.keyCode) < 0) return;
+        if (e.type === 'keypress' && e.metaKey /* APPLE CMD */ && e.keyCode == 118 /* v */) return;
+        if (e.type === 'keypress' && _.indexOf([13 /* ENTER */], e.keyCode) >= 0) return;
         Ext.lib.Event.stopEvent(e);
 
         let start = e.target.selectionStart;
