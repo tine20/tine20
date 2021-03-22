@@ -7,6 +7,7 @@
  */
 
 /* global Ext,Tine,i18n,postal */
+import GenericProvider from 'MFA/Providers/Generic'
 import UserPasswordProvider from 'MFA/Providers/UserPassword'
 import PinProvider from 'MFA/Providers/Pin'
 import TokenProvider from 'MFA/Providers/Token'
@@ -117,15 +118,12 @@ class AreaLocks extends Ext.util.Observable {
       })
     }
     
-    let providerClass = _.get(selectedDevice, 'config_class')
+    let providerClass = _.get(providerMap, _.get(selectedDevice, 'config_class'), GenericProvider)
     const key = `${areaName}.${providerClass}`
     
     if (!this.providerInstances[key]) {
-      if (!providerMap[providerClass]) {
-        throw new Error(`AreaLocks.getProvider no such provider: ${providerClass}`)
-      }
       // @TODO give areaLock or mfaDevice info or lockState into provider?
-      this.providerInstances[key] = new providerMap[providerClass](_.assign({
+      this.providerInstances[key] = new providerClass(_.assign({
         areaName: areaName,
         mfaDevice: selectedDevice
       }, opts))

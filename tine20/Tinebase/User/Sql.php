@@ -1051,18 +1051,47 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->visibility = 'hidden';
             $_user->contact_id = null;
         }
-        if ($oldUser->mfa_configs && $_user->mfa_configs) {
+        if ($_user->mfa_configs) {
             if (!$_user->mfa_configs->isValid()) {
                 throw new Tinebase_Exception_Backend('mfa configs are not valid: ' .
                     print_r($_user->mfa_configs->getValidationErrors(), true));
             }
-            foreach ($oldUser->mfa_configs->filter(Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS,
-                    Tinebase_Model_MFA_PinUserConfig::class) as $pin2FAUserCfg) {
-                if ($newCfg = $_user->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
-                        $pin2FAUserCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) {
-                    $newCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
-                        ->{Tinebase_Model_MFA_PinUserConfig::FLD_HASHED_PIN} = $pin2FAUserCfg
-                        ->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->getHashedPin();
+            if ($oldUser->mfa_configs) {
+                foreach ($oldUser->mfa_configs->filter(Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS,
+                        Tinebase_Model_MFA_PinUserConfig::class) as $pinMFAUserCfg) {
+                    if ($newCfg = $_user->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
+                            $pinMFAUserCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) {
+                        $newCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                            ->{Tinebase_Model_MFA_PinUserConfig::FLD_HASHED_PIN} = $pinMFAUserCfg
+                                ->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->getHashedPin();
+                    }
+                }
+            }
+            foreach ($_user->mfa_configs->filter(Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS,
+                    Tinebase_Model_MFA_YubicoOTPUserConfig::class) as $yubicoMFAUserCfg) {
+                $yubicoMFAUserCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                    ->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_ACCOUNT_ID} = $_user->getId();
+                if (($newAes = $yubicoMFAUserCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->getAesKey()) &&
+                        $newId = $yubicoMFAUserCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->getPrivatId()) {
+                    $cc = Tinebase_Auth_CredentialCache::getInstance();
+                    $adapter = explode('_', get_class($cc->getCacheAdapter()));
+                    $adapter = end($adapter);
+                    try {
+                        $cc->setCacheAdapter('Shared');
+                        $sharedCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($newId,
+                            $newAes, null, true /* save in DB */, Tinebase_DateTime::now()->addYear(100));
+
+                        $yubicoMFAUserCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                            ->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_CC_ID} = $sharedCredentials->getId();
+                    } finally {
+                        $cc->setCacheAdapter($adapter);
+                    }
+                    if ($oldUser->mfa_configs && ($oldCfg = $oldUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
+                            $yubicoMFAUserCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) && ($ccId = $oldCfg
+                            ->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                            ->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_CC_ID})) {
+                        $cc->delete($ccId);
+                    }
                 }
             }
         }

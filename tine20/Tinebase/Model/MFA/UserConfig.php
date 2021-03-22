@@ -59,14 +59,15 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
                 self::CONFIG                    => [
                     // not used in client, @see \Admin_Frontend_Json::getPossibleMFAs
                     // needs to implement Tinebase_Auth_MFA_UserConfigInterface
-                self::AVAILABLE_MODELS              => [
-                    Tinebase_Model_MFA_SmsUserConfig::class,
-                    Tinebase_Model_MFA_PinUserConfig::class,
+                    self::AVAILABLE_MODELS              => [
+                        Tinebase_Model_MFA_SmsUserConfig::class,
+                        Tinebase_Model_MFA_PinUserConfig::class,
+                        Tinebase_Model_MFA_YubicoOTPUserConfig::class,
                     ],
                 ],
-                    self::VALIDATORS            => [
-                        Zend_Filter_Input::ALLOW_EMPTY => false,
-                        Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
             self::FLD_CONFIG                    => [

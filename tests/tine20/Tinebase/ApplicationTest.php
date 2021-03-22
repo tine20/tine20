@@ -429,6 +429,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_MFA_PinUserConfig::class,
                 Tinebase_Model_MFA_Config::class,
                 Tinebase_Model_MFA_UserConfig::class,
+                Tinebase_Model_MFA_YubicoOTPConfig::class,
+                Tinebase_Model_MFA_YubicoOTPUserConfig::class,
                 Tinebase_Model_AuthToken::class,
                 Tinebase_Model_AuthTokenChannelConfig::class,
                 Tinebase_Model_BLConfig::class,

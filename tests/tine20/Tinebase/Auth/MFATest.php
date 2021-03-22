@@ -10,6 +10,69 @@
 
 class Tinebase_Auth_MFATest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Tinebase_Auth_MFA::destroyInstances();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        
+        Tinebase_Auth_MFA::destroyInstances();
+    }
+
+    public function testYubicoOTP()
+    {
+        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
+            Tinebase_Model_MFA_UserConfig::class, [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'yubicoOTPunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_YubicoOTPUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                new Tinebase_Model_MFA_YubicoOTPUserConfig([
+                    Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_PUBLIC_ID => 'vvccccdhdtnh',
+                    Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_PRIVAT_ID => '1449e1c9cd4c',
+                    Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_AES_KEY => '9a9798f480da0193ab7be4e8abc952c2',
+                ]),
+        ]]);
+
+        $this->_createAreaLockConfig([], [
+            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_YubicoOTPUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_YubicoOTPConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_YubicoOTPAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => []
+        ]);
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
+        $mfa = Tinebase_Auth_MFA::getInstance('unittest');
+
+        $this->assertFalse($mfa->validate('shaaaaaaaaaalala', $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected');
+        $this->assertTrue($mfa->validate('vvccccdhdtnhleteeguflgbchbgfcbvbclnkknethrfv', $this->_originalTestUser
+            ->mfa_configs->getFirstRecord()), 'validate didn\'t succeed');
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertFalse($mfa->validate('vvccccdhdtnhleteeguflgbchbgfcbvbclnkknethrfv', $this->_originalTestUser
+            ->mfa_configs->getFirstRecord()), 'validate didn\'t fail as expected on second call');
+
+        $this->assertTrue($mfa->validate('vvccccdhdtnhtrbtrhtbvfldecgjevlutenjkgugglfh', $this->_originalTestUser
+            ->mfa_configs->getFirstRecord()), 'validate didn\'t succeed');
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertFalse($mfa->validate('vvccccdhdtnhleteeguflgbchbgfcbvbclnkknethrfv', $this->_originalTestUser
+            ->mfa_configs->getFirstRecord()), 'validate didn\'t fail as expected on second call');
+        $this->assertFalse($mfa->validate('vvccccdhdtnhtrbtrhtbvfldecgjevlutenjkgugglfh', $this->_originalTestUser
+            ->mfa_configs->getFirstRecord()), 'validate didn\'t succeed');
+    }
+
     public function testGenericSmsAdapter()
     {
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(

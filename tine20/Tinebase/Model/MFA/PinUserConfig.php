@@ -10,7 +10,7 @@
  */
 
 /**
- * AuthGenericSmsMFAUserConfig Model
+ * Pin MFA UserConfig Model
  *
  * @package     Tinebase
  * @subpackage  Auth
