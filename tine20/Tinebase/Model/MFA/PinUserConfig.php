@@ -15,8 +15,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  */
-class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Record_NewAbstract
-    implements Tinebase_Auth_MFA_UserConfigInterface
+class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Auth_MFA_AbstractUserConfig
 {
     public const MODEL_NAME_PART = 'MFA_PinUserConfig';
 
@@ -81,10 +80,5 @@ class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Record_NewAbstract
     public function getHashedPin()
     {
         return $this->_hashedPin;
-    }
-
-    public function toFEArray(): array
-    {
-        return $this->toArray();
     }
 }
