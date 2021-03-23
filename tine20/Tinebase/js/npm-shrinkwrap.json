@@ -8279,6 +8279,22 @@
         }
       }
     },
+    "keydown": {
+      "version": "git+https://github.com/tine20/keydown.git#82ab109e26df35e2f548c0be85ffdc462d0ec3e3",
+      "from": "git+https://github.com/tine20/keydown.git",
+      "dev": true,
+      "requires": {
+        "core-js": "^3.1.2"
+      },
+      "dependencies": {
+        "core-js": {
+          "version": "3.9.1",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-3.9.1.tgz",
+          "integrity": "sha512-gSjRvzkxQc1zjM/5paAmL4idJBFzuJoo+jDjF1tStYFMV2ERfD02HhahhCGXUyHxQRG4yFKVSdO6g62eoRMcDg==",
+          "dev": true
+        }
+      }
+    },
     "killable": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/killable/-/killable-1.0.1.tgz",

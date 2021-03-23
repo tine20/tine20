@@ -11,6 +11,8 @@ Ext.namespace('Tine.Felamimail');
 
 require('./MessageFileButton');
 
+import keydown from 'keydown';
+
 /**
  * Message grid panel
  * 
@@ -313,7 +315,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_flag = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Toggle highlighting'),
-            handler: this.onToggleFlag.createDelegate(this, ['\\Flagged'], true),
+            handler: this.toggleMessageFlagged,
+            scope: this,
             iconCls: 'action_email_flag',
             allowMultiple: true,
             disabled: true
@@ -322,7 +325,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_markUnread = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Mark read/unread'),
-            handler: this.onToggleFlag.createDelegate(this, ['\\Seen'], true),
+            handler: this.toggleMessageUnread,
+            scope: this,
             iconCls: 'action_mark_read',
             allowMultiple: true,
             disabled: true
@@ -1179,6 +1183,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * compose new message handler
      */
+    @keydown(['ctrl+n', 'ctrl+m'])
     onMessageCompose: function() {
         var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
         
@@ -1193,6 +1198,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * forward message(s) handler
      */
+    @keydown('ctrl+l')
     onMessageForward: function() {
         var sm = this.getGrid().getSelectionModel(),
             msgs = sm.getSelections(),
@@ -1210,6 +1216,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
+    @keydown('ctrl+r')
+    replyMessage() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onMessageReplyTo(false) : false;
+    },
+    
+    @keydown('ctrl+shift+r')
+    replyMessageAll() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onMessageReplyTo(true) : false;
+    },
+    
+    @keydown(['a', 'ctrl+s'])
+    fileMessage() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.action_fileRecord.handler() : false;
+    },
+    
     /**
      * reply message handler
      * 
@@ -1219,6 +1240,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             msg = sm.getSelected();
             
+        if (! msg) return;
+        
         Tine.Felamimail.MessageEditDialog.openWindow({
             replyTo : Ext.encode(msg.data),
             replyToAll: toAll,
@@ -1287,6 +1310,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
     },
 
+    @keydown(['ctrl+o', 'enter'])
+    openMessage() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onRowDblClick(this.grid) : false;
+    },
+    
     /**
      * row doubleclick handler
      * 
@@ -1294,10 +1322,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * - opens message display dialog (everything else)
      * 
      * @param {Tine.Felamimail.GridPanel} grid
-     * @param {Row} row
-     * @param {Event} e
      */
-    onRowDblClick: function(grid, row, e) {
+    onRowDblClick: function(grid) {
         
         var record = this.grid.getSelectionModel().getSelected(),
             folder = this.app.getFolderStore().getById(record.get('folder_id')),
@@ -1355,45 +1381,24 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
-    /**
-     * key down handler
-     * 
-     * @param {Event} e
-     */
-    onKeyDown: function(e) {
-        // no keys for quickadds etc.
-        if (e.getTarget('input') || e.getTarget('textarea')) return;
-
-        switch (e.getKey()) {
-            case e.N:
-            case e.M:
-                this.onMessageCompose();
-                e.preventDefault();
-                break;
-            case e.R:
-                this.onMessageReplyTo();
-                e.preventDefault();
-                break;
-            case e.L:
-                this.onMessageForward();
-                e.preventDefault();
-                break;
-        }
-
-        // TODO add keys to "help" message box of generic grid onKeyDown()
-
-        Tine.Felamimail.GridPanel.superclass.onKeyDown.call(this, e);
+    @keydown('1')
+    toggleMessageFlagged() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onToggleFlag('\\Flagged') : false;
+    },
+    
+    @keydown('m')
+    toggleMessageUnread() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onToggleFlag('\\Seen') : false;
     },
     
     /**
      * toggle flagged status of mail(s)
      * - Flagged/Seen
-     * 
-     * @param {Button} button
-     * @param {Event} event
+     *
      * @param {String} flag
+     * @param {Boolean} flagged
      */
-    onToggleFlag: function(btn, e, flag) {
+    onToggleFlag: function(flag, flagged) {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
             msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
@@ -1404,6 +1409,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             flagCount += msg.hasFlag(flag) ? 1 : 0;
         });
         var action = flagCount >= Math.round(msgs.getCount()/2) ? 'clear' : 'add';
+        action = _.isBoolean(flagged) ? (flagged ? 'add' : 'clear') : action
         
         Tine.log.info('Tine.Felamimail.GridPanel::onToggleFlag - Toggle flag for ' + msgs.getCount() + ' message(s): ' + flag);
         
@@ -1789,6 +1795,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
         return result;
+    },
+
+    @keydown('j')
+    markMessagesSpam() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.processSpamStrategy('spam') : false;
+    },
+
+    @keydown('shift+j')
+    markMessagesHam() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.processSpamStrategy('ham') : false;
     },
 
     /**
