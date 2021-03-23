@@ -1005,10 +1005,21 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 }
 
 .ext-el-mask-msg.tb-arealocks-msg,
-.ext-el-mask-msg.tb-arealocks-msg div{
+.ext-el-mask-msg.tb-arealocks-msg div,
+.tb-arealocks-msg .ext-el-mask-wait x-mask-wait {
+    border: none !important;
+    background: none;
+    cursor: pointer;
+}
+
+.ext-el-mask-msg {
     border: none;
     background: none;
     cursor: pointer;
+}
+
+.ext-el-mask-msg div {
+    padding-left: 23px;
 }
 
 .tine-tinebase-recorddisplaypanel-displayfield .x-form-display-field {
@@ -1035,23 +1046,6 @@ textarea.x-form-invalid,
 
 /*.x-form-field-wrap .x-form-search-trigger {*/
     /*background-image: url(../../images/icon-set/icon_search.svg);*/
-/*}*/
-
-/* @todo make better loading mask, use existing vue/bootstrap component*/
-
-/*div.ext-el-mask-msg.x-mask-loading {*/
-    /*margin: 0 0 0 0;*/
-    /*border: none;*/
-    /*padding: 0 0 0 0;*/
-    /*background-color: transparent;*/
-    /*background-position: center;*/
-    /*background-size: 60px 60px;*/
-    /*width: 60px;*/
-    /*height: 60px;*/
-/*}*/
-
-/*.ext-el-mask-msg.x-mask-loading div {*/
-    /*display: none;*/
 /*}*/
 
 .x-tab-strip .x-tab-with-icon span.x-tab-strip-text {
@@ -1236,7 +1230,7 @@ div.x-btn-wait,
     left: 8px;
     padding: 0px !important;
     position: absolute;
-    top: 7px;
+    top: 6px;
     height: 16px;
     width: 16px;
     margin: 0px;

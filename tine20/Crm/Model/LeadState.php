@@ -16,5 +16,6 @@ class Crm_Model_LeadState extends Tinebase_Config_KeyFieldRecord
     protected $_additionalValidators = array(
         'probability'             => array('allowEmpty' => true         ),
         'endslead'                => array('allowEmpty' => true         ),
+        'readonly'                => array('allowEmpty' => true         ),
     );
 }

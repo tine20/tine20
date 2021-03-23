@@ -140,6 +140,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return true;
     }
 
+    protected function _throwMFAException(Tinebase_Model_AreaLockConfig $config, Tinebase_Record_RecordSet $feCfg)
+    {
+        $e = new Tinebase_Exception_AreaLocked('mfa required');
+        $e->setArea($config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+        $e->setMFAUserConfigs($feCfg);
+        throw $e;
+    }
+
     /**
      * create new user session (via openID connect)
      *
@@ -450,69 +458,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             __METHOD__ . '::' . __LINE__ . ' Auth result messages: ' . print_r($authResult->getMessages(), TRUE));
 
         Tinebase_AccessLog::getInstance()->create($accessLog);
-    }
-    
-     /**
-     * renders and send to browser one captcha image
-     *
-     * @return array
-     */
-    public function makeCaptcha()
-    {
-        return $this->_makeImage();
-    }
-
-    /**
-     * renders and send to browser one captcha image
-     *
-     * @return array
-     */
-    protected function _makeImage()
-    {
-        $result = array();
-        $width='170';
-        $height='40';
-        $characters= mt_rand(5,7);
-        $possible = '123456789aAbBcCdDeEfFgGhHIijJKLmMnNpPqQrRstTuUvVwWxXyYZz';
-        $code = '';
-        $i = 0;
-        while ($i < $characters) {
-            $code .= substr($possible, mt_rand(0, strlen($possible)-1), 1);
-            $i++;
-        }
-        $font = './fonts/Milonga-Regular.ttf';
-        /* font size will be 70% of the image height */
-        $font_size = $height * 0.67;
-        try {
-            $image = @imagecreate($width, $height);
-            /* set the colours */
-            $text_color = imagecolorallocate($image, 20, 40, 100);
-            $noise_color = imagecolorallocate($image, 100, 120, 180);
-            /* generate random dots in background */
-            for( $i=0; $i<($width*$height)/3; $i++ ) {
-                imagefilledellipse($image, mt_rand(0,$width), mt_rand(0,$height), 1, 1, $noise_color);
-            }
-            /* generate random lines in background */
-            for( $i=0; $i<($width*$height)/150; $i++ ) {
-                imageline($image, mt_rand(0,$width), mt_rand(0,$height), mt_rand(0,$width), mt_rand(0,$height), $noise_color);
-            }
-            /* create textbox and add text */
-            $textbox = imagettfbbox($font_size, 0, $font, $code);
-            $x = ($width - $textbox[4])/2;
-            $y = ($height - $textbox[5])/2;
-            imagettftext($image, $font_size, 0, $x, $y, $text_color, $font , $code);
-            ob_start();
-            imagejpeg($image);
-            $image_code = ob_get_contents ();
-            ob_end_clean();
-            imagedestroy($image);
-            $result = array();
-            $result['1'] = base64_encode($image_code);
-            Tinebase_Session::getSessionNamespace()->captcha['code'] = $code;
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-        }
-        return $result;
     }
 
     /**
@@ -876,16 +821,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             return false;
         }
 
-        if (! $this->_validateSecondFactor($accessLog, $user)) {
-            $authResult = new Zend_Auth_Result(
-                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
-                $user->accountLoginName,
-                array('Second factor authentication failed.')
-            );
-            $accessLog->result = Tinebase_Auth::FAILURE;
-            $this->_loginFailed($authResult, $accessLog);
-            return false;
-        }
+        $this->_validateSecondFactor($accessLog, $user);
 
         return $user;
     }
@@ -895,29 +831,71 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Tinebase_Model_FullUser $user
      * @return bool
      */
-    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user)
+    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
     {
-        if (! Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
-            || $accessLog->clienttype !== 'JSON-RPC'
+        $areaLock = Tinebase_AreaLock::getInstance();
+        if ($accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE ||
+                ! $areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
+                ! $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
         ) {
             // no login lock or non json access
-            return true;
+            return;
+        }
+
+        $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
+             $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
+        }
+
+        $areaConfig = $areaLock->getLastAuthFailedAreaConfig();
+
+        // user has no 2FA config -> currently its sort of optional -> no check
+        if (count($userConfigIntersection->mfa_configs) === 0) {
+            $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+            return;
         }
 
         $context = $this->getRequestContext();
-        $password = $context['otp'];
-        try {
-            Tinebase_AreaLock::getInstance()->unlock(
-                Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-                $password,
-                $user->accountLoginName
-            );
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            return false;
+        $mfaId = $context['MFAId'];
+        $password = $context['MFAPassword'];
+
+        // check if FE send mfa or if we only have one 2FA configured anyway
+        if ((!empty($mfaId) && $userConfigIntersection->getById($mfaId)) || (1 === $userConfigIntersection->count() &&
+                ($mfaId = $userConfigIntersection->getFirstRecord()->getId()))) {
+            $userCfg = $userConfigIntersection->getById($mfaId);
+            // FE send provider and password -> validate it
+            if (!empty($password)) {
+                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(function($rec) use($userCfg) {
+                            return in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
+                        }) as $areaCfg) {
+                    if (!$areaCfg->getBackend()->hasValidAuth()) {
+                        $areaLock->unlock(
+                            $areaCfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
+                            $mfaId,
+                            $password,
+                            $user
+                        );
+                        break;
+                    }
+                }
+                return;
+            } else {
+                if (!Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                        ->sendOut($userCfg)) {
+                    throw new Tinebase_Exception('mfa send out failed');
+                } else {
+                    // success, FE to render input field
+                    $this->_throwMFAException($areaConfig, new Tinebase_Record_RecordSet(
+                        Tinebase_Model_MFA_UserConfig::class, [$userConfigIntersection->getById($mfaId)]));
+                }
+            }
+        } else {
+            // FE to render selection which 2FA to use
+            $this->_throwMFAException($areaConfig, $areaConfig->getUserMFAIntersection($user));
         }
 
-        return true;
+        // must never reach this
+        assert(false, 'should return true or throw, line must not be reached');
     }
 
     /**

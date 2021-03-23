@@ -309,7 +309,8 @@ Tine.Tinebase.tineInit = {
             var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
             Tine.loginPanel = new Tine.Tinebase.LoginPanel({
                 defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
-                defaultPassword: Tine.Tinebase.registry.get('defaultPassword')
+                defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
+                allowBrowserPasswordManager: Tine.Tinebase.registry.get('allowBrowserPasswordManager')
             });
             mainCardPanel.add(Tine.loginPanel);
         }
@@ -329,9 +330,26 @@ Tine.Tinebase.tineInit = {
 
     renderWindow: function () {
         Tine.log.info('renderWindow::start');
-
+        Ext.MessageBox.hide();
+        
         // check if user is already logged in
         if (! Tine.Tinebase.registry.get('currentAccount')) {
+            const areaLockException = Tine.Tinebase.registry.get('areaLockedException')
+            if (areaLockException) {
+                // login from post - user is authenticated but mfa is required
+                return Tine.Tinebase.areaLocks.handleAreaLockException(areaLockException).then(() => {
+                    Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
+                    Tine.Tinebase.tineInit.initRegistry(true, Tine.Tinebase.tineInit.renderWindow, Tine.Tinebase.tineInit);
+                }).catch(async (error) => {
+                    Ext.MessageBox.wait(i18n._('Logging you out...'), i18n._('Please wait!'));
+                    await Tine.Tinebase.logout();
+                    return Tine.Tinebase.common.reload({
+                        keepRegistry: false,
+                        clearCache: true
+                    });
+                    
+                });
+            }
             Tine.Tinebase.tineInit.showLoginBox(function(response){
                 Tine.log.info('tineInit::renderWindow -fetch users registry');
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
@@ -804,7 +822,7 @@ Tine.Tinebase.tineInit = {
         // downloads in a cloud :-(
         Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isIOS && !Ext.isAndorid);
 
-        var AreaLocks = require('./AreaLocks.es6');
+        var AreaLocks = require('./AreaLocks');
         Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
 
         // load initial js of user enabled apps

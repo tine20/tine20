@@ -34,6 +34,10 @@ Tine.widgets.form.FieldManager = function() {
          */
         CATEGORY_PROPERTYGRID: 'propertyGrid',
 
+        specialTypeMap: {
+            password : 'tw-passwordTriggerField'
+        },
+        
         /**
          * get form field of well known field names
          *
@@ -45,7 +49,7 @@ Tine.widgets.form.FieldManager = function() {
 
             return field;
         },
-
+        
         /**
          * get form field by data type
          *
@@ -251,6 +255,17 @@ Tine.widgets.form.FieldManager = function() {
                         field = picker;
                     }
                     break;
+                case 'dynamicRecord':
+                    // NOTE: this editor depends and the className _data_ and therefore can't be assigned statically
+                    //       as the editor api (get/setValue) does not know about the record the value comes from
+                    //       it's not possible to auto create a editor here
+                    // return null;
+                    const classNameField = fieldDefinition.config.refModelField;
+                    field.xtype = 'tw-recordEditField';
+                    field.appName = fieldDefinition.config.appName;
+                    field.modelName = classNameField;
+                    field.fieldName = fieldDefinition.fieldName;
+                    break
                 case 'keyfield':
                     field.xtype = 'widget-keyfieldcombo';
                     field.app = app;
@@ -301,7 +316,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.width = 80;
                     break;
                 default:
-                    field.xtype = 'textfield';
+                    field.xtype = this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
                     if (fieldDefinition.length) {
                         field.maxLength = fieldDefinition.length;
                     }

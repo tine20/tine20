@@ -24,7 +24,7 @@ describe('AreaLocks', () => {
 
     // @TODO: get rid of inject-loader, it hurts with phantomjs
     /* eslint import/no-webpack-loader-syntax: off */
-    let fileInjector = require('inject-loader!AreaLocks.es6')
+    let fileInjector = require('inject-loader!AreaLocks')
 
     // mock the providers
     mockProvider = sinon.spy()

@@ -43,13 +43,6 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const VACATION_EXPIRES = 'vacationExpires';
     
     /**
-     * types for extra free times
-     * 
-     * @var string
-     */
-    const EXTRA_FREETIME_TYPE = 'extraFreetimeType';
-
-    /**
      * calculate daily reports
      *
      * @var string
@@ -178,22 +171,6 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             ],
             self::DEFAULT_STR => [],
         ],
-        self::EXTRA_FREETIME_TYPE => array(
-            //_('Extra freetime type')
-            'label'                 => 'Extra freetime type',
-            //_('Possible extra free time definitions')
-            'description'           => 'Possible extra free time definitions',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'HumanResources_Model_ExtraFreeTimeType'),
-            'clientRegistryInclude' => TRUE,
-            'default'               => array(
-                'records' => array(
-                    array('id' => 'PAYED',     'value' => 'Payed',     'icon' => NULL, 'system' => TRUE),  //_('Payed')
-                    array('id' => 'NOT_PAYED', 'value' => 'Not payed', 'icon' => NULL, 'system' => TRUE),  //_('Not payed')
-                ),
-                'default' => 'PAYED'
-            )
-        ),
         self::VACATION_EXPIRES => array(
             // _('Vacation expires')
             'label'                 => 'Vacation expires',
@@ -202,7 +179,7 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'type'                  => 'string',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
-            'default' => '03-15'
+            'default' => '03-31'
         ),
         self::REPORT_TEMPLATES_CONTAINER_ID => array(
         //_('Report Templates Node ID')
@@ -309,25 +286,16 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     
     /**
      * returns the date of vacation expiration for the given year 
-     * or for the current year, if no year is given or null, if no expiration is defined
      * 
-     * @param string $year
+     * @param string $accountYear
      * @return Tinebase_DateTime|NULL
      */
-    public function getVacationExpirationDate($year)
+    public function getVacationExpirationDate($accountYear=null)
     {
-        if (! $year) {
-            $year = Tinebase_DateTime::now()->format('Y');
-        }
+        $accountYear = $accountYear ?: Tinebase_DateTime::now()->format('Y');
+        $year = $accountYear+1;
         
-        $expires = self::getInstance()->get(self::VACATION_EXPIRES, 0);
-        
-        if ($expires != 0) {
-            $split = explode('-', $expires);
-            $date = Tinebase_DateTime::now();
-            $date->setDate($year, (int) $split[0], (int) $split[1]);
-        } else {
-            return null;
-        }
+        [$month, $day] = preg_split('/-/', $this->{self::VACATION_EXPIRES});
+        return new Tinebase_DateTime("{$year}-{$month}-{$day} 00:00:00");
     }
 }

@@ -346,9 +346,18 @@
             }
             if (!$attendee instanceof Tinebase_Record_Interface) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . " Skip notification for unknown attende: " . print_r($attendee, true) . ' attender: ' . print_r($_attender, true));
+                    . " Skip notification for unknown attendee: " . print_r($attendee, true) . ' attender: ' . print_r($_attender, true));
                 return;
             }
+
+            if (Calendar_Config::getInstance()->get(Calendar_Config::DISABLE_EXTERNAL_NOTIFICATIONS)) {
+                if ($attendee->account_id === null) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . " Skip notification for external attendee: " . print_r($attendee, true) . ' attender: ' . print_r($_attender, true));
+                    return;
+                }
+            }
+
 
             list($prefUser, $locale, $timezone, $translate, $sendLevel, $sendOnOwnActions, $sendAlarms) = self::getNotificationPreferences($_attender, $_event);
             $attendeeAccountId = $_attender->getUserAccountId();

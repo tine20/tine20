@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -37,6 +37,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
+        Tinebase_AreaLock::getInstance()->activatedByFE();
+
         $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
 
@@ -384,6 +386,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 // SMD request
                 return self::getServiceMap();
             }
+
+            self::_checkAreaLock($method);
             
             $this->_methods[] = $method;
 
@@ -488,7 +492,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $classes = array();
 
         $classes['Tinebase_Frontend_Json'] = 'Tinebase';
-
+        // only load restricted apis if no area_login lock is set or if it is unlocked already
         if (self::userIsRegistered()) {
             $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
             $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
@@ -505,6 +509,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     $classes[$jsonAppName] = $application->name;
                 }
             }
+        } elseif (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -523,22 +529,26 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     {
         $anonymnousMethods = array(
             '', //empty method
+            'Tinebase.authenticate',
             'Tinebase.getRegistryData',
             'Tinebase.getAllRegistryData',
-            'Tinebase.authenticate',
             'Tinebase.login',
+            'Tinebase.logout',
             'Tinebase.openIDCLogin',
             'Tinebase.getAvailableTranslations',
             'Tinebase.getTranslations',
             'Tinebase.setLocale',
-            'Tinebase.checkAuthToken'
+            'Tinebase.checkAuthToken',
+            'Tinebase_AreaLock.unlock'
         );
-        
+
         // check json key for all methods but some exceptions
         if ( !(in_array($method, $anonymnousMethods)) && ($jsonKey !== Tinebase_Core::get('jsonKey') || !self::userIsRegistered())) {
-
             $request = Tinebase_Core::getRequest();
             if (!self::userIsRegistered()) {
+                if (is_object(Tinebase_Core::getUser())) {
+                    self::_checkAreaLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+                }
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
                     ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' .
                     $request->getRemoteAddress() . '". (session timeout?)');
@@ -566,10 +576,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         return (! empty($this->_methods)) ? implode('|', $this->_methods) : NULL;
     }
 
+    /** this method will also check login area lock */
     public static function userIsRegistered()
     {
         return Tinebase_Core::isRegistered(Tinebase_Core::USER)
-            && is_object(Tinebase_Core::getUser());
+            && is_object(Tinebase_Core::getUser()) && self::checkLoginAreaLock();
     }
 
     public static function exposeApi($config)

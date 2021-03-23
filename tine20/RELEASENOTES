@@ -7,6 +7,14 @@ TINE 2.0 RELEASENOTES
 
 # GENERAL CHANGES (Administrative)
 
+## MFA / SecondFactor Pin refactoring
+
+moving the current second factor pin into the new MFA facility, it is required to configure a MFA with the provider
+Tinebase_Auth_MFA_PinAdapter
+in order for the update script to be able to copy the hashes of the old pins into the new MFA data structure.
+If the update script is being run without configuring such an MFA, all accounts pins will be permanently lost
+(except for any preexisting database backups of course)
+
 ## MySQL 8 Support
 
 But be careful, MySQL 8.0.20 has a major bug (see https://bugs.mysql.com/bug.php?id=99398 for more information) and should not be used!

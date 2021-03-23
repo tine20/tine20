@@ -574,10 +574,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         var foreignRecordClass = this.recordClass.getField(key).type;
                         var record = new foreignRecordClass(value);
                         field.selectedRecord = record;
-                        field.setValue(value);
+                        field.setValue(value, this.record);
                         field.fireEvent('select');
                     } else {
-                        field.setValue(value);
+                        field.setValue(value, this.record);
                     }
                     field.disable();
                 }
@@ -1048,7 +1048,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         // force set last selected field
                         this.getForm().items.each(function(item) {
                             if (item.hasFocus) {
-                                item.setValue(item.getRawValue());
+                                item.setValue(item.getRawValue(), this.record);
                             }
                         }, this);
                     }

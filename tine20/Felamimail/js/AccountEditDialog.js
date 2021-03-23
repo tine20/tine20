@@ -408,7 +408,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'password',
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
-                    inputType: 'password',
+                    clipboard: false,
                     listeners: {
                         scope: this,
                         keyup: (field)=> {
@@ -481,7 +481,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'smtp_password',
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
-                    inputType: 'password',
+                    clipboard: false,
                     listeners: {
                         scope: this,
                         keyup: (field)=> {

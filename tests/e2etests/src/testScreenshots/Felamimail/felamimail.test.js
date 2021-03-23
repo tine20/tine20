@@ -87,7 +87,7 @@ describe('context menu', () => {
         await newPage.screenshot({path: 'screenshots/4_email/10_email_abwesenheitsnotiz.png'});
         await newPage.close();
     });
-    test('add mail filter', async () => {
+    test.skip('add mail filter', async () => {
         await expect(page).toClick('span', {text: mail.accountEmailAddress, button: 'right'});
         await page.waitFor(1000);
         await expect(page).toClick('.x-menu-item-icon.action_email_forward');
@@ -219,7 +219,7 @@ describe('filterBar', () => {
     });
 });
 
-describe('write E-Mail', () => {
+describe.skip('write E-Mail', () => {
     test('open editDialog', async () => {
         await expect(page).toClick('button', {text: 'Verfassen'});
         let newPage = await lib.getNewWindow();

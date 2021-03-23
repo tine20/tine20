@@ -1952,6 +1952,8 @@ class Addressbook_JsonTest extends TestCase
     {
         $tfj = new Tinebase_Frontend_Json();
         $allRegistryData = $tfj->getAllRegistryData();
+        self::assertArrayHasKey('Addressbook', $allRegistryData, 'no Addressbook data found in registry: '
+            . print_r(array_keys($allRegistryData), true));
         $registryData = $allRegistryData['Addressbook'];
 
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
@@ -2619,8 +2621,9 @@ Steuernummer 33/111/32212";
 
         // lock projects
         $this->_createAreaLockConfig([
-            'area' => 'Projects'
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => ['Projects']
         ]);
+
         Projects_Controller_Project::getInstance()->resetValidatedAreaLock();
 
         // fetch & save contact again
@@ -2634,8 +2637,8 @@ Steuernummer 33/111/32212";
 
         // unlock projects
         $user = Tinebase_Core::getUser();
-        Tinebase_User::getInstance()->setPin($user, '1234');
-        Tinebase_AreaLock::getInstance()->unlock('Projects', '1234');
+        $this->_setPin();
+        Tinebase_AreaLock::getInstance()->unlock('login', 'userpin', '1234', $user);
 
         // save contact again
         $contactWithUnlockedProjectSaved = $this->_uit->saveContact($contactWithLockedProjectSaved);

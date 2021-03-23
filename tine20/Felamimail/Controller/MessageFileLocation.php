@@ -149,6 +149,13 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
             throw new Tinebase_Exception_InvalidArgument('existing record is required');
         }
 
+        if (strlen($record->getId()) > 40) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' record: ' . print_r($record->toArray(), true));
+            }
+            throw new Tinebase_Exception_InvalidArgument('record id is too long: ' . $record->getId());
+        }
+
         $messageId = $this->_getMessageId($message);
         $locationToCreate = clone($location);
         $locationToCreate->message_id = $messageId;

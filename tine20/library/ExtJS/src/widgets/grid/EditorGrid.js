@@ -335,7 +335,7 @@ grid.on('validateedit', function(e) {
                 // need to prevent the editor from firing onBlur on itself.
                 ed.selectSameEditor = (this.activeEditor == this.lastActiveEditor);
                 var v = this.preEditValue(r, field);
-                ed.startEdit(this.view.getCell(row, col).firstChild, Ext.isDefined(v) ? v : '');
+                ed.startEdit(this.view.getCell(row, col).firstChild, Ext.isDefined(v) ? v : '', r);
 
                 // Clear the selectSameEditor flag
                 (function(){

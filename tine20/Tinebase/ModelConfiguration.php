@@ -1454,6 +1454,17 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         return $tableName;
     }
 
+    public function getTableNameForField(string $field): string
+    {
+        if (!isset($this->_fields[$field])) {
+            throw new Tinebase_Exception($field . ' is not a property of ' . $this->_modelName);
+        }
+        if (isset($this->_fields[$field][self::TABLE])) {
+            return $this->_fields[$field][self::TABLE];
+        }
+        return $this->getTableName();
+    }
+
     /**
      * constructs the query filter
      *

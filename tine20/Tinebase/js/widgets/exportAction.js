@@ -109,8 +109,9 @@ Tine.widgets.exportAction.getExportButton = function(recordClass, exportConfig, 
         translationObject: i18n,
         iconCls: 'action_export',
         scope: this,
-        disabled: true,
+        disabled: false,
         allowMultiple: true,
+        actionUpdater: this.updateAction,
         menu: {
             items: menuItems
         }
@@ -159,5 +160,12 @@ Tine.widgets.exportAction.downloadExport = function(exportJob) {
                 timeout: 1800000 // 30 minutes - this might take a while
             });
         });
+    }
+};
+
+// Don't use the generic action Updater if no records are selected
+Tine.widgets.exportAction.updateAction = function(action, grants, records, isFilterSelect) {
+    if (records.length != 0) {
+        Tine.widgets.ActionUpdater.prototype.defaultUpdater(action, grants, records, isFilterSelect);
     }
 };

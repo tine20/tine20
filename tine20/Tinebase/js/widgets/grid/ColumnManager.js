@@ -63,6 +63,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
+            if (_.get(fieldDefinition, 'disabled')) {
+                return null;
+            }
+            
             if (! app) { // e.g. no access to owningApp
                 return null;
             }
@@ -114,6 +118,14 @@ Tine.widgets.grid.ColumnManager = function() {
 
             if(fieldDefinition.type == 'hexcolor') {
                 config.width = 40;
+            }
+
+            if(fieldDefinition.type == 'model') {
+                config.width = config.width || 125;
+            }
+
+            if(fieldDefinition.type == 'dynamicRecord') {
+                config.width = config.width || 400;
             }
 
             // If no label exists, don't use in grid

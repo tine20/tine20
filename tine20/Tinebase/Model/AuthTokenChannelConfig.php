@@ -36,7 +36,7 @@ class Tinebase_Model_AuthTokenChannelConfig extends Tinebase_Record_NewAbstract
         self::MODEL_NAME            => self::MODEL_NAME_PART,
 
         self::FIELDS                => [
-            self::NAME                      => [
+            self::FLDS_NAME                      => [
                 self::TYPE                      => self::TYPE_STRING,
             ],
             self::FLDS_TOKEN_CREATE_HOOK    => [

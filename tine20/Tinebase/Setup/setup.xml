@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>14.2</version>
+    <version>14.3</version>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
@@ -230,7 +230,7 @@
 
         <table>
             <name>accounts</name>
-            <version>16</version>
+            <version>17</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -370,6 +370,11 @@
                 </field>
                 <field>
                     <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>
+                <field>
+                    <name>mfa_configs</name>
                     <type>text</type>
                     <length>65535</length>
                 </field>

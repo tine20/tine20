@@ -67,6 +67,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             parent = me.findParentBy(function(c){return !!c.record})
                 || me.findParentBy(function(c) {return c.editDialog});
 
+        this.modelConfig = this.modelConfig ||
+            _.get(this, 'recordClass.getModelConfiguration') ? this.recordClass.getModelConfiguration() : null;
+        
         this.defaultSortInfo = this.defaultSortInfo || {};
 
         this.initGrid();

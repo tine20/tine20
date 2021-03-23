@@ -130,7 +130,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
         Tine.Tinebase.widgets.dialog.PasswordDialog.superclass.afterRender.call(this);
         this.buttonApply.setDisabled(!this.allowEmptyPassword);
 
-        this.passwordField.focus(true, 100);
+        this.passwordField.focus(true, 500);
     },
 
     /**
@@ -190,9 +190,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
                 (this.hasPwGen ? 20 : 0) +
                 (Math.ceil(this.questionText.length/70) * 20),
             layout: 'fit',
-            items: [
-                this
-            ]
+            items: this
         }, config));
 
         return this.window;

@@ -289,7 +289,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 : $event->container_id;
 
             // either current user is organizer or has admin right on container
-            if ($event->organizer === $currentContact) {
+            if ($event->organizer === $currentContact
+                && Calendar_Config::getInstance()->get(Calendar_Config::ORGANIZER_IMPLICIT_EDIT_GRANT)
+            ) {
                 foreach ($this->_recordBasedGrants as $grant) {
                     $event->{$grant} = true;
                 }
@@ -391,7 +393,30 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
         $select = $this->_getSelect(array('count' => 'COUNT(*)'));
-        $this->_addFilter($select, $_filter);
+
+        // clone the filter, as the filter is also used in the json frontend
+        // and the calendar filter is used in the UI to
+        $clonedFilters = clone $_filter;
+
+        // sort filters, roleFilter und statusFilter need to be processed after attenderFilter
+        $tempFilters = [];
+        // make sure $fund is NOT set at this point!
+        $func = function($filter) use (/*yes & !*/&$func, &$tempFilters) {
+            if ($filter instanceof Calendar_Model_EventFilter) {
+                $filter->filterWalk($func);
+            } elseif ($filter instanceof Calendar_Model_AttenderRoleFilter || $filter instanceof
+                Calendar_Model_AttenderStatusFilter) {
+                $tempFilters[] = $filter;
+            }
+        };
+        $clonedFilters->filterWalk($func);
+        foreach ($tempFilters as $tempFilter) {
+            $parent = $tempFilter->getParent();
+            $parent->removeFilter($tempFilter);
+            $parent->addFilter($tempFilter);
+        }
+
+        $this->_addFilter($select, $clonedFilters);
 
         $result = $this->_db->fetchOne($select);
         
@@ -592,13 +617,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $accountId = $_user ? $_user->getId() : Tinebase_Core::getUser()->getId();
         $contactId = $_user ? $_user->contact_id : Tinebase_Core::getUser()->contact_id;
         
-        // delte grant couldn't be gained implicitly
+        // delete grant couldn't be gained implicitly
         if ($_requiredGrant == Tinebase_Model_Grants::GRANT_DELETE) {
             return '1=0';
         }
         
         // organizer gets all other grants implicitly
-        $sql = $this->_db->quoteIdentifier('cal_events.organizer') . " = " . $this->_db->quote($contactId);
+        if (Calendar_Config::getInstance()->get(Calendar_Config::ORGANIZER_IMPLICIT_EDIT_GRANT)) {
+            $sql = $this->_db->quoteIdentifier('cal_events.organizer') . " = " . $this->_db->quote($contactId);
+        }
         
         // attendee get read, sync, export and private grants implicitly
         if (in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_EXPORT,

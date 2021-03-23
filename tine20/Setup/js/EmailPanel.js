@@ -197,7 +197,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     name: 'imap_password',
                     fieldLabel: this.app.i18n._('Password'),
                     xtype: 'textfield',
-                    inputType: 'password'
+                    xtype: 'tw-passwordTriggerField',
+                    clipboard: false
                 }, */{
                     name: 'imap_port',
                     fieldLabel: this.app.i18n._('Port'),
@@ -267,7 +268,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         }, {
                             name: 'imap_cyrus_password',
                             fieldLabel: this.app.i18n._('Cyrus Admin Password'),
-                            inputType: 'password'
+                            xtype: 'tw-passwordTriggerField',
+                            clipboard: false
                         },
                         Ext.applyIf({
                                 name: 'imap_cyrus_useProxyAuth',
@@ -350,8 +352,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 }, {
                     name: 'smtp_password',
                     fieldLabel: this.app.i18n._('Notification Password'),
-                    inputType: 'password',
-                    xtype: 'textfield'
+                    xtype: 'tw-passwordTriggerField',
+                    clipboard: false
                 }, {
                     name: 'smtp_name',
                     fieldLabel: this.app.i18n._('Notifications local client (hostname or IP address)'),
@@ -509,7 +511,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         }, {
             name: type1 + '_' + type2 + '_password',
             fieldLabel: typeString + this.app.i18n._('MySql Password'),
-            inputType: 'password'
+            xtype: 'tw-passwordTriggerField',
+            clipboard: false
         }, {
             name: type1 + '_' + type2 + '_port',
             fieldLabel: typeString + this.app.i18n._('MySql Port'),

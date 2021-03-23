@@ -65,6 +65,7 @@ Tine.Admin.Model.UserArray = [
     { name: 'container_id' },
     { name: 'filesystemSize'},
     { name: 'effectiveAndLocalQuota'},
+    { name: 'mfa_configs'},
     { name: 'xprops'}
 ];
 

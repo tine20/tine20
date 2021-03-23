@@ -365,25 +365,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     }
 
     /**
-     * try to reset pin
-     *
-     * @see 0013320: allow admin to reset pin for accounts
-     */
-    public function testResetPin()
-    {
-        $userArray = $this->_createTestUser();
-
-        $pw = '1234';
-        $this->_json->resetPin($userArray, $pw);
-
-        $pinAuth = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
-        $pinAuth->setIdentity($userArray['accountLoginName']);
-        $pinAuth->setCredential($pw);
-        $result = $pinAuth->authenticate();
-        $this->assertEquals(Tinebase_Auth::SUCCESS, $result->getCode());
-    }
-
-    /**
      * testAccountContactModlog
      *
      * @see 0006688: contact of new user should have modlog information

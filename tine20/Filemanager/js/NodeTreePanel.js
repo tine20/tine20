@@ -27,7 +27,6 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     ddGroup: 'fileDDGroup',
     enableDD: true,
 
-    dataSafeAreaName: 'Tinebase.datasafe',
     dataSafeEnabled: false,
 
     hasGrid: true,
@@ -78,15 +77,17 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             callback: this.onRecordChanges.createDelegate(this)
         }));
 
-        this.dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock(this.dataSafeAreaName);
+        this.dataSafeEnabled = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length;
         if (this.dataSafeEnabled) {
-            this.postalSubscriptions.push(postal.subscribe({
-                channel: 'areaLocks',
-                topic: this.dataSafeAreaName +'.*',
-                callback: this.applyDataSafeState.createDelegate(this)
-            }));
-
-            this.dataSafeIsLocked = Tine.Tinebase.areaLocks.isLocked(this.dataSafeAreaName)
+            _.each(Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName), (areaLock) => {
+                this.postalSubscriptions.push(postal.subscribe({
+                    channel: "areaLocks",
+                    topic: areaLock + '.*',
+                    callback: this.applyDataSafeState.createDelegate(this)
+                }));
+            });
+            
+            this.dataSafeIsLocked = !!Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
         }
     },
 
@@ -149,29 +150,23 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     },
 
     applyDataSafeState: function() {
-        var me = this;
+        const wasLocked = this.dataSafeIsLocked;
+        this.dataSafeIsLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
+        
+        if (this.dataSafeIsLocked != wasLocked) {
+            var rootNode = this.getRootNode(),
+                selectedNode = this.getSelectionModel().getSelectedNode();
 
-        Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName).then(function(isLocked) {
-            me.dataSafeIsLocked.then(function(wasLocked) {
-                me.dataSafeIsLocked = Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName);
-                if (isLocked != wasLocked) {
-                    var rootNode = me.getRootNode(),
-                        selectedNode = me.getSelectionModel().getSelectedNode();
-
-                    me.getSelectionModel().suspendEvents();
-                    rootNode.collapse(true);
-                    // NOTE: the grid reload expands the tree as well!
-                    // not clear yet how to detect if a grid is on board as well
-                    // if (selectedNode) {
-                    //     me.selectPath(selectedNode.attributes.path, {}, me.getSelectionModel().resumeEvents.bind(me));
-                    // } else {
-                    //     rootNode.expand(false, true,  me.getSelectionModel().resumeEvents.bind(me));
-                    // }
-
-                }
-            })
-
-        });
+            this.getSelectionModel().suspendEvents();
+            rootNode.collapse(true);
+            // NOTE: the grid reload expands the tree as well!
+            // not clear yet how to detect if a grid is on board as well
+            // if (selectedNode) {
+            //     me.selectPath(selectedNode.attributes.path, {}, me.getSelectionModel().resumeEvents.bind(me));
+            // } else {
+            //     rootNode.expand(false, true,  me.getSelectionModel().resumeEvents.bind(me));
+            // }
+        }
     },
 
     /**

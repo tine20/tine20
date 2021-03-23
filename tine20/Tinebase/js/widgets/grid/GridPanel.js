@@ -547,7 +547,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         
         // init generic columnModel
-        this.initGenericColumnModel();
+        _.assign(this.gridConfig, this.initGenericColumnModel());
     },
     
     /**
@@ -581,10 +581,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * initializes the generic column model on auto bootstrap
+     * Note this method is mixedin Tine.widgets.grid.QuickaddGridPanel
      */
     initGenericColumnModel: function() {
-        var _ = window.lodash;
-
+        const gridConfig = {};
+        
         if (this.modelConfig) {
             var columns = [],
                 appName = this.recordClass.getMeta('appName'),
@@ -598,7 +599,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     return;
                 }
 
-                if (this.hideColumns.indexOf(key) !== -1) {
+                if (this.hideColumns && this.hideColumns.indexOf(key) !== -1) {
                     return;
                 }
 
@@ -631,16 +632,26 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             });
 
-            columns = columns.concat(this.getCustomColumns());
-            columns = this.customizeColumns(columns);
+            columns = columns.concat(this.getCustomColumns ? this.getCustomColumns() : []);
+            columns = this.customizeColumns ? this.customizeColumns(columns) || columns : columns;
             
-            this.gridConfig.cm = new Ext.grid.ColumnModel({
+            gridConfig.cm = new Ext.grid.ColumnModel({
                 defaults: {
                     resizable: true
                 },
                 columns: columns
             });
+
+            gridConfig.autoExpandColumn =
+                gridConfig.autoExpandColumn ||
+                this.autoExpandColumn ||
+                this.recordClass.getMeta('titleProperty');
+
+            gridConfig.autoExpandColumn = this.recordClass.hasField(gridConfig.autoExpandColumn) ?
+                gridConfig.autoExpandColumn : null;
+            
         }
+        return gridConfig;
     },
     
     /**

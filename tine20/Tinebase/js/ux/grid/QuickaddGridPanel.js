@@ -189,6 +189,10 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     data[item.id] = item.quickaddField.selectedRecord ?
                         item.quickaddField.selectedRecord.data :
                         item.quickaddField.getValue();
+                    // NOTE quickAddField might set more data at once
+                    if (item.quickaddField.getQuickAddRecordData) {
+                        Ext.apply(data, item.quickaddField.getQuickAddRecordData(this));
+                    }
                     item.quickaddField.setDisabled(item.id != this.quickaddMandatory);
                 }
             }, this);

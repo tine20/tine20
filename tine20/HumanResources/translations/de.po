@@ -687,10 +687,6 @@ msgstr "Pausenzeit Abzug"
 msgid "Feast Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:173
-msgid "Break Time"
-msgstr "Pausenzeit"
-
 #: Model/DailyWTReport.php:181
 msgid "Sickness Time"
 msgstr "Tage der Krankmeldung"
@@ -1231,8 +1227,11 @@ msgstr "Arbeitszeit Saldo"
 msgid "[FD] Feast day"
 msgstr "[F] Feiertag"
 
-msgid "Break Times"
-msgstr "Pausenzeiten"
+msgid "Break Time"
+msgid_plural "Break Times"
+msgstr[0] "Pausenzeit"
+msgstr[1] "Pausenzeiten"
+
 
 msgid "Work Time Limits"
 msgstr "Arbeitzeitlimits"

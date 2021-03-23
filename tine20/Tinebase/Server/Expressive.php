@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -72,6 +72,8 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
+        Tinebase_AreaLock::getInstance()->activatedByFE();
+
         // TODO session handling in middle ware? this is a question!
         try {
             if (Tinebase_Session::sessionExists()) {

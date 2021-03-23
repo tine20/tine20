@@ -361,9 +361,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 const year = _.get(this, 'accountPicker.selectedRecord.data.year');
                 const feastAndFreeDays = _.get(this.feastAndFreeDaysCache, year);
                 let remaining = _.get(feastAndFreeDays, 'remainingVacation', 0);
-                
-                const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', 0) : 0;
+
                 const currentDays = this.record.get('days_count');
+                const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', currentDays) : 0;
                 remaining = remaining + originalDays - currentDays;
 
                 this.form.findField('remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');

@@ -259,7 +259,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 }
                 $_select->joinLeft(
                     [$relatedTableName => SQL_TABLE_PREFIX . $relatedMC->getTableName()],
-                    $db->quoteIdentifier([$mc->getTableName(), $field]) . ' = ' .
+                    $db->quoteIdentifier([$mc->getTableNameForField($field), $field]) . ' = ' .
                     $db->quoteIdentifier([$relatedTableName, $idProp]) .
                     ($relatedMC->modlogActive && ! $_getDeleted ?
                         ' AND ' . $db->quoteIdentifier([$relatedTableName, 'is_deleted']) . ' = 0': ''),

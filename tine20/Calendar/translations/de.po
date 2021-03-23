@@ -2626,3 +2626,6 @@ msgstr "Farbe nach Ressource"
 
 msgid "Color"
 msgstr "Farbe"
+
+msgid "Disable notification for external attendeers"
+msgstr "Deaktiviere Benachrichtigung für externe Teilnehmer"

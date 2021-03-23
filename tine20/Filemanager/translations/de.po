@@ -493,6 +493,12 @@ msgstr "Rechte eines Ordners gelten auch rekursiv für alle Unterordner, es sei 
 msgid "This folder is part of the data safe"
 msgstr "Dieser Ordner ist Teil des Datentresors"
 
+msgid "Locking data safe..."
+msgstr "Datentresor wird geschlossen..."
+
+msgid "Unlocking data safe..."
+msgstr "Datentresor wird geöffnet..."
+
 #: js/GrantsPanel.js:52
 msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
 msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."

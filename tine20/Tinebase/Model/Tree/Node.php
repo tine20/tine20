@@ -456,21 +456,23 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     {
         $fileObjectTime = [
             self::FILTER    => Tinebase_Model_Filter_DateTime::class,
-            self::OPTIONS   => ['tablename' => 'tree_fileobjects']
+            self::OPTIONS   => ['tablename' => Tinebase_Model_Tree_FileObject::TABLE_NAME]
         ];
         $fileObjectUser = [
             self::FILTER    => Tinebase_Model_Filter_User::class,
-            self::OPTIONS   => ['tablename' => 'tree_fileobjects']
+            self::OPTIONS   => ['tablename' => Tinebase_Model_Tree_FileObject::TABLE_NAME]
         ];
 
         $_definition['created_by'][self::DOCTRINE_IGNORE] = true;
         $_definition['created_by'][self::FILTER_DEFINITION] = $fileObjectUser;
+        $_definition['created_by'][self::TABLE] = Tinebase_Model_Tree_FileObject::TABLE_NAME;
 
         $_definition['creation_time'][self::DOCTRINE_IGNORE] = true;
         $_definition['creation_time'][self::FILTER_DEFINITION] = $fileObjectTime;
 
         $_definition['last_modified_by'][self::DOCTRINE_IGNORE] = true;
         $_definition['last_modified_by'][self::FILTER_DEFINITION] = $fileObjectUser;
+        $_definition['last_modified_by'][self::TABLE] = Tinebase_Model_Tree_FileObject::TABLE_NAME;
 
         $_definition['last_modified_time'][self::DOCTRINE_IGNORE] = true;
         $_definition['last_modified_time'][self::FILTER_DEFINITION] = $fileObjectTime;
@@ -479,6 +481,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 
         $_definition['deleted_by'][self::DOCTRINE_IGNORE] = true;
         $_definition['deleted_by'][self::FILTER_DEFINITION] = $fileObjectUser;
+        $_definition['deleted_by'][self::TABLE] = Tinebase_Model_Tree_FileObject::TABLE_NAME;
     }
 
     public function runConvertToRecord()

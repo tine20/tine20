@@ -53,9 +53,9 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * only do area lock validation once
      *
-     * @var boolean
+     * @var array
      */
-    protected $_areaLockValidated = false;
+    protected $_areaLockValidated = [];
 
     /**
      * do area lock check
@@ -2325,40 +2325,46 @@ abstract class Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_AreaLocked
      */
-    protected function _checkRight(/** @noinspection PhpUnusedParameterInspection */
-                                    $_action)
+    protected function _checkRight($_action)
     {
         if (! $this->_doRightChecks) {
             return;
         }
 
-        $this->_checkAreaLock();
+        $this->_checkAreaLock($_action);
     }
 
     /**
      * check area lock
      *
+     * @param string $_action {get|create|update|delete}
      * @throws Tinebase_Exception_AreaLocked
-     *
-     * TODO only check with json frontend? maybe we should enable this only from json frontends
      */
-    protected function _checkAreaLock()
+    protected function _checkAreaLock($_action)
     {
-        if ($this->_areaLockValidated) {
+        if (!Tinebase_AreaLock::getInstance()->isActivatedByFE()) {
             return;
         }
 
-        if (Tinebase_AreaLock::getInstance()->hasLock($this->_applicationName)) {
-            if (Tinebase_AreaLock::getInstance()->isLocked($this->_applicationName)) {
-                $teal = new Tinebase_Exception_AreaLocked('Application is locked: '
-                    . $this->_applicationName);
-                $teal->setArea($this->_applicationName);
+        $check = $this->_applicationName . '.' . $this->getModel() . '.' . $_action;
+
+        if (isset($this->_areaLockValidated[$check])) {
+            return;
+        }
+
+        if (Tinebase_AreaLock::getInstance()->hasLock($check)) {
+            if (Tinebase_AreaLock::getInstance()->isLocked($check)) {
+                $teal = new Tinebase_Exception_AreaLocked('Controller action is locked: '
+                    . $check);
+                $cfg = Tinebase_AreaLock::getInstance()->getLastAuthFailedAreaConfig();
+                $teal->setArea($cfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+                $teal->setMFAUserConfigs($cfg->getUserMFAIntersection(Tinebase_Core::getUser()));
                 throw $teal;
             } else {
-                $this->_areaLockValidated = true;
+                $this->_areaLockValidated[$check] = true;
             }
         } else {
-            $this->_areaLockValidated = true;
+            $this->_areaLockValidated[$check] = true;
         }
     }
 
@@ -2367,7 +2373,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function resetValidatedAreaLock()
     {
-        $this->_areaLockValidated = false;
+        $this->_areaLockValidated = [];
     }
 
     /**

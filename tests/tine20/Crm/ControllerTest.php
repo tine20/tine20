@@ -12,14 +12,9 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Group
  */
-class Crm_ControllerTest extends \PHPUnit\Framework\TestCase
+class Crm_ControllerTest extends Crm_AbstractTest
 {
     /**
      * @var array test objects
@@ -186,9 +181,9 @@ class Crm_ControllerTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
     }
-    
+
     /**
      * try to add a lead
      *
@@ -200,6 +195,7 @@ class Crm_ControllerTest extends \PHPUnit\Framework\TestCase
         $lead = $this->_objects['initialLead'];
         $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
         $lead = Crm_Controller_Lead::getInstance()->create($lead);
+        // TODO remove this nonsense
         $GLOBALS['Addressbook_ControllerTest']['leadId'] = $lead->getId();
         
         $this->assertEquals($GLOBALS['Addressbook_ControllerTest']['leadId'], $lead->id);
@@ -255,7 +251,7 @@ class Crm_ControllerTest extends \PHPUnit\Framework\TestCase
         
         $leads = Crm_Controller_Lead::getInstance()->search($filter);
         $count = Crm_Controller_Lead::getInstance()->searchCount($filter);
-                
+        
         $this->assertEquals(1, count($leads), 'count mismatch');
         $this->assertEquals($count['totalcount'], count($leads), 'wrong totalcount');
         $this->assertEquals(1, $count['leadstates'][1], 'leadstates count mismatch');
@@ -305,6 +301,23 @@ class Crm_ControllerTest extends \PHPUnit\Framework\TestCase
         $this->assertGreaterThan(0, count($updatedLead->relations));
         $this->assertEquals($task->getId(), $updatedLead->relations[0]->related_id);
         
+    }
+
+    /**
+     * try to update a lead with the read only state
+     *
+     */
+    public function testUpdateReadonlyLead()
+    {
+        $lead = Crm_Controller_Lead::getInstance()->create($this->_getLead(false, Tinebase_Record_Abstract::generateUID(10)));
+        // save read-only status
+        $lead->leadstate_id = 7; //read-only
+        $updatedLead = Crm_Controller_Lead::getInstance()->update($lead);
+        // try to save the Lead again
+        $translation = Tinebase_Translation::getTranslation('Crm');
+        $this->expectException('Tinebase_Exception_SystemGeneric');
+        $this->expectExceptionMessage($translation->_('This Lead state is set to read-only therefore updating this Lead is not possible.'));
+        Crm_Controller_Lead::getInstance()->update($updatedLead);
     }
 
     /**

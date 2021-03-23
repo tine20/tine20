@@ -152,6 +152,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
         } catch (Exception $e) {
             // we have to convert this exception because the frontend does not handle the imap errors well...
+            Tinebase_Exception::log($e);
             throw new Tinebase_Exception_SystemGeneric('Failed to get folder status: ' . $e->getMessage());
         }
         return $this->_multipleRecordsToJson($result);
@@ -516,7 +517,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS) &&
                     ! $account->sieve_notification_move
                 ) {
-                    Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
+                    // TODO add new status for sieve_notification_move: "never" (+ "auto" if feature is active, but not already set, and "active")
+                    // Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
                 }
                 $accounts['results'][$idx] = $this->_recordToJson($account);
             } else {
@@ -715,34 +717,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function doMailsBelongToAccount($mails)
     {
-        $contactFilter = new Addressbook_Model_ContactFilter([
-            [
-                'field' => 'type',
-                'operator' => 'equals',
-                'value' => Addressbook_Model_Contact::CONTACTTYPE_USER
-            ],
-            [
-                'condition' => 'OR',
-                'filters' => [
-                    [
-                        'field' => 'email',
-                        'operator' => 'in',
-                        'value' => $mails
-                    ],
-                    [
-                        'field' => 'email_home',
-                        'operator' => 'in',
-                        'value' => $mails
-                    ]
-                ]
-            ]
-        ]);
-        
-        $contacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
-        
-        $usermails = array_filter(array_merge($contacts->email, $contacts->email_home));
-        
-        return array_diff($mails, $usermails);
+        $mails = Addressbook_Controller_Contact::getInstance()->doMailsBelongToAccount($mails);
+        return $mails;
     }
 
     /**

@@ -236,8 +236,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 border: false,
                 defaults: {
                     width: 300,
-                    xtype: 'textfield',
-                    inputType: 'password',
+                    xtype: 'tw-passwordTriggerField',
                     tabIndex: this.getTabIndex
                 },
                 items: [{
@@ -316,7 +315,8 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         }, {
                             name: 'authentication_Ldap_password',
                             fieldLabel: this.app.i18n._('Password'),
-                            inputType: 'password'
+                            xtype: 'tw-passwordTriggerField',
+                            clipboard: false
                         },
                         Ext.applyIf({
                             name: 'authentication_Ldap_bindRequiresDn',
@@ -607,7 +607,8 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             }, {
                 name: 'accounts_' + type + '_password',
                 fieldLabel: this.app.i18n._('Password'),
-                inputType: 'password'
+                xtype: 'tw-passwordTriggerField',
+                clipboard: false
             }, 
             Ext.applyIf({
                 name: 'accounts_' + type + '_bindRequiresDn',

@@ -47,9 +47,11 @@ class Tinebase_Model_BLConfig extends Tinebase_Record_NewAbstract
         self::FIELDS        => [
             self::FLDS_CLASSNAME        => [
                 self::TYPE                  => self::TYPE_MODEL,
+                self::LABEL                 => 'Type', // _('Type)
             ],
             self::FLDS_CONFIG_RECORD    => [
                 self::TYPE                  => self::TYPE_DYNAMIC_RECORD,
+                self::LABEL                 => 'Config', // _('Config)
                 self::CONFIG                => [
                     self::REF_MODEL_FIELD       => self::FLDS_CLASSNAME,
                 ]

@@ -102,7 +102,25 @@ msgstr[1] "Stundenzettel"
 
 #: js/TimesheetEditDialog.js:286
 msgid "Accounting"
-msgstr ""
+msgstr "Abrechnung"
+
+msgid "Project time is cleared"
+msgstr "Projektzeit ist abgerechnet"
+
+msgid "Project time cleared in"
+msgstr "Projektzeit abgerechnet in"
+
+msgid "Project time Invoice"
+msgstr "Projektzeit Rechnung"
+
+msgid "Project time billable"
+msgstr "Projektzeit ist abrechenbar"
+
+msgid "Project time billable (combined)"
+msgstr "Projektzeit ist abrechenbar (kombiniert)"
+
+msgid "Projecttime cleared (combined)"
+msgstr "Projektzeit ist abgerechnet (kombiniert)"
 
 #: js/TimesheetEditDialog.js:352 Model/Timeaccount.php:57
 msgid "Timeaccount"

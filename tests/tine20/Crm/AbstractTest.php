@@ -83,13 +83,16 @@ class Crm_AbstractTest extends TestCase
     
     /**
      * get lead
-     * 
+     *
+     * @param boolean $mute
+     * @param string $name
+     *
      * @return Crm_Model_Lead
      */
-    protected function _getLead($mute = false)
+    protected function _getLead($mute = false, $name = 'PHPUnit')
     {
         return new Crm_Model_Lead(array(
-            'lead_name'     => 'PHPUnit',
+            'lead_name'     => $name,
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,

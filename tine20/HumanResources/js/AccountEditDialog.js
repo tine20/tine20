@@ -65,19 +65,6 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
      * @private
      */
     getFormItems: function() {
-        
-        this.extraFreeTimeGridPanel = new Tine.HumanResources.ExtraFreeTimeGridPanel({
-            app: this.app,
-            editDialog: this,
-            editDialogRecordProperty: 'extra_free_times',
-            disabled: false,
-            frame: false,
-            border: true,
-            autoScroll: true,
-            layout: 'border',
-            title: this.app.i18n._('Extra free time'),
-            hideColumns: ['account_id']
-        });
         // columnForm defaults
         var cfDefaults = {xtype: 'textfield', readOnly: true, columnWidth: .5, anchor: '100%'};
         return {
@@ -111,11 +98,9 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                             formDefaults: cfDefaults,
                             labelAlign: 'top',
                             items: [[
-                                {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/5 },
-                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'remaining_vacation_days', columnWidth: 1/5 },
-                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'taken_vacation_days', columnWidth: 1/5 },
-                                {fieldLabel: this.app.i18n._('Expired vaction days'), name: 'expired_vacation_days', columnWidth: 1/5 },
-                                {fieldLabel: this.app.i18n._('Rebooked vaction days'), name: 'rebooked_vacation_days', columnWidth: 1/5 }
+                                {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/3 },
+                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'remaining_vacation_days', columnWidth: 1/3 },
+                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'taken_vacation_days', columnWidth: 1/3 }
                             ]]
                         }]
                     }, {
@@ -169,7 +154,6 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                         }]
                     }]
                 }]},
-                this.extraFreeTimeGridPanel,
                 new Tine.widgets.activities.ActivitiesTabPanel({
                     app: this.appName,
                     record_id: this.record.id,

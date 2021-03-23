@@ -39,6 +39,23 @@ class Admin_Controller_UserTest extends TestCase
         }
     }
 
+    public function testAddAccountWithMFAConfigs()
+    {
+        $user = $this->_createUserWithEmailAccount([
+            'mfa_configs' => [[
+                Tinebase_Model_MFA_UserConfig::FLD_ID => 'test',
+                Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'test',
+                Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS => Tinebase_Model_MFA_PinUserConfig::class,
+                Tinebase_Model_MFA_UserConfig::FLD_CONFIG => [
+                    Tinebase_Model_MFA_PinUserConfig::FLD_PIN => ''
+                ]
+            ]]
+        ]);
+
+        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $user->mfa_configs);
+        $this->assertInstanceOf(Tinebase_Model_MFA_UserConfig::class, $user->mfa_configs->getFirstRecord());
+    }
+
     public function testAddAccountWithEmailUserXprops()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
