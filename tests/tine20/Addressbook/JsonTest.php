@@ -1952,6 +1952,8 @@ class Addressbook_JsonTest extends TestCase
     {
         $tfj = new Tinebase_Frontend_Json();
         $allRegistryData = $tfj->getAllRegistryData();
+        self::assertArrayHasKey('Addressbook', $allRegistryData, 'no Addressbook data found in registry: '
+            . print_r(array_keys($allRegistryData), true));
         $registryData = $allRegistryData['Addressbook'];
 
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
