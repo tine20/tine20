@@ -66,7 +66,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(es6\.js|vue)$/,
+                test: /\.(mjs|es6\.js|vue)$/,
                 loader: 'eslint-loader',
                 enforce: "pre",
                 exclude: /node_modules/,
@@ -79,6 +79,24 @@ module.exports = {
                 loader: 'vue-loader'
             },
             {
+                test: /\.mjs$/,
+                loader: 'babel-loader',
+                exclude: [
+                    /node_modules/,
+                ],
+                options: {
+                    plugins: [
+                        "@babel/plugin-transform-runtime",
+                        "@babel/plugin-syntax-dynamic-import",
+                        ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": false }],
+                        "@babel/plugin-proposal-class-properties"
+                    ],
+                    presets: [
+                        ["@babel/preset-env", { "modules": true }]
+                    ]
+                }
+            },
+            {
                 test: /\.js$/,
                 loader: 'babel-loader',
                 exclude: [
@@ -88,6 +106,7 @@ module.exports = {
                     plugins: [
                         "@babel/plugin-transform-runtime",
                         "@babel/plugin-syntax-dynamic-import",
+                        ["@babel/plugin-proposal-decorators", { "legacy": true }],
                         "@babel/plugin-proposal-class-properties"
                     ],
                     presets: [
