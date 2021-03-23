@@ -920,19 +920,6 @@ textarea {
     cursor: pointer
 }
 
-.ext-webkit .x-form-invalid, .x-form-focus, textarea.x-form-focus {
-    border: 1px solid
-}
-
-.x-form-invalid, textarea.x-form-invalid {
-    background: repeat-x bottom;
-    border: 1px solid
-}
-
-.x-form-inner-invalid, textarea.x-form-inner-invalid {
-    background: repeat-x bottom
-}
-
 .x-editor {
     visibility: hidden;
     padding: 0;
@@ -4970,14 +4957,6 @@ ul.x-tab-strip-top {
 
 .x-form-focus, textarea.x-form-focus {
     border-color: #7eadd9
-}
-
-.x-form-invalid, textarea.x-form-invalid {
-    border-color: #c30
-}
-
-.ext-webkit .x-form-invalid {
-    border-color: #ff7870
 }
 
 .x-form-grow-sizer, .x-form-item {
