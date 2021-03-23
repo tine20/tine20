@@ -9,8 +9,6 @@
 
 const { retryAllRejectedPromises } = require('promises-to-retry');
 
-const mailAdresses = require('../../Tinebase/js/node_modules/email-addresses');
-
 require('./MessageFileButton');
 
 Ext.namespace('Tine.Felamimail');
@@ -1615,18 +1613,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     validateSystemlinkRecipients: function () {
         var me = this;
 
-        return new Promise(function (fulfill, reject) {
+        return new Promise(async function (fulfill, reject) {
             var recipients = [],
                 resolvePromise = fulfill;
 
-            me.recipientGrid.getStore().each(function (recipient) {
+            me.recipientGrid.getStore().each(async function (recipient) {
                 var address = recipient.get('address');
 
                 if (!address) {
                     return;
                 }
 
-                recipients.push(me.extractMailFromString(address));
+                recipients.push(await me.extractMailFromString(address));
             });
 
             var hasSystemlinks = false;
@@ -1649,12 +1647,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
 
-    extractMailFromString: function (string) {
-        //return import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
-        //    const parsed = addrs.parseOneAddress(string.replace(',', ''));
-        //    return parsed.address;
-        //});
-        return mailAdresses.parseOneAddress(string.replace(',', '')).address;
+    extractMailFromString: async function (string) {
+        return await import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
+            const parsed = addrs.parseOneAddress(string.replace(',', ''));
+            return parsed.address;
+        });
     },
 
     /**
