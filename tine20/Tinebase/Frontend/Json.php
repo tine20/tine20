@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -39,10 +39,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'ImportExportDefinition',
         'LogEntry',
         'Tree_Node',
-//        Tinebase_Model_MFA_Config::MODEL_NAME_PART,
         Tinebase_Model_MFA_UserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_PinUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_SmsUserConfig::MODEL_NAME_PART,
+        Tinebase_Model_MFA_YubicoOTPUserConfig::MODEL_NAME_PART,
     ];
 
     /**

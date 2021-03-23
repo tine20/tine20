@@ -12,7 +12,6 @@ import Generic from './Generic'
 class UserPassword extends Generic {
     constructor (config) {
         super(config)
-        this.providerClass = 'Tinebase_Auth_SecondFactor_MockSmsAdapter'
         this.windowTitle = i18n._('Password required')
         this.questionText = i18n._('This area is locked. To unlock it you need to provide your password')
         this.passwordFieldLabel = i18n._('Password')
