@@ -213,7 +213,7 @@ docker_build_dev:
   script:
     - cd $TINE20ROOT
     - composer require phpstan/phpstan
-    - php -d memory_limit=2G $TINE20ROOT/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=prettyJson --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json
+    - php -d memory_limit=2G $TINE20ROOT/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=gitlab --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json
   artifacts:
     reports:
       codequality: code-quality-report.json
