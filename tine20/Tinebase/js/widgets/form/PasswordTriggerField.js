@@ -84,6 +84,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         if (e.type === 'keypress' && _.indexOf([13 /* ENTER */], e.keyCode) >= 0) return;
         Ext.lib.Event.stopEvent(e);
 
+        clearTimeout(this.selectTextTimeout);
         let start = e.target.selectionStart;
         const end = e.target.selectionEnd;
         const valueArray = (this.getValue() || '').split('');
@@ -97,7 +98,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             start = start + replacement.length;
         }
         this.setValue(valueArray.join(''));
-        _.defer(() => {this.selectText(start, start)});
+        this.selectTextTimeout = setTimeout(() => {this.selectText(start, start)}, 20);
     },
     
     initTrigger: function () {
@@ -122,6 +123,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             this.setRawValue(this.locked ? this.value : this.hiddenPasswordChr.repeat(this.value.length));
         }
         this.locked = !this.locked;
+        this.focus();
     },
 
     onTrigger2Click: function () {
