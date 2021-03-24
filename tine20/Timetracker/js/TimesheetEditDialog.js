@@ -111,7 +111,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }
             notBillable = !(grants.manageBillableGrant || grants.adminGrant || manageRight);
             notClearable = !(grants.adminGrant || manageRight);
-            this.useInvoice ? null : this.getForm().findField('billed_in').setDisabled(!(grants.adminGrant || manageRight));
+            // only if useInvoice = false
+            if(!this.useInvoice) {
+                this.getForm().findField('billed_in').setDisabled(!(grants.adminGrant || manageRight));
+            }
         }
 
         if (timeaccount && timeaccount.data) {
