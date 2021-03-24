@@ -89,6 +89,19 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
      */
     public function gc($maxlifetime)
     {
+        if ($this->_lifeTimeSec <= $maxlifetime) {
+            // nothing to do, let redis ttl handle this
+            return true;
+        }
+
+        $redisIterator = null;
+        while (false !== ($result = $this->_redis->scan($redisIterator, $this->_prefix . '*', 30))) {
+            foreach ($result as $key) {
+                if ($this->_lifeTimeSec - (int)$this->_redis->ttl($key) >= $maxlifetime) {
+                    $this->_redis->del($key);
+                }
+            }
+        }
         return true;
     }
 

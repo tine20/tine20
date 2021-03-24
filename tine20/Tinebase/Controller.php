@@ -1652,4 +1652,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         return $response;
     }
+
+    /**
+     * enable Maintenance Mode
+     */
+    public function goIntoMaintenanceMode()
+    {
+        parent::goIntoMaintenanceMode();
+
+        // delete sessions
+        Zend_Session::getSaveHandler()->gc(0);
+    }
 }
