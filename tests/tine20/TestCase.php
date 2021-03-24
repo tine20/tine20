@@ -100,6 +100,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected $_customfieldIdsToDelete = array();
 
     protected $_areaLocksToInvalidate = [];
+    protected $_oldAreaLockCfg;
 
     protected $_originalSmtpConfig = null;
 
@@ -134,6 +135,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
         
         $this->_originalTestUser = Tinebase_Core::getUser();
+        $this->_oldAreaLockCfg = null;
     }
     
     /**
@@ -168,6 +170,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         foreach ($this->_areaLocksToInvalidate as $area) {
             Tinebase_AreaLock::getInstance()->resetValidAuth($area);
+        }
+        if (null !== $this->_oldAreaLockCfg) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS} = $this->_oldAreaLockCfg;
         }
 
         if ($this->_originalSmtpConfig) {
@@ -929,6 +934,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             Tinebase_Model_AreaLockConfig::FLD_MFAS => ['pin'],
             Tinebase_Model_AreaLockConfig::FLD_VALIDITY => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
         ], $config);
+        $this->_oldAreaLockCfg = Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS};
         $locks = new Tinebase_Config_KeyField([
             'records' => new Tinebase_Record_RecordSet(Tinebase_Model_AreaLockConfig::class, [$config])
         ]);
