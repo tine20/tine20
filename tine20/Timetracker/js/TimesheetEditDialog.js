@@ -100,7 +100,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 :  {});
         
         if (grants) {
-            var setDisabled = ! (grants.bookAllGrant || grants.adminGrant || manageRight);
+            var setDisabled = !(grants.bookAllGrant || grants.adminGrant || manageRight);
             var accountField = this.getForm().findField('account_id');
             accountField.setDisabled(setDisabled);
             // set account id to the current user, if he doesn't have the right to edit other users timesheets
@@ -109,9 +109,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     accountField.setValue(Tine.Tinebase.registry.get('currentAccount'));
                 }
             }
-            notBillable = ! (grants.manageBillableGrant || grants.adminGrant || manageRight);
-            notClearable = ! (grants.adminGrant || manageRight);
-            this.getForm().findField('billed_in').setDisabled(! (grants.adminGrant || manageRight));
+            notBillable = !(grants.manageBillableGrant || grants.adminGrant || manageRight);
+            notClearable = !(grants.adminGrant || manageRight);
+            // only if useInvoice = false
+            if(!this.useInvoice) {
+                this.getForm().findField('billed_in').setDisabled(!(grants.adminGrant || manageRight));
+            }
         }
 
         if (timeaccount && timeaccount.data) {
@@ -169,10 +172,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     onClearedUpdate: function(field, checked) {
         if (!this.useMultiple) {
-            this.getForm().findField('billed_in').setDisabled(! checked);
-            if (this.useInvoice) {
-                this.getForm().findField('invoice_id').setDisabled(! checked);
-            }
+            this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in').setDisabled(! checked);
         }
     },
 
@@ -249,10 +249,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     disableClearedFields: function(disable) {
-        this.getForm().findField('billed_in').setDisabled(disable);
-        if (this.useInvoice) {
-            this.getForm().findField('invoice_id').setDisabled(disable);
-        }
+        this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in').setDisabled(disable);
     },
 
     onDurationChange: function() {
