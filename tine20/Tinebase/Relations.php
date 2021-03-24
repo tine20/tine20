@@ -574,6 +574,9 @@ class Tinebase_Relations
                 // some right might prevent the update ... skipping update
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Don\'t update related record: ' . $tead->getMessage());
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Don\'t update related record: ' . $tenf->getMessage());
             }
         }
 
