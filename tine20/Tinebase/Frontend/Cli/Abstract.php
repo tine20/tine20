@@ -186,7 +186,8 @@ class Tinebase_Frontend_Cli_Abstract
                     continue;
                 }
                 $newGrants->addRecord(new Tinebase_Model_Grants([
-                    'readGrant' => true,
+                    Tinebase_Model_Grants::GRANT_READ => true,
+                    Tinebase_Model_Grants::GRANT_SYNC => $grant->syncGrant || $grant->admitGrant,
                     'account_type' => $grant->account_type,
                     'account_id' => $grant->account_id,
                 ]));
