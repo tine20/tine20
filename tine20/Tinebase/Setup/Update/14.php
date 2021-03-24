@@ -80,6 +80,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             if ($mfas && $mfas->records && ($pinMfa = $mfas->records
                     ->find(Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS, Tinebase_Auth_MFA_PinAdapter::class))) {
                 $userCtrl = Tinebase_User::getInstance();
+                $failcount = 0;
                 foreach ($this->getDb()
                          ->query('select `id`, `pin` from ' . SQL_TABLE_PREFIX . 'accounts WHERE LENGTH(`pin`) > 0')
                          ->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
@@ -97,8 +98,18 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
                     ]]);
                     $user->mfa_configs->getFirstRecord()->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
                         ->{Tinebase_Model_MFA_PinUserConfig::FLD_HASHED_PIN} = $row['pin'];
-                    $userCtrl->updateUser($user);
-
+                    try {
+                        $userCtrl->updateUser($user);
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
+                            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Problem with User '
+                                . $row['id'] . ' when trying to convert PIN ('. $row['pin']  . ')');
+                        Tinebase_Exception::log($e);
+                        $failcount++;
+                        if ($failcount > 10) {
+                            throw new Setup_Exception('Too many broken users! Aborting...');
+                        }
+                    }
                 }
             }
             $this->_backend->dropCol('accounts', 'pin');

@@ -987,6 +987,7 @@ Ext.Foo = Ext.extend(Ext.Bar, {
                 }
             }
             this.afterRender(this.container);
+            _.defer(_.bind(this.componentDidMount, this, this));
 
 
             if(this.hidden){
@@ -1038,7 +1039,6 @@ Ext.Foo = Ext.extend(Ext.Bar, {
             contentTarget.update(html, loadScripts, cb);
         }
     },
-
 
     /**
      * @private
@@ -1264,6 +1264,9 @@ var myGrid = new Ext.grid.EditorGridPanel({
     // private
     afterRender : Ext.emptyFn,
 
+    // https://reactjs.org/docs/react-component.html#componentdidmount
+    componentDidMount: Ext.emptyFn,
+
     /**
      * Destroys this component by purging any event listeners, removing the component's element from the DOM,
      * removing the component from its {@link Ext.Container} (if applicable) and unregistering it from
@@ -1276,6 +1279,7 @@ var myGrid = new Ext.grid.EditorGridPanel({
             if(this.fireEvent('beforedestroy', this) !== false){
                 this.destroying = true;
                 this.beforeDestroy();
+                this.componentWillUnmount(this);
                 if(this.ownerCt && this.ownerCt.remove){
                     this.ownerCt.remove(this, false);
                 }
@@ -1304,6 +1308,9 @@ var myGrid = new Ext.grid.EditorGridPanel({
 
     // private
     beforeDestroy : Ext.emptyFn,
+
+    // https://reactjs.org/docs/react-component.html#componentwillunmount
+    componentWillUnmount : Ext.emptyFn,
 
     // private
     onDestroy  : Ext.emptyFn,
