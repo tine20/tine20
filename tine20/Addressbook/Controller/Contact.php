@@ -349,7 +349,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if ($updatedRecord->type === Addressbook_Model_Contact::CONTACTTYPE_USER) {
             if (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE]) ||
                 !$this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE]) {
-                Tinebase_User::getInstance()->updateContact($updatedRecord);
+                try {
+                    Tinebase_User::getInstance()->updateContact($updatedRecord);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Don\'t update contact record: ' . $tenf->getMessage());
+                }
             }
         }
 
