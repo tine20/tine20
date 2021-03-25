@@ -59,6 +59,11 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FEATURE_TINE20_FLAG = 'tine20Flag';
 
     /**
+     * allow only send password download link as attachment
+     */
+    const FEATURE_ONLY_PW_DOWNLOAD_LINK = 'onlyPwDownloadLink';
+
+    /**
      * show reply-to field in message compose dialog
      *
      * @var string
@@ -310,6 +315,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     //_('Save drafts automatically while editing an email')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
+                ],
+                self::FEATURE_ONLY_PW_DOWNLOAD_LINK   => [
+                    self::LABEL                 => 'Only password download link',
+                    //_('Only password download link')
+                    self::DESCRIPTION           => 'Allow only password download link',
+                    //_('Allow only password download link')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
                 ],
                 self::FEATURE_TINE20_FLAG   => [
                     self::LABEL                 => 'Tine 2.0 Flag',

@@ -749,6 +749,15 @@ msgstr "Nachricht verfassen:"
 msgid "Attachments"
 msgstr "Anhänge"
 
+msgid "Attachment"
+msgstr "Anhang"
+
+msgid "Only password download link"
+msgstr "Nur passwortgeschützter Download Link"
+
+msgid "Allow only password download links"
+msgstr "Nur passwortgeschützter Download Link erlaubt"
+
 #: js/MessageEditDialog.js:1325 js/MessageEditDialog.js:1335
 #: js/MessageEditDialog.js:1387 js/AccountEditDialog.js:374
 #: js/AccountEditDialog.js:417 js/AccountEditDialog.js:432
