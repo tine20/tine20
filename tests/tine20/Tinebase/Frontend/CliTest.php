@@ -382,6 +382,19 @@ class Tinebase_Frontend_CliTest extends TestCase
         self::assertStringContainsString('CACHE ', $out);
         self::assertLessThanOrEqual(1, $result);
     }
+    
+    /**
+     * testMonitoringMailServers
+     */
+    public function testMonitoringMailServers()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringMailServers();
+        $out = ob_get_clean();
+
+        self::assertStringContainsString('CONNECTION ', $out);
+        self::assertLessThanOrEqual(1, $result);
+    }
 
     /**
      * test cleanNotes

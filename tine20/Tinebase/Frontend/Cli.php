@@ -1534,6 +1534,59 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * nagios monitoring for mail servers
+     * imap/smtp/sieve
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringMailServers() {
+        $result = 0;
+        $servers = [
+            Tinebase_Config::SMTP,
+            Tinebase_Config::IMAP,
+            Tinebase_Config::SIEVE
+        ];
+        
+        $message = "\n";
+        
+        foreach ($servers as $server) {
+            $serverConfig = Tinebase_Config::getInstance()->{$server};
+            
+            $host = isset($serverConfig->{'hostname'}) ? $serverConfig->{'hostname'} : $serverConfig->{'host'};
+            $port = $serverConfig->{'port'};
+            
+            $message .= $server . ' | host: '. $host . ' | port: ' . $port;
+            
+            if (empty($host) || empty($port)) {
+                $message .= ' -> INVALID VALUE' . PHP_EOL;
+                $result = 2;
+                continue;
+            }
+        
+            $output = shell_exec('nc -d -N -w3 ' . $host . ' ' . $port . PHP_EOL);
+            
+            if ($output) {
+                if (strpos($output, 'OK') || strstr($output, '220')) {
+                    $message .= ' -> CONNECTION OK' . PHP_EOL;
+                } else {
+                    $message .= ' -> CONNECTION ERROR' . PHP_EOL;
+                    $result = 1;
+                }
+                
+                $message .= PHP_EOL . $output . PHP_EOL;
+            } else {
+                $message .= ' -> CONNECTION FAILED' . PHP_EOL;
+                $result = 2;
+            }
+        }
+        
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
      * example: $ php tine20.php --username pschuele --method Tinebase.undo -d 
