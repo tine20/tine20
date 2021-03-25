@@ -106,7 +106,34 @@ class Crm_AbstractTest extends TestCase
             'mute'          => $mute,
         ));
     }
-    
+
+    /**
+     * @return array
+     */
+    protected function _getLeadArrayWithRelations()
+    {
+        $contact    = $this->_getContact();
+        $task       = $this->_getTask();
+        $lead       = $this->_getLead();
+        $product    = $this->_getProduct();
+        $price      = 200;
+
+        $leadData = $lead->toArray();
+        $leadData['relations'] = array(
+            array('type'  => 'TASK',    'related_record' => $task->toArray()),
+            array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
+            array('type'  => 'PRODUCT', 'related_record' => $product->toArray(), 'remark' => array('price' => $price)),
+        );
+        // add note
+        $note = array(
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note',
+        );
+        $leadData['notes'] = array($note);
+
+        return $leadData;
+    }
+
     /**
      * get lead filter
      * 
