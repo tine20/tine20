@@ -138,8 +138,30 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $result['leadtypes'] = $this->_backend->getGroupCountForField($_filter, 'leadtype_id');
         
         return $result;
-    }            
-    
+    }
+
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @param   boolean $skipEvent = false
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $skipEvent = false)
+    {
+        $updatedLead = parent::update($_record, $_duplicateCheck);
+
+        if ($skipEvent === false) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Crm_Event_InspectLeadAfterUpdate([
+                'observable' => $updatedLead
+            ]));
+        }
+
+        return $updatedLead;
+    }
+
     /********************* notifications ***************************/
     
     /**
