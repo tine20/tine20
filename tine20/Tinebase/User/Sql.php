@@ -208,6 +208,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $stmt->closeCursor();
         
         $result = new Tinebase_Record_RecordSet($_accountClass, $rows, TRUE);
         
@@ -341,6 +342,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $stmt = $select->query();
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
+        $stmt->closeCursor();
         if ($row === false) {
             throw new Tinebase_Exception_NotFound('User with ' . $_property . ' = ' . $value . ' not found.');
         }
@@ -373,6 +375,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.primary_group_id') . ' = ?', $groupId));
         $stmt = $select->query();
         $data = (array) $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $stmt->closeCursor();
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_FullUser', $data, true);
         return $result;
     }
@@ -1418,6 +1421,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
+        $stmt->closeCursor();
         
         $result = new Tinebase_Record_RecordSet($_accountClass, $queryResult, TRUE);
         
