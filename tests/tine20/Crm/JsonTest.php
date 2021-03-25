@@ -604,19 +604,6 @@ class Crm_JsonTest extends Crm_AbstractTest
     }
     
     /**
-     * get product
-     * 
-     * @return Sales_Model_Product
-     */
-    protected function _getProduct()
-    {
-        return new Sales_Model_Product(array(
-            'name'  => 'PHPUnit test product',
-            'price' => 10000,
-        ));
-    }
-    
-    /**
      * get lead filter
      * 
      * @return array
