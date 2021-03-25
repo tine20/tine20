@@ -39,7 +39,6 @@ class Crm_AbstractTest extends TestCase
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'note'                  => 'Bla Bla Bla',
-            //'container_id'          => $addressbookContainer->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -132,6 +131,19 @@ class Crm_AbstractTest extends TestCase
         $leadData['notes'] = array($note);
 
         return $leadData;
+    }
+
+    /**
+     * get product
+     *
+     * @return Sales_Model_Product
+     */
+    protected function _getProduct()
+    {
+        return new Sales_Model_Product(array(
+            'name'  => 'PHPUnit test product',
+            'price' => 10000,
+        ));
     }
 
     /**
