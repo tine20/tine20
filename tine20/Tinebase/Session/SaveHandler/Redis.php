@@ -101,6 +101,9 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
                     $this->_redis->del($key);
                 }
             }
+            if (0 === $redisIterator) {
+                break;
+            }
         }
         return true;
     }
