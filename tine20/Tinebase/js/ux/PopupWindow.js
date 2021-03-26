@@ -122,15 +122,8 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         this.stateId = 'ux.popupwindow-' + this.contentPanelConstructor;
         this.on('resize', this.saveState, this, {delay:100});
 
-        // M$ IE has its internal location bar in the viewport
-        if (Ext.isIE) {
-            this.height += 20;
-        }
-
-        // chrome counts window decoration and location bar to window height
-        if (Ext.isChrome) {
-            this.height += 40;
-        }
+        // window decoration and location bar count to window height
+        this.height += 20;
 
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
     },
