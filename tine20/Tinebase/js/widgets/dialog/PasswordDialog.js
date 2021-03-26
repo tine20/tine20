@@ -88,6 +88,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
                         ref: '../../../../passwordField',
                         listeners: {
                             scope: this,
+                            paste: this.onChange,
                             keyup: this.onChange,
                             keydown: this.onKeyDown
                         }
@@ -165,7 +166,9 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
      * @param el
      */
     onChange: function (el) {
-        this.buttonApply.setDisabled(!this.allowEmptyPassword && el.getValue().length === 0)
+        _.defer(() => {
+            this.buttonApply.setDisabled(!this.allowEmptyPassword && el.getValue().length === 0);
+        })
     },
 
     getEventData: function (event) {
