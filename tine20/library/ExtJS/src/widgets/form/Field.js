@@ -518,7 +518,7 @@ var form = new Ext.form.FormPanel({
      * @return {Mixed} value The field value
      */
     getRawValue : function(){
-        var v = this.rendered ? this.el.getValue() : Ext.value(this.value, '');
+        var v = this.rendered ? this.el.getValue() || "" : Ext.value(this.value, '');
         if(v === this.emptyText){
             v = '';
         }
