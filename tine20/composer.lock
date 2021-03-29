@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec58d1be143300002289ad5d413ff253",
+    "content-hash": "5251c2d2bc04c94ee090c315033a4d49",
     "packages": [
         {
             "name": "benmorel/gsm-charset-converter",
@@ -44,10 +44,6 @@
                 "gsm",
                 "sms"
             ],
-            "support": {
-                "issues": "https://github.com/BenMorel/GsmCharsetConverter/issues",
-                "source": "https://github.com/BenMorel/GsmCharsetConverter/tree/0.2.0"
-            },
             "time": "2020-12-02T12:49:14+00:00"
         },
         {
@@ -855,12 +851,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f"
+                "reference": "1354e7e8c558dc9ae353e07b8cde7ab0d46e7a25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/2512f595e0f4c5235e99ef97603a8db902b3cc5f",
-                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/1354e7e8c558dc9ae353e07b8cde7ab0d46e7a25",
+                "reference": "1354e7e8c558dc9ae353e07b8cde7ab0d46e7a25",
                 "shasum": ""
             },
             "require": {
@@ -897,7 +893,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-10-01T00:19:10+00:00"
+            "time": "2021-02-28T01:42:20+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -949,10 +945,6 @@
                 "request",
                 "response"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-message-util/issues",
-                "source": "https://github.com/php-fig/http-message-util/tree/1.1.4"
-            },
             "time": "2020-02-05T20:36:27+00:00"
         },
         {
@@ -1199,17 +1191,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab"
+                "reference": "4f95102af87f86c43e8191ec6e90d9f35ed1ce5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/9f15504105640b03277d7174b62fbfc0f5e608ab",
-                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4f95102af87f86c43e8191ec6e90d9f35ed1ce5f",
+                "reference": "4f95102af87f86c43e8191ec6e90d9f35ed1ce5f",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
+                "paragonie/random_compat": ">=2",
                 "php": ">=5.4",
                 "phpseclib/phpseclib": "~2.0"
             },
@@ -1228,7 +1221,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-08-27T16:47:41+00:00"
+            "time": "2020-11-16T14:48:22+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
@@ -1277,14 +1270,6 @@
                 "escaper",
                 "laminas"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-escaper/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-escaper/issues",
-                "rss": "https://github.com/laminas/laminas-escaper/releases.atom",
-                "source": "https://github.com/laminas/laminas-escaper"
-            },
             "time": "2019-12-31T16:43:30+00:00"
         },
         {
@@ -1333,12 +1318,6 @@
                 "laminas",
                 "zf"
             ],
-            "support": {
-                "forum": "https://discourse.laminas.dev/",
-                "issues": "https://github.com/laminas/laminas-zendframework-bridge/issues",
-                "rss": "https://github.com/laminas/laminas-zendframework-bridge/releases.atom",
-                "source": "https://github.com/laminas/laminas-zendframework-bridge"
-            },
             "time": "2020-09-14T14:23:00+00:00"
         },
         {
@@ -1662,6 +1641,51 @@
                 "routing"
             ],
             "time": "2018-02-13T20:26:39+00:00"
+        },
+        {
+            "name": "paragonie/random_compat",
+            "version": "v9.99.100",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*",
+                "vimeo/psalm": "^1"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
+            ],
+            "time": "2020-10-15T08:29:30+00:00"
         },
         {
             "name": "pclzip/pclzip",
@@ -2266,10 +2290,6 @@
                 "response",
                 "server"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-server-handler/issues",
-                "source": "https://github.com/php-fig/http-server-handler/tree/master"
-            },
             "time": "2018-10-30T16:46:14+00:00"
         },
         {
@@ -2323,10 +2343,6 @@
                 "request",
                 "response"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-server-middleware/issues",
-                "source": "https://github.com/php-fig/http-server-middleware/tree/master"
-            },
             "time": "2018-10-30T17:12:04+00:00"
         },
         {
@@ -3582,7 +3598,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WebbyLab/php-validator-livr.git",
+                "url": "git@github.com:WebbyLab/php-validator-livr.git",
                 "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
             },
             "dist": {
@@ -4125,14 +4141,6 @@
                 "psr-7",
                 "zf"
             ],
-            "support": {
-                "docs": "https://docs.zendframework.com/zend-stratigility/",
-                "forum": "https://discourse.zendframework.com/c/questions/expressive",
-                "issues": "https://github.com/zendframework/zend-stratigility/issues",
-                "rss": "https://github.com/zendframework/zend-stratigility/releases.atom",
-                "slack": "https://zendframework-slack.herokuapp.com",
-                "source": "https://github.com/zendframework/zend-stratigility"
-            },
             "abandoned": "laminas/laminas-stratigility",
             "time": "2019-06-12T15:22:39+00:00"
         },
@@ -4262,11 +4270,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl43",
+            "version": "1.12.20pl44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "03f56fe32001a315944a5b6bb07a7fb244594d06"
+                "reference": "5deb9609a417ed06f999985a9d5c0adb742a54a3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -4283,7 +4291,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2021-02-10T08:49:03+00:00"
+            "time": "2021-03-29T10:26:36+00:00"
         }
     ],
     "packages-dev": [
@@ -5880,40 +5888,40 @@
     ],
     "aliases": [
         {
-            "package": "doctrine/dbal",
-            "version": "2.5.13.0-patch6",
             "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0"
+            "alias_normalized": "2.5.13.0",
+            "version": "2.5.13.0-patch6",
+            "package": "doctrine/dbal"
         },
         {
-            "package": "doctrine/orm",
-            "version": "2.5.14.0-patch1",
             "alias": "v2.5.14",
-            "alias_normalized": "2.5.14.0"
+            "alias_normalized": "2.5.14.0",
+            "version": "2.5.14.0-patch1",
+            "package": "doctrine/orm"
         },
         {
-            "package": "phpoffice/phpspreadsheet",
-            "version": "1.10.1.0-patch3",
             "alias": "1.10.1",
-            "alias_normalized": "1.10.1.0"
+            "alias_normalized": "1.10.1.0",
+            "version": "1.10.1.0-patch3",
+            "package": "phpoffice/phpspreadsheet"
         },
         {
-            "package": "phpoffice/phpword",
-            "version": "0.14.0.0",
             "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0"
+            "alias_normalized": "0.13.0.0",
+            "version": "0.14.0.0",
+            "package": "phpoffice/phpword"
         },
         {
-            "package": "sabre/vobject",
-            "version": "3.5.3.0-patch1",
             "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0"
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
         },
         {
-            "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch43",
             "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0"
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch44",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "stable",
@@ -5946,6 +5954,5 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    },
-    "plugin-api-version": "2.0.0"
+    }
 }
