@@ -26,6 +26,10 @@ class Tinebase_Auth_MFATest extends TestCase
 
     public function testYubicoOTP()
     {
+        if (empty(Tinebase_Config::getInstance()->{Tinebase_Auth_CredentialCache_Adapter_Shared::CONFIG_KEY})) {
+            self::markTestSkipped('shared credential cache key CONFIG_KEY required for this test');
+        }
+
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
             Tinebase_Model_MFA_UserConfig::class, [[
             Tinebase_Model_MFA_UserConfig::FLD_ID => 'yubicoOTPunittest',
