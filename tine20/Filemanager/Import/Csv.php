@@ -45,6 +45,7 @@ class Filemanager_Import_Csv extends Tinebase_Import_Csv_Abstract
         $this->_folder = $_data['folder'];
         $this->_type = $_data['type'];
         $this->_user = $_data['container'];
+        $this->_displayname = $_data['displayname'];
         return $_data;
     }
 
@@ -78,16 +79,28 @@ class Filemanager_Import_Csv extends Tinebase_Import_Csv_Abstract
                 $resolveStrategy = $clientRecordData ? $clientRecordDatas[$recordIndex]['resolveStrategy'] : NULL;
 
                 foreach ($recordDataToImport as $idx => $processedRecordData) {
-                    $strucktur = explode('/', $this->_folder);
+                    $structure = explode('/', $this->_folder); 
 
                     $this->_user == 'shared' ? $_filenames = 'shared' : $_filenames = $this->_getPersonalPath($this->_user);
 
-                    for ($i = 0; $i < count($strucktur); $i++) {
-                        $_filenames .= '/' . $strucktur[$i];
-
-                        Filemanager_Controller_Node::getInstance()->createNodes($_filenames, $this->_type, $_tempFileIds = array(), $_forceOverwrite = true);
+                    for ($i = 0; $i < count($structure); $i++) {
+                        $_filenames .= '/' . $structure[$i];
+                        
+                        Filemanager_Controller_Node::getInstance()->createNodes($_filenames, 'folder', $_tempFileIds = array(), $_forceOverwrite = true);
                     }
-                    Filemanager_Controller_Node::getInstance()->createNodes($_filenames . '/' . $this->_name, $this->_type, $_tempFileIds = array(), $_forceOverwrite = true);
+                    
+                    if ($this->_type == 'file') {
+                        $tempFile =  $this->_getTempFile($this->_name);
+                        if ($tempFile) {
+                            $filename = $this->_displayname ? $this->_displayname : $this->_name;
+                            Filemanager_Controller_Node::getInstance()->createNodes($_filenames . '/' . $filename, $this->_type, $_tempFileIds = array($tempFile->getId()), $_forceOverwrite = true);
+                        } else {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Could not find demo file: ' . $this->_name);
+                            }
+                        }
+                    }
+                    
                     $this->_importResult['totalcount']++;
                 }
             } catch (Exception $e) {
@@ -120,4 +133,26 @@ class Filemanager_Import_Csv extends Tinebase_Import_Csv_Abstract
             ) . '/' . $user->getId();
     }
 
+    /**
+     * Create a Tempfile from an example file
+     * 
+     * @param $filename
+     * @return Tinebase_Model_TempFile|null
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    protected function _getTempFile($filename)
+    {
+        $tempFileBackend = new Tinebase_TempFile();
+
+        $path = dirname(__FILE__) . '/../Setup/DemoData/files/'. $filename;
+        if (file_exists($path)) {
+            $handle = fopen($path, 'r');
+            $tempfile = $tempFileBackend->createTempFileFromStream($handle, $filename, '');
+            fclose($handle);
+            
+            return $tempfile;  
+        } else {
+            return null;
+        }
+    }
 }

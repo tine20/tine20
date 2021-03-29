@@ -1,4 +1,6 @@
-name,folder,type,container
-SharedFolder,Gemeinsamer/Shared/Folder,folder,shared
-Privat,Mein/Privater/Folder,folder,tine20admin
-Privat,Mein/Privater/Folder,folder,testUser
+name,folder,type,container,displayname,
+SharedFolder,Gemeinsamer/Shared/Folder,folder,shared,,
+Privat,Mein/Privater/Folder,folder,tine20admin,,
+Privat,Mein/Privater/Folder,folder,testUser,,
+dokument.txt,Mein/Privater/Folder,file,tine20admin,,
+Anleitung fuer die Einrichtung vom ownCloud Client.docx,shared/Support/Anleitungen,file,shared,Anleitung für die Einrichtung vom ownCloud Client.docx
