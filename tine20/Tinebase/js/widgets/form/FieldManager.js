@@ -114,6 +114,9 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.dateFormat) {
                         field.dateFormat = fieldDefinition.dateFormat;
                     }
+                    if (fieldDefinition.format) {
+                        field.format = fieldDefinition.format;
+                    }
                     break;
                 case 'time':
                     field.xtype = 'timefield';

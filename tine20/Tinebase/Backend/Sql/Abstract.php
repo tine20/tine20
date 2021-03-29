@@ -480,6 +480,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
+        $stmt->closeCursor();
         
         $result = $this->_rawDataToRecordSet($queryResult);
         
@@ -511,6 +512,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
+        $stmt->closeCursor();
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, true));
         

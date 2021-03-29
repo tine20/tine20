@@ -90,6 +90,12 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
             }]
         }];
         
+        this.afterIsRendered().then(() => {
+            this.mon(this.el, 'dblclick', (e) => {
+                window.getSelection().removeAllRanges();
+                _.defer(_.bind(this.onOk, this));
+            });
+        });
         this.supr().initComponent.call(this);
     },
     

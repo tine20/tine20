@@ -179,27 +179,8 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function saveLead()
     {
-        $contact    = $this->_getContact();
-        $task       = $this->_getTask();
-        $lead       = $this->_getLead();
-        $product    = $this->_getProduct();
-        $price      = 200;
-        
-        $leadData = $lead->toArray();
-        $leadData['relations'] = array(
-            array('type'  => 'TASK',    'related_record' => $task->toArray()),
-            array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
-            array('type'  => 'PRODUCT', 'related_record' => $product->toArray(), 'remark' => array('price' => $price)),
-        );
-        // add note
-        $note = array(
-            'note_type_id'      => 1,
-            'note'              => 'phpunit test note',
-        );
-        $leadData['notes'] = array($note);
-        
-        $savedLead = $this->_getUit()->saveLead($leadData);
-        return $savedLead;
+        $leadData = $this->_getLeadArrayWithRelations();
+        return $this->_getUit()->saveLead($leadData);
     }
     
     /**
@@ -619,19 +600,6 @@ class Crm_JsonTest extends Crm_AbstractTest
             'end_scheduled' => NULL,
             'tags'          => $tags,
             'customfields'  => $cfs
-        ));
-    }
-    
-    /**
-     * get product
-     * 
-     * @return Sales_Model_Product
-     */
-    protected function _getProduct()
-    {
-        return new Sales_Model_Product(array(
-            'name'  => 'PHPUnit test product',
-            'price' => 10000,
         ));
     }
     

@@ -39,7 +39,6 @@ class Crm_AbstractTest extends TestCase
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'note'                  => 'Bla Bla Bla',
-            //'container_id'          => $addressbookContainer->id,
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
@@ -106,7 +105,47 @@ class Crm_AbstractTest extends TestCase
             'mute'          => $mute,
         ));
     }
-    
+
+    /**
+     * @return array
+     */
+    protected function _getLeadArrayWithRelations()
+    {
+        $contact    = $this->_getContact();
+        $task       = $this->_getTask();
+        $lead       = $this->_getLead();
+        $product    = $this->_getProduct();
+        $price      = 200;
+
+        $leadData = $lead->toArray();
+        $leadData['relations'] = array(
+            array('type'  => 'TASK',    'related_record' => $task->toArray()),
+            array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
+            array('type'  => 'PRODUCT', 'related_record' => $product->toArray(), 'remark' => array('price' => $price)),
+        );
+        // add note
+        $note = array(
+            'note_type_id'      => 1,
+            'note'              => 'phpunit test note',
+        );
+        $leadData['notes'] = array($note);
+
+        return $leadData;
+    }
+
+    /**
+     * get product
+     *
+     * @return Sales_Model_Product
+     */
+    protected function _getProduct()
+    {
+        return new Sales_Model_Product(array(
+            'name'  => 'PHPUnit test product',
+            'price' => 10000,
+        ));
+    }
+
     /**
      * get lead filter
      * 
