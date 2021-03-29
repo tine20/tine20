@@ -1712,7 +1712,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     formatHeaders: function(headers, ellipsis, onlyImportant, plain) {
-        var result = '';
+        let result = '';
+        let header = '';
         for (header in headers) {
             if (headers.hasOwnProperty(header) && 
                     (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date')) 
