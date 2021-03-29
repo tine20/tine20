@@ -229,6 +229,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+        const me = this;
         this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
             selectType: 'both',
             title:  i18n._('Permissions'),
@@ -238,7 +239,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             selectTypeDefault: 'group',
             height : 250,
             disabled: ! this.asAdminModule,
-            recordClass: Tine.Tinebase.Model.Grant
+            recordClass: Tine.Tinebase.Model.Grant,
+            checkState: function() {
+                const disabled = ! (me.record.get('type') === 'shared' && me.asAdminModule);
+                me.grantsGrid.setDisabled(disabled);
+            }
         });
 
         this.rulesGridPanel = new Tine.Felamimail.sieve.RulesGridPanel({
@@ -325,6 +330,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     }
                                 },
                                 scope: this
+                            },
+                            checkState: function() {
+                                const disabled = me.record.get('type') === 'shared' || me.record.get('type') === 'adblist';
+                                this.setDisabled(disabled);
                             }
                         }, this.userAccountPicker = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
@@ -375,14 +384,20 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: [[{
                     fieldLabel: this.app.i18n._('Host'),
                     name: 'host',
-                    allowBlank: this.asAdminModule
+                    allowBlank: this.asAdminModule,
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Port (Default: 143 / SSL: 993)'),
                     name: 'port',
                     allowBlank: this.asAdminModule,
                     maxLength: 5,
                     value: 143,
-                    xtype: 'numberfield'
+                    xtype: 'numberfield',
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'ssl',
@@ -398,11 +413,22 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['none', this.app.i18n._('None')],
                         ['tls',  this.app.i18n._('TLS')],
                         ['ssl',  this.app.i18n._('SSL')]
-                    ]
+                    ],
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 },{
                     fieldLabel: this.app.i18n._('Username'),
                     name: 'user',
-                    allowBlank: this.asAdminModule
+                    allowBlank: this.asAdminModule,
+                    checkState: function() {
+                        const disabled = !(
+                            !me.record.get('type')
+                            || me.record.get('type') === 'userInternal'
+                            || me.record.get('type') === 'user'
+                        );
+                        this.setDisabled(disabled);
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Password'),
                     name: 'password',
@@ -417,8 +443,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 this.smtpButton.setDisabled(false);
                             }
                         }
+                    },
+                    checkState: function() {
+                        me.disablePasswordField(me.getForm().findField('password'));
                     }
-                }, 
+                },
                 this.imapButton = new Ext.Button({
                     text: this.app.i18n._('Test IMAP Connection'),
                     handler: () => {
@@ -435,14 +464,20 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 formDefaults: commonFormDefaults,
                 items: [[ {
                     fieldLabel: this.app.i18n._('Host'),
-                    name: 'smtp_hostname'
+                    name: 'smtp_hostname',
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Port (Default: 25)'),
                     name: 'smtp_port',
                     maxLength: 5,
                     xtype:'numberfield',
                     value: 25,
-                    allowBlank: this.asAdminModule
+                    allowBlank: this.asAdminModule,
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'smtp_ssl',
@@ -457,7 +492,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['none', this.app.i18n._('None')],
                         ['tls',  this.app.i18n._('TLS')],
                         ['ssl',  this.app.i18n._('SSL')]
-                    ]
+                    ],
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Authentication'),
                     name: 'smtp_auth',
@@ -472,10 +510,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['none',    this.app.i18n._('None')],
                         ['login',   this.app.i18n._('Login')],
                         ['plain',   this.app.i18n._('Plain')]
-                    ]
+                    ],
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 },{
                     fieldLabel: this.app.i18n._('Username (optional)'),
-                    name: 'smtp_user'
+                    name: 'smtp_user',
+                    checkState: function() {
+                        const disabled = me.isSystemAccount() || (me.asAdminModule && me.record.get('type') === 'user');
+                        this.setDisabled(disabled);
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Password (optional)'),
                     name: 'smtp_password',
@@ -490,6 +535,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 this.smtpButton.setDisabled(false);
                             }
                         }
+                    },
+                    checkState: function() {
+                        const disabled = me.isSystemAccount() || (me.asAdminModule && me.record.get('type') === 'user');
+                        this.setDisabled(disabled);
                     }
                 },
                     this.smtpButton = new Ext.Button({
@@ -509,13 +558,19 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: [[{
                     fieldLabel: this.app.i18n._('Host'),
                     name: 'sieve_hostname',
-                    maxLength: 64
+                    maxLength: 64,
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Port (Default: 2000)'),
                     name: 'sieve_port',
                     maxLength: 5,
                     value: 2000,
-                    xtype:'numberfield'
+                    xtype:'numberfield',
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'sieve_ssl',
@@ -529,21 +584,33 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     store: [
                         ['none', this.app.i18n._('None')],
                         ['tls',  this.app.i18n._('TLS')]
-                    ]
+                    ],
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Notification Email'),
                     name: 'sieve_notification_email',
-                    vtype: 'email'
+                    vtype: 'email',
+                    checkState: function() {
+                        this.setDisabled(! me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Auto-move notifications'),
                     name: 'sieve_notification_move',
                     xtype: 'checkbox',
-                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications')
+                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications'),
+                    checkState: function() {
+                        this.setDisabled(! me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Auto-move notifications folder'),
                     name: 'sieve_notification_move_folder',
                     maxLength: 255,
-                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications')
+                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications'),
+                    checkState: function() {
+                        this.setDisabled(! me.isSystemAccount());
+                    }
                 }
                 ]]
             }, {
