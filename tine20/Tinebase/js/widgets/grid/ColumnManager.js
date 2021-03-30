@@ -125,7 +125,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 column.summaryType = fieldDefinition.summaryType;
             }
 
-            var renderer = Tine.widgets.grid.RendererManager.get(appName, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+            var renderer = Tine.widgets.grid.RendererManager.get(app, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
             if (renderer) {
                 column.renderer = renderer;
             }
