@@ -6,17 +6,8 @@
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Tinebase_Frontend_Json
  */
 class Tinebase_Frontend_JsonTest extends TestCase
 {
@@ -36,7 +27,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      *
      */
     public function setUp(): void
-{
+    {
         parent::setUp();
         
         $this->_instance = new Tinebase_Frontend_Json();
@@ -69,7 +60,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * tear down
      */
     public function tearDown(): void
-{
+    {
         parent::tearDown();
         
         // reset tz in core
@@ -739,44 +730,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
             self::assertEquals('report', $reportDefinition['scope'], 'scope mismatch');
             self::assertTrue(is_array($reportDefinition['plugin_options_json']));
         }
-    }
-
-    /**
-     * checks if confidential provider config isn't sent to clients
-     */
-    public function testAreaLockProviderConfigRemovedFromRegistryData()
-    {
-        $this->_createAreaLockConfig([Tinebase_Model_AreaLockConfig::FLD_AREAS => ['foo']]);
-
-        $this->assertSame(['pin'], Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS}->records
-            ->getFirstRecord()->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
-
-        $registryData = $this->_instance->getAllRegistryData();
-        $registryConfigValue = $registryData['Tinebase']['config'][Tinebase_Config::AREA_LOCKS]['value'];
-        self::assertTrue(isset($registryConfigValue['records'][0]));
-        self::assertFalse(isset($registryConfigValue['records'][0]['provider_config']),
-            'confidental data should be removed: ' . print_r($registryConfigValue, true));
-
-        $this->assertSame(['pin'], Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS}->records
-            ->getFirstRecord()->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
-    }
-
-    public function testAreaLockLoginExceptionInRegistryData()
-    {
-        $this->_createAreaLockConfig();
-
-        $this->_setPin();
-
-        $registryData = $this->_instance->getAllRegistryData();
-        $registryException = $registryData['Tinebase']['areaLockedException'];
-        $this->assertSame(630, $registryException['code']);
-        $this->assertSame('login', $registryException['area']);
-        $this->assertSame([[
-            'id' => 'userpin',
-            'mfa_config_id' => 'pin',
-            'config_class' => Tinebase_Model_MFA_PinUserConfig::class,
-            'config' => []
-        ]], $registryException['mfaUserConfigs']);
     }
 
     /**
