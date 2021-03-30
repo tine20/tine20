@@ -1775,14 +1775,20 @@ class Setup_Controller
                 Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE} =
                     Tinebase_Config::MAINTENANCE_MODE_NORMAL;
                 // delete sessions
-                Zend_Session::getSaveHandler()->gc(0);
+                Tinebase_Session::setSessionBackend();
+                if (($sessionHandler = Zend_Session::getSaveHandler()) instanceof Zend_Session_SaveHandler_Interface) {
+                    $sessionHandler->gc(0);
+                }
                 break;
 
             case Tinebase_Config::MAINTENANCE_MODE_ALL:
                 Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE} =
                     Tinebase_Config::MAINTENANCE_MODE_ALL;
                 // delete sessions
-                Zend_Session::getSaveHandler()->gc(0);
+                Tinebase_Session::setSessionBackend();
+                if (($sessionHandler = Zend_Session::getSaveHandler()) instanceof Zend_Session_SaveHandler_Interface) {
+                    $sessionHandler->gc(0);
+                }
                 break;
 
             default:
