@@ -98,8 +98,8 @@ Tine.widgets.grid.RendererManager = function() {
                                 const titleProperty = foreignRecordClass.getMeta('titleProperty');
                                 value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
                                 
-                                if (_.get(record, 'data.is_deleted', false)) {
-                                    value = '<span style="text-decoration: line-through;">' + value + '</sspan>';
+                                if (!!+_.get(record, 'data.is_deleted')) {
+                                    value = '<span style="text-decoration: line-through;">' + value + '</span>';
                                 }
                             }
                             return value;
