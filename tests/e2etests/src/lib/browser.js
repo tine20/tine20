@@ -5,11 +5,11 @@ require('dotenv').config();
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
-const uuid = require('uuid/v1');
+const uuid = require('uuid');
 
 module.exports = {
     download: async function (page, selector, option = {}) {
-        const downloadPath = path.resolve(__dirname, 'download', uuid());
+        const downloadPath = path.resolve(__dirname, 'download', uuid.v1());
         mkdirp(downloadPath);
         console.log('Downloading file to:', downloadPath);
         await page._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: downloadPath});
@@ -114,16 +114,28 @@ module.exports = {
 
         expect.setDefaultOptions({timeout: 5000});
 
-        browser = await puppeteer.launch({
-            // set this to false for dev/debugging
-            headless: process.env.TEST_MODE != 'debug',
-            //ignoreDefaultArgs: ['--enable-automation'],
-            //slowMo: 250,
-            //defaultViewport: {width: 1366, height: 768},
-            args: ['--lang=de-DE,de']
-        });
+        args = ['--lang=de-DE,de'];
 
+        if(process.env.TEST_DOCKER === 'true') {
+            args.push('--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage');
+        }
+
+	try {
+            browser = await puppeteer.launch({
+                headless: process.env.TEST_MODE != 'debug',
+                //ignoreDefaultArgs: ['--enable-automation'],
+                //slowMo: 250,
+                //defaultViewport: {width: 1366, height: 768},
+                args: args
+            });
+	} catch (e) {
+	    console.log(e);
+	}
         page = await browser.newPage();
+
+        await page.setExtraHTTPHeaders({
+            'Accept-Language': 'de'
+        });
         await page.setDefaultTimeout(15000);
         await page.setViewport({
             width: 1366,

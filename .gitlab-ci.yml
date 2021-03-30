@@ -7,7 +7,6 @@ include:
 stages:
   - build1
   - build2
-  - build3
   - test
   - deploy
   - housekeeping
@@ -21,7 +20,7 @@ workflow:
       when: never
     - when: always
 
-# ============ stage: build1-3 ===========================
+# ============ stage: build1-2 ===========================
 # This stage builds all docker images
 #
 # The images are named according to $REGISTRY/$NAME-commit:$CI_PIPELINE_ID-$PHP_VERSION.
@@ -43,7 +42,7 @@ docker_build_source_reuse:
   variables:
     REUSE_IMAGES: "true"
   rules:
-    - if: &TESTS_NEEDING_BUILT_IMAGE $RUN_ALL_TESTS == "true" || $PHP_UNIT_ALL_TESTS_BUILT == "true" || $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true" || $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
+    - if: &TESTS_NEEDING_BUILT_IMAGE $RUN_ALL_TESTS == "true" || $PHP_UNIT_ALL_TESTS_BUILT == "true" || $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true" || $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true" || $TEST_WITH_HEALTH_CHECK == "true"
       when: never
     - if: &DEPLOYS_NEEDING_BUILT_IMAGE $PUSH_BUILT_IMAGE_TO_GITLAB == "true" || $PUSH_TO_DOCKERHUB == "true"
       when: never
@@ -231,8 +230,19 @@ docker_build_dev:
   allow_failure: true
   timeout: 20m # time run: 4m
 
-
-
+"js: end to end tests source":
+  extends: .abstract_jobs.e2e_test
+  variables:
+    ARG_COPY_SOURCE: "true"
+    ARG_IMAGE: test-source-commit
+  rules:
+    - if: $JS_E2E_TEST_SOURCE == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $JS_E2E_TEST_SOURCE == "true"
+      when: on_success
+    - when: never
 
 "php unit: all tests built":
   extends: .abstract_jobs.php_unit

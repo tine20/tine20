@@ -13,15 +13,66 @@
   name: ${UTIL_REGISTRY}/postfix:1.0.0
   alias: postfix
   # fix service service discovery https://gitlab.com/gitlab-org/gitlab-runner/issues/1042#note_144420147
-  entrypoint: ["/bin/sh", "-c", "while [ ! -f /$CI_PROJECT_DIR/hosts_$CI_JOB_ID ]; do sleep 1; done && cat /$CI_PROJECT_DIR/hosts_$CI_JOB_ID > /etc/hosts && postconf -e 'smtp_host_lookup = native' 'lmtp_host_lookup = native' && /bin/sh /root/docker-entrypoint.sh"]
+  entrypoint: ["/bin/sh", "-c", "postconf -e 'smtp_host_lookup = native' 'lmtp_host_lookup = native' && /bin/sh /root/docker-entrypoint.sh"]
 .dovecot_service: &abstract_jobs-dovecot_service
   name: ${UTIL_REGISTRY}/dovecot:1.0.1
   alias: dovecot
-  entrypoint: ["/bin/sh", "-c", "while [ ! -f /$CI_PROJECT_DIR/hosts_$CI_JOB_ID ]; do sleep 1; done && cat /$CI_PROJECT_DIR/hosts_$CI_JOB_ID > /etc/hosts && /bin/sh /root/docker-entrypoint.sh"]
+  entrypoint: ["/bin/sh", "-c", "/bin/sh /root/docker-entrypoint.sh"]
 .ldap_service: &abstract_jobs-ldap_service
   name: ${UTIL_REGISTRY}/ldap:1.0.0
   alias: ldap
   entrypoint: ["/container/tool/run", "--copy-service"]
+.tine_as_service: &abstract_jobs-tine_as_service
+  name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_VERSION}
+  alias: tine
+  entrypoint:
+    - "/bin/sh"
+    - "-c"
+    - |
+      if test "${ARG_COPY_SOURCE}" == "true"; then
+        echo "copy src to container ...";
+        apk add rsync;
+        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/;
+        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/;
+        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/;
+        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d/;
+        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/crond.ini /etc/supervisor.d/;
+        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/;
+        cp ${CI_PROJECT_DIR}/ci/dockerimage/scripts/* /usr/local/bin/;
+        cp ${CI_PROJECT_DIR}/phpstan.neon ${TINE20ROOT}/phpstan.neon;
+        cp ${CI_PROJECT_DIR}/phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon;
+        rsync -a -I --delete ${CI_PROJECT_DIR}/docs/config/ /config;
+        rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/conf.d/ /etc/confd/conf.d;
+        rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/templates/ /etc/confd/templates;
+        rsync -a -I --delete ${CI_PROJECT_DIR}/scripts/ ${TINE20ROOT}/scripts/;
+        rsync -a -I --delete ${CI_PROJECT_DIR}/tests/ ${TINE20ROOT}/tests/;
+        rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_PROJECT_DIR}/tine20/ ${TINE20ROOT}/tine20/;
+        rm -r ${TINE20ROOT}/tine20/vendor/metaways
+        cd ${TINE20ROOT}/tine20;
+        composer install --no-ansi --no-progress --no-suggest --no-scripts
+        if test -n "${CUSTOM_APP_NAME}"; then
+          apk add jq;
+          echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
+          composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
+          echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
+          composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
+        fi
+      fi
+      /usr/sbin/confd -onetime -backend env;
+      tine20_await_db;
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot";
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS postfix";
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';";
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON postfix.* TO '$MYSQL_USER'@'%'";
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON dovecot.* TO '$MYSQL_USER'@'%'";
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/dovecot_tables.sql;
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < /config/postfix_tables.sql;
+      touch $CI_PROJECT_DIR/tine20.log
+      chown tine20:tine20 $CI_PROJECT_DIR/tine20.log
+      su tine20 -c "tine20_install";
+      su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}"
+      touch $CI_PROJECT_DIR/tine_ready_$CI_JOB_ID;
+      supervisord --nodaemon;
 
 .copy_source: &abstract_jobs-copy_source |
   if test "${ARG_COPY_SOURCE}" == "true"; then
@@ -54,14 +105,8 @@
     fi
   fi
 
-# Has a db, redis and installs tine. Then runs a php unit test.
-# $ARG_IMAGE e.g. test-built-commit
-# $ARG_EXCLUDE_GROUP optional e.g. longrunning,needsbuild,nogitlabci
-# $ARG_TEST e.g. AllTests
-# $ARG_FILTER optional e.g. CashBook
-# $ARG_GROUP optional e.g nogitlab
-# $ARG_COPY_SOURCE copy source from gitlab repo onto image
-.abstract_jobs.php_unit:
+
+.abstract_jobs.test:
   variables:
     MAIL_DB_HOST: db # temporary variable, to switch form docker-machine to k8
     MYSQL_HOST: db
@@ -116,9 +161,22 @@
     - *abstract_jobs-redis_service
     - *abstract_jobs-postfix_service
     - *abstract_jobs-dovecot_service
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+
+# Has a db, redis and installs tine. Then runs a php unit test.
+# $ARG_IMAGE e.g. test-built-commit
+# $ARG_EXCLUDE_GROUP optional e.g. longrunning,needsbuild,nogitlabci
+# $ARG_TEST e.g. AllTests
+# $ARG_FILTER optional e.g. CashBook
+# $ARG_GROUP optional e.g nogitlab
+# $ARG_COPY_SOURCE copy source from gitlab repo onto image
+.abstract_jobs.php_unit:
+  extends: .abstract_jobs.test
   before_script:
     - *abstract_jobs-copy_source
-    - cp /etc/hosts "${CI_PROJECT_DIR}/hosts_${CI_JOB_ID}"
     - /usr/sbin/confd -onetime -backend env
     - tine20_await_db
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot"
@@ -128,11 +186,8 @@
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON dovecot.* TO '$MYSQL_USER'@'%'"
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/dovecot_tables.sql
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < $ARG_POSTFIX_INIT_SQL_PATH
-
     - tine20_install
     - supervisord
-  image:
-    name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_VERSION}
   script:
     - test -f ${TINE20ROOT}/scripts/postInstallGitlab.sh && ${TINE20ROOT}/scripts/postInstallGitlab.sh
     - echo cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
@@ -145,6 +200,8 @@
       echo ${cmd};
       echo ${NODE_TOTAL} ${NODE_INDEX};
       ${cmd}
+  image:
+    name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_VERSION}
   artifacts:
     paths:
       - tine20.log
@@ -153,10 +210,11 @@
     when: always
     reports:
       junit: phpunit-report.xml
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
+  services:
+    - *abstract_jobs-db_service
+    - *abstract_jobs-redis_service
+    - *abstract_jobs-postfix_service
+    - *abstract_jobs-dovecot_service
 
 # extends .abstract_jobs.php_unit with ldap.
 .abstract_jobs.php_unit_ldap:
@@ -185,6 +243,52 @@
     - *abstract_jobs-postfix_service
     - *abstract_jobs-dovecot_service
     - *abstract_jobs-ldap_service
+
+# $ARG_IMAGE
+.abstract_jobs.e2e_test:
+  extends: .abstract_jobs.test
+  variables:
+    TEST_DOCKER: "true"
+    TEST_BROWSER_LANGUAGE: en
+    KUBERNETES_CPU_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_CPU_REQUEST
+    KUBERNETES_CPU_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_CPU_LIMIT
+    KUBERNETES_MEMORY_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_MEMORY_REQUEST
+    KUBERNETES_MEMORY_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_MEMORY_LIMIT
+    KUBERNETES_HELPER_CPU_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_HELPER_CPU_REQUEST
+    KUBERNETES_HELPER_CPU_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_HELPER_CPU_LIMIT
+    KUBERNETES_HELPER_MEMORY_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_HELPER_MEMORY_REQUEST
+    KUBERNETES_HELPER_MEMORY_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_HELPER_MEMORY_LIMIT
+    KUBERNETES_SERVICE_CPU_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_SERVICE_CPU_REQUEST
+    KUBERNETES_SERVICE_CPU_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_SERVICE_CPU_LIMIT
+    KUBERNETES_SERVICE_MEMORY_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_SERVICE_MEMORY_REQUEST
+    KUBERNETES_SERVICE_MEMORY_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_SERVICE_MEMORY_LIMIT
+  services:
+    - *abstract_jobs-db_service
+    - *abstract_jobs-redis_service
+    - *abstract_jobs-postfix_service
+    - *abstract_jobs-dovecot_service
+    - *abstract_jobs-tine_as_service
+  image:
+    name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.2
+  before_script:
+    - cd $CI_PROJECT_DIR/tine20
+    - composer install --ignore-platform-reqs
+    - cd $CI_PROJECT_DIR/tests/e2etests
+    - echo no cp -r /root/node_modules .
+    - npm install
+    - while [ ! -f /$CI_PROJECT_DIR/tine_ready_$CI_JOB_ID ]; do sleep 1; done
+  script:
+    - |
+      if [ "${TINE20_BUILDTYPE}" == "DEVELOPMENT" ]; then
+        export TEST_URL=http://tine:10443;
+      else
+        export TEST_URL=http://tine:80;
+      fi
+    - while ! wget $TEST_URL; do echo; done
+    - sleep 60;
+    - echo TEST_URL=${TEST_URL}
+    - export TEST_ENVIROMENT=""
+    - npm test
 
 .abstract_jobs.copy_source:
   before_script:

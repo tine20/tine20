@@ -219,7 +219,7 @@ describe('filterBar', () => {
     });
 });
 
-describe('write E-Mail', () => {
+describe.skip('write E-Mail', () => {
     test('open editDialog', async () => {
         await expect(page).toClick('button', {text: 'Verfassen'});
         let newPage = await lib.getNewWindow();
