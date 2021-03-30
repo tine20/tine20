@@ -27,7 +27,8 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
     },
 
     routes: {
-        'showNode(.*)': 'showNode'
+        'showNode(.*)': 'showNode',
+        '(.*)': 'showNode'
     },
 
     /**
@@ -35,28 +36,21 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
      * /#/Filemanager/showNode/shared/someFolder/someFile
      */
     showNode: function(path) {
-        this.getMainScreen().getCenterPanel().initialLoadAfterRender = false;
+        const {type, dirname, sanitize} = Tine.Filemanager.Model.Node;
         Tine.Tinebase.MainScreenPanel.show(this);
-        // NOTE: decodeURIComponent can't cope with +
-        path = Ext.ux.util.urlCoder.decodeURIComponent(path);
+        path = sanitize(Ext.ux.util.urlCoder.decodeURIComponent(path));
 
-        // if file, show directory file is in
-        var dirPath = path;
-        if (String(path).match(/\/.*\..+$/)) {
-            var pathParts = path.split('/');
-            pathParts.pop();
-            dirPath = pathParts.join('/');
-        }
-
+        const isFile = type(path) === 'file';
+        const dir = isFile ? dirname(path) : path;
+        
         (function() {
             var cp = this.getMainScreen().getCenterPanel(),
                 grid = cp.getGrid(),
                 store = cp.getStore(),
                 ftb = cp.filterToolbar,
                 highlight = function() {
-                    store.un('load', highlight);
                     var sm = grid.getSelectionModel(),
-                        idx = store.find('path', path);
+                        idx = store.findExact('path', path);
                     if (idx >= 0) {
                         sm.clearSelections();
                         const row = grid.getView().getRow(idx);
@@ -65,10 +59,20 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
                     }
                 };
 
-            store.on('load', highlight);
-            ftb.setValue([{field: 'path', operator: 'equals', value: dirPath}]);
-            ftb.onFiltertrigger();
+            store.on('load', highlight, this, {single: true});
+            
+            const currentValue = ftb.getValue();
+            if (! (currentValue.length ===1 && currentValue[0].field === 'path' && currentValue[0].operator === 'equals')
+                && ! sanitzise(currentValue[0].value) === dir) {
+                ftb.setValue([{field: 'path', operator: 'equals', value: dir}]);
+                ftb.onFiltertrigger();
+            }
         }).defer(500, this);
+    },
+
+    getRoute(path) {
+        const encodedPath = _.map(Tine.Filemanager.Model.Node.sanitize(path).split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/');
+        return `Filemanager${encodedPath}`;
     }
 });
 
