@@ -45,6 +45,7 @@ describe('Edit Lead', () => {
         await newPage.keyboard.press('ArrowDown');
         await newPage.waitFor(500);
         await newPage.screenshot({path: 'screenshots/7_crm/6_crm_lead_produkte_zuweisen.png'});
+        await newPage.type('.x-form-text.x-form-field.x-form-focus', 'Getränke');
         await expect(newPage).toClick('.x-combo-list-item', {text: 'Getränke'}); // need DemoDaten!
         await newPage.waitFor(500);
         await newPage.screenshot({path: 'screenshots/7_crm/5_crm_lead_produkte_zugewiesen.png'});

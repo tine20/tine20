@@ -7,7 +7,6 @@ include:
 stages:
   - build1
   - build2
-  - build3
   - test
   - deploy
   - housekeeping
@@ -21,7 +20,7 @@ workflow:
       when: never
     - when: always
 
-# ============ stage: build1-3 ===========================
+# ============ stage: build1-2 ===========================
 # This stage builds all docker images
 #
 # The images are named according to $REGISTRY/$NAME-commit:$CI_PIPELINE_ID-$PHP_VERSION.
@@ -231,8 +230,19 @@ docker_build_dev:
   allow_failure: true
   timeout: 20m # time run: 4m
 
-
-
+"js: end to end tests source":
+  extends: .abstract_jobs.e2e_test
+  variables:
+    ARG_COPY_SOURCE: "true"
+    ARG_IMAGE: test-source-commit
+  rules:
+    - if: $JS_E2E_TEST_SOURCE == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $JS_E2E_TEST_SOURCE == "true"
+      when: on_success
+    - when: never
 
 "php unit: all tests built":
   extends: .abstract_jobs.php_unit
