@@ -25,7 +25,7 @@ describe('filemanager', () => {
             test('create folder', async () => {
                 const folder = 'Test' + Math.round(Math.random() * 10000000);
                 await page.waitFor(1000);
-                await expect(page).toClick('.t-app-filemanager button', {text: 'Ordner anlegen'});
+                await expect(page).toClick('.t-app-filemanager button', {text: 'Ordner anlegen',visibile:true});
                 await page.waitForSelector('.x-window.x-window-plain.x-window-dlg');
                 await page.type('.ext-mb-fix-cursor input', folder);
                 await page.keyboard.press('Enter');
