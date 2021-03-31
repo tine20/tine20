@@ -297,6 +297,9 @@ msgstr "Zusätzliche Eigenschaft des Zusatzfeldes"
 msgid "Tab Panel"
 msgstr "Karteireiter"
 
+msgid "Multi Factor Authentication Config"
+msgstr "Multi-Faktor-Authentifizierung"
+
 #: js/customfield/EditDialog.js:493 js/Models.js:87 js/GroupEditDialog.js:222
 #: js/Models.js:90
 msgid "Group"

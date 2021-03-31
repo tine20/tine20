@@ -13,7 +13,7 @@ class Pin extends Generic {
   constructor (config) {
     super(config)
     this.windowTitle = i18n._('PIN required')
-    this.questionText = formatMessage('This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret', this)
+    this.questionText = formatMessage('This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret.', this)
     this.passwordFieldLabel = formatMessage('{mfaDevice.device_name} secret', this)
   }
 }

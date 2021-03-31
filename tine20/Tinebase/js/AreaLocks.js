@@ -12,12 +12,14 @@ import UserPasswordProvider from 'MFA/Providers/UserPassword'
 import PinProvider from 'MFA/Providers/Pin'
 import TokenProvider from 'MFA/Providers/Token'
 import SmsProvider from 'MFA/Providers/Sms'
+import YubicoOTPProvider from 'MFA/Providers/YubicoOTP'
 
 let providerMap = {
   Tinebase_Model_MFA_SmsUserConfig: SmsProvider,
   Tinebase_Model_MFA_UserPassword: UserPasswordProvider,
   Tinebase_Model_MFA_PinUserConfig: PinProvider,
-  Tinebase_Model_MFA_TokenUserConfig: TokenProvider
+  Tinebase_Model_MFA_TokenUserConfig: TokenProvider,
+  Tinebase_Model_MFA_YubicoOTPUserConfig: YubicoOTPProvider
 }
 
 class AreaLocks extends Ext.util.Observable {
