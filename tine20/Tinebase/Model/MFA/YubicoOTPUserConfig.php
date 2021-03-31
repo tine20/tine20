@@ -56,7 +56,7 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
             ],
             self::FLD_AES_KEY                   => [
                 self::TYPE                          => self::TYPE_STRING,
-                self::LABEL                         => 'Yubico AES privat key', // _('Yubico AES privat key')
+                self::LABEL                         => 'Yubico privat key', // _('Yubico privat key')
             ],
             self::FLD_CC_ID                     => [
                 self::TYPE                          => self::TYPE_STRING,

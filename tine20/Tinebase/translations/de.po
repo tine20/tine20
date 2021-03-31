@@ -4011,20 +4011,20 @@ msgid "Password required"
 msgstr "Passwort erforderlich"
 
 #: js/AreaLocks/UserPasswordProvider.es6.js:16
-msgid "This area is locked. To unlock it you need to provide your password"
+msgid "This area is locked. To unlock it you need to provide your password."
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr Passwort "
-"eingeben"
+"eingeben."
 
 #: js/AreaLocks/TokenProvider.es6.js:15
 msgid "Token required"
 msgstr "Token erforderlich"
 
 #: js/AreaLocks/TokenProvider.es6.js:16
-msgid "This area is locked. To unlock it you need to enter your Token"
+msgid "This area is locked. To unlock it you need to enter your Token."
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihren Token "
-"eingeben"
+"eingeben."
 
 #: js/AreaLocks/TokenProvider.es6.js:17
 msgid "Token"
@@ -4035,14 +4035,34 @@ msgid "PIN required"
 msgstr "PIN erforderlich"
 
 #: js/AreaLocks/PinProvider.es6.js:16
-msgid "This area is locked. To unlock it you need to provide your PIN"
+msgid "This area is locked. To unlock it you need to provide your PIN."
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
-"eingeben"
+"eingeben."
 
 #: js/AreaLocks/PinProvider.es6.js:17 js/PasswordChangeDialog.js:34
 msgid "PIN"
 msgstr "PIN"
+
+msgid "Yubico OTP required"
+msgstr "Yubico OTP erforderlich"
+
+msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihren Yubico "
+"OTP eingeben."
+
+msgid "Yubico OTP"
+msgstr "Yubico OTP"
+
+msgid "Yubico OTP public id"
+msgstr "Yubico OTP öffentliche ID"
+
+msgid "Yubico OTP privat id"
+msgstr "Yubico OTP private ID"
+
+msgid "Yubico privat key"
+msgstr "Yubico geheimer Schlüssel"
 
 #: js/LicenseScreen.js:35
 msgid "License"
@@ -4051,9 +4071,6 @@ msgstr "Lizenz"
 #: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
 msgid "Outdent Text"
 msgstr "Text ausrücken"
-
-msgid "Multi Factor Authentication Config"
-msgstr "Multi-Faktor-Authentifizierung"
 
 msgid "Cell Phone Number"
 msgstr "Mobilfunknummer"
@@ -4066,6 +4083,12 @@ msgstr "Statischer PIN: ●●●●●●"
 
 msgid "New PIN"
 msgstr "Neue PIN"
+
+msgid "MFA Device Type"
+msgstr "MFA Gerätetyp"
+
+msgid "MFA Device Config"
+msgstr "MFA Gerätekonfiguration"
 
 #: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
 msgid "Indent Text"
@@ -4909,20 +4932,20 @@ msgstr "Das E-Mail-Konto existiert bereits"
 
 msgid ""
 "This area is locked. To unlock it you need to provide your {mfaDevice."
-"device_name} secret"
+"device_name} secret."
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr {mfaDevice."
-"device_name} Geheimnis eingeben"
+"device_name} Geheimnis eingeben."
 
 msgid "{mfaDevice.device_name} secret"
 msgstr "{mfaDevice.device_name} Geheimnis"
 
 msgid ""
 "This area is locked. To unlock it you need to provide your token from your "
-"device: {mfaDevice.device_name}"
+"device: {mfaDevice.device_name}."
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token vom "
-"Gerät {mfaDevice.device_name} eingeben"
+"Gerät {mfaDevice.device_name} eingeben."
 
 msgid "Token from {mfaDevice.device_name}"
 msgstr "Token vom Gerät {mfaDevice.device_name}"
@@ -4955,10 +4978,10 @@ msgstr "SMS Sicherheitscode benötigt"
 
 msgid ""
 "This area is locked. To unlock it we send a securitycode to via "
-"{mfaDevice.device_name}"
+"{mfaDevice.device_name}."
 msgstr ""
 "Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via "
-"{mfaDevice.device_name} zum entsperren gesendet"
+"{mfaDevice.device_name} zum entsperren gesendet."
 
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "{mfaDevice.device_name} Sicherheitscode"
