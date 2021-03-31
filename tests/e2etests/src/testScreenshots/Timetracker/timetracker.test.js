@@ -44,7 +44,7 @@ describe('timetracker', () => {
             await page.waitFor(1000);
         });
 
-        test('open EditDialog', async () => {
+        test.skip('open EditDialog', async () => {
             await expect(page).toClick('button', {text: 'Stundenzettel hinzufügen'});
             //await expect(page).toClick('.x-btn-split .x-btn-text button', {text: 'Stundenzettel hinzufügen'});
             //console.log('Klick Button');
