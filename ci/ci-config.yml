@@ -84,11 +84,7 @@ variables:
 
   JS_E2E_TEST_SOURCE:
     description: "Whether to run e2e test on source image"
-    value: "false"
-
-  JS_E2E_TEST_BUILT:
-    description: "Whether to run e2e test on built image"
-    value: "false"
+    value: "never"
 
   DATABASE_IMAGE:
     description: "Database image used by tests."
