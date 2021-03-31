@@ -92,7 +92,7 @@ describe('Contacts', () => {
             await popupWindow.close();
         });
 
-        test.skip('relations', async () => {
+        test('relations', async () => {
             await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
             var popupWindow = await lib.getNewWindow();
             await popupWindow.waitFor('.x-tab-edge');
@@ -116,7 +116,7 @@ describe('Contacts', () => {
             await popupWindow.close();
         });
 
-        describe.skip('ContextMenu', () => {
+        describe('ContextMenu', () => {
 
             test('test Tags', async () => {
                 await expect(page).toClick('.x-grid3-row', {button: 'right'});
