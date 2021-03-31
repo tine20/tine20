@@ -543,7 +543,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         );
 
         // check json key for all methods but some exceptions
-        if ( !(in_array($method, $anonymnousMethods)) && ($jsonKey !== Tinebase_Core::get('jsonKey') || !self::userIsRegistered())) {
+        if ( !(in_array($method, $anonymnousMethods)) && ($jsonKey !== Tinebase_Core::get('jsonKey') || !self::userIsRegistered())
+                && ('Tinebase_AreaLock.triggerMFA' !== $method || !is_object(Tinebase_Core::getUser()))) {
             $request = Tinebase_Core::getRequest();
             if (!self::userIsRegistered()) {
                 if (is_object(Tinebase_Core::getUser())) {
