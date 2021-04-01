@@ -31,7 +31,7 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Supplier',
+        'recordName'        => 'Supplier', // gettext('GENDER_Supplier')
         'recordsName'       => 'Suppliers', // ngettext('Supplier', 'Suppliers', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,

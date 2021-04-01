@@ -1547,5 +1547,23 @@ msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben."
 msgid "Assets"
 msgstr "Guthaben"
 
+msgid "GENDER_Customer"
+msgstr "male"
+
+msgid "GENDER_Address"
+msgstr "female"
+
+msgid "GENDER_Cost Center"
+msgstr "female"
+
+msgid "GENDER_Division"
+msgstr "female"
+
+msgid "GENDER_Invoice"
+msgstr "female"
+
+msgid "GENDER_Offer"
+msgstr "other"
+
 msgid "GENDER_Contract"
 msgstr "male"

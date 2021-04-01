@@ -2311,12 +2311,12 @@ msgstr "ist nicht"
 
 #: js/widgets/grid/FilterModel.js:263
 msgid "{gender, select, male {one of} female {one of} other {one of}}"
-msgstr "{gender, select, male {einer von} female {eine von} other {eines von}}"
+msgstr "{gender, select, male {ist einer von} female {ist eine von} other {ist eines von}}"
 
 #: js/widgets/grid/FilterModel.js:264
 msgid "{gender, select, male {none of} female {none of} other {none of}}"
 msgstr ""
-"{gender, select, male {keiner von} female {keine von} other {keines von}}"
+"{gender, select, male {ist keiner von} female {ist keine von} other {ist keines von}}"
 
 #: js/widgets/grid/FilterModel.js:265
 msgid "is before"

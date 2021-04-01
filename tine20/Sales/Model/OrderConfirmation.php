@@ -29,7 +29,7 @@ class Sales_Model_OrderConfirmation extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Order Confirmation',
+        'recordName'        => 'Order Confirmation', // gettext('GENDER_Order Confirmation')
         'recordsName'       => 'Order Confirmations', // ngettext('Order Confirmation', 'Order Confirmations', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
