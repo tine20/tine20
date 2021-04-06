@@ -42,7 +42,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Contract', // gettext('GENDER_Contract)
+        'recordName'        => 'Contract', // gettext('GENDER_Contract')
         'recordsName'       => 'Contracts', // ngettext('Contract', 'Contracts', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
@@ -65,30 +65,6 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'modelName'         => 'Contract',
         
         'filterModel' => array(
-            'customer' => array(
-                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
-                'label' => 'Customer', // _('Customer')
-                'options' => array(
-                    'controller' => 'Sales_Controller_Customer',
-                    'filtergroup' => 'Sales_Model_CustomerFilter',
-                    'own_filtergroup' => 'Sales_Model_ContractFilter',
-                    'own_controller' => 'Sales_Controller_Contract',
-                    'related_model' => 'Sales_Model_Customer',
-                ),
-                'jsConfig' => array('filtertype' => 'sales.contractcustomer')
-            ),
-            'costcenter' => array(
-                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
-                'label' => 'Cost Center', // _('Cost Center')
-                'options' => array(
-                    'controller' => 'Sales_Controller_CostCenter',
-                    'filtergroup' => 'Sales_Model_CostCenterFilter',
-                    'own_filtergroup' => 'Sales_Model_ContractFilter',
-                    'own_controller' => 'Sales_Controller_Contract',
-                    'related_model' => 'Sales_Model_CostCenter',
-                ),
-                'jsConfig' => array('filtertype' => 'sales.contractcostcenter')
-            ),
             'contact_internal' => array(
                 'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
                 'label' => 'Contact Person (internal)', // _('Contact Person (internal)')
@@ -99,7 +75,6 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'own_controller' => 'Sales_Controller_Contract',
                     'related_model' => 'Addressbook_Model_Contact',
                 ),
-                'jsConfig' => array('filtertype' => 'sales.contract-contact-internal')
             ),
             'contact_external' => array(
                 'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
@@ -111,7 +86,6 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'own_controller' => 'Sales_Controller_Contract',
                     'related_model' => 'Addressbook_Model_Contact',
                 ),
-                'jsConfig' => array('filtertype' => 'sales.contract-contact-external')
             ),
             'products' => array(
                 // TODO generalize this for "records" type (Tinebase_Model_Filter_ForeignRecords?)

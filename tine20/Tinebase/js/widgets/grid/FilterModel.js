@@ -342,13 +342,13 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             });
             operator.on('select', function(combo, newRecord, newKey) {
                 if (combo.value != combo.filter.get('operator')) {
-                    this.onOperatorChange(combo.filter, combo.value);
+                    this.onOperatorChange(combo.filter, combo.value, true);
                 }
             }, this);
             
             operator.on('blur', function(combo) {
                 if (combo.value != combo.filter.get('operator')) {
-                    this.onOperatorChange(combo.filter, combo.value);
+                    this.onOperatorChange(combo.filter, combo.value, true);
                 }
             }, this);
             
@@ -387,7 +387,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      * called on operator change of a filter row
      * @private
      */
-    onOperatorChange: function(filter, newOperator) {
+    onOperatorChange: function(filter, newOperator, keepValue) {
         filter.set('operator', newOperator);
         filter.set('value', '');
         
