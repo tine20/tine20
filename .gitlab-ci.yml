@@ -173,7 +173,7 @@ docker_build_dev:
     ARG_COPY_SOURCE: "true"
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
   stage: test
-  timeout: 30m
+  timeout: 90m
   rules:
     - if: $PHP_UNIT_SETUP_TESTS == "never"
       when: never
