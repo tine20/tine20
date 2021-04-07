@@ -577,6 +577,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             );
         }
 
+        Tinebase_Controller::getInstance()->forceUnlockLoginArea();
         Tinebase_Controller::getInstance()->setRequestContext(array(
             'MFAPassword' => $MFAPassword,
             'MFAId'       => $MFAUserConfigId
