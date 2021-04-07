@@ -503,7 +503,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             if ($parents[$fileNode->parent_id] === false) {
                 $result->removeRecord($fileNode);
             } else {
-                $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name;
+                $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name . ( 'folder' === $fileNode->type ? '/' : '');
             }
         }
 
@@ -1055,10 +1055,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             ? new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($_records)) : $_records;
 
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
+        $flatpathWithoutBasepath = rtrim(Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app), '/');
         if ($records) {
             foreach ($records as $record) {
-                $record->path = $flatpathWithoutBasepath . '/' . $record->name;
+                $record->path = $flatpathWithoutBasepath . '/' . $record->name . ( 'folder' === $record->type ? '/' : '');
             }
         }
 

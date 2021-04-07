@@ -76,6 +76,6 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
             $val = urlencode($val);
         });
 
-        return Tinebase_Core::getUrl() . '/#/Filemanager/showNode/' . join('/', $path);
+        return Tinebase_Core::getUrl() . '/#/Filemanager/' . join('/', $path) . ($_record->type === 'folder' ? '/' : '');
     }
 }

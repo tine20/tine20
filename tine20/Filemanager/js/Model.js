@@ -34,16 +34,56 @@ Tine.Filemanager.Model.NodeMixin = {
     },
 
     getSystemLink: function() {
-        var _ = window.lodash,
-            encodedPath = _.map(String(this.get('path')).replace(/(^\/|\/$)/, '').split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/') +
-                (this.get('type') === 'folder' ? '/' : '');
-
-        return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#/Filemanager/showNode', encodedPath].join('/');
+        return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#',
+            Tine.Tinebase.appMgr.get('Filemanager').getRoute(this.get('path'), this.get('type'))].join('/');
     },
     
     statics: {
+        type(path) {
+            path = String(path);
+            return path.lastIndexOf('/') === --path.length || path.split('/').pop().lastIndexOf('.') < 0 ? 'folder' : 'file';
+        },
+        
+        dirname(path) {
+            const self = Tine.Filemanager.Model.Node;
+            const sanitized = self.sanitize(path).replace(/\/$/, '');
+            return sanitized.substr(0, sanitized.lastIndexOf('/') + 1);
+        },
+        
+        basename(path, sep='/') {
+            const self = Tine.Filemanager.Model.Node;
+            const sanitized = self.sanitize(path).replace(/\/$/, '');
+            return sanitized.substr(sanitized.lastIndexOf(sep) + 1);
+        },
+        
+        extension(path) {
+            const self = Tine.Filemanager.Model.Node;
+            return self.type(path) === 'file' ? self.basename(path,'.') : null;
+        },
+
+        pathinfo(path) {
+            const self = Tine.Filemanager.Model.Node;
+            const basename = self.basename(path);
+            const extension = self.extension(path);
+            return {
+                dirname: self.dirname(path),
+                basename: basename,
+                extension: extension,
+                filename: extension ? basename.substring(0, basename.length - extension.length - 1) : null
+            }
+        },
+        
+        sanitize(path) {
+            path = String(path);
+            const self = Tine.Filemanager.Model.Node;
+            let isFolder = path.lastIndexOf('/') === --path.length;
+            path = _.compact(path.split('/')).join('/');
+            return '/' + path + (isFolder || self.type(path) === 'folder' ? '/' : '');
+        },
+        
         getExtension: function(filename) {
-            return filename.split('.').pop();
+            const self = Tine.Filemanager.Model.Node;
+            return self.extension(filename);
         },
 
         registerStyleProvider: function(provider) {

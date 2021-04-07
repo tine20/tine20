@@ -2082,7 +2082,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
             $result = $nodeController->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), FALSE);
             $personalNode = $result[0];
-            $filepath = $personalNode->path . '/test.txt';
+            $filepath = $personalNode->path . 'test.txt';
 
             // create empty file first (like the js frontend does)
             $nodeController->createNodes($filepath, Tinebase_Model_Tree_FileObject::TYPE_FILE, array(), FALSE);

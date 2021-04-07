@@ -93,9 +93,17 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.modelConfig = this.recordClass.getModelConfiguration();
         _.assign(this.gridConfig, this.initGenericColumnModel());
 
+        const routeParts = Tine.Tinebase.router.getRoute();
+        let defaultPath = Tine.Tinebase.container.getMyFileNodePath();
+        if ('Filemanager' === routeParts.shift()) {
+            const path = Ext.ux.util.urlCoder.decodeURIComponent(this.recordClass.sanitize(routeParts.join('/')));
+            const isFile = this.recordClass.type(path) === 'file';
+            defaultPath = isFile ? this.recordClass.dirname(path) : path;
+        }
+        
         this.defaultFilters = this.defaultFilters || [
             {field: 'query', operator: 'contains', value: ''},
-            {field: 'path', operator: 'equals', value: Tine.Tinebase.container.getMyFileNodePath()}
+            {field: 'path', operator: 'equals', value: defaultPath}
         ];
 
         this.plugins = this.plugins || [];

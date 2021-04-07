@@ -68,6 +68,8 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                 value = '/' + value;
             }
 
+            Tine.Tinebase.router.setRoute(Tine.Tinebase.appMgr.get('Filemanager').getRoute(value));
+            
             return Ext.ux.form.ClearableTextField.prototype.setValue.call(this, value);
         };
 

@@ -870,7 +870,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     }
                 }
             } else {
-                filters.push(line);
+                if (! (line.operator === 'contains' && !line.value)) {
+                    filters.push(line);
+                }
             }
         }, this);
         
