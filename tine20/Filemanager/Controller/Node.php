@@ -616,21 +616,21 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
             array(
                 'name'   => $translate->_('My folders'),
-                'path'   => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
+                'path'   => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/',
                 'type'   => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                 'id'     => 'myUser',
                 'grants' => array(),
             ),
             array(
                 'name' => $translate->_('Shared folders'),
-                'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+                'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/',
                 'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                 'id' => Tinebase_FileSystem::FOLDER_TYPE_SHARED,
                 'grants' => array(),
             ),
             array(
                 'name' => $translate->_('Other users folders'),
-                'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
+                'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/',
                 'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                 'id' => Tinebase_Model_Container::TYPE_OTHERUSERS,
                 'grants' => array(),

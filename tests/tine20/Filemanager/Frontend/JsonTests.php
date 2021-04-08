@@ -184,7 +184,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals(array(
             'id'             => 'myUser',
             'path'           => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' .
-                Tinebase_Core::getUser()->accountLoginName,
+                Tinebase_Core::getUser()->accountLoginName . '/',
             'name'           => $translate->_('My folders'),
             'type'           => 'folder',
             'grants'         => array(),
@@ -209,7 +209,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             ), $searchResult['results'][0], 'my user folder mismatch');
         $this->assertEquals(array(
             'id'    => Tinebase_Model_Container::TYPE_SHARED,
-            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/',
             'name' => $translate->_('Shared folders'),
             'type' => 'folder',
             'grants'         => array(),
@@ -234,7 +234,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), $searchResult['results'][1], 'shared folder mismatch');
         $this->assertEquals(array(
             'id'    => Tinebase_Model_Container::TYPE_OTHERUSERS,
-            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
+            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/',
             'name' => $translate->_('Other users folders'),
             'type' => 'folder',
             'grants'         => array(),
