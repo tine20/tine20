@@ -541,7 +541,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
 
-        this.fireEvent('dtStartChange', Ext.util.JSON.encode({newValue: newValue, oldValue: oldValue}));
+        this.fireEvent('dtStartChange', Ext.util.JSON.encode({newValue: newValue, oldValue: oldValue || newValue}));
     },
     
     /**

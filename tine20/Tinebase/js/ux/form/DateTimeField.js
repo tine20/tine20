@@ -338,7 +338,9 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     
     setRawValue: Ext.EmptyFn,
     
-    setValue: function (value, skipHistory) {
+    setValue: function (value, record, skipHistory) {
+        // NOTE: skipHistory was second param. don't know if this is used somehwere
+        skipHistory = !_.isSet(skipHistory) && _.isBoolean(record) ? record : skipHistory;
         if (! skipHistory) {
             this.lastValues.push(value);
         }
