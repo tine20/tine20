@@ -28,6 +28,7 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE015 = __CLASS__ . '::update015';
     const RELEASE012_UPDATE016 = __CLASS__ . '::update016';
     const RELEASE012_UPDATE017 = __CLASS__ . '::update017';
+    const RELEASE012_UPDATE018 = __CLASS__ . '::update018';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -69,6 +70,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE015          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update015',
+            ],
+            self::RELEASE012_UPDATE018          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update018',
             ],
         ],
 
@@ -349,5 +354,18 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '12.35', self::RELEASE012_UPDATE017);
+    }
+
+    /**
+     * recheck foreign key constraints
+     */
+    public function update018()
+    {
+        // stop transaction for structure updates to work proeprly
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        (new Tinebase_Setup_Update_Release11($this->_backend))->update_46();
+
+        $this->addApplicationUpdate('Tinebase', '12.36', self::RELEASE012_UPDATE018);
     }
 }
