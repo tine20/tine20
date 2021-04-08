@@ -101,7 +101,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             var _ = window.lodash,
                 me = this,
                 path = data.path,
-                parentPath = path.replace(new RegExp(_.escapeRegExp(data.name) + '$'), ''),
+                parentPath = Tine.Filemanager.Model.Node.dirname(path),
                 node = this.getNodeById(data.id),
                 pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') != path;
 
@@ -460,7 +460,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             }
 
             if (index > 2) {
-                var c = curNode.findChild('path', curPath + '/' + keys[index]);
+                var c = curNode.findChild('path', Tine.Filemanager.Model.Node.sanitize(curPath + keys[index]));
             } else {
                 var c = curNode.findChild('id', keys[index]);
             }
@@ -511,7 +511,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             if(typeof nodeName == 'object') {
                 nodeName = nodeName.name;
             }
-            newPath = targetPath + '/' + nodeName;
+            newPath = Tine.Filemanager.Model.Node.sanitize(targetPath + nodeName);
 
             copy = new Ext.tree.AsyncTreeNode({text: node.text, path: newPath, name: node.attributes.name
                 , nodeRecord: node.attributes.nodeRecord, account_grants: node.attributes.account_grants});
@@ -525,7 +525,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             var nodeData = Ext.copyTo({}, node.data, this.recordClass.getFieldNames());
             var newNodeRecord = new this.recordClass(nodeData);
 
-            newPath = targetPath + '/' + nodeName;
+            newPath = Tine.Filemanager.Model.Node.sanitize(targetPath + nodeName);
             copy = new Ext.tree.AsyncTreeNode({text: nodeName, path: newPath, name: node.data.name
                 , nodeRecord: newNodeRecord, account_grants: node.data.account_grants});
         }
@@ -583,7 +583,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             }
 
             var fileName = file.name || file.fileName,
-                filePath = targetNodePath + '/' + fileName;
+                filePath = Tine.Filemanager.Model.Node.sanitize(targetNodePath + fileName);
 
             var upload = new Ext.ux.file.Upload({
                 fmDirector: treePanel,
