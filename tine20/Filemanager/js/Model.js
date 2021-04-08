@@ -41,7 +41,8 @@ Tine.Filemanager.Model.NodeMixin = {
     statics: {
         type(path) {
             path = String(path);
-            return path.lastIndexOf('/') === --path.length || path.split('/').pop().lastIndexOf('.') < 0 ? 'folder' : 'file';
+            const basename = path.split('/').pop(); // do not use basename() here -> recursion!
+            return path.lastIndexOf('/') === --path.length || basename.lastIndexOf('.') < Math.max(1, basename.length - 5) ? 'folder' : 'file';
         },
         
         dirname(path) {
@@ -268,14 +269,14 @@ Tine.Filemanager.nodeBackendMixin = {
                 targetPath = target;
             
             if(target.data) {
-                targetPath = target.data.path + (target.data.type == 'folder' ? '/' : '');
+                targetPath = target.data.path;
             }
             else if (target.attributes) {
-                targetPath = target.attributes.path + '/';
+                targetPath = target.attributes.path;
                 treeIsTarget = true;
             }
             else if (target.path) {
-                targetPath = target.path + (target.type == 'folder' ? '/' : '');
+                targetPath = target.path;
             }
 
             for(var i=0; i<items.length; i++) {
@@ -291,7 +292,7 @@ Tine.Filemanager.nodeBackendMixin = {
                     itemName = itemName.name;
                 }
 
-                destinationFilenames.push(targetPath + (targetPath.match(/\/$/) ? itemName : ''));
+                destinationFilenames.push(Tine.Filemanager.Model.Node.sanitize(targetPath + (targetPath.match(/\/$/) ? itemName : '')));
             }
             
             var method = this.appName + ".copyNodes",
