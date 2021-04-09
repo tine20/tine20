@@ -758,10 +758,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.filterStore.add(filter);
 
         if (this.bwrap) {
-            var fRow = this.templates.filterrow.insertAfter(this.bwrap.child('tr[class=fw-ftb-frow]:last'), {
+            var frow = this.templates.filterrow.append(this.bwrap.child('.tw-filtertoolbar table tbody'), {
                 id: 'tw-ftb-frowid-' + filter.id
             }, true);
-
             this.renderFilterRow(filter);
         }
 
@@ -781,8 +780,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     /**
      * deletes a filter
      * @param {Ext.Record} filter to delete
+     * @param {Boolean} supressDefault supress new default row
      */
-    deleteFilter: function(filter) {
+    deleteFilter: function(filter, supressDefault) {
         var fRow = this.bwrap ? this.bwrap.child('tr[id=tw-ftb-frowid-' + filter.id + ']') : null;
         //var isLast = this.filterStore.getAt(this.filterStore.getCount()-1).id == filter.id;
         var isLast = this.filterStore.getCount() == 1,
@@ -800,7 +800,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             filterModel.onDestroy(filter);
         }
         
-        if (isLast && this.bwrap) {
+        if (isLast && !supressDefault && this.bwrap) {
             // add a new first row
             var firstFilter = this.addFilter();
             

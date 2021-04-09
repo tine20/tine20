@@ -102,7 +102,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         this.defaultFilters = this.defaultFilters || [
-            {field: 'query', operator: 'contains', value: ''},
             {field: 'path', operator: 'equals', value: defaultPath}
         ];
 
