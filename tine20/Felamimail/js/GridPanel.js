@@ -1871,16 +1871,25 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     targetFolder.set('cache_status', 'pending');
                     targetFolder.commit();
                 }
+                
+                if (nextRecord) {
+                    sm.selectRecords([nextRecord]);
+                }
             }
             
-            if ('spam' === option && nextRecord) {
-                sm.selectRecords([nextRecord]);
+            if ('ham' === option ) {
+                sm.selectRecords(msgs.items, true);
             }
             
-            await Promise.allSettled(promises);
+            await Promise.allSettled(promises)
+                .then(() => {
+                    if ('spam' === option) {
+                        this.onAfterDelete(msgsIds);
+                    }
+                    
+                    this.doRefresh();
+            });
             
-            this.onAfterDelete(msgsIds);
-            this.doRefresh();
         } catch (e) {
             this.doRefresh();
         }
