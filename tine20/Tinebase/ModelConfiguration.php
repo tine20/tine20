@@ -1564,7 +1564,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         if (isset($this->_fields[$field]) && isset($this->_fields[$field][self::TYPE])) {
             switch ($this->_fields[$field][self::TYPE]) {
                 case 'user':
-                    return Tinebase_Model_FullUser::class;
+                    return Tinebase_Model_User::class;
                 case 'relation':
                     return Tinebase_Model_Relation::class;
                 case 'tag':
