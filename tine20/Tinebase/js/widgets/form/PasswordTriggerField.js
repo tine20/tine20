@@ -79,6 +79,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
     transformInput: function(e) {
         e = e.browserEvent || e;
         if (! this.locked) return;
+        if (e.type === 'keydown' && e.keyCode === 229) return _.defer(_.bind(this.transformIMEInput, this, e));
         if (e.type === 'keydown' && _.indexOf([8 /* BACKSPACE */, 46 /* DELETE */], e.keyCode) < 0) return;
         if (e.type === 'keypress' && e.metaKey /* APPLE CMD */ && e.keyCode == 118 /* v */) return;
         if (e.type === 'keypress' && _.indexOf([13 /* ENTER */], e.keyCode) >= 0) return;
@@ -97,6 +98,24 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             valueArray.splice(start, end-start, replacement);
             start = start + replacement.length;
         }
+        this.setValue(valueArray.join(''));
+        this.selectTextTimeout = setTimeout(() => {this.selectText(start, start)}, 20);
+    },
+    
+    // handle android IME keyboard
+    // NOTE: rawValue is updated before this event
+    transformIMEInput: function(e) {
+        Ext.lib.Event.stopEvent(e);
+        clearTimeout(this.selectTextTimeout);
+        
+        const start = e.target.selectionStart;
+        const valueArray = (this.getValue() || '').split('');
+        const raw = this.getRawValue();
+        const replacement = raw.split(this.hiddenPasswordChr).join('');
+        const deleteCount = valueArray.length - (raw.length - replacement.length);
+        
+        valueArray.splice(start  - replacement.length, deleteCount, replacement);
+        
         this.setValue(valueArray.join(''));
         this.selectTextTimeout = setTimeout(() => {this.selectText(start, start)}, 20);
     },
