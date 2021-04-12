@@ -33,13 +33,6 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     protected $_fsController;
 
-    /**
-     * customfield name
-     *
-     * @var string
-     */
-    protected $_cfcName = null;
-
    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -73,7 +66,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         if (isset($this->_objects['paths'])) {
             foreach ($this->_objects['paths'] as $path) {
                 try {
@@ -97,6 +90,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         $savedLead = $this->saveLead();
         $getLead = $this->_getUit()->getLead($savedLead['id']);
+
         $searchLeads = $this->_getUit()->searchLeads($this->_getLeadFilter(), '');
         
         // test manual resolving of organizer in related_record and set it back for following tests
@@ -116,10 +110,10 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals(200, $searchLeads['results'][0]['turnover'], 'turnover has not been calculated using product prices');
         $this->assertEquals($searchLeads['results'][0]['turnover']*$getLead['probability']/100, $searchLeads['results'][0]['probableTurnover']);
         // now we need 2 relations here (frontend search shall return relations with related_model Addressbook_Model_Contact or Sales_Model_Product
-        $this->assertEquals(2, count($searchLeads['results'][0]['relations']), 'did not get all relations');
+        $this->assertEquals(3, count($searchLeads['results'][0]['relations']), 'did not get all relations');
 
         $relatedTask = null;
-        foreach($getLead['relations'] as $rel) {
+        foreach ($getLead['relations'] as $rel) {
             if ($rel['type'] == 'TASK') {
                 $relatedTask = $rel['related_record'];
             }
@@ -173,13 +167,12 @@ class Crm_JsonTest extends Crm_AbstractTest
     }
     
     /**
-     * save lead with relations
-     * 
+     * @param boolean $addCf
      * @return array
      */
-    public function saveLead()
+    public function saveLead($addCf = false)
     {
-        $leadData = $this->_getLeadArrayWithRelations();
+        $leadData = $this->_getLeadArrayWithRelations($addCf);
         return $this->_getUit()->saveLead($leadData);
     }
     
@@ -192,7 +185,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         $lead       = $this->_getLead();
         $savedLead = $this->_getUit()->saveLead($lead->toArray());
-        
+
         $sharedTagName = Tinebase_Record_Abstract::generateUID();
         $tag = new Tinebase_Model_Tag(array(
             'type'  => Tinebase_Model_Tag::TYPE_SHARED,
@@ -551,58 +544,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             )), TRUE),
         ));
     }
-    
-    /**
-     * get lead
-     * 
-     * @param boolean $addCf
-     * @param boolean $addTags
-     * @return Crm_Model_Lead
-     */
-    protected function _getLead($addCf = TRUE, $addTags = TRUE)
-    {
-        if ($addCf) {
-            $cfc = Tinebase_CustomFieldTest::getCustomField(array(
-                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
-                'model'          => 'Crm_Model_Lead',
-                'name'           => Tinebase_Record_Abstract::generateUID(),
-            ));
-            $this->_cfcName = $cfc->name;
-            
-            $cfs = array(
-                $this->_cfcName => '1234'
-            );
-            
-            Tinebase_CustomField::getInstance()->addCustomField($cfc);
-        } else {
-            $cfs = array();
-        }
-        
-        if ($addTags) {
-            $tags = array(
-                array('name' => 'lead tag', 'type' => Tinebase_Model_Tag::TYPE_SHARED)
-            );
-        } else {
-            $tags = array();
-        }
-        
-        return new Crm_Model_Lead(array(
-            'lead_name'     => 'PHPUnit LEAD',
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class)->getId(),
-            'start'         => Tinebase_DateTime::now(),
-            'description'   => 'Description',
-            'end'           => NULL,
-            'turnover'      => 0,
-            'probability'   => 70,
-            'end_scheduled' => NULL,
-            'tags'          => $tags,
-            'customfields'  => $cfs
-        ));
-    }
-    
+
     /**
      * get lead filter
      * 
@@ -623,7 +565,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testRelatedModlog()
     {
         // create lead with tag, customfield and related contacts
-        $savedLead = $this->saveLead();
+        $savedLead = $this->saveLead(true);
         
         // change relations, customfields + tags
         $savedLead['tags'][] = array('name' => 'another tag', 'type' => Tinebase_Model_Tag::TYPE_PERSONAL);
@@ -644,8 +586,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $modifications->addRecord(Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Crm', $updatedLead['id'])->getLastRecord());
         $diff = new Tinebase_Record_Diff(json_decode($modifications->getFirstRecord()->new_value, true));
         $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($modifications);
-        
-        //print_r($updatedLead);
+
         $this->assertEquals(3, count($changedAttributes), 'expected 3 modifications: ' . print_r($modifications->toArray(), TRUE));
         foreach ($changedAttributes as $attribute) {
             switch ($attribute) {
@@ -832,7 +773,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
         ];
         $updatedLead = $this->_getUit()->saveLead($lead);
-        self::assertEquals(4, count($updatedLead['relations']), 'relation count mismatch: '
+        self::assertEquals(5, count($updatedLead['relations']), 'relation count mismatch: '
             . print_r($updatedLead, true));
     }
 }

@@ -1,22 +1,17 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- *
- * @package     Crm
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schüle <p.schuele@metaways.de>
- */
-
-/**
  * Test class for Crm Notifications
  *
  * @package     Crm
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2013-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Crm_NotificationsTests extends Crm_AbstractTest
 {
     /**
-     * @var Crm_Controller_Lead controller unter test
+     * @var Crm_Controller_Lead controller under test
      */
     protected $_leadController;
 
@@ -25,7 +20,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
      * @see tests/tine20/Crm/AbstractTest::setUp()
      */
     public function setUp(): void
-{
+    {
         parent::setUp();
 
         Tinebase_Config::getInstance()->clearCache();
@@ -35,6 +30,18 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         }
 
         $this->_leadController = Crm_Controller_Lead::getInstance();
+    }
+
+    /**
+     * @param false $addCf
+     * @param bool $addTags
+     * @param false $mute
+     * @param string $name
+     * @return Crm_Model_Lead
+     */
+    protected function _getLead($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit')
+    {
+        return parent::_getLead($addCf, $addTags, $mute, 'PHPUnit LEAD ' . Tinebase_Record_Abstract::generateUID(10));
     }
 
     /**
@@ -61,7 +68,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertStringContainsString(' Lars Kneschke (Metaways', $bodyText);
+        $this->assertStringContainsString('Metaways', $bodyText);
         return $savedLead;
     }
 
@@ -91,7 +98,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertStringContainsString('**PHPUnit **', $bodyText);
+        $this->assertStringContainsString('PHPUnit LEAD', $bodyText);
     }
 
     /**
@@ -109,7 +116,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(2, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertStringContainsString('**PHPUnit **', $bodyText);
+        $this->assertStringContainsString('PHPUnit LEAD', $bodyText);
 
         Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,false);
         self::flushMailer();
@@ -120,7 +127,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         // one message from the update user!
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertStringContainsString('**PHPUnit **', $bodyText);
+        $this->assertStringContainsString('PHPUnit LEAD', $bodyText);
         Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,true);
     }
     /**
@@ -232,7 +239,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertStringContainsString('**PHPUnit **', $bodyText);
+        $this->assertStringContainsString('PHPUnit LEAD', $bodyText);
     }
 
     /**
@@ -268,7 +275,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     public function testMuteNotification()
     {
         self::flushMailer();
-        $lead = $this->_getLead(true);
+        $lead = $this->_getLead(false, false, true);
         $lead->relations = array(new Tinebase_Model_Relation(array(
             'type' => 'CUSTOMER',
             'related_record' => $this->_getContact(),
@@ -283,54 +290,5 @@ class Crm_NotificationsTests extends Crm_AbstractTest
 
         $messages = self::getMessages();
         $this->assertEquals(0, count($messages));
-    }
-    
-    /**
-     * get contact
-     *
-     * @return Addressbook_Model_Contact
-     */
-    protected function _getContact()
-    {
-        return new Addressbook_Model_Contact(array(
-            'adr_one_countryname'   => 'DE',
-            'adr_one_locality'      => 'Hamburg',
-            'adr_one_postalcode'    => '24xxx',
-            'adr_one_region'        => 'Hamburg',
-            'adr_one_street'        => 'Pickhuben 4',
-            'adr_one_street2'       => 'no second street',
-            'adr_two_countryname'   => 'DE',
-            'adr_two_locality'      => 'Hamburg',
-            'adr_two_postalcode'    => '24xxx',
-            'adr_two_region'        => 'Hamburg',
-            'adr_two_street'        => 'Pickhuben 4',
-            'adr_two_street2'       => 'no second street2',
-            'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
-            'email'                 => 'unittests@tine20.org',
-            'email_home'            => 'unittests@tine20.org',
-            'note'                  => 'Bla Bla Bla',
-            'role'                  => 'Role',
-            'title'                 => 'Title',
-            'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
-            'n_family'              => 'Kneschke',
-            'n_fileas'              => 'Kneschke, Lars',
-            'n_given'               => 'Lars',
-            'n_middle'              => 'no middle name',
-            'n_prefix'              => 'no prefix',
-            'n_suffix'              => 'no suffix',
-            'org_name'              => 'Metaways Infosystems GmbH',
-            'org_unit'              => 'Tine 2.0',
-            'tel_assistent'         => '+49TELASSISTENT',
-            'tel_car'               => '+49TELCAR',
-            'tel_cell'              => '+49TELCELL',
-            'tel_cell_private'      => '+49TELCELLPRIVATE',
-            'tel_fax'               => '+49TELFAX',
-            'tel_fax_home'          => '+49TELFAXHOME',
-            'tel_home'              => '+49TELHOME',
-            'tel_pager'             => '+49TELPAGER',
-            'tel_work'              => '+49TELWORK',
-        ));
     }
 }

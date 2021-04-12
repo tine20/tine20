@@ -1933,7 +1933,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     'time'         => Tinebase_DateTime::now(),
                     'content_seq'  => $newContentSeq,
                 ));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Creating "' . $action . '" action content history record for record id ' . $recordId);
                 $this->getContentBackend()->create($contentRecord);
             }
@@ -2001,7 +2001,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $containerIds = (! is_array($containerIds))
             ? Tinebase_Model_Container::convertContainerId($containerIds)
             : $containerIds;
-        
+
         $select = $this->_getSelect(array('id', 'content_seq'), TRUE);
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $containerIds));
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);

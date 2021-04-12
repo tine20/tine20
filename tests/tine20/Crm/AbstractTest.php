@@ -1,19 +1,38 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
+ * abstract crm test class
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
-
-/**
- * abstract crm test class
- */
 class Crm_AbstractTest extends TestCase
 {
+    /**
+     * customfield name
+     *
+     * @var string
+     */
+    protected $_cfcName = null;
+
+    /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown(): void
+    {
+        if ($this->_cfcName) {
+            $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication('Crm', $this->_cfcName);
+            Tinebase_CustomField::getInstance()->deleteCustomField($cf);
+        }
+        parent::tearDown();
+    }
+
     /**
      * get contact
      * 
@@ -83,13 +102,39 @@ class Crm_AbstractTest extends TestCase
     /**
      * get lead
      *
+     * @param boolean $addCf
+     * @param boolean $addTags
      * @param boolean $mute
      * @param string $name
-     *
      * @return Crm_Model_Lead
      */
-    protected function _getLead($mute = false, $name = 'PHPUnit')
+    protected function _getLead($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit LEAD')
     {
+        if ($addCf) {
+            $cfc = Tinebase_CustomFieldTest::getCustomField(array(
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
+                'model'          => 'Crm_Model_Lead',
+                'name'           => 'testCustomField' . Tinebase_Record_Abstract::generateUID(5),
+            ));
+            $this->_cfcName = $cfc->name;
+
+            $cfs = array(
+                $this->_cfcName => '1234'
+            );
+
+            Tinebase_CustomField::getInstance()->addCustomField($cfc);
+        } else {
+            $cfs = array();
+        }
+
+        if ($addTags) {
+            $tags = array(
+                array('name' => 'lead tag', 'type' => Tinebase_Model_Tag::TYPE_SHARED)
+            );
+        } else {
+            $tags = array();
+        }
+
         return new Crm_Model_Lead(array(
             'lead_name'     => $name,
             'leadstate_id'  => 1,
@@ -99,31 +144,47 @@ class Crm_AbstractTest extends TestCase
             'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description',
             'end'           => NULL,
-            'turnover'      => '200000',
+            'turnover'      => 200,
             'probability'   => 70,
             'end_scheduled' => NULL,
             'mute'          => $mute,
+            'tags'          => $tags,
+            'customfields'  => $cfs,
+            'attachments'   => [],
         ));
     }
 
+
     /**
+     * @param boolean $addCf
+     * @param boolean $addTags
+     * @param boolean $mute
+     * @param string $name
      * @return array
      */
-    protected function _getLeadArrayWithRelations()
+    protected function _getLeadArrayWithRelations($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit LEAD')
     {
         $contact    = $this->_getContact();
         $task       = $this->_getTask();
-        $lead       = $this->_getLead();
+        $lead       = $this->_getLead($addCf, $addTags, $mute, $name);
         $product    = $this->_getProduct();
+        $responsibleArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+            Tinebase_Core::getUser()->getId()
+        )->toArray();
+
         $price      = 200;
 
         $leadData = $lead->toArray();
-        $leadData['relations'] = array(
+        $leadData['relations'] = [
+            [
+                'type'  => 'RESPONSIBLE',
+                'related_record' => $responsibleArray,
+                'remark' => [],
+            ],
             array('type'  => 'TASK',    'related_record' => $task->toArray()),
             array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
             array('type'  => 'PRODUCT', 'related_record' => $product->toArray(), 'remark' => array('price' => $price)),
-        );
-        // add note
+        ];
         $note = array(
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',

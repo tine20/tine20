@@ -185,11 +185,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'showDisabled'      => [
                 'filter'            => Addressbook_Model_ContactHiddenFilter::class,
-                'title'             => 'Show Disabled', // _('Show Disabled') // TODO is this right?
+                'title'             => 'Show Disabled', // _('Show Disabled')
                 'options'           => [
                     'requiredCols'      => ['account_id' => 'accounts.id'],
                 ],
-                'jsConfig'          => ['filtertype' => 'addressbook.contactshowDisabled'] // TODO later with FE fix it
+                'jsConfig'          => ['filtertype' => 'addressbook.contactshowDisabled']
             ],
             'path'              => [
                 'filter'            => Tinebase_Model_Filter_Path::class,
