@@ -18,13 +18,6 @@
  */
 class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
-    /**
-     * the controller
-     *
-     * @var Crm_Controller_Lead
-     */
-    protected $_controller = NULL;
-    
     protected $_relatableModels = array('Crm_Model_Lead');
     
     /**
@@ -34,7 +27,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function __construct()
     {
         $this->_applicationName = 'Crm';
-        $this->_controller = Crm_Controller_Lead::getInstance();
     }
     
     /************************************** public API **************************************/
@@ -48,7 +40,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchLeads($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_controller, 'Crm_Model_LeadFilter', array('Addressbook_Model_Contact', 'Sales_Model_Product'));
+        return $this->_search($filter, $paging, Crm_Controller_Lead::getInstance(), 'Crm_Model_LeadFilter', array('Addressbook_Model_Contact', 'Sales_Model_Product'));
     }
 
     /**
@@ -90,7 +82,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getLead($id)
     {
         $organizerIds = array();
-        $lead = $this->_get($id, $this->_controller);
+        $lead = $this->_get($id, Crm_Controller_Lead::getInstance());
         
         foreach($lead['relations'] as $relation) {
             if ($relation['related_model'] == 'Tasks_Model_Task') {
@@ -124,7 +116,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveLead($recordData, $duplicateCheck = true)
     {
-        return $this->_save($recordData, $this->_controller, 'Lead', 'id' , array($duplicateCheck));
+        return $this->_save($recordData, Crm_Controller_Lead::getInstance(), 'Lead', 'id' , array($duplicateCheck));
     }
     
     /**
@@ -135,7 +127,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteLeads($ids)
     {
-        return $this->_delete($ids, $this->_controller);
+        return $this->_delete($ids, Crm_Controller_Lead::getInstance());
     }
 
     /**

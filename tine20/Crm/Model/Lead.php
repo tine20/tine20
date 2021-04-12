@@ -6,16 +6,11 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
-/**
- * class to hold lead data
- * 
- * @package     Crm
- */
-class Crm_Model_Lead extends Tinebase_Record_Abstract
+class Crm_Model_Lead extends Tinebase_Record_NewAbstract
 {
+    const MODEL_NAME_PART = 'Lead';
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -30,16 +25,25 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Crm';
-    
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
     /**
      * if foreign Id fields should be resolved on search and get from json
      * should have this format: 
-     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     *     array('Addressbook_Model_Contact' => 'contact_id', ...)
      * or for more fields:
-     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     *     array('Addressbook_Model_Contact' => array('contact_id', 'customer_id), ...)
      * (e.g. resolves contact_id with the corresponding Model)
      * 
      * @var array
+     *
+     * @todo still needed with MC?
      */
     protected static $_resolveForeignIdFields = array(
         'Tinebase_Model_User'     => array('created_by', 'last_modified_by'),
@@ -47,73 +51,104 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     );
     
     /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_filters = array(
-        'lead_name'     => 'StringTrim',
-        'probability'   => 'Digits',
-    );
-    
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'lead_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'leadstate_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'leadtype_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'leadsource_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'start'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'end'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'turnover'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'probableTurnover'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'probability'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'end_scheduled'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'resubmission_date'     => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-    // linked objects
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
-    // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'mute'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
+    protected static $_modelConfiguration = [
+        'containerName'     => 'Lead list',
+        'containersName'    => 'Leads lists',
+        'recordName'        => 'Lead',
+        'recordsName'       => 'Leads', // ngettext('Lead', 'Leads', n)
+        'hasRelations'      => true,
+        'copyRelations'     => true,
+        'hasCustomFields'   => true,
+        'hasSystemCustomFields' => false,
+        'hasNotes'          => true,
+        'hasTags'           => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => true,
+        'createModule'      => true,
+        'exposeHttpApi'     => true,
+        'exposeJsonApi'     => true,
+        'containerProperty' => 'container_id',
+        'multipleEdit'      => false,
 
-    /**
-     * name of fields containing datetime or or an array of datetime
-     * information
-     *
-     * @var array list of datetime fields
-     */    
-    protected $_datetimeFields = array(
-        'start',
-        'end',
-        'end_scheduled',
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-        'resubmission_date'
-    );
-    
+        'titleProperty'     => 'lead_name',
+        'appName'           => 'Crm',
+        'modelName'         => self::MODEL_NAME_PART, // _('GENDER_Lead')
+
+        'filterModel'       => [
+            'showClosed'      => [
+                'filter'            => Crm_Model_LeadClosedFilter::class,
+                'title'             => 'Show Closed', // _('Show Closed')
+                // 'jsConfig'          => ['filtertype' => 'crm...'] // TODO needed?
+            ],
+            'query'      => [
+                'filter'            => Crm_Model_LeadQueryFilter::class,
+            ],
+        ],
+        'fields'            => [
+            'lead_name'            => [
+                self::LABEL                 => 'Lead name', //_('Lead name')
+                self::TYPE                  => self::TYPE_STRING,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+                self::INPUT_FILTERS         => [Zend_Filter_StringTrim::class],
+            ],
+            'leadstate_id'            => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+            ],
+            'leadtype_id'            => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+            ],
+            'leadsource_id'            => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+            ],
+            'start'            => [
+                self::LABEL                 => 'Start',
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+            ],
+            'end'            => [
+                self::LABEL                 => 'End',
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+            ],
+            'description'            => [
+                self::LABEL                 => 'Description',
+                self::TYPE                  => self::TYPE_FULLTEXT,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ],
+            'turnover'            => [
+                self::TYPE                  => self::TYPE_FLOAT,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+            ],
+            'probableTurnover'            => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ],
+            'probability'            => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+            ],
+            'end_scheduled'            => [
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+            ],
+            'resubmission_date'            => [
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ],
+            'mute'            => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+            ],
+        ]
+    ];
+
     /**
      * @see Tinebase_Record_Abstract
      */
@@ -133,22 +168,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     );
 
     /**
-     * overwrite constructor to add more filters
-     *
-     * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param mixed $_convertDates
-     * @return void
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        // set turnover to 0 if not set
-        $this->_filters['turnover'] = new Zend_Filter_Empty(0);
-        
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
-    
-    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -167,6 +186,8 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
      * @param   int|string|Crm_Model_Lead $_accountId the lead id to convert
      * @return  int
      * @throws  UnexpectedValueException
+     *
+     * @refactor remove that
      */
     static public function convertLeadIdToInt($_leadId)
     {
@@ -319,7 +340,6 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
     {
         return $this->getRelations(['RESPONSIBLE']);
     }
-
 
     /**
      * get all Relation for type.

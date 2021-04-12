@@ -181,7 +181,8 @@ class Tinebase_FileSystem_RecordAttachments
         $currentAttachments = ($record->getId()) ? $this->getRecordAttachments(clone $record) : new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $attachmentsToSet = ($record->attachments instanceof Tinebase_Record_RecordSet) 
             ? $record->attachments
-            : new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', (array)$record->attachments, TRUE);
+            : new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node',
+                empty($record->attachments) ? [] : (array)$record->attachments, TRUE);
         
         $attachmentDiff = $currentAttachments->diff($attachmentsToSet);
 
@@ -268,8 +269,7 @@ class Tinebase_FileSystem_RecordAttachments
         
         $this->_fsController->copyTempfile($attachment, $attachmentPath);
         
-        $node = $this->_fsController->stat($attachmentPath);
-        return $node;
+        return $this->_fsController->stat($attachmentPath);
     }
     
     /**

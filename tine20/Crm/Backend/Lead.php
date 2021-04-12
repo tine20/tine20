@@ -101,7 +101,6 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
                 )
             );
         }
-        
         return $select;
     }
     
