@@ -239,7 +239,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                 btn('bold'),
                 btn('italic'),
                 btn('underline'),
-                btn('strikeThrough')
+                btn('strikeThrough'),
+                btn('formatblockPre', false, this.toggleCodeBlock)
             );
         }
 
@@ -831,6 +832,22 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
     },
 
     // private
+    toggleCodeBlock: function(btn) {
+        let doc = this.getDoc();
+        if (doc.queryCommandValue('formatblock') === 'pre') {
+            let selection = this.getWin().getSelection()
+            _.each(doc.querySelectorAll('pre'), function (node) {
+                if (selection.containsNode(node, true)) {
+                    node.after(document.createElement('br'));
+                    node.replaceWith(node.textContent);
+                }
+            });
+        } else {
+            this.execCmd('formatblock', 'pre');
+        }
+    },
+
+    // private
     onEditorEvent : function(e){
         this.updateToolbar();
     },
@@ -866,6 +883,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             btns.italic.toggle(doc.queryCommandState('italic'));
             btns.underline.toggle(doc.queryCommandState('underline'));
             btns.strikeThrough.toggle(doc.queryCommandState('strikeThrough'));
+            btns.formatblockPre.toggle(doc.queryCommandValue('formatblock') === 'pre');
         }
         if(this.enableAlignments){
             btns.justifyleft.toggle(doc.queryCommandState('justifyleft'));
@@ -1120,6 +1138,11 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         createlink : {
             title: 'Hyperlink',
             text: 'Make the selected text a hyperlink.',
+            cls: 'x-html-editor-tip'
+        },
+        formatblockPre : {
+            title: 'Code block',
+            text: 'Insert pre-formatted code block',
             cls: 'x-html-editor-tip'
         },
         sourceedit : {
