@@ -197,4 +197,18 @@ class Admin_Controller_UserTest extends TestCase
             self::assertEquals($translate->_('Email account already exists'), $tesg->getMessage());
         }
     }
+
+    public function testUpdateUserRemoveMail()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $user = $this->_createUserWithEmailAccount();
+        $user->accountEmailAddress = '';
+        $updatedUser = Admin_Controller_User::getInstance()->update($user);
+
+        self::assertEmpty($updatedUser->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP],
+            'smtp user id still set: ' . print_r($updatedUser->toArray(), true));
+        self::assertEmpty($updatedUser->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP],
+            'imap user id still set ' . print_r($updatedUser->toArray(), true));
+    }
 }
