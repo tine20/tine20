@@ -67,19 +67,20 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         $export = file_get_contents($this->_filename);
         
         $translate = Tinebase_Translation::getTranslation('Crm');
-        
-        $defaultContainerId = Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class)->getId();
-        $this->assertStringContainsString('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","container_id","start"'
-            . ',"description","end","turnover","probableTurnover","probability","end_scheduled","resubmission_date","tags","attachments","notes","seq","mute","tags",'
-            . '"CUSTOMER-org_name","CUSTOMER-n_family","CUSTOMER-n_given","CUSTOMER-adr_one_street","CUSTOMER-adr_one_postalcode","CUSTOMER-adr_one_locality",'
-            . '"CUSTOMER-adr_one_countryname","CUSTOMER-tel_work","CUSTOMER-tel_cell","CUSTOMER-email",'
-            . '"PARTNER-org_name","PARTNER-n_family","PARTNER-n_given","PARTNER-adr_one_street","PARTNER-adr_one_postalcode","PARTNER-adr_one_locality",'
-            . '"PARTNER-adr_one_countryname","PARTNER-tel_work","PARTNER-tel_cell","PARTNER-email",'
-            . '"RESPONSIBLE-org_name","RESPONSIBLE-n_family","RESPONSIBLE-n_given","RESPONSIBLE-adr_one_street","RESPONSIBLE-adr_one_postalcode","RESPONSIBLE-adr_one_locality",'
-            . '"RESPONSIBLE-adr_one_countryname","RESPONSIBLE-tel_work","RESPONSIBLE-tel_cell","RESPONSIBLE-email",'
-            . '"TASK-summary","PRODUCT-name"', $export, 'headline wrong: ' . substr($export, 0, 360));
-        $this->assertStringContainsString('"PHPUnit","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market') . '","'
-            . $defaultContainerId . '"', $export, 'data #1 wrong');
+
+        $this->assertStringContainsString('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","start"'
+            . ',"end","description","turnover","probableTurnover","probability","end_scheduled","resubmission_date","mute"',
+            $export, 'headline wrong: ' . substr($export, 0, 360));
+        $this->assertStringContainsString('"container_id","tags","attachments","notes","seq","tags",',
+            $export, 'headline wrong: ' . substr($export, 0, 360));
+        $this->assertStringContainsString('"CUSTOMER-org_name","CUSTOMER-n_family","CUSTOMER-n_given","CUSTOMER-adr_one_street","CUSTOMER-adr_one_postalcode","CUSTOMER-adr_one_locality",'
+            . '"CUSTOMER-adr_one_countryname","CUSTOMER-tel_work","CUSTOMER-tel_cell","CUSTOMER-email",', $export, 'headline wrong: ' . substr($export, 0, 360));
+        $this->assertStringContainsString('"PARTNER-org_name","PARTNER-n_family","PARTNER-n_given","PARTNER-adr_one_street","PARTNER-adr_one_postalcode","PARTNER-adr_one_locality",'
+            . '"PARTNER-adr_one_countryname","PARTNER-tel_work","PARTNER-tel_cell","PARTNER-email",', $export, 'headline wrong: ' . substr($export, 0, 360));
+        $this->assertStringContainsString('"RESPONSIBLE-org_name","RESPONSIBLE-n_family","RESPONSIBLE-n_given","RESPONSIBLE-adr_one_street","RESPONSIBLE-adr_one_postalcode","RESPONSIBLE-adr_one_locality",'
+            . '"RESPONSIBLE-adr_one_countryname","RESPONSIBLE-tel_work","RESPONSIBLE-tel_cell","RESPONSIBLE-email",', $export, 'headline wrong: ' . substr($export, 0, 360));
+        $this->assertStringContainsString('"TASK-summary","PRODUCT-name"', $export, 'headline wrong: ' . substr($export, 0, 360));
+        $this->assertStringContainsString('"PHPUnit LEAD","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market'), $export, 'data #1 wrong');
         $this->assertStringContainsString('"Metaways Infosystems GmbH","Kneschke","Lars","Pickhuben 4","24xxx","Hamburg","DE","+49TELWORK","+49TELCELL","unittests@tine20.org","","","","","","","","","","","","","","","","","","","","","phpunit: crm test task",""', $export, 'relations wrong');
         
         $dateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat(NULL, NULL, NULL, 'date');

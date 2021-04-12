@@ -1,73 +1,20 @@
 <?php
 /**
  * Tine 2.0
+ * Leads Filter Class
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- */
-
-/**
- * Leads Filter Class
- * @package Crm
  */
 class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
-     * @var string application of this filter group
+     * if this is set, the filtergroup will be created using the configurationObject for this model
+     *
+     * @var string
      */
-    protected $_applicationName = 'Crm';
-    
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = Crm_Model_Lead::class;
-    
-    /**
-     * @var array filter model fieldName => definition
-     */
-    protected $_filterModel = array(
-        'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'                 => array('filter' => 'Crm_Model_LeadQueryFilter'),
-        'description'           => array('filter' => 'Tinebase_Model_Filter_FullText'),
-        'lead_name'             => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
-            'idProperty' => 'metacrm_lead.id',
-            'applicationName' => 'Crm',
-        )),
-        'probability'           => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'turnover'              => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'leadstate_id'          => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'leadtype_id'           => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'leadsource_id'         => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'container_id'          => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('modelName' => Crm_Model_Lead::class)),
-        'showClosed'            => array('filter' => 'Crm_Model_LeadClosedFilter'),
-        'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),
-        'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'deleted_time'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
-        'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
-        'creation_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'customfield'           => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'metacrm_lead.id')),
-        'end_scheduled'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'resubmission_date'     => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'end'     => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'start'   => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-
-    // relation filters
-        'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-            'related_model'     => 'Addressbook_Model_Contact',
-            'filtergroup'    => 'Addressbook_Model_ContactFilter'
-        )),
-        'product'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-            'related_model'     => 'Sales_Model_Product',
-            'filtergroup'    => 'Sales_Model_ProductFilter'
-        )),
-        'task'           => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-            'related_model'     => 'Tasks_Model_Task',
-            'filtergroup'    => 'Tasks_Model_TaskFilter'
-        )),
-    );
+    protected $_configuredModel = Crm_Model_Lead::class;
 }
