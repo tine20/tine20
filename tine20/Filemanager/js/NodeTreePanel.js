@@ -245,10 +245,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         var nodes = dropEvent.data.nodes,
             target = dropEvent.target;
 
-        Tine[this.appName].nodeBackend.copyNodes(nodes, target, !(dropEvent.rawEvent.ctrlKey  || dropEvent.rawEvent.altKey));
+        const success = Tine[this.appName].nodeBackend.copyNodes(nodes, target, !(dropEvent.rawEvent.ctrlKey  || dropEvent.rawEvent.altKey)) !== false;
 
-        dropEvent.dropStatus = true;
-        return true;
+        dropEvent.dropStatus = success;
+        return success;
     },
 
     /**

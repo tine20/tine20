@@ -118,6 +118,12 @@ msgstr "Eintrag entfernen"
 msgid "Creating new Download Link..."
 msgstr "Erstelle neuen Download Link..."
 
+msgid "Confirm Changing of Folder Grants"
+msgstr "Ordner Berechtigungen werden geändert"
+
+msgid "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
+msgstr "Sie sind im Begriff einen Ordner zu verschieben der eigene Berechtigungen enthält. Diese gehen verloren und es werden die Berechtigungen des neuen übergeordneten Ordners geerbt."
+
 #: js/DownloadLinkGridPanel.js:182
 msgid "Deleting Download Links..."
 msgstr "Lösche Download Links..."

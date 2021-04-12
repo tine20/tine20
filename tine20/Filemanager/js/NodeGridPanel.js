@@ -261,9 +261,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return false;
         }
         
-        Tine.Filemanager.nodeBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey));
-        this.grid.getStore().remove(data.nodes);
-        return true;
+        const success = Tine.Filemanager.nodeBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey)) !== false;
+        if(success) {
+            this.grid.getStore().remove(data.nodes);
+        }
+        return success;
     },
 
     onContainerDrop: function(dd, e, data) {

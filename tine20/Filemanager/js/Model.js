@@ -264,6 +264,7 @@ Tine.Filemanager.nodeBackendMixin = {
             
             var sourceFilenames = new Array(),
                 destinationFilenames = new Array(),
+                withOwnGrants = [],
                 forceOverwrite = false,
                 treeIsTarget = false,
                 targetPath = target;
@@ -293,6 +294,10 @@ Tine.Filemanager.nodeBackendMixin = {
                 }
 
                 destinationFilenames.push(Tine.Filemanager.Model.Node.sanitize(targetPath + (targetPath.match(/\/$/) ? itemName : '')));
+
+                if (itemData.type === 'folder' && itemData.acl_node === itemData.id) {
+                    withOwnGrants.push(itemData);
+                }
             }
             
             var method = this.appName + ".copyNodes",
@@ -310,6 +315,20 @@ Tine.Filemanager.nodeBackendMixin = {
                     method: method
             };
             
+            if (move && withOwnGrants.length) {
+                Ext.MessageBox.show({
+                    icon: Ext.MessageBox.WARNING,
+                    buttons: Ext.MessageBox.OKCANCEL,
+                    title: app.i18n._('Confirm Changing of Folder Grants'),
+                    msg: app.i18n._("You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."),
+                    fn: function(btn) {
+                        if (btn === 'ok') {
+                            Tine.Filemanager.nodeBackend.copyNodes(items, target, move, params);
+                        }
+                    }
+                });
+                return false;
+            }
         } else {
             message = app.i18n._('Copying data .. {0}');
             if(params.method == this.appName + '.moveNodes') {

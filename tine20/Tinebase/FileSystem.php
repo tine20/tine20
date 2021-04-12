@@ -1496,8 +1496,7 @@ class Tinebase_FileSystem implements
                     return false;
                 }
 
-                if (null === $node->acl_node || ($node->acl_node === $oldParent->acl_node &&
-                        $newParent->acl_node !== $node->acl_node)) {
+                if (null === $node->acl_node || $newParent->acl_node !== $node->acl_node) {
                     $node->acl_node = $newParent->acl_node;
                     if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
                         if (null === $node->acl_node) {
