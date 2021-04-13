@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Relations
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        re-enable the caching (but check proper invalidation first) -> see task #232
@@ -565,7 +565,9 @@ class Tinebase_Relations
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Don\'t update related record because user has no update grant');
         } else {
+            $oldRollback = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack();
             try {
+                Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
                 /** @var Tinebase_Record_Interface $record */
                 $record = $appController->$method($_relation->related_record,
                     $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
@@ -577,6 +579,8 @@ class Tinebase_Relations
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Don\'t update related record: ' . $tenf->getMessage());
+            } finally {
+                Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldRollback);
             }
         }
 
