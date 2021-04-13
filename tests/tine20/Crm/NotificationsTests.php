@@ -68,7 +68,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $messages = self::getMessages();
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
-        $this->assertStringContainsString('Metaways', $bodyText);
+        $this->assertStringContainsString('PHPUnit LEAD', $bodyText);
         return $savedLead;
     }
 
