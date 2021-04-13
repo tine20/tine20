@@ -292,9 +292,14 @@ class Tinebase_TransactionManager
     /**
      * @param $bool
      */
-    public function unitTestForceSkipRollBack($bool)
+    public function unitTestForceSkipRollBack($bool = null)
     {
         $this->_unitTestForceSkipRollBack = $bool;
+        $oldValue = $this->_unitTestForceSkipRollBack;
+        if (null !== $bool) {
+            $this->_unitTestForceSkipRollBack = $bool;
+        }
+        return $oldValue;
     }
 
     public function unitTestRemoveTransactionable($_transactionable)
