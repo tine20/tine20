@@ -771,8 +771,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if (isset($recordData['relations']) && is_array($recordData['relations'])) {
             foreach($recordData['relations'] as $relation) {
-                if ($relation['related_model'] == 'Sales_Model_Customer' && isset($relation['related_record'])) {
-                    $foundCustomer = $relation['related_record'];
+                if ($relation['related_model'] == 'Sales_Model_Customer' && isset($relation['related_id'])) {
+                    $foundCustomer = $relation['related_id'];
                     break;
                 }
             }
@@ -781,10 +781,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (isset($recordData['relations']) && is_array($recordData['relations']) && ! $foundCustomer) {
             foreach($recordData['relations'] as $relation) {
                 if ($relation['related_model'] == 'Sales_Model_Contract') {
-                    $foundContractRecord = Sales_Controller_Contract::getInstance()->get($relation['related_record']['id']);
+                    $foundContractRecord = Sales_Controller_Contract::getInstance()->get($relation['related_id']);
                     foreach($foundContractRecord->relations as $relation) {
                         if ($relation['related_model'] == 'Sales_Model_Customer') {
-                            $foundCustomer = $relation['related_record'];
+                            $foundCustomer = $relation['related_id'];
                             $customerCalculated = TRUE;
                             break 2;
                         }
@@ -800,8 +800,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_Customer',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
-                'related_id'             => $foundCustomer['id'],
-                'related_record'         => $foundCustomer,
+                'related_id'             => $foundCustomer,
                 'type'                   => 'CUSTOMER'
             )));
         }
@@ -825,7 +824,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
         }
-        
+
+        /*
         if (isset($recordData['relations']) && is_array($recordData['relations'])) {
             for ($i = 0; $i < count($recordData['relations']); $i++) {
                 if (isset($recordData['relations'][$i]['related_record']['product_id'])) {
@@ -839,7 +839,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
-        }
+        }*/
 
         return $this->_save($recordData, Sales_Controller_Invoice::getInstance(), 'Invoice', 'id', array($duplicateCheck));
     }
@@ -900,7 +900,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (is_array($recordData['relations'])) {
             foreach($recordData['relations'] as $relation) {
                 if ($relation['related_model'] == 'Sales_Model_Supplier') {
-                    $foundSupplier = $relation['related_record'];
+                    $foundSupplier = $relation['related_id'];
                     break;
                 }
             }
@@ -913,7 +913,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         #if (is_array($recordData["costcenter_id"])) {
         #    $recordData["costcenter_id"] = $recordData["costcenter_id"]['id'];
         #}
-        
+        /*
         if (is_array($recordData['relations'])) {
             for ($i = 0; $i < count($recordData['relations']); $i++) {
                 if (isset($recordData['relations'][$i]['related_record']['product_id'])) {
@@ -927,7 +927,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
             }
-        }
+        }*/
 
         return $this->_save($recordData, Sales_Controller_PurchaseInvoice::getInstance(), 'PurchaseInvoice', 'id', array($duplicateCheck));
     }

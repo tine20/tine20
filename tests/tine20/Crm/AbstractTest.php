@@ -34,7 +34,17 @@ class Crm_AbstractTest extends TestCase
     }
 
     /**
-     * get contact
+     * get created contact
+     *
+     * @return Addressbook_Model_Contact
+     */
+    protected function _getCreatedContact()
+    {
+        return Addressbook_Controller_Contact::getInstance()->create($this->_getContact());
+    }
+
+    /**
+     * get UNcreated contact
      * 
      * @return Addressbook_Model_Contact
      */
@@ -83,7 +93,17 @@ class Crm_AbstractTest extends TestCase
     }
 
     /**
-     * get task
+     * get created task
+     *
+     * @return Tasks_Model_Task
+     */
+    protected function _getCreatedTask()
+    {
+        return Tasks_Controller_Task::getInstance()->create($this->_getTask());
+    }
+
+    /**
+     * get UNcreated task
      * 
      * @return Tasks_Model_Task
      */
@@ -164,13 +184,13 @@ class Crm_AbstractTest extends TestCase
      */
     protected function _getLeadArrayWithRelations($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit LEAD')
     {
-        $contact    = $this->_getContact();
-        $task       = $this->_getTask();
+        $contact    = Addressbook_Controller_Contact::getInstance()->create($this->_getContact());
+        $task       = Tasks_Controller_Task::getInstance()->create($this->_getTask());
         $lead       = $this->_getLead($addCf, $addTags, $mute, $name);
-        $product    = $this->_getProduct();
-        $responsibleArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+        $product    = Sales_Controller_Product::getInstance()->create($this->_getProduct());
+        $responsible = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
             Tinebase_Core::getUser()->getId()
-        )->toArray();
+        );
 
         $price      = 200;
 
@@ -178,12 +198,12 @@ class Crm_AbstractTest extends TestCase
         $leadData['relations'] = [
             [
                 'type'  => 'RESPONSIBLE',
-                'related_record' => $responsibleArray,
+                'related_id' => $responsible->getId(),
                 'remark' => [],
             ],
-            array('type'  => 'TASK',    'related_record' => $task->toArray()),
-            array('type'  => 'PARTNER', 'related_record' => $contact->toArray()),
-            array('type'  => 'PRODUCT', 'related_record' => $product->toArray(), 'remark' => array('price' => $price)),
+            array('type'  => 'TASK',    'related_id' => $task->getId()),
+            array('type'  => 'PARTNER', 'related_id' => $contact->getId()),
+            array('type'  => 'PRODUCT', 'related_id' => $product->getId(), 'remark' => array('price' => $price)),
         ];
         $note = array(
             'note_type_id'      => 1,
