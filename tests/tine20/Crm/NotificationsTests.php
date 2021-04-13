@@ -53,9 +53,10 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     {
         self::flushMailer();
         $lead = $this->_getLead();
+
         $lead->relations = array(new Tinebase_Model_Relation(array(
             'type' => 'CUSTOMER',
-            'related_record' => $this->_getContact(),
+            'related_id' => $this->_getCreatedContact()->getId(),
             'own_model' => 'Crm_Model_Lead',
             'own_backend' => 'Sql',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -86,7 +87,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         
         $lead->relations = array(new Tinebase_Model_Relation(array(
             'type'                   => 'RESPONSIBLE',
-            'related_record'         => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
+            'related_id'             => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->getId(),
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'Sql',
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -161,7 +162,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
 
        $lead->relations = array(new Tinebase_Model_Relation(array(
            'type' => $type,
-           'related_record' => $savedContact,
+           'related_id' => $savedContact->getId(),
            'own_model' => 'Crm_Model_Lead',
            'own_backend' => 'Sql',
            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -223,7 +224,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
 
         $lead->relations = array(new Tinebase_Model_Relation(array(
             'type' => 'RESPONSIBLE',
-            'related_record' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
+            'related_id' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->getId(),
             'own_model' => 'Crm_Model_Lead',
             'own_backend' => 'Sql',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -278,7 +279,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $lead = $this->_getLead(false, false, true);
         $lead->relations = array(new Tinebase_Model_Relation(array(
             'type' => 'CUSTOMER',
-            'related_record' => $this->_getContact(),
+            'related_id' => $this->_getCreatedContact()->getId(),
             'own_model' => 'Crm_Model_Lead',
             'own_backend' => 'Sql',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,

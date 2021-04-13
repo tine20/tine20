@@ -1712,7 +1712,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
                     'related_degree' => 'sibling',
                     'related_model' => Sales_Model_Customer::class,
                     'related_backend' => 'Sql',
-                    'related_record' => $customer->toArray(),
+                    'related_id' => $customer->getId(),
                     'type' => 'CUSTOMER'
                 ]
             ]

@@ -142,7 +142,12 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
             }
             
             // add new task to store
+            newTask.id = Tine.Tinebase.data.Record.generateUID();
             this.store.loadData([newTask], true);
+
+            Tine.Tasks.saveTask(newTask).then((savedTask) => {
+                this.onUpdate(savedTask);
+            });
             
             return true;
         }, this);
@@ -184,6 +189,9 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 }
             }
         }
+        Tine.Tasks.saveTask(o.record.data).then((savedTask) => {
+            this.onUpdate(savedTask);
+        });
     },
     
     
@@ -315,6 +323,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                 myTask.set(p, task.get(p));
             }
             myTask.endEdit();
+            myTask.commit();
             
         } else {
             task.data.relation_type = 'task';

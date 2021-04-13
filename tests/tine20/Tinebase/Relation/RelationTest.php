@@ -84,7 +84,19 @@ class Tinebase_Relation_RelationTest extends TestCase
             'backend' => 'SQL',
             'id'      => Tinebase_Record_Abstract::generateUID()
         );
-        
+
+        $task = Tasks_Controller_Task::getInstance()->create(new Tasks_Model_Task([
+            'summary'              => 'phpunit test task for relations from crm',
+            'description'          => 'This task was created by phpunit when testing relations',
+            'due'                  => '2010-06-11T15:47:40',
+        ]));
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_family'              => 'Weiss',
+            'n_given'               => 'Cornelius',
+            'bday'                  => '1979-06-05T00:00:00',
+            'container_id'          => '',
+        ]));
+
         $this->_relationData = array(
             array(
                 'own_model'              => 'Crm_Model_Lead',
@@ -93,7 +105,7 @@ class Tinebase_Relation_RelationTest extends TestCase
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Tasks_Model_Task',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
-                'related_id'             => Tinebase_Record_Abstract::generateUID(),//'8a572723e867dd73dd68d1740dd94f586eff5432',
+                'related_id'             => Tinebase_Record_Abstract::generateUID(),
                 'type'                   => 'CRM_TASK'
             ),
             array(
@@ -103,12 +115,7 @@ class Tinebase_Relation_RelationTest extends TestCase
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
                 'related_model'          => 'Tasks_Model_Task',
                 'related_backend'        => '',
-                'related_id'             => '',
-                'related_record'           => array(
-                    'summary'              => 'phpunit test task for relations from crm',
-                    'description'          => 'This task was created by phpunit when testing relations',
-                    'due'                  => '2010-06-11T15:47:40',
-                ),
+                'related_id'             => $task->getId(),
                 'type'                   => 'CRM_TASK',
             ),
             array(
@@ -118,13 +125,7 @@ class Tinebase_Relation_RelationTest extends TestCase
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
                 'related_model'          => 'Addressbook_Model_Contact',
                 'related_backend'        => '',
-                'related_id'             => '',
-                'related_record'           => array(
-                    'n_family'              => 'Weiss',
-                    'n_given'               => 'Cornelius',
-                    'bday'                  => '1979-06-05T00:00:00',
-                    'container_id'                 => '',
-                ),
+                'related_id'             => $contact->getId(),
                 'type'                   => 'PARTNER',
             ),
         );
@@ -193,33 +194,6 @@ class Tinebase_Relation_RelationTest extends TestCase
     }
     
     /**
-     * Test if updating a related record works
-     *
-     */
-    public function testSetRelationUpdateRelatedRecord()
-    {
-        $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
-
-        $relatedContacts = $relations->filter('related_model', 'Addressbook_Model_Contact');
-        $relatedContacts->sort('related_model', 'ASC');
-        $relatedContacts[0]->related_record->note = "Testing to update from relation set";
-        
-        // NOTE: At the moment we need to set timezone to users timezone, as related records come as arrays and don't get
-        // their dates converted in the JSON frontends
-        foreach ($relations as $relation) {
-            $relation->setTimezone(Tinebase_Core::getUserTimezone());
-            $relation->related_record = isset($relation->related_record) ? $relation->related_record->toArray() : [];
-        }        
-        $this->_object->setRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id'], $relations->toArray(), FALSE, TRUE);
-        
-        $updatedRelations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);
-        $updatedConacts = $updatedRelations->filter('related_model', 'Addressbook_Model_Contact');
-        $updatedConacts->sort('related_model', 'ASC');
-
-        $this->assertEquals("Testing to update from relation set", $updatedConacts[0]->related_record->note);
-    }
-    
-    /**
      * test if getting multiple relations returns en empty record set for a missing record
      *
      */
@@ -253,13 +227,7 @@ class Tinebase_Relation_RelationTest extends TestCase
             'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
             'related_model'          => 'Addressbook_Model_Contact',
             'related_backend'        => '',
-            'related_id'             => '',
-            'related_record'         => array(
-                'n_family'              => 'Weiss',
-                'n_given'               => 'Leonie',
-                'bday'                  => '2005-07-13T00:00:00+02:00',
-                'container_id'          => '',
-            ),
+            'related_id'             => Tinebase_Record_Abstract::generateUID(),
             'type'                   => 'CUSTOMER',
         ));
         $this->_object->setRelations($this->_crmId2['model'], $this->_crmId2['backend'], $this->_crmId2['id'], $relationData);
@@ -350,7 +318,7 @@ class Tinebase_Relation_RelationTest extends TestCase
         $contractJson['relations'][] = array(
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'  => 'Addressbook_Model_Contact',
-            'related_record' => $sclever->toArray(),
+            'related_id' => $sclever->getId(),
             'type'           => 'CUSTOMER',
         );
         
@@ -360,13 +328,13 @@ class Tinebase_Relation_RelationTest extends TestCase
         $contract2Json['relations'][] = array(
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'  => 'Addressbook_Model_Contact',
-            'related_record' => $sclever->toArray(),
+            'related_id' => $sclever->getId(),
             'type'           => 'PARTNER',
         );
         $contract2Json['relations'][] = array(
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'  => 'Addressbook_Model_Contact',
-            'related_record' => $pwulf->toArray(),
+            'related_id' => $pwulf->getId(),
             'type'           => 'PARTNER',
         );
         $contract2Json = $json->saveContract($contract2Json);

@@ -79,8 +79,8 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $contact2 = $this->_contactController->create(new Addressbook_Model_Contact(
                 array('n_given' => 'Hans Friedrich', 'n_family' => 'Ochs', 'container_id' => $container->getId()))
         );
-    
-        $customerData = array(
+
+        $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
                 'name' => 'Worldwide Electronics International',
                 'cpextern_id' => $contact1->getId(),
                 'cpintern_id' => $contact2->getId(),
@@ -103,7 +103,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
                 'adr_region' => 'Shanghai',
                 'adr_countryname' => 'China',
                 'adr_pobox'   => '7777777'
-        );
+        ]));
         
         $purchaseData = array(
                 'number' => 'R-12345',
@@ -122,7 +122,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
                         'own_model' => 'Sales_Model_PurchaseInvoice',
                         'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'related_model' => 'Sales_Model_Supplier',
-                        'related_record' => $customerData,
+                        'related_id' => $supplier->getId(),
                         'type' => 'SUPPLIER'
                 )
             )
@@ -194,7 +194,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
         ];
         $this->_json->savePurchaseInvoice($purchase);
 
-        $customerData = array(
+        $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
             'name' => 'ZWorldwide Electronics International',
             'cpextern_id' => $purchase['relations'][0]['related_record']['cpextern_id'],
             'cpintern_id' => $purchase['relations'][0]['related_record']['cpintern_id'],
@@ -217,7 +217,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
             'adr_region' => 'Shanghai',
             'adr_countryname' => 'China',
             'adr_pobox'   => '7777777'
-        );
+        ]));
 
         $purchaseData = array(
             'number' => 'R-12346',
@@ -236,7 +236,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
                 'own_model' => 'Sales_Model_PurchaseInvoice',
                 'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model' => 'Sales_Model_Supplier',
-                'related_record' => $customerData,
+                'related_id' => $supplier->getId(),
                 'related_backend' => 'Sql',
                 'type' => 'SUPPLIER'
             ],[
