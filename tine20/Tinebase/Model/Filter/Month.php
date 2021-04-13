@@ -84,9 +84,13 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
                 $_select->where($this->_getQuotedFieldName($_backend) . " = '0000-00-00 00:00:00' OR " .
                                 $this->_getQuotedFieldName($_backend) . ' IS NULL');
             } else {
+                $this->_value = str_replace('_', '-', $this->_value);
                 $split = explode('-', $this->_value);
-                if (!((strlen($this->_value) == 7) && ((int) $split[0] > 1900) && ((int) $split[1] > 0) && ((int) $split[1] < 13))) {
-                    // set default value
+                if ( !isset($split[1]) ||
+                    (!((strlen($this->_value) == 7) && ((int) $split[0] > 1900) && ((int) $split[1] > 0) && ((int) $split[1] < 13)))
+                ) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' Set default value 0000-00 (from' . $this->_value . ')');
                     $this->_value = '0000-00';
                 }
                 
