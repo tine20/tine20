@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>13.4</version>
+    <version>13.5</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
