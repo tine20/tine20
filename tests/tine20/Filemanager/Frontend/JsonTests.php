@@ -1738,6 +1738,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     protected function _getRelationData($node)
     {
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_given'           => 'ali',
+            'n_family'          => 'PHPUNIT',
+            'org_name'          => Tinebase_Record_Abstract::generateUID(),
+            'tel_cell_private'  => '+49TELCELLPRIVATE',
+        ]));
         return array(
             'own_model'              => 'Filemanager_Model_Node',
             'own_backend'            => 'Sql',
@@ -1747,12 +1753,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             'related_backend'        => 'Sql',
             'related_model'          => 'Addressbook_Model_Contact',
             'remark'                 => null,
-            'related_record'         => array(
-                'n_given'           => 'ali',
-                'n_family'          => 'PHPUNIT',
-                'org_name'          => Tinebase_Record_Abstract::generateUID(),
-                'tel_cell_private'  => '+49TELCELLPRIVATE',
-            )
+            'related_id'             => $contact->getId()
         );
     }
 

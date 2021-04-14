@@ -342,7 +342,6 @@ class Projects_JsonTest extends TestCase
                 'own_id'                 => 0,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'COWORKER',
-                'related_record'         => NULL,
                 'related_backend'        => 'Sql',
                 'related_id'             => Tinebase_Core::getUser()->contact_id,
                 'related_model'          => 'Addressbook_Model_Contact',
