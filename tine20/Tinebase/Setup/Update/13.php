@@ -143,9 +143,15 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         $db = Tinebase_Core::getDb();
         $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container SET type = "personal" WHERE type IS NULL');
         $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container SET model = "" WHERE model IS NULL');
+        // remove obsolete containers that have been created by an old bug
+        $db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'container WHERE model = "Felamimail_Model_Message"');
 
         foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
-            Tinebase_Container::getInstance()->deleteDuplicateContainer($app->name);
+            try {
+                Tinebase_Container::getInstance()->deleteDuplicateContainer($app->name);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
         }
 
         $this->addApplicationUpdate('Tinebase', '13.6', self::RELEASE013_UPDATE007);
