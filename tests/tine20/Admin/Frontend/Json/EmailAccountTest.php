@@ -425,7 +425,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         Admin_Controller_User::getInstance()->setAccountPassword($sclever, $newPw, $newPw);
         $this->_scleverPwChanged = true;
         $scleverAccount = array_filter($systemAccounts, function($account) use ($sclever) {
-            return ($account['user_id']['accountLoginName'] === $sclever->accountLoginName);
+            return ($account['user_id']['accountId'] === $sclever->getId());
         });
         $scleverAccount = array_pop($scleverAccount);
         $result = $this->_json->saveRules($scleverAccount['id'], []);

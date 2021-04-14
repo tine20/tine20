@@ -28,7 +28,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      *
      * @todo perhaps we can remove that and build model name from name of the class (replace 'Controller' with 'Model')
      */
-    protected $_modelName = 'Tinebase_Model_FullUser';
+    protected $_modelName = 'Tinebase_Model_User';
 
     /**
      * row name mapping 
@@ -1487,7 +1487,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param  string  $_accountClass  type of model to return
      * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User' or 'Tinebase_Model_FullUser'
      */
-    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_FullUser') 
+    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User')
     {
         if (empty($_id)) {
             return new Tinebase_Record_RecordSet($_accountClass);

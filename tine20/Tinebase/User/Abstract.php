@@ -759,6 +759,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 
     public function getModel()
     {
-        return Tinebase_Model_FullUser::class;
+        return Tinebase_Model_User::class;
     }
 }
