@@ -44,13 +44,16 @@ abstract class ImportTestCase extends TestCase
      * tear down tests
      */
     protected function tearDown(): void
-{
-        if ($this->_testContainer) {
-            Tinebase_Container::getInstance()->deleteContainer($this->_testContainer, true);
-        }
-
+    {
         parent::tearDown();
 
+        if ($this->_testContainer) {
+            try {
+                Tinebase_Container::getInstance()->deleteContainer($this->_testContainer, true);
+                Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'container', 'is_deleted = 1');
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+        }
+        
         // cleanup
         if (file_exists($this->_filename) && $this->_deleteImportFile) {
              unlink($this->_filename);
@@ -94,7 +97,12 @@ abstract class ImportTestCase extends TestCase
         }
 
         // then import
-        $result = $this->_instance->importFile($this->_filename, $clientRecordData);
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        try {
+            $result = $this->_instance->importFile($this->_filename, $clientRecordData);
+        } finally {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
+        }
 
         return $result;
     }

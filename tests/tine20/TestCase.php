@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -113,6 +113,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected $_pin = '1234';
 
+    protected $_containerToDelete = [];
+
     /**
      * set up tests
      */
@@ -147,8 +149,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $this->_deleteUsers();
             $this->_deleteGroups();
         }
-        if ($this->_transactionId) {
-            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
+        if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back test transaction');
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -186,6 +188,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         foreach ($this->_listsToDelete as $list) {
             $listId = $list instanceof Addressbook_Model_List ? $list->getId() : $list;
             Addressbook_Controller_List::getInstance()->delete($listId);
+        }
+
+        if (!empty($this->_containerToDelete)) {
+            try {
+                Tinebase_Container::getInstance()->delete($this->_containerToDelete);
+            } catch (Tinebase_Exception $e) {}
         }
 
         Tinebase_Lock_UnitTestFix::clearLocks();
@@ -1080,6 +1088,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
         $mailinglist = Addressbook_Controller_List::getInstance()->create($list);
         $this->_listsToDelete[] = $mailinglist;
+        $this->_containerToDelete[] = $mailinglist->container_id;
         return $mailinglist;
     }
 

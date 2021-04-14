@@ -16,6 +16,16 @@ class Addressbook_Export_VCardTest extends TestCase
 {
     protected $_testContainer = null;
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if ($this->_testContainer) {
+            Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'addressbook', 'container_id = "' . $this->_testContainer->getId() . '"');
+            Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'container', 'id = "' . $this->_testContainer->getId() . '"');
+        }
+    }
+
     public function testExportPersonalContainer()
     {
         $this->_testNeedsTransaction();
