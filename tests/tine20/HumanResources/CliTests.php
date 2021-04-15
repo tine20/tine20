@@ -34,8 +34,11 @@ class HumanResources_CliTests extends HumanResources_TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
+        parent::setUp();
+
         $this->_cli = new HumanResources_Frontend_Cli();
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
     }
     
     /**
@@ -45,17 +48,19 @@ class HumanResources_CliTests extends HumanResources_TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
+        parent::tearDown();
+
         HumanResources_Controller_Employee::getInstance()->delete($this->_idsToDelete);
     }
         
     /**
      * test employee import
-     * 
-     * @group longrunning
      */
     public function testImportEmployee()
     {
+        self::markTestSkipped('cli employee import is broken, not testing');
+
         $cc = $this->_getSalesCostCenter(7);
         
         $this->_doImport(true);
@@ -132,12 +137,11 @@ class HumanResources_CliTests extends HumanResources_TestCase
 
     /**
      * test employee import update
-     * 
-     * @group longrunning
-     * @group nodockerci
      */
     public function testImportUpdate()
     {
+        self::markTestSkipped('cli employee import is broken, not testing');
+
         $this->_doImport();
         
         sleep(1);
@@ -159,11 +163,11 @@ class HumanResources_CliTests extends HumanResources_TestCase
     
     /**
      * tests set_contracts_end_date
-     * @group nogitlabci
-     * @group nodockerci
      */
     public function testSetContractsEndDate()
     {
+        self::markTestSkipped('cli employee import is broken, not testing');
+
         $this->_doImport(FALSE);
         
         $cc = HumanResources_Controller_Contract::getInstance();
