@@ -154,6 +154,8 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             }
         }
 
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container SET owner_id = "" WHERE owner_id IS NULL');
         Setup_SchemaTool::updateSchema([Tinebase_Model_Container::class]);
 
         $this->addApplicationUpdate('Tinebase', '13.6', self::RELEASE013_UPDATE007);
