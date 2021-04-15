@@ -154,6 +154,8 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             }
         }
 
+        Setup_SchemaTool::updateSchema([Tinebase_Model_Container::class]);
+
         $this->addApplicationUpdate('Tinebase', '13.6', self::RELEASE013_UPDATE007);
     }
 }
