@@ -2,28 +2,26 @@
 /**
  * leads controller for CRM application
  * 
- * the main logic of the CRM application (for leads)
+ * leads controller class for CRM application
  *
  * @package     Crm
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- */
-
-/**
- * leads controller class for CRM application
- * 
- * @package     Crm
- * @subpackage  Controller
  */
 class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
 {
     /**
      * @see Tinebase_Controller_Record_Abstract
      */
-    protected $_inspectRelatedRecords = TRUE;
+    protected $_inspectRelatedRecords = true;
+
+    /**
+     * @var bool en/disable readonly check with this
+     */
+    protected $_doReadonlyCheck = true;
 
     /**
      * const for sendNotification
@@ -86,7 +84,18 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
-    }    
+    }
+
+    /**
+     * set/get checking lead readonly check
+     *
+     * @param  boolean $setTo
+     * @return boolean
+     */
+    public function doReadonlyCheck($setTo = NULL)
+    {
+        return $this->_setBooleanMemberVar('_doReadonlyCheck', $setTo);
+    }
     
     /****************************** overwritten functions ************************/
     
@@ -399,7 +408,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * Check if old record lead state has a readonly flag and throw a exception
+     * Check if record lead state has a readonly flag and throw a exception
      * if the record was already set to a readonly state.
      * 
      * @param $_record
@@ -407,9 +416,13 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkReadonlyState($_record)
     {
+        if (! $this->_doReadonlyCheck) {
+            return;
+        }
+
         $leadState = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getValue($_record->leadstate_id);
         $readonly = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getKeyfieldRecordByValue($leadState)['readonly'];
-        
+
         if ($readonly) {
             $translate = Tinebase_Translation::getTranslation('Crm');
             // _('This Lead state is set to read-only therefore updating this Lead is not possible.')
@@ -417,9 +430,9 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                 $translate->_('This Lead state is set to read-only therefore updating this Lead is not possible.'));
         }
     }
-    
+
     /**
-     * set turnover of record if empty by calulating sum of product prices
+     * set turnover of record if empty by calculating sum of product prices
      * 
      * @param Tinebase_Record_Interface $_record
      * @return void
