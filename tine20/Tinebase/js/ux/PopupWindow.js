@@ -132,12 +132,16 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         // open popup window first to save time
         if (! this.popup) {
             try {
-                // browser zoom level does not affect window size
-                this.evalDevicePixelRatio = ! Ext.isSafari;
+                // NOTE: safaris devicePixelRatio is always 2 and does not change with zoom-level 
+                this.evalDevicePixelRatio = !Ext.isSafari;
+                
+                // NOTE: Chrome/FF on MacOS with retina display have their devicePixelRatio multiplied by 2
+                //       what about mac-mini? -> pls. report
+                const devicePixelRatio = window.devicePixelRatio / (Ext.isMac ? 2 : 1);
 
-                if (this.evalDevicePixelRatio && window.devicePixelRatio) {
-                    this.width = Math.round(this.width * window.devicePixelRatio);
-                    this.height = Math.round(this.height * window.devicePixelRatio);
+                if (this.evalDevicePixelRatio && devicePixelRatio) {
+                    this.width = Math.round(this.width * devicePixelRatio);
+                    this.height = Math.round(this.height * devicePixelRatio);
                 }
 
                 //limit the window size
