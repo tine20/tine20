@@ -1012,7 +1012,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ? Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP
             : Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP;
 
-        if ($method === 'inspectUpdateUser' && empty($user->accountEmailAddress) && $user->xprops()[$xprop]) {
+        if ($method === 'inspectUpdateUser' && empty($user->accountEmailAddress)
+            && isset($user->xprops()[$xprop]) && $user->xprops()[$xprop]
+        ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' Remove plugin user as email address has been removed');
             $this->_inspectEmailPluginCRUD($plugin, $user, $newUserProperties, 'inspectDeleteUser');
