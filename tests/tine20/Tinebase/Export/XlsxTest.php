@@ -159,8 +159,8 @@ class Tinebase_Export_XlsxTest extends TestCase
      */
     public function testAddressbookCustomFieldRelations()
     {
-        if (Tinebase_Application::getInstance()->isInstalled('WebUntis')) {
-            self::markTestSkipped('does not work with WebUntis app');
+        if (Tinebase_Application::getInstance()->isInstalled('WebUntis') || Tinebase_Application::getInstance()->isInstalled('FinanzPlusIntegrator')) {
+            self::markTestSkipped('does not work with some apps');
         }
 
         $cfController = Tinebase_CustomField::getInstance();
