@@ -1997,8 +1997,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                             });
                         }
                         break;
-                    case 'keyfield':
-                        // @TODO implement me
+                    case 'keyField':
+                        result.push({filtertype:'tine.widget.keyfield.filter',field:'customfield:' + cfConfig.id, app: this.app, keyfieldName: cfDefinition.label , label:cfDefinition.label});
                         break;
                     default:
                         result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
