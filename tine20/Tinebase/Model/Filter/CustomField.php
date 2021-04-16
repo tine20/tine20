@@ -177,6 +177,9 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 // TODO support recordset
                 throw new Tinebase_Exception_NotImplemented('filter for records type not implemented yet');
                 break;
+            case 'keyField':
+                $filterClass = Tinebase_Model_Filter_Id::class;
+                break;
             default:
                 $this->_operators = ['contains', 'AND', 'OR'];
                 // nothing here - parent is used
@@ -289,7 +292,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $valueIdentifier = $db->quoteIdentifier("{$this->_correlationName}.value");
             if (!$this->_value['value']) {
                 $_select->where($db->quoteInto($valueIdentifier . ' IS NULL OR ' . $valueIdentifier . ' = ?',
-                    $this->_value['value']));
+                    // this is all just wrong....
+                    is_numeric($this->_value['value']) || is_bool($this->_value['value'])  ? '0' : ''));
             } else {
                 if (strpos($this->_operator, 'not') === 0) {
                     $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);

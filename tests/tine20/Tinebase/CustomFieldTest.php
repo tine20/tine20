@@ -373,7 +373,7 @@ class Tinebase_CustomFieldTest extends TestCase
                 ]]
             ]));
             if ($filterToTest['expectContactToBeFound']) {
-                static::assertEquals(1, $result->count(), 'contact not found with filter '
+                static::assertEquals(intval($filterToTest['expectContactToBeFound']), $result->count(), 'contact not found with filter '
                     . print_r($filterToTest, true)
                     . ' cf value: ' . $customFieldValue
                 );
@@ -643,5 +643,31 @@ class Tinebase_CustomFieldTest extends TestCase
 
         $record = new Addressbook_Model_Contact([], true);
         static::assertFalse($record->has($systemCF->name), 'record still has the system cf property');
+    }
+
+    public function testCustomKeyFieldFilter()
+    {
+        $value = 'go';
+        $filtersToTest = [
+            ['operator' => 'in', 'value' => $value, 'expectContactToBeFound' => true],
+            ['operator' => 'notin', 'value' => $value, 'expectContactToBeFound' => false],
+        ];
+        $this->_testContactCustomFieldOfType('keyField', $value, $filtersToTest);
+    }
+
+    public function testCustomKeyFieldFilterEmpty()
+    {
+        $count = Addressbook_Controller_Contact::getInstance()->searchCount(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class)) + 1;
+        $value = '';
+        $filtersToTest = [
+            ['operator' => 'equals', 'value' => [], 'expectContactToBeFound' => $count],
+            ['operator' => 'in', 'value' => [], 'expectContactToBeFound' => $count],
+            ['operator' => 'equals', 'value' => '', 'expectContactToBeFound' => $count],
+            ['operator' => 'in', 'value' => '', 'expectContactToBeFound' => $count],
+            ['operator' => 'equals', 'value' => 'a', 'expectContactToBeFound' => false],
+            ['operator' => 'in', 'value' => 'a', 'expectContactToBeFound' => false],
+        ];
+        $this->_testContactCustomFieldOfType('keyField', $value, $filtersToTest);
     }
 }
