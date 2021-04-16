@@ -79,21 +79,27 @@ class Tinebase_Tree implements Tinebase_Controller_Interface
             case Tinebase_Timemachine_ModificationLog::UPDATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 /** @var Tinebase_Model_Tree_Node $record */
-                $record = $treeBackend->get($_modification->record_id, true);
-                if (isset($diff->diff['grants']) && $record->acl_node === $record->getId()) {
-                    Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($record);
-                }
-                $record->applyDiff($diff);
-                $this->_prepareReplicationRecord($record);
-                $treeBackend->update($record);
-                if (isset($diff->diff['grants']) && $record->acl_node === $record->getId()) {
-                    Tinebase_FileSystem::getInstance()->setGrantsForNode($record, $record->grants);
-                    //Tinebase_Tree_NodeGrants::getInstance()->setGrants($record);
+                try {
+                    $record = $treeBackend->get($_modification->record_id, true);
+                    if (isset($diff->diff['grants']) && $record->acl_node === $record->getId()) {
+                        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($record);
+                    }
+                    $record->applyDiff($diff);
+                    $this->_prepareReplicationRecord($record);
+                    $treeBackend->update($record);
+                    if (isset($diff->diff['grants']) && $record->acl_node === $record->getId()) {
+                        Tinebase_FileSystem::getInstance()->setGrantsForNode($record, $record->grants);
+                        //Tinebase_Tree_NodeGrants::getInstance()->setGrants($record);
+                    }
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    break;
                 }
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
-                $treeBackend->softDelete(array($_modification->record_id));
+                try {
+                    $treeBackend->softDelete(array($_modification->record_id));
+                } catch (Tinebase_Exception_NotFound $tenf) {}
                 break;
 
             default:
