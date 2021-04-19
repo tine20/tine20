@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
@@ -15,6 +15,7 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE013_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE013_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE        => [
@@ -31,6 +32,10 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE013_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -115,5 +120,11 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([Addressbook_Model_Contact::class]);
         $this->addApplicationUpdate('Addressbook', '13.5', self::RELEASE013_UPDATE005);
+    }
+
+    public function update006()
+    {
+        Setup_SchemaTool::updateSchema([Addressbook_Model_Contact::class]);
+        $this->addApplicationUpdate('Addressbook', '13.6', self::RELEASE013_UPDATE006);
     }
 }
