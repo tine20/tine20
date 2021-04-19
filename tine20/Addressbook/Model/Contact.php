@@ -1,19 +1,14 @@
 <?php
 /**
  * Tine 2.0
+ *
+ * class to hold contact data
  * 
  * @package     Addressbook
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- */
-
-/**
- * class to hold contact data
- * 
- * @package     Addressbook
- * @subpackage  Model
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @property    string $account_id                 id of associated user
  * @property    string $adr_one_countryname        name of the country the contact lives in
@@ -112,7 +107,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 26,
+        self::VERSION       => 27,
         'containerName'     => 'Addressbook',
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
         'recordName'        => self::MODEL_PART_NAME,
@@ -806,7 +801,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'url'                           => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 128,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Web', // _('Web')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -814,13 +809,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'url_home'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 128,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'URL (private)', // _('URL (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class],
             ],
-
 
             // do we want to remove those?
             'label'                         => [
