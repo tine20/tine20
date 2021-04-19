@@ -40,7 +40,7 @@ class Crm_AbstractTest extends TestCase
      */
     protected function _getCreatedContact()
     {
-        return Addressbook_Controller_Contact::getInstance()->create($this->_getContact());
+        return Addressbook_Controller_Contact::getInstance()->create($this->_getContact(), false);
     }
 
     /**
@@ -184,8 +184,8 @@ class Crm_AbstractTest extends TestCase
      */
     protected function _getLeadArrayWithRelations($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit LEAD')
     {
-        $contact    = Addressbook_Controller_Contact::getInstance()->create($this->_getContact());
-        $task       = Tasks_Controller_Task::getInstance()->create($this->_getTask());
+        $contact    = $this->_getCreatedContact();
+        $task       = $this->_getCreatedTask();
         $lead       = $this->_getLead($addCf, $addTags, $mute, $name);
         $product    = Sales_Controller_Product::getInstance()->create($this->_getProduct());
         $responsible = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
