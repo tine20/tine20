@@ -301,6 +301,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 myContact.set(p, contact.get(p));
             }
             myContact.endEdit();
+            myContact.commit();
         } else {
             contact.data.relation_type = 'customer';
             this.store.add(contact);

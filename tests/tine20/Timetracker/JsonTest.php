@@ -1367,7 +1367,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_Relations::getInstance()->setRelations('Sales_Model_Invoice', 'Sql', $invoice->id, array(array(
             'related_id' => $ta->id,
             'related_model' => 'Timetracker_Model_Timeaccount',
-            'related_record' => $ta,
             'related_degree' => 'sibling',
             'type' => 'INVOICE'
         )));

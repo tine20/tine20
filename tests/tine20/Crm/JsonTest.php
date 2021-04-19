@@ -233,7 +233,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
-            array('type'  => 'PARTNER', 'related_record' => $savedContact->toArray()),
+            array('type'  => 'PARTNER', 'related_id' => $savedContact->getId()),
         );
         $savedLead = $this->_getUit()->saveLead($leadData);
         
@@ -243,7 +243,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             . print_r($savedLead['relations'], true));
         
         $savedLead['relations'] = array(
-            array('type'  => 'PARTNER', 'related_record' => $savedContact->toArray()),
+            array('type'  => 'PARTNER', 'related_id' => $savedContact->getId()),
         );
         $savedLead = $this->_getUit()->saveLead($savedLead);
         
@@ -264,76 +264,12 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
-            array('type'  => '', 'related_record' => $savedContact->toArray()),
+            array('type'  => '', 'related_id' => $savedContact->getId()),
         );
         $savedLead = $this->_getUit()->saveLead($leadData);
         
         $this->assertEquals(1, count($savedLead['relations']), 'Relation has not been added');
         $this->assertEquals('CUSTOMER', $savedLead['relations'][0]['type'], 'default type should be CUSTOMER');
-    }
-
-    public function testUpdateContactRelationOnCreate()
-    {
-        $contact      = $this->_getContact();
-        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
-        $lead         = $this->_getLead();
-
-        $leadData = $lead->toArray();
-        $street = 'Heinrichstrasse 193';
-        $contactData = $savedContact->toArray();
-        $contactData['adr_one_street'] = $street;
-        $leadData['relations'] = array(
-            array('type'  => 'CUSTOMER', 'related_record' => $contactData),
-        );
-        $savedLead = $this->_getUit()->saveLead($leadData);
-        $this->assertTrue(isset($savedLead['relations'][0]));
-        $contactRelation = $savedLead['relations'][0];
-        $this->assertEquals($street, $contactRelation['related_record']['adr_one_street'],
-            'street not set in contact: ' . print_r($contactRelation, true));
-    }
-    
-    /**
-     * testConcurrentRelationSetting
-     * 
-     * @see 0007108: inspect and solve concurrency conflicts when setting lead relations
-     * @see 0000554: modlog: records can't be updated in less than 1 second intervals
-     */
-    public function testConcurrentRelationSetting()
-    {
-        $leadData = $this->_getUit()->saveLead($this->_getLead()->toArray());
-        $task = $this->_getTask();
-        
-        $taskJson = new Tasks_Frontend_Json();
-        $taskData = $task->toArray();
-        $taskData['relations'] = array(
-            array(
-                'type'  => 'TASK',
-                'own_model' => 'Tasks_Model_Task',
-                'own_backend' => 'Sql',
-                'related_degree' => 'sibling',
-                'related_model' => 'Crm_Model_Lead',
-                'related_backend' => 'Sql',
-                'related_id' => $leadData['id'],
-                'related_record' => $leadData
-            ),
-        );
-        
-        $taskData = $taskJson->saveTask($taskData);
-        $taskData['description'] = 1;
-        $taskJson->saveTask($taskData);
-        
-        $savedLead = $this->_getUit()->getLead($leadData['id']);
-        $savedLead['relations'][0]['related_record']['description'] = '2';
-        $savedLead['relations'][0]['related_record']['due'] = '2012-10-18 12:54:33';
-        
-        // client may send wrong seq -> this should cause a concurrency conflict
-        $savedLead['relations'][0]['related_record']['seq'] = 0;
-        try {
-            $this->_getUit()->saveLead($savedLead);
-            $this->fail('expected concurrency exception');
-        } catch (Tinebase_Exception_ConcurrencyConflict $ttecc) {
-            $this->assertEquals('concurrency conflict!', $ttecc->getMessage());
-        }
     }
     
     /**
@@ -357,8 +293,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'related_degree' => 'sibling',
                 'related_model' => 'Crm_Model_Lead',
                 'related_backend' => 'Sql',
-                'related_id' => $leadData1['id'],
-                'related_record' => $leadData1
+                'related_id' => $leadData1['id']
             ),
         );
         
@@ -372,8 +307,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'related_degree' => 'sibling',
             'related_model' => 'Crm_Model_Lead',
             'related_backend' => 'Sql',
-            'related_id' => $leadData2['id'],
-            'related_record' => $leadData2
+            'related_id' => $leadData2['id']
         );
         
         $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
@@ -400,8 +334,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'related_degree' => 'sibling',
                 'related_model' => 'Crm_Model_Lead',
                 'related_backend' => 'Sql',
-                'related_id' => $leadData1['id'],
-                'related_record' => $leadData1
+                'related_id' => $leadData1['id']
             ),
         );
         
@@ -417,8 +350,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'related_degree' => 'sibling',
                 'related_model' => 'Tasks_Model_Task',
                 'related_backend' => 'Sql',
-                'related_id' => $taskData['id'],
-                'related_record' => $taskData
+                'related_id' => $taskData['id']
             )
         );
         
@@ -434,14 +366,14 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testLeadWithMultipleTasks()
     {
         $lead = $this->_getLead();
-        $task1 = $this->_getTask();
-        $task2 = $this->_getTask();
+        $task1 = $this->_getCreatedTask();
+        $task2 = $this->_getCreatedTask();
         
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
-                array('type'  => 'TASK', 'related_record' => $task1->toArray()),
-                array('type'  => 'TASK', 'related_record' => $task2->toArray())
+                array('type'  => 'TASK', 'related_id' => $task1->getId()),
+                array('type'  => 'TASK', 'related_id' => $task2->getId())
         );
         
         $savedLead = $this->_getUit()->saveLead($leadData);
@@ -751,7 +683,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $lead = $this->_getLead();
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
-            array('type'  => 'PARTNER', 'related_record' => $scleverContact->toArray()),
+            array('type'  => 'PARTNER', 'related_id' => $this->_personas['sclever']->contact_id),
         );
         $newLead = $this->_getUit()->saveLead($leadData);
 
@@ -767,7 +699,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'summary'   => 'test event',
         ]));
         $lead['relations'][] = [
-            'related_record' => $event->toArray(),
+            'related_id' => $event->getId(),
             'related_model' => 'Calendar_Model_Event',
             'type' => '',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
