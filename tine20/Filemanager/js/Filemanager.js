@@ -71,6 +71,8 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
     },
 
     getRoute(path) {
+        this.path = path = path || this.path || Tine.Tinebase.container.getMyFileNodePath();
+
         const encodedPath = _.map(Tine.Filemanager.Model.Node.sanitize(path).split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/');
         return `Filemanager${encodedPath}`;
     }
