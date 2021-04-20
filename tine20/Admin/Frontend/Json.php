@@ -2,23 +2,16 @@
 /**
  * Tine 2.0
  *
- * @package     Admin
- * @subpackage  Frontend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
- * @todo        use functions from Tinebase_Frontend_Json_Abstract
- */
-
-/**
- * backend class for Zend_Json_Server
- *
  * This class handles all Json requests for the admin application
  *
  * @package     Admin
  * @subpackage  Frontend
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
+ * @todo        use functions from Tinebase_Frontend_Json_Abstract
  */
 class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -39,7 +32,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function __construct()
     {
-        // manage samba sam?
         if (isset(Tinebase_Core::getConfig()->samba)) {
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
         }
@@ -289,12 +281,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchUsers($filter, $paging)
     {
-        $sort = (isset($paging['sort']))    ? $paging['sort']   : 'accountDisplayName';
-        $dir  = (isset($paging['dir']))     ? $paging['dir']    : 'ASC';
-        
-        $result = $this->getUsers($filter[0]['value'], $sort, $dir, isset($paging['start']) ? $paging['start'] : 0,
-            isset($paging['limit']) ? $paging['limit'] : null);
-        $result['filter'] = $filter[0];
+        $result = $this->getUsers(
+            $filter[0]['value'] ?? null,
+            $paging['sort'] ?? 'accountDisplayName',
+            $paging['dir'] ?? 'ASC',
+            $paging['start'] ?? 0,
+            $paging['limit'] ?? null
+        );
+        $result['filter'] = $filter[0] ?? [];
         
         return $result;
     }
