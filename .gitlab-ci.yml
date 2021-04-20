@@ -91,6 +91,33 @@ docker_build_dev:
   timeout: 60m # time run: 28m
   interruptible: true
 
+housekeeping_uninterruptible:
+  variables:
+    KUBERNETES_CPU_REQUEST: 10m
+    KUBERNETES_MEMORY_REQUEST: 100Mi
+    GIT_STRATEGY: none
+  stage: build1
+  interruptible: false
+  allow_failure: true
+  script:
+    - >-
+      echo "This job dose not build anything.";
+      echo "Its is only here to make the pipeline uninterruptible.";
+      echo "This job should not run for merge requests and feature branches,";
+      echo "but it should run on main branches and for customer apps.";
+      echo "";
+      echo "gitlab-ci.yml ref:"; 
+      echo "  interruptible:";
+      echo "    When Auto-cancel redundant pipelines is enabled, a pipeline is";
+      echo "    immediately canceled when a new pipeline starts on the same";
+      echo "    branch if either of the following is true:";
+      echo "    - All jobs in the pipeline are set as interruptible.";
+      echo "    - Any uninterruptible jobs have not started yet.";
+  rules:
+    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+      when: never
+    - when: on_success
+
 # ============ stage: test ===========================
 # This stage runs all tests.
 
