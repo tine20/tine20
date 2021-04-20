@@ -485,7 +485,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     protected function _getLeadFilter()
     {
         return array(
-            array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit'),
+            array('field' => 'query', 'operator' => 'contains', 'value' => 'PHPUnit'),
         );
     }
 
@@ -707,5 +707,29 @@ class Crm_JsonTest extends Crm_AbstractTest
         $updatedLead = $this->_getUit()->saveLead($lead);
         self::assertEquals(5, count($updatedLead['relations']), 'relation count mismatch: '
             . print_r($updatedLead, true));
+    }
+
+    public function testSearchMyLeads()
+    {
+        $this->saveLead();
+        $filter = new Tinebase_Model_PersistentFilterFilter(array(
+            array(
+                'field' => 'name',
+                'operator' => 'equals',
+                'value' => 'my leads'
+            ),
+            array(
+                'field' => 'application_id',
+                'operator' => 'equals',
+                'value' => Tinebase_Application::getInstance()->getApplicationById('Crm')->getId()
+            ),
+        ));
+
+        $myLeadsPFilter = Tinebase_PersistentFilter::getInstance()->search($filter)->getFirstRecord();
+        $leadFilters = $myLeadsPFilter->filters->toArray();
+        self::assertCount(1, $leadFilters);
+        $result = $this->_getUit()->searchLeads($leadFilters, []);
+        self::assertGreaterThanOrEqual(1, $result['totalcount']);
+        self::assertCount(2, $result['filter']);
     }
 }

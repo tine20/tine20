@@ -87,6 +87,19 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
             'query'      => [
                 'filter'            => Crm_Model_LeadQueryFilter::class,
             ],
+            // relation filters
+            'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+                'related_model'     => 'Addressbook_Model_Contact',
+                'filtergroup'    => 'Addressbook_Model_ContactFilter'
+            )),
+            'product'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+                'related_model'     => 'Sales_Model_Product',
+                'filtergroup'    => 'Sales_Model_ProductFilter'
+            )),
+            'task'           => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+                'related_model'     => 'Tasks_Model_Task',
+                'filtergroup'    => 'Tasks_Model_TaskFilter'
+            )),
         ],
         'fields'            => [
             'lead_name'            => [
