@@ -43,6 +43,6 @@ class Tasks_Import_DemoDataTest extends TestCase
             ['field' => 'containerProperty', 'operator' => 'equals', 'value' => $this->_importContainer->getId()]
         ]);
         $result = Tasks_Controller_Task::getInstance()->search($filter);
-        self::assertEquals(2, count($result), print_r($result->toArray(), true));
+        self::assertGreaterThanOrEqual(2, count($result), print_r($result->toArray(), true));
     }
 }
