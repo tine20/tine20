@@ -238,6 +238,14 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     },
 
     /**
+     * get route for this app
+     * @return {string}
+     */
+    getRoute() {
+        return '/' + this.appName;
+    },
+    
+    /**
      * template function for subclasses is called before app activation. Return false to cancel activation
      */
     onBeforeActivate: Ext.emptyFn,

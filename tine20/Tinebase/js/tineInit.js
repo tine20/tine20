@@ -389,7 +389,7 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.router = new director.Router().init();
         Tine.Tinebase.router.configure({notfound: function () {
             var defaultApp = Tine.Tinebase.appMgr.getDefault();
-            Tine.Tinebase.router.setRoute('/' + defaultApp.appName);
+            Tine.Tinebase.router.setRoute(app.getRoute());
         }});
 
         var route = Tine.Tinebase.router.getRoute(),
