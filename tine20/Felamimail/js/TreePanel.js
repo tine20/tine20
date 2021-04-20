@@ -645,7 +645,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
         
         Tine.log.debug('Added new folder:' + newRecord.get('globalname'));
-        
+
+        this.ctxNode.leaf = false;
+        this.ctxNode.expand();
+        this.ctxNode.appendChild(this.loader.createNode(folderData));
+
+        const parentRecord = this.folderStore.getById(this.ctxNode.id);
+        if (parentRecord) parentRecord.set('has_children', true);
         this.folderStore.add([newRecord]);
         this.initNewFolderNode(newRecord);
     },

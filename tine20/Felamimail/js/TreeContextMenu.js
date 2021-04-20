@@ -55,42 +55,20 @@ Tine.Felamimail.setTreeContextMenus = function() {
     };
     
     // we need this for adding folders to account (root level)
-    const addFolderToRootAction = {
+    const addFolderAction = {
         text: this.app.i18n._('Add Folder'),
         iconCls: 'action_add',
         scope: this,
-        disabled: true,
+        // disabled: true,
         handler: function() {
-            Ext.MessageBox.prompt(String.format(i18n._('New {0}'), this.app.i18n._('Folder')), String.format(i18n._('Please enter the name of the new {0}:'), this.app.i18n._('Folder')), function(_btn, _text) {
-                if( this.ctxNode && _btn == 'ok') {
-                    if (! _text) {
-                        Ext.Msg.alert(String.format(i18n._('No {0} added'), this.app.i18n._('Folder')), String.format(i18n._('You have to supply a {0} name!'), this.app.i18n._('Folder')));
-                        return;
+            Ext.MessageBox.prompt(String.format(i18n._('New {0}'), this.app.i18n._('Folder')), String.format(i18n._('Please enter the name of the new {0}:'), this.app.i18n._('Folder')), async (btn, folderName) => {
+                if( this.ctxNode && btn === 'ok') {
+                    if (! folderName) {
+                        return Ext.Msg.alert(String.format(i18n._('No {0} added'), this.app.i18n._('Folder')), String.format(i18n._('You have to supply a {0} name!'), this.app.i18n._('Folder')));
                     }
                     Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Creating {0}...' ), this.app.i18n._('Folder')));
-                    var parentNode = this.ctxNode;
-                    
-                    var params = {
-                        method: 'Felamimail.addFolder',
-                        name: _text
-                    };
-                    
-                    params.parent = '';
-                    params.accountId = parentNode.id;
-                    
-                    Ext.Ajax.request({
-                        params: params,
-                        scope: this,
-                        timeout: 150000, // 2 minutes
-                        success: function(_result, _request){
-                            var nodeData = Ext.util.JSON.decode(_result.responseText);
-                            var newNode = this.loader.createNode(nodeData);
-                            parentNode.appendChild(newNode);
-                            this.fireEvent('containeradd', nodeData);
-                            Ext.MessageBox.hide();
-                        }
-                    });
-                    
+                    this.fireEvent('containeradd', await Tine.Felamimail.addFolder(folderName, this.ctxNode.attributes.globalname, this.ctxNode.attributes.account_id), this.ctxNode);
+                    Ext.MessageBox.hide();
                 }
             }, this);
         }
@@ -285,20 +263,20 @@ Tine.Felamimail.setTreeContextMenus = function() {
     };
     
     // system folder ctx menu
-    config.actions = [markFolderSeenAction, 'add'];
+    config.actions = [markFolderSeenAction, addFolderAction];
     this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // user folder ctx menu
-    config.actions = [markFolderSeenAction, 'add', 'rename', 'delete'];
+    config.actions = [markFolderSeenAction, addFolderAction, 'rename', 'delete'];
     this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // trash ctx menu
-    config.actions = [markFolderSeenAction, 'add', emptyFolderAction];
+    config.actions = [markFolderSeenAction, addFolderAction, emptyFolderAction];
     this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // account ctx menu
     let accountActions = [
-        addFolderToRootAction,
+        addFolderAction,
         updateFolderCacheAction,
         editVacationAction,
         editRulesAction,

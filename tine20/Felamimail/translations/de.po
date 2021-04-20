@@ -28,6 +28,9 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.2.3\n"
 
+msgid "GENDER_Folder"
+msgstr "male"
+
 #: Controller/Sieve.php:363
 msgid "Out of Office reply from %1$s"
 msgstr "Abwesenheitsnotiz von %1$s"
