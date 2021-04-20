@@ -184,21 +184,24 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         if (!empty($_filter)) {
             $whereStatement = array();
-            $defaultValues  = array(
+            $defaultValues = array(
                 $this->rowNameMapping['accountLastName'], 
                 $this->rowNameMapping['accountFirstName'], 
-                $this->rowNameMapping['accountLoginName']
+                $this->rowNameMapping['accountLoginName'],
+                $this->rowNameMapping['accountEmailAddress'],
             );
 
             // prepare for case insensitive search
             foreach ($defaultValues as $defaultValue) {
-                $whereStatement[] = $this->_dbCommand->prepareForILike($this->_db->quoteIdentifier($defaultValue)) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
+                $whereStatement[] = $this->_dbCommand->prepareForILike(
+                        $this->_db->quoteIdentifier($this->_db->table_prefix . $this->_tableName . '.' . $defaultValue)
+                    ) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
             }
             
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
         
-        // @todo still needed?? either we use contacts from addressboook or full users now
+        // @todo still needed?? either we use contacts from addressbook or full users now
         // return only active users, when searching for simple users
         if ($_accountClass == 'Tinebase_Model_User') {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
