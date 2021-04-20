@@ -37,6 +37,7 @@ workflow:
     - build_or_reuse_image source $REUSE_IMAGES
     - build_or_reuse_image test-source $REUSE_IMAGES
   timeout: 60m
+  interruptible: true
 docker_build_source_reuse:
   extends: .docker_build_source
   variables:
@@ -76,6 +77,7 @@ docker_build_built:
       when: on_success
     - when: never
   timeout: 120m
+  interruptible: true
 
 docker_build_dev:
   extends: .abstract_jobs.docker
@@ -87,6 +89,34 @@ docker_build_dev:
       when: on_success
     - when: never
   timeout: 60m # time run: 28m
+  interruptible: true
+
+housekeeping_uninterruptible:
+  variables:
+    KUBERNETES_CPU_REQUEST: 10m
+    KUBERNETES_MEMORY_REQUEST: 100Mi
+    GIT_STRATEGY: none
+  stage: build1
+  interruptible: false
+  allow_failure: true
+  script:
+    - >-
+      echo "This job dose not build anything.";
+      echo "Its is only here to make the pipeline uninterruptible.";
+      echo "This job should not run for merge requests and feature branches,";
+      echo "but it should run on main branches and for customer apps.";
+      echo "";
+      echo "gitlab-ci.yml ref:"; 
+      echo "  interruptible:";
+      echo "    When Auto-cancel redundant pipelines is enabled, a pipeline is";
+      echo "    immediately canceled when a new pipeline starts on the same";
+      echo "    branch if either of the following is true:";
+      echo "    - All jobs in the pipeline are set as interruptible.";
+      echo "    - Any uninterruptible jobs have not started yet.";
+  rules:
+    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+      when: never
+    - when: on_success
 
 # ============ stage: test ===========================
 # This stage runs all tests.
@@ -100,6 +130,7 @@ docker_build_dev:
     NODE_INDEX: 1
   stage: test
   timeout: 45m
+  interruptible: true
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
       when: never
@@ -119,6 +150,7 @@ docker_build_dev:
   stage: test
   timeout: 45m
   parallel: 5
+  interruptible: true
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
       when: never
@@ -138,6 +170,7 @@ docker_build_dev:
     ARG_TEST: AllServerTests
   stage: test
   timeout: 30m
+  interruptible: true
   rules:
     - if: $PHP_UNIT_SERVERTESTS == "never"
       when: never
@@ -156,6 +189,7 @@ docker_build_dev:
     TINE20_EMAIL_SMTP: "active:true,backend:postfixmultiinstance,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfixmultiinstance_host:db,postfixmultiinstance_dbname:postfix,postfixmultiinstance_username:tine20,postfixmultiinstance_password:tine20pw"
   stage: test
   timeout: 45m
+  interruptible: true
   parallel: 5
   rules:
     - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE == "never"
@@ -174,6 +208,7 @@ docker_build_dev:
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
   stage: test
   timeout: 90m
+  interruptible: true
   rules:
     - if: $PHP_UNIT_SETUP_TESTS == "never"
       when: never
@@ -203,6 +238,7 @@ docker_build_dev:
     - when: never
   allow_failure: true
   timeout: 20m # time run: 4m
+  interruptible: true
 
 "phpstan: code analyses":
   extends: .abstract_jobs.copy_source
@@ -229,12 +265,14 @@ docker_build_dev:
     - when: never
   allow_failure: true
   timeout: 20m # time run: 4m
+  interruptible: true
 
 "js: end to end tests source":
   extends: .abstract_jobs.e2e_test
   variables:
     ARG_COPY_SOURCE: "true"
     ARG_IMAGE: test-source-commit
+  interruptible: true
   rules:
     - if: $JS_E2E_TEST_SOURCE == "never"
       when: never
@@ -251,6 +289,7 @@ docker_build_dev:
   stage: test
   parallel: 5
   timeout: 45m
+  interruptible: true
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "never"
       when: never
@@ -270,6 +309,7 @@ docker_build_dev:
   parallel: 5
   allow_failure: true
   timeout: 30m
+  interruptible: true
   rules:
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "never"
       when: never
@@ -286,6 +326,7 @@ docker_build_dev:
   stage: test
   parallel: 5
   timeout: 30m
+  interruptible: true
   rules:
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "never"
       when: never
@@ -328,6 +369,7 @@ docker_build_dev:
       when: on_success
     - when: never
   timeout: 20m
+  interruptible: false
 
 # pushes dev-commit as dev to our gitlab registry.
 # They can be accessed essayer.
@@ -342,6 +384,7 @@ docker_build_dev:
       when: on_success
     - when: never
   timeout: 20m
+  interruptible: false
 
 # pushing built-commit as tine20/tine20 to dockerhub.
 # The tag is also overwritten and set to $DOCKERHUB_TAG
@@ -363,6 +406,7 @@ docker_build_dev:
       when: on_success
     - when: never
   timeout: 20m
+  interruptible: false
 
 # ============ stage: housekeeping ===========================
 
@@ -378,20 +422,4 @@ docker_populate_cache:
     - docker_populate_cache test-built || true
     - docker_populate_cache dev || true
   allow_failure: true # a failure is a problem, but the pipeline should not fail
-
-docker_cleanup_images:
-  extends: .abstract_jobs.docker
-  stage: housekeeping-cleanup
-  script:
-    - docker_untag_image base-commit $CI_PIPELINE_ID-$PHP_VERSION || true
-    - docker_untag_image source-commit $CI_PIPELINE_ID-$PHP_VERSION || true
-    - docker_untag_image test-source-commit $CI_PIPELINE_ID-$PHP_VERSION || true
-    - docker_untag_image build-commit $CI_PIPELINE_ID-$PHP_VERSION || true
-    - docker_untag_image built-commit $CI_PIPELINE_ID-$PHP_VERSION || true
-    - docker_untag_image test-built-commit $CI_PIPELINE_ID-$PHP_VERSION || true
-    - docker_untag_image dev-commit $CI_PIPELINE_ID-$PHP_VERSION || true
-  rules:
-    - if: $DOCKER_CLEANUP_IMAGES == "true"
-      when: always
-    - when: never
-  allow_failure: true # a failure is a problem, but the pipeline should not fail
+  interruptible: false
