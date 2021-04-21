@@ -181,8 +181,8 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
                             $response->getStatus()
                         );
                     default:
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                            Tinebase_Core::getLogger()->notice(
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                            Tinebase_Core::getLogger()->WARN(
                                 __METHOD__ . '::' . __LINE__ . ' STATUS CODE: ' . $response->getStatus() . ' MESSAGE: ' . $response->getBody()
                             );
                         }
