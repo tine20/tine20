@@ -351,7 +351,7 @@ class Sales_JsonTest extends TestCase
     public function testSearchCustomers()
     {
         $customerController = Sales_Controller_Customer::getInstance();
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_personas['sclever']->getId());
         $i = 0;
         
         while ($i < 104) {
