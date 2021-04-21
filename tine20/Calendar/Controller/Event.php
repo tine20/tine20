@@ -3226,9 +3226,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . ' Comparing period ' . $from . ' - ' . $endWeek);
     
             // get all events from cal1+cal2 for the week
-            $cal1Events = $this->_getEventsForPeriodAndCalendar($cal1, $from, $endWeek);
+            $cal1Events = $this->getEventsForPeriodAndCalendar($cal1, $from, $endWeek);
             $cal1EventsClone = clone $cal1Events;
-            $cal2Events = $this->_getEventsForPeriodAndCalendar($cal2, $from, $endWeek);
+            $cal2Events = $this->getEventsForPeriodAndCalendar($cal2, $from, $endWeek);
             $cal2EventsClone = clone $cal2Events;
             
             $from->addWeek(1);
@@ -3302,7 +3302,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         return $result;
     }
     
-    protected function _getEventsForPeriodAndCalendar($calendarId, $from, $until)
+    public function getEventsForPeriodAndCalendar($calendarId, $from, $until)
     {
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'period', 'operator' => 'within', 'value' =>
@@ -3346,7 +3346,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             
             // TODO we need to detect events with DECLINED/DELETED attendee
-            $events = $this->_getEventsForPeriodAndCalendar($calendarId, $from, $endWeek);
+            $events = $this->getEventsForPeriodAndCalendar($calendarId, $from, $endWeek);
             
             $from->addWeek(1);
             
