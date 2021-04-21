@@ -54,7 +54,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'is_spam_suspicions', type: 'bool' }
     ], {
     appName: 'Felamimail',
-    modelName: 'Message',
+    modelName: 'Message', // gettext('GENDER_Message')
     idProperty: 'id',
     titleProperty: 'subject',
     // ngettext('Message', 'Messages', n);
@@ -443,7 +443,7 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
     // i18n._('INBOX') i18n._('Drafts') i18n._('Sent') i18n._('Templates') i18n._('Junk') i18n._('Trash')
 
     appName: 'Felamimail',
-    modelName: 'Folder',
+    modelName: 'Folder', // gettext('GENDER_Folder')
     idProperty: 'id',
     titleProperty: 'localname',
     // ngettext('Folder', 'Folders', n);

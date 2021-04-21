@@ -27,7 +27,7 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.PickerFilter, {
      * @private
      */
     initComponent: function() {
-        this.label = this.app.i18n._('Folder');
+        this.label = Tine.Felamimail.Model.Folder.getMeta('modelName');
         
         this.multiselectFieldConfig = {
             labelField: 'path',
