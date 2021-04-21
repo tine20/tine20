@@ -203,7 +203,7 @@ class Crm_AbstractTest extends TestCase
             ],
             array('type'  => 'TASK',    'related_id' => $task->getId()),
             array('type'  => 'PARTNER', 'related_id' => $contact->getId()),
-            array('type'  => 'PRODUCT', 'related_id' => $product->getId(), 'remark' => array('price' => $price)),
+            array('type'  => 'PRODUCT', 'related_id' => $product->getId(), 'remark' => array('price' => $price, 'quantity' => 3)),
         ];
         $note = array(
             'note_type_id'      => 1,
@@ -224,6 +224,7 @@ class Crm_AbstractTest extends TestCase
         return new Sales_Model_Product(array(
             'name'  => 'PHPUnit test product',
             'price' => 10000,
+            'gtin'  => 1234
         ));
     }
 
