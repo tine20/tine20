@@ -36,7 +36,6 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      * Panel config
      * @private
      */
-    frame: true,
     border: true,
     autoScroll: true,
     bodyStyle: 'background-color:white',
@@ -150,6 +149,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
         
         this.folderTree = new Ext.tree.TreePanel({
             id: 'felamimail-foldertree',
+            border: false,
             rootVisible: ! this.allAccounts,
             store: this.store || this.app.getFolderStore(),
             // TODO use another loader/store for subscriptions

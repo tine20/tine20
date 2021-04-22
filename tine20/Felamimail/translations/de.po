@@ -28,6 +28,9 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.2.3\n"
 
+msgid "GENDER_Folder"
+msgstr "male"
+
 #: Controller/Sieve.php:363
 msgid "Out of Office reply from %1$s"
 msgstr "Abwesenheitsnotiz von %1$s"
@@ -748,6 +751,15 @@ msgstr "Nachricht verfassen:"
 #: js/MessageEditDialog.js:1230 js/MailDetailsPanel.js:288 js/GridPanel.js:495
 msgid "Attachments"
 msgstr "Anhänge"
+
+msgid "Attachment"
+msgstr "Anhang"
+
+msgid "Only password download link"
+msgstr "Nur passwortgeschützter Download Link"
+
+msgid "Allow only password download links"
+msgstr "Nur passwortgeschützter Download Link erlaubt"
 
 #: js/MessageEditDialog.js:1325 js/MessageEditDialog.js:1335
 #: js/MessageEditDialog.js:1387 js/AccountEditDialog.js:374

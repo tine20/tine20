@@ -13,7 +13,7 @@ class Generic extends Abstract {
   constructor (config) {
     super(config)
     this.windowTitle = i18n._('MFA secret required')
-    this.questionText = formatMessage('This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}', this)
+    this.questionText = formatMessage('This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}.', this)
     this.passwordFieldLabel = formatMessage('Secret from {mfaDevice.device_name}', this)
   }
 

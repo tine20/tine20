@@ -13,7 +13,7 @@ class Token extends Generic {
   constructor (config) {
     super(config)
     this.windowTitle = i18n._('Token required')
-    this.questionText = formatMessage('This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}', this)
+    this.questionText = formatMessage('This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}.', this)
     this.passwordFieldLabel = formatMessage('Token from {mfaDevice.device_name}', this)
   }
 }

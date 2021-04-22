@@ -62,18 +62,6 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 ),
                 'jsConfig' => array('filtertype' => 'sales.supplier')
             ),
-            'costcenter' => array(
-                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
-                'label' => 'Cost Center', // _('Cost Center')
-                'options' => array(
-                    'controller'      => 'Sales_Controller_CostCenter',
-                    'filtergroup'     => 'Sales_Model_CostCenterFilter',
-                    'own_filtergroup' => 'Sales_Model_PurchaseInvoiceFilter',
-                    'own_controller'  => 'Sales_Controller_PurchaseInvoice',
-                    'related_model'   => 'Sales_Model_CostCenter',
-                ),
-                'jsConfig' => array('filtertype' => 'sales.contractcostcenter')
-            ),
             'approver' => array(
                 'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
                 'label' => 'Approver', // _('Approver')

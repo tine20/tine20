@@ -29,7 +29,7 @@ class Sales_Model_Offer extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Offer',
+        'recordName'        => 'Offer', // gettext('GENDER_Offer')
         'recordsName'       => 'Offers', // ngettext('Offer', 'Offers', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,

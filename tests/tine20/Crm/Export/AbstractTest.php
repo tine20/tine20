@@ -39,14 +39,14 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
         Tinebase_Cache_PerRequest::getInstance()->reset();
         $this->_json = new Crm_Frontend_Json();
         
-        $contact = $this->_getContact();
-        $task = $this->_getTask();
+        $contact = $this->_getCreatedContact();
+        $task = $this->_getCreatedTask();
         $lead = $this->_getLead();
         
         $leadData = $lead->toArray();
         $leadData['relations'] = array(
-            array('type'  => 'TASK',     'related_record' => $task->toArray()),
-            array('type'  => 'CUSTOMER', 'related_record' => $contact->toArray()),
+            array('type'  => 'TASK',     'related_id' => $task->getId()),
+            array('type'  => 'CUSTOMER', 'related_id' => $contact->getId()),
         );
         
         $this->_objects['lead'] = $this->_json->saveLead(Zend_Json::encode($leadData));

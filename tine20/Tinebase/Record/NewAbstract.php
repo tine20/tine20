@@ -1559,7 +1559,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
 
             foreach ($toConvert as $convertField => &$value) {
                 if (! method_exists($value, 'setTimezone')) {
-                    throw new Tinebase_Exception_Record_Validation($convertField . ' must be a method setTimezone');
+                    throw new Tinebase_Exception_Record_Validation($field . ' must have a method setTimezone');
                 }
                 $value->setTimezone($_timezone);
             }

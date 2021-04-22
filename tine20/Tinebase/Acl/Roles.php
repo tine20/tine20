@@ -154,7 +154,14 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         
         $applicationId = $application->getId();
         
-        return isset($rights[$applicationId]) && (isset($rights[$applicationId][$_right]) || isset($rights[$applicationId][Tinebase_Acl_Rights::ADMIN]));
+        $result = isset($rights[$applicationId]) && (isset($rights[$applicationId][$_right]) || isset($rights[$applicationId][Tinebase_Acl_Rights::ADMIN]));
+        if (!$result) {
+            $appCtrl = Tinebase_Core::getApplicationInstance($application->name, '', true);
+            if (method_exists($appCtrl, 'hasImplicitRight')) {
+                $result = $appCtrl->hasImplicitRight($_accountId, $_right);
+            }
+        }
+        return $result;
     }
     
     /**

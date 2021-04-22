@@ -516,39 +516,33 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             filter.foreignRecordDefinition = filter.get('operator');
         }
         
-        if (this.linkType === 'foreignId') {
-            operator.origGetValue = operator.getValue.createDelegate(operator);
-            
-            /**
-             * get operator value
-             *
-             * NOTE: operator filed is composed of "<operator>[?<option1>=<value1>[&<optionN>=<valueN]]
-             *     operator can be definedBy and notDefinedBy
-             *     options (urlencoded) options
-             *          condition: condition of the subfiltergroup (and or or)
-             *          setOperator: result of subfilter must match oneOf or allOf our records
-             *                      (allOf makes sense if our field is of type records (1:n n:m))
-             *
-             * NOTE: for historic reasons operator might be AND, which means definedBy?condition=and&setOperator=oneOf
-             *
-             * @return {string}
-             */
-            operator.getValue = function () {
-                // auto switch operator for single line filters
-                var op = operator.origGetValue(),
-                    opMap = {
-                        not: 'notDefinedBy?condition=and&setOperator=oneOf',
-                        notin: 'notDefinedBy?condition=and&setOperator=oneOf',
-                        allOf: 'definedBy?condition=and&setOperator=allOf'
-                    };
+        operator.origGetValue = operator.getValue.createDelegate(operator);
+        
+        /**
+         * get operator value
+         *
+         * NOTE: operator filed is composed of "<operator>[?<option1>=<value1>[&<optionN>=<valueN]]
+         *     operator can be definedBy and notDefinedBy
+         *     options (urlencoded) options
+         *          condition: condition of the subfiltergroup (and or or)
+         *          setOperator: result of subfilter must match oneOf or allOf our records
+         *                      (allOf makes sense if our field is of type records (1:n n:m))
+         *
+         * NOTE: for historic reasons operator might be AND, which means definedBy?condition=and&setOperator=oneOf
+         *
+         * @return {string}
+         */
+        operator.getValue = function () {
+            // auto switch operator for single line filters
+            var op = operator.origGetValue(),
+                opMap = {
+                    not: 'notDefinedBy?condition=and&setOperator=oneOf',
+                    notin: 'notDefinedBy?condition=and&setOperator=oneOf',
+                    allOf: 'definedBy?condition=and&setOperator=allOf'
+                };
 
-                return opMap[op] || 'definedBy?condition=and&setOperator=oneOf';
-            };
-        } else {
-            operator.getValue = function () {
-                return 'AND';
-            }
-        }
+            return opMap[op] || 'definedBy?condition=and&setOperator=oneOf';
+        };
         
         return operator;
     },
@@ -567,7 +561,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             filter.foreignRecordDefinition = newOperator;
         }
         
-        if (filter.get('operator') != newOperator) {
+        const oldOperator = filter.get('operator');
+        if (oldOperator != newOperator) {
             if (filter.toolbar) {
                 filter.toolbar.destroy();
                 delete filter.toolbar;
@@ -576,7 +571,13 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
         filter.set('operator', newOperator);
 
-        if (! keepValue) {
+        if (['equals', 'not'].indexOf(oldOperator) > -1 && ['in', 'allOf', 'notin'].indexOf(newOperator) > -1) {
+            filter.set('value', _.compact([filter.get('value')]));
+        }
+        
+        if (! keepValue 
+            || [oldOperator, newOperator].indexOf('definedBy') > -1
+            || ['equals', 'not'].indexOf(newOperator) > -1 && ['in', 'allOf', 'notin'].indexOf(oldOperator) > -1) {
             filter.set('value', '');
         }
         

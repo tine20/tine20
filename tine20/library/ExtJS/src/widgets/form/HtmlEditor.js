@@ -212,8 +212,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                 scope: editor,
                 handler:handler||editor.relayBtnCmd,
                 clickEvent:'mousedown',
-                tooltip: tipsEnabled ? editor.buttonTips[id] || undefined : undefined,
-                overflowText: editor.buttonTips[id].title || undefined,
+                tooltip: tipsEnabled ? _.get(editor, `buttonTips[${id}]`, undefined) : undefined,
+                overflowText: _.get(editor, `buttonTips[${id}].title`, undefined),
                 tabIndex:-1
             };
         }
@@ -238,7 +238,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             items.push(
                 btn('bold'),
                 btn('italic'),
-                btn('underline')
+                btn('underline'),
+                btn('strikeThrough')
             );
         }
 
@@ -864,6 +865,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             btns.bold.toggle(doc.queryCommandState('bold'));
             btns.italic.toggle(doc.queryCommandState('italic'));
             btns.underline.toggle(doc.queryCommandState('underline'));
+            btns.strikeThrough.toggle(doc.queryCommandState('strikeThrough'));
         }
         if(this.enableAlignments){
             btns.justifyleft.toggle(doc.queryCommandState('justifyleft'));
@@ -927,6 +929,9 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                     break;
                     case 'u':
                         cmd = 'underline';
+                    break;
+                    case 'd':
+                        cmd = 'strikeThrough';
                     break;
                 }
                 if(cmd){
@@ -1060,6 +1065,11 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         underline : {
             title: 'Underline (Ctrl+U)',
             text: 'Underline the selected text.',
+            cls: 'x-html-editor-tip'
+        },
+        strikeThrough : {
+            title: 'Strike out',
+            text: 'Strike out the selected text.',
             cls: 'x-html-editor-tip'
         },
         increasefontsize : {

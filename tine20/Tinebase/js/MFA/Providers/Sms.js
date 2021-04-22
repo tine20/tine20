@@ -13,7 +13,7 @@ class Sms extends Generic {
         super(config)
         this.isOTP = true
         this.windowTitle = i18n._('SMS security code required')
-        this.questionText = formatMessage('This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}', this)
+        this.questionText = formatMessage('This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}.', this)
         this.passwordFieldLabel = formatMessage('Security code from {mfaDevice.device_name}', this)
     }
     

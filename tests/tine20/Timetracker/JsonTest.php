@@ -1367,7 +1367,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_Relations::getInstance()->setRelations('Sales_Model_Invoice', 'Sql', $invoice->id, array(array(
             'related_id' => $ta->id,
             'related_model' => 'Timetracker_Model_Timeaccount',
-            'related_record' => $ta,
             'related_degree' => 'sibling',
             'type' => 'INVOICE'
         )));
@@ -1470,12 +1469,9 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
         $this->assertEquals('', $timeaccount['price_unit']);
-        
-        $timeaccount->price_unit = 'days';
-        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
-        $this->assertEquals('days', $timeaccount['price_unit']);
-        
 
-
+        $timeaccountData['price_unit'] = 'days';
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccountData);
+        $this->assertEquals('days', $timeaccountData['price_unit']);
     }
 }

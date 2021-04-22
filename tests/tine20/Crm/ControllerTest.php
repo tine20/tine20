@@ -309,7 +309,7 @@ class Crm_ControllerTest extends Crm_AbstractTest
      */
     public function testUpdateReadonlyLead()
     {
-        $lead = Crm_Controller_Lead::getInstance()->create($this->_getLead(false, Tinebase_Record_Abstract::generateUID(10)));
+        $lead = Crm_Controller_Lead::getInstance()->create($this->_getLead(true, true, false, Tinebase_Record_Abstract::generateUID(10)));
         // save read-only status
         $lead->leadstate_id = 7; //read-only
         $updatedLead = Crm_Controller_Lead::getInstance()->update($lead);

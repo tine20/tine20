@@ -159,6 +159,15 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 Tine.widgets.grid.FilterToolbar.FILTERS[fc] = filterclass;
                 filter = {filtertype: fc};
                 break;
+            case 'relation':
+                _.assign(filter, {
+                    filtertype: 'foreignrecord',
+                    valueType: 'relation',
+                    app: _.get(filterconfig, 'options.appName', appName),
+                    ownRecordClass: _.get(filterconfig, 'options.own_model'),
+                    foreignRecordClass: _.get(filterconfig, 'options.related_model')
+                });
+                break;
             case 'tag': 
                 filter = {filtertype: 'tinebase.tag', app: appName};
                 break;

@@ -52,7 +52,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Invoice',
+        'recordName'        => 'Invoice', // gettext('GENDER_Invoice')
         'recordsName'       => 'Invoices', // ngettext('Invoice', 'Invoices', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,

@@ -229,9 +229,8 @@ describe('Contacts', () => {
 
         test('add Tag', async () => {
             //await newPage.waitFor(1000);
-            let arrowtrigger = await popupWindow.$x('//div[contains(@class, "x-panel x-panel-noborder x-box-item") and contains(.,"Tags (0)")]' +
-                '//span[contains(@class,"x-form-twin-triggers")]');
-            await arrowtrigger[0].click();
+            let arrowtrigger = await popupWindow.$$('.x-form-arrow-trigger');
+            await arrowtrigger[8].click();
             await popupWindow.waitFor(2000);
             await popupWindow.waitFor('.x-widget-tag-tagitem-text');
             await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/15_adressbuch_tag_hinzu.png'});
@@ -278,3 +277,9 @@ describe('Group', () => {
 afterAll(async () => {
     browser.close();
 });
+
+async function selectTab(popupWindow,regEx) {
+    await expect(popupWindow).toClick('span .x-tab-strip-text', {text: new RegExp(regEx)});
+    await popupWindow.waitFor(500); //fix click issue @todo find better way
+    await expect(popupWindow).toClick('span .x-tab-strip-text', {text: new RegExp(regEx)});
+}

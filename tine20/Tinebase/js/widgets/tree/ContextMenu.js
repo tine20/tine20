@@ -221,13 +221,7 @@ Tine.widgets.tree.ContextMenu = {
                     params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
                     params.modelName = this.scope.app.getMainScreen().getActiveContentType();
                     if(params.modelName == '') params.modelName = this.scope.contextModel;
-                } 
-                else if (this.backendModel == 'Folder') {
-                    var parentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(parentNode.attributes.folder_id);
-                    params.parent = parentFolder.get('globalname');
-                    params.accountId = parentFolder.get('account_id');
                 }
-                
                 Ext.Ajax.request({
                     params: params,
                     scope: this,
@@ -240,20 +234,9 @@ Tine.widgets.tree.ContextMenu = {
                             return;
                         }
 
-                        // TODO add + icon if it wasn't expandable before
-                        if(nodeData.type == 'folder') {
-                            var nodeData = Ext.util.JSON.decode(result.responseText);
-
-                            var app = Tine.Tinebase.appMgr.get(this.scope.app.appName);
-                            var newNode = app.getMainScreen().getWestPanel().getContainerTreePanel().createTreeNode(nodeData, parentNode);
-                            parentNode.appendChild(newNode);
-                        }
-                        else {
-                            var newNode = this.scope.loader.createNode(nodeData);
-                            parentNode.appendChild(newNode);
-                        }
-                        
+                        var newNode = this.scope.loader.createNode(nodeData);
                         parentNode.expand();
+                        parentNode.appendChild(newNode);
                         this.scope.fireEvent('containeradd', nodeData);
                                               
                         Ext.MessageBox.hide();

@@ -2363,8 +2363,7 @@ Steuernummer 33/111/32212";
                 'related_degree' => 'sibling',
                 'related_model' => 'Addressbook_Model_List',
                 'related_backend' => 'Sql',
-                'related_id' => $relatedList['id'],
-                'related_record' => $relatedList
+                'related_id' => $relatedList['id']
             )
         );
         $list = $this->_uit->saveList($list);

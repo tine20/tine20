@@ -785,6 +785,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId);
         $pipeLine = new Tinebase_BL_Pipe($rs, false);
         $pipeLine->execute($message);
+
+        return [
+            'status' => 'success'
+        ];
     }
 
     /**

@@ -28,7 +28,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      *
      * @todo perhaps we can remove that and build model name from name of the class (replace 'Controller' with 'Model')
      */
-    protected $_modelName = 'Tinebase_Model_FullUser';
+    protected $_modelName = 'Tinebase_Model_User';
 
     /**
      * row name mapping 
@@ -184,21 +184,24 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         if (!empty($_filter)) {
             $whereStatement = array();
-            $defaultValues  = array(
+            $defaultValues = array(
                 $this->rowNameMapping['accountLastName'], 
                 $this->rowNameMapping['accountFirstName'], 
-                $this->rowNameMapping['accountLoginName']
+                $this->rowNameMapping['accountLoginName'],
+                $this->rowNameMapping['accountEmailAddress'],
             );
 
             // prepare for case insensitive search
             foreach ($defaultValues as $defaultValue) {
-                $whereStatement[] = $this->_dbCommand->prepareForILike($this->_db->quoteIdentifier($defaultValue)) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
+                $whereStatement[] = $this->_dbCommand->prepareForILike(
+                        $this->_db->quoteIdentifier($this->_db->table_prefix . $this->_tableName . '.' . $defaultValue)
+                    ) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
             }
             
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
         
-        // @todo still needed?? either we use contacts from addressboook or full users now
+        // @todo still needed?? either we use contacts from addressbook or full users now
         // return only active users, when searching for simple users
         if ($_accountClass == 'Tinebase_Model_User') {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
@@ -976,7 +979,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param $plugin
      * @param $user
      * @param $newUserProperties
-     * @param $method
+     * @param $method (add|update|inspectGetUserByProperty|delete)
      *
      * TODO support different imap/smtp xprops
      */
@@ -988,37 +991,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         // add email user xprops here if configured
         if (Tinebase_EmailUser::isEmailUserPlugin($plugin) && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
-            if ($method === 'inspectAddUser' && empty($user->accountEmailAddress)) {
-                // do not add plugin user if user has no email adress
-                return;
-            }
-
-            $pluginUser = clone($user);
-            Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $pluginUser, $method !== 'inspectGetUserByProperty');
-            if ($newUserProperties) {
-                $updatePluginUser = clone($newUserProperties);
-                Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $updatePluginUser);
-                $params = [$pluginUser, $updatePluginUser];
-            } else {
-                $params = [$pluginUser];
-                $updatePluginUser = null;
-            }
-            call_user_func_array([$plugin, $method], $params);
-
-            // return email user properties to $user
-            // TODO do this always?
-            if ($method === 'inspectGetUserByProperty' || $method === 'inspectUpdateUser') {
-                foreach (['smtpUser', 'emailUser', 'imapUser'] as $prop) {
-                    if ($pluginUser->{$prop}) {
-                        $user->{$prop} = $pluginUser->{$prop};
-                    }
-                }
-            }
-
-            // save new/missing xprops in user
-            if ($updatePluginUser) {
-                Tinebase_EmailUser_XpropsFacade::setXprops($user, $updatePluginUser->getId());
-            }
+            $this->_inspectEmailPluginCRUD($plugin, $user, $newUserProperties, $method);
         } else {
             if ($newUserProperties) {
                 $params = [$user, $newUserProperties];
@@ -1028,7 +1001,66 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             call_user_func_array([$plugin, $method], $params);
         }
     }
-    
+
+    /**
+     * @param $plugin
+     * @param $user
+     * @param $newUserProperties
+     * @param $method (inspectAddUser|inspectUpdateUser|inspectGetUserByProperty|inspectDeleteUser)
+     */
+    protected function _inspectEmailPluginCRUD($plugin, $user, $newUserProperties, $method)
+    {
+        if ($method === 'inspectAddUser' && empty($user->accountEmailAddress)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Do not add plugin user as user has no email address');
+            return;
+        }
+
+        $xprop = strpos(get_class($plugin), 'Imap') !== false
+            ? Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP
+            : Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP;
+
+        if ($method === 'inspectUpdateUser' && empty($user->accountEmailAddress)
+            && isset($user->xprops()[$xprop]) && $user->xprops()[$xprop]
+        ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Remove plugin user as email address has been removed');
+            $this->_inspectEmailPluginCRUD($plugin, $user, $newUserProperties, 'inspectDeleteUser');
+            return;
+        }
+
+        $pluginUser = clone($user);
+        Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $pluginUser, $method !== 'inspectGetUserByProperty', $xprop);
+        if ($newUserProperties) {
+            $updatePluginUser = clone($newUserProperties);
+            Tinebase_EmailUser_XpropsFacade::setIdFromXprops($user, $updatePluginUser);
+            $params = [$pluginUser, $updatePluginUser];
+        } else {
+            $params = [$pluginUser];
+            $updatePluginUser = null;
+        }
+        call_user_func_array([$plugin, $method], $params);
+
+        // return email user properties to $user
+        // TODO do this always?
+        // TODO remove on inspectDeleteUser?
+        if ($method === 'inspectGetUserByProperty' || $method === 'inspectUpdateUser') {
+            foreach (['smtpUser', 'emailUser', 'imapUser'] as $prop) {
+                if ($pluginUser->{$prop}) {
+                    $user->{$prop} = $pluginUser->{$prop};
+                }
+            }
+        }
+
+        if ($updatePluginUser) {
+            if ($method === 'inspectDeleteUser') {
+                $user->xprops()[$xprop] = null;
+            } else {
+                $user->xprops()[$xprop] = $updatePluginUser->getId();
+            }
+        }
+    }
+
     /**
      * updates an user
      * 
@@ -1117,8 +1149,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $accountData[$this->rowNameMapping['accountStatus']] = $_user->accountStatus;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($accountData, true));
-
         try {
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             
@@ -1462,7 +1492,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param  string  $_accountClass  type of model to return
      * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User' or 'Tinebase_Model_FullUser'
      */
-    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_FullUser') 
+    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User')
     {
         if (empty($_id)) {
             return new Tinebase_Record_RecordSet($_accountClass);

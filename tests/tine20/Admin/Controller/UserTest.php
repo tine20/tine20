@@ -150,7 +150,8 @@ class Admin_Controller_UserTest extends TestCase
         static::assertSame($container->getId(),
             Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
 
-        $updateContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class, true);
+        $updateContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class,
+            true, __METHOD__);
 
         $user->container_id = $updateContainer->getId();
 
@@ -196,5 +197,19 @@ class Admin_Controller_UserTest extends TestCase
             $translate = Tinebase_Translation::getTranslation('Tinebase');
             self::assertEquals($translate->_('Email account already exists'), $tesg->getMessage());
         }
+    }
+
+    public function testUpdateUserRemoveMail()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $user = $this->_createUserWithEmailAccount();
+        $user->accountEmailAddress = '';
+        $updatedUser = Admin_Controller_User::getInstance()->update($user);
+
+        self::assertEmpty($updatedUser->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP],
+            'smtp user id still set: ' . print_r($updatedUser->toArray(), true));
+        self::assertEmpty($updatedUser->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP],
+            'imap user id still set ' . print_r($updatedUser->toArray(), true));
     }
 }

@@ -34,16 +34,57 @@ Tine.Filemanager.Model.NodeMixin = {
     },
 
     getSystemLink: function() {
-        var _ = window.lodash,
-            encodedPath = _.map(String(this.get('path')).replace(/(^\/|\/$)/, '').split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/') +
-                (this.get('type') === 'folder' ? '/' : '');
-
-        return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#/Filemanager/showNode', encodedPath].join('/');
+        return [Tine.Tinebase.common.getUrl().replace(/\/$/, ''), '#',
+            Tine.Tinebase.appMgr.get('Filemanager').getRoute(this.get('path'), this.get('type'))].join('/');
     },
     
     statics: {
+        type(path) {
+            path = String(path);
+            const basename = path.split('/').pop(); // do not use basename() here -> recursion!
+            return path.lastIndexOf('/') === --path.length || basename.lastIndexOf('.') < Math.max(1, basename.length - 5) ? 'folder' : 'file';
+        },
+        
+        dirname(path) {
+            const self = Tine.Filemanager.Model.Node;
+            const sanitized = self.sanitize(path).replace(/\/$/, '');
+            return sanitized.substr(0, sanitized.lastIndexOf('/') + 1);
+        },
+        
+        basename(path, sep='/') {
+            const self = Tine.Filemanager.Model.Node;
+            const sanitized = self.sanitize(path).replace(/\/$/, '');
+            return sanitized.substr(sanitized.lastIndexOf(sep) + 1);
+        },
+        
+        extension(path) {
+            const self = Tine.Filemanager.Model.Node;
+            return self.type(path) === 'file' ? self.basename(path,'.') : null;
+        },
+
+        pathinfo(path) {
+            const self = Tine.Filemanager.Model.Node;
+            const basename = self.basename(path);
+            const extension = self.extension(path);
+            return {
+                dirname: self.dirname(path),
+                basename: basename,
+                extension: extension,
+                filename: extension ? basename.substring(0, basename.length - extension.length - 1) : null
+            }
+        },
+        
+        sanitize(path) {
+            path = String(path);
+            const self = Tine.Filemanager.Model.Node;
+            let isFolder = path.lastIndexOf('/') === --path.length;
+            path = _.compact(path.split('/')).join('/');
+            return '/' + path + (isFolder || self.type(path) === 'folder' ? '/' : '');
+        },
+        
         getExtension: function(filename) {
-            return filename.split('.').pop();
+            const self = Tine.Filemanager.Model.Node;
+            return self.extension(filename);
         },
 
         registerStyleProvider: function(provider) {
@@ -223,19 +264,20 @@ Tine.Filemanager.nodeBackendMixin = {
             
             var sourceFilenames = new Array(),
                 destinationFilenames = new Array(),
+                withOwnGrants = [],
                 forceOverwrite = false,
                 treeIsTarget = false,
                 targetPath = target;
             
             if(target.data) {
-                targetPath = target.data.path + (target.data.type == 'folder' ? '/' : '');
+                targetPath = target.data.path;
             }
             else if (target.attributes) {
-                targetPath = target.attributes.path + '/';
+                targetPath = target.attributes.path;
                 treeIsTarget = true;
             }
             else if (target.path) {
-                targetPath = target.path + (target.type == 'folder' ? '/' : '');
+                targetPath = target.path;
             }
 
             for(var i=0; i<items.length; i++) {
@@ -251,7 +293,11 @@ Tine.Filemanager.nodeBackendMixin = {
                     itemName = itemName.name;
                 }
 
-                destinationFilenames.push(targetPath + (targetPath.match(/\/$/) ? itemName : ''));
+                destinationFilenames.push(Tine.Filemanager.Model.Node.sanitize(targetPath + (targetPath.match(/\/$/) ? itemName : '')));
+
+                if (itemData.type === 'folder' && itemData.acl_node === itemData.id) {
+                    withOwnGrants.push(itemData);
+                }
             }
             
             var method = this.appName + ".copyNodes",
@@ -269,6 +315,20 @@ Tine.Filemanager.nodeBackendMixin = {
                     method: method
             };
             
+            if (move && withOwnGrants.length) {
+                Ext.MessageBox.show({
+                    icon: Ext.MessageBox.WARNING,
+                    buttons: Ext.MessageBox.OKCANCEL,
+                    title: app.i18n._('Confirm Changing of Folder Grants'),
+                    msg: app.i18n._("You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."),
+                    fn: function(btn) {
+                        if (btn === 'ok') {
+                            Tine.Filemanager.nodeBackend.copyNodes(items, target, move, params);
+                        }
+                    }
+                });
+                return false;
+            }
         } else {
             message = app.i18n._('Copying data .. {0}');
             if(params.method == this.appName + '.moveNodes') {

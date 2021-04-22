@@ -238,24 +238,6 @@ class Sales_JsonTest extends TestCase
     }
 
     /**
-     * try to update a contract (with relations)
-     */
-    public function testUpdateContract()
-    {
-        $contract = $this->_getContract();
-        $contractData = $this->_instance->saveContract($contract->toArray());
-        $contractData = $this->_instance->getContract($contractData['id']);
-
-        // add account and contact + update contract
-        $contractData['relations'] = $this->_getRelations();
-        $contractUpdated = $this->_instance->saveContract($contractData);
-
-        $this->assertEquals($contractData['id'], $contractUpdated['id']);
-        $this->assertGreaterThan(0, count($contractUpdated['relations']));
-        $this->assertEquals(2, count($contractUpdated['relations']));
-    }
-
-    /**
      * try to get a contract
      */
     public function testSearchContracts()
@@ -369,7 +351,7 @@ class Sales_JsonTest extends TestCase
     public function testSearchCustomers()
     {
         $customerController = Sales_Controller_Customer::getInstance();
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_personas['sclever']->getId());
         $i = 0;
         
         while ($i < 104) {
@@ -573,44 +555,6 @@ class Sales_JsonTest extends TestCase
     {
         return array(
             array('field' => 'query', 'operator' => 'contains', 'value' => $search),
-        );
-    }
-
-    /**
-     * get relations
-     *
-     * @return array
-     */
-    protected function _getRelations()
-    {
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'),
-            Addressbook_Model_Contact::class,
-            Zend_Registry::get('currentAccount'),
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-
-        $currentUser = Tinebase_Core::getUser();
-
-        return array(
-            array(
-                'type'              => Sales_Model_Contract::RELATION_TYPE_CUSTOMER,
-                'related_record'    => array(
-                    'org_name'         => 'phpunit erp test customer',
-                    'container_id'  => $personalContainer[0]->getId(),
-                ),
-                'related_model' => 'Addressbook_Model_Contact',
-                'related_degree'=> 'sibling'
-            ),
-            array(
-                'type'              => Sales_Model_Contract::RELATION_TYPE_RESPONSIBLE,
-                'related_record'    => array(
-                    'org_name'         => 'phpunit erp test responsible',
-                    'container_id'  => $personalContainer[0]->getId(),
-                ),
-                'related_model' => 'Addressbook_Model_Contact',
-                'related_degree'=> 'sibling'
-            ),
         );
     }
 

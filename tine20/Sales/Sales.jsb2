@@ -44,10 +44,6 @@
           "path": "js/"
         },
         {
-          "text": "ContractCostCenterFilterModel.js",
-          "path": "js/"
-        },
-        {
           "text": "DivisionEditDialog.js",
           "path": "js/"
         },
@@ -57,14 +53,6 @@
         },
         {
           "text": "CostCenterEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "ContractContactInternalFilterModel.js",
-          "path": "js/"
-        },
-        {
-          "text": "ContractContactExternalFilterModel.js",
           "path": "js/"
         },
         {
@@ -205,10 +193,6 @@
         },
         {
           "text": "OfferEditDialog.js",
-          "path": "js/"
-        },
-        {
-          "text": "ContractCustomerFilterModel.js",
           "path": "js/"
         },
         {

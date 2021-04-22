@@ -1447,7 +1447,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // Enable feature, disabled by default!
         Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, true);
 
-        $resource = $this->_getResource();
+        $resource = $this->_getResource(null, ['name' => 'resource' . __LINE__]);
         $resource->email = Tinebase_Core::getUser()->accountEmailAddress;
         $resource->suppress_notification = $suppress_notification;
         $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
@@ -1495,7 +1495,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
             $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
             $this->assertStringContainsString('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
-            $this->assertStringContainsString('Meeting Room (Required, No response)', print_r($messages, true));
+            $this->assertStringContainsString($persistentResource->name . ' (Required, No response)', print_r($messages, true));
         }
     }
 

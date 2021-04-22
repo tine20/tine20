@@ -134,7 +134,7 @@ class Calendar_Model_EventTests extends TestCase
             'summary'   => 'test event',
         );
         $testContainer1 = $this->_getTestContainer('Calendar', 'Calendar_Model_Event');
-        $testContainer2 = $this->_getTestContainer('Calendar', 'Calendar_Model_Event');
+        $testContainer2 = $this->_getTestContainer('Calendar', 'Calendar_Model_Event', false, 'container2');
 
         $event1 = new Calendar_Model_Event(array_merge($baseEventData,[
             'rrule_constraints' => array(

@@ -38,6 +38,16 @@ class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
         }
     }
 
+    public function __sleep()
+    {
+        throw new Tinebase_Exception_Backend_Database('cant serialize db connection');
+    }
+
+    public function __wakeup()
+    {
+        throw new Tinebase_Exception_Backend_Database('cant serialize db connection');
+    }
+
     /**
      * @param $dbConfigArray
      * @return string charset

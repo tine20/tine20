@@ -43,6 +43,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     protected $_applicationName = 'Tinebase';
     
     protected $_writeAccessLog;
+
+    protected $_forceUnlockLoginArea = false;
+
+    public function forceUnlockLoginArea(bool $bool = true)
+    {
+        $this->_forceUnlockLoginArea = $bool;
+    }
     
     /**
      * the constructor
@@ -834,6 +841,19 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
     {
         $areaLock = Tinebase_AreaLock::getInstance();
+        $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+            foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
+                $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
+            }
+
+            // user has no 2FA config -> currently its sort of optional -> no check
+            if ($this->_forceUnlockLoginArea && count($userConfigIntersection->mfa_configs) === 0) {
+                $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+                return;
+            }
+        }
+
         if ($accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE ||
                 ! $areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
                 ! $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
@@ -842,18 +862,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             return;
         }
 
-        $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
-        foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
-             $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
-        }
-
         $areaConfig = $areaLock->getLastAuthFailedAreaConfig();
-
-        // user has no 2FA config -> currently its sort of optional -> no check
-        if (count($userConfigIntersection->mfa_configs) === 0) {
-            $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
-            return;
-        }
 
         $context = $this->getRequestContext();
         $mfaId = $context['MFAId'];

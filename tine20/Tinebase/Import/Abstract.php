@@ -709,10 +709,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             'remark'        => $relationType == 'PRODUCT' ? array('quantity' => 1) : null,
         );
 
-        if ($record) {
-            $relation['related_id'] = $record->getId();
-            $recordArray = $record->toArray();
-        } else {
+        if (!$record) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Create new related record');
@@ -723,31 +720,29 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             if (! empty($filterValueToAdd)) {
                 $recordArray[str_replace($relationType . '_', '', $field['filterValueAdd'])] = trim($filterValueToAdd);
             }
-        }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Import data:' . print_r($data, true));
-        }
-
-        // add more data for this relation if available
-        foreach ($data as $key => $value) {
-            $regex = '/^' . preg_quote($relationType, '/') . '_/';
-            if (preg_match($regex, $key)) {
-                $relatedField = preg_replace($regex, '', $key);
-                $recordArray[$relatedField] = trim($value);
+            // add more data for this relation if available
+            foreach ($data as $key => $value) {
+                $regex = '/^' . preg_quote($relationType, '/') . '_/';
+                if (preg_match($regex, $key)) {
+                    $relatedField = preg_replace($regex, '', $key);
+                    $recordArray[$relatedField] = trim($value);
+                }
             }
+
+            // we don't need related record relations
+            unset($recordArray['relations']);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' Related record: ' . print_r($recordArray, true));
+            }
+
+            $ctrl = Tinebase_Core::getApplicationInstance($field['related_model']);
+            $record = $ctrl->create(new $field['related_model']($recordArray));
+
         }
-
-        // we don't need related record relations
-        unset($recordArray['relations']);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Related record: ' . print_r($recordArray, true));
-        }
-
-        $relation['related_record'] = $recordArray;
+        $relation['related_id'] = $record->getId();
 
         return $relation;
     }
@@ -792,11 +787,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
     {
         $_record->isValid(TRUE);
-        
+
+        $oldRollback = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack();
         if ($this->_options['dryrun']) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Doing Dry-Run ... (transaction will be rolled-back)');
             Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         }
         if($_record->has('tags')){
             $this->_handleTags($_record, $_resolveStrategy);
@@ -810,6 +807,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $this->_importResult['results']->addRecord($importedRecord);
         
         if ($this->_options['dryrun']) {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldRollback);
             Tinebase_TransactionManager::getInstance()->rollBack();
         } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Successfully imported record with id ' . $importedRecord->getId());

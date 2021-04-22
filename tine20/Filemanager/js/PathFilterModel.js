@@ -68,6 +68,10 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                 value = '/' + value;
             }
 
+            if (! this.el.findParent('.x-window') && 'Filemanager' === _.get(Tine.Tinebase.MainScreen.getActiveApp(), 'name')) {
+                Tine.Tinebase.router.setRoute(Tine.Tinebase.appMgr.get('Filemanager').getRoute(value));
+            }
+            
             return Ext.ux.form.ClearableTextField.prototype.setValue.call(this, value);
         };
 

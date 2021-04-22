@@ -199,6 +199,11 @@ if(Ext.form.HtmlEditor){
         text: 'Unterstreicht den ausgewählten Text.',
         cls: 'x-html-editor-tip'
       },
+      strikeout : {
+        title: 'Durchstreichen',
+        text: 'Streicht den ausgewählten Text durch.',
+        cls: 'x-html-editor-tip'
+      },
       increasefontsize : {
         title: 'Text vergößern',
         text: 'Erhöht die Schriftgröße.',

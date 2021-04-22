@@ -8,7 +8,7 @@ beforeAll(async () => {
     await lib.getBrowser('Sales', 'Kunden');
 });
 
-describe('Mainpage', () => {
+describe.skip('Mainpage', () => {
     let popupwindow;
     test('open frische fische record', async () => {
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name',{text: "Frische Fische Gmbh & Co. KG"});
