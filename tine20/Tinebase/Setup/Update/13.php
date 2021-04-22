@@ -156,6 +156,26 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
 
         $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
         $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container SET owner_id = "" WHERE owner_id IS NULL');
+
+        while (count($rows = $db->query('select group_concat(id), count(id) AS c from ' . SQL_TABLE_PREFIX . 'container where deleted_time > "1970-01-01 00:00:00" group by application_id, name, owner_id, model, deleted_time having c > 1')
+                ->fetchAll(Zend_Db::FETCH_NUM)) > 0) {
+            foreach ($rows as $row) {
+                foreach(explode(',', $row[0]) as $key => $id) {
+                    if (0 === $key) continue;
+                    $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container set deleted_time = DATE_ADD(deleted_time, INTERVAL ' . $key . ' SECOND) WHERE id = "' . $id .'"');
+                }
+            }
+        }
+        while (count($rows = $db->query('select group_concat(id), count(id) AS c from ' . SQL_TABLE_PREFIX . 'container where is_deleted = 0 group by application_id, name, owner_id, model, deleted_time having c > 1')
+                ->fetchAll(Zend_Db::FETCH_NUM)) > 0) {
+            foreach ($rows as $row) {
+                foreach(explode(',', $row[0]) as $key => $id) {
+                    if (0 === $key) continue;
+                    $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container set name = CONCAT(name, " ('.$key.')") WHERE id = "' . $id .'"');
+                }
+            }
+        }
+
         Setup_SchemaTool::updateSchema([Tinebase_Model_Container::class]);
 
         $this->addApplicationUpdate('Tinebase', '13.6', self::RELEASE013_UPDATE007);
