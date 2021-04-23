@@ -337,7 +337,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             'locale'           => array(
                 'locale'   => $locale->toString(), 
                 'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
-                'region'   => Zend_Locale:: getTranslation($locale->getRegion(), 'country', $locale),
+                'region'   => Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale),
             ),
             'version'          => array(
                 'buildType'     => TINE20_BUILDTYPE,
