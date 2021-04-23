@@ -647,7 +647,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         const isLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
         // if state change -> reload
-        if (isLocked == me.action_dataSafe.items[0].pressed) {
+        if (me.action_dataSafe.items.length && isLocked == me.action_dataSafe.items[0].pressed) {
             _.defer(() => {
                 me.loadGridData({
                     preserveCursor:     false,
