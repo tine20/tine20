@@ -1188,7 +1188,11 @@ abstract class Tinebase_Controller_Record_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             $_record->isValid(TRUE);
+            if ($this->_backend instanceof Tinebase_Backend_Sql_Abstract) {
+                $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
+            }
             $currentRecord = $this->get($_record->getId());
+            unset($raii);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
