@@ -24,6 +24,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     protected function _initializeFavorites()
     {
         $pfe = Tinebase_PersistentFilter::getInstance();
+
+        $translate = Tinebase_Translation::getDefaultTranslation(HumanResources_Config::APP_NAME);
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -32,14 +34,14 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         );
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Currently employed employees", // _("Currently employed employees")
-            'description'       => "Employees which are currently employed", // _("Employees which are currently employed")
+            'name'              => $translate->_("Currently employed employees"),
+            'description'       => $translate->_("Employees which are currently employed"),
             'filters'           => array(array('field' => 'is_employed', 'operator' => 'equals', 'value' => 1)),
         ))));
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "All employees", // _("All employees")
-            'description'       => "All available employees", // _("All available employees")
+            'name'              => $translate->_("All employees"),
+            'description'       => $translate->_("All available employees"),
             'filters'           => array(),
         ))));
         
@@ -51,8 +53,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         );
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "All accounts", // _("All accounts")
-            'description'       => "All available accounts", // _("All available accounts")
+            'name'              => $translate->_("All accounts"),
+            'description'       => $translate->_("All available accounts"),
             'filters'           => array(),
         ))));
     }
@@ -97,7 +99,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
         $blPipe = static::getDefaultWTS_BL()->toArray();
 
-        $translate = Tinebase_Translation::getTranslation('HumanResources');
+        $translate = Tinebase_Translation::getDefaultTranslation(HumanResources_Config::APP_NAME);
         $_record = new HumanResources_Model_WorkingTimeScheme(array(
             'title' => $translate->_('Full-time 40 hours'),
             'working_hours' => '40',
@@ -139,7 +141,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
     public static function createtWageTypes($throw = true)
     {
-        $translate = Tinebase_Translation::getTranslation('HumanResources');
+        $translate = Tinebase_Translation::getDefaultTranslation(HumanResources_Config::APP_NAME);
         $wageTypes = [
             //['id' => '01', 'number' => '1000', 'name' => $translate->_('Default wage type'), 'system' => true,  'wage_factor' => 100, 'additional_wage' => false],
             ['id' => HumanResources_Model_WageType::ID_SALARY, 'number' => '2000', 'name' => $translate->_('Salary'),            'system' => true,  'wage_factor' => 100, 'additional_wage' => false],
@@ -175,16 +177,16 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
     public static function createFreeTimeTypes($throw = true)
     {
-        $translate = Tinebase_Translation::getTranslation('HumanResources');
+        $translate = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
         $freeTimeTypes = [
             // NOTE: no feastday type as feastdays are treated via feastday cal which is shared and not per user
-            ['id' => HumanResources_Model_FreeTimeType::ID_SICKNESS, 'abbreviation' => '[S]', 'name' => $translate->_('[S] Sickness'),        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SICK, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '02', 'abbreviation' => '[D]', 'name' => $translate->_('[D] Visit doctor'),    'system' => false, 'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            ['id' => HumanResources_Model_FreeTimeType::ID_VACATION, 'abbreviation' => '[V]', 'name' => $translate->_('[V] Vacation'),        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_VACATION, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '04', 'abbreviation' => '[BT]', 'name' => $translate->_('[BT] Business trip'),  'system' => false, 'wage_type' => '03', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => true],
-            //['id' => '05', 'abbreviation' => '[FT]', 'name' => $translate->_('[FT] Flex time'),      'system' => true,  'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false],
-            //['id' => '06', 'abbreviation' => '[BK]', 'name' => $translate->_('[BK] Break'),          'system' => true,  'wage_type' => '13', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
-            //['id' => '07', 'abbreviation' => '[T]', 'name' => $translate->_('[T] Training'),        'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            ['id' => HumanResources_Model_FreeTimeType::ID_SICKNESS, 'name' => $translate->_('[S] Sickness'),        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_SICK, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '02', 'name' => $translate->_('[D] Visit doctor'),    'system' => false, 'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
+            ['id' => HumanResources_Model_FreeTimeType::ID_VACATION, 'name' => $translate->_('[V] Vacation'),        'system' => true,  'wage_type' => HumanResources_Model_WageType::ID_VACATION, 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '04', 'name' => $translate->_('[BT] Business trip'),  'system' => false, 'wage_type' => '03', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => true],
+            //['id' => '05', 'name' => $translate->_('[FT] Flex time'),      'system' => true,  'wage_type' => '01', 'allow_booking' => true,  'allow_planning' => true,  'enable_timetracking' => false],
+            //['id' => '06', 'name' => $translate->_('[BK] Break'),          'system' => true,  'wage_type' => '13', 'allow_booking' => true,  'allow_planning' => false, 'enable_timetracking' => true],
+            //['id' => '07', 'name' => $translate->_('[T] Training'),        'system' => true,  'wage_type' => '01', 'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false],
         ];
 
         $fttCntrl = HumanResources_Controller_FreeTimeType::getInstance();

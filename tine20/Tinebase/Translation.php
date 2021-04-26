@@ -238,7 +238,18 @@ class Tinebase_Translation
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
         return $locale;
     }
-    
+
+    /**
+     * get instance default language zend translate for an application
+     *
+     * @param  string $_applicationName
+     * @return Zend_Translate_Adapter
+     */
+    public static function getDefaultTranslation($_applicationName = 'Tinebase')
+    {
+        return static::getTranslation($_applicationName, new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE}));
+    }
+
     /**
      * get zend translate for an application
      * 
