@@ -273,6 +273,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
             
             this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
                 selectType: 'both',
+                selectRole: true,
                 title:  i18n._('Permissions'),
                 store: this.getGrantsStore(),
                 hasAccountPrefix: true,
