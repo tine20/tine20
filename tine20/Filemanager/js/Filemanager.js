@@ -62,8 +62,8 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
             store.on('load', highlight, this, {single: true});
             
             const currentValue = ftb.getValue();
-            if (! (currentValue.length ===1 && currentValue[0].field === 'path' && currentValue[0].operator === 'equals')
-                && ! sanitzise(currentValue[0].value) === dir) {
+            if (! (currentValue.length ===1 && currentValue[0].field === 'path' && currentValue[0].operator === 'equals'
+                && sanitize(currentValue[0].value) === dir)) {
                 ftb.setValue([{field: 'path', operator: 'equals', value: dir}]);
                 ftb.onFiltertrigger();
             }
