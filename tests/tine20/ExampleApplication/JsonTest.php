@@ -115,6 +115,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $this->assertTrue(isset($returnedGet['number_str']), 'number_str missing');
         $this->assertEquals('ER-' . $expectedNumber, $returnedGet['number_str']);
         $this->assertEquals('some words in the description for the fulltext search', $returnedGet['description']);
+        $this->assertSame(false, $returnedGet['is_deleted']);
         
         return $returnedRecord;
     }

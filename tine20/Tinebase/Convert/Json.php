@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_ModelConfiguration_Const as MCC;
@@ -770,8 +770,43 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
         $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
+        $result = $this->_resolveBoolFields($result, $modelConfiguration, $multiple);
         $result = $this->_convertRightToAccountGrants($result, $modelConfiguration, $multiple);
         return $result;
+    }
+
+    /**
+     * adds account_grants if configured in model
+     *
+     * @param array $resultSet
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     * @return array
+     */
+    protected function _resolveBoolFields($resultSet, $modelConfiguration, $multiple)
+    {
+        if (! $modelConfiguration) {
+            return $resultSet;
+        }
+        $fields = [];
+        foreach ($modelConfiguration->getFields() as $field) {
+            if (isset($field[MCC::TYPE]) && MCC::TYPE_BOOLEAN === $field[MCC::TYPE]) {
+                $fields[$field[MCC::FIELD_NAME]] = isset($field[MCC::NULLABLE]) && $field[MCC::NULLABLE];
+            }
+        }
+        if (empty($fields)) {
+            return $resultSet;
+        }
+
+        $tmp = $multiple ? $resultSet : [$resultSet];
+        foreach ($tmp as &$record) {
+            foreach ($fields as $field => $nullable) {
+                if (isset($record[$field]) || (!$nullable && array_key_exists($field, $record))) {
+                    $record[$field] = (bool)$record[$field];
+                }
+            }
+        }
+        return $multiple ? $tmp : $tmp[0];
     }
 
     /**
