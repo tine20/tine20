@@ -863,21 +863,31 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         if (! $diff->isEmpty()) {
             $updateMetaData = array('seq' => ($notNullRecord->has('seq')) ? $notNullRecord->seq : 0);
-            $last_modified_time = $notNullRecord->last_modified_time;
-            if (!empty($last_modified_time)) {
-                $updateMetaData['last_modified_time'] = $last_modified_time;
-            }
-            $last_modified_by   = $notNullRecord->last_modified_by;
-            if (!empty($last_modified_by)) {
-                $updateMetaData['last_modified_by'] = $last_modified_by;
-            }
             $commonModLog = $this->_getCommonModlog($_model, $_backend, $updateMetaData, $_id);
             $commonModLog->new_value = json_encode($diff->toArray());
             if (null === $_newRecord) {
+                if (!empty($notNullRecord->deleted_time)) {
+                    $commonModLog->modification_time = $notNullRecord->deleted_time;
+                }
+                if (!empty($notNullRecord->deleted_by)) {
+                    $commonModLog->modification_account = $notNullRecord->deleted_by;
+                }
                 $commonModLog->change_type = self::DELETED;
             } elseif(null === $_curRecord) {
+                if (!empty($notNullRecord->creation_time)) {
+                    $commonModLog->modification_time = $notNullRecord->creation_time;
+                }
+                if (!empty($notNullRecord->created_by)) {
+                    $commonModLog->modification_account = $notNullRecord->created_by;
+                }
                 $commonModLog->change_type = self::CREATED;
             } else {
+                if (!empty($notNullRecord->last_modified_time)) {
+                    $commonModLog->modification_time = $notNullRecord->last_modified_time;
+                }
+                if (!empty($notNullRecord->last_modified_by)) {
+                    $commonModLog->modification_account = $notNullRecord->last_modified_by;
+                }
                 $commonModLog->change_type = self::UPDATED;
             }
 
