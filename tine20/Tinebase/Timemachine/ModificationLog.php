@@ -1095,6 +1095,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                         }
                     }
 
+                    $undoneModlogs->addRecord($modlog);
+
                     // this is the legacy code for old data in existing installations
                 } else {
 

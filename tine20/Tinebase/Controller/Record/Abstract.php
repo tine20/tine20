@@ -1911,32 +1911,33 @@ abstract class Tinebase_Controller_Record_Abstract
             $_ids = (array)$_ids->getId();
         }
 
-        /** @var string[] $_ids */
-        $ids = $this->_inspectDelete((array) $_ids);
-        if ($ids instanceof Tinebase_Record_RecordSet) {
-            /** @var Tinebase_Record_RecordSet $records */
-            $records = $ids;
-            $ids = array_unique($records->getId());
-        } else {
-            /** @var Tinebase_Record_RecordSet $records */
-            $records = $this->_backend->getMultiple((array)$ids);
-        }
-
-        if (count((array)$ids) != count($records)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
-                . ' of ' . count((array)$ids) . ' records exist.');
-        }
-        
-        if (empty($records)) {
-            return $records;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Deleting ' . count($records) . ' of ' . $this->_modelName . ' records ...');
-
         try {
-            $db = $this->_backend->getAdapter();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            $raii = Tinebase_RAII::getTransactionManagerRAII();
+
+            /** @var string[] $_ids */
+            $ids = $this->_inspectDelete((array) $_ids);
+            if ($ids instanceof Tinebase_Record_RecordSet) {
+                /** @var Tinebase_Record_RecordSet $records */
+                $records = $ids;
+                $ids = array_unique($records->getId());
+            } else {
+                /** @var Tinebase_Record_RecordSet $records */
+                $records = $this->_backend->getMultiple((array)$ids);
+            }
+
+            if (count((array)$ids) != count($records)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
+                    . ' of ' . count((array)$ids) . ' records exist.');
+            }
+
+            if (empty($records)) {
+                $raii->release();
+                return $records;
+            }
+        
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Deleting ' . count($records) . ' of ' . $this->_modelName . ' records ...');
+
             $this->_checkRight(self::ACTION_DELETE);
             
             foreach ($records as $record) {
@@ -1954,7 +1955,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $pathController->deleteShadowPathParts($shadowPathParts);
             }
 
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $raii->release();
 
             // send notifications
             if ($this->sendNotifications()) {
