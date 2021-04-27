@@ -457,13 +457,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         try {
             $existing = Tinebase_User::getInstance()->getUserByLoginName($user->accountLoginName);
+            if ($existing->is_deleted) {
+                return true;
+            }
             if ($user->getId() === NULL || $existing->getId() !== $user->getId()) {
                 throw new Tinebase_Exception_SystemGeneric('Login name already exists. Please choose another one.');
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
         }
         
-        return TRUE;
+        return true;
     }
     
     /**
