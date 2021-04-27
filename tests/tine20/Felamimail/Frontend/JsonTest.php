@@ -2206,7 +2206,9 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertTrue(isset($suggestion['model']));
         self::assertEquals(Felamimail_Model_MessageFileLocation::class, $suggestion['model']);
         self::assertEquals(Filemanager_Model_Node::class, $suggestion['record']['model']);
-        self::assertStringContainsString('personal files', $suggestion['record']['record_title']);
+        self::assertStringContainsString(str_replace('%s', '',
+            Tinebase_Translation::getDefaultTranslation()->_('%s\'s personal files')),
+            $suggestion['record']['record_title']);
     }
 
     /**
