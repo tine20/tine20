@@ -293,7 +293,6 @@ class Tinebase_TransactionManager
      */
     public function unitTestForceSkipRollBack($bool = null)
     {
-        $this->_unitTestForceSkipRollBack = $bool;
         $oldValue = $this->_unitTestForceSkipRollBack;
         if (null !== $bool) {
             $this->_unitTestForceSkipRollBack = $bool;

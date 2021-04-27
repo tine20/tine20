@@ -787,11 +787,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
     {
         $_record->isValid(TRUE);
-        
+
+        $oldRollback = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack();
         if ($this->_options['dryrun']) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Doing Dry-Run ... (transaction will be rolled-back)');
             Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         }
         if($_record->has('tags')){
             $this->_handleTags($_record, $_resolveStrategy);
@@ -805,6 +807,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $this->_importResult['results']->addRecord($importedRecord);
         
         if ($this->_options['dryrun']) {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldRollback);
             Tinebase_TransactionManager::getInstance()->rollBack();
         } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Successfully imported record with id ' . $importedRecord->getId());

@@ -1199,7 +1199,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
     {
         $syncrotonFolder = $this->testCreateFolder();
         
-        $syncrotonFolder2 = $this->testCreateFolder();
+        $syncrotonFolder2 = $this->testCreateFolder('testfolder2');
         
         //make $syncrotonFolder2 the default
         Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
@@ -1279,7 +1279,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         list($serverId, $syncrotonEvent) = $this->testUpdateEntriesIPhone($syncrotonFolder);
 
         // create new default folder2
-        $syncrotonFolder2 = $this->testCreateFolder();
+        $syncrotonFolder2 = $this->testCreateFolder('testFolder2');
         Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
 
         // load event in non default folder

@@ -2276,6 +2276,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
     /**
      * Delete duplicate container without contents.
+     * Rename duplicate container with contents (adding '(N)')
      *
      * @param $application
      * @param null $dryrun
@@ -2293,7 +2294,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $application = Tinebase_Application::getInstance()->getApplicationByName($application);
 
         $filter = new Tinebase_Model_ContainerFilter([
-            ['field' => 'type', 'operator' => 'equals', 'value' => 'personal'],
             ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()]
         ]);
 
@@ -2303,24 +2303,27 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         Tinebase_Container::getInstance()->doSearchAclFilter(true);
 
-        $removeCount = 0;
-        foreach ($containers as $container) {
-            $duplicate = $containers->filter('name', $container['name']);
+        $changedCount = 0;
+        while (null !== ($container = $containers->getFirstRecord())) {
+            // first find all containers sorted by creation_time
+            $duplicate = $containers->filter('name', $container['name'])->filter('type', $container->type)
+                ->filter('owner_id', $container->owner_id);
             $duplicate->sort('creation_time', 'ASC');
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Container: . ' . $duplicate->getFirstRecord()['id'] . ' is the default Container');
 
+            $containers->removeRecord($duplicate->getFirstRecord());
             $duplicate->removeFirst();
             if ($duplicate->count() > 0) {
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Duplicates found. ' . $duplicate);
 
+                $renameCounter = 1;
                 foreach ($duplicate as $dupContainer) {
                     if ($dupContainer['content_seq'] == 0) {
                         if ($dryrun) {
-
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                 . ' Dry run: Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' will remove.');
 
@@ -2329,20 +2332,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                 . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' remove.');
-
                         }
-                        $removeCount++;
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                             . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' don´t remove, because in container exist records');
 
+                        $dupContainer->name .= '(' . ($renameCounter++) . ')';
+                        Tinebase_Container::getInstance()->update($dupContainer);
                     }
                 }
+                $changedCount += $duplicate->count();
+                $containers->removeRecords($duplicate);
             }
-            $containers->removeRecords($duplicate);
         }
 
-        return $removeCount;
+        return $changedCount;
     }
 
     public function getModel()

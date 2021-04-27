@@ -316,14 +316,14 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         } else {
             $json = new HumanResources_Frontend_Json();
             $result = $json->saveEmployee($currentEmployee->toArray());
-            if ($currentEmployee->contracts) {
+            if (is_array($currentEmployee->contracts)) {
                 $rs = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
                 foreach ($currentEmployee->contracts as $contract) {
                     $rs->addRecord(new HumanResources_Model_Contract($contract));
                 }
                 $currentEmployee->contracts = $rs;
             }
-            if ($currentEmployee->costcenters) {
+            if (is_array($currentEmployee->costcenters)) {
                 $ccrs = new Tinebase_Record_RecordSet('HumanResources_Model_CostCenter');
                 foreach ($currentEmployee->costcenters as $costcenter) {
                     $ccrs->addRecord(new HumanResources_Model_CostCenter($costcenter));

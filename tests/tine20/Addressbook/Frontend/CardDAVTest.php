@@ -90,7 +90,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
 
     public function testGetAllContainersWithShared()
     {
-        $c = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser()->getId(),
+        $c = Tinebase_Container::getInstance()->getPersonalContainer($this->_personas['sclever']->getId(),
             Addressbook_Model_Contact::class, $this->_personas['sclever']->getId(), '*', true)->getFirstRecord();
         if (null === $c) {
             $c = Addressbook_Controller::getInstance()->createPersonalFolder($this->_personas['sclever'])
