@@ -6,7 +6,7 @@ include:
   - local: '/ci/gitlab-ci/abstract_jobs.yml'
     # ci default configuration
   - local: '/ci/ci-config.yml'
-    # docker image build jobs
+    # docker image build jobs, package build jobs
   - local: '/ci/gitlab-ci/build_jobs.yml'
     # phpunit tests, for source and build images
   - local: '/ci/gitlab-ci/test_php_jobs.yml'
@@ -14,7 +14,7 @@ include:
   - local: '/ci/gitlab-ci/test_js_jobs.yml'
     # all other tests
   - local: '/ci/gitlab-ci/test_jobs.yml'
-    # deploy jobs
+    # deploy jobs 
   - local: '/ci/gitlab-ci/deploy_jobs.yml'
     # housekeeping jobs, jobs needed for the ci to work correctly
   - local: '/ci/gitlab-ci/housekeeping_jobs.yml'
@@ -23,6 +23,7 @@ stages:
   - build1
   - build2
   - test
+  - build3
   - deploy
   - housekeeping
   - housekeeping-cleanup
