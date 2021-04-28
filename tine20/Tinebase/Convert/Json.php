@@ -799,10 +799,20 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
 
         $tmp = $multiple ? $resultSet : [$resultSet];
-        foreach ($tmp as &$record) {
-            foreach ($fields as $field => $nullable) {
-                if (isset($record[$field]) || (!$nullable && array_key_exists($field, $record))) {
-                    $record[$field] = (bool)$record[$field];
+        if (is_object($resultSet)) {
+            foreach ($tmp as &$record) {
+                foreach ($fields as $field => $nullable) {
+                    if (isset($record[$field]) || !$nullable) {
+                        $record[$field] = (bool)$record[$field];
+                    }
+                }
+            }
+        } else {
+            foreach ($tmp as &$record) {
+                foreach ($fields as $field => $nullable) {
+                    if (isset($record[$field]) || (!$nullable && array_key_exists($field, $record))) {
+                        $record[$field] = (bool)$record[$field];
+                    }
                 }
             }
         }
