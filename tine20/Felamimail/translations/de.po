@@ -1998,3 +1998,6 @@ msgstr "Nur Dateien vom Typ eml sind erlaubt."
 
 msgid "Importing Messages..."
 msgstr "Importiere Nachrichten..."
+
+msgid "Original message not found, email was moved or deleted"
+msgstr "Die ursprüngliche Nachricht wurde nicht gefunden, die E-Mail wurde verschoben oder gelöscht."
