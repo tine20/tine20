@@ -12,7 +12,7 @@
 /**
  * Test class for Tinebase_User_Abstract
  */
-class Tinebase_User_AbstractTest extends \PHPUnit\Framework\TestCase
+class Tinebase_User_AbstractTest extends TestCase
 {
     /**
      * unit under test
@@ -33,7 +33,9 @@ class Tinebase_User_AbstractTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
+        parent::setUp();
+
         $this->_uit = Tinebase_User::getInstance();
     }
 
@@ -44,8 +46,10 @@ class Tinebase_User_AbstractTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         $this->_deleteDummyUsers();
+
+        parent::tearDown();
     }
     
     /**
@@ -202,7 +206,7 @@ class Tinebase_User_AbstractTest extends \PHPUnit\Framework\TestCase
             $this->_objects[] = $dummyUser;
         }
     }
-    
+
     protected function _deleteDummyUsers()
     {
         foreach ($this->_objects as $object) {

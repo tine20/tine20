@@ -105,6 +105,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'hasTags'           => false,
         'hasXProps'         => true,
         'modlogActive'      => true,
+        self::HAS_DELETED_TIME_UNIQUE => true,
         'hasAttachments'    => false,
         'createModule'      => false,
         'exposeHttpApi'     => false,

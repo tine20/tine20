@@ -315,14 +315,13 @@ class Tasks_JsonTest extends TestCase
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         $this->assertEquals(1, $tasks['totalcount'], 'more (or less) than one tasks found');
 
-        $organizer = $tasks['results'][0]['organizer'];
-        $this->assertTrue(is_array($organizer), 'organizer not resolved: ' . print_r($tasks['results'][0], TRUE));
-        $this->assertEquals($organizer['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName,
-            'accountDisplayName not found in organizer: ' . print_r($organizer, TRUE));
+        $organizerArray = $tasks['results'][0]['organizer'];
+        $this->assertTrue(is_array($organizerArray), 'organizer not resolved: ' . print_r($tasks['results'][0], TRUE));
+        $this->assertEquals($organizer->accountDisplayName, $organizerArray['accountDisplayName']);
 
         // test get single task - organizer is deleted
         $task = $this->_backend->getTask($taskId);
-        $this->assertEquals($task['organizer']['accountDisplayName'], Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName);
+        $this->assertEquals($organizer->accountDisplayName, $task['organizer']['accountDisplayName']);
     }
     
     /**

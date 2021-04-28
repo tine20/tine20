@@ -98,17 +98,27 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                     $this->deletePersonalFolder($_eventObject->account, Addressbook_Model_Contact::class);
                 }
 
-                //make to be deleted accounts (user) contact a normal contact
+                $oldAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+                $oldRight = Addressbook_Controller_Contact::getInstance()->doRightChecks(false);
+                $oldAreaLock = Addressbook_Controller_Contact::getInstance()->doAreaLockCheck(false);
+                $raii = new Tinebase_RAII(function() use ($oldAcl, $oldAreaLock, $oldRight) {
+                    Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldAcl);
+                    Addressbook_Controller_Contact::getInstance()->doRightChecks($oldRight);
+                    Addressbook_Controller_Contact::getInstance()->doAreaLockCheck($oldAreaLock);
+                });
+
+                // make to be deleted accounts (user) contact a normal contact
                 if ($_eventObject->keepAsContact()) {
                     $contact = Addressbook_Controller_Contact::getInstance()->get($_eventObject->account->contact_id);
                     $contact->type = Addressbook_Model_Contact::CONTACTTYPE_CONTACT;
                     Addressbook_Controller_Contact::getInstance()->update($contact);
 
                 } else {
-                    //or just delete it
-                    $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                    $contactsBackend->delete($_eventObject->account->contact_id);
+                    // or just delete it
+                    Addressbook_Controller_Contact::getInstance()->delete([$_eventObject->account->contact_id]);
                 }
+
+                unset($raii);
                 break;
             case 'Tinebase_Event_Container_BeforeCreate':
                 $this->_handleContainerBeforeCreateEvent($_eventObject);

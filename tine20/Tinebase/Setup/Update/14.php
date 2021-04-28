@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
@@ -13,6 +13,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE014_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -27,6 +28,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE014_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -123,5 +128,33 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '14.3', self::RELEASE014_UPDATE003);
+    }
+
+    public function update004()
+    {
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'accounts SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
+
+        $this->_backend->alterCol('accounts', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+                <notnull>true</notnull>
+                <default>1970-01-01 00:00:00</default>
+            </field>'));
+        $this->_backend->dropIndex('accounts', 'login_name');
+        $this->_backend->addIndex('accounts', new Setup_Backend_Schema_Index_Xml(
+            '<index>
+                <name>login_name</name>
+                <unique>true</unique>
+                <field>
+                    <name>login_name</name>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                </field>
+            </index>'
+        ));
+
+        $this->addApplicationUpdate('Tinebase', '14.4', self::RELEASE014_UPDATE004);
     }
 }

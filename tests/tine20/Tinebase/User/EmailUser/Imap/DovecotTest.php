@@ -38,17 +38,19 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
-        $this->_config = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP,
-            new Tinebase_Config_Struct())->toArray();
-        if (!isset($this->_config['backend']) || !('Imap_' . ucfirst($this->_config['backend']) == Tinebase_EmailUser::IMAP_DOVECOT) || $this->_config['active'] != true) {
-            $this->markTestSkipped('Dovecot MySQL backend not configured or not enabled');
-        }
-
+    {
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
             // error: Zend_Ldap_Exception: 0x44 (Already exists; 00002071: samldb: Account name (sAMAccountName)
             // 'tine20phpunituser' already in use!): adding: cn=PHPUnit User Tine 2.0,cn=Users,dc=example,dc=org
             $this->markTestSkipped('skipped for ad backends as it does not allow duplicate CNs');
+        }
+
+        parent::setUp();
+
+        $this->_config = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP,
+            new Tinebase_Config_Struct())->toArray();
+        if (!isset($this->_config['backend']) || !('Imap_' . ucfirst($this->_config['backend']) == Tinebase_EmailUser::IMAP_DOVECOT) || $this->_config['active'] != true) {
+            $this->markTestSkipped('Dovecot MySQL backend not configured or not enabled');
         }
 
         $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
@@ -65,7 +67,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         // delete email account
         foreach ($this->_objects['addedUsers'] as $user) {
             $this->_backend->inspectDeleteUser($user);
@@ -85,6 +87,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         foreach ($this->_objects['emailUserIds'] as $userId) {
             $smtpBackend->deleteUserById($userId);
         }
+
+        parent::tearDown();
     }
 
     /**
@@ -161,9 +165,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         $userId = $user->getId();
         $this->_objects['emailUserIds'][] = $userId;
 
-        // delete user in tine accounts table
-        $userBackend = new Tinebase_User_Sql();
-        $userBackend->deleteUserInSqlBackend($userId);
+        // delete user
+        Tinebase_User::getInstance()->deleteUser($userId);
 
         // create user again - should not throw an exception as old email user data gets deleted
         unset($user->accountId);
@@ -172,6 +175,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         $this->_objects['fullUsers'] = array($newUser);
         $this->assertNotEquals($userId, $newUser->getId());
         $this->assertTrue(isset($newUser->imapUser), 'imapUser data not found: ' . print_r($newUser->toArray(), true));
+        // teardown will delete user -> we need to make sure deleted_times are not equal -> sleep(1)
+        sleep(1);
     }
 
     /**

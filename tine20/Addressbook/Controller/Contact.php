@@ -625,7 +625,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     protected function _deleteRecord(Tinebase_Record_Interface $_record)
     {
         /** @var Addressbook_Model_Contact $_record */
-        if (!empty($_record->account_id)) {
+        if (($this->_doContainerACLChecks || $this->_doRightChecks) && !empty($_record->account_id)) {
             $translation = Tinebase_Translation::getTranslation('Addressbook');
             throw new Addressbook_Exception_AccessDenied($translation->_('It is not allowed to delete a contact linked to an user account!'));
         }

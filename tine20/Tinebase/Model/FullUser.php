@@ -72,6 +72,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         'hasTags'           => false,
         'hasXProps'         => true,
         'modlogActive'      => true,
+        self::HAS_DELETED_TIME_UNIQUE => true,
         'hasAttachments'    => false,
         'createModule'      => false,
         'exposeHttpApi'     => false,

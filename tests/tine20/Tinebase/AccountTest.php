@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -241,9 +241,9 @@ class Tinebase_AccountTest extends TestCase
 
         Tinebase_User::getInstance()->deleteUser($account);
 
-        $this->expectException('Tinebase_Exception_NotFound');
-
         $account = Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
+        $this->assertEquals(true, $account->is_deleted);
+        $this->assertEquals(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $account->accountStatus);
     }
 
     /**
@@ -258,9 +258,9 @@ class Tinebase_AccountTest extends TestCase
 
         Tinebase_User::getInstance()->deleteUsers($todelete);
 
-        $this->expectException('Tinebase_Exception_NotFound');
-
-        Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
+        $account = Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
+        $this->assertEquals(true, $account->is_deleted);
+        $this->assertEquals(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $account->accountStatus);
     }
 
     /**

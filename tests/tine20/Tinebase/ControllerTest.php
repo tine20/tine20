@@ -209,13 +209,14 @@ class Tinebase_ControllerTest extends TestCase
             Tinebase_User::getInstance()->deleteUser($account->getId());
 
             foreach ($aclTables as $table) {
-                if ('filter_acl' === $table) {
-                    // constraint and delete filter => no acl anymore ... :-/
-                    continue;
-                }
                 $row = $db->select()->from(SQL_TABLE_PREFIX . $table, new Zend_Db_Expr('count(*)'))->query()->
                     fetch(Zend_Db::FETCH_NUM);
-                static::assertEquals($newCounts[$table], $row[0], 'number of acl changed in table: ' . $table);
+                if ('filter_acl' === $table) {
+                    static::assertNotEquals($newCounts[$table], $row[0], 'number of acl not changed in table: ' . $table);
+                    $newCounts[$table] = $row[0];
+                } else {
+                    static::assertEquals($newCounts[$table], $row[0], 'number of acl changed in table: ' . $table);
+                }
             }
 
             $this->_instance->cleanAclTables();
@@ -223,12 +224,7 @@ class Tinebase_ControllerTest extends TestCase
             foreach ($aclTables as $table) {
                 $row = $db->select()->from(SQL_TABLE_PREFIX . $table, new Zend_Db_Expr('count(*)'))->query()->
                     fetch(Zend_Db::FETCH_NUM);
-                if ('container_acl' === $table) {
-                    static::assertLessThan($newCounts[$table], $row[0], 'container_acls did not decrease');
-                } else {
-                    static::assertEquals($counts[$table], $row[0],
-                        'number of acl not back to normal in table: ' . $table);
-                }
+                static::assertEquals($newCounts[$table], $row[0], 'number of acl changed in table: ' . $table);
             }
         } finally {
             Tinebase_PersistentFilter::getInstance()->purgeRecords($oldPurgeValue);

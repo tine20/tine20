@@ -296,8 +296,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $userArray = $this->_createTestUser();
         Admin_Controller_User::getInstance()->delete($userArray['accountId']);
 
-        $this->expectException('Tinebase_Exception_NotFound');
-        Tinebase_User::getInstance()->getUserById($userArray['accountId']);
+        $account = Tinebase_User::getInstance()->getUserById($userArray['accountId']);
+        $this->assertTrue((bool)$account->is_deleted);
     }
 
     /**
