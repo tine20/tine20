@@ -215,7 +215,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $result = new Tinebase_Record_RecordSet($_accountClass, $rows, TRUE);
         $result->runConvertToRecord();
-        
+
         return $result;
     }
     
@@ -1149,6 +1149,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $accountData[$this->rowNameMapping['accountStatus']] = $_user->accountStatus;
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($accountData, true));
+
         try {
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             
@@ -1314,7 +1317,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         $_user->runConvertToRecord();
-        
+
         return $accountData;
     }
     
@@ -1461,7 +1464,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $result = new Tinebase_Record_RecordSet($_accountClass, $queryResult, TRUE);
         $result->runConvertToRecord();
-        
+
         return $result;
     }
 
