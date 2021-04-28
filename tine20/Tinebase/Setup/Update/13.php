@@ -166,7 +166,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
                 }
             }
         }
-        while (count($rows = $db->query('select group_concat(id), count(id) AS c from ' . SQL_TABLE_PREFIX . 'container where is_deleted = 0 group by application_id, name, owner_id, model, deleted_time having c > 1')
+        while (count($rows = $db->query('select group_concat(id), count(id) AS c from ' . SQL_TABLE_PREFIX . 'container group by application_id, name, owner_id, model, deleted_time having c > 1')
                 ->fetchAll(Zend_Db::FETCH_NUM)) > 0) {
             foreach ($rows as $row) {
                 foreach(explode(',', $row[0]) as $key => $id) {
