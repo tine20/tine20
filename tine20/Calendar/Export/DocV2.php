@@ -53,7 +53,17 @@ class Calendar_Export_DocV2 extends Tinebase_Export_DocV2
             $record->resolveOrganizer();
         }
 
+        if ($record->status == 'CANCELED'){
+            $translation = Tinebase_Translation::getTranslation('Calendar');
+            $record->summary =  $this->_strikeText($record->summary) . '  (' . $translation->_('Canceled') . ')';
+        };
+
         return parent::_processRecord($record);
+    }
+
+    private function _strikeText($text){
+        $splitText = str_split($text);
+        return implode(IntlChar::chr(822), $splitText) . IntlChar::chr(822);
     }
 
     /**
