@@ -460,7 +460,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             }
 
             if (index > 2) {
-                var c = curNode.findChild('path', Tine.Filemanager.Model.Node.sanitize(curPath + keys[index]));
+                var c = curNode.findChild('path', Tine.Filemanager.Model.Node.sanitize(curPath + keys[index] + '/'));
             } else {
                 var c = curNode.findChild('id', keys[index]);
             }
