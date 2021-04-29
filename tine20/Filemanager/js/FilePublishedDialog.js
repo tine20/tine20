@@ -103,15 +103,16 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.Panel, {
     },
 
     onSendAsMail: function () {
-        var body =  this.app.i18n._("Download") + ": " + this.record.get('url');
-
+        let body =  this.app.i18n._("Download") + ": " + this.record.get('url');
+        
         if (this.password) {
-            body += "\n" + this.app.i18n._("Password") + ": " + this.password;
+            body += '<br>' + this.app.i18n._("Password") + ": " + this.password;
         }
-
-        var record = new Tine.Felamimail.Model.Message({
-            'body': body
-        });
+        
+        let defaults = Tine.Felamimail.Model.Message.getDefaultData();
+        defaults.body = body + Tine.Felamimail.getSignature();
+        
+        const record = new Tine.Felamimail.Model.Message(defaults, 0);
 
         Tine.Felamimail.MessageEditDialog.openWindow({
             record: record
