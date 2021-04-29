@@ -278,7 +278,7 @@ Tine.Filemanager.nodeActions.Rename = {
 
     executor: function(record, text) {
         // @TODO validate filename
-        var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
+        const targetPath = Tine.Filemanager.Model.Node.dirname(record.get('path')) + text;
         Tine.Filemanager.nodeBackend.copyNodes([record], targetPath, true);
     }
 };
