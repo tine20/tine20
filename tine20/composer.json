@@ -94,6 +94,7 @@
     "metaways/timezoneconvert": "1.*",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
+    "nl.idaas/openid-server": "^0.1.7",
     "phpoffice/phpexcel": "1.8.*",
     "phpoffice/phpspreadsheet": "1.10.1pl3 as 1.10.1",
     "phpoffice/phpword": "v0.14.0 as v0.13.0",
