@@ -1081,6 +1081,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });
+        $r->addGroup('/.well-known', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/webfinger', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Webfinger::class, 'handlePublicGet', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
     }
 
     /**
