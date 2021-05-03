@@ -321,7 +321,7 @@ var myField = new Ext.form.NumberField({
     },
 
     applyEmptyText : function(){
-        if(this.rendered && this.emptyText && this.getRawValue().length < 1 && !this.hasFocus){
+        if(this.rendered && this.el.dom && this.emptyText && this.getRawValue().length < 1 && !this.hasFocus){
             this.setRawValue(this.emptyText);
             this.el.addClass(this.emptyClass);
         }
