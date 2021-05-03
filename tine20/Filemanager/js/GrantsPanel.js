@@ -91,15 +91,16 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             path = record.get('path'),
             evalGrants = editDialog.evalGrants,
             hasOwnGrants = record.get('acl_node') == record.id,
-            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
-
-        this.hasOwnGrantsCheckbox.setReadOnly(
-            record.get('type') != 'folder') ||
-            !lodash.get(record, 'data.account_grants.adminGrant', false) ||
-            path.match(/^\/personal\/.*\/.*\/$/) ||
-            path.match(/^\/shared\/.*\/$/);
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant),
+            ownGrantsReadOnly = record.get('type') != 'folder' ||
+                !lodash.get(record, 'data.account_grants.adminGrant', false) ||
+                path.match(/^\/personal(\/[^/]+){0,2}\/$/) ||
+                path.match(/^\/shared(\/[^/]+){0,1}\/$/);
+        
         this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
+        this.hasOwnGrantsCheckbox.setReadOnly(ownGrantsReadOnly);
         this.pinProtectionCheckbox.setValue(record.get('pin_protected_node') ? true : false);
+        this.pinProtectionCheckbox.setReadOnly(ownGrantsReadOnly);
 
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData({results: record.data.grants});
@@ -108,11 +109,10 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.grantsGrid.setReadOnly(!hasOwnGrants || !hasRequiredGrant);
     },
 
+    // grants-grid only - checkboxes have own state
     setReadOnly: function(readOnly) {
         this.readOnly = readOnly;
         this.grantsGrid.setReadOnly(readOnly);
-        this.hasOwnGrantsCheckbox.setReadOnly(readOnly);
-        this.pinProtectionCheckbox.setReadOnly(readOnly);
     },
 
     onRecordUpdate: function(editDialog, record) {
