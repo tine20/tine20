@@ -568,21 +568,29 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 // disable some account actions if needed
                 this.contextMenuAccount.items.each(function(item) {
                     // TODO don't rely on iconCls here!
-                    // check account personal namespace -> disable 'add folder' if namespace is other than root 
-                    if (item.iconCls == 'action_add') {
-                        item.setDisabled(account.get('ns_personal') != '');
-                    }
-                    // disable filter rules/vacation if no sieve hostname is set
-                    if (item.iconCls == 'action_email_replyAll' || item.iconCls == 'action_email_forward') {
-                        item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
-                    }
-                    // disable account migration approval if already approved
-                    if (item.iconCls == 'action_approve_migration') {
-                        item.setDisabled(
-                               account.get('migration_approved') == 1
-                            || account.get('type') == 'user'
-                            || account.get('type') == 'shared'
-                        );
+                    switch (item.iconCls) {
+                        case 'action_add':
+                            // check account personal namespace -> disable 'add folder' if namespace is other than root
+                            item.setDisabled(account.get('ns_personal') != '');
+                            break;
+                        case 'action_email_replyAll':
+                        case 'action_email_forward':
+                            // disable filter rules/vacation if no sieve hostname is set
+                            item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
+                            break;
+                        case 'action_approve_migration':
+                            item.setDisabled(
+                                account.get('migration_approved') == 1
+                                || account.get('type') === 'user'
+                                || account.get('type') === 'shared'
+                            );
+                            break;
+                        case 'action_delete':
+                            item.setDisabled(
+                                account.get('type') === 'system'
+                                || account.get('type') === 'shared'
+                            );
+                            break;
                     }
                 });
                 
