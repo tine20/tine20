@@ -272,6 +272,12 @@ MyGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 });
                 sbp.override = io;
                 Ext.override(sb, overrides);
+                if (sbp && sbp.inheritableStatics) {
+                    Ext.apply(sb, sbp.inheritableStatics);
+                }
+                if (overrides && overrides.statics) {
+                    Ext.apply(sb, overrides.statics);
+                }
                 sb.extend = function(o){return Ext.extend(sb, o);};
                 return sb;
             };
