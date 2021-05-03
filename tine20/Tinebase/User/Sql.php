@@ -1330,7 +1330,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $deletedUser = $this->deleteUserInSqlBackend($_userId);
         
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->deleteUserInSyncBackend($deletedUser);
         }
         
@@ -1338,7 +1338,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         foreach ($this->_sqlPlugins as $plugin) {
             $this->_inspectCRUD($plugin, $deletedUser, null, 'delete');
         }
-        
     }
 
     /**
@@ -1385,15 +1384,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
 
         try {
-            $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-            $where  = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
-            );
-            $accountsTable->update(array(   'deleted_by' => Tinebase_Core::getUser()->getId(),
-                                            'deleted_time' => Tinebase_DateTime::now()->toString(),
-                                            'is_deleted' => 1,
-                                            'status' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
-                                            'visibility' => Tinebase_Model_User::VISIBILITY_HIDDEN), $where);
+            if ($this instanceof Tinebase_User_Interface_SyncAble) {
+                $this->_hardDelete($user);
+            } else {
+                $this->_softDelete($user);
+            }
 
             $this->_writeModLog(null, $user);
 
@@ -1407,6 +1402,42 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         return $user;
+    }
+
+    protected function _hardDelete($user)
+    {
+        $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+        $roleMembersTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
+
+        $where  = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $user->getId()),
+        );
+        $groupMembersTable->delete($where);
+
+        $where  = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_id')   . ' = ?', $user->getId()),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
+        );
+        $roleMembersTable->delete($where);
+
+        $where  = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
+        );
+        $accountsTable->delete($where);
+    }
+
+    protected function _softDelete($user)
+    {
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
+        );
+        $accountsTable->update(array('deleted_by' => Tinebase_Core::getUser()->getId(),
+            'deleted_time' => Tinebase_DateTime::now()->toString(),
+            'is_deleted' => 1,
+            'status' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+            'visibility' => Tinebase_Model_User::VISIBILITY_HIDDEN), $where);
     }
 
     /**
