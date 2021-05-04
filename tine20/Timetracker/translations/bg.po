@@ -32,99 +32,99 @@ msgstr ""
 msgid "Close Timeaccount"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:93
+#: js/TimesheetGridPanel.js:92
 msgid "timeframe"
 msgstr "времева рамка"
 
-#: js/TimesheetGridPanel.js:117
+#: js/TimesheetGridPanel.js:116
 msgid "summary"
 msgstr "общо"
 
-#: js/TimesheetGridPanel.js:120
+#: js/TimesheetGridPanel.js:119
 msgid "Total Timesheets"
 msgstr "Всички нанесни часове"
 
-#: js/TimesheetGridPanel.js:121
+#: js/TimesheetGridPanel.js:120
 msgid "Billable Timesheets"
 msgstr "Платими часове"
 
-#: js/TimesheetGridPanel.js:122
+#: js/TimesheetGridPanel.js:121
 msgid "Total Time"
 msgstr "Обща сума"
 
-#: js/TimesheetGridPanel.js:123
+#: js/TimesheetGridPanel.js:122
 msgid "Time of Billable Timesheets"
 msgstr "Обща сума на платимите часове"
 
-#: js/TimesheetGridPanel.js:180 js/TimesheetEditDialog.js:369
-#: js/TimeaccountEditDialog.js:248 Model/Timeaccount.php:155
-#: Model/Timesheet.php:238
+#: js/TimesheetGridPanel.js:179 js/TimesheetEditDialog.js:490
+#: js/TimeaccountEditDialog.js:249 Model/Timeaccount.php:155
+#: Model/Timesheet.php:243
 msgid "Description"
 msgstr "Описание"
 
-#: js/TimesheetGridPanel.js:194
+#: js/TimesheetGridPanel.js:193
 msgid "Detail"
 msgstr "Детайл"
 
-#: js/TimesheetGridPanel.js:259
+#: js/TimesheetGridPanel.js:258
 #, python-brace-format
 msgid "Assign '{0}' Tag"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:270
+#: js/TimesheetGridPanel.js:269
 msgid "Export Timesheets"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:280
+#: js/TimesheetGridPanel.js:279
 msgid "Export as ODS"
 msgstr "Експорт в ODS-формат"
 
-#: js/TimesheetGridPanel.js:287
+#: js/TimesheetGridPanel.js:286
 msgid "Export as CSV"
 msgstr "Експорт в CSV-формат"
 
-#: js/TimesheetGridPanel.js:294
+#: js/TimesheetGridPanel.js:293
 msgid "Export as ..."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:225 Model/Timesheet.php:35
+#: js/TimesheetEditDialog.js:318 Model/Timesheet.php:38
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Работен час"
 msgstr[1] "Работни часа"
 
-#: js/TimesheetEditDialog.js:286
+#: js/TimesheetEditDialog.js:400
 msgid "Accounting"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:352 Model/Timeaccount.php:57
+#: js/TimesheetEditDialog.js:473 Model/Timeaccount.php:57
 msgid "Timeaccount"
 msgid_plural "Timeaccounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TimesheetEditDialog.js:405
+#: js/TimesheetEditDialog.js:526
 msgid "Failed"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:406
+#: js/TimesheetEditDialog.js:527
 #, python-brace-format
 msgid "Could not save {0}."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:407
+#: js/TimesheetEditDialog.js:528
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:415 js/TimesheetEditDialog.js:427
+#: js/TimesheetEditDialog.js:536 js/TimesheetEditDialog.js:548
 msgid "Closed Timeaccount Warning!"
 msgstr ""
 
-#: js/TimesheetEditDialog.js:416
+#: js/TimesheetEditDialog.js:537
 msgid "The selected Time Account is already closed."
 msgstr ""
 
-#: js/TimesheetEditDialog.js:428
+#: js/TimesheetEditDialog.js:549
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr ""
 
@@ -153,68 +153,67 @@ msgstr "Цена на една единица"
 msgid "Factor"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:113
+#: js/TimeaccountEditDialog.js:114
 msgid "Budget"
 msgstr "Бюджет"
 
-#: js/TimeaccountEditDialog.js:118 Model/Timeaccount.php:189
+#: js/TimeaccountEditDialog.js:119 Model/Timeaccount.php:189
 msgid "Status"
 msgstr "Статус"
 
-#: js/TimeaccountEditDialog.js:124 js/Timetracker.js:19 js/Timetracker.js:24
+#: js/TimeaccountEditDialog.js:125 js/Timetracker.js:19 js/Timetracker.js:24
 #: js/Timetracker.js:50 js/TimeAccountStatusFilterModel.js:44
 msgid "closed"
 msgstr "затворено"
 
-#: js/TimeaccountEditDialog.js:124 js/Timetracker.js:50
+#: js/TimeaccountEditDialog.js:125 js/Timetracker.js:50
 #: js/TimeAccountStatusFilterModel.js:44
 msgid "open"
 msgstr "отворено"
 
-#: js/TimeaccountEditDialog.js:145
+#: js/TimeaccountEditDialog.js:146
 msgid "Cleared In"
 msgstr "Пресметнат (нанесен) в"
 
-#: js/TimeaccountEditDialog.js:164 Model/Timeaccount.php:237
+#: js/TimeaccountEditDialog.js:165 Model/Timeaccount.php:237
 msgid "Cleared at"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:170 Model/Timeaccount.php:299
+#: js/TimeaccountEditDialog.js:171 Model/Timeaccount.php:311
 msgid "Cost Center"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:185 Model/Timeaccount.php:303
+#: js/TimeaccountEditDialog.js:186 Model/Timeaccount.php:315
 msgid "Responsible Person"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:194
+#: js/TimeaccountEditDialog.js:195
 msgid "Timesheets are billable"
 msgstr "Работните часове са по сметка / заплатими"
 
-#: js/TimeaccountEditDialog.js:204 Model/Timeaccount.php:212
-#: Model/Timesheet.php:151
+#: js/TimeaccountEditDialog.js:205 Model/Timeaccount.php:212
 msgid "Invoice"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:220 Model/Timeaccount.php:307
+#: js/TimeaccountEditDialog.js:221 Model/Timeaccount.php:319
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Времево конто"
 msgstr[1] "Времеви конта"
 
-#: js/TimeaccountEditDialog.js:236 Model/Timeaccount.php:147
+#: js/TimeaccountEditDialog.js:237 Model/Timeaccount.php:147
 msgid "Number"
 msgstr "Номер"
 
-#: js/TimeaccountEditDialog.js:242 Model/Timeaccount.php:140
+#: js/TimeaccountEditDialog.js:243 Model/Timeaccount.php:140
 msgid "Title"
 msgstr "Име"
 
-#: js/TimeaccountEditDialog.js:273
+#: js/TimeaccountEditDialog.js:274
 msgid "Access"
 msgstr "Достъп"
 
-#: js/TimeaccountEditDialog.js:288
+#: js/TimeaccountEditDialog.js:289
 msgid "Permissions"
 msgstr "Права за достър"
 
@@ -291,7 +290,7 @@ msgstr[1] ""
 msgid "Favorite"
 msgstr ""
 
-#: js/TimeaccountPickerCombo.js:46
+#: js/TimeaccountPickerCombo.js:52
 msgid "Show closed"
 msgstr "Показва затворени"
 
@@ -347,7 +346,7 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: Model/Timeaccount.php:206 Model/Timesheet.php:143
+#: Model/Timeaccount.php:206
 msgid "Cleared in"
 msgstr "Пресметнат (нанесен) в"
 
@@ -359,81 +358,89 @@ msgstr "Платени"
 msgid "Booking deadline"
 msgstr ""
 
-#: Model/Timeaccount.php:286 Model/Timesheet.php:250
+#: Model/Timeaccount.php:286 Model/Timesheet.php:255
 msgid "Accounting time factor"
 msgstr ""
 
-#: Model/Timeaccount.php:701 Model/Timesheet.php:321
+#: Model/Timeaccount.php:295
+msgid "Stream"
+msgstr ""
+
+#: Model/Timeaccount.php:719 Model/Timesheet.php:318
 msgid "hour"
 msgstr ""
 
-#: Model/Timesheet.php:87
+#: Model/Timesheet.php:90
 msgid "Account"
 msgstr "Сметка (конто)"
 
-#: Model/Timesheet.php:94
+#: Model/Timesheet.php:97
 msgid "Time Account (Number - Title)"
 msgstr ""
 
-#: Model/Timesheet.php:120 Model/Timesheet.php:130 Model/Timesheet.php:135
+#: Model/Timesheet.php:123
+msgid "Project time billable"
+msgstr ""
+
+#: Model/Timesheet.php:134
+msgid "Project time billable (combined)"
+msgstr ""
+
+#: Model/Timesheet.php:139
 msgid "Billable"
 msgstr "по сметка / заплатими"
 
-#: Model/Timesheet.php:171 Model/Timesheet.php:176
-msgid "Cleared"
-msgstr "Осчетоводено"
+#: Model/Timesheet.php:147
+msgid "Project time cleared in"
+msgstr ""
 
-#: Model/Timesheet.php:190 Model/Timesheet.php:197
+#: Model/Timesheet.php:155
+msgid "Project time Invoice"
+msgstr ""
+
+#: Model/Timesheet.php:170
+msgid "Project time is cleared"
+msgstr ""
+
+#: Model/Timesheet.php:181
+msgid "Projecttime cleared (combined)"
+msgstr ""
+
+#: Model/Timesheet.php:195 Model/Timesheet.php:202
 msgid "Date"
 msgstr "Дата"
 
-#: Model/Timesheet.php:205
+#: Model/Timesheet.php:210
 msgid "Start time"
 msgstr "Начало"
 
-#: Model/Timesheet.php:223
+#: Model/Timesheet.php:228
 msgid "End time"
 msgstr ""
 
-#: Model/Timesheet.php:231
+#: Model/Timesheet.php:236
 msgid "Duration"
 msgstr "Продължителност"
 
-#: Model/Timesheet.php:244
+#: Model/Timesheet.php:249
 msgid "Need for Clarification"
 msgstr ""
 
-#: Model/Timesheet.php:256
+#: Model/Timesheet.php:261
 msgid "Accounting time"
 msgstr ""
 
-#: Model/Timesheet.php:263
+#: Model/Timesheet.php:268
 msgid "Workingtime is cleared"
 msgstr ""
 
-#: Model/Timesheet.php:269
+#: Model/Timesheet.php:274
 msgid "Workingtime cleared in"
 msgstr ""
-
-#: Model/Timesheet.php:278
-msgid "Time Account closed"
-msgstr "Времевото конто е затворено"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Нанасянене на работни часове"
-
-#: Setup/Update/Release5.php:81 Setup/Initialize.php:112
-msgid "Timeaccounts to bill"
-msgstr ""
-
-#: Setup/Update/Release5.php:95 Setup/Initialize.php:126
-msgid "Timeaccounts not yet billed"
-msgstr ""
-
-#: Setup/Update/Release5.php:109 Setup/Initialize.php:141
-msgid "Timeaccounts already billed"
-msgstr ""
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
@@ -453,6 +460,18 @@ msgstr ""
 
 #: Setup/Initialize.php:89
 msgid "My Timesheets last month"
+msgstr ""
+
+#: Setup/Initialize.php:112
+msgid "Timeaccounts to bill"
+msgstr ""
+
+#: Setup/Initialize.php:126
+msgid "Timeaccounts not yet billed"
+msgstr ""
+
+#: Setup/Initialize.php:141
+msgid "Timeaccounts already billed"
 msgstr ""
 
 #: Acl/Rights.php:121
@@ -482,6 +501,12 @@ msgstr ""
 #: Acl/Rights.php:134
 msgid "Create or update shared timesheet favorites"
 msgstr ""
+
+#~ msgid "Cleared"
+#~ msgstr "Осчетоводено"
+
+#~ msgid "Time Account closed"
+#~ msgstr "Времевото конто е затворено"
 
 #~ msgid "Not a valid time"
 #~ msgstr "Невалидно време"

@@ -22,81 +22,35 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.3\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s persönliche Projekte"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Alle meine Projekte"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Standard Favorit, der beim starten von Projekten geladen wird"
-
-#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
-msgid "Attendee"
-msgstr "Teilnehmer"
-
-#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Rolle"
-
-#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projekte"
-
-#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Titel"
-
-#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Projektnummer"
-
-#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Status"
-
-#: js/ProjectEditDialog.js:188 js/Model.js:76
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/ProjectEditDialog.js:202
-msgid "Enter description"
-msgstr "Beschreibung eingeben"
-
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projekte"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "FAQ durchsuchen"
 
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Tags"
 
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Projekt auswählen"
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:146
+msgid "Number"
+msgstr "Projektnummer"
 
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Rolle auswählen"
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:141
+msgid "Title"
+msgstr "Titel"
 
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Füge {0} Teilnehmer zum Projekt hinzu"
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:152
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:116 js/ProjectEditDialog.js:129
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projekte"
 
 #: js/Model.js:39
 msgid "Project list"
@@ -111,6 +65,10 @@ msgstr "Projektlisten"
 #: js/Model.js:73
 msgid "Quick Search"
 msgstr "Schnellsuche"
+
+#: js/Model.js:76 js/ProjectEditDialog.js:187
+msgid "Description"
+msgstr "Beschreibung"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -128,37 +86,54 @@ msgstr "Erstelldatum"
 msgid "Created By"
 msgstr "Angelegt von"
 
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:90
+msgid "Attendee"
+msgstr "Teilnehmer"
+
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr "Teilnehmerrolle"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "FAQ durchsuchen"
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
 
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Tags"
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
 
-#: Setup/Initialize.php:36
-msgid "All my open projects"
-msgstr "Alle meine offenen Projekte"
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Projekt auswählen"
 
-#: Setup/Initialize.php:56
-msgid "My projects that I'm responsible for"
-msgstr "Alle Projekte für die ich verantwortlich bin"
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:91
+msgid "Role"
+msgstr "Rolle"
 
-#: Setup/Initialize.php:57
-msgid "All my open projects that I am responsible for"
-msgstr "Alle offenen Projekte für die ich verantwortlich bin"
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Rolle auswählen"
 
-#: Setup/Initialize.php:77
-msgid "My waiting projects"
-msgstr "Meine wartenden Projekte"
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Füge {0} Teilnehmer zum Projekt hinzu"
 
-#: Setup/Initialize.php:78
-msgid "My projects that are on hold"
-msgstr "Meine pausierten Projekte"
+#: js/ProjectEditDialog.js:201
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Alle meine Projekte"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Standard Favorit, der beim starten von Projekten geladen wird"
 
 #: Config.php:38
 msgid "Available Project Status"
@@ -199,6 +174,31 @@ msgstr "Mitarbeiter"
 #: Config.php:66
 msgid "Responsible"
 msgstr "Projektleiter"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s persönliche Projekte"
+
+#: Setup/Initialize.php:36
+msgid "All my open projects"
+msgstr "Alle meine offenen Projekte"
+
+#: Setup/Initialize.php:56
+msgid "My projects that I'm responsible for"
+msgstr "Alle Projekte für die ich verantwortlich bin"
+
+#: Setup/Initialize.php:57
+msgid "All my open projects that I am responsible for"
+msgstr "Alle offenen Projekte für die ich verantwortlich bin"
+
+#: Setup/Initialize.php:77
+msgid "My waiting projects"
+msgstr "Meine wartenden Projekte"
+
+#: Setup/Initialize.php:78
+msgid "My projects that are on hold"
+msgstr "Meine pausierten Projekte"
 
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"

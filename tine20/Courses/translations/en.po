@@ -26,15 +26,61 @@ msgstr "Last Name"
 msgid "Add new member to course"
 msgstr "Add new member to course"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:121
 msgid "Errors"
 msgstr "Errors"
 
-#: js/AddMemberDialog.js:118
+#: js/AddMemberDialog.js:121
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
 
-#: js/CourseGridPanel.js:44 js/Models.js:72
+#: js/CourseEditDialog.js:40
+msgid "Import course members"
+msgstr "Import course members"
+
+#: js/CourseEditDialog.js:49
+msgid "Add new member"
+msgstr "Add new member"
+
+#: js/CourseEditDialog.js:213 js/Models.js:43 Controller/Course.php:122
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Course"
+msgstr[1] "Courses"
+
+#: js/CourseEditDialog.js:229
+msgid "Course Name"
+msgstr "Course Name"
+
+#: js/CourseEditDialog.js:236
+msgid "Course / School Type"
+msgstr "Course / School Type"
+
+#: js/CourseEditDialog.js:246
+msgid "Description"
+msgstr "Description"
+
+#: js/CourseEditDialog.js:252 js/Models.js:70 Config.php:118
+msgid "Internet Access"
+msgstr "Internet Access"
+
+#: js/CourseEditDialog.js:281
+msgid "Members"
+msgstr "Members"
+
+#: js/CourseEditDialog.js:310
+msgid "Login"
+msgstr "Login"
+
+#: js/CourseEditDialog.js:314
+msgid "unknown"
+msgstr "unknown"
+
+#: js/CourseEditDialog.js:339
+msgid "Reset Password"
+msgstr "Reset Password"
+
+#: js/CourseGridPanel.js:44 js/Models.js:68
 msgid "Name"
 msgstr "Name"
 
@@ -50,148 +96,111 @@ msgstr "Failed"
 msgid "Some error occured while trying to update the courses."
 msgstr "Some error occured while trying to update the courses."
 
-#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Course"
-msgstr[1] "Courses"
-
-#: js/Models.js:47
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "record list"
-msgstr[1] "record lists"
-
-#: js/Models.js:71
+#: js/Models.js:67
 msgid "Quick Search"
 msgstr "Quick Search"
 
-#: js/Models.js:74 js/CourseEditDialog.js:227 Config.php:103
-msgid "Internet Access"
-msgstr "Internet Access"
-
-#: js/Models.js:109
+#: js/Models.js:105
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Course Type"
 msgstr[1] "Course Types"
 
-#: js/CourseEditDialog.js:33
-msgid "Import course members"
-msgstr "Import course members"
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+msgid "All courses"
+msgstr "All courses"
 
-#: js/CourseEditDialog.js:42
-msgid "Add new member"
-msgstr "Add new member"
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "The default favorite which is loaded on Classes startup"
 
-#: js/CourseEditDialog.js:204
-msgid "Course Name"
-msgstr "Course Name"
+#: Config.php:108
+msgid "Additional Group Memberships"
+msgstr "Additional Group Memberships"
 
-#: js/CourseEditDialog.js:211
-msgid "Course / School Type"
-msgstr "Course / School Type"
+#: Config.php:110
+msgid "Array of IDs of Groups students can be members of"
+msgstr "Array of IDs of Groups students can be members of"
 
-#: js/CourseEditDialog.js:221
-msgid "Description"
-msgstr "Description"
-
-#: js/CourseEditDialog.js:256
-msgid "Members"
-msgstr "Members"
-
-#: js/CourseEditDialog.js:283
-msgid "Login"
-msgstr "Login"
-
-#: js/CourseEditDialog.js:287
-msgid "unknown"
-msgstr "unknown"
-
-#: js/CourseEditDialog.js:292
-msgid "Reset Password"
-msgstr "Reset Password"
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Teacher"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Teacher Account"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "My course"
-
-#: Config.php:105
+#: Config.php:120
 msgid "Internet access options."
 msgstr "Internet access options."
 
-#: Config.php:112
+#: Config.php:127
 msgid "On"
 msgstr "On"
 
-#: Config.php:113
+#: Config.php:128
 msgid "Off"
 msgstr "Off"
 
-#: Config.php:114
+#: Config.php:129
 msgid "Filtered"
 msgstr "Filtered"
 
-#: Config.php:119 Config.php:121
+#: Config.php:134 Config.php:136
 msgid "Internet Access Group (ON)"
 msgstr "Internet Access Group (ON)"
 
-#: Config.php:127 Config.php:129
+#: Config.php:142 Config.php:144
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internet Access Group (FILTERED)"
 
-#: Config.php:135 Config.php:137
+#: Config.php:150 Config.php:152
 msgid "Students Group"
 msgstr "Students Group"
 
-#: Config.php:143 Config.php:145
+#: Config.php:158 Config.php:160
 msgid "Students Import Definition"
 msgstr "Students Import Definition"
 
-#: Config.php:151
+#: Config.php:166
 msgid "Students login name prefix"
 msgstr "Students login name prefix"
 
-#: Config.php:158
+#: Config.php:173
 msgid "Students password suffix"
 msgstr "Students password suffix"
 
-#: Config.php:165
+#: Config.php:180
 msgid "Teacher password"
 msgstr "Teacher password"
 
-#: Config.php:174
+#: Config.php:189
 msgid "Student username schema"
 msgstr "Student username schema"
 
-#: Config.php:176
+#: Config.php:191
 msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
 msgstr "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
 
-#: Config.php:183 Config.php:185
+#: Config.php:198 Config.php:200
 msgid "Samba user settings"
 msgstr "Samba user settings"
 
-#: Config.php:194
+#: Config.php:209
 msgid "Default department"
 msgstr "Default department"
 
-#: Config.php:196
+#: Config.php:211
 msgid "The default department for new Courses"
 msgstr "The default department for new Courses"
 
-#: Setup/Initialize.php:35 Setup/Update/Release5.php:30 Preference.php:24
-#: Preference.php:60
-msgid "All courses"
-msgstr "All courses"
+#: Controller/Course.php:353 Controller/Course.php:398
+msgid "Teacher"
+msgstr "Teacher"
+
+#: Controller/Course.php:354
+msgid "Teacher Account"
+msgstr "Teacher Account"
+
+#: Controller/Course.php:419
+msgid "My course"
+msgstr "My course"
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Courses"
 
 #: Setup/Initialize.php:57
 msgid "School"
@@ -201,34 +210,34 @@ msgstr "School"
 msgid "Defaul school for Courses application"
 msgstr "Defaul school for Courses application"
 
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Courses"
-
-#: Acl/Rights.php:108
+#: Acl/Rights.php:116
 msgid "Add new user"
 msgstr "Add new user"
 
-#: Acl/Rights.php:109
+#: Acl/Rights.php:117
 msgid "Add new user as member to a course"
 msgstr "Add new user as member to a course"
 
-#: Acl/Rights.php:112
+#: Acl/Rights.php:120
 msgid "Add existing user"
 msgstr "Add existing user"
 
-#: Acl/Rights.php:113
+#: Acl/Rights.php:121
 msgid "Add existing user as member to a course"
 msgstr "Add existing user as member to a course"
 
-#: Acl/Rights.php:116
+#: Acl/Rights.php:124
 msgid "Manage shared courses favorites"
 msgstr "Manage shared courses favorites"
 
-#: Acl/Rights.php:117
+#: Acl/Rights.php:125
 msgid "Create or update shared courses favorites"
 msgstr "Create or update shared courses favorites"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "The default favorite which is loaded on Classes startup"
+#: Acl/Rights.php:128
+msgid "Set additional memberships"
+msgstr "Set additional memberships"
+
+#: Acl/Rights.php:129
+msgid "Set additional course member group memberships"
+msgstr "Set additional course member group memberships"

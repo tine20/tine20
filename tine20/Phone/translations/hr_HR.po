@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # fvisic <visicfilip@gmail.com>, 2012
 # fvisic <visicfilip@gmail.com>, 2012
@@ -9,46 +9,14 @@ msgstr ""
 "PO-Revision-Date: 2020-05-11 11:55+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/tine20/tine20/language/hr_HR/)\n"
+"Language: hr_HR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hr_HR\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr ""
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr ""
-
-#: Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr ""
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr ""
-
-#: Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr ""
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr ""
-
-#: Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr ""
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr ""
 
 #: js/Phone.js:102
 msgid "Incoming call"
@@ -134,6 +102,42 @@ msgstr "Greška"
 msgid "Not possible to dial."
 msgstr "Nije moguće birati."
 
+#: Config.php:44 Config.php:46
+msgid "Local prefix for outgoing calls"
+msgstr ""
+
+#: Config.php:53 Config.php:55
+msgid "telephone area code"
+msgstr ""
+
+#: Config.php:61
+msgid "regex for local calls"
+msgstr ""
+
+#: Config.php:63
+msgid "Identifies if a calling number is a local call without leading area code."
+msgstr ""
+
+#: Config.php:70
+msgid "own telephone number"
+msgstr ""
+
+#: Config.php:72
+msgid "Own telephone number to prefix to internal calls."
+msgstr ""
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr ""
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr ""
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr ""
+
 #: Model/Call.php:43
 msgid "Call"
 msgstr ""
@@ -182,39 +186,34 @@ msgstr "Odredište"
 msgid "resolved destination"
 msgstr ""
 
-#: Model/MyPhone.php:61
-msgid "Settings"
+#: Setup/Initialize.php:33
+msgid "Calls this week"
 msgstr ""
 
-#: Model/MyPhone.php:66
-msgid "Lines"
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
 msgstr ""
 
-#: Model/MyPhone.php:69
-msgid "Description"
+#: Setup/Initialize.php:43
+msgid "Calls last week"
 msgstr ""
 
-#: Config.php:44 Config.php:46
-msgid "local prefix for outgoing calls"
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
 msgstr ""
 
-#: Config.php:53 Config.php:55
-msgid "telephone area code"
+#: Setup/Initialize.php:53
+msgid "Calls this month"
 msgstr ""
 
-#: Config.php:61
-msgid "regex for local calls"
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
 msgstr ""
 
-#: Config.php:63
-msgid ""
-"identifies if a calling number is a local call without leading area code"
+#: Setup/Initialize.php:63
+msgid "Calls last month"
 msgstr ""
 
-#: Config.php:70
-msgid "own telephone number"
-msgstr ""
-
-#: Config.php:72
-msgid "own telephone number to prefix to internal calls"
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
 msgstr ""
