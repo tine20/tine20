@@ -18,6 +18,69 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Controller/Course.php:121 js/Models.js:43 js/CourseEditDialog.js:187
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Tečaj"
+msgstr[1] "Tečajevi"
+msgstr[2] "Tečajeva"
+
+#: Controller/Course.php:256 Controller/Course.php:301
+msgid "Teacher"
+msgstr "Učitelj"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Račun učitelja"
+
+#: Controller/Course.php:322
+msgid "My course"
+msgstr "Moji tečajevi"
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Tečajevi"
+
+#: Setup/Initialize.php:35 Preference.php:24 Preference.php:60
+msgid "All courses"
+msgstr "Svi tečajevi"
+
+#: Setup/Initialize.php:57
+msgid "School"
+msgstr ""
+
+#: Setup/Initialize.php:58
+msgid "Defaul school for Courses application"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Zadani favorit koji se pokreče za nastavu "
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Dodaj novog korisnika"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Dodaj novog korisnika kao člana tečaja"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Dodaj postojećeg korisnika"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Dodaj postojećeg korisnika kao člana tečaja"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
+msgstr ""
+
 #: js/CourseGridPanel.js:44 js/Models.js:68
 msgid "Name"
 msgstr "Ime"
@@ -33,28 +96,6 @@ msgstr "Neuspjelo"
 #: js/CourseGridPanel.js:96
 msgid "Some error occured while trying to update the courses."
 msgstr "Pojavila se pogreška pri pokušaju ažuriranja tečajeva."
-
-#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Tečaj"
-msgstr[1] "Tečajevi"
-msgstr[2] "Tečajeva"
-
-#: js/Models.js:67
-msgid "Quick Search"
-msgstr ""
-
-#: js/Models.js:70 js/CourseEditDialog.js:227 Config.php:103
-msgid "Internet Access"
-msgstr "Pristup Internetu"
-
-#: js/Models.js:105
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Vrsta tečaja"
-msgstr[1] "Vrste tečajeva"
-msgstr[2] "Vrste tečajeva"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
@@ -76,6 +117,21 @@ msgstr "Greške"
 msgid "Please fix the errors noted."
 msgstr "Molimo popraviti uočene pogreške."
 
+#: js/Models.js:67
+msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:70 js/CourseEditDialog.js:226 Config.php:103
+msgid "Internet Access"
+msgstr "Pristup Internetu"
+
+#: js/Models.js:105
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Vrsta tečaja"
+msgstr[1] "Vrste tečajeva"
+msgstr[2] "Vrste tečajeva"
+
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
 msgstr "Uvoz članova tečaja"
@@ -84,42 +140,33 @@ msgstr "Uvoz članova tečaja"
 msgid "Add new member"
 msgstr "Dodaj novog člana"
 
-#: js/CourseEditDialog.js:204
+#: js/CourseEditDialog.js:203
 msgid "Course Name"
 msgstr "Ime tečaja"
 
-#: js/CourseEditDialog.js:211
+#: js/CourseEditDialog.js:210
 msgid "Course / School Type"
 msgstr "Tečaj / tip škole"
 
-#: js/CourseEditDialog.js:221
+#: js/CourseEditDialog.js:220
 msgid "Description"
 msgstr "Opis"
 
-#: js/CourseEditDialog.js:256
+#: js/CourseEditDialog.js:255
 msgid "Members"
 msgstr "Članovi"
 
-#: js/CourseEditDialog.js:283
+#: js/CourseEditDialog.js:282
 msgid "Login"
 msgstr "Prijava"
 
-#: js/CourseEditDialog.js:287
+#: js/CourseEditDialog.js:286
 msgid "unknown"
 msgstr "nepoznat"
 
-#: js/CourseEditDialog.js:292
+#: js/CourseEditDialog.js:291
 msgid "Reset Password"
 msgstr "Resetirati lozinku"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr "Svi tečajevi"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Zadani favorit koji se pokreče za nastavu "
 
 #: Config.php:105
 msgid "Internet access options."
@@ -186,51 +233,3 @@ msgstr ""
 #: Config.php:196
 msgid "The default department for new Courses"
 msgstr ""
-
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Dodaj novog korisnika"
-
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Dodaj novog korisnika kao člana tečaja"
-
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Dodaj postojećeg korisnika"
-
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Dodaj postojećeg korisnika kao člana tečaja"
-
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Učitelj"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Račun učitelja"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Moji tečajevi"
-
-#: Setup/Initialize.php:57
-msgid "School"
-msgstr ""
-
-#: Setup/Initialize.php:58
-msgid "Defaul school for Courses application"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Tečajevi"

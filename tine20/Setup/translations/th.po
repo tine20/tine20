@@ -1,42 +1,22 @@
-#
+# 
 # Translators:
-# jaruwan <luca.ingianni@gmail.com>, 2014
-# jaruwan <luca.ingianni@gmail.com>, 2014
+# 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014
+# 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"PO-Revision-Date: 2020-05-11 11:59+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
-"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr ""
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "ข้อตกลงเรื่องความเป็นส่วนตัว"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr ""
 
 #: js/EmailPanel.js:146 js/EmailPanel.js:486 js/AuthenticationPanel.js:203
 #: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
@@ -269,6 +249,10 @@ msgstr ""
 msgid "PLAIN"
 msgstr ""
 
+#: js/init.js:75
+msgid "Setup"
+msgstr ""
+
 #: js/TreePanel.js:52
 msgid "Terms and Conditions"
 msgstr ""
@@ -293,81 +277,15 @@ msgstr "อีเมล"
 msgid "Application Manager"
 msgstr "ตัวจัดการแอพพลิเคชั่น"
 
-#: js/init.js:75
-msgid "Setup"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "ชื่อ"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "เปิดใช้งานแล้ว"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "คำสั่ง"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "เวอร์ชั่นที่ได้ติดตั้ง"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "เวอร์ชั่นที่มี"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "สถานะ"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "ขึ้นอยู่กับ"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "ติดตั้งแอพพลิเคชั่น"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "ถอนการติดตั้งแอพพลิเคชั่น"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "อัพเดทแอพพลิเคชั่น"
-
-#: js/ApplicationGridPanel.js:105
-#, python-brace-format
-msgid "Go to {0} login"
-msgstr "ไปยังการเข้าใช้ {0} "
-
-#: js/ApplicationGridPanel.js:184
-msgid "uninstall"
-msgstr "ถอนการติดตั้ง"
-
-#: js/ApplicationGridPanel.js:184
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "คุณแน่ใจว่าต้องการถอนการติดตั้งแอพพลิเคชั่น(s)?"
-
-#: js/ApplicationGridPanel.js:244
-msgid "This may take a while"
-msgstr "นี่อาจจะใช้เวลาสักครู่"
-
-#: js/ApplicationGridPanel.js:278
-msgid "Dependency Violation"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:287
-msgid "CLI Required"
-msgstr ""
-
 #: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "ลบผ๔้ใช้และกลุ่มที่มีอยู่ทั้งหมด"
 
 #: js/AuthenticationPanel.js:126
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
 msgstr "การสลับจาก SQL ไปยัง LDAP จะลบบัญชี กลุ่ม และหน้าที่ของผู้ใช้ที่มีอยู่ทั้งหมด คุณแน่ใจว่าต้องการสลับการจัดเก็บบัญชีส่วนหลังไปใช้ LDAP?"
 
 #: js/AuthenticationPanel.js:204
@@ -653,33 +571,24 @@ msgstr "รหัสผ่านไม่ตรง"
 msgid "Should not be empty"
 msgstr "ไม่ควรว่างไว้"
 
-#: js/EnvCheckGridPanel.js:89
-msgid "Performing Environment Checks..."
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:130
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+#: js/TermsPanel.js:37
+msgid "License Agreement"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:160
-msgid "Check"
-msgstr "ตรวจสอบ"
-
-#: js/EnvCheckGridPanel.js:161
-msgid "Result"
-msgstr "ผลลัพธ์"
-
-#: js/EnvCheckGridPanel.js:162
-msgid "Error"
-msgstr "ผิดพลาด"
-
-#: js/EnvCheckGridPanel.js:180
-msgid "Run setup tests"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:189
-msgid "Ignore setup tests"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "ข้อตกลงเรื่องความเป็นส่วนตัว"
+
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
 msgstr ""
 
 #: js/Model.js:33
@@ -781,5 +690,102 @@ msgstr ""
 
 #: js/ConfigManagerPanel.js:564
 #, python-brace-format
-msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgid ""
+"This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgstr ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "ชื่อ"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "เปิดใช้งานแล้ว"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "คำสั่ง"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "เวอร์ชั่นที่ได้ติดตั้ง"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "เวอร์ชั่นที่มี"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "ขึ้นอยู่กับ"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "ติดตั้งแอพพลิเคชั่น"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "ถอนการติดตั้งแอพพลิเคชั่น"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "อัพเดทแอพพลิเคชั่น"
+
+#: js/ApplicationGridPanel.js:105
+#, python-brace-format
+msgid "Go to {0} login"
+msgstr "ไปยังการเข้าใช้ {0} "
+
+#: js/ApplicationGridPanel.js:184
+msgid "uninstall"
+msgstr "ถอนการติดตั้ง"
+
+#: js/ApplicationGridPanel.js:184
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "คุณแน่ใจว่าต้องการถอนการติดตั้งแอพพลิเคชั่น(s)?"
+
+#: js/ApplicationGridPanel.js:244
+msgid "This may take a while"
+msgstr "นี่อาจจะใช้เวลาสักครู่"
+
+#: js/ApplicationGridPanel.js:278
+msgid "Dependency Violation"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:287
+msgid "CLI Required"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:130
+#, python-brace-format
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "ตรวจสอบ"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr "ผลลัพธ์"
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Message"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
 msgstr ""

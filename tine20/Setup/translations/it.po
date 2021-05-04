@@ -1,4 +1,4 @@
-#
+# 
 # Translators:
 # Daniele Gobbetti <daniele@gobbetti.name>, 2013
 # Samuel Barbera <samuel.barbera@email.it>, 2013
@@ -8,37 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"PO-Revision-Date: 2020-05-11 11:59+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Italian (http://www.transifex.com/tine20/tine20/language/it/)\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Ho letto l'informativa di licenza e lo accetto"
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Informativa di Licenza"
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Ho letto l'accordo"
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Informativa della Privacy"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Accetto i Termini e le Condizioni"
 
 #: js/EmailPanel.js:146 js/EmailPanel.js:486 js/AuthenticationPanel.js:203
 #: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
@@ -271,6 +251,10 @@ msgstr "SSHA512"
 msgid "PLAIN"
 msgstr "PLAIN"
 
+#: js/init.js:75
+msgid "Setup"
+msgstr ""
+
 #: js/TreePanel.js:52
 msgid "Terms and Conditions"
 msgstr "Termini e Condizioni"
@@ -295,81 +279,15 @@ msgstr "Email"
 msgid "Application Manager"
 msgstr "Manager di Applicazione"
 
-#: js/init.js:75
-msgid "Setup"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Nome"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Abilitato"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Ordine"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Versione Installata"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Versione Disponibile"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Stato"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Dipende da"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Installa applicazione"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Disinstalla applicazione"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Aggiorna applicazione"
-
-#: js/ApplicationGridPanel.js:105
-#, python-brace-format
-msgid "Go to {0} login"
-msgstr "Vai a {0} login"
-
-#: js/ApplicationGridPanel.js:184
-msgid "uninstall"
-msgstr "disinstalla"
-
-#: js/ApplicationGridPanel.js:184
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Vuoi veramente disinstallare la/le applicazioni?"
-
-#: js/ApplicationGridPanel.js:244
-msgid "This may take a while"
-msgstr "Potrebbe richiedere del tempo"
-
-#: js/ApplicationGridPanel.js:278
-msgid "Dependency Violation"
-msgstr "Violazione di dipendenze"
-
-#: js/ApplicationGridPanel.js:287
-msgid "CLI Required"
-msgstr ""
-
 #: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "Cancella tutte gli utenti e i gruppi esistenti"
 
 #: js/AuthenticationPanel.js:126
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
 msgstr "Il passaggio da SQL a LDAP cancellerà tutti gli Account Utente esistenti, i Gruppi e i Ruoli. Vuoi veramente migrare il sistema di memorizzazione account a LDAP?"
 
 #: js/AuthenticationPanel.js:204
@@ -655,34 +573,25 @@ msgstr "Le password non corrispondono"
 msgid "Should not be empty"
 msgstr "Non dovrebbe essere vuota"
 
-#: js/EnvCheckGridPanel.js:89
-msgid "Performing Environment Checks..."
-msgstr "Esecuzione Controlli di Ambiente..."
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Ho letto l'informativa di licenza e lo accetto"
 
-#: js/EnvCheckGridPanel.js:130
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Non è stato trovato alcun {0}. Prova a cambiare i criteri del filtro, le opzioni di visualizzazione o {1} nella tua ricerca"
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Informativa di Licenza"
 
-#: js/EnvCheckGridPanel.js:160
-msgid "Check"
-msgstr "Controlla"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "Ho letto l'accordo"
 
-#: js/EnvCheckGridPanel.js:161
-msgid "Result"
-msgstr "Risultati"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Informativa della Privacy"
 
-#: js/EnvCheckGridPanel.js:162
-msgid "Error"
-msgstr "Errore"
-
-#: js/EnvCheckGridPanel.js:180
-msgid "Run setup tests"
-msgstr "Avvia test di installazione"
-
-#: js/EnvCheckGridPanel.js:189
-msgid "Ignore setup tests"
-msgstr "Ignora test di installazione"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Accetto i Termini e le Condizioni"
 
 #: js/Model.js:33
 msgid "Application"
@@ -784,5 +693,102 @@ msgstr "Scarica il file di Configurazione"
 
 #: js/ConfigManagerPanel.js:564
 #, python-brace-format
-msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgid ""
+"This prefix is too long. Please choose a prefix no longer than {0} chars."
 msgstr ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Nome"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Abilitato"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Ordine"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Versione Installata"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Versione Disponibile"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Stato"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Dipende da"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Installa applicazione"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Disinstalla applicazione"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Aggiorna applicazione"
+
+#: js/ApplicationGridPanel.js:105
+#, python-brace-format
+msgid "Go to {0} login"
+msgstr "Vai a {0} login"
+
+#: js/ApplicationGridPanel.js:184
+msgid "uninstall"
+msgstr "disinstalla"
+
+#: js/ApplicationGridPanel.js:184
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Vuoi veramente disinstallare la/le applicazioni?"
+
+#: js/ApplicationGridPanel.js:244
+msgid "This may take a while"
+msgstr "Potrebbe richiedere del tempo"
+
+#: js/ApplicationGridPanel.js:278
+msgid "Dependency Violation"
+msgstr "Violazione di dipendenze"
+
+#: js/ApplicationGridPanel.js:287
+msgid "CLI Required"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr "Esecuzione Controlli di Ambiente..."
+
+#: js/EnvCheckGridPanel.js:130
+#, python-brace-format
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr "Non è stato trovato alcun {0}. Prova a cambiare i criteri del filtro, le opzioni di visualizzazione o {1} nella tua ricerca"
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "Controlla"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr "Risultati"
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Message"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr "Avvia test di installazione"
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
+msgstr "Ignora test di installazione"
