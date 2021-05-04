@@ -86,7 +86,8 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
     {
         $employeeId = $employeeId instanceof HumanResources_Model_Employee ? $employeeId->getId() : $employeeId;
         $freeTimes = $this->search(new HumanResources_Model_FreeTimeFilter([
-            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId]
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employeeId],
+            ['field' => 'type',        'operator' => 'equals', 'value' => HumanResources_Model_FreeTimeType::ID_VACATION],
         ]));
         
         return HumanResources_Controller_FreeDay::getInstance()->search(new HumanResources_Model_FreeDayFilter([
