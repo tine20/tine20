@@ -17,6 +17,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE013_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE013_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE013_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -33,6 +34,10 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE013_UPDATE008           => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -179,5 +184,49 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([Tinebase_Model_Container::class]);
 
         $this->addApplicationUpdate('Tinebase', '13.6', self::RELEASE013_UPDATE007);
+    }
+
+    public function update008()
+    {
+
+        $this->_db->update(SQL_TABLE_PREFIX . 'importexport_definition', ['deleted_time' => '1970-01-01 00:00:00'],
+            'deleted_time IS NULL');
+
+        $this->_backend->alterCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+                <notnull>true</notnull>
+                <default>1970-01-01 00:00:00</default>
+            </field>'));
+
+        try {
+            $this->_backend->dropIndex('importexport_definition', 'model-name-type');
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+
+        $this->_backend->addIndex('importexport_definition', new Setup_Backend_Schema_Index_Xml(
+            '  <index>
+                    <name>model-name-type</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>model</name>
+                    </field>
+                    <field>
+                        <name>name</name>
+                    </field>
+                    <field>
+                        <name>type</name>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
+                    </field>
+                </index>'));
+
+        if ($this->getTableVersion('importexport_definition') < 12) {
+            $this->setTableVersion('importexport_definition', 12);
+        }
+        $this->addApplicationUpdate('Tinebase', '13.7', self::RELEASE013_UPDATE008);
     }
 }
