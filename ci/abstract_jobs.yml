@@ -192,7 +192,7 @@
     - test -f ${TINE20ROOT}/scripts/postInstallGitlab.sh && ${TINE20ROOT}/scripts/postInstallGitlab.sh
     - echo cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
     - cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
-    - cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit phpunit-report.xml --debug";
+    - cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
       if test -n "${ARG_FILTER}"; then cmd="${cmd} --filter ${ARG_FILTER}"; fi;
       if test -n "${ARG_EXCLUDE_GROUP}"; then cmd="${cmd} --exclude-group ${ARG_EXCLUDE_GROUP}"; fi;
       if test -n "${ARG_GROUP}"; then cmd="${cmd} --group ${ARG_GROUP}"; fi;
