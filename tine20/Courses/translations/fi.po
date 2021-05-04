@@ -20,6 +20,68 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Controller/Course.php:121 js/Models.js:43 js/CourseEditDialog.js:187
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurssi"
+msgstr[1] "Kurssit"
+
+#: Controller/Course.php:256 Controller/Course.php:301
+msgid "Teacher"
+msgstr "Opettaja"
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr "Opettajan käyttäjätili"
+
+#: Controller/Course.php:322
+msgid "My course"
+msgstr "Kurssini"
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurssit"
+
+#: Setup/Initialize.php:35 Preference.php:24 Preference.php:60
+msgid "All courses"
+msgstr "Kaikki kurssit"
+
+#: Setup/Initialize.php:57
+msgid "School"
+msgstr ""
+
+#: Setup/Initialize.php:58
+msgid "Defaul school for Courses application"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Oletussuosikki, joka ladataan kurssin alussa."
+
+#: Acl/Rights.php:108
+msgid "Add new user"
+msgstr "Lisää uusi osallistuja"
+
+#: Acl/Rights.php:109
+msgid "Add new user as member to a course"
+msgstr "Lisää uusi osallistuja kurssille"
+
+#: Acl/Rights.php:112
+msgid "Add existing user"
+msgstr "Lisää olemassa oleva osallistuja"
+
+#: Acl/Rights.php:113
+msgid "Add existing user as member to a course"
+msgstr "Lisää olemassa oleva osallistuja kurssille"
+
+#: Acl/Rights.php:116
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:117
+msgid "Create or update shared courses favorites"
+msgstr ""
+
 #: js/CourseGridPanel.js:44 js/Models.js:68
 msgid "Name"
 msgstr "Nimi"
@@ -35,26 +97,6 @@ msgstr "Epäonnistui"
 #: js/CourseGridPanel.js:96
 msgid "Some error occured while trying to update the courses."
 msgstr "Virhe kurssia päivitettäessä"
-
-#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurssi"
-msgstr[1] "Kurssit"
-
-#: js/Models.js:67
-msgid "Quick Search"
-msgstr ""
-
-#: js/Models.js:70 js/CourseEditDialog.js:227 Config.php:103
-msgid "Internet Access"
-msgstr "Internet oikeudet"
-
-#: js/Models.js:105
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Kurssin tyyppi"
-msgstr[1] "Kurssin tyypit"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
@@ -76,6 +118,20 @@ msgstr "Virheet"
 msgid "Please fix the errors noted."
 msgstr "Korjaa havaitut virheet"
 
+#: js/Models.js:67
+msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:70 js/CourseEditDialog.js:226 Config.php:103
+msgid "Internet Access"
+msgstr "Internet oikeudet"
+
+#: js/Models.js:105
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Kurssin tyyppi"
+msgstr[1] "Kurssin tyypit"
+
 #: js/CourseEditDialog.js:33
 msgid "Import course members"
 msgstr "Lisää kurssin osallistujat"
@@ -84,42 +140,33 @@ msgstr "Lisää kurssin osallistujat"
 msgid "Add new member"
 msgstr "Lisää uusi jäsen"
 
-#: js/CourseEditDialog.js:204
+#: js/CourseEditDialog.js:203
 msgid "Course Name"
 msgstr "Kurssin nimi"
 
-#: js/CourseEditDialog.js:211
+#: js/CourseEditDialog.js:210
 msgid "Course / School Type"
 msgstr "Kurssi / Koulutuksen tyyppi"
 
-#: js/CourseEditDialog.js:221
+#: js/CourseEditDialog.js:220
 msgid "Description"
 msgstr "Kuvaus"
 
-#: js/CourseEditDialog.js:256
+#: js/CourseEditDialog.js:255
 msgid "Members"
 msgstr "Käyttäjät"
 
-#: js/CourseEditDialog.js:283
+#: js/CourseEditDialog.js:282
 msgid "Login"
 msgstr "Kirjaudu"
 
-#: js/CourseEditDialog.js:287
+#: js/CourseEditDialog.js:286
 msgid "unknown"
 msgstr "tuntematon"
 
-#: js/CourseEditDialog.js:292
+#: js/CourseEditDialog.js:291
 msgid "Reset Password"
 msgstr "Nollaa salasana"
-
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
-msgid "All courses"
-msgstr "Kaikki kurssit"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Oletussuosikki, joka ladataan kurssin alussa."
 
 #: Config.php:105
 msgid "Internet access options."
@@ -186,51 +233,3 @@ msgstr ""
 #: Config.php:196
 msgid "The default department for new Courses"
 msgstr ""
-
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Lisää uusi osallistuja"
-
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Lisää uusi osallistuja kurssille"
-
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Lisää olemassa oleva osallistuja"
-
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Lisää olemassa oleva osallistuja kurssille"
-
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: Controller/Course.php:256 Controller/Course.php:300
-msgid "Teacher"
-msgstr "Opettaja"
-
-#: Controller/Course.php:257
-msgid "Teacher Account"
-msgstr "Opettajan käyttäjätili"
-
-#: Controller/Course.php:321
-msgid "My course"
-msgstr "Kurssini"
-
-#: Setup/Initialize.php:57
-msgid "School"
-msgstr ""
-
-#: Setup/Initialize.php:58
-msgid "Defaul school for Courses application"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurssit"

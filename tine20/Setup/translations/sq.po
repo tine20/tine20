@@ -1,4 +1,4 @@
-#
+# 
 # Translators:
 # Enri Mullai <enri_mullai@albnet.net>, 2013-2014
 # Enri Mullai <enri_mullai@albnet.net>, 2014
@@ -6,37 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"PO-Revision-Date: 2020-05-11 11:59+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/tine20/tine20/language/sq/)\n"
-"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Unë e kam lexuar marrveshjen e licensave dhe e kam pranuar atë"
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Marveshje Licensash"
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Unë e kam lexuar marrveshjen e fshehtësive dhe e kam pranuar atë"
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Marrveshje e Fshehtësive"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Prano Kushtet dhe Konditat"
 
 #: js/EmailPanel.js:146 js/EmailPanel.js:486 js/AuthenticationPanel.js:203
 #: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
@@ -269,6 +249,10 @@ msgstr "SSHA512"
 msgid "PLAIN"
 msgstr "PLAIN"
 
+#: js/init.js:75
+msgid "Setup"
+msgstr ""
+
 #: js/TreePanel.js:52
 msgid "Terms and Conditions"
 msgstr "Kushtet dhe Konditat"
@@ -293,81 +277,15 @@ msgstr "E-Postë"
 msgid "Application Manager"
 msgstr "Menaxheri i Aplikacioneve"
 
-#: js/init.js:75
-msgid "Setup"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Emër"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Aktivizuar"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Porosi"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Versioni i Instaluar"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Version i disponueshëm"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Status"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Varet nga"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Instalo aplikacionin"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Ç'instalo aplikacionin"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Përditëso aplikacionin"
-
-#: js/ApplicationGridPanel.js:105
-#, python-brace-format
-msgid "Go to {0} login"
-msgstr "Shko tek hyrja {0}"
-
-#: js/ApplicationGridPanel.js:184
-msgid "uninstall"
-msgstr "Ç'instalo"
-
-#: js/ApplicationGridPanel.js:184
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Doni vërtet të ç'instaloni aplikacionin(et)?"
-
-#: js/ApplicationGridPanel.js:244
-msgid "This may take a while"
-msgstr "Kjo mund të dojë pak kohë"
-
-#: js/ApplicationGridPanel.js:278
-msgid "Dependency Violation"
-msgstr "Shkelje të Varësive"
-
-#: js/ApplicationGridPanel.js:287
-msgid "CLI Required"
-msgstr ""
-
 #: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "Fshij të gjithë Grupet dhe Përdoruesit"
 
 #: js/AuthenticationPanel.js:126
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
 msgstr "Ndryshimi nga SQL në LDAP do të fshijë të gjitha Logaritë e Përdoruesëve, Grupet, dhe RoletDoni vërtetë të ndryshoni arkivën fundore të përdoruesve në LDAP?"
 
 #: js/AuthenticationPanel.js:204
@@ -653,34 +571,25 @@ msgstr "Fajlëkalimet nuk përkojnë"
 msgid "Should not be empty"
 msgstr "Nuk duhet të jetë bosh"
 
-#: js/EnvCheckGridPanel.js:89
-msgid "Performing Environment Checks..."
-msgstr "Duke kryer kontrollet e ambientit..."
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Unë e kam lexuar marrveshjen e licensave dhe e kam pranuar atë"
 
-#: js/EnvCheckGridPanel.js:130
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Nuk u gjet ndonje {0}. Ju lutem provoni të ndryshoni kërkesat e fitrave tuaj, mundësite e shfaqesose {1} ku kërkoni"
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Marveshje Licensash"
 
-#: js/EnvCheckGridPanel.js:160
-msgid "Check"
-msgstr "Kontrollo"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "Unë e kam lexuar marrveshjen e fshehtësive dhe e kam pranuar atë"
 
-#: js/EnvCheckGridPanel.js:161
-msgid "Result"
-msgstr "Rezultati"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Marrveshje e Fshehtësive"
 
-#: js/EnvCheckGridPanel.js:162
-msgid "Error"
-msgstr "Gabim"
-
-#: js/EnvCheckGridPanel.js:180
-msgid "Run setup tests"
-msgstr "Kryej teste konfigurimi"
-
-#: js/EnvCheckGridPanel.js:189
-msgid "Ignore setup tests"
-msgstr "Injoro testet e konfigurimit"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Prano Kushtet dhe Konditat"
 
 #: js/Model.js:33
 msgid "Application"
@@ -782,5 +691,102 @@ msgstr "Shkarko skedarin e konfigurimit"
 
 #: js/ConfigManagerPanel.js:564
 #, python-brace-format
-msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgid ""
+"This prefix is too long. Please choose a prefix no longer than {0} chars."
 msgstr ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Emër"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Aktivizuar"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Porosi"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Versioni i Instaluar"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Version i disponueshëm"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Status"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Varet nga"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Instalo aplikacionin"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Ç'instalo aplikacionin"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Përditëso aplikacionin"
+
+#: js/ApplicationGridPanel.js:105
+#, python-brace-format
+msgid "Go to {0} login"
+msgstr "Shko tek hyrja {0}"
+
+#: js/ApplicationGridPanel.js:184
+msgid "uninstall"
+msgstr "Ç'instalo"
+
+#: js/ApplicationGridPanel.js:184
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Doni vërtet të ç'instaloni aplikacionin(et)?"
+
+#: js/ApplicationGridPanel.js:244
+msgid "This may take a while"
+msgstr "Kjo mund të dojë pak kohë"
+
+#: js/ApplicationGridPanel.js:278
+msgid "Dependency Violation"
+msgstr "Shkelje të Varësive"
+
+#: js/ApplicationGridPanel.js:287
+msgid "CLI Required"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr "Duke kryer kontrollet e ambientit..."
+
+#: js/EnvCheckGridPanel.js:130
+#, python-brace-format
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr "Nuk u gjet ndonje {0}. Ju lutem provoni të ndryshoni kërkesat e fitrave tuaj, mundësite e shfaqesose {1} ku kërkoni"
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "Kontrollo"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr "Rezultati"
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Message"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr "Kryej teste konfigurimi"
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
+msgstr "Injoro testet e konfigurimit"

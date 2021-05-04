@@ -1,40 +1,20 @@
-#
+# 
 # Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"PO-Revision-Date: 2020-05-11 11:59+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Catalan (http://www.transifex.com/tine20/tine20/language/ca/)\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "He llegit i acceptat l'acord de llicència"
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Acord de llicència"
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "He llegit i acceptat l'acord de privadesa"
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Acord de privadesa"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Accepta els termes i condicions"
 
 #: js/EmailPanel.js:146 js/EmailPanel.js:486 js/AuthenticationPanel.js:203
 #: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
@@ -267,6 +247,10 @@ msgstr ""
 msgid "PLAIN"
 msgstr ""
 
+#: js/init.js:75
+msgid "Setup"
+msgstr ""
+
 #: js/TreePanel.js:52
 msgid "Terms and Conditions"
 msgstr "Termes i condicions"
@@ -291,81 +275,15 @@ msgstr "Correu electrònic"
 msgid "Application Manager"
 msgstr "Gestor d'aplicacions"
 
-#: js/init.js:75
-msgid "Setup"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Nom"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Habilitat"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Ordre"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Versió instal·lada"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Versió disponible"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Estat"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Depèn de"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Instal·la aplicació"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Desinstal·la aplicació"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Actualitza aplicació"
-
-#: js/ApplicationGridPanel.js:105
-#, python-brace-format
-msgid "Go to {0} login"
-msgstr "Vés a l'inici de sessió de {0}"
-
-#: js/ApplicationGridPanel.js:184
-msgid "uninstall"
-msgstr "desinstal·la"
-
-#: js/ApplicationGridPanel.js:184
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Esteu segur que voleu deinstal·lar l'aplicació o aplicacions?"
-
-#: js/ApplicationGridPanel.js:244
-msgid "This may take a while"
-msgstr "Això pot tardar una estona"
-
-#: js/ApplicationGridPanel.js:278
-msgid "Dependency Violation"
-msgstr "S'ha produït una violació de dependències"
-
-#: js/ApplicationGridPanel.js:287
-msgid "CLI Required"
-msgstr ""
-
 #: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "Elimina tots els usuaris i grups existents"
 
 #: js/AuthenticationPanel.js:126
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
 msgstr "El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els rols existents. Esteu segur que voleu canviar l'administració d'emmagatzematge de comptes a LDAP?"
 
 #: js/AuthenticationPanel.js:204
@@ -651,34 +569,25 @@ msgstr "Les contrasenyes no coincideixen"
 msgid "Should not be empty"
 msgstr "No pot ser buit"
 
-#: js/EnvCheckGridPanel.js:89
-msgid "Performing Environment Checks..."
-msgstr "Es realitzen comprovacions d'entorn..."
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "He llegit i acceptat l'acord de llicència"
 
-#: js/EnvCheckGridPanel.js:130
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr ""
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Acord de llicència"
 
-#: js/EnvCheckGridPanel.js:160
-msgid "Check"
-msgstr "Comprova"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "He llegit i acceptat l'acord de privadesa"
 
-#: js/EnvCheckGridPanel.js:161
-msgid "Result"
-msgstr "Resultat"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Acord de privadesa"
 
-#: js/EnvCheckGridPanel.js:162
-msgid "Error"
-msgstr "Error"
-
-#: js/EnvCheckGridPanel.js:180
-msgid "Run setup tests"
-msgstr "Executa proves de configuració"
-
-#: js/EnvCheckGridPanel.js:189
-msgid "Ignore setup tests"
-msgstr "Ignora les proves de configuració"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Accepta els termes i condicions"
 
 #: js/Model.js:33
 msgid "Application"
@@ -780,5 +689,102 @@ msgstr "Descarrega el fitxer de configuració"
 
 #: js/ConfigManagerPanel.js:564
 #, python-brace-format
-msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgid ""
+"This prefix is too long. Please choose a prefix no longer than {0} chars."
 msgstr ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Nom"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Habilitat"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Ordre"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Versió instal·lada"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Versió disponible"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Estat"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Depèn de"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Instal·la aplicació"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Desinstal·la aplicació"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Actualitza aplicació"
+
+#: js/ApplicationGridPanel.js:105
+#, python-brace-format
+msgid "Go to {0} login"
+msgstr "Vés a l'inici de sessió de {0}"
+
+#: js/ApplicationGridPanel.js:184
+msgid "uninstall"
+msgstr "desinstal·la"
+
+#: js/ApplicationGridPanel.js:184
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Esteu segur que voleu deinstal·lar l'aplicació o aplicacions?"
+
+#: js/ApplicationGridPanel.js:244
+msgid "This may take a while"
+msgstr "Això pot tardar una estona"
+
+#: js/ApplicationGridPanel.js:278
+msgid "Dependency Violation"
+msgstr "S'ha produït una violació de dependències"
+
+#: js/ApplicationGridPanel.js:287
+msgid "CLI Required"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr "Es realitzen comprovacions d'entorn..."
+
+#: js/EnvCheckGridPanel.js:130
+#, python-brace-format
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "Comprova"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr "Resultat"
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Message"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr "Executa proves de configuració"
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
+msgstr "Ignora les proves de configuració"

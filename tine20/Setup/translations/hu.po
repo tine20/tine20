@@ -1,41 +1,21 @@
-#
+# 
 # Translators:
 # Tamás Faragó <>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-11-28 11:10+0000\n"
+"PO-Revision-Date: 2020-05-11 11:59+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Hungarian (http://www.transifex.com/tine20/tine20/language/hu/)\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Elolvastam a licensz megállapodást és elfogadtam"
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Licensz megállapodás"
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Elolvastam a titoktartási megállapodást és elfogadtam"
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Titoktartási megállapodás"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Kikötések és feltételek elfogadása"
 
 #: js/EmailPanel.js:146 js/EmailPanel.js:486 js/AuthenticationPanel.js:203
 #: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
@@ -268,6 +248,10 @@ msgstr "SSHA512"
 msgid "PLAIN"
 msgstr "Egyszerű"
 
+#: js/init.js:75
+msgid "Setup"
+msgstr ""
+
 #: js/TreePanel.js:52
 msgid "Terms and Conditions"
 msgstr "Kikötések és feltételek"
@@ -292,81 +276,15 @@ msgstr "Email"
 msgid "Application Manager"
 msgstr "Programok kezelése"
 
-#: js/init.js:75
-msgid "Setup"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
-msgid "Name"
-msgstr "Név"
-
-#: js/ApplicationGridPanel.js:64
-msgid "Enabled"
-msgstr "Engedélyezett"
-
-#: js/ApplicationGridPanel.js:65
-msgid "Order"
-msgstr "Sorrend"
-
-#: js/ApplicationGridPanel.js:66
-msgid "Installed Version"
-msgstr "Telepített verzió"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Available Version"
-msgstr "Elérhető verzió"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Status"
-msgstr "Állapot"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Depends on"
-msgstr "Függőségek"
-
-#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
-msgid "Install application"
-msgstr "Program telepítése"
-
-#: js/ApplicationGridPanel.js:87
-msgid "Uninstall application"
-msgstr "Program eltávolítása"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Program frissítése"
-
-#: js/ApplicationGridPanel.js:105
-#, python-brace-format
-msgid "Go to {0} login"
-msgstr "{0} bejelentkezéshez ugrás"
-
-#: js/ApplicationGridPanel.js:184
-msgid "uninstall"
-msgstr "eltávolítás"
-
-#: js/ApplicationGridPanel.js:184
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Biztosan el szeretnéd távolítani a programo(ka)t?"
-
-#: js/ApplicationGridPanel.js:244
-msgid "This may take a while"
-msgstr "Ez eltarthat egy ideig"
-
-#: js/ApplicationGridPanel.js:278
-msgid "Dependency Violation"
-msgstr "Függőségek megszegése"
-
-#: js/ApplicationGridPanel.js:287
-msgid "CLI Required"
-msgstr ""
-
 #: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "Minden meglévő csoport és felhasználó törlése"
 
 #: js/AuthenticationPanel.js:126
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgid ""
+"Switching from SQL to LDAP will delete all existing User Accounts, Groups "
+"and Roles. Do you really want to switch the accounts storage backend to LDAP"
+" ?"
 msgstr "SQL-ről LDAP-ra váltás törölni fogja az összes meglévő Felhasználói fiókokat, Csoportokat és Szabályokat. Biztosan szeretnéd váltani az azonsítók tárolási hátterét LDAP-ra?"
 
 #: js/AuthenticationPanel.js:204
@@ -652,34 +570,25 @@ msgstr "Jelszó nem egyezik"
 msgid "Should not be empty"
 msgstr "Nem lehet üres"
 
-#: js/EnvCheckGridPanel.js:89
-msgid "Performing Environment Checks..."
-msgstr "Környezeti ellenörzés végrehajtása..."
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Elolvastam a licensz megállapodást és elfogadtam"
 
-#: js/EnvCheckGridPanel.js:130
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Nem található semmi {0}. Kérlek próbáld megváltoztatni a szűrő feltételeket, a nézet opciókat vagy a {1} amiben keresel."
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Licensz megállapodás"
 
-#: js/EnvCheckGridPanel.js:160
-msgid "Check"
-msgstr "Ellenörzés"
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "Elolvastam a titoktartási megállapodást és elfogadtam"
 
-#: js/EnvCheckGridPanel.js:161
-msgid "Result"
-msgstr "Eredmény"
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Titoktartási megállapodás"
 
-#: js/EnvCheckGridPanel.js:162
-msgid "Error"
-msgstr "Hiba"
-
-#: js/EnvCheckGridPanel.js:180
-msgid "Run setup tests"
-msgstr "Telepítési tesztek futtatása"
-
-#: js/EnvCheckGridPanel.js:189
-msgid "Ignore setup tests"
-msgstr "Telepítési tesztek figyelmen kívül hagyása"
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Kikötések és feltételek elfogadása"
 
 #: js/Model.js:33
 msgid "Application"
@@ -781,5 +690,102 @@ msgstr "Beállítási file letöltése"
 
 #: js/ConfigManagerPanel.js:564
 #, python-brace-format
-msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgid ""
+"This prefix is too long. Please choose a prefix no longer than {0} chars."
 msgstr ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Név"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Engedélyezett"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Sorrend"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Telepített verzió"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Elérhető verzió"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Állapot"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Függőségek"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Program telepítése"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Program eltávolítása"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Program frissítése"
+
+#: js/ApplicationGridPanel.js:105
+#, python-brace-format
+msgid "Go to {0} login"
+msgstr "{0} bejelentkezéshez ugrás"
+
+#: js/ApplicationGridPanel.js:184
+msgid "uninstall"
+msgstr "eltávolítás"
+
+#: js/ApplicationGridPanel.js:184
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Biztosan el szeretnéd távolítani a programo(ka)t?"
+
+#: js/ApplicationGridPanel.js:244
+msgid "This may take a while"
+msgstr "Ez eltarthat egy ideig"
+
+#: js/ApplicationGridPanel.js:278
+msgid "Dependency Violation"
+msgstr "Függőségek megszegése"
+
+#: js/ApplicationGridPanel.js:287
+msgid "CLI Required"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr "Környezeti ellenörzés végrehajtása..."
+
+#: js/EnvCheckGridPanel.js:130
+#, python-brace-format
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria,"
+" view-options or the {1} you search in."
+msgstr "Nem található semmi {0}. Kérlek próbáld megváltoztatni a szűrő feltételeket, a nézet opciókat vagy a {1} amiben keresel."
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "Ellenörzés"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr "Eredmény"
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Message"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr "Telepítési tesztek futtatása"
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
+msgstr "Telepítési tesztek figyelmen kívül hagyása"

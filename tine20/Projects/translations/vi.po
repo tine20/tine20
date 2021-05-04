@@ -1,4 +1,4 @@
-#
+# 
 # Translators:
 # sao sang <saosangmo@yahoo.com>, 2013
 msgid ""
@@ -8,19 +8,38 @@ msgstr ""
 "PO-Revision-Date: 2017-09-23 18:43+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
-"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "Dự án cá nhân của %s"
+#: Setup/setup.xml:4 js/Projects.js:24
+msgid "Projects"
+msgstr "Dự án"
+
+#: Setup/Initialize.php:36
+msgid "All my open projects"
+msgstr "Mọi dự án đang mở của tôi"
+
+#: Setup/Initialize.php:56
+msgid "My projects that I'm responsible for"
+msgstr "Dự án tôi chịu trách nhiệm"
+
+#: Setup/Initialize.php:57
+msgid "All my open projects that I am responsible for"
+msgstr "Mọi dự án đang mở tôi chịu trách nhiệm"
+
+#: Setup/Initialize.php:77
+msgid "My waiting projects"
+msgstr "Dự án đang chờ tôi"
+
+#: Setup/Initialize.php:78
+msgid "My projects that are on hold"
+msgstr "Dự án tôi đang giữ"
 
 #: Preference.php:24
 msgid "All my projects"
@@ -34,6 +53,14 @@ msgstr "Lỗi tắt mặc định"
 msgid "The default favorite which is loaded on Projects startup"
 msgstr "Lối tắt mặc định sẽ được nạp khi dự án khởi động"
 
+#: Acl/Rights.php:90
+msgid "Manage shared project favorites"
+msgstr "Quản lý lối tắt dự án dùng chung"
+
+#: Acl/Rights.php:91
+msgid "Create new shared project favorites"
+msgstr "Tạo lối tắt dự án dùng chung"
+
 #: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Người tham gia"
@@ -42,64 +69,35 @@ msgstr "Người tham gia"
 msgid "Role"
 msgstr "Vai trò"
 
-#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
+#: js/ProjectEditDialog.js:116 js/ProjectEditDialog.js:129 js/Model.js:35
 msgid "Project"
 msgid_plural "Projects"
-msgstr[0] ""
-"one: Dự án\n"
-"other: Dự án"
+msgstr[0] "one: Dự án\nother: Dự án"
 
-#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
+#: js/ProjectEditDialog.js:141 js/Model.js:74 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
+#: js/ProjectEditDialog.js:146 js/Model.js:75 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "Số"
 
-#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
+#: js/ProjectEditDialog.js:152 js/Model.js:78 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/ProjectEditDialog.js:188 js/Model.js:76
+#: js/ProjectEditDialog.js:187 js/Model.js:76
 msgid "Description"
 msgstr "Mô tả"
 
-#: js/ProjectEditDialog.js:202
+#: js/ProjectEditDialog.js:201
 msgid "Enter description"
 msgstr "Nhập mô tả"
-
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Dự án"
-
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Xin chọn dự án để thêm liên hệ vào"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Chọn vai trò người tham gia"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Chọn dự án"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Chọn vai trò"
-
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Thêm {0} người tham gia vào dự án"
 
 #: js/Model.js:39
 msgid "Project list"
 msgid_plural "Project lists"
-msgstr[0] ""
-"one: Danh sách dự án\n"
-"other: Danh sách dự án"
+msgstr[0] "one: Danh sách dự án\nother: Danh sách dự án"
 
 #: js/Model.js:42
 msgid "Project lists"
@@ -137,32 +135,40 @@ msgstr "Tìm FAQ"
 msgid "Tags"
 msgstr "Thẻ"
 
-#: Setup/Initialize.php:36
-msgid "All my open projects"
-msgstr "Mọi dự án đang mở của tôi"
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Xin chọn dự án để thêm liên hệ vào"
 
-#: Setup/Initialize.php:56
-msgid "My projects that I'm responsible for"
-msgstr "Dự án tôi chịu trách nhiệm"
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Chọn vai trò người tham gia"
 
-#: Setup/Initialize.php:57
-msgid "All my open projects that I am responsible for"
-msgstr "Mọi dự án đang mở tôi chịu trách nhiệm"
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Chọn dự án"
 
-#: Setup/Initialize.php:77
-msgid "My waiting projects"
-msgstr "Dự án đang chờ tôi"
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Chọn vai trò"
 
-#: Setup/Initialize.php:78
-msgid "My projects that are on hold"
-msgstr "Dự án tôi đang giữ"
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Thêm {0} người tham gia vào dự án"
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "Dự án cá nhân của %s"
 
 #: Config.php:38
-msgid "Available Project Status"
-msgstr ""
+msgid "Project Status Available"
+msgstr "Trạng thái dự án sẵn có"
 
 #: Config.php:40
-msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
+msgid ""
+"Possible Project status. Please note that additional project status might "
+"impact other Projects systems on export or syncronisation."
 msgstr "Trạng thái dự án có thể. Xin nhớ rằng trạng thái dự án thêm vào có thể liên quan tới dự án khác khi xuất hoặc đồng bộ dữ liệu"
 
 #: Config.php:47
@@ -182,11 +188,14 @@ msgid "In process"
 msgstr "Đang thực hiện"
 
 #: Config.php:56
-msgid "Available Project Attendee Role"
-msgstr ""
+msgid "Project Attendee Role Available"
+msgstr "Vai trò người tham gia dự án sẵn có"
 
 #: Config.php:58
-msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+msgid ""
+"Possible Project attendee roles. Please note that additional project "
+"attendee roles might impact other Projects systems on export or "
+"syncronisation."
 msgstr "Vai trò người tham gia có thể. Xin nhớ rằng vai trò người tham gia dự án thêm vào có thể liên quan tới hệ thống dự án khác khi xuất hoặc đồng bộ dữ liệu"
 
 #: Config.php:65
@@ -196,17 +205,3 @@ msgstr "Đồng nghiệp"
 #: Config.php:66
 msgid "Responsible"
 msgstr "Trách nhiệm"
-
-#: Acl/Rights.php:90
-msgid "Manage shared project favorites"
-msgstr "Quản lý lối tắt dự án dùng chung"
-
-#: Acl/Rights.php:91
-msgid "Create new shared project favorites"
-msgstr "Tạo lối tắt dự án dùng chung"
-
-#~ msgid "Project Status Available"
-#~ msgstr "Trạng thái dự án sẵn có"
-
-#~ msgid "Project Attendee Role Available"
-#~ msgstr "Vai trò người tham gia dự án sẵn có"
