@@ -422,4 +422,63 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         
         return $fmailIds;
     }
+
+    /**
+     * return encrypted password
+     *
+     * @throws Tinebase_Exception
+     * @return string
+     */
+    public function encryptSharedPassword($password)
+    {
+        if (empty($_key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
+            throw new Tinebase_Exception(Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY . ' is not set');
+        }
+
+        return static::encryptData($password, $_key);
+    }
+
+    /**
+     * return decrypted password
+     *
+     * @throws Tinebase_Exception
+     * @return string
+     */
+    public function decryptSharedPassword($password) 
+    {
+        if (empty($_key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
+            throw new Tinebase_Exception('config : ' . Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY . ' is not set');
+        }
+        
+        return static::decryptData($password, $_key);
+    }
+
+    /**
+     * generate random password
+     *
+     * @return string
+     */
+    public function generateRandomPassword($length = 10, $useSpecialChar = true)
+    {
+        $symbolsGeneral = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $symbolsSpecialChars = '!?~@#-_+<>[]{}';
+        
+        $used_symbols = $symbolsGeneral;
+        $symbols_length = strlen($used_symbols) - 1; //strlen starts from 0 so to get number of characters deduct 1
+    
+        $pass = '';
+        
+        for ($i = 0; $i < $length; $i++) {
+            $pass .= $used_symbols[rand(0, $symbols_length)];
+        }
+        
+        if ($useSpecialChar) {
+            $pass = substr($pass, 1) ;
+            $pass .= $symbolsSpecialChars[rand(0, strlen($symbolsSpecialChars) - 1)];
+
+        }
+        
+        return str_shuffle($pass); // return the generated password
+    }
+
 }
