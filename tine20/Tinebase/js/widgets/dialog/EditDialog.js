@@ -244,6 +244,22 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     useMultiple: false,
 
+    inheritableStatics: {
+        /**
+         * register checkState provider
+         * @param {String} field
+         * @param {Funciton} fn check state function
+         */
+        registerCheckStateProvider: function(field, fn) {
+            arguments.callee.__providers = arguments.callee.__providers || {};
+            arguments.callee.__providers[field] = arguments.callee.__providers[field] || [];
+            arguments.callee.__providers[field].push(fn);
+        },
+        getCheckStateProviders(field) {
+            return _.get(this, `registerCheckStateProvider.__providers.${field}`, []);
+        }
+    },
+    
     //private
     initComponent: function() {
         this.relationPanelRegistry = this.relationPanelRegistry ? this.relationPanelRegistry : [];
@@ -596,6 +612,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.getForm().items.each(function (item) {
             if (Ext.isFunction(item.checkState)) {
                 item.checkState(this, this.record);
+            }
+            if (item.name) {
+                _.each(this.constructor.getCheckStateProviders(item.name), (fn) => {
+                    fn.call(item, this, this.record);
+                });
             }
         }, this)
     },
