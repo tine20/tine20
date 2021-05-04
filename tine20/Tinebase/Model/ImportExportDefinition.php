@@ -243,4 +243,20 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
         $filter = json_decode($this->{self::FLDS_FILTER}, true);
         return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->model, is_array($filter) ? $filter : []);
     }
+
+    public function runConvertToRecord()
+    {
+        if (isset($this->_data['deleted_time']) && $this->_data['deleted_time'] == '1970-01-01 00:00:00') {
+            unset($this->_data['deleted_time']);
+        }
+        parent::runConvertToRecord();
+    }
+
+    public function runConvertToData()
+    {
+        if (array_key_exists('deleted_time', $this->_data) && null === $this->_data['deleted_time']) {
+            unset($this->_data['deleted_time']);
+        }
+        parent::runConvertToData();
+    }
 }

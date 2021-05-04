@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>13.5</version>
+    <version>13.7</version>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
@@ -2480,7 +2480,7 @@
         </table>
         <table>
             <name>importexport_definition</name>
-            <version>11</version>
+            <version>12</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2594,6 +2594,8 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                    <notnull>true</notnull>
+                    <default>1970-01-01 00:00:00</default>
                 </field>
                 <field>
                     <name>seq</name>
@@ -2619,6 +2621,9 @@
                     </field>
                     <field>
                         <name>type</name>
+                    </field>
+                    <field>
+                        <name>deleted_time</name>
                     </field>
                 </index>
                 <index>
