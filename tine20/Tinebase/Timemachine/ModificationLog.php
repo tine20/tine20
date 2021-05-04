@@ -350,7 +350,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             array('field' => 'application_id', 'operator' => 'equals',  'value' => $applicationId),
         ));
         $paging = new Tinebase_Model_Pagination(array(
-            'sort' => 'seq'
+            'sort' => 'instance_seq'
         ));
         
         return $this->_backend->search($filter, $paging);
@@ -1204,9 +1204,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      */
     public static function increaseRecordSequence(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $curRecord = NULL)
     {
-        if (is_object($curRecord) && $curRecord->has('seq')) {
-            $newRecord->seq = (int) $curRecord->seq +1;
-            
+        if ($newRecord->has('seq')) {
+            if (is_object($curRecord)) {
+                $newRecord->seq = (int) $curRecord->seq + 1;
+            } else {
+                $newRecord->seq = (int) $newRecord->seq + 1;
+            }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' Increasing seq of ' . get_class($newRecord) . ' with id ' . $newRecord->getId() .
                 ' from ' . ($newRecord->seq - 1) . ' to ' . $newRecord->seq);
