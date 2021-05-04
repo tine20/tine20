@@ -17,14 +17,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Bộ chưa kho hàng mặc định"
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Bộ chứa mặc định cho mục mới"
-
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
 msgstr "Số luân chuyển phải nhỏ hơn hoặc bằng tổng số"
@@ -53,7 +45,7 @@ msgstr "Nhập mô tả"
 msgid "Location"
 msgstr "Địa điểm"
 
-#: js/InventoryItemEditDialog.js:162
+#: js/InventoryItemEditDialog.js:162 Model/InventoryItem.php:176
 msgid "Added"
 msgstr "Đã thêm"
 
@@ -61,7 +53,7 @@ msgstr "Đã thêm"
 msgid "Warranty"
 msgstr "Bảo hành"
 
-#: js/InventoryItemEditDialog.js:174
+#: js/InventoryItemEditDialog.js:174 Model/InventoryItem.php:186
 msgid "Removed"
 msgstr "Đã xóa"
 
@@ -97,21 +89,17 @@ msgstr "Hóa đơn"
 msgid "Invoice date"
 msgstr "Ngày hóa đơn"
 
-#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:195
 msgid "Depreciate"
 msgstr "Giảm giá"
 
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
-msgid "All Inventory Items"
-msgstr "Tất cả hàng trong kho"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Bộ chưa kho hàng mặc định"
 
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
-msgid "All existing Inventory Items"
-msgstr "Tất cả hàng còn lại trong kho"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Kho"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Bộ chứa mặc định cho mục mới"
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -145,6 +133,18 @@ msgstr "đã xóa"
 msgid "unknown"
 msgstr "không rõ"
 
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Nhập dữ liệu kiểm kê CSV"
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Nhập danh sách (###CURRENTDATE###)"
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Mục được nhập trong ###CURRENTDATE### tại ###CURRENTTIME### bởi ###USERFULLNAME###"
+
 #: Model/InventoryItem.php:38
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -163,22 +163,20 @@ msgstr "Mã kho"
 msgid "Cost Center"
 msgstr ""
 
-#: Model/InventoryItem.php:176
-msgid "Item added"
-msgstr "Hàng đã thêm"
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Kho"
 
-#: Model/InventoryItem.php:184
-msgid "Item removed"
-msgstr "Hàng đã xóa"
+#: Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Tất cả hàng trong kho"
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Nhập dữ liệu kiểm kê CSV"
+#: Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Tất cả hàng còn lại trong kho"
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Nhập danh sách (###CURRENTDATE###)"
+#~ msgid "Item added"
+#~ msgstr "Hàng đã thêm"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Mục được nhập trong ###CURRENTDATE### tại ###CURRENTTIME### bởi ###USERFULLNAME###"
+#~ msgid "Item removed"
+#~ msgstr "Hàng đã xóa"

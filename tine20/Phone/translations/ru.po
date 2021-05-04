@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Aleksey <aleksdem@aleksdem.com>, 2014
 # Aleksey Kovalev <alexey.kovaliov@gmail.com>, 2017
@@ -12,46 +12,14 @@ msgstr ""
 "PO-Revision-Date: 2020-05-11 11:55+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "Звонки на этой неделе"
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Входящие и исходящие звонки на этой неделе"
-
-#: Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "Звонки на прошлой неделе"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Входящие и исходящие звонки на прошлой неделе"
-
-#: Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "Звонки в этом месяце"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Входящие и исходящие звонки в этом месяце"
-
-#: Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "Звонки в прошлом месяце"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Входящие и исходящие звонки в прошлом месяце"
 
 #: js/Phone.js:102
 msgid "Incoming call"
@@ -137,6 +105,42 @@ msgstr "Ошибка"
 msgid "Not possible to dial."
 msgstr "Не возможно набрать."
 
+#: Config.php:44 Config.php:46
+msgid "Local prefix for outgoing calls"
+msgstr ""
+
+#: Config.php:53 Config.php:55
+msgid "telephone area code"
+msgstr ""
+
+#: Config.php:61
+msgid "regex for local calls"
+msgstr ""
+
+#: Config.php:63
+msgid "Identifies if a calling number is a local call without leading area code."
+msgstr ""
+
+#: Config.php:70
+msgid "own telephone number"
+msgstr "Свой телефонный номер"
+
+#: Config.php:72
+msgid "Own telephone number to prefix to internal calls."
+msgstr ""
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "Настройки"
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Линии"
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Описание"
+
 #: Model/Call.php:43
 msgid "Call"
 msgstr "Звонок"
@@ -185,39 +189,37 @@ msgstr "Назначение"
 msgid "resolved destination"
 msgstr ""
 
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "Настройки"
+#: Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr "Звонки на этой неделе"
 
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Линии"
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Входящие и исходящие звонки на этой неделе"
 
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Описание"
+#: Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Звонки на прошлой неделе"
 
-#: Config.php:44 Config.php:46
-msgid "local prefix for outgoing calls"
-msgstr "Локальный префикс для исходящих вызовов"
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Входящие и исходящие звонки на прошлой неделе"
 
-#: Config.php:53 Config.php:55
-msgid "telephone area code"
-msgstr ""
+#: Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Звонки в этом месяце"
 
-#: Config.php:61
-msgid "regex for local calls"
-msgstr ""
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Входящие и исходящие звонки в этом месяце"
 
-#: Config.php:63
-msgid ""
-"identifies if a calling number is a local call without leading area code"
-msgstr ""
+#: Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Звонки в прошлом месяце"
 
-#: Config.php:70
-msgid "own telephone number"
-msgstr "Свой телефонный номер"
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Входящие и исходящие звонки в прошлом месяце"
 
-#: Config.php:72
-msgid "own telephone number to prefix to internal calls"
-msgstr ""
+#~ msgid "local prefix for outgoing calls"
+#~ msgstr "Локальный префикс для исходящих вызовов"
