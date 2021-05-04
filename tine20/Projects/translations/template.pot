@@ -13,81 +13,35 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr ""
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr ""
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr ""
-
-#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
-msgid "Attendee"
-msgstr ""
-
-#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr ""
-
-#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr ""
-
-#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr ""
-
-#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr ""
-
-#: js/ProjectEditDialog.js:188 js/Model.js:76
-msgid "Description"
-msgstr ""
-
-#: js/ProjectEditDialog.js:202
-msgid "Enter description"
-msgstr ""
-
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr ""
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
 msgstr ""
 
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
 msgstr ""
 
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:146
+msgid "Number"
 msgstr ""
 
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:141
+msgid "Title"
 msgstr ""
 
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:152
+msgid "Status"
 msgstr ""
+
+#: js/Model.js:35 js/ProjectEditDialog.js:116 js/ProjectEditDialog.js:129
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/Model.js:39
 msgid "Project list"
@@ -101,6 +55,10 @@ msgstr ""
 
 #: js/Model.js:73
 msgid "Quick Search"
+msgstr ""
+
+#: js/Model.js:76 js/ProjectEditDialog.js:187
+msgid "Description"
 msgstr ""
 
 #: js/Model.js:87
@@ -119,36 +77,53 @@ msgstr ""
 msgid "Created By"
 msgstr ""
 
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:90
+msgid "Attendee"
+msgstr ""
+
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr ""
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
 msgstr ""
 
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
 msgstr ""
 
-#: Setup/Initialize.php:36
-msgid "All my open projects"
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
 msgstr ""
 
-#: Setup/Initialize.php:56
-msgid "My projects that I'm responsible for"
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:91
+msgid "Role"
 msgstr ""
 
-#: Setup/Initialize.php:57
-msgid "All my open projects that I am responsible for"
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
 msgstr ""
 
-#: Setup/Initialize.php:77
-msgid "My waiting projects"
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
 msgstr ""
 
-#: Setup/Initialize.php:78
-msgid "My projects that are on hold"
+#: js/ProjectEditDialog.js:201
+msgid "Enter description"
+msgstr ""
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
 msgstr ""
 
 #: Config.php:38
@@ -194,6 +169,31 @@ msgstr ""
 
 #: Config.php:66
 msgid "Responsible"
+msgstr ""
+
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr ""
+
+#: Setup/Initialize.php:36
+msgid "All my open projects"
+msgstr ""
+
+#: Setup/Initialize.php:56
+msgid "My projects that I'm responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:57
+msgid "All my open projects that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:77
+msgid "My waiting projects"
+msgstr ""
+
+#: Setup/Initialize.php:78
+msgid "My projects that are on hold"
 msgstr ""
 
 #: Acl/Rights.php:90
