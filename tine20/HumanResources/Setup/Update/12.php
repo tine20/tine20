@@ -257,6 +257,10 @@ class HumanResources_Setup_Update_12 extends Setup_Update_Abstract
         ]);
 
         // this "app version" is legacy anyway... whatever
-        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '13.0', self::RELEASE012_UPDATE007);
+        try {
+            $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '13.0', self::RELEASE012_UPDATE007);
+        } catch (Setup_Exception $se) {
+            // ... version might have already been increased to 13.0 in 13.php ... - this is borke ;)
+        }
     }
 }
