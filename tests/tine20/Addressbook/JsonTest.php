@@ -1950,7 +1950,9 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportDefinitionsInRegistry()
     {
-        self::markTestSkipped('FIXME: fails since the mfa changes');
+        if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+            Tinebase_AreaLock::getInstance()->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        }
 
         $tfj = new Tinebase_Frontend_Json();
         $allRegistryData = $tfj->getAllRegistryData();
