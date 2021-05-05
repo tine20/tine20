@@ -31,8 +31,22 @@ class Addressbook_Model_ListMemberRoleFilter extends Tinebase_Model_Filter_Filte
      */
     protected $_filterModel = array(
         'id'                => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'contact_id'        => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'list_id'           => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'list_role_id'      => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'contact_id'        => [
+            'filter'            => Tinebase_Model_Filter_ForeignId::class,
+            'options'           => [
+                'controller'        => Addressbook_Controller_Contact::class,
+                'filtergroup'       => Addressbook_Model_ContactFilter::class
+            ]
+        ],
+        'list_id'           => array('filter' => Tinebase_Model_Filter_ForeignId::class,
+            'options'           => [
+                'controller'        => Addressbook_Controller_List::class,
+                'filtergroup'       => Addressbook_Model_ListFilter::class
+            ]),
+        'list_role_id'      => array('filter' => Tinebase_Model_Filter_ForeignId::class,
+            'options'           => [
+                'controller'        => Addressbook_Controller_ListRole::class,
+                'filtergroup'       => Addressbook_Model_ListRoleFilter::class
+            ]),
     );
 }
