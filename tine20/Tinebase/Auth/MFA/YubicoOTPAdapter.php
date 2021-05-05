@@ -80,7 +80,7 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
                 $counter;
             $cfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_SESSIONC} =
                 $session;
-            Tinebase_User::getInstance()->updateUser($user);
+            Tinebase_User::getInstance()->updateUserInSqlBackend($user);
             return true;
         }
 
