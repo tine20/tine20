@@ -388,12 +388,14 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testMonitoringMailServers()
     {
-        self::markTestSkipped('FIXME not working in jenkins ci yet');
-
         ob_start();
         $result = $this->_cli->monitoringMailServers();
         $out = ob_get_clean();
 
+        if ($result === 99) {
+            self::markTestSkipped('netcat is not installed');
+        }
+        
         self::assertStringContainsString('CONNECTION ', $out);
         self::assertLessThanOrEqual(1, $result);
     }
