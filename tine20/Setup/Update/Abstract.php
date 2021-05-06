@@ -96,9 +96,13 @@ class Setup_Update_Abstract
      * @param string $_applicationName
      * @param string $_version new version number
      * @return Tinebase_Model_Application
+     * @deprecated should no longer be used - use addApplicationUpdate instead
      */    
     public function setApplicationVersion($_applicationName, $_version)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+            ' @deprecated! should no longer be used - use addApplicationUpdate instead');
+
         $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
         if (version_compare($application->version, $_version) < 0) {
             $application->version = $_version;
@@ -114,7 +118,6 @@ class Setup_Update_Abstract
      * @param string $_version new version number
      * @param string $_updateKey update key to add to application state
      * @return Tinebase_Model_Application
-     * @throws Setup_Exception
      */
     public function addApplicationUpdate($_applicationName, $_version, $_updateKey)
     {
@@ -131,7 +134,8 @@ class Setup_Update_Abstract
             $application->version = $_version;
             return Tinebase_Application::getInstance()->updateApplication($application);
         } else if (version_compare($application->version, $_version) === 0) {
-            throw new Setup_Exception('Cannot update to equal version: '
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . 'Cannot update to equal version: '
                 . $_version . ' Version update missing in update script?');
         }
         return $application;
