@@ -708,20 +708,25 @@ abstract class Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedContainer($containerName, $data = array(), $setAsThisSharedContainer = true)
     {
-        // create shared calendar
-        $container = Tinebase_Container::getInstance()->addContainer(
-            new Tinebase_Model_Container(array_merge(
-                array(
-                    'name'           => $containerName,
-                    'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                    'backend'        => 'SQL',
-                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
-                    'model'          => $this->_appName . '_Model_' . $this->_modelName,
-                    'color'          => '#00FF00'
-                ),
-                $data
-            ), true)
-        );
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerByName($this->_appName . '_Model_' . $this->_modelName, $containerName,Tinebase_Model_Container::TYPE_SHARED);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // create shared container
+            $container = Tinebase_Container::getInstance()->addContainer(
+                new Tinebase_Model_Container(array_merge(
+                    array(
+                        'name'           => $containerName,
+                        'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                        'backend'        => 'SQL',
+                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId(),
+                        'model'          => $this->_appName . '_Model_' . $this->_modelName,
+                        'color'          => '#00FF00'
+                    ),
+                    $data
+                ), true)
+            );
+        }
+        
         $group = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Container::getInstance()->addGrants($container->getId(), 'group', $group->getId(), $this->_userGrants, true);
         if (isset($this->_personas['sclever'])) {
