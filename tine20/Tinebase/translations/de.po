@@ -4790,6 +4790,12 @@ msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}] o
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
 
+msgid "Private"
+msgstr "Privat"
+
+msgid "The grant to access contacts private information"
+msgstr "Das Recht für den Zugriff auf private Kontaktinformationen"
+
 #~ msgid "Only numbers are allowed for PINs"
 #~ msgstr "Für die PIN sind nur zahlen zulässig"
 

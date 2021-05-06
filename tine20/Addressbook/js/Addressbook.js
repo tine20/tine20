@@ -254,7 +254,7 @@ Tine.widgets.container.GrantsManager.register('Addressbook_Model_List', function
 
 
 Ext.override(Tine.widgets.container.GrantsGrid, {
-    privateDataGrantTitle: 'Private', // i18n._('Private')
-    privateDataGrantDescription: 'The grant to access contacts private information', // i18n._('The grant to access contacts private information')
+    privateDataGrantTitle: i18n._('Private'), // i18n._('Private')
+    privateDataGrantDescription: i18n._('The grant to access contacts private information'), // i18n._('The grant to access contacts private information')
 
 });
