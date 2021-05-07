@@ -520,7 +520,8 @@ class Tinebase_Helper
      */
     public static function convertDomainToPunycode($domain)
     {
-        return self::convertDomain($domain, 'idn_to_ascii');
+        $domain = self::convertDomain($domain, 'idn_to_ascii');
+        return $domain ? $domain : "";
     }
 
     public static function convertDomain($domain, $converterFunction)
