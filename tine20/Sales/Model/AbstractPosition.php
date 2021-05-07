@@ -24,10 +24,11 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     const FLD_SORT = 'sort'; // automatisch in 10000er schritten, shy
     const FLD_GROUP = 'group'; // gruppierte darstellung, automatische laufende nummern pro gruppe(nicht persistiert)
     
-    const FLD_REFERENCE_POSITION = 'reference_position'; // z.B. angebotsposition bei auftragsposition
+    const FLD_SUBPRODUCT_MAPPING = 'subproduct_mapping'; // "kreuztabelle" Sales_Model_SubproductMapping (nur für bundles nicht für set's?)
+    
+    const FLD_REFERENCE_POSITION = 'reference_position'; // z.B. angebotsposition bei auftragsposition (virtual, link?)
     
     const FLD_PRODUCT_ID = 'product_id';  // optional, es gibt auch textonlypositionen
-    const FLD_SUBPRODUCT_MAPPING = 'subproduct_mapping'; // "kreuztabelle" Sales_Model_SubproductMapping (nur für bundles nicht für set's?)
     
     const FLD_TITLE = 'title'; // einzeiler/überschrift(fett) aus product ubernommen sind änderbar
     const FLD_DESCRIPTION = 'description'; // aus product ubernommen sind idr. änderbar
@@ -38,7 +39,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     const FLD_NET_PRICE = 'net_price'; // Nettopreis - anzahl * einzelpreis
 
     const FLD_POSITION_DISCOUNT_TYPE = 'position_discount_type'; // PERCENTAGE|SUM
-    const FLD_POSITION_DISCOUNT_PERCENTAGE = 'position_discount_percentage'; // automatische Berechnung je nach type
+    const FLD_POSITION_DISCOUNT_PERCENTAGE = 'position_discount_percentage'; // automatische Berechnung je nach tupe
     const FLD_POSITION_DISCOUNT_SUM = 'position_discount_sum'; // automatische Berechnung je nach type
     
     const FLD_TAX_RATE = 'tax_rate'; // Mehrwertssteuersatz - berechnen
@@ -57,6 +58,8 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     // - title - varchar
     // - description - text
     // - gruppe (Gruppierung von Positionen z.B. A implementierung, B regelm., C zusatz) - varchar - autocomplete
+    // - anzahl
+    // - anzahl aus accounting (ja/nein)
     // - einheit - varchar
     // - preis (pro einheit) 
     // - steuersatz - percentage
@@ -86,7 +89,6 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     // {{ <shortcut>.<field> }} {{ <shortcut>.record.<productfield> }}
     // BSP: VM mit {{ cpu.inclusive }} vcpus und {{ram.inclusive}} vram
     
-    // @TODO: schon im produkt pfelgen? 
     // Autrags belegposition die use_actual_quantity haben müssen verknüpfung zum konkreten leistungsnachweis (accountable)
     // im rahmen der leistungserfassung werden die tatsächlichen "Anzahl-Werte" ermittelt
 
