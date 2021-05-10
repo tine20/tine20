@@ -331,7 +331,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected function _updateCurrentUser($updatedUser)
     {
         $currentUser = Tinebase_Core::getUser();
-        if ($currentUser->getId() === $updatedUser->getId()) {
+        if ($currentUser->getId() === $updatedUser->getId() && Tinebase_Session::isStarted()) {
             // update current user in session!
             Tinebase_Core::set(Tinebase_Core::USER, $updatedUser);
             Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
