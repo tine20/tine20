@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -307,5 +307,82 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "--DRY RUN--\n";
         }
         echo "Repaired " . $groupUpdateCount . " groups and or lists\n";
+    }
+
+    /**
+     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password]
+     *
+     * @param Zend_Console_Getopt $opts
+     *
+     * @todo allow to define separator / mapping
+     */
+    public function setPasswords(Zend_Console_Getopt $opts)
+    {
+        $args = $this->_parseArgs($opts, array(), 'userlist_csv');
+
+        // input csv/user list
+        if (! isset($args['userlist_csv'])) {
+            echo "userlist file param required or file not found. usage: method=Admin.setRandomPasswords [-d] userlist.csv\n";
+            return 2;
+        }
+
+        foreach ($args['userlist_csv'] as $csv) {
+            if (!$csv) {
+                $csv = getcwd() . DIRECTORY_SEPARATOR . $csv;
+                if (!file_exists($csv)) {
+                    echo "file not found: " . $csv . "\n";
+                    break;
+                }
+            }
+
+            $stream = fopen($csv, 'r');
+            if (!$stream) {
+                echo "file could not be opened: " . $csv . "\n";
+                return 2;
+            }
+            $users = [];
+            while ($line = fgetcsv($stream, 0, ';')) {
+                $users[] = $line;
+            }
+            fclose($stream);
+
+            if ($opts->v) {
+                // print_r($users);
+            }
+
+            $pw = $args['pw'] ?? null;
+            $this->_setPasswordsForUsers($opts, $users, $pw);
+        }
+    }
+
+    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null)
+    {
+        // set random passwords
+        foreach ($users as $user) {
+            if (empty($user[0])) {
+                break;
+            }
+
+            // get user by email or @todo accountname
+            // @todo allow to define column with username/email
+            try {
+                $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $user[0]);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                echo $tenf->getMessage() . "\n";
+                break;
+            }
+
+            $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
+            if (! $opts->d) {
+                Tinebase_User::getInstance()->setPassword($user, $newPw);
+            }
+
+            // @todo create csv export for this
+            if ($opts->v) {
+                // echo $user->accountEmailAddress . ';' . $newPw . "\n";
+                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
+                echo $fullUser->accountLoginName . ';' . $newPw . "\n";
+            }
+        }
     }
 }
