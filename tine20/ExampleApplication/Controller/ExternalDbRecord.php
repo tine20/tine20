@@ -1,6 +1,6 @@
 <?php
 /**
- * ExampleRecord controller for ExampleApplication application
+ * ExternalDbRecord controller for ExampleApplication application
  * 
  * @package     ExampleApplication
  * @subpackage  Controller
@@ -11,51 +11,38 @@
  */
 
 /**
- * ExampleRecord controller class for ExampleApplication application
+ * ExternalDbRecord controller class for ExampleApplication application
  * 
  * @package     ExampleApplication
  * @subpackage  Controller
  */
-class ExampleApplication_Controller_ExampleRecord extends Tinebase_Controller_Record_Abstract
+class ExampleApplication_Controller_ExternalDbRecord extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
 
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton
+     * don't use the constructor. use the singleton 
      */
     protected function __construct()
     {
+        Tinebase_Config::getInstance()->{Tinebase_Config::EXTERNAL_DATABASE} = [
+            'exampleRecordsDb' => Tinebase_Config::getInstance()->database->toArray(),
+        ];
+        Tinebase_Config::getInstance()->{Tinebase_Config::EXTERNAL_DATABASE}->exampleRecordsDb->useUtf8mb4 = true;
+
         $this->_applicationName = ExampleApplication_Config::APP_NAME;
         $this->_modelName = ExampleApplication_Model_ExampleRecord::class;
         $this->_backend = new Tinebase_Backend_Sql([
             Tinebase_Backend_Sql::MODEL_NAME        => ExampleApplication_Model_ExampleRecord::class,
             Tinebase_Backend_Sql::TABLE_NAME        => ExampleApplication_Model_ExampleRecord::TABLE_NAME,
             Tinebase_Backend_Sql::MODLOG_ACTIVE     => true,
-        ]);
+        ], Tinebase_Core::getExternalDb('exampleRecordsDb'));
 
         $this->_purgeRecords = false;
         $this->_resolveCustomFields = true;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = false;
-    }
-
-    /****************************** overwritten functions ************************/
-
-    /**
-     * implement logic for each controller in this function
-     *
-     * @param Tinebase_Event_Abstract $_eventObject
-     */
-    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
-    {
-        switch(get_class($_eventObject))
-        {
-            case 'Tinebase_Event_Record_Update':
-                /** @var Tinebase_Event_Record_Update $_eventObject*/
-                echo 'catched record update for observing id: ' . $_eventObject->persistentObserver->observer_identifier;
-                break;
-        }
     }
 }

@@ -45,6 +45,25 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         $this->assertEquals('catched record update for observing id: exampleIdentifier', $result);
     }
 
+    public function testExternalDb()
+    {
+        $exampleRecord = $this->_getExampleRecord();
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($exampleRecord);
+        try {
+            ExampleApplication_Controller_ExternalDbRecord::getInstance()->get($exampleRecord->getId());
+            $this->fail('we should be on a different connection => not set uncommited insert');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $externalRecord = ExampleApplication_Controller_ExternalDbRecord::getInstance()->get($exampleRecord->getId());
+        } finally {
+            Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . ExampleApplication_Model_ExampleRecord::TABLE_NAME,
+                'id = "' . $exampleRecord->getId() . '"');
+        }
+
+        $this->assertSame($exampleRecord->getId(), $externalRecord->getId());
+    }
+
     public function testDateFilter()
     {
         $exampleRecord = $this->_getExampleRecord();
