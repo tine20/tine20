@@ -267,6 +267,74 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * usage: method=Admin.getSetEmailAliasesAndForwards [-d] [-v] [aliases_forwards.csv]
+     *
+     * @param Zend_Console_Getopt $opts
+     */
+    public function getSetEmailAliasesAndForwards(Zend_Console_Getopt $opts)
+    {
+        $args = $this->_parseArgs($opts, array(), 'aliases_forwards_csv');
+
+        $tinebaseUser = Tinebase_User::getInstance();
+
+        if (! isset($args['aliases_forwards_csv'])) {
+
+            foreach ($tinebaseUser->getUsers() as $user) {
+                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
+                $aliases = [];
+                foreach ($fullUser->emailUser->emailAliases as $alias) {
+                    $aliases[] = $alias['email'];
+                }
+                $aliases = implode($aliases, ',');
+                $forwards = implode($fullUser->emailUser->emailForwards, ',');
+                echo $fullUser->accountLoginName . ';' . $aliases . ';' . $forwards . "\n";
+            }
+        } else {
+            foreach ($args['aliases_forwards_csv'] as $csv) {
+                $users = $this->_readCsv($csv);
+                if (! $users) {
+                    echo "no users found in file";
+                    break;
+                }
+                foreach ($users as $userdata) {
+                    // 0=loginname, 1=aliases, 2=forwards
+                    if ($opts->v) {
+                        print_r($userdata);
+                    }
+                    try {
+                        $user = Tinebase_User::getInstance()->getFullUserByLoginName($userdata[0]);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        echo $tenf->getMessage() . "\n";
+                        break;
+                    }
+                    // @todo fix in 2020.11 - we now have aliases/forwards models
+                    $user->smtpUser = new Tinebase_Model_EmailUser(array(
+                        'emailAddress'     => $user->accountEmailAddress,
+                        'emailAliases'     => !empty($userdata[1]) ? explode(',', $userdata[1]) : [],
+                        'emailForwards'    => !empty($userdata[2]) ? explode(',', $userdata[2]) : [],
+                    ));
+                    if (! $opts->d) {
+                        Admin_Controller_User::getInstance()->update($user);
+                    }
+                }
+            }
+        }
+    }
+
+    protected function _checkSanitizeFilename($filename)
+    {
+        if (!file_exists($filename)) {
+            $filename = getcwd() . DIRECTORY_SEPARATOR . $csv;
+            if (!file_exists($filename)) {
+                echo "file not found: " . $filename . "\n";
+                return false;
+            }
+        }
+
+        return $filename;
+    }
+
+    /**
      * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password]
      *
      * @param Zend_Console_Getopt $opts
@@ -284,24 +352,11 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         foreach ($args['userlist_csv'] as $csv) {
-            if (!$csv) {
-                $csv = getcwd() . DIRECTORY_SEPARATOR . $csv;
-                if (!file_exists($csv)) {
-                    echo "file not found: " . $csv . "\n";
-                    break;
-                }
+            $users = $this->_readCsv($csv);
+            if (! $users) {
+                echo "no users found in file";
+                break;
             }
-
-            $stream = fopen($csv, 'r');
-            if (!$stream) {
-                echo "file could not be opened: " . $csv . "\n";
-                return 2;
-            }
-            $users = [];
-            while ($line = fgetcsv($stream, 0, ';')) {
-                $users[] = $line;
-            }
-            fclose($stream);
 
             if ($opts->v) {
                 // print_r($users);
@@ -310,6 +365,26 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $pw = $args['pw'] ?? null;
             $this->_setPasswordsForUsers($opts, $users, $pw);
         }
+    }
+
+    protected function _readCsv($csv)
+    {
+        $csv = $this->_checkSanitizeFilename($csv);
+        if (! $csv) {
+            return false;
+        }
+
+        $stream = fopen($csv, 'r');
+        if (!$stream) {
+            echo "file could not be opened: " . $csv . "\n";
+            return false;
+        }
+        $users = [];
+        while ($line = fgetcsv($stream, 0, ';')) {
+            $users[] = $line;
+        }
+        fclose($stream);
+        return $users;
     }
 
     protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null)
