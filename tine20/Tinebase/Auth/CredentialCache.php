@@ -452,33 +452,4 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         
         return static::decryptData($password, $_key);
     }
-
-    /**
-     * generate random password
-     *
-     * @return string
-     */
-    public function generateRandomPassword($length = 10, $useSpecialChar = true)
-    {
-        $symbolsGeneral = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-        $symbolsSpecialChars = '!?~@#-_+<>[]{}';
-        
-        $used_symbols = $symbolsGeneral;
-        $symbols_length = strlen($used_symbols) - 1; //strlen starts from 0 so to get number of characters deduct 1
-    
-        $pass = '';
-        
-        for ($i = 0; $i < $length; $i++) {
-            $pass .= $used_symbols[rand(0, $symbols_length)];
-        }
-        
-        if ($useSpecialChar) {
-            $pass = substr($pass, 1) ;
-            $pass .= $symbolsSpecialChars[rand(0, strlen($symbolsSpecialChars) - 1)];
-
-        }
-        
-        return str_shuffle($pass); // return the generated password
-    }
-
 }
