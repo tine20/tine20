@@ -1201,4 +1201,34 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         return $systemUser;
     }
+
+    /**
+     * generate random password
+     *
+     * @param int $length
+     * @param boolean $useSpecialChar
+     * @return string
+     */
+    public static function generateRandomPassword($length = 10, $useSpecialChar = true)
+    {
+        $symbolsGeneral = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $symbolsSpecialChars = '!?~@#-_+<>[]{}';
+
+        $used_symbols = $symbolsGeneral;
+        $symbols_length = strlen($used_symbols) - 1; //strlen starts from 0 so to get number of characters deduct 1
+
+        $pass = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $pass .= $used_symbols[rand(0, $symbols_length)];
+        }
+
+        if ($useSpecialChar) {
+            $pass = substr($pass, 1) ;
+            $pass .= $symbolsSpecialChars[rand(0, strlen($symbolsSpecialChars) - 1)];
+
+        }
+
+        return str_shuffle($pass);
+    }
 }
