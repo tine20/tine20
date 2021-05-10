@@ -1567,19 +1567,19 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
             $output = shell_exec('nc -d -N -w3 ' . $host . ' ' . $port . PHP_EOL);
             
-            if ($output) {
-                if (strpos($output, 'OK') || strstr($output, '220')) {
-                    $message .= ' -> CONNECTION OK' . PHP_EOL;
-                } else {
-                    $message .= ' -> CONNECTION ERROR' . PHP_EOL;
-                    $result = 1;
-                }
-                
-                $message .= PHP_EOL . $output . PHP_EOL;
-            } else {
-                $message .= ' -> CONNECTION FAILED' . PHP_EOL;
-                $result = 2;
+            if (!$output) {
+                echo 'COMMAND CANNOT BE EXECUTE' . PHP_EOL;
+                return 99;
             }
+            
+            if (strpos($output, 'OK') || strstr($output, '220')) {
+                $message .= ' -> CONNECTION OK' . PHP_EOL;
+            } else {
+                $message .= ' -> CONNECTION ERROR' . PHP_EOL;
+                $result = 1;
+            }
+            
+            $message .= PHP_EOL . $output . PHP_EOL;
         }
         
         echo $message . "\n";
