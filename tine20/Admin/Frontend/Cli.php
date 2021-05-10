@@ -321,6 +321,10 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
     }
 
+    /**
+     * @param $filename
+     * @return false|string
+     */
     protected function _checkSanitizeFilename($filename)
     {
         if (!file_exists($filename)) {
@@ -335,9 +339,10 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password]
+     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1 pwlist=pws.csv]
      *
      * @param Zend_Console_Getopt $opts
+     * @return integer
      *
      * @todo allow to define separator / mapping
      */
@@ -351,23 +356,40 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return 2;
         }
 
+        if (isset($args['pwlist'])) {
+            $pw = $this->_readCsv($args['pwlist'], true);
+            if ($pw && $opts->v) {
+                echo "using pwlist file " . $args['pwlist'] . "\n";
+            }
+        } else {
+            $pw = $args['pw'] ?? null;
+        }
+
         foreach ($args['userlist_csv'] as $csv) {
             $users = $this->_readCsv($csv);
             if (! $users) {
-                echo "no users found in file";
+                echo "no users found in file\n";
                 break;
             }
 
             if ($opts->v) {
-                // print_r($users);
+                print_r($args);
+                print_r($users);
             }
 
-            $pw = $args['pw'] ?? null;
-            $this->_setPasswordsForUsers($opts, $users, $pw);
+            $sendmail = isset($args['sendmail']) && (bool) $args['sendmail'];
+            $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail);
         }
+
+        return 0;
     }
 
-    protected function _readCsv($csv)
+    /**
+     * @param string $csv filename
+     * @param boolean $firstColIsKey
+     * @return array|false
+     */
+    protected function _readCsv($csv, $firstColIsKey = false)
     {
         $csv = $this->_checkSanitizeFilename($csv);
         if (! $csv) {
@@ -381,41 +403,87 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         $users = [];
         while ($line = fgetcsv($stream, 0, ';')) {
-            $users[] = $line;
+            if ($firstColIsKey) {
+                $users[$line[0]] = $line[1];
+            } else {
+                $users[] = $line;
+            }
         }
         fclose($stream);
         return $users;
     }
 
-    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null)
+    /**
+     * set random pws for array with userdata
+     *
+     * @param Zend_Console_Getopt $opts
+     * @param array $users
+     * @param string|array $pw
+     * @param boolean $sendmail
+     *
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, $sendmail = false)
     {
-        // set random passwords
-        foreach ($users as $user) {
-            if (empty($user[0])) {
-                break;
+        $smtp = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
+        $pwCsv = '';
+
+        foreach ($users as $userdata) {
+            if (empty($userdata[0])) {
+                continue;
             }
 
             // get user by email or @todo accountname
-            // @todo allow to define column with username/email
+            // @todo allow to define columns with username/email/...
             try {
-                $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $user[0]);
+                $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $userdata[0]);
+                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 echo $tenf->getMessage() . "\n";
-                break;
+                continue;
             }
 
-            $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
+            if (is_array($pw) && isset($pw[$fullUser->accountLoginName])) {
+                // list of user pws
+                $newPw = $pw[$fullUser->accountLoginName];
+            } else {
+                $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
+            }
+
             if (! $opts->d) {
                 Tinebase_User::getInstance()->setPassword($user, $newPw);
+                if ($sendmail && ! empty($userdata[1])) {
+                    echo "sending mail to " . $userdata[1] . "\n";
+                    $smtp->send(
+                        Tinebase_Core::getUser(),
+                        new Addressbook_Model_Contact([
+                            'email' => $userdata[1],
+                            'n_fn' => $userdata[0],
+                        ]),
+                        // @todo translate
+                        'Neues Tine 2.0/E-Mail Passwort',
+                        'Ihr neues Passwort lautet: ' . $newPw . "\r\n"
+                        . Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL)
+                    );
+                }
+            } else {
+                echo "--DRYRUN-- setting pw for user " . $userdata[0] . "\n";
+                if ($sendmail && ! empty($userdata[1])) {
+                    echo "--DRYRUN-- sending mail to " . $userdata[1] . "\n";
+                }
             }
 
             // @todo create csv export for this
             if ($opts->v) {
                 // echo $user->accountEmailAddress . ';' . $newPw . "\n";
-                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
-                echo $fullUser->accountLoginName . ';' . $newPw . "\n";
+                $pwCsv .= $fullUser->accountLoginName . ';' . $newPw . "\n";
             }
         }
+
+        echo "\nNEW PASSWORDS:\n\n";
+        echo $pwCsv;
     }
 
     public function fixUserIdInSharedEmailAccounts($opts)
