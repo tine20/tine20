@@ -382,7 +382,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1]
+     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1 pwlist=pws.csv]
      *
      * @param Zend_Console_Getopt $opts
      * @return integer
@@ -399,10 +399,19 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return 2;
         }
 
+        if (isset($args['pwlist'])) {
+            $pw = $this->_readCsv($args['pwlist'], true);
+            if ($pw && $opts->v) {
+                echo "using pwlist file " . $args['pwlist'] . "\n";
+            }
+        } else {
+            $pw = $args['pw'] ?? null;
+        }
+
         foreach ($args['userlist_csv'] as $csv) {
             $users = $this->_readCsv($csv);
             if (! $users) {
-                echo "no users found in file";
+                echo "no users found in file\n";
                 break;
             }
 
@@ -411,7 +420,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 print_r($users);
             }
 
-            $pw = $args['pw'] ?? null;
             $sendmail = isset($args['sendmail']) && (bool) $args['sendmail'];
             $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail);
         }
@@ -420,10 +428,11 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * @param $csv
+     * @param string $csv filename
+     * @param boolean $firstColIsKey
      * @return array|false
      */
-    protected function _readCsv($csv)
+    protected function _readCsv($csv, $firstColIsKey = false)
     {
         $csv = $this->_checkSanitizeFilename($csv);
         if (! $csv) {
@@ -437,7 +446,11 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         $users = [];
         while ($line = fgetcsv($stream, 0, ';')) {
-            $users[] = $line;
+            if ($firstColIsKey) {
+                $users[$line[0]] = $line[1];
+            } else {
+                $users[] = $line;
+            }
         }
         fclose($stream);
         return $users;
@@ -448,7 +461,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @param Zend_Console_Getopt $opts
      * @param array $users
-     * @param null $pw
+     * @param string|array $pw
      * @param boolean $sendmail
      *
      * @throws Tinebase_Exception_AccessDenied
@@ -458,6 +471,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, $sendmail = false)
     {
         $smtp = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
+        $pwCsv = '';
 
         foreach ($users as $userdata) {
             if (empty($userdata[0])) {
@@ -468,12 +482,19 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             // @todo allow to define columns with username/email/...
             try {
                 $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $userdata[0]);
+                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 echo $tenf->getMessage() . "\n";
                 continue;
             }
 
-            $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
+            if (is_array($pw) && isset($pw[$fullUser->accountLoginName])) {
+                // list of user pws
+                $newPw = $pw[$fullUser->accountLoginName];
+            } else {
+                $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
+            }
+
             if (! $opts->d) {
                 Tinebase_User::getInstance()->setPassword($user, $newPw);
                 if ($sendmail && ! empty($userdata[1])) {
@@ -500,9 +521,11 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             // @todo create csv export for this
             if ($opts->v) {
                 // echo $user->accountEmailAddress . ';' . $newPw . "\n";
-                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
-                echo $fullUser->accountLoginName . ';' . $newPw . "\n";
+                $pwCsv .= $fullUser->accountLoginName . ';' . $newPw . "\n";
             }
         }
+
+        echo "\nNEW PASSWORDS:\n\n";
+        echo $pwCsv;
     }
 }
