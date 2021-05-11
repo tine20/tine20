@@ -588,11 +588,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                     <length>65535</length>
                 </field>'));
 
-            $this->_db->update(
-                SQL_TABLE_PREFIX . 'container',
-                ['hierarchy' => $this->_db->quoteIdentifier('name')],
-                $this->_db->quoteIdentifier('is_deleted') . ' = 0'
-            );
+            $this->_db->query("UPDATE `" . SQL_TABLE_PREFIX . "container` SET `hierarchy`=`name` WHERE `is_deleted` = '0'");
         }
 
         if ($this->getTableVersion('container') == 13) {
