@@ -6,6 +6,7 @@ owner = "root"
 mode = "0644"
 keys = [
     "/server/name",
+    "/log/format",
     "/client/max/body/size",
     "/tine20/config/dir"
 ]
