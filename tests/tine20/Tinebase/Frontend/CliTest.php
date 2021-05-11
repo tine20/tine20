@@ -385,6 +385,7 @@ class Tinebase_Frontend_CliTest extends TestCase
     
     /**
      * testMonitoringMailServers
+     * @group nodockerci
      */
     public function testMonitoringMailServers()
     {
