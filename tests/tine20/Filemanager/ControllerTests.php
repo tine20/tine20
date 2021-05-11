@@ -67,6 +67,9 @@ class Filemanager_ControllerTests extends TestCase
         Tinebase_FileSystem::getInstance()->stat($personalFolderPath);
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testNotificationUpdateForReadOnly()
     {
         Tinebase_Core::setLocale('en');
@@ -146,6 +149,9 @@ class Filemanager_ControllerTests extends TestCase
         }
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testRenameFolderCaseSensitive()
     {
         // check if personal folder exists
