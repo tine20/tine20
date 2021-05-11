@@ -252,28 +252,38 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
     /**
      * extract attendee filter from filters
      *
-     * @param {Array} filter
+     * @param {Array} filters
      */
-    extractFilterValue: function(filters) {
-        var value = [];
-
+    extractFilter: function(filters) {
+        let attendeeFilters = null;
         // use first OR panel in case of filterPanel
         Ext.each(filters, function(filterData) {
             if (filterData.condition && filterData.condition == 'OR') {
-                filters = filterData.filters[0].filters;
+                attendeeFilters = filterData.filters[0].filters;
                 return false;
             }
         }, this);
 
         // use first attedee filter
-        Ext.each(filters, function(filter) {
-            if (filter.field == 'attender') {
-                value = filter.value;
+        let attendeeFilter = null;
+        Ext.each(attendeeFilters, function(filter) {
+            if (filter.field === 'attender') {
+                attendeeFilter = filter;
                 return false;
             }
         }, this);
 
-        return value;
+        return attendeeFilter;
+    },
+
+    /**
+     * extract attendee filter values from filters
+     *
+     * @param {Array} filters
+     */
+    extractFilterValue: function(filters) {
+        let attendeeFilter = this.extractFilter(filters);
+        return _.get(attendeeFilter, 'value');
     },
 
     /**

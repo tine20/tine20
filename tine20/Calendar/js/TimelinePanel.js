@@ -130,6 +130,8 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
                 remove: this.onGroupRemove
             }
         });
+
+        this.store.on('beforeload', this.onStoreBeforeLoad, this);
         this.store.on('load', this.onStoreLoad, this);
 
         this.initTemplates();
@@ -140,25 +142,56 @@ Tine.Calendar.TimelinePanel = Ext.extend(Ext.Panel, {
         Tine.Calendar.TimelinePanel.superclass.initComponent.apply(this, arguments);
     },
 
-    onStoreLoad: function(store, records, options) {
+    onStoreBeforeLoad: function(store, options) {
+        this.resolveGroupingItemsPromise = Promise.resolve();
+        
+        // resolve members for memberOf filters
+        const attendeeFilter = Tine.Calendar.AttendeeFilterGrid.prototype.extractFilterValue(options.params.filter);
+        const memberIds = _.reduce(attendeeFilter, (memberIds, attendee) => {
+            return memberIds.concat(memberIds, _.get(attendee, 'user_type') === 'memberOf' ?
+                _.get(attendee, 'user_id.members', []) : []);
+        }, []);
+        
+        if (memberIds.length) {
+            this.resolveGroupingItemsPromise = Tine.Addressbook.searchContacts([{
+                field: 'id', operator: 'in', value: _.compact(_.uniq(memberIds))
+            }]);
+        }
+    },
+
+    onStoreLoad: async function(store, records, options) {
         this.groupingMetadataCache = {};
 
         var fixedGroups = [],
             attendeeFilterValue = Tine.Calendar.AttendeeFilterGrid.prototype.extractFilterValue(options.params.filter),
             attendeeStore = attendeeFilterValue ? Tine.Calendar.Model.Attender.getAttendeeStore(attendeeFilterValue) : null;
-
+        
+        options.keepLoadMask = true;
+        const members = await this.resolveGroupingItemsPromise;
+        
         if (attendeeStore) {
-            attendeeStore.each(function(attendee) {
-                // NOTE: we can't cope yet with memberOf entries as we would nee to know
-                //       the listmembers of the list to add them to the group
-                if (attendee.get('user_type') == 'memberOf') return;
-
-                var groupName = attendee.getCompoundId();
-                fixedGroups.push(groupName);
-                this.groupingMetadataCache[groupName] = attendee;
-            }, this);
+            attendeeStore.each(async (attendee) => {
+                if (attendee.get('user_type') === 'memberOf') {
+                    // add each list member to fixedGroups
+                    const Attender = Tine.Calendar.Model.Attender;
+                    _.each(_.get(attendee, 'data.user_id.members', []), (memberId) => {
+                        const memberContact = _.find(_.get(members, 'results', {}), {id: memberId});
+                        if (memberContact) {
+                            const memberAttendee = new Attender(Attender.getDefaultData({user_type: 'user', user_id: memberContact}));
+                            const groupName = memberAttendee.getCompoundId();
+                            fixedGroups.push(groupName);
+                            this.groupingMetadataCache[groupName] = memberAttendee;
+                        }
+                    });
+                 } else {
+                    var groupName = attendee.getCompoundId();
+                    fixedGroups.push(groupName);
+                    this.groupingMetadataCache[groupName] = attendee;
+                }
+            });
         }
-        this.groupCollection.setFixedGroups(fixedGroups);
+        this.groupCollection.setFixedGroups(_.uniq(fixedGroups));
+        this.mainScreen.loadMask.hide();
     },
 
     groupingFn: function(event) {

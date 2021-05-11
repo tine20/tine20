@@ -1586,7 +1586,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * called when store loaded data
      */
     onStoreLoad: function (store, options) {
-        if (this.rendered) {
+        if (this.rendered && _.get(options, 'keepLoadMask') !== true) {
             this.loadMask.hide();
         }
         
@@ -1920,7 +1920,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     period: tbar.periodPicker.getPeriod(),
                     viewType: whichParts.period,
                     store: store,
-                    canonicalName: ['Event', 'Timeline']
+                    canonicalName: ['Event', 'Timeline'],
+                    mainScreen: this
                 });
             }
 
