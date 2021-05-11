@@ -45,6 +45,7 @@ class Projects_JsonTest extends TestCase
 
     /**
      * try to add a Project
+     * @group nodockerci
      */
     public function testAddProject()
     {
@@ -68,6 +69,7 @@ class Projects_JsonTest extends TestCase
     
     /**
      * try to get a Project
+     * @group nodockerci
      */
     public function testGetProject()
     {
@@ -85,6 +87,7 @@ class Projects_JsonTest extends TestCase
 
     /**
      * try to update a Project
+     * @group nodockerci
      */
     public function testUpdateProject()
     {
@@ -106,6 +109,7 @@ class Projects_JsonTest extends TestCase
     
     /**
      * try to search a Project
+     * @group nodockerci
      */
     public function testSearchProjects()
     {
@@ -177,6 +181,7 @@ class Projects_JsonTest extends TestCase
 
     /**
      * try to search projects with contact relation
+     * @group nodockerci
      */
     public function testSearchProjectsWithContactRelation()
     {
@@ -367,6 +372,7 @@ class Projects_JsonTest extends TestCase
 
     /**
      * testAddRecordAttachments
+     * @group nodockerci
      */
     public function testAddRecordAttachments()
     {
