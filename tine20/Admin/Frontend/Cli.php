@@ -267,7 +267,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * usage: method=Admin.getSetEmailAliasesAndForwards [-d] [-v] [aliases_forwards.csv]
+     * usage: method=Admin.getSetEmailAliasesAndForwards [-d] [-v] [aliases_forwards.csv] [-- pwlist=pws.csv]
      *
      * @param Zend_Console_Getopt $opts
      */
@@ -278,21 +278,32 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $tinebaseUser = Tinebase_User::getInstance();
 
         if (! isset($args['aliases_forwards_csv'])) {
-
             foreach ($tinebaseUser->getUsers() as $user) {
-                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
-                $aliases = [];
-                foreach ($fullUser->emailUser->emailAliases as $alias) {
-                    $aliases[] = $alias['email'];
+                if (! empty($user->accountEmailAddress)) {
+                    $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
+                    $aliases = [];
+                    if (is_array($fullUser->emailUser->emailAliases)) {
+                        foreach ($fullUser->emailUser->emailAliases as $alias) {
+                            $aliases[] = is_array($alias) ? $alias['email'] : $alias;
+                        }
+                    }
+                    $aliases = implode($aliases, ',');
+                    $forwards = is_array($fullUser->emailUser->emailForwards) ? implode($fullUser->emailUser->emailForwards, ',') : '';
+                    echo $fullUser->accountLoginName . ';' . $aliases . ';' . $forwards . "\n";
                 }
-                $aliases = implode($aliases, ',');
-                $forwards = implode($fullUser->emailUser->emailForwards, ',');
-                echo $fullUser->accountLoginName . ';' . $aliases . ';' . $forwards . "\n";
             }
         } else {
+            $pw = null;
+            if (isset($args['pwlist'])) {
+                $pw = $this->_readCsv($args['pwlist'], true);
+                if ($pw && $opts->v) {
+                    echo "using pwlist file " . $args['pwlist'] . "\n";
+                }
+            }
+
             foreach ($args['aliases_forwards_csv'] as $csv) {
                 $users = $this->_readCsv($csv);
-                if (! $users) {
+                if (!$users) {
                     echo "no users found in file";
                     break;
                 }
@@ -301,6 +312,20 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     if ($opts->v) {
                         print_r($userdata);
                     }
+
+                    $password = null;
+                    if ($pw) {
+                        if (! isset($pw[$userdata[0]])) {
+                            echo "user " . $userdata[0] . " not in pwlist - skipping\n";
+                            continue;
+                        } else {
+                            $password = $pw[$userdata[0]];
+                            if ($opts->v) {
+                                echo "setting pw " . $password . " for user " . $userdata[0] . "\n";
+                            }
+                        }
+                    }
+
                     try {
                         $user = Tinebase_User::getInstance()->getFullUserByLoginName($userdata[0]);
                     } catch (Tinebase_Exception_NotFound $tenf) {
@@ -309,12 +334,12 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
                     // @todo fix in 2020.11 - we now have aliases/forwards models
                     $user->smtpUser = new Tinebase_Model_EmailUser(array(
-                        'emailAddress'     => $user->accountEmailAddress,
-                        'emailAliases'     => !empty($userdata[1]) ? explode(',', $userdata[1]) : [],
-                        'emailForwards'    => !empty($userdata[2]) ? explode(',', $userdata[2]) : [],
+                        'emailAddress' => $user->accountEmailAddress,
+                        'emailAliases' => !empty($userdata[1]) ? explode(',', $userdata[1]) : [],
+                        'emailForwards' => !empty($userdata[2]) ? explode(',', $userdata[2]) : [],
                     ));
-                    if (! $opts->d) {
-                        Admin_Controller_User::getInstance()->update($user);
+                    if (!$opts->d) {
+                        Admin_Controller_User::getInstance()->update($user, $password, $password);
                     }
                 }
             }
