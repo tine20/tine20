@@ -587,12 +587,11 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                     <length>65535</length>
                 </field>'));
 
-            $containerController = Tinebase_Container::getInstance();
-            /** @var Tinebase_Model_Container $container */
-            foreach ($containerController->getAll() as $container) {
-                $container->hierarchy = $container->name;
-                $containerController->update($container);
-            }
+            $this->_db->update(
+                SQL_TABLE_PREFIX . 'container',
+                ['hierarchy' => $this->_db->quoteIdentifier('name')],
+                $this->_db->quoteIdentifier('is_deleted') . ' = 0'
+            );
         }
 
         if ($this->getTableVersion('container') == 13) {
