@@ -49,6 +49,14 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
     protected static $_delayDisabled = false;
 
+    protected $_allowComplexFilter = false;
+
+    public function allowComplexFilter($value = true)
+    {
+        $oldValue = $this->_allowComplexFilter;
+        $this->_allowComplexFilter = $value;
+        return $oldValue;
+    }
 
     /***
      ** get methods
@@ -400,7 +408,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
 
             $filters = $_filter->getFilterObjects();
-            if (count($filters) > 1) {
+            if (!$this->_allowComplexFilter && count($filters) > 1) {
                 throw new Tinebase_Exception_NotImplemented('paths don\'t support complex filters for in memory operations');
             }
             reset($filters);
@@ -481,9 +489,18 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     foreach (static::$_modelStore as $id => $record) {
                         $parentResult->removeById($id);
                         foreach($values as $value) {
-                            if (mb_stripos($record->{$field}, $value) !== false) {
-                                $parentResult->addRecord($record);
-                                break;
+                            if (($pos = mb_stripos($record->{$field}, $value)) !== false) {
+                                if ('shadow_path' === $field) {
+                                    if ($pos + mb_strlen($value) === mb_strlen($record->{$field}) ||
+                                            mb_stripos($record->{$field}, $value . '/') !== false ||
+                                            mb_stripos($record->{$field}, $value . '{') !== false) {
+                                        $parentResult->addRecord($record);
+                                        break;
+                                    }
+                                } else {
+                                    $parentResult->addRecord($record);
+                                    break;
+                                }
                             }
                         }
                     }
