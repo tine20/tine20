@@ -475,7 +475,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if ($username instanceof Tinebase_Model_FullUser) {
             $username = $username->accountLoginName;
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Sync options: ' . print_r($options, true));
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
 
@@ -494,6 +497,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         try {
             $user = $userBackend->getUserByPropertyFromSyncBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Sync User: ' . print_r($user->toArray(), true));
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
                 . $tenf->getMessage());
@@ -614,6 +619,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (isset($options['syncAccountStatus']) && $options['syncAccountStatus']) {
             $fieldsToSync[] = 'accountStatus';
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Fields to sync: ' . print_r($fieldsToSync, true));
+
         $recordNeedsUpdate = false;
         foreach ($fieldsToSync as $field) {
             if ($currentUser->{$field} !== $user->{$field} && (! empty($user->{$field}) || ! in_array($field, $nonEmptyFields))) {
