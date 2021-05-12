@@ -501,6 +501,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         Calendar_Model_Attender::resolveAttendee($event->attendee, FALSE, $event);
 
+        /** @var Calendar_Model_Attender $eventAttendee */
         foreach($event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();
 
