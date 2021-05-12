@@ -776,7 +776,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @throws Tinebase_Exception_Record_Validation
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function sendPasswordChangeMail($user, $newPw, $email = null)
+    public function sendPasswordChangeMail(Tinebase_Model_FullUser $user, $newPw, $email = null)
     {
         $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user);
         if ($email) {
@@ -790,9 +790,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             . "IMAP: Host: {{ imap.host }} Port: {{ imap.port }}\r\n"
             . "SMTP: Host: {{ smtp.hostname }} Port: {{ smtp.port }}\r\n"
             . "Benutzername: Ihre E-Mail Adresse ({{ email }})\r\n";
-        $message = "Guten Tag!\r\n\r\nIhr neues Tine 2.0 / E-Mail-Passwort lautet: {{ password }}\r\n" .
+        $message = "Guten Tag!\r\n\r\nIhr neues Tine 2.0 / E-Mail-Passwort lautet: {{ password|raw }}\r\n" .
             "Bitte ändern Sie es gleich nach dem ersten Login.\r\n" .
-            "\r\nTine 2.0 URL: {{ tine20url }}\r\n" .
+            "\r\nTine 2.0 URL: {{ tine20url }} (Benutzername: {{ username }})\r\n" .
             $emailSettings .
             "\r\nEinen schönen Tag wünscht: Ihr Metaways Team\r\n";
 
@@ -804,7 +804,8 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             'smtp' => $tbConfig->get(Tinebase_Config::SMTP)->toArray(),
             'imap' => $tbConfig->get(Tinebase_Config::IMAP)->toArray(),
             'password' => $newPw,
-            'email' => $recipient->email,
+            'email' => $user->accountEmailAddress,
+            'username' => $user->accountLoginName,
         ]);
 
         $smtp = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
