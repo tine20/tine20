@@ -259,6 +259,10 @@ class Tinebase_Record_PathTest extends TestCase
                 . print_r($recordPaths->toArray(), true));
         }
 
+        $fakeContact = new Addressbook_Model_Contact(['id' => substr($contact->getId(), 0, 1)], true);
+        $recordPaths = $this->_uit->getPathsForRecord($fakeContact);
+        $this->assertSame(0, $recordPaths->count());
+
         return $contact;
     }
 
