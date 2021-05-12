@@ -452,7 +452,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, $sendmail = false)
     {
-        $smtp = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
         $pwCsv = '';
 
         foreach ($users as $userdata) {
@@ -481,17 +480,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 Tinebase_User::getInstance()->setPassword($user, $newPw);
                 if ($sendmail && ! empty($userdata[1])) {
                     echo "sending mail to " . $userdata[1] . "\n";
-                    $smtp->send(
-                        Tinebase_Core::getUser(),
-                        new Addressbook_Model_Contact([
-                            'email' => $userdata[1],
-                            'n_fn' => $userdata[0],
-                        ]),
-                        // @todo translate
-                        'Neues Tine 2.0/E-Mail Passwort',
-                        'Ihr neues Passwort lautet: ' . $newPw . "\r\n"
-                        . Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL)
-                    );
+                    Tinebase_User::getInstance()->sendPasswordChangeMail($user, $newPw, $userdata[1]);
                 }
             } else {
                 echo "--DRYRUN-- setting pw for user " . $userdata[0] . "\n";
