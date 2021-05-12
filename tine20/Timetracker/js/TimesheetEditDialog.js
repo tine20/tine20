@@ -254,7 +254,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
     onDurationChange: function() {
         this.calculateAccountingTime();
-        
         // adopt endtime if starttime is set
         const startTime = +this.getForm().findField('start_time').getValue();
         if (startTime) {
