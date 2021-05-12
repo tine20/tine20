@@ -31,9 +31,9 @@ Tine.widgets.exportAction.getExports = function (recordClass, favorites, scope) 
     if (_.isBoolean(favorites)) {
         exportDefinitions = _.filter(exportDefinitions, function(d) {
             if (favorites) {
-                return d.favorite === '1';
+                return d.favorite === true;
             } else {
-                return d.favorite === '0' || d.favorite === null;
+                return d.favorite === false || d.favorite === null;
             }
         });
     }
