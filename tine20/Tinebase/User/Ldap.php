@@ -728,9 +728,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $this->_rowNameMapping['accountId'], $userId
         );
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' fetch meta data - filter: ' . $filter);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Fetch meta data - filter: ' . $filter);
 
         $result = $this->_ldap->search(
             $filter,
@@ -738,8 +738,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $this->_userSearchScope
         );
 
-        if (count($result) !== 1) {
-            throw new Tinebase_Exception_NotFound("user with userid $_userId not found");
+        if (count($result) === 0) {
+            throw new Tinebase_Exception_NotFound("user with user id $_userId not found");
+        }
+        if (count($result) > 1 && Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Found ' . count($result) . ' records for user id ' . $_userId . ' in LDAP ... using the first.');
         }
 
         return $result->getFirst();
