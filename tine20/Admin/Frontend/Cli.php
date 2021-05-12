@@ -480,12 +480,14 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 Tinebase_User::getInstance()->setPassword($user, $newPw);
                 if ($sendmail && ! empty($userdata[1])) {
                     echo "sending mail to " . $userdata[1] . "\n";
-                    Tinebase_User::getInstance()->sendPasswordChangeMail($user, $newPw, $userdata[1]);
+                    Tinebase_User::getInstance()->sendPasswordChangeMail($fullUser, $newPw, $userdata[1]);
                 }
             } else {
                 echo "--DRYRUN-- setting pw for user " . $userdata[0] . "\n";
                 if ($sendmail && ! empty($userdata[1])) {
                     echo "--DRYRUN-- sending mail to " . $userdata[1] . "\n";
+                } else {
+                    echo "no email for: " . $userdata[0] . ";" . $newPw . "\n";
                 }
             }
 
