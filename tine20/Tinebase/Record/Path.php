@@ -93,8 +93,24 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         $filter = new Tinebase_Model_PathFilter(array(
             array('field' => 'shadow_path', 'operator' => 'contains', 'value' => $_record->getShadowPathPart())
         ));
+        $filterGroup = new Tinebase_Model_Filter_FilterGroup([], 'OR');
+        $filterGroup->addFilter(new Tinebase_Model_Filter_Text([
+            'field' => 'shadow_path', 'operator' => 'contains', 'value' => $_record->getShadowPathPart() . '/'
+        ]));
+        $filterGroup->addFilter(new Tinebase_Model_Filter_Text([
+            'field' => 'shadow_path', 'operator' => 'contains', 'value' => $_record->getShadowPathPart() . '{'
+        ]));
+        $filterGroup->addFilter(new Tinebase_Model_Filter_Text([
+            'field' => 'shadow_path', 'operator' => 'endswith', 'value' => $_record->getShadowPathPart()
+        ]));
+        $filter->addFilterGroup($filterGroup);
 
-        return $this->_backend->search($filter);
+        try {
+            $oldValue = $this->_backend->allowComplexFilter();
+            return $this->_backend->search($filter);
+        } finally {
+            $this->_backend->allowComplexFilter($oldValue);
+        }
     }
 
     /**
