@@ -389,7 +389,7 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testMonitoringMailServers()
     {
-        self::markTestSkipped('FIXME');
+        $this->_skipWithoutEmailSystemAccountConfig();
 
         ob_start();
         $result = $this->_cli->monitoringMailServers();
