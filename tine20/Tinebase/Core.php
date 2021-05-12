@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -94,6 +94,8 @@ class Tinebase_Core
      * constant for database adapter
      */
     const DB = 'dbAdapter';
+
+    const DB_EXTERNAL = 'dbExt';
     
     /**
      * constant for database adapter name
@@ -1092,6 +1094,38 @@ class Tinebase_Core
         
         return $db;
     }
+
+    /**
+     * @param string $dbName
+     * @return Zend_Db_Adapter_Abstract
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public static function setupDatabaseConnectionByName(string $dbName): Zend_Db_Adapter_Abstract
+    {
+        $dbConfig = self::getConfig();
+
+        if (!isset($dbConfig->{Tinebase_Config::EXTERNAL_DATABASE})) {
+            die ("external database section not found in central configuration file.\n");
+        }
+
+        $dbConfig = $dbConfig->{Tinebase_Config::EXTERNAL_DATABASE};
+        if (!isset($dbConfig->{$dbName})) {
+            die ("external database section with name '$dbName' not found in central configuration file.\n");
+        }
+
+        $dbConfig = $dbConfig->{$dbName};
+        if (!isset($dbConfig->useUtf8mb4)) {
+            die ("external database section with name '$dbName' does not provide mandatory useUtf8mb4 flag.\n");
+        }
+        if (!isset($dbConfig->tableprefix)) {
+            $dbConfig->tableprefix = SQL_TABLE_PREFIX;
+        }
+
+        $db = self::createAndConfigureDbAdapter($dbConfig->toArray());
+        $db->table_prefix = $dbConfig->tableprefix;
+
+        return $db;
+    }
     
     /**
      * create db adapter and configure it for Tine 2.0
@@ -1781,6 +1815,25 @@ class Tinebase_Core
         }
         
         return self::get(self::DB);
+    }
+
+    /**
+     * @param string $dbName
+     * @return Zend_Db_Adapter_Abstract
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function getExternalDb(string $dbName): Zend_Db_Adapter_Abstract
+    {
+        if (!is_array($externalDbs = self::get(self::DB_EXTERNAL))) {
+            $externalDbs = [];
+        }
+        if (!isset($externalDbs[$dbName])) {
+            $db = self::setupDatabaseConnectionByName($dbName);
+            $externalDbs[$dbName] = $db;
+            self::set(self::DB_EXTERNAL, $externalDbs);
+        }
+
+        return $externalDbs[$dbName];
     }
 
     /**

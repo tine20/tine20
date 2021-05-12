@@ -115,6 +115,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
+    const EXTERNAL_DATABASE = 'externalDatabase';
+
     /**
      * emailUserIdInXprops
      */
