@@ -64,6 +64,7 @@
  * @property    string $salutation                 Salutation
  * @property    string $url_home                   private url of the contact
  * @property    integer $preferred_address         defines which is the preferred address of a contact, 0: business, 1: private
+ * @property    string $color                      color
  */
 class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
@@ -411,6 +412,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::TYPE                      => 'datetime',
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Birthday', // _('Birthday')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'color'                         => [
+                self::TYPE                      => self::TYPE_HEX_COLOR,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Color', // _('Color')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'calendar_uri'                  => [
