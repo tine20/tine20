@@ -16,6 +16,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'tid', omitDuplicateResolving: true},
     {name: 'private', omitDuplicateResolving: true},
     {name: 'cat_id', omitDuplicateResolving: true},
+    {name: 'color', label: 'Color', group: 'Color'},
     {name: 'n_family', label: 'Last Name', group: 'Name' },//_('Last Name') _('Name')
     {name: 'n_given', label: 'First Name', group: 'Name' }, //_('First Name')
     {name: 'n_middle', label: 'Middle Name', group: 'Name' }, //_('Middle Name')

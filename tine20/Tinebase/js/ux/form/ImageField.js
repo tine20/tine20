@@ -70,11 +70,17 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.imageCt = this.el.child('img');
         this.buttonCt = this.el.child('div[class=ux-imagefield-button]');
         this.textCt = this.el.child('div[class=ux-imagefield-text]');
-        
+
         if (this.border === false) {
             this.el.applyStyles({
                 border: '0'
             });
+        } else {
+            if (this.borderColor) {
+                this.el.applyStyles({
+                    border: '2px solid #'+this.borderColor
+                });
+            }
         }
         
         this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: i18n._('Loading'), msgCls: 'x-mask-loading'});
@@ -118,8 +124,8 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         } else {
             if (value instanceof Ext.ux.util.ImageURL || (Ext.isString(value) && value.match(/&/))) {
                 this.value = Ext.ux.util.ImageURL.prototype.parseURL(value);
-                this.value.width = (this.border === false ? this.width : this.width-2);
-                this.value.height = (this.border === false ? this.height : this.height-2);
+                this.value.width = (this.border === false ? this.width : this.width-4);
+                this.value.height = (this.border === false ? this.height : this.height-4);
                 this.value.ratiomode = 0;
             } else {
                 this.setDefaultImage(value);
@@ -277,12 +283,16 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                 scope: this,
                 handler: this.downloadImage
                 
-            }].concat(this.extraContextActions || [])
+            }].concat(this.getExtraContextActions())
         });
         this.ctxMenu.showAt(e.getXY());
         
     },
-    
+
+    getExtraContextActions: function () {
+        return this.extraContextActions || []
+    },
+
     downloadImage: function () {
         var url = Ext.apply(this.value, {
             height: -1,

@@ -179,7 +179,36 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     new Ext.ux.form.ImageField({
                         name: 'jpegphoto',
                         width: 90,
-                        height: 120
+                        height: 120,
+                        border: true,
+                        borderColor: this.record.get('color'),
+                        getExtraContextActions: () => {
+                            return [
+                                {
+                                    text: i18n._('Select color'),
+                                    iconCls: 'action_changecolor',
+                                    scope: this,
+                                    menu: new Ext.menu.ColorMenu({
+                                        scope: this,
+                                        listeners: {
+                                            show: function (cmp) {
+                                                const colorPalette = cmp.items.get(0)
+                                                colorPalette.suspendEvents()
+                                                colorPalette.select(this.record.get('color'))
+                                                colorPalette.resumeEvents()
+                                            },
+                                            select: function (p, color) {
+                                                p.scope.record.set('color', color)
+                                                p.scope.find('name', 'jpegphoto')[0].el.applyStyles({
+                                                    border: '2px solid #'+color
+                                                });
+                                            },
+                                            scope: this
+                                        }
+                                    })
+                                }
+                            ]
+                        }
                     })
                 ]
             }, {
