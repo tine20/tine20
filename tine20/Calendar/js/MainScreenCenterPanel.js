@@ -312,10 +312,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             checkState: (mainScreen, btn) => {
                 let isGridView = mainScreen.activeView.match(/grid/i);
                 btn.setVisible(isGridView);
-
-                if (!isGridView && btn.pressed) {
-                    _.delay(() => {this.showWeekView.toggle(true);}, 500);
-                }
             }
         });
         this.toggleFullScreen = new Ext.Toolbar.Button({
@@ -572,6 +568,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     changeView: function (view, startDate) {
         // autocomplete view
         var viewParts = this.getViewParts(view);
+        if (viewParts.period === 'custom' && viewParts.presentation !== 'Grid') {
+            // transition customGrid -> sheetView
+            let range = Ext.ux.form.PeriodPicker.getRange(this.getCalendarPanel(this.activeView).getView().getPeriod());
+            if (['month', 'week', 'day'].indexOf(range) < 0) range = 'week';
+            
+            viewParts.period = range;
+;       }
         view = viewParts.toString();
         
         Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::changeView(' + view + ',' + startDate + ')');
