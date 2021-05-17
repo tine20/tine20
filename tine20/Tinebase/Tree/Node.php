@@ -328,17 +328,33 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     protected function _inspectForPreviewCreation(Tinebase_Model_Tree_Node $_newRecord, Tinebase_Model_Tree_Node $_oldRecord = null)
     {
-        if (! Tinebase_FileSystem::getInstance()->isPreviewActive()
-                || ($_oldRecord !== null && $_oldRecord->hash === $_newRecord->hash) || (int)$_newRecord->revision < 1 ||
-                empty($_newRecord->hash) || Tinebase_Model_Tree_FileObject::TYPE_FILE !== $_newRecord->type) {
+        if (! Tinebase_FileSystem::getInstance()->isPreviewActive()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Skipping preview creation (preview not active)');
+            return;
+        }
+
+        if (($_oldRecord !== null && $_oldRecord->hash === $_newRecord->hash) || (int)$_newRecord->revision < 1 ||
+                empty($_newRecord->hash)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Skipping preview creation (no new hash or revision empty)');
+            return;
+        }
+
+        if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $_newRecord->type) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Skipping preview creation (node is no TYPE_FILE)');
             return;
         }
 
         if (false === Tinebase_FileSystem_Previews::getInstance()->canNodeHavePreviews($_newRecord)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Skipping preview creation (canNodeHavePreviews === false)');
             return;
         }
 
-        Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction('Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
+        Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction(
+            'Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
     }
 
     /**
