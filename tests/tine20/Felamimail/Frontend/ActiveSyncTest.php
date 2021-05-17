@@ -1,17 +1,13 @@
 <?php
 /**
+ * Test class for Felamimail_Frontend_ActiveSync
+ *
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- */
-
-/**
- * Test class for Felamimail_Frontend_ActiveSync
- * 
- * @package     Felamimail
  *
  * TODO extend Felamimail_TestCase
  */
@@ -1107,5 +1103,20 @@ cj48L2Rpdj48L2Rpdj4=&#13;
 
         $message = $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
         self::assertEquals(1, count($message->to), 'message should have 1 recipient: ' . print_r($message->to, true));
+    }
+
+    public function testCreateFolder()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $folder = new Syncroton_Model_Folder([
+            'parentId' => $inbox->getId(),
+            'displayName' => 'syncroTestFolder',
+        ]);
+        $this->_createdFolders[] = 'INBOX.' . $folder->displayName;
+        $newFolder = $controller->createFolder($folder);
+
+        $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($newFolder->serverId);
+        self::assertEquals($folder->displayName, $fmailFolder->localname);
     }
 }
