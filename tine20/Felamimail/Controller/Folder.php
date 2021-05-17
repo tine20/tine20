@@ -209,7 +209,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @param string|Felamimail_Model_Account $_accountId
      * @param string $_folderName to create
-     * @param string $_parentFolder
+     * @param string $_parentFolder parent folder globalname
      * @return Felamimail_Model_Folder
      * @throws Felamimail_Exception_IMAPServiceUnavailable
      * @throws Tinebase_Exception_SystemGeneric
