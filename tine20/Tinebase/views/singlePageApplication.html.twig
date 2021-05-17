@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html{% if lang %} lang="{{ lang }}"{% endif %}>
 <head>
     {% block head -%}
     <title>{{ config(constant('Tinebase_Config::BRANDING_TITLE')) }}</title>

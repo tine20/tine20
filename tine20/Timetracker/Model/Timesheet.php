@@ -258,13 +258,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'default'               => 0
             ),
             'accounting_time_factor'    => array(
-                'label'                 => 'Accounting time factor', // _('Accounting time factor')
+                'label'                 => 'Projecttime Accounting factor', // _('Projecttime Accounting factor')
                 'inputFilters' => array('Zend_Filter_Empty' => 1),
                 'type'                  => 'float',
                 'default'               => 1
             ),
             'accounting_time'  => array(
-                'label'                 => 'Accounting time', // _('Accounting time')
+                'label'                 => 'Accounting Projecttime', // _('Accounting Projecttime')
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'integer',
                 'specialType'           => 'minutes',
