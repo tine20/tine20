@@ -42,17 +42,19 @@ class Felamimail_Model_MessagePipeCopy implements Tinebase_BL_ElementInterface, 
 
             // create directory if it does not exist
             $targetDir = $this->_config['target']['local_directory'];
+            
             if (! is_dir($targetDir)) {
                 mkdir($targetDir);
             }
 
             // put message as eml into local_directory (filename = MESSAGE-ID.eml)
             $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
-            if (isset($message->headers['message-id'])) {
-                $filename = $message->headers['message-id'] . '.eml';
-            } else {
-                $filename = $message->getId()  . '.eml';
-            }
+            $filename = isset($message->headers['message-id']) ? $message->headers['message-id'] : $message->message_id;
+            $filename =  preg_replace("/[^\w\d@._-]|\.\./", "", $filename) . '.eml';
+
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Copy file to temp path: '
+                . $tempFile->path . ' -> ' . $targetDir . DIRECTORY_SEPARATOR . $filename);
+            
             copy($tempFile->path, $targetDir . DIRECTORY_SEPARATOR . $filename);
         } else {
             $accountId = isset($this->_config['target']['accountid']) ?
