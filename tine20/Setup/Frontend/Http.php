@@ -62,7 +62,9 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $jsFiles[] = "index.php?method=Tinebase.getCustomJsFiles";
         }
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig');
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig', [
+            'lang' => $locale
+        ]);
     }
     
     /**
