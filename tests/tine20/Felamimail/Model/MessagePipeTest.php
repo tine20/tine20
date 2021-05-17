@@ -36,13 +36,17 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         $pipe = 'spam';
 
         // move to root
-        $this->_messagePipeTestHelper($config[$pipe]);
-        $this->_messagePipeTestHelper($config[$pipe]);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
 
         // move to sub folder
         $config[$pipe]['config']['target']['folder'] = 'INBOX/SPAM';
-        $this->_messagePipeTestHelper($config[$pipe]);
-        $this->_messagePipeTestHelper($config[$pipe]);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
     }
     
     /**
@@ -79,21 +83,25 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
 
         $pipe = 'spam';
 
-        $message = $this->_messagePipeTestHelper($config[$pipe]);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
         $this->_assertMessageInFolder('spam', $message['subject']);
 
         // move to sub folder
         $config[$pipe]['config']['target']['folder'] = 'INBOX/SPAM';
-        $message = $this->_messagePipeTestHelper($config[$pipe]);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
         $this->_assertMessageInFolder('INBOX.SPAM', $message['subject'] );
 
         $pipe = 'ham';
 
-        $message = $this->_messagePipeTestHelper($config[$pipe]);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
         $this->_assertMessageInFolder('ham', $message['subject']);
 
         $config[$pipe]['config']['target']['folder'] = 'INBOX/HAM';
-        $message = $this->_messagePipeTestHelper($config[$pipe]);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
         $this->_assertMessageInFolder('INBOX.HAM', $message['subject'] );
     }
 
@@ -134,21 +142,25 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         // move to root
         $pipe = 'spam';
 
-        $message = $this->_messagePipeTestHelper($config[$pipe], $account);
+        $message = $this->_messagePipeTestHelper($account);
+        $this->_executePipeLine($config[$pipe], $message);
         $this->_assertMessageInFolder('spam', $message['subject'], $account);
 
         // move to sub folder
         $config[$pipe]['config']['target']['folder'] = 'INBOX/SPAM';
-        $message = $this->_messagePipeTestHelper($config[$pipe], $account);
+        $message = $this->_messagePipeTestHelper($account);
+        $this->_executePipeLine($config[$pipe], $message);
         $this->_assertMessageInFolder('INBOX.SPAM', $message['subject'], $account);
 
         $pipe = 'ham';
 
-        $message = $this->_messagePipeTestHelper($config[$pipe], $account);
+        $message = $this->_messagePipeTestHelper($account);
+        $this->_executePipeLine($config[$pipe], $message);
         $this->_assertMessageInFolder('ham', $message['subject']);
 
         $config[$pipe]['config']['target']['folder'] = 'INBOX/HAM';
-        $message = $this->_messagePipeTestHelper($config[$pipe], $account);
+        $message = $this->_messagePipeTestHelper($account);
+        $this->_executePipeLine($config[$pipe], $message);
         $this->_assertMessageInFolder('INBOX.HAM', $message['subject'], $account);
     }
 
@@ -183,19 +195,58 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         ];
 
         // send message and copy to spam dir
-        $message = $this->_messagePipeTestHelper($config['spam']);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config['spam'], $message);
         $this->_assertMessageInFolder('INBOX', $message['subject']);
         // assert eml in $tmp . '/spam'
         self::assertTrue(is_dir($tmp . '/spam'), 'no spam dir found');
-        $filename = $tmp . '/spam/' . $message->headers['message-id'] . '.eml';
+        
+        $filename =  preg_replace("/[^\w\d@._-]|\.\./", "", $message->headers['message-id']);
+        $filename = $tmp . '/spam/' . $filename . '.eml';
         self::assertTrue(file_exists($filename), 'eml file not found: ' . $filename);
 
         // send message and copy to ham dir
-        $message = $this->_messagePipeTestHelper($config['ham']);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config['ham'], $message);
         $this->_assertMessageInFolder('INBOX', $message['subject']);
         // assert eml in $tmp . '/ham'
         self::assertTrue(is_dir($tmp . '/ham'), 'no ham dir found');
-        $filename = $tmp . '/ham/' . $message->headers['message-id'] . '.eml';
+        
+        $filename =  preg_replace("/[^\w\d@._-]|\.\./", "", $message->headers['message-id']);
+        $filename = $tmp . '/ham/' . $filename . '.eml';
+        self::assertTrue(file_exists($filename), 'eml file not found: ' . $filename);
+    }
+
+    /**
+     * test message pipe spam copy strategy with invalid char
+     *
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Exception
+     */
+    public function testMessagePipeCopyWithInvalidChar()
+    {
+        $this->_testNeedsTransaction();
+        $tmp = Tinebase_Core::getTempDir();
+        
+        $config = [
+            'spam' => [
+                'strategy' => 'copy',
+                'config' => [
+                    'target' => [
+                        'local_directory' => $tmp . '/spam'
+                    ]
+                ]
+            ]
+        ];
+
+        // char '/' is invalid
+        $message = $this->_messagePipeTestHelper();
+        $message->headers = [];
+        $message->message_id = '<123abcABC._-@/\!=+>..';
+        
+        $this->_executePipeLine($config['spam'], $message);
+        
+        $filename = $tmp . '/spam/' . '123abcABC._-@.eml';
         self::assertTrue(file_exists($filename), 'eml file not found: ' . $filename);
     }
 
@@ -225,7 +276,9 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         $inbox = $this->_getFolder('INBOX');
         $inboxBefore = $this->_json->updateMessageCache($inbox['id'], 30);
 
-        $message = $this->_messagePipeTestHelper($config[$pipe]);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
+        
         $inboxAfter = $this->_getFolder('INBOX');
 
         $this->assertEquals($inboxBefore['cache_unreadcount'], $inboxAfter['cache_unreadcount']);
@@ -253,7 +306,9 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
             ]
         ];
 
-        $this->_messagePipeTestHelper($config[$pipe]);
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
+
         $this->_assertMessageInFolder('INBOX', 'test messagePipe');
     }
 
@@ -276,7 +331,7 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
      * @throws Tinebase_Exception_Record_NotAllowed
      * @throws Tinebase_Exception_Record_Validation
      */
-    public function _messagePipeTestHelper($_config, $_account = null)
+    public function _messagePipeTestHelper($_account = null)
     {
         // set spam strategy config
         $this->_setFeatureForTest(Felamimail_Config::getInstance(), Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY);
@@ -297,7 +352,12 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
             $subject);
 
         $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
+        
+        return $message;
+    }
 
+    public function _executePipeLine($_config, $_message)
+    {
         // create and execute pipeLine
         $pipeLineRecord = Felamimail_Model_MessagePipeConfig::factory($_config);
         $rs = new Tinebase_Record_RecordSet(Felamimail_Model_MessagePipeConfig::class);
@@ -306,8 +366,6 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
             Felamimail_Model_MessagePipeConfig::FLDS_CONFIG_RECORD => $pipeLineRecord]));
 
         $pipeLine = new Tinebase_BL_Pipe($rs);
-        $pipeLine->execute($message);
-        
-        return $message;
+        $pipeLine->execute($_message);
     }
 }
