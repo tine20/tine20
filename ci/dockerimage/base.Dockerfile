@@ -135,6 +135,12 @@ RUN addgroup -S -g 150 tine20 && \
     mkdir -p /run/nginx && \
     mkdir -p /etc/php7/php-fpm.d/ && \
     mkdir -p /etc/php8/php-fpm.d/ && \
+    rm -r /etc/nginx/conf.d && \
+    rm -r /etc/nginx/http.d && \
+    rm /etc/nginx/nginx.conf && \
+    mkdir -p /etc/nginx/conf.d/ && \
+    mkdir -p /etc/nginx/http.d/ && \
+    mkdir -p /etc/nginx/snippets/ && \
     mkdir -p ${TINE20ROOT}/tine20 && \
     touch /var/log/tine20/tine20.log && \
     chown tine20:tine20 /var/log/tine20 && \
@@ -148,6 +154,10 @@ RUN addgroup -S -g 150 tine20 && \
 
 COPY ci/dockerimage/confd/conf.d /etc/confd/conf.d
 COPY ci/dockerimage/confd/templates/ /etc/confd/templates
+COPY etc/tine20/config.inc.php.tmpl /etc/confd/templates/config.inc.php.tmpl
+COPY etc/nginx/sites-available/tine20.conf.tmpl /etc/confd/templates/nginx-vhost.conf.tmpl
+COPY etc/nginx/conf.d/ /etc/nginx/conf.d
+COPY etc/nginx/snippets /etc/nginx/snippets
 COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/
@@ -158,4 +168,3 @@ COPY ci/dockerimage/scripts/* /usr/local/bin/
 WORKDIR ${TINE20ROOT}
 ENV TINE20ROOT=${TINE20ROOT}
 CMD ["/usr/local/bin/entrypoint"]
-HEALTHCHECK --timeout=30s CMD curl --silent --fail http://127.0.0.1:80/ADMIN/fpm-ping
