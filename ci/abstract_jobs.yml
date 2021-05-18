@@ -41,9 +41,13 @@
         cp ${CI_PROJECT_DIR}/ci/dockerimage/scripts/* /usr/local/bin/;
         cp ${CI_PROJECT_DIR}/phpstan.neon ${TINE20ROOT}/phpstan.neon;
         cp ${CI_PROJECT_DIR}/phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon;
-        rsync -a -I --delete ${CI_PROJECT_DIR}/docs/config/ /config;
+        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/ /config;
         rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/conf.d/ /etc/confd/conf.d;
         rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/templates/ /etc/confd/templates;
+        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/tine20/config.inc.php.tmpl /etc/confd/templates/config.inc.php.tmpl
+        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/sites-available/tine20.conf.tmpl /etc/confd/templates/nginx-vhost.conf.tmpl
+        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/conf.d/ /etc/nginx/conf.d
+        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/snippets/ /etc/nginx/snippets
         rsync -a -I --delete ${CI_PROJECT_DIR}/scripts/ ${TINE20ROOT}/scripts/;
         rsync -a -I --delete ${CI_PROJECT_DIR}/tests/ ${TINE20ROOT}/tests/;
         rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_PROJECT_DIR}/tine20/ ${TINE20ROOT}/tine20/;
@@ -65,8 +69,8 @@
       mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';";
       mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON postfix.* TO '$MYSQL_USER'@'%'";
       mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON dovecot.* TO '$MYSQL_USER'@'%'";
-      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/dovecot_tables.sql;
-      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < /config/postfix_tables.sql;
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/sql/dovecot_tables.sql;
+      mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < /config/sql/postfix_tables.sql;
       touch $CI_PROJECT_DIR/tine20.log
       chown tine20:tine20 $CI_PROJECT_DIR/tine20.log
       su tine20 -c "tine20_install";
@@ -87,9 +91,13 @@
     cp ${CI_PROJECT_DIR}/ci/dockerimage/scripts/* /usr/local/bin/;
     cp ${CI_PROJECT_DIR}/phpstan.neon ${TINE20ROOT}/phpstan.neon;
     cp ${CI_PROJECT_DIR}/phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon;
-    rsync -a -I --delete ${CI_PROJECT_DIR}/docs/config/ /config;
+    rsync -a -I --delete ${CI_PROJECT_DIR}/etc/ /config;
     rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/conf.d/ /etc/confd/conf.d;
     rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/templates/ /etc/confd/templates;
+    rsync -a -I --delete ${CI_PROJECT_DIR}/etc/tine20/config.inc.php.tmpl /etc/confd/templates/config.inc.php.tmpl
+    rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/sites-available/tine20.conf.tmpl /etc/confd/templates/nginx-vhost.conf.tmpl
+    rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/conf.d/ /etc/nginx/conf.d
+    rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/snippets/ /etc/nginx/snippets
     rsync -a -I --delete ${CI_PROJECT_DIR}/scripts/ ${TINE20ROOT}/scripts/;
     rsync -a -I --delete ${CI_PROJECT_DIR}/tests/ ${TINE20ROOT}/tests/;
     rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_PROJECT_DIR}/tine20/ ${TINE20ROOT}/tine20/;
@@ -143,7 +151,7 @@
     ARG_TEST: AllTests
     ARG_FILTER: $PHPUNIT_FILTER
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/tine20/
-    ARG_POSTFIX_INIT_SQL_PATH: /config/postfix_tables.sql
+    ARG_POSTFIX_INIT_SQL_PATH: /config/sql/postfix_tables.sql
     KUBERNETES_CPU_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_CPU_REQUEST
     KUBERNETES_CPU_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_CPU_LIMIT
     KUBERNETES_MEMORY_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_MEMORY_REQUEST
@@ -184,7 +192,7 @@
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON postfix.* TO '$MYSQL_USER'@'%'"
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON dovecot.* TO '$MYSQL_USER'@'%'"
-    - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/dovecot_tables.sql
+    - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/sql/dovecot_tables.sql
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < $ARG_POSTFIX_INIT_SQL_PATH
     - tine20_install
     - supervisord
