@@ -265,6 +265,34 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         return $totalCount;
     }
+
+    /**
+     * clear mod log table
+     * - if $date param is omitted, exception is thrown
+     * 
+     * @param Tinebase_DateTime $date
+     * @return bool
+     */
+    public function clearTable($date = NULL)
+    {
+        
+        if(empty($date)){
+            throw new Tinebase_Exception_InvalidArgurment("Date not set");
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removing all modification log entries before ' . $date->toString());
+        
+        $db = $this->_backend->getAdapter();
+        $where = array(
+            $db->quoteInto($db->quoteIdentifier('modification_time') . ' <= ?', $date->toString())
+        );
+        $deletedRows = $db->delete($this->_backend->getTablePrefix() . $this->_backend->getTableName(), $where);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed ' . $deletedRows . ' rows.');
+        
+        return true;
+    }
     
     /**
      * Returns modification of a given record in a given timespan
