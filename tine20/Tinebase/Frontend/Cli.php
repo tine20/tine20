@@ -437,6 +437,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - access_log
      * - async_job
      * - temp_files
+     * - timemachine_modlog
      * 
      * if param date is given (date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * 
@@ -450,10 +451,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
         $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
 
+        $date = ($dateString) ? new Tinebase_DateTime($dateString) : NULL;
+
         foreach ((array)$args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    $date = ($dateString) ? new Tinebase_DateTime($dateString) : NULL;
                     Tinebase_AccessLog::getInstance()->clearTable($date);
                     break;
                 case 'async_job':
@@ -464,6 +466,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     break;
                 case 'temp_files':
                     Tinebase_TempFile::getInstance()->clearTableAndTempdir($dateString);
+                    break;
+                case 'timemachine_modlog':
+                    Tinebase_Tinemachine_ModificationLog::getInstance()->clear_table($date);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
