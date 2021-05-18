@@ -40,7 +40,7 @@ RUN if [ ${ALPINE_PHP_PACKAGE} == php8 ]; then \
         apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community composer; \
     fi
 
-COPY docs/config/ /config
+COPY etc /config
 
 COPY --from=source-copy ${TINE20ROOT}/tests ${TINE20ROOT}/tests
 COPY --from=source-copy ${TINE20ROOT}/scripts ${TINE20ROOT}/scripts

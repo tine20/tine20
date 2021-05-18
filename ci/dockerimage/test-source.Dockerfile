@@ -19,6 +19,6 @@ ARG TINE20ROOT=/usr/share
 RUN apk add mysql-client
 
 COPY ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/webpack.ini
-COPY docs/config /config
+COPY etc /config
 COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
 COPY phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon
