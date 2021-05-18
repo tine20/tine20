@@ -116,6 +116,10 @@ class Calendar_Frontend_iMIPTest extends TestCase
             $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['RECURRENCE-ID']);
         static::assertEquals('X-MICROSOFT-CDO-OWNERAPPTID:1983350753',
             $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['X-MICROSOFT-CDO-OWNERAPPTID']);
+        $this->assertSame('X-MICROSOFT-SKYPETEAMSPROPERTIES:{"cid":"19:meeting_YmYwMzdhNTktOTQxMy00MmN' . "\r\n" .
+' kLWE1ZDAtOTliYmIwZDQxMDIz@thread.v2"\,"private":true\,"type":0\,"mid":0\,"' . "\r\n" .
+' rid":0\,"uid":null}',
+            $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['X-MICROSOFT-SKYPETEAMSPROPERTIES']);
 
         // TODO test that msg send to external server contains proper recurid
         $iMIP->preconditionsChecked = true;
@@ -125,6 +129,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $vCalBlob = $vcalendar->serialize();
         static::assertContains('RECURRENCE-ID:20180906T110000', $vCalBlob);
         static::assertContains('X-MICROSOFT-CDO-OWNERAPPTID:1983350753', $vCalBlob);
+        static::assertContains('X-MICROSOFT-SKYPETEAMSPROPERTIES:{"cid":"19:meeting_YmYwMzdhNTktOTQxMy00MmN', $vCalBlob);
     }
 
     /**
