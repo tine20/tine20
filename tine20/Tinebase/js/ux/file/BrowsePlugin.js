@@ -224,6 +224,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
         if (this.handler) {
             this.handler.call(this.scope, this, e);
         }
+        
+        this.input_file.value = '';
     },
 
     getFileList: function () {
