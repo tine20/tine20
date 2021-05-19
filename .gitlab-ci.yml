@@ -185,7 +185,7 @@ housekeeping_uninterruptible:
   variables:
     ARG_IMAGE: test-source-commit
     ARG_COPY_SOURCE: "true"
-    ARG_POSTFIX_INIT_SQL_PATH: /config/postfixmultiinstance_tables.sql
+    ARG_POSTFIX_INIT_SQL_PATH: /config/sql/postfixmultiinstance_tables.sql
     TINE20_EMAIL_SMTP: "active:true,backend:postfixmultiinstance,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfixmultiinstance_host:db,postfixmultiinstance_dbname:postfix,postfixmultiinstance_username:tine20,postfixmultiinstance_password:tine20pw"
   stage: test
   timeout: 45m
