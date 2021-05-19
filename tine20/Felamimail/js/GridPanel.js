@@ -489,6 +489,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * initializes the filterPanel, overwrites the superclass method
      */
     initFilterPanel: function() {
+        this.defaultFilters = [
+            {field: 'query', operator: 'contains', value: ''}
+        ];
         this.filterToolbar = this.getFilterToolbar();
         this.filterToolbar.criteriaIgnores = [
             {field: 'query',     operator: 'contains',     value: ''},

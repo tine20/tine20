@@ -581,9 +581,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 if (typeof o.setValue == 'function' && o.findRecord(o.valueField, oldOperator)) {
                     o.setValue(oldOperator);
                 }
-                filter.formFields.value.setValue(oldValue);
-                filter.formFields.value.selectText.defer(50, filter.formFields.value);
             }
+            filter.formFields.value.setValue(oldValue);
+            filter.formFields.value.selectText.defer(50, filter.formFields.value);
         }
 
         this.fixWidths();
