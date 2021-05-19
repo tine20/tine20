@@ -374,6 +374,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
+        if (! $cronuser) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                __LINE__ . ' No valid cronuser found.');
+            return 1;
+        }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $scheduler = Tinebase_Core::getScheduler();
