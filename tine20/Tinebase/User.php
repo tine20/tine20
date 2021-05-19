@@ -1186,9 +1186,12 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 }
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                    ' no system user could be created');
+                    ' no system user could be created: ' . $e->getMessage());
                 // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
-                Tinebase_Exception::log($e);
+
+                if (! ($e instanceof Zend_Db_Statement_Exception && Tinebase_Exception::isDbDuplicate($e))) {
+                    Tinebase_Exception::log($e);
+                }
                 $systemUser = null;
             }
         }
