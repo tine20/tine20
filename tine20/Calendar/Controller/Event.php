@@ -232,6 +232,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             Tinebase_FileSystem::getInstance()->fileExists($path);
         }
 
+        $sendNotifications = $this->_sendNotifications;
         try {
             $declineResources = [];
             $db = $this->_backend->getAdapter();
@@ -251,20 +252,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
 
             // skip sending notifications in parent
-            $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
 
             /** @var Calendar_Model_Event $createdEvent */
             $createdEvent = parent::create($_record);
             
-            $this->_sendNotifications = $sendNotifications;
-            
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
+        } finally {
+            $this->_sendNotifications = $sendNotifications;
         }
-        
+
+        $this->_processDeclineResources($createdEvent, $declineResources);
+
         // send notifications
         $createdEvent->mute = $_record->mute;
         if ($this->_sendNotifications) {
@@ -273,8 +275,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Skip sending notifications');
         }
-
-        $this->_processDeclineResources($createdEvent, $declineResources);
 
         return $createdEvent;
     }
@@ -296,7 +296,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             });
 
-            $event = $this->update($event);
+            // make sure current user gets the decline message
+            $sendOnOwnActions = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS};
+            Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS} = true;
+            try {
+                $event = $this->update($event);
+            } finally {
+                Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS} = $sendOnOwnActions;
+            }
         }
 
         return $event;
@@ -1047,6 +1054,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $updatedEvent = $this->get($event->getId(), null, true, true);
 
+        // first process resource declines, as this may alter the event again
+        $updatedEvent = $this->_processDeclineResources($updatedEvent, $declineResources);
+
         if ($skipEvent === false) {
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEventAfterUpdate([
                 'observable' => $updatedEvent
@@ -1059,8 +1069,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($this->_sendNotifications) {
             $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
-
-        $updatedEvent = $this->_processDeclineResources($updatedEvent, $declineResources);
 
         return $updatedEvent;
     }

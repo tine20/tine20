@@ -317,8 +317,8 @@ abstract class Calendar_TestCase extends TestCase
     protected function _getAttendee()
     {
         return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            $this->_createAttender($this->_getTestUserContact()->getId())->toArray(),
-            $this->_createAttender($this->_GetPersonasContacts('sclever')->getId())->toArray(),
+            $this->_createAttender($this->_getTestUserContact()->getId()),
+            $this->_createAttender($this->_GetPersonasContacts('sclever')->getId()),
         ));
     }
     
