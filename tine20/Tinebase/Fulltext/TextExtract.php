@@ -98,7 +98,11 @@ class Tinebase_Fulltext_TextExtract
                 . ' tika did not return status 0. maybe the java runtime is missing? output:'
                 . print_r($output, true) . ' ' . print_r($result, true));
             if (file_exists($tempFileName)) {
-                unlink($tempFileName);
+                try {
+                    unlink($tempFileName);
+                } catch (Throwable $t) {
+                    // ignore race condition
+                }
             }
             return false;
         } else {
