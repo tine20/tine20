@@ -4,13 +4,14 @@
 # Markus Henriksson <markus.henriksson@marinex.se>, 2012
 # Markus Henriksson <markus.henriksson@marinex.se>, 2012
 # Niklas Ye <niklas@idontgetlaid.com>, 2013
+# S P <sebbe088@gmail.com>, 2019
 # BrianLuckBad <tulken_hultan@hotmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 12:23+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2020-05-11 11:58+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/tine20/tine20/language/sv_SE/)\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -21,81 +22,35 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's egna projekt"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Alla mina projekt"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Standardfavorit"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Standardinställningen favoriten som laddas på Projekt start"
-
-#: js/ProjectEditDialog.js:90 js/ProjectAttendeeFilter.js:38
-msgid "Attendee"
-msgstr "Deltagare"
-
-#: js/ProjectEditDialog.js:91 js/AddToProjectPanel.js:81
-msgid "Role"
-msgstr "Roll"
-
-#: js/ProjectEditDialog.js:117 js/ProjectEditDialog.js:130 js/Model.js:35
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projekt"
-
-#: js/ProjectEditDialog.js:142 js/Model.js:74 js/ProjectGridPanel.js:128
-msgid "Title"
-msgstr "Titel"
-
-#: js/ProjectEditDialog.js:147 js/Model.js:75 js/ProjectGridPanel.js:121
-msgid "Number"
-msgstr "Nummer"
-
-#: js/ProjectEditDialog.js:153 js/Model.js:78 js/ProjectGridPanel.js:134
-msgid "Status"
-msgstr "Status"
-
-#: js/ProjectEditDialog.js:188 js/Model.js:76
-msgid "Description"
-msgstr "Beskrivning"
-
-#: js/ProjectEditDialog.js:202
-msgid "Enter description"
-msgstr "Ange beskrivning"
-
 #: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projekt"
 
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Vänligen välj ett projekt att lägga deltagaren i"
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Sök i FAQ"
 
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Vänligen välj deltagarens roll"
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Taggar"
 
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Välj projekt"
+#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:146
+msgid "Number"
+msgstr "Nummer"
 
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Välj roll"
+#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:141
+msgid "Title"
+msgstr "Titel"
 
-#: js/AddToProjectPanel.js:102
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Lägger till {0} deltagare till projektet"
+#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:152
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:35 js/ProjectEditDialog.js:116 js/ProjectEditDialog.js:129
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projekt"
 
 #: js/Model.js:39
 msgid "Project list"
@@ -109,7 +64,11 @@ msgstr "Projektlistor"
 
 #: js/Model.js:73
 msgid "Quick Search"
-msgstr ""
+msgstr "Snabbsök"
+
+#: js/Model.js:76 js/ProjectEditDialog.js:187
+msgid "Description"
+msgstr "Beskrivning"
 
 #: js/Model.js:87
 msgid "Last Modified Time"
@@ -127,37 +86,54 @@ msgstr "Skapelsetid"
 msgid "Created By"
 msgstr "Skapad av"
 
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:90
+msgid "Attendee"
+msgstr "Deltagare"
+
 #: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr "Deltaganderoll"
 
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr ""
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Vänligen välj ett projekt att lägga deltagaren i"
 
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Taggar"
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Vänligen välj deltagarens roll"
 
-#: Setup/Initialize.php:36
-msgid "All my open projects"
-msgstr "Alla mina öppna projekt"
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Välj projekt"
 
-#: Setup/Initialize.php:56
-msgid "My projects that I'm responsible for"
-msgstr "Mina projekt som Jag är ansvarig för"
+#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:91
+msgid "Role"
+msgstr "Roll"
 
-#: Setup/Initialize.php:57
-msgid "All my open projects that I am responsible for"
-msgstr "Alla mina projekt som Jag är ansvarig för"
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Välj roll"
 
-#: Setup/Initialize.php:77
-msgid "My waiting projects"
-msgstr "Mina väntande projekt"
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Lägger till {0} deltagare till projektet"
 
-#: Setup/Initialize.php:78
-msgid "My projects that are on hold"
-msgstr "Mina projekt som är pågående"
+#: js/ProjectEditDialog.js:201
+msgid "Enter description"
+msgstr "Ange beskrivning"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Alla mina projekt"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Standardfavorit"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Standardinställningen favoriten som laddas på Projekt start"
 
 #: Config.php:38
 msgid "Available Project Status"
@@ -199,13 +175,38 @@ msgstr "Medarbetare"
 msgid "Responsible"
 msgstr "Ansvarig"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "%s's egna projekt"
+
+#: Setup/Initialize.php:36
+msgid "All my open projects"
+msgstr "Alla mina öppna projekt"
+
+#: Setup/Initialize.php:56
+msgid "My projects that I'm responsible for"
+msgstr "Mina projekt som Jag är ansvarig för"
+
+#: Setup/Initialize.php:57
+msgid "All my open projects that I am responsible for"
+msgstr "Alla mina projekt som Jag är ansvarig för"
+
+#: Setup/Initialize.php:77
+msgid "My waiting projects"
+msgstr "Mina väntande projekt"
+
+#: Setup/Initialize.php:78
+msgid "My projects that are on hold"
+msgstr "Mina projekt som är pågående"
+
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"
-msgstr ""
+msgstr "Hantera delade projektfavoriter"
 
 #: Acl/Rights.php:91
 msgid "Create new shared project favorites"
-msgstr ""
+msgstr "Skapa ny delad projektfavorit"
 
 #~ msgid "Project Status Available"
 #~ msgstr "Tillgänglig projektstatus"

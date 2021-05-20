@@ -417,6 +417,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     );
                 }
             }
+
+            this.checkStates();
         }, this);
         
         this.on('render', function() {this.getForm().add(organizerCombo);}, this);

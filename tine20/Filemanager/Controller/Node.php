@@ -378,6 +378,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $this->resolveGrants($record);
 
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $record->type) {
+            $record->path = rtrim($record->path, '/') . '/';
             $context = $this->getRequestContext();
             if (is_array($context) && isset($context['quotaResult'])) {
                 $context['quotaResult'] = $this->_backend->getEffectiveAndLocalQuota($record);

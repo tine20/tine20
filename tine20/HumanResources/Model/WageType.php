@@ -30,11 +30,19 @@ class HumanResources_Model_WageType extends Tinebase_Record_Abstract
     const MODEL_NAME_PART = 'WageType';
     const TABLE_NAME = 'humanresources_wagetypes';
 
-    const ID_FEAST      = '30';
-    const ID_SALARY     = '31';
-    const ID_VACATION   = '32';
-    const ID_SICK       = '33';
-
+    
+    const ID_FEAST              = '30';
+    const ID_SALARY             = '31';
+    const ID_VACATION           = '32';
+    const ID_SICK               = '33';
+    const ID_SICK_CHILD         = '34';
+    const ID_SPECIAL_VACATION   = '36';
+    const ID_UNPAID_VACATION    = '37';
+    const ID_NO_WAGE            = '38';
+    const ID_SICK_SICKPAY       = '39';
+    const ID_SPECIAL_PAYMENT    = '40';
+    
+    
     /**
      * holds the configuration object (must be declared in the concrete class)
      *

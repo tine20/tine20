@@ -18,14 +18,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Контейнер по-умолчанию для инвентаризации"
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Контейнер по-умолчанию для новых предметов"
-
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
 msgstr "Этот номер должен быть меньше или равным общему."
@@ -54,7 +46,7 @@ msgstr "Введите описание"
 msgid "Location"
 msgstr "Расположение"
 
-#: js/InventoryItemEditDialog.js:162
+#: js/InventoryItemEditDialog.js:162 Model/InventoryItem.php:176
 msgid "Added"
 msgstr "Добавлен"
 
@@ -62,7 +54,7 @@ msgstr "Добавлен"
 msgid "Warranty"
 msgstr "Гарантия"
 
-#: js/InventoryItemEditDialog.js:174
+#: js/InventoryItemEditDialog.js:174 Model/InventoryItem.php:186
 msgid "Removed"
 msgstr "Удалено"
 
@@ -98,21 +90,17 @@ msgstr "Счёт"
 msgid "Invoice date"
 msgstr "Дата счёта"
 
-#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:195
 msgid "Depreciate"
 msgstr "Не используется"
 
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
-msgid "All Inventory Items"
-msgstr "Все предметы из инвентаризации"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Контейнер по-умолчанию для инвентаризации"
 
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
-msgid "All existing Inventory Items"
-msgstr "Все существующие предметы из инвентаризации"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "инвентарь"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Контейнер по-умолчанию для новых предметов"
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -146,6 +134,18 @@ msgstr "списан"
 msgid "unknown"
 msgstr "неизвестно"
 
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Импорт файла CSV"
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Импорт списка (###CURRENTDATE###)"
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Предметы импортированы ###CURRENTDATE### в ###CURRENTTIME### пользователем ###USERFULLNAME###"
+
 #: Model/InventoryItem.php:38
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -170,22 +170,20 @@ msgstr "Инвентарный №"
 msgid "Cost Center"
 msgstr "Затраты"
 
-#: Model/InventoryItem.php:176
-msgid "Item added"
-msgstr "Пункт добавлен"
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "инвентарь"
 
-#: Model/InventoryItem.php:184
-msgid "Item removed"
-msgstr "пункт удалён"
+#: Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Все предметы из инвентаризации"
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Импорт файла CSV"
+#: Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Все существующие предметы из инвентаризации"
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Импорт списка (###CURRENTDATE###)"
+#~ msgid "Item added"
+#~ msgstr "Пункт добавлен"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Предметы импортированы ###CURRENTDATE### в ###CURRENTTIME### пользователем ###USERFULLNAME###"
+#~ msgid "Item removed"
+#~ msgstr "пункт удалён"

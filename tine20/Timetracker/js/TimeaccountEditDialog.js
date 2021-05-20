@@ -312,5 +312,6 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.Timetracker.TimeaccountEditDialog.superclass.doCopyRecord.call(this);
         
         this.record.set('status', 'not yet billed');
+        this.record.set('is_open', 1 );
     }
 });

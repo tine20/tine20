@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Aleksey <aleksdem@aleksdem.com>, 2013-2014
 # Nikolay Parukhin <parukhin@gmail.com>, 2012,2015-2016
@@ -10,54 +10,14 @@ msgstr ""
 "PO-Revision-Date: 2018-11-28 11:09+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: js/CourseGridPanel.js:44 js/Models.js:68
-msgid "Name"
-msgstr "Имя"
-
-#: js/CourseGridPanel.js:50
-msgid "Type"
-msgstr "Тип"
-
-#: js/CourseGridPanel.js:95
-msgid "Failed"
-msgstr "Сбой"
-
-#: js/CourseGridPanel.js:96
-msgid "Some error occured while trying to update the courses."
-msgstr "Произошла ошибка при попытке обновить курсы."
-
-#: js/Models.js:43 js/CourseEditDialog.js:188 Controller/Course.php:121
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Курс"
-msgstr[1] "Курса"
-msgstr[2] "Курсов"
-msgstr[3] "Курсов"
-
-#: js/Models.js:67
-msgid "Quick Search"
-msgstr "Быстрый поиск"
-
-#: js/Models.js:70 js/CourseEditDialog.js:227 Config.php:103
-msgid "Internet Access"
-msgstr "Доступ в интернет"
-
-#: js/Models.js:105
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Тип курсов"
-msgstr[1] "Типа курсов"
-msgstr[2] "Типов курсов"
-msgstr[3] "Типов курсов"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
@@ -79,44 +39,83 @@ msgstr "Ошибка"
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте ошибки"
 
-#: js/CourseEditDialog.js:33
+#: js/CourseEditDialog.js:40
 msgid "Import course members"
 msgstr "Импорт членов курса"
 
-#: js/CourseEditDialog.js:42
+#: js/CourseEditDialog.js:49
 msgid "Add new member"
 msgstr "Добавить нового участника"
 
-#: js/CourseEditDialog.js:204
+#: js/CourseEditDialog.js:213 js/Models.js:43 Controller/Course.php:122
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Курс"
+msgstr[1] "Курса"
+msgstr[2] "Курсов"
+msgstr[3] "Курсов"
+
+#: js/CourseEditDialog.js:229
 msgid "Course Name"
 msgstr "Название курса"
 
-#: js/CourseEditDialog.js:211
+#: js/CourseEditDialog.js:236
 msgid "Course / School Type"
 msgstr "Тип курсов/школы"
 
-#: js/CourseEditDialog.js:221
+#: js/CourseEditDialog.js:246
 msgid "Description"
 msgstr "Описание"
 
-#: js/CourseEditDialog.js:256
+#: js/CourseEditDialog.js:252 js/Models.js:70 Config.php:118
+msgid "Internet Access"
+msgstr "Доступ в интернет"
+
+#: js/CourseEditDialog.js:281
 msgid "Members"
 msgstr "Члены"
 
-#: js/CourseEditDialog.js:283
+#: js/CourseEditDialog.js:310
 msgid "Login"
 msgstr "Вход"
 
-#: js/CourseEditDialog.js:287
+#: js/CourseEditDialog.js:314
 msgid "unknown"
 msgstr "неизвестный"
 
-#: js/CourseEditDialog.js:292
+#: js/CourseEditDialog.js:339
 msgid "Reset Password"
 msgstr "Сброс пароля"
 
+#: js/CourseGridPanel.js:44 js/Models.js:68
+msgid "Name"
+msgstr "Имя"
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr "Тип"
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr "Сбой"
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr "Произошла ошибка при попытке обновить курсы."
+
+#: js/Models.js:67
+msgid "Quick Search"
+msgstr "Быстрый поиск"
+
+#: js/Models.js:105
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Тип курсов"
+msgstr[1] "Типа курсов"
+msgstr[2] "Типов курсов"
+msgstr[3] "Типов курсов"
+
 #: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-#: Setup/Update/Release5.php:30
 msgid "All courses"
 msgstr "Все курсы"
 
@@ -124,107 +123,93 @@ msgstr "Все курсы"
 msgid "The default favorite which is loaded on Classes startup"
 msgstr "Будет загружено по-умолчанию при загрузке Классов"
 
-#: Config.php:105
+#: Config.php:108
+msgid "Additional Group Memberships"
+msgstr ""
+
+#: Config.php:110
+msgid "Array of IDs of Groups students can be members of"
+msgstr ""
+
+#: Config.php:120
 msgid "Internet access options."
 msgstr "Опции доступа в интернет."
 
-#: Config.php:112
+#: Config.php:127
 msgid "On"
 msgstr "Вкл"
 
-#: Config.php:113
+#: Config.php:128
 msgid "Off"
 msgstr "выкл"
 
-#: Config.php:114
+#: Config.php:129
 msgid "Filtered"
 msgstr "Отфильтровано"
 
-#: Config.php:119 Config.php:121
+#: Config.php:134 Config.php:136
 msgid "Internet Access Group (ON)"
 msgstr "Группа доступа  в интернет (ВКЛ)"
 
-#: Config.php:127 Config.php:129
+#: Config.php:142 Config.php:144
 msgid "Internet Access Group (FILTERED)"
 msgstr "Группа доступа  в интернет (ФИЛЬТРУЕМЫЙ)"
 
-#: Config.php:135 Config.php:137
+#: Config.php:150 Config.php:152
 msgid "Students Group"
 msgstr "Студенческая группа"
 
-#: Config.php:143 Config.php:145
+#: Config.php:158 Config.php:160
 msgid "Students Import Definition"
 msgstr "Определение импорта студентов"
 
-#: Config.php:151
+#: Config.php:166
 msgid "Students login name prefix"
 msgstr "Префикс для имени студента"
 
-#: Config.php:158
+#: Config.php:173
 msgid "Students password suffix"
 msgstr "Суффикс пароля студентов"
 
-#: Config.php:165
+#: Config.php:180
 msgid "Teacher password"
 msgstr "Пароль преподавателя"
 
-#: Config.php:174
+#: Config.php:189
 msgid "Student username schema"
 msgstr "Схема имени пользователя студента"
 
-#: Config.php:176
-msgid ""
-"Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
-"chars of firstname"
+#: Config.php:191
+msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
 msgstr "Схема имён студентов (0 = только фамилии (10 букв), 1 = фамилия + 2 буквы от имени"
 
-#: Config.php:183 Config.php:185
+#: Config.php:198 Config.php:200
 msgid "Samba user settings"
 msgstr "Пользовательские настройки для SAMBA"
 
-#: Config.php:194
+#: Config.php:209
 msgid "Default department"
 msgstr "Отдел по-умолчанию"
 
-#: Config.php:196
+#: Config.php:211
 msgid "The default department for new Courses"
 msgstr "Отдел по-умолчанию для новых курсов"
 
-#: Acl/Rights.php:108
-msgid "Add new user"
-msgstr "Добавить нового пользователя"
-
-#: Acl/Rights.php:109
-msgid "Add new user as member to a course"
-msgstr "Добавить нового пользователя как участника курса"
-
-#: Acl/Rights.php:112
-msgid "Add existing user"
-msgstr "Добавить существующего пользователя"
-
-#: Acl/Rights.php:113
-msgid "Add existing user as member to a course"
-msgstr "Добавить существующего пользователя как участника курса"
-
-#: Acl/Rights.php:116
-msgid "Manage shared courses favorites"
-msgstr "Управление избранными в общих курсах"
-
-#: Acl/Rights.php:117
-msgid "Create or update shared courses favorites"
-msgstr "Создание или обновление избранных в общих курсах"
-
-#: Controller/Course.php:256 Controller/Course.php:300
+#: Controller/Course.php:353 Controller/Course.php:398
 msgid "Teacher"
 msgstr "Преподаватель"
 
-#: Controller/Course.php:257
+#: Controller/Course.php:354
 msgid "Teacher Account"
 msgstr "Учётная запись преподавателя"
 
-#: Controller/Course.php:321
+#: Controller/Course.php:419
 msgid "My course"
 msgstr "Мои курсы"
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr "Курсы"
 
 #: Setup/Initialize.php:57
 msgid "School"
@@ -234,6 +219,34 @@ msgstr "Школа"
 msgid "Defaul school for Courses application"
 msgstr "Школа по-умолчанию для приложения Курсы"
 
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Курсы"
+#: Acl/Rights.php:116
+msgid "Add new user"
+msgstr "Добавить нового пользователя"
+
+#: Acl/Rights.php:117
+msgid "Add new user as member to a course"
+msgstr "Добавить нового пользователя как участника курса"
+
+#: Acl/Rights.php:120
+msgid "Add existing user"
+msgstr "Добавить существующего пользователя"
+
+#: Acl/Rights.php:121
+msgid "Add existing user as member to a course"
+msgstr "Добавить существующего пользователя как участника курса"
+
+#: Acl/Rights.php:124
+msgid "Manage shared courses favorites"
+msgstr "Управление избранными в общих курсах"
+
+#: Acl/Rights.php:125
+msgid "Create or update shared courses favorites"
+msgstr "Создание или обновление избранных в общих курсах"
+
+#: Acl/Rights.php:128
+msgid "Set additional memberships"
+msgstr ""
+
+#: Acl/Rights.php:129
+msgid "Set additional course member group memberships"
+msgstr ""

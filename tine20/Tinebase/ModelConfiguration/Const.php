@@ -129,6 +129,7 @@ class Tinebase_ModelConfiguration_Const {
     const TABLE = 'table';
     const TARGET_ENTITY = 'targetEntity';
     const TITLE_PROPERTY = 'titleProperty';
+    const TOOLTIP = 'tooltip';
     const TYPE = 'type';
     const TYPE_ATTACHMENTS = 'attachments';
     const TYPE_BIGINT = 'bigint';

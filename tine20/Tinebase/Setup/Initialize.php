@@ -37,6 +37,9 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      */
     public function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
+        if ($locale = Tinebase_Core::getLocale()) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE} = $locale->getLanguage();
+        }
         $this->_initProcedures();
 
         $this->_setupConfigOptions($_options);

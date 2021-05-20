@@ -32,7 +32,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
 
         this.hasOwnGrantsCheckbox = new Ext.form.Checkbox({
-            disabled: true,
+            readOnly: true,
             boxLabel: this.app.i18n._('This folder has its own grants'),
             listeners: {scope: this, check: this.onOwnGrantsCheck}
         });
@@ -40,7 +40,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             text: this.app.i18n._("Grants of a folder also apply recursively to all sub folders unless they have their own grants.")
         });
         this.pinProtectionCheckbox = new Ext.form.Checkbox({
-            disabled: true,
+            readOnly: true,
             hidden: ! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length,
             boxLabel: this.app.i18n._('This folder is part of the data safe')
         });
@@ -83,19 +83,24 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
     onOwnGrantsCheck: function(cb, checked) {
         this.grantsGrid.setReadOnly(!checked);
-        this.pinProtectionCheckbox.setDisabled(!checked);
+        this.pinProtectionCheckbox.setReadOnly(!checked);
     },
 
     onRecordLoad: function(editDialog, record, ticketFn) {
         var _ = window.lodash,
+            path = record.get('path'),
             evalGrants = editDialog.evalGrants,
             hasOwnGrants = record.get('acl_node') == record.id,
-            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
-
-        this.hasOwnGrantsCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
-            || record.get('type') != 'folder');
+            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant),
+            ownGrantsReadOnly = record.get('type') != 'folder' ||
+                !lodash.get(record, 'data.account_grants.adminGrant', false) ||
+                path.match(/^\/personal(\/[^/]+){0,2}\/$/) ||
+                path.match(/^\/shared(\/[^/]+){0,1}\/$/);
+        
         this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
+        this.hasOwnGrantsCheckbox.setReadOnly(ownGrantsReadOnly);
         this.pinProtectionCheckbox.setValue(record.get('pin_protected_node') ? true : false);
+        this.pinProtectionCheckbox.setReadOnly(ownGrantsReadOnly);
 
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData({results: record.data.grants});
@@ -104,10 +109,10 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.grantsGrid.setReadOnly(!hasOwnGrants || !hasRequiredGrant);
     },
 
+    // grants-grid only - checkboxes have own state
     setReadOnly: function(readOnly) {
         this.readOnly = readOnly;
         this.grantsGrid.setReadOnly(readOnly);
-        this.hasOwnGrantsCheckbox.setDisabled(readOnly);
     },
 
     onRecordUpdate: function(editDialog, record) {

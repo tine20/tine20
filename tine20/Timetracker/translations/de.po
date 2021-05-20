@@ -150,8 +150,11 @@ msgid "The selected Time Account is already closed."
 msgstr "Das ausgewählte Zeitkonto ist bereits geschlossen."
 
 #: js/TimesheetEditDialog.js:428
-msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
-msgstr "Das ausgewählte Zeitkonto ist bereits geschlossen. Wollen Sie dennoch fortfahren?"
+msgid ""
+"The selected Time Account is already closed. Do you wish to continue anyway?"
+msgstr ""
+"Das ausgewählte Zeitkonto ist bereits geschlossen. Wollen Sie dennoch "
+"fortfahren?"
 
 #: js/TimeAccountContractFilterModel.js:30 Model/Timeaccount.php:109
 #: Model/Timeaccount.php:277
@@ -326,7 +329,8 @@ msgstr "Stundenzettel ODS-Export Konfiguration"
 
 #: Preference.php:71
 msgid "Use this configuration for the timesheet ODS export."
-msgstr "Hiermit können Sie die zu verwendende ODS-Export Konfiguration einstellen."
+msgstr ""
+"Hiermit können Sie die zu verwendende ODS-Export Konfiguration einstellen."
 
 #: Preference.php:74
 msgid "A Tag which is available in context menu for fast assignment"
@@ -492,7 +496,9 @@ msgstr "Zeitkonten verwalten"
 
 #: Acl/Rights.php:122
 msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Zeitkonten anlegen, bearbeiten und löschen (beinhaltet alle Stundenzettel-Rechte)"
+msgstr ""
+"Zeitkonten anlegen, bearbeiten und löschen (beinhaltet alle Stundenzettel-"
+"Rechte)"
 
 #: Acl/Rights.php:125 Acl/Rights.php:126
 msgid "Add timeaccounts"
@@ -514,84 +520,92 @@ msgstr "Gemeinsame Stundenzettel-Favoriten verwalten"
 msgid "Create or update shared timesheet favorites"
 msgstr "Gemeinsame Stundenzettel-Favoriten erstellen oder bearbeiten"
 
-#~ msgid "Select Time Account..."
-#~ msgstr "Zeitkonto auswählen ..."
+#: Model/Timeaccount.php:286 Model/Timesheet.php:250
+msgid "Projecttime Accounting factor"
+msgstr "Abrechnungsfaktor Projektzeit"
 
-#~ msgid "Start"
-#~ msgstr "Start"
+#: Model/Timesheet.php:256
+msgid "Accounting Projecttime"
+msgstr "Abrechenbare Projektzeit"
 
-#~ msgid "not set"
-#~ msgstr "nicht gesetzt"
+msgid "Select Time Account..."
+msgstr "Zeitkonto auswählen ..."
 
-#~ msgid "Enter description..."
-#~ msgstr "Bitte geben Sie eine Beschreibung an..."
+msgid "Start"
+msgstr "Start"
 
-#~ msgid "Export"
-#~ msgstr "Export"
+msgid "not set"
+msgstr "nicht gesetzt"
 
-#~ msgid "The grant to export Timesheets of Timeaccount"
-#~ msgstr "Das Recht, Stundenzettel zu exportieren"
+msgid "Enter description..."
+msgstr "Bitte geben Sie eine Beschreibung an..."
 
-#~ msgid "Manage All"
-#~ msgstr "Darf Alles"
+msgid "Export"
+msgstr "Export"
 
-#~ msgid "Includes all other grants"
-#~ msgstr "Beinhaltet alle anderen Rechte"
+msgid "The grant to export Timesheets of Timeaccount"
+msgstr "Das Recht, Stundenzettel zu exportieren"
 
-#~ msgid "{0}"
-#~ msgstr "{0}"
+msgid "Manage All"
+msgstr "Darf Alles"
 
-#~ msgid "Not a valid time"
-#~ msgstr "Keine gültige Zeitangabe"
+msgid "Includes all other grants"
+msgstr "Beinhaltet alle anderen Rechte"
 
-#~ msgid "New Timesheet"
-#~ msgstr "Neuer Stundenzettel"
+msgid "{0}"
+msgstr "{0}"
 
-#~ msgid "Tags"
-#~ msgstr "Tags"
+msgid "Not a valid time"
+msgstr "Keine gültige Zeitangabe"
 
-#~ msgid "Export Timeaccounts"
-#~ msgstr "Zeitkonten exportieren"
+msgid "New Timesheet"
+msgstr "Neuer Stundenzettel"
 
-#~ msgid "Mass Update"
-#~ msgstr "Massenaktualisierung"
+msgid "Tags"
+msgstr "Tags"
 
-#~ msgid "Update field:"
-#~ msgstr "Feld aktualisieren:"
+msgid "Export Timeaccounts"
+msgstr "Zeitkonten exportieren"
 
-#~ msgid "timesheets list"
-#~ msgid_plural "timesheets lists"
-#~ msgstr[0] "Stundenzettel-Liste"
-#~ msgstr[1] "Stundenzettel-Listen"
+msgid "Mass Update"
+msgstr "Massenaktualisierung"
 
-#~ msgid "Quick Search"
-#~ msgstr "Schnellsuche"
+msgid "Update field:"
+msgstr "Feld aktualisieren:"
 
-#~ msgid "Last Modified Time"
-#~ msgstr "Zuletzt geändert"
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] "Stundenzettel-Liste"
+msgstr[1] "Stundenzettel-Listen"
 
-#~ msgid "Last Modified By"
-#~ msgstr "Zuletzt geändert von"
+msgid "Quick Search"
+msgstr "Schnellsuche"
 
-#~ msgid "Creation Time"
-#~ msgstr "Angelegt am"
+msgid "Last Modified Time"
+msgstr "Zuletzt geändert"
 
-#~ msgid "Created By"
-#~ msgstr "Erstellt von"
+msgid "Last Modified By"
+msgstr "Zuletzt geändert von"
 
-#~ msgid "timeaccount list"
-#~ msgid_plural "timeaccount lists"
-#~ msgstr[0] "Stundenzettel-Liste"
-#~ msgstr[1] "Stundenzettel-Listen"
+msgid "Creation Time"
+msgstr "Angelegt am"
 
-#~ msgid "Type"
-#~ msgstr "Typ"
+msgid "Created By"
+msgstr "Erstellt von"
 
-#~ msgid "End"
-#~ msgstr "Ende"
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] "Stundenzettel-Liste"
+msgstr[1] "Stundenzettel-Listen"
 
-#~ msgid "Working time"
-#~ msgstr "Arbeitszeit"
+msgid "Type"
+msgstr "Typ"
 
-#~ msgid "Project time"
-#~ msgstr "Projektzeit"
+msgid "End"
+msgstr "Ende"
+
+msgid "Working time"
+msgstr "Arbeitszeit"
+
+msgid "Project time"
+msgstr "Projektzeit"

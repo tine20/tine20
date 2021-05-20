@@ -207,7 +207,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Did not find original message (' . $originalMessageId . ')');
-            $originalMessage = NULL;
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_NotFound($translation->_('Original message not found, email was moved or deleted'));
         }
         
         $_message->original_id      = $originalMessage;

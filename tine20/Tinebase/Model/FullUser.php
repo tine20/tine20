@@ -72,6 +72,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         'hasTags'           => false,
         'hasXProps'         => true,
         'modlogActive'      => true,
+        self::HAS_DELETED_TIME_UNIQUE => true,
         'hasAttachments'    => false,
         'createModule'      => false,
         'exposeHttpApi'     => false,
@@ -223,6 +224,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             ],
             'mfa_configs'             => [
                 self::TYPE                      => self::TYPE_RECORDS,
+                self::OMIT_MOD_LOG              => true,
                 self::CONFIG                    => [
                     self::STORAGE                   => self::TYPE_JSON,
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,

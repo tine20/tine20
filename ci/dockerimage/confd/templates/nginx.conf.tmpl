@@ -20,35 +20,14 @@ http {
 
 	server_tokens off;
 
-	client_max_body_size {{getv "/client/max/body/size" "1m"}};
-
 	keepalive_timeout {{getv "/keepalive/timeout" "65"}};
 
 	sendfile on;
 
 	tcp_nodelay on;
 
-	tcp_nopush {{getv "/tcp/nopush" "off"}};
-
-	ssl_prefer_server_ciphers on;
-
-	ssl_session_cache shared:SSL:2m;
-
-	gzip {{getv "/gzip" "on"}};
-
-	gzip_vary on;
-
-	gzip_static {{getv "/gzip/static" "off"}};
-
-	brotli {{getv "/brotli" "on"}};
-	brotli_comp_level {{getv "/brotli/comp/level" "6"}};
-	brotli_types text/xml image/svg+xml application/x-font-ttf image/vnd.microsoft.icon application/x-font-opentype application/json font/eot application/vnd.ms-fontobject application/javascript font/otf application/xml application/xhtml+xml text/javascript  application/x-javascript text/plain application/x-font-truetype application/xml+rss image/x-icon font/opentype text/css image/x-win-bitmap;
-
-	log_format main '$remote_addr - $remote_user [$time_local] "$request" '
-			'$status $body_bytes_sent "$http_referer" '
-			'"$http_user_agent" "$http_x_forwarded_for"';
-
-	access_log /dev/stdout main;
+	tcp_nopush off;
 
 	include /etc/nginx/conf.d/*;
+	include /etc/nginx/http.d/*;
 }

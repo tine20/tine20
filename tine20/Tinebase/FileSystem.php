@@ -919,12 +919,7 @@ class Tinebase_FileSystem implements
             $rootRevisionSize = (int)$applicationController->getApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, true);
 
-            $refLogBackend->addSelectHook(function(Zend_Db_Select $select) {
-                $select->forUpdate(true);
-            });
-            $raii = new Tinebase_RAII(function() use($refLogBackend) {
-                $refLogBackend->resetSelectHooks();
-            });
+            $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($refLogBackend);
             $refLogs = $refLogBackend->getMultiple($refLogIds);
             if (!$refLogs->count()) {
                 $transMgr->commitTransaction($transId);
@@ -935,12 +930,7 @@ class Tinebase_FileSystem implements
             unset($raii);
 
             $treeBackend = $this->_getTreeNodeBackend();
-            $treeBackend->addSelectHook(function(Zend_Db_Select $select) {
-                $select->forUpdate(true);
-            });
-            $raii = new Tinebase_RAII(function() use($treeBackend) {
-                $treeBackend->resetSelectHooks();
-            });
+            $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($treeBackend);
 
             $folders = $allFolders = $treeBackend->getMultiple($refLogs->{Tinebase_Model_Tree_RefLog::FLD_FOLDER_ID});
             while (!empty($parentIds = array_filter($folders->parent_id, function($val) use($allFolders) {
@@ -1205,14 +1195,14 @@ class Tinebase_FileSystem implements
         try {
 
             try {
-                $this->_fileObjectBackend->addSelectHook(function(Zend_Db_Select $select) {$select->forUpdate(true);});
+                $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_fileObjectBackend);
                 $fileObject = $this->_fileObjectBackend->get($_objectId);
             } catch(Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Could not find file object ' . $_objectId);
                 return true;
             } finally {
-                $this->_fileObjectBackend->resetSelectHooks();
+                unset($raii);
             }
             
             if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileObject->type) {

@@ -15,6 +15,17 @@ in order for the update script to be able to copy the hashes of the old pins int
 If the update script is being run without configuring such an MFA, all accounts pins will be permanently lost
 (except for any preexisting database backups of course)
 
+We refactored the login and added support for multiple MFA providers (SMS, yubico, ...). The old "captcha" has been removed.
+
+see 41610e5 feature(Tinebase): mfa UI
+see 0c6fcb3 feature(Tinebase): introduce MTA and refactor area lock
+
+## Disable Browser Password Safe
+
+A new config option has been added to disable the Browser Password Safe (for example for the login screen).
+
+see cf14e3c feature(Tinebase): prevent browser password safe in ux.passwordField
+
 ## MySQL 8 Support
 
 But be careful, MySQL 8.0.20 has a major bug (see https://bugs.mysql.com/bug.php?id=99398 for more information) and should not be used!

@@ -254,7 +254,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
     onDurationChange: function() {
         this.calculateAccountingTime();
-        
         // adopt endtime if starttime is set
         const startTime = +this.getForm().findField('start_time').getValue();
         if (startTime) {
@@ -414,11 +413,17 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             scope: this,
                                             check: this.onCheckBillable
                                         }}),
-                                    fieldManager('accounting_time_factor', {columnWidth: .1, decimalSeparator: ',', listeners: {
-                                        scope: this,
-                                        change: this.calculateAccountingTime
+                                    fieldManager('accounting_time_factor', {
+                                        columnWidth: .1,
+                                        decimalSeparator: ',',
+                                        fieldLabel: this.app.i18n._('Factor'),
+                                        listeners: {
+                                            scope: this,
+                                            change: this.calculateAccountingTime
                                     }}),
-                                    fieldManager('accounting_time', {listeners: {
+                                    fieldManager('accounting_time', {
+                                        fieldLabel: this.app.i18n._('Accounting time'),
+                                        listeners: {
                                             scope: this,
                                             blur: this.calculateFactor,
                                             spin: this.calculateFactor

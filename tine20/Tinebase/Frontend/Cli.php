@@ -381,6 +381,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
+        if (! $cronuser) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                __LINE__ . ' No valid cronuser found.');
+            return 1;
+        }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $scheduler = Tinebase_Core::getScheduler();
@@ -437,6 +442,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - access_log
      * - async_job
      * - temp_files
+     * - timemachine_modlog
      * 
      * if param date is given (date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * 
@@ -450,10 +456,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
         $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
 
+        $date = ($dateString) ? new Tinebase_DateTime($dateString) : NULL;
+
         foreach ((array)$args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    $date = ($dateString) ? new Tinebase_DateTime($dateString) : NULL;
                     Tinebase_AccessLog::getInstance()->clearTable($date);
                     break;
                 case 'async_job':
@@ -464,6 +471,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     break;
                 case 'temp_files':
                     Tinebase_TempFile::getInstance()->clearTableAndTempdir($dateString);
+                    break;
+                case 'timemachine_modlog':
+                    Tinebase_Tinemachine_ModificationLog::getInstance()->clear_table($date);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
@@ -1529,6 +1539,59 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $this->_logMonitoringResult($result, $message);
         }
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
+     * nagios monitoring for mail servers
+     * imap/smtp/sieve
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringMailServers() {
+        $result = 0;
+        $servers = [
+            Tinebase_Config::SMTP,
+            Tinebase_Config::IMAP,
+            Tinebase_Config::SIEVE
+        ];
+        
+        $message = "\n";
+        
+        foreach ($servers as $server) {
+            $serverConfig = Tinebase_Config::getInstance()->{$server};
+            
+            $host = isset($serverConfig->{'hostname'}) ? $serverConfig->{'hostname'} : $serverConfig->{'host'};
+            $port = $serverConfig->{'port'};
+            
+            $message .= $server . ' | host: '. $host . ' | port: ' . $port;
+            
+            if (empty($host) || empty($port)) {
+                $message .= ' -> INVALID VALUE' . PHP_EOL;
+                $result = 2;
+                continue;
+            }
+        
+            $output = shell_exec('nc -d -N -w3 ' . $host . ' ' . $port . PHP_EOL);
+            
+            if (!$output) {
+                echo 'COMMAND CANNOT BE EXECUTE' . PHP_EOL;
+                return 99;
+            }
+            
+            if (strpos($output, 'OK') || strstr($output, '220')) {
+                $message .= ' -> CONNECTION OK' . PHP_EOL;
+            } else {
+                $message .= ' -> CONNECTION ERROR' . PHP_EOL;
+                $result = 1;
+            }
+            
+            $message .= PHP_EOL . $output . PHP_EOL;
+        }
+        
         echo $message . "\n";
         return $result;
     }

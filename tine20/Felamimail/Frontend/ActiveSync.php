@@ -43,13 +43,6 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     );
     
     /**
-     * felamimail message controller
-     *
-     * @var Felamimail_Controller_Message
-     */
-    protected $_messageController;
-    
-    /**
      * felamimail account
      * 
      * @var Felamimail_Model_Account
@@ -789,7 +782,28 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         Felamimail_Controller_Folder::getInstance()->rename($fmailFolder->account_id, $folder->displayName, $fmailFolder->globalname);
         return $folder;
     }
-    
+
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IData::createFolder()
+     */
+    public function createFolder(Syncroton_Model_IFolder $folder)
+    {
+        if (empty($folder->parentId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " It is not possible to create a folder at root level");
+            return $folder;
+        }
+
+        $parent = Felamimail_Controller_Folder::getInstance()->get($folder->parentId);
+        $account = Felamimail_Controller_Account::getInstance()->get($parent->account_id);
+        $newFolder = Felamimail_Controller_Folder::getInstance()->create($account, $folder->displayName, $parent->globalname);
+
+        $folder->serverId = $newFolder->getId();
+
+        return $folder;
+    }
+
     /**
      * (non-PHPdoc)
      * @see ActiveSync_Frontend_Abstract::toTineModel()

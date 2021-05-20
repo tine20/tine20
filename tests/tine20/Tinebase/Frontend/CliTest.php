@@ -382,6 +382,26 @@ class Tinebase_Frontend_CliTest extends TestCase
         self::assertStringContainsString('CACHE ', $out);
         self::assertLessThanOrEqual(1, $result);
     }
+    
+    /**
+     * testMonitoringMailServers
+     * @group nodockerci
+     */
+    public function testMonitoringMailServers()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        ob_start();
+        $result = $this->_cli->monitoringMailServers();
+        $out = ob_get_clean();
+
+        if ($result === 99) {
+            self::markTestSkipped('netcat is not installed');
+        }
+        
+        self::assertStringContainsString('CONNECTION ', $out);
+        self::assertLessThanOrEqual(1, $result);
+    }
 
     /**
      * test cleanNotes

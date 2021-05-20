@@ -1244,4 +1244,21 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         
         $this->assertEquals(0, $modifications->count(), 'not all modifications processed');
     }
+
+    public function testClearTableModLog()
+    {
+        //create modlog
+        $contact = Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()->contact_id);
+        $contact->adr_one_street = 'Teststrasse';
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        $modLogsBefore = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications("Addressbook", $contact->getId());
+        
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->clearTable(Tinebase_DateTime::now());
+        $this->assertTrue($result);
+        
+        $modLogsAfter = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications("Addressbook", $contact->getId());
+        $this->assertGreaterThan(count($modLogsAfter), count($modLogsBefore)); 
+        $this->assertEquals(0, count($modLogsAfter), print_r($modLogsAfter->toArray(), true));
+    }
 }

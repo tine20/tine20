@@ -19,14 +19,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Contenitore voci inventario predefinito"
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Contenitore predefinito per nuove voci"
-
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
 msgstr "Il numero attivo deve essere minore o uguale al numero totale"
@@ -55,7 +47,7 @@ msgstr "Inserisci descrizione"
 msgid "Location"
 msgstr "Luogo"
 
-#: js/InventoryItemEditDialog.js:162
+#: js/InventoryItemEditDialog.js:162 Model/InventoryItem.php:176
 msgid "Added"
 msgstr "Aggiunto"
 
@@ -63,7 +55,7 @@ msgstr "Aggiunto"
 msgid "Warranty"
 msgstr "Garanzia"
 
-#: js/InventoryItemEditDialog.js:174
+#: js/InventoryItemEditDialog.js:174 Model/InventoryItem.php:186
 msgid "Removed"
 msgstr "Rimosso"
 
@@ -99,21 +91,17 @@ msgstr "Fattura"
 msgid "Invoice date"
 msgstr "Data fattura"
 
-#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:195
 msgid "Depreciate"
 msgstr "Svalutato"
 
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
-msgid "All Inventory Items"
-msgstr "Tutte le Voci di inventario"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Contenitore voci inventario predefinito"
 
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
-msgid "All existing Inventory Items"
-msgstr "Tutte le voci di Inventario esistenti"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventario"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Contenitore predefinito per nuove voci"
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -147,6 +135,18 @@ msgstr "rimosso"
 msgid "unknown"
 msgstr "sconosciuto"
 
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Importa inventario via CSV"
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Importa elenco (###CURRENTDATE###)"
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Articoli importati da ###USERFULLNAME### - ###CURRENTTIME### ###CURRENTDATE###"
+
 #: Model/InventoryItem.php:38
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -167,22 +167,20 @@ msgstr "ID Inventario"
 msgid "Cost Center"
 msgstr ""
 
-#: Model/InventoryItem.php:176
-msgid "Item added"
-msgstr "Voce aggiunta"
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventario"
 
-#: Model/InventoryItem.php:184
-msgid "Item removed"
-msgstr "Voce rimossa"
+#: Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Tutte le Voci di inventario"
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Importa inventario via CSV"
+#: Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Tutte le voci di Inventario esistenti"
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Importa elenco (###CURRENTDATE###)"
+#~ msgid "Item added"
+#~ msgstr "Voce aggiunta"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Articoli importati da ###USERFULLNAME### - ###CURRENTTIME### ###CURRENTDATE###"
+#~ msgid "Item removed"
+#~ msgstr "Voce rimossa"

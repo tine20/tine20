@@ -376,12 +376,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         if (isset($_data['user_id']) && is_array($_data['user_id'])) {
-            if ((isset($_data['user_id']['accountId']) || array_key_exists('accountId', $_data['user_id']))) {
+            if (isset($_data['user_id']['accountId'])) {
                 // NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
                 $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'], true)->getId();
-            } elseif ((isset($_data['user_id']['group_id']) || array_key_exists('group_id', $_data['user_id']))) {
-                $_data['user_id'] = is_array($_data['user_id']['group_id']) ? $_data['user_id']['group_id'][0] : $_data['user_id']['group_id'];
-            } else if ((isset($_data['user_id']['id']) || array_key_exists('id', $_data['user_id']))) {
+            } elseif (isset($_data['user_id']['id'])) {
                 $_data['user_id'] = $_data['user_id']['id'];
             }
         }
@@ -1134,7 +1132,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // first fetch the groups, then the lists identified by list_id
                     $typeMap[$type] = Tinebase_Group::getInstance()->getMultiple(array_unique($ids));
                     $listIds = array_unique(array_merge($typeMap[$type]->list_id, $ids));
-                    $typeMap['list'] = Addressbook_Controller_List::getInstance()->getMultiple($listIds, true);
+                    $typeMap[$type] = Addressbook_Controller_List::getInstance()->getMultiple($listIds, true);
                     break;
                 case self::USERTYPE_RESOURCE:
                     $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids), true);
@@ -1164,21 +1162,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // already resolved from cache
                     continue;
                 }
-                
-                if ($attender->user_type == self::USERTYPE_GROUP) {
-                    $attendeeTypeSet = $typeMap[$attender->user_type];
-                    $idx = $attendeeTypeSet->getIndexById($attender->user_id);
-                    if ($idx !== false) {
-                        $group = $attendeeTypeSet[$idx];
-                        $attendeeTypeSet = $typeMap['list'];
-                        $idx = $attendeeTypeSet->getIndexById($group->list_id);
-                    } else {
-                        $attendeeTypeSet = $typeMap['list'];
-                        $idx = $attendeeTypeSet->getIndexById($attender->user_id);
+
+                $attendeeTypeSet = $typeMap[$attender->user_type];
+                $idx = $attendeeTypeSet->getIndexById($attender->user_id);
+                if (false == $idx && self::USERTYPE_GROUP === $attender->user_type) {
+                    if (null !== ($list = $attendeeTypeSet->find('group_id', $attender->user_id))) {
+                        $idx = $attendeeTypeSet->getIndexById($list->getId());
                     }
-                } else {
-                    $attendeeTypeSet = $typeMap[$attender->user_type];
-                    $idx = $attendeeTypeSet->getIndexById($attender->user_id);
                 }
                 
                 if ($idx !== false) {

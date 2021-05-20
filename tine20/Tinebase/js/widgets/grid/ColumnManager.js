@@ -137,6 +137,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 id: fieldName,
                 dataIndex: fieldName,
                 header: i18n._(fieldDefinition.label),
+                tooltip: i18n._(fieldDefinition.tooltip),
                 hidden: fieldDefinition.hasOwnProperty('shy') ? fieldDefinition.shy : false,    // defaults to false
                 sortable: (fieldDefinition.hasOwnProperty('sortable') && fieldDefinition.sortable == false) ? false : true // defaults to true
             });

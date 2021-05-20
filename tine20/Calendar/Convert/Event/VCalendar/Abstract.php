@@ -400,6 +400,15 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             $sabrePropertyParser = new Calendar_Convert_Event_VCalendar_SabrePropertyParser($vcalendar);
             foreach ($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] as $prop) {
                 try {
+                    $propArr = explode("\r\n", $prop);
+                    $prop = array_shift($propArr);
+                    foreach ($propArr as $line) {
+                        if ($line[0] === "\t" || $line[0] === ' ') {
+                            $prop .= substr($line, 1);
+                        } else {
+                            $prop .= $line;
+                        }
+                    }
                     $propObj = $sabrePropertyParser->parseProperty($prop);
                     $vevent->__set($propObj->name, $propObj);
                 } catch (\Sabre\VObject\ParseException $svope) {
@@ -501,6 +510,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         Calendar_Model_Attender::resolveAttendee($event->attendee, FALSE, $event);
 
+        /** @var Calendar_Model_Attender $eventAttendee */
         foreach($event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();
 

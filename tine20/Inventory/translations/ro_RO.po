@@ -18,14 +18,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr ""
-
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
 msgstr "Numărul activ trebuie sa fie mai mic sau egal cu numărul total."
@@ -54,7 +46,7 @@ msgstr "Introducere Descriere"
 msgid "Location"
 msgstr "Locaţie"
 
-#: js/InventoryItemEditDialog.js:162
+#: js/InventoryItemEditDialog.js:162 Model/InventoryItem.php:176
 msgid "Added"
 msgstr "Adăugat"
 
@@ -62,7 +54,7 @@ msgstr "Adăugat"
 msgid "Warranty"
 msgstr "Garanţie"
 
-#: js/InventoryItemEditDialog.js:174
+#: js/InventoryItemEditDialog.js:174 Model/InventoryItem.php:186
 msgid "Removed"
 msgstr "Înlăturat"
 
@@ -98,21 +90,17 @@ msgstr "Factură"
 msgid "Invoice date"
 msgstr "Dată factură"
 
-#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:195
 msgid "Depreciate"
 msgstr "Depreciat"
 
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
-msgid "All Inventory Items"
-msgstr "Toate elementele Inventarului"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr ""
 
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
-msgid "All existing Inventory Items"
-msgstr "Toate elementele existente"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventar"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr ""
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -146,6 +134,18 @@ msgstr "înlăturat"
 msgid "unknown"
 msgstr "necunoscut"
 
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Import Inventar CSV "
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
 #: Model/InventoryItem.php:38
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -168,22 +168,20 @@ msgstr "ID Inventor"
 msgid "Cost Center"
 msgstr ""
 
-#: Model/InventoryItem.php:176
-msgid "Item added"
-msgstr "Element adăugat"
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventar"
 
-#: Model/InventoryItem.php:184
-msgid "Item removed"
-msgstr "Element înlăturat"
+#: Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Toate elementele Inventarului"
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Import Inventar CSV "
+#: Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Toate elementele existente"
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+#~ msgid "Item added"
+#~ msgstr "Element adăugat"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+#~ msgid "Item removed"
+#~ msgstr "Element înlăturat"

@@ -152,8 +152,9 @@ Ext.MessageBox = function(){
                 msgEl = Ext.get(contentEl.firstChild);
                 textboxEl = Ext.get(contentEl.childNodes[2].firstChild);
                 textboxEl.enableDisplayMode();
-                textboxEl.addKeyListener([10,13], function(){
+                textboxEl.addKeyListener([10,13], function(key, e){
                     if(dlg.isVisible() && opt && opt.buttons){
+                        e.stopEvent();
                         if(opt.buttons.ok){
                             handleButton("ok");
                         }else if(opt.buttons.yes){

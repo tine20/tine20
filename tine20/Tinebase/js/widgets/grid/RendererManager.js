@@ -65,6 +65,8 @@ Tine.widgets.grid.RendererManager = function() {
                 renderer = Tine.Tinebase.common.containerRenderer;
             } else if (fieldName == 'attachments') {
                 renderer = Tine.widgets.grid.attachmentRenderer;
+            } else if (fieldName == 'color') {
+                renderer = Tine.Tinebase.common.colorRenderer;
             }
             
             return renderer;

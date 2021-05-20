@@ -182,12 +182,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     public function delete($_ids)
     {
         parent::delete($_ids);
-        
-        // check if default account got deleted and set new default account
+        $this->_updateDefaultAccountPreference($_ids);
+    }
+
+    /**
+     * check if default account got deleted and set new default account
+     *
+     * @param $_ids
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _updateDefaultAccountPreference($_ids)
+    {
         if (in_array(Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
             $accounts = $this->search();
             $defaultAccountId = (count($accounts) > 0) ? $accounts->getFirstRecord()->getId() : '';
-            
+
             Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccountId;
         }
     }
@@ -1120,6 +1129,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         if (!$this->_doContainerACLChecks) {
             return true;
+        }
+
+        if ($action === 'delete' && $record->type === Felamimail_Model_Account::TYPE_SHARED
+            && ! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_EMAILACCOUNTS)
+        ) {
+            throw new Tinebase_Exception_AccessDenied('Shared accounts can only be deleted by email admins with MANAGE_EMAILACCOUNTS right');
         }
 
         if (Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {

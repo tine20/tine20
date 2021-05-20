@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-28 09:49+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2020-05-11 11:55+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
@@ -28,34 +28,6 @@ msgstr "Cuộc gọi đi"
 #: js/Phone.js:114
 msgid "unknown number"
 msgstr "không rõ số"
-
-#: js/DialerPanel.js:54 Model/MyPhone.php:32
-msgid "Phone"
-msgstr ""
-
-#: js/DialerPanel.js:77 Model/Call.php:60
-msgid "Line"
-msgstr "Đường dây"
-
-#: js/DialerPanel.js:86
-msgid "Number"
-msgstr "Số"
-
-#: js/DialerPanel.js:95
-msgid "Cancel"
-msgstr "Hủy"
-
-#: js/DialerPanel.js:105
-msgid "Dial"
-msgstr "Quay số"
-
-#: js/DialerPanel.js:125
-msgid "Error"
-msgstr "Lỗi"
-
-#: js/DialerPanel.js:126
-msgid "Not possible to dial."
-msgstr "Không thể quay số"
 
 #: js/AddressbookGridPanelHook.js:40
 msgid "Call contact"
@@ -101,37 +73,33 @@ msgstr "Chưa chọn điện thoại"
 msgid "Please select the desired phone in the tree!"
 msgstr "Xin chọn điện thoại bạn muốn trong cây danh mục"
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "Cuộc gọi trong tuần"
+#: js/DialerPanel.js:54 Model/MyPhone.php:32
+msgid "Phone"
+msgstr ""
 
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "Cuộc gọi tuần trước"
+#: js/DialerPanel.js:77 Model/Call.php:60
+msgid "Line"
+msgstr "Đường dây"
 
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "Cuộc gọi tháng này"
+#: js/DialerPanel.js:86
+msgid "Number"
+msgstr "Số"
 
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "Cuộc gọi tháng trước"
+#: js/DialerPanel.js:95
+msgid "Cancel"
+msgstr "Hủy"
 
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Cuộc gọi đi và đến trong tuần"
+#: js/DialerPanel.js:105
+msgid "Dial"
+msgstr "Quay số"
 
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Cuộc gọi đi và đến tuần trước"
+#: js/DialerPanel.js:125
+msgid "Error"
+msgstr "Lỗi"
 
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Cuộc gọi đi và đến tháng này"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Cuộc gọi đi và đến tháng trước"
+#: js/DialerPanel.js:126
+msgid "Not possible to dial."
+msgstr "Không thể quay số"
 
 #: Config.php:44 Config.php:46
 msgid "Local prefix for outgoing calls"
@@ -156,6 +124,18 @@ msgstr ""
 #: Config.php:72
 msgid "Own telephone number to prefix to internal calls."
 msgstr ""
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "Thiết lập"
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Đường dây"
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Mô tả"
 
 #: Model/Call.php:43
 msgid "Call"
@@ -205,14 +185,34 @@ msgstr "Đích đến"
 msgid "resolved destination"
 msgstr ""
 
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "Thiết lập"
+#: Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr "Cuộc gọi trong tuần"
 
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Đường dây"
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Cuộc gọi đi và đến trong tuần"
 
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Mô tả"
+#: Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Cuộc gọi tuần trước"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Cuộc gọi đi và đến tuần trước"
+
+#: Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Cuộc gọi tháng này"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Cuộc gọi đi và đến tháng này"
+
+#: Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Cuộc gọi tháng trước"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Cuộc gọi đi và đến tháng trước"

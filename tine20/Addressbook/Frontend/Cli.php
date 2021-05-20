@@ -453,4 +453,47 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         echo "Added privateData grant to $counter shared containers" . PHP_EOL;
     }
+
+
+    /**
+     * @param $opts
+     * $opts -> container_id, fields and sprecialChar
+     * e.x -- --method=Addressbook.removeSpecialChar container_id='1234' fields='n_given,n_family' specialChar='\\'
+     * all Contacts with '\' in n_given and n_family remove '\'
+     * default fields n_given n_middle n_family
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function removeSpecialChar($opts)
+    {
+        $args = $this->_parseArgs($opts);
+        $filter = [];
+        if (!isset($args['fields'])) {
+            $args['fields'] = $fields = ['n_given', 'n_middle', 'n_family'];
+        }
+
+        if (isset($args['container_id'])) {
+            $filter[] = [['field' => 'container_id', 'operator' => 'equals', 'value' => $args['container_id']]];
+        }
+
+        $fieldsFilter = [];
+        foreach ($args['fields'] as $field) {
+            $fieldsFilter[] = ['field' => $field, 'operator' => 'contains', 'value' => $args['specialChar']];
+        }
+
+        $filter[] = ['condition' => 'OR', 'filters' => $fieldsFilter];
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, $filter);
+        $results = Addressbook_Controller_Contact::getInstance()->search($filter);
+
+        foreach ($results as $record) {
+            foreach ($args['fields'] as $field) {
+                if (isset($record[$field])) {
+                    $record[$field] = str_replace($args['specialChar'], '', $record[$field]);
+                }
+            }
+            Addressbook_Controller_Contact::getInstance()->update($record);
+        }
+
+    }
 }

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-28 09:49+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2020-05-11 11:55+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/tine20/tine20/language/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -29,34 +29,6 @@ msgstr "Llamada de salida"
 #: js/Phone.js:114
 msgid "unknown number"
 msgstr "número desconocido"
-
-#: js/DialerPanel.js:54 Model/MyPhone.php:32
-msgid "Phone"
-msgstr "Teléfono"
-
-#: js/DialerPanel.js:77 Model/Call.php:60
-msgid "Line"
-msgstr "Línea"
-
-#: js/DialerPanel.js:86
-msgid "Number"
-msgstr "Número"
-
-#: js/DialerPanel.js:95
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: js/DialerPanel.js:105
-msgid "Dial"
-msgstr "Marcar"
-
-#: js/DialerPanel.js:125
-msgid "Error"
-msgstr "Error"
-
-#: js/DialerPanel.js:126
-msgid "Not possible to dial."
-msgstr "Fue imposible discar."
 
 #: js/AddressbookGridPanelHook.js:40
 msgid "Call contact"
@@ -102,37 +74,33 @@ msgstr "Teléfono no seleccionado"
 msgid "Please select the desired phone in the tree!"
 msgstr "Seleccione teléfono"
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "Llamadas esta semana"
+#: js/DialerPanel.js:54 Model/MyPhone.php:32
+msgid "Phone"
+msgstr "Teléfono"
 
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "Llamadas última semana"
+#: js/DialerPanel.js:77 Model/Call.php:60
+msgid "Line"
+msgstr "Línea"
 
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "Llamadas este mes"
+#: js/DialerPanel.js:86
+msgid "Number"
+msgstr "Número"
 
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "Llamadas último mes"
+#: js/DialerPanel.js:95
+msgid "Cancel"
+msgstr "Cancelar"
 
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Llamadas entrantes/salientes esta semana"
+#: js/DialerPanel.js:105
+msgid "Dial"
+msgstr "Marcar"
 
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Llamadas entrantes/salientes última semana"
+#: js/DialerPanel.js:125
+msgid "Error"
+msgstr "Error"
 
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Llamadas entrantes/salientes este mes"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Llamadas entrantes/salientes último mes"
+#: js/DialerPanel.js:126
+msgid "Not possible to dial."
+msgstr "Fue imposible discar."
 
 #: Config.php:44 Config.php:46
 msgid "Local prefix for outgoing calls"
@@ -157,6 +125,18 @@ msgstr ""
 #: Config.php:72
 msgid "Own telephone number to prefix to internal calls."
 msgstr ""
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "Configuración"
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Lineas"
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Descripción"
 
 #: Model/Call.php:43
 msgid "Call"
@@ -206,14 +186,34 @@ msgstr "Destino"
 msgid "resolved destination"
 msgstr ""
 
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "Configuración"
+#: Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr "Llamadas esta semana"
 
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Lineas"
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Llamadas entrantes/salientes esta semana"
 
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Descripción"
+#: Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Llamadas última semana"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Llamadas entrantes/salientes última semana"
+
+#: Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Llamadas este mes"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Llamadas entrantes/salientes este mes"
+
+#: Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Llamadas último mes"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Llamadas entrantes/salientes último mes"

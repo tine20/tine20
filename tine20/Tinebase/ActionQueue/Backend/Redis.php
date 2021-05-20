@@ -6,7 +6,7 @@
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Zend_RedisProxy as Redis;
@@ -87,8 +87,6 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $this->_dataStructName   = $this->_options['queueName'] . $this->_options['redisDataSuffix'];
         $this->_daemonStructName = $this->_options['queueName'] . $this->_options['redisDaemonSuffix'];
         $this->_deadLetterStructName = $this->_options['queueName'] . $this->_options['redisDeadLetterSuffix'];
-
-        // Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' options: ' . print_r($this->_options, true));
 
         $this->connect();
     }
@@ -259,15 +257,10 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
     {
         try {
             $encodedMessage = serialize($message);
-            
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(
-                __METHOD__ . '::' . __LINE__ . " failed to serialize message: '{$message}'");
-            Tinebase_Core::getLogger()->err(
-                __METHOD__ . '::' . __LINE__ . " exception message: " . $e->getMessage());
-            Tinebase_Core::getLogger()->err(
-                __METHOD__ . '::' . __LINE__ . " exception stacktrace: " . $e->getTraceAsString());
-            
+                __METHOD__ . '::' . __LINE__ . ' Failed to serialize message: ' . print_r($message, true));
+            Tinebase_Exception::log($e);
             return null;
         }
         

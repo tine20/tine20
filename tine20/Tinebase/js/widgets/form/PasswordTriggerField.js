@@ -91,7 +91,8 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         const valueArray = (this.getValue() || '').split('');
         const replacement = e.clipboardData ? e.clipboardData.getData('text') : String.fromCharCode(e.keyCode);
         
-        if (_.indexOf([8 /*BACKSPACE*/, 46 /*DELETE*/], e.keyCode) > -1) {
+        // NOTE: keydown & keypress have different keyCodes!
+        if (e.type === 'keydown' && _.indexOf([8 /*BACKSPACE*/, 46 /*DELETE*/], e.keyCode) > -1) {
             start = start - (e.keyCode === 8 /*BACKSPACE*/ && start === end);
             valueArray.splice(start, Math.abs(end-start)||1);
         } else {

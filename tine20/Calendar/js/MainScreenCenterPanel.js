@@ -312,10 +312,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             checkState: (mainScreen, btn) => {
                 let isGridView = mainScreen.activeView.match(/grid/i);
                 btn.setVisible(isGridView);
-
-                if (!isGridView && btn.pressed) {
-                    _.delay(() => {this.showWeekView.toggle(true);}, 500);
-                }
             }
         });
         this.toggleFullScreen = new Ext.Toolbar.Button({
@@ -572,6 +568,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     changeView: function (view, startDate) {
         // autocomplete view
         var viewParts = this.getViewParts(view);
+        if (viewParts.period === 'custom' && viewParts.presentation !== 'Grid') {
+            // transition customGrid -> sheetView
+            let range = Ext.ux.form.PeriodPicker.getRange(this.getCalendarPanel(this.activeView).getView().getPeriod());
+            if (['month', 'week', 'day'].indexOf(range) < 0) range = 'week';
+            
+            viewParts.period = range;
+;       }
         view = viewParts.toString();
         
         Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::changeView(' + view + ',' + startDate + ')');
@@ -825,23 +828,33 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @return {Object}
      */
     getEventStatusAction: function(event) {
-        let statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'eventStatus');
-        let statusRecord = statusStore.getById(event.get('status'));
+        const statusField = new Tine.Tinebase.widgets.keyfield.ComboBox({app: 'Calendar', keyFieldName: 'eventStatus'});
+        const statusRecord = statusField.store.getById(event.get('status'));
+        const constraintsProvider = Tine.Calendar.EventEditDialog.getCheckStateProviders('status');
+        const editDialogMock = {
+            getForm() { return {
+                findField() {
+                    return statusField;
+                }
+            }}
+        };
+        _.each(constraintsProvider, (cp) => {
+            cp(editDialogMock, event);
+        });
+        
         let eventStatusAction = {
             text: this.app.i18n._('Set event status'),
             icon: statusRecord ? statusRecord.get('icon') : false,
             menu: []
         };
-
-        statusStore.each(function(status) {
-            let isCurrent = statusRecord && statusRecord.id === status.id;
-
+        
+        statusField.store.each(function(status) {
             // NOTE: we can't use checked items here as we use icons already
             eventStatusAction.menu.push({
                 text: status.get('i18nValue'),
                 handler: this.setEventStatus.createDelegate(this, [event, status.id]),
                 icon: status.get('icon'),
-                disabled: isCurrent
+                disabled: status.id === event.get('status')
             });
         }, this);
         
@@ -1576,7 +1589,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * called when store loaded data
      */
     onStoreLoad: function (store, options) {
-        if (this.rendered) {
+        if (this.rendered && _.get(options, 'keepLoadMask') !== true) {
             this.loadMask.hide();
         }
         
@@ -1910,7 +1923,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     period: tbar.periodPicker.getPeriod(),
                     viewType: whichParts.period,
                     store: store,
-                    canonicalName: ['Event', 'Timeline']
+                    canonicalName: ['Event', 'Timeline'],
+                    mainScreen: this
                 });
             }
 

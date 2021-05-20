@@ -192,6 +192,11 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         );
     }
 
+    /**
+     * reset preview_error_count & preview_status
+     *
+     * @throws Zend_Db_Adapter_Exception
+     */
     public function resetPreviewErrorCount()
     {
         $maxErrorCount = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
@@ -199,7 +204,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $this->_db->update(
             $this->_tablePrefix . $this->_revisionsTableName,
             [
-                'preview_error_count' => 0
+                'preview_error_count' => 0,
+                'preview_status' => 0,
             ],
             $this->_db->quoteInto('preview_error_count >= ?', $maxErrorCount)
         );
@@ -227,10 +233,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         // increase revision
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $objectId);
-        $data  = array('revision' => $revision);
+        $data = [
+            'revision' => $revision,
+        ];
         $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
         
-        // store new revisionid and unlock row
+        // store new revision id and unlock row
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         return $revision;
@@ -324,6 +332,8 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 
         if ($createRevision) {
             $data['id'] = $_record->getId();
+            // reset preview status - otherwise new previews are not created
+            $data['preview_status'] = 0;
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
 
             if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_record->type &&
@@ -522,7 +532,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $transactionManager = Tinebase_TransactionManager::getInstance();
         $dbExpr = new Zend_Db_Expr('sum(size)');
 
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $transactionId = $transactionManager->startTransaction($this->_db);
             try {
                 try {

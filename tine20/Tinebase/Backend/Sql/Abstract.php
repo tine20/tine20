@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
@@ -175,14 +175,20 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
     }
 
-    public function addSelectHook(callable $callable)
+    public function addSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void
     {
-        $this->_selectHooks[] = $callable;
+        if (!isset($this->_selectHooks[$hook->getKey()])) {
+            $this->_selectHooks[$hook->getKey()] = new SplObjectStorage();
+        }
+        $this->_selectHooks[$hook->getKey()]->attach($hook);
     }
 
-    public function resetSelectHooks()
+    public function removeSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void
     {
-        $this->_selectHooks = [];
+        $this->_selectHooks[$hook->getKey()]->detach($hook);
+        if (0 === $this->_selectHooks[$hook->getKey()]->count()) {
+            unset($this->_selectHooks[$hook->getKey()]);
+        }
     }
 
     /*************************** getters and setters *********************************/
@@ -879,8 +885,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $this->_addForeignTableJoins($select, $cols);
 
-        foreach ($this->_selectHooks as $hook) {
-            $hook($select);
+        /** @var SplObjectStorage $objs */
+        foreach ($this->_selectHooks as $objs) {
+            $objs->rewind();
+            $objs->current()->manipulateSelect($select);
         }
         
         return $select;

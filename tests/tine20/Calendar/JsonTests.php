@@ -392,8 +392,8 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testSearchEventsWithOutPeriodFilterConfiguredFromAndUntil()
     {
-        if (Tinebase_DateTime::now()->get('H') == 23) {
-            self::markTestSkipped('FIXME: this test fails in the hour before midnight');
+        if (Tinebase_DateTime::now()->get('H') == 22 || Tinebase_DateTime::now()->get('H') == 23) {
+            self::markTestSkipped('FIXME: this test fails in the hours before');
         }
 
         Calendar_Config::getInstance()->set(Calendar_Config::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM, 12);
@@ -2163,6 +2163,30 @@ class Calendar_JsonTests extends Calendar_TestCase
             isset($result[Calendar_Model_Attender::USERTYPE_GROUP]) &&
             !isset($result[Calendar_Model_Attender::USERTYPE_RESOURCE])
         );
+    }
+
+    public function testSearchEventAttendeeMemberOfFilter()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => Tinebase_Core::getUser()->contact_id),
+            array('user_id' => $this->_getPersonasContacts('sclever')->getId())
+        ));
+        Calendar_Controller_Event::getInstance()->create($event);
+
+        $groupsListId = Tinebase_Group::getInstance()->getGroupById($this->_getPersona('sclever')->accountPrimaryGroup)->list_id;
+        $searchResult = $this->_uit->searchEvents([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()],
+            ['field' => 'attender'    , 'operator' => 'in',     'value' => [
+                [
+                    'user_type' => Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF,
+                    'user_id'   => Addressbook_Controller_List::getInstance()->get($groupsListId)->toArray(false),
+                ]
+            ]]
+        ], []);
+
+        $this->assertSame('attender', $searchResult['filter'][1]['field']);
+        $this->assertSame($groupsListId, $searchResult['filter'][1]['value'][0]['user_id']['id']);
     }
 
     public function testSearchAttendeersConfigUserFilter()

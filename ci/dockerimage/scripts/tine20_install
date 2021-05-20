@@ -15,4 +15,5 @@ php /usr/share/tine20/setup.php --install --config ${TINE20_CONFIG_PATH:-"/etc/t
   sieve="${TINE20_EMAIL_SIEVE}" \
   authentication="${TINE20_AUTHENTICATION}" \
   accounts="${TINE20_ACCOUNTS}" \
-  license="${TINE20_LICENSE_PATH}"
+  license="${TINE20_LICENSE_PATH}" \
+  lang="${TINE20_INSTALL_LANG:-de}"

@@ -11,6 +11,15 @@
  */
 class Admin_Controller_UserTest extends TestCase
 {
+    /**
+     * set up tests
+     */
+    protected function setUp(): void
+    {
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        parent::setUp();
+    }
+
     public function testAddUserWithAlreadyExistingEmailData()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
@@ -25,8 +34,8 @@ class Admin_Controller_UserTest extends TestCase
         ));
         $pw = Tinebase_Record_Abstract::generateUID(12);
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
-        $this->_usernamesToDelete[] = $user->accountLoginName;
-        // remove user from tine20 table and add again
+
+        // delete user and add again
         $backend = new Tinebase_User_Sql();
         $backend->deleteUserInSqlBackend($user);
 

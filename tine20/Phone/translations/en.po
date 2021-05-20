@@ -26,34 +26,6 @@ msgstr "Outgoing call"
 msgid "unknown number"
 msgstr "unknown number"
 
-#: js/DialerPanel.js:54 Model/MyPhone.php:32
-msgid "Phone"
-msgstr "Phone"
-
-#: js/DialerPanel.js:77 Model/Call.php:60
-msgid "Line"
-msgstr "Line"
-
-#: js/DialerPanel.js:86
-msgid "Number"
-msgstr "Number"
-
-#: js/DialerPanel.js:95
-msgid "Cancel"
-msgstr "Cancel"
-
-#: js/DialerPanel.js:105
-msgid "Dial"
-msgstr "Dial"
-
-#: js/DialerPanel.js:125
-msgid "Error"
-msgstr "Error"
-
-#: js/DialerPanel.js:126
-msgid "Not possible to dial."
-msgstr "Not possible to dial."
-
 #: js/AddressbookGridPanelHook.js:40
 msgid "Call contact"
 msgstr "Call contact"
@@ -98,37 +70,33 @@ msgstr "No phone selected"
 msgid "Please select the desired phone in the tree!"
 msgstr "Please select the desired phone in the tree!"
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "Calls this week"
+#: js/DialerPanel.js:54 Model/MyPhone.php:32
+msgid "Phone"
+msgstr "Phone"
 
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "Calls last week"
+#: js/DialerPanel.js:77 Model/Call.php:60
+msgid "Line"
+msgstr "Line"
 
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "Calls this month"
+#: js/DialerPanel.js:86
+msgid "Number"
+msgstr "Number"
 
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "Calls last month"
+#: js/DialerPanel.js:95
+msgid "Cancel"
+msgstr "Cancel"
 
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Incoming and outgoing calls of this week"
+#: js/DialerPanel.js:105
+msgid "Dial"
+msgstr "Dial"
 
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Incoming and outgoing calls of last week"
+#: js/DialerPanel.js:125
+msgid "Error"
+msgstr "Error"
 
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Incoming and outgoing calls of this month"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Incoming and outgoing calls of last month"
+#: js/DialerPanel.js:126
+msgid "Not possible to dial."
+msgstr "Not possible to dial."
 
 #: Config.php:44 Config.php:46
 msgid "Local prefix for outgoing calls"
@@ -153,6 +121,18 @@ msgstr "own telephone number"
 #: Config.php:72
 msgid "Own telephone number to prefix to internal calls."
 msgstr "Own telephone number to prefix to internal calls."
+
+#: Model/MyPhone.php:61
+msgid "Settings"
+msgstr "Settings"
+
+#: Model/MyPhone.php:66
+msgid "Lines"
+msgstr "Lines"
+
+#: Model/MyPhone.php:69
+msgid "Description"
+msgstr "Description"
 
 #: Model/Call.php:43
 msgid "Call"
@@ -202,14 +182,34 @@ msgstr "Destination"
 msgid "resolved destination"
 msgstr "resolved destination"
 
-#: Model/MyPhone.php:61
-msgid "Settings"
-msgstr "Settings"
+#: Setup/Initialize.php:33
+msgid "Calls this week"
+msgstr "Calls this week"
 
-#: Model/MyPhone.php:66
-msgid "Lines"
-msgstr "Lines"
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Incoming and outgoing calls of this week"
 
-#: Model/MyPhone.php:69
-msgid "Description"
-msgstr "Description"
+#: Setup/Initialize.php:43
+msgid "Calls last week"
+msgstr "Calls last week"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Incoming and outgoing calls of last week"
+
+#: Setup/Initialize.php:53
+msgid "Calls this month"
+msgstr "Calls this month"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Incoming and outgoing calls of this month"
+
+#: Setup/Initialize.php:63
+msgid "Calls last month"
+msgstr "Calls last month"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Incoming and outgoing calls of last month"

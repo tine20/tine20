@@ -342,6 +342,8 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @see 0009852: improve cache cleaning after LDAP sync
+     *
+     * @group nogitlabci
      */
     public function testSyncGroups()
     {

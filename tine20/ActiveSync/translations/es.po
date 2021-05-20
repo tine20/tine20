@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-28 09:48+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2020-05-11 11:43+0000\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/tine20/tine20/language/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -16,99 +16,6 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Preference.php:75
-msgid "Default Address book"
-msgstr ""
-
-#: Preference.php:76
-msgid "The default address book to create new contacts in."
-msgstr ""
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Calendario por defecto"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Calendario por defecto para crear nuevos eventos en él."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Lista de tareas por defecto"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Lista de tareas por defecto para crear nuevas tareas en él."
-
-#: js/AdminPanel.js:45
-msgid "Sync Devices"
-msgstr ""
-
-#: js/EditDialog.js:72 js/SyncDevicesGridPanel.js:70
-#: js/SyncDevicesGridPanel.js:154
-msgid "Device ID"
-msgstr ""
-
-#: js/EditDialog.js:79
-msgid "Devicetype"
-msgstr ""
-
-#: js/EditDialog.js:86 js/SyncDevicesGridPanel.js:72
-msgid "Owner"
-msgstr ""
-
-#: js/EditDialog.js:98 js/SyncDevicesGridPanel.js:73
-msgid "Policy"
-msgstr ""
-
-#: js/EditDialog.js:104 js/SyncDevicesGridPanel.js:74
-msgid "ActiveSync Version"
-msgstr ""
-
-#: js/EditDialog.js:110 js/SyncDevicesGridPanel.js:75
-msgid "User agent"
-msgstr ""
-
-#: js/EditDialog.js:116 js/SyncDevicesGridPanel.js:76
-msgid "Model"
-msgstr ""
-
-#: js/EditDialog.js:122 js/SyncDevicesGridPanel.js:77
-msgid "IMEI"
-msgstr ""
-
-#: js/EditDialog.js:128 js/SyncDevicesGridPanel.js:78
-msgid "Friendly Name"
-msgstr ""
-
-#: js/EditDialog.js:134
-msgid "OS"
-msgstr ""
-
-#: js/EditDialog.js:140 js/SyncDevicesGridPanel.js:80
-msgid "OS Language"
-msgstr ""
-
-#: js/EditDialog.js:146
-msgid "Phonenumber"
-msgstr ""
-
-#: js/SyncDevices.js:71
-msgid "Sync Device"
-msgid_plural "Sync Devices"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:42
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Dispositivo"
-msgstr[1] "Dispositivos"
-
-#: js/Model.js:42
-msgid "Devices"
-msgstr "Dispositivos"
 
 #: js/Application.js:27
 msgid "Active Sync"
@@ -144,16 +51,58 @@ msgstr "reseteado"
 msgid "Set Sync Filter"
 msgstr "Ajustar filtro de sincronización"
 
+#: js/AdminPanel.js:45
+msgid "Sync Devices"
+msgstr ""
+
 #: js/SyncDevicesGridPanel.js:69
 msgid "ID"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:70 js/SyncDevicesGridPanel.js:154
+#: js/EditDialog.js:72
+msgid "Device ID"
 msgstr ""
 
 #: js/SyncDevicesGridPanel.js:71
 msgid "Device Type"
 msgstr ""
 
+#: js/SyncDevicesGridPanel.js:72 js/SyncDevicesGridPanel.js:155
+#: js/EditDialog.js:86
+msgid "Owner"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
+msgid "Policy"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:104
+msgid "ActiveSync Version"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:110
+msgid "User agent"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:116
+msgid "Model"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:122
+msgid "IMEI"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:128
+msgid "Friendly Name"
+msgstr ""
+
 #: js/SyncDevicesGridPanel.js:79
 msgid "Operating System"
+msgstr ""
+
+#: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:140
+msgid "OS Language"
 msgstr ""
 
 #: js/SyncDevicesGridPanel.js:81
@@ -212,53 +161,133 @@ msgstr ""
 msgid "Quicksearch"
 msgstr ""
 
-#: Setup/Update/Release6.php:290 Setup/setup.xml:549
-msgid "Default Policy"
-msgstr "Política por Defecto"
+#: js/SyncDevices.js:70
+msgid "Sync Device"
+msgid_plural "Sync Devices"
+msgstr[0] ""
+msgstr[1] ""
 
-#: Setup/Update/Release6.php:295 Setup/setup.xml:554
-msgid "Default Policy installed during setup"
-msgstr "Política por Defecto instalada durante la instalación"
+#: js/Model.js:42
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Dispositivo"
+msgstr[1] "Dispositivos"
 
-#: Config.php:57
+#: js/Model.js:42
+msgid "Devices"
+msgstr "Dispositivos"
+
+#: js/EditDialog.js:79
+msgid "Devicetype"
+msgstr ""
+
+#: js/EditDialog.js:134
+msgid "OS"
+msgstr ""
+
+#: js/EditDialog.js:146
+msgid "Phonenumber"
+msgstr ""
+
+#: Preference.php:75
+msgid "Default Address book"
+msgstr ""
+
+#: Preference.php:76
+msgid "The default address book to create new contacts in."
+msgstr ""
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Calendario por defecto"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Calendario por defecto para crear nuevos eventos en él."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Lista de tareas por defecto"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Lista de tareas por defecto para crear nuevas tareas en él."
+
+#: Config.php:60
 msgid "Default policy for new devices"
 msgstr "Política por Defecto para nuevos dispositivos"
 
-#: Config.php:59
+#: Config.php:62
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Introduzca el id de la política a aplicar a los nuevos dispositivos creados."
 
-#: Config.php:68
+#: Config.php:71
+msgid "Device Model Agent Deny List"
+msgstr ""
+
+#: Config.php:73
+msgid "Array of regular expressions of Device-Model strings"
+msgstr ""
+
+#: Config.php:84
 msgid "User Agent Deny List"
 msgstr ""
 
-#: Config.php:70
+#: Config.php:86
 msgid "Array of regular expressions of User-Agent strings"
 msgstr ""
 
-#: Config.php:81
+#: Config.php:97
 msgid "Disable Access Log"
 msgstr ""
 
-#: Config.php:83
+#: Config.php:99
 msgid "Disable ActiveSync Access Log creation."
 msgstr ""
 
-#: Config.php:92
+#: Config.php:108
 msgid "Filter timeslot for e-mails"
 msgstr ""
 
-#: Config.php:94
+#: Config.php:110
 msgid "For how long in the past the e-mails should be synchronized."
 msgstr ""
 
-#: Config.php:115
+#: Config.php:131
 msgid "Filter timeslot for events"
 msgstr ""
 
-#: Config.php:117
+#: Config.php:133
 msgid "For how long in the past the events should be synchronized."
 msgstr ""
+
+#: Controller/Device.php:213
+msgid "%1$s ActiveSync failure"
+msgstr ""
+
+#: views/lastPingNotificationToUserEmail.twig:1
+msgid "Dear user,"
+msgstr ""
+
+#: views/lastPingNotificationToUserEmail.twig:3
+msgid "%1$s has noticed that the syncronization with your ActiveSync device is no longer active. Please trigger the syncronisation on your device."
+msgstr ""
+
+#: views/lastPingNotificationToUserEmail.twig:5
+msgid "Thank you."
+msgstr ""
+
+#: views/lastPingNotificationToUserEmail.twig:7
+msgid "Your %1$s Team"
+msgstr ""
+
+#: Setup/setup.xml:549
+msgid "Default Policy"
+msgstr "Política por Defecto"
+
+#: Setup/setup.xml:554
+msgid "Default Policy installed during setup"
+msgstr "Política por Defecto instalada durante la instalación"
 
 #: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
