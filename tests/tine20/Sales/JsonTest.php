@@ -483,6 +483,20 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals(3, $updatedCustomer['postal_id']['seq']);
         $this->assertEquals(3, $updatedCustomer['adr_seq']);
     }
+
+    public function testSaveCustomerAndCreateInvoiceAddress()
+    {
+        $customer = $this->_instance->saveCustomer(array(
+            'name'      => Tinebase_Record_Abstract::generateUID(),
+            'adr_street' => '11212stree',
+            'adr_postalcode' => '1111',
+            'adr_locality' => '1dscscsd',
+        ));
+
+        // assert invoice address (same as postal address)
+        self::assertTrue(is_array($customer['billing']), print_r($customer, true));
+        self::assertCount(1, $customer['billing'], print_r($customer, true));
+    }
     
     /**
      * testSaveContractWithManyRelations

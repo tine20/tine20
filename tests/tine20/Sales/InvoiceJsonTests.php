@@ -46,8 +46,9 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->assertTrue(is_array($customer['postal_id']));
         $this->assertEquals($customer['adr_id'], $customer['postal_id']['id']);
         
+        //we create a billing address as postal address
         $this->assertTrue(is_array($customer['billing']));
-        $this->assertEquals(1, count($customer['billing']));
+        $this->assertEquals(2, count($customer['billing']));
         
         $this->assertTrue(is_array($customer['delivery']));
         $this->assertEquals(1, count($customer['delivery']));
@@ -60,7 +61,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $customer['billing'][1] = array('prefix1' => 'Dr.', 'prefix2' => 'George Harbottle', 'street' => 'Glasgow Str. 432', 'postalcode' => '532 45', 'locality' => 'Birmingham', 'type' => 'billing');
         $customer['delivery'][1] = array('prefix1' => 'Mr.', 'prefix2' => 'Peter Harbottle', 'street' => 'London Str. 123', 'postalcode' => '532 23', 'locality' => 'Birmingham', 'type' => 'delivery');
-        
+
         $customer = $this->_uit->saveCustomer($customer);
         
         $this->assertEquals(2, count($customer['billing']));
