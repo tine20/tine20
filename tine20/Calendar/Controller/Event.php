@@ -1054,6 +1054,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $updatedEvent = $this->get($event->getId(), null, true, true);
 
+        // first process resource declines, as this may alter the event again
+        $updatedEvent = $this->_processDeclineResources($updatedEvent, $declineResources);
+
         if ($skipEvent === false) {
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEventAfterUpdate([
                 'observable' => $updatedEvent
@@ -1066,8 +1069,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($this->_sendNotifications) {
             $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
-
-        $updatedEvent = $this->_processDeclineResources($updatedEvent, $declineResources);
 
         return $updatedEvent;
     }
