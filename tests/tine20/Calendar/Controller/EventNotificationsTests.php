@@ -96,6 +96,38 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
         $this->assertEquals($event->mute, 1);
     }
+
+    public function testResourceBusyNotification()
+    {
+        $resource = $this->_getResource();
+        $resource->busy_type = Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE;
+        $resource = Calendar_Controller_Resource::getInstance()->create($resource);
+
+        $event = $this->_getEvent(true);
+        $event->attendee->removeLast();
+        $event->attendee->addRecord($this->_createAttender($resource->getId(), Calendar_Model_Attender::USERTYPE_RESOURCE));
+        $event->attendee->getLastRecord()->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        /*$firstEvent =*/ $this->_eventController->create($event);
+
+        self::flushMailer();
+        $event->setId(null);
+        $event->uid = null;
+        /*$secondEvent =*/ Calendar_Controller_MSEventFacade::getInstance()->create($event);
+        //$this->_eventController->create($event);
+
+        $messages = self::getMessages();
+        $this->assertEquals(2, count($messages), 'expected exactly two mails');
+        $this->assertStringContainsString('Meeting Room declined event', $messages[0]->getSubject());
+
+        $bodyPart = $messages[1]->getBodyText(FALSE);
+        $s = fopen('php://temp','r+');
+        fputs($s, $bodyPart->getContent());
+        rewind($s);
+        $bodyPartStream = new Zend_Mime_Part($s);
+        $bodyPartStream->encoding = $bodyPart->encoding;
+        $bodyText = $bodyPartStream->getDecodedContent();
+        $this->assertStringContainsString('Meeting Room (Required, Declined)', $bodyText);
+    }
     
     /**
      * Test event reschedul with muted invitation
