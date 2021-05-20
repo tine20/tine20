@@ -385,6 +385,12 @@ class Sales_InvoiceTestCase extends TestCase
             $customer['credit_term'] = 30;
             $customer['currency'] = 'EUR';
             $customer['currency_trans_rate'] = 1;
+
+            //add default necessary postal data
+            $customer['adr_street'] = 'test street';
+            $customer['adr_pobox'] = 'test pobox';
+            $customer['adr_postalcode'] = 'test postalcode';
+            $customer['adr_locality'] ='test locality';
         
             $this->_customerRecords->addRecord($this->_customerController->create(new Sales_Model_Customer($customer)));
         }

@@ -438,56 +438,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  boolean $duplicateCheck
      *
      * @return array created/updated record
+     * 
+     * @todo move code to customer controller inspect functions
      */
     public function saveCustomer($recordData, $duplicateCheck = TRUE)
     {
-        $postalAddress = array();
-        foreach($recordData as $field => $value) {
-            if (strpos($field, 'adr_') !== FALSE && ! empty($value)) {
-                $postalAddress[substr($field, 4)] = $value;
-                unset($recordData[$field]);
-            }
-        }
-        if (!isset($postalAddress['seq']) && isset($recordData['postal_id']) && isset($recordData['postal_id']['seq'])) {
-            $postalAddress['seq'] = $recordData['postal_id']['seq'];
-        }
-    
-        foreach (array('cpextern_id', 'cpintern_id') as $prop) {
-            if (isset($recordData[$prop]) && is_array($recordData[$prop])) {
-                $recordData[$prop] = $recordData[$prop]['id'];
-            }
-        }
-    
         $ret = $this->_save($recordData, Sales_Controller_Customer::getInstance(), 'Customer', 'id', array($duplicateCheck));
-        $postalAddress['customer_id'] = $ret['id'];
-    
-        $addressController = Sales_Controller_Address::getInstance();
-        $filter = new Sales_Model_AddressFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(
-            array('field' => 'customer_id', 'operator' => 'equals', 'value' => $ret['id'])
-        ));
-    
-        $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
-    
-        // delete if fields are empty
-        if (empty($postalAddress) && $postalAddressRecord) {
-            $addressController->delete(array($postalAddressRecord->getId()));
-            $postalAddressRecord = NULL;
-        } else {
-            // create if none has been found
-            if (! $postalAddressRecord) {
-                $postalAddressRecord = $addressController->create(new Sales_Model_Address($postalAddress));
-            } else {
-                // update if it has changed
-                $postalAddress['id'] = $postalAddressRecord->getId();
-                $postalAddressRecordToUpdate = new Sales_Model_Address($postalAddress);
-                $diff = $postalAddressRecord->diff($postalAddressRecordToUpdate);
-                if (! empty($diff)) {
-                    $postalAddressRecord = $addressController->update($postalAddressRecordToUpdate);
-                }
-            }
-        }
-    
         return $this->getCustomer($ret['id']);
     }
     
