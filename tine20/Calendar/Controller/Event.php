@@ -296,7 +296,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             });
 
-            $event = $this->update($event);
+            // make sure current user gets the decline message
+            $sendOnOwnActions = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS};
+            Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS} = true;
+            try {
+                $event = $this->update($event);
+            } finally {
+                Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS} = $sendOnOwnActions;
+            }
         }
 
         return $event;
