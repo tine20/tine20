@@ -551,13 +551,17 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function exists($id)
     {
+        if (!$id) {
+            return false;
+        }
+
         $this->_checkRight(self::ACTION_GET);
         
         try {
             $record = $this->_backend->get($id);
-            $result = $this->_checkGrant($record, self::ACTION_GET, FALSE);
+            $result = $this->_checkGrant($record, self::ACTION_GET, false);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $result = FALSE;
+            $result = false;
         }
         
         return $result;
