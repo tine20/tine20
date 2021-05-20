@@ -232,6 +232,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             Tinebase_FileSystem::getInstance()->fileExists($path);
         }
 
+        $sendNotifications = $this->_sendNotifications;
         try {
             $declineResources = [];
             $db = $this->_backend->getAdapter();
@@ -251,20 +252,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
 
             // skip sending notifications in parent
-            $sendNotifications = $this->_sendNotifications;
             $this->_sendNotifications = FALSE;
 
             /** @var Calendar_Model_Event $createdEvent */
             $createdEvent = parent::create($_record);
             
-            $this->_sendNotifications = $sendNotifications;
-            
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
+        } finally {
+            $this->_sendNotifications = $sendNotifications;
         }
-        
+
+        $this->_processDeclineResources($createdEvent, $declineResources);
+
         // send notifications
         $createdEvent->mute = $_record->mute;
         if ($this->_sendNotifications) {
@@ -273,8 +275,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Skip sending notifications');
         }
-
-        $this->_processDeclineResources($createdEvent, $declineResources);
 
         return $createdEvent;
     }
