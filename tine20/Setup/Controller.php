@@ -2567,7 +2567,25 @@ class Setup_Controller
         $cachesCleared[] = 'ApplicationClassCache';
         Tinebase_Cache_PerRequest::getInstance()->reset();
         $cachesCleared[] = 'RequestCache';
+        
+        clearstatcache();
+        $cachesCleared[] = 'StatCache';
 
+        $this->clearCacheDir();
+        
+        $cachesCleared[] = 'RoutesCache';
+    
+        if ($deactivateCache) {
+            Tinebase_Core::setupCache(FALSE);
+        }
+
+        return $cachesCleared;
+    }
+
+    /**
+     * clear cache directories
+     */
+    public function clearCacheDir(){
         // clear routing cache
         foreach (new DirectoryIterator(Tinebase_Core::getCacheDir()) as $directoryIterator) {
             if (strpos($directoryIterator->getFilename(), 'route.cache') !== false && $directoryIterator->isFile()) {
@@ -2576,14 +2594,6 @@ class Setup_Controller
                 unlink($directoryIterator->getPathname());
             }
         }
-        $cachesCleared[] = 'RoutesCache';
-        clearstatcache();
-
-        if ($deactivateCache) {
-            Tinebase_Core::setupCache(FALSE);
-        }
-
-        return $cachesCleared;
     }
 
     /**
