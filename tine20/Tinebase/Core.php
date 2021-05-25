@@ -573,7 +573,8 @@ class Tinebase_Core
         $container = new ContainerBuilder();
 
         $container->register(RequestInterface::class)
-            ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals');
+            ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals')
+            ->setPublic(true);
 
         try {
             $applications = Tinebase_Application::getInstance()->getApplications();

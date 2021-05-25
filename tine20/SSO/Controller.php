@@ -10,6 +10,11 @@
  *
  */
 
+use SAML2\Constants;
+use SAML2\XML\saml\Issuer;
+use SimpleSAML\Logger;
+use SimpleSAML\Stats;
+
 /**
  * 
  * @package     SSO
@@ -46,6 +51,18 @@ class SSO_Controller extends Tinebase_Controller_Event
             ]))->toArray());
             $routeCollector->get('/oauth2/certs', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicCerts', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->get('/saml2/idpmetadata', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicSaml2IdPMetaData', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->addRoute(['GET', 'POST'], '/saml2/redirect/signon', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicSaml2RedirectRequest', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->addRoute(['GET', 'POST'], '/saml2/redirect/logout', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicSaml2RedirectLogout', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });
@@ -338,6 +355,151 @@ class SSO_Controller extends Tinebase_Controller_Event
         ];
     }
 
+    /*
+     * https://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf
+     */
+    public static function publicSaml2IdPMetaData(): \Zend\Diactoros\Response
+    {
+        $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
+
+        static::initSAMLServer();
+        $idpentityid = 'tine20';
+
+        $certInfo = \SimpleSAML\Utils\Crypto::loadPublicKey(\SimpleSAML\Configuration::getInstance(), true);
+
+        $metaArray = [
+            'metadata-set'          => 'saml20-idp-remote',
+            'entityid'              => $idpentityid,
+            'NameIDFormat'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            'SingleSignOnService'   => [[
+                'Binding'  => Constants::BINDING_HTTP_REDIRECT,
+                'Location' => $serverUrl . '/sso/saml2/redirect/signon',
+            ]],
+            'SingleLogoutService'   => [[
+                'Binding'  => Constants::BINDING_HTTP_REDIRECT,
+                'Location' => $serverUrl . '/sso/saml2/redirect/logout',
+            ]],
+            'certData'              => $certInfo['certData'],
+        ];
+
+        $metaBuilder = new \SimpleSAML\Metadata\SAMLBuilder($idpentityid);
+        $metaBuilder->addMetadataIdP20($metaArray);
+        $metaBuilder->addOrganizationInfo($metaArray);
+
+        $metaxml = $metaBuilder->getEntityDescriptorText();
+
+        // sign the metadata if enabled
+        $metaxml = \SimpleSAML\Metadata\Signer::sign($metaxml, [], 'SAML 2 IdP');
+
+        $response = new \Zend\Diactoros\Response('php://memory', 200,
+            ['Content-Type' => 'application/samlmetadata+xml']);
+        $response->getBody()->write($metaxml);
+
+        return $response;
+    }
+
+    public static function publicSaml2RedirectLogout(): \Zend\Diactoros\Response
+    {
+        try {
+            Tinebase_Core::startCoreSession();
+        } catch (Zend_Session_Exception $zse) {
+            // expire session cookie for client
+            Tinebase_Session::expireSessionCookie();
+            return new \Zend\Diactoros\Response($body = 'php://memory', $status = 500);
+        }
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+
+        static::initSAMLServer();
+        $idp = \SimpleSAML\IdP::getById('saml2:tine20');
+
+        try {
+            \SimpleSAML\Module\saml\IdP\SAML2::receiveLogoutMessage($idp);
+            throw new Tinebase_Exception('logout didnt work');
+        } catch (SSO_Facade_SAML_RedirectException $e) {
+            $response = new \Zend\Diactoros\Response('php://memory', 302, [
+                'Location' => $e->redirectUrl
+            ]);
+            return $response;
+        }
+    }
+
+    /**
+     * http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0-cd-02.html#5.1.2.SP-Initiated%20SSO:%20%20Redirect/POST%20Bindings|outline
+     */
+    public static function publicSaml2RedirectRequest(): \Zend\Diactoros\Response
+    {
+        try {
+            Tinebase_Core::startCoreSession();
+        } catch (Zend_Session_Exception $zse) {
+            // expire session cookie for client
+            Tinebase_Session::expireSessionCookie();
+            return new \Zend\Diactoros\Response($body = 'php://memory', $status = 500);
+        }
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+
+        static::initSAMLServer();
+        $idp = \SimpleSAML\IdP::getById('saml2:tine20');
+        $simpleSampleIsRealyGreat = new ReflectionProperty(\SimpleSAML\IdP::class, 'authSource');
+        $simpleSampleIsRealyGreat->setAccessible(true);
+        $simpleSampleIsRealyGreat2 = new ReflectionProperty(\SimpleSAML\Auth\Simple::class, 'authSource');
+        $simpleSampleIsRealyGreat2->setAccessible(true);
+        $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsRealyGreat2->getValue($simpleSampleIsRealyGreat
+            ->getValue($idp)));
+        $simpleSampleIsRealyGreat->setValue($idp, $newSimple);
+
+        try {
+            \SimpleSAML\Module\saml\IdP\SAML2::receiveAuthnRequest($idp);
+
+            throw new Tinebase_Exception('expect simplesaml to throw a resolution');
+        } catch (SSO_Facade_SAML_MFAMaskException $e) {
+            // render MFA mask
+            $response = new \Zend\Diactoros\Response();
+            $response->getBody()->write('mfa mask');
+        } catch (SSO_Facade_SAML_LoginMaskException $e) {
+            // render login mask
+            $response = new \Zend\Diactoros\Response();
+            $response->getBody()->write('<html>
+<body>
+<form method="post" action="/sso/saml2/redirect/signon' . /* RelayState= urlencode($message->getRelayState()) .
+                'SAMLRequest=' . urlencode($_GET['SAMLRequest']) .*/ '">');
+            foreach ($request->getQueryParams() as $name => $value) {
+                if ('SAMLRequest' === $name) {
+                    $value = base64_decode($value);
+                    $value = gzinflate($value);
+                    $value = base64_encode($value);
+                }
+                $response->getBody()->write('<input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
+                    . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>');
+            }
+            $response->getBody()->write('<input type="text" name="username"/><br/>
+<input type="password" name="password"/><br/>
+<input type="submit" value="Login"/>
+</form>
+</body>
+</html>');
+        } catch (SSO_Facade_SAML_RedirectException $e) {
+            $response = new \Zend\Diactoros\Response();
+            $response->getBody()->write('<html>
+<body>
+<form method="post" action="' . $e->redirectUrl . '">');
+            foreach ($e->data as $name => $value) {
+                /*if ('SAMLResponse' === $name) {
+                    $value = base64_decode($value);
+                    $value = gzdeflate($value);
+                    $value = base64_encode($value);
+                }*/
+                $response->getBody()->write('<input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
+                    . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>');
+            }
+            $response->getBody()->write('
+    <input type="submit" value="continue"/>
+</form>
+</html>');
+        }
+
+        return $response;
+    }
+
     protected static function getOpenIdConnectServer(): \League\OAuth2\Server\AuthorizationServer
     {
         // Setup the authorization server
@@ -382,5 +544,21 @@ class SSO_Controller extends Tinebase_Controller_Event
         );*/
 
         return $server;
+    }
+
+    protected static function initSAMLServer()
+    {
+        \SAML2\Compat\ContainerSingleton::setContainer(new SSO_Facade_SAML_Container());
+        \SimpleSAML\Configuration::setPreLoadedConfig(new \SimpleSAML\Configuration([
+            'metadata.sources' => [['type' => SSO_Facade_SAML_MetaDataStorage::class]],
+            'metadata.sign.enable' => true,
+            'metadata.sign.privatekey' => __DIR__ . '/keys/saml2.pem',
+            'metadata.sign.certificate' => __DIR__ . '/keys/saml2.crt',
+            'certificate' => __DIR__ . '/keys/saml2.crt',
+            'enable.saml20-idp' => true,
+        ], 'tine20'));
+        \SimpleSAML\Configuration::setPreLoadedConfig(new \SimpleSAML\Configuration([
+            'tine20' => [SSO_Facade_SAML_AuthSourceFactory::class]
+        ], 'authsources.php'), 'authsources.php');
     }
 }

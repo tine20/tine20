@@ -26,6 +26,8 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
     public const FLD_REDIRECT_URLS = 'redirect_urls';
     public const FLD_SECRET = 'secret';
     public const FLD_IS_CONFIDENTIAL = 'is_confidential';
+    public const FLD_CONFIG = 'config';
+    public const FLD_CONFIG_CLASS = 'config_class';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -92,6 +94,15 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL           => 0,
+            ],
+            self::FLD_CONFIG_CLASS      => [
+                self::TYPE                  => self::TYPE_STRING,
+            ],
+            self::FLD_CONFIG            => [
+                self::TYPE                  => self::TYPE_DYNAMIC_RECORD,
+                self::CONFIG                => [
+                    self::REF_MODEL_FIELD       => self::FLD_CONFIG_CLASS,
+                ],
             ],
         ]
     ];
