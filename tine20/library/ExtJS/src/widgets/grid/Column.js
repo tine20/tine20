@@ -229,6 +229,7 @@ var grid = new Ext.grid.GridPanel({
         if(!this.scope){
             this.scope = this;
         }
+        this.tooltip = this.tooltip || this.header;
         
         var ed = this.editor;
         delete this.editor;
