@@ -246,11 +246,36 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'MR',      'value' => 'Mr',      'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/icon-set/icon_man.svg',    'system' => true), //_('Mr')
-                    array('id' => 'MS',      'value' => 'Ms',      'gender' => Addressbook_Model_Salutation::GENDER_FEMALE, 'image' => 'images/icon-set/icon_woman.svg',  'system' => true), //_('Ms')
-                    array('id' => 'COMPANY', 'value' => 'Company', 'gender' => Addressbook_Model_Salutation::GENDER_OTHER,  'image' => 'images/icon-set/icon_company.svg','system' => true), //_('Company')
+                    [
+                        //_('Mr')
+                        'id' => 'MR',
+                        'value' => 'Mr',
+                        'gender' => Addressbook_Model_Salutation::GENDER_MALE,
+                        'image' => 'images/icon-set/icon_man.svg',
+                        'system' => true
+                    ], [
+                        //_('Ms')
+                        'id' => 'MS',
+                        'value' => 'Ms',
+                        'gender' => Addressbook_Model_Salutation::GENDER_FEMALE,
+                        'image' => 'images/icon-set/icon_woman.svg',
+                        'system' => true
+                    ], [
+                        //_('Company')
+                        'id' => 'COMPANY',
+                        'value' => 'Company',
+                        'gender' => Addressbook_Model_Salutation::GENDER_COMPANY,
+                        'image' => 'images/icon-set/icon_company.svg',
+                        'system' => true
+                    ], [
+                        //_('Person')
+                        'id' => 'PERSON',
+                        'value' => 'Person',
+                        'gender' => Addressbook_Model_Salutation::GENDER_PERSON,
+                        'image' => 'images/icon-set/icon_undefined_contact.svg',
+                        'system' => true
+                    ],
                 ),
-//                'default' => 'MR'
             )
         ),
         self::CONTACT_ADDRESS_PARSE_RULES_FILE => array(
