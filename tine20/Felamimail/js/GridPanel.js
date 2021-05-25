@@ -1906,29 +1906,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (!this.app.featureEnabled('featureSpamSuspicionStrategy')) {
             return ;
         }
-
-        const sm = this.getGrid().getSelectionModel();
-        const msgs =  sm.getCount() > 0 ? sm.getSelectionsCollection() : null;
+        
         const folder = this.getCurrentFolderFromTree();
         const account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) : null;
 
         this.action_spam.show();
         this.action_ham.show();
 
-        if (folder && account && (
-            folder.get('globalname') === account.get('trash_folder')
-            || folder.get('localname').match(/junk/i)
-        )) {
+        if (!account) {
             this.action_spam.hide();
             this.action_ham.hide();
-        }
-
-        if (msgs) {
-            msgs.each(function (msg) {
-                if (!msg.get('is_spam_suspicions')) {
-                    this.action_ham.disable();
-                }
-            }, this);
         }
     }
 });
