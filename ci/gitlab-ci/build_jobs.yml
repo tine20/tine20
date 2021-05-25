@@ -1,0 +1,79 @@
+# ============ stage: build1-2 ===========================
+# This stage builds all docker images
+#
+# The images are named according to $REGISTRY/$NAME-commit:$CI_PIPELINE_ID-$PHP_VERSION.
+#
+# Gitlab currently dose not support needs in the same stage.
+# Therefore we need multiple build stages.
+
+
+# Build docker image using caching.
+# Reuses image if no build needs a current image (test overwrite the source code anyways).
+# If REUSE_IMAGES is true, use copy of an old image if available. Reuse image uses, either an
+# old image form the current branch, if it is available. Or an old image from MAJOR_COMMIT_REF_NAME 
+# branch.
+docker_build_source:
+  extends: .abstract_jobs.docker
+  stage: build1
+  script:
+    - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
+    - build_or_reuse_image base $REUSE_IMAGES
+    - build_or_reuse_image source $REUSE_IMAGES
+    - build_or_reuse_image test-source $REUSE_IMAGES
+  timeout: 60m
+  interruptible: true
+  variables:
+    REUSE_IMAGES: "true"
+  rules:
+    # do not reuse image wenn building build image
+    - if: &TESTS_NEEDING_BUILT_IMAGE $RUN_ALL_TESTS == "true" || $PHP_UNIT_ALL_TESTS_BUILT == "true" || $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true" || $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true" || $TEST_WITH_HEALTH_CHECK == "true"
+      variables:
+        REUSE_IMAGES: "false"
+      when: on_success
+    # do not reuse image wenn building build image
+    - if: &DEPLOYS_NEEDING_BUILT_IMAGE $PUSH_BUILT_IMAGE_TO_GITLAB == "true" || $PUSH_TO_DOCKERHUB == "true"
+      variables:
+        REUSE_IMAGES: "false"
+      when: on_success
+    # do not reuse image wenn building dev image
+    - if: &DEPLOYS_NEEDING_DEV_IMAGE $PUSH_DEV_IMAGE_TO_GITLAB == "true" || $PUSH_TO_DOCKERHUB == "true"
+      variables:
+        REUSE_IMAGES: "false"
+      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
+        # do not reuse image if the docker image changed
+        - ci/dockerimage/**/*
+        - etc/**/*
+      variables:
+        REUSE_IMAGES: "false"
+      when: on_success
+    - when: on_success
+      
+docker_build_built:
+  extends: .abstract_jobs.docker
+  stage: build2
+  script:
+    - build_image build
+    - build_image built
+    - build_image test-built
+  rules:
+    - if: *TESTS_NEEDING_BUILT_IMAGE
+      when: on_success
+    - if: *DEPLOYS_NEEDING_BUILT_IMAGE
+      when: on_success
+    - when: never
+  timeout: 120m
+  interruptible: true
+
+docker_build_dev:
+  extends: .abstract_jobs.docker
+  stage: build2
+  script:
+    - build_image dev
+  rules:
+    - if: *DEPLOYS_NEEDING_DEV_IMAGE
+      when: on_success
+    - when: never
+  timeout: 60m # time run: 28m
+  interruptible: true

@@ -119,7 +119,7 @@ RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/main n
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
-RUN if [ ${ALPINE_PHP_PACKAGE} == php8 ]; then ln -s /usr/bin/php8 /usr/bin/php; fi
+RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /usr/bin/php8 /usr/bin/php; fi
 
 RUN addgroup -S -g 150 tine20 && \
     adduser -S -H -D -s /bin/ash -g "tine20 user" -G tine20 -u 150 tine20 && \
