@@ -271,7 +271,7 @@
   services:
     - name: ${UTIL_REGISTRY}/docker:19.03.1-dind
       alias: docker
-  image: ${UTIL_REGISTRY}/docker:19.03.1-r1
+  image: ${UTIL_REGISTRY}/docker:19.03.1-r2
   before_script:
     - source ci/functions.sh
     - export DOCKER_BUILDKIT=0
