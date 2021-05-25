@@ -36,36 +36,7 @@
         while [ ! -f /$CI_PROJECT_DIR/tine_as_service.env ]; do echo "Waiting for ci project dir..."; sleep 1; done; sleep 10; echo "ci project dir available";
         echo "loading additional env variable from /$CI_PROJECT_DIR/tine_as_service.env";
         source /$CI_PROJECT_DIR/tine_as_service.env;
-        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/;
-        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/;
-        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/;
-        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d/;
-        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/crond.ini /etc/supervisor.d/;
-        cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/;
-        cp ${CI_PROJECT_DIR}/ci/dockerimage/scripts/* /usr/local/bin/;
-        cp ${CI_PROJECT_DIR}/phpstan.neon ${TINE20ROOT}/phpstan.neon;
-        cp ${CI_PROJECT_DIR}/phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon;
-        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/ /config;
-        rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/conf.d/ /etc/confd/conf.d;
-        rsync -a -I --delete ${CI_PROJECT_DIR}/ci/dockerimage/confd/templates/ /etc/confd/templates;
-        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/tine20/config.inc.php.tmpl /etc/confd/templates/config.inc.php.tmpl
-        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/sites-available/tine20.conf.tmpl /etc/confd/templates/nginx-vhost.conf.tmpl
-        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/conf.d/ /etc/nginx/conf.d
-        rsync -a -I --delete ${CI_PROJECT_DIR}/etc/nginx/snippets/ /etc/nginx/snippets
-        rsync -a -I --delete ${CI_PROJECT_DIR}/scripts/ ${TINE20ROOT}/scripts/;
-        rsync -a -I --delete ${CI_PROJECT_DIR}/tests/ ${TINE20ROOT}/tests/;
-        rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_PROJECT_DIR}/tine20/ ${TINE20ROOT}/tine20/;
-        rm -r ${TINE20ROOT}/tine20/vendor/metaways
-        cd ${TINE20ROOT}/tine20;
-        composer install --no-ansi --no-progress --no-suggest --no-scripts
-        echo "CUSTOM_APP_NAME: ${CUSTOM_APP_NAME}"
-        if test -n "${CUSTOM_APP_NAME}"; then
-          apk add jq;
-          echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
-          composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
-          echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
-          composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
-        fi
+        $CI_PROJECT_DIR/ci/scripts/copy_source.sh;
       fi
       /usr/sbin/confd -onetime -backend env;
       tine20_await_db;
@@ -82,35 +53,6 @@
       su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}"
       touch $CI_PROJECT_DIR/tine_ready_$CI_JOB_ID;
       supervisord --nodaemon;
-
-.copy_source: &abstract_jobs-copy_source |
-  if test "${ARG_COPY_SOURCE}" == "true"; then
-    echo "copy src to container ...";
-    apk add rsync;
-    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/;
-    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/;
-    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/;
-    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d/;
-    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/crond.ini /etc/supervisor.d/;
-    cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/;
-    cp ${CI_PROJECT_DIR}/ci/dockerimage/scripts/* /usr/local/bin/;
-    cp ${CI_PROJECT_DIR}/phpstan.neon ${TINE20ROOT}/phpstan.neon;
-    cp ${CI_PROJECT_DIR}/phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon;
-    rsync -a -I --delete ${CI_PROJECT_DIR}/etc/ /config;
-    rsync -a -I --delete ${CI_PROJECT_DIR}/scripts/ ${TINE20ROOT}/scripts/;
-    rsync -a -I --delete ${CI_PROJECT_DIR}/tests/ ${TINE20ROOT}/tests/;
-    rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_PROJECT_DIR}/tine20/ ${TINE20ROOT}/tine20/;
-    rm -r ${TINE20ROOT}/tine20/vendor/metaways
-    cd ${TINE20ROOT}/tine20;
-    composer install --no-ansi --no-progress --no-suggest --no-scripts
-    if test -n "${CUSTOM_APP_NAME}"; then
-      apk add jq;
-      echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
-      composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
-      echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
-      composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
-    fi
-  fi
 
 
 .abstract_jobs.test:
@@ -183,7 +125,7 @@
 .abstract_jobs.php_unit:
   extends: .abstract_jobs.test
   before_script:
-    - *abstract_jobs-copy_source
+    - if test "${ARG_COPY_SOURCE}" == "true"; then $CI_PROJECT_DIR/ci/scripts/copy_source.sh; fi
     - /usr/sbin/confd -onetime -backend env
     - tine20_await_db
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot"
@@ -281,12 +223,7 @@
     - printf "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}\nCUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}\nCUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}\nCUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" > /$CI_PROJECT_DIR/tine_as_service.env
     - cd $CI_PROJECT_DIR/tine20
     - composer install --no-ansi --no-progress --no-suggest --no-scripts --ignore-platform-reqs
-    - if test -n "${CUSTOM_APP_NAME}"; then
-        echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
-        composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
-        echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
-        composer require --ignore-platform-reqs "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
-      fi
+    - $CI_PROJECT_DIR/ci/scripts/install_custom_app.sh
     - cd $CI_PROJECT_DIR/tests/e2etests
     - echo no cp -r /root/node_modules .
     - npm install
@@ -307,7 +244,7 @@
 
 .abstract_jobs.copy_source:
   before_script:
-    - *abstract_jobs-copy_source
+    - if test "${ARG_COPY_SOURCE}" == "true"; then $CI_PROJECT_DIR/ci/scripts/copy_source.sh; fi
   retry:
     max: 2
     when:
