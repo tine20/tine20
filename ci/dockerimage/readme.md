@@ -18,3 +18,4 @@
     ▾          ▾                    ▾   ▾
    dev    test-source            test-built
   ```
++ Docker image can be build localy with './make.sh <target>'.
