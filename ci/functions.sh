@@ -54,12 +54,12 @@ function build_image() {
     MAJOR_CACHE_IMAGE="${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
 
     # config via env
-    PHP_VERSION=${PHP_VERSION}
-    BASE_IMAGE="${REGISTRY}/base-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-    DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-    SOURCE_IMAGE="${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-    BUILD_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-    BUILT_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    export PHP_VERSION=${PHP_VERSION}
+    export BASE_IMAGE="${REGISTRY}/base-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    export SOURCE_IMAGE="${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    export BUILD_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+    export BUILT_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
 
     apk add bash util-linux
 
@@ -79,30 +79,6 @@ function tag_major_as_commit_image() {
     tag_image "${REGISTRY}" "${NAME}" "${MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}" "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_VERSION}"
 }
 
-# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_VERSION}" to name:"${CI_COMMIT_REF_NAME}-${PHP_VERSION}" and pushes it
-function docker_populate_cache() {
-    NAME=$1
-
-    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_VERSION}" "${REGISTRY}" "${NAME}" "${CI_COMMIT_REF_NAME}-${PHP_VERSION}" || true
-}
-
-# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_VERSION}" name:"${CI_PIPELINE_ID}-${PHP_VERSION}" and pushes it to docker hub
-function tag_commit_as_gitlab_image() {
-    NAME=$1
-
-    docker login -u "${CI_REGISTRY_USER}" -p "${CI_REGISTRY_PASSWORD}" "${CI_REGISTRY}"
-    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_VERSION}" "${CI_REGISTRY}/tine20/tine20" "$NAME" "${CI_COMMIT_REF_NAME}-${PHP_VERSION}"
-}
-
-# renames a commit image name-commit:"${CI_PIPELINE_ID}-${PHP_VERSION}" DOCKERHUB_NAME:DOCKERHUB_TAG
-function tag_commit_as_dockerhub_image() {
-    NAME=$1
-    DOCKERHUB_NAME=$2
-
-    docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_TOKEN}" "docker.io"
-    tag_image "${REGISTRY}" "${NAME}-commit" "${CI_PIPELINE_ID}-${PHP_VERSION}" "docker.io/tine20" "${DOCKERHUB_NAME}" "${DOCKERHUB_TAG}"
-}
-
 # impl for all tag functions
 function tag_image() {
   FROM_REG=$1
@@ -118,19 +94,4 @@ function tag_image() {
   docker pull "${FROM_IMAGE}"
   docker tag "${FROM_IMAGE}" "${DESTINATION_IMAGE}"
   docker push "${DESTINATION_IMAGE}"
-}
-
-function docker_untag_image() {
-	image=$1
-	tag=$2
-
-	digest=$(curl -X HEAD -I -v --user ${REGISTRY_USER}:${REGISTRY_PASSWORD} -H "Accept: application/vnd.docker.distribution.manifest.v2+json" https://${REGISTRY}/v2/${image}/manifests/${tag} | awk 'BEGIN {FS=": "}/^docker-content-digest/{print $2}' | tr -d '\r' )
-	if [ -z ${digest} ]; then
-		return 1
-	fi
-
-	docker pull ${REGISTRY}/cleanup-manifest:latest
-	docker tag ${REGISTRY}/cleanup-manifest:latest ${REGISTRY}/${image}:${tag}
-
-	curl -X DELETE -v --user ${REGISTRY_USER}:${REGISTRY_PASSWORD} https://${REGISTRY}/v2/${image}/manifests/${digest}
 }

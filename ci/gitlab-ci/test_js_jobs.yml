@@ -1,0 +1,14 @@
+"js: end to end tests source":
+  extends: .abstract_jobs.e2e_test
+  variables:
+    ARG_COPY_SOURCE: "true"
+    ARG_IMAGE: test-source-commit
+  interruptible: true
+  rules:
+    - if: $JS_E2E_TEST_SOURCE == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $JS_E2E_TEST_SOURCE == "true"
+      when: on_success
+    - when: never

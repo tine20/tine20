@@ -1,0 +1,46 @@
+"check php version":
+  stage: test
+  image:
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_VERSION"
+  script:
+    - echo "PHP version shoud be ${PHP_VERSION}."
+    - echo "PHP version is $(php -r 'echo PHP_VERSION;')"
+    - "[[ $(php -r 'echo PHP_VERSION;') == $PHP_VERSION.* ]]"
+  rules:
+    - if: $CHECK_PHP_VERSION == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $CHECK_PHP_VERSION == "true"
+      when: on_success
+    - when: never
+  allow_failure: true
+  timeout: 20m # time run: 4m
+  interruptible: true
+
+"phpstan: code analyses":
+  extends: .abstract_jobs.copy_source
+  stage: test
+  image:
+    name: "$REGISTRY/test-source-commit:$CI_PIPELINE_ID-$PHP_VERSION"
+  script:
+    - cd $TINE20ROOT
+    - composer require phpstan/phpstan
+    - php -d memory_limit=2G $TINE20ROOT/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=gitlab --no-progress -vvv | tee $CI_PROJECT_DIR/code-quality-report.json
+  artifacts:
+    reports:
+      codequality: code-quality-report.json
+    paths:
+      - code-quality-report.json
+    expire_in: 1 days
+  rules:
+    - if: $PHP_STAN_ANALYSES == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_STAN_ANALYSES == "true"
+      when: on_success
+    - when: never
+  allow_failure: true
+  timeout: 20m # time run: 4m
+  interruptible: true
