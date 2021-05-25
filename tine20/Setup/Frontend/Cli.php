@@ -118,6 +118,8 @@ class Setup_Frontend_Cli
             $this->_setConfig($_opts);
         } elseif(isset($_opts->clear_cache)) {
             $this->_clearCache($_opts);
+        } elseif(isset($_opts->clear_cache_dir)) {
+            $this->_clearCacheDir($_opts);
         } elseif(isset($_opts->create_admin)) {
             $this->_createAdminUser($_opts);
         } elseif(isset($_opts->getconfig)) {
@@ -926,7 +928,17 @@ class Setup_Frontend_Cli
         $cachesCleared = Setup_Controller::getInstance()->clearCache();
         if ($_opts->v) {
             echo "Caches cleared: " . print_r($cachesCleared, true) . "\n";
-        }
+        } 
+    }
+
+    /**
+     * clears cache directories
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _clearCacheDir(Zend_Console_Getopt $_opts)
+    {
+        Setup_Controller::getInstance()->clearCacheDir();
     }
 
     /**
