@@ -379,6 +379,7 @@ Tine.widgets.form.FieldManager = function() {
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
                 genericKey = this.getKey([appName, modelName, fieldName]);
 
+            field.name = fieldName;
             fields[category ? categoryKey : genericKey] = field;
         },
 

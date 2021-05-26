@@ -21,6 +21,7 @@ require('../../library/ExtJS/ext-custom');
 
 // include traditional stuff as defined in jsb2
 require('./../../Tinebase/Tinebase.jsb2');
+require('./CommunityIdentNr/explainer');
 
 // UI style >= 2019
 require('node-waves');
