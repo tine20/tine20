@@ -48,6 +48,11 @@ docker_build_source:
       variables:
         REUSE_IMAGES: "false"
       when: on_success
+    # do not reuse image for tag pipelines
+    - if: $CI_COMMIT_TAG
+      variables:
+        REUSE_IMAGES: "false"
+      when: on_success
     - when: on_success
       
 docker_build_built:
@@ -61,6 +66,8 @@ docker_build_built:
     - if: *TESTS_NEEDING_BUILT_IMAGE
       when: on_success
     - if: *DEPLOYS_NEEDING_BUILT_IMAGE
+      when: on_success
+    - if: $CI_COMMIT_TAG
       when: on_success
     - when: never
   timeout: 120m
@@ -76,4 +83,17 @@ docker_build_dev:
       when: on_success
     - when: never
   timeout: 60m # time run: 28m
+  interruptible: true
+
+docker_build_packages:
+  extends: .abstract_jobs.docker
+  stage: build3
+  script:
+    - apk add bash util-linux tar
+    - $CI_PROJECT_DIR/ci/scripts/packaging.sh
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: on_success
+    - when: never
+  timeout: 120m
   interruptible: true
