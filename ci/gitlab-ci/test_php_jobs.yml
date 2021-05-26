@@ -96,7 +96,8 @@
       when: on_success
     - if: $PHP_UNIT_SETUP_TESTS == "true"
       when: on_success
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes:
         - tine20/Setup/**/*
     - when: never
 
