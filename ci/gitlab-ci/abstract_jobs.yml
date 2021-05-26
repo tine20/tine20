@@ -273,10 +273,9 @@
       alias: docker
   image: ${UTIL_REGISTRY}/docker:19.03.1-r2
   before_script:
-    - source ci/functions.sh
     - export DOCKER_BUILDKIT=0
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
-    - docker_login
+    - docker login "${REGISTRY}" --username "${REGISTRY_USER}" --password "${REGISTRY_PASSWORD}"
   retry:
     max: 2
     when:
