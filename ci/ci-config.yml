@@ -117,3 +117,11 @@ variables:
   PHP_VERSION:
     description: "Php version to use."
     value: "7.3"
+ 
+  BUILD_PACKAGES:
+    description: "Build source packages"
+    value: "true"
+
+  CODENAME:
+    description: "Codename for build"
+    value: "todo"
