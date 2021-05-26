@@ -1,5 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
 set -e
+set -x
 
 function build_image() {
     local target=$1
@@ -36,6 +38,11 @@ function build_image() {
     cmd+=" --build-arg CUSTOM_APP_NAME"
     cmd+=" --build-arg CUSTOM_APP_GIT_URL"
     cmd+=" --build-arg CUSTOM_APP_VERSION"
+
+    # release
+    cmd+=" --build-arg RELEASE"
+    cmd+=" --build-arg CODENAME"
+    cmd+=" --build-arg REVISION"
 
     for cache_image in "${cache_from[@]}"; do
         echo "0: using cache from ${cache_image}"
@@ -103,7 +110,7 @@ function build_image_and_dependencies() {
                     build_image "build" "${build_image}" "${base_image}" "${source_image}" '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
                 fi
 
-                if [ 'built' == "${target}" ] || [ 'test-built' != "${target}" ]; then
+                if [ 'built' == "${target}" ]; then
                     if [ 'built' != "${target}" ]; then
                         echo "$0: unknown target image -- ${target}"
                         echo "$0: building built target/image instead"
@@ -120,11 +127,16 @@ function build_image_and_dependencies() {
                         build_image "built" "${built_image}" "${base_image}" "${source_image}" "${build_image}" '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
                     fi
 
-                    if [ 'test-built' == "${target}" ]; then
+                    if [ 'test-built' == "${target}" ] || [ 'packaging' == "${target}" ]; then
                         build_image "${target}" "${image}" "${base_image}" "${source_image}" "${build_image}" "${built_image}" "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
                     else
-                        echo "$0: unreachable state -- unknown target image -- ${target}"
-                        exit 1;
+                        echo "$0: unknown target image -- ${target}"
+			echo "$0: building built target/image instead"
+			for tmp_image in "${tmp_images[@]}"; do
+			    echo "$0: deleting tmp image: ${tmp_image}"
+			    docker image rm "${tmp_image}"
+			done
+			exit 1;
                     fi
                 fi
             fi
@@ -138,12 +150,6 @@ function build_image_and_dependencies() {
     done
 
     echo "$0: ... building ${target} image. done"
-
-    if [[ $push == true ]]; then
-        echo "$0: pushing image ${image} ..."
-        docker push ${image}
-        echo "$0: ... pushing image ${image}. done"
-    fi
 }
 
 function use_old_image_if_nothing_has_changed() {
@@ -205,14 +211,58 @@ function make_image() {
 
     build_image_and_dependencies "${target}" "${image}" "${base_image}" "${source_image}" "${build_image}" "${built_image}" "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
 
-    local old_image=${arr[0]}
+    local old_image=${cache_form[0]}
     if [ -n "${old_image}" ] && [ 'true' == "${use_old_image}" ]; then
         use_old_image_if_nothing_has_changed "${image}" "${old_image}"
     fi
 
-    if [ 'true' == "${push}" ]; then
-        docker push "${image}"
+    if [ "${push}" == 'true' ]; then
+        echo "$0: pushing image ${image} ..."
+        docker push ${image}
+        echo "$0: ... pushing image ${image}. done"
     fi
+}
+
+function make_packages() {
+    local packaging_image=$1
+    local output_path=$2
+
+    echo "$0: building packages ..."
+    
+    if [[ -z "${packaging_image}" ]]; then
+        echo "$0: packaging image not provided ..."
+
+        packaging_image=packaging:tmp-$(uuidgen)
+        tmp_images+=(${packaging_image})
+
+    	make_image 'packaging' "${packaging_image}" "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}"
+    fi
+
+    echo "$0: using ${packaging_image} as packages source"
+
+    local cmd="docker build ${DOCKER_ADDITIONAL_BUILD_ARGS}"
+    cmd+=" --target packages"
+    cmd+=" --file packages.Dockerfile"
+    cmd+=" -o type=tar,dest=${output_path}"
+
+    # image locations
+    cmd+=" --build-arg PACKAGING_IMAGE=${packaging_image}"
+
+    cmd+=" ../../"
+    
+    OLD_DOCKER_BUILDKIT=${DOCKER_BUILDKIT}
+    export DOCKER_BUILDKIT=1
+    ${cmd}
+    export DOCKER_BUILDKIT=${OLD_DOCKER_BUILDKIT}
+
+    echo "$o: ... saved to ${output_path} ..."
+    echo "$0: ... building packages. done"
+
+    for tmp_image in "${tmp_images[@]}"; do
+        echo "$0: deleting tmp image: ${tmp_image}"
+
+        docker image rm "${tmp_image}"
+    done
 }
 
 function help() {
@@ -225,6 +275,8 @@ function help() {
     echo '  build'
     echo '  built'
     echo '  test-built'
+    echo '  packaging'
+    echo '  packages'
     echo 'options:'
     echo '  -r registry: default is ""'
     echo '  -t tag: default is latest'
@@ -233,6 +285,7 @@ function help() {
     echo '  -c cache_image: cache images to use; -c image:1 -c img:2'
     echo '  -i image: overwrite image name; default [<repository>/]>name>:<tag>'
     echo '  -u use old image if nothing has changed; default is false'
+    echo '  -o output path for package build'
     echo '  -h help'
     echo 'env:'
     echo '  DOCKER_ADDITIONAL_BUILD_ARGS: add args to docker build'
@@ -240,11 +293,15 @@ function help() {
     echo '  BASE_IMAGE: set base image'
     echo '  SOURCE_IMAGE: set source image'
     echo '  BUILD_IMAGE: set build image'
-    echo '  BUILT_IMAGE set built image'
+    echo '  BUILT_IMAGE: set built image'
+    echo '  PACKAGING_IMAGE: set backaging image'
     echo '  CUSTOM_APP_VENDOR: composer vendor'
     echo '  CUSTOM_APP_NAME: composer app name'
     echo '  CUSTOM_APP_GIT_URL: composer git repo'
     echo '  CUSTOM_APP_VERSION: composer git repo version'
+    echo '  RELEASE:'
+    echo '  CODENAME:'
+    echo '  REVISION:'
 }
 
 cd "$(dirname "$0")"
@@ -255,9 +312,10 @@ push='false'
 use_old_image='false'
 name=''
 cache_from=()
+output_path='packages.tar'
 PHP_VERSION=${PHP_VERSION:-'7.3'}
 
-while getopts i:r:t:c:n:uph opt
+while getopts i:r:t:c:n:o:uph opt
 do
     case ${opt} in
         t) tag="${OPTARG}";;
@@ -267,6 +325,7 @@ do
         i) image="${OPTARG}";;
         u) use_old_image=true;;
         c) cache_from+=("${OPTARG}");;
+	o) output_path="${OPTARG}";;
         h)
             help
             exit 0
@@ -284,6 +343,8 @@ case ${1} in
     build) make_image 'build' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     built) make_image 'built' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     test-built) make_image 'test-built' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    packaging) make_image 'packaging' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    packages) make_packages "${PACKAGING_IMAGE}" "${output_path}";; 
     '')
         help
         exit 0

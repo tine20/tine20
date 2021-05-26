@@ -10,10 +10,6 @@
 #   BASE_IMAGE=base
 #   BUILD_IMAGE=build
 #   TINE20ROOT=/usr/share
-#   todo comment vars
-#   RELEASE=local -
-#   CODENAME=local -
-#   REVISION=local -
 
 ARG BASE_IMAGE=base
 ARG BUILD_IMAGE=build
