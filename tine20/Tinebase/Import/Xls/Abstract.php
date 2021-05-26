@@ -44,7 +44,9 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         'startColumn' => 'A',
         'endColumn' => null,
         'headlineRow' => null,
-        'mapping' => []
+        'mapping' => [],
+        'keepImportFile' => null,
+        'importFile' => null,
     ];
 
     /**
@@ -131,7 +133,11 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         if (!file_exists($_filename)) {
             throw new Tinebase_Exception_NotFound("File $_filename not found.");
         }
-
+        
+        if ($this->_options['keepImportFile']) {
+            $this->_options['importFile'] = Tinebase_TempFile::getInstance()->createTempFile($_filename, 'Import-' . Tinebase_DateTime::now() . '.xlsx');
+        }
+        
         $this->_spreadsheet = IOFactory::load($_filename);
         $this->_worksheet = $this->_spreadsheet->getSheet($this->_options['sheet']);
         $iterator = $this->_worksheet->getRowIterator($this->_options['startRow'], $this->_options['endRow']);
@@ -183,5 +189,19 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
     public function getMapping()
     {
         return $this->_mapping;
+    }
+
+    /**
+     * do something with the imported record
+     *
+     * @param $importedRecord
+     */
+    protected function _inspectAfterImport($importedRecord)
+    {
+        if ($this->_options['keepImportFile'] && $this->_options['importFile']) {
+            $recordAttachments = Tinebase_FileSystem_RecordAttachments::getInstance();
+            $tempFile = $this->_options['importFile'];
+            $recordAttachments->addRecordAttachment($importedRecord, $tempFile->name, $tempFile);
+        }
     }
 }

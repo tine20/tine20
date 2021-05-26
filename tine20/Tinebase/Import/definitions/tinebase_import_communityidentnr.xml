@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>tinebase_import_communityidentnr</name>
+    <model>Tinebase_Model_CommunityIdentNr</model>
+    <plugin>Tinebase_Import_CommunityIdentNr</plugin>
+    <type>import</type>
+    <dryrun>0</dryrun>
+    <headline>0</headline>
+    <description>Import Community identification Numbers</description>
+    <!-- _("Import Community identification Numbers") -->
+    <extension>xlsx</extension>
+    <label>Community Identification Number Import</label>
+    <!-- _("Community Identification Number Import") -->
+    <sheet>1</sheet>
+    <startRow>7</startRow>
+    <endRow></endRow>
+    <startColumn>A</startColumn>
+    <endColumn></endColumn>
+    <headlineRow></headlineRow>
+    <keepImportFile>1</keepImportFile>
+    <duplicateResolveStrategy>mergeMine</duplicateResolveStrategy>
+    <mapping>
+        <field>
+            <destination>satzArt</destination>
+        </field>
+        <field>
+            <destination>textkenzeichen</destination>
+        </field>
+        <field>
+            <destination>arsLand</destination>
+        </field>
+        <field>
+            <destination>arsRB</destination>
+        </field>
+        <field>
+            <destination>arsKreis</destination>
+        </field>
+        <field>
+            <destination>arsVB</destination>
+        </field>
+        <field>
+            <destination>arsGem</destination>
+        </field>
+        <field>
+            <destination>gemeindenamen</destination>
+        </field>
+        <field>
+            <destination>flaeche</destination>
+            <typecast>float</typecast>
+        </field>
+        <field>
+            <destination>bevoelkerungGesamt</destination>
+        </field>
+        <field>
+            <destination>bevoelkerungMaennlich</destination>
+        </field>
+        <field>
+            <destination>bevoelkerungWeiblich</destination>
+        </field>
+        <field>
+            <destination>bevoelkerungJeKm</destination>
+        </field>
+        <field>
+            <destination>plz</destination>
+        </field>
+        <field>
+            <destination>laengengrad</destination>
+            <typecast>float</typecast>
+        </field>
+        <field>
+            <destination>breitengrad</destination>
+            <typecast>float</typecast>
+        </field>
+        <field>
+            <destination>reisegebiet</destination>
+        </field>
+        <field>
+            <destination>reisegebietBezeichnung</destination>
+        </field>
+        <field>
+            <destination>gradDerVerstaedterung</destination>
+        </field>
+        <field>
+            <destination>gradDerVerstaedterungBezeichnung</destination>
+        </field>
+    </mapping>
+</config>

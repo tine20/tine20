@@ -259,6 +259,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const FEATURE_AUTODISCOVER_MAILCONFIG = 'autodiscoverMailConfig';
 
+
+    /**
+     * Community identification Number
+     * 
+     */
+    const FEATURE_COMMUNITY_IDENT_NR = 'communityIdentNr';
+
+
     /**
      * user defined page title postfix for browser page title
      * 
@@ -796,6 +804,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL = 'cleanUpMaxTotal';
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER = 'cleanUpMaxFilter';
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
+
+    /**
+     * Grad der Verstädterung (CummunityIdentificationNumber)
+     * 
+     * @var string
+     */
+    const GRAD_DER_VERSTAEDTERUNG = 'gradVerstaedterung';
+
+    /**
+     * fields for lead record duplicate check
+     *
+     * @var string
+     */
+    const COMMUNITYIDENTNR_DUP_FIELDS = 'communityIdentNrDupFields';
 
     /**
      * (non-PHPdoc)
@@ -1448,6 +1470,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     //_('Autodiscover mail config')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
+                ],
+                self::FEATURE_COMMUNITY_IDENT_NR  => [
+                    self::LABEL                 => 'Community Identification Number',
+                    //_('Community Identification Number')
+                    self::DESCRIPTION           => 'Show the Community Identification Number in the Coredata',
+                    //_('Show the Community Identification Number in the Coredata')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
                 ],
             ],
             self::DEFAULT_STR => [],
@@ -2789,6 +2819,33 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
         ],
+        self::GRAD_DER_VERSTAEDTERUNG => array(
+            //_('Grad der Verstädterung')
+            self::LABEL              => 'Grad der Verstädterung',
+            //_('')
+            self::DESCRIPTION        => '',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => array(
+                'records' => array(
+                    array('id' => '01',    'value' => 'dicht besiedelt', 'system' => true), //_('dicht besiedelt')
+                    array('id' => '02',    'value' => 'mittlere Besiedlungsdichte', 'system' => true), //_('mittlere Besiedlungsdichte')
+                    array('id' => '03',    'value' => 'gering besiedelt', 'system' => true), //_('gering besiedelt')
+                )
+            )
+        ),
+        self::COMMUNITYIDENTNR_DUP_FIELDS => array(
+            //_('Community Identification Number duplicate check fields')
+            'label'                 => 'Community Identification Number duplicate check fields',
+            //_('These fields are checked when a new Community Identification Number is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
+            'description'           => 'These fields are checked when a new Community Identification Number is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
+            'type'                  => 'array',
+            'contents'              => 'array',
+            'clientRegistryInclude' => TRUE,
+            'default'               => array('arsCombined'),
+        ),
     );
 
     /**
