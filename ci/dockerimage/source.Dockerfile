@@ -22,7 +22,7 @@ FROM ${BASE_IMAGE} as cache-invalidator
 ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
 ARG CACHE_BUST=0
 RUN apk add --no-cache --simulate git npm | sha256sum >> /cachehash
-RUN if [ ${ALPINE_PHP_PACKAGE} != php8 ]; then \
+RUN if [ ${ALPINE_PHP_PACKAGE} != "php8" ]; then \
         apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
         composer | sha256sum >> /cachehash; \
     fi
@@ -54,7 +54,7 @@ ARG ALPINE_PHP_PACKAGE=php7
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 RUN apk add --no-cache git npm
 
-RUN if [ ${ALPINE_PHP_PACKAGE} == php8 ]; then \
+RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then \
         php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');"; \
         php -r "if (hash_file('sha384', '/composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"; \
         php /composer-setup.php; \
