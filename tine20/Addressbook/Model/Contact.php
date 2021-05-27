@@ -482,6 +482,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::OMIT_MOD_LOG              => true,
                 self::SYSTEM                    => true,
             ],
+            'language'           => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Language', // _('Language')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
             'note'                          => [
                 self::TYPE                      => self::TYPE_FULLTEXT,
                 self::LENGTH                    => 2147483647, // mysql longtext, really?!?
