@@ -254,9 +254,12 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         if (! this[contentType + suffix]) {
             try {
                 this[contentType + suffix] = def && def.xtype ? Ext.create(def) :
-                    new Tine[this.app.appName][contentType + suffix]({
-                        app: this.app,
-                        plugins: [this.getWestPanel().getFilterPlugin(contentType)]
+                    new Tine[def.appName || this.app.appName][contentType + suffix]({
+                        app: def.appName ? Tine.Tinebase.appMgr.get(def.appName) : this.app,
+                        plugins: (() => {
+                            const wp = this.getWestPanel();
+                            return wp && wp.getFilterPlugin ? [wp.getFilterPlugin(contentType)] : []
+                        })()
                     });
 
                 if (this[contentType + suffix].cls) {
@@ -542,13 +545,20 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
  *
  * @param {String} appName
  * @param {Collection} contentType
- *   contentType:   {String}
+ *   contentType:   {String|Object|Model}
  *   text:          {String}
  *   group:         {String} (optional)
  *   xtype:         {String} (optional)
  */
 Tine.widgets.MainScreen.registerContentType = function(appName, contentType) {
     var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + appName, []);
+    if (_.isFunction(contentType.getMeta)) {
+        contentType = {
+            appName: contentType.getMeta('appName'),
+            modelName: contentType.getMeta('modelName')
+        };
+    }
+    
     registeredContentTypes.push(contentType);
 
     _.set(Tine.widgets.MainScreen.registerContentType, 'registry.' + appName, registeredContentTypes);
