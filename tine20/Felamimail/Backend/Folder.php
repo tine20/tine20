@@ -67,6 +67,8 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
                     }
                     return true;
                 } elseif (!$lock->isLocked()) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Folder is locked');
                     return false;
                 } else {
                     return true;
