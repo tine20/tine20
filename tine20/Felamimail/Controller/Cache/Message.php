@@ -858,7 +858,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             
             if ($this->_timeLeft()) {
                 // add missing messages
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Retrieve message from {$_folder->imap_totalcount} to 1");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ .  " Retrieve message from {$_folder->imap_totalcount} to 1");
                 
                 $begin = $_folder->cache_job_lowestuid > 0 ? $_folder->cache_job_lowestuid : $this->_imapMessageSequence;
                 
@@ -1399,8 +1400,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             $_folder->quota_usage = 0;
             $_folder->quota_limit = 0;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($quota, TRUE));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($quota, TRUE));
     }
     
     /**
@@ -1413,6 +1415,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     public function getMessageSummary($messageUid, $accountId, $folderId = NULL)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' messageUid/folder ' . $messageUid . ' / ' . $folderId);
+
         $imap = Felamimail_Backend_ImapFactory::factory($accountId);
         
         if ($folderId !== null) {
@@ -1426,8 +1431,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
         }
         
-        $summary = $imap->getSummary($messageUid, NULL, TRUE);
-        
-        return $summary;
+        return $imap->getSummary($messageUid, NULL, TRUE);
     }
 }
