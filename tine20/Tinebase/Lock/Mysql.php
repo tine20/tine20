@@ -50,8 +50,13 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
                 $row[0] == 1) {
             static::$mysqlLockId = $this->_lockId;
             $this->_isLocked = true;
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                .' Aquired lock: ' . $this->_lockId);
             return true;
         }
+        // TODO we could also log the lock user - "select is_used_lock($this->_lockId);"
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            .' Could not get_lock: ' . $this->_lockId . ' ' . (isset($row) ? print_r($row, true) : 'get_lock failed'));
         return false;
     }
 
