@@ -341,12 +341,8 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'instancename') . ' = ?',
                 $this->_config['instanceName']);
         } else if (isset($this->_config['domain']) && ! empty($this->_config['domain'])) {
-            $domains = Tinebase_EmailUser::getAllowedDomains();
-            if (count($domains) === 0) {
-                $domains = [$this->_config['domain']];
-            }
-            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' IN (?)',
-                $domains);
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',
+                $this->_config['domain']);
         } else {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
         }
@@ -448,17 +444,14 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
 
         $emailUsername = $this->getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
 
-        if (strpos($_newUserProperties->accountEmailAddress, '@') !== false) {
-            list($localPart, $domain) = explode('@', $_newUserProperties->accountEmailAddress, 2);
-        } else {
-            list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
-            $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
-        }
-        $rawData['domain'] = $domain;
+        list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
+        $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
 
         if (isset($this->_config['instanceName'])) {
             $rawData['instancename'] = $this->_config['instanceName'];
         }
+
+        $rawData['domain'] = $domain;
 
         $rawData[$this->_propertyMapping['emailHome']] = $this->_getEmailHome($emailUsername, $localPart, $domain);
         $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
