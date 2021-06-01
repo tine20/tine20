@@ -160,11 +160,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             $cond = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'client_idnr') . ' = ?', $this->_clientId);
         } else {
             if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
-                $domains = Tinebase_EmailUser::getAllowedDomains();
-                if (count($domains) === 0) {
-                    $domains = [$this->_config['domain']];
-                }
-                $cond = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' IN (?)', $domains);
+                $cond = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
             } else {
                 $cond = $this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " =''";
             }
@@ -295,6 +291,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
                 substr($_userId, 0,32) . '#~#%') . ')'
         );
         $this->_appendClientIdOrDomain($where);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' where: ' . print_r($where, true));
         
         $this->_db->update($this->_userTable, $values, $where);
     }
