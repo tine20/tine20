@@ -23,6 +23,11 @@ class Tinebase_ModelConfiguration_Const {
     const ASSOCIATIONS = 'associations';
     const AVAILABLE_MODELS = 'availableModels';
 
+    /**
+     * additional boxLabel for checkboxes
+     */
+    const BOX_LABEL = 'boxLabel';
+    
     const CONFIG = 'config';
     const CONTROLLER = 'controller';
     const CONTROLLER_CLASS_NAME = 'controllerClassName';
@@ -149,6 +154,7 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_INTEGER = 'integer';
     const TYPE_JSON = 'json';
     const TYPE_KEY_FIELD = 'keyfield';
+    const TYPE_LABEL = 'label';
     const TYPE_MODEL = 'model';
     const TYPE_MONEY = 'money';
     const TYPE_NOTE = 'note';
