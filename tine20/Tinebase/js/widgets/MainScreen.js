@@ -248,7 +248,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     getCenterPanel: function(contentType) {
         contentType = contentType || this.getActiveContentType();
 
-        var def = this.getContentTypeDefinition(contentType),
+        var def = this.getContentTypeDefinition(contentType) || {},
             suffix = def && def.xtype ? '' : this.centerPanelClassNameSuffix;
 
         if (! this[contentType + suffix]) {
