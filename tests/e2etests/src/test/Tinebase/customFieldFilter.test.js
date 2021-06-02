@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Admin', 'Zusatzfelder');
 });
 
-describe('Mainpage', () => {
+describe.skip('Mainpage', () => {
     test('create customFieldKeyField', async () => {
         let editDialog = await lib.getEditDialog('Zusatzfeld hinzufügen');
         await editDialog.click('input[name=application_id]');
