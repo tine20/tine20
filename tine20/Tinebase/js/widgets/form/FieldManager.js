@@ -128,9 +128,9 @@ Tine.widgets.form.FieldManager = function() {
                 case 'boolean':
                     if (category === 'editDialog') {
                         field.xtype = 'checkbox';
-                        field.boxLabel = field.fieldLabel;
+                        field.boxLabel = _.get(fieldDefinition, 'boxLabel', field.fieldLabel);
                         field.checked = field['default'];
-                        field.hideLabel = true;
+                        field.hideLabel = !_.get(fieldDefinition, 'boxLabel');
                         field.blurOnChange = true;
                     } else {
                         field.xtype = 'booleancombo';
@@ -318,6 +318,9 @@ Tine.widgets.form.FieldManager = function() {
                     field.xtype = 'colorfield';
                     field.width = 80;
                     break;
+                case 'label':
+                    field.xtype = 'label';
+                    break;
                 default:
                     field.xtype = this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
                     if (fieldDefinition.length) {
@@ -379,6 +382,7 @@ Tine.widgets.form.FieldManager = function() {
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
                 genericKey = this.getKey([appName, modelName, fieldName]);
 
+            field.name = fieldName;
             fields[category ? categoryKey : genericKey] = field;
         },
 

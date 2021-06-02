@@ -501,7 +501,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 throw new Tinebase_Exception_AccessDenied('You are not allowed to change the locked preference.');
             }
 
-            if ($_value === Tinebase_Model_Preference::DEFAULT_VALUE) {
+            if ($_value === Tinebase_Model_Preference::DEFAULT_VALUE || null === $_value) {
                 // delete if new value = use default
                 $this->delete($preference->getId());
                 $action = 'Reset';

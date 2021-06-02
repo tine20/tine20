@@ -1672,4 +1672,30 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         // delete sessions
         Zend_Session::getSaveHandler()->gc(0);
     }
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = parent::getCoreDataForApplication();
+
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+
+        if (Tinebase_Config::getInstance()->featureEnabled(
+            Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR)
+        ) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'cs_community_identification_number',
+                'application_id' => $application,
+                'model' => 'Tinebase_Model_CommunityIdentNr',
+                'label' => 'Community Identification Number' // _('Community Identification Number')
+            )));
+        }
+        
+
+        return $result;
+    }
 }

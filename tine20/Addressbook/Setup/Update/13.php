@@ -16,6 +16,8 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE013_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE013_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE013_UPDATE007 = __CLASS__ . '::update007';
+
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE        => [
@@ -36,6 +38,10 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE013_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -126,5 +132,11 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([Addressbook_Model_Contact::class]);
         $this->addApplicationUpdate('Addressbook', '13.6', self::RELEASE013_UPDATE006);
+    }
+
+    public function update007()
+    {
+        Setup_SchemaTool::updateSchema([Addressbook_Model_Contact::class]);
+        $this->addApplicationUpdate('Addressbook', '13.7', self::RELEASE013_UPDATE007);
     }
 }

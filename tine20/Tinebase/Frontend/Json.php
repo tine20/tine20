@@ -43,7 +43,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_MFA_PinUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_SmsUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_YubicoOTPUserConfig::MODEL_NAME_PART,
+        Tinebase_Model_CommunityIdentNr::MODEL_NAME_PART
     ];
+    
+    public function __construct()
+    {
+        if (!Tinebase_Config::getInstance()->featureEnabled(
+            Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR)
+        ) {
+            $this->_configuredModels = array_diff($this->_configuredModels, [
+                Tinebase_Model_CommunityIdentNr::MODEL_NAME_PART
+            ]);
+        }
+    }
 
     /**
      * wait for changes

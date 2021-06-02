@@ -90,8 +90,10 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $zipfilename = Tinebase_TempFile::getTempPath();
         $opened = $zip->open($zipfilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
 
-        if( $opened !== true ) {
-            throw new Exception('could not open zip file');
+        if ($opened !== true) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not open zip ' . $zipfilename);
+            $this->_handleFailure(404);
         }
 
         foreach ($message['attachments'] as $attachment) {
@@ -111,6 +113,11 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
         $zip->close();
 
+        if (! file_exists($zipfilename)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could find zip for download: ' . $zipfilename);
+            $this->_handleFailure(404);
+        }
         $stream = fopen($zipfilename, 'r');
         // TODO use subject as filename?
         $this->_prepareHeader('attachments.zip', 'application/zip');

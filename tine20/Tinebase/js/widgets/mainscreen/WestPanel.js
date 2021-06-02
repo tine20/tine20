@@ -210,9 +210,9 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * 
      * @return {Tine.Tinebase.widgets.ContainerTreePanel}
      */
-    getContainerTreePanel: function() {
-        var contentType = this.app.getMainScreen().getActiveContentType(),
-            panelName = contentType + 'TreePanel';
+    getContainerTreePanel: function(contentType) {
+        contentType = contentType || this.app.getMainScreen().getActiveContentType();
+        const panelName = contentType + 'TreePanel';
 
         if (! this[panelName]) {
             if (Tine[this.app.appName].hasOwnProperty(panelName)) {
@@ -300,16 +300,21 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * @return {Tine.widgets.grid.FilterPlugin}
      */
     getFilterPlugin: function(contentType) {
+        
+        
         if (this.hasContainerTreePanel) {
-            return this.getContainerTreePanel().getFilterPlugin();
-        } else {
-            return new Tine.widgets.grid.FilterPlugin({
-                getValue: function() {
-                    return [
-                    ];
-                }
-            });
+            const ctp = this.getContainerTreePanel(contentType);
+            if (ctp.getFilterPlugin) {
+                return ctp.getFilterPlugin();
+            }
         }
+        
+        return new Tine.widgets.grid.FilterPlugin({
+            getValue: function() {
+                return [
+                ];
+            }
+        });
     },
     
     /**

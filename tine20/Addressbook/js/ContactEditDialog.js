@@ -58,6 +58,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             });
         }
 
+        var allLanguages = Locale.getTranslationList('Language');
+
         this.preferredAddressBusinessCheckbox = new Ext.form.Checkbox({
             checked: this.record.get('preferred_address') === "0",
             hideLabel: false,
@@ -331,9 +333,19 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             }
                         }
                     }
+                }, {
+                    fieldLabel: this.app.i18n._('Language'),
+                    name: 'language',
+                    xtype: 'combo',
+                    mode: 'local',
+                    allowBlank: true,
+                    editable: true,
+                    forceSelection: true,
+                    store: Object.entries(allLanguages)
                 }]]
             }]
         };
+        
 
         this.postalAddressesTabPanel = Ext.create({
             xtype: 'tabpanel',

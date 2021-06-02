@@ -1,5 +1,6 @@
 #
 # Translators:
+#: Config.php:2825
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
@@ -1124,11 +1125,11 @@ msgstr ""
 msgid "Searching..."
 msgstr "Vyhledávám..."
 
-#: js/widgets/form/PasswordTriggerField.js:125
+#: js/widgets/form/PasswordTriggerField.js:126
 msgid "Cleartext/Hidden"
 msgstr ""
 
-#: js/widgets/form/PasswordTriggerField.js:126
+#: js/widgets/form/PasswordTriggerField.js:127
 msgid "Copy to Clipboard"
 msgstr ""
 
@@ -3228,972 +3229,1008 @@ msgstr ""
 msgid "Which action should be executed by default when a file is double-clicked."
 msgstr ""
 
-#: Config.php:804 Config.php:806
+#: Config.php:828 Config.php:830
 msgid "Accesslog rotation in days"
 msgstr ""
 
-#: Config.php:825
+#: Config.php:849
 msgid "Account Deletion Event"
 msgstr ""
 
-#: Config.php:827
+#: Config.php:851
 msgid "Configure what should happen to data of deleted users"
 msgstr ""
 
-#: Config.php:839
+#: Config.php:863
 msgid "Area Locks"
 msgstr ""
 
-#: Config.php:841
+#: Config.php:865
 msgid "Configured Area Locks"
 msgstr ""
 
-#: Config.php:851
+#: Config.php:875
 msgid "MFA"
 msgstr ""
 
-#: Config.php:853
+#: Config.php:877
 msgid "Configured MFAs"
 msgstr ""
 
-#: Config.php:866
+#: Config.php:890
 msgid "Available Languages"
 msgstr ""
 
-#: Config.php:868
+#: Config.php:892
 msgid "Whitelist available languages that can be chosen in the GUI"
 msgstr ""
 
-#: Config.php:879
+#: Config.php:903
 msgid "Build Type"
 msgstr ""
 
-#: Config.php:881
+#: Config.php:905
 msgid "One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE"
 msgstr ""
 
-#: Config.php:890
+#: Config.php:914
 msgid "DB logger configuration"
 msgstr ""
 
-#: Config.php:913
+#: Config.php:937
 msgid "Default Locale"
 msgstr ""
 
-#: Config.php:915
+#: Config.php:939
 msgid "Default locale for this installation."
 msgstr ""
 
-#: Config.php:932
+#: Config.php:956
 msgid "Internet proxy config"
 msgstr ""
 
-#: Config.php:956
+#: Config.php:980
 msgid "System IMAP"
 msgstr ""
 
-#: Config.php:958
+#: Config.php:982
 msgid "System IMAP server configuration."
 msgstr ""
 
-#: Config.php:981
+#: Config.php:1005
 msgid "System SMTP"
 msgstr ""
 
-#: Config.php:983
+#: Config.php:1007
 msgid "System SMTP server configuration."
 msgstr ""
 
-#: Config.php:992
+#: Config.php:1016
 msgid "System SIEVE"
 msgstr ""
 
-#: Config.php:994
+#: Config.php:1018
 msgid "System SIEVE server configuration."
 msgstr ""
 
-#: Config.php:1004 Config.php:1006
+#: Config.php:1028 Config.php:1030
 msgid "Use record XPROPS to save email user id"
 msgstr ""
 
-#: Config.php:1016
+#: Config.php:1040
 msgid "Trusted Proxies"
 msgstr ""
 
-#: Config.php:1018
+#: Config.php:1042
 msgid "If this is set, the HTTP_X_FORWARDED_FOR header is used."
 msgstr ""
 
-#: Config.php:1026
+#: Config.php:1050
 msgid "Authentication Backend"
 msgstr ""
 
-#: Config.php:1028
+#: Config.php:1052
 msgid "Backend adapter for user authentication."
 msgstr ""
 
-#: Config.php:1036
+#: Config.php:1060
 msgid "Authentication Configuration"
 msgstr ""
 
-#: Config.php:1038
+#: Config.php:1062
 msgid "Authentication backend configuration."
 msgstr ""
 
-#: Config.php:1048
+#: Config.php:1072
 msgid "Authentication by Email"
 msgstr ""
 
-#: Config.php:1056
+#: Config.php:1080
 msgid "User Backend"
 msgstr ""
 
-#: Config.php:1058
+#: Config.php:1082
 msgid "Backend adapter for user data."
 msgstr ""
 
-#: Config.php:1066
+#: Config.php:1090
 msgid "Replication master configuration"
 msgstr ""
 
-#: Config.php:1068
+#: Config.php:1092
 msgid "Replication master configuration."
 msgstr ""
 
-#: Config.php:1082
+#: Config.php:1106
 msgid "Replication slave configuration"
 msgstr ""
 
-#: Config.php:1084
+#: Config.php:1108
 msgid "Replication slave configuration."
 msgstr ""
 
-#: Config.php:1107
+#: Config.php:1131
 msgid "Full text configuration"
 msgstr ""
 
-#: Config.php:1109
+#: Config.php:1133
 msgid "Full text configuration."
 msgstr ""
 
-#: Config.php:1137
+#: Config.php:1161
 msgid "Action queue configuration"
 msgstr ""
 
-#: Config.php:1139
+#: Config.php:1163
 msgid "Action queue configuration."
 msgstr ""
 
-#: Config.php:1223
+#: Config.php:1247
 msgid "User Configuration"
 msgstr ""
 
-#: Config.php:1225
+#: Config.php:1249
 msgid "User backend configuration."
 msgstr ""
 
-#: Config.php:1337 Config.php:1665
+#: Config.php:1361 Config.php:1697
 msgid "Sync contact data from sync backend"
 msgstr ""
 
-#: Config.php:1339 Config.php:1667
+#: Config.php:1363 Config.php:1699
 msgid "Sync user contact data from sync backend"
 msgstr ""
 
-#: Config.php:1348
+#: Config.php:1372
 msgid "Sync contact photo from sync backend"
 msgstr ""
 
-#: Config.php:1350
+#: Config.php:1374
 msgid "Sync user contact photo from sync backend"
 msgstr ""
 
-#: Config.php:1359 Config.php:1361
+#: Config.php:1383 Config.php:1385
 msgid "Sync deleted users from sync backend"
 msgstr ""
 
-#: Config.php:1370 Config.php:1372
+#: Config.php:1394 Config.php:1396
 msgid "Sync user account status from sync backend"
 msgstr ""
 
-#: Config.php:1386
+#: Config.php:1410
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:1394
+#: Config.php:1418
 msgid "Show Advanced Search"
 msgstr ""
 
-#: Config.php:1397
+#: Config.php:1421
 msgid "Show toggle button to switch on or off the advanced search for the quickfilter"
 msgstr ""
 
-#: Config.php:1403
+#: Config.php:1427
 msgid "Show Account Email Address"
 msgstr ""
 
-#: Config.php:1405
+#: Config.php:1429
 msgid "Show email address in account picker and attendee grids"
 msgstr ""
 
-#: Config.php:1410
+#: Config.php:1434
 msgid "Remeber Popup Size"
 msgstr ""
 
-#: Config.php:1412
+#: Config.php:1436
 msgid "Save edit dialog size in state"
 msgstr ""
 
-#: Config.php:1417
+#: Config.php:1441
 msgid "Create File Previews"
 msgstr ""
 
-#: Config.php:1423
+#: Config.php:1447
 msgid "Create FullText Indices"
 msgstr ""
 
-#: Config.php:1436 Config.php:1438
+#: Config.php:1460 Config.php:1462
 msgid "Autodiscover"
 msgstr ""
 
-#: Config.php:1444 Config.php:1446
+#: Config.php:1468 Config.php:1470
 msgid "Autodiscover mail config"
 msgstr ""
 
-#: Config.php:1454
+#: Config.php:1476 Controller.php:1694 Model/CommunityIdentNr.php:59
+msgid "Community Identification Number"
+msgid_plural "Community Identification Numbers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: Config.php:1478
+msgid "Show the Community Identification Number in the Coredata"
+msgstr ""
+
+#: Config.php:1486
 msgid "Default Admin Role Name"
 msgstr ""
 
-#: Config.php:1464
+#: Config.php:1496
 msgid "Default User Role Name"
 msgstr ""
 
-#: Config.php:1474
+#: Config.php:1506
 msgid "Cronjob Disabled"
 msgstr ""
 
-#: Config.php:1476
+#: Config.php:1508
 msgid "triggerAsyncEvents does not do anything and monitoringCheckCron does not alert"
 msgstr ""
 
-#: Config.php:1485
+#: Config.php:1517
 msgid "Cronuser ID"
 msgstr ""
 
-#: Config.php:1487
+#: Config.php:1519
 msgid "User ID of the cron user."
 msgstr ""
 
-#: Config.php:1495
+#: Config.php:1527
 msgid "Title Postfix"
 msgstr ""
 
-#: Config.php:1497
+#: Config.php:1529
 msgid "Postfix string appended to the title of this installation."
 msgstr ""
 
-#: Config.php:1505
+#: Config.php:1537
 msgid "Redirect URL"
 msgstr ""
 
-#: Config.php:1507
+#: Config.php:1539
 msgid "Redirect to this URL after logout."
 msgstr ""
 
-#: Config.php:1515
+#: Config.php:1547
 msgid "Redirect to Referrer"
 msgstr ""
 
-#: Config.php:1517
+#: Config.php:1549
 msgid "Redirect to referrer after logout."
 msgstr ""
 
-#: Config.php:1525
+#: Config.php:1557
 msgid "Redirect Always"
 msgstr ""
 
-#: Config.php:1527
+#: Config.php:1559
 msgid "Redirect to configured redirect URL also for login."
 msgstr ""
 
-#: Config.php:1535
+#: Config.php:1567
 msgid "Status Info"
 msgstr ""
 
-#: Config.php:1537
+#: Config.php:1569
 msgid "If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status"
 msgstr ""
 
-#: Config.php:1546
+#: Config.php:1578
 msgid "Allowed Origins"
 msgstr ""
 
-#: Config.php:1548
+#: Config.php:1580
 msgid "Allowed Origins for the JSON API."
 msgstr ""
 
-#: Config.php:1556
+#: Config.php:1588
 msgid "Allowed Health Check IPs"
 msgstr ""
 
-#: Config.php:1558
+#: Config.php:1590
 msgid "Hosts that are allowed to access the TINEURL/health API"
 msgstr ""
 
-#: Config.php:1567
+#: Config.php:1599
 msgid "Accepted Terms Version"
 msgstr ""
 
-#: Config.php:1569
+#: Config.php:1601
 msgid "Accepted version number of the terms and conditions document."
 msgstr ""
 
-#: Config.php:1577
+#: Config.php:1609
 msgid "Use Geolocation Services"
 msgstr ""
 
-#: Config.php:1579
+#: Config.php:1611
 msgid "Use of external Geolocation services is allowed."
 msgstr ""
 
-#: Config.php:1589
+#: Config.php:1621
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:1591
+#: Config.php:1623
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:1602
+#: Config.php:1634
 msgid "Contact fields overwritten by LDAP"
 msgstr ""
 
-#: Config.php:1604
+#: Config.php:1636
 msgid "These fields are overwritten during LDAP sync if empty"
 msgstr ""
 
-#: Config.php:1613
+#: Config.php:1645
 msgid "Sales Tax Default"
 msgstr ""
 
-#: Config.php:1615
+#: Config.php:1647
 msgid "Sales tax that is used as default value in Tine 2.0 apps like Sales."
 msgstr ""
 
-#: Config.php:1624
+#: Config.php:1656
 msgid "Sentry service URI"
 msgstr ""
 
-#: Config.php:1626
+#: Config.php:1658
 msgid "URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>"
 msgstr ""
 
-#: Config.php:1634 Config.php:1636
+#: Config.php:1666 Config.php:1668
 msgid "Sentry Loglevel Bitmask"
 msgstr ""
 
-#: Config.php:1645 Config.php:1647
+#: Config.php:1677 Config.php:1679
 msgid "API key to access status URI"
 msgstr ""
 
-#: Config.php:1655
+#: Config.php:1687
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:1657
+#: Config.php:1689
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:1678
+#: Config.php:1710
 msgid "Removed users should be deleted after X months"
 msgstr ""
 
-#: Config.php:1676
+#: Config.php:1708
 msgid "Sync user: delete after X months)label"
 msgstr ""
 
-#: Config.php:1687
+#: Config.php:1719
 msgid "IP Session Validator"
 msgstr ""
 
-#: Config.php:1689
+#: Config.php:1721
 msgid "Destroy session if the users IP changes."
 msgstr ""
 
-#: Config.php:1697
+#: Config.php:1729
 msgid "UA Session Validator"
 msgstr ""
 
-#: Config.php:1699
+#: Config.php:1731
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
 
-#: Config.php:1708
+#: Config.php:1740
 msgid "Files Directory"
 msgstr ""
 
-#: Config.php:1710
+#: Config.php:1742
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Config.php:1718 Config.php:1720
+#: Config.php:1750 Config.php:1752
 msgid "Reuse last username logged"
 msgstr ""
 
-#: Config.php:1728 Config.php:1730
+#: Config.php:1760 Config.php:1762
 msgid "User may change password"
 msgstr ""
 
-#: Config.php:1739
+#: Config.php:1771
 msgid "Browser password manager can be used"
 msgstr ""
 
-#: Config.php:1749
+#: Config.php:1781
 msgid "Support NTLM V2 authentication"
 msgstr ""
 
-#: Config.php:1751
+#: Config.php:1783
 msgid "Support NTLM V2 authentication and store account password as ntlm v2 hash"
 msgstr ""
 
-#: Config.php:1760 Config.php:1762
+#: Config.php:1792 Config.php:1794
 msgid "Update NTLM V2 password has on login"
 msgstr ""
 
-#: Config.php:1771
+#: Config.php:1803
 msgid "NTLM V2 password hash encryption key"
 msgstr ""
 
-#: Config.php:1773
+#: Config.php:1805
 msgid "Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database."
 msgstr ""
 
-#: Config.php:1782
+#: Config.php:1814
 msgid "User password policy"
 msgstr ""
 
-#: Config.php:1784
+#: Config.php:1816
 msgid "User password policy settings."
 msgstr ""
 
-#: Config.php:1794 Config.php:1796 Config.php:1899 Config.php:1901
+#: Config.php:1826 Config.php:1828 Config.php:1931 Config.php:1933
 msgid "Enable password policy"
 msgstr ""
 
-#: Config.php:1804 Config.php:1909
+#: Config.php:1836 Config.php:1941
 msgid "Only ASCII"
 msgstr ""
 
-#: Config.php:1806 Config.php:1911
+#: Config.php:1838 Config.php:1943
 msgid "Only ASCII characters are allowed in passwords."
 msgstr ""
 
-#: Config.php:1814 Config.php:1919
+#: Config.php:1846 Config.php:1951
 msgid "Minimum length"
 msgstr ""
 
-#: Config.php:1816 Config.php:1921
+#: Config.php:1848 Config.php:1953
 msgid "Minimum password length"
 msgstr ""
 
-#: Config.php:1824 Config.php:1929
+#: Config.php:1856 Config.php:1961
 msgid "Minimum word chars"
 msgstr ""
 
-#: Config.php:1826 Config.php:1931
+#: Config.php:1858 Config.php:1963
 msgid "Minimum word chars in password"
 msgstr ""
 
-#: Config.php:1834 Config.php:1939
+#: Config.php:1866 Config.php:1971
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: Config.php:1836 Config.php:1941
+#: Config.php:1868 Config.php:1973
 msgid "Minimum uppercase chars in password"
 msgstr ""
 
-#: Config.php:1844 Config.php:1949
+#: Config.php:1876 Config.php:1981
 msgid "Minimum special chars"
 msgstr ""
 
-#: Config.php:1846 Config.php:1951
+#: Config.php:1878 Config.php:1983
 msgid "Minimum special chars in password"
 msgstr ""
 
-#: Config.php:1854 Config.php:1959
+#: Config.php:1886 Config.php:1991
 msgid "Minimum numbers"
 msgstr ""
 
-#: Config.php:1856 Config.php:1961
+#: Config.php:1888 Config.php:1993
 msgid "Minimum numbers in password"
 msgstr ""
 
-#: Config.php:1864 Config.php:1969
+#: Config.php:1896 Config.php:2001
 msgid "Forbid part of username"
 msgstr ""
 
-#: Config.php:1866 Config.php:1971
+#: Config.php:1898 Config.php:2003
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: Config.php:1874 Config.php:1979
+#: Config.php:1906 Config.php:2011
 msgid "Change Password After ... Days"
 msgstr ""
 
-#: Config.php:1876 Config.php:1981
+#: Config.php:1908 Config.php:2013
 msgid "Users need to change their passwords after defined number of days"
 msgstr ""
 
-#: Config.php:1887
+#: Config.php:1919
 msgid "Download password policy"
 msgstr ""
 
-#: Config.php:1889
+#: Config.php:1921
 msgid "Download password policy settings."
 msgstr ""
 
-#: Config.php:1992
+#: Config.php:2024
 msgid "Automatic bugreports"
 msgstr ""
 
-#: Config.php:1994
+#: Config.php:2026
 msgid "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr ""
 
-#: Config.php:2002
+#: Config.php:2034
 msgid "Last sessions cleanup run"
 msgstr ""
 
-#: Config.php:2004
+#: Config.php:2036
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr ""
 
-#: Config.php:2012
+#: Config.php:2044
 msgid "Warn after X login failures"
 msgstr ""
 
-#: Config.php:2014
+#: Config.php:2046
 msgid "Maximum allowed login failures before writing warn log messages"
 msgstr ""
 
-#: Config.php:2023
+#: Config.php:2055
 msgid "Disable Anyone Account"
 msgstr ""
 
-#: Config.php:2025
+#: Config.php:2057
 msgid "Disallow anyone account in grant configurations"
 msgstr ""
 
-#: Config.php:2033
+#: Config.php:2065
 msgid "Alarms sent each job"
 msgstr ""
 
-#: Config.php:2035
+#: Config.php:2067
 msgid "Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Config.php:2043
+#: Config.php:2075
 msgid "Account deactivation notfication"
 msgstr ""
 
-#: Config.php:2045
+#: Config.php:2077
 msgid "Send E-Mail to user if the account is deactivated or the user tries to login with deactivated account"
 msgstr ""
 
-#: Config.php:2053
+#: Config.php:2085
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:2055
+#: Config.php:2087
 msgid "Allows to configure which user is allowed to switch to another users account"
 msgstr ""
 
-#: Config.php:2063 Config.php:2065
+#: Config.php:2095 Config.php:2097
 msgid "Max username length"
 msgstr ""
 
-#: Config.php:2072
+#: Config.php:2104
 msgid "User PIN"
 msgstr ""
 
-#: Config.php:2074
+#: Config.php:2106
 msgid "Users can have a PIN"
 msgstr ""
 
-#: Config.php:2081 Config.php:2083
+#: Config.php:2113 Config.php:2115
 msgid "User PIN minimum length"
 msgstr ""
 
-#: Config.php:2090
+#: Config.php:2122
 msgid "conf.d folder name"
 msgstr ""
 
-#: Config.php:2092
+#: Config.php:2124
 msgid "Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!"
 msgstr ""
 
-#: Config.php:2101
+#: Config.php:2133
 msgid "Maintenance mode enabled"
 msgstr ""
 
-#: Config.php:2103
+#: Config.php:2135
 msgid "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users having the maintenance right can login) and \"all\""
 msgstr ""
 
-#: Config.php:2112
+#: Config.php:2144
 msgid "Version check enabled"
 msgstr ""
 
-#: Config.php:2124
+#: Config.php:2156
 msgid "Custom Javascript includes for Fat-Client"
 msgstr ""
 
-#: Config.php:2126
+#: Config.php:2158
 msgid "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver."
 msgstr ""
 
-#: Config.php:2135
+#: Config.php:2167
 msgid "custom title"
 msgstr ""
 
-#: Config.php:2137
+#: Config.php:2169
 msgid "Custom title for branding."
 msgstr ""
 
-#: Config.php:2146
+#: Config.php:2178
 msgid "custom logo path"
 msgstr ""
 
-#: Config.php:2148
+#: Config.php:2180
 msgid "Path to custom logo."
 msgstr ""
 
-#: Config.php:2157
+#: Config.php:2189
 msgid "custom description"
 msgstr ""
 
-#: Config.php:2159
+#: Config.php:2191
 msgid "Custom description for branding."
 msgstr ""
 
-#: Config.php:2168
+#: Config.php:2200
 msgid "custom weburl"
 msgstr ""
 
-#: Config.php:2170
+#: Config.php:2202
 msgid "Custom weburl for branding."
 msgstr ""
 
-#: Config.php:2179
+#: Config.php:2211
 msgid "custom help url"
 msgstr ""
 
-#: Config.php:2181
+#: Config.php:2213
 msgid "Custom url for help."
 msgstr ""
 
-#: Config.php:2190
+#: Config.php:2222
 msgid "custom shop url"
 msgstr ""
 
-#: Config.php:2192
+#: Config.php:2224
 msgid "Custom url for the shop."
 msgstr ""
 
-#: Config.php:2201
+#: Config.php:2233
 msgid "custom bugreport url"
 msgstr ""
 
-#: Config.php:2203
+#: Config.php:2235
 msgid "Custom bugreport url."
 msgstr ""
 
-#: Config.php:2212
+#: Config.php:2244
 msgid "custom favicon paths"
 msgstr ""
 
-#: Config.php:2214
+#: Config.php:2246
 msgid "Paths to custom favicons."
 msgstr ""
 
-#: Config.php:2227
+#: Config.php:2259
 msgid "custom svg favicon paths"
 msgstr ""
 
-#: Config.php:2229
+#: Config.php:2261
 msgid "Paths to custom svg favicon."
 msgstr ""
 
-#: Config.php:2238
+#: Config.php:2270
 msgid "Mask Icon Color"
 msgstr ""
 
-#: Config.php:2240
+#: Config.php:2272
 msgid "Background color of mask icon (safari pinned tab)."
 msgstr ""
 
-#: Config.php:2250
+#: Config.php:2282
 msgid "Installation logo"
 msgstr ""
 
-#: Config.php:2252
+#: Config.php:2284
 msgid "Path to custom installation logo."
 msgstr ""
 
-#: Config.php:2261
+#: Config.php:2293
 msgid "custom website url"
 msgstr ""
 
-#: Config.php:2263
+#: Config.php:2295
 msgid "Custom url used for logo on login page."
 msgstr ""
 
-#: Config.php:2272
+#: Config.php:2304
 msgid "Use login name instead of full name"
 msgstr ""
 
-#: Config.php:2274
+#: Config.php:2306
 msgid "Use login name instead of full name for webdav."
 msgstr ""
 
-#: Config.php:2283
+#: Config.php:2315
 msgid "List of WebDav agent strings that will be denied"
 msgstr ""
 
-#: Config.php:2285
+#: Config.php:2317
 msgid "List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
 msgstr ""
 
-#: Config.php:2294
+#: Config.php:2326
 msgid "Enable SyncToken plugin"
 msgstr ""
 
-#: Config.php:2296
+#: Config.php:2328
 msgid "Enable the use of the SyncToken plugin."
 msgstr ""
 
-#: Config.php:2305
+#: Config.php:2337
 msgid "currency symbol"
 msgstr ""
 
-#: Config.php:2307
+#: Config.php:2339
 msgid "Path to custom favicon."
 msgstr ""
 
-#: Config.php:2316
+#: Config.php:2348
 msgid "Filesystem settings"
 msgstr ""
 
-#: Config.php:2318
+#: Config.php:2350
 msgid "Filesystem settings."
 msgstr ""
 
-#: Config.php:2327
+#: Config.php:2359
 msgid "Filesystem history"
 msgstr ""
 
-#: Config.php:2329
+#: Config.php:2361
 msgid "Filesystem keeps history, default is false."
 msgstr ""
 
-#: Config.php:2338
+#: Config.php:2370
 msgid "Filesystem number of revisions"
 msgstr ""
 
-#: Config.php:2340
+#: Config.php:2372
 msgid "Filesystem number of revisions being kept before they are automatically deleted."
 msgstr ""
 
-#: Config.php:2349
+#: Config.php:2381
 msgid "Filesystem months of revisions"
 msgstr ""
 
-#: Config.php:2351
+#: Config.php:2383
 msgid "Filesystem number of months revisions being kept before they are automatically deleted."
 msgstr ""
 
-#: Config.php:2360
+#: Config.php:2392
 msgid "Filesystem index content"
 msgstr ""
 
-#: Config.php:2362
+#: Config.php:2394
 msgid "Filesystem index content."
 msgstr ""
 
-#: Config.php:2371
+#: Config.php:2403
 msgid "Filesystem enable notifications"
 msgstr ""
 
-#: Config.php:2373
+#: Config.php:2405
 msgid "Filesystem enable notifications."
 msgstr ""
 
-#: Config.php:2382
+#: Config.php:2414
 msgid "Filesystem create previews"
 msgstr ""
 
-#: Config.php:2384
+#: Config.php:2416
 msgid "Filesystem create previews."
 msgstr ""
 
-#: Config.php:2393
+#: Config.php:2425
 msgid "URL of preview service"
 msgstr ""
 
-#: Config.php:2395
+#: Config.php:2427
 msgid "URL of preview service."
 msgstr ""
 
-#: Config.php:2404
+#: Config.php:2436
 msgid "Class for preview service"
 msgstr ""
 
-#: Config.php:2406
+#: Config.php:2438
 msgid "Class to use, to connect to preview service."
 msgstr ""
 
-#: Config.php:2415
+#: Config.php:2447
 msgid "Max file size for preview service"
 msgstr ""
 
-#: Config.php:2417
+#: Config.php:2449
 msgid "Max file size for preview service."
 msgstr ""
 
-#: Config.php:2426 Config.php:2428
+#: Config.php:2458 Config.php:2460
 msgid "Max per preview preview service error count, for trying to generate preview."
 msgstr ""
 
-#: Config.php:2437 Config.php:2439
+#: Config.php:2469 Config.php:2471
 msgid "X size of thumbnail images."
 msgstr ""
 
-#: Config.php:2448 Config.php:2450
+#: Config.php:2480 Config.php:2482
 msgid "Y size of thumbnail images."
 msgstr ""
 
-#: Config.php:2459 Config.php:2461 Config.php:2481 Config.php:2483
+#: Config.php:2491 Config.php:2493 Config.php:2513 Config.php:2515
 msgid "X size of preview images."
 msgstr ""
 
-#: Config.php:2470 Config.php:2472 Config.php:2492 Config.php:2494
+#: Config.php:2502 Config.php:2504 Config.php:2524 Config.php:2526
 msgid "Y size of preview images."
 msgstr ""
 
-#: Config.php:2503 Config.php:2505
+#: Config.php:2535 Config.php:2537
 msgid "Ignore Proxy config for preview service"
 msgstr ""
 
-#: Config.php:2514 Config.php:2516
+#: Config.php:2546 Config.php:2548
 msgid "Antivirus Scan Max File Size"
 msgstr ""
 
-#: Config.php:2525 Config.php:2527
+#: Config.php:2557 Config.php:2559
 msgid "Antivirus Scan Mode"
 msgstr ""
 
-#: Config.php:2538 Config.php:2540
+#: Config.php:2570 Config.php:2572
 msgid "Antivirus Scan URL"
 msgstr ""
 
-#: Config.php:2551 Config.php:2553
+#: Config.php:2583 Config.php:2585
 msgid "Filter sync token settings"
 msgstr ""
 
-#: Config.php:2562 Config.php:2564
+#: Config.php:2594 Config.php:2596
 msgid "Max age in days"
 msgstr ""
 
-#: Config.php:2573 Config.php:2575
+#: Config.php:2605 Config.php:2607
 msgid "Max amount in total"
 msgstr ""
 
-#: Config.php:2584 Config.php:2586
+#: Config.php:2616 Config.php:2618
 msgid "Max amount per filter"
 msgstr ""
 
-#: Config.php:2598 Config.php:2600
+#: Config.php:2630 Config.php:2632
 msgid "Quota settings"
 msgstr ""
 
-#: Config.php:2609
+#: Config.php:2641
 msgid "Show UI"
 msgstr ""
 
-#: Config.php:2611
+#: Config.php:2643
 msgid "Should the quota UI elements be rendered or not."
 msgstr ""
 
-#: Config.php:2620
+#: Config.php:2652
 msgid "Include revisions"
 msgstr ""
 
-#: Config.php:2622
+#: Config.php:2654
 msgid "Should all revisions be used to calculate total usage?"
 msgstr ""
 
-#: Config.php:2631
+#: Config.php:2663
 msgid "Total quota in MB"
 msgstr ""
 
-#: Config.php:2633
+#: Config.php:2665
 msgid "Total quota in MB (0 for unlimited)"
 msgstr ""
 
-#: Config.php:2642
+#: Config.php:2674
 msgid "Total quota by user in MB"
 msgstr ""
 
-#: Config.php:2644
+#: Config.php:2676
 msgid "Total quota by user in MB (0 for unlimited)"
 msgstr ""
 
-#: Config.php:2653
+#: Config.php:2685
 msgid "Soft quota in %"
 msgstr ""
 
-#: Config.php:2655
+#: Config.php:2687
 msgid "Soft quota in % (0-100, 0 means off)"
 msgstr ""
 
-#: Config.php:2664
+#: Config.php:2696
 msgid "Soft quota notification role"
 msgstr ""
 
-#: Config.php:2666
+#: Config.php:2698
 msgid "Name of the role to notify if soft quota is exceeded"
 msgstr ""
 
-#: Config.php:2675 Config.php:2677
+#: Config.php:2707 Config.php:2709
 msgid "Skip Imap Quota Notfication"
 msgstr ""
 
-#: Config.php:2689 Config.php:2691
+#: Config.php:2721 Config.php:2723
 msgid "SSO client settings"
 msgstr ""
 
-#: Config.php:2728
+#: Config.php:2760
 msgid "Tine20 URL"
 msgstr ""
 
-#: Config.php:2730
+#: Config.php:2762
 msgid "The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable."
 msgstr ""
 
-#: Config.php:2739
+#: Config.php:2771
 msgid "Tine20 URL Used For JS Client"
 msgstr ""
 
-#: Config.php:2741
+#: Config.php:2773
 msgid "see https://github.com/tine20/tine20/issues/7218"
 msgstr ""
 
-#: Config.php:2769 Config.php:2771
+#: Config.php:2801 Config.php:2803
 msgid "auth token default and maximum TTL in seconds"
 msgstr ""
 
-#: Config.php:2780 Config.php:2782
+#: Config.php:2812 Config.php:2814
 msgid "shared credential cache cryptographic key"
+msgstr ""
+
+#: Config.php:2823 Model/CommunityIdentNr.php:252
+msgid "Grad der Verstädterung"
+msgstr ""
+
+#: Config.php:2833
+msgid "dicht besiedelt"
+msgstr ""
+
+#: Config.php:2834
+msgid "mittlere Besiedlungsdichte"
+msgstr ""
+
+#: Config.php:2835
+msgid "gering besiedelt"
+msgstr ""
+
+#: Config.php:2840
+msgid "Community Identification Number duplicate check fields"
+msgstr ""
+
+#: Config.php:2842
+msgid "These fields are checked when a new Community Identification Number is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Controller.php:521
@@ -4292,6 +4329,14 @@ msgstr ""
 
 #: Import/Csv/Abstract.php:396
 msgid "N/A"
+msgstr ""
+
+#: Import/definitions/tinebase_import_communityidentnr.xml:10
+msgid "Import Community identification Numbers"
+msgstr ""
+
+#: Import/definitions/tinebase_import_communityidentnr.xml:13
+msgid "Community Identification Number Import"
 msgstr ""
 
 #: Model/MFA/PinUserConfig.php:36
@@ -4425,6 +4470,78 @@ msgstr ""
 
 #: Model/Container.php:212
 msgid "UUID"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:83
+msgid "Satzart"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:93
+msgid "Textkennzeichen"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:102
+msgid "Land"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:112
+msgid "RB"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:122
+msgid "Kreis"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:132
+msgid "VB"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:142
+msgid "Gem"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:152
+msgid "Amtlicher Regionalschlüssel"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:161
+msgid "Gemeindename"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:169
+msgid "Fläche"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:178
+msgid "Bevölkerung insgesamt"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:187
+msgid "Bevölkerung männlich"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:196
+msgid "Bevölkerung weiblich"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:205
+msgid "Bevölkerung je quadrat km"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:214
+msgid "plz"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:223
+msgid "Längengrad"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:232
+msgid "Breitengrad"
+msgstr ""
+
+#: Model/CommunityIdentNr.php:242
+msgid "Reisegebiet"
 msgstr ""
 
 #: Model/AreaLockState.php:38
@@ -4708,15 +4825,15 @@ msgstr "změněno"
 msgid "record changed"
 msgstr "záznam byl změněn"
 
-#: Frontend/Cli.php:2006
+#: Frontend/Cli.php:2016
 msgid "Number of distinct users"
 msgstr ""
 
-#: Frontend/Cli.php:2013
+#: Frontend/Cli.php:2023
 msgid "Number of users"
 msgstr ""
 
-#: Frontend/Cli.php:2022
+#: Frontend/Cli.php:2032
 msgid "  User Accounts:\n"
 msgstr ""
 

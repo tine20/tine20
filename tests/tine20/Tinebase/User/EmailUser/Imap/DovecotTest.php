@@ -305,6 +305,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         ]);
         $rawDovecotUser = $this->_getRawDovecotUser($user);
         self::assertNotNull($rawDovecotUser, 'could not find dovecot user');
-        self::assertEquals($secEmailDomain, $rawDovecotUser['domain'], 'secondary domain expected: ' . print_r($rawDovecotUser, true));
+        self::assertEquals(TestServer::getPrimaryMailDomain(), $rawDovecotUser['domain'],
+            'primary domain expected: ' . print_r($rawDovecotUser, true));
     }
 }

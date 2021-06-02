@@ -1899,6 +1899,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * import contacts
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function import($_opts)
+    {
+        parent::_import($_opts);
+    }
+
+    /**
      * transfer relations
      * 
      * @param Zend_Console_Getopt $opts

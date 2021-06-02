@@ -6,8 +6,9 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * @todo is this still needed?
  */
 class Addressbook_Model_Salutation extends Tinebase_Config_KeyFieldRecord
 {
@@ -22,10 +23,15 @@ class Addressbook_Model_Salutation extends Tinebase_Config_KeyFieldRecord
     const GENDER_FEMALE = 'female';
     
     /**
-     * other gender
+     * company
      */
-    const GENDER_OTHER = 'other';
-    
+    const GENDER_COMPANY = 'company';
+
+    /**
+     * person / other
+     */
+    const GENDER_PERSON = 'person';
+
     /**
      * application the record belongs to
      *
@@ -53,6 +59,11 @@ class Addressbook_Model_Salutation extends Tinebase_Config_KeyFieldRecord
         'value'                => array('allowEmpty' => false         ),
         'image'                => array('allowEmpty' => true          ),
         'system'               => array('allowEmpty' => true,  'Int'  ),
-        'gender'               => array(array('InArray', array(self::GENDER_MALE, self::GENDER_FEMALE, self::GENDER_OTHER))),
+        'gender'               => array(array('InArray', [
+            self::GENDER_MALE,
+            self::GENDER_FEMALE,
+            self::GENDER_COMPANY,
+            self::GENDER_PERSON
+        ])),
     );
 }
