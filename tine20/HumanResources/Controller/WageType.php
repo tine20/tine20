@@ -58,4 +58,25 @@ class HumanResources_Controller_WageType extends Tinebase_Controller_Record_Abst
         }
         return parent::_inspectDelete($_ids);
     }
+
+    /**
+     * check rights
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_EMPLOYEE, FALSE);
+
+        if (! $hasRight) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' wage type.');
+        }
+        parent::_checkRight($_action);
+    }
 }

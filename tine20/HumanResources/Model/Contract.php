@@ -52,6 +52,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'titleProperty'   => 'start_date',
         'appName'         => 'HumanResources',
         'modelName'       => 'Contract',
+        'requiredRight'   => HumanResources_Acl_Rights::MANAGE_EMPLOYEE,
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
@@ -74,7 +75,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 ),
             ),
         ),
-        
+
         'fields'          => array(
             'employee_id'       => array(
                 'label'      => 'Employee',    // _('Employee')

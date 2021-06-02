@@ -88,6 +88,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 
         'appName' => 'HumanResources',
         'modelName' => self::MODEL_NAME_PART,
+        'requiredRight' => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
 
         self::TITLE_PROPERTY=> "{# {{date - sorting! #}{% if working_time_actual %}{{ working_time_actual |date('H:i', 'GMT')}}{% else %}00:00{% endif %} - {{ date | localizeddate('full', 'none', app.request.locale ) }}",
 

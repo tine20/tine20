@@ -42,10 +42,11 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
         'isDependent'       => TRUE,
         'createModule'      => FALSE,
         'containerProperty' => NULL,
-    
+
         'titleProperty'     => NULL,
         'appName'           => 'HumanResources',
         'modelName'         => 'FreeDay',
+        'requiredRight'     => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
@@ -68,7 +69,7 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
                 ),
             ),
         ),
-        
+
         'fields'            => array(
             'freetime_id'       => array(
                 'label'      => NULL,

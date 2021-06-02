@@ -1418,3 +1418,21 @@ msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Mitarbeiters"
 
 #~ msgid "Work Time Limits"
 #~ msgstr "Arbeitzeitlimits"
+
+msgid "edit employee data"
+msgstr "Mitarbeiterdaten bearbeiten"
+
+msgid "edit stream data"
+msgstr "Streams bearbeiten"
+
+msgid "edit working times"
+msgstr "Arbeitszeit bearbeiten"
+
+msgid "Show and edit working streams"
+msgstr "Streams anzeigen und bearbeiten"
+
+msgid "Show and edit working time reports"
+msgstr "Arbeitszeitberichte anzeigen und bearbeiten"
+
+msgid "Show and edit employee data and free time management"
+msgstr "Mitarbeiterdaten und Abwesenheitsplanung anzeigen und bearbeiten"

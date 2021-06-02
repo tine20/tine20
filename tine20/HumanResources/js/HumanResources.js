@@ -4,7 +4,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,7 +20,10 @@ Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
     hasMainScreen: true,
 
     init: function() {
-        if (this.featureEnabled(('workingTimeAccounting'))) {
+        if (
+            this.featureEnabled(('workingTimeAccounting')) &&
+            Tine.Tinebase.common.hasRight('manage_employee', 'HumanResources', 'account')
+        ) {
             Tine.widgets.MainScreen.registerContentType('HumanResources', {
                 contentType: 'FreeTimePlanning',
                 text: this.i18n._('Free Time Planning'),

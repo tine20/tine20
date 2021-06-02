@@ -138,6 +138,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_doRightsCleanup($_record);
         $this->_doPrivateCleanup($_record);
         $this->_checkContractsOverlap($_record);
         $this->_recordArraysToId($_record);
@@ -160,7 +161,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             // no private cleanup with admin rights
             if ($user->hasRight('HumanResources', HumanResources_Acl_Rights::ADMIN) ||
                 $user->hasRight('Tinebase', Tinebase_Acl_Rights_Abstract::ADMIN) ||
-                $user->hasRight('HumanResources', HumanResources_Acl_Rights::EDIT_PRIVATE)) {
+                $user->hasRight('HumanResources', HumanResources_Acl_Rights::MANAGE_PRIVATE)) {
                 return;
             } else {
                 // if oldData is given, this is a update operation,
@@ -177,7 +178,38 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             }
         }
     }
-    
+
+    /**
+     * @param mixed Tinebase_Record_Interface/Tinebase_Record_RecordSet $data
+     * @return mixed
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _doRightsCleanup(&$data)
+    {
+        if ($this->checkRight(HumanResources_Acl_Rights::MANAGE_EMPLOYEE, FALSE)) {
+            return $data;
+        }
+
+        $whitelist = ['id', 'title', 'salutation', 'n_family', 'n_given', 'n_fn', 'supervisor_id', 'division_id', 'contracts',
+                      'is_deleted', 'employee_id', 'costcenters', 'relations', 'seq', 'account_id', 'email', 'position',
+                      'employment_begin', 'employment_end', 'profession',
+                      'number', 'dfcom_id', 'description', 'tags', 'attachments', 'notes', 'created_by',
+                      'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by', 'deleted_time', 'customfields'
+            ];
+        $fields = $data->getFields();
+        if (get_class($data) === 'Tinebase_Record_RecordSetFast') {
+            $fields = $fields[0];
+        }
+
+        foreach ($fields as $field) {
+            if (!in_array($field, $whitelist)) {
+                $data->{$field} = null;
+            }
+        }
+        return $data;
+    }
+
     /**
      * checks on save or update if contracts overlap
      * 
@@ -243,7 +275,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $this->_duplicateCheck($_record);
-        
+
+        $this->_doRightsCleanup($_record, $_oldRecord);
         $this->_doPrivateCleanup($_record, $_oldRecord);
         $this->_checkContractsOverlap($_record);
         $this->_recordArraysToId($_record);
@@ -280,6 +313,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $records = parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
+        $this->_doRightsCleanup($records);
         $this->_doPrivateCleanup($records);
         return $records;
     }
@@ -295,6 +329,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
     {
         $records = parent::getAll($_orderBy, $_orderDirection);
+        $this->_doRightsCleanup($records);
         $this->_doPrivateCleanup($records);
         return $records;
     }
@@ -313,6 +348,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        $this->_doRightsCleanup($record);
         $this->_doPrivateCleanup($record);
         return $record;
     }
@@ -522,5 +558,13 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             'working_time_scheme'=> $workingTimeModel->getId(),
             'start_date'         => $contractData['startDate']
         );
+    }
+
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = null, Tinebase_Model_Pagination $_pagination = null, $_getRelations = false, $_onlyIds = false, $_action = self::ACTION_GET)
+    {
+        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        if ($_onlyIds) { return $result; }
+
+        return $this->_doRightsCleanup($result);
     }
 }

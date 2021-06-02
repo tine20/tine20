@@ -44,11 +44,12 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-      
+        'requiredRight'     => HumanResources_Acl_Rights::MANAGE_EMPLOYEE,
+
         'titleProperty'     => 'n_fn',
         'appName'           => 'HumanResources',
         'modelName'         =>  self::MODEL_NAME_PART,
-        
+
         'fieldGroups'       => array(
             'banking' => 'Banking Information',    // _('Banking Information')
             'private' => 'Private Information',    // _('Private Information')
@@ -56,8 +57,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'fieldGroupRights'  => array(
             'private' => array(
                 // TODO: handle see right
-                'see'  => HumanResources_Acl_Rights::EDIT_PRIVATE,
-                'edit' => HumanResources_Acl_Rights::EDIT_PRIVATE,
+                'see'  => HumanResources_Acl_Rights::MANAGE_PRIVATE,
+                'edit' => HumanResources_Acl_Rights::MANAGE_PRIVATE,
             )
         ),
 
@@ -72,7 +73,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'table'             => array(
             'name'    => 'humanresources_employee',
         ),
-        
+
         'fields'            => array(
             'number' => array(
                 'label' => 'Number', //_('Number')
