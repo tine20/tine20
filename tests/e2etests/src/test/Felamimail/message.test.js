@@ -92,7 +92,7 @@ describe('message', () => {
         await popupWindow.close();
     });
 
-    test('attachment file in filemanager', async () => {
+    test.skip('attachment file in filemanager', async () => {
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toClick('.x-menu-item-text', {text: 'Dateimanager'});
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Tine 2.0 Admin Account\'s personal files'});
