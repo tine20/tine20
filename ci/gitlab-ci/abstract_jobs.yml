@@ -240,7 +240,11 @@
     - sleep 60;
     - echo TEST_URL=${TEST_URL}
     - export TEST_ENVIROMENT=""
-    - npm test $JS_E2E_TEST_FILTER
+    - npm test -- $JS_E2E_TEST_FILTER --reporters=default --reporters=jest-junit
+  artifacts:
+    when: always
+    reports:
+      junit: tests/e2etests/junit.xml
 
 .abstract_jobs.copy_source:
   before_script:
