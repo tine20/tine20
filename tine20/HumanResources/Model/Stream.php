@@ -60,6 +60,7 @@ class HumanResources_Model_Stream extends Tinebase_Record_NewAbstract
 
         self::APP_NAME                  => HumanResources_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
+        'requiredRight'                 => HumanResources_Acl_Rights::MANAGE_STREAMS,
 
         /*self::ASSOCIATIONS          => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_MANY => [

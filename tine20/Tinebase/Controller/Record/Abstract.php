@@ -322,9 +322,16 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($this->resolveCustomfields()) {
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
+
+            $result = $this->_doRightsCleanup($result);
         }
         
         return $result;
+    }
+
+    protected function _doRightsCleanup(&$data)
+    {
+        return $data;
     }
     
     /**

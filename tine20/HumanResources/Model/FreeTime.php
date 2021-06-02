@@ -46,6 +46,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'titleProperty'   => 'description',
         'appName'         => 'HumanResources',
         'modelName'       => 'FreeTime',
+        'requiredRight'                 => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
@@ -67,7 +68,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 ],
             ],
         ],
-        
+
         'table'             => array(
             'name'    => 'humanresources_freetime',
             'indexes' => array(
@@ -79,7 +80,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                 ),
             )
         ),
-        
+
         'fields'          => array(
             'employee_id'       => array(
                 'label'      => 'Employee',    // _('Employee')
