@@ -19,7 +19,8 @@ export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_V
 export SOURCE_IMAGE="${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
 export BUILD_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
 export BUILT_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-export RELEASE=$(echo "${CI_COMMIT_TAG:-nightly}" | sed sI-I~Ig)
+export VERSION=${CI_COMMIT_TAG:-nightly}
+export RELEASE=$(echo "${VERSION}" | sed sI-I~Ig)
 export REVISION=0
 export CODENAME="${CODENAME}"
 
@@ -29,3 +30,12 @@ export CODENAME="${CODENAME}"
 # add current.map
 echo "currentPackage ${RELEASE}/tine20-allinone_${RELEASE}.zip" >> current.map
 tar -rf "${CI_PROJECT_DIR}/packages.tar" current.map
+
+#push packages to gitlab
+# gitlab 13.9 package version only allows semantic version not a tag. gitlab 14 allows our tag format, using package name as version instade
+curl \
+	--header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+	--upload-file "${CI_PROJECT_DIR}/packages.tar" \
+	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/packages.tar"
+
+echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/packages.tar ..."
