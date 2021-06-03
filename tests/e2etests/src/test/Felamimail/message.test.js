@@ -4,7 +4,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('E-Mail');
-    page.waitForSelector('div.x-tree-selected a span',{text: "Posteingang"});
+    await page.waitForSelector('div.x-tree-selected a span',{text: "Posteingang"});
 });
 
 describe('message', () => {
@@ -46,6 +46,7 @@ describe('message', () => {
     
     let newMail;
     test('fetch messages', async () => {
+        await page.waitForTimeout(2000); //wait to close editDialog
         await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
         try{
           await page.waitForSelector('.flag_unread',{timeout: 10000});
@@ -61,8 +62,14 @@ describe('message', () => {
         await page.waitForSelector('.preview-panel-felamimail');
     });
 
+    test('contextMenu', async () => {
+        await newMail.click({button: 'right'});
+        await page.screenshot({path: 'screenshots/EMail/17_email_kontextmenu_email.png'});
+        await page.keyboard.press('Escape')
+    })
+
     let attachement;
-    test('download attachments', async () => {
+    test.skip('download attachments', async () => {
         newMail.click({clickCount: 2});
         popupWindow = await lib.getNewWindow();
         //await popupWindow.waitForSelector('.ext-el-mask');
@@ -79,7 +86,7 @@ describe('message', () => {
         }
     });
 
-    test('file attachment', async () => {
+    test.skip('file attachment', async () => {
         await popupWindow.waitForSelector('.tinebase-download-link');
         attachement = await popupWindow.$$('.tinebase-download-link');
         await attachement[1].hover();
@@ -95,8 +102,8 @@ describe('message', () => {
     test.skip('attachment file in filemanager', async () => {
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toClick('.x-menu-item-text', {text: 'Dateimanager'});
-        await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Tine 2.0 Admin Account\'s personal files'});
-        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Tine 2.0 Admin Account\'s personal files', clickCount: 2});
+        await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von Tine 2.0 Admin Account'});
+        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von Tine 2.0 Admin Account', clickCount: 2});
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'attachment.txt'});
     });
 });

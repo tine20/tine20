@@ -25,7 +25,7 @@ describe('mainScreen', () => {
         await page.waitFor(500);
         await expect(page).toClick('span', {text: 'Adressbuch'});
         await page.waitFor(5000);
-        await page.screenshot({path: 'screenshots/2_allgemeines/1_allgemein_alle_reiter.png'});
+        await page.screenshot({path: 'screenshots/StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png'});
     })
 });
 
@@ -38,7 +38,7 @@ describe('usersettings', () => {
         settings = await page.$$('.x-menu.x-menu-floating.x-layer .x-menu-item-icon.action_adminMode');
         await settings[1].hover();
         await page.screenshot({
-            path: 'screenshots/12_benutzereinstellungen/1_benutzer_link.png'
+            path: 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png'
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}
         });
     });
@@ -46,19 +46,19 @@ describe('usersettings', () => {
         await settings[1].click();
         newPage = await lib.getNewWindow();
         await newPage.waitFor(2000);
-        await newPage.screenshot({path: 'screenshots/12_benutzereinstellungen/2_benutzer__generelle_einstellungen.png'});
+        await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png'});
     });
 
     test('appsettings', async () => {
-        await getSettingScreenshots(newPage, 'Mein Profil', '4_benutzer_einstellungen_profil');
-        await getSettingScreenshots(newPage, 'ActiveSync', '5_benutzer_einstellungen_activesync');
-        await getSettingScreenshots(newPage, 'Zeiterfassung', '6_benutzer_einstellungen_zeiterfassung');
-        await getSettingScreenshots(newPage, 'Inventarisierung', '7_benutzer_einstellungen_inventar');
-        await getSettingScreenshots(newPage, 'E-Mail', '9_benutzer_einstellungen_email');
-        await getSettingScreenshots(newPage, 'Crm', '10_benutzer_einstellungen_crm');
-        await getSettingScreenshots(newPage, 'Kalender', '11_benutzer_einstellungen_kalender');
-        await getSettingScreenshots(newPage, 'Adressbuch', '12_benutzer_einstellungen_adressbuch');
-
+        await getSettingScreenshots(newPage, 'Mein Profil', '4_benutzereinstellungen_profil');
+        await getSettingScreenshots(newPage, 'ActiveSync', '5_benutzereinstellungen_activesync');
+        await getSettingScreenshots(newPage, 'Zeiterfassung', '6_benutzereinstellungen_zeiterfassung');
+        await getSettingScreenshots(newPage, 'Inventarisierung', '7_benutzereinstellungen_inventar');
+        await getSettingScreenshots(newPage, 'E-Mail', '9_benutzereinstellungen_email');
+        await getSettingScreenshots(newPage, 'Crm', '10_benutzereinstellungen_crm');
+        await getSettingScreenshots(newPage, 'Kalender', '11_benutzereinstellungen_kalender');
+        await getSettingScreenshots(newPage, 'Adressbuch', '12_benutzereinstellungen_adressbuch');
+        await getSettingScreenshots(newPage, 'Aufgaben', '8_benutzereinstellungen_aufgaben');
     });
 
 
@@ -67,7 +67,7 @@ describe('usersettings', () => {
         await newPage.waitFor(1000);
         await newPage.click('.x-btn-image.action_adminMode');
         await newPage.waitFor(2000);
-        await newPage.screenshot({path: 'screenshots/12_benutzereinstellungen/3_benutzer__generelle_einstellungen_adminmodus.png'});
+        await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus.png'});
         await expect(newPage).toClick('button', {text: 'Abbrechen'});
     });
 });
@@ -79,5 +79,5 @@ afterAll(async () => {
 async function getSettingScreenshots(newPage, text, screenName) {
     await expect(newPage).toClick('span', {text: text});
     await newPage.waitFor(1000);
-    await newPage.screenshot({path: 'screenshots/12_benutzereinstellungen/' + screenName + '.png'});
+    await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/' + screenName + '.png'});
 }

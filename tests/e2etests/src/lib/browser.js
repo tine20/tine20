@@ -28,17 +28,24 @@ module.exports = {
         return filename;
     },
 
+    uploadFile: async function (page,file) {
+        let inputUploadHandle;
+
+        inputUploadHandle = await page.$('input[type=file]');
+        await inputUploadHandle.uploadFile(file);
+    },
+
     getNewWindow: async function () {
         return new Promise((fulfill) => browser.once('targetcreated', (target) => fulfill(target.page())));
     },
 
     getEditDialog: async function (btnText, win) {
         await expect(win || page).toMatchElement('.x-btn-text', {text: btnText});
-        await page.waitFor(100); // wait for btn to get active
+        await page.waitForTimeout(100); // wait for btn to get active
         await expect(win || page).toClick('.x-btn-text', {text: btnText});
         let popupWindow = await this.getNewWindow();
         await popupWindow.waitForSelector('.ext-el-mask');
-        await popupWindow.waitFor(() => !document.querySelector('.ext-el-mask'));
+        await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
         await popupWindow.screenshot({path: 'screenshots/test.png'});
         return popupWindow;
     },

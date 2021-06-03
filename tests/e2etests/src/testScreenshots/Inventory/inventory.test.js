@@ -7,7 +7,7 @@ beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Inventarisierung');
     await page.waitFor(1000);
-    await page.screenshot({path: 'screenshots/9_inventar/1_inventar_uebersicht.png'});
+    await page.screenshot({path: 'screenshots/Inventarisierung/1_inventar_uebersicht.png'});
 });
 
 describe('mainScreen', () => {
@@ -20,7 +20,7 @@ describe('mainScreen', () => {
         }
         let newPage = await lib.getNewWindow();
         await newPage.waitForXPath('//button');
-        await newPage.screenshot({path: 'screenshots/9_inventar/5_inventar_import.png'});
+        await newPage.screenshot({path: 'screenshots/Inventarisierung/5_inventar_import.png'});
         await newPage.keyboard.press('Escape')
     })
 });
@@ -32,17 +32,17 @@ describe('Edit Contact', () => {
         //console.log('Klick Button');
         newPage = await lib.getNewWindow();
         await newPage.waitFor(5000); // @todo waitfor selector...
-        await newPage.screenshot({path: 'screenshots/9_inventar/2_inventar_gegenstand_neu.png'});
+        await newPage.screenshot({path: 'screenshots/Inventarisierung/2_inventar_gegenstand_neu.png'});
         await newPage.click('input[name=status]');
         await newPage.waitFor(1000);
         await newPage.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-trigger-wrap-focus');
-        await newPage.screenshot({path: 'screenshots/9_inventar/3_inventar_gegenstand_status.png'});
+        await newPage.screenshot({path: 'screenshots/Inventarisierung/3_inventar_gegenstand_status.png'});
         //console.log('Get Popup');
     });
 
     test('accounting', async () => {
         await expect(newPage).toClick('span', {text: 'Buchhaltung'});
-        await newPage.screenshot({path: 'screenshots/9_inventar/4_inventar_gegenstand_buchhaltung.png'});
+        await newPage.screenshot({path: 'screenshots/Inventarisierung/4_inventar_gegenstand_buchhaltung.png'});
 
     })
 
@@ -54,7 +54,7 @@ describe('Edit Contact', () => {
            /*let combolist = await newPage.$('.x-combo-list[visibility=visible]');
            await combolist.hover('.x-combo-list-item', {text: '1 Tag davor'});
            await newPage.waitFor(1000);
-           await newPage.screenshot({path: 'screenshots/5_aufgaben/3_aufgaben_alarm.png'});
+           await newPage.screenshot({path: 'screenshots/Aufgaben/3_aufgaben_alarm.png'});
        })  */
 });
 

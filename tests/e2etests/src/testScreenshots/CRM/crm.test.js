@@ -5,64 +5,60 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('Crm');
-    await page.screenshot({path: 'screenshots/7_crm/1_crm_leadtabellen.png'});
-});
-
-describe('Test mainpage', () => {
-
-});
-
-describe('mainScreen', () => {
-
+    await page.mouse.move(0, 0);
+    await page.waitForTimeout(1000);
+    await page.screenshot({path: 'screenshots/Crm/1_crm_leadtabellen.png'});
 });
 
 describe('Edit Lead', () => {
-    test.skip('open EditDialog', async () => {
-        var [button] = await lib.getElement('button', page, 'Lead hinzufügen');
-        await button.click();
-        //console.log('Klick Button');
-        let newPage = await lib.getNewWindow();
-        await newPage.setViewport({
+    let editDialog
+    test('open EditDialog', async () => {
+        editDialog = await lib.getEditDialog('Lead hinzufügen');
+
+        await editDialog.setViewport({
             width: 1366,
             height: 768,
         });
-        await newPage.waitFor(3000);
-        await newPage.type('input[name=lead_name]', 'Lead');
-        await newPage.screenshot({path: 'screenshots/7_crm/2_crm_lead_neu.png'});
-        await newPage.waitFor(2000);
-        await newPage.click('.x-menu-item-icon.contactIcon');
-        await newPage.waitFor(2000);
-        await expect(newPage).toMatchElement('.x-combo-list-item', {text: 'Partner'});
-        await newPage.screenshot({path: 'screenshots/7_crm/3_crm_lead_rolle.png'});
-        await newPage.click('input[name=leadstate_id]');
-        await newPage.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-trigger-wrap-focus');
-        await newPage.waitFor(500);
-        await newPage.screenshot({path: 'screenshots/7_crm/4_crm_lead_status.png'});
-
-        let produkte = await newPage.$$('#linkPanelBottom .x-tab-strip-text');
-        await produkte[1].click();
-        await newPage.click('#linkPanelBottom .x-panel-tbar.x-panel-tbar-noheader.x-panel-tbar-noborder');
-        await newPage.keyboard.press('ArrowDown');
-        await newPage.waitFor(500);
-        await newPage.screenshot({path: 'screenshots/7_crm/6_crm_lead_produkte_zuweisen.png'});
-        await newPage.type('.x-form-text.x-form-field.x-form-focus', 'Getränke');
-        await expect(newPage).toClick('.x-combo-list-item', {text: 'Getränke'}); // need DemoDaten!
-        await newPage.waitFor(500);
-        await newPage.screenshot({path: 'screenshots/7_crm/5_crm_lead_produkte_zugewiesen.png'});
+        await editDialog.waitForTimeout(1000); //wait for resize viewport
+        await editDialog.type('input[name=lead_name]', 'Lead');
+        await editDialog.screenshot({path: 'screenshots/Crm/2_crm_lead_neu.png'});
+        await editDialog.click('.x-menu-item-icon.contactIcon');
+        await expect(editDialog).toMatchElement('.x-combo-list-item', {text: 'Partner'});
+        await editDialog.screenshot({path: 'screenshots/Crm/3_crm_lead_rolle.png'});
+        await editDialog.click('input[name=leadstate_id]');
+        await editDialog.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-trigger-wrap-focus');
+        await expect(editDialog).toMatchElement('.x-combo-list-item', {text: 'akzeptiert'});
+        await editDialog.screenshot({path: 'screenshots/Crm/4_crm_lead_status.png'});
+        await editDialog.keyboard.press('Escape');
     });
 
-    /*
-        test('notification', async () => {
-            await expect(newPage).toClick('span', {text: 'Alarm', clickCount: 1});
-            await newPage.click('.new-row .x-form-trigger.x-form-arrow-trigger');
-            await newPage.waitFor(500);
+    test('add product', async () => {
+        let product = await editDialog.$$('#linkPanelBottom .x-tab-strip-text');
+        await product[1].click();
+        await editDialog.click('#linkPanelBottom .x-panel-tbar.x-panel-tbar-noheader.x-panel-tbar-noborder');
+        await editDialog.keyboard.press('ArrowDown');
+        await editDialog.type('.x-form-text.x-form-field.x-form-focus', 'Getränke');
+        await expect(editDialog).toMatchElement('.x-combo-list-item', {text: 'Getränke'});
+        await editDialog.screenshot({path: 'screenshots/Crm/6_crm_lead_produkte_zuweisen.png'});
+        await expect(editDialog).toClick('.x-combo-list-item', {text: 'Getränke'}); // need DemoDaten!
+        await editDialog.waitForSelector('.x-grid3-row.x-grid3-row-first.x-grid3-row-last');
+        await editDialog.screenshot({path: 'screenshots/Crm/5_crm_lead_produkte_zugewiesen.png'});
+    });
 
-            /*let combolist = await newPage.$('.x-combo-list[visibility=visible]');
-            await combolist.hover('.x-combo-list-item', {text: '1 Tag davor'});
-            await newPage.waitFor(1000);
-            await newPage.screenshot({path: 'screenshots/5_aufgaben/3_aufgaben_alarm.png'});
-        })
-    */
+    test('add task', async () => {
+        await expect(editDialog).toClick('span', {text: 'Aufgaben'});
+        await editDialog.type('.new-row .x-form-text.x-form-field.x-form-empty-field', 'Papier kaufen');
+        await editDialog.keyboard.press('Enter');
+        await expect(editDialog).toMatchElement('.x-grid3-cell-inner.x-grid3-col-summary', {text: 'Papier kaufen'});
+        await editDialog.screenshot({path: 'screenshots/Crm/aufgaben.png'});
+    });
+
+    test('show grid rows', async () => {
+        await editDialog.click('.ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn')
+        await editDialog.waitForSelector('.x-menu-list');
+        await editDialog.screenshot({path: 'screenshots/Crm/7_crm_lead_spalten.png'});
+    })
+
 });
 
 afterAll(async () => {
