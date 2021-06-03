@@ -27,9 +27,10 @@ describe.skip('Mainpage', () => {
         await page.waitFor(1000); //wait to create customField
         await lib.reloadRegistry(page);
         await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
+        await page.waitForTimeout(1000);
     });
 
-    test('filter null customField-keyField', async () => {
+    test.skip('filter null customField-keyField', async () => {
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toClick('.x-menu-item-text', {text: 'Crm'});
         try {
