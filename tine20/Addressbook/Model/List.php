@@ -167,7 +167,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             ),
             'list_type'         => array(
                 'label'             => 'List type', //_('List type')
-                'type'              => 'string',
+                'type'              => 'keyfield',
+                'name'              => Addressbook_Config::LIST_TYPE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'group_id'          => array(
