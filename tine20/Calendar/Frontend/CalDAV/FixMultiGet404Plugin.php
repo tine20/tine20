@@ -1,6 +1,13 @@
 <?php
-
-
+/**
+ * Tine 2.0
+ *
+ * @package    Sabre
+ * @subpackage CalDAV
+ * @copyright  Copyright (c) 2015-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author     Paul Mehrer <p.mehrer@metaways.de>
+ * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ */
 class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
 {
     protected $_fakeEvent = null;
@@ -15,8 +22,8 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
      * @param DOMNode $dom
      * @return void
      */
-    public function calendarMultiGetReport($dom) {
-
+    public function calendarMultiGetReport($dom)
+    {
         $properties = array_keys(Sabre\DAV\XMLUtil::parseProperties($dom->firstChild));
         $hrefElems = $dom->getElementsByTagNameNS('urn:DAV','href');
 
@@ -38,16 +45,13 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
             if ($end <= $start) {
                 throw new Sabre\DAV\Exception\BadRequest('The end-date must be larger than the start-date in the expand element.');
             }
-
             $expand = true;
-
         } else {
-
             $expand = false;
-
         }
 
-        foreach($hrefElems as $elem) {
+        $propertyList = [];
+        foreach ($hrefElems as $elem) {
             $uri = $this->server->calculateUri($elem->nodeValue);
             try {
                 list($objProps) = $this->server->getPropertiesForPath($uri, $properties);
@@ -73,7 +77,6 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
             }
 
             $propertyList[]=$objProps;
-
         }
 
         $prefer = $this->server->getHTTPPRefer();
@@ -82,7 +85,6 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
         $this->server->httpResponse->setHeader('Content-Type','application/xml; charset=utf-8');
         $this->server->httpResponse->setHeader('Vary','Brief,Prefer');
         $this->server->httpResponse->sendBody($this->generateMultiStatus($propertyList, $prefer['return-minimal']));
-
     }
 
     /**
