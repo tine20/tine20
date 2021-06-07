@@ -1081,27 +1081,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
         $appRegistry['customfields'] = $customfields->toArray();
 
-        // add preferences for app
         try {
             $prefRegistry = $this->_getAppPreferencesForRegistry($application);
             $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
-        } catch (Tinebase_Exception_AccessDenied $tead) {
-            // do not add prefs if user has no run right
-        }
-
-        $customAppRegistry = $this->_getCustomAppRegistry($application);
-        if (empty($customAppRegistry)) {
-            // TODO always get this from app controller (and remove from _getCustomAppRegistry)
-            try {
+            $customAppRegistry = $this->_getCustomAppRegistry($application);
+            if (empty($customAppRegistry)) {
+                // TODO always get this from app controller (and remove from _getCustomAppRegistry)
                 $appController = Tinebase_Core::getApplicationInstance($application->name);
                 $models = $appController->getModels();
                 $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                // do not add prefs if user has no run right
+            } else {
+                $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
             }
-
-        } else {
-            $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Do not add app registry data. Exception message: ' . $tead->getMessage());
         }
 
         if (! isset($appRegistry['importDefinitions'])) {
