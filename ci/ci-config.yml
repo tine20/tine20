@@ -83,7 +83,7 @@ variables:
 
   JS_E2E_TEST_SOURCE:
     description: "Whether to run e2e test on source image"
-    value: "never"
+    value: "true"
 
   JS_E2E_TEST_FILTER:
     description: "Select e2e test to run. - npm test $JS_E2E_TEST_FILTER"

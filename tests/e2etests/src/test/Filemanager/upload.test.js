@@ -9,7 +9,7 @@ beforeAll(async () => {
 
 describe('filemanager', () => {
     describe('filemanager grid', () => {
-        test.skip('select home folder', async () => {
+        test('select home folder', async () => {
             try {
                 await page.waitForSelector('t-app-filemanager .tine-mainscreen-centerpanel-west-treecards .x-panel-collapsed .x-tool.x-tool-toggle');
                 await page.click('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards .x-panel-collapsed .x-tool.x-tool-toggle');
@@ -17,7 +17,7 @@ describe('filemanager', () => {
                 console.log('tree also expand');
             }
 
-            await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Tine 2.0 Admin Account\'s personal files'});
+            await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Persönliche Dateien von Tine 2.0 Admin Account'});
             await page.waitFor(2000);
         });
         // gehen ins home verzeichnis
@@ -39,14 +39,14 @@ describe('filemanager', () => {
                 await editDialog.waitFor(2000);
                 await expect(editDialog).toClick('span',{text: 'Berechtigungen'});
             });
-            test.skip('add user in grantsPanel', async () => {
+            test('add user in grantsPanel', async () => {
                 await expect(editDialog).toClick('.x-form-cb-label', {text:'Diese Ordner hat eigene Berechtigungen'});
                 let input = await editDialog.$$('.x-panel-tbar.x-panel-tbar-noheader');
                 await input[1].click();
                 await editDialog.keyboard.press('ArrowDown');
                 await expect(editDialog).toClick('.x-combo-list-item', {text:'Users'});
             });
-            test.skip('give new user rights', async () => {
+            test('give new user rights', async () => {
                 await editDialog.waitForXPath('//div[contains(@class, "x-grid3-row ") and contains(., "Users")]');;
                 await clickCheckBox(editDialog,'x-grid3-cc-add');
                 await clickCheckBox(editDialog,'x-grid3-cc-edit');
