@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 # build a docker image with cache and cache invalidators (see dockerimage readme.md)
 
 TARGET=$1

@@ -1,7 +1,9 @@
 #!/bin/sh
+set -e
 
 echo $0 copying ...
 
+apk add rsync
 cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/;
 cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/;
 cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/;
