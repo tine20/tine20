@@ -54,9 +54,10 @@ describe('Contacts', () => {
             await popupWindow.close();
         });
 
-        test.skip('show map', async () => {
+        let popupWindow
+        test('show map', async () => {
             await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            let popupWindow = await lib.getNewWindow();
+            popupWindow = await lib.getNewWindow();
             await popupWindow.waitFor('.x-tab-edge');
             try {
                 await selectTab(popupWindow,'Karte');
@@ -65,13 +66,9 @@ describe('Contacts', () => {
             } catch (e) {
                 console.log('Map musst enabled');
             }
-            await popupWindow.close();
         });
 
         test('notes', async () => {
-            await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            let popupWindow = await lib.getNewWindow();
-            await popupWindow.waitFor('.x-tab-edge');
             await selectTab(popupWindow,'Notizen.*');
             await popupWindow.screenshot({path: 'screenshots/2_allgemeines/17_allgemein_hr_eingabemaske_neu_notiz.png'});
             await expect(popupWindow).toClick('button', {text: 'Notizen hinzufügen'});
@@ -80,22 +77,14 @@ describe('Contacts', () => {
             //await popupWindow.waitFor(1000);
             await popupWindow.screenshot({path: 'screenshots/2_allgemeines/18_allgemein_hr_eingabemaske_neu_notiz_notiz.png'});
             await expect(popupWindow).toClick('.x-window-bwrap button', 'Abbrechen');
-            await popupWindow.close();
         });
 
         test('attachments', async () => {
-            await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            var popupWindow = await lib.getNewWindow();
-            await popupWindow.waitFor('.x-tab-edge');
             await selectTab(popupWindow,'Anhänge');
             await popupWindow.screenshot({path: 'screenshots/2_allgemeines/22_allgemein_hr_mitarbeiter_anhang.png'});
-            await popupWindow.close();
         });
 
         test.skip('relations', async () => {
-            await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            var popupWindow = await lib.getNewWindow();
-            await popupWindow.waitFor('.x-tab-edge');
             await selectTab(popupWindow,'Verknüpfungen.*');
             await popupWindow.waitFor(3000);
             await popupWindow.screenshot({path: 'screenshots/2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen.png'});
@@ -105,15 +94,11 @@ describe('Contacts', () => {
             await popupWindow.screenshot({path: 'screenshots/2_allgemeines/24_allgemein_hr_mitarbeiter_verknuepfungen_hinzu.png'});
             await arrowtrigger[10].click();
             await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts.png'});
-            await popupWindow.close();
         });
 
         test('history', async () => {
-            await expect(page).toClick('.x-grid3-row-first', {clickCount: 2});
-            var popupWindow = await lib.getNewWindow();
             await selectTab(popupWindow,'Historie.*');
             await popupWindow.screenshot({path: 'screenshots/2_allgemeines/21_allgemein_hr_mitarbeiter_historie.png'});
-            await popupWindow.close();
         });
 
         describe.skip('ContextMenu', () => {
@@ -283,8 +268,8 @@ afterAll(async () => {
     browser.close();
 });
 
-async function selectTab(popupWindow,regEx) {
+async function selectTab(popupWindow, regEx) {
     await expect(popupWindow).toClick('span .x-tab-strip-text', {text: new RegExp(regEx)});
-    await popupWindow.waitFor(500); //fix click issue @todo find better way
+    await popupWindow.waitForTimeout(500); //fix click issue @todo find better way
     await expect(popupWindow).toClick('span .x-tab-strip-text', {text: new RegExp(regEx)});
 }
