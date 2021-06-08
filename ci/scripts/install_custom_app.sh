@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 echo $0 installing ...
 

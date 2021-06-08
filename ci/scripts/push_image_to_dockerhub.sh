@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 NAME=$1
 DOCKERHUB_NAME=$2
 
