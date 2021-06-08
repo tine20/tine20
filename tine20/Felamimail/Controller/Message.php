@@ -485,8 +485,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
     protected function _getPartStructureFromAttachments($message, $partId)
     {
-        $attachment = array_filter($message->attachments, function($el) use ($partId) {
-            return isset($el['partId']) && $el['partId'] === $partId;
+        $attachments = $message->attachments instanceof Tinebase_Record_RecordSet ? $message->attachments->toArray() : $message->attachments;
+        $attachment = array_filter($attachments, function($attach) use ($partId) {
+            return isset($attach['partId']) && $attach['partId'] === $partId;
         });
         if (count($attachment) >= 1) {
             $partAttachment = array_pop($attachment);
