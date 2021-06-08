@@ -660,4 +660,25 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             }
         }
     }
+
+    /**
+     * check rights
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_WORKINGTIME, FALSE);
+
+        if (! $hasRight) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' daily WT report.');
+        }
+        parent::_checkRight($_action);
+    }
 }

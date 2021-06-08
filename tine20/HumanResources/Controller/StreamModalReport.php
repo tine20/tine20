@@ -39,4 +39,25 @@ class HumanResources_Controller_StreamModalReport extends Tinebase_Controller_Re
         $this->_doContainerACLChecks = false;
         $this->_handleVirtualRelationProperties = true;
     }
+
+    /**
+     * check timeaccount rights
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_STREAMS, FALSE);
+
+        if (! $hasRight) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' stream modal report.');
+        }
+        parent::_checkRight($_action);
+    }
 }

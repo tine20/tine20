@@ -52,4 +52,25 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
 
         return self::$_instance;
     }
+
+    /**
+     * check rights
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_EMPLOYEE, FALSE);
+
+        if (! $hasRight) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' free day.');
+        }
+        parent::_checkRight($_action);
+    }
 }
