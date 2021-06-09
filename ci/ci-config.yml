@@ -129,3 +129,7 @@ variables:
   REUSE_IMAGES:
     description: "Try to reuse source images" 
     value: "true"
+
+  NODIFY_ON_FAILURE:
+    description: "send riot message if pipeline failes"
+    value: "false"
