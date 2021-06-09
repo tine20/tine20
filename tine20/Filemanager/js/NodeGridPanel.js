@@ -583,7 +583,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             actionUpdater: function(action) {
                 var _ = window.lodash,
-                    path = _.get(this, 'currentFolderNode.attributes.path', false);
+                    path = _.get(this.getFilteredContainers(),'0.path');
 
                 action.setDisabled(path == '/');
             }.createDelegate(this)
@@ -656,14 +656,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      * @param {Ext.Component} button
      * @param {Ext.EventObject} event
+     *
+     * @todo currentfolderNode
      */
     onLoadParentFolder: function(button, event) {
-        var currentFolderNode = this.currentFolderNode;
-
-        if(currentFolderNode && currentFolderNode.parentNode) {
-            this.currentFolderNode = currentFolderNode.parentNode;
-            currentFolderNode.parentNode.select();
-        }
+        let currentFolderNode = _.get(this.getFilteredContainers(),'0');
+        this.expandFolder(this.getParentPath(_.get(currentFolderNode, 'path')));
     },
 
     onDataSafeToggle: function(button, e) {
@@ -671,7 +669,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         var me = this,
             promise = !button.pressed ?
-                Tine.Tinebase.areaLocks.unlock(me.dataSafeAreaName) :
+               Tine.Tinebase.areaLocks.unlock(me.dataSafeAreaName) :
                 Tine.Tinebase.areaLocks.lock(me.dataSafeAreaName);
 
         me.getEl().mask('some text');
@@ -849,30 +847,19 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * expand folder node
      *
-     * @param rowRecord
+     * @param {Sting | Tine.Filemanager.Model.Node} path
      */
-    expandFolder: function(rowRecord) {
-        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel();
-        var currentFolderNode = treePanel.getNodeById(rowRecord.id);
-
-        if (currentFolderNode) {
-            currentFolderNode.select();
-            currentFolderNode.expand();
-            this.currentFolderNode = currentFolderNode;
-        } else {
-            // get   ftb path filter
-            this.filterToolbar.filterStore.each(function (filter) {
-                var field = filter.get('field');
-                if (field === 'path') {
-                    filter.set('value', '');
-                    filter.set('value', rowRecord.data);
-                    filter.formFields.value.setValue(rowRecord.get('path'));
-
-                    this.filterToolbar.onFiltertrigger();
-                    return false;
-                }
-            }, this);
-        }
+    expandFolder: function (path) {
+        path = _.get(path, 'data.path', path);
+        this.filterToolbar.filterStore.each(function (filter) {
+            var field = filter.get('field');
+            if (field === 'path') {
+                filter.set('value', '');
+                filter.formFields.value.setValue(path);
+                this.filterToolbar.onFiltertrigger();
+                return false;
+            }
+        }, this);
     },
 
     /**
@@ -1086,5 +1073,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             nodeRecord.set(field, fileRecord.get(field));
         }
         nodeRecord.fileRecord = fileRecord;
+    },
+
+    getParentPath: function (path) {
+        if (String(path).match(/\/.*\/.+/)) {
+            let pathParts = path.split('/');
+            pathParts.pop();
+            return pathParts.join('/');
+        }
+        return '/';
     }
 });
