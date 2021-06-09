@@ -4895,3 +4895,6 @@ msgstr "Diese Datei kann ihren Computer potentiell schädigen. Daher wurde sie q
 
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
+
+msgid "A container with this name already exists."
+msgstr "Ein Container mit diesem Namen existiert bereits."
