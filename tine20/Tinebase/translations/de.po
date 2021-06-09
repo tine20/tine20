@@ -1809,9 +1809,11 @@ msgstr ""
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
-#: js/ExceptionHandler.js:170
-msgid "Your session timed out. You need to login again."
-msgstr "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
+msgid "Session Timed Out"
+msgstr "Sitzung ist abgelaufen"
+
+msgid "You can close this window."
+msgstr "Sie können dieses Fenster schließen."
 
 #: js/ExceptionHandler.js:189
 msgid "Insufficient Rights"
@@ -3906,7 +3908,6 @@ msgid "Select a {0}"
 msgstr "Bitte {0} auswählen"
 
 #: js/widgets/container/GrantsDialog.js:52
-#, fuzzy
 msgid "Folder"
 msgstr "Ordner"
 
@@ -4910,11 +4911,11 @@ msgstr ""
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
 
-msgid "Session Timed Out"
-msgstr "Sitzung ist abgelaufen"
+msgid "A container with this name already exists."
+msgstr "Ein Container mit diesem Namen existiert bereits."
 
-msgid "You can close this window."
-msgstr "Sie können dieses Fenster schließen."
+msgid "Your session timed out. You need to login again."
+msgstr "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
 
 msgid "Yubico OTP required"
 msgstr "Yubico OTP erforderlich"
@@ -4928,7 +4929,6 @@ msgstr ""
 msgid "Yubico OTP"
 msgstr "Yubico OTP"
 
-#, python-brace-format
 msgid ""
 "This area is locked. To unlock it you need to provide your {mfaDevice."
 "device_name} secret."
@@ -4939,7 +4939,6 @@ msgstr ""
 msgid "SMS security code required"
 msgstr "SMS Sicherheitscode benötigt"
 
-#, python-brace-format
 msgid ""
 "This area is locked. To unlock it we send a securitycode to via "
 "{mfaDevice.device_name}."
@@ -4947,7 +4946,6 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via "
 "{mfaDevice.device_name} zum entsperren gesendet."
 
-#, python-brace-format
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "{mfaDevice.device_name} Sicherheitscode"
 
