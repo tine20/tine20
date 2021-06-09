@@ -1,22 +1,15 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
+ *
+ * Test class for Felamimail_Sieve_Backend_Script
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Felamimail_Sieve_Backend_Script
- */
-class Felamimail_Sieve_Backend_ScriptTest extends \PHPUnit\Framework\TestCase
+class Felamimail_Sieve_Backend_ScriptTest extends TestCase
 {
     /**
      * serialized rule
@@ -47,25 +40,13 @@ class Felamimail_Sieve_Backend_ScriptTest extends \PHPUnit\Framework\TestCase
     protected $_smartSieveVacation = '#vacation&&7&&"info@example.com"&&Thank you very much for your email.\n\n&&off';
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Felamimail Sieve Script Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $rule      = new Felamimail_Sieve_Rule();
         $condition = new Felamimail_Sieve_Rule_Condition();
         $action    = new Felamimail_Sieve_Rule_Action();
@@ -93,7 +74,7 @@ class Felamimail_Sieve_Backend_ScriptTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
     }
 
     /**
@@ -133,13 +114,20 @@ class Felamimail_Sieve_Backend_ScriptTest extends \PHPUnit\Framework\TestCase
         $script    = new Felamimail_Sieve_Backend_Script();
         $rule      = new Felamimail_Sieve_Rule();
         $action    = new Felamimail_Sieve_Rule_Action();
+        $condition = new Felamimail_Sieve_Rule_Condition();
+
+        $condition->setComperator(Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS)
+            ->setTest(Felamimail_Sieve_Rule_Condition::TEST_ADDRESS)
+            ->setHeader('From')
+            ->setKey('info@example.com');
 
         $action->setType(Felamimail_Sieve_Rule_Action::VACATION)
             ->setArgument('my reason');
 
         $rule->setEnabled(true)
             ->setId(12)
-            ->setAction($action);
+            ->setAction($action)
+            ->addCondition($condition);
 
         $script->addRule($rule);
 
@@ -148,6 +136,20 @@ class Felamimail_Sieve_Backend_ScriptTest extends \PHPUnit\Framework\TestCase
             'vacation extension is required in script: ' . $sieveScript);
         $this->assertStringContainsString('vacation "my reason";', $sieveScript);
         $this->assertStringContainsString('Felamimail_Sieve_Rule', $sieveScript);
+    }
+
+    public function testInvalidRule()
+    {
+        $script    = new Felamimail_Sieve_Backend_Script();
+        $rule      = new Felamimail_Sieve_Rule();
+        $rule->setEnabled(true)
+            ->setId(12);
+        try {
+            $script->addRule($rule);
+            self::fail('should throw validation exception');
+        } catch (Felamimail_Exception_Sieve $fes) {
+            self::assertStringContainsString('Invalid Sieve Rule', $fes->getMessage());
+        }
     }
 
     /**
