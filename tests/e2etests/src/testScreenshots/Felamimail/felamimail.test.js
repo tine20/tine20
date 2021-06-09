@@ -219,17 +219,16 @@ describe('filterBar', () => {
     });
 });
 
-describe('write E-Mail', () => {
+describe.skip('write E-Mail', () => {
     test('open editDialog', async () => {
-        await expect(page).toClick('button', {text: 'Verfassen'});
-        let newPage = await lib.getNewWindow();
-        await newPage.waitFor(2000);
-        await newPage.click('.x-btn-image.AddressbookIconCls');
+        let popupWindow = await lib.getEditDialog('Verfassen');
+        await popupWindow.waitFor(2000);
+        await popupWindow.click('.x-btn-image.AddressbookIconCls');
         let popup = await lib.getNewWindow();
         await popup.waitFor(2000);
         await popup.screenshot({path: 'screenshots/EMail/16_email_auswahl_empfaenger.png'});
         await popup.close();
-        await newPage.close();
+        await popupWindow.close();
     });
 });
 
