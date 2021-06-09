@@ -224,10 +224,17 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                             }]
                         }, {
                             flex: 3,
-                            layout: 'fit',
-
+                            layout: 'ux.display',
+                            hideLabels: true,
                             border: false,
                             items: [{
+                                xtype: 'ux.displayfield',
+                                name: 'url',
+                                ctCls: 'x-ux-dislplay-no-label',
+                                itemCls: 'x-ux-dislplay-no-label',
+                                fieldLabel: this.app.i18n._('URL'),
+                                linkify: true
+                            },{
                                 cls: 'x-ux-display-background-border',
                                 xtype: 'ux.displaytextarea',
                                 name: 'description'

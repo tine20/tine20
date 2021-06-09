@@ -285,6 +285,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             labelAlign: 'top',
                             border: false,
                             items: [{
+                                hideLabel: true,
+                                xtype:'textfield',
+                                width: '100%',
+                                itemCls: 'cal-urlfield',
+                                name: 'url',
+                                emptyText: this.app.i18n._('URL'),
+                                requiredGrant: 'editGrant'
+                            }, {
                                 style: 'margin-top: -4px; border 0px;',
                                 labelSeparator: '',
                                 xtype:'textarea',
