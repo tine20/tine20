@@ -332,6 +332,18 @@ Tine.Tinebase.tineInit = {
 
         // check if user is already logged in
         if (! Tine.Tinebase.registry.get('currentAccount')) {
+            if (! window.isMainWindow) {
+                window.close();
+                // just in case it didn't succeed
+                return Ext.MessageBox.show({
+                    title: i18n._('Session Timed Out'),
+                    msg: i18n._('You can close this window.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.INFO,
+                    fn: window.close
+                });
+            }
+            
             Tine.Tinebase.tineInit.showLoginBox(function(response){
                 Tine.log.info('tineInit::renderWindow -fetch users registry');
                 Tine.Tinebase.tineInit.initRegistry(true, function() {

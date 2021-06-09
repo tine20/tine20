@@ -1809,9 +1809,11 @@ msgstr ""
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
-#: js/ExceptionHandler.js:170
-msgid "Your session timed out. You need to login again."
-msgstr "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
+msgid "Session Timed Out"
+msgstr "Sitzung ist abgelaufen"
+
+msgid "You can close this window."
+msgstr "Sie können dieses Fenster schließen."
 
 #: js/ExceptionHandler.js:189
 msgid "Insufficient Rights"
