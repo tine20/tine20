@@ -84,9 +84,13 @@ abstract class Felamimail_Sieve_Backend_Abstract
      * add rule to script
      * 
      * @param Felamimail_Sieve_Rule $rule
+     * @throws Felamimail_Exception_Sieve
      */
     public function addRule(Felamimail_Sieve_Rule $rule)
     {
+        if (! $rule->validate()) {
+            throw new Felamimail_Exception_Sieve('Invalid Sieve Rule');
+        }
         $this->_rules[$rule->getId()] = $rule;
     }
     

@@ -17,7 +17,8 @@
  * @property    boolean $enabled
  * @property    string  $action_argument
  * @property    string  $action_type
- * 
+ * @property    string  $conjunction
+ *
  * @package     Felamimail
  */
 class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
