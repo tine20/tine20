@@ -284,6 +284,11 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     background-image: url(../../images/icon-set/icon_calendar_attendee_cancle.svg) !important;
 }
 
+.cal-urlfield {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 .x-grid3-cell .x-grid3-col-fbInfo {
     padding-left: 2px;
     padding-top: 1px;
