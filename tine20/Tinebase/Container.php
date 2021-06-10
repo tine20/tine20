@@ -2109,7 +2109,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         // use get (avoids cache) or getContainerById, guess its better to avoid the cache
         $oldContainer = $this->get($_record->getId(), $_updateDeleted);
 
-        $result = parent::update($_record);
+        try {
+            $result = parent::update($_record);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                $translation = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric($translation->_('A container with this name already exists.'));
+            } else {
+                throw $zdse;
+            }
+        }
 
         unset($result->account_grants);
         unset($oldContainer->account_grants);

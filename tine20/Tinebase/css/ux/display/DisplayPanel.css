@@ -23,6 +23,12 @@
     color:#404040;
     font-family:verdana;
     font-size:11px;
+    padding-left: 5px !important;
+}
+
+.x-form-item.x-ux-dislplay-no-label,
+.x-ux-display .x-form-element.x-ux-dislplay-no-label {
+    padding: 0 !important;
 }
 
 .x-ux-display textarea.x-ux-display-textarea {
@@ -93,10 +99,6 @@
 .x-ux-display .x-form-item {
     display: flex;
     padding-left: 2px;
-}
-
-.x-ux-display .x-form-element {
-    padding-left: 5px !important;
 }
 
 /* NOTE: this makes ugly details panel in edit dialogs
