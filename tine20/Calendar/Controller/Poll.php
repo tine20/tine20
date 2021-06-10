@@ -517,9 +517,11 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
         $oldvalues = [
             'containerACLChecks'    => $this->doContainerACLChecks(false),
             'rightChecks'           => $this->doRightChecks(false),
+            'accContainerACLChecks' => Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false),
+            'accRightChecks'        => Addressbook_Controller_Contact::getInstance()->doRightChecks(false),
             'cceContainerACLChecks' => Calendar_Controller_Event::getInstance()->doContainerACLChecks(false),
             'cceRightChecks'        => Calendar_Controller_Event::getInstance()->doRightChecks(false),
-            'cceSendNotifications'        => Calendar_Controller_Event::getInstance()->sendNotifications(false),
+            'cceSendNotifications'  => Calendar_Controller_Event::getInstance()->sendNotifications(false),
             'currentUser'           => $currentUser,
         ];
 
@@ -529,6 +531,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             $this->doRightChecks($oldvalues['rightChecks']);
             Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldvalues['cceContainerACLChecks']);
             Calendar_Controller_Event::getInstance()->doRightChecks($oldvalues['cceRightChecks']);
+            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldvalues['accContainerACLChecks']);
+            Addressbook_Controller_Contact::getInstance()->doRightChecks($oldvalues['accRightChecks']);
             Calendar_Controller_Event::getInstance()->sendNotifications($oldvalues['cceSendNotifications']);
             if ($oldvalues['currentUser']) {
                 Tinebase_Core::set(Tinebase_Core::USER, $oldvalues['currentUser']);
@@ -561,14 +565,15 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             $this->_checkAuth($poll);
 
             $alternative_dates = Calendar_Controller_Poll::getInstance()->getPollEvents($pollId);
-
+            $currentCalUser = $anonymousAccess && !$userKey ? null : 
+                Calendar_Model_Attender::fromKey($anonymousAccess ? $userKey : ('user-' . Tinebase_Core::getUser()->contact_id));
+            
             // check authkey
             // NOTE: maybe we have different authkeys for some reason, so lets check that at least one matches
-            if ($anonymousAccess && $userKey) {
-                $user = Calendar_Model_Attender::fromKey($userKey);
+            if ($anonymousAccess && $currentCalUser) {
                 $authKeys = [];
                 foreach($alternative_dates as $date) {
-                    $authKeys[$date->id] = Calendar_Model_Attender::getAttendee($date->attendee, $user)->status_authkey;
+                    $authKeys[$date->id] = Calendar_Model_Attender::getAttendee($date->attendee, $currentCalUser)->status_authkey;
                 }
                 if (! in_array($authKey, $authKeys)) {
                     throw new Tinebase_Exception_Record_NotAllowed('authkey mismatch');
@@ -579,8 +584,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             // fill cache, cleanup status_authkeys
             Calendar_Model_Attender::resolveAttendee($alternative_dates->attendee, true, $alternative_dates);
             foreach($alternative_dates as $date) {
-                $currentUserAttendee = $anonymousAccess && !$userKey ? null :
-                    Calendar_Model_Attender::getAttendee($date->attendee, Calendar_Model_Attender::fromKey($anonymousAccess ? $userKey : ('user-' . Tinebase_Core::getUser()->contact_id)));
+                $currentUserAttendee = $currentCalUser ? Calendar_Model_Attender::getAttendee($date->attendee, $currentCalUser) : null;
 
                 foreach($date->attendee as $attendee) {
                     // flatten
@@ -624,7 +628,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                     $date_attendee = Calendar_Model_Attender::getAttendee($date->attendee, $attendee);
                     if ($date_attendee) {
                         $status[] = array_merge(array_intersect_key($date_attendee->toArray(), array_flip([
-                            'id', 'cal_event_id', 'status', 'user_type', 'user_id', 'status_authkey'
+                            'id', 'cal_event_id', 'status', 'user_type', 'user_id', 'status_authkey', 'seq'
                         ])), [
                             'info_url' => $anonymousAccess ? '' : Tinebase_Core::getUrl()
                                 . "/#/Calendar/pollFBView/{$attendee['user_type']}/{$attendee['user_id']}/"
@@ -656,8 +660,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                     'locale'            => (string) Tinebase_Core::getLocale(),
                     'has_gtc'           => !!Calendar_Config::getInstance()->get(Calendar_Config::POLL_GTC),
                     'status_available'  => Calendar_Config::getInstance()->get(Calendar_Config::ATTENDEE_STATUS)->toArray(),
-                    'is_anonymous'      => Tinebase_Core::getUser()->accountLoginName == 'anonymoususer',
-                    'current_contact'   => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray(),
+                    'is_anonymous'      => $anonymousAccess,
+                    'current_contact'   => $currentCalUser ? Addressbook_Controller_Contact::getInstance()->get($currentCalUser->user_id, TRUE)->toArray() : null,
                     'jsonKey'           => Tinebase_Core::get('jsonKey'),
                     'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
                     'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
