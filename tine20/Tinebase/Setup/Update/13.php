@@ -18,6 +18,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE013_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE013_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE013_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -56,6 +57,10 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE013_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ]
     ];
@@ -228,5 +233,12 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             $this->setTableVersion('importexport_definition', 12);
         }
         $this->addApplicationUpdate('Tinebase', '13.7', self::RELEASE013_UPDATE008);
+    }
+
+    public function update009()
+    {
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX .
+            'container SET deleted_time = NOW() WHERE is_deleted = 1 and deleted_time = "1970-01-01 00:00:00"');
+        $this->addApplicationUpdate('Tinebase', '13.8', self::RELEASE013_UPDATE009);
     }
 }
