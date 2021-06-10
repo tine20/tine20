@@ -63,7 +63,7 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
                 };
 
             store.on('load', highlight);
-            ftb.setValue([{field: 'path', operator: 'equals', value: dirPath}]);
+            ftb.setValue([{field: 'path', operator: 'equals', value: dirPath.replace(/\/\s*$/, "")}]);
             ftb.onFiltertrigger();
         }).defer(500, this);
     }
