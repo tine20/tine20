@@ -288,7 +288,7 @@ export default {
               user_type: status.user_type,
               user_id: status.user_id,
               status_authkey: status.status_authkey,
-              seq: attendee.seq
+              seq: status.seq
             }
             payload.status.push(datePayload)
           })
@@ -313,7 +313,7 @@ export default {
             this.loadPoll()
           }
 
-          let target = window.location.href +
+          let target = window.location.href.replace(/\/*$/, '') +
             '/' + first.user_type + '-' + first.user_id +
             '/' + first.status_authkey
 
@@ -379,21 +379,16 @@ export default {
 
         this.askPassword = this.poll.password !== null && this.password !== this.poll.password
 
-        let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
+        // let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
 
-        if (!this.forceNewAttendee &&
-          typeof this.poll.config.current_contact !== 'undefined' &&
-          (urlParams.length <= 5 || !this.poll.config.is_anonymous)
-        ) {
-          if (this.poll.config.is_anonymous) {
-            this.activeAttendee.id = null
-            this.forceNewAttendee = true
-          } else {
-            this.activeAttendee.id = this.poll.config.current_contact.type + '-' + this.poll.config.current_contact.id
-            this.activeAttendee.name = this.poll.config.current_contact.n_fn
-            this.activeAttendee.email = this.poll.config.current_contact.email
-            this.activeAttendee.user_id = this.poll.config.current_contact.id
-          }
+        if (!this.poll.config.current_contact || this.forceNewAttendee) {
+          this.activeAttendee.id = null
+          this.forceNewAttendee = true
+        } else {
+          this.activeAttendee.id = this.poll.config.current_contact.type + '-' + this.poll.config.current_contact.id
+          this.activeAttendee.name = this.poll.config.current_contact.n_fn
+          this.activeAttendee.email = this.poll.config.current_contact.email
+          this.activeAttendee.user_id = this.poll.config.current_contact.id
         }
 
         this.newAccountContact = true
