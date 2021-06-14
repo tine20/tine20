@@ -363,7 +363,12 @@ class Tinebase_Group
                 }
             }
 
-            Tinebase_Lock::keepLocksAlive();
+            try {
+                Tinebase_Lock::keepLocksAlive();
+            } catch  (Tinebase_Exception_Backend $teb) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $teb->getMessage());
+            }
         }
 
         return true;
