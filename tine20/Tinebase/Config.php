@@ -266,6 +266,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_COMMUNITY_IDENT_NR = 'communityIdentNr';
 
+    const IMPORT_EXPORT_DEFAULT_CONTAINER = 'importExportDefaultContainer';
+
 
     /**
      * user defined page title postfix for browser page title
@@ -1523,6 +1525,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
         ),
+        self::IMPORT_EXPORT_DEFAULT_CONTAINER => [
+            self::LABEL                 => 'Import/Export Default Container', // _('Import/Export Default Container')
+            self::DESCRIPTION           => 'Import/Export Default Container',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+        ],
         self::PAGETITLEPOSTFIX => array(
                                    //_('Title Postfix')
             'label'                 => 'Title Postfix',
@@ -2785,13 +2795,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ],
             self::DEFAULT_STR           => [
                 'records'                   => [
-                    /*[
-                        Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME => 'test',
-                        Tinebase_Model_AuthTokenChannelConfig::FLDS_TOKEN_CREATE_HOOK => [
-                            Tinebase_Frontend_Json::class, 'testHook'
-                        ]
-                    ]*/
-                ]
+                    [
+                        Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME => Tinebase_Export_Abstract::class . '::expressiveApi',
+                    ]
+                ],
             ],
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,

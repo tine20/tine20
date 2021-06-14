@@ -52,6 +52,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
     const FLDS_FORMAT = 'format';
     const FLDS_FILENAME = 'filename';
     const FLDS_FILTER = 'filter';
+    const FLDS_CONTAINER_ID = 'container_id';
 
     /**
      * key in $_validators/$_properties array for the filed which
@@ -116,6 +117,8 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
         'exposeHttpApi'     => false,
         'exposeJsonApi'     => true,
         'copyEditAction'    => true,
+        self::CONTAINER_PROPERTY => self::FLDS_CONTAINER_ID,
+        self::HAS_PERSONAL_CONTAINER => false,
 
 
         'appName'           => 'Tinebase',

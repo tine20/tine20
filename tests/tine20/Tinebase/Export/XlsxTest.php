@@ -9,6 +9,7 @@
  */
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * Test class for Tinebase_Export_Doc
@@ -376,5 +377,109 @@ class Tinebase_Export_XlsxTest extends TestCase
                 unlink($file);
             }
         }
+    }
+
+    public function testExpressiveApiWithToken()
+    {
+        $definitionId = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
+            'model' => 'Addressbook_Model_Contact',
+            'name' => 'adb_xls'
+        ]))->getFirstRecord()->getId();
+
+        $testContact = new Addressbook_Model_Contact([]);
+        $testContact->n_given = 'Test Contact Name 123';
+        $testContact->n_family = 'Test Name';
+        $testContact = Addressbook_Controller_Contact::getInstance()->create($testContact);
+
+        $emitter = new Tinebase_Server_UnittestEmitter();
+        $server = new Tinebase_Server_Expressive($emitter);
+
+        $token = (new Tinebase_Frontend_Json)->getAuthToken([Tinebase_Export_Abstract::class . '::expressiveApi']);
+
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+            'POST /Tinebase/export/' . $definitionId . ' HTTP/1.1' . "\r\n"
+            . 'Host: localhost' . "\r\n"
+            . 'Authorization: Bearer ' . $token[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN] . "\r\n"
+            . "\r\n"
+            . json_encode(['filter' => [
+                ['field' => 'n_given', 'operator' => 'equals', 'value' => $testContact->n_given]
+            ]]) . "\r\n\r\n"
+        ));
+
+        /** @var \Symfony\Component\DependencyInjection\Container $container */
+        $container = Tinebase_Core::getPreCompiledContainer();
+        $container->set(RequestInterface::class, $request);
+        Tinebase_Core::setContainer($container);
+        Tinebase_Core::unsetUser();
+
+        $server->handle();
+
+        $tmpFile = Tinebase_TempFile::getTempPath();
+        $raii = new Tinebase_RAII(function() use($tmpFile) {
+            unlink($tmpFile);
+        });
+        file_put_contents($tmpFile, (string)$emitter->response->getBody());
+
+        $reader = IOFactory::createReader('Xlsx');
+        $doc = $reader->load($tmpFile);
+        // CZ is enough for contact, but to allow growth DZ is on the safe side
+        $arrayData = $doc->getActiveSheet()->rangeToArray('A3:DZ4');
+        $flippedArrayData = array_flip(array_filter($arrayData[1]));
+
+        $msg = print_r($flippedArrayData, true);
+        $this->assertArrayHasKey($testContact->n_given, $flippedArrayData, $msg);
+        $this->assertArrayHasKey($testContact->n_family, $flippedArrayData, $msg);
+
+        unset($raii);
+    }
+
+    public function testExpressiveApi()
+    {
+        $definitionId = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
+            'model' => 'Addressbook_Model_Contact',
+            'name' => 'adb_xls'
+        ]))->getFirstRecord()->getId();
+
+        $testContact = new Addressbook_Model_Contact([]);
+        $testContact->n_given = 'Test Contact Name 123';
+        $testContact->n_family = 'Test Name';
+        $testContact = Addressbook_Controller_Contact::getInstance()->create($testContact);
+
+        $emitter = new Tinebase_Server_UnittestEmitter();
+        $server = new Tinebase_Server_Expressive($emitter);
+
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+            'POST /Tinebase/export/' . $definitionId . ' HTTP/1.1' . "\r\n"
+            . 'Host: localhost' . "\r\n"
+            . "\r\n"
+            . json_encode(['filter' => [
+                ['field' => 'n_given', 'operator' => 'equals', 'value' => $testContact->n_given]
+            ]]) . "\r\n\r\n"
+        ));
+
+        /** @var \Symfony\Component\DependencyInjection\Container $container */
+        $container = Tinebase_Core::getPreCompiledContainer();
+        $container->set(RequestInterface::class, $request);
+        Tinebase_Core::setContainer($container);
+
+        $server->handle();
+
+        $tmpFile = Tinebase_TempFile::getTempPath();
+        $raii = new Tinebase_RAII(function() use($tmpFile) {
+            unlink($tmpFile);
+        });
+        file_put_contents($tmpFile, (string)$emitter->response->getBody());
+
+        $reader = IOFactory::createReader('Xlsx');
+        $doc = $reader->load($tmpFile);
+        // CZ is enough for contact, but to allow growth DZ is on the safe side
+        $arrayData = $doc->getActiveSheet()->rangeToArray('A3:DZ4');
+        $flippedArrayData = array_flip(array_filter($arrayData[1]));
+
+        $msg = print_r($flippedArrayData, true);
+        $this->assertArrayHasKey($testContact->n_given, $flippedArrayData, $msg);
+        $this->assertArrayHasKey($testContact->n_family, $flippedArrayData, $msg);
+
+        unset($raii);
     }
 }

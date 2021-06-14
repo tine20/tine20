@@ -80,6 +80,11 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
         }
     }
 
+    public function generateToStream($stream)
+    {
+        $this->generate($stream);
+    }
+
     /**
      * generate export
      *

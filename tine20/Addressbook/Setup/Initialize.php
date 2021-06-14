@@ -244,6 +244,11 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     {
         self::setDefaultInternalAddressbook($this->_getInternalAddressbook());
     }
+
+    protected function _initializeImportExportDefinitionContainer()
+    {
+        Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
+    }
     
     /**
      * set default internal addressbook
