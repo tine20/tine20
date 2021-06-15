@@ -253,7 +253,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         ob_start();
         $result = $this->_cli->triggerAsyncEvents($opts);
         ob_get_clean();
-        static::assertTrue($result, 'cli triggerAsyncEvents did not return true');
+        static::assertEquals(0, $result, 'cli triggerAsyncEvents did run successfully');
         
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
         $this->assertTrue(! empty($cronuserId), 'got empty cronuser id');
