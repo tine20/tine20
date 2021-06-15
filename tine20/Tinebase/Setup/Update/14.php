@@ -15,7 +15,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE014_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE014_UPDATE005 = __CLASS__ . '::update005';
-
+    const RELEASE014_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -38,6 +38,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE014_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -168,5 +172,20 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([Tinebase_Model_CommunityIdentNr::class]);
         $this->addApplicationUpdate('Tinebase', '14.5', self::RELEASE014_UPDATE005);
+    }
+
+    public function update006()
+    {
+        if ($this->getTableVersion('notes') < 3) {
+            $this->_backend->alterCol('notes', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>record_model</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>'));
+            $this->setTableVersion('notes', 3);
+        }
+        $this->addApplicationUpdate('Tinebase', '14.6', self::RELEASE014_UPDATE006);
     }
 }
