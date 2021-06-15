@@ -348,20 +348,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * trigger async events (for example via cronjob)
      *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean success
+     * @return integer
      */
     public function triggerAsyncEvents($_opts)
     {
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::CRON_DISABLED)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                 __LINE__ . ' Cronjob is disabled.');
-            return false;
+            return 1;
         }
 
         if (Tinebase_Core::inMaintenanceModeAll()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                 __LINE__ . ' Maintenance mode prevents trigger async events.');
-            return false;
+            return 1;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -384,7 +384,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $scheduler = Tinebase_Core::getScheduler();
         $result = $scheduler->run();
         
-        return $result;
+        return $result ? 0 : 1;
     }
 
     /**
@@ -392,17 +392,23 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *  --jobId the queue job id to execute
      *
      * @param Zend_Console_Getopt $_opts
-     * @return bool success
+     * @return integer
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function executeQueueJob($_opts)
+    public function executeQueueJob(Zend_Console_Getopt $_opts)
     {
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
-        
+
+        if (! $cronuser) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                __LINE__ . ' No valid cronuser found.');
+            return 1;
+        }
+
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $args = $_opts->getRemainingArgs();
@@ -424,8 +430,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $result = $actionQueue->executeAction($job);
-        
-        return false !== $result;
+
+        return $result ? 0 : 1;
     }
     
     /**
