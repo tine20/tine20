@@ -76,7 +76,7 @@ describe('context menu', () => {
         await page.hover('.x-menu-item-icon.action_add');
         await page.screenshot({path: 'screenshots/EMail/8_email_konto_kontextmenu.png'});
     });
-    test('absence note', async () => {
+    test.skip('absence note', async () => {
         await page.hover('.x-menu-item-icon.action_email_replyAll');
         await page.screenshot({path: 'screenshots/EMail/18_email_server_kontextmenu.png'});
         await page.click('.x-menu-item-icon.action_email_replyAll');
