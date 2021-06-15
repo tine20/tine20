@@ -362,8 +362,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if ($this instanceof Tinebase_Group_Interface_SyncAble) {
             $this->addGroupMemberInSyncBackend($_groupId, $_accountId);
         }
-        
-        $this->addGroupMemberInSqlBackend($_groupId, $_accountId);
+
+        try {
+            $this->addGroupMemberInSqlBackend($_groupId, $_accountId);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                throw $zdse;
+            }
+        }
     }
     
     /**
