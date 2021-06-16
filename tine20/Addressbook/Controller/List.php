@@ -601,7 +601,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        $this->_fireChangeListeEvent($updatedRecord);
+        $this->_fireChangeListeEvent($updatedRecord, $currentRecord);
 
         if (isset($updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
@@ -641,11 +641,13 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * fireChangeListeEvent
      *
      * @param Addressbook_Model_List $list
+     * @param Addressbook_Model_List|null $currentList
      */
-    protected function _fireChangeListeEvent(Addressbook_Model_List $list)
+    protected function _fireChangeListeEvent(Addressbook_Model_List $list, Addressbook_Model_List $currentList = null)
     {
         $event = new Addressbook_Event_ChangeList();
         $event->list = $list;
+        $event->currentList = $currentList;
         Tinebase_Event::fireEvent($event);
     }
 
