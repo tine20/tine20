@@ -1,6 +1,10 @@
 #!/bin/sh
 set -e
 
+echo $0 init git submodules ...
+
+git submodule init
+
 echo $0 copying ...
 
 cp ${CI_PROJECT_DIR}/ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/;
