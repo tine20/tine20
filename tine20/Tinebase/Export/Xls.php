@@ -175,6 +175,20 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         $this->write($_target);    
     }
 
+    public function generateToStream($stream)
+    {
+        $this->generate();
+        $tempfile = Tinebase_TempFile::getTempPath();
+
+        try {
+            $this->write($tempfile);
+            $fh = fopen($tempfile, 'r');
+            stream_copy_to_stream($fh, $stream);
+        } finally {
+            unlink($tempfile);
+        }
+    }
+
     /**
      * generate export
      * @throws Tinebase_Exception

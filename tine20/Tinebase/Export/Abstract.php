@@ -10,6 +10,9 @@
  *
  */
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * Tinebase Abstract export class
  *
@@ -1667,5 +1670,31 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
             Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
         ]);
+    }
+
+    public static function expressiveApi(string $definitionId): ResponseInterface
+    {
+        /** @var Tinebase_Model_ImportExportDefinition $definition */
+        $definition = Tinebase_ImportExportDefinition::getInstance()->get($definitionId);
+
+        /** @var \Zend\Diactoros\Request $request */
+        $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
+
+        $filter = null;
+        $request->getBody()->rewind();
+        if (($rawBody = json_decode($request->getBody()->getContents(), true)) && is_array($rawBody)
+                && isset($rawBody['filter']) && is_array($rawBody['filter'])) {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($definition->model);
+            $filter->setFromArrayInUsersTimezone($rawBody['filter']);
+        }
+
+        $exportClass = $definition->plugin;
+        /** @var Tinebase_Export_Abstract $export */
+        $export = new $exportClass($filter, null, ['definitionId' => $definitionId]);
+
+        $export->generateToStream(($stream = fopen('php://memory', 'w+')));
+        $response = new \Zend\Diactoros\Response($stream);
+
+        return $response;
     }
 }
