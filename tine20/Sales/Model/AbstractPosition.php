@@ -24,7 +24,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     const FLD_SORT = 'sort'; // automatisch in 10000er schritten, shy
     const FLD_GROUP = 'group'; // gruppierte darstellung, automatische laufende nummern pro gruppe(nicht persistiert)
     
-    const FLD_REFERENCE_POSITION = 'reference_position'; // virtual, link
+    const FLD_REFERENCE_POSITION = 'reference_position'; // z.B. angebotsposition bei auftragsposition
     
     const FLD_PRODUCT_ID = 'product_id';  // optional, es gibt auch textonlypositionen
     const FLD_SUBPRODUCT_MAPPING = 'subproduct_mapping'; // "kreuztabelle" Sales_Model_SubproductMapping (nur für bundles nicht für set's?)
@@ -38,7 +38,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     const FLD_NET_PRICE = 'net_price'; // Nettopreis - anzahl * einzelpreis
 
     const FLD_POSITION_DISCOUNT_TYPE = 'position_discount_type'; // PERCENTAGE|SUM
-    const FLD_POSITION_DISCOUNT_PERCENTAGE = 'position_discount_percentage'; // automatische Berechnung je nach tupe
+    const FLD_POSITION_DISCOUNT_PERCENTAGE = 'position_discount_percentage'; // automatische Berechnung je nach type
     const FLD_POSITION_DISCOUNT_SUM = 'position_discount_sum'; // automatische Berechnung je nach type
     
     const FLD_TAX_RATE = 'tax_rate'; // Mehrwertssteuersatz - berechnen
@@ -53,13 +53,13 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
 
     
     // Produkte:
-    // - shortcut intern (wird als kurzbez. in subproduktzuordnung übernommen, in pos nicht benötigt)
-    // - title
-    // - description
-    // - gruppe
-    // - einheit
-    // - preis (pro einheit)
-    // - steuersatz
+    // - shortcut intern (wird als kurzbez. in subproduktzuordnung übernommen, in pos nicht benötigt) - varchar 20
+    // - title - varchar
+    // - description - text
+    // - gruppe (Gruppierung von Positionen z.B. A implementierung, B regelm., C zusatz) - varchar - autocomplete
+    // - einheit - varchar
+    // - preis (pro einheit) 
+    // - steuersatz - percentage
     // - kostenstelle
     // - kostenträger
     // - ist verkaufsprodukt (bool) [nur verkaufsprodukte können in positionen direkt gewählt werden]
@@ -70,7 +70,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     //           gruppe aus hauptprodukut wird in jedes subprodukt übernommen
     //           
     //    Zur Sicherheit: Bundles/Sets dürfen keine Bundles/Sets enthalten!
-    // - subproduktzuordnung
+    // - subproduktzuordnung (eigene Tabelle)
     //   - shortcut z.B. vcpu, supportstunden, ... eindeutig pro hauptprodukt wird aus produkt übernommen (wird gebraucht für variablennamen im text des hauptproduktes)
     //   - hauptproduct_id (referenz für subprod tabelle)
     //   - product_id (referenz auf einzelprodukt)
@@ -86,6 +86,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     // {{ <shortcut>.<field> }} {{ <shortcut>.record.<productfield> }}
     // BSP: VM mit {{ cpu.inclusive }} vcpus und {{ram.inclusive}} vram
     
+    // @TODO: schon im produkt pfelgen? 
     // Autrags belegposition die use_actual_quantity haben müssen verknüpfung zum konkreten leistungsnachweis (accountable)
     // im rahmen der leistungserfassung werden die tatsächlichen "Anzahl-Werte" ermittelt
 
