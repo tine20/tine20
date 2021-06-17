@@ -170,10 +170,13 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
                      '2018-08-08 00:00:00' => 2 * 3600,
                  ] as $day => $workTime) {
             $report = $result->filter('date', $day)->getFirstRecord();
+
+            self::assertNotNull($report);
             if ($report->date->format('Y-m-d') === $ts->start_date) {
                 $workTime += 900;
+                $this->assertEquals(5400, $report->break_time_net); // 30 min forced, 60 min natural
+                $this->assertEquals(1800, $report->break_time_deduction); // 30 min forced
             }
-            self::assertNotNull($report);
             self::assertEquals($workTime, $report->working_time_actual);
             // @todo add more assertions (absence_time*, evaluation_period*, break_time*, working_time_target, working_time_correction, ...)
         }
