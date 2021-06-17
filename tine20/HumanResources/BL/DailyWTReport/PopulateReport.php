@@ -52,7 +52,7 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             }
 
             if (null !== $lastSlot && null !== $someBreak) {
-                $timePaused = $someBreak->calculateTimePaused($lastSlot, $timeSlot);
+                $timePaused += $someBreak->calculateTimePaused($lastSlot, $timeSlot);
             }
             $duration = $timeSlot->durationInSec();
             $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
