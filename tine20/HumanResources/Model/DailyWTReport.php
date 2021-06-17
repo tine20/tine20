@@ -72,7 +72,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 2,
+        'version' => 3,
         'recordName' => 'Daily Working Time Report',
         'recordsName' => 'Daily Working Time Reports', // ngettext('Daily Working Time Report', 'Daily Working Time Reports', n)
         'containerProperty' => null,
@@ -207,18 +207,18 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Target Working Time', // _('Target Working Time')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
                 self::DISABLED              => true,
             ],
             'working_time_target_correction' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Target Working Time Correction', // _('Target Working Time Correction')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
             ],
 
             //  zeit zwischen den zetteln (brutto pausenzeit - in transportklasse) + break_time_deduction
@@ -226,8 +226,8 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Break Time Net', // _('Break Time Net')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
                 self::DISABLED              => true,
             ],
             // WorkingTime - passiert, wenn MA zu wenig pause gemacht hat
@@ -235,8 +235,8 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Break Deduction Time', // _('Break Deduction Time')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
                 self::DISABLED              => true,
             ],
             self::FLDS_WORKING_TIMES  => [
@@ -255,9 +255,9 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Actual Working Time', // _('Actual Working Time')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
                 self::DISABLED              => true,
             ],
             // manuelles feld für korrekturen ("musterschüler")
@@ -265,17 +265,17 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Working Time Correction', // _('Working Time Correction')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
             ],
             'working_time_total' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Total Working Time', // _('Total Working Time')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
                 self::DISABLED              => true,
             ],
             // z.b. krankheit, urlaub, feiertag (bei regelarbeit leer)
