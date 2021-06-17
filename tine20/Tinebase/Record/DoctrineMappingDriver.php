@@ -242,7 +242,14 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
      */
     public function isTransient($className)
     {
-        $modelConfig = $className::getConfiguration();
+        try {
+            $modelConfig = $className::getConfiguration();
+        } catch (Throwable $t) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not load MC for model ' . $className);
+            Tinebase_Exception::log($t);
+            return false;
+        }
 
         return $modelConfig && is_int($modelConfig->getVersion());
     }
