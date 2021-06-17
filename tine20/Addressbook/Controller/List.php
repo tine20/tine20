@@ -418,6 +418,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_InspectListBeforeUpdate([
+            'observable' => $_record,
+            'oldList' => $_oldRecord,
+        ]));
+
         $this->_flattenMembers($_record);
 
         if (! empty($_record->email) && $_record->email !== $_oldRecord->email) {
