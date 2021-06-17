@@ -91,6 +91,59 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $this->assertArrayHasKey('id', $reportMonthlyDeleted['results'][0]['employee_id']);
     }
 
+    public function testUpdateDailyReport()
+    {
+        $this->_createBasicData();
+
+        $this->_createTimesheets();
+
+        // create report
+        $start = new Tinebase_DateTime('2018-08-01 00:00:00');
+        $end = new Tinebase_DateTime('2018-08-31 23:59:59');
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        /** @var HumanResources_Model_DailyWTReport $report */
+        $report = $result->find('date', '2018-08-08 00:00:00');
+        self::assertEquals(2 * 3600, $report->working_time_actual);
+
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee(
+            HumanResources_Controller_Employee::getInstance()->get($report->employee_id), new Tinebase_DateTime('2018-08-08 00:00:00'),
+            new Tinebase_DateTime('2018-08-08 00:00:00'));
+
+        $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(get_class($report), $report->getId(), 'Sql', false);
+        // only one created note
+        $this->assertCount(1, $notes);
+
+        $ts = clone $this->_ts->filter('description', 'Gießen der Pflanzen')->getFirstRecord();
+        unset($ts->id);
+        $ts->start_time = '10:00:00';
+        $ts->end_time = '12:00:00';
+        Timetracker_Controller_Timesheet::getInstance()->create($ts);
+
+        $ts = clone $this->_ts->filter('description', 'Gießen der Pflanzen')->getFirstRecord();
+        unset($ts->id);
+        $ts->start_time = '17:30:00';
+        $ts->end_time = '19:30:00';
+        Timetracker_Controller_Timesheet::getInstance()->create($ts);
+
+        $report->working_time_target_correction = 3600;
+        HumanResources_Controller_DailyWTReport::getInstance()->update($report);
+        $result = $this->_getReportsForEmployee($this->employee);
+        /** @var HumanResources_Model_DailyWTReport $report */
+        $updatedReport = $result->find('date', '2018-08-08 00:00:00');
+        self::assertEquals(6 * 3600, $updatedReport->working_time_actual);
+        self::assertNotEquals($report->working_time_actual, $updatedReport->working_time_actual);
+
+        $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(get_class($report), $report->getId(), 'Sql', false);
+        // update notes too now, one working time correction, one recalc
+        $this->assertCount(3, $notes);
+        $note = $notes->find('seq', 3);
+        $this->assertNotNull($note, 'recalc note not found');
+        $this->assertStringContainsString('working_times (2 added: 02:00 (10:00 - 12:00) - , 02:00 (17:30 - 19:30) - )',
+            $note->note);
+    }
+
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEnd()
     {
         $this->_createBasicData();
@@ -145,7 +198,17 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         // add a new TS
         /** @var Timetracker_Model_Timesheet $ts */
-        $ts = $this->_ts->filter('description', 'Probe')->getFirstRecord();
+        $ts = clone $this->_ts->filter('description', 'Probe')->getFirstRecord();
+        unset($ts->id);
+        $ts->start_date = '2018-08-01';
+        $ts->start_time = '05:51:53';
+        $ts->end_time = '15:30:23';
+        $ts->duration = (string)(9*60 + 38);
+        Timetracker_Controller_Timesheet::getInstance()->create($ts);
+
+        // add a new TS
+        /** @var Timetracker_Model_Timesheet $ts */
+        $ts = clone $this->_ts->filter('description', 'Probe')->getFirstRecord();
         unset($ts->id);
         $ts->start_time = '16:00:00';
         $ts->end_time = '16:15:00';
@@ -177,7 +240,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
                 $this->assertEquals(5400, $report->break_time_net); // 30 min forced, 60 min natural
                 $this->assertEquals(1800, $report->break_time_deduction); // 30 min forced
             }
-            self::assertEquals($workTime, $report->working_time_actual);
+            self::assertEquals($workTime, $report->working_time_actual, $report->date);
             // @todo add more assertions (absence_time*, evaluation_period*, break_time*, working_time_target, working_time_correction, ...)
         }
     }
