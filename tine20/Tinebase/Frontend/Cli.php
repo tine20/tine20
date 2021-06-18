@@ -392,7 +392,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *  --jobId the queue job id to execute
      *
      * @param Zend_Console_Getopt $_opts
-     * @return integer
+     * @return bool success
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function executeQueueJob(Zend_Console_Getopt $_opts)
@@ -406,7 +406,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (! $cronuser) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
                 __LINE__ . ' No valid cronuser found.');
-            return 1;
+            return false;
         }
 
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
@@ -431,7 +431,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $result = $actionQueue->executeAction($job);
 
-        return $result ? 0 : 1;
+        // NOTE: queue job execution expects boolean result - don't change to integer (0,1,2...) here
+        return false !== $result;
     }
     
     /**
