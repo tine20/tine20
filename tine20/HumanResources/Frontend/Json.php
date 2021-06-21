@@ -178,6 +178,16 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
     }
 
+    public function recalculateEmployeesWTReports(string $employeeId)
+    {
+        /** @noinspection PhpParamsInspection */
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee(
+            HumanResources_Controller_Employee::getInstance()->get($employeeId)
+        );
+
+        return true;
+    }
+
     /**
      * calculate all daily working time reports
      *
