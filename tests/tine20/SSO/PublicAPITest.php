@@ -8,6 +8,8 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use SAML2\Utils;
+
 /**
  * SSO public API tests
  *
@@ -15,14 +17,29 @@
  */
 class SSO_PublicAPITest extends TestCase
 {
-    /**
-     * Tinebase_Core::getContainer()->set(RequestInterface::class,
-    (new \Zend\Diactoros\ServerRequest([], [], 'http://unittest/shalala?blub=bla'))
-    ->withHeader('Authorization', 'Bearer ' . JWT::encode(['payload' => ['url' => 'http://unittest/shalala']],
-    OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256')));
+    public function testSaml2RedirectRequestAlreadyLoggedIn()
+    {
+        $authNRequest = new \SAML2\AuthnRequest();
+        ($issuer = new \SAML2\XML\saml\Issuer())->setValue('https://localhost:8443/auth/saml2/sp/metadata.php');
+        $authNRequest->setIssuer($issuer);
+        $msgStr = $authNRequest->toUnsignedXML();
+        $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
+        $msgStr = gzdeflate($msgStr);
+        $msgStr = base64_encode($msgStr);
 
-     */
-    public function testGetLoginMask()
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['QUERY_STRING'] = 'SAMLRequest='.urlencode($msgStr);
+        $_GET['SAMLRequest'] = $msgStr;
+
+        $response = SSO_Controller::publicSaml2RedirectRequest();
+        $response->getBody()->rewind();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertStringContainsString('<input type="hidden" name="SAMLResponse"', $response->getBody()->getContents());
+
+    }
+
+    public function testOAuthGetLoginMask()
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
@@ -61,7 +78,7 @@ class SSO_PublicAPITest extends TestCase
         $this->assertStringContainsString('<input type="hidden" name="nonce" value="nonce"/>', $response->getBody()->getContents());
     }
 
-    public function testPostLoginMask()
+    public function testOAuthPostLoginMask()
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
@@ -100,7 +117,7 @@ class SSO_PublicAPITest extends TestCase
         $this->assertSame(302, $response->getStatusCode());
     }
 
-    public function testAutoAuth()
+    public function testOAuthAutoAuth()
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
