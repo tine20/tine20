@@ -88,6 +88,10 @@ function cleanupJs() {
             fi
         fi
     done
+
+    (cd ${TINE20ROOT}/tine20/Tinebase/js/ux/Printer; rm -rf $(ls | grep -v print.css))
+    (cd ${TINE20ROOT}/tine20/Tinebase/js/ux/data; rm -rf $(ls | grep -v windowNameConnection))
+    (cd ${TINE20ROOT}/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer | grep -v data))
 }
 
 function cleanupJsWithAssetsJson()
@@ -172,6 +176,29 @@ function cleanupTinebase() {
   composer dumpautoload -d ${TINE20ROOT}/tine20
 
   rm -rf ${TINE20ROOT}/tine20/composer.*
+}
+
+function moveCustomapps() {
+    echo "moving custom apps... "
+
+    #copy code
+    for FILE in ${TINE20ROOT}/tine20/vendor/metaways/tine20-*/lib/*; do
+        if [ -d "$FILE/translations" ] || [ -d "$FILE/Setup" ]; then
+            mv "$FILE" "${TINE20ROOT}/tine20"
+            echo " moveed $FILE"
+        fi
+    done
+
+    #delete custom app folder
+    for FILE in ${TINE20ROOT}/tine20/vendor/metaways/tine20-*; do
+        echo " delete $FILE"
+        rm -rf "$FILE"
+    done
+}
+
+function fixFilePermissions() {
+    find . -type d -exec chmod 755 {} +
+    find . -type f -exec chmod 644 {} +
 }
 
 function createArchives()
