@@ -596,6 +596,17 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     abstract public function getDownloadContentType();
 
+    public function getContentDescriptionHeaderValue(): string
+    {
+        return $this->_format . ' file';
+    }
+
+    public function getContentDispositionHeaderValue(): string
+    {
+        // pdfs might want to do inline instead of attachment, maybe? why? always?
+        return 'attachment; filename=' . $this->getDownloadFilename();
+    }
+
     /**
      * return download filename
      *
@@ -1693,7 +1704,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $export = new $exportClass($filter, null, ['definitionId' => $definitionId]);
 
         $export->generateToStream(($stream = fopen('php://memory', 'w+')));
-        $response = new \Zend\Diactoros\Response($stream);
+        $response = new \Zend\Diactoros\Response($stream, 200, [
+            'Pragma' => 'public',
+            'Cache-Control' => 'max-age=0',
+            'Content-Disposition' => $export->getContentDispositionHeaderValue(),
+            'Content-Description' => $export->getContentDescriptionHeaderValue(),
+            'Content-Type' => $export->getDownloadContentType(),
+        ]);
 
         return $response;
     }
