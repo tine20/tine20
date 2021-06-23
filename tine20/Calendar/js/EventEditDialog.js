@@ -145,6 +145,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Start Time'),
                                     listeners: {scope: this, change: this.onDtStartChange},
                                     name: 'dtstart',
+                                    allowBlank: false,
                                     increment: timeIncrement,
                                     requiredGrant: 'editGrant'
                                 }, {
@@ -160,6 +161,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('End Time'),
                                     listeners: {scope: this, change: this.onDtEndChange},
                                     name: 'dtend',
+                                    allowBlank: false,
                                     increment: timeIncrement,
                                     requiredGrant: 'editGrant'
                                 }, {
