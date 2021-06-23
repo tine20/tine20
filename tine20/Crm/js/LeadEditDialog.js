@@ -116,8 +116,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onMuteNotificationOnce: function (button, e) {
         this.record.set('mute', button.pressed);
         button.setText(Tine.Tinebase.appMgr.get('Crm').i18n._(button.pressed ?
-            'Notifications are disabled' : 'Notifications are enabled'
-        ));
+            Tine.Tinebase.appMgr.get('Crm').i18n._('Notifications are disabled') :
+            Tine.Tinebase.appMgr.get('Crm').i18n._('Notifications are enabled')));
+
     },
     
     onAfterRecordUpdate: function(closeWindow) {
