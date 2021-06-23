@@ -36,6 +36,16 @@ tar -rf "${CI_PROJECT_DIR}/packages.tar" current.map
 curl \
 	--header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
 	--upload-file "${CI_PROJECT_DIR}/packages.tar" \
-	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/packages.tar"
+	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/all.tar"
+echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/all.tar"
 
-echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/packages.tar ..."
+tar -xf "${CI_PROJECT_DIR}/packages.tar"
+
+cd ${CI_PROJECT_DIR}/${RELEASE}/
+
+for f in *; do
+	curl \
+	--header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+	--upload-file "$f" \
+	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/$(echo "$f" | sed sI~I-Ig)"
+done
