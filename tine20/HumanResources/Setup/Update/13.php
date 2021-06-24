@@ -39,6 +39,23 @@ class HumanResources_Setup_Update_13 extends Setup_Update_Abstract
 
     public function update002()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_wt_dailyreport',
+            ['working_time_target' => 0], 'working_time_target IS NULL');
+        $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_wt_dailyreport',
+            ['working_time_target_correction' => 0], 'working_time_target_correction IS NULL');
+        $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_wt_dailyreport',
+            ['break_time_net' => 0], 'break_time_net IS NULL');
+        $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_wt_dailyreport',
+            ['break_time_deduction' => 0], 'break_time_deduction IS NULL');
+        $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_wt_dailyreport',
+            ['working_time_actual' => 0], 'working_time_actual IS NULL');
+        $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_wt_dailyreport',
+            ['working_time_correction' => 0], 'working_time_correction IS NULL');
+        $this->getDb()->update(SQL_TABLE_PREFIX . 'humanresources_wt_dailyreport',
+            ['working_time_total' => 0], 'working_time_total IS NULL');
+
         Setup_SchemaTool::updateSchema([
             HumanResources_Model_DailyWTReport::class,
         ]);
