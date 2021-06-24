@@ -539,6 +539,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             // clone pagination to prevent accidental change of original object
             $pagination = clone($_pagination);
         }
+        if (!$pagination->model) {
+            $pagination->model = $this->_modelName;
+        }
         
         // legacy: $_cols param was $_onlyIds (boolean) ...
         if ($_cols === TRUE) {
