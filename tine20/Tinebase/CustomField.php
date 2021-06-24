@@ -252,7 +252,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 }
                 $result = $this->_backendConfig->search($filter);
             } finally {
-                $this->_backendConfig->setNoSystemCFs();
+                if ($_getSystemCFs) {
+                    $this->_backendConfig->setNoSystemCFs();
+                }
             }
 
         
