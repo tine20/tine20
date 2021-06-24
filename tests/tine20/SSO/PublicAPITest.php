@@ -17,6 +17,34 @@ use SAML2\Utils;
  */
 class SSO_PublicAPITest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $config = SSO_Config::getInstance();
+        $config->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED} = true;
+        $config->{SSO_Config::SAML2}->{SSO_Config::ENABLED} = true;
+    }
+
+    public function testCreateSAML2Config()
+    {
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = null;
+
+        SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
+            SSO_Model_RelyingParty::FLD_NAME => 'https://localhost:8443/auth/saml2/sp/metadata.php',
+            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_Saml2RPConfig::class,
+            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_Saml2RPConfig([
+                SSO_Model_Saml2RPConfig::FLD_NAME => 'moodle',
+                SSO_Model_Saml2RPConfig::FLD_ENTITYID => 'https://localhost:8443/auth/saml2/sp/metadata.php',
+                SSO_Model_Saml2RPConfig::FLD_ASSERTION_CONSUMER_SERVICE_BINDING => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                SSO_Model_Saml2RPConfig::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION => 'https://localhost:8443/auth/saml2/sp/saml2-acs.php/localhost',
+                SSO_Model_Saml2RPConfig::FLD_SINGLE_LOGOUT_SERVICE_LOCATION => 'https://localhost:8443/auth/saml2/sp/saml2-logout.php/localhost',
+            ]),
+        ]));
+
+    }
+
     public function testSaml2RedirectRequestAlreadyLoggedIn()
     {
         $authNRequest = new \SAML2\AuthnRequest();
@@ -43,9 +71,12 @@ class SSO_PublicAPITest extends TestCase
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
-            SSO_Model_RelyingParty::FLD_REDIRECT_URLS => ['https://unittest.test/uri'],
-            SSO_Model_RelyingParty::FLD_SECRET => 'unittest',
-            SSO_Model_RelyingParty::FLD_IS_CONFIDENTIAL => true,
+            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
+            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
+                SSO_Model_OAuthOIdRPConfig::FLD_SECRET          => 'unittest',
+                SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL => true,
+            ]),
         ]));
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
@@ -54,14 +85,14 @@ class SSO_PublicAPITest extends TestCase
                 '&client_id=' . urlencode($relyingParty->getId()) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
-                '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_REDIRECT_URLS}[0]), 'GET'))
+                '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'GET'))
             ->withQueryParams([
                 'response_type' => 'code',
                 'scope' => 'openid profile email',
                 'client_id' => $relyingParty->getId(),
                 'state' => 'af0ifjsldkj',
                 'nonce' => 'nonce',
-                'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_REDIRECT_URLS}[0]
+                'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]
             ])
         );
 
@@ -82,9 +113,12 @@ class SSO_PublicAPITest extends TestCase
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
-            SSO_Model_RelyingParty::FLD_REDIRECT_URLS => ['https://unittest.test/uri'],
-            SSO_Model_RelyingParty::FLD_SECRET => 'unittest',
-            SSO_Model_RelyingParty::FLD_IS_CONFIDENTIAL => true,
+            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
+            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
+                SSO_Model_OAuthOIdRPConfig::FLD_SECRET          => 'unittest',
+                SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL => true,
+            ]),
         ]));
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
@@ -93,14 +127,14 @@ class SSO_PublicAPITest extends TestCase
                 '&client_id=' . urlencode($relyingParty->getId()) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
-                '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_REDIRECT_URLS}[0]), 'POST'))
+                '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'POST'))
                 ->withQueryParams([
                     'response_type' => 'code',
                     'scope' => 'openid profile email',
                     'client_id' => $relyingParty->getId(),
                     'state' => 'af0ifjsldkj',
                     'nonce' => 'nonce',
-                    'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_REDIRECT_URLS}[0],
+                    'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0],
                 ])->withParsedBody([
                     'username' => 'tine20admin',
                     'password' => 'tine20admin'
@@ -121,9 +155,12 @@ class SSO_PublicAPITest extends TestCase
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
-            SSO_Model_RelyingParty::FLD_REDIRECT_URLS => ['https://unittest.test/uri'],
-            SSO_Model_RelyingParty::FLD_SECRET => 'unittest',
-            SSO_Model_RelyingParty::FLD_IS_CONFIDENTIAL => true,
+            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
+            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
+                SSO_Model_OAuthOIdRPConfig::FLD_SECRET          => 'unittest',
+                SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL => true,
+            ]),
         ]));
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
@@ -132,14 +169,14 @@ class SSO_PublicAPITest extends TestCase
                 '&client_id=' . urlencode($relyingParty->getId()) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
-                '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_REDIRECT_URLS}[0]), 'GET'))
+                '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'GET'))
                 ->withQueryParams([
                     'response_type' => 'code',
                     'scope' => 'openid profile email',
                     'client_id' => $relyingParty->getId(),
                     'state' => 'af0ifjsldkj',
                     'nonce' => 'nonce',
-                    'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_REDIRECT_URLS}[0]
+                    'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]
                 ])
         );
 
@@ -149,7 +186,7 @@ class SSO_PublicAPITest extends TestCase
         $this->assertIsArray($header);
         $this->assertCount(1, $header);
         $this->assertStringContainsString('&state=af0ifjsldkj', $header[0]);
-        $this->assertStringStartsWith($relyingParty->{SSO_Model_RelyingParty::FLD_REDIRECT_URLS}[0] . '?', $header[0]);
+        $this->assertStringStartsWith($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0] . '?', $header[0]);
         $this->assertTrue((bool)preg_match('/code=([^&]+)/', $header[0], $m), 'can not pregmatch code in redirect url');
         // TODO test $m[1] against token api
     }

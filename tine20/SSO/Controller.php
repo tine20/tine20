@@ -10,9 +10,11 @@
  *
  */
 
+use SAML2\Binding;
 use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
 use SimpleSAML\Logger;
+use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Stats;
 
 /**
@@ -68,8 +70,17 @@ class SSO_Controller extends Tinebase_Controller_Event
         });
     }
 
+    public static function serviceNotEnabled(): \Psr\Http\Message\ResponseInterface
+    {
+        return new \Zend\Diactoros\Response('php://memory', 403);
+    }
+
     public static function publicCerts(): \Psr\Http\Message\ResponseInterface
     {
+        if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
         $keys = [
             'keys' => [
                 [
@@ -93,13 +104,19 @@ class SSO_Controller extends Tinebase_Controller_Event
     public static function publicRegister(): \Psr\Http\Message\ResponseInterface
     {
         //TODO FIXME: The OpenID Provider MAY require an Initial Access Token that is provisioned out-of-band
-
+        //if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        //}
     }
 
     // TODO FIX ME
     // 3.1.2.6.  Authentication Error Response
     public static function publicAuthorize(): \Psr\Http\Message\ResponseInterface
     {
+        if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
         $server = static::getOpenIdConnectServer();
 
         // \League\OAuth2\Server\Grant\AuthCodeGrant::canRespondToAuthorizationRequest
@@ -203,6 +220,10 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     public static function publicToken(): \Psr\Http\Message\ResponseInterface
     {
+        if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
         Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
             ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
         $server = static::getOpenIdConnectServer();
@@ -213,8 +234,12 @@ class SSO_Controller extends Tinebase_Controller_Event
         );
     }
 
-    public static function publicGetWellKnownOpenIdConfiguration(): \Zend\Diactoros\Response
+    public static function publicGetWellKnownOpenIdConfiguration(): \Psr\Http\Message\ResponseInterface
     {
+        if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
         $response = new \Zend\Diactoros\Response('php://memory', 200, ['Content-Type' => 'application/json']);
 
         $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
@@ -358,8 +383,12 @@ class SSO_Controller extends Tinebase_Controller_Event
     /*
      * https://docs.oasis-open.org/security/saml/v2.0/saml-metadata-2.0-os.pdf
      */
-    public static function publicSaml2IdPMetaData(): \Zend\Diactoros\Response
+    public static function publicSaml2IdPMetaData(): \Psr\Http\Message\ResponseInterface
     {
+        if (! SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
         $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
 
         static::initSAMLServer();
@@ -398,8 +427,12 @@ class SSO_Controller extends Tinebase_Controller_Event
         return $response;
     }
 
-    public static function publicSaml2RedirectLogout(): \Zend\Diactoros\Response
+    public static function publicSaml2RedirectLogout(): \Psr\Http\Message\ResponseInterface
     {
+        if (! SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
         try {
             Tinebase_Core::startCoreSession();
         } catch (Zend_Session_Exception $zse) {
@@ -407,27 +440,55 @@ class SSO_Controller extends Tinebase_Controller_Event
             Tinebase_Session::expireSessionCookie();
             return new \Zend\Diactoros\Response($body = 'php://memory', $status = 500);
         }
-        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
 
         static::initSAMLServer();
         $idp = \SimpleSAML\IdP::getById('saml2:tine20');
 
-        try {
-            \SimpleSAML\Module\saml\IdP\SAML2::receiveLogoutMessage($idp);
-            throw new Tinebase_Exception('logout didnt work');
-        } catch (SSO_Facade_SAML_RedirectException $e) {
+        $binding = Binding::getCurrentBinding();
+        $message = $binding->receive();
+
+        $issuer = $message->getIssuer();
+        if ($issuer === null) {
+            /* Without an issuer we have no way to respond to the message. */
+            throw new \SimpleSAML\Error\BadRequest('Received message on logout endpoint without issuer.');
+        } elseif ($issuer instanceof Issuer) {
+            $spEntityId = $issuer->getValue();
+            if ($spEntityId === null) {
+                /* Without an issuer we have no way to respond to the message. */
+                throw new \SimpleSAML\Error\BadRequest('Received message on logout endpoint without issuer.');
+            }
+        } else {
+            $spEntityId = $issuer;
+        }
+
+        $metadata = MetaDataStorageHandler::getMetadataHandler();
+        $idpMetadata = $idp->getConfig();
+        $spMetadata = $metadata->getMetaDataConfig($spEntityId, 'saml20-sp-remote');
+
+        \SimpleSAML\Module\saml\Message::validateMessage($spMetadata, $idpMetadata, $message);
+
+        if ($message instanceof \SAML2\LogoutRequest) {
+            \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6));
+
             $response = new \Zend\Diactoros\Response('php://memory', 302, [
-                'Location' => $e->redirectUrl
+                'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
             ]);
             return $response;
+
+        } else {
+            throw new \SimpleSAML\Error\BadRequest('Unknown message received on logout endpoint: ' . get_class($message));
         }
     }
 
     /**
      * http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0-cd-02.html#5.1.2.SP-Initiated%20SSO:%20%20Redirect/POST%20Bindings|outline
      */
-    public static function publicSaml2RedirectRequest(): \Zend\Diactoros\Response
+    public static function publicSaml2RedirectRequest(): \Psr\Http\Message\ResponseInterface
     {
+        if (! SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
         try {
             Tinebase_Core::startCoreSession();
         } catch (Zend_Session_Exception $zse) {
@@ -439,13 +500,13 @@ class SSO_Controller extends Tinebase_Controller_Event
 
         static::initSAMLServer();
         $idp = \SimpleSAML\IdP::getById('saml2:tine20');
-        $simpleSampleIsRealyGreat = new ReflectionProperty(\SimpleSAML\IdP::class, 'authSource');
-        $simpleSampleIsRealyGreat->setAccessible(true);
-        $simpleSampleIsRealyGreat2 = new ReflectionProperty(\SimpleSAML\Auth\Simple::class, 'authSource');
-        $simpleSampleIsRealyGreat2->setAccessible(true);
-        $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsRealyGreat2->getValue($simpleSampleIsRealyGreat
+        $simpleSampleIsReallyGreat = new ReflectionProperty(\SimpleSAML\IdP::class, 'authSource');
+        $simpleSampleIsReallyGreat->setAccessible(true);
+        $simpleSampleIsReallyGreat2 = new ReflectionProperty(\SimpleSAML\Auth\Simple::class, 'authSource');
+        $simpleSampleIsReallyGreat2->setAccessible(true);
+        $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsReallyGreat2->getValue($simpleSampleIsReallyGreat
             ->getValue($idp)));
-        $simpleSampleIsRealyGreat->setValue($idp, $newSimple);
+        $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
 
         try {
             \SimpleSAML\Module\saml\IdP\SAML2::receiveAuthnRequest($idp);
@@ -548,13 +609,19 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     protected static function initSAMLServer()
     {
+        $sessionReflection = new ReflectionProperty(\SimpleSAML\Session::class, 'instance');
+        $sessionReflection->setAccessible(true);
+        $sessionReflection->setValue(new SSO_Facade_SAML_Session());
+
+        $saml2Config = SSO_Config::getInstance()->{SSO_Config::SAML2};
+
         \SAML2\Compat\ContainerSingleton::setContainer(new SSO_Facade_SAML_Container());
         \SimpleSAML\Configuration::setPreLoadedConfig(new \SimpleSAML\Configuration([
             'metadata.sources' => [['type' => SSO_Facade_SAML_MetaDataStorage::class]],
             'metadata.sign.enable' => true,
-            'metadata.sign.privatekey' => __DIR__ . '/keys/saml2.pem',
-            'metadata.sign.certificate' => __DIR__ . '/keys/saml2.crt',
-            'certificate' => __DIR__ . '/keys/saml2.crt',
+            'metadata.sign.privatekey' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['privatekey'],
+            'metadata.sign.certificate' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['certificate'],
+            'certificate' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['certificate'],
             'enable.saml20-idp' => true,
         ], 'tine20'));
         \SimpleSAML\Configuration::setPreLoadedConfig(new \SimpleSAML\Configuration([

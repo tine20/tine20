@@ -22,6 +22,10 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
     public const MODEL_NAME_PART = 'Saml2RPConfig';
 
     public const FLD_NAME = 'name';
+    public const FLD_ASSERTION_CONSUMER_SERVICE_LOCATION = 'AssertionConsumerServiceLocation';
+    public const FLD_ASSERTION_CONSUMER_SERVICE_BINDING = 'AssertionConsumerServiceBinding';
+    public const FLD_ENTITYID = 'entityid';
+    public const FLD_SINGLE_LOGOUT_SERVICE_LOCATION = 'singleLogoutServiceLocation';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -50,13 +54,61 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
                 ],
                 self::LABEL                 => 'Name', // _('Name')
             ],
+            self::FLD_ENTITYID          => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+                self::LABEL                 => 'Entity ID', // _('Entity ID')
+            ],
+            self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING    => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+                self::LABEL                 => 'Consumer Service Binding', // _('Consumer Service Binding')
+            ],
+            self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION   => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+                self::LABEL                 => 'Consumer Service Location', // _('Consumer Service Location')
+            ],
+            self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION   => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+                self::LABEL                 => 'Logout Service Location', // _('Logout Service Location')
+            ],
         ]
     ];
 
     public function getSaml2Array(): array
     {
         return [
-
+            'AssertionConsumerService' => [
+                'Location' => $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION},
+                'Binding' => $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING},
+            ],
+            'SingleLogoutService' => [
+                'Location' => $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION},
+            ],
+            'IDPList' => [ /* add us, aka IDP */],
+            'entityid' => $this->{self::FLD_ENTITYID},
+            'attributeencodings' => [
+                'eduPersonPrincipalName' => 'string',
+            ],
+            'ForceAuthn' => true,
         ];
     }
 }

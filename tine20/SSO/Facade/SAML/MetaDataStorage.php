@@ -24,7 +24,7 @@ class SSO_Facade_SAML_MetaDataStorage extends \SimpleSAML\Metadata\MetaDataStora
 
         switch ($set) {
             // the SP aka relyingparty config
-            case 'saml20-sp-remote': /*
+            case 'saml20-sp-remote':
                 $rp = SSO_Controller_RelyingParty::getInstance()->search(
                     Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_RelyingParty::class, [
                         ['field' => SSO_Model_RelyingParty::FLD_NAME, 'operator' => 'equals', 'value' => $index],
@@ -35,29 +35,18 @@ class SSO_Facade_SAML_MetaDataStorage extends \SimpleSAML\Metadata\MetaDataStora
                     $result = [];
                 } else {
                     $result = $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->getSaml2Array();
-                }*/
-                $result = [
-                    'AssertionConsumerService' => [
-                        'Location' => 'https://localhost:8443/auth/saml2/sp/saml2-acs.php/localhost',
-                        'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-                    ],
-                    'IDPList' => [ /* add us, aka IDP */],
-                    'entityid' => 'https://localhost:8443/auth/saml2/sp/metadata.php',
-                    'attributeencodings' => [
-                        'eduPersonPrincipalName' => 'string',
-                    ],
-                    'ForceAuthn' => true,
-                ];
+                }
                 $cache[$set][$index] = $result;
                 return $result;
                 
             default:
                 // this is the IDP config
+                $saml2Config = SSO_Config::getInstance()->{SSO_Config::SAML2};
                 return [
                     'auth' => 'tine20',
-                    'entityid' => 'tine20',
-                    'privatekey' => dirname(dirname(__DIR__)) . '/keys/saml2.pem',
-                    'certificate' => dirname(dirname(__DIR__)) . '/keys/saml2.crt',
+                    'entityid' => $saml2Config->{SSO_Config::SAML2_ENTITYID},
+                    'privatekey' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['privatekey'],
+                    'certificate' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['certificate'],
                     //'validate.authnrequest' => true, // TODO FIXME enable this, add certs to aboves SP config
                 ];
         }

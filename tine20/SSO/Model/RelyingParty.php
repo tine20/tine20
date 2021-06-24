@@ -23,9 +23,6 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
     public const TABLE_NAME = 'sso_relying_party';
 
     public const FLD_NAME = 'name';
-    public const FLD_REDIRECT_URLS = 'redirect_urls';
-    public const FLD_SECRET = 'secret';
-    public const FLD_IS_CONFIDENTIAL = 'is_confidential';
     public const FLD_CONFIG = 'config';
     public const FLD_CONFIG_CLASS = 'config_class';
 
@@ -73,28 +70,6 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
                 ],
                 self::LABEL                 => 'Name', // _('Name')
             ],
-            self::FLD_REDIRECT_URLS     => [
-                self::TYPE                  => self::TYPE_JSON,
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-                self::LABEL                 => 'Redirect URLs', // _('Redirect URLs')
-            ],
-            self::FLD_SECRET            => [
-                self::TYPE                  => self::TYPE_STRING,
-                self::LENGTH                => 255,
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-                self::LABEL                 => 'Secret', // _('Secret')
-            ],
-            self::FLD_IS_CONFIDENTIAL   => [
-                self::TYPE                  => self::TYPE_BOOLEAN,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::DEFAULT_VAL           => 0,
-            ],
             self::FLD_CONFIG_CLASS      => [
                 self::TYPE                  => self::TYPE_STRING,
             ],
@@ -102,6 +77,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_DYNAMIC_RECORD,
                 self::CONFIG                => [
                     self::REF_MODEL_FIELD       => self::FLD_CONFIG_CLASS,
+                    self::PERSISTENT            => true,
                 ],
             ],
         ]
@@ -110,6 +86,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
     public function validateSecret(string $secret): bool
     {
         // TODO fixme needs to use hashing
-        return $this->{self::FLD_SECRET} === $secret;
+        // TODO fixme this is OAuth and should be moved to oauth config class
+        return $this->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_SECRET} === $secret;
     }
 }
