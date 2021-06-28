@@ -79,7 +79,6 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         if (null === $this->_sortColumns) {
             $this->_sortColumns = [];
             if ($this->_readModelConfig()) {
-                $this->_ensureRepeatableResults();
                 foreach ($this->sort as $field) {
                     if (!isset($this->_externalSortMapping[$field]) && (!isset($this->_virtualFields[$field]) ||
                             (!isset($virtualFields[$field]['type']) ||
@@ -312,13 +311,10 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     protected function _ensureRepeatableResults()
     {
         // jupp, this sucks all over the place :-/
-        if (empty($this->sort) || empty($this->dir)) {
+        if (empty($this->sort)) {
             $this->sort = [];
-            $this->dir = 'ASC';
-        } else {
-            if (!is_array($this->sort)) {
-                $this->sort = [$this->sort];
-            }
+        } elseif (!is_array($this->sort)) {
+            $this->sort = [$this->sort];
         }
         if (!in_array($this->_identifier, $this->sort)) {
             $this->xprops('sort')[] = $this->_identifier;
