@@ -266,7 +266,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         );
         $pagination = new Tinebase_Model_Pagination([
             'limit' => 1,
-            'order' => 'start',
+            'sort' => 'start',
             'dir'   => 'DESC'
         ]);
         return Phone_Controller_Call::getInstance()->search($filter, $pagination)->getFirstRecord();

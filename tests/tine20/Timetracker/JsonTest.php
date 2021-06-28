@@ -128,6 +128,30 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         //self::assertGreaterThan(0, count($ta['grants']), 'grants not resolved in ' . print_r($ta, true));
     }
 
+    // we are testing pagination with \Timetracker_Backend_Timesheet::$_defaultSecondarySort here
+    public function testSearchTimesheetsDESC()
+    {
+        $pagination = $this->_getPaging();
+        $pagination['dir'] = 'DESC';
+
+        $filter = [
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    [
+                        'condition' => 'AND',
+                        'filters' => [
+                            ['field' => 'start_date', 'operator' => 'within', 'value' => ["from" => "2021-06-14 00:00:00", "until" => "2021-06-20 23:59:59"]],
+                        ]
+                    ]
+                ]
+            ],
+            ['field' => 'query', 'operator' => 'contains', 'value' => '']
+        ];
+
+        $this->_json->searchTimesheets($filter, $pagination);
+    }
+
     /**
      * try to get a Timeaccount with a TA filter
      * 
