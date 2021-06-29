@@ -181,18 +181,17 @@ function cleanupTinebase() {
 function moveCustomapps() {
     echo "moving custom apps... "
 
-    #copy code
-    for FILE in ${TINE20ROOT}/tine20/vendor/metaways/tine20-*/lib/*; do
-        if [ -d "$FILE/translations" ] || [ -d "$FILE/Setup" ]; then
-            mv "$FILE" "${TINE20ROOT}/tine20"
-            echo " moveed $FILE"
-        fi
-    done
+    for PACKAGE in ${TINE20ROOT}/tine20/vendor/metaways/tine20-*; do
+        for FILE in $PACKAGE/lib/*; do
+            if [ -d "$FILE/translations" ] || [ -d "$FILE/Setup" ]; then
+                rm ${TINE20ROOT}/tine20/$(basename $FILE)
+                mv "$FILE" "${TINE20ROOT}/tine20"
+                echo " moved $FILE"
+            fi
+        done
 
-    #delete custom app folder
-    for FILE in ${TINE20ROOT}/tine20/vendor/metaways/tine20-*; do
-        echo " delete $FILE"
-        rm -rf "$FILE"
+        echo " delete $PACKAGE"
+        rm -rf "$PACKAGE"
     done
 }
 
