@@ -19,4 +19,4 @@ message="$message"'\n'"$CI_PIPELINE_URL"
 
 echo $message
 
-$CI_PROJECT_DIR/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "$message"
+${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "$message"

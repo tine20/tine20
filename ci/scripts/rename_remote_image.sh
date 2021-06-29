@@ -9,6 +9,9 @@ old_tag=$5
 new_repo=$6
 new_tag=$7
 
+
+echo "$0 retagging $registry $old_repo/$old_tag to $new_repo/$new_tag"
+
 if ! curl -s -f --user $user:$password -H "accept: application/vnd.docker.distribution.manifest.v2+json" https://$registry/v2/$old_repo/manifests/$old_tag > /dev/null; then
 	curl -s --user $user:$password -H "accept: application/vnd.docker.distribution.manifest.v2+json" https://$registry/v2/$old_repo/manifests/$old_tag;
 	exit 1;
