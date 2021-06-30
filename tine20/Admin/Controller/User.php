@@ -364,7 +364,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_passwordRepeat = '';
         }
         if (!$_ignorePwdPolicy) {
-            Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
+            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $_user);
         }
 
         try {
