@@ -567,6 +567,8 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     */
     public function importMembers($tempFileId, $courseId)
     {
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
         $this->checkRight(Courses_Acl_Rights::ADD_NEW_USER);
         
         $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
@@ -589,7 +591,33 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $this->_manageAccessGroups($groupMembers, $course);
         $this->_addToStudentGroup($groupMembers);
         $this->_addToUserDefaultGroup($groupMembers);
-        
+
+        $createdAccounts = $importer->getCreatedAccounts();
+        $createdPwds = $importer->getCreatedPasswords();
+
+        // feed data into export and store it as course attachment
+        $export = new Courses_Export_PwdPrintableDoc(new Tinebase_Record_RecordSet(Tinebase_Model_FullUser::class,
+            $createdAccounts), $createdPwds);
+
+        $export->generate();
+        $tmpFile = Tinebase_TempFile::getTempPath();
+        $tmpFileRAII = new Tinebase_RAII(function() use($tmpFile) {
+            unlink($tmpFile);
+        });
+        $export->save($tmpFile);
+        $attachmentsDir = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($course, true);
+        $attachmentPath = $attachmentsDir . '/' . $export->getDownloadFilename();
+        $fs = Tinebase_FileSystem::getInstance();
+        $i = 0;
+        while ($fs->fileExists($attachmentPath)) {
+            $parts = pathinfo($export->getDownloadFilename());
+            $attachmentPath = $attachmentsDir . '/' . $parts['filename'] . '(' . (++$i) . ' )' . $parts['extension'];
+        }
+        copy($tmpFile, 'tine20://' . $attachmentPath);
+
+        $transaction->release();
+        unset($tmpFileRAII);
+
         return $result;
     }
     
@@ -609,7 +637,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
             'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
             'userNameSchema'                => $this->_config->get(Courses_Config::STUDENTS_USERNAME_SCHEMA, 1),
-            'password'                      => $this->getStudentPassword($course->name),
+            'passwordGenerator'             => function(Tinebase_Model_FullUser $user) {
+                return Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
+            },
             'course'                        => $course,
             'accountLoginShell'             => '/bin/false',
             'samba'                         => (isset($this->_config->samba)) ? array(
@@ -621,18 +651,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                 'pwdMustChange' => new Tinebase_DateTime('@1')
             ) : array(),
         );
-    }
-    
-    
-    /**
-     * Returns default student password
-     * 
-     * @param string $courseName
-     * @return string
-     */
-    public function getStudentPassword($courseName)
-    {
-        return strtolower($courseName) . $this->_config->get(Courses_Config::STUDENT_PASSWORD_SUFFIX, '');
     }
     
     /**

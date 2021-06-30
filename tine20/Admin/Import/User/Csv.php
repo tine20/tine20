@@ -19,6 +19,9 @@
  */
 class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
 {
+    protected $_createdPasswords = [];
+    protected $_createdAccounts = [];
+
     /**
      * additional config options
      * 
@@ -34,7 +37,27 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
         'accountLoginShell'             => '',
         'userNameSchema'                => 1
     );
-    
+
+    /**
+     * init import result data
+     */
+    protected function _initImportResult()
+    {
+        parent::_initImportResult();
+        $this->_createdPasswords = [];
+        $this->_createdAccounts = [];
+    }
+
+    public function getCreatedPasswords(): array
+    {
+        return $this->_createdPasswords;
+    }
+
+    public function getCreatedAccounts(): array
+    {
+        return $this->_createdAccounts;
+    }
+
     /**
      * set controller
      *
@@ -95,6 +118,8 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
             if ($record->isValid()) {
                 if (!$this->_options['dryrun']) {
                     $record = $this->_controller->create($record, $password, $password);
+                    $this->_createdPasswords[$record->getId()] = $password;
+                    $this->_createdAccounts[$record->getId()] = $record;
                 } else {
                     $this->_importResult['results']->addRecord($record);
                 }
