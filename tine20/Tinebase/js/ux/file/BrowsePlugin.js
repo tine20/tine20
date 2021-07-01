@@ -23,10 +23,15 @@ Ext.ux.file.BrowsePlugin = function (config) {
  */
 Ext.ux.file.BrowsePlugin.prototype = {
     /**
+     * @cfg {Boolean} allowFolder
+     * allow folder to be selected (HTML 5 only)
+     */
+    allowFolder: false,
+    /**
      * @cfg {Boolean} multiple
      * allow multiple files to be selected (HTML 5 only)
      */
-    multiple: false,
+    multiple: true,
     /**
      * @cfg {Ext.Element} dropEl
      * element used as drop target if enableFileDrop is enabled
@@ -79,7 +84,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
     scope: null,
 
     currentTreeNodeUI: null,
-
+    
     /**
      * @see Ext.Button.initComponent
      */
@@ -117,14 +122,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         e.preventDefault();
         this.component.el.applyStyles(' background-color: transparent');
         this.onBrowseButtonClick();
-        var me = this;
-
-        // easy cope with directories
-        var fs = require('html5-file-selector'),
-            dt = e.browserEvent.dataTransfer;
-            fs.getDataTransferFiles(dt).then(function(files) {
-                me.onInputFileChange(e, window.lodash.map(files, 'fileObject'));
-            });
+        this.onInputFileChange(e);
     },
 
     onRender: function () {
@@ -188,6 +186,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.input_file.setAttribute('type', 'file');
         this.input_file.setAttribute('style', 'display: none;');
         this.input_file.multiple = this.multiple;
+        // we can not select file and folder at the same time
+        this.input_file.webkitdirectory = this.allowFolder;
         this.component.el.dom.appendChild(this.input_file);
 
         this.input_file.addEventListener('change', this.onInputFileChange.bind(this), false);
@@ -198,12 +198,14 @@ Ext.ux.file.BrowsePlugin.prototype = {
 
     /**
      * Handler when inputFileEl changes value (i.e. a new file is selected).
-     * @param {FileList} files when input comes from drop...
+     * @param e
      * @private
      */
-    onInputFileChange: function (e, files) {
-        var _ = window.lodash;
-
+    onInputFileChange: async function (e) {
+        // easy cope with directories
+        const fs = await require('html5-file-selector/src');
+        const files = await fs.getDroppedOrSelectedFiles(e.browserEvent || e);
+        
         if (files) {
             this.files = files;
         } else {
@@ -213,7 +215,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 this.files = e.target.files;
             }
         }
-
+        
         if (!_.isFunction(e.getTarget)) {
             // backwards compatibility
             e.getTarget = function () {

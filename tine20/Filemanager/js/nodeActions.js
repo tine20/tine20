@@ -158,18 +158,18 @@ Tine.Filemanager.nodeActions.CreateFolder = {
             nodeName = Tine.Filemanager.Model.Node.getContainerName();
 
         if (! currentPath) return;
-
         const grid = _.get(this, 'initialConfig.selectionModel.grid');
         if (grid) {
             const gridWdgt = grid.ownerCt.ownerCt;
             const newRecord = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
                 name: app.i18n._('New Folder'),
-                type: 'folder'
+                type: 'folder',
+                path: `${currentPath}`,
             }));
             
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
                 return new Promise((resolve, reject) => {
-                    Tine.Filemanager.nodeBackend.createFolder(currentPath + '/' + localRecord.get('name'), {
+                    Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`, {
                         success: resolve,
                         failure: reject
                     });
@@ -183,7 +183,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                         return;
                     }
 
-                    var filename = currentPath + '/' + text;
+                    const filename = `${currentPath}${text}/`;
                     Tine.Filemanager.nodeBackend.createFolder(filename);
                 }
             }, this);
@@ -261,7 +261,7 @@ Tine.Filemanager.nodeActions.Rename = {
             buttons: Ext.MessageBox.OKCANCEL,
             value: record.get('name'),
             fn: function (btn, text) {
-                if (btn == 'ok') {
+                if (btn === 'ok') {
                     if (!text) {
                         Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), nodeName), String.format(i18n._('You have to supply a {0} name!'), nodeName));
                         return;
@@ -352,9 +352,22 @@ Tine.Filemanager.nodeActions.Delete = {
             title: app.i18n._('Do you really want to delete the following files?'),
             text: nodeName,
             scope: this,
-            handler: function (button) {
-                if (nodes && button == 'yes') {
-                    Tine.Filemanager.nodeBackend.deleteItems(nodes);
+            handler: async function (button) {
+                if (nodes && button === 'yes') {
+                    try {
+                        // announce delete before server delete to improve ux
+                        _.each(nodes, function(record) {
+                            window.postal.publish({
+                                channel: "recordchange",
+                                topic: 'Filemanager.Node.delete',
+                                data: record.data
+                            });
+                        });
+                        
+                        await Tine.Filemanager.deleteNodes(_.map(nodes, 'data.path'));
+                    } catch (e) {
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(e);
+                    }
                 }
 
                 for (var i = 0; i < nodes.length; i++) {

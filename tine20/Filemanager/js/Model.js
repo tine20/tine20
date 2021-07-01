@@ -159,6 +159,36 @@ Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision', 
 });
 
 Tine.Filemanager.nodeBackendMixin = {
+    
+    /**
+     * searches all (lightweight) records matching filter
+     *
+     * @param   {Object} filter
+     * @param   {Object} paging
+     * @param   {Object} options
+     * @return  {Number} Ext.Ajax transaction id
+     * @success {Object} root:[records], totalcount: number
+     */
+    searchRecords: function(filter, paging, options) {
+        const cb = options.success;
+        options.success = function(response) {
+            const path = _.get(_.find(filter, {field: 'path'}), 'value');
+            if (path) {
+                const virtualNodes = Tine.Tinebase.uploadManager.getVirtualNodesByPath(path);
+                _.each(virtualNodes, (nodeData) => {
+                    if (!_.find(_.map(response.records, 'data'), {name: nodeData.name})) {
+                        response.records.push(new this.recordClass(nodeData));
+                    }
+                })
+                response.records = _.orderBy(response.records, ['data.name'], [paging.dir.toLowerCase()]);
+            }
+            
+            cb.apply(cb.scope, arguments);
+        }
+        return Tine.Tinebase.data.RecordProxy.prototype.searchRecords.apply(this, arguments);
+    },
+    
+    
     /**
      * creating folder
      * 
@@ -167,26 +197,34 @@ Tine.Filemanager.nodeBackendMixin = {
      * @returns
      */
     createFolder: function(name, options) {
-        
-        options = options || {};
-        var params = {
-                application : this.appName,
-                filename : name,
-                type : 'folder',
-                method : this.appName + ".createNode"  
-        };
-        
-        options.params = params;
-        
-        options.beforeSuccess = function(response) {
-            var folder = this.recordReader(response);
-            folder.set('client_access_time', new Date());
-            this.postMessage('create', folder.data);
-            return [folder];
-        };
-
-        return this.doXHTTPRequest(options);
+        return new Promise((fulfill, reject) => {
+            options = options || {};
+            _.wrap(_.escape, function(func, text) {
+                return '<p>' + func(text) + '</p>';
+            });
+            
+            options.success = (options.success || Ext.emptyFn).createSequence(fulfill);
+            options.failure = (options.failure || Ext.emptyFn).createSequence(reject);
+            
+            var params = {
+                    application : this.appName,
+                    filename : name,
+                    type : 'folder',
+                    method : this.appName + ".createNode"  
+            };
+            
+            options.params = params;
+            
+            options.beforeSuccess = function(response) {
+                const folder = this.recordReader(response);
+                folder.data.path = name;
+                this.postMessage('create', folder.data);
+                return [folder];
+            };
+            this.doXHTTPRequest(options);
+        });
     },
+    
     
     /**
      * is automatically called in generic GridPanel
@@ -195,52 +233,8 @@ Tine.Filemanager.nodeBackendMixin = {
         if(record.hasOwnProperty('fileRecord')) {
             return;
         } else {
-            Tine.Tinebase.data.RecordProxy.prototype.saveRecord.call(this, record, request);
+            //Tine.Tinebase.data.RecordProxy.prototype.saveRecord.call(this, record, request);
         }
-    },
-
-    /**
-     * deleting file or folder
-     *
-     * overridden cause json fe works on filenames / not id's
-     *
-     * @param items     files/folders to delete
-     * @param options   additional options
-     * @returns
-     */
-    deleteItems: function(items, options) {
-        options = options || {};
-
-        var _ = window.lodash,
-            me = this,
-            filenames = new Array(),
-            nodeCount = items.length;
-
-        for(var i=0; i<nodeCount; i++) {
-            filenames.push(items[i].data.path );
-        }
-
-        var params = {
-            application: this.appName,
-            filenames: filenames,
-            method: this.appName + ".deleteNodes",
-            timeout: 300000 // 5 minutes
-        };
-
-        options.params = params;
-
-        options.beforeSuccess = function(response) {
-            var folder = this.recordReader(response);
-            folder.set('client_access_time', new Date());
-            return [folder];
-        };
-
-        // announce delte before server delete to improve ux
-        _.each(items, function(record) {
-            me.postMessage('delete', record.data);
-        });
-
-        return this.doXHTTPRequest(options);
     },
     
     /**
@@ -437,11 +431,9 @@ Tine.Filemanager.nodeBackendMixin = {
 
             for (var i = 0; i < this.uploadKeyArray.length; i++) {
                 var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKeyArray[i]);
-
-                Tine.Tinebase.uploadManager.getUpload(this.uploadKeyArray[i]).on('update', me.onUploadUpdate.createDelegate(me));
-
+                var nodeRecord = Tine.Tinebase.data.Record.setFromJson(nodeData[i], Tine.Filemanager.Model.Node);
+                
                 if (addToGridStore) {
-                    var nodeRecord = Tine.Tinebase.data.Record.setFromJson(nodeData[i], Tine.Filemanager.Model.Node);
 
                     var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
                     if (existingRecordIdx > -1) {
@@ -451,9 +443,10 @@ Tine.Filemanager.nodeBackendMixin = {
                         gridStore.add(nodeRecord);
                     }
                     
-                    fileRecord = Tine.Filemanager.nodeBackend.updateNodeRecord(nodeData[i], fileRecord);
-                    nodeRecord.fileRecord = fileRecord;
                 }
+                
+                fileRecord = Tine.Filemanager.nodeBackend.updateNodeRecord(nodeData[i], fileRecord);
+                nodeRecord.fileRecord = fileRecord;
             }
 
         }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});
@@ -477,111 +470,6 @@ Tine.Filemanager.nodeBackendMixin = {
             failure: onFailure || Ext.emptyFn
         });
     },
-
-    /**
-     * Is fired if there is any change for an uploading file
-     *
-     * Is bind to the record proxy scope
-     */
-    onUploadUpdate: function (change, upload, fileRecord) {
-        var app = Tine.Tinebase.appMgr.get(this.appName),
-            grid = app.getMainScreen().getCenterPanel(),
-            rowsToUpdate = grid.store.query('name', fileRecord.get('name'));
-
-        if (change === 'uploadstart') {
-            Tine.Tinebase.uploadManager.onUploadStart();
-        } else if (change === 'uploadfailure') {
-            if (Ext.isFunction(grid.onUploadFail)) {
-                grid.onUploadFail();
-            } else {
-                // TODO do something on failure?
-            }
-        }
-
-        if (rowsToUpdate.get(0)) {
-            if (change === 'uploadcomplete') {
-                this.onUploadComplete.call(grid, this, upload, fileRecord);
-            } else if (change === 'uploadfinished') {
-                rowsToUpdate.get(0).set('size', fileRecord.get('size'));
-                rowsToUpdate.get(0).set('contenttype', fileRecord.get('contenttype'));
-            }
-
-            rowsToUpdate.get(0).afterEdit();
-            rowsToUpdate.get(0).commit(false);
-        }
-    },
-
-    /**
-     * updating fileRecord after creating node
-     *
-     * @param response
-     * @param request
-     * @param upload
-     */
-    onNodeCreated: function (response, request, upload) {
-        var record = Ext.util.JSON.decode(response.responseText);
-
-        var fileRecord = upload.fileRecord;
-        fileRecord.beginEdit();
-        fileRecord.set('contenttype', record.contenttype);
-        fileRecord.set('created_by', Tine.Tinebase.registry.get('currentAccount'));
-        fileRecord.set('creation_time', record.creation_time);
-        fileRecord.set('revision', record.revision);
-        fileRecord.set('last_modified_by', record.last_modified_by);
-        fileRecord.set('last_modified_time', record.last_modified_time);
-        fileRecord.set('name', record.name);
-        fileRecord.set('path', record.path);
-        fileRecord.set('status', 'complete');
-        fileRecord.set('progress', 100);
-        fileRecord.commit(false);
-
-        upload.fireEvent('update', 'uploadfinished', upload, fileRecord);
-
-        var allRecordsComplete = true;
-        var storeItems = this.getStore().getRange();
-        for (var i = 0; i < storeItems.length; i++) {
-            if (storeItems[i].get('status') && storeItems[i].get('status') !== 'complete') {
-                allRecordsComplete = false;
-                break;
-            }
-        }
-
-        if (allRecordsComplete) {
-            this.pagingToolbar.refresh.enable();
-        }
-    },
-
-    /**
-     * copies uploaded temporary file to target location
-     *
-     * @param proxy  {Tine.Filemanager.nodeBackend}
-     * @param upload  {Ext.ux.file.Upload}
-     * @param file  {Ext.ux.file.Upload.file}
-     */
-    onUploadComplete: function(proxy, upload, file) {
-        Ext.Ajax.request({
-            timeout: 10*60*1000, // Overriding Ajax timeout - important!
-            params: {
-                method: proxy.appName + '.createNode',
-                filename: upload.fileRecord.get('path'),
-                type: 'file',
-                tempFileId: file.get('id'),
-                forceOverwrite: true
-            },
-            success: proxy.onNodeCreated.createDelegate(this, [upload], true),
-            failure: function(response, request) {
-                let app = Tine.Tinebase.appMgr.get('Filemanager');
-                let msg = app.formatMessage('Error while uploading "{fileName}". Please try again later.',
-                    {fileName: file.get('name') });
-
-                Ext.MessageBox.alert(app.formatMessage('Upload Failed'), msg)
-                    .setIcon(Ext.MessageBox.ERROR);
-
-            }
-        });
-
-    },
-
     /**
      * exception handler for this proxy
      * 

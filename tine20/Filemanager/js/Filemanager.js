@@ -109,7 +109,6 @@ Tine.Tinebase.appMgr.isInitialised('Filemanager').then(() => {
         });
     }
 });
-
 /**
  * @namespace Tine.Filemanager
  * @class Tine.Filemanager.MainScreen
