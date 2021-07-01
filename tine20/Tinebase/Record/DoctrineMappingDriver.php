@@ -31,7 +31,6 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_STRING_AUTOCOMPLETE   => 'string',
         MCC::TYPE_TEXT                  => 'text',
         MCC::TYPE_FULLTEXT              => 'text',
-        MCC::TYPE_STRICTFULLTEXT        => 'text',
         MCC::TYPE_DATETIME              => 'datetime',
         MCC::TYPE_DATE                  => 'datetime',
         MCC::TYPE_TIME                  => 'time',

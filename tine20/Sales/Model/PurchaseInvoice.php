@@ -83,10 +83,9 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'queryFilter' => TRUE,
             ),
             'description' => array(
-                self::LABEL         => 'Description', // _('Description')
-                self::TYPE          => self::TYPE_STRICTFULLTEXT,
-                self::VALIDATORS    => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                self::QUERY_FILTER  => TRUE,
+                'label'   => 'Description',     // _('Description')
+                'queryFilter' => TRUE,
+                'type' => 'fulltext'
             ),
             'date' => array(
                 'type'  => 'date',
