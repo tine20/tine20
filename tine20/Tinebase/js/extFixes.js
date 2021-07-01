@@ -797,6 +797,23 @@ Ext.override(Ext.tree.TreePanel, {
         } catch(e) {
             return null;
         }
+    },
+
+    /**
+     * Gets a node in this tree by its path
+     * @param {String} path
+     * @return {Node}
+     */
+    getNodeByPath : function(path){
+        try {
+            const node = _.filter(this.nodeHash, (node) => {
+                return node?.attributes?.path === path;
+            });
+            
+            return node[0];
+        } catch(e) {
+            return null;
+        }
     }
 });
 

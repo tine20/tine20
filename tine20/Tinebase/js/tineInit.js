@@ -1075,6 +1075,7 @@ Tine.Tinebase.tineInit = {
      */
     initUploadMgr: function () {
         Tine.Tinebase.uploadManager = new Ext.ux.file.UploadManager();
+        Tine.Tinebase.uploadManager.InitChannels();
     },
     
     /**

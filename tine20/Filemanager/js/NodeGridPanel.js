@@ -10,6 +10,9 @@ Ext.ns('Tine.Filemanager');
 require('./nodeActions');
 require('./nodeContextMenu');
 
+import upload from './upload';
+
+const { retryAllRejectedPromises } = require('promises-to-retry');
 /**
  * File grid panel
  *
@@ -125,6 +128,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push({field: 'path'});
         }
 
+        
         Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
         this.getStore().on('load', this.onLoad.createDelegate(this));
         this.getGrid().on('beforeedit', this.onBeforeEdit, this);
@@ -143,8 +147,106 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         //         this.actionUpdater.updateActions(record);
         //     }
         // }, this);
+        
     },
 
+    /**
+     * get record by data path
+     * @param data
+     * @returns {string}
+     */
+    getRecordByData(data) {
+        const store = this.getStore();
+
+        const record = _.filter(store.data.items, (node) => {
+            if (node.get('path')) {
+                return node.get('path') === data?.path;
+            } else {
+                return node.get('name') === data?.name || node.get('id') === data?.id;
+            }
+        })
+        
+        return record[0];
+    },
+
+    /**
+     * check if node path is in current grid panel
+     * @param path
+     * @returns {boolean}
+     */
+    isInCurrentGrid(path) {
+        const CurrentNodePath = _.get(_.get(this.getFilteredContainers(), '0'), 'path');
+        return `${this.getParentPath(path)}/` === CurrentNodePath;
+    },
+
+    /**
+     * bus notified about record changes
+     */
+    onRecordChanges: function(data, e) {
+        const existingRecord = this.getRecordByData(data);
+
+        if (e.topic.match(/\.create/) || e.topic.match(/\.update/)) {
+            this.onUpdateGridPanel(data);
+        }else if (existingRecord && e.topic.match(/\.delete/)) {
+            this.store.remove(existingRecord);
+        } else {
+            if (this.isInCurrentGrid(_.get(data, 'path'))) {
+                this.bufferedLoadGridData({
+                    removeStrategy: 'keepBuffered'
+                });
+            }
+        }
+        // NOTE: grid doesn't update selections itself
+        this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
+    },
+
+    /**
+     * on update after edit
+     *
+     * @param {String|Tine.Tinebase.data.Record} record
+     * @param {String} mode
+     */
+    onUpdateGridPanel: function(record, mode) {
+        if (! this.rendered) {
+            return;
+        }
+
+        record = this.createRecord(JSON.stringify(record), mode);
+
+        Tine.log.debug('Tine.Filemanager.NodeGridPanel::onUpdateRecord() -> record:');
+        Tine.log.debug(record, mode);
+
+        if (record && Ext.isFunction(record.copy)) {
+            const store = this.getStore();
+            
+            if (this.isInCurrentGrid(record.get('path'))) {
+                const idx = store.findExact('id', record.get('id')) > -1 ?
+                    store.findExact('id', record.get('id')) :
+                    store.findExact('name', record.get('name'));
+                const isSelected = this.getGrid().getSelectionModel().isSelected(idx);
+                
+                if (idx > -1) {
+                    store.removeAt(idx);
+                    store.insert(idx, [record]);
+                } else {
+                    store.add([record]);
+                }
+                
+                // sort new/edited record
+                store.remoteSort = false;
+                store.sort(
+                    _.get(store, 'sortInfo.field', this.recordClass.getMeta('titleField')),
+                    _.get(store, 'sortInfo.direction', 'ASC')
+                );
+                store.remoteSort = this.storeRemoteSort;
+                
+                if (isSelected) {
+                    this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
+                }
+            }
+        }
+    },
+   
     /**
      * check if record can be edited
      *
@@ -442,14 +544,16 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     /**
      * returns add action / test
+     * 
+     * - handle both file and folder upload action
      *
      * @return {Object} add action config
      */
-    getAddAction: function () {
+    getAddAction: function (allowFolder) {
         return {
             requiredGrant: 'addGrant',
             actionType: 'add',
-            text: this.app.i18n._('Upload'),
+            text: allowFolder ? this.app.i18n._('Upload Folder ') : this.app.i18n._('Upload File'),
             handler: this.onFilesSelect,
             disabled: true,
             scope: this,
@@ -457,7 +561,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 ptype: 'ux.browseplugin',
                 multiple: true,
                 enableFileDrop: false,
-                disable: true
+                disable: true,
+                allowFolder: allowFolder
             }],
             iconCls: 'action_add',
             actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
@@ -532,7 +637,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         // grid only actions - work on node which is displayed (this.currentFolderNode)
         // @TODO: fixme - ux problems with filterselect / initialData
-        this.action_upload = new Ext.Action(this.getAddAction());
+        this.action_file_upload = new Ext.Action(this.getAddAction(false));
+        this.action_folder_upload = new Ext.Action(this.getAddAction(true));
         this.action_goUpFolder = new Ext.Action({
             allowMultiple: true,
             actionType: 'goUpFolder',
@@ -585,7 +691,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.actionUpdater.addActions(this.folderContextMenu.items);
 
         var actions = [
-            this.action_upload,
+            this.action_file_upload,
+            this.action_folder_upload,
             this.action_createFolder,
             this.action_goUpFolder,
             this.action_download,
@@ -666,15 +773,20 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * returns view row class
      */
     getViewRowClass: function(record, index, rowParams, store) {
-        var className = Tine.Filemanager.NodeGridPanel.superclass.getViewRowClass.apply(this, arguments);
+        let className = Tine.Filemanager.NodeGridPanel.superclass.getViewRowClass.apply(this, arguments);
 
         if (this.dataSafeEnabled && !!record.get('pin_protected_node')) {
             className += ' x-type-data-safe'
         }
+        
+        const updatedRecord = _.get(arguments[0], 'json') ?? _.get(arguments[0], 'data');
+        if (_.get(updatedRecord,'status') === 'pending') {
+            className += ' x-type-data-pending'
+        }
 
         return className;
     },
-
+    
     /**
      * get the right contextMenu
      */
@@ -694,13 +806,15 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! this.actionToolbar) {
             var items = [
                 this.splitAddButton ?
-                    Ext.apply(new Ext.SplitButton(this.action_upload), {
+                    Ext.apply(new Ext.SplitButton(this.action_file_upload), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top',
                         arrowAlign:'right',
                         menu: new Ext.menu.Menu({
-                            items: [],
+                            items: [
+                                this.action_folder_upload
+                            ],
                             plugins: [{
                                 ptype: 'ux.itemregistry',
                                 key:   'Tine.widgets.grid.GridPanel.addButton'
@@ -710,7 +824,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             }]
                         })
                     }) :
-                    Ext.apply(new Ext.Button(this.action_upload), {
+                    Ext.apply(new Ext.Button(this.action_file_upload), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
@@ -809,8 +923,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      * @param {Sting | Tine.Filemanager.Model.Node} path
      */
-    expandFolder: function (path) {
-        path = _.get(path, 'data.path', path);
+    expandFolder: function (nodeData) {
+        if (nodeData?.json?.status === 'pending') {
+            return;
+        }
+        
+        const path = _.get(nodeData, 'data.path', nodeData);
         this.filterToolbar.filterStore.each(function (filter) {
             var field = filter.get('field');
             if (field === 'path') {
@@ -856,38 +974,37 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
     },
+    
 
     /**
-     * upload new file and add to store
+     * upload new files and add to store
      *
+     * - handle both folder and files
+     * 
      * @param {ux.BrowsePlugin} fileSelector
-     * @param {} e
+     * @param event
      */
-    onFilesSelect: function (fileSelector, event) {
-        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+    onFilesSelect: async function (fileSelector, event) {
+        let app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = this,
-            targetNode = grid.currentFolderNode ? grid.currentFolderNode : _.get(this.getFilteredContainers(),'0'),
+            targetNode = grid.currentFolderNode ? grid.currentFolderNode : _.get(this.getFilteredContainers(), '0'),
             gridStore = grid.store,
             rowIndex = false,
-            me = this,
-            targetFolderPath = targetNode.attributes ? targetNode.attributes.path : _.get(targetNode, 'path'),
-            addToGrid = true,
-            nodeRecord = null
+            nodeRecord = null;
+        this.targetFolderPath = targetNode.attributes ? targetNode.attributes.path : _.get(targetNode, 'path');
 
         if(event && event.getTarget()) {
             rowIndex = grid.getView().findRowIndex(event.getTarget());
         }
-
-
+        
         if(targetNode.attributes) {
             nodeRecord = targetNode.attributes.nodeRecord;
         }
 
         if(rowIndex !== false && rowIndex > -1) {
             var newTargetNode = gridStore.getAt(rowIndex);
-            if(newTargetNode && newTargetNode.data.type == 'folder') {
-                targetFolderPath = newTargetNode.data.path;
-                addToGrid = false;
+            if(newTargetNode && newTargetNode.data.type === 'folder') {
+                this.targetFolderPath = newTargetNode.data.path;
                 nodeRecord = new Tine.Filemanager.Model.Node(newTargetNode.data);
             }
         }
@@ -896,9 +1013,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             nodeRecord = new Tine.Filemanager.Model.Node(targetNode);
         }
 
-        var files = fileSelector.getFileList();
+        let files = fileSelector.getFileList();
+        const folderList = _.uniq(_.map(files, (fo) => {
+            return fo.fullPath.replace(/\/[^/]*$/, '');
+        }));
         
-        if(!Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, _.map(files, Tine.Filemanager.Model.Node.createFromFile))) {
+        if(folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}])) {
             Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
                     app.i18n._('It is not permitted to store files in this folder!')
@@ -907,97 +1027,19 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return;
         }
         
-        var filePathsArray = [], uploadKeyArray = [], fileTypesArray= [], promises = [];
-
-        Ext.each(files, function (file) {
-            var promise = new Promise(function (fullfill, reject) {
-                me.isFile(file).then(function () {
-                    var fileRecord = Tine.Filemanager.Model.Node.createFromFile(file),
-                        filePath = targetFolderPath + '/' + fileRecord.get('name');
-
-                    fileRecord.set('path', filePath);
-                    var existingRecordIdx = gridStore.find('name', fileRecord.get('name'));
-                    if (existingRecordIdx < 0) {
-                        gridStore.add(fileRecord);
-                    }
-
-                    var upload = new Ext.ux.file.Upload({
-                        fmDirector: grid,
-                        file: file,
-                        fileSelector: fileSelector,
-                        id: filePath
-                    });
-
-                    filePathsArray.push(filePath);
-                    fileTypesArray.push('vnd.adobe.partial-upload; final_type=' + file.type);
-                    uploadKeyArray.push(Tine.Tinebase.uploadManager.queueUpload(upload));
-                }, me).then(function () {
-                    fullfill();
-                }).catch(function() {
-                    fullfill();
-                });
-            });
-            promises.push(promise);
-        });
-
-        Promise.all(promises).then(function () {
-            if (0 === uploadKeyArray.length) {
-                return;
-            }
-
-            var params = {
-                filenames: filePathsArray,
-                types: fileTypesArray,
-                tempFileIds: [],
-                forceOverwrite: false
-            };
-            Tine.Filemanager.nodeBackend.createNodes(params, uploadKeyArray, true);
-        });
-    },
-
-    isFile: function (file) {
-        return Promise.resolve();
-        // NOTE: fileReader can't cope with files ~> 1GB
-        //       with html5-file-selector we can't have directories here
-        // return new Promise(function (resolve, reject) {
-        //     var fr = new FileReader();
-        //     fr.onload = function () {
-        //         if (fr.result === null) {
-        //             reject();
-        //         } else {
-        //             resolve();
-        //         }
-        //     };
-        //     fr.readAsText(file);
-        // });
+        await upload(this.targetFolderPath, files);
     },
 
     /**
      * grid on load handler
      *
-     * @param grid
+     * @param store
      * @param records
      * @param options
      */
     onLoad: function(store, records, options){
-        var _ = window.lodash,
-            quota = _.get(store, 'reader.jsonData.quota', false),
-            grid = this;
-
-        for(var i=records.length-1; i>=0; i--) {
-            var record = records[i];
-            if(record.get('type') == 'file' && (!record.get('size') || record.get('size') == 0)) {
-                var upload = Tine.Tinebase.uploadManager.getUpload(record.get('path'));
-
-                if(upload) {
-                      if(upload.fileRecord && record.get('name') == upload.fileRecord.get('name')) {
-                          grid.updateNodeRecord(record, upload.fileRecord);
-                          record.afterEdit();
-                    }
-                }
-            }
-        }
-
+        const quota = _.get(store, 'reader.jsonData.quota', false);
+            
         if (quota) {
             var qhtml = Tine.widgets.grid.QuotaRenderer(quota.effectiveUsage, quota.effectiveQuota, /*use SoftQuota*/ true);
             this.quotaBar.show();
@@ -1021,24 +1063,21 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const pathFilter = _.get(_.find(_.get(this, 'store.reader.jsonData.filter', {}), {field: 'path'}), 'value');
         return pathFilter ? [pathFilter] : null;
     },
-
+    
     /**
-     * update grid nodeRecord with fileRecord data
+     * get parent path 
      *
-     * @param nodeRecord
-     * @param fileRecord
+     * @param path
+     * @returns {string|*}
      */
-    updateNodeRecord: function(nodeRecord, fileRecord) {
-        for(var field in fileRecord.fields) {
-            nodeRecord.set(field, fileRecord.get(field));
-        }
-        nodeRecord.fileRecord = fileRecord;
-    },
-
     getParentPath: function (path) {
         if (String(path).match(/\/.*\/.+/)) {
             let pathParts = path.split('/');
             pathParts.pop();
+            // handle folder path that end with '/' 
+            if (path.endsWith('/')) {
+                pathParts.pop();
+            }
             return pathParts.join('/');
         }
         return '/';
