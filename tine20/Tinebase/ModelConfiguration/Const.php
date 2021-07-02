@@ -164,6 +164,7 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_RECORDS = 'records';
     const TYPE_RELATION = 'relation';
     const TYPE_RELATIONS = 'relations';
+    const TYPE_STRICTFULLTEXT = 'strictFulltext';
     const TYPE_STRING = 'string';
     const TYPE_STRING_AUTOCOMPLETE = 'stringAutocomplete';
     const TYPE_TAG = 'tag';
