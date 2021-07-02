@@ -18,6 +18,8 @@ class Sales_PurchaseInvoiceTest extends TestCase
      * @var Sales_Frontend_Json
      */
     protected $_json;
+
+    protected $_recordsToDelete = array();
     
     /**
      * get paging
@@ -52,11 +54,39 @@ class Sales_PurchaseInvoiceTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
     
         $this->_contactController  = Addressbook_Controller_Contact::getInstance();
         $this->_json               = new Sales_Frontend_Json();
+        $this->_recordsToDelete = array();
+    }
+
+    protected function tearDown(): void
+    {
+        if (count($this->_recordsToDelete) > 0)
+        {
+            $purchaseRecords = array_filter($this->_recordsToDelete, function($record) {
+                return get_class($record) === Sales_Model_PurchaseInvoice::class;
+            });
+            $this->_json->deletePurchaseInvoices(array_keys($purchaseRecords));
+            
+            $supplierRecords = array_filter($this->_recordsToDelete, function($record) {
+                return get_class($record) === Sales_Model_Supplier::class;
+            });
+            $this->_json->deleteSuppliers(array_keys($supplierRecords));
+
+            foreach($this->_recordsToDelete as $record) {
+                $className = get_class($record);
+                $configuration = $record->getConfiguration();
+                foreach ($configuration->getAutoincrementFields() as $fieldDef) {
+                    $numberable = Tinebase_Numberable::getNumberable($className, $fieldDef['fieldName'], $fieldDef);
+                    $numberable->free($record->{$fieldDef['fieldName']});
+                }
+            }
+        }
+
+        parent::tearDown();
     }
     
     /**
@@ -104,7 +134,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
                 'adr_countryname' => 'China',
                 'adr_pobox'   => '7777777'
         ]));
-        
+
         $purchaseData = array(
                 'number' => 'R-12345',
                 'description' => 'test',
@@ -127,7 +157,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
                 )
             )
         );
-        
+
         return $this->_json->savePurchaseInvoice($purchaseData);
     }
     
@@ -287,6 +317,110 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $this->assertEquals($purchase['number'], $search['results'][0]['number']);
         $this->assertEquals(2, $search['totalcount']);
     }
+
+    /**
+     * try to get a PurchaseInvoice
+     */
+    public function testSearchPurchaseInvoiceWithSpecialChar()
+    {
+        $oldValue = Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+            ->{Tinebase_Config::FULLTEXT_QUERY_FILTER};
+
+        try {
+            $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
+                'name' => 'Worldwide Electronics International',
+                'cpextern_id' => '',
+                'cpintern_id' => '',
+                'number'      => 54321,
+
+                'iban'        => 'CN09234098324098234598',
+                'bic'         => '0239580429570923432444',
+                'url'         => 'http://wwei.cn',
+                'vatid'       => '239rc9mwqe9c2q',
+                'credit_term' => '30',
+                'currency'    => 'EUR',
+                'curreny_trans_rate' => 7.034,
+                'discount'    => 12.5,
+
+                'adr_prefix1' => 'no prefix 1',
+                'adr_prefix2' => 'no prefix 2',
+                'adr_street' => 'Mao st. 2000',
+                'adr_postalcode' => '1',
+                'adr_locality' => 'Shanghai',
+                'adr_region' => 'Shanghai',
+                'adr_countryname' => 'China',
+                'adr_pobox'   => '7777777'
+            ]));
+
+            $purchaseData = array(
+                'number' => 'R-007-123456',
+                'description' => '006-0094739-007',
+                'discount' => 0,
+                'due_in' => 10,
+                'date' => '2015-03-17 00:00:00',
+                'due_at' => '2015-03-27 00:00:00',
+                'price_net' => 10,
+                'sales_tax' => 19,
+                'price_tax' => 1.9,
+                'price_gross' => 11.9,
+                'price_gross2' => 1,
+                'price_total' => 12.9,
+                'relations' => array(array(
+                    'own_model' => 'Sales_Model_PurchaseInvoice',
+                    'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model' => 'Sales_Model_Supplier',
+                    'related_id' => $supplier->getId(),
+                    'type' => 'SUPPLIER'
+                )
+                )
+            );
+
+            // commit transaction for full text to work
+            if ($this->_transactionId) {
+                Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+                $this->_transactionId = null;
+            }
+
+            $purchaseRecord = $this->_json->savePurchaseInvoice($purchaseData);
+            
+            $this->_recordsToDelete[$supplier['id']] = Sales_Controller_Supplier::getInstance()->get($supplier['id']);
+            $this->_recordsToDelete[$purchaseRecord['id']] = Sales_Controller_PurchaseInvoice::getInstance()->get($purchaseRecord['id']);
+
+
+            // activate fulltext query filter
+            Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+                ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
+            
+            // search & check
+            $paging = $this->_getPaging();
+            $filter =  [
+                [
+                    'field' => 'query',
+                    'operator' => 'contains',
+                    'value' => '006-0094739-007'
+                ]
+            ];
+        
+            $search = $this->_json->searchPurchaseInvoices($filter, $paging);
+            $this->assertEquals(1, $search['totalcount']);
+
+            $filter = [
+                [
+                    'field' => 'query',
+                    'operator' => 'contains',
+                    'value' => '006-0094739-006'
+                ],
+            ];
+
+            $search = $this->_json->searchPurchaseInvoices($filter, $paging);
+            $this->assertEquals(0, $search['totalcount']);
+
+        } finally {
+            Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+                ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = $oldValue;
+        }
+
+    }
     
     /**
      * try to delete a PurchaseInvoice
@@ -339,6 +473,8 @@ class Sales_PurchaseInvoiceTest extends TestCase
         unset($invoice2['id']);
         $invoice2['number'] = 'SomethingElse';
         $invoice2['price_total'] = 290.3;
+        // prevent warning of duplicated supplier id entry
+        unset($invoice2['relations'][0]['id']);
 
         // create a non-duplicate first
         $invoice2 = $this->_json->savePurchaseInvoice($invoice2);
