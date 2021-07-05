@@ -1675,7 +1675,7 @@ msgstr "Bestätigt"
 
 #: Config.php:344 Export/Ods.php:50 Export/Doc.php:52 Export/DocV2.php:58
 msgid "Canceled"
-msgstr "Abgesagt"
+msgstr "Entfällt"
 
 #: Config.php:350
 msgid "Event Classes Available"
