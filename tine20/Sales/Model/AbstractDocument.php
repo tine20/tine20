@@ -20,8 +20,11 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
     const MODEL_NAME_PART = 'AbstractDocument';
 
     const FLD_ID = 'id';
+    const FLD_CONFIG = 'config';
+    const FLD_CONFIG_CLASS = 'config_class';
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
     const FLD_REFERENCE_DOCUMENT = 'reference_document'; // virtual, link
+    const FLD_NOTE = 'note';
     const FLD_RECIPIENT_CLASS = 'recipient_class'; // Kunde od. Organisation
     const FLD_RECIPIENT_ID = 'recipient_id';
     const FLD_RECIPIENT_REFERENCE = 'recipient_reference'; // varchar 255
