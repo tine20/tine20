@@ -790,18 +790,14 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     public function createFolder(Syncroton_Model_IFolder $folder)
     {
         if (empty($folder->parentId)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . " It is not possible to create a folder at root level");
             $account = $this->_getAccount();
-            $newFolder = Felamimail_Controller_Folder::getInstance()->create($account, $folder->displayName);
-            $folder->serverId = $newFolder->getId();
-            return $folder;
+            $parentGlobalname = '';
+        } else {
+            $parent = Felamimail_Controller_Folder::getInstance()->get($folder->parentId);
+            $account = Felamimail_Controller_Account::getInstance()->get($parent->account_id);
+            $parentGlobalname = $parent->globalname;
         }
-
-        $parent = Felamimail_Controller_Folder::getInstance()->get($folder->parentId);
-        $account = Felamimail_Controller_Account::getInstance()->get($parent->account_id);
-        $newFolder = Felamimail_Controller_Folder::getInstance()->create($account, $folder->displayName, $parent->globalname);
-
+        $newFolder = Felamimail_Controller_Folder::getInstance()->create($account, $folder->displayName, $parentGlobalname);
         $folder->serverId = $newFolder->getId();
 
         return $folder;
