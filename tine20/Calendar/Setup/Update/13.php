@@ -60,13 +60,14 @@ class Calendar_Setup_Update_13 extends Setup_Update_Abstract
     public function update003()
     {
         if ($this->getTableVersion('cal_events') < 17) {
-            $declaration = new Setup_Backend_Schema_Field_Xml('
+            if (! $this->_backend->columnExists('mute', 'cal_events')) {
+                $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>mute</name>
                 <type>boolean</type>
             </field>');
-
-            $this->_backend->addCol('cal_events', $declaration);
+                $this->_backend->addCol('cal_events', $declaration);
+            }
             $this->setTableVersion('cal_events', 17);
         }
 
