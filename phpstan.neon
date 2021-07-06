@@ -1,6 +1,9 @@
 includes:
     - phpstan-baseline.neon
 parameters:
+    universalObjectCratesClasses:
+        - Tinebase_Record_Interface
+        - Tinebase_Record_RecordSet
     reportUnmatchedIgnoredErrors: false
     paths:
       - tine20
