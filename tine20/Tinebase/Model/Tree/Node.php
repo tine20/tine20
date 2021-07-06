@@ -213,12 +213,12 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::NULLABLE                  => true,
             ],
             'revisionProps'                 => [
-                'type'                          => 'text',
+                'type'                          => self::TYPE_JSON,
                 self::NULLABLE                  => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'notificationProps'             => [
-                'type'                          => 'text',
+                'type'                          => self::TYPE_JSON,
                 self::NULLABLE                  => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
