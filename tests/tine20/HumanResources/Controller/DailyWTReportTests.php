@@ -140,8 +140,11 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $this->assertCount(3, $notes);
         $note = $notes->find('seq', 3);
         $this->assertNotNull($note, 'recalc note not found');
-        $this->assertStringContainsString('working_times (2 added: 02:00 (10:00 - 12:00) - , 02:00 (17:30 - 19:30) - )',
-            $note->note);
+        $added = Tinebase_Translation::getTranslation(Tinebase_Config::APP_NAME, Tinebase_Core::getLocale())->_('added');
+        $wt = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME, Tinebase_Core::getLocale())
+            ->_('working_times');
+        $this->assertStringContainsString(
+            $wt . ' (2 ' . $added . ': 02:00 (10:00 - 12:00) - , 02:00 (17:30 - 19:30) - )', $note->note);
     }
 
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEnd()
