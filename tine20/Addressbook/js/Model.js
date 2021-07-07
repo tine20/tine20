@@ -327,7 +327,6 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     }
 });
 
-
 /**
  * get filtermodel of emailaddress model
  * 
@@ -340,38 +339,6 @@ Tine.Addressbook.Model.EmailAddress.getFilterModel = function() {
         {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
     ];
 };
-
-/**
- * ListRole model
- */
-Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
-    {name: 'id'},
-    {name: 'name'},
-    {name: 'members'},
-    {name: 'description'}
-], {
-    appName: 'Addressbook',
-    modelName: 'ListRole',
-    titleProperty: 'name',
-    // ngettext('List Function', 'List Functions', n); gettext('List Functions');
-    recordName: 'List Function', // _('GENDER_List Function')
-    recordsName: 'List Functions'
-});
-
-/**
- * get filtermodel of ListRole model
- *
- * @namespace Tine.Addressbook.Model
- * @static
- * @return {Array} filterModel definition
- */
-Tine.Addressbook.Model.ListRole.getFilterModel = function() {
-    return [
-        {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
-    ];
-};
-
-/**
 
 /**
  * Industry model

@@ -213,7 +213,9 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
                 this.columns[idx].width = 150;
             }
             if (this.columns[idx].id === "memberroles") {
-                this.editors[idx] = new Tine.Addressbook.ListMemberRoleLayerCombo({});
+                this.editors[idx] = new Tine.Addressbook.ListMemberRoleLayerCombo({
+                    gridRecordClass: Tine.Addressbook.Model.ListRole
+                });
                 this.columns[idx].editor = this.editors[idx];
             }
         }, this);

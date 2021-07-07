@@ -29,8 +29,10 @@ class Addressbook_Model_ListRole extends Tinebase_Record_NewAbstract
         self::APP_NAME => Addressbook_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
-        self::RECORD_NAME => 'List Role',
-        self::RECORDS_NAME => 'List Roles',
+        // ngettext('List Function', 'List Functions', n)
+        // _('GENDER_List Function')
+        self::RECORD_NAME => 'List Function',
+        self::RECORDS_NAME => 'List Functions',
         self::TITLE_PROPERTY => 'name',
 
         self::EXPOSE_HTTP_API => true,
@@ -50,6 +52,7 @@ class Addressbook_Model_ListRole extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+                self::QUERY_FILTER              => true,
             ],
             self::FLD_DESCRIPTION => array(
                 self::LABEL => 'Description', //_('Description')

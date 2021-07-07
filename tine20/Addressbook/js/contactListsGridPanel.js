@@ -12,7 +12,7 @@ Ext.ns('Tine.Addressbook');
 
 /**
  * @namespace   Tine.Addressbook
- * @class       Tine.Addressbook.ListRoleGridPanel
+ * @class       Tine.Addressbook.ListEditDialogRoleGridPanel
  * @extends     Ext.grid.EditorGridPanel
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */

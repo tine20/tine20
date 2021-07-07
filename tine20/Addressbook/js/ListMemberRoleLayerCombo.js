@@ -22,11 +22,6 @@ Tine.Addressbook.ListMemberRoleLayerCombo = Ext.extend(Tine.widgets.grid.PickerG
      */
     record: null,
 
-    /**
-     * @cfg grid record class
-     */
-    gridRecordClass: Tine.Addressbook.Model.ListRole,
-
     stripData: function(value) {
         var listRoles = [];
         if (Ext.isArray(value)) {
