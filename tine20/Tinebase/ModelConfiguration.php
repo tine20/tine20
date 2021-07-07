@@ -1413,13 +1413,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             if (isset($this->_filterModelMapping[$type])) {
                 // if no filterDefinition is given, try to use the default one
                 $this->_filterModel[$fieldKey] = array('filter' => $this->_filterModelMapping[$type]);
-                if (null !== $config) {
+                if (null !== $config && isset($config['appName']) && isset($config['modelName'])) {
                     $this->_filterModel[$fieldKey]['options'] = $config;
 
                     // set id filter controller
                     if ($type === 'record' || $type === 'records') {
-                        $this->_filterModel[$fieldKey]['options']['filtergroup'] = (isset($config['recordClassName']) ? $config['recordClassName'] : ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
-                        $this->_filterModel[$fieldKey]['options']['controller']  = isset($config['controllerClassName']) ? $config['controllerClassName'] : ($config['appName'] . '_Controller_' . $config['modelName']);
+                        $this->_filterModel[$fieldKey]['options']['filtergroup'] =
+                            ($config['recordClassName'] ?? ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
+                        $this->_filterModel[$fieldKey]['options']['controller']  =
+                            $config['controllerClassName'] ?? ($config['appName'] . '_Controller_' . $config['modelName']);
                     }
                 } else if ($type === self::TYPE_RELATION || $type === self::TYPE_RELATIONS) {
                     unset($this->_filterModel[$fieldKey]);
@@ -2064,6 +2066,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
             $foreignRecords = $controller->search($filter, $paging);
             /** @var Tinebase_Record_Interface $foreignRecordClass */
+            /** @var Tinebase_Record_RecordSet $foreignRecords */
             $foreignRecordClass = $foreignRecords->getRecordClassName();
             $foreignRecordModelConfiguration = $foreignRecordClass::getConfiguration();
 
