@@ -381,6 +381,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Projects_Model_Status::class,
             ),
             'Sales' => array(
+                Sales_Model_AbstractDocument::class,
+                Sales_Model_AbstractPosition::class,
                 Sales_Model_Address::class,
                 Sales_Model_Config::class,
                 Sales_Model_Contract::class,
