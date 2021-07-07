@@ -1,10 +1,7 @@
-# ============ stage: test ===========================
-# This stage runs all tests.
-
 "php unit: all tests source":
   extends: .abstract_jobs.php_unit
   variables:
-    ARG_IMAGE: test-source-commit
+    ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
     NODE_TOTAL: 1
     NODE_INDEX: 1
@@ -12,6 +9,8 @@
   timeout: 45m
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "true"
@@ -25,13 +24,15 @@
 "php unit: all tests source, parallel":
   extends: .abstract_jobs.php_unit
   variables:
-    ARG_IMAGE: test-source-commit
+    ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
   stage: test
   timeout: 45m
   parallel: 5
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "false"
@@ -45,13 +46,15 @@
 "php unit: servertests source":
   extends: .abstract_jobs.php_unit
   variables:
-    ARG_IMAGE: test-source-commit
+    ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
     ARG_TEST: AllServerTests
   stage: test
   timeout: 30m
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_SERVERTESTS == "never"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -63,7 +66,7 @@
 "php unit: tests with postfixmultiinstance":
   extends: .abstract_jobs.php_unit
   variables:
-    ARG_IMAGE: test-source-commit
+    ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
     ARG_POSTFIX_INIT_SQL_PATH: /config/sql/postfixmultiinstance_tables.sql
     TINE20_EMAIL_SMTP: "active:true,backend:postfixmultiinstance,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfixmultiinstance_host:db,postfixmultiinstance_dbname:postfix,postfixmultiinstance_username:tine20,postfixmultiinstance_password:tine20pw"
@@ -72,6 +75,8 @@
   interruptible: true
   parallel: 5
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE == "never"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -83,13 +88,15 @@
 "php unit: setup tests source":
   extends: .abstract_jobs.php_unit
   variables:
-    ARG_IMAGE: test-source-commit
+    ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
   stage: test
   timeout: 90m
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_SETUP_TESTS == "never"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -104,12 +111,14 @@
 "php unit: all tests built":
   extends: .abstract_jobs.php_unit
   variables:
-    ARG_IMAGE: test-built-commit
+    ARG_IMAGE: test-built
   stage: test
   parallel: 5
   timeout: 45m
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "never"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -121,7 +130,7 @@
 "php unit: nogitlabci tests built":
   extends: .abstract_jobs.php_unit
   variables:
-    ARG_IMAGE: test-built-commit
+    ARG_IMAGE: test-built
     ARG_EXCLUDE_GROUP: ""
     ARG_GROUP: "nogitlabci"
   stage: test
@@ -130,6 +139,8 @@
   timeout: 30m
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "never"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -141,12 +152,14 @@
 "php unit: all tests built with ldap":
   extends: .abstract_jobs.php_unit_ldap
   variables:
-    ARG_IMAGE: test-built-commit
+    ARG_IMAGE: test-built
   stage: test
   parallel: 5
   timeout: 30m
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "never"
       when: never
     - if: $RUN_ALL_TESTS == "true"

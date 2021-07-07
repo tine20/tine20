@@ -23,7 +23,7 @@
   alias: ldap
   entrypoint: ["/container/tool/run", "--copy-service"]
 .tine_as_service: &abstract_jobs-tine_as_service
-  name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_VERSION}
+  name: ${REGISTRY}/${ARG_IMAGE}-commit:${IMAGE_TAG}
   alias: tine
   entrypoint:
     - "/bin/sh"
@@ -33,10 +33,10 @@
         echo "copy src to container ...";
         apk add rsync;
 
-        while [ ! -f /$CI_PROJECT_DIR/tine_as_service.env ]; do echo "Waiting for ci project dir..."; sleep 1; done; sleep 10; echo "ci project dir available";
-        echo "loading additional env variable from /$CI_PROJECT_DIR/tine_as_service.env";
-        source /$CI_PROJECT_DIR/tine_as_service.env;
-        $CI_PROJECT_DIR/ci/scripts/copy_source.sh;
+        while [ ! -f /${CI_BUILDS_DIR}/tine20/tine20/tine_as_service.env ]; do echo "Waiting for tine20..."; sleep 1; done; sleep 10; echo "tine20 dir available";
+        echo "loading additional env variable from /${CI_BUILDS_DIR}/tine20/tine20/tine_as_service.env";
+        source /${CI_BUILDS_DIR}/tine20/tine20/tine_as_service.env;
+        ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/copy_source.sh;
       fi
       /usr/sbin/confd -onetime -backend env;
       tine20_await_db;
@@ -47,11 +47,11 @@
       mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON dovecot.* TO '$MYSQL_USER'@'%'";
       mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/sql/dovecot_tables.sql;
       mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < /config/sql/postfix_tables.sql;
-      touch $CI_PROJECT_DIR/tine20.log
-      chown tine20:tine20 $CI_PROJECT_DIR/tine20.log
+      touch ${CI_BUILDS_DIR}/tine20/tine20/tine20.log
+      chown tine20:tine20 ${CI_BUILDS_DIR}/tine20/tine20/tine20.log
       su tine20 -c "tine20_install";
       su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}"
-      touch $CI_PROJECT_DIR/tine_ready_$CI_JOB_ID;
+      touch ${CI_BUILDS_DIR}/tine20/tine20/tine_ready_$CI_JOB_ID;
       supervisord --nodaemon;
 
 
@@ -79,7 +79,7 @@
     TINE20_SESSION_BACKEND: Redis
     TINE20_SESSION_HOST: cache
     TINE20_APPLICATION_TO_INSTALL: all
-    TINE20_LOGGER_FILENAME: $CI_PROJECT_DIR/tine20.log
+    TINE20_LOGGER_FILENAME: ${CI_PROJECT_DIR}/tine20.log
     TINE20_LOGGER_PRIORITY: 7
     TINE20_LOGGER_ADDITIONALWRITERS_FILENAME: /var/log/tine20/tine20.log # do not log to php://stdout it breaks php unit 8.5 processIsolation
     TINE20_EMAIL_IMAP: "active:true,host:dovecot,port:143,useSystemAccount:1,ssl:none,verifyPeer:0,backend:dovecot_imap,domain:mail.test,instanceName:tine.test,dovecot_host:db,dovecot_dbname:dovecot,dovecot_username:tine20,dovecot_password:tine20pw,dovecot_uid:vmail,dovecot_gid:vmail,dovecot_home:/var/vmail/%d/%u,dovecot_scheme:SSHA256"
@@ -125,7 +125,8 @@
 .abstract_jobs.php_unit:
   extends: .abstract_jobs.test
   before_script:
-    - if test "${ARG_COPY_SOURCE}" == "true"; then $CI_PROJECT_DIR/ci/scripts/copy_source.sh; fi
+    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL ${CI_BUILDS_DIR}/tine20/tine20; fi
+    - if test "${ARG_COPY_SOURCE}" == "true"; then ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/copy_source.sh; fi
     - /usr/sbin/confd -onetime -backend env
     - tine20_await_db
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot"
@@ -150,15 +151,15 @@
       echo ${NODE_TOTAL} ${NODE_INDEX};
       ${cmd}
   image:
-    name: ${REGISTRY}/${ARG_IMAGE}:${CI_PIPELINE_ID}-${PHP_VERSION}
+    name: ${REGISTRY}/${ARG_IMAGE}-commit:${IMAGE_TAG}
   artifacts:
     paths:
-      - tine20.log
-      - phpunit-report.xml
+      - ${CI_PROJECT_DIR}/tine20.log
+      - ${CI_PROJECT_DIR}/phpunit-report.xml
     expire_in: 1 day
     when: always
     reports:
-      junit: phpunit-report.xml
+      junit: ${CI_PROJECT_DIR}/phpunit-report.xml
   services:
     - *abstract_jobs-db_service
     - *abstract_jobs-redis_service
@@ -220,14 +221,15 @@
   image:
     name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.3
   before_script:
-    - printf "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}\nCUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}\nCUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}\nCUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" > /$CI_PROJECT_DIR/tine_as_service.env
-    - cd $CI_PROJECT_DIR/tine20
+    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL ${CI_BUILDS_DIR}/tine20/tine20; fi
+    - printf "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}\nCUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}\nCUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}\nCUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" > /${CI_BUILDS_DIR}/tine20/tine20/tine_as_service.env
+    - cd ${CI_BUILDS_DIR}/tine20/tine20/tine20
     - composer install --no-ansi --no-progress --no-suggest --no-scripts --ignore-platform-reqs
-    - $CI_PROJECT_DIR/ci/scripts/install_custom_app.sh
-    - cd $CI_PROJECT_DIR/tests/e2etests
+    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/install_custom_app.sh
+    - cd ${CI_BUILDS_DIR}/tine20/tine20/tests/e2etests
     - echo no cp -r /root/node_modules .
     - npm install
-    - while [ ! -f /$CI_PROJECT_DIR/tine_ready_$CI_JOB_ID ]; do sleep 1; done
+    - while [ ! -f /${CI_BUILDS_DIR}/tine20/tine20/tine_ready_$CI_JOB_ID ]; do sleep 1; done
   script:
     - env
     - |
@@ -241,14 +243,17 @@
     - echo TEST_URL=${TEST_URL}
     - export TEST_ENVIROMENT=""
     - npm test -- $JS_E2E_TEST_FILTER --reporters=default --reporters=jest-junit
+  after_script:
+    - cp ${CI_BUILDS_DIR}/tine20/tine20/tests/e2etests/junit.xml ${CI_PROJECT_DIR}/junit.xml
   artifacts:
     when: always
     reports:
-      junit: tests/e2etests/junit.xml
+      junit: ${CI_PROJECT_DIR}/junit.xml
 
 .abstract_jobs.copy_source:
   before_script:
-    - if test "${ARG_COPY_SOURCE}" == "true"; then $CI_PROJECT_DIR/ci/scripts/copy_source.sh; fi
+    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL ${CI_BUILDS_DIR}/tine20/tine20; fi
+    - if test "${ARG_COPY_SOURCE}" == "true"; then ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/copy_source.sh; fi
   retry:
     max: 2
     when:

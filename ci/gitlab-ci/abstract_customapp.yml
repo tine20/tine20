@@ -1,0 +1,46 @@
+include:
+  - local: '/ci/gitlab-ci/abstract_jobs.yml'
+  - local: '/ci/ci-config.yml'
+  - local: '/ci/gitlab-ci/test_php_jobs.yml'
+  - local: '/ci/gitlab-ci/test_js_jobs.yml'
+  - local: '/ci/gitlab-ci/test_jobs.yml'
+  - local: '/ci/gitlab-ci/code_analysis.yml'
+  - local: '/ci/gitlab-ci/merge_customapp.yml'
+
+stages:
+  - build
+  - test
+  - merge
+
+variables:
+  # also needs to be set in build job
+  IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
+  CI_IS_CUSTOMAPP: "true"
+  # TESTS
+  PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL: "false"
+  PHP_UNIT_ALL_TESTS_BUILT: "false"
+  PHP_UNIT_SERVERTESTS: "false"
+  PHP_UNIT_SETUP_TESTS: "false"
+  PHP_STAN_ANALYSES: "false"
+  JS_E2E_TEST_SOURCE: "false"
+  JS_E2E_TEST_FILTER: ""
+
+workflow:
+  rules:
+    # Disable ci pipeline
+    - if: $RUN_CI_PIPELINE == "false"
+      when: never
+    # Do not run pipelines on push for feature branches. Only merge requests should run feature branche pipelines.
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+      when: never
+    - when: always
+
+build:
+  stage: build
+  trigger:
+    project: tine20/tine20
+    branch: $TINE20_BRANCH
+    strategy: depend
+  variables:
+    RUN_NO_TESTS: "true"
+    IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION

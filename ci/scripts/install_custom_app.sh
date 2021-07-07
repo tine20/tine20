@@ -3,11 +3,14 @@ set -e
 
 echo $0 installing ...
 
-if test -n "${CUSTOM_APP_NAME}"; then
-	echo composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
-	composer config "repositories.${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" git "${CUSTOM_APP_GIT_URL}";
-	echo composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
-	composer require "${CUSTOM_APP_VENDOR}/${CUSTOM_APP_NAME}" "${CUSTOM_APP_VERSION}";
+if [ "$CI_IS_CUSTOMAPP" == "true" ]; then
+	name=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
+
+	cd ${TINE20ROOT}/tine20
+	echo $0: composer config "repositories.ci" path "${CI_PROJECT_DIR}";
+	composer config "repositories.ci" path "${CI_PROJECT_DIR}";
+	echo $0: composer require "$name @dev";
+	composer require "$name @dev";
 fi
 
 echo $0 ... done
