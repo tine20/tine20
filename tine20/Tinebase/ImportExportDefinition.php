@@ -376,6 +376,14 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
 
     protected static function createDefaultImportExportContainer(): Tinebase_Model_Container
     {
+        if (Tinebase_Core::isReplica()) {
+            try {
+                return Tinebase_Container::getInstance()->getContainerByName(Tinebase_Model_ImportExportDefinition::class,
+                    'Internal Import/Export Container', Tinebase_Model_Container::TYPE_SHARED);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                throw new Tinebase_Exception_Record_NotAllowed('on replicas, default container needs to replicated from master');
+            }
+        }
         $container = new Tinebase_Model_Container(array(
             'name'              => 'Internal Import/Export Container',
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
