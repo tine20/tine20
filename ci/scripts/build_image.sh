@@ -6,21 +6,22 @@ TARGET=$1
 CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
 MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
 
-IMAGE="${REGISTRY}/${TARGET}-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+IMAGE="${REGISTRY}/${TARGET}-commit:${IMAGE_TAG}"
 CACHE_IMAGE="${REGISTRY}/${TARGET}:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
 MAJOR_CACHE_IMAGE="${REGISTRY}/${TARGET}:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
 
 # config via env
 export PHP_VERSION=${PHP_VERSION}
-export BASE_IMAGE="${REGISTRY}/base-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-export SOURCE_IMAGE="${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-export BUILD_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
-export BUILT_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+export BASE_IMAGE="${REGISTRY}/base-commit:${IMAGE_TAG}"
+export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
+export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
+export BUILD_IMAGE="${REGISTRY}/build-commit${IMAGE_TAG}"
+export BUILT_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
 
 export VERSION=${CI_COMMIT_TAG:-nightly}
 export RELEASE=$(echo "${VERSION}" | sed sI-I~Ig)
 export REVISION=0
 export CODENAME="${CODENAME}"
 
+cd ${CI_BUILDS_DIR}/tine20/tine20
 ./ci/dockerimage/make.sh -u -p -i "${IMAGE}" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" "${TARGET}"
