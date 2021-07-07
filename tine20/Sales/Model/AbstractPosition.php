@@ -128,7 +128,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::APP_NAME                      => Tinebase_Config::APP_NAME,
+        self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Second factor config for user', // ngettext('Second factor config for user', 'Second factor configs for user', n)
         self::RECORDS_NAME                  => 'Second factor configs for user',

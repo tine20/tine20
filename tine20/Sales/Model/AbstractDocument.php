@@ -66,7 +66,7 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::APP_NAME                      => Tinebase_Config::APP_NAME,
+        self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Document', // ngettext('Document', 'Documents', n)
         self::RECORDS_NAME                  => 'Documents',

@@ -19,6 +19,11 @@
 class Sales_Config extends Tinebase_Config_Abstract
 {
     /**
+     * @var string
+     */
+    const APP_NAME = 'Sales';
+
+    /**
      * sets the biggest interval, contracts will be billed
      * 
      * @var string
