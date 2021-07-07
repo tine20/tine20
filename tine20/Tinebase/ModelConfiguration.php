@@ -857,6 +857,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'stringAutocomplete'    => Tinebase_Model_Filter_Text::class,
         'text'                  => Tinebase_Model_Filter_Text::class,
         'fulltext'              => Tinebase_Model_Filter_FullText::class,
+        self::TYPE_STRICTFULLTEXT        => Tinebase_Model_Filter_StrictFullText::class,
         'json'                  => Tinebase_Model_Filter_Text::class,
         'boolean'               => Tinebase_Model_Filter_Bool::class,
         'integer'               => Tinebase_Model_Filter_Int::class,
@@ -885,6 +886,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_inputFilterDefaultMapping = array(
         'text'     => array('Tinebase_Model_InputFilter_CrlfConvert'),
         'fulltext' => array('Tinebase_Model_InputFilter_CrlfConvert'),
+        self::TYPE_STRICTFULLTEXT => ['Tinebase_Model_InputFilter_CrlfConvert'],
     );
 
     /**
@@ -1411,13 +1413,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             if (isset($this->_filterModelMapping[$type])) {
                 // if no filterDefinition is given, try to use the default one
                 $this->_filterModel[$fieldKey] = array('filter' => $this->_filterModelMapping[$type]);
-                if (null !== $config) {
+                if (null !== $config && isset($config['appName']) && isset($config['modelName'])) {
                     $this->_filterModel[$fieldKey]['options'] = $config;
 
                     // set id filter controller
                     if ($type === 'record' || $type === 'records') {
-                        $this->_filterModel[$fieldKey]['options']['filtergroup'] = (isset($config['recordClassName']) ? $config['recordClassName'] : ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
-                        $this->_filterModel[$fieldKey]['options']['controller']  = isset($config['controllerClassName']) ? $config['controllerClassName'] : ($config['appName'] . '_Controller_' . $config['modelName']);
+                        $this->_filterModel[$fieldKey]['options']['filtergroup'] =
+                            ($config['recordClassName'] ?? ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
+                        $this->_filterModel[$fieldKey]['options']['controller']  =
+                            $config['controllerClassName'] ?? ($config['appName'] . '_Controller_' . $config['modelName']);
                     }
                 } else if ($type === self::TYPE_RELATION || $type === self::TYPE_RELATIONS) {
                     unset($this->_filterModel[$fieldKey]);
@@ -1603,6 +1607,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             case 'string':
             case 'text':
             case 'fulltext':
+            case self::TYPE_STRICTFULLTEXT:
             case 'integer':
             case self::TYPE_BIGINT:
             case 'float':
@@ -2061,6 +2066,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
             $foreignRecords = $controller->search($filter, $paging);
             /** @var Tinebase_Record_Interface $foreignRecordClass */
+            /** @var Tinebase_Record_RecordSet $foreignRecords */
             $foreignRecordClass = $foreignRecords->getRecordClassName();
             $foreignRecordModelConfiguration = $foreignRecordClass::getConfiguration();
 

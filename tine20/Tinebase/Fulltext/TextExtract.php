@@ -81,22 +81,33 @@ class Tinebase_Fulltext_TextExtract
         if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $_fileObject->type) {
             throw new Tinebase_Exception_InvalidArgument('$_fileObject needs to be of type file only!');
         }
-
+        
         $tempFileName = Tinebase_TempFile::getTempPath();
         $blobFileName = $_fileObject->getFilesystemPath();
-
+        
         // tika may complain, aka not return status 0 if file is empty or unreadable
         if (! is_readable($blobFileName) || ($fSize = filesize($blobFileName)) === 0 || false === $fSize) {
             return $tempFileName;
         }
 
-        @exec($this->_javaBin . ' -jar '. $this->_tikaJar . ' -t -eUTF8 '
-            . escapeshellarg($blobFileName) . ' > ' . escapeshellarg($tempFileName) . ' 2> /dev/null', $output, $result);
-
+        // we create a job specific tempdir as tika plugins might drop large tempfiles there
+        $tempDir = Tinebase_Core::getTempDir() . "/" . Tinebase_Record_Abstract::generateUID();
+        mkdir($tempDir);
+        
+        $cmd = $this->_javaBin . ' -Djava.io.tmpdir=' . escapeshellarg($tempDir)
+            . ' -jar ' . $this->_tikaJar . ' -t -eUTF8 ' . escapeshellarg($blobFileName)
+            . ' > ' . escapeshellarg("$tempFileName");
+        
+        @exec($cmd . " 2> $tempDir/stderr", $output, $result);
+        
+        $errMsg = file_get_contents("$tempDir/stderr");
+        @exec('rm -Rf ' . escapeshellarg("$tempDir"));
+        
         if ($result !== 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' tika did not return status 0. maybe the java runtime is missing? output:'
-                . print_r($output, true) . ' ' . print_r($result, true));
+                . " tika did not return status 0. maybe the java runtime is missing? \n command: $cmd\n output:"
+                . $errMsg . print_r($output, true) . ' ' . print_r($result, true));
+            
             if (file_exists($tempFileName)) {
                 try {
                     unlink($tempFileName);
@@ -109,7 +120,7 @@ class Tinebase_Fulltext_TextExtract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' tika success!');
         }
-
+        
         return $tempFileName;
     }
 }

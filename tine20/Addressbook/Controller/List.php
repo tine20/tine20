@@ -418,6 +418,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_InspectListBeforeUpdate([
+            'observable' => $_record,
+            'oldList' => $_oldRecord,
+        ]));
+
         $this->_flattenMembers($_record);
 
         if (! empty($_record->email) && $_record->email !== $_oldRecord->email) {
@@ -579,12 +584,14 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param Felamimail_Model_Account $_list
-     * @return NULL|Tinebase_Record_Interface
+     * @param Addressbook_Model_List $_list
+     * @return NULL|Felamimail_Model_Account
      */
     protected function _getMailAccount($_list)
     {
-        return Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+        // if user has right for list, he/she is also allowed to see/change the mail account
+        $backend = new Felamimail_Backend_Account();
+        return $backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $_list->getId()],
             ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
@@ -601,7 +608,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        $this->_fireChangeListeEvent($updatedRecord);
+        $this->_fireChangeListeEvent($updatedRecord, $currentRecord);
 
         if (isset($updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
@@ -633,7 +640,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
                 preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
-            Felamimail_Controller_Account::getInstance()->delete($this->_getMailAccount($currentRecord)->getId());
+
+            $account = $this->_getMailAccount($currentRecord);
+            if ($account !== null) {
+                Felamimail_Controller_Account::getInstance()->delete($account->getId());
+            }
         }
     }
 
@@ -641,11 +652,13 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * fireChangeListeEvent
      *
      * @param Addressbook_Model_List $list
+     * @param Addressbook_Model_List|null $currentList
      */
-    protected function _fireChangeListeEvent(Addressbook_Model_List $list)
+    protected function _fireChangeListeEvent(Addressbook_Model_List $list, Addressbook_Model_List $currentList = null)
     {
         $event = new Addressbook_Event_ChangeList();
         $event->list = $list;
+        $event->currentList = $currentList;
         Tinebase_Event::fireEvent($event);
     }
 

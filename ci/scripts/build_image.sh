@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 # build a docker image with cache and cache invalidators (see dockerimage readme.md)
 
 TARGET=$1
@@ -16,5 +17,10 @@ export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${CI_PIPELINE_ID}-${PHP_V
 export SOURCE_IMAGE="${REGISTRY}/source-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
 export BUILD_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
 export BUILT_IMAGE="${REGISTRY}/build-commit:${CI_PIPELINE_ID}-${PHP_VERSION}"
+
+export VERSION=${CI_COMMIT_TAG:-nightly}
+export RELEASE=$(echo "${VERSION}" | sed sI-I~Ig)
+export REVISION=0
+export CODENAME="${CODENAME}"
 
 ./ci/dockerimage/make.sh -u -p -i "${IMAGE}" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" "${TARGET}"

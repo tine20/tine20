@@ -290,6 +290,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Admin' => array(
                 Admin_Model_Config::class,
+                Admin_Model_JWTAccessRoutes::class,
                 Admin_Model_SambaMachine::class,
             ),
             'Calendar' => array(

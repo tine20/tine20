@@ -1,4 +1,6 @@
 #/bin/sh
+set -e
+
 branch=$1
 
 if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then

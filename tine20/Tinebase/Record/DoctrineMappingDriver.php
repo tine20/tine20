@@ -31,6 +31,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_STRING_AUTOCOMPLETE   => 'string',
         MCC::TYPE_TEXT                  => 'text',
         MCC::TYPE_FULLTEXT              => 'text',
+        MCC::TYPE_STRICTFULLTEXT        => 'text',
         MCC::TYPE_DATETIME              => 'datetime',
         MCC::TYPE_DATE                  => 'datetime',
         MCC::TYPE_TIME                  => 'time',
@@ -242,7 +243,14 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
      */
     public function isTransient($className)
     {
-        $modelConfig = $className::getConfiguration();
+        try {
+            $modelConfig = $className::getConfiguration();
+        } catch (Throwable $t) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not load MC for model ' . $className);
+            Tinebase_Exception::log($t);
+            return false;
+        }
 
         return $modelConfig && is_int($modelConfig->getVersion());
     }

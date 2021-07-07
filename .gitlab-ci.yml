@@ -18,6 +18,7 @@ include:
   - local: '/ci/gitlab-ci/deploy_jobs.yml'
     # housekeeping jobs, jobs needed for the ci to work correctly
   - local: '/ci/gitlab-ci/housekeeping_jobs.yml'
+  - local: '/ci/gitlab-ci/nodification_jobs.yml'
 
 stages:
   - build1
@@ -27,6 +28,7 @@ stages:
   - deploy
   - housekeeping
   - housekeeping-cleanup
+  - nodify
 
 workflow:
   rules:

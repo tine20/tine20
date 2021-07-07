@@ -242,7 +242,8 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         // needed for action updater / save and close in edit dialog
         readGrant: true,
         organizer: organizer,
-        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container)
+        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container),
+        mute: false
     };
     
     if (prefs.get('defaultalarmenabled')) {

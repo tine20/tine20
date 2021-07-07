@@ -1,4 +1,9 @@
 #!/bin/sh
+set -e
+
+echo $0 init git submodules ...
+
+git submodule init
 
 echo $0 copying ...
 

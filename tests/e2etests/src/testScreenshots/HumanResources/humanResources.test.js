@@ -8,7 +8,7 @@ beforeAll(async () => {
     await lib.getBrowser('Human Resources');
     // modules
     await page.screenshot({
-        path: 'screenshots/10_humanresources/1_human_module.png',
+        path: 'screenshots/HumanResources/1_humanresources_module.png',
         clip: {x: 0, y: 0, width: 150, height: 300}
     })
 });
@@ -26,29 +26,30 @@ describe('employee', () => {
         //console.log('Klick Button');
         newPage = await lib.getNewWindow();
         await newPage.waitFor(5000); //@todo wait for selector etc...
-        await newPage.screenshot({path: 'screenshots/2_allgemeines/16_allgemein_hr_eingabemaske_neu.png'});
-        await newPage.screenshot({path: 'screenshots/10_humanresources/2_human_mitarbeiter_hinzu.png'});
+        await newPage.screenshot({path: 'screenshots/StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu.png'});
+        await newPage.screenshot({path: 'screenshots/HumanResources/6_humanresources_mitarbeiter_dialog.png'});
         let stick = await newPage.$$('button');
         await stick[1].hover();
         await newPage.waitFor(1000);
         await newPage.screenshot({
-            path: 'screenshots/10_humanresources/3_human_mitarbeiter_kontaktdaten_zauberstab.png',
+            path: 'screenshots/HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab.png',
             clip: {x: 0, y: 0, width: 1366, height: (768 / 3)}
         });
     });
 
     test('costcenter', async () => {
         await expect(newPage).toClick('span', {text: 'Kostenstellen'});
-        await newPage.screenshot({path: 'screenshots/10_humanresources/4_human_mitarbeiter_kostenstellen.png'});
+        await newPage.screenshot({path: 'screenshots/HumanResources/8_humanresources_mitarbeiter_kostenstellen.png'});
     });
 
     test('contracts', async () => {
         await expect(newPage).toClick('span', {text: 'Verträge'});
         await newPage.waitFor(1000);
+        await newPage.screenshot({path: 'screenshots/HumanResources/9_humanresources_mitarbeiter_vertraege.png'});
         await expect(newPage).toClick('button', {text: 'Vertrag hinzufügen'});
         let popup = await lib.getNewWindow();
         await popup.waitFor(2000);
-        await popup.screenshot({path: 'screenshots/10_humanresources/6_human_mitarbeiter_vertrag.png'});
+        await popup.screenshot({path: 'screenshots/HumanResources/10_humanresources_mitarbeiter_vertragsdialog.png'});
         await popup.close();
     });
 
@@ -61,7 +62,7 @@ describe('employee', () => {
             if (index == 5) await element.click();
         });
         await newPage.waitFor('.x-widget-tag-tagitem-text');
-        await newPage.screenshot({path: 'screenshots/2_allgemeines/19_allgemein_hr_eingabemaske_neu_tag.png'});
+        await newPage.screenshot({path: 'screenshots/StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag.png'});
         let btn_text = await newPage.$$('.x-btn-text');
         btn_text.forEach(async function (element, index) {
             //console.log(index + ' \n ' + element);
@@ -69,7 +70,7 @@ describe('employee', () => {
         });
         await newPage.waitFor('.ext-mb-input');
         await expect(newPage).toFill('.ext-mb-input', 'Persönlicher Tag');
-        await newPage.screenshot({path: 'screenshots/2_allgemeines/20_allgemein_hr_eingabemaske_neu_tag_auswahl.png'});
+        await newPage.screenshot({path: 'screenshots/StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl.png'});
         await newPage.keyboard.press('Escape');
         await newPage.close();
     });
@@ -86,13 +87,13 @@ describe('employee', () => {
             await newPage.waitFor(2000);
             await expect(newPage).toClick('span', {text: 'Urlaub'});
             await newPage.waitFor(2000);
-            await newPage.screenshot({path: 'screenshots/10_humanresources/7_human_mitarbeiter_urlaub.png'});
+            await newPage.screenshot({path: 'screenshots/HumanResources/11_humanresources_mitarbeiter_vertraege.png'});
             await expect(newPage).toClick('button', {text: 'Urlaubstage hinzufügen'});
             let popup = await lib.getNewWindow();
             await popup.waitFor(2000);
-            await popup.screenshot({path: 'screenshots/10_humanresources/8_human_mitarbeiter_urlaubstage.png'});
+            await popup.screenshot({path: 'screenshots/HumanResources/12_humanresources_mitarbeiter_urlaub.png'});
             await expect(popup).toClick('button', {text: 'Abbrechen'});
-            await expect(newPage).toClick('button', {text: 'Abbrechen'});
+            await newPage.close();
         })
     })
 });
@@ -107,7 +108,7 @@ describe('employee accounts', () => {
         await row[2].click({clickCount: 2});
         newPage = await lib.getNewWindow();
         await newPage.waitFor(5000);
-        await newPage.screenshot({path: 'screenshots/10_humanresources/10_human_personalkonto.png'});
+        await newPage.screenshot({path: 'screenshots/HumanResources/14_humanresources_personalkonten_dialog.png'});
     });
 
     // not in BE
@@ -117,7 +118,7 @@ describe('employee accounts', () => {
         await expect(newPage).toClick('button', {text: 'Sonderurlaub hinzufügen'});
         let popup = await lib.getNewWindow();
         await popup.waitFor(2000);
-        await popup.screenshot({path: 'screenshots/10_humanresources/12_human_personalkonto_sonderurlaub.png'});
+        await popup.screenshot({path: 'screenshots/HumanResources/16_humanresources_personalkonten_sonderurlaub.png'});
     });
 });
 

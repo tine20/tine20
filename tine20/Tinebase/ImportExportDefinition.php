@@ -40,7 +40,6 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         $this->_modelName = 'Tinebase_Model_ImportExportDefinition';
         $this->_applicationName = 'Tinebase';
         $this->_purgeRecords = FALSE;
-        $this->_doContainerACLChecks = FALSE;
 
         // set backend with activated modlog
         $this->_backend = new Tinebase_Backend_Sql(array(
@@ -272,12 +271,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $definition->setId($existing->getId());
             $definition->is_deleted = $existing->is_deleted;
-            $result = $this->_backend->update($definition);
+            $result = $this->update($definition);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             // does not exist
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $_filename);
-            $result = $this->_backend->create($definition);
+            $result = $this->create($definition);
         }
         
         return $result;
@@ -344,5 +343,61 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         ));
 
         return $definition;
+    }
+
+    /**
+     * sets personal container id if container id is missing in record - can be overwritten to set a different container
+     *
+     * @param $_record
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _setContainer(Tinebase_Record_Interface $_record)
+    {
+        if (!$_record->container_id) {
+            $_record->container_id = self::getDefaultImportExportContainer()->getId();
+        }
+    }
+
+    public static function getDefaultImportExportContainer(): Tinebase_Model_Container
+    {
+        static $container = null;
+
+        if (null === $container) {
+            if (!($containerId = Tinebase_Config::getInstance()->{Tinebase_Config::IMPORT_EXPORT_DEFAULT_CONTAINER})) {
+                $container = self::createDefaultImportExportContainer();
+                Tinebase_Config::getInstance()->{Tinebase_Config::IMPORT_EXPORT_DEFAULT_CONTAINER} = $container->getId();
+            } else {
+                $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+            }
+        }
+
+        return $container;
+    }
+
+    protected static function createDefaultImportExportContainer(): Tinebase_Model_Container
+    {
+        $container = new Tinebase_Model_Container(array(
+            'name'              => 'Internal Import/Export Container',
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Core::getTinebaseId(),
+            'model'             => Tinebase_Model_ImportExportDefinition::class,
+        ));
+
+        $grants = Tinebase_Model_Grants::getDefaultGrants([
+            Tinebase_Model_Grants::GRANT_ADD => true,
+            Tinebase_Model_Grants::GRANT_EDIT => true,
+            Tinebase_Model_Grants::GRANT_DELETE => true,
+        ]);
+        $anybody = $grants->find('account_id', Tinebase_Core::getUser()->getId());
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
+            $grants->removeRecord($anybody);
+        } else {
+            $anybody->account_id = 0;
+            $anybody->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+            $anybody->{Tinebase_Model_Grants::GRANT_ADMIN} = false;
+        }
+
+        return Tinebase_Container::getInstance()->addContainer($container, $grants, true);
     }
 }

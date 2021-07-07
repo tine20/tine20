@@ -27,6 +27,7 @@ class Tinebase_Expressive_RouteHandler
     const PUBLIC_USER_ROLES = 'publicUserRoles';
     const CLASS_NAME = 'class';
     const METHOD = 'method';
+    const NAME = 'name';
 
     /**
      * pipeInject data should be an array of arrays containing the PIPE_INJECT_* data
@@ -49,6 +50,7 @@ class Tinebase_Expressive_RouteHandler
     protected $_isStatic = false;
     protected $_hasGetInstance = true;
     protected $_pipeInjectData = [];
+    protected $_name = null;
 
     /**
      * Tinebase_Expressive_RouteHandler constructor.
@@ -67,6 +69,11 @@ class Tinebase_Expressive_RouteHandler
         if (isset($_options[self::PIPE_INJECT])) {
             $this->_pipeInjectData = $_options[self::PIPE_INJECT];
         }
+        if (isset($_options[self::NAME])) {
+            $this->_name = $_options[self::NAME];
+        } else {
+            $this->_name = $class . '::' . $method;
+        }
 
         $this->_class = $class;
         $this->_method = $method;
@@ -74,6 +81,11 @@ class Tinebase_Expressive_RouteHandler
         $this->_methodParams = $reflection->getParameters();
         $this->_isStatic = $reflection->isStatic();
         $this->_hasGetInstance = method_exists($class, 'getInstance');
+    }
+
+    public function getName(): string
+    {
+        return $this->_name;
     }
 
     /**

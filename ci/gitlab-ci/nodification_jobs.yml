@@ -1,0 +1,9 @@
+"send_pipeline_status":
+  extends: .abstract_jobs.docker
+  stage: nodify
+  script:
+    - $CI_PROJECT_DIR/ci/scripts/send_pipeline_status.sh
+  rules:
+    - if: $NODIFY_ON_FAILURE == "true"
+      when: on_failure
+    - when: never

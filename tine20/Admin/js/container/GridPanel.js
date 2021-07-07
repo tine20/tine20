@@ -94,10 +94,12 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * initialises filter toolbar
      */
     initFilterPanel: function() {
+        var typeStore = [['shared', this.app.i18n._('shared')], ['personal', this.app.i18n._('personal')]];
+        
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Container'),       field: 'query',    operators: ['contains']},
-                {label: this.app.i18n._('Type'),            field: 'type',     operators: ['contains']},
+                {label: this.app.i18n._('Type'), defaultValue: 'shared', valueType: 'combo', field: 'type', store: typeStore},
                 {filtertype: 'admin.application', app: this.app}
             ],
             defaultFilter: 'query',

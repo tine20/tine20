@@ -70,7 +70,8 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.loadMask.show();
         var upload = new Ext.ux.file.Upload({
             file: files[0],
-            fileSelector: fileSelector
+            fileSelector: fileSelector,
+            id: Tine.Tinebase.uploadManager.generateUploadId()
         });
         
         upload.on('uploadcomplete', function(uploader, record){
@@ -95,8 +96,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
         
         this.loadMask.show();
-        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
+        upload.upload();
     },
     
     /**

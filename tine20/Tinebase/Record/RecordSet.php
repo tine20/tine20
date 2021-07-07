@@ -18,7 +18,8 @@
  * @package     Tinebase
  * @subpackage  Record
  *
- * @method getId()
+ * @method getId() - see \Tinebase_Record_Abstract::getId
+ * @method setConvertDates($_bool) - see \Tinebase_Record_Abstract::setConvertDates
  */
 class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
 {

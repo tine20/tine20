@@ -175,7 +175,9 @@ describe('employee', () => {
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled');
                     await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
-                    
+
+                    await employeeEditDialog.screenshot({path: 'screenshots/HumanResources/13_humanresources_mitarbeiter_krankheit.png'});
+
                     await expect(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-SICKNESS .x-grid3-col-description', {text: testString});
                 });
             });

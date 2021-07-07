@@ -1050,9 +1050,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'getLogo', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-        });
-        
-        $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
+
             $routeCollector->get('/health', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'healthCheck', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -1064,6 +1062,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'getStatus', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
+
+            $routeCollector->addRoute(['GET', 'POST'], '/export/{definitionId}', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Export_Abstract::class, 'expressiveApi'))->toArray());
         });
 
         $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {

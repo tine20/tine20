@@ -170,7 +170,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
 
     metadata.css = 'x-grid-mimeicon';
 
-    if(record.get('type') == 'folder') {
+    if(record.get('type') === 'folder') {
         metadata.css += ' mime-icon-folder';
         
         if (dataSafeEnabled && !!record.get('pin_protected_node')) {
@@ -189,9 +189,10 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     if (Tine.Tinebase.common.hasRight('run', 'Filemanager')) {
         metadata.css += ' ' + Tine.Filemanager.Model.Node.getStyles(record).join(' ');
     }
-
-    if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
-
+    
+    // all browsers should support chunk upload
+    /*
+    if (!Ext.ux.file.Upload.isHtml5ChunkedUpload()) {
         var fileName = value;
         if (typeof value == 'object') {
             fileName = value.name;
@@ -203,6 +204,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         
         return Ext.util.Format.htmlEncode(fileName);
     }
+    */
     
     if (! Ext.ux.PercentRendererWithName.template) {
         Ext.ux.PercentRendererWithName.template = new Ext.XTemplate(
@@ -245,15 +247,21 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         fileName = '<div class="mime-icon-overlay mime-icon-link"></div>' + fileName;
     }
 
-    if (String(record.get('contenttype')).match(/^vnd\.adobe\.partial-upload.*/) && record.get('status') !== 'uploading') {
-        const warningText = i18n._('This file has no contents. The Upload has failed or has not yet finished.');
-        fileName = '<div class="mime-icon-overlay x-dialog-warn" ext:qtip="'+ Tine.Tinebase.common.doubleEncode(warningText) +'"></div>' + fileName;
+    // check contenttype and get info , update ui based on it
+    
+    let percent = -1;
+    
+    if (String(record.get('contenttype')).match(/^vnd\.adobe\.partial-upload.*/)) {
+        const progress = parseInt(_.last(_.split(record.get('contenttype'), ';')).replace('progress=', ''));
+        if(progress > -1) {
+            percent = progress;
+        }
+    } else {
+        percent = record.get('progress');
     }
-
-    var percent = record.get('progress');
     
     var additionalStyle = '';
-    if(record.get('status') == 'paused' && percent < 100) {
+    if(record.get('status') === 'paused' && percent < 100) {
         fileName = i18n._('(paused)') + '&#160;&#160;' + fileName;
         additionalStyle = 'background-image: url(\'styles/images/tine20/progress/progress-bg-y.gif\') !important;';
     }

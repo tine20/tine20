@@ -6,7 +6,7 @@
  * @subpackage  Session
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Guilherme Striquer Bisotto <guilherme.bisotto@serpro.gov.br>
- * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -258,24 +258,26 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
 
                 if (!ini_set('session.save_handler', 'files'))
                 {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " ini set didn´t work. session.save_handler = " . ini_get('session.save_handler'));
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . " ini set didn´t work. session.save_handler = " . ini_get('session.save_handler'));
                 }
 
-                
-                $lastSessionCleanup = Tinebase_Config::getInstance()->get(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN);
-                if ($lastSessionCleanup instanceof DateTime && $lastSessionCleanup > Tinebase_DateTime::now()->subHour(2)) {
-                    Zend_Session::setOptions(array(
-                        'gc_probability' => 0,
-                        'gc_divisor'     => 100
-                    ));
-                } else if (@opendir($sessionSavepath) !== FALSE) {
-                    Zend_Session::setOptions(array(
-                        'gc_probability' => 1,
-                        'gc_divisor'     => 100
-                    ));
-                } else {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . " Unable to initialize automatic session cleanup. Check permissions to " . $sessionSavepath);
+                if (!$config->session || !$config->session->nocleanup) {
+                    $lastSessionCleanup = Tinebase_Config::getInstance()->get(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN);
+                    if ($lastSessionCleanup instanceof DateTime && $lastSessionCleanup > Tinebase_DateTime::now()->subHour(2)) {
+                        Zend_Session::setOptions(array(
+                            'gc_probability' => 0,
+                            'gc_divisor' => 100
+                        ));
+                    } else if (@opendir($sessionSavepath) !== FALSE) {
+                        Zend_Session::setOptions(array(
+                            'gc_probability' => 1,
+                            'gc_divisor' => 100
+                        ));
+                    } else {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . " Unable to initialize automatic session cleanup. Check permissions to " . $sessionSavepath);
+                    }
                 }
                 
                 break;
