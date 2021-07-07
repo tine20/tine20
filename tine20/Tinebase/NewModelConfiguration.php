@@ -44,10 +44,9 @@ class Tinebase_NewModelConfiguration  extends Tinebase_ModelConfiguration
         } catch (Tinebase_Exception_Record_DefinitionFailure $e) {
             throw $e;
         } catch (Exception $e) {
+            Tinebase_Exception::log($e);
             throw new Tinebase_Exception_Record_DefinitionFailure('exception: ' . $e->getMessage(), $e->getCode(), $e);
         }
-
-
     }
 
     public function setValidators($_validators)
