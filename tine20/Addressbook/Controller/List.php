@@ -579,12 +579,14 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param Felamimail_Model_Account $_list
-     * @return NULL|Tinebase_Record_Interface
+     * @param Addressbook_Model_List $_list
+     * @return NULL|Felamimail_Model_Account
      */
     protected function _getMailAccount($_list)
     {
-        return Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+        // if user has right for list, he/she is also allowed to see/change the mail account
+        $backend = new Felamimail_Backend_Account();
+        return $backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $_list->getId()],
             ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
@@ -633,7 +635,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
                 preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
-            Felamimail_Controller_Account::getInstance()->delete($this->_getMailAccount($currentRecord)->getId());
+
+            $account = $this->_getMailAccount($currentRecord);
+            if ($account !== null) {
+                Felamimail_Controller_Account::getInstance()->delete($account->getId());
+            }
         }
     }
 
