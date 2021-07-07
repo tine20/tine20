@@ -24,6 +24,13 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     protected $_memberRolesBackend = null;
 
     /**
+     * application backend class
+     *
+     * @var Addressbook_Backend_List
+     */
+    protected $_backend;
+
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -32,9 +39,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $this->_resolveCustomFields = true;
         $this->_backend = new Addressbook_Backend_List();
-        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
-            $this->_useRecordPaths = true;
-        }
         $this->_modelName = Addressbook_Model_List::class;
         $this->_applicationName = 'Addressbook';
     }
@@ -443,11 +447,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * add / remove system group members
      *
-     * @param $group
-     * @param $list
-     * @param $oldList
+     * @param Tinebase_Model_Group $group
+     * @param Addressbook_Model_List $list
+     * @param Addressbook_Model_List $oldList
      */
-    protected function _updateGroupMembers($group, $list, $oldList)
+    protected function _updateGroupMembers(Tinebase_Model_Group $group, Addressbook_Model_List $list, Addressbook_Model_List $oldList)
     {
         // get all system contacts
         $checks = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
@@ -533,7 +537,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * - throw exception if another system user or group is found with this address
      *   or the domain mismatches
      *
-     * @param $email
+     * @param string $email
      * @throws Tinebase_Exception_Backend_Database
      * @throws Tinebase_Exception_SystemGeneric
      */
@@ -674,14 +678,17 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         foreach ($lists as $list) {
             $event = new Addressbook_Event_DeleteList();
             $event->list = $list;
-            Tinebase_Event::fireEvent($event);
-
-            if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+            if (! Tinebase_Event::fireEvent($event)) {
+                $key = array_search($list->getId(), $_ids);
+                unset($_ids[$key]);
+            } else {
+                if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                     $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
                     preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $list->email)) {
-                $mailAccount = $this->_getMailAccount($list);
-                if ($mailAccount) {
-                    Felamimail_Controller_Account::getInstance()->delete($mailAccount->getId());
+                    $mailAccount = $this->_getMailAccount($list);
+                    if ($mailAccount) {
+                        Felamimail_Controller_Account::getInstance()->delete($mailAccount->getId());
+                    }
                 }
             }
         }
@@ -759,10 +766,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * add / remove system group members
      *
-     * @param $group
-     * @param $list
+     * @param Tinebase_Model_Group $group
+     * @param Addressbook_Model_List $list
      */
-    protected function _updateListMembersFromGroup($group, $list)
+    protected function _updateListMembersFromGroup(Tinebase_Model_Group $group, Addressbook_Model_List $list)
     {
         // get all non-system contacts
         $checks = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
@@ -934,7 +941,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * get all lists given contact is member of
      *
-     * @param $contact
+     * @param Addressbook_Model_Contact|string $contact
      * @return array
      */
     public function getMemberships($contact)
