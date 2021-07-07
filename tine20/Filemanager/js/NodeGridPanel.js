@@ -144,7 +144,18 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @returns {boolean}
      */
     onBeforeEdit: function(row) {
-        return Tine.Filemanager.nodeActionsMgr.checkConstraints('edit', row.record);
+        const record = row.record;
+
+        // TODO do we have a function to find out top level nodes?
+        if (record.id && record.get('path') && (
+            ['myUser', 'otherUsers', 'shared'].indexOf(record.get('id')) !== -1
+            || record.get('path').match(/^\/personal\/\w+$/)
+        )) {
+            // do not allow to edit user/shared top level nodes
+            return false;
+        }
+
+        return true;
     },
 
     /**

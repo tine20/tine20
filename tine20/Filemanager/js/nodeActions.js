@@ -69,12 +69,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
         
         if (action === 'delete') {
             // delete grant required
-            isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.deleteGrant', false);
-        }
-        
-        if (action === 'edit') {
-            // edit grant required
-            isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.editGrant', false);
+            isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.deleteGrant')
         }
 
         // don't allow any actions 
