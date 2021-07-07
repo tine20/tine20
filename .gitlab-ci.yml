@@ -20,6 +20,9 @@ include:
   - local: '/ci/gitlab-ci/housekeeping_jobs.yml'
   - local: '/ci/gitlab-ci/nodification_jobs.yml'
 
+variables:
+  IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
+
 stages:
   - build1
   - build2

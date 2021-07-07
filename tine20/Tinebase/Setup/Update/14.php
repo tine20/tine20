@@ -204,7 +204,18 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
                     <length>40</length>
                 </field>'));
 
-        $defaultContainer = Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
+        if (Tinebase_Core::isReplica()) {
+            $tries = 0;
+            do {
+                Tinebase_Timemachine_ModificationLog::getInstance()->readModificationLogFromMaster();
+                try {
+                    $defaultContainer = Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
+                    break;
+                } catch (Exception $e) {}
+            } while (++$tries < 100);
+        } else {
+            $defaultContainer = Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
+        }
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'importexport_definition SET container_id = "' .
             $defaultContainer->getId() . '"');
 
