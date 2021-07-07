@@ -2183,6 +2183,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $model = $_modification->record_type;
                 $record = new $model($diff->diff);
+                if ($record->application_id === $_modification->instance_id) {
+                    $record->application_id = Tinebase_Core::getTinebaseId();
+                }
                 $this->addContainer($record, null, true);
                 break;
 
