@@ -4,7 +4,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  */
@@ -70,7 +70,7 @@ class Addressbook_JsonTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $this->_geodata = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
         
         // always resolve customfields
@@ -114,7 +114,7 @@ class Addressbook_JsonTest extends TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
 
         if ($this->_uit) {
@@ -2231,10 +2231,11 @@ Steuernummer 33/111/32212";
     public function testCreateListWithMemberAndRole($listRoleName = 'my test role')
     {
         $contact = $this->_addContact();
-        $listRole = $this->_uit->saveListRole(array(
-            'name'          => $listRoleName,
-            'description'   => 'my test description'
-        ));
+        $listRole = $this->_uit->saveListRole([
+            Addressbook_Model_ListRole::FLD_NAME => $listRoleName,
+            Addressbook_Model_ListRole::FLD_DESCRIPTION => 'my test description',
+            Addressbook_Model_ListRole::FLD_MAX_MEMBERS => 1,
+        ]);
         $memberroles = array(array(
             'contact_id'   => $contact['id'],
             'list_role_id' => $listRole['id'],
@@ -2242,7 +2243,7 @@ Steuernummer 33/111/32212";
         $list = $this->_uit->saveList(array(
             'name'                  => 'my test list',
             'description'           => '',
-            'members'               => array($contact['id']),
+            'members'               => [$contact['id']],
             'memberroles'           => $memberroles,
             'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
         ));
@@ -2386,6 +2387,28 @@ Steuernummer 33/111/32212";
         $updatedList['email'] = 'somelistemailupdated@' . TestServer::getPrimaryMailDomain();
         $updatedListAgain = $this->_uit->saveList($updatedList);
         self::assertEquals($updatedList['email'], $updatedListAgain['email']);
+    }
+
+    public function testListMaxRoleMembers()
+    {
+        $list = $this->testCreateListWithMemberAndRole();
+        // try to add another contact with the same role
+        $contact2 = $this->_addContact();
+        $memberrole1 = $list['memberroles'][0];
+        $memberrole1['list_role_id'] = $memberrole1['list_role_id']['id'];
+        $memberrole1['contact_id'] = $memberrole1['contact_id']['id'];
+        $memberrole2 = $memberrole1;
+        unset($memberrole2['id']);
+        $memberrole2['contact_id'] = $contact2['id'];
+        $list['memberroles'] = [$memberrole1, $memberrole2];
+        $list['members'] = [$memberrole1['contact_id'], $contact2['id']];
+        try {
+            $list = $this->_uit->saveList($list);
+            self::fail('should not be possible to add another member with the same function/role: ' . print_r($list, true));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translate = Tinebase_Translation::getTranslation('Addressbook');
+            self::assertStringContainsString($translate->_('Maximum number of role members reached'), $tesg->getMessage());
+        }
     }
 
     public function testUpdateListEmailOfSystemGroup()
