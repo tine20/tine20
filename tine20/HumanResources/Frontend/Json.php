@@ -469,9 +469,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $ftController = HumanResources_Controller_FreeTime::getInstance();
         $fdController = HumanResources_Controller_FreeDay::getInstance();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' $_employeeId ' . $_employeeId . ' $_year ' . $_year . ' $_freeTimeId ' . $_freeTimeId . ' $_accountId ' . $_accountId);
-        
         // validate employeeId
         $employee = $eController->get($_employeeId);
         
