@@ -15,7 +15,7 @@ export PHP_VERSION=${PHP_VERSION}
 export BASE_IMAGE="${REGISTRY}/base-commit:${IMAGE_TAG}"
 export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
 export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
-export BUILD_IMAGE="${REGISTRY}/build-commit${IMAGE_TAG}"
+export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
 export BUILT_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
 
 export VERSION=${CI_COMMIT_TAG:-nightly}
