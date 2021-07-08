@@ -24,7 +24,7 @@
   extends: .abstract_jobs.copy_source
   stage: test
   image:
-    name: "$REGISTRY/test-source$-commit:${IMAGE_TAG}"
+    name: "$REGISTRY/test-source-commit:${IMAGE_TAG}"
   script:
     - cd $TINE20ROOT
     - composer require phpstan/phpstan

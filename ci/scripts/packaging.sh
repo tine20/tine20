@@ -37,7 +37,7 @@ tar -rf "${CI_BUILDS_DIR}/tine20/tine20/packages.tar" current.map
 curl \
 	--header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
 	--upload-file "${CI_BUILDS_DIR}/tine20/tine20/packages.tar" \
-	"${CI_API_V4_URL}/projects/${CI_BUILDS_DIR}/tine20/tine20/packages/generic/${VERSION}/1.0.0/all.tar"
+	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/all.tar"
 echo "published packages to ${CI_API_V4_URL}/projects/${CI_BUILDS_DIR}/tine20/tine20/packages/generic/${VERSION}/1.0.0/all.tar"
 
 tar -xf "${CI_BUILDS_DIR}/tine20/tine20/packages.tar"
