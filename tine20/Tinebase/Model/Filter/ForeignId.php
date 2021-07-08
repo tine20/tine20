@@ -21,6 +21,8 @@
  *
  * @package     Tinebase
  * @subpackage  Filter
+ *
+ * TODO make filtergroup optional (can be fetched via controller or model)
  */
 class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecord
 {

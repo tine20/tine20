@@ -4,7 +4,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -12,16 +12,14 @@ Ext.ns('Tine.Addressbook');
 
 /**
  * @namespace   Tine.Addressbook
- * @class       Tine.Addressbook.ListRoleGridPanel
+ * @class       Tine.Addressbook.ListEditDialogRoleGridPanel
  * @extends     Ext.grid.EditorGridPanel
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
- * NOTE: this is currently only used in ListEditDialog. If we need a separate ListRole grid panel with toolbars, filters,
- * ... this needs to be splitted/renamed.
+ * NOTE: this is currently only used in ListEditDialog
  */
-Tine.Addressbook.ListRoleGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.Addressbook.ListEditDialogRoleGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
-    recordClass: Tine.Addressbook.Model.ListRole,
     usePagingToolbar: false,
 
     autoExpandColumn: 'name',
@@ -38,6 +36,7 @@ Tine.Addressbook.ListRoleGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * init component
      */
     initComponent: function() {
+        this.recordClass = Tine.Addressbook.Model.ListRole;
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Addressbook');
 
         this.gridConfig.cm = new Ext.grid.ColumnModel({
@@ -49,7 +48,7 @@ Tine.Addressbook.ListRoleGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.title = this.app.i18n._('List Functions')
 
-        Tine.Addressbook.ListRoleGridPanel.superclass.initComponent.call(this);
+        Tine.Addressbook.ListEditDialogRoleGridPanel.superclass.initComponent.call(this);
     },
 
     getColumns: function() {

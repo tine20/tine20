@@ -816,26 +816,6 @@ parameters:
 			path: tine20/Addressbook/Frontend/Cli.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$recordData\\)\\: Unexpected token \"\\$recordData\", expected type at offset 47$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$recordData\\)\\: Unexpected token \"\\$recordData\", expected type at offset 46$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_Model_Filter_FilterGroup\\)\\: Unexpected token \"\\\\n     \\*\", expected variable at offset 194$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/Json.php
-
-		-
-			message: "#^Cannot access property \\$image on Tinebase_Record_Interface\\|true\\.$#"
-			count: 2
-			path: tine20/Addressbook/Frontend/Json.php
-
-		-
 			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
 			count: 1
 			path: tine20/Addressbook/Frontend/WebDAV/Container.php
@@ -884,11 +864,6 @@ parameters:
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
 			count: 1
 			path: tine20/Addressbook/Model/ListMemberFilter.php
-
-		-
-			message: "#^Access to an undefined property Addressbook_Model_ListRole\\:\\:\\$name\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListRole.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"

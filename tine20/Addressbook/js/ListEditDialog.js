@@ -44,7 +44,8 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             frame: true,
             margins: '6 0 0 0'
         });
-        this.memberRolesPanel = new Tine.Addressbook.ListRoleGridPanel({
+        this.memberRolesPanel = new Tine.Addressbook.ListEditDialogRoleGridPanel({
+            recordClass: Tine.Addressbook.Model.ListRole,
             region: "south",
             frame: true,
             margins: '6 0 0 0',
