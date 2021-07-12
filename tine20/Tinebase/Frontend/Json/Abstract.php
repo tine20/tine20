@@ -601,9 +601,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 $nodes = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($nodeId);
                 $result = $this->_multipleRecordsToJson($nodes);
             }
-        } catch (Exception $e) {
+        } catch (Throwable $t) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' Could not get template files: ' . $e);
+                . ' Could not get template files: ' . $t);
         }
     
         return array(
