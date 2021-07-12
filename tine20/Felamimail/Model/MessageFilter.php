@@ -204,6 +204,9 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         }
         
         // add filter value
+        if (! isset($_filterData['value'])) {
+            $_filterData['value'] = '';
+        }
         if (! is_array($_filterData['value'])) {
             $value      = '%' . $_filterData['value'] . '%';
         } else {
