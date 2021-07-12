@@ -4,6 +4,7 @@ parameters:
     universalObjectCratesClasses:
         - Tinebase_Record_Interface
         - Tinebase_Record_RecordSet
+        - Tinebase_Config
     reportUnmatchedIgnoredErrors: false
     paths:
       - tine20
