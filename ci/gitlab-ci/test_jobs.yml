@@ -52,7 +52,7 @@
 "test with health check":
   extends: .abstract_jobs.php_unit
   variables:
-    ARG_IMAGE: test-built-commit
+    ARG_IMAGE: test-built
   stage: test
   timeout: 20m
   script:
