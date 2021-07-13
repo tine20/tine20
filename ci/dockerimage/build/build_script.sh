@@ -196,8 +196,8 @@ function moveCustomapps() {
 }
 
 function fixFilePermissions() {
-    find . -type d -exec chmod 755 {} +
-    find . -type f -exec chmod 644 {} +
+    find ${TINE20ROOT} -type d -exec chmod 755 {} +
+    find ${TINE20ROOT} -type f -exec chmod 644 {} +
 }
 
 function createArchives()
