@@ -20,6 +20,6 @@ else
     		exit 1
 	fi
 
-	echo "${branch}" | cut -d '/' -f0
+	echo "${branch}" | cut -d '/' -f1
 	exit 0
 fi
