@@ -1,7 +1,7 @@
 "check php version":
   stage: test
-  image:
-    name: "$REGISTRY/test-source$-commit:${IMAGE_TAG}"
+  variables:
+    ARG_IMAGE: test-source
   script:
     - echo "PHP version shoud be ${PHP_VERSION}."
     - echo "PHP version is $(php -r 'echo PHP_VERSION;')"
@@ -23,8 +23,8 @@
 "phpstan: code analyses":
   extends: .abstract_jobs.copy_source
   stage: test
-  image:
-    name: "$REGISTRY/test-source-commit:${IMAGE_TAG}"
+  variables:
+    ARG_IMAGE: test-source
   script:
     - cd $TINE20ROOT
     - composer require phpstan/phpstan
