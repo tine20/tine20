@@ -33,12 +33,14 @@ echo "currentPackage ${RELEASE}/tine20-allinone_${RELEASE}.zip" >> current.map
 tar -rf "${CI_BUILDS_DIR}/tine20/tine20/packages.tar" current.map
 
 #push packages to gitlab
-# gitlab 13.9 package version only allows semantic version not a tag. gitlab 14 allows our tag format, using package name as version instade
+
+customer=$(${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/get_customer_for_branch.sh $MAJOR_COMMIT_REF_NAME)
+
 curl \
 	--header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
 	--upload-file "${CI_BUILDS_DIR}/tine20/tine20/packages.tar" \
-	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/all.tar"
-echo "published packages to ${CI_API_V4_URL}/projects/${CI_BUILDS_DIR}/tine20/tine20/packages/generic/${VERSION}/1.0.0/all.tar"
+	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${VERSION}/all.tar"
+echo "published packages to ${CI_API_V4_URL}/projects/${CI_BUILDS_DIR}/tine20/tine20/packages/generic/${customer}/${VERSION}/all.tar"
 
 tar -xf "${CI_BUILDS_DIR}/tine20/tine20/packages.tar"
 
@@ -48,5 +50,5 @@ for f in *; do
 	curl \
 	--header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
 	--upload-file "$f" \
-	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${VERSION}/1.0.0/$(echo "$f" | sed sI~I-Ig)"
+	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${VERSION}/$(echo "$f" | sed sI~I-Ig)"
 done
