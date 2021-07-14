@@ -19,7 +19,7 @@
   alias: dovecot
   entrypoint: ["/bin/sh", "-c", "/bin/sh /root/docker-entrypoint.sh"]
 .ldap_service: &abstract_jobs-ldap_service
-  name: ${UTIL_REGISTRY}/ldap:1.0.0
+  name: ${UTIL_REGISTRY}/ldap:1.2.5-r0
   alias: ldap
   entrypoint: ["/container/tool/run", "--copy-service"]
 .tine_as_service: &abstract_jobs-tine_as_service
