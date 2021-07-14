@@ -197,12 +197,14 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
 
     public function update007()
     {
-        $this->_backend->addCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
-            '<field>
+        if (! $this->_backend->columnExists('container_id', 'importexport_definition')) {
+            $this->_backend->addCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
+                '<field>
                     <name>container_id</name>
                     <type>text</type>
                     <length>40</length>
                 </field>'));
+        }
 
         if (Tinebase_Core::isReplica()) {
             $tries = 0;
