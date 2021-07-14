@@ -1,0 +1,29 @@
+dn: ou=groups,dc=tine,dc=test
+ou: groups
+objectClass: organizationalUnit
+objectClass: top
+
+dn: cn=Administrators,ou=groups,dc=tine,dc=test
+cn: Administrators
+gidNumber: 1062
+memberUid: tine20
+objectClass: posixGroup
+objectClass: top
+
+dn: cn=Users,ou=groups,dc=tine,dc=test
+cn: Users
+gidNumber: 1063
+memberUid: tine20
+objectClass: posixGroup
+objectClass: top
+
+dn: ou=users,dc=tine,dc=test
+ou: users
+objectClass: organizationalUnit
+objectClass: top
+
+# addressbook sync ou
+dn: ou=ab,dc=tine,dc=test
+ou: ab
+objectClass: organizationalUnit
+objectClass: top
