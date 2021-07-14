@@ -193,15 +193,15 @@ class Crm_JsonTest extends Crm_AbstractTest
             'description' => 'testTagFilter',
             'color' => '#009B31',
         ));
-        $contact    = $this->_getContact();
+        $contact = $this->_getContact();
         $contact->setId($savedLead['id']);
         
         $contact->tags = array($tag);
         $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         $tag = $savedContact->tags->getFirstRecord();
-        
+
         $filter = array(
-            array('field' => 'tag',           'operator' => 'equals',       'value' => $tag->getId()),
+            array('field' => 'tag', 'operator' => 'equals', 'value' => $tag->getId()),
         );
         
         $result = $this->_getUit()->searchLeads($filter, array());
