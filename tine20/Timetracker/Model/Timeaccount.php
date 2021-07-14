@@ -284,7 +284,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             ),
             'accounting_time_factor' => array(
                 'label'                 => 'Accounting time factor', // _('Accounting time factor')
-                'inputFilters' => array('Zend_Filter_Empty' => 1),
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'float',
                 'default'               => 1
             ),
