@@ -425,6 +425,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_AreaLockState::class,
                 Tinebase_Model_AsyncJob::class,
                 Tinebase_Model_MFA_GenericSmsConfig::class,
+                Tinebase_Model_MFA_HTOTPConfig::class,
+                Tinebase_Model_MFA_HTOTPUserConfig::class,
                 Tinebase_Model_MFA_SmsUserConfig::class,
                 Tinebase_Model_MFA_PinConfig::class,
                 Tinebase_Model_MFA_PinUserConfig::class,

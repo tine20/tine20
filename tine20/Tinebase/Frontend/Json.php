@@ -39,6 +39,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'ImportExportDefinition',
         'LogEntry',
         'Tree_Node',
+        Tinebase_Model_MFA_HTOTPUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_UserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_PinUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_SmsUserConfig::MODEL_NAME_PART,

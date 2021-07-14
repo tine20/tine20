@@ -13,8 +13,10 @@ import PinProvider from 'MFA/Providers/Pin'
 import TokenProvider from 'MFA/Providers/Token'
 import SmsProvider from 'MFA/Providers/Sms'
 import YubicoOTPProvider from 'MFA/Providers/YubicoOTP'
+import HTOTPProvider from 'MFA/Providers/HTOTP'
 
 let providerMap = {
+  Tinebase_Model_MFA_HTOTPUserConfig: HTOTPProvider,
   Tinebase_Model_MFA_SmsUserConfig: SmsProvider,
   Tinebase_Model_MFA_UserPassword: UserPasswordProvider,
   Tinebase_Model_MFA_PinUserConfig: PinProvider,
