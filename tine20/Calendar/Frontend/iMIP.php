@@ -161,19 +161,24 @@ class Calendar_Frontend_iMIP
      */
     protected function _process($_iMIP, $_status = NULL)
     {
-        $method                  = ucfirst(strtolower($_iMIP->method));
-        $processMethodName       = '_process'   . $method;
-        
-        if (! method_exists($this, $processMethodName)) {
+        if (empty($_iMIP->method)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' iMIP method empty ... assuming "REQUEST"');
+            $_iMIP->method = 'REQUEST';
+        }
+        $method = ucfirst(strtolower($_iMIP->method));
+        $processMethodName = '_process' . $method;
+
+        if (!method_exists($this, $processMethodName)) {
             throw new Tinebase_Exception_UnexpectedValue("Method {$_iMIP->method} not supported");
         }
 
         $this->_checkPreconditions($_iMIP, true, $_status);
         $result = $this->{$processMethodName}($_iMIP, $_status);
 
-        //clear existing event cache
+        // clear existing event cache
         unset($_iMIP->existing_event);
-        
+
         return $result;
     }
     
