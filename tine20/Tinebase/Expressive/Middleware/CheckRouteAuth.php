@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Expressive
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -42,11 +42,41 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             throw new Tinebase_Exception_UnexpectedValue('no matched route found');
         }
 
+        Tinebase_Core::startCoreSession();
+
         if (! $routeHandler->isPublic()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' in an auth route');
 
-            if (null === ($user = Tinebase_Core::getUser()) || !Tinebase_Server_Abstract::checkLoginAreaLock()) {
+            if (null === ($user = Tinebase_Core::getUser()) && $request->hasHeader('Authorization')) {
+                foreach ($request->getHeader('Authorization') as $authHeader) {
+                    if (strpos($authHeader, 'Bearer ') === 0) {
+                        $token = substr($authHeader, 7);
+                        try {
+                            Admin_Controller_JWTAccessRoutes::doRouteAuth($routeHandler->getName(), $token);
+                            $user = Tinebase_Core::getUser();
+                        } catch (Tinebase_Exception_AccessDenied $tead) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
+                                '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $tead->getMessage());
+
+                            // unauthorized
+                            return new Response('php://memory', 401);
+                        } catch (Tinebase_Exception $te) {
+                            // something went wrong -> 500
+                            throw $te;
+                        } catch (Exception $e) {
+                            // these are jwt fails, so basically bad requests ... yet we return 401
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
+                                '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $e->getMessage());
+
+                            // unauthorized
+                            return new Response('php://memory', 401);
+                        }
+                    }
+                }
+            }
+
+            if (null === $user || (!empty($user->mfa_configs) && !Tinebase_Server_Abstract::checkLoginAreaLock())) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . ' returning with HTTP 401 unauthorized');
 

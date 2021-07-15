@@ -17,7 +17,7 @@ describe('Edit Contact', () => {
         await popupWindow.screenshot({path: 'screenshots/Aufgaben/2_aufgaben_neue_aufgabe.png'});
     });
 
-    test('notification', async () => {
+    test.skip('notification', async () => {
         await expect(popupWindow).toClick('span', {text: 'Alarm', clickCount: 1});
         await popupWindow.click('.new-row .x-form-trigger.x-form-arrow-trigger');
         await popupWindow.waitFor(500);

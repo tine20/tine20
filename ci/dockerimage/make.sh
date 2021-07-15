@@ -39,6 +39,7 @@ function build_image() {
     cmd+=" --build-arg CUSTOM_APP_GIT_URL"
     cmd+=" --build-arg CUSTOM_APP_VERSION"
 
+    echo "$0: using RELEASE: $RELEASE; CODENAME: $CODENAME; REVISION: $REVISION" 
     # release
     cmd+=" --build-arg RELEASE"
     cmd+=" --build-arg CODENAME"

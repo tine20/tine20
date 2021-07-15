@@ -136,7 +136,8 @@ class Addressbook_CliTest extends TestCase
         $listRole = Addressbook_Controller_ListRole::getInstance()->get($_id);
         static::assertSame($_name, $listRole->name);
 
-        $listRoles = Addressbook_Controller_ListRole::getInstance()->search(new Addressbook_Model_ListRoleFilter([
+        $listRoles = Addressbook_Controller_ListRole::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_ListRole::class, [
             ['field' => 'name', 'operator' => 'equals', 'value' => $_name],
         ]));
         static::assertSame(1, $listRoles->count(), 'did\'nt find right amount');

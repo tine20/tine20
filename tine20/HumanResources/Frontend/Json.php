@@ -227,6 +227,16 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
     }
 
+    public function recalculateEmployeesWTReports(string $employeeId)
+    {
+        /** @noinspection PhpParamsInspection */
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee(
+            HumanResources_Controller_Employee::getInstance()->get($employeeId)
+        );
+
+        return true;
+    }
+
     /**
      * calculate all daily working time reports
      *
@@ -507,9 +517,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $aController = HumanResources_Controller_Account::getInstance();
         $ftController = HumanResources_Controller_FreeTime::getInstance();
         $fdController = HumanResources_Controller_FreeDay::getInstance();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' $_employeeId ' . $_employeeId . ' $_year ' . $_year . ' $_freeTimeId ' . $_freeTimeId . ' $_accountId ' . $_accountId);
         
         // validate employeeId
         $employee = $eController->get($_employeeId);

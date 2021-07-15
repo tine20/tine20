@@ -470,13 +470,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             callback: this.onRecordChanges.createDelegate(this)
         }));
     },
-
+    
+    getRecordByData(data) {
+        const idProperty = this.recordClass.getMeta('idProperty');
+        return this.store.getById(_.get(data, idProperty));
+    },
+    
     /**
      * bus notified about record changes
      */
     onRecordChanges: function(data, e) {
-        var existingRecord = this.store.getById(data.id);
-        if (existingRecord && e.topic.match(/\.update/)) {
+        var existingRecord = this.getRecordByData(data);
+        
+        if (e.topic.match(/\.create/)) {
+            this.onCreateRecord(data);
+        }else if (existingRecord && e.topic.match(/\.update/)) {
             // NOTE: local mode saves again (and again...)
             this.onUpdateRecord(JSON.stringify(data)/*, 'local'*/);
         } else if (existingRecord && e.topic.match(/\.delete/)) {
@@ -1171,16 +1179,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         const onAfterEdit = async (o) => {
             ed.un('canceledit', onCancelEdit);
-
+            
             this.pagingToolbar.refresh.disable();
+            localRecord.data.path = `${localRecord.get('path')}${localRecord.get('name')}/`;
+
             this.store.remove(localRecord);
             this.store.addSorted(localRecord);
             this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
             
             const remoteRecord = await proxyFn(localRecord);
-            this.store.remove(localRecord);
-            this.store.addSorted(remoteRecord);
-            this.grid.getSelectionModel().selectRow(this.store.indexOf(remoteRecord));
+            
+            window.postal.publish({
+                channel: "recordchange",
+                topic: 'Filemanager.Node.update',
+                data: remoteRecord.data
+            });
+            
             this.pagingToolbar.refresh.enable();
         }
         this.grid.on('afteredit', onAfterEdit, this, {single: true, buffer: 100});
@@ -1275,7 +1289,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
-
         // define a transaction
         this.lastStoreTransactionId = options.transactionId = Ext.id();
 
@@ -1310,7 +1323,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 //        if (this.store.getCount() > 0) {
 //            this.grid.getView().focusRow(0);
 //        }
-
         // restore selection
         if (Ext.isArray(options.preserveSelection)) {
             Ext.each(options.preserveSelection, function(record) {
@@ -1618,16 +1630,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.groupField && ! this.groupTextTpl) {
             this.groupTextTpl = '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "' + i18n._("Records") + '" : "' + i18n._("Record") + '"]})';
         }
-        
-        var viewClass = this.groupField ? Ext.grid.GroupingView : Ext.grid.GridView;
-        var view =  new viewClass({
+
+        const viewClass = this.groupField ? Ext.grid.GroupingView : Ext.grid.GridView;
+        return new viewClass({
             getRowClass: this.getViewRowClass.bind(this),
             autoFill: true,
-            forceFit:true,
+            forceFit: true,
             ignoreAdd: true,
             emptyText: this.i18nEmptyText,
             groupTextTpl: this.groupTextTpl,
-            onLoad: Ext.grid.GridView.prototype.onLoad.createInterceptor(function() {
+            onLoad: Ext.grid.GridView.prototype.onLoad.createInterceptor(function () {
                 if (this.grid.getView().isPagingRefresh) {
                     this.grid.getView().isPagingRefresh = false;
                     return true;
@@ -1636,8 +1648,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 return false;
             }, this)
         });
-        
-        return view;
     },
     
     /**
@@ -2335,22 +2345,25 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.store.reload();
     },
 
-    /**
-     * on update after edit
-     * 
-     * @param {String|Tine.Tinebase.data.Record} record
-     * @param {String} mode
-     */
-    onUpdateRecord: function(record, mode) {
-        if (! this.rendered) {
-            return;
+    onCreateRecord(nodeData, mode) {
+        const record = this.createRecord(JSON.stringify(nodeData), mode);
+        // Problem: we can't evaluate filters on client side !!!
+        if (mode === 'local') {
+            // @TODO add sorted!! (see sort code in onUpdateRecord
+            this.store.insert(0 , [record]);
+        } else {
+            this.bufferedLoadGridData({
+                removeStrategy: 'keepBuffered',
+            });
         }
+    },
 
+    createRecord(record, mode) {
         if (! mode && ! this.recordProxy) {
             // proxy-less = local if not defined otherwise
             mode = 'local';
         }
-        
+
         if (Ext.isString(record)) {
             record = this.recordProxy
                 ? this.recordProxy.recordReader({responseText: record})
@@ -2366,6 +2379,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record.id = 'new-' + Ext.id();
             record.setId(record.id);
         }
+        
+        return record;
+    },
+
+
+    /**
+     * on update after edit
+     * 
+     * @param {String|Tine.Tinebase.data.Record} record
+     * @param {String} mode
+     */
+    onUpdateRecord: function(record, mode) {
+        if (! this.rendered) {
+            return;
+        }
+        
+        record = this.createRecord(record, mode);
 
         Tine.log.debug('Tine.widgets.grid.GridPanel::onUpdateRecord() -> record:');
         Tine.log.debug(record, mode);
@@ -2378,14 +2408,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (idx >= 0) {
                 // only run do this in local mode as we reload the store in remote mode
                 // NOTE: this would otherwise delete the record if a record proxy exists!
-                if (mode == 'local') {
+                if (mode === 'local') {
                     store.removeAt(idx);
                     store.insert(idx, [record]);
                 }
             } else {
                 this.getStore().add([record]);
             }
-
+            //TODO: use this for msg bus
+            
             // sort new/edited record
             store.remoteSort = false;
             store.sort(

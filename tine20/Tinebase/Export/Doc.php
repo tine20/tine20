@@ -89,6 +89,19 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
         return 'docx';
     }
 
+    public function generateToStream($stream)
+    {
+        $this->generate();
+        $document = $this->getDocument();
+        $tempfile = $document->save();
+        try {
+            $fh = fopen($tempfile, 'r');
+            stream_copy_to_stream($fh, $stream);
+        } finally {
+            unlink($tempfile);
+        }
+    }
+
     /**
      * generate export
      */

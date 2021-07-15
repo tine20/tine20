@@ -2008,6 +2008,8 @@ class Setup_Controller
      */
     protected function _installApplication(SimpleXMLElement $_xml, $_options = null)
     {
+        static $deferImportExport = [];
+
         if ($this->_backend === NULL) {
             throw new Tinebase_Exception_Backend_Database('Need configured and working database backend for install.');
         }
@@ -2069,8 +2071,26 @@ class Setup_Controller
             Setup_Initialize::initialize($application, $_options);
 
             if (!isset($_options[self::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS])) {
-                // look for import definitions and put them into the db
-                $this->createImportExportDefinitions($application);
+                switch ($application->name) {
+                    case Tinebase_Config::APP_NAME:
+                    case Admin_Config::APP_NAME:
+                        $that = $this;
+                        $deferImportExport[] = function() use ($application, $that) {
+                            $that->createImportExportDefinitions($application);
+                        };
+                        break;
+                    /** @noinspection PhpMissingBreakStatementInspection */
+                    case Addressbook_Config::APP_NAME:
+                        foreach ($deferImportExport as $func) {
+                            $func();
+                        }
+                        $deferImportExport = [];
+                        // no break!
+                    default:
+                        // look for import definitions and put them into the db
+                        $this->createImportExportDefinitions($application);
+                        break;
+                }
             }
 
             // fill update state with all available updates of the current version, as we do not need to run them again

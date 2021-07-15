@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -27,6 +27,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         1 => 'not',
         2 => 'in',
         3 => 'notin',
+        4 => 'contains',
     );
     
     /**
@@ -37,6 +38,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         'not'        => array('sqlop' => ' IS NULL'    ),
         'in'         => array('sqlop' => ' IS NOT NULL'),
         'notin'      => array('sqlop' => ' IS NULL'    ),
+        'contains'   => array('sqlop' => ' IS NOT NULL'),
     );
     
     /**
@@ -73,25 +75,32 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
             return;
         }
         
-        // check the view right of the tag (throws Exception if not accessable)
-        Tinebase_Tags::getInstance()->getTagsById($this->_value);
+        // check the view right of the tag (throws Exception if not accessible)
+        if ($this->_operator === 'contains') {
+            $tagIds = Tinebase_Tags::getInstance()->searchTags(new Tinebase_Model_TagFilter([
+                'name' => $this->_value
+            ]))->getArrayOfIds();
+        } else {
+            $tagIds = $this->_value;
+        }
         
         $db = Tinebase_Core::getDb();
         $idProperty = $db->quoteIdentifier($this->_options['idProperty']);
         
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_options['applicationName']);
 
-        $correlationName = Tinebase_Record_Abstract::generateUID(5) . ((is_array($this->_value) === true) ? implode(',', $this->_value) : $this->_value) . 'tag';
+        $correlationName = Tinebase_Record_Abstract::generateUID(5) . ((is_array($tagIds) === true)
+                ? implode(',', $tagIds) : $tagIds) . 'tag';
         // per left join we add a tag column named as the tag and filter this joined column
         // NOTE: we name the column we join like the tag, to be able to join multiple tag criteria (multiple invocations of this function)
         $_select->joinLeft(
             /* what */    array($correlationName => SQL_TABLE_PREFIX . 'tagging'), 
             /* on   */    $db->quoteIdentifier("{$correlationName}.record_id") . " = $idProperty " .
                 " AND " . $db->quoteIdentifier("{$correlationName}.application_id") . " = " . $db->quote($app->getId()) .
-                " AND " . $db->quoteInto($db->quoteIdentifier("{$correlationName}.tag_id") . " IN (?)", (array) $this->_value),
+                " AND " . $db->quoteInto($db->quoteIdentifier("{$correlationName}.tag_id") . " IN (?)", (array) $tagIds),
         /* select */  array());
         
-        $_select->where($db->quoteIdentifier("{$correlationName}.tag_id") .  $this->_opSqlMap[$this->_operator]['sqlop']);
+        $_select->where($db->quoteIdentifier("{$correlationName}.tag_id") . $this->_opSqlMap[$this->_operator]['sqlop']);
         $_select->group($this->_options['idProperty']);
     }
     
@@ -105,7 +114,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
     {
         $result = parent::toArray($_valueToJson);
         
-        if ($_valueToJson == true) {
+        if ($this->_operator !== 'contains' && $_valueToJson == true) {
             $tags = Tinebase_Tags::getInstance()->getTagsById($this->_value)->toArray();
             if (count($tags) > 0) {
                 $result['value'] = (is_array($this->_value)) ? $tags : $tags[0];

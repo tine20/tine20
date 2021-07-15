@@ -363,9 +363,9 @@ class Tinebase_User_SqlTest extends TestCase
         $calBackend = new Calendar_Backend_Sql();
         try {
             $calBackend->get($event->getId());
-            $this->fail('event should be deleted: ' . print_r($event->toArray(), true));
+            $this->fail('Event should be deleted: ' . print_r($event->toArray(), true));
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof Tinebase_Exception_NotFound, 'event should be deleted');
+            $this->assertTrue($e instanceof Tinebase_Exception_NotFound, $e);
         }
     }
 

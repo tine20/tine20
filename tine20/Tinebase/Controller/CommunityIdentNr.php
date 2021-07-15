@@ -33,7 +33,7 @@ class Tinebase_Controller_CommunityIdentNr extends Tinebase_Controller_Record_Ab
         $this->_backend = new Tinebase_Backend_Sql([
             Tinebase_Backend_Sql::TABLE_NAME        => Tinebase_Model_CommunityIdentNr::TABLE_NAME,
             Tinebase_Backend_Sql::MODEL_NAME        => Tinebase_Model_CommunityIdentNr::class,
-            Tinebase_Backend_Sql::MODLOG_ACTIVE     => false,
+            Tinebase_Backend_Sql::MODLOG_ACTIVE     => true,
         ]);
 
         $this->_duplicateCheckFields = Tinebase_Config::getInstance()->get(Tinebase_Config::COMMUNITYIDENTNR_DUP_FIELDS, array(

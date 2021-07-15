@@ -224,7 +224,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
         
-        $this->checkPasswordPolicy($_password, $user);
+        Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
         
         $metaData = $this->_getMetaData($user);
 

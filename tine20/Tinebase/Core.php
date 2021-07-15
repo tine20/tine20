@@ -2447,12 +2447,11 @@ class Tinebase_Core
     }
 
     /**
-     * @return Raven_client|null
+     * @return Raven_Client|null
      */
     public static function getSentry()
     {
-        $sentryClient = Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
-        return $sentryClient;
+        return Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
     }
 
     /**

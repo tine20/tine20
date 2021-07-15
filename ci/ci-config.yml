@@ -59,7 +59,7 @@ variables:
 
   PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP:
     description: "Enable or disable run all test with ldap backend enabled. Does not effect or is evected by PHP_UNIT_ALL_TESTS_BUILT."
-    value: "false"
+    value: "never"
 
   PHP_UNIT_SERVERTESTS:
     description: "Enable or disable server tests."

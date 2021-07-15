@@ -22,6 +22,7 @@ class Tinebase_Auth_MFATest extends TestCase
         parent::tearDown();
         
         Tinebase_Auth_MFA::destroyInstances();
+        Tinebase_AreaLock::destroyInstance();
     }
 
     public function testYubicoOTP()

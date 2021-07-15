@@ -145,6 +145,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Start Time'),
                                     listeners: {scope: this, change: this.onDtStartChange},
                                     name: 'dtstart',
+                                    allowBlank: false,
                                     increment: timeIncrement,
                                     requiredGrant: 'editGrant'
                                 }, {
@@ -160,6 +161,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('End Time'),
                                     listeners: {scope: this, change: this.onDtEndChange},
                                     name: 'dtend',
+                                    allowBlank: false,
                                     increment: timeIncrement,
                                     requiredGrant: 'editGrant'
                                 }, {
@@ -380,14 +382,17 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this
         });
 
-        this.tbarItems = [new Ext.Button(this.action_freeTimeSearch), new Ext.Button(new Ext.Action({
+        this.button_muteNotification =  new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are enabled'),
             handler: this.onMuteNotificationOnce,
             iconCls: 'action_mute_noteification',
             disabled: false,
             scope: this,
-            enableToggle: true
-        })), new Ext.Button(new Ext.Action({
+            enableToggle: true,
+        }));
+
+        this.tbarItems = [new Ext.Button(this.action_freeTimeSearch), this.button_muteNotification
+        , new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Print Event'),
             handler: this.onPrint,
             iconCls:'action_print',
@@ -451,7 +456,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
-        
+
+        this.button_muteNotification.toggle(this.record.get('mute'));
+        this.button_muteNotification.setText(this.record.get('mute') ?
+            Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are disabled') :
+            Tine.Tinebase.appMgr.get('Calendar').i18n._('Notifications are enabled'));
+
         this.addAttendee();
     },
 

@@ -50,7 +50,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         $this->_forceUnlockLoginArea = $bool;
     }
-    
+
     /**
      * the constructor
      *
@@ -176,6 +176,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         $adapterName = $ssoConfig->{Tinebase_Config::SSO_ADAPTER};
+        /** @var Tinebase_Auth_OpenIdConnect $authAdapter */
         $authAdapter = Tinebase_Auth_Factory::factory($adapterName);
         $authAdapter->setOICDResponse($oidcResponse);
         $authResult = $authAdapter->authenticate();
@@ -1050,9 +1051,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'getLogo', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-        });
-        
-        $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
+
             $routeCollector->get('/health', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'healthCheck', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -1064,6 +1063,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'getStatus', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
+
+            $routeCollector->addRoute(['GET', 'POST'], '/export/{definitionId}', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Export_Abstract::class, 'expressiveApi'))->toArray());
         });
 
         $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1214,7 +1216,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @todo fix $size param - it should not be allowed to set it to png/svg
      */
-    public function getFavicon($size = 16, $ext = 'png')
+    public function getFavicon($size = 16, string $ext = 'png')
     {
         if ($size == 'svg' || $ext == 'svg') {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG);
@@ -1230,11 +1232,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
         $mime = Tinebase_ImageHelper::getMime($ext);
         if (! in_array($mime, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
-            throw new Tinebase_Exception_UnexpectedValue('image format not supported');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Image format not supported: ' . $mime . ' ... using png');
+            $mime = Tinebase_ImageHelper::getMime('png');
         }
 
         if (! is_numeric($size)) {
-            throw new Tinebase_Exception_UnexpectedValue('size should be numeric');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Size should be numeric ... setting it to 16');
+            $size = 16;
         }
 
         $cacheId = sha1(self::class . 'getFavicon' . $size . $mime);
@@ -1339,7 +1347,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'actionQueueLR' => ['dataWarn' => 60, 'dataErr' => 5 * 60],
             ];
 
-            foreach (['actionQueue' => Tinebase_ActionQueue::getInstance(), 'actionQueueLR' => Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)] as $qName => $actionQueue) {
+            foreach ([
+                        'actionQueue' => Tinebase_ActionQueue::getInstance(),
+                        'actionQueueLR' => Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)
+                     ] as $qName => $actionQueue) {
 
                 $missingQueueKeys = [];
                 $missingDaemonKeys = [];
@@ -1694,7 +1705,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'label' => 'Community Identification Number' // _('Community Identification Number')
             )));
         }
-        
+
 
         return $result;
     }

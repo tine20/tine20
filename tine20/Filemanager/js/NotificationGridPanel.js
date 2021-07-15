@@ -142,7 +142,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
 
         var _ = window.lodash;
 
-        var iconCls = 'tine-grid-row-action-icon ' + (_.get(record, 'data.accountType') === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer_accountGroupIcon');
+        var iconCls = 'tine-grid-row-action-icon renderer ' + (_.get(record, 'data.accountType') === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer_accountGroupIcon');
 
         return '<div class="' + iconCls + '">&#160;</div>' + Ext.util.Format.htmlEncode(_.get(record, 'data.accountName') || value);
     },

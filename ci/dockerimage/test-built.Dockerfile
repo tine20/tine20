@@ -28,7 +28,7 @@ ARG TINE20ROOT=/usr/share
 ARG ALPINE_PHP_REPOSITORY_BRANCH=v3.12
 ARG ALPINE_PHP_PACKAGE=php7
 
-RUN apk add --no-cache git npm mysql-client
+RUN apk add --no-cache git npm mysql-client jq rsync
 
 RUN if [ ${ALPINE_PHP_PACKAGE} == php8 ]; then \
         php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');"; \

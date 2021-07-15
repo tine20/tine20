@@ -5,14 +5,9 @@
  * @package     ExampleApplication
  * @subpackage  Test
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for ExampleApplication_JsonTest
@@ -182,19 +177,23 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $exampleRecordWithTag = $this->testCreateExampleRecord();
         // create a second record with no tag
         $this->testCreateExampleRecord(2);
-        
+
+        $tagName = 'supi';
         $exampleRecordWithTag['tags'] = array(array(
-            'name'    => 'supi',
+            'name'    => $tagName,
             'type'    => Tinebase_Model_Tag::TYPE_PERSONAL,
         ));
         $exampleRecordWithTag = $this->_json->saveExampleRecord($exampleRecordWithTag);
         $exampleRecordTagID = $exampleRecordWithTag['tags'][0]['id'];
         
         $searchTagFilter = array(array('field' => 'tag', 'operator' => 'equals', 'value' => $exampleRecordTagID));
-        
         $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
-        
         $this->assertEquals(1, $returned['totalcount']);
+
+        // test search again with tag name contains ...
+        $searchTagFilter = array(array('field' => 'tag', 'operator' => 'contains', 'value' => $tagName));
+        $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
+        $this->assertEquals(1, $returned['totalcount'], 'did not find records by tag name (contains)');
     }
     
     /**

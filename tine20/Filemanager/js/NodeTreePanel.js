@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import upload from "./upload";
+
 Ext.ns('Tine.Filemanager');
 
 require('./nodeContextMenu');
@@ -30,6 +32,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     dataSafeEnabled: false,
 
     hasGrid: true,
+
+    currentNodePath: null,
 
     initComponent: function() {
         this.recordClass= Tine.Filemanager.Model.Node;
@@ -97,12 +101,12 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     },
     
     onRecordChanges: function(data, e) {
-        if (data.type == 'folder') {
+        if (data.type === 'folder') {
             var _ = window.lodash,
                 me = this,
                 path = data.path,
                 parentPath = Tine.Filemanager.Model.Node.dirname(path),
-                node = this.getNodeById(data.id),
+                node = this.getNodeById(data.id) ?? this.getNodeByPath(path),
                 pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') != path;
 
             if (node && e.topic.match(/\.delete/)) {
@@ -112,14 +116,18 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 } catch (e) {}
                 return;
             }
-
+            
             if (node) {
                 node.setText(Ext.util.Format.htmlEncode(data.name));
                 // NOTE: qtip dosn't work, but implementing is not worth the effort...
                 node.qtip = Tine.Tinebase.common.doubleEncode(data.name);
                 Ext.apply(node.attributes, data);
                 node.attributes.nodeRecord = new this.recordClass(data);
-
+                
+                if (node.attributes?.status !== 'pending') {
+                    Ext.fly(node.ui?.elNode)?.removeClass('x-type-data-pending');
+                }
+                
                 // in case of path change we need to reload the node (children) as well
                 // as the path of all children changed as well
                 if (node.hasChildNodes() && pathChange && ! node.loading) {
@@ -129,14 +137,16 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                     node.bufferedReload();
                 }
             }
-
+            
             // add / remount node
             try {
                 me.expandPath(parentPath, '', function (sucess, parentNode) {
-                    var childNode = parentNode.findChild('name', data.name);
+                    const childNode = parentNode.findChild('name', data.name);
                     if (!childNode) {
-                        parentNode.appendChild(node || me.loader.createNode(data));
-                    } else if (childNode != node) {
+                        if (`${me.currentNodePath}/` === data.path.replace(data.name, '')) {
+                            parentNode.appendChild(node || me.loader.createNode({...data}));
+                        }
+                    } else if (childNode !== node) {
                         // node got duplicated by expand load
                         try {
                             node.cancelExpand();
@@ -335,7 +345,11 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         attr.nodeRecord = new this.recordClass(nodeData);
 
         if(this.dataSafeEnabled && !!attr.nodeRecord.get('pin_protected_node')) {
-            attr.cls += ' x-type-data-safe';
+            attr.cls += ' x-type-data-safe'
+        }
+        
+        if (_.get(arguments[0],'status') === 'pending') {
+            attr.cls += ' x-type-data-pending'
         }
         
         attr.cls += ' ' + Tine.Filemanager.Model.Node.getStyles(attr.nodeRecord).join(' ');
@@ -389,6 +403,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Ext.tree.TreeNode} node
      */
     onSelectionChange: function(sm, node) {
+        if (node?.attributes?.status === 'pending') {
+            return;
+        }
         // this.updateActions(sm, node);
         var grid = this.app.getMainScreen().getCenterPanel(),
             gridSelectionModel = grid.selectionModel,
@@ -485,9 +502,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * (bSuccess, oSelNode) where bSuccess is if the selection was successful and oSelNode is the selected node.
      */
     selectPath : function(path, attr, callback) {
-        var node = this.expandPath(path, attr, function(bSuccess, oLastNode){
+        this.expandPath(path, attr, function(bSuccess, oLastNode){
             if (oLastNode) {
                 oLastNode.select();
+                this.currentNodePath = oLastNode?.attributes?.nodeRecord?.data?.path;
                 if (Ext.isFunction(callback)) {
                     callback.call(true, oLastNode);
                 }
@@ -544,75 +562,38 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param fileSelector
      * @param targetNodeId
      */
-    dropIntoTree: function(fileSelector, event) {
+    dropIntoTree: async function (fileSelector, event) {
 
         var treePanel = fileSelector.component,
             app = treePanel.app,
-            grid = app.getMainScreen().getCenterPanel(),
             targetNode,
             targetNodePath;
 
-
         var targetNodeId;
         var treeNodeAttribute = event.getTarget('div').attributes['ext:tree-node-id'];
-        if(treeNodeAttribute) {
+        if (treeNodeAttribute) {
             targetNodeId = treeNodeAttribute.nodeValue;
             targetNode = treePanel.getNodeById(targetNodeId);
             targetNodePath = targetNode.attributes.path;
 
         }
 
-        var files = fileSelector.getFileList();
-        if(!Tine.Filemanager.nodeActionsMgr.checkConstraints('create', targetNode.attributes.nodeRecord, _.map(files, Tine.Filemanager.Model.Node.createFromFile))) {
+        let files = fileSelector.getFileList();
+        const folderList = _.uniq(_.map(files, (fo) => {
+            return fo.fullPath.replace(/\/[^/]*$/, '');
+        }));
+
+
+        if (folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', targetNode.attributes.nodeRecord, _.map(files, Tine.Filemanager.Model.Node.createFromFile))) {
             Ext.MessageBox.alert(
-                    i18n._('Upload Failed'),
-                    app.i18n._('It is not permitted to store files in this folder!')
-                ).setIcon(Ext.MessageBox.ERROR);
+                i18n._('Upload Failed'),
+                app.i18n._('It is not permitted to store files in this folder!')
+            ).setIcon(Ext.MessageBox.ERROR);
 
             return;
         }
 
-        var filePathsArray = [],
-            fileTypesArray = [],
-            uploadKeyArray = [],
-            addToGridStore = false;
-
-        Ext.each(files, function (file) {
-            if ("" === file.type) {
-                return true;
-            }
-
-            var fileName = file.name || file.fileName,
-                filePath = Tine.Filemanager.Model.Node.sanitize(targetNodePath + fileName);
-
-            var upload = new Ext.ux.file.Upload({
-                fmDirector: treePanel,
-                file: file,
-                fileSelector: fileSelector,
-                id: filePath
-            });
-
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-
-            filePathsArray.push(filePath);
-            fileTypesArray.push('vnd.adobe.partial-upload; final_type=' + file.type);
-            uploadKeyArray.push(uploadKey);
-
-            addToGridStore = _.get(grid, 'currentFolderNode.id') === targetNodeId;
-
-        }, this);
-
-        if (0 === uploadKeyArray.length) {
-            return;
-        }
-
-        var params = {
-                filenames: filePathsArray,
-                type: "file",
-                tempFileIds: [],
-                forceOverwrite: false
-        };
-        Tine.Filemanager.nodeBackend.createNodes(params, uploadKeyArray, addToGridStore);
+        await upload(targetNodePath, files);
     },
 
 

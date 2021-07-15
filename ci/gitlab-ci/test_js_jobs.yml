@@ -2,9 +2,11 @@
   extends: .abstract_jobs.e2e_test
   variables:
     ARG_COPY_SOURCE: "true"
-    ARG_IMAGE: test-source-commit
+    ARG_IMAGE: test-source
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $JS_E2E_TEST_SOURCE == "never"
       when: never
     - if: $RUN_ALL_TESTS == "true"

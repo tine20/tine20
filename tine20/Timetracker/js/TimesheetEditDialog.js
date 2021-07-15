@@ -203,25 +203,30 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     calculateAccountingTime: function() {
-        var factor = this.getForm().findField('accounting_time_factor').getValue(),
-            duration = this.getForm().findField('duration').getValue(),
-            accountingTime = Math.round(factor * duration);
-        if (factor != this.factor) {
-            this.factor = factor;
-            this.factorChanged = true;
+        if (!this.useMultiple) {
+            var factor = this.getForm().findField('accounting_time_factor').getValue(),
+                duration = this.getForm().findField('duration').getValue(),
+                accountingTime = Math.round(factor * duration);
+            if (factor != this.factor) {
+                this.factor = factor;
+                this.factorChanged = true;
+            }
+            this.getForm().findField('accounting_time').setValue(accountingTime);
         }
-        this.getForm().findField('accounting_time').setValue(accountingTime);
     },
 
     calculateFactor: function() {
-        var duration = this.getForm().findField('duration').getValue(),
-            accountingTime = this.getForm().findField('accounting_time').getValue(),
-            factor = accountingTime / duration;
-        if (factor != this.factor) {
-            this.factor = factor;
-            this.factorChanged = true;
+        if (!this.useMultiple) {
+            var duration = this.getForm().findField('duration').getValue(),
+                accountingTime = this.getForm().findField('accounting_time').getValue(),
+                factor = accountingTime / duration;
+            if (factor != this.factor) {
+                this.factor = factor;
+                this.factorChanged = true;
+            }
+            
+            this.getForm().findField('accounting_time_factor').setValue(factor);
         }
-        this.getForm().findField('accounting_time_factor').setValue(factor);
     },
     
     onCheckBillable: function(field, checked) {
@@ -414,6 +419,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             check: this.onCheckBillable
                                         }}),
                                     fieldManager('accounting_time_factor', {
+                                        disabled: this.useMultiple,
                                         columnWidth: .1,
                                         decimalSeparator: ',',
                                         fieldLabel: this.app.i18n._('Factor'),
@@ -422,6 +428,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             change: this.calculateAccountingTime
                                     }}),
                                     fieldManager('accounting_time', {
+                                        disabled: this.useMultiple,
                                         fieldLabel: this.app.i18n._('Accounting time'),
                                         listeners: {
                                             scope: this,

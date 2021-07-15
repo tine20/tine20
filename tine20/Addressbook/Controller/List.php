@@ -24,6 +24,13 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     protected $_memberRolesBackend = null;
 
     /**
+     * application backend class
+     *
+     * @var Addressbook_Backend_List
+     */
+    protected $_backend;
+
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -32,9 +39,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $this->_resolveCustomFields = true;
         $this->_backend = new Addressbook_Backend_List();
-        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
-            $this->_useRecordPaths = true;
-        }
         $this->_modelName = Addressbook_Model_List::class;
         $this->_applicationName = 'Addressbook';
     }
@@ -418,6 +422,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_InspectListBeforeUpdate([
+            'observable' => $_record,
+            'oldList' => $_oldRecord,
+        ]));
+
         $this->_flattenMembers($_record);
 
         if (! empty($_record->email) && $_record->email !== $_oldRecord->email) {
@@ -438,11 +447,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * add / remove system group members
      *
-     * @param $group
-     * @param $list
-     * @param $oldList
+     * @param Tinebase_Model_Group $group
+     * @param Addressbook_Model_List $list
+     * @param Addressbook_Model_List $oldList
      */
-    protected function _updateGroupMembers($group, $list, $oldList)
+    protected function _updateGroupMembers(Tinebase_Model_Group $group, Addressbook_Model_List $list, Addressbook_Model_List $oldList)
     {
         // get all system contacts
         $checks = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
@@ -528,7 +537,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * - throw exception if another system user or group is found with this address
      *   or the domain mismatches
      *
-     * @param $email
+     * @param string $email
      * @throws Tinebase_Exception_Backend_Database
      * @throws Tinebase_Exception_SystemGeneric
      */
@@ -579,12 +588,14 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param Felamimail_Model_Account $_list
-     * @return NULL|Tinebase_Record_Interface
+     * @param Addressbook_Model_List $_list
+     * @return NULL|Felamimail_Model_Account
      */
     protected function _getMailAccount($_list)
     {
-        return Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+        // if user has right for list, he/she is also allowed to see/change the mail account
+        $backend = new Felamimail_Backend_Account();
+        return $backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $_list->getId()],
             ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
@@ -601,7 +612,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        $this->_fireChangeListeEvent($updatedRecord);
+        $this->_fireChangeListeEvent($updatedRecord, $currentRecord);
 
         if (isset($updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
@@ -633,7 +644,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
                 preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
-            Felamimail_Controller_Account::getInstance()->delete($this->_getMailAccount($currentRecord)->getId());
+
+            $account = $this->_getMailAccount($currentRecord);
+            if ($account !== null) {
+                Felamimail_Controller_Account::getInstance()->delete($account->getId());
+            }
         }
     }
 
@@ -641,11 +656,13 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * fireChangeListeEvent
      *
      * @param Addressbook_Model_List $list
+     * @param Addressbook_Model_List|null $currentList
      */
-    protected function _fireChangeListeEvent(Addressbook_Model_List $list)
+    protected function _fireChangeListeEvent(Addressbook_Model_List $list, Addressbook_Model_List $currentList = null)
     {
         $event = new Addressbook_Event_ChangeList();
         $event->list = $list;
+        $event->currentList = $currentList;
         Tinebase_Event::fireEvent($event);
     }
 
@@ -661,14 +678,17 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         foreach ($lists as $list) {
             $event = new Addressbook_Event_DeleteList();
             $event->list = $list;
-            Tinebase_Event::fireEvent($event);
-
-            if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
+            if (! Tinebase_Event::fireEvent($event)) {
+                $key = array_search($list->getId(), $_ids);
+                unset($_ids[$key]);
+            } else {
+                if (isset($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                     $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
                     preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $list->email)) {
-                $mailAccount = $this->_getMailAccount($list);
-                if ($mailAccount) {
-                    Felamimail_Controller_Account::getInstance()->delete($mailAccount->getId());
+                    $mailAccount = $this->_getMailAccount($list);
+                    if ($mailAccount) {
+                        Felamimail_Controller_Account::getInstance()->delete($mailAccount->getId());
+                    }
                 }
             }
         }
@@ -746,10 +766,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * add / remove system group members
      *
-     * @param $group
-     * @param $list
+     * @param Tinebase_Model_Group $group
+     * @param Addressbook_Model_List $list
      */
-    protected function _updateListMembersFromGroup($group, $list)
+    protected function _updateListMembersFromGroup(Tinebase_Model_Group $group, Addressbook_Model_List $list)
     {
         // get all non-system contacts
         $checks = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
@@ -859,39 +879,78 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         /** @var Addressbook_Model_List $record */
         if (isset($record->memberroles)) {
-            // get migration
-            // TODO add generic helper fn for this?
-            $memberrolesToSet = (!$record->memberroles instanceof Tinebase_Record_RecordSet)
-                ? new Tinebase_Record_RecordSet(
-                    'Addressbook_Model_ListMemberRole',
-                    is_array($record->memberroles) ? $record->memberroles : [],
-                    /* $_bypassFilters */ true
-                ) : $record->memberroles;
-
-            foreach ($memberrolesToSet as $memberrole) {
-                foreach (array('contact_id', 'list_role_id', 'list_id') as $field) {
-                    if (isset($memberrole[$field]['id'])) {
-                        $memberrole[$field] = $memberrole[$field]['id'];
-                    }
-                }
-            }
-
-            $currentMemberroles = $this->getMemberRoles($record);
-            $diff = $currentMemberroles->diff($memberrolesToSet);
-            if (count($diff['added']) > 0) {
-                $diff['added']->list_id = $updatedRecord->getId();
-                foreach ($diff['added'] as $memberrole) {
-                    $this->getMemberRolesBackend()->create($memberrole);
-                }
-            }
-            if (count($diff['removed']) > 0) {
-                $this->getMemberRolesBackend()->delete($diff['removed']->getArrayOfIds());
-            }
+            $this->setMemberRoles($record, $updatedRecord->getId());
         }
 
-        $result = parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
+        return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
+    }
 
-        return $result;
+    /**
+     * set member roles for list
+     *
+     * @param Addressbook_Model_List $list
+     * @param string $listId
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * TODO add generic helper fn for migration handling?
+     */
+    public function setMemberRoles(Addressbook_Model_List $list, $listId = null)
+    {
+        $memberrolesToSet = (!$list->memberroles instanceof Tinebase_Record_RecordSet)
+            ? new Tinebase_Record_RecordSet(
+                'Addressbook_Model_ListMemberRole',
+                is_array($list->memberroles) ? $list->memberroles : [],
+                /* $_bypassFilters */ true
+            ) : $list->memberroles;
+
+        // sanitize ids and check constraints
+        $listConstraints = [];
+        foreach ($memberrolesToSet as $memberrole) {
+            foreach (array('contact_id', 'list_role_id', 'list_id') as $field) {
+                if (isset($memberrole[$field]['id'])) {
+                    $memberrole[$field] = $memberrole[$field]['id'];
+                }
+            }
+            $this->_checkMaxMemberConstraint($listConstraints, $memberrole['list_role_id']);
+        }
+
+        $currentMemberroles = $this->getMemberRoles($list);
+        $diff = $currentMemberroles->diff($memberrolesToSet);
+        if (count($diff['added']) > 0) {
+            $diff['added']->list_id = $listId ?? $list->getId();
+            foreach ($diff['added'] as $memberrole) {
+                $this->getMemberRolesBackend()->create($memberrole);
+            }
+        }
+        if (count($diff['removed']) > 0) {
+            $this->getMemberRolesBackend()->delete($diff['removed']->getArrayOfIds());
+        }
+    }
+
+    /**
+     * @param array $listConstraints
+     * @param string $listRoleId
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkMaxMemberConstraint(&$listConstraints, $listRoleId)
+    {
+        if (! isset($listConstraints[$listRoleId])) {
+            $listConstraints[$listRoleId] = [
+                'listRole' => Addressbook_Controller_ListRole::getInstance()->get($listRoleId),
+                'count' => 1,
+            ];
+        } else {
+            $listConstraints[$listRoleId]['count']++;
+        }
+
+        /** var Addressbook_Model_ListRole $listConstraints[$listRoleId]['listRole'] */
+        $maxMembers = $listConstraints[$listRoleId]['listRole']->{Addressbook_Model_ListRole::FLD_MAX_MEMBERS};
+        if ($maxMembers && $listConstraints[$listRoleId]['count'] > $maxMembers) {
+            $translate = Tinebase_Translation::getTranslation($this->_applicationName);
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Maximum number of role members reached'));
+        }
     }
 
     /**
@@ -921,7 +980,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * get all lists given contact is member of
      *
-     * @param $contact
+     * @param Addressbook_Model_Contact|string $contact
      * @return array
      */
     public function getMemberships($contact)
