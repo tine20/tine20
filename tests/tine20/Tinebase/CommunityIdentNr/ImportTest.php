@@ -31,5 +31,9 @@ class Tinebase_CommunityIdentNr_ImportTest extends ImportTestCase
         $record = $result['results']->getFirstRecord();
         $this->assertEquals('Schleswig-Holstein',
             $record->gemeindenamen, print_r($record->toArray(), true));
+        
+        $updatedRecord = Tinebase_Controller_CommunityIdentNr::getInstance()->get($record->id);
+        $this->assertNotEmpty($updatedRecord->relations, 'No relation Found!');
+        $this->assertEquals('IMPORTFILE', $updatedRecord->relations->getFirstRecord()->type, 'Importfile relation is missing!');
     }
 }
