@@ -53,7 +53,7 @@ class Tinebase_Import_CommunityIdentNr extends Tinebase_Import_Xls_Abstract
      * @param Tinebase_Record_Interface $_record
      * @param null $_resolveStrategy
      * @param array $_recordData
-     * @return Tinebase_Record_Interface
+     * @return Tinebase_Record_Interface|null
      * @throws Tinebase_Exception_Record_Validation
      */
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array()) 
@@ -62,6 +62,7 @@ class Tinebase_Import_CommunityIdentNr extends Tinebase_Import_Xls_Abstract
             $_record->arsCombined = $_record->arsLand . $_record->arsRB . $_record->arsKreis . $_record->arsVB . $_record->arsGem;
             return parent::_importRecord($_record, $_resolveStrategy, $_recordData);
         }
-    }
 
+        return null;
+    }
 }

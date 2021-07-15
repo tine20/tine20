@@ -30,10 +30,11 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_ActionQueue_Test::class);
         $suite->addTestSuite(Tinebase_ActionQueue_Backend_RedisTest::class);
         $suite->addTestSuite(Tinebase_Auth_MFATest::class);
-        $suite->addTestSuite(Tinebase_CacheTest::class);
         $suite->addTestSuite(Tinebase_AccessLogTest::class);
         $suite->addTestSuite(Tinebase_AccountTest::class);
         $suite->addTestSuite(Tinebase_AuthTest::class);
+        $suite->addTestSuite(Tinebase_CacheTest::class);
+        $suite->addTestSuite(Tinebase_CommunityIdentNr_ImportTest::class);
         $suite->addTestSuite(Tinebase_CoreTest::class);
         $suite->addTestSuite(Tinebase_DateTimeTest::class);
         $suite->addTestSuite(Tinebase_ExceptionTest::class);
