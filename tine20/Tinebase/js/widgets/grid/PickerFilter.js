@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * TODO         container filter should extend this
  */
@@ -152,6 +152,9 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         Tine.log.debug('Tine.widgets.grid.PickerFilter::valueRenderer() - Creating new value field for ' + operator + ' operator.')
 
         switch(operator) {
+            case 'contains':
+                value = this.getClearableTextField(filter, el);
+                break;
             case 'equals':
             case 'not':
                 value = this.getPicker(filter, el);
@@ -169,7 +172,24 @@ Tine.widgets.grid.PickerFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         
         return value;
     },
-    
+
+    getClearableTextField: function (filter, el) {
+        return new Ext.ux.form.ClearableTextField({
+            filter: filter,
+            renderTo: el,
+            value: filter.data.value ? filter.data.value : this.defaultValue,
+            emptyText: this.emptyText,
+            listeners: {
+                scope: this,
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.ENTER) {
+                        this.onFiltertrigger();
+                    }
+                }
+            }
+        });
+    },
+
     /**
      * get record picker
      * 
