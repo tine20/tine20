@@ -76,13 +76,27 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
                 }
             }
 
-            if (null === $user || (!empty($user->mfa_configs) && !Tinebase_Server_Abstract::checkLoginAreaLock())) {
+            if (null === $user) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . ' returning with HTTP 401 unauthorized');
 
                 // unauthorized
                 return new Response('php://memory', 401);
             }
+            if (!Tinebase_Server_Abstract::checkLoginAreaLock()) {
+                $areaLock = Tinebase_AreaLock::getInstance();
+                $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
+                    $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
+                }
+
+                // user has 2FA config -> currently its sort of optional -> only then we 401
+                if ( count($userConfigIntersection->mfa_configs) > 0) {
+                    // unauthorized
+                    return new Response('php://memory', 401);
+                }
+            }
+
             if (! $user->hasRight($routeHandler->getApplicationName(), Tinebase_Acl_Rights_Abstract::RUN)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . ' returning with HTTP 403 forbidden');
