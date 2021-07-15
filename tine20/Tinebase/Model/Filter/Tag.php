@@ -67,14 +67,6 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
-        // don't take empty tag filter into account
-        if (empty($this->_value)) {
-            if ($this->_operator === 'in') {
-                $_select->where('1=0');
-            }
-            return;
-        }
-        
         // check the view right of the tag (throws Exception if not accessible)
         if ($this->_operator === 'contains') {
             $tagIds = Tinebase_Tags::getInstance()->searchTags(new Tinebase_Model_TagFilter([
@@ -83,7 +75,15 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         } else {
             $tagIds = $this->_value;
         }
-        
+
+        // don't take empty tag filter into account
+        if (empty($tagIds)) {
+            if ($this->_operator === 'in' || $this->_operator === 'contains') {
+                $_select->where('1=0');
+            }
+            return;
+        }
+
         $db = Tinebase_Core::getDb();
         $idProperty = $db->quoteIdentifier($this->_options['idProperty']);
         
