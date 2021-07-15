@@ -81,6 +81,9 @@ abstract class ImportTestCase extends TestCase
             $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($this->_modelName);
         } else {
             $definition = ($_definition instanceof Tinebase_Model_ImportExportDefinition) ? $_definition : Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
+            if ($definition->plugin) {
+                $this->_importerClassName = $definition->plugin;
+            }
         }
         $this->_instance = call_user_func_array($this->_importerClassName . '::createFromDefinition' , array($definition, $_options));
 

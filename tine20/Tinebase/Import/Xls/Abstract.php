@@ -137,8 +137,14 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         if ($this->_options['keepImportFile']) {
             $this->_options['importFile'] = Tinebase_TempFile::getInstance()->createTempFile($_filename, 'Import-' . Tinebase_DateTime::now() . '.xlsx');
         }
-        
-        $this->_spreadsheet = IOFactory::load($_filename);
+
+        // we use the reader and switch to readonly to avoid massive performance-losses
+        // see https://stackoverflow.com/questions/16742647/phpexcel-taking-an-extremely-long-time-to-read-excel-file
+        // TODO allow to switch to Xls Reader via option / import definition?
+        $objReader = IOFactory::createReader('Xlsx');
+        $objReader->setReadDataOnly(true);
+        $this->_spreadsheet = $objReader->load($_filename);
+
         $this->_worksheet = $this->_spreadsheet->getSheet($this->_options['sheet']);
         $iterator = $this->_worksheet->getRowIterator($this->_options['startRow'], $this->_options['endRow']);
 
@@ -194,7 +200,7 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
     /**
      * do something with the imported record
      *
-     * @param $importedRecord
+     * @param Tinebase_Record_Interface $importedRecord
      */
     protected function _inspectAfterImport($importedRecord)
     {
