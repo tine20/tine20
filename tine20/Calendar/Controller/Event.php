@@ -3210,12 +3210,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
             return;
         }
-        Tinebase_ActionQueue::getInstance()->queueAction('Calendar.sendEventNotifications', 
-            $_event, 
-            $_updater,
-            $_action, 
-            $_oldEvent ? $_oldEvent : NULL
-        );
+        try {
+            Tinebase_ActionQueue::getInstance()->queueAction('Calendar.sendEventNotifications',
+                $_event,
+                $_updater,
+                $_action,
+                $_oldEvent ? $_oldEvent : NULL
+            );
+        } catch (Tinebase_Exception_Backend_Database $tedb) {
+            if ($tedb->getMessage() === 'cant serialize db connection') {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                    ' some of the data contains a zend db connection object, that must not happen: ' . PHP_EOL .
+                    ' $_event: ' . print_r($_event, true) . PHP_EOL .
+                    ' $_updater: ' . print_r($_updater, true) . PHP_EOL .
+                    ' $_oldEvent: ' . print_r($_oldEvent, true));
+            }
+            throw $tedb;
+        }
     }
 
     public function compareCalendars($cal1, $cal2, $from, $until)
