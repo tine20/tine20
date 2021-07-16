@@ -48,7 +48,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
