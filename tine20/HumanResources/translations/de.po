@@ -1210,7 +1210,7 @@ msgid "Allow Booking"
 msgstr "Buchung erlauben"
 
 msgid "Allow Planning"
-msgstr "Plaung erlauben"
+msgstr "Planung erlauben"
 
 msgid "Enable Freetime Timetracking"
 msgstr "Abwesenheits-Zeiterfassung aktivieren"
