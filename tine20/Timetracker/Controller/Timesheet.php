@@ -201,7 +201,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $_record->start_time = $start->format('H:i');
         }
 
-        if (empty($_record->accounting_time)) {
+        if (!isset($_record->accounting_time)) {
             $_record->accounting_time = $_record->duration;
         }
     }
