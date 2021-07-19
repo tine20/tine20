@@ -95,13 +95,13 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     /**
      * @see Tinebase_Controller_Record_Abstract::update()
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $_updateDeleted = false)
      {
         if ($_duplicateCheck) {
             $this->_checkNumberUniqueness($_record, true);
         }
         $this->_checkNumberType($_record);
-        return parent::update($_record, $_duplicateCheck);
+        return parent::update($_record, $_duplicateCheck, $_updateDeleted);
     }
 
     /**

@@ -139,11 +139,11 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      *
      * @todo use CONTEXT instead of $_additionalArguments
      */
-    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
+    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array(), $_updateDeleted = false)
     {
         // do not skip modlog here because we use the abstract record controller for updates
         $this->_omitModLog = false;
-        $container = parent::update($_record);
+        $container = parent::update($_record, true, $_updateDeleted);
         $this->_omitModLog = true;
 
         if ($container->type === Tinebase_Model_Container::TYPE_PERSONAL) {

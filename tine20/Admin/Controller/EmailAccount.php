@@ -141,11 +141,11 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      * @param   array $_additionalArguments
      * @return  Tinebase_Record_Interface
      */
-    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
+    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array(), $_updateDeleted = false)
     {
         $this->_checkRight('update');
 
-        $currentAccount = $this->get($_record->getId());
+        $currentAccount = $this->get($_record->getId(), null, true, $_updateDeleted);
 
         $raii = false;
         if ($this->_sieveBackendSupportsMasterPassword($_record)) {
