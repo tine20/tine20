@@ -47,7 +47,7 @@ class Tinebase_Role extends Tinebase_Acl_Roles
      *
      * @todo    fix duplicate check on update / merge needs to remove the changed record / ux discussion
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $_updateDeleted = false)
     {
         /** @var Tinebase_Record_RecordSet $members */
         $members = $_record->members;
@@ -56,7 +56,7 @@ class Tinebase_Role extends Tinebase_Acl_Roles
         $rights = $_record->rights;
         $_record->rights = null;
 
-        $return = parent::update($_record, $_duplicateCheck);
+        $return = parent::update($_record, $_duplicateCheck, $_updateDeleted);
 
         if (null !== $members) {
             if (is_array($members)) {

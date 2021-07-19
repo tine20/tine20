@@ -267,7 +267,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true, $_updateDeleted = false)
     {
         // we better make this in one transaction, we don't want to update them separately
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -290,7 +290,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             }
             unset($_record->grants);
 
-            $result = parent::update($_record);
+            $result = parent::update($_record, true, $_updateDeleted);
 
             if ($container->name !== $result->name || $container->hierarchy !== $result->hierarchy || $container->color !== $result->color) {
                 $container->color = $result->color;

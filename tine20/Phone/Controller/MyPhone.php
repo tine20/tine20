@@ -71,7 +71,7 @@ class Phone_Controller_MyPhone extends Voipmanager_Controller_Snom_Phone
      *
      * @todo do not overwrite update() -> use inspectBefore/After functions
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $_updateDeleted = false)
     {
         $oldRecord = $this->get($_record->getId());
         
@@ -102,7 +102,7 @@ class Phone_Controller_MyPhone extends Voipmanager_Controller_Snom_Phone
         $oldRecord->lines    = $_record->lines;
         $oldRecord->settings = $_record->settings;
         
-        return parent::update($oldRecord, $_duplicateCheck);
+        return parent::update($oldRecord, $_duplicateCheck, $_updateDeleted);
     }
     
     /**
