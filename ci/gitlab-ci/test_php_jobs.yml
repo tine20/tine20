@@ -5,6 +5,8 @@
     ARG_COPY_SOURCE: "true"
     NODE_TOTAL: 1
     NODE_INDEX: 1
+  needs:
+    - docker_build_source
   stage: test
   timeout: 45m
   interruptible: true
@@ -27,6 +29,8 @@
     ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
   stage: test
+  needs:
+    - docker_build_source
   timeout: 45m
   parallel: 5
   interruptible: true
@@ -50,6 +54,8 @@
     ARG_COPY_SOURCE: "true"
     ARG_TEST: AllServerTests
   stage: test
+  needs:
+    - docker_build_source
   timeout: 30m
   interruptible: true
   rules:
@@ -71,6 +77,8 @@
     ARG_POSTFIX_INIT_SQL_PATH: /config/sql/postfixmultiinstance_tables.sql
     TINE20_EMAIL_SMTP: "active:true,backend:postfixmultiinstance,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfixmultiinstance_host:db,postfixmultiinstance_dbname:postfix,postfixmultiinstance_username:tine20,postfixmultiinstance_password:tine20pw"
   stage: test
+  needs:
+    - docker_build_source
   timeout: 45m
   interruptible: true
   parallel: 5
@@ -92,6 +100,8 @@
     ARG_COPY_SOURCE: "true"
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
   stage: test
+  needs:
+    - docker_build_source
   timeout: 90m
   interruptible: true
   rules:
@@ -113,6 +123,8 @@
   variables:
     ARG_IMAGE: test-built
   stage: test
+  needs:
+    - docker_build_built
   parallel: 5
   timeout: 45m
   interruptible: true
@@ -134,6 +146,8 @@
     ARG_EXCLUDE_GROUP: ""
     ARG_GROUP: "nogitlabci"
   stage: test
+  needs:
+    - docker_build_built
   parallel: 5
   allow_failure: true
   timeout: 30m
@@ -154,6 +168,8 @@
   variables:
     ARG_IMAGE: test-built
   stage: test
+  needs:
+    - docker_build_built
   parallel: 5
   timeout: 30m
   interruptible: true
