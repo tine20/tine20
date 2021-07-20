@@ -114,11 +114,14 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
                 $grant->{Calendar_Model_ResourceGrants::RESOURCE_INVITE}    = true;
                 $grant->{Calendar_Model_ResourceGrants::RESOURCE_READ}      = true;
                 $grant->{Calendar_Model_ResourceGrants::RESOURCE_SYNC}      = true;
+                $grant->{Tinebase_Model_Grants::GRANT_EDIT}                 = true;
             } else {
                 if ($grant->{Calendar_Model_ResourceGrants::RESOURCE_EDIT}) {
                     $grant->{Calendar_Model_ResourceGrants::RESOURCE_READ}      = true;
+                    $grant->{Tinebase_Model_Grants::GRANT_EDIT}                 = true;
                 }
             }
+
 
             // apply event grants
             if ($grant->{Calendar_Model_ResourceGrants::EVENTS_ADD}) {
