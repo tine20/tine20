@@ -434,7 +434,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
 
     public function testSortInstallableApplications()
     {
-        $apps = ['Tinebase','Addressbook','Courses','CoreData','Voipmanager','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Phone','Timetracker','Tasks','Projects','Felamimail','Admin','Calendar','Sales'];
+        $apps = ['Tinebase','Addressbook','Courses','CoreData','Voipmanager','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Phone','Timetracker','Tasks','Felamimail','Admin','Calendar','Sales'];
 
         $applications = array();
         foreach ($apps as $applicationName) {
@@ -452,17 +452,16 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             6 => 'Sales',
             7 => 'ExampleApplication',
             8 => 'Inventory',
-            9 => 'Projects',
-            10 => 'Timetracker',
-            11 => 'ActiveSync',
-            12 => 'Filemanager',
-            13 => 'Phone',
-            14 => 'Crm',
-            15 => 'Tasks',
-            16 => 'Courses',
-            17 => 'Voipmanager',
-            18 => 'HumanResources',
-            19 => 'SimpleFAQ',
+            9 => 'Timetracker',
+            10 => 'ActiveSync',
+            11 => 'Filemanager',
+            12 => 'Phone',
+            13 => 'Crm',
+            14 => 'Tasks',
+            15 => 'Courses',
+            16 => 'Voipmanager',
+            17 => 'HumanResources',
+            18 => 'SimpleFAQ',
         );
         self::assertEquals($expected, array_keys($result));
     }
@@ -471,11 +470,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
     {
         $appCtrl = Tinebase_Application::getInstance();
 
-        //try {
-            $exampleApp = $appCtrl->getApplicationByName(ExampleApplication_Config::APP_NAME);
-        /*} catch (Tinebase_Exception_NotFound $tenf) {
-          install it on the fly?
-        }*/
+        $exampleApp = $appCtrl->getApplicationByName(ExampleApplication_Config::APP_NAME);
 
         $state = json_decode($appCtrl->getApplicationState($exampleApp, Tinebase_Application::STATE_UPDATES), true);
         static::assertTrue(is_array($state) && isset($state[ExampleApplication_Setup_Update_0::RELEASE000_UPDATE001])
