@@ -21,9 +21,10 @@ variables:
   PHP_UNIT_ALL_TESTS_BUILT: "false"
   PHP_UNIT_SERVERTESTS: "false"
   PHP_UNIT_SETUP_TESTS: "false"
-  PHP_STAN_ANALYSES: "false"
+  PHP_STAN_ANALYSES: "true"
   JS_E2E_TEST_SOURCE: "false"
   JS_E2E_TEST_FILTER: ""
+  PHPUNIT_FILTER: ${CUSTOMAPP_DIR}
 
 workflow:
   rules:
