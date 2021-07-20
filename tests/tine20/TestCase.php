@@ -733,7 +733,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         $newRecord = array();
 
-        if ($nameField) {
+        if ($nameField && ! isset($recordData[$nameField])) {
             $newRecord[$nameField] = 'my test ' . $modelName;
         }
 
@@ -753,7 +753,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         if ($nameField) {
             self::assertTrue(isset($savedRecord[$nameField]), 'name field missing: ' . print_r($savedRecord, true));
-            self::assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
+            $nameValue = isset($recordData[$nameField]) ? $recordData[$nameField] : 'my test ' . $modelName;
+            self::assertEquals($nameValue, $savedRecord[$nameField], print_r($savedRecord, true));
             if (null !== $configuration && $configuration->modlogActive) {
                 self::assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
                     print_r($savedRecord, true));
