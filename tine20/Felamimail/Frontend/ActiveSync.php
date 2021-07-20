@@ -914,9 +914,8 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         try {
             $folders = Felamimail_Controller_Folder::getInstance()->search($filter);
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
-            Tinebase_Exception::log($feiic, null, array(
-                'accountname' => $account->name
-            ));
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
             return array();
         }
         
