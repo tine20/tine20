@@ -1,23 +1,4 @@
 # only for customapps
-phpstan:
-  stage: test
-  image: composer
-  needs: []
-  before_script:
-    - composer require phpstan/phpstan
-  script:
-    - 'test -f phpstan.neon.dist || printf "parameters:\n\tlevel: ${CODE_ANALYSIS_PHPSTAN_LEVEL:-2}\n\tscanDirectories:\n\t- ${CI_BUILDS_DIR}/tine20/tine20/tine20\n" >> phpstan.neon.dist'
-    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL ${CI_BUILDS_DIR}/tine20/tine20; fi
-    - (cd tine20/tine20; composer install --ignore-platform-reqs --no-interaction)
-    - ./vendor/bin/phpstan analyse --no-progress --error-format=gitlab lib/ >> phpstan-report.json || true
-    - ./vendor/bin/phpstan analyse --no-progress -vvv lib/ | tee phpstan-report.json
-  artifacts:
-    reports:
-      codequality: phpstan-report.json
-  rules:
-    - if: $CODE_ANALYSIS_PHPSTAN_STRICT == "true"
-      allow_failure: false
-    - allow_failure: true
 
 phpcs:
   stage: test

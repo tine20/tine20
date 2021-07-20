@@ -178,7 +178,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         // create a second record with no tag
         $this->testCreateExampleRecord(2);
 
-        $tagName = 'supi';
+        $tagName = 'nice/supi';
         $exampleRecordWithTag['tags'] = array(array(
             'name'    => $tagName,
             'type'    => Tinebase_Model_Tag::TYPE_PERSONAL,
@@ -194,6 +194,16 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $searchTagFilter = array(array('field' => 'tag', 'operator' => 'contains', 'value' => $tagName));
         $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
         $this->assertEquals(1, $returned['totalcount'], 'did not find records by tag name (contains)');
+
+        // test search again with tag name contains ... this time only with the first chars
+        $searchTagFilter = array(array('field' => 'tag', 'operator' => 'contains', 'value' => substr($tagName, 0, 4)));
+        $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
+        $this->assertEquals(1, $returned['totalcount'], 'did not find records by tag name (contains)');
+
+        // test search again with tag name contains ... once more with a non-matching string
+        $searchTagFilter = array(array('field' => 'tag', 'operator' => 'contains', 'value' => '1234'));
+        $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
+        $this->assertEquals(0, $returned['totalcount'], 'should not find any records');
     }
     
     /**

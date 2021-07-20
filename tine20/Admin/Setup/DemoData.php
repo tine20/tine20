@@ -307,20 +307,22 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $appList = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->toArray();
 
         foreach ($this->_tagNames as $tagName) {
-            Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
-                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-                'name'  => $tagName,
+            $tag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
+                'type' => Tinebase_Model_Tag::TYPE_SHARED,
+                'name' => $tagName,
                 'description' => 'this is the shared tag ' . $tagName,
                 'color' => '#' . $this->_generateRandomColor(),
-                'contexts' => array('any'),
-                'appList'  => $appList,
-                'rights'   => array(array(
-                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                    'account_id'    => 0,
-                    'view_right'    => TRUE,
-                    'use_right'     => TRUE,
-                ))
+                'appList' => $appList,
             )));
+
+            Tinebase_Tags::getInstance()->setRights(new Tinebase_Model_TagRight(array(
+                'tag_id' => $tag->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id' => 0,
+                'view_right' => true,
+                'use_right' => true,
+            )));
+            Tinebase_Tags::getInstance()->setContexts(array('any'), $tag);
         }
     }
     

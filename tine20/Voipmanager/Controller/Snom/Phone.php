@@ -189,7 +189,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      *
      * @todo do not overwrite update() -> use inspectBefore/After functions
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $_updateDeleted = false)
     {
         // check first if mac address is already used
         if ($_record->has('macaddress')) {

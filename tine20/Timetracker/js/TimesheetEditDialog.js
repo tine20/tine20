@@ -155,7 +155,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         if (this.record.id == 0 && this.record.get('timeaccount_id') && this.record.get('timeaccount_id').is_billable) {
             this.getForm().findField('is_billable').setValue(this.record.get('timeaccount_id').is_billable);
         }
-        this.factor = this.getForm().findField('accounting_time_factor').getValue()
+        this.factor = this.getForm().findField('accounting_time_factor').getValue();
+        this.calculateAccountingTime();
         var focusFieldName = this.record.get('timeaccount_id') ? 'duration' : 'timeaccount_id',
             focusField = this.getForm().findField(focusFieldName);
 
@@ -573,5 +574,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     initActions: function () {
         Tine.Timetracker.TimesheetEditDialog.superclass.initActions.call(this);
         this.action_export = null;
+    },
+
+    doCopyRecord: function() {
+        Tine.Timetracker.TimeaccountEditDialog.superclass.doCopyRecord.call(this);
+        const factor = this.record.data?.timeaccount_id?.accounting_time_factor;
+        this.record.set('accounting_time_factor', factor ?? 1);
     }
 });

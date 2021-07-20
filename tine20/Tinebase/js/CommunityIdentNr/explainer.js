@@ -103,10 +103,10 @@ const template = new Ext.XTemplate(
             return v ? Ext.util.Format.htmlEncode(v) : '';
         },
         path(v) {
-            return _.get(v, 'attachments[0].path');
+            return _.get(v, 'relations[0].related_record.path');
         },
         getId(v) {
-            return _.get(v, 'attachments[0].id');
+            return _.get(v, 'relations[0].related_record.id');
         },
         stand(v) {
             const stand = v.last_modified_time || v.creation_time;

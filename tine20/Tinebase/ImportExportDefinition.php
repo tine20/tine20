@@ -271,7 +271,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $definition->setId($existing->getId());
             $definition->is_deleted = $existing->is_deleted;
-            $result = $this->update($definition);
+            // also update deleted
+            $result = $this->update($definition, true, true);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             // does not exist

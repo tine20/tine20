@@ -48,7 +48,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
@@ -59,7 +59,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
         self::RECORDS_NAME => 'Community Identification Numbers', // ngettext('Community Identification Number', 'Community Identification Numbers', n)
         self::TITLE_PROPERTY => self::FLD_ARS_COMBINED,
         
-        self::HAS_RELATIONS => false,
+        self::HAS_RELATIONS => true,
         self::HAS_ATTACHMENTS => true,
         self::HAS_NOTES => false,
         self::HAS_TAGS => true,
@@ -68,11 +68,13 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
         self::EXPOSE_JSON_API => true,
         self::CREATE_MODULE => false,
 
+        self::HAS_DELETED_TIME_UNIQUE => true,
+
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
             self::UNIQUE_CONSTRAINTS => [
                 self::FLD_ARS_COMBINED => [
-                    self::COLUMNS => [self::FLD_ARS_COMBINED]
+                    self::COLUMNS => [self::FLD_ARS_COMBINED, self::FLD_DELETED_TIME]
                 ],
             ],
         ],
@@ -157,7 +159,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_GEMEINDENAMEN => [
                 self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 40,
+                self::LENGTH => 255,
                 self::LABEL => 'Gemeindename', // _('Gemeindename')
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
@@ -238,7 +240,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_REISEGEBIET => [
                 self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 4,
+                self::LENGTH => 10,
                 self::LABEL  => 'Reisegebiet', // _('Reisegebiet')
                 self::NULLABLE => true,
                 self::VALIDATORS => [

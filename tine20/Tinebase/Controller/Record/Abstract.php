@@ -1173,13 +1173,14 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param   Tinebase_Record_Interface $_record
      * @param   boolean $_duplicateCheck
+     * @param   boolean $_updateDeleted
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * 
      * @todo    fix duplicate check on update / merge needs to remove the changed record / ux discussion
      *          (duplicate check is currently only enabled in Sales_Controller_PurchaseInvoice)
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $_updateDeleted = false)
     {
         $this->_duplicateCheck = $_duplicateCheck;
 
@@ -1202,7 +1203,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($this->_backend instanceof Tinebase_Backend_Sql_Abstract) {
                 $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
             }
-            $currentRecord = $this->get($_record->getId());
+            $currentRecord = $this->get($_record->getId(), null, true, $_updateDeleted);
             unset($raii);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

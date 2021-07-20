@@ -9681,36 +9681,6 @@ parameters:
 			path: tine20/Timetracker/Model/TimeaccountFilter.php
 
 		-
-			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime   start_date\\)\\: Unexpected token \"start_date\", expected variable at offset 107$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(integer             duration\\)\\: Unexpected token \"duration\", expected variable at offset 201$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string              start_time\\)\\: Unexpected token \"start_time\", expected variable at offset 154$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string              timeaccount_id\\)\\: Unexpected token \"timeaccount_id\", expected variable at offset 246$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^Access to an undefined property Timetracker_Model_Timesheet\\:\\:\\$start_date\\.$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^Access to an undefined property Timetracker_Model_Timesheet\\:\\:\\$duration\\.$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
 			count: 1
 			path: tine20/Timetracker/Model/TimesheetFilter.php

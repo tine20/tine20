@@ -141,7 +141,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      *   2) remove code duplication (xprops loops)
      *   3) find out, why xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) does not return an array in some cases
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true, $_updateDeleted = false)
     {
         // be careful, don't put $_record in here, like that parent_id might be spoofed! It must be only the id!
         $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
@@ -204,7 +204,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        return parent::update($_record, $_duplicateCheck);
+        return parent::update($_record, $_duplicateCheck, $_updateDeleted);
     }
 
     /**

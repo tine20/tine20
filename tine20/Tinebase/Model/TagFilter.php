@@ -40,7 +40,7 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
 
         'owner'                => array('allowEmpty' => true),
         'application'          => array('allowEmpty' => true),
-        'name'                 => array('allowEmpty' => true),
+        'name'                 => array('allowEmpty' => true), // contains!
         'description'          => array('allowEmpty' => true),
         'type'                 => array('presence'   => 'required',
                                         'allowEmpty' => true,
@@ -82,7 +82,7 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         
         $orWhere = array();
         if (!empty($this->name)) {
-            $orWhere[] = $db->quoteInto($db->quoteIdentifier('tags.name') . ' LIKE ?', $this->name);
+            $orWhere[] = $db->quoteInto($db->quoteIdentifier('tags.name') . ' LIKE ?', '%' . $this->name . '%');
         }
         if (!empty($this->description)) {
             $orWhere[] = $db->quoteInto($db->quoteIdentifier('tags.description') . ' LIKE ?', $this->description);
