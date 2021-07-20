@@ -18,6 +18,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE014_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE014_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE014_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -52,6 +53,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE014_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -239,7 +244,12 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
 
     public function update008()
     {
-        Setup_SchemaTool::updateSchema([Tinebase_Model_CommunityIdentNr::class]);
         $this->addApplicationUpdate('Tinebase', '14.8', self::RELEASE014_UPDATE008);
+    }
+
+    public function update009()
+    {
+        Setup_SchemaTool::updateSchema([Tinebase_Model_CommunityIdentNr::class]);
+        $this->addApplicationUpdate('Tinebase', '14.9', self::RELEASE014_UPDATE009);
     }
 }

@@ -68,11 +68,13 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
         self::EXPOSE_JSON_API => true,
         self::CREATE_MODULE => false,
 
+        self::HAS_DELETED_TIME_UNIQUE => true,
+
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
             self::UNIQUE_CONSTRAINTS => [
                 self::FLD_ARS_COMBINED => [
-                    self::COLUMNS => [self::FLD_ARS_COMBINED]
+                    self::COLUMNS => [self::FLD_ARS_COMBINED, self::FLD_DELETED_TIME]
                 ],
             ],
         ],
