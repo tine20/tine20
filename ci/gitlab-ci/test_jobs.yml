@@ -2,6 +2,8 @@
   stage: test
   variables:
     ARG_IMAGE: test-source
+  needs:
+    - docker_build_source
   script:
     - echo "PHP version shoud be ${PHP_VERSION}."
     - echo "PHP version is $(php -r 'echo PHP_VERSION;')"
@@ -26,6 +28,8 @@
   variables:
     ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
+  needs:
+    - docker_build_source
   script:
     - cd $TINE20ROOT
     - composer require phpstan/phpstan
