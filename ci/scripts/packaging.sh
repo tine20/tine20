@@ -52,3 +52,9 @@ for f in *; do
 	--upload-file "$f" \
 	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${VERSION}/$(echo "$f" | sed sI~I-Ig)"
 done
+
+#set current link
+curl \
+	--header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+	-XPUT --data "${VERSION}" \
+	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
