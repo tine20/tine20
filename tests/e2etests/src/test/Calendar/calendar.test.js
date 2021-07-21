@@ -8,7 +8,7 @@ beforeAll(async () => {
 });
 
 describe('keyFields', () => {
-    describe('calendar', () => {
+    describe.skip('calendar', () => {
         let popupWindow;
         test('events keyFields', async () => {
             popupWindow = await lib.getEditDialog('Termin hinzufügen');
