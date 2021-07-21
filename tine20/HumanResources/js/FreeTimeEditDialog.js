@@ -313,7 +313,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         var statusPickerDefaults = {
             fieldLabel: this.app.i18n._('Status'),
             xtype: 'widget-keyfieldcombo',
-            app: 'HumanResources'
+            app: 'HumanResources',
+            width: 115,
         };
 
         this.sicknessStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
