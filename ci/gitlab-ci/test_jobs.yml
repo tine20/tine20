@@ -22,7 +22,7 @@
   timeout: 20m # time run: 4m
   interruptible: true
 
-"phpstan":
+phpstan:
   extends: .abstract_jobs.copy_source
   stage: test
   variables:
@@ -46,11 +46,86 @@
       when: never
     - if: $PHP_STAN_ANALYSES == "never"
       when: never
+    - if: $RUN_ALL_TESTS == "true" && $PHP_STAN_ANALYSES_STRICT == "true"
+      allow_failure: false
+      when: on_success
     - if: $RUN_ALL_TESTS == "true"
+      allow_failure: true
+      when: on_success
+    - if: $PHP_STAN_ANALYSES == "true" && $PHP_STAN_ANALYSES_STRICT == "true"
+      allow_failure: false
       when: on_success
     - if: $PHP_STAN_ANALYSES == "true"
+      allow_failure: true
       when: on_success
     - when: never
-  allow_failure: true
-  timeout: 20m # time run: 4m
+  timeout: 20m
+  interruptible: true
+
+parallel-lint:
+  stage: test
+  image: composer
+  needs: []
+  before_script:
+    - composer require php-parallel-lint/php-parallel-lint=dev-master
+  script:
+    - if test "${CI_PROJECT_NAME}" == "tine20"; then dir=./tine20/; else dir=./lib/; fi
+    - ./vendor/bin/parallel-lint --gitlab $dir | tee ${CI_PROJECT_DIR}/parallel-lint-report.json
+  artifacts:
+    reports:
+      codequality: ${CI_PROJECT_DIR}/parallel-lint-report.json
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $CODE_ANALYSIS_PARALLEL_LINT == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true" && $CODE_ANALYSIS_PARALLEL_LINT_STRICT == "false"
+      allow_failure: true
+      when: on_success
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $CODE_ANALYSIS_PARALLEL_LINT == "true" && $CODE_ANALYSIS_PARALLEL_LINT_STRICT == "false"
+      allow_failure: true
+      when: on_success
+    - if: $CODE_ANALYSIS_PARALLEL_LINT == "true"
+      when: on_success
+    - when: never
+  timeout: 20m
+  interruptible: true
+
+phpcs:
+  stage: test
+  image: composer
+  needs: []
+  before_script:
+    - composer require squizlabs/php_codesniffer
+    - composer require micheh/phpcs-gitlab
+  script:
+    - if test "${CI_PROJECT_NAME}" == "tine20"; then dir=./tine20; else dir=./lib; fi
+    - ./vendor/bin/phpcs -s --report=full --standard=PSR12
+      --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=${CI_PROJECT_DIR}/phpcs-report.json $dir
+      --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
+      --extensions=php
+  artifacts:
+    reports:
+      codequality: ${CI_PROJECT_DIR}/phpcs-report.json
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $CODE_ANALYSIS_PHPCS == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true" && $CODE_ANALYSIS_PHPCS_STRICT == "true"
+      allow_failure: false
+      when: on_success
+    - if: $RUN_ALL_TESTS == "true"
+      allow_failure: true
+      when: on_success
+    - if: $CODE_ANALYSIS_PHPCS == "true" && $CODE_ANALYSIS_PHPCS_STRICT == "true"
+      allow_failure: false
+      when: on_success
+    - if: $CODE_ANALYSIS_PHPCS == "true"
+      allow_failure: true
+      when: on_success
+    - when: never
+  timeout: 20m
   interruptible: true
