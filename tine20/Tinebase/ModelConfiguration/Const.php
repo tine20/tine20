@@ -34,6 +34,7 @@ class Tinebase_ModelConfiguration_Const {
     const CREATE_MODULE = 'createModule';
 
     const DB_COLUMNS = 'dbColumns';
+    const DEFAULT_SORT_INFO = 'defaultSortInfo';
     const DEFAULT_VAL = 'default';
     const DEGREE = 'degree';
     const DEPENDENT_RECORDS = 'dependentRecords';
