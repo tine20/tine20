@@ -6,6 +6,7 @@ ARG TINE20PACKAGES=/root/packages
 ARG RELEASE=local
 ARG CODENAME=local
 ARG REVISION=local
+ARG ZIP_PACKAGES="false"
 
 RUN apk add zip
 
