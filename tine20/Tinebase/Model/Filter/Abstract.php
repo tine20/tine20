@@ -436,25 +436,80 @@ abstract class Tinebase_Model_Filter_Abstract
             return '';
         }
         $action = $this->_opSqlMap[$this->_operator];
+        $value = (string)$value;
 
-        // escape backslashes first
-        $returnValue = addcslashes($value, '\\');
+        // be wary of explode on empty string
+        if (stripos($action['sqlop'], 'LIKE') !== false && '' !== $value) {
+            // we have a LIKE op, so we need to do some stuff:
+            // tine20 supports * and _ as wildcards, where * transforms to % and _ stays _ and \ escapes them
+            // \ also escapes itself, but ONLY in front of a wildcard -> \\* => one backslash (escaped, two...) followed by %
+            // but \\a => two backslash (escaped, four...) followed by a
+            // also we need to escape LIKE characters \ % _
+            // AND mysql 5.6 / 5.7 has a bug with unicode_utf8mb4_ci .... https://bugs.mysql.com/bug.php?id=81990
+            // so we add some magic 'escape "|"' to it, to be removed once mysql 5.7 can be dropped
+            $result = '';
+            $wasBackSlash = false;
+            $didEscapeBS = false;
+            $firstIteration = true;
+            foreach (explode('\\', $value) as $part) {
+                if ($wasBackSlash) {
+                    if ('' === $part) {
+                        // escaped \
+                        $result .= '\\';
+                        $didEscapeBS = true;
+                        $wasBackSlash = false;
+                        continue;
 
-        // is * escaped?
-        if (!strpos($returnValue, '\\*')) {
-            // replace wildcards from user ()
-            $returnValue = str_replace(array('*', '_'), $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
-        } else {
-            // remove escaping and just search for * (not as wildcard)
-            $returnValue = str_replace(array("\\"), $this->_dbCommand->setDatabaseJokerCharacters(), $returnValue);
+                    }
+                } elseif ('' === $part) {
+                    if ($firstIteration && '\\' === $value[0]) {
+                        $firstIteration = false;
+                        continue;
+                    }
+                    if ($didEscapeBS) {
+                        $result .= '\\';
+                        $didEscapeBS = false;
+                    }
+                    $wasBackSlash = true;
+                    $firstIteration = false;
+                    continue;
+                }
+
+                if ('*' === $part[0] && !$wasBackSlash && !$firstIteration) {
+                    // escaped *, no transformation, we omit the \ here
+                    $result .= '*';
+                    $part = substr($part, 1);
+
+                } elseif ('_' === $part[0] && !$wasBackSlash) {
+                    // escaped _, just add the |, the _ will not be replaced below
+                    $result .= '|';
+
+                } elseif (!$firstIteration) { // not the first iteration
+                    // just a sinlge backslash somewhere, we keep it
+                    $result .= '\\';
+                }
+                $wasBackSlash = false;
+                $didEscapeBS = false;
+                $firstIteration = false;
+
+                $result .= str_replace('*', '%', str_replace(['%', '|'], ['|%', '||'], $part));
+            }
+            if ($wasBackSlash) {
+                $result .= '\\';
+            } elseif ($didEscapeBS) {
+                // well, we escaped, but there was nothing to escape ... expand!
+                $result .= '\\';
+            }
+
+            $value = $result;
         }
 
         // add wildcard to value according to operator
         if (isset($action['wildcards'])) {
-            $returnValue = str_replace('?', $returnValue, $action['wildcards']);
+            $value = str_replace('?', $value, $action['wildcards']);
         }
 
-        return (string) $returnValue;
+        return $value;
     }
 
     /**
