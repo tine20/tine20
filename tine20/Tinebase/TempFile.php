@@ -341,7 +341,11 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 ++$numberOfDeletedFiles;
             } else if ($directoryIterator->isDir()) {
                 // delete sub dir contents, too
-                $numberOfDeletedFiles += $this->_removeFilesFromDirByTimestamp($directoryIterator->getPathname(), $date);
+                try {
+                    $numberOfDeletedFiles += $this->_removeFilesFromDirByTimestamp($directoryIterator->getPathname(), $date);
+                } catch (UnexpectedValueException $uve) {
+                    // sub dir was already removed...
+                }
             }
 
             Tinebase_Lock::keepLocksAlive();
