@@ -45,3 +45,12 @@ docker_build_source:
   variables:
     RUN_NO_TESTS: "true"
     IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
+
+docker_build_built:
+  stage: build
+  script:
+    - echo job is there for needs
+  rules:
+    - if: $NOT_TURE == "true"
+      when: on_success
+    - when: never
