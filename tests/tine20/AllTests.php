@@ -39,6 +39,7 @@ class AllTests
             'ActiveSync',
             'Filemanager',
             'MailFiler',
+            'Projects',
             'HumanResources',
             'Inventory',
             'Events',
