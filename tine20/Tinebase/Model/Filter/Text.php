@@ -19,6 +19,8 @@
  */
 class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
 {
+    const CASE_SENSITIVE = 'caseSensitive';
+
     /**
      * @var array list of allowed operators
      */
@@ -63,12 +65,12 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
         $_options = isset($_fieldOrData['options']) ? $_fieldOrData['options'] : $_options;
-        if (isset($_options['caseSensitive']) && $_options['caseSensitive']) {
+        if (isset($_options[self::CASE_SENSITIVE]) && $_options[self::CASE_SENSITIVE]) {
             $this->_caseSensitive = true;
         }
         if (isset($_options['binary']) && $_options['binary']) {
             $this->_binary = true;
-            if (!isset($_options['caseSensitive'])) {
+            if (!isset($_options[self::CASE_SENSITIVE])) {
                 $this->_caseSensitive = true;
             }
         }
@@ -85,7 +87,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             return;
         }
 
-        // TODO fixme
+        // TODO fixme move CS here
         // if ($this->_caseSensitive) {}
         // it seems as of mysql8 this might become an option
         // 'sqlop' => ' LIKE _utf8mb4 ? COLLATE utf8mb4_unicode_cs? or something'
@@ -121,15 +123,17 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     {
         // quote field identifier, set action and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
-        if (($db = Tinebase_Core::getDb()) instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            if (!$this->_binary && $this->_caseSensitive) {
-                $field = 'BINARY ' . $field;
-            } elseif ($this->_binary && !$this->_caseSensitive) {
-                if ($db->getConfig()['charset'] === 'utf8') {
-                    $field .= ' COLLATE utf8_unicode_ci';
-                } else {
-                    $field .= ' COLLATE utf8mb4_unicode_ci';
-                }
+
+        // TODO fix me: this should be moved to the static part of the query, the search condition.
+        // TODO fix me: that might improve performance quiet a bit, remove this, do it in _setOpSqlMap
+        $db = Tinebase_Core::getDb();
+        if (!$this->_binary && $this->_caseSensitive) {
+            $field = 'BINARY ' . $field;
+        } elseif ($this->_binary && !$this->_caseSensitive) {
+            if ($db->getConfig()['charset'] === 'utf8') {
+                $field .= ' COLLATE utf8_unicode_ci';
+            } else {
+                $field .= ' COLLATE utf8mb4_unicode_ci';
             }
         }
         
