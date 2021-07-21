@@ -48,6 +48,21 @@ variables:
   PHP_STAN_ANALYSES:
     description: "Enable php stan."
     value: "true"
+    
+  PHP_STAN_ANALYSES_STRICT:
+    value: "false"
+
+  CODE_ANALYSIS_PARALLEL_LINT:
+    value: "true"
+
+  CODE_ANALYSIS_PARALLEL_LINT_STRICT:
+    value: "false"
+
+  CODE_ANALYSIS_PHPCS:
+    value: "false"
+
+  CODE_ANALYSIS_PHPCS_STRICT:
+    value: "false"
 
   PHP_UNIT_ALL_TESTS_SOURCE:
     description: "Enable or disable php unit tests on source (with webpack) image."

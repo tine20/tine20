@@ -1,5 +1,8 @@
 "js: end to end tests source":
   extends: .abstract_jobs.e2e_test
+  stage: test
+  needs:
+    - docker_build_source
   variables:
     ARG_COPY_SOURCE: "true"
     ARG_IMAGE: test-source
