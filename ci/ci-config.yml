@@ -147,3 +147,7 @@ variables:
   NODIFY_ON_FAILURE:
     description: "send riot message if pipeline failes"
     value: "false"
+
+  ZIP_PACKAGES:
+    description: "Build zip packages, wenn packaging. (Tar packages are always build)"
+    value: "false"
