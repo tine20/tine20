@@ -49,7 +49,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      * initial path
      * @cfg {String} initialPath
      */
-    initialPath: 'null',
+    initialPath: null,
     
     // private
     app: null,
@@ -64,6 +64,8 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     initComponent: function () {
         this.allowMultiple = this.hasOwnProperty('singleSelect') ? ! this.singleSelect : this.allowMultiple;
         this.requiredGrants = this.requiredGrants ? this.requiredGrants : (this.mode === 'source' ? ['readGrant'] : ['editGrant']);
+        
+        this.allowCreateNewFile = this.mode === 'target' && this.constraint !== 'folder';
         
         var model = Tine.Filemanager.Model.Node;
         this.app = Tine.Tinebase.appMgr.get(model.getMeta('appName'));
@@ -104,6 +106,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 split: true,
                 collapsible: true,
                 header: false,
+                autoScroll: true,
                 collapseMode: 'mini',
                 items: [
                     this.westPanel = new Tine.widgets.mainscreen.WestPanel({
@@ -128,7 +131,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             }, {
                 region: 'north',
                 border: false,
-                hidden: this.mode !== 'target' || this.constraint === 'folder',
+                hidden: !this.allowCreateNewFile,
                 layout: 'hbox',
                 height: 38,
                 frame: true,
@@ -153,7 +156,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                         enableKeyEvents: true,
                         validate: Ext.emptyFn,
                         listeners: {
-                            keyup: this.onFileNameFieldChange.createDelegate(this),
+                            keyup: this.checkState.createDelegate(this),
                             specialkey: (field, e) => {
                                 if (e.getKey() === e.ENTER && this.validSelection) {
                                     this.fireEvent('forceNodeSelected', this.selection);
@@ -188,9 +191,16 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         Tine.Filemanager.FilePicker.superclass.afterRender.call(this);
     },
 
-    onFileNameFieldChange: function(field, e) {
+    checkState: function() {
+        const field = this.fileNameField;
         const fileName = field.getValue();
+        
         const basePath = _.get(this.treePanel.getSelectedContainer(), 'path');
+        if (! basePath) {
+            // NOTE: race-condition - there might be no selected container!
+            return _.delay(() => { this.checkState() }, 250);
+        }
+        
         const node = {
             id: 'newFile',
             type: 'file',
@@ -206,7 +216,6 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             this.assertRowSelection();
             this.fireEvent('nodeSelected', this.selection);
         } else {
-            field.markInvalid(_('Invalid Filename'));
             this.selection = [];
             this.validSelection = false;
             this.fireEvent('invalidNodeSelected');
@@ -268,7 +277,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         treePanel.getSelectionModel().on('selectionchange', function (selectionModel) {
             var treeNode = selectionModel.getSelectedNode();
             me.updateSelection([
-                treeNode.attributes
+                _.get(treeNode, 'attributes')
             ]);
         });
 
@@ -320,7 +329,9 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             plugins: [this.getTreePanel().getFilterPlugin()]
         });
 
-        gridPanel.getStore().on('load', this.assertRowSelection, this);
+        if (this.allowCreateNewFile) {
+            gridPanel.getStore().on('load', this.checkState, this);
+        }
         
         gridPanel.getGrid().reconfigure(gridPanel.getStore(), this.getColumnModel());
         gridPanel.getGrid().getSelectionModel().singleSelect = !this.allowMultiple;
@@ -389,6 +400,10 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         if (_.isRegExp(this.constraint)) {
             return node.get('path').match(this.constraint);
         }
+        
+        if (_.isFunction(this.constraint)) {
+            return this.constraint(node)
+        }
     },
 
     /**
@@ -401,11 +416,14 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     hasGrant: function(node, grants) {
         var _ = window.lodash,
             condition = true;
-
+        
         if (this.mode === 'target') {
+            
             if (node.id === 'newFile') {
-                node = new Tine.Filemanager.Model.Node(this.treePanel.getSelectedContainer());
-                grants = ['addGrant'];
+                const targetNodeData = _.get(this.treePanel.getSelectionModel().getSelectedNode(), 'attributes');
+                const targetNode = targetNodeData ? new Tine.Filemanager.Model.Node(targetNodeData) : null;
+                
+                return targetNode && Tine.Filemanager.nodeActionsMgr.checkConstraints('create', targetNode, [node]);
             } else {
                 grants = ['editGrant'];
             }
@@ -490,6 +508,22 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                     return value;
                 }
             }
+        }, {
+            id: 'creation_time',
+            header: this.app.i18n._("Creation Time"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'creation_time',
+            renderer: Tine.Tinebase.common.dateTimeRenderer,
+            hidden: true
+        },{
+            id: 'last_modified_time',
+            header: this.app.i18n._("Last Modified Time"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'last_modified_time',
+            hidden: true,
+            renderer: Tine.Tinebase.common.dateTimeRenderer
         }];
 
         return new Ext.grid.ColumnModel({

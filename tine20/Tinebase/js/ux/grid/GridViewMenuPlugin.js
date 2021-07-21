@@ -82,10 +82,6 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
      */
     init : function(grid)
     {
-        if (grid.enableHdMenu === true) {
-            throw("Ext.ux.grid.GridViewMenuPlugin - grid's \"enableHdMenu\" property has to be set to \"false\"");
-        }
-        
         var v = this._view = grid.getView();
         v.afterMethod('initElements', this.initElements, this);
         v.afterMethod('initData', this.initData, this);

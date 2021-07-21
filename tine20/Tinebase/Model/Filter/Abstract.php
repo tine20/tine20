@@ -213,6 +213,39 @@ abstract class Tinebase_Model_Filter_Abstract
         
         $this->_operator = $_operator;
     }
+
+    /**
+     * url parses the operator and returns the operator itself as string
+     * the query parameters will be set to $_operatorParams
+     * $_allowedParams needs to be an array [
+     *      'key1' => true, // all values are allowed
+     *      'key2' => [ // list of allowed values
+     *          'allowedVal1' => true,
+     *          'allowedVal2' => true, // etc.
+     *      ], //etc.
+     * ]
+     *
+     * @param string $_operator
+     * @param array $_allowedParams
+     * @param array &$_operatorParams
+     * @return string
+     */
+    protected function _parseOperator($_operator, array $_allowedParams, &$_operatorParams)
+    {
+        $_operatorParams = [];
+        $urlParts = parse_url($_operator);
+        if (isset($urlParts['query'])) {
+            parse_str($urlParts['query'], $res);
+            foreach ($res as $key => $val) {
+                if (isset($_allowedParams[$key])) {
+                    if (!is_array($_allowedParams[$key]) || isset($_allowedParams[$key][$val])) {
+                        $_operatorParams[$key] = $val;
+                    }
+                }
+            }
+        }
+        return $urlParts['path'];
+    }
     
     /**
      * gets operator

@@ -43,8 +43,10 @@ class HumanResources_Model_BLDailyWTReport_WorkingTime extends Tinebase_Record_N
     protected static $_modelConfiguration = [
         self::APP_NAME      => HumanResources_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
+        self::RECORD_NAME   => 'Working time', // _('Working time')
+        self::RECORDS_NAME  => 'Working times', // _('Working times')
 
-        self::TITLE_PROPERTY=> "{# {{start - sorting! #}{{ duration |date('H:i', 'GMT')}}{% if start and end %} ({{ start |date('H:i', 'GMT')}} - {{ end |date('H:i', 'GMT')}}){% endif %} - {{wage_type.name}}",
+        self::TITLE_PROPERTY=> "{# {{start - sorting! #}{{ duration |date('H:i', 'GMT')}}{% if start and end %} ({{ start |date('H:i')}} - {{ end |date('H:i')}}){% endif %} - {{wage_type.name}}",
 
         self::FIELDS        => [
             self::FLDS_WAGE_TYPE        => [
@@ -65,4 +67,63 @@ class HumanResources_Model_BLDailyWTReport_WorkingTime extends Tinebase_Record_N
             ]
         ],
     ];
+
+    /**
+     * @param Tinebase_Record_RecordSet $_recordSetOne
+     * @param Tinebase_Record_RecordSet $_recordSetTwo
+     * @return null|Tinebase_Record_RecordSetDiff
+     */
+    public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
+    {
+        $_recordSetOne->sort('start');
+        $_recordSetTwo->sort('start');
+
+        $iteratorOne = $_recordSetOne->getIterator();
+        $iteratorTwo = $_recordSetTwo->getIterator();
+
+        $removed = new Tinebase_Record_RecordSet(static::class);
+        $added = new Tinebase_Record_RecordSet(static::class);
+
+        do {
+            /** @var Tinebase_Record_Abstract $currentOne */
+            $currentOne = $iteratorOne->current();
+            $currentTwo = $iteratorTwo->current();
+
+            if ($currentOne && $currentTwo) {
+                if ($currentOne->diff($currentTwo, ['id'])->isEmpty()) {
+                    // equal
+                    $iteratorOne->next();
+                    $iteratorTwo->next();
+                } else {
+                    if ($currentTwo->end <= $currentOne->start) {
+                        $added->addRecord(clone $currentTwo);
+                        $iteratorTwo->next();
+                    } elseif ($currentTwo->start >= $currentOne->end) {
+                        $removed->addRecord(clone $currentOne);
+                        $iteratorOne->next();
+                    } else {
+                        $removed->addRecord(clone $currentOne);
+                        $iteratorOne->next();
+                        $added->addRecord(clone $currentTwo);
+                        $iteratorTwo->next();
+                    }
+                }
+            } elseif ($currentOne) {
+                $removed->addRecord(clone $currentOne);
+                $iteratorOne->next();
+            } elseif ($currentTwo) {
+                $added->addRecord(clone $currentTwo);
+                $iteratorTwo->next();
+            } else {
+                break;
+            }
+        } while (true);
+
+        return new Tinebase_Record_RecordSetDiff([
+            'model'    => static::class,
+            'added'    => $added,
+            'removed'  => $removed,
+            'modified' => new Tinebase_Record_RecordSet('Tinebase_Record_Diff'),
+        ]);
+    }
 }

@@ -8,7 +8,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
@@ -151,6 +151,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $result = Felamimail_Controller_Cache_Message::getInstance()->getFolderStatus($filter);
         } catch (Exception $e) {
+            if ($e instanceof Felamimail_Exception_IMAPInvalidCredentials) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            } else {
+                Tinebase_Exception::log($e);
+            }
+
             // we have to convert this exception because the frontend does not handle the imap errors well...
             throw new Tinebase_Exception_SystemGeneric('Failed to get folder status: ' . $e->getMessage());
         }
@@ -343,6 +350,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * import message into target folder
+     * 
+     * @param $targetFolderId
+     * @param $tempFile
+     */
+    public function importMessage($targetFolderId, $tempFileId)
+    {
+        $tempFile = Tinebase_TempFile::getInstance()->get($tempFileId);
+        Felamimail_Controller_Message::getInstance()->appendMessage($targetFolderId, file_get_contents($tempFile->path));
+    }
+    
+    /**
      * add given flags to given messages
      *
      * @param  array        $filterData
@@ -489,7 +508,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
         // add signatures and remove ADB list type from result set
-        // TODO move this to a better place (default filter?)
+        // TODO move this to a better place (default filter? separate api?)
         foreach ($accounts['results'] as $idx => $account) {
             if (in_array($account['type'], [
                 Felamimail_Model_Account::TYPE_SHARED,
@@ -497,9 +516,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_SYSTEM,
             ])) {
-                $fullAccount = $this->getAccount($account['id']);
-                $this->_reloadFolderCacheOnPrimaryAccount($fullAccount);
-                $accounts['results'][$idx] = $fullAccount;
+                $account = Felamimail_Controller_Account::getInstance()->get($account['id']);
+                Felamimail_Controller_Folder::getInstance()->reloadFolderCacheOnAccount($account);
+                if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM &&
+                    Felamimail_Config::getInstance()->featureEnabled(
+                        Felamimail_Config::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS) &&
+                    ! $account->sieve_notification_move
+                ) {
+                    // TODO add new status for sieve_notification_move: "never" (+ "auto" if feature is active, but not already set, and "active")
+                    // Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($account);
+                }
+                $accounts['results'][$idx] = $this->_recordToJson($account);
             } else {
                 unset($accounts['results'][$idx]);
                 $accounts['totalcount']--;
@@ -511,35 +538,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $accounts;
     }
 
-    /**
-     * reload folder cache on primary account - only do this once an hour (with caching)
-     *
-     * @param $account
-     * @return boolean
-     */
-    protected function _reloadFolderCacheOnPrimaryAccount($account)
-    {
-        if (Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} !== $account['id']) {
-            return false;
-        }
-
-        $cache = Tinebase_Core::getCache();
-        $cacheId = Tinebase_Helper::convertCacheId('_reloadFolderCacheOnPrimaryAccount' . $account['id']);
-        if ($cache->test($cacheId)) {
-            return $cache->load($cacheId);
-        }
-
-        try {
-            $this->updateFolderCache($account['id'], '');
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' Could not update account folder cache: ' . $e->getMessage()
-            );
-        }
-        $cache->save(true, $cacheId, [], 3600);
-        return true;
-    }
-    
     /**
      * get account data
      *
@@ -725,34 +723,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function doMailsBelongToAccount($mails)
     {
-        $contactFilter = new Addressbook_Model_ContactFilter([
-            [
-                'field' => 'type',
-                'operator' => 'equals',
-                'value' => Addressbook_Model_Contact::CONTACTTYPE_USER
-            ],
-            [
-                'condition' => 'OR',
-                'filters' => [
-                    [
-                        'field' => 'email',
-                        'operator' => 'in',
-                        'value' => $mails
-                    ],
-                    [
-                        'field' => 'email_home',
-                        'operator' => 'in',
-                        'value' => $mails
-                    ]
-                ]
-            ]
-        ]);
-        
-        $contacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
-        
-        $usermails = array_filter(array_merge($contacts->email, $contacts->email_home));
-        
-        return array_diff($mails, $usermails);
+        $mails = Addressbook_Controller_Contact::getInstance()->doMailsBelongToAccount($mails);
+        return $mails;
     }
 
     /**
@@ -788,5 +760,189 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         return $result;
+    }
+
+    /**
+     * @param string $messageId
+     * @param string $userRating
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function processSpam($messageId, $userRating)
+    {
+        if (Felamimail_Model_MessagePipeConfig::USER_RATING_SPAM === $userRating || Felamimail_Model_MessagePipeConfig::USER_RATING_HAM === $userRating) {
+            $pl = Felamimail_Config::getInstance()->{Felamimail_Config::SPAM_USERPROCESSING_PIPELINE};
+        } else {
+            throw new \InvalidArgumentException("incorrect pipeline option: 'spam' or 'ham' have to be given");
+        }
+
+        $rs = new Tinebase_Record_RecordSet(Felamimail_Model_MessagePipeConfig::class);
+
+        foreach ($pl[$userRating] as $data) {
+            $pipeLineRecord = Felamimail_Model_MessagePipeConfig::factory($data);
+            $rs->addRecord(new Felamimail_Model_MessagePipeConfig([
+                Felamimail_Model_MessagePipeConfig::FLDS_CLASSNAME => get_class($pipeLineRecord),
+                Felamimail_Model_MessagePipeConfig::FLDS_CONFIG_RECORD => $pipeLineRecord]));
+        }
+
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId);
+        $pipeLine = new Tinebase_BL_Pipe($rs, false);
+        $pipeLine->execute($message);
+
+        return [
+            'status' => 'success'
+        ];
+    }
+
+    /**
+     * test imap settings
+     *
+     * @param $accountId
+     * @param $fields
+     * @param bool $forceConnect
+     * @return array
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public function testIMapSettings($accountId, $fields, $forceConnect = false)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+        
+        // only test connection for external user account by default
+        if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER) {
+            return [
+                'status' => 'success'
+            ];
+        }
+        
+        $params = [];
+        
+        if (is_array($fields)) {
+            $params = (object)$fields;
+        }
+
+        if ('' === $params->host) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('IMAP Hostname missing'));
+        }
+
+        if ('' ===  $params->user || (!$accountId && '' ===  $params->password)) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('IMAP Credentials missing'));
+        }
+        
+        foreach ($fields as $key => $field) {
+            $account[$key] = $fields[$key];
+        }
+
+        $params->host     = isset($fields['host'])     ? $fields['host']    : 'localhost';
+        $params->password = isset($fields['password']) ? $fields['password'] : '';
+        $params->port     = isset($fields['port'])     ? $fields['port']     : null;
+        $params->ssl      = isset($fields['ssl'])      ? $fields['ssl']      : false;
+        $params->account = $account;
+
+        $fieldsWithoutPw = $fields;
+        unset($fieldsWithoutPw['password']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            ' Trying connection with params: ' . print_r($fieldsWithoutPw, true)
+        );
+
+        try {
+            $backend = new Felamimail_Backend_Imap($params);
+        } catch (Exception $e) {
+
+            $fieldsWithoutPw = $fields;
+            unset($fieldsWithoutPw['password']);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Connection failed: ' . $e
+            );
+
+            switch ($e->getCode()) {
+                case 910: // Felamimail_Exception_IMAP
+                    throw new Tinebase_Exception_SystemGeneric('General IMAP error.');
+                case 911: // Felamimail_Exception_IMAPServiceUnavailable
+                    throw new Tinebase_Exception_SystemGeneric('No connection to IMAP server.');
+                case 912: // Felamimail_Exception_IMAPInvalidCredentials
+                    throw new Tinebase_Exception_SystemGeneric('Cannot login, user or password wrong.');
+                default:
+                    throw new Tinebase_Exception_SystemGeneric($e->getMessage());
+            }
+        }
+
+        return [
+            'status' => 'success'
+        ];
+    }
+
+    /**
+     * test smtp settings
+     *
+     * @param $accountId
+     * @param $fields
+     * @param bool $forceConnect
+     * @return array
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Exception
+     */
+    public function testSmtpSettings($accountId, $fields, $forceConnect = false)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+        
+        //only test connection for external user account by default 
+        if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER) {
+            return [
+                'status' => 'success'
+            ];
+        }
+
+        if ('' === $fields['smtp_user'] && isset($fields['user'])) {
+            $fields['smtp_user'] = $fields['user'];
+        }
+        if ('' === $fields['smtp_password'] && isset($fields['password'])) {
+            $fields['smtp_password'] = $fields['password'];
+        }
+        
+        if ('' === $fields['smtp_hostname']) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Hostname missing'));
+        }
+
+        if ('' === $fields['smtp_user'] || (!$accountId && '' === $fields['smtp_password'])) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Credentials missing'));
+        }
+
+        foreach ($fields as $key => $field) {
+            $account[$key] = $fields[$key];
+        }
+        
+        $smtpConfig = $account->getSmtpConfig();
+        $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
+
+        // Check if authentication is required and determine required class
+        $connectionClass = 'Zend_Mail_Protocol_Smtp';
+
+        if (array_key_exists('auth',$smtpConfig) && isset($smtpConfig['auth'])) {
+            $connectionClass .= '_Auth_' . ucwords($smtpConfig['auth']);
+        }
+
+        if (!class_exists($connectionClass)) {
+            require_once 'Zend/Loader.php';
+            Zend_Loader::loadClass($connectionClass);
+        }
+
+        try {
+            $transport->setConnection(new $connectionClass($smtpConfig['hostname'], $smtpConfig['port'], $smtpConfig));
+            $transport->getConnection()->connect();
+            $transport->getConnection()->helo($smtpConfig['hostname']);
+        } catch (Exception $e) {
+            throw new Tinebase_Exception_SystemGeneric($e->getMessage());
+        }
+
+        return [
+            'status' => 'success'
+        ];
     }
 }

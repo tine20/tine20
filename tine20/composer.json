@@ -66,7 +66,7 @@
     }
   ],
   "require": {
-    "php": "^7.0",
+    "php": "7.1 - 7.4",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
@@ -82,21 +82,22 @@
     "ext-openssl": "*",
     "ext-xml": "*",
     "ext-zip": "*",
-    "composer/semver": "^1.4",
+    "benmorel/gsm-charset-converter": "^0.2.0",
+    "composer/semver": "*",
     "doctrine/dbal": "v2.5.13pl6 as v2.5.13",
     "doctrine/orm": "2.5.14pl1 as v2.5.14",
     "ezyang/htmlpurifier": "dev-master",
-    "firebase/php-jwt": "^5.0",
-    "giggsey/libphonenumber-for-php": "^8.10",
-    "http-interop/http-middleware": "^0.5.0",
+    "firebase/php-jwt": "^5",
+    "giggsey/libphonenumber-for-php": "^8",
     "jumbojett/openid-connect-php": "dev-master",
     "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "phpoffice/phpexcel": "1.8.*",
-    "phpoffice/phpspreadsheet": "1.10.1pl1 as 1.10.1",
+    "phpoffice/phpspreadsheet": "1.10.1pl3 as 1.10.1",
     "phpoffice/phpword": "v0.14.0 as v0.13.0",
+    "psr/http-server-middleware": "^1.0",
     "sabre/dav": "1.8.*",
     "sabre/vobject": "3.5.3pl1 as 2.1.0",
     "sentry/sentry": "^1.8",
@@ -111,12 +112,12 @@
     "zbateson/mail-mime-parser": "1.*",
     "zendframework/zend-diactoros": "^1.6",
     "zendframework/zend-http": "2.5.*",
-    "zendframework/zend-stratigility": "^2.1",
-    "zendframework/zendframework1": "1.12.20pl39 as 1.12.20"
+    "zendframework/zend-stratigility": "^3.2",
+    "zendframework/zendframework1": "1.12.20pl44 as 1.12.20"
   },
   "require-dev": {
     "phing/phing": "2.16.*",
-    "phpunit/phpunit": "5.2.*",
+    "phpunit/phpunit": "^8.5",
     "tedivm/jshrink": "~1.0",
     "zendframework/zend-psr7bridge": "^0.2"
   },
@@ -143,7 +144,8 @@
   "config": {
     "secure-http": false,
     "platform": {
-      "php": "7.0.8"
+      "php": "7.2.5",
+      "ext-filter": "7.2"
     },
     "sort-packages": true
   },

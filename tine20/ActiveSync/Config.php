@@ -49,6 +49,7 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
 
     const LAST_PING_MONITORING_THRESHOLD_DAYS = 'lastPingMonitoringThresholdDays';
     const LAST_PING_MONITORING_NOTIFICATION_EMAILS = 'lastPingMonitoringNotificationEmails';
+    const LAST_PING_MONITORING_NOTIFICATION_TO_USER = 'lastPingMonitoringNotificationToUser';
 
     /**
      * (non-PHPdoc)
@@ -162,6 +163,15 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::LAST_PING_MONITORING_NOTIFICATION_TO_USER => [
+            self::LABEL                 => 'Send last ping monitoring notification email to user',
+            self::DESCRIPTION           => 'Send last ping monitoring notification email to user',
+            self::TYPE                  => self::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => false,
+        ],
     );
     
     /**

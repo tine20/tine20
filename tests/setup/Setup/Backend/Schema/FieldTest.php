@@ -28,7 +28,7 @@ class Setup_Backend_Schema_FieldTest extends Setup_Backend_AbstractTest
         $field->setName(str_pad('A', 24, 'a'));
         $this->assertFalse($field->isValid(), 'Test if a too long field name is invalid');
         
-        $this->setExpectedException('Setup_Exception_InvalidSchema');
+        $this->expectException('Setup_Exception_InvalidSchema');
         $field->isValid(true); //Test if the parameter throwException works as expected
     }
     

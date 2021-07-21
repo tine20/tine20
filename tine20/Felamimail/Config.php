@@ -59,6 +59,11 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FEATURE_TINE20_FLAG = 'tine20Flag';
 
     /**
+     * allow only send password download link as attachment
+     */
+    const FEATURE_ONLY_PW_DOWNLOAD_LINK = 'onlyPwDownloadLink';
+
+    /**
      * show reply-to field in message compose dialog
      *
      * @var string
@@ -73,6 +78,41 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS = 'systemAccountAutoCreateFolders';
 
+    /**
+     * spam suspicion strategy feature
+     *
+     * @var string
+     */
+    const FEATURE_SPAM_SUSPICION_STRATEGY = 'featureSpamSuspicionStrategy';
+
+    /**
+     * Create spam suspicion strategy
+     *
+     * @var string
+     */
+    const SPAM_SUSPICION_STRATEGY = 'spamSuspicionStrategy';
+
+    /**
+     * Create spam suspicion strategy config
+     *
+     * @var string
+     */
+    const SPAM_SUSPICION_STRATEGY_CONFIG = 'spamSuspicionStrategyConfig';
+
+    /**
+     * Create spam user processing pipeline config
+     *
+     * @var string
+     */
+    const SPAM_USERPROCESSING_PIPELINE = 'spamUserProcessingPipeline';
+
+    /**
+     * Create spam alert information config
+     *
+     * @var string
+     */
+    const SPAM_INFO_DIALOG_CONTENT = 'spamInfoDialogContent';
+    
     /**
      * Tine 2.0 filter message uris (only allow <a> uris)
      *
@@ -276,6 +316,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],
+                self::FEATURE_ONLY_PW_DOWNLOAD_LINK   => [
+                    self::LABEL                 => 'Only password download link',
+                    //_('Only password download link')
+                    self::DESCRIPTION           => 'Allow only password download link',
+                    //_('Allow only password download link')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
                 self::FEATURE_TINE20_FLAG   => [
                     self::LABEL                 => 'Tine 2.0 Flag',
                     //_('Tine 2.0 Flag')
@@ -300,9 +348,61 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],
+                self::FEATURE_SPAM_SUSPICION_STRATEGY   => [
+                    self::LABEL                 => 'Enable Spam Suspicion Strategy',
+                    //_('Enable Spam Suspicion Strategy')
+                    self::DESCRIPTION           => 'Enable Spam Suspicion Strategy',
+                    //_('SEnable pam Suspicion Strategy')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
             ],
             self::DEFAULT_STR => [],
         ],
+        self::SPAM_SUSPICION_STRATEGY => array(
+            //_('Spam Suspicion Strategy')
+            'label'                 => 'Spam Suspicion Strategy',
+            // _('Spam Suspicion Strategy')
+            'description'           => 'Spam Suspicion Strategy',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => null,
+        ),
+        self::SPAM_SUSPICION_STRATEGY_CONFIG => array(
+            //_('Spam Suspicion Strategy Config')
+            'label'                 => 'Spam Suspicion Strategy Config',
+            // _('Spam Suspicion Strategy Config')
+            'description'           => 'Spam Suspicion Strategy Config',
+            'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => null,
+        ),
+        self::SPAM_USERPROCESSING_PIPELINE => array(
+            //_('Spam User Processing Pipeline')
+            'label'                 => 'Spam User Processing Pipeline',
+            // _('Spam User Processing Pipeline')
+            'description'           => 'Spam User Processing Pipeline',
+            'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => null,
+        ),
+        self::SPAM_INFO_DIALOG_CONTENT => array(
+            //_('Confirm SPAM Suspicion Message')
+            'label'                 => 'Confirm SPAM Suspicion Message',
+            // _('Message for users when they press the info button in a SPAM suspicion toolbar.')
+            'description'           => 'Message for users when they press the info button in a SPAM suspicion toolbar.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => null,
+        ),
         self::FILTER_EMAIL_URIS => array(
             //_('Filter E-Mail URIs')
             self::LABEL                 => 'Filter E-Mail URIs',

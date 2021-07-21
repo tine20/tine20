@@ -109,23 +109,33 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             'CALSCALE' => 'GREGORIAN'
         ));
 
-        $originatorTz = $_record ? $_record->originator_tz : NULL;
-        if (empty($originatorTz)) {
-            throw new Tinebase_Exception_Record_Validation('originator_tz needed for conversion to Sabre\VObject\Component');
-        }
-
-        try {
-            $vcalendar->add(new Sabre_VObject_Component_VTimezone($originatorTz));
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            throw new Tinebase_Exception_Record_Validation('Bad Timezone: ' . $originatorTz);
-        }
+        $this->_setVTimezone($_record, $vcalendar);
 
         if (isset($this->_method)) {
             $vcalendar->add('METHOD', $this->_method);
         }
 
         return $vcalendar;
+    }
+
+    /**
+     * @param Calendar_Model_Event $event
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
+     */
+    protected function _setVTimezone(Calendar_Model_Event $event, \Sabre\VObject\Component\VCalendar $vcalendar)
+    {
+        $originatorTz = $event ? $event->originator_tz : Tinebase_Core::getUserTimezone();
+
+        try {
+            $vtimezone = new Sabre_VObject_Component_VTimezone($originatorTz);
+        } catch (Exception $e) {
+            $userTz = Tinebase_Core::getUserTimezone();
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ .
+                '::' . __LINE__ . ' Could not add event tz: ' . $e->getMessage() . ' - use default user tz: ' . $userTz);
+            $vtimezone = new Sabre_VObject_Component_VTimezone($userTz);
+        }
+
+        $vcalendar->add($vtimezone);
     }
 
     /**
@@ -190,7 +200,16 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     {
         // clone the event and change the timezone
         $event = clone $_event;
-        $event->setTimezone($event->originator_tz);
+        try {
+            $event->setTimezone($event->originator_tz);
+        } catch (Exception $e) {
+            $userTz = Tinebase_Core::getUserTimezone();
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ .
+                '::' . __LINE__ . ' Could not set event tz: ' . $e->getMessage() . ' - use default user tz: ' . $userTz);
+            $event->setTimezone($userTz);
+            $event->originator_tz = $userTz;
+            $_event->originator_tz = $userTz;
+        }
         
         $lastModifiedDateTime = $_event->last_modified_time ? $_event->last_modified_time : $_event->creation_time;
         if (! $event->creation_time instanceof Tinebase_DateTime) {
@@ -381,6 +400,15 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             $sabrePropertyParser = new Calendar_Convert_Event_VCalendar_SabrePropertyParser($vcalendar);
             foreach ($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] as $prop) {
                 try {
+                    $propArr = explode("\r\n", $prop);
+                    $prop = array_shift($propArr);
+                    foreach ($propArr as $line) {
+                        if ($line[0] === "\t" || $line[0] === ' ') {
+                            $prop .= substr($line, 1);
+                        } else {
+                            $prop .= $line;
+                        }
+                    }
                     $propObj = $sabrePropertyParser->parseProperty($prop);
                     $vevent->__set($propObj->name, $propObj);
                 } catch (\Sabre\VObject\ParseException $svope) {
@@ -460,8 +488,10 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      */
     protected function _getAttachmentFilename($string)
     {
-        $filename = str_replace([' ', '/'], '_', $string);
-        $filename = iconv("UTF-8", "ascii//TRANSLIT", $filename);
+        $string = str_replace([' ', '/'], '_', $string);
+        if (false === ($filename = @iconv("UTF-8", "ascii//TRANSLIT", $string))) {
+            $filename = iconv("UTF-8", "ascii//IGNORE", $string);
+        }
 
         return $filename;
     }
@@ -480,14 +510,16 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         Calendar_Model_Attender::resolveAttendee($event->attendee, FALSE, $event);
 
+        /** @var Calendar_Model_Attender $eventAttendee */
         foreach($event->attendee as $eventAttendee) {
             $attendeeEmail = $eventAttendee->getEmail();
 
+            $role = in_array($eventAttendee->role, ['REQ', 'OPT']) ? $eventAttendee->role : 'REQ';
             $parameters = array(
                 'CN'       => $eventAttendee->getName(),
                 'CUTYPE'   => $this->_getAttendeeCUType($eventAttendee),
                 'PARTSTAT' => $eventAttendee->status,
-                'ROLE'     => "{$eventAttendee->role}-PARTICIPANT",
+                'ROLE'     => "{$role}-PARTICIPANT",
                 'RSVP'     => $eventAttendee->isSame($this->_calendarUser) ? 'TRUE' : 'FALSE',
             );
             if (strpos($attendeeEmail, '@') !== false) {
@@ -1286,6 +1318,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             $date = date_create($dateString, new DateTimeZone ((string) Tinebase_Core::getUserTimezone()));
         } else {
             $date = date_create($dateString);
+        }
+        if (! $date) {
+            throw new Tinebase_Exception_UnexpectedValue('Could not create DateTime from date string: ' . $dateString);
         }
         $date->setTimezone(new DateTimeZone('UTC'));
         return $date;

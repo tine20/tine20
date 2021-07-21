@@ -12,7 +12,7 @@ class Crm_AllTests
 {
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Crm All Tests');
         $suite->addTest(Crm_Backend_AllTests::suite());
         $suite->addTest(Crm_Export_AllTests::suite());
         $suite->addTestSuite('Crm_ControllerTest');

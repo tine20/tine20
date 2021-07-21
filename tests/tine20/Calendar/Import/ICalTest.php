@@ -38,7 +38,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             'container_id' => 'unittest_not_existing',
         ));
 
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->expectException('Tinebase_Exception_InvalidArgument');
         $result = $importer->importFile(dirname(__FILE__) . '/files/simple.ics');
     }
     

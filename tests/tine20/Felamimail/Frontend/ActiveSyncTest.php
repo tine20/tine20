@@ -1,17 +1,15 @@
 <?php
 /**
+ * Test class for Felamimail_Frontend_ActiveSync
+ *
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- */
-
-/**
- * Test class for Felamimail_Frontend_ActiveSync
- * 
- * @package     Felamimail
+ *
+ * TODO extend Felamimail_TestCase
  */
 class Felamimail_Frontend_ActiveSyncTest extends TestCase
 {
@@ -45,25 +43,20 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * @var string
      */
     protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email"><Collections><Collection><Class>Email</Class><SyncKey>17</SyncKey><CollectionId>Inbox</CollectionId><Commands><Change><ClientId>1</ClientId><ApplicationData/></Change></Commands></Collection></Collections></Sync>';
-    
+
     /**
-     * Runs the test methods of this class.
+     * folders to delete in tearDown()
      *
-     * @access public
-     * @static
+     * @var array
      */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller Email Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
+    protected $_createdFolders = array();
+
     /**
      * set up test environment
      * 
      * @todo move setup to abstract test case
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         
@@ -98,7 +91,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
@@ -106,7 +99,16 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         Felamimail_Controller_Message::getInstance()->delete($this->_createdMessages->getArrayOfIds());
-        
+
+        if (count($this->_createdFolders) > 0) {
+            foreach ($this->_createdFolders as $folderName) {
+                try {
+                    Felamimail_Controller_Folder::getInstance()->delete($this->_getTestUserFelamimailAccount(), $folderName);
+                } catch (Zend_Mail_Storage_Exception $zmse) {
+                    // already deleted
+                }
+            }
+        }
         parent::tearDown();
     }
     
@@ -379,7 +381,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         self::assertEquals('text/plain; charset=ISO-8859-1', $completeMessage->headers['content-type']);
 
         // check signature
-        self::assertContains('my special signature', $completeMessage->body);
+        self::assertStringContainsString('my special signature', $completeMessage->body);
     }
 
     /**
@@ -405,7 +407,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         // check content
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        $this->assertContains('Test', $completeMessage->body);
+        $this->assertStringContainsString('Test', $completeMessage->body);
     }
     
     /**
@@ -644,7 +646,7 @@ dGVzdAo=&#13;
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $originalMessage->flags), 'forward flag missing in original message: ' . print_r($originalMessage->toArray(), TRUE));
         
         // check body
-        $this->assertContains("The attached list notes all of the packages that were added or removed", $completeMessage->body);
+        $this->assertStringContainsString("The attached list notes all of the packages that were added or removed", $completeMessage->body);
     }
     
     /**
@@ -671,7 +673,7 @@ dGVzdAo=&#13;
         
         $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $message->subject);
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        $this->assertContains('Sebastian
+        $this->assertStringContainsString('Sebastian
 The attached list notes all of the packages that were added or removed<br />from the tree, for the week ending 2009-04-12 23h59 UTC.<br />', $completeMessage->body,
             'reply body has not been appended correctly');
     }
@@ -781,7 +783,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
 
         //echo $completeMessage->body;
-        $this->assertContains($stringToCheck, $completeMessage->body);
+        $this->assertStringContainsString($stringToCheck, $completeMessage->body);
         return $completeMessage;
     }
     
@@ -851,6 +853,7 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $emailAccount = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         try {
             $subfolder = Felamimail_Controller_Folder::getInstance()->create($emailAccount->getId(), 'sub', 'INBOX');
+            $this->_createdFolders[] = $subfolder->globalname;
         } catch (Zend_Mail_Storage_Exception $zmse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $zmse);
         }
@@ -1100,5 +1103,20 @@ cj48L2Rpdj48L2Rpdj4=&#13;
 
         $message = $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
         self::assertEquals(1, count($message->to), 'message should have 1 recipient: ' . print_r($message->to, true));
+    }
+
+    public function testCreateFolder()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $folder = new Syncroton_Model_Folder([
+            'parentId' => $inbox->getId(),
+            'displayName' => 'syncroTestFolder',
+        ]);
+        $this->_createdFolders[] = 'INBOX.' . $folder->displayName;
+        $newFolder = $controller->createFolder($folder);
+
+        $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($newFolder->serverId);
+        self::assertEquals($folder->displayName, $fmailFolder->localname);
     }
 }

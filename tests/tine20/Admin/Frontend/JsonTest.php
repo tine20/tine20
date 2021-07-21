@@ -90,7 +90,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $this->assertTrue($result['success']);
         
         // try to get deleted group
-        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
+        $this->expectException('Tinebase_Exception_Record_NotDefined');
         
         // get group by name
         Tinebase_Group::getInstance()->getGroupByName($group['name']);
@@ -167,8 +167,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     
     /**
      * try to get all access log entries
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetAccessLogsWithDeletedUser()
     {
@@ -182,7 +180,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
         $this->assertGreaterThan(0, $accessLogs['totalcount']);
         $testLogEntry = $accessLogs['results'][0];
-        $this->assertEquals(Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName, $testLogEntry['account_id']['accountDisplayName']);
+        $this->assertEquals($user->accountDisplayName, $testLogEntry['account_id']['accountDisplayName']);
         $this->assertEquals($clienttype, $testLogEntry['clienttype']);
         
         $this->_json->deleteAccessLogs(array($testLogEntry['id']));
@@ -248,8 +246,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     /**
      * try to add role and set members/rights
-     *
-     * @group nogitlabci_ldap
      */
     public function testAddRole()
     {
@@ -287,8 +283,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     /**
      * try to get role rights
-     *
-     * @group nogitlabci_ldap
      */
     public function testGetRoleRights()
     {
@@ -303,8 +297,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     
     /**
      * try to save role
-     *
-     * @group nogitlabci_ldap
      */
     public function testUpdateRole()
     {
@@ -330,8 +322,6 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     
     /**
      * try to delete roles
-     *
-     * @group nogitlabci_ldap
      */
     public function testDeleteRoles()
     {
@@ -343,7 +333,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $this->assertTrue($result['success']);
         
         // try to get it, shouldn't be found
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_Acl_Roles::getInstance()->getRoleByName($this->_getRole()->name);
     }
 
@@ -620,7 +610,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $container = $this->_saveContainer();
         
         $container['application_id'] = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
-        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
+        $this->expectException('Tinebase_Exception_Record_NotAllowed');
         $this->_json->saveContainer($container);
     }
     
@@ -661,7 +651,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         
         $translate = Tinebase_Translation::getTranslation('Admin');
         $body = quoted_printable_decode($notification->getBodyText(TRUE));
-        $this->assertContains($container['note'],  $body, $body);
+        $this->assertStringContainsString($container['note'],  $body, $body);
         
         $subject = $notification->getSubject();
         if (strpos($subject, 'UTF-8') !== FALSE) {
@@ -689,7 +679,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
             'account_type'   => 'user',
             Tinebase_Model_Grants::GRANT_ADMIN     => true
         );
-        $this->setExpectedException(Tinebase_Exception_SystemGeneric::class);
+        $this->expectException(Tinebase_Exception_SystemGeneric::class);
         $this->_json->saveContainer($container);
     }
 
@@ -698,7 +688,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
      */
     public function testCreateContainerBadXprops()
     {
-        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        static::expectException(Tinebase_Exception_Record_Validation::class);
         $this->_json->saveContainer(array(
             "type" => Tinebase_Model_Container::TYPE_SHARED,
             "backend" => "Sql",
@@ -726,7 +716,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
             "note" => "",
         ));
 
-        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        static::expectException(Tinebase_Exception_Record_Validation::class);
         $container['xprops'] = '{a":"b"}';
         $this->_json->saveContainer($container);
     }
@@ -866,8 +856,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     public function testPhpinfo()
     {
         $info = $this->_json->getServerInfo();
-        $this->assertContains("phpinfo()", $info['html']);
-        $this->assertContains("PHP Version =>", $info['html']);
+        $this->assertStringContainsString("phpinfo()", $info['html']);
+        $this->assertStringContainsString("PHP Version =>", $info['html']);
     }
 
     protected function createExampleAppRecord()
@@ -905,7 +895,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         }
 
         static::assertNotNull($exampleRecord);
-        static::assertContains($initialRecord->name, $exampleRecord['value']);
+        static::assertStringContainsString($initialRecord->name, $exampleRecord['value']);
 
         return $exampleRecord;
     }
@@ -926,7 +916,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $exampleRecord['value'] = json_encode($newExampleRecord->toArray());
 
         $result = $this->_json->saveConfig($exampleRecord);
-        static::assertContains($newExampleRecord->name, $result['value']);
+        static::assertStringContainsString($newExampleRecord->name, $result['value']);
     }
 
     public function testSearchConfigs()
@@ -995,11 +985,11 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     /**
      * @see 0011504: deactivated user is removed from group when group is saved
-     *
-     * @group nogitlabci_ldap
      */
     public function testDeactivatedUserGroupSave()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         // deactivate user
         $userArray = $this->_createTestUser();
 
@@ -1027,11 +1017,11 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     /**
      * @see 0011504: deactivated user is removed from group when group is saved
-     *
-     * @group nogitlabci_ldap
      */
     public function testBlockedUserGroupSave()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         // deactivate user
         $userArray = $this->_createTestUser();
         $userArray['lastLoginFailure'] = Tinebase_DateTime::now()->toString();
@@ -1045,6 +1035,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
     public function testAccountOnlyGroup()
     {
+        $this->_skipIfLDAPBackend('FIXME: Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=tine20phpunitgroup,ou=groups,...');
+
         $userArray = $this->_createTestUser();
         $savedGroup = $this->_saveGroup($userArray, ['account_only' => 0]);
         self::assertEquals('0', $savedGroup['account_only']);

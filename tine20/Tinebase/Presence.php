@@ -120,6 +120,8 @@ class Tinebase_Presence implements Tinebase_Controller_Interface
 
     /**
      * updates presence in all keys
+     *
+     * @return bool
      */
     public function reportPresence()
     {
@@ -128,14 +130,14 @@ class Tinebase_Presence implements Tinebase_Controller_Interface
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' No session started');
             }
-            return;
+            return false;
         }
         if (!Tinebase_Session::getSessionEnabled()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Session not enabled');
             }
-            return;
+            return false;
         }
 
         $presenceKeys = Tinebase_Session::getSessionNamespace()->{self::PRESENCE_SESSION_NAMESPACE};
@@ -145,7 +147,17 @@ class Tinebase_Presence implements Tinebase_Controller_Interface
                 $item['lastPresence'] = $now;
             }, $now);
 
-            Tinebase_Session::getSessionNamespace()->{self::PRESENCE_SESSION_NAMESPACE} = $presenceKeys;
+            try {
+                Tinebase_Session::getSessionNamespace()->{self::PRESENCE_SESSION_NAMESPACE} = $presenceKeys;
+            } catch (Zend_Session_Exception $zse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $zse->getMessage());
+                }
+                return false;
+            }
         }
+
+        return true;
     }
 }

@@ -9,9 +9,10 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-use \Interop\Http\Server\RequestHandlerInterface;
-use \Interop\Http\Server\MiddlewareInterface;
+use \Psr\Http\Server\RequestHandlerInterface;
+use \Psr\Http\Server\MiddlewareInterface;
 use \Psr\Http\Message\ServerRequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 use \Zend\Diactoros\Response;
 
 /**
@@ -27,10 +28,10 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
      * to the next middleware component to create the response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Interop\Http\Server\RequestHandlerInterface $delegate
+     * @param \Psr\Http\Server\RequestHandlerInterface $delegate
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . ' processing...');
@@ -86,10 +87,10 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
                 $headerStr .= "$name: {$values[0]}\n";
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . " Response headers: " . $headerStr);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                __METHOD__ . '::' . __LINE__ . " Response body: " . $body->getContents());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response headers: " . $headerStr);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response body: " . $body->getContents());
+            }
         }
         return $response;
     }

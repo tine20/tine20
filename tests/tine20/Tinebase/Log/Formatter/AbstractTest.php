@@ -41,13 +41,13 @@ class Tinebase_Log_Formatter_AbstractTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_logger = new Zend_Log();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Log_Formatter::reset();
         $this->_writer->shutdown();
         unlink($this->_logfile);

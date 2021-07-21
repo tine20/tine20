@@ -74,10 +74,16 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
             return methods;
         }
 
-        methods = methods.concat([{
-                id: 'download_public_fm',
-                name: this.app.i18n._('Filemanager (Download link)')
-            }, {
+        if(!Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('onlyPwDownloadLink')) {
+            methods = methods.concat([{
+                    id: 'download_public_fm',
+                    name: this.app.i18n._('Filemanager (Download link)')
+                }]
+            );
+        }
+
+        methods = methods.concat([
+            {
                 id: 'download_protected_fm',
                 name: this.app.i18n._('Filemanager (Download link, password)')
             }, {
@@ -113,19 +119,20 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
             this.store.clearFilter();
 
             this.store.filterBy(function (record, id) {
-                var _ = window.lodash;
-
-                if (_.get(uploadGrid.currentRecord, 'data.type') === 'file' && !_.get(uploadGrid.currentRecord, 'data.account_grants.downloadGrant', true) && id === 'attachment') {
+                const isFilemanagerNode = !_.has(uploadGrid.currentRecord, 'data.input'); // check if upload or fm node
+                
+                // attach fm nodes only with download grant
+                if (isFilemanagerNode && !_.get(uploadGrid.currentRecord, 'data.account_grants.downloadGrant', true) && id === 'attachment') {
                     return false;
                 }
 
                 // only fm files can be system links
-                if (_.get(uploadGrid.currentRecord, 'data.type') !== 'file' && id === 'systemlink_fm') {
+                if (!isFilemanagerNode && id === 'systemlink_fm') {
                     return false
                 }
 
                 // if no grants, then its not from fm
-                if (!_.get(uploadGrid.currentRecord, 'data.account_grants.publishGrant', true) && id.startsWith('download_')) {
+                if (!isFilemanagerNode && id.startsWith('download_')) {
                     return false;
                 }
 

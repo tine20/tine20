@@ -74,14 +74,16 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.HumanResources.FreeTimeEditDialog.superclass.checkStates.apply(this, arguments);
 
         // record vs. recordData!
-        var type = this.typePicker.selectedRecord || this.record.get('type') || {};
-        var employee = this.employeePicker.selectedRecord || this.record.get('employee_id');
-        var employeeName = _.get(employee, 'data.n_fn', _.get(employee, 'n_fn', this.app.i18n._('Employee')));
-        var typeString = _.get(type, 'data.name', _.get(type, 'name', type)) || 'Free Time';
-        var isNewRecord = !this.record.get('creation_time');
+        let type = this.typePicker.selectedRecord || this.record.get('type') || {};
+        let employee = this.employeePicker.selectedRecord || this.record.get('employee_id');
+        let employeeName = _.get(employee, 'data.n_fn', _.get(employee, 'n_fn', this.app.i18n._('Employee')));
+        let typeString = _.get(type, 'data.name', _.get(type, 'name', type)) || this.app.i18n._('Free Time');
+        if (Ext.isObject(typeString)) {
+            typeString = this.app.i18n._('Free Time');
+        }
+        let isNewRecord = !this.record.get('creation_time');
 
         if (!isNewRecord) {
-            // this.accountPicker.hide();
             this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1}'), this.app.i18n._hidden(typeString), employeeName));
         } else {
             this.window.setTitle(String.format(this.app.i18n._('Add {0} for {1}'),  this.app.i18n._hidden(typeString), employeeName));
@@ -311,7 +313,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         var statusPickerDefaults = {
             fieldLabel: this.app.i18n._('Status'),
             xtype: 'widget-keyfieldcombo',
-            app: 'HumanResources'
+            app: 'HumanResources',
+            width: 115,
         };
 
         this.sicknessStatusPicker = new Tine.Tinebase.widgets.keyfield.ComboBox(
@@ -359,9 +362,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 const year = _.get(this, 'accountPicker.selectedRecord.data.year');
                 const feastAndFreeDays = _.get(this.feastAndFreeDaysCache, year);
                 let remaining = _.get(feastAndFreeDays, 'remainingVacation', 0);
-                
-                const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', 0) : 0;
+
                 const currentDays = this.record.get('days_count');
+                const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', currentDays) : 0;
                 remaining = remaining + originalDays - currentDays;
 
                 this.form.findField('remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');

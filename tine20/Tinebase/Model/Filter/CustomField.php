@@ -93,6 +93,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
      */
     protected $_subFilterController = null;
 
+    protected $_passThroughFilter = null;
     
     /**
      * get a new single filter action
@@ -155,10 +156,19 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             case 'record':
                 if (is_array($_fieldOrData['value']['value'])) {
                     $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
-                    $this->_subFilterController = Tinebase_Core::getApplicationInstance($modelName);
-                    $this->_subFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName);
-                    $filterClass = null;
-                    $this->_operators = ['AND', 'OR', 'notDefinedBy:AND', 'notDefinedBy:OR'];
+                    $passThroughData = $_fieldOrData;
+                    $passThroughData['field'] = 'value';
+                    $passThroughData['value'] = $passThroughData['value']['value'];
+                    $filterGroup = get_class(Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName));
+                    if ($filterGroup === Tinebase_Model_Filter_FilterGroup::class) {
+                        $filterGroup = $modelName;
+                    }
+                    $passThroughData['options'] = [
+                        'tablename'     => $this->_correlationName,
+                        'controller'    => get_class(Tinebase_Core::getApplicationInstance($modelName)),
+                        'filtergroup'   => $filterGroup,
+                    ];
+                    $this->_passThroughFilter = new Tinebase_Model_Filter_ForeignId($passThroughData);
                 } else {
                     $filterClass = Tinebase_Model_Filter_Id::class;
                 }
@@ -169,7 +179,6 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 break;
             case 'keyField':
                 $filterClass = Tinebase_Model_Filter_Id::class;
-                $this->_operators = ['equals', 'not'];
                 break;
             default:
                 $this->_operators = ['contains', 'AND', 'OR'];
@@ -188,6 +197,21 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         }
 
         parent::__construct($_fieldOrData, $_operator, $_value, $_options);
+    }
+
+    /**
+     * sets operator
+     *
+     * @param string $_operator
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function setOperator($_operator)
+    {
+        if (null !== $this->_passThroughFilter) {
+            $this->_operator = $_operator;
+        } else {
+            parent::setOperator($_operator);
+        }
     }
     
     /**
@@ -268,7 +292,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $valueIdentifier = $db->quoteIdentifier("{$this->_correlationName}.value");
             if (!$this->_value['value']) {
                 $_select->where($db->quoteInto($valueIdentifier . ' IS NULL OR ' . $valueIdentifier . ' = ?',
-                    $this->_value['value']));
+                    // this is all just wrong....
+                    is_numeric($this->_value['value']) || is_bool($this->_value['value'])  ? '0' : ''));
             } else {
                 if (strpos($this->_operator, 'not') === 0) {
                     $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
@@ -279,6 +304,9 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     $this->_valueFilter->appendFilterSql($_select, $_backend);
                 }
             }
+        }
+        if (null !== $this->_passThroughFilter) {
+            $this->_passThroughFilter->appendFilterSql($_select, $_backend);
         }
     }
     
@@ -297,14 +325,14 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);
                     $controller = Tinebase_Core::getApplicationInstance($modelName);
                     if (is_string($result['value']['value'])) {
-                        $result['value']['value'] = $controller->get($result['value']['value'])->toArray();
+                        $result['value']['value'] = $controller->get($result['value']['value'], null, false)->toArray();
                     }  elseif (is_array($result['value']['value'])) {
                         //  this is very bad - @refactor
                         foreach ($result['value']['value'] as $key => $subfilter) {
                             if (isset($subfilter['field']) && $subfilter['field'] === ':id' && isset($subfilter['value'])) {
                                 try {
                                     if (is_string($subfilter['value'])) {
-                                        $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'])->toArray();
+                                        $result['value']['value'][$key]['value'] = $controller->get($subfilter['value'], null, false)->toArray();
                                     } elseif (is_array($subfilter['value']) && isset($subfilter['value']['id'])) {
                                         // nothing to do here!
                                     } elseif (is_array($subfilter['value'])) {

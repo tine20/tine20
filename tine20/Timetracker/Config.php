@@ -60,7 +60,7 @@ class Timetracker_Config extends Tinebase_Config_Abstract
                         'Add timeaccounts as favorite to speedup timesheet creation.',
                     //_('Add timeaccounts as favorite to speedup timesheet creation.)
                     self::TYPE                          => self::TYPE_BOOL,
-                    self::DEFAULT_STR                   => true,
+                    self::DEFAULT_STR                   => false,
                 ],
             ],
             self::DEFAULT_STR => [],

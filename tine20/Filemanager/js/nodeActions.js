@@ -13,7 +13,74 @@ require('Filemanager/js/QuickLookPanel');
  * @singleton
  */
 Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
-    actionConfigs: Tine.Filemanager.nodeActions
+    constraintsProvider: [],
+    actionConfigs: Tine.Filemanager.nodeActions,
+
+    /**
+     * register constraint action provider
+     * @param {Function} provider function with same signature as checkConstraints
+     */
+    registerConstraintsProvider: function(provider) {
+        this.constraintsProvider.push(provider);
+    },
+
+    /**
+     * check action constraints for given nodes
+     * 
+     * @param {String} action (create|delete|move|copy) 
+     * @param {Record} targetNode
+     * @param {Array}  sourceNodes
+     * @param {Object} options
+     * @return {Boolean}
+     */
+    checkConstraints: function(action, targetNode, sourceNodes = [], options = {}) {
+        let isAllowed = true;
+        const targetPath = _.get(targetNode, 'data.path', _.get(targetNode, 'path'));
+        
+        if (['create', 'copy', 'move'].indexOf(action) >= 0) {
+            // only folders allowed in virtual folders
+            if (targetNode.isVirtual()) {
+                isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
+                    return allowed && _.get(node, 'data.type', _.get(node, 'type')) === 'folder';
+                }, true);
+            }
+            
+            // add grant for target required
+            isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
+                return allowed && node.id !== targetNode.id
+            }, true);
+            
+            if (action === 'move') {
+                isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
+                    return allowed
+                        // delete grant for all sources required
+                        && _.get(node, 'data.account_grants.deleteGrant')
+                        // sourceFolder must not be parent of target
+                        && targetPath.indexOf(_.get(node, 'data.path')) !== 0
+                }, true);
+            }
+            
+            // sourceNode != targetNode && source != direct children of target
+            isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
+                const parentId = _.get(node, 'data.parent_id', _.get(node, 'parent_id'));
+                return allowed && node.id !== targetNode.id && parentId !== targetNode.id;
+            }, true);
+        }
+        
+        if (action === 'delete') {
+            // delete grant required
+            isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.deleteGrant')
+        }
+
+        // don't allow any actions 
+        if (targetNode.id === 'otherUsers') {
+            isAllowed = false;
+        }
+        
+        return _.reduce(this.constraintsProvider, (allowed, constraintsProvider) => {
+            return allowed && (constraintsProvider(action, targetNode, sourceNodes, options) !== false);
+        }, isAllowed);
+    }
 }))();
 
 /**
@@ -68,7 +135,7 @@ Tine.Filemanager.nodeActions.actionUpdater = function(action, grants, records, i
 //     handler: function() {
 //         var record = this.initialConfig.selections[0];
 //         // arg - does not trigger tree children reload!
-//         Tine.Filemanager.fileRecordBackend.loadRecord(record);
+//         Tine.Filemanager.nodeBackend.loadRecord(record);
 //     }
 // };
 
@@ -91,18 +158,22 @@ Tine.Filemanager.nodeActions.CreateFolder = {
             nodeName = Tine.Filemanager.Model.Node.getContainerName();
 
         if (! currentPath) return;
-
         const grid = _.get(this, 'initialConfig.selectionModel.grid');
         if (grid) {
             const gridWdgt = grid.ownerCt.ownerCt;
             const newRecord = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
                 name: app.i18n._('New Folder'),
-                type: 'folder'
+                type: 'folder',
+                path: `${currentPath}`,
             }));
             
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
-                const nodeData = await Tine.Filemanager.createNode(currentPath + '/' + localRecord.get('name'), 'folder', [], false);
-                return Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
+                return new Promise((resolve, reject) => {
+                    Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`, {
+                        success: resolve,
+                        failure: reject
+                    });
+                })
             });
         } else {
             Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), function (btn, text) {
@@ -112,8 +183,8 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                         return;
                     }
 
-                    var filename = currentPath + '/' + text;
-                    Tine.Filemanager.fileRecordBackend.createFolder(filename);
+                    const filename = `${currentPath}${text}/`;
+                    Tine.Filemanager.nodeBackend.createFolder(filename);
                 }
             }, this);
         }
@@ -122,13 +193,16 @@ Tine.Filemanager.nodeActions.CreateFolder = {
         var enabled = !isFilterSelect
             && records && records.length === 1
             && records[0].get('type') === 'folder'
-            && window.lodash.get(records, '[0].data.account_grants.addGrant', false);
+            && window.lodash.get(records, '[0].data.account_grants.addGrant', false)
+            && Tine.Filemanager.nodeActionsMgr.checkConstraints('create', records[0], [{type: 'folder'}]);
 
         if (! _.get(records, 'length') && filteredContainers) {
             enabled = _.get(filteredContainers, '[0].account_grants.addGrant', false);
             action.initialConfig.filteredContainer = Tine.Tinebase.data.Record.setFromJson(filteredContainers[0], Tine.Filemanager.Model.Node);
+        
+            enabled = Tine.Filemanager.nodeActionsMgr.checkConstraints('create', action.initialConfig.filteredContainer, [{type: 'folder'}]) && enabled;
         }
-
+        
         action.setDisabled(!enabled);
     }
 };
@@ -187,7 +261,7 @@ Tine.Filemanager.nodeActions.Rename = {
             buttons: Ext.MessageBox.OKCANCEL,
             value: record.get('name'),
             fn: function (btn, text) {
-                if (btn == 'ok') {
+                if (btn === 'ok') {
                     if (!text) {
                         Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), nodeName), String.format(i18n._('You have to supply a {0} name!'), nodeName));
                         return;
@@ -204,8 +278,8 @@ Tine.Filemanager.nodeActions.Rename = {
 
     executor: function(record, text) {
         // @TODO validate filename
-        var targetPath = record.get('path').replace(new RegExp(_.escapeRegExp(record.get('name')) +'$'), text);
-        Tine.Filemanager.fileRecordBackend.copyNodes([record], targetPath, true);
+        const targetPath = Tine.Filemanager.Model.Node.dirname(record.get('path')) + text;
+        Tine.Filemanager.nodeBackend.copyNodes([record], targetPath, true);
     }
 };
 
@@ -278,9 +352,22 @@ Tine.Filemanager.nodeActions.Delete = {
             title: app.i18n._('Do you really want to delete the following files?'),
             text: nodeName,
             scope: this,
-            handler: function (button) {
-                if (nodes && button == 'yes') {
-                    Tine.Filemanager.fileRecordBackend.deleteItems(nodes);
+            handler: async function (button) {
+                if (nodes && button === 'yes') {
+                    try {
+                        // announce delete before server delete to improve ux
+                        _.each(nodes, function(record) {
+                            window.postal.publish({
+                                channel: "recordchange",
+                                topic: 'Filemanager.Node.delete',
+                                data: record.data
+                            });
+                        });
+                        
+                        await Tine.Filemanager.deleteNodes(_.map(nodes, 'data.path'));
+                    } catch (e) {
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(e);
+                    }
                 }
 
                 for (var i = 0; i < nodes.length; i++) {
@@ -326,11 +413,13 @@ Tine.Filemanager.nodeActions.Move = {
         var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
             windowTitle: app.i18n._('Move Items'),
             singleSelect: true,
-            constraint: 'folder'
+            constraint: (targetNode) => {
+                return Tine.Filemanager.nodeActionsMgr.checkConstraints('move', targetNode, records);
+            }
         });
 
         filePickerDialog.on('apply', function(node) {
-            Tine.Filemanager.fileRecordBackend.copyNodes(records, node, true);
+            Tine.Filemanager.nodeBackend.copyNodes(records, node[0], true);
         });
 
         filePickerDialog.openWindow();

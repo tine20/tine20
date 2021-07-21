@@ -22,7 +22,7 @@ class Addressbook_Frontend_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('All Addressbook frontend tests');
+        $suite = new \PHPUnit\Framework\TestSuite('All Addressbook frontend tests');
         
         $suite->addTest(Addressbook_Frontend_WebDAV_AllTests::suite());
         

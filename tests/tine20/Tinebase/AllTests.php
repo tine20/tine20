@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -25,14 +25,16 @@ class Tinebase_AllTests
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All Tests');
 
         $suite->addTestSuite(Tinebase_ActionQueue_Test::class);
         $suite->addTestSuite(Tinebase_ActionQueue_Backend_RedisTest::class);
-        $suite->addTestSuite(Tinebase_CacheTest::class);
+        $suite->addTestSuite(Tinebase_Auth_MFATest::class);
         $suite->addTestSuite(Tinebase_AccessLogTest::class);
         $suite->addTestSuite(Tinebase_AccountTest::class);
         $suite->addTestSuite(Tinebase_AuthTest::class);
+        $suite->addTestSuite(Tinebase_CacheTest::class);
+        $suite->addTestSuite(Tinebase_CommunityIdentNr_ImportTest::class);
         $suite->addTestSuite(Tinebase_CoreTest::class);
         $suite->addTestSuite(Tinebase_DateTimeTest::class);
         $suite->addTestSuite(Tinebase_ExceptionTest::class);
@@ -90,7 +92,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_Tree_AllTests::suite());
         $suite->addTest(Tinebase_Record_AllTests::suite());
         $suite->addTest(Tinebase_WebDav_AllTests::suite());
-        $suite->addTest(OpenDocument_AllTests::suite());
+        //$suite->addTest(OpenDocument_AllTests::suite());
 
         return $suite;
     }

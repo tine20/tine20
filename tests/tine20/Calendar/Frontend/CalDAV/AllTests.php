@@ -22,7 +22,7 @@ class Calendar_Frontend_CalDAV_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Frontend CalDAV Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar All Frontend CalDAV Tests');
         $suite->addTestSuite('Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest');
         $suite->addTestSuite('Calendar_Frontend_CalDAV_ProxyTest');
         $suite->addTestSuite('Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest');

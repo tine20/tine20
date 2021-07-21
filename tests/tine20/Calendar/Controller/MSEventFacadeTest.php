@@ -15,8 +15,8 @@
  */
 class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
 {
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);

@@ -39,11 +39,11 @@ class Tinebase_Log_FormatterTest extends Tinebase_Log_Formatter_AbstractTest
         }
 
         $this->assertFalse(strpos($loggerFile, $password), 'pw found!');
-        $this->assertContains('********', $loggerFile);
+        $this->assertStringContainsString('********', $loggerFile);
         if ($config->logger->logruntime || $config->logger->logdifftime) {
             $this->assertTrue(preg_match('/' . $username . ' \d/', $loggerFile) === 1);
         } else {
-            $this->assertContains($username, $loggerFile);
+            $this->assertStringContainsString($username, $loggerFile);
         }
     }
 
@@ -59,7 +59,7 @@ class Tinebase_Log_FormatterTest extends Tinebase_Log_Formatter_AbstractTest
         $this->_logger->notice("test logging");
         $loggerFile = file_get_contents($this->_logfile);
 
-        self::assertContains("\e[1m", $loggerFile, 'did not find ansi color escape code');
-        self::assertContains("\e[36m", $loggerFile, 'did not find color for prio 5 (36m)');
+        self::assertStringContainsString("\e[1m", $loggerFile, 'did not find ansi color escape code');
+        self::assertStringContainsString("\e[36m", $loggerFile, 'did not find color for prio 5 (36m)');
     }
 }

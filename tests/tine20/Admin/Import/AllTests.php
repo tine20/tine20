@@ -22,7 +22,7 @@ class Admin_Import_AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin All Tests Import');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Admin All Tests Import');
         $suite->addTestSuite('Admin_Import_DemoDataTest');
 
         return $suite;

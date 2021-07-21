@@ -24,6 +24,10 @@
             <source>container</source>
             <destination>container</destination>
         </field>
-
+        <field>
+            <source>displayname</source>
+            <destination>displayname</destination>
+        </field>
+        
     </mapping>
 </config>

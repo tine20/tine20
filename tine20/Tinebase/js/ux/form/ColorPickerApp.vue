@@ -15,6 +15,9 @@
 </template>
 
 <script>
+// Make available for translation in ColorPalette
+// _('Select Color')
+
 import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
@@ -37,7 +40,9 @@ export default {
     }
   },
   beforeMount () {
-    this.color = '#' + this.initialColor
+    if (this.initialColor) {
+      this.color = '#' + this.initialColor
+    }
   }
 }
 </script>

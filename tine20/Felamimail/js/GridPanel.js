@@ -4,12 +4,14 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.namespace('Tine.Felamimail');
 
 require('./MessageFileButton');
+
+import keydown from 'keydown';
 
 /**
  * Message grid panel
@@ -88,6 +90,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     sendFolderGridStateId: null,
 
+    sentFolderSelected: false,
+
     /**
      * Return CSS class to apply to rows depending upon flags
      * - checks Flagged, Deleted and Seen
@@ -107,6 +111,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         if (! record.hasFlag('\\Seen')) {
             className += ' flag_unread';
+        }
+        if (record.get('is_spam_suspicions')) {
+            className += ' is_spam_suspicions';
         }
         
         return className;
@@ -129,11 +136,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.pagingConfig = {
             doRefresh: this.doRefresh.createDelegate(this)
         };
+
+        if (!this.readOnly) {
+            this.plugins.push({
+                ptype: 'ux.browseplugin',
+                multiple: true,
+                scope: this,
+                enableFileDialog: false,
+                handler: this.onFilesSelect.createDelegate(this)
+            });
+        }
         
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
-        
+        this.contextMenu.on('beforeshow', this.onDisplaySpamActions, this);
         this.initPagingToolbar();
 
         this.sendFolderGridStateId = this.gridConfig.stateId + '-SendFolder';
@@ -236,7 +253,28 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function() {
+        
+        this.action_spam = new Ext.Action({
+            requiredGrant: 'editGrant',
+            actionType: 'edit',
+            text: this.app.i18n._('It is SPAM'),
+            handler:this.processSpamStrategy.bind(this, 'spam'),
+            iconCls: 'felamimail-action-spam',
+            allowMultiple: true,
+            hidden: !this.app.featureEnabled('featureSpamSuspicionStrategy')
 
+        });
+
+        this.action_ham = new Ext.Action({
+            requiredGrant: 'editGrant',
+            actionType: 'edit',
+            text: this.app.i18n._('It is not SPAM'),
+            handler: this.processSpamStrategy.bind(this, 'ham'),
+            iconCls: 'felamimail-action-ham',
+            allowMultiple: true,
+            hidden: !this.app.featureEnabled('featureSpamSuspicionStrategy')
+        });
+        
         this.action_write = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
@@ -277,7 +315,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_flag = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Toggle highlighting'),
-            handler: this.onToggleFlag.createDelegate(this, ['\\Flagged'], true),
+            handler: this.toggleMessageFlagged,
+            scope: this,
             iconCls: 'action_email_flag',
             allowMultiple: true,
             disabled: true
@@ -286,7 +325,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_markUnread = new Ext.Action({
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Mark read/unread'),
-            handler: this.onToggleFlag.createDelegate(this, ['\\Seen'], true),
+            handler: this.toggleMessageUnread,
+            scope: this,
             iconCls: 'action_mark_read',
             allowMultiple: true,
             disabled: true
@@ -325,6 +365,25 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
 
         this.action_fileRecord = new Tine.Felamimail.MessageFileButton({});
+        
+        this.action_importRecords = new Ext.Action({
+            requiredGrant: 'addGrant',
+            actionType: 'add',
+            text: this.app.i18n._('Import Messages'),
+            handler: this.onFilesSelect,
+            disabled: true,
+            scope: this,
+            plugins: [{
+                ptype: 'ux.browseplugin',
+                multiple: true,
+                enableFileDrop: false,
+                disable: true
+            }],
+            iconCls: 'action_import',
+            actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+                action.setDisabled(! this.getCurrentFolderFromTree());
+            }.createDelegate(this)
+        });
 
         this.action_addAccount = new Ext.Action({
             text: this.app.i18n._('Add Account'),
@@ -361,13 +420,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_replyAll,
             this.action_forward,
             this.action_fileRecord,
+            this.action_importRecords,
             this.action_flag,
             this.action_markUnread,
             this.action_addAccount,
             this.action_print,
             this.action_printPreview,
             this.action_copyRecord,
-            this.action_moveRecord
+            this.action_moveRecord,
+            this.action_spam,
+            this.action_ham
         ]);
         
         this.contextMenu = new Ext.menu.Menu({
@@ -384,15 +446,52 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_copyRecord,
                 this.action_moveRecord,
                 this.action_deleteRecord,
-                this.action_fileRecord
-            ]
+                this.action_fileRecord,
+                this.action_spam,
+                this.action_ham
+            ],
         });
+    },
+
+    /**
+     * upload new file and add to store
+     *
+     * @param {ux.BrowsePlugin} fileSelector
+     * @param {} e
+     */
+    onFilesSelect: async function (fileSelector, event) {
+        const folder = this.getCurrentFolderFromTree();
+        if (! folder) {
+            return Ext.Msg.alert(this.app.i18n._('No target folder selected'), this.app.i18n._('You need to select a target folder for the messages.'));
+        }
+        
+        const exts = _.uniq(_.map(fileSelector.files, file => {return file.name.split('.').pop()}));
+        if (exts.length !== 1 || exts[0] !== 'eml') {
+            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml allowed only.'));
+        }
+        
+        this.importMask = new Ext.LoadMask(this.grid.getEl(), { msg: i18n._('Importing Messages...') });
+        this.importMask.show();
+        
+        const pms = _.map(fileSelector.files, (file) => {
+            return new Ext.ux.file.Upload({file: file}).upload().get('promise').then((upload) => {
+                const tempFile = upload.fileRecord.get('tempFile');
+                return Tine.Felamimail.importMessage(folder.id, tempFile.id);
+            });             
+        });
+        
+        await Promise.allSettled(pms);
+        this.doRefresh();
+        this.importMask.hide();
     },
     
     /**
      * initializes the filterPanel, overwrites the superclass method
      */
     initFilterPanel: function() {
+        this.defaultFilters = [
+            {field: 'query', operator: 'contains', value: ''}
+        ];
         this.filterToolbar = this.getFilterToolbar();
         this.filterToolbar.criteriaIgnores = [
             {field: 'query',     operator: 'contains',     value: ''},
@@ -479,7 +578,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                 this.action_markUnread,
                                 this.action_addAccount,
                                 this.action_fileRecord,
-                                this.action_flag
+                                this.action_flag,
+                                this.action_importRecords
                             ]
                         }
                     ]
@@ -627,11 +727,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }   
         if (record.hasFlag('Passed')) {
             icons.push({src: 'images/icon-set/icon_email_forward.svg', qtip: i18n._('Forwarded')});
-        }   
+        }
+        
+        if (record.get('is_spam_suspicions')) {
+            icons.push({src: 'images/icon-set/icon_spam.svg', qtip: i18n._('This message might be SPAM')});
+        }
+
         if (record.hasFlag('Tine20')) {
             const icon = record.getTine20Icon();
             icons.push({src: icon, qtip: i18n._('Tine20')});
         }
+
         if (record.get('content_type') === 'multipart/encrypted') {
             icons.push({src: 'images/icon-set/icon_lock.svg', qtip: i18n._('Encrypted Message')});
         }
@@ -682,7 +788,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         return result;
     },
-    
+
     /**
      * executed when user clicks refresh btn
      */
@@ -719,18 +825,28 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * delete messages handler
+     * delete messages handler:
+     * delete messages from trash/drafts folder, move messages to trash from other folders
      * 
      * @return {Boolean}
      */
     onDeleteRecords: function() {
-        var account = this.app.getActiveAccount(),
-            trashId = (account) ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null,
-            trashConfigured = (account.get('trash_folder'));
-            
-        return (trash && ! trash.isCurrentSelection())
-            || (! trash && trashConfigured)
+        const account = this.app.getActiveAccount();
+        const trashId = (account) ? account.getTrashFolderId() : null;
+        const trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
+        const draftsFolderId = account.getSpecialFolderId('drafts_folder');
+        const draftsFolder = draftsFolderId ? this.app.getFolderStore().getById(draftsFolderId) : null;
+
+        let moveMessages;
+
+        if (draftsFolder && draftsFolder.isCurrentSelection()) {
+            moveMessages = false;
+        } else {
+            const trashConfigured = account.get('trash_folder');
+            moveMessages = trash && ! trash.isCurrentSelection() || ! trash && trashConfigured;
+        }
+
+        return moveMessages
                 ? this.moveSelectedMessages(trash, true, false)
                 : this.deleteSelectedMessages();
     },
@@ -881,8 +997,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
-            msgsIds = [],
-            foldersNeedUpdate = false;
+            msgsIds = [];
         
         if (sm.isFilterSelect) {
             var msgs = this.getStore(),
@@ -901,16 +1016,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (currFolder) {
                 currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
                 currFolder.set('cache_totalcount', currFolder.get('cache_totalcount') - 1);
-                if (sm.isFilterSelect && sm.getCount() > 50 && currFolder.get('cache_status') !== 'pending') {
-                    Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - Set cache status to pending for folder ' + currFolder.get('globalname'));
-                    currFolder.set('cache_status', 'pending');
-                    foldersNeedUpdate = true;
-                }
+                currFolder.set('cache_status', 'pending');
                 currFolder.commit();
             }
-            if (folder) {
-                increaseUnreadCountInTargetFolder += diff;
-            }
+            increaseUnreadCountInTargetFolder += diff;
            
             msgsIds.push(msg.id);
             if (! keepOriginalMessages) {
@@ -918,19 +1027,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         },  this);
         
-        if (folder && increaseUnreadCountInTargetFolder > 0) {
+        if (folder) {
             // update unread count of target folder (only when moving)
             folder.set('cache_unreadcount', folder.get('cache_unreadcount') + increaseUnreadCountInTargetFolder);
-            if (foldersNeedUpdate) {
-                Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - Set cache status to pending for target folder ' + folder.get('globalname'));
-                folder.set('cache_status', 'pending');
-            }
+            folder.set('cache_status', 'pending');
             folder.commit();
-        }
-        
-        if (foldersNeedUpdate) {
-            Tine.log.debug('Tine.Felamimail.GridPanel::moveOrDeleteMessages - update message cache for "pending" folders');
-            this.app.checkMailsDelayedTask.delay(1000);
         }
 
         if (! keepOriginalMessages) {
@@ -939,6 +1040,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (nextRecord !== null) {
             sm.selectRecords([nextRecord]);
         }
+        
+        this.app.checkMailsDelayedTask.delay(1000);
         
         var callbackFn = this.onAfterDelete.createDelegate(this, [msgsIds]);
         
@@ -959,21 +1062,42 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * get next message in grid
      * 
-     * @param {Ext.util.MixedCollection} msgs
+     * @param msgs
      * @return Tine.Felamimail.Model.Message
      */
     getNextMessage: function(msgs) {
-        
         var nextRecord = null;
         
-        if (msgs.getCount() == 1 && this.getStore().getCount() > 1) {
-            // select next message (or previous if it was the last or BACKSPACE)
-            var lastIdx = this.getStore().indexOf(msgs.last()),
-                direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
+        if (msgs.getCount() >= 1 && this.getStore().getCount() > 1) {
+            if (msgs.getCount() === 1) {
+                // select next message (or previous if it was the last or BACKSPACE)
+                var lastIdx = this.getStore().indexOf(msgs.last()),
+                    direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
+
+                nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
+                if (! nextRecord) {
+                    nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
+                }
+            }
             
-            nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
-            if (! nextRecord) {
-                nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
+            if (msgs.getCount() > 1) {
+                const sm = this.getGrid().getSelectionModel();
+                msgs.each(function (msg) {
+                    let idx = this.getStore().indexOfId(msg.id);
+                    nextRecord = this.getStore().getAt(idx + 1);
+                    
+                    // return the first unselected row as nextRecord
+                    if (!sm.isSelected(idx + 1)) {
+                        return false;
+                    }
+                    
+                    //select the previous row before the first selected one, if user select till the last row
+                    if (idx === (this.getStore().getCount() - 1)) {
+                        idx = this.getStore().indexOfId(msgs.items[0].id);
+                        nextRecord = this.getStore().getAt(idx - 1) || null;
+                        return false;
+                    }
+                }, this)
             }
         }
         
@@ -1062,6 +1186,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * compose new message handler
      */
+    @keydown(['ctrl+n', 'ctrl+m'])
     onMessageCompose: function() {
         var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
         
@@ -1076,6 +1201,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * forward message(s) handler
      */
+    @keydown('ctrl+l')
     onMessageForward: function() {
         var sm = this.getGrid().getSelectionModel(),
             msgs = sm.getSelections(),
@@ -1093,6 +1219,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
+    @keydown('ctrl+r')
+    replyMessage() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onMessageReplyTo(false) : false;
+    },
+    
+    @keydown('ctrl+shift+r')
+    replyMessageAll() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onMessageReplyTo(true) : false;
+    },
+    
+    @keydown(['a', 'ctrl+s'])
+    fileMessage() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.action_fileRecord.handler() : false;
+    },
+    
     /**
      * reply message handler
      * 
@@ -1102,6 +1243,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             msg = sm.getSelected();
             
+        if (! msg) return;
+        
         Tine.Felamimail.MessageEditDialog.openWindow({
             replyTo : Ext.encode(msg.data),
             replyToAll: toAll,
@@ -1170,6 +1313,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
     },
 
+    @keydown(['ctrl+o', 'enter'])
+    openMessage() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onRowDblClick(this.grid) : false;
+    },
+    
     /**
      * row doubleclick handler
      * 
@@ -1177,10 +1325,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * - opens message display dialog (everything else)
      * 
      * @param {Tine.Felamimail.GridPanel} grid
-     * @param {Row} row
-     * @param {Event} e
      */
-    onRowDblClick: function(grid, row, e) {
+    onRowDblClick: function(grid) {
         
         var record = this.grid.getSelectionModel().getSelected(),
             folder = this.app.getFolderStore().getById(record.get('folder_id')),
@@ -1238,45 +1384,24 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
-    /**
-     * key down handler
-     * 
-     * @param {Event} e
-     */
-    onKeyDown: function(e) {
-        // no keys for quickadds etc.
-        if (e.getTarget('input') || e.getTarget('textarea')) return;
-
-        switch (e.getKey()) {
-            case e.N:
-            case e.M:
-                this.onMessageCompose();
-                e.preventDefault();
-                break;
-            case e.R:
-                this.onMessageReplyTo();
-                e.preventDefault();
-                break;
-            case e.L:
-                this.onMessageForward();
-                e.preventDefault();
-                break;
-        }
-
-        // TODO add keys to "help" message box of generic grid onKeyDown()
-
-        Tine.Felamimail.GridPanel.superclass.onKeyDown.call(this, e);
+    @keydown('1')
+    toggleMessageFlagged() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onToggleFlag('\\Flagged') : false;
+    },
+    
+    @keydown('m')
+    toggleMessageUnread() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onToggleFlag('\\Seen') : false;
     },
     
     /**
      * toggle flagged status of mail(s)
      * - Flagged/Seen
-     * 
-     * @param {Button} button
-     * @param {Event} event
+     *
      * @param {String} flag
+     * @param {Boolean} flagged
      */
-    onToggleFlag: function(btn, e, flag) {
+    onToggleFlag: function(flag, flagged) {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
             msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection(),
@@ -1287,6 +1412,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             flagCount += msg.hasFlag(flag) ? 1 : 0;
         });
         var action = flagCount >= Math.round(msgs.getCount()/2) ? 'clear' : 'add';
+        action = _.isBoolean(flagged) ? (flagged ? 'add' : 'clear') : action
         
         Tine.log.info('Tine.Felamimail.GridPanel::onToggleFlag - Toggle flag for ' + msgs.getCount() + ' message(s): ' + flag);
         
@@ -1341,13 +1467,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         const isSendFolderPath = this.isSendFolderPathInFilterParams(options.params);
 
-        if (isSendFolderPath) {
+        if (isSendFolderPath && ! this.sentFolderSelected) {
             this.changeFilterInParams(options.params, 'query', 'to');
             this.changeGridState(this.sendFolderGridStateId);
+            this.sentFolderSelected = true;
 
-        } else {
+        } else if (! isSendFolderPath && this.sentFolderSelected) {
             this.changeFilterInParams(options.params, 'to', 'query');
             this.changeGridState(this.gridConfig.stateId);
+            this.sentFolderSelected = false;
         }
     },
 
@@ -1382,9 +1510,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * TODO just change the field??
      */
     changeFilterInParams: function (params, from, to) {
-        const queryFilter =_.remove(params.filter[0].filters[0].filters, {
-            field: from
-        });
+        const queryFilter = params.filter[0] && params.filter[0].filters
+            ? _.remove(params.filter[0].filters[0].filters, {
+                field: from
+            })
+            : [];
         if (queryFilter.length > 0) {
             params.filter[0].filters[0].filters =
                 params.filter[0].filters[0].filters.concat({
@@ -1654,7 +1784,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     formatHeaders: function(headers, ellipsis, onlyImportant, plain) {
-        var result = '';
+        let result = '';
+        let header = '';
         for (header in headers) {
             if (headers.hasOwnProperty(header) && 
                     (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date')) 
@@ -1668,5 +1799,123 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
         return result;
-    }    
+    },
+
+    @keydown('j')
+    markMessagesSpam() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.processSpamStrategy('spam') : false;
+    },
+
+    @keydown('shift+j')
+    markMessagesHam() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.processSpamStrategy('ham') : false;
+    },
+
+    /**
+     * process spam strategy and refresh grid panel
+     *
+     * @param option
+     */
+    processSpamStrategy: async function (option) {
+        const sm = this.getGrid().getSelectionModel();
+        const msgs = sm.isFilterSelect ? this.getStore() : sm.getSelectionsCollection();
+        const nextRecord = sm.isFilterSelect ? null : this.getNextMessage(msgs);
+        const account = this.app.getActiveAccount();
+        const msgsIds = [];
+        
+        try {
+            const promises = [];
+            let increaseUnreadCountInTargetFolder = 0;
+            
+            this.movingOrDeleting = true;
+            
+            msgs.each(function (msg) {
+                const currFolder = this.app.getFolderStore().getById(msg.get('folder_id'));
+
+                if (currFolder) {
+                    if ('spam' === option) {
+                        this.getStore().remove(msg);
+                        this.deleteQueue.push(msg.id);
+                        msgsIds.push(msg.id);
+    
+                        //spam strategy will execute move message , ham will remain in current folder
+                        const isSeen = msg.hasFlag('\\Seen');
+                        const diff = isSeen ? 0 : 1;
+                        
+                        currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
+                        currFolder.set('cache_totalcount', currFolder.get('cache_totalcount') - 1);
+                        currFolder.set('cache_status', 'pending');
+                        currFolder.commit();
+                        
+                        increaseUnreadCountInTargetFolder += diff;
+                    }
+                    
+                    if ('ham' === option) {
+                        let subject = msg.get('subject').replace(/^SPAM\? \(.+\) \*\*\* /, '');
+                        msg.set('subject', subject);
+                        msg.set('is_spam_suspicions', false);
+                        msg.commit();
+                        this.editBuffer.push(msg.id);
+                    }
+                    
+                }
+                
+                promises.push(Tine.Felamimail.processSpam(msg, option));
+
+            }, this);
+            
+            // update unread count of trash folder (only needed for spam Strategy)
+            if ('spam' === option) {
+                const trashFolderId = account ? account.getTrashFolderId() : null;
+                const targetFolder = trashFolderId ? this.app.getFolderStore().getById(trashFolderId) : null;
+                
+                if (targetFolder) {
+                    targetFolder.set('cache_unreadcount', targetFolder.get('cache_unreadcount') + increaseUnreadCountInTargetFolder);
+                    targetFolder.set('cache_status', 'pending');
+                    targetFolder.commit();
+                }
+                
+                if (nextRecord) {
+                    sm.selectRecords([nextRecord]);
+                }
+            }
+            
+            if ('ham' === option ) {
+                sm.selectRecords(msgs.items, true);
+            }
+            
+            await Promise.allSettled(promises)
+                .then(() => {
+                    if ('spam' === option) {
+                        this.onAfterDelete(msgsIds);
+                    }
+                    
+                    this.doRefresh();
+            });
+            
+        } catch (e) {
+            this.doRefresh();
+        }
+    },
+
+    /**
+     * - hide spam actions if the current folder is trash/junk folder
+     * - disable spam actions if the message has no spam flag
+     */
+    onDisplaySpamActions: function () {
+        if (!this.app.featureEnabled('featureSpamSuspicionStrategy')) {
+            return ;
+        }
+        
+        const folder = this.getCurrentFolderFromTree();
+        const account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) : null;
+
+        this.action_spam.show();
+        this.action_ham.show();
+
+        if (!account) {
+            this.action_spam.hide();
+            this.action_ham.hide();
+        }
+    }
 });

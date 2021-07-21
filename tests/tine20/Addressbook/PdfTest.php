@@ -19,7 +19,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  * 
  * take care: the tests only work with the zend_pdf fonts ... don't use custom fonts
  */
-class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
+class Addressbook_PdfTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -34,7 +34,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Controller Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -44,8 +44,8 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->objects['contact'] = NULL;
     }
 
@@ -55,8 +55,8 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // delete contact afterwards
         Addressbook_Controller_Contact::getInstance()->delete($this->objects['contact']);
     }

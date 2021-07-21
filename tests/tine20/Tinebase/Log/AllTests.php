@@ -23,7 +23,7 @@ class Tinebase_Log_AllTests
     
     public static function suite() 
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Log Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All Log Tests');
         $suite->addTestSuite('Tinebase_Log_Filter_FilterTest');
         $suite->addTestSuite('Tinebase_Log_FormatterTest');
         $suite->addTestSuite('Tinebase_Log_Formatter_JsonTest');

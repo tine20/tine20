@@ -50,8 +50,8 @@ class Timetracker_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         Timetracker_Controller_Timesheet::unsetInstance();
@@ -102,8 +102,8 @@ class Timetracker_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
@@ -395,7 +395,7 @@ class Timetracker_ControllerTest extends TestCase
         switch ($_action) {
             case 'create':
                 if ($_expect === 'Exception') {
-                    $this->setExpectedException('Tinebase_Exception_AccessDenied');
+                    $this->expectException('Tinebase_Exception_AccessDenied');
                     $this->_timesheetController->create($ts);
                 } else {
                     $ts = $this->_timesheetController->create($ts);
@@ -407,7 +407,7 @@ class Timetracker_ControllerTest extends TestCase
                 $date = new Tinebase_DateTime();
                 $date->sub(8, Tinebase_DateTime::MODIFIER_DAY);
                 $ts->start_date = $date->toString('Y-m-d');
-                $this->setExpectedException('Timetracker_Exception_Deadline');
+                $this->expectException('Timetracker_Exception_Deadline');
                 $this->_timesheetController->create($ts);
                 break;
             case 'search_bookable':

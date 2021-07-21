@@ -36,8 +36,8 @@ class Tinebase_FileSystemTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
             $this->markTestSkipped('filesystem base path not found');
         }
@@ -62,8 +62,8 @@ class Tinebase_FileSystemTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
         Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $this->_oldQuota;
 
@@ -218,7 +218,7 @@ class Tinebase_FileSystemTest extends TestCase
         $sourcePath      = $this->testCreateFile();
         $destinationPath = $this->testMkdir();
         
-        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
+        $this->expectException('Tinebase_Exception_UnexpectedValue');
 
         $this->_controller->copy($sourcePath, $destinationPath);
     }
@@ -335,7 +335,7 @@ class Tinebase_FileSystemTest extends TestCase
 
         $updatedBasePathNode = $this->_controller->stat($testDir);
 
-        $this->assertContains($testFile, $children);
+        $this->assertcontains($testFile, $children);
         $this->assertEquals(1, $updatedBasePathNode->revision);
         $this->assertNotEquals($basePathNode->hash, $updatedBasePathNode->hash);
         

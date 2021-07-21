@@ -50,8 +50,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
             // account email addresses are empty with AD backend
             $this->markTestSkipped('skipped for ad backend');
@@ -80,8 +80,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
         
         if (! empty($this->_eventIdsToDelete)) {
@@ -116,6 +116,10 @@ class Calendar_Frontend_iMIPTest extends TestCase
             $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['RECURRENCE-ID']);
         static::assertEquals('X-MICROSOFT-CDO-OWNERAPPTID:1983350753',
             $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['X-MICROSOFT-CDO-OWNERAPPTID']);
+        $this->assertSame('X-MICROSOFT-SKYPETEAMSPROPERTIES:{"cid":"19:meeting_YmYwMzdhNTktOTQxMy00MmN' . "\r\n" .
+' kLWE1ZDAtOTliYmIwZDQxMDIz@thread.v2"\,"private":true\,"type":0\,"mid":0\,"' . "\r\n" .
+' rid":0\,"uid":null}',
+            $iMIP->event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['X-MICROSOFT-SKYPETEAMSPROPERTIES']);
 
         // TODO test that msg send to external server contains proper recurid
         $iMIP->preconditionsChecked = true;
@@ -123,8 +127,9 @@ class Calendar_Frontend_iMIPTest extends TestCase
         /** @var \Sabre\VObject\Component\VCalendar $vcalendar */
         $vcalendar = Calendar_Convert_Event_VCalendar_Factory::factory('')->fromTine20Model($iMIP->getEvent());
         $vCalBlob = $vcalendar->serialize();
-        static::assertContains('RECURRENCE-ID:20180906T110000', $vCalBlob);
-        static::assertContains('X-MICROSOFT-CDO-OWNERAPPTID:1983350753', $vCalBlob);
+        static::assertStringContainsString('RECURRENCE-ID:20180906T110000', $vCalBlob);
+        static::assertStringContainsString('X-MICROSOFT-CDO-OWNERAPPTID:1983350753', $vCalBlob);
+        static::assertStringContainsString('X-MICROSOFT-SKYPETEAMSPROPERTIES:{"cid":"19:meeting_YmYwMzdhNTktOTQxMy00MmN', $vCalBlob);
     }
 
     /**
@@ -151,8 +156,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
     public function testExternalInvitationRequestMultiImport()
     {
-        if (Tinebase_Core::getUser()->accountLoginName === 'travis') {
-            static::markTestSkipped('FIXME on travis-ci');
+        if (Tinebase_Core::getUser()->accountLoginName === 'github') {
+            static::markTestSkipped('FIXME on github-ci');
         }
 
         $firstIMIP = $this->testExternalInvitationRequestAutoProcess();
@@ -464,9 +469,9 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $messages = Calendar_Controller_EventNotificationsTests::getMessages();
         $this->assertEquals(1, count($messages), 'exactly one mail should be send');
         $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
-        $this->assertContains('accepted', $messages[0]->getSubject(), 'wrong subject');
-        $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
-        $this->assertContains('SEQUENCE:0', var_export($messages[0], TRUE), 'external sequence has not been keepted');
+        $this->assertStringContainsString('accepted', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertStringContainsString('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
+        $this->assertStringContainsString('SEQUENCE:0', var_export($messages[0], TRUE), 'external sequence has not been keepted');
     }
     
     /**
@@ -545,7 +550,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         self::assertGreaterThan(0, count($complete->preparedParts), 'no prepared parts found');
         $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
         
-        $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: ATTENDEE');
+        $this->expectException('Calendar_Exception_iMIP'); $this->expectExceptionMessageMatches('/iMIP preconditions failed: ATTENDEE/');
         $result = $this->_iMIPFrontend->process($iMIP);
     }
 
@@ -606,7 +611,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         try {
             $this->_iMIPFrontend->autoProcess($iMIP);
         } catch (Exception $e) {
-            $this->assertContains('TOPROCESS', $e->getMessage());
+            $this->assertStringContainsString('TOPROCESS', $e->getMessage());
             return;
         }
         
@@ -997,7 +1002,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             $this->_iMIPFrontend->autoProcess($iMIP);
             $this->fail('autoProcess should throw Calendar_Exception_iMIP');
         } catch (Calendar_Exception_iMIP $cei) {
-            $this->assertContains('iMIP preconditions failed: RECENT', $cei->getMessage());
+            $this->assertStringContainsString('iMIP preconditions failed: RECENT', $cei->getMessage());
         }
     }
 
@@ -1168,9 +1173,9 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $messages = Calendar_Controller_EventNotificationsTests::getMessages();
         $this->assertEquals(1, count($messages), 'exactly one mail should be send');
         $this->assertTrue(in_array('l.kneschke@caldav.org', $messages[0]->getRecipients()), 'organizer is not a receipient');
-        $this->assertContains('Tentative response', $messages[0]->getSubject(), 'wrong subject');
-        $this->assertContains('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
-        $this->assertContains('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
+        $this->assertStringContainsString('Tentative response', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertStringContainsString('METHOD:REPLY', var_export($messages[0], TRUE), 'method missing');
+        $this->assertStringContainsString('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
 
 
         // reply from second internal attendee
@@ -1186,8 +1191,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_DECLINED);
         $messages = Calendar_Controller_EventNotificationsTests::getMessages();
         $this->assertEquals(1, count($messages), 'exactly one mail should be send');
-        $this->assertContains('Clever, Susan declined event', $messages[0]->getSubject(), 'wrong subject');
-        $this->assertContains('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
+        $this->assertStringContainsString('Clever, Susan declined event', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertStringContainsString('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
 
         // try outdated imip
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['pwulf']);
@@ -1195,7 +1200,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
             $iMIP = $this->_testExternalImap('outlook_invitation.ics',
                 3, 'Metaways Folgetermin ');
         } catch (Calendar_Exception_iMIP $preconditionException) {}
-        $this->assertContains('RECENT', $preconditionException->getMessage());
+        $this->assertStringContainsString('RECENT', $preconditionException->getMessage());
 
     }
 

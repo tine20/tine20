@@ -10,7 +10,7 @@
 module.exports = function(source) {
     this.cacheable();
 
-    source = source.replace(/file-loader/g, 'file-loader?{name: "Tinebase/js/ace-[name]-FAT.[ext]"}');
+    source = source.replace(/file-loader\?esModule=false/g, 'file-loader?{name: "Tinebase/js/ace-[name]-FAT.[ext]", esModule: false}');
 
     return source;
 };

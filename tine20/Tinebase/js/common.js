@@ -525,7 +525,7 @@ Tine.Tinebase.common = {
      * @return {string}
      */
     booleanRenderer: function (value) {
-        var translationString = String.format("{0}",(value == 1) ? Locale.getTranslationData('Question', 'yes') : Locale.getTranslationData('Question', 'no'));
+        var translationString = String.format("{0}",(Boolean(value) && value !== "0") ? Locale.getTranslationData('Question', 'yes') : Locale.getTranslationData('Question', 'no'));
         
         return translationString.substr(0, translationString.indexOf(':'));
     },
@@ -791,9 +791,8 @@ Tine.Tinebase.common = {
      */
     linkifyText: function(text, cb, scope) {
         require.ensure(["linkifyjs", "linkifyjs/html"], function() {
-            var linkify = require('linkifyjs');
-            var linkifyHtml = require('linkifyjs/html');
-            var linkifyed = linkifyHtml(text);
+            const linkifyHtml = require('linkifyjs/html');
+            let linkifyed = linkifyHtml(text);
 
             if (Ext.isFunction(cb)) {
                 cb.call(scope || window, linkifyed);
@@ -801,33 +800,6 @@ Tine.Tinebase.common = {
                 cb.update(linkifyed);
             }
         }, 'Tinebase/js/linkify');
-    },
-
-    /**
-     * resolves an appName to applicationInstance or vice versa
-     * returns applicationinstance if getInstance is true
-     * @param {String/Tine.Tinebase.Application}    app 
-     * @param {Boolean}                             getInstance
-     */
-    resolveApp: function(app, getInstance) {
-        if(getInstance) {
-            return Ext.isObject(app) ? app : Tinebase.appMgr.get(app);
-        }
-        return Ext.isObject(app) ? app.name : app;
-    },
-    
-    /**
-     * resolves model to modelName or returns recordClass if an application was given
-     * @param {String/Tine.Tinebase.data.Record}    model
-     * @param {String/Tine.Tinebase.Application}    app
-     */
-    resolveModel: function(model, app) {
-        var modelName = Ext.isObject(model) ? model.getMeta('modelName') : model;
-        if(app) {
-            var appName = this.resolveApp(app);
-            return Tine[appName].Model[modelName];
-        }
-        return modelName;
     },
 
     /**

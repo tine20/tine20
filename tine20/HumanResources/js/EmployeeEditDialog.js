@@ -42,7 +42,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * inits the component
      */
     initComponent: function() {
-        this.showPrivateInformation = (Tine.Tinebase.common.hasRight('edit_private','HumanResources')) ? true : false;
+        this.showPrivateInformation = (Tine.Tinebase.common.hasRight('manage_private','HumanResources')) ? true : false;
         this.useSales = Tine.Tinebase.appMgr.get('Sales') ? true : false;
         Tine.HumanResources.EmployeeEditDialog.superclass.initComponent.call(this);
         this.on('updateDependent', function() {

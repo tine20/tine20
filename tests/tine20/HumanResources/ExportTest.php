@@ -21,7 +21,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for HumanResources_Export_Ods
  */
-class HumanResources_Export_OdsTest extends PHPUnit_Framework_TestCase
+class HumanResources_Export_OdsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * csv export class
@@ -50,8 +50,8 @@ class HumanResources_Export_OdsTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $fe = new Tinebase_Frontend_Cli();
@@ -64,7 +64,7 @@ class HumanResources_Export_OdsTest extends PHPUnit_Framework_TestCase
         $fe->updateImportExportDefinition($opts);
         $output = ob_get_clean();
         
-        $this->assertContains('hr_default_ods.xml successfully.', $output);
+        $this->assertStringContainsString('hr_default_ods.xml successfully.', $output);
         
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, array(
             array('field' => 'name', 'operator' => 'equals', 'value' => 'hr_default_ods')
@@ -90,8 +90,8 @@ class HumanResources_Export_OdsTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         unlink($this->_filename);
         parent::tearDown();
     }

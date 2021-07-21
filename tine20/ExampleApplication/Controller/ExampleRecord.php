@@ -18,47 +18,28 @@
  */
 class ExampleApplication_Controller_ExampleRecord extends Tinebase_Controller_Record_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
+     * don't use the constructor. use the singleton
      */
-    private function __construct()
+    protected function __construct()
     {
-        $this->_applicationName = 'ExampleApplication';
+        $this->_applicationName = ExampleApplication_Config::APP_NAME;
         $this->_modelName = ExampleApplication_Model_ExampleRecord::class;
-        $this->_backend = new Tinebase_Backend_Sql(array(
-            'modelName' => $this->_modelName,
-            'tableName' => 'example_application_record',
-            'modlogActive' => true
-        ));
+        $this->_backend = new Tinebase_Backend_Sql([
+            Tinebase_Backend_Sql::MODEL_NAME        => ExampleApplication_Model_ExampleRecord::class,
+            Tinebase_Backend_Sql::TABLE_NAME        => ExampleApplication_Model_ExampleRecord::TABLE_NAME,
+            Tinebase_Backend_Sql::MODLOG_ACTIVE     => true,
+        ]);
 
         $this->_purgeRecords = false;
         $this->_resolveCustomFields = true;
         // activate this if you want to use containers
         $this->_doContainerACLChecks = false;
     }
-    
-    /**
-     * holds the instance of the singleton
-     *
-     * @var ExampleApplication_Controller_ExampleRecord
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return ExampleApplication_Controller_ExampleRecord
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new self();
-        }
-        
-        return self::$_instance;
-    }        
 
     /****************************** overwritten functions ************************/
 

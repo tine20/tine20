@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  *
@@ -6,7 +6,7 @@
  * @subpackage  Adapter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -21,164 +21,54 @@
  */
 class Tinebase_AreaLock implements Tinebase_Controller_Interface
 {
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Tinebase_AreaLock
-     */
-    private static $_instance = NULL;
-
-    protected $_hasLocks = [];
+    use Tinebase_Controller_SingletonTrait;
 
     /**
-     * don't clone. Use the singleton.
-     *
+     * @var array<Tinebase_Record_RecordSet<Tinebase_Model_AreaLockConfig>>
      */
-    private function __clone()
+    protected $_locks = [];
+
+    /**
+     * @var Tinebase_Config_KeyField|null
+     */
+    protected $_config;
+
+    /**
+     * @var bool
+     */
+    protected $_activatedByFE = false;
+
+    /**
+     * @var Tinebase_Model_AreaLockConfig|null
+     */
+    protected $_lastAuthFailedAreaConfig = null;
+
+    public function _getConfig(): Tinebase_Config_KeyField
     {
-    }
-
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_AreaLock
-     */
-    public static function getInstance()
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_AreaLock();
+        if (null === $this->_config) {
+            $this->_config = Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS};
+            if (null === $this->_config->records) {
+                $this->_config->records = new Tinebase_Record_RecordSet(Tinebase_Model_AreaLockConfig::class);
+            }
         }
-
-        return self::$_instance;
+        return $this->_config;
     }
 
     /**
-     * destroy instance of this class
+     * @return Tinebase_Record_RecordSet<Tinebase_Model_AreaLockConfig>
      */
-    public static function destroyInstance()
+    public function getAreaConfigs(string $area): Tinebase_Record_RecordSet
     {
-        self::$_instance = NULL;
-    }
-
-    /**
-     * constructor
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     * returns area lock status
-     */
-    public static function getStatus()
-    {
-        $status = [
-            'active' => false,
-            'problems' => [],
-        ];
-
-        $areaConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::AREA_LOCKS);
-        $status['active'] = $areaConfigs && $areaConfigs->records && count($areaConfigs->records) > 0;
-
-        // @todo check configs + backends
-
-        return $status;
-    }
-
-    /**
-     * @param $area
-     * @return Tinebase_Model_AreaLockState
-     */
-    public function lock($area)
-    {
-        if ($this->_hasValidAuth($area)) {
-            $this->resetValidAuth($area);
+        if (isset($this->_locks[$area])) {
+            return $this->_locks[$area];
         }
+        $this->_locks[$area] = $this->_getConfig()->records->filter(
+            function(Tinebase_Model_AreaLockConfig $val) use ($area) {
+                if ($val->areaMatch($area)) return true;
+                return false;
+            });
 
-        return new Tinebase_Model_AreaLockState([
-            'area' => $area,
-            'expires' => new Tinebase_DateTime('1970-01-01')
-        ]);
-    }
-
-    /**
-     * @param string $area
-     * @param string $password
-     * @param string $identity
-     * @return Tinebase_Model_AreaLockState
-     * @throws Tinebase_Exception_AreaUnlockFailed
-     *
-     * @todo allow "non-authentication" providers?
-     */
-    public function unlock($area, $password, $identity = null)
-    {
-        $areaConfig = $this->getAreaConfig($area);
-        if (! $areaConfig) {
-            throw new Tinebase_Exception_AreaUnlockFailed('Config for area lock not found');
-        }
-        $authProvider = $this->_getAuthProvider($areaConfig);
-
-        if (! $identity) {
-            $user = Tinebase_Core::getUser();
-            $identity = $user->accountLoginName;
-        }
-        $authProvider->setIdentity($identity)
-            ->setCredential($password);
-        $authResult = $authProvider->authenticate();
-
-        if ($authResult->isValid()) {
-            $expires =$this->_saveValidAuth($area, $areaConfig);
-        } else {
-            $teauf = new Tinebase_Exception_AreaUnlockFailed('Invalid authentication: ' . $authResult->getCode());
-            $teauf->setArea($area);
-            throw $teauf;
-        }
-
-        return new Tinebase_Model_AreaLockState([
-            'area' => $area,
-            'expires' => $expires
-        ]);
-    }
-
-    /**
-     * @param Tinebase_Model_AreaLockConfig $areaConfig
-     * @return Tinebase_Auth_Interface
-     */
-    protected function _getAuthProvider(Tinebase_Model_AreaLockConfig $areaConfig)
-    {
-        switch (strtolower($areaConfig->provider)) {
-            case Tinebase_Model_AreaLockConfig::PROVIDER_PIN:
-                $authProvider = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
-                break;
-            case Tinebase_Model_AreaLockConfig::PROVIDER_USERPASSWORD:
-                $authProvider = Tinebase_Auth::getInstance()->getBackend();
-                break;
-            case Tinebase_Model_AreaLockConfig::PROVIDER_TOKEN:
-                if (! isset($areaConfig->provider_config) || ! isset($areaConfig->provider_config['adapter'])) {
-                    throw new Tinebase_Exception_UnexpectedValue('"adapter" needs to be set in provider_config');
-                }
-                $authProvider = Tinebase_Auth_Factory::factory($areaConfig->provider_config['adapter'], $areaConfig->provider_config);
-                break;
-            default:
-                throw new Tinebase_Exception_UnexpectedValue('no valid area lock provider given');
-        }
-
-        return $authProvider;
-    }
-
-    /**
-     * @param string $area
-     * @return Tinebase_Model_AreaLockConfig
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function getAreaConfig($area)
-    {
-        $areaConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::AREA_LOCKS);
-        $areaConfig = $areaConfigs && $areaConfigs->records
-            ? $areaConfigs->records->filter('area', $area)->getFirstRecord()
-            : null;
-
-        return $areaConfig;
+        return $this->_locks[$area];
     }
 
     /**
@@ -187,145 +77,195 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      */
     public function hasLock($area)
     {
-        if (in_array($area, $this->_hasLocks)) {
+        if ($this->getAreaConfigs($area)->count() > 0) {
             return true;
         }
-
-        if ($this->getAreaConfig($area)) {
-            $this->_hasLocks[] = $area;
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
-    /**
-     * @param string $area
-     * @return bool
-     */
-    public function isLocked($area)
+    public function isLocked(string $area): bool
     {
         return !$this->_hasValidAuth($area);
     }
 
-    /**
-     * @param $area
-     * @return Tinebase_Model_AreaLockState
-     */
-    public function getState($area)
+    public function isAreaLockLocked(string $areaLockName): bool
     {
-        $expires = $this->_getAuthValidity($area);
+        if (null === ($areaLockCfg = $this->_getConfig()->records->find(Tinebase_Model_AreaLockConfig::FLD_AREA_NAME, $areaLockName))) {
+            throw new Tinebase_Exception_NotFound('no area ' . $areaLockName . ' found');
+        }
+        return !$areaLockCfg->getBackend()->hasValidAuth();
+    }
+
+    /**
+     * returns area lock status
+     */
+    public function getStatus(): array
+    {
+        $status = [
+            'active' => false,
+            'problems' => [],
+        ];
+
+        $status['active'] = $this->_getConfig()->records->count() > 0;
+
+        // @todo check configs + backends
+
+        return $status;
+    }
+
+    public function lock(string $areaLockName): Tinebase_Model_AreaLockState
+    {
+        if (null === ($areaLockCfg = $this->_getConfig()->records->find(Tinebase_Model_AreaLockConfig::FLD_AREA_NAME, $areaLockName))) {
+            throw new Tinebase_Exception_NotFound('no area ' . $areaLockName . ' found');
+        }
+        if ($areaLockCfg->getBackend()->hasValidAuth()) {
+            $areaLockCfg->getBackend()->resetValidAuth();
+        }
 
         return new Tinebase_Model_AreaLockState([
-            'area' => $area,
-            'expires' => $expires ? $expires : new Tinebase_DateTime('1970-01-01')
+            'area' => $areaLockName,
+            'expires' => new Tinebase_DateTime('1970-01-01')
         ]);
+    }
+
+    /**
+     * @throws Tinebase_Exception_AreaUnlockFailed
+     */
+    public function unlock(string $areaLockName, string $userMfaId, string $password, Tinebase_Model_FullUser $identity): Tinebase_Model_AreaLockState
+    {
+        /** @var Tinebase_Model_AreaLockConfig $areaConfig */
+        if (null === ($areaConfig = $this->_getConfig()->records
+                ->find(Tinebase_Model_AreaLockConfig::FLD_AREA_NAME, $areaLockName))) {
+            throw new Tinebase_Exception('Config for area lock "' . $areaLockName . '" not found');
+        }
+        /** @var Tinebase_Model_MFA_UserConfig $userCfg */
+        if (null === ($userCfg = Tinebase_Auth_MFA::getAccountsMFAUserConfig($userMfaId, $identity))) {
+            throw new Tinebase_Exception('User has no mfa configuration for id ' . $userMfaId);
+        }
+        if (!in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID},
+                $areaConfig->{Tinebase_Model_AreaLockConfig::FLD_MFAS})) {
+            throw new Tinebase_Exception('No MFA with id "' .
+                $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID} . '" for area "' . $areaLockName . '" found');
+        }
+
+        if ($areaConfig->getBackend()->hasValidAuth()) {
+            $expires = $areaConfig->getBackend()->getAuthValidity();
+        } else {
+            $mfa = Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID});
+            if ($mfa->validate($password, $userCfg)) {
+                $expires = $areaConfig->getBackend()->saveValidAuth();
+            } else {
+                $teauf = new Tinebase_Exception_AreaUnlockFailed('Invalid authentication'); //_('Invalid authentication')
+                $teauf->setArea($areaConfig->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+                $teauf->setMFAUserConfigs($areaConfig->getUserMFAIntersection($identity));
+                throw $teauf;
+            }
+        }
+
+        return new Tinebase_Model_AreaLockState([
+            'area' => $areaConfig->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
+            'expires' => $expires
+        ]);
+    }
+
+    public function forceUnlock(string $area): void
+    {
+        if (($configs = $this->getAreaConfigs($area))->count() === 0) {
+            throw new Tinebase_Exception('Config for area lock "' . $area . '" not found');
+        }
+        /** @var Tinebase_Model_AreaLockConfig $config */
+        foreach($configs as $config) {
+            $config->getBackend()->saveValidAuth();
+        }
     }
 
     /**
      * @return Tinebase_Record_RecordSet of Tinebase_Model_AreaLockState
      */
-    public function getAllStates()
+    public function getAllStates(): Tinebase_Record_RecordSet
     {
-        $states = new Tinebase_Record_RecordSet(Tinebase_Model_AreaLockState::class);
-        $areaConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::AREA_LOCKS);
-        if ($areaConfigs->records) {
-            foreach ($areaConfigs->records as $areaConfig) {
-                $states->addRecord($this->getState($areaConfig->area));
-            }
-        }
-        return $states;
-    }
-
-    /**
-     * @param string $area
-     * @param Tinebase_Model_AreaLockConfig $config
-     * @return Tinebase_DateTime
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _saveValidAuth($area, Tinebase_Model_AreaLockConfig $config)
-    {
-        $alBackend = $this->_getBackend($config);
-        $sessionValidity = $alBackend ? $alBackend->saveValidAuth($area) : Tinebase_DateTime::now();
-
-        return $sessionValidity;
-    }
-
-    /**
-     * @param $config
-     * @return null|Tinebase_AreaLock_Interface
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _getBackend($config)
-    {
-        switch (strtolower($config->validity)) {
-            case Tinebase_Model_AreaLockConfig::VALIDITY_SESSION:
-            case Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME:
-                $backend = new Tinebase_AreaLock_Session($config);
-                break;
-            case Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE:
-                $backend = new Tinebase_AreaLock_Presence($config);
-                break;
-            case Tinebase_Model_AreaLockConfig::VALIDITY_DEFINEDBYPROVIDER:
-                // @todo add support
-                throw new Tinebase_Exception_InvalidArgument('validity ' . $config->validity . ' not supported yet');
-                break;
-            default:
-                // no persistent backend
-                $backend = null;
+        $states = [];
+        foreach ($this->_getConfig()->records as $areaConfig) {
+            $states = array_merge($states, $this->_getAuthValidity(
+                current($areaConfig->{Tinebase_Model_AreaLockConfig::FLD_AREAS})
+            ));
         }
 
-        return $backend;
+        $result = new Tinebase_Record_RecordSet(Tinebase_Model_AreaLockState::class);
+        foreach ($states as $areaName => $expires) {
+            $result->addRecord(new Tinebase_Model_AreaLockState([
+                'area' => $areaName,
+                'expires' => $expires ? $expires : new Tinebase_DateTime('1970-01-01')
+            ]));
+        }
+
+        return $result;
     }
 
     /**
-     * @param string $area
-     * @return bool
-     * @throws Exception
-     * @throws Zend_Session_Exception
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_AreaLockState
      */
-    protected function _hasValidAuth($area)
+    public function getState(string $area): Tinebase_Record_RecordSet
     {
-        $config = $this->getAreaConfig($area);
-        if (! $config) {
+        $result = new Tinebase_Record_RecordSet(Tinebase_Model_AreaLockState::class);
+        foreach ($this->_getAuthValidity($area) as $areaName => $expires) {
+            $result->addRecord(new Tinebase_Model_AreaLockState([
+                'area' => $areaName,
+                'expires' => $expires ? $expires : new Tinebase_DateTime('1970-01-01')
+            ]));
+        }
+
+        return $result;
+    }
+
+    public function getLastAuthFailedAreaConfig(): ?Tinebase_Model_AreaLockConfig
+    {
+        return $this->_lastAuthFailedAreaConfig;
+    }
+
+    protected function _hasValidAuth(string $area): bool
+    {
+        if (($configs = $this->getAreaConfigs($area))->count() === 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
                 . __LINE__ . ' Config not found for area ' . $area);
             return false;
         }
-        $alBackend = $this->_getBackend($config);
-        return $alBackend ? $alBackend->hasValidAuth($area) : false;
-    }
-
-    /**
-     * @param $area
-     * @return bool|Tinebase_DateTime
-     */
-    protected function _getAuthValidity($area)
-    {
-        $config = $this->getAreaConfig($area);
-        if (! $config) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
-                . __LINE__ . ' Config not found for area ' . $area);
-            return false;
-        }
-        $alBackend = $this->_getBackend($config);
-        return $alBackend ? $alBackend->getAuthValidity($area) : false;
-    }
-
-    /**
-     * @param string $area
-     */
-    public function resetValidAuth($area)
-    {
-        // invalidate class cache
-        $this->_hasLocks = [];
-
-        $config = $this->getAreaConfig($area);
-        if ($config) {
-            $alBackend = $this->_getBackend($config);
-            if ($alBackend) {
-                $alBackend->resetValidAuth($area);
+        /** @var Tinebase_Model_AreaLockConfig $config */
+        foreach($configs as $config) {
+            if (!$config->getBackend()->hasValidAuth()) {
+                $this->_lastAuthFailedAreaConfig = $config;
+                return false;
             }
         }
+        return true;
+    }
+
+    /**
+     * @return array<Tinebase_DateTime>
+     */
+    protected function _getAuthValidity(string $area): array
+    {
+        $result = [];
+        foreach ($this->getAreaConfigs($area) as $config) {
+            $result[$config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME}] = $config->getBackend()->getAuthValidity();
+        }
+        return $result;
+    }
+
+    public function resetValidAuth(string $area): void
+    {
+        foreach ($this->getAreaConfigs($area) as $config) {
+            $config->getBackend()->resetValidAuth();
+        }
+    }
+
+    public function activatedByFE(bool $value = true): void
+    {
+        $this->_activatedByFE = $value;
+    }
+
+    public function isActivatedByFE(): bool
+    {
+        return $this->_activatedByFE;
     }
 }

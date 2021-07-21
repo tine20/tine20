@@ -22,7 +22,7 @@ class ActiveSync_Backend_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 ActiveSync Controller All Tests');
         
         $suite->addTestSuite('ActiveSync_Backend_DeviceTests');
         #$suite->addTestSuite('ActiveSync_Backend_FolderTests');

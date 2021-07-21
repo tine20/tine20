@@ -22,7 +22,7 @@ class Sales_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales All Tests');
         $suite->addTestSuite('Sales_Backend_ContractTest');
         $suite->addTestSuite('Sales_Backend_NumberTest');
         $suite->addTestSuite('Sales_Backend_CostCenterTest');

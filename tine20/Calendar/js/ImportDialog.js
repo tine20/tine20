@@ -171,7 +171,8 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         });
         
         return {
-            xtype: 'panel',
+            xtype: 'form',
+            labelAlign: 'top',
             baseCls: 'ux-subformpanel',
             id: 'remotePanel',
             hidden: false,
@@ -215,8 +216,8 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 html: '<p><br />' + this.app.i18n._('Password') + '</p><br />'
             }, {
                 ref: '../../remotePassword',
-                xtype: 'textfield',
-                inputType: 'password',
+                xtype: 'tw-passwordTriggerField',
+                clipboard: false,
                 scope: this,
                 disabled: true,
                 enableKeyEvents: true,

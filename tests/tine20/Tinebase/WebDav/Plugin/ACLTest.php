@@ -22,8 +22,8 @@ class Tinebase_WebDav_Plugin_ACLTest extends Tinebase_WebDav_Plugin_AbstractBase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->plugin = new Tinebase_WebDav_Plugin_ACL();
@@ -62,7 +62,7 @@ class Tinebase_WebDav_Plugin_ACLTest extends Tinebase_WebDav_Plugin_AbstractBase
         $this->server->exec();
         static::assertSame('HTTP/1.1 200 OK', $this->response->status);
         static::assertTrue(isset($this->response->headers['Allow']), 'allow header not set');
-        static::assertContains('ACL', $this->response->headers['Allow']);
+        static::assertStringContainsString('ACL', $this->response->headers['Allow']);
     }
 
 }

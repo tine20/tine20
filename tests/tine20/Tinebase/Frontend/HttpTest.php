@@ -16,15 +16,15 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Frontend_Http
  */
-class Tinebase_Frontend_HttpTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Tinebase_Frontend_Http
      */
     protected $_uit = NULL;
     
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $this->_uit = new Tinebase_Frontend_Http;
     }
 

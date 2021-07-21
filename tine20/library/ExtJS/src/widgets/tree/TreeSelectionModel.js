@@ -248,7 +248,7 @@ Ext.extend(Ext.tree.MultiSelectionModel, Ext.util.Observable, {
      * @param {Boolean} keepExisting True to retain existing selections
      * @return {TreeNode} The selected node
      */
-    select : function(node, e, keepExisting){
+    select : function(node, e, keepExisting, focus=true){
         if(keepExisting !== true){
             this.clearSelections(true);
         }
@@ -259,7 +259,7 @@ Ext.extend(Ext.tree.MultiSelectionModel, Ext.util.Observable, {
         this.selNodes.push(node);
         this.selMap[node.id] = node;
         this.lastSelNode = node;
-        node.ui.onSelectedChange(true);
+        node.ui.onSelectedChange(true, focus);
         this.fireEvent('selectionchange', this, this.selNodes);
         return node;
     },

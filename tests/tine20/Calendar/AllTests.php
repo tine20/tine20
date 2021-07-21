@@ -27,7 +27,7 @@ class Calendar_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar All Tests');
         $suite->addTest(Calendar_Frontend_AllTests::suite());
         $suite->addTest(Calendar_Model_AllTests::suite());
         $suite->addTestSuite('Calendar_RruleTests');
@@ -40,13 +40,11 @@ class Calendar_AllTests
         $suite->addTestSuite('Calendar_Controller_MSEventFacadeTest');
         $suite->addTestSuite('Calendar_Controller_PollTest');
         $suite->addTestSuite('Calendar_JsonTests');
-        $suite->addTestSuite('Calendar_Export_OdsTests');
-        $suite->addTestSuite('Calendar_Export_DocTest');
-        $suite->addTestSuite(Calendar_Export_VCalendarTest::class);
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_AllTests');
         $suite->addTestSuite('Calendar_Setup_DemoDataTests');
-        $suite->addTestSuite('Calendar_Import_AllTests');
-        
+        $suite->addTestSuite(Calendar_Export_AllTests::class);
+        $suite->addTestSuite(Calendar_Import_AllTests::class);
+
         return $suite;
     }
 }

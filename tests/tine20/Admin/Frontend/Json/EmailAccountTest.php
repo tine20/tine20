@@ -33,8 +33,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_skipWithoutEmailSystemAccountConfig();
 
         parent::setUp();
@@ -42,8 +42,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->_json = new Admin_Frontend_Json();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->_emailAccounts as $account) {
             try {
                 $this->_json->deleteEmailAccounts([is_array($account) ? $account['id'] : $account->getId()]);
@@ -222,7 +222,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $account = $this->testEmailAccountApiSharedAccount(false);
 
         try {
-            static::setExpectedException(Tinebase_Exception_SystemGeneric::class, 'email account already exists');
+            static::expectException(Tinebase_Exception_SystemGeneric::class);
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            $this->expectExceptionMessageMatches('/' . $translate->_('Email account already exists') . '/');
             $this->testEmailAccountApiSharedAccount(true, [
                 'email' => $account->email
             ]);
@@ -260,7 +262,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             $this->_json->saveEmailAccount($accountdata);
             self::fail('it should not be possible to create accounts with duplicate email addresses');
         } catch (Tinebase_Exception_SystemGeneric $ted) {
-            self::assertEquals('email account already exists', $ted->getMessage());
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            self::assertEquals($translate->_('Email account already exists'), $ted->getMessage());
         }
     }
 
@@ -334,7 +337,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             $this->_json->saveEmailAccount($account);
             self::fail('it should not be possible to update accounts with duplicate email addresses');
         } catch (Tinebase_Exception_SystemGeneric $ted) {
-            self::assertEquals('email account already exists', $ted->getMessage());
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            self::assertEquals($translate->_('Email account already exists'), $ted->getMessage());
         }
     }
 
@@ -421,7 +425,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         Admin_Controller_User::getInstance()->setAccountPassword($sclever, $newPw, $newPw);
         $this->_scleverPwChanged = true;
         $scleverAccount = array_filter($systemAccounts, function($account) use ($sclever) {
-            return ($account['user_id']['accountLoginName'] === $sclever->accountLoginName);
+            return ($account['user_id']['accountId'] === $sclever->getId());
         });
         $scleverAccount = array_pop($scleverAccount);
         $result = $this->_json->saveRules($scleverAccount['id'], []);
@@ -452,6 +456,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     public function testUpdatePasswordOfSharedAccount()
     {
         $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
+        $sharedAccount->resolveCredentials(false);
+        self::assertEquals('123', $sharedAccount->password);
 
         $emailUser = Felamimail_Controller_Account::getInstance()->getSharedAccountEmailUser($sharedAccount);
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
@@ -461,16 +467,19 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $pw = $userInBackend['password'];
 
         $sharedAccountArray = $sharedAccount->toArray();
-        $sharedAccountArray['password'] = 'someupdatedPW';
-        // FE might send empty user
-        $sharedAccountArray['user'] = '';
+        $newPw = 'someupdatedPW';
+        $sharedAccountArray['password'] = $newPw;
         $this->_json->saveEmailAccount($sharedAccountArray);
         // test imap login
         $sharedAccount = Felamimail_Controller_Account::getInstance()->get($sharedAccount);
+        self::assertEquals($sharedAccount->credentials_id, $sharedAccount->smtp_credentials_id);
         Felamimail_Backend_ImapFactory::factory($sharedAccount->getId());
-        $sharedAccount->resolveCredentials();
+        $sharedAccount->resolveCredentials(false);
         self::assertNotEmpty($sharedAccount->user, 'username should not be empty/overwritten! '
             . print_r($sharedAccount->toArray(), true));
+        self::assertEquals($newPw, $sharedAccount->password);
+        $sharedAccount->resolveCredentials(false, false, true);
+        self::assertEquals($newPw, $sharedAccount->smtp_password);
 
         // check if pw was changed
         $userInBackend = $emailUserBackend->getRawUserById($emailUser);

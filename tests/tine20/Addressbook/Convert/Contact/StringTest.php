@@ -13,7 +13,7 @@
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Addressbook_Convert_Contact_StringTest extends PHPUnit_Framework_TestCase {
+class Addressbook_Convert_Contact_StringTest extends \PHPUnit\Framework\TestCase {
 
     protected $_testData = array(array(
         'string' =>
@@ -66,4 +66,3 @@ Mustermann Straße 3a
         }
     }
 }
- 

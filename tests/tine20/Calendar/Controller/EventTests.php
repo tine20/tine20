@@ -26,15 +26,16 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      * (non-PHPdoc)
      * @see Calendar_TestCase::setUp()
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
         $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
+        Calendar_Controller_Event::unsetInstance();
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
         parent::tearDown();
     }
@@ -65,7 +66,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->originator_tz = 'BRT';
-        static::setExpectedException(Tinebase_Exception_Record_Validation::class);
+        static::expectException(Tinebase_Exception_Record_Validation::class);
         $this->_controller->create($event);
     }
     
@@ -435,6 +436,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->attendee = clone $attendee;
         $persistentEvent = $this->_controller->create($event);
 
+        $this->assertSame(Tinebase_Group::getInstance()->getDefaultGroup()->list_id, $persistentEvent->attendee->find(
+            'user_type', Calendar_Model_Attender::USERTYPE_GROUP
+        )->user_id, 'group attendee should be stored by its list id, not its group id!');
+
         $period = new Calendar_Model_EventFilter(array(array(
             'field'     => 'period',
             'operator'  => 'within',
@@ -765,7 +770,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'role'      => Calendar_Model_Attender::ROLE_REQUIRED
         )));
         
-        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->expectException('Calendar_Exception_AttendeeBusy');
         $this->_controller->update($persitentConflictEvent, TRUE);
     }
     
@@ -775,7 +780,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentConflictEvent->summary = 'time updates should recheck free/busy';
         $persitentConflictEvent->dtend->addHour(1);
         
-        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->expectException('Calendar_Exception_AttendeeBusy');
         $this->_controller->update($persitentConflictEvent, TRUE);
     }
 
@@ -810,7 +815,28 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent = $this->_controller->update($persistendEvent);
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee[0]->status, 'updateing of other attedee must not set status');
     }
-    
+
+    public function testGroupMembershipChangeReflectsInAttendeeList()
+    {
+        $admGrpCtrl = Admin_Controller_Group::getInstance();
+        $group = $admGrpCtrl->create(new Tinebase_Model_Group(['name' => 'unittest']));
+        $admGrpCtrl->addGroupMember($group->getId(), $this->_personas['sclever']->getId());
+
+        $event = $this->_getEvent(true);
+        $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_id'   => $group->list_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+            ]]);
+        $event = $this->_controller->create($event);
+        static::assertSame(2, $event->attendee->count(), 'expect 2 attendees on event');
+
+        $admGrpCtrl->addGroupMember($group->getId(), $this->_personas['pwulf']->getId());
+        Calendar_Model_Attender::clearCache();
+        $event = $this->_controller->get($event->getId());
+        static::assertSame(3, $event->attendee->count(), 'expect 3 attendees on event');
+    }
+
     public function testAttendeeSetStatus()
     {
         $event = $this->_getEvent();
@@ -1283,7 +1309,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         unset($persistentEvent->rrule);
         $this->_controller->delete($persistentEvent);
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentException->getId());
     }
     
@@ -1301,10 +1327,145 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $contentSeq = Tinebase_Container::getInstance()->getContentSequence($this->_getTestCalendar());
         $this->assertEquals(3, $contentSeq, 'container content seq should be increased 3 times!');
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentEvent->getId());
     }
-    
+
+    public function testGetChangesForRecurEventsForOneself()
+    {
+        Tinebase_Core::setUser($this->_personas['sclever']);
+
+        $event = $this->_getEvent(true);
+        $event->container_id = $this->_getPersonasDefaultCals('sclever')->id;
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtend->getClone()->addDay(3)->toString();
+        $persistentEvent = $this->_controller->create($event);
+        $exception = clone $persistentEvent;
+        $exception->dtstart->addDay(1);
+        $exception->dtend->addDay(1);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->setRecurId($persistentEvent->getId());
+        $this->_controller->create($exception);
+
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id, true);
+
+        $changes = $collection->getChild($this->_getPersonasDefaultCals('sclever')->id)->getChanges(-1);
+
+        $this->assertArrayHasKey('create', $changes);
+        $this->assertArrayHasKey($persistentEvent->getId(), $changes['create']);
+        $this->assertSame($persistentEvent->getId() . '.ics', $changes['create'][$persistentEvent->getId()]);
+        $this->assertCount(1, $changes['create']);
+    }
+
+    public function testGetChangesForRecurEventsAsAttendee()
+    {
+        $event = $this->_getEvent(true);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtend->getClone()->addDay(3)->toString();
+        $event->attendee = [[
+                'user_id'   => $this->_personas['sclever']->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        ]];
+        $persistentEvent = $this->_controller->create($event);
+        $exception = clone $persistentEvent;
+        $exception->dtstart->addDay(1);
+        $exception->dtend->addDay(1);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->setRecurId($persistentEvent->getId());
+        $this->_controller->create($exception);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id, true);
+
+        $changes = $collection->getChild($this->_getPersonasDefaultCals('sclever')->id)->getChanges(-1);
+
+        $this->assertArrayHasKey('create', $changes);
+        $this->assertArrayHasKey($persistentEvent->getId(), $changes['create']);
+        $this->assertSame($persistentEvent->getId() . '.ics', $changes['create'][$persistentEvent->getId()]);
+        $this->assertCount(1, $changes['create']);
+    }
+
+    public function testIMIPtbWebDAVAllInternalRecurEventAsAttendee()
+    {
+        $event = $this->_getEvent(true);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtend->getClone()->addDay(3)->toString();
+        $event->attendee = [[
+            'user_id'   => $this->_personas['sclever']->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        ]];
+        $persistentEvent = $this->_controller->create($event);
+
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION,
+            $persistentEvent->attendee->find('user_id', $this->_personas['sclever']->contact_id)->status);
+
+        $exception = clone $persistentEvent;
+        $exception->dtstart->addDay(1);
+        $exception->dtend->addDay(1);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->setRecurId($persistentEvent->getId());
+        $this->_controller->create($exception);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $vevent = $converter->fromTine20Model($persistentEvent);
+        $vevent->METHOD = 'REQUEST';
+        $vevent = str_replace('PARTSTAT=NEEDS-ACTION', 'PARTSTAT=ACCEPTED', $vevent->serialize());
+
+        Calendar_Frontend_WebDAV_Event::create($this->_getPersonasDefaultCals('sclever'),
+            $persistentEvent->getId() . '.ics', $vevent);
+
+        $persistentEvent = $this->_controller->get($persistentEvent->getId());
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED,
+            $persistentEvent->attendee->find('user_id', $this->_personas['sclever']->contact_id)->status);
+    }
+
+    public function testIMIPtbWebDAVAllInternalRecurEventExceptionAsAttendee()
+    {
+        $event = $this->_getEvent(true);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=' . $event->dtend->getClone()->addDay(3)->toString();
+        $event->attendee = [[
+            'user_id'   => $this->_personas['sclever']->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        ]];
+        $persistentEvent = $this->_controller->create($event);
+        $exception = clone $persistentEvent;
+        $exception->dtstart->addDay(1);
+        $exception->dtend->addDay(1);
+        $exception->setId(NULL);
+        unset($exception->rrule);
+        unset($exception->exdate);
+        $exception->setRecurId($persistentEvent->getId());
+        $persistentEventException = $this->_controller->create($exception);
+
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION,
+            $persistentEventException->attendee->find('user_id', $this->_personas['sclever']->contact_id)->status);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
+
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $vevent = $converter->fromTine20Model($persistentEventException);
+        $vevent->METHOD = 'REQUEST';
+        $vevent = str_replace('PARTSTAT=NEEDS-ACTION', 'PARTSTAT=ACCEPTED', $vevent->serialize());
+
+        Calendar_Frontend_WebDAV_Event::create($this->_getPersonasDefaultCals('sclever'),
+            $persistentEventException->getId() . '.ics', $vevent);
+
+        $persistentEventException = $this->_controller->get($persistentEventException->getId());
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED,
+            $persistentEventException->attendee->find('user_id', $this->_personas['sclever']->contact_id)->status);
+    }
+
     /**
      * @todo use exception api once we have it!
      *
@@ -1326,7 +1487,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persistentException = $this->_controller->create($exception);
         
         $this->_controller->delete($persistentEvent->getId());
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentException->getId());
     }
     
@@ -1802,6 +1963,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
     /**
      * @group longrunning
+     * @group nodockerci
      */
     public function testRruleModLogUndo()
     {
@@ -1809,8 +1971,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             static::markTestSkipped('pgsql will be dropped, roll back of data not supported on pgsql');
         }
 
-        if (Tinebase_Core::getUser()->accountLoginName === 'travis') {
-            static::markTestSkipped('FIXME on travis-ci');
+        if (Tinebase_Core::getUser()->accountLoginName === 'github') {
+            static::markTestSkipped('FIXME on github-ci');
         }
 
         $instanceSeq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
@@ -1849,11 +2011,17 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent = $this->_controller->get($createdEvent->getId());
         static::assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedEvent->attendee->filter('user_id',
             $scleverContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $updatedEvent->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
 
         // now make it a recurring event
         $updatedEvent->rrule = 'FREQ=DAILY;INTERVAL=1';
         $updatedEvent = $this->_controller->update($updatedEvent);
         static::assertNull($updatedEvent->exdate);
+        static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->filter('user_id',
+            $scleverContactId)->getFirstRecord()->status);
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $updatedEvent->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, $updatedEvent->dtend);
 
@@ -1864,6 +2032,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $recurInstance = $this->_controller->get($id);
         static::assertTrue($recurInstance->isRecurInstance());
         static::assertEquals($nextOccurance->getId(), $recurInstance->getId());
+        static::assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $nextOccurance->attendee->filter('user_id',
+            $ownContactId)->getFirstRecord()->status);
 
         // create recur exception
         $nextOccurance->summary = 'exception';
@@ -2319,7 +2489,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
         // undo the summary change
         $mod = $modifications->getLastRecord();
-        static::assertNotContains(Calendar_Model_Attender::class, $mod->new_value);
+        static::assertStringNotContainsString(Calendar_Model_Attender::class, $mod->new_value);
         $modifications->removeRecord($mod);
         Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))

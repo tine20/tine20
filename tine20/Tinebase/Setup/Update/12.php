@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
@@ -27,6 +27,8 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
     const RELEASE012_UPDATE014 = __CLASS__ . '::update014';
     const RELEASE012_UPDATE015 = __CLASS__ . '::update015';
     const RELEASE012_UPDATE016 = __CLASS__ . '::update016';
+    const RELEASE012_UPDATE017 = __CLASS__ . '::update017';
+    const RELEASE012_UPDATE018 = __CLASS__ . '::update018';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -37,6 +39,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE009          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
+            ],
+            self::RELEASE012_UPDATE017          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update017',
             ],
         ],
 
@@ -64,6 +70,10 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             self::RELEASE012_UPDATE015          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update015',
+            ],
+            self::RELEASE012_UPDATE018          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update018',
             ],
         ],
 
@@ -326,5 +336,36 @@ class Tinebase_Setup_Update_12 extends Setup_Update_Abstract
             ]));
 
         $this->addApplicationUpdate('Tinebase', '12.34', self::RELEASE012_UPDATE016);
+    }
+
+    public function update017()
+    {
+        $db = Tinebase_Core::getDb();
+        if (false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn() &&
+                ($str = $db->query('SHOW CREATE TABLE ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1)) &&
+                strpos($str, 'utf8mb4') !== false) {
+            try {
+                (new Setup_Frontend_Cli())->_migrateUtf8mb4();
+            } catch (Exception $e) {
+                // catch problems here - update should not fail here
+                // TODO we should find a way to notify the admin about possible problems
+                Tinebase_Exception::log($e);
+            }
+        }
+
+        $this->addApplicationUpdate('Tinebase', '12.35', self::RELEASE012_UPDATE017);
+    }
+
+    /**
+     * recheck foreign key constraints
+     */
+    public function update018()
+    {
+        // stop transaction for structure updates to work proeprly
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        (new Tinebase_Setup_Update_Release11($this->_backend))->update_46();
+
+        $this->addApplicationUpdate('Tinebase', '12.36', self::RELEASE012_UPDATE018);
     }
 }

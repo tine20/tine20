@@ -20,8 +20,8 @@ class Admin_Import_UserTest extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
     }
 
@@ -29,6 +29,7 @@ class Admin_Import_UserTest extends TestCase
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_SystemGeneric
      * @group longrunning
+     * @group nodockerci
      */
     public function testImportDemoData()
     {

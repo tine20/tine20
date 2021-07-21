@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,7 @@
  * @property string status
  * @property string status_authkey
  * @property string user_type
+ * @property string displaycontainer_id
  */
 class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {
@@ -27,7 +28,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const USERTYPE_GROUP       = 'group';
     const USERTYPE_GROUPMEMBER = 'groupmember';
     const USERTYPE_RESOURCE    = 'resource';
-    const USERTYPE_LIST        = 'list';
     const USERTYPE_ANY         = 'any';
 
     /**
@@ -56,7 +56,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         self::USERTYPE_USER        => array(),
         self::USERTYPE_GROUPMEMBER => array(),
         self::USERTYPE_GROUP       => array(),
-        self::USERTYPE_LIST        => array(),
         self::USERTYPE_RESOURCE    => array(),
         Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF => array()
     );
@@ -294,7 +293,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $translation->translate('User');
             case self::USERTYPE_GROUPMEMBER:
                 return $translation->translate('Member of group');
-            case self::USERTYPE_LIST:
             case self::USERTYPE_GROUP:
                 return $translation->translate('Group');
             case self::USERTYPE_RESOURCE:
@@ -378,12 +376,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         if (isset($_data['user_id']) && is_array($_data['user_id'])) {
-            if ((isset($_data['user_id']['accountId']) || array_key_exists('accountId', $_data['user_id']))) {
+            if (isset($_data['user_id']['accountId'])) {
                 // NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
                 $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'], true)->getId();
-            } elseif ((isset($_data['user_id']['group_id']) || array_key_exists('group_id', $_data['user_id']))) {
-                $_data['user_id'] = is_array($_data['user_id']['group_id']) ? $_data['user_id']['group_id'][0] : $_data['user_id']['group_id'];
-            } else if ((isset($_data['user_id']['id']) || array_key_exists('id', $_data['user_id']))) {
+            } elseif (isset($_data['user_id']['id'])) {
                 $_data['user_id'] = $_data['user_id']['id'];
             }
         }
@@ -451,7 +447,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             
             $_event->attendee->removeRecord($attendeeToDelete);
         }
-        
+
+        /* that's what I had in mind, but churchedition comes with custom system roles ...
+        $systemRoles = Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES}->records
+            ->filter('system', true)->getArrayOfIds(); */
+        $systemRoles = ['REQ', 'OPT'];
+
         // attendees to keep and update
         $attendeesToKeep   = array_diff_key($emailsOfCurrentAttendees, $attendeesToDelete);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to keep " . print_r(array_keys($attendeesToKeep), true));
@@ -461,7 +462,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
             // update object by reference
             $attendeeToKeep->status = isset($newSettings['partStat']) ? $newSettings['partStat'] : $attendeeToKeep->status;
-            $attendeeToKeep->role   = $newSettings['role'];
+            $attendeeToKeep->role   = isset($newSettings['role']) && in_array($newSettings['role'], $systemRoles) &&
+                in_array($attendeeToKeep->role, $systemRoles) ? $newSettings['role'] : $attendeeToKeep->role;
         }
 
         // new attendess to add to event
@@ -481,6 +483,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 ) {
                     $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
                     $attendeeId = $matches[1];
+
+                    try {
+                        $list = Addressbook_Controller_List::getInstance()->get($attendeeId);
+                        if ($list && $list->type === Addressbook_Model_List::LISTTYPE_GROUP) {
+                            $attendeeId = $list->group_id;
+                        }
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
                 }
 
                 // does a contact with this email address exist?
@@ -525,9 +536,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     try {
                         $listId = explode('@', $newAttendee['email'])[0];
                         $list = Addressbook_Controller_List::getInstance()->get($listId);
-                        if ($list) {
+                        if ($list && $list->type === Addressbook_Model_List::LISTTYPE_GROUP) {
                             $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
-                            $attendeeId = $list->getId();
+                            $attendeeId = $list->group_id;
                         }
                     } catch (Exception $e) {
                         // do nothing
@@ -592,6 +603,32 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     'email'     => $currentAttendee->user_id,
                 ));
                 $currentAttendee->user_id = $contact->getId();
+            }
+        }
+    }
+
+    public static function enforceListIdForGroups(Tinebase_Record_RecordSet $_attendees)
+    {
+        $groups = [];
+        $lists = [];
+        foreach ($_attendees->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP) as $groupAttendee) {
+            if ($groupAttendee->user_id instanceof Tinebase_Record_Interface) {
+                if ($groupAttendee->user_id instanceof Tinebase_Model_Group && !empty($groupAttendee->user_id->list_id)) {
+                    $groupAttendee->user_id = Addressbook_Controller_List::getInstance()->get($groupAttendee->user_id->list_id);
+                }
+            } else {
+                if (!isset($groups[$groupAttendee->user_id]) && !isset($lists[$groupAttendee->user_id])) {
+                    try {
+                        $lists[$groupAttendee->user_id] = Addressbook_Controller_List::getInstance()
+                            ->get($groupAttendee->user_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $groups[$groupAttendee->user_id] = Tinebase_Group::getInstance()
+                            ->getGroupById($groupAttendee->user_id);
+                    }
+                }
+                if (isset($groups[$groupAttendee->user_id])) {
+                    $groupAttendee->user_id = $groups[$groupAttendee->user_id]->list_id;
+                }
             }
         }
     }
@@ -687,8 +724,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $listId = null;
         
             if ($groupAttender->user_id instanceof Addressbook_Model_List) {
-                $listId = $groupAttender->user_id->getId();
-            } else if ($groupAttender->user_id !== NULL) {
+                $groupAttender->user_id = $listId = $groupAttender->user_id->getId();
+            } elseif ($groupAttender->user_id instanceof Tinebase_Model_Group &&
+                    !empty($groupAttender->user_id->list_id)) {
+                $groupAttender->user_id = $listId = $groupAttender->user_id->list_id;
+            } elseif ($groupAttender->user_id !== NULL) {
                 try {
                     $list = Addressbook_Controller_List::getInstance()->get($groupAttender->user_id);
                     $listId = $list->getId();
@@ -697,7 +737,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
                     if (!empty($group->list_id)) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__  . ' fixme: depricated use of  group id');
-                        $listId = $group->list_id;
+                        $groupAttender->user_id = $listId = $group->list_id;
                     }
                 }
             } else {
@@ -843,7 +883,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             self::USERTYPE_USER        => array(),
             self::USERTYPE_GROUPMEMBER => array(),
             self::USERTYPE_GROUP       => array(),
-            self::USERTYPE_LIST        => array(),
             self::USERTYPE_RESOURCE    => array(),
             Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF => array()
         );
@@ -1092,7 +1131,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 case Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF:
                     // first fetch the groups, then the lists identified by list_id
                     $typeMap[$type] = Tinebase_Group::getInstance()->getMultiple(array_unique($ids));
-                    $typeMap[self::USERTYPE_LIST] = Addressbook_Controller_List::getInstance()->getMultiple($typeMap[$type]->list_id, true);
+                    $listIds = array_unique(array_merge($typeMap[$type]->list_id, $ids));
+                    $typeMap[$type] = Addressbook_Controller_List::getInstance()->getMultiple($listIds, true);
                     break;
                 case self::USERTYPE_RESOURCE:
                     $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids), true);
@@ -1122,18 +1162,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // already resolved from cache
                     continue;
                 }
-                
-                if ($attender->user_type == self::USERTYPE_GROUP) {
-                    $attendeeTypeSet = $typeMap[$attender->user_type];
-                    $idx = $attendeeTypeSet->getIndexById($attender->user_id);
-                    if ($idx !== false) {
-                        $group = $attendeeTypeSet[$idx];
-                        $attendeeTypeSet = $typeMap[self::USERTYPE_LIST];
-                        $idx = $attendeeTypeSet->getIndexById($group->list_id);
+
+                $attendeeTypeSet = $typeMap[$attender->user_type];
+                $idx = $attendeeTypeSet->getIndexById($attender->user_id);
+                if (false == $idx && self::USERTYPE_GROUP === $attender->user_type) {
+                    if (null !== ($list = $attendeeTypeSet->find('group_id', $attender->user_id))) {
+                        $idx = $attendeeTypeSet->getIndexById($list->getId());
                     }
-                } else {
-                    $attendeeTypeSet = $typeMap[$attender->user_type];
-                    $idx = $attendeeTypeSet->getIndexById($attender->user_id);
                 }
                 
                 if ($idx !== false) {

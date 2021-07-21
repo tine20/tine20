@@ -2,23 +2,16 @@
 /**
  * Tine 2.0
  *
- * @package     Admin
- * @subpackage  Frontend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
- * @todo        use functions from Tinebase_Frontend_Json_Abstract
- */
-
-/**
- * backend class for Zend_Json_Server
- *
  * This class handles all Json requests for the admin application
  *
  * @package     Admin
  * @subpackage  Frontend
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
+ * @todo        use functions from Tinebase_Frontend_Json_Abstract
  */
 class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -39,7 +32,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function __construct()
     {
-        // manage samba sam?
         if (isset(Tinebase_Core::getConfig()->samba)) {
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
         }
@@ -289,12 +281,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchUsers($filter, $paging)
     {
-        $sort = (isset($paging['sort']))    ? $paging['sort']   : 'accountDisplayName';
-        $dir  = (isset($paging['dir']))     ? $paging['dir']    : 'ASC';
-        
-        $result = $this->getUsers($filter[0]['value'], $sort, $dir, isset($paging['start']) ? $paging['start'] : 0,
-            isset($paging['limit']) ? $paging['limit'] : null);
-        $result['filter'] = $filter[0];
+        $result = $this->getUsers(
+            $filter[0]['value'] ?? null,
+            $paging['sort'] ?? 'accountDisplayName',
+            $paging['dir'] ?? 'ASC',
+            $paging['start'] ?? 0,
+            $paging['limit'] ?? null
+        );
+        $result['filter'] = $filter[0] ?? [];
         
         return $result;
     }
@@ -340,14 +334,20 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Core::getLogger()->addReplacement($password);
         }
 
-        // dehydrate primary group id
+        // dehydrate primary group id + groups
         if (isset($recordData['accountPrimaryGroup'])
             && is_array($recordData['accountPrimaryGroup'])
             && isset($recordData['accountPrimaryGroup']['id'])
         ) {
             $recordData['accountPrimaryGroup'] = $recordData['accountPrimaryGroup']['id'];
         }
-        
+
+        if (isset($recordData['groups']['results'])) {
+            $recordData['groups'] = array_map(function($group) {
+                return $group['id'];
+            }, $recordData['groups']['results']);
+        }
+
         $account = new Tinebase_Model_FullUser();
         
         // always re-evaluate fullname
@@ -484,26 +484,25 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * reset password for given account
-     *
+     * returns possible mfa adapter for given user
+     * 
      * @param array|string $account Tinebase_Model_FullUser data or account id
-     * @param string $password the new password
-     * @return array
+     * @retujrn array id => user_config_class
      */
-    public function resetPin($account, $password)
+    public function getPossibleMFAs($account)
     {
-        if (is_array($account)) {
-            $account = new Tinebase_Model_FullUser($account);
-        } else {
-            $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->getFullUserById($account);
+        $result = [];
+
+        $mfas = Tinebase_Config::getInstance()->{Tinebase_Config::MFA};
+        if (is_iterable($mfas->records)) {
+            foreach ($mfas->records as $mfaConfig) {
+                $result[] = [
+                    'mfa_config_id' => $mfaConfig->id,
+                    'config_class' => $mfaConfig->user_config_class,
+                ];
+            }
         }
-
-        $controller = Admin_Controller_User::getInstance();
-        $controller->setAccountPin($account, $password);
-
-        $result = array(
-            'success' => TRUE
-        );
+        
         return $result;
     }
 

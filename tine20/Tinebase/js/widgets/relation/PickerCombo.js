@@ -18,34 +18,62 @@ Ext.ns('Tine.widgets.relation');
 
 Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
 
-    // private
-    items: null,
-    combo: null,
-    layout: 'fit',
-    /**
-     * @cfg {Tine.widgets.dialog.EditDialog}
-     */
-    editDialog: null,
-    /**
-     * @cfg {Tine.Tinebase.data.Record} recordClass
-     */
-    recordClass: null,
-    /**
-     * @cfg {Ext.data.SimpleStore} store 
-     */
-    store: null,
-
-    app: null,
-
     /**
      * config spec for additionalFilters
      *
-     * @type: {object} e.g.
+     * @cfg: {Object} additionalFilterSpec e.g.
      * additionalFilterConfig: {config: { 'name': 'configName', 'appName': 'myApp'}}
      * additionalFilterConfig: {preference: {'appName': 'myApp', 'name': 'preferenceName}}
      * additionalFilterConfig: {favorite: {'appName': 'myApp', 'id': 'favoriteId', 'name': 'optionallyuseaname'}}
      */
     additionalFilterSpec: null,
+
+    /**
+     * @cfg {Tine.Tinebase.Application} app
+     */
+    app: null,
+
+    /**
+     * @cfg {Tine.widgets.dialog.EditDialog}
+     */
+    editDialog: null,
+
+    /**
+     * the related record can not be chosen in more than one pickerCombo in this.editDialog even if they have different
+     * relationTypes
+     *
+     * NOTE: should be per relationType and degree???  don't we have constraints for this???
+     * NOTE: modelUnique is a stupid name -> recordUnique ?
+     *
+     * @cfg {Boolean} modelUnique
+     */
+    modelUnique: false,
+
+    /**
+     * record class of related record
+     *
+     * @cfg {Tine.Tinebase.data.Record} recordClass
+     */
+    recordClass: null,
+
+    /**
+     * relation degree of the relation
+     * @cfg {String} relationType
+     */
+    relationDegree: null,
+
+    /**
+     * relation type of the relation
+     * @cfg {String} relationType
+     */
+    relationType: null,
+
+
+    // private
+    items: null,
+    store: null,
+    combo: null,
+    layout: 'fit',
 
     /**
      * initializes the component

@@ -6,17 +6,8 @@
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Tinebase_Frontend_Json
  */
 class Tinebase_Frontend_JsonTest extends TestCase
 {
@@ -35,7 +26,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * set up tests
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         
@@ -68,7 +59,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
     /**
      * tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         
@@ -295,9 +286,10 @@ class Tinebase_Frontend_JsonTest extends TestCase
         static::assertSame('data2', file_get_contents('tine20:///Filemanager/folders/shared/unittest/test.txt'));
         $node2 = Tinebase_FileSystem::getInstance()->stat('Filemanager/folders/shared/unittest/test.txt');
 
-        static::setExpectedException(Tinebase_Exception_UnexpectedValue::class,
-            Tinebase_Model_Tree_FileLocation::FLD_FM_PATH . ' and ' . Tinebase_Model_Tree_FileLocation::FLD_NODE_ID .
-            ' mismatch');
+        $this->expectException(Tinebase_Exception_UnexpectedValue::class);
+        $this->expectExceptionMessage(Tinebase_Model_Tree_FileLocation::FLD_FM_PATH . ' and ' .
+            Tinebase_Model_Tree_FileLocation::FLD_NODE_ID . ' mismatch');
+
         $this->_instance->restoreRevision([
             Tinebase_Model_Tree_FileLocation::FLD_TYPE      => Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
             Tinebase_Model_Tree_FileLocation::FLD_FM_PATH   => '/shared/unittest/test.txt',
@@ -442,8 +434,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
             if ($result['name'] == 'defaultapp') {
                 $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $result['value']);
                 $this->assertTrue(is_array($result['options']));
-                $this->assertEquals(3, count($result['options']));
-                $this->assertContains('option1', $result['options'][1][1]);
+                // ignore DB options. NOTE: if we need them we could introduce a flag to keep db options
+                $this->assertGreaterThan(3, count($result['options']));
             } else if ($result['name'] == Tinebase_Preference::TIMEZONE) {
                 $this->assertTrue(is_array($result['options'][0]), 'options should be arrays');
             }
@@ -516,7 +508,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         }
         
         $this->assertTrue(isset($defaultString));
-        $this->assertContains('(auto)', $defaultString);
+        $this->assertStringContainsString('(auto)', $defaultString);
 
         // set user pref to en first then to 'use default'
         Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = 'en';
@@ -535,7 +527,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             }
         }
         $this->assertEquals(count($locale['options']), count($updatedLocale['options']), 'option count has to be equal');
-        $this->assertContains('(Deutsch)', $defaultString);
+        $this->assertStringContainsString('(Deutsch)', $defaultString);
         $this->assertEquals('de', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
     }
     
@@ -741,23 +733,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
     }
 
     /**
-     * checks if confidential provider config isn't sent to clients
-     */
-    public function testAreaLockProviderConfigRemovedFromRegistryData()
-    {
-        $this->_createAreaLockConfig([
-            'provider_config' => [
-                'confidential' => 'secret!'
-            ],
-        ]);
-        $registryData = $this->_instance->getAllRegistryData();
-        $registryConfigValue = $registryData['Tinebase']['config'][Tinebase_Config::AREA_LOCKS]['value'];
-        self::assertTrue(isset($registryConfigValue['records'][0]));
-        self::assertFalse(isset($registryConfigValue['records'][0]['provider_config']),
-            'confidental data should be removed: ' . print_r($registryConfigValue, true));
-    }
-
-    /**
      * test get all registry data with persistent filters
      * 
      * @return void
@@ -796,7 +771,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertTrue(is_array($profile['updateableFields']));
         
         // try to get user profile of different user
-        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        $this->expectException('Tinebase_Exception_AccessDenied');
         
         $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
         $this->_instance->getUserProfile($sclever->getId());
@@ -926,21 +901,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $result = $this->_instance->searchTags($filter, array());
         
         $this->assertEquals(0, $result['totalCount']);
-    }
-
-    /**
-     * @see 0013314: allow users to change pin
-     */
-    public function testChangePin()
-    {
-        $result = $this->_instance->changePin('', '1234');
-        self::assertTrue($result['success']);
-
-        $result = $this->_instance->changePin('', '1234');
-        self::assertFalse($result['success']);
-
-        $result = $this->_instance->changePin('1234', '5678');
-        self::assertTrue($result['success']);
     }
 
     public function testGetTerminationDeadline()

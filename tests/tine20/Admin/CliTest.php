@@ -42,8 +42,8 @@ class Admin_CliTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_cli = new Admin_Frontend_Cli();
@@ -262,8 +262,8 @@ class Admin_CliTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $this->_groupIdsToDelete = $this->_groupsToDelete ? $this->_groupsToDelete->getArrayOfIds() : null;
         parent::tearDown();
     }
@@ -372,6 +372,7 @@ class Admin_CliTest extends TestCase
      * testImportUsersWithEmailUser
      *
      * @group longrunning
+     * @group nodockerci
      */
     public function testImportUsersWithEmailUser()
     {
@@ -409,6 +410,7 @@ class Admin_CliTest extends TestCase
      * testImportUsersAdvanced
      *
      * @group longrunning
+     * @group nodockerci
      */
     public function testImportUsersAdvanced()
     {

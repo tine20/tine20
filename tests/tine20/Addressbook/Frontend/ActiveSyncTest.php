@@ -82,8 +82,8 @@ class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_Controll
      * (non-PHPdoc)
      * @see ActiveSync_TestCase::setUp()
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_setGeoData = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
@@ -95,8 +95,8 @@ class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_Controll
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_setGeoData);

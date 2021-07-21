@@ -132,6 +132,8 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             
             {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'date'},
             {label: app.i18n._('Resubmission Date'), field: 'resubmission_date', valueType: 'date'},
+            {label: app.i18n._('End'), field: 'end', valueType: 'date'},
+            {label: app.i18n._('Start'), field: 'start', valueType: 'date'},
             
             {filtertype: 'crm.contact'},
             {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Tasks.Model.Task, ownField: 'task'}
@@ -154,7 +156,8 @@ Tine.Crm.Model.LeadState = Tine.Tinebase.data.Record.create([
     { name: 'value' },
     { name: 'system' },
     { name: 'probability', label: 'Probability', type: 'percentage' }, // i18n._('Probability')
-    { name: 'endslead', label: 'X Lead', type: 'bool'} // i18n._('X Lead')
+    { name: 'endslead', label: 'X Lead', type: 'bool'}, // i18n._('X Lead')
+    { name: 'readonly', label: 'read-only', type: 'bool'} // i18n._('read-only')
 ], {
     appName: 'Crm',
     modelName: 'LeadState',

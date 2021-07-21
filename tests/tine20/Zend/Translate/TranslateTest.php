@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Zend Translation Adapter extension for PO files
  */
-class Zend_Translate_TranslateTest extends PHPUnit_Framework_TestCase
+class Zend_Translate_TranslateTest extends \PHPUnit\Framework\TestCase
 {
     
     /**
@@ -25,7 +25,7 @@ class Zend_Translate_TranslateTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp() {}
+    protected function setUp(): void {}
 
     /**
      * Tears down the fixture
@@ -33,7 +33,7 @@ class Zend_Translate_TranslateTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown() {}
+    protected function tearDown(): void {}
 
     public function testTranslationPluralWithSingular1()
      {

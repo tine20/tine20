@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Update
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -96,9 +96,13 @@ class Setup_Update_Abstract
      * @param string $_applicationName
      * @param string $_version new version number
      * @return Tinebase_Model_Application
+     * @deprecated should no longer be used - use addApplicationUpdate instead
      */    
     public function setApplicationVersion($_applicationName, $_version)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+            ' @deprecated! should no longer be used - use addApplicationUpdate instead');
+
         $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
         if (version_compare($application->version, $_version) < 0) {
             $application->version = $_version;
@@ -129,10 +133,14 @@ class Setup_Update_Abstract
         if (version_compare($application->version, $_version) < 0) {
             $application->version = $_version;
             return Tinebase_Application::getInstance()->updateApplication($application);
+        } else if (version_compare($application->version, $_version) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . 'Cannot update to equal version: '
+                . $_version . ' Version update missing in update script?');
         }
         return $application;
     }
-    
+
     /**
      * get version number of a given table
      * version is stored in database table "applications_tables"

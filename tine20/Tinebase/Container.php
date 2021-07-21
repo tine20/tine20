@@ -281,8 +281,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     'account_id'      => '0',
                     'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                     Tinebase_Model_Grants::GRANT_READ    => true,
-                    Tinebase_Model_Grants::GRANT_EXPORT  => true,
-                    Tinebase_Model_Grants::GRANT_SYNC    => true,
+                    // TODO allow to configure export/sync for anyone on shared containers
+//                    Tinebase_Model_Grants::GRANT_EXPORT  => true,
+//                    Tinebase_Model_Grants::GRANT_SYNC    => true,
                 ), TRUE));
             }
         } else {
@@ -1265,6 +1266,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $controller = Tinebase_Core::getApplicationInstance($model, /* $_modelName */ '', $_ignoreAcl);
 
         if ($controller) {
+            $acl = null;
             if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
                 $acl = $controller->doContainerACLChecks(FALSE);
             }
@@ -1276,7 +1278,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     . ' No deleteContainerContents defined in controller ' . get_class($controller));
             }
 
-            if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
+            if ($acl) {
                 $controller->doContainerACLChecks($acl);
             }
         }
@@ -1459,7 +1461,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        foreach($grantsData as $grantData) {
+        foreach ($grantsData as $grantData) {
             $givenGrants = explode(',', $grantData['account_grants']);
             foreach($givenGrants as $grant) {
                 $grantData[$grant] = TRUE;
@@ -1932,7 +1934,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     'time'         => Tinebase_DateTime::now(),
                     'content_seq'  => $newContentSeq,
                 ));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Creating "' . $action . '" action content history record for record id ' . $recordId);
                 $this->getContentBackend()->create($contentRecord);
             }
@@ -2000,7 +2002,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $containerIds = (! is_array($containerIds))
             ? Tinebase_Model_Container::convertContainerId($containerIds)
             : $containerIds;
-        
+
         $select = $this->_getSelect(array('id', 'content_seq'), TRUE);
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $containerIds));
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
@@ -2054,41 +2056,51 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     {
         $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Creating system container for model ' . $model);
+        $aclFilter = $this->doSearchAclFilter(false);
+        $systemContainer = $this->search(new Tinebase_Model_ContainerFilter([
+            ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()],
+            ['field' => 'model', 'operator' => 'equals', 'value' => $model],
+            ['field' => 'name', 'operator' => 'equals', 'value' => $name]
+        ]))->getFirstRecord();
+        $this->doSearchAclFilter($aclFilter);
+        if ($systemContainer) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Found existing system container for model ' . $model);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Creating system container for model ' . $model);
 
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => $name,
-            'type'              => Tinebase_Model_Container::TYPE_SHARED,
-            'backend'           => 'Sql',
-            'application_id'    => $application->getId(),
-            'model'             => $model
-        ));
+            $newContainer = new Tinebase_Model_Container(array(
+                'name' => $name,
+                'type' => Tinebase_Model_Container::TYPE_SHARED,
+                'backend' => 'Sql',
+                'application_id' => $application->getId(),
+                'model' => $model
+            ));
 
-        $grants = ($grants) ? $grants : Tinebase_Model_Grants::getDefaultGrants();
-        $newContainer = $this->addContainer($newContainer, $grants, TRUE);
+            $grants = ($grants) ? $grants : Tinebase_Model_Grants::getDefaultGrants();
+            $systemContainer = $this->addContainer($newContainer, $grants, TRUE);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Created new system container ' . $name . ' for application ' . $application->name);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Created new system container ' . $name . ' for application ' . $application->name);
+        }
 
         if ($configId !== NULL) {
             $configClass = $application->name . '_Config';
             if (@class_exists($configClass)) {
                 $config = call_user_func(array($configClass, 'getInstance'));
-
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Setting system container config "' . $configId . '" = ' . $newContainer->getId());
-
-                $config->set($configId, $newContainer->getId());
+                    . ' Setting system container config "' . $configId . '" = ' . $systemContainer->getId());
+                $config->set($configId, $systemContainer->getId());
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Could not find preferences class ' . $configClass);
+                    . ' Could not find config class ' . $configClass);
             }
         }
 
         $this->resetClassCache();
 
-        return $newContainer;
+        return $systemContainer;
     }
 
     /**
@@ -2108,7 +2120,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         // use get (avoids cache) or getContainerById, guess its better to avoid the cache
         $oldContainer = $this->get($_record->getId(), $_updateDeleted);
 
-        $result = parent::update($_record);
+        try {
+            $result = parent::update($_record);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                $translation = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric($translation->_('A container with this name already exists.'));
+            } else {
+                throw $zdse;
+            }
+        }
 
         unset($result->account_grants);
         unset($oldContainer->account_grants);
@@ -2173,6 +2194,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
                 $model = $_modification->record_type;
                 $record = new $model($diff->diff);
+                if ($record->application_id === $_modification->instance_id) {
+                    $record->application_id = Tinebase_Core::getTinebaseId();
+                }
                 $this->addContainer($record, null, true);
                 break;
 
@@ -2275,6 +2299,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
     /**
      * Delete duplicate container without contents.
+     * Rename duplicate container with contents (adding '(N)')
      *
      * @param $application
      * @param null $dryrun
@@ -2292,7 +2317,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $application = Tinebase_Application::getInstance()->getApplicationByName($application);
 
         $filter = new Tinebase_Model_ContainerFilter([
-            ['field' => 'type', 'operator' => 'equals', 'value' => 'personal'],
             ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()]
         ]);
 
@@ -2302,24 +2326,27 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         Tinebase_Container::getInstance()->doSearchAclFilter(true);
 
-        $removeCount = 0;
-        foreach ($containers as $container) {
-            $duplicate = $containers->filter('name', $container['name']);
+        $changedCount = 0;
+        while (null !== ($container = $containers->getFirstRecord())) {
+            // first find all containers sorted by creation_time
+            $duplicate = $containers->filter('name', $container['name'])->filter('type', $container->type)
+                ->filter('owner_id', $container->owner_id);
             $duplicate->sort('creation_time', 'ASC');
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Container: . ' . $duplicate->getFirstRecord()['id'] . ' is the default Container');
 
+            $containers->removeRecord($duplicate->getFirstRecord());
             $duplicate->removeFirst();
             if ($duplicate->count() > 0) {
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Duplicates found. ' . $duplicate);
 
+                $renameCounter = 1;
                 foreach ($duplicate as $dupContainer) {
                     if ($dupContainer['content_seq'] == 0) {
                         if ($dryrun) {
-
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                 . ' Dry run: Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' will remove.');
 
@@ -2328,20 +2355,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                 . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' remove.');
-
                         }
-                        $removeCount++;
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                             . ' Duplicate ' . $dupContainer['name'] . ' ' . $dupContainer['id'] . ' don´t remove, because in container exist records');
 
+                        $dupContainer->name .= '(' . ($renameCounter++) . ')';
+                        Tinebase_Container::getInstance()->update($dupContainer);
                     }
                 }
+                $changedCount += $duplicate->count();
+                $containers->removeRecords($duplicate);
             }
-            $containers->removeRecords($duplicate);
         }
 
-        return $removeCount;
+        return $changedCount;
     }
 
     public function getModel()

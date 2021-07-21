@@ -1,0 +1,70 @@
+variables:
+  GITLAB_CI_FUNCTIONS_FUNCTION_ALPINE_GIT_IMAGE: alpine/git
+
+# Merge job
+# This jobs creates a merge gitlab merge request. Which is automatically merged, if its possible.
+# $MERGE_TABLE defines which branch is merged into which other branch.
+# This job should after all tests. All other jobs should not run when $CI_MERGE_REQUEST_TITLE =~ /^Merge/ is true.
+# Because this job creates a new Merge request. It would trigger all other jobs. They would only run on the source branch.
+# But the source branch should already be tested. If you flow the advice and all your jobs do not run if
+# $CI_MERGE_REQUEST_TITLE =~ /^Merge/ is true, you also need to include .gitlab-ci-functions.functions.merge_upwards.do_nothing.
+# Pipelines without any job are treated as if they were failed.
+# before_script and after_script can be used to run custom commands.
+
+#
+# $MERGE_TABLE: required {"2018-11":"2019-11","2019-11":"2020-11","2020-11":"master"}
+# $GITLAB_CI_FUNCTIONS_FUNCTION_ALPINE_GIT_IMAGE: optional set alpine/git image, default: alpine/git
+merge_upwards:
+  stage: merge
+  image:
+    name: ${GITLAB_CI_FUNCTIONS_FUNCTION_ALPINE_GIT_IMAGE}
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    - apk add jq curl
+    - |
+      function mergeUpwards() {
+        if mergeTarget=$(echo $MERGE_TABLE | jq -e -r --arg name ${CI_COMMIT_REF_NAME} '.[$name]'); then
+          if mergeId=$(
+            curl -s -f \
+              --header "Authorization: Bearer ${GITLAB_TOKEN}" \
+              -X POST "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests" \
+              -d "source_branch=${CI_COMMIT_REF_NAME}" \
+              -d "target_branch=${mergeTarget}" \
+              -d "title=Merge%20${CI_COMMIT_REF_NAME}%20into%20${mergeTarget}" \
+              -d "allow_collaboration=true" \
+              -d "assignee_id=${GITLAB_USER_ID}" \
+              | jq .iid
+          ); then
+            sleep 10
+            if curl -s -f \
+              --header "Authorization: Bearer ${GITLAB_TOKEN}" \
+              -X PUT "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests/${mergeId}/merge" \
+              -d "merge_when_pipeline_succeeds=1" | jq ; then
+              echo merged
+            else
+              echo failed to merge
+              exit 1
+            fi
+          else
+            echo failed to create merge request
+            exit 1
+          fi
+        fi
+      }
+    - mergeUpwards
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    - when: on_success
+
+merge_upwards.do_nothing:
+  stage: merge
+  image:
+    name: ${GITLAB_CI_FUNCTIONS_FUNCTION_ALPINE_GIT_IMAGE}
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    - echo At least one job must run for the pipeline to be successful.
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^Merge/
+      when: on_success
+    - when: never

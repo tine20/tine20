@@ -95,23 +95,37 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
     protected function _readModelConfig()
     {
-        if (empty($this->model) || empty($this->sort) || empty($this->dir) || null !== $this->_customFields) {
+        if (empty($this->model) || null !== $this->_customFields) {
             return false;
         }
 
-        list($application,) = explode('_', $this->model, 2);
-        $this->_customFields = Tinebase_CustomField::getInstance()
-            ->getCustomFieldsForApplication($application, $this->model);
-        /** @var Tinebase_Record_Interface $model */
-        $model = $this->model;
-        $this->_externalSortMapping = $model::getSortExternalMapping();
-        if (null !== ($mc = $model::getConfiguration())) {
-            $this->_virtualFields = $mc->getVirtualFields();
-            $this->_recordFields = $mc->recordsFields;
-        }
-        $this->sort = (array)$this->sort;
+        static $recursion = 0;
+        try {
+            if (++$recursion > 1) return false;
 
-        return true;
+            list($application,) = explode('_', $this->model, 2);
+            $this->_customFields = Tinebase_CustomField::getInstance()
+                ->getCustomFieldsForApplication($application, $this->model);
+            /** @var Tinebase_Record_Interface $model */
+            $model = $this->model;
+            $this->_externalSortMapping = $model::getSortExternalMapping();
+            if (null !== ($mc = $model::getConfiguration())) {
+                if ($model === Tinebase_Model_User::class || $model === Tinebase_Model_FullUser::class) {
+                    $this->_identifier = 'id';
+                } else {
+                    $this->_identifier = $mc->getIdProperty();
+                }
+                $this->_virtualFields = $mc->getVirtualFields();
+                $this->_recordFields = $mc->recordFields;
+            } else {
+                $this->_identifier = (new $model([], true))->getIdProperty();
+            }
+            $this->sort = (array)$this->sort;
+
+            return true;
+        } finally {
+            --$recursion;
+        }
     }
 
     /**
@@ -120,10 +134,10 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      * @param  Zend_Db_Select
      * @return void
      */
-    public function appendPaginationSql($_select)
+    public function appendPaginationSql($_select, $_getDeleted = false)
     {
         // check model for required joins etc.
-        $this->appendModelConfig($_select);
+        $this->appendModelConfig($_select, $_getDeleted);
 
         $this->appendLimit($_select);
         $this->appendSort($_select);
@@ -135,9 +149,9 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      * @param  Zend_Db_Select $_select
      * @return void
      */
-    public function appendModelConfig($_select)
+    public function appendModelConfig($_select, $_getDeleted = false)
     {
-        if (empty($this->model) || empty($this->sort) || empty($this->dir)) {
+        if (empty($this->model) || ((empty($this->sort) || empty($this->dir)) && empty($this->limit))) {
             return;
         }
 
@@ -200,7 +214,8 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                     $db->quoteIdentifier([$relationName, 'own_model']) . ' =  "' . $model . '" AND ' .
                     $db->quoteIdentifier([$relationName, 'related_model']) . ' = "' . $relatedModel . '" AND ' .
                     $db->quoteIdentifier([$relationName, 'type']) . $db->quoteInto(' = ?',
-                        $virtualFields[$field]['config']['type']),
+                        $virtualFields[$field]['config']['type']) .
+                    ($_getDeleted ? '' : ' AND ' . $db->quoteIdentifier([$relationName, 'is_deleted']) . ' = 0'),
                     []
                 );
 
@@ -222,11 +237,11 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 }
                 $field = $relatedTableName . '.' . $field;
 
-            } elseif (isset($recordFields[$field]) && isset($recordFields[$field]['type']) &&
-                    $recordFields[$field]['type'] === 'record' && isset($recordFields[$field]['config']) &&
+            } elseif (isset($recordFields[$field]) && isset($recordFields[$field]['config']) &&
                     isset($recordFields[$field]['config']['appName']) &&
                     isset($recordFields[$field]['config']['modelName']) &&
-                    isset($recordFields[$field]['config']['type'])) {
+                    isset($recordFields[$field]['config']['type']) &&
+                    $recordFields[$field]['config']['type'] === 'record') {
 
                 ++$joinCount;
                 $db = $_select->getAdapter();
@@ -241,22 +256,30 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 }
 
                 $relatedTableName = $relatedMC->getTableName() . '_recPagi' . $joinCount;
-                $_select->joinLeft(
-                    [$relatedTableName => SQL_TABLE_PREFIX . $relatedMC->getTableName()],
-                    $db->quoteIdentifier([$mc->getTableName(), $field]) . ' = ' .
-                    $db->quoteIdentifier([$relatedTableName, $relatedMC->getIdProperty()]),
-                    []
-                );
-                if (is_array($relatedMC->defaultSortInfo) && isset($relatedMC->defaultSortInfo['field'])) {
-                    $field = $relatedMC->defaultSortInfo['field'];
+                if ($relatedModel === Tinebase_Model_User::class || $relatedModel === Tinebase_Model_FullUser::class) {
+                    $idProp = 'id';
+                    $relatedField = 'display_name';
                 } else {
-                    if (is_array($relatedMC->titleProperty)) {
-                        $field = $relatedMC->titleProperty[1][0];
+                    $idProp = $relatedMC->getIdProperty();
+                    if (is_array($relatedMC->defaultSortInfo) && isset($relatedMC->defaultSortInfo['field'])) {
+                        $relatedField = $relatedMC->defaultSortInfo['field'];
                     } else {
-                        $field = $relatedMC->titleProperty;
+                        if (is_array($relatedMC->titleProperty)) {
+                            $relatedField = $relatedMC->titleProperty[1][0];
+                        } else {
+                            $relatedField = $relatedMC->titleProperty;
+                        }
                     }
                 }
-                $field = $relatedTableName . '.' . $field;
+                $_select->joinLeft(
+                    [$relatedTableName => SQL_TABLE_PREFIX . $relatedMC->getTableName()],
+                    $db->quoteIdentifier([$mc->getTableNameForField($field), $field]) . ' = ' .
+                    $db->quoteIdentifier([$relatedTableName, $idProp]) .
+                    ($relatedMC->modlogActive && ! $_getDeleted ?
+                        ' AND ' . $db->quoteIdentifier([$relatedTableName, 'is_deleted']) . ' = 0': ''),
+                    []
+                );
+                $field = $relatedTableName . '.' . $relatedField;
             } elseif (null !== ($cfCfg = $customfields->find('name', $field))) {
                 ++$joinCount;
                 $db = $_select->getAdapter();
@@ -283,12 +306,38 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      */
     public function appendLimit($_select)
     {
+        // attention, we only check for limit, not for start! same above in model helper functions!
         if (!empty($this->limit)) {
+            $this->_ensureRepeatableResults();
             $start = ($this->start >= 0) ? $this->start : 0;
             $_select->limit($this->limit, $start);
         }
     }
-    
+
+    protected function _ensureRepeatableResults()
+    {
+        // jupp, this sucks all over the place :-/
+        if (empty($this->sort)) {
+            $this->sort = [];
+        } elseif (!is_array($this->sort)) {
+            $this->sort = [$this->sort];
+        }
+        if (!in_array($this->_identifier, $this->sort)) {
+            $this->xprops('sort')[] = $this->_identifier;
+            if (empty($this->dir)) {
+                $this->dir = 'ASC';
+            } elseif (!is_array($this->dir)) {
+                if ('ASC' !== $this->dir) {
+                    $this->dir = array_fill(0, count($this->sort) - 1, $this->dir);
+                    $this->xprops('dir')[] = 'ASC';
+                }
+            } else {
+                $this->xprops('dir')[] = 'ASC';
+            }
+
+        }
+    }
+
     /**
      * Appends sort statement to a given select object
      * 
@@ -298,6 +347,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     public function appendSort($_select)
     {
         if (!empty($this->sort) && !empty($this->dir)){
+            $this->_ensureRepeatableResults();
             $tableName = null;
             foreach ($_select->getPart(Zend_Db_Select::FROM) as $key => $from) {
                 if (Zend_Db_Select::FROM === $from['joinType']) {

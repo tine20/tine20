@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -140,6 +140,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DISABLE_EXTERNAL_IMIP = 'disableExternalImip';
+
+    /**
+     * DISABLE_EXTERNAL_IMIP_NOTIFICATION
+     *
+     * @var string
+     */
+    const DISABLE_EXTERNAL_NOTIFICATIONS = 'disableExternalNotifications';
     
     /**
      * SKIP_DOUBLE_EVENTS
@@ -188,7 +195,6 @@ class Calendar_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_POLLS = 'featurePolls';
 
-
     /**
      * EVENT_VIEW
      *
@@ -207,6 +213,11 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_EVENT_NOTIFICATION_CONFIRMATION = 'featureEventNotificationConfirmation';
+
+    /**
+     * @var string
+     */
+    const ORGANIZER_IMPLICIT_EDIT_GRANT = 'organizerImplicitEditGrant';
 
     /**
      * @var string
@@ -250,7 +261,6 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE = 30;
     const FREEBUSY_INFO_ALLOW_CALENDAR = 40;
     const FREEBUSY_INFO_ALLOW_ALL_ATTENDEE = 50;
-
 
     /**
      * (non-PHPdoc)
@@ -399,12 +409,22 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 'REQ', 'value' => 'Required', 'system' => true, 'order' => 0), //_('Required')
-                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true, 'order' => 1), //_('Optional')
+                    array('id' => 'REQ', 'value' => 'Required', 'system' => true, 'order' => 0, 'color' => '#FF0000'), //_('Required')
+                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true, 'order' => 1, 'color' => '#0000FF'), //_('Optional')
                 ),
                 'default' => 'REQ'
             )
         ),
+        self::ORGANIZER_IMPLICIT_EDIT_GRANT => [
+            //_('Organizer has implicit edit grant')
+            'label'                 => 'Organizer has implicit edit grant',
+            'description'           => 'Organizer has implicit edit grant',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => true,
+        ],
         self::RESOURCE_TYPES => array(
             //_('Resource Types Available')
             'label'                 => 'Resource Types Available',
@@ -510,6 +530,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'label'                 => 'Disable iMIP for external organizers',
         //_('Disable iMIP for external organizers')
             'description'           => 'Disable iMIP for external organizers',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            'default'               => false,
+        ),
+        self::DISABLE_EXTERNAL_NOTIFICATIONS => array(
+            //_('Disable notification for external organizers')
+            'label'                 => 'Disable notification for external organizers',
+            //_('Disable notification for external organizers')
+            'description'           => 'Disable notification for external organizers',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,

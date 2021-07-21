@@ -2,14 +2,14 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->
-    <version>12.13</version>
+    <version>14.0</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>16</version>
+            <version>17</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -269,6 +269,10 @@
                         <name>poll_id</name>
                     </field>
                 </index>
+                <field>
+                    <name>mute</name>
+                    <type>boolean</type>
+                </field>
             </declaration>
         </table>
         
@@ -495,7 +499,7 @@
         <!-- resources -->
         <table>
             <name>cal_resources</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -604,6 +608,11 @@
                     <name>suppress_notification</name>
                     <type>boolean</type>
                     <default>false</default>
+                </field>
+                <field>
+                    <name>color</name>
+                    <type>text</type>
+                    <length>7</length>
                 </field>
                 <index>
                     <name>id</name>

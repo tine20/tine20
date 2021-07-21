@@ -488,7 +488,7 @@ myFormPanel.getForm().submit({
      * @return {BasicForm} this
      */
     loadRecord : function(record){
-        this.setValues(record.data);
+        this.setValues(record.data, record);
         return this;
     },
 
@@ -592,13 +592,13 @@ myFormPanel.getForm().submit({
 }</code></pre>
      * @return {BasicForm} this
      */
-    setValues : function(values){
+    setValues : function(values, record){
         if(Ext.isArray(values)){ // array of objects
             for(var i = 0, len = values.length; i < len; i++){
                 var v = values[i];
                 var f = this.findField(v.id);
                 if(f){
-                    f.setValue(v.value);
+                    f.setValue(v.value, record);
                     if(this.trackResetOnLoad){
                         f.originalValue = f.getValue();
                     }
@@ -608,7 +608,7 @@ myFormPanel.getForm().submit({
             var field, id;
             for(id in values){
                 if(!Ext.isFunction(values[id]) && (field = this.findField(id))){
-                    field.setValue(values[id]);
+                    field.setValue(values[id], record);
                     if(this.trackResetOnLoad){
                         field.originalValue = field.getValue();
                     }

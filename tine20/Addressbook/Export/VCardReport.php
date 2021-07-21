@@ -31,10 +31,12 @@ class Addressbook_Export_VCardReport extends Tinebase_Export_Report_Abstract
      */
     public static function getPluginOptionsDefinition()
     {
+        $translation = Tinebase_Translation::getTranslation('Addressbook');
+
         return [
             // Containers
             'sources' => [
-                'label' => 'Containers to export', // _('Containers to export')
+                'label' => $translation->_('Addressbooks to export'),
                 'type' => 'containers',
                 'config' => [
                     'appName' => 'Addressbook',
@@ -44,7 +46,7 @@ class Addressbook_Export_VCardReport extends Tinebase_Export_Report_Abstract
             ],
             // FileLocation
             'target' => [
-                'label' => 'Export target', // _('Export target')
+                'label' => $translation->_('Export target'),
                 'type' => 'filelocation',
                 'config' => [
                     'mode' => 'target',

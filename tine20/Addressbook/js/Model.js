@@ -16,6 +16,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'tid', omitDuplicateResolving: true},
     {name: 'private', omitDuplicateResolving: true},
     {name: 'cat_id', omitDuplicateResolving: true},
+    {name: 'color', label: 'Color', group: 'Color'},
     {name: 'n_family', label: 'Last Name', group: 'Name' },//_('Last Name') _('Name')
     {name: 'n_given', label: 'First Name', group: 'Name' }, //_('First Name')
     {name: 'n_middle', label: 'Middle Name', group: 'Name' }, //_('Middle Name')
@@ -40,6 +41,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_one_countryname', label: 'Country (Company Address)', group: 'Company Address' }, //_('Country (Company Address)')
     {name: 'adr_one_lon', label: 'Longitude (Company Address)', group: 'Company Address', omitDuplicateResolving: true }, //_('Longitude (Company Address)')
     {name: 'adr_one_lat', label: 'Latitude (Company Address)', group: 'Company Address', omitDuplicateResolving: true }, //_('Latitude (Company Address)')
+    {name: 'language', label: 'Language', group: 'Company Communication' }, //_('Language')
     {name: 'label', omitDuplicateResolving: true},
     {name: 'adr_two_street', label: 'Street (Private Address)', group: 'Private Address' }, //_('Street (Private Address)')  _('Private Address')
     {name: 'adr_two_street2', label: 'Street 2 (Private Address)', group: 'Private Address' }, //_('Street 2 (Private Address)')
@@ -97,7 +99,7 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     appName: 'Addressbook',
     modelName: 'Contact',
     idProperty: 'id',
-    titleProperty: 'n_fn',
+    titleProperty: 'n_fileas',
     // ngettext('Contact', 'Contacts', n); gettext('Contacts');
     recordName: 'Contact',
     recordsName: 'Contacts',
@@ -105,7 +107,7 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     // ngettext('Addressbook', 'Addressbooks', n); gettext('Addressbooks');
     containerName: 'Addressbook',
     containersName: 'Addressbooks',
-    copyOmitFields: ['account_id', 'type', 'relations'],
+    copyOmitFields: ['account_id', 'type', 'relations', 'n_short'],
     
     /**
      * returns true if record has an email address
@@ -158,8 +160,8 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
     var filters = [
         {label: i18n._('Quick Search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
-        {filtertype: 'addressbook.listMember', app: app},
-        {filtertype: 'addressbook.listRoleMember', app: app},
+        {filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Addressbook.Model.List, multipleForeignRecords: true, ownField: 'list' },
+        {filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Addressbook.Model.ListRole, multipleForeignRecords:true, ownField: 'list_role_id' },
         {label: app.i18n._('Title'),                                                    field: 'n_prefix' },
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
@@ -325,7 +327,6 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     }
 });
 
-
 /**
  * get filtermodel of emailaddress model
  * 
@@ -338,38 +339,6 @@ Tine.Addressbook.Model.EmailAddress.getFilterModel = function() {
         {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
     ];
 };
-
-/**
- * ListRole model
- */
-Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
-    {name: 'id'},
-    {name: 'name'},
-    {name: 'members'},
-    {name: 'description'}
-], {
-    appName: 'Addressbook',
-    modelName: 'ListRole',
-    titleProperty: 'name',
-    // ngettext('List Function', 'List Functions', n); gettext('List Functions');
-    recordName: 'List Function',
-    recordsName: 'List Functions'
-});
-
-/**
- * get filtermodel of ListRole model
- *
- * @namespace Tine.Addressbook.Model
- * @static
- * @return {Array} filterModel definition
- */
-Tine.Addressbook.Model.ListRole.getFilterModel = function() {
-    return [
-        {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
-    ];
-};
-
-/**
 
 /**
  * Industry model

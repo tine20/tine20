@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Config
  */
-class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
+class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * unit under test (UIT)
@@ -38,8 +38,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_instance = Tinebase_Config::getInstance();
     }
 
@@ -49,8 +49,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->_filenamesToDelete as $filename) {
             unlink($filename);
         }
@@ -166,6 +166,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 
     /**
      * testApplicationDefaultConfig
+     *
+     * @group nodockerci
      */
     public function testApplicationDefaultConfig()
     {
@@ -266,6 +268,9 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, Tinebase_Config::getInstance()->{Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME});
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testConfDFolder()
     {
         $config = Tinebase_Core::getConfig();
@@ -313,6 +318,9 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array("www.test.de", "www.tine20.net"), Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()));
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testConfigStructure()
     {
         $defaultConfigFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'
@@ -341,7 +349,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_int($imapStruct->{ExampleApplication_Config::PORT}) && $imapStruct->{ExampleApplication_Config::PORT} === 999);
         $this->assertTrue(is_bool($imapStruct->{ExampleApplication_Config::SSL}) && $imapStruct->{ExampleApplication_Config::SSL} === true);
 
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->expectException('Tinebase_Exception_InvalidArgument');
         $imapStruct->shooo;
     }
 

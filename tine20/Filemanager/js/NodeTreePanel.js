@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import upload from "./upload";
+
 Ext.ns('Tine.Filemanager');
 
 require('./nodeContextMenu');
@@ -22,19 +24,19 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
     filterMode : 'filterToolbar',
 
-    recordClass : Tine.Filemanager.Model.Node,
-
     allowMultiSelection : false,
 
     ddGroup: 'fileDDGroup',
     enableDD: true,
 
-    dataSafeAreaName: 'Tinebase.datasafe',
     dataSafeEnabled: false,
 
     hasGrid: true,
 
+    currentNodePath: null,
+
     initComponent: function() {
+        this.recordClass= Tine.Filemanager.Model.Node;
         this.on('nodedragover', this.onNodeDragOver, this);
 
         if (! this.app) {
@@ -72,32 +74,39 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 handler : this.dropIntoTree
             });
         }
-
-        postal.subscribe({
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
             callback: this.onRecordChanges.createDelegate(this)
-        });
+        }));
 
-        this.dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock(this.dataSafeAreaName);
+        this.dataSafeEnabled = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length;
         if (this.dataSafeEnabled) {
-            postal.subscribe({
-                channel: 'areaLocks',
-                topic: this.dataSafeAreaName +'.*',
-                callback: this.applyDataSafeState.createDelegate(this)
+            _.each(Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName), (areaLock) => {
+                this.postalSubscriptions.push(postal.subscribe({
+                    channel: "areaLocks",
+                    topic: areaLock + '.*',
+                    callback: this.applyDataSafeState.createDelegate(this)
+                }));
             });
-
-            this.dataSafeIsLocked = Tine.Tinebase.areaLocks.isLocked(this.dataSafeAreaName)
+            
+            this.dataSafeIsLocked = !!Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
         }
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     onRecordChanges: function(data, e) {
-        if (data.type == 'folder') {
+        if (data.type === 'folder') {
             var _ = window.lodash,
                 me = this,
                 path = data.path,
-                parentPath = path.replace(new RegExp(_.escapeRegExp(data.name) + '$'), ''),
-                node = this.getNodeById(data.id),
+                parentPath = Tine.Filemanager.Model.Node.dirname(path),
+                node = this.getNodeById(data.id) ?? this.getNodeByPath(path),
                 pathChange = node && node.attributes && node.attributes.nodeRecord.get('path') != path;
 
             if (node && e.topic.match(/\.delete/)) {
@@ -107,14 +116,18 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 } catch (e) {}
                 return;
             }
-
+            
             if (node) {
                 node.setText(Ext.util.Format.htmlEncode(data.name));
                 // NOTE: qtip dosn't work, but implementing is not worth the effort...
                 node.qtip = Tine.Tinebase.common.doubleEncode(data.name);
                 Ext.apply(node.attributes, data);
                 node.attributes.nodeRecord = new this.recordClass(data);
-
+                
+                if (node.attributes?.status !== 'pending') {
+                    Ext.fly(node.ui?.elNode)?.removeClass('x-type-data-pending');
+                }
+                
                 // in case of path change we need to reload the node (children) as well
                 // as the path of all children changed as well
                 if (node.hasChildNodes() && pathChange && ! node.loading) {
@@ -124,14 +137,16 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                     node.bufferedReload();
                 }
             }
-
+            
             // add / remount node
             try {
                 me.expandPath(parentPath, '', function (sucess, parentNode) {
-                    var childNode = parentNode.findChild('name', data.name);
+                    const childNode = parentNode.findChild('name', data.name);
                     if (!childNode) {
-                        parentNode.appendChild(node || me.loader.createNode(data));
-                    } else if (childNode != node) {
+                        if (`${me.currentNodePath}/` === data.path.replace(data.name, '')) {
+                            parentNode.appendChild(node || me.loader.createNode({...data}));
+                        }
+                    } else if (childNode !== node) {
                         // node got duplicated by expand load
                         try {
                             node.cancelExpand();
@@ -145,29 +160,23 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     },
 
     applyDataSafeState: function() {
-        var me = this;
+        const wasLocked = this.dataSafeIsLocked;
+        this.dataSafeIsLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
+        
+        if (this.dataSafeIsLocked != wasLocked) {
+            var rootNode = this.getRootNode(),
+                selectedNode = this.getSelectionModel().getSelectedNode();
 
-        Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName).then(function(isLocked) {
-            me.dataSafeIsLocked.then(function(wasLocked) {
-                me.dataSafeIsLocked = Tine.Tinebase.areaLocks.isLocked(me.dataSafeAreaName);
-                if (isLocked != wasLocked) {
-                    var rootNode = me.getRootNode(),
-                        selectedNode = me.getSelectionModel().getSelectedNode();
-
-                    me.getSelectionModel().suspendEvents();
-                    rootNode.collapse(true);
-                    // NOTE: the grid reload expands the tree as well!
-                    // not clear yet how to detect if a grid is on board as well
-                    // if (selectedNode) {
-                    //     me.selectPath(selectedNode.attributes.path, {}, me.getSelectionModel().resumeEvents.bind(me));
-                    // } else {
-                    //     rootNode.expand(false, true,  me.getSelectionModel().resumeEvents.bind(me));
-                    // }
-
-                }
-            })
-
-        });
+            this.getSelectionModel().suspendEvents();
+            rootNode.collapse(true);
+            // NOTE: the grid reload expands the tree as well!
+            // not clear yet how to detect if a grid is on board as well
+            // if (selectedNode) {
+            //     me.selectPath(selectedNode.attributes.path, {}, me.getSelectionModel().resumeEvents.bind(me));
+            // } else {
+            //     rootNode.expand(false, true,  me.getSelectionModel().resumeEvents.bind(me));
+            // }
+        }
     },
 
     /**
@@ -197,6 +206,8 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         var _ = window.lodash,
             requiredGrant = e.ctrlKey || e.altKey ? 'readGrant' : 'editGrant';
 
+        data.nodes = [_.get(data, 'node.attributes.nodeRecord')];
+        
         // @TODO: rethink: do I need delte on the record or parent?
         return !! _.get(data, 'node.attributes.nodeRecord.data.account_grants.' + requiredGrant);
     },
@@ -223,13 +234,15 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * cancel - Set this to true to signal drop not allowed.
      */
     onNodeDragOver: function(dragOverEvent) {
-        var _ = window.lodash,
-            cancel = this.readOnly
-                || ! dragOverEvent.target.expanded
-                || dragOverEvent.target == dragOverEvent.source.dragData.node
-                || ! _.get(dragOverEvent, 'target.attributes.nodeRecord.data.account_grants.addGrant');
+        const action = dragOverEvent.rawEvent.ctrlKey || dragOverEvent.rawEvent.altKey ? 'copy' : 'move';
+        const targetNode = _.get(dragOverEvent, 'target.attributes.nodeRecord');
+        const sourceNodes = dragOverEvent.data.nodes;
 
-        dragOverEvent.cancel = cancel;
+        dragOverEvent.cancel = this.readOnly
+            || dragOverEvent.point !== 'append'
+            || ! Tine.Filemanager.nodeActionsMgr.checkConstraints(action, targetNode, sourceNodes, {
+                targetChildNodes: dragOverEvent.target.childNodes
+            });
     },
 
     /**
@@ -239,20 +252,13 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @private
      */
     onBeforeNodeDrop: function(dropEvent) {
-        var nodes, target = dropEvent.target;
+        var nodes = dropEvent.data.nodes,
+            target = dropEvent.target;
 
-        if(dropEvent.data.selections) {
-            nodes = dropEvent.data.grid.selModel.selections.items;
-        }
+        const success = Tine[this.appName].nodeBackend.copyNodes(nodes, target, !(dropEvent.rawEvent.ctrlKey  || dropEvent.rawEvent.altKey)) !== false;
 
-        if(!nodes && dropEvent.data.node) {
-            nodes = [dropEvent.data.node];
-        }
-
-        Tine[this.appName].fileRecordBackend.copyNodes(nodes, target, !(dropEvent.rawEvent.ctrlKey  || dropEvent.rawEvent.altKey));
-
-        dropEvent.dropStatus = true;
-        return true;
+        dropEvent.dropStatus = success;
+        return success;
     },
 
     /**
@@ -339,8 +345,14 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         attr.nodeRecord = new this.recordClass(nodeData);
 
         if(this.dataSafeEnabled && !!attr.nodeRecord.get('pin_protected_node')) {
-            attr.cls = 'x-type-data-safe';
+            attr.cls += ' x-type-data-safe'
         }
+        
+        if (_.get(arguments[0],'status') === 'pending') {
+            attr.cls += ' x-type-data-pending'
+        }
+        
+        attr.cls += ' ' + Tine.Filemanager.Model.Node.getStyles(attr.nodeRecord).join(' ');
     },
 
     /**
@@ -391,6 +403,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Ext.tree.TreeNode} node
      */
     onSelectionChange: function(sm, node) {
+        if (node?.attributes?.status === 'pending') {
+            return;
+        }
         // this.updateActions(sm, node);
         var grid = this.app.getMainScreen().getCenterPanel(),
             gridSelectionModel = grid.selectionModel,
@@ -422,10 +437,14 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      */
     getTreePath: function(containerPath) {
         var _ = window.lodash,
+            currentAccount = Tine.Tinebase.registry.get('currentAccount'),
             treePath = '/' + this.getRootNode().id + containerPath
-            .replace(new RegExp('^' + _.escapeRegExp(Tine.Tinebase.container.getMyFileNodePath())), '/myUser')
-            .replace(/^\/personal/, '/otherUsers')
-            .replace(/\/$/, '');
+                .replace(/[0-9a-f]{40}\/folders\//, '')
+                .replace(new RegExp('^/personal/(' 
+                    + _.escapeRegExp(currentAccount.accountLoginName) + '|'
+                    + _.escapeRegExp(currentAccount.accountId) + ')' ), '/myUser')
+                .replace(/^\/personal/, '/otherUsers')
+                .replace(/\/$/, '');
 
         return treePath;
     },
@@ -458,7 +477,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             }
 
             if (index > 2) {
-                var c = curNode.findChild('path', curPath + '/' + keys[index]);
+                var c = curNode.findChild('path', Tine.Filemanager.Model.Node.sanitize(curPath + keys[index] + '/'));
             } else {
                 var c = curNode.findChild('id', keys[index]);
             }
@@ -483,9 +502,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * (bSuccess, oSelNode) where bSuccess is if the selection was successful and oSelNode is the selected node.
      */
     selectPath : function(path, attr, callback) {
-        var node = this.expandPath(path, attr, function(bSuccess, oLastNode){
+        this.expandPath(path, attr, function(bSuccess, oLastNode){
             if (oLastNode) {
                 oLastNode.select();
+                this.currentNodePath = oLastNode?.attributes?.nodeRecord?.data?.path;
                 if (Ext.isFunction(callback)) {
                     callback.call(true, oLastNode);
                 }
@@ -509,7 +529,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             if(typeof nodeName == 'object') {
                 nodeName = nodeName.name;
             }
-            newPath = targetPath + '/' + nodeName;
+            newPath = Tine.Filemanager.Model.Node.sanitize(targetPath + nodeName);
 
             copy = new Ext.tree.AsyncTreeNode({text: node.text, path: newPath, name: node.attributes.name
                 , nodeRecord: node.attributes.nodeRecord, account_grants: node.attributes.account_grants});
@@ -523,7 +543,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             var nodeData = Ext.copyTo({}, node.data, this.recordClass.getFieldNames());
             var newNodeRecord = new this.recordClass(nodeData);
 
-            newPath = targetPath + '/' + nodeName;
+            newPath = Tine.Filemanager.Model.Node.sanitize(targetPath + nodeName);
             copy = new Ext.tree.AsyncTreeNode({text: nodeName, path: newPath, name: node.data.name
                 , nodeRecord: newNodeRecord, account_grants: node.data.account_grants});
         }
@@ -542,75 +562,38 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param fileSelector
      * @param targetNodeId
      */
-    dropIntoTree: function(fileSelector, event) {
+    dropIntoTree: async function (fileSelector, event) {
 
         var treePanel = fileSelector.component,
             app = treePanel.app,
-            grid = app.getMainScreen().getCenterPanel(),
             targetNode,
             targetNodePath;
 
-
         var targetNodeId;
         var treeNodeAttribute = event.getTarget('div').attributes['ext:tree-node-id'];
-        if(treeNodeAttribute) {
+        if (treeNodeAttribute) {
             targetNodeId = treeNodeAttribute.nodeValue;
             targetNode = treePanel.getNodeById(targetNodeId);
             targetNodePath = targetNode.attributes.path;
 
         }
 
-        if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
+        let files = fileSelector.getFileList();
+        const folderList = _.uniq(_.map(files, (fo) => {
+            return fo.fullPath.replace(/\/[^/]*$/, '');
+        }));
+
+
+        if (folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', targetNode.attributes.nodeRecord, _.map(files, Tine.Filemanager.Model.Node.createFromFile))) {
             Ext.MessageBox.alert(
-                    i18n._('Upload Failed'),
-                    app.i18n._('It is not permitted to store files in this folder!')
-                ).setIcon(Ext.MessageBox.ERROR);
+                i18n._('Upload Failed'),
+                app.i18n._('It is not permitted to store files in this folder!')
+            ).setIcon(Ext.MessageBox.ERROR);
 
             return;
         }
 
-        var files = fileSelector.getFileList(),
-            filePathsArray = [],
-            fileTypesArray = [],
-            uploadKeyArray = [],
-            addToGridStore = false;
-
-        Ext.each(files, function (file) {
-            if ("" === file.type) {
-                return true;
-            }
-
-            var fileName = file.name || file.fileName,
-                filePath = targetNodePath + '/' + fileName;
-
-            var upload = new Ext.ux.file.Upload({
-                fmDirector: treePanel,
-                file: file,
-                fileSelector: fileSelector,
-                id: filePath
-            });
-
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-
-            filePathsArray.push(filePath);
-            fileTypesArray.push('vnd.adobe.partial-upload; final_type=' + file.type);
-            uploadKeyArray.push(uploadKey);
-
-            addToGridStore = grid.currentFolderNode.id === targetNodeId;
-
-        }, this);
-
-        if (0 === uploadKeyArray.length) {
-            return;
-        }
-
-        var params = {
-                filenames: filePathsArray,
-                type: "file",
-                tempFileIds: [],
-                forceOverwrite: false
-        };
-        Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, addToGridStore);
+        await upload(targetNodePath, files);
     },
 
 

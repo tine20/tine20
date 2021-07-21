@@ -80,8 +80,8 @@ msgstr ""
 #: js/HumanResources.js:23
 msgid "Human Resources"
 msgid_plural "Human Resources"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Human Resources"
+msgstr[1] "Human Resources"
 
 #: js/HumanResources.js:40 Model/WorkingTime.php:56 Model/Employee.php:170
 msgid "Title"
@@ -687,17 +687,13 @@ msgstr "Pausenzeit Abzug"
 msgid "Feast Time"
 msgstr ""
 
-#: Model/DailyWTReport.php:173
-msgid "Break Time"
-msgstr "Pausenzeit"
-
 #: Model/DailyWTReport.php:181
 msgid "Sickness Time"
 msgstr "Tage der Krankmeldung"
 
 #: Model/DailyWTReport.php:189
 msgid "Working Time Correction"
-msgstr "Arbeitszeit (Berichtigt)"
+msgstr "Arbeitszeitkorrektur"
 
 #: Model/DailyWTReport.php:198
 msgid "Actual Working Time"
@@ -717,7 +713,7 @@ msgstr "Anmerkung"
 
 #: Model/DailyWTReport.php:225
 msgid "Is Cleared"
-msgstr "Ist Freigegeben"
+msgstr "Ist Abgerechnet"
 
 #: Model/DailyWTReport.php:233
 msgid "Cleared in"
@@ -1033,8 +1029,7 @@ msgstr "Arbeitszeit Schema"
 msgid ""
 "Template (individual working time schemas are created for each contract)"
 msgstr ""
-"Vorlage (für jeden Vertrag wird ein individuelles Arbeitszeitschema "
-"angelegt)"
+"Vorlage (für jeden Vertrag wird ein individuelles Arbeitszeitschema angelegt)"
 
 msgid "Shared (this working time schemas can be shared among contracts)"
 msgstr "Gemeinsam (dieses Arbeitszeit Schema kann gemeinsam genutzt werden)"
@@ -1177,11 +1172,10 @@ msgstr "Startzeit"
 
 msgid ""
 "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time "
-"{{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted "
-"automatically."
+"{{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted automatically."
 msgstr ""
-"Wenn {{time_worked|date(\"H:i\", \"GMT\")}} Arbeitszeit überschritten "
-"sind, werden {{break_time|date(\"H:i\", \"GMT\")}} Pausenzeit automatisch "
+"Wenn {{time_worked|date(\"H:i\", \"GMT\")}} Arbeitszeit überschritten sind, "
+"werden {{break_time|date(\"H:i\", \"GMT\")}} Pausenzeit automatisch "
 "abgezogen."
 
 msgid "Time worked"
@@ -1196,11 +1190,14 @@ msgstr[0] "Arbeitzeitlimitierung"
 msgstr[1] "Arbeitzeitlimitierungen"
 
 msgid ""
-"Working time is evaluated from {{start_time|date(\"H:i\")}} until "
-"{{end_time|date(\"H:i\")}}."
+"Working time is evaluated from {{start_time|date(\"H:i\")}} until {{end_time|"
+"date(\"H:i\")}}."
 msgstr ""
-"Arbeitszeit wird ausgewertet von {{start_time|date(\"H:i\")}} bis "
-"{{end_time|date(\"H:i\")}}."
+"Arbeitszeit wird ausgewertet von {{start_time|date(\"H:i\")}} bis {{end_time|"
+"date(\"H:i\")}}."
+
+msgid "Monthly Report"
+msgstr "Monatsbericht"
 
 msgid "Absence reason"
 msgid_plural "Absence reasons"
@@ -1211,7 +1208,7 @@ msgid "Allow Booking"
 msgstr "Buchung erlauben"
 
 msgid "Allow Planning"
-msgstr "Plaung erlauben"
+msgstr "Planung erlauben"
 
 msgid "Enable Freetime Timetracking"
 msgstr "Abwesenheits-Zeiterfassung aktivieren"
@@ -1228,8 +1225,214 @@ msgstr "Arbeitszeit Saldo"
 msgid "[FD] Feast day"
 msgstr "[F] Feiertag"
 
-msgid "Break Times"
-msgstr "Pausenzeiten"
+msgid "Break Time"
+msgid_plural "Break Times"
+msgstr[0] "Pausenzeit"
+msgstr[1] "Pausenzeiten"
 
 msgid "Work Time Limits"
 msgstr "Arbeitzeitlimits"
+
+msgid "Free Time Planning"
+msgstr "Abwesenheitsplanung"
+
+msgid "Add Free Time"
+msgstr "Abwesenheit hinzufügen"
+
+msgid "Edit Free Time"
+msgstr "Abwesenheit bearbeiten"
+
+msgid "Delete Free Time"
+msgstr "Abwesenheit löschen"
+
+msgid "Freetime"
+msgstr "Abwesenheit"
+
+msgid "Loading free time planning data..."
+msgstr "Abwesenheitsdaten werden geladen..."
+
+msgid "Do you really want to delete the selected record?"
+msgid_plural "Do you really want to delete the selected records?"
+msgstr[0] "Wollen sie den ausgewählten Eintrag wirklich löschen?"
+msgstr[1] "Wollen sie die ausgewählten Einträge wirklich löschen?"
+
+msgid "Confirm"
+msgstr "Bestätigung"
+
+msgid "You have to select at least one day to save this freetime entry."
+msgstr ""
+"Sie müssen wenigstens einen Tag auswählen um den Eintrag zu speichern."
+
+msgid "Enable Streams"
+msgstr "Streams Aktivieren"
+
+msgid "Activate working streams"
+msgstr "Aktiviere Arbeitszeit Streams"
+
+msgid "Enable Working Time Tracking"
+msgstr "Aktiviere Arbeitszeit-Erfassung"
+
+msgid "Activate to enable working time tracking and reporting"
+msgstr "Aktiviere Arbeitszeit-Erfassung und Abrechnung"
+
+msgid "Stream Intervals available"
+msgstr "Verfügbare Stream-Intervalle"
+
+msgid "Weekly"
+msgstr "Wöchentlich"
+
+msgid "Monthly"
+msgstr "Monatlich"
+
+msgid "Quarterly"
+msgstr "Quartalsweise"
+
+msgid "Yearly"
+msgstr "Jährlich"
+
+msgid "Stream Types available"
+msgstr "Verfügbare Stream-Typen"
+
+msgid "Velocity Stream"
+msgstr "Velocity Stream"
+
+msgid "Working Stream"
+msgstr "Arbeits Stream"
+
+msgid "Daily Business"
+msgstr "Tagesgeschäft"
+
+msgid "Color"
+msgstr "Farbe"
+
+msgid "Working times"
+msgstr "Arbeitszeiten"
+
+msgid "Stream"
+msgid_plural "Streams"
+msgstr[0] "Stream"
+msgstr[1] ""
+
+msgid "Board Info"
+msgstr "Board Info"
+
+msgid "Stream Modalities"
+msgstr "Stream Modalitäten"
+
+msgid "Responsibles"
+msgstr "Verantwortliche"
+
+msgid "Timeaccounts"
+msgstr "Zeitkonten"
+
+msgid "Modality Report"
+msgid_plural "Modality Reports"
+msgstr[0] "Modalitäts Report"
+msgstr[1] "Modalitäten Report"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "End"
+msgstr "Ende"
+
+msgid "Interval"
+msgstr "Intervall"
+
+msgid "Number of Intervals"
+msgstr "Anzahl Intervalle"
+
+msgid "Overflow In"
+msgstr "Überlauf In"
+
+msgid "Overflow Out"
+msgstr "Überlauf Aus"
+
+msgid "Closed"
+msgstr "Geschlossen"
+
+msgid "Modality"
+msgid_plural "Modalities"
+msgstr[0] "Modalität"
+msgstr[1] "Modalitäten"
+
+msgid "Tracking Start"
+msgstr "Tracking Start"
+
+msgid "Tracking End"
+msgstr "Tracking Ende"
+
+msgid "Hours per Interval"
+msgstr "Stunden per Intervall"
+
+msgid "Stream Modality Reports"
+msgstr "Stream Modalitäten Report"
+
+msgid "HR Empoyee Working Time"
+msgstr "HR Mitarbeiter Arbeitszeit"
+
+msgid ""
+"No valid blpipe for the working time scheme of this contract for this date"
+msgstr ""
+"Keine valide blpipe für das Arbeitszeitschema dieses Vertrags beim "
+"gegebenen Datum"
+
+msgid "No wage"
+msgstr "Kein Lohn"
+
+msgid "Special Vacation"
+msgstr "Sonderurlaub"
+
+msgid "Unpaid Vacation"
+msgstr "Unbezahlter Urlaub"
+
+msgid "Sick pay - Sickness of Child"
+msgstr "Lohnfortzahlung - Kind Krank"
+
+msgid "Sick pay - Sickness from 7nth week on"
+msgstr "Lohnfortzahlung - Krank ab 7.  Woche"
+
+msgid "Special Payment"
+msgstr "Sonderzahlung"
+
+msgid "[C] Sickness of Child"
+msgstr "[I] Kind Krank"
+
+msgid "[7] Sick pay - Sickness from 7nth week on"
+msgstr "[7] Lohnfortzahlung ab 7. Krankheitswoche"
+
+msgid "[P] Special Vacation"
+msgstr "[S] Sonderurlaub"
+
+msgid "[U] Unpaid Vacation"
+msgstr "[N] Unbezahlter Urlaub"
+
+msgid "[S] Short Business trip"
+msgstr "[D] Dienstgang"
+
+msgid "[B] Business trip"
+msgstr "[R] Dienstreise"
+
+msgid "[F] Flex time reduction"
+msgstr "[G] Gleitzeitabbau"
+
+msgid "[B] Break"
+msgstr "[P] Pause"
+
+msgid "edit employee data"
+msgstr "Mitarbeiterdaten bearbeiten"
+
+msgid "edit stream data"
+msgstr "Streams bearbeiten"
+
+msgid "edit working times"
+msgstr "Arbeitszeit bearbeiten"
+
+msgid "Show and edit working streams"
+msgstr "Streams anzeigen und bearbeiten"
+
+msgid "Show and edit working time reports"
+msgstr "Arbeitszeitberichte anzeigen und bearbeiten"
+
+msgid "Show and edit employee data and free time management"
+msgstr "Mitarbeiterdaten und Abwesenheitsplanung anzeigen und bearbeiten"

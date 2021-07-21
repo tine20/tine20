@@ -31,8 +31,8 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());

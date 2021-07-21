@@ -1,21 +1,15 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
+ * the class provides functions to handle config options
+ *
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- */
-
-/**
- * the class provides functions to handle config options
- * 
- * @package     Tinebase
- * @subpackage  Config
- * 
+ *
  * @todo remove all deprecated stuff
  */
 class Tinebase_Config extends Tinebase_Config_Abstract
@@ -27,7 +21,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var int
      */
-    const TINEBASE_VERSION = 13;
+    const TINEBASE_VERSION = 14;
 
     /**
      * access log rotation in days
@@ -42,6 +36,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const AREA_LOCKS = 'areaLocks';
+
+    /**
+     * MFA providers
+     *
+     * @var string
+     */
+    const MFA = 'mfa';
 
     /**
      * authentication backend config
@@ -63,6 +64,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const AUTHENTICATION_BY_EMAIL = 'authenticationByEmail';
+
+    const AUTH_TOKEN_CHANNELS = 'authTokenChanels';
+    const AUTH_TOKEN_DEFAULT_TTL = 'authTokenDefaultTTL';
 
     /**
      * save automatic alarms when creating new record
@@ -111,6 +115,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
+    const EXTERNAL_DATABASE = 'externalDatabase';
+
     /**
      * emailUserIdInXprops
      */
@@ -130,14 +136,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const IMAP = 'imap';
 
-    const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
-
     /**
-     * trusted proxy config
+     * imap useSystemAccount
      *
      * @var string
      */
-    const TRUSTED_PROXIES = 'trustedProxies';
+    const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
+
+    /**
+     * default sales tax
+     *
+     * @var string
+     */
+    const SALES_TAX = 'salesTax';
 
     /**
      * smtp conf name
@@ -152,6 +163,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SIEVE = 'sieve';
+
+    /**
+     * trusted proxy config
+     *
+     * @var string
+     */
+    const TRUSTED_PROXIES = 'trustedProxies';
 
     /**
      * user backend config
@@ -240,6 +258,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_AUTODISCOVER = 'autodiscover';
 
     const FEATURE_AUTODISCOVER_MAILCONFIG = 'autodiscoverMailConfig';
+
+
+    /**
+     * Community identification Number
+     * 
+     */
+    const FEATURE_COMMUNITY_IDENT_NR = 'communityIdentNr';
+
+    const IMPORT_EXPORT_DEFAULT_CONTAINER = 'importExportDefaultContainer';
+
 
     /**
      * user defined page title postfix for browser page title
@@ -418,6 +446,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     */
     const PASSWORD_CHANGE = 'changepw';
 
+    /**
+     * ALLOW_BROWSER_PASSWORD_MANAGER
+     *
+     * @var string
+     */
+    const ALLOW_BROWSER_PASSWORD_MANAGER = 'allowBrowserPasswordManager';
+    
     /**
      * USER_PASSWORD_POLICY
      *
@@ -729,6 +764,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_ACTIVE = 'active';
     const ACTIONQUEUE_BACKEND = 'backend';
+    const ACTIONQUEUE_CLEAN_DS = 'cleanDS';
+    const ACTIONQUEUE_CLEAN_DS_LONG_RUNNING = 'cleanDSlongRunning';
     const ACTIONQUEUE_HOST = 'host';
     const ACTIONQUEUE_LONG_RUNNING = 'longRunning';
     const ACTIONQUEUE_PORT = 'port';
@@ -743,6 +780,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE_LR_MONITORING_DURATION_CRIT = 'LRdurationCrit';
     const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT = 'LRlastUpdateCrit';
     const ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT = 'LRdaemonStructSizeCrit';
+    const ACTIONQUEUE_QUEUES = 'queues';
 
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
@@ -762,11 +800,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SSO_ADAPTER = 'adapter';
 
     const TINE20_URL = 'tine20URL';
+    const TINE20_URL_USEFORJSCLIENT = 'tine20URLUseForJSClient';
 
     const FILTER_SYNC_TOKEN = 'filterSyncToken';
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL = 'cleanUpMaxTotal';
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER = 'cleanUpMaxFilter';
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
+
+    /**
+     * Grad der Verstädterung (CummunityIdentificationNumber)
+     * 
+     * @var string
+     */
+    const GRAD_DER_VERSTAEDTERUNG = 'gradVerstaedterung';
+
+    /**
+     * fields for lead record duplicate check
+     *
+     * @var string
+     */
+    const COMMUNITYIDENTNR_DUP_FIELDS = 'communityIdentNrDupFields';
 
     /**
      * (non-PHPdoc)
@@ -814,9 +867,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Configured Area Locks')
             'description'           => 'Configured Area Locks',
             'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'Tinebase_Model_AreaLockConfig'),
-            'clientRegistryInclude' => true,
-            'setBySetupModule'      => true,
+            'options'               => array('recordModel' => Tinebase_Model_AreaLockConfig::class),
+            'clientRegistryInclude' => true, // this will be cleaned in getClientRegistryConfig()! // TODO make this as a hook or something
+            'setBySetupModule'      => false,
+            'setByAdminModule'      => false,
+            'default'               => [],
+        ),
+        self::MFA => array(
+            //_('MFA')
+            'label'                 => 'MFA',
+            //_('Configured MFAs')
+            'description'           => 'Configured MFAs',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => Tinebase_Model_MFA_Config::class),
+            'clientRegistryInclude' => false,
+            'setBySetupModule'      => false,
             'setByAdminModule'      => false,
             'default'               => [],
         ),
@@ -1113,6 +1178,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'type'                              => Tinebase_Config::TYPE_STRING,
                     'default'                           => 'Direct',
                 ],
+                self::ACTIONQUEUE_CLEAN_DS_LONG_RUNNING => [
+                    'type'                              => Tinebase_Config::TYPE_INT,
+                    'default'                           => 5 * 60 * 60, // 5 hours
+                ],
                 self::ACTIONQUEUE_HOST          => [
                     'type'                              => Tinebase_Config::TYPE_STRING,
                     'default'                           => 'localhost',
@@ -1168,6 +1237,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT=> [
                     'type'                              => Tinebase_Config::TYPE_INT,
                     'default'                           => 3,
+                ],
+                self::ACTIONQUEUE_QUEUES            => [
+                    'type'                              => Tinebase_Config::TYPE_ARRAY,
+                    'default'                           => [],
                 ],
             ],
             'default'                           => [],
@@ -1400,6 +1473,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],
+                self::FEATURE_COMMUNITY_IDENT_NR  => [
+                    self::LABEL                 => 'Community Identification Number',
+                    //_('Community Identification Number')
+                    self::DESCRIPTION           => 'Show the Community Identification Number in the Coredata',
+                    //_('Show the Community Identification Number in the Coredata')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
             ],
             self::DEFAULT_STR => [],
         ],
@@ -1444,6 +1525,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
         ),
+        self::IMPORT_EXPORT_DEFAULT_CONTAINER => [
+            self::LABEL                 => 'Import/Export Default Container', // _('Import/Export Default Container')
+            self::DESCRIPTION           => 'Import/Export Default Container',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+        ],
         self::PAGETITLEPOSTFIX => array(
                                    //_('Title Postfix')
             'label'                 => 'Title Postfix',
@@ -1562,6 +1651,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => array()
         ),
+        self::SALES_TAX => array(
+            //_('Sales Tax Default')
+            'label'                 => 'Sales Tax Default',
+            //_('Sales tax that is used as default value in Tine 2.0 apps like Sales.')
+            'description'           => 'Sales tax that is used as default value in Tine 2.0 apps like Sales.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_FLOAT,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
+            Tinebase_Config_Abstract::DEFAULT_STR => 19.0,
+        ),
         self::SENTRY_URI => array(
             //_('Sentry service URI')
             'label'                 => 'Sentry service URI',
@@ -1671,6 +1771,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'User may change password',
         //_('User may change password')
             'description'           => 'User may change password',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => TRUE
+        ),
+        self::ALLOW_BROWSER_PASSWORD_MANAGER => array(
+            //_('Browser password manager can be used')
+            'label'                 => 'Browser password manager can be used',
+            'description'           => 'Browser password manager can be used',
             'type'                  => 'bool',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
@@ -2656,7 +2766,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             'default'               => array(),
         ),
-        self::TINE20_URL  => array(
+        self::TINE20_URL => [
             //_('Tine20 URL')
             'label' => 'Tine20 URL',
             //_('The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.')
@@ -2666,7 +2776,45 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => true,
             'setByAdminModule' => true,
             'setBySetupModule' => true,
-        ),
+        ],
+        self::TINE20_URL_USEFORJSCLIENT => [
+            //_('Tine20 URL Used For JS Client')
+            self::LABEL => 'Tine20 URL Used For JS Client',
+            //_('see https://github.com/tine20/tine20/issues/7218')
+            self::DESCRIPTION => 'see https://github.com/tine20/tine20/issues/7218',
+            self::TYPE                  => self::TYPE_BOOL,
+            self::DEFAULT_STR           => true,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        self::AUTH_TOKEN_CHANNELS => [
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => [
+                'recordModel'               => Tinebase_Model_AuthTokenChannelConfig::class
+            ],
+            self::DEFAULT_STR           => [
+                'records'                   => [
+                    [
+                        Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME => Tinebase_Export_Abstract::class . '::expressiveApi',
+                    ]
+                ],
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+        ],
+        self::AUTH_TOKEN_DEFAULT_TTL => [
+            //_('auth token default and maximum TTL in seconds')
+            self::LABEL                 => 'auth token default and maximum TTL in seconds',
+            //_('auth token default and maximum TTL in seconds')
+            self::DESCRIPTION           => 'auth token default and maximum TTL in seconds',
+            self::TYPE                  => self::TYPE_INT,
+            self::DEFAULT_STR           => 12 * 60 * 60, // 12 hours
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::CREDENTIAL_CACHE_SHARED_KEY => [
             //_('shared credential cache cryptographic key')
             self::LABEL                 => 'shared credential cache cryptographic key',
@@ -2677,7 +2825,34 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
-        ]
+        ],
+        self::GRAD_DER_VERSTAEDTERUNG => array(
+            //_('Grad der Verstädterung')
+            self::LABEL              => 'Grad der Verstädterung',
+            //_('')
+            self::DESCRIPTION        => '',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => array(
+                'records' => array(
+                    array('id' => '01',    'value' => 'dicht besiedelt', 'system' => true), //_('dicht besiedelt')
+                    array('id' => '02',    'value' => 'mittlere Besiedlungsdichte', 'system' => true), //_('mittlere Besiedlungsdichte')
+                    array('id' => '03',    'value' => 'gering besiedelt', 'system' => true), //_('gering besiedelt')
+                )
+            )
+        ),
+        self::COMMUNITYIDENTNR_DUP_FIELDS => array(
+            //_('Community Identification Number duplicate check fields')
+            'label'                 => 'Community Identification Number duplicate check fields',
+            //_('These fields are checked when a new Community Identification Number is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
+            'description'           => 'These fields are checked when a new Community Identification Number is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
+            'type'                  => 'array',
+            'contents'              => 'array',
+            'clientRegistryInclude' => TRUE,
+            'default'               => array('arsCombined'),
+        ),
     );
 
     /**
@@ -2824,6 +2999,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Got ' . count($clientProperties[$application->name]) . ' config items for ' . $application->name . '.');
+            }
+        }
+
+        // TODO replace this with a hook in the config itself or something
+        if (isset($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']) &&
+                $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records) {
+            $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records = clone
+                $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records;
+            /** @var Tinebase_Model_AreaLockConfig $record */
+            foreach($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records as $idx => $record) {
+                $result = [];
+                /** @var Tinebase_Model_MFA_UserConfig $usrCfg */
+                foreach ($record->getUserMFAIntersection(Tinebase_Core::getUser()) as $usrCfg) {
+                    $result[] = $usrCfg->toFEArray();
+                }
+                $record->{Tinebase_Model_AreaLockConfig::FLD_MFAS} = $result;
             }
         }
         

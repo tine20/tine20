@@ -81,7 +81,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
 
         $attendeeBackend = new Calendar_Backend_Sql_Attendee($this->_backend->getAdapter());
         $this->assertEquals(0, count($attendeeBackend->getMultipleByProperty($persistentEvent->getId(), 'cal_event_id')));
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $loadedEvent = $this->_backend->get($persistentEvent->getId());
         
     }

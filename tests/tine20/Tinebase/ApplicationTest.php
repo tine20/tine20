@@ -27,12 +27,12 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_ApplicationTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_ApplicationTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         Tinebase_Application::getInstance()->resetClassCache();
@@ -107,7 +107,7 @@ class Tinebase_ApplicationTest extends TestCase
 
         Tinebase_Application::getInstance()->deleteApplication($application);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         Tinebase_Application::getInstance()->getApplicationById($application);
     }
@@ -137,7 +137,7 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public function testGetApplicationByInvalidId()
     {
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         Tinebase_Application::getInstance()->getApplicationById(Tinebase_Record_Abstract::generateUID());
     }
@@ -170,21 +170,17 @@ class Tinebase_ApplicationTest extends TestCase
         $this->assertGreaterThanOrEqual(2, count($applications));
         $this->assertContains($application->id, $applications->id);
 
-
         Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::DISABLED);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertNotContains($application->id, $applications->id);
-
 
         $application2 = $this->testAddApplication();
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertContains($application2->id, $applications->id);
 
-
         Tinebase_Application::getInstance()->deleteApplication($application2);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertNotContains($application2->id, $applications->id);
-
 
         Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::ENABLED);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
@@ -198,7 +194,7 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public function testGetApplicationByInvalidState()
     {
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->expectException('Tinebase_Exception_InvalidArgument');
 
         Tinebase_Application::getInstance()->getApplicationsByState('foobar');
     }
@@ -210,7 +206,7 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public function testGetApplicationByInvalidName()
     {
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
 
         Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Record_Abstract::generateUID());
     }
@@ -294,6 +290,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Admin' => array(
                 Admin_Model_Config::class,
+                Admin_Model_JWTAccessRoutes::class,
                 Admin_Model_SambaMachine::class,
             ),
             'Calendar' => array(
@@ -330,6 +327,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'ExampleApplication' => array(
                 ExampleApplication_Model_ExampleRecord::class,
+                ExampleApplication_Model_OneToOne::class,
                 ExampleApplication_Model_Status::class,
             ),
             'Expressomail' => array(
@@ -347,6 +345,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Felamimail_Model_Message::class,
                 Felamimail_Model_MessageFileLocation::class,
                 Felamimail_Model_MessageFileSuggestion::class,
+                Felamimail_Model_MessagePipeConfig::class,
                 Felamimail_Model_PreparedMessagePart::class,
                 Felamimail_Model_Sieve_Rule::class,
                 Felamimail_Model_Sieve_ScriptPart::class,
@@ -369,8 +368,6 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_CostCenter::class,
                 HumanResources_Model_DailyWTReport::class,
                 HumanResources_Model_Employee::class,
-                HumanResources_Model_ExtraFreeTime::class,
-                HumanResources_Model_ExtraFreeTimeType::class,
                 HumanResources_Model_FreeDay::class,
                 HumanResources_Model_FreeTime::class,
                 HumanResources_Model_FreeTimeStatus::class,
@@ -389,11 +386,6 @@ class Tinebase_ApplicationTest extends TestCase
             'Phone' => array(
                 Phone_Model_Call::class,
                 Phone_Model_MyPhone::class,
-            ),
-            'Projects' => array(
-                Projects_Model_AttendeeRole::class,
-                Projects_Model_Project::class,
-                Projects_Model_Status::class,
             ),
             'Sales' => array(
                 Sales_Model_Address::class,
@@ -439,7 +431,18 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_AreaLockConfig::class,
                 Tinebase_Model_AreaLockState::class,
                 Tinebase_Model_AsyncJob::class,
+                Tinebase_Model_MFA_GenericSmsConfig::class,
+                Tinebase_Model_MFA_SmsUserConfig::class,
+                Tinebase_Model_MFA_PinConfig::class,
+                Tinebase_Model_MFA_PinUserConfig::class,
+                Tinebase_Model_MFA_Config::class,
+                Tinebase_Model_MFA_UserConfig::class,
+                Tinebase_Model_MFA_YubicoOTPConfig::class,
+                Tinebase_Model_MFA_YubicoOTPUserConfig::class,
+                Tinebase_Model_AuthToken::class,
+                Tinebase_Model_AuthTokenChannelConfig::class,
                 Tinebase_Model_BLConfig::class,
+                Tinebase_Model_CommunityIdentNr::class,
                 Tinebase_Model_Config::class,
                 Tinebase_Model_Container::class,
                 Tinebase_Model_ContainerContent::class,

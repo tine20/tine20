@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -30,6 +30,8 @@ class Tinebase_Exception_AreaLocked extends Tinebase_Exception_SystemGeneric
      */
     protected $_area = null;
 
+    protected $_mfaUserConfigs = null;
+
     /**
      * Tinebase_Exception_AreaLocked constructor.
      * @param null $_message
@@ -46,6 +48,11 @@ class Tinebase_Exception_AreaLocked extends Tinebase_Exception_SystemGeneric
     public function setArea($area)
     {
         $this->_area = $area;
+    }
+
+    public function setMFAUserConfigs(Tinebase_Record_RecordSet $config): void
+    {
+        $this->_mfaUserConfigs = $config;
     }
 
     /**
@@ -65,6 +72,12 @@ class Tinebase_Exception_AreaLocked extends Tinebase_Exception_SystemGeneric
     {
         $result = parent::toArray();
         $result['area'] = $this->getArea();
+        if (!$this->_mfaUserConfigs && ($user = Tinebase_Core::getUser()) && $user->mfa_configs) {
+            $this->_mfaUserConfigs = $user->mfa_configs;
+        }
+        if ($this->_mfaUserConfigs) {
+            $result['mfaUserConfigs'] = $this->_mfaUserConfigs->toFEArray();
+        }
         return $result;
     }
 }

@@ -31,6 +31,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_STRING_AUTOCOMPLETE   => 'string',
         MCC::TYPE_TEXT                  => 'text',
         MCC::TYPE_FULLTEXT              => 'text',
+        MCC::TYPE_STRICTFULLTEXT        => 'text',
         MCC::TYPE_DATETIME              => 'datetime',
         MCC::TYPE_DATE                  => 'datetime',
         MCC::TYPE_TIME                  => 'time',
@@ -46,6 +47,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_USER                  => 'string',
         MCC::TYPE_BOOLEAN               => 'boolean',
         MCC::TYPE_MONEY                 => 'float',
+        MCC::TYPE_HEX_COLOR             => 'string',
         // TODO replace that with a single type 'datetime_separated'?
 //        'datetime_separated' => 'date',
         'datetime_separated_date' => 'date',
@@ -194,6 +196,9 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
             if ($config[self::TYPE] === self::TYPE_CONTAINER) {
                 $config[self::LENGTH] = 40;
             }
+            if ($config[self::TYPE] === self::TYPE_HEX_COLOR) {
+                $config[self::LENGTH] = 7;
+            }
             $config[self::TYPE] = self::$_typeMap[$config[self::TYPE]];
             $config['doctrineIgnore'] = $defaultDoctrineIgnore;
             if (isset($config[self::UNSIGNED])) {
@@ -238,7 +243,14 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
      */
     public function isTransient($className)
     {
-        $modelConfig = $className::getConfiguration();
+        try {
+            $modelConfig = $className::getConfiguration();
+        } catch (Throwable $t) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not load MC for model ' . $className);
+            Tinebase_Exception::log($t);
+            return false;
+        }
 
         return $modelConfig && is_int($modelConfig->getVersion());
     }

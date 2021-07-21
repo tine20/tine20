@@ -98,17 +98,27 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                     $this->deletePersonalFolder($_eventObject->account, Addressbook_Model_Contact::class);
                 }
 
-                //make to be deleted accounts (user) contact a normal contact
+                $oldAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+                $oldRight = Addressbook_Controller_Contact::getInstance()->doRightChecks(false);
+                $oldAreaLock = Addressbook_Controller_Contact::getInstance()->doAreaLockCheck(false);
+                $raii = new Tinebase_RAII(function() use ($oldAcl, $oldAreaLock, $oldRight) {
+                    Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldAcl);
+                    Addressbook_Controller_Contact::getInstance()->doRightChecks($oldRight);
+                    Addressbook_Controller_Contact::getInstance()->doAreaLockCheck($oldAreaLock);
+                });
+
+                // make to be deleted accounts (user) contact a normal contact
                 if ($_eventObject->keepAsContact()) {
                     $contact = Addressbook_Controller_Contact::getInstance()->get($_eventObject->account->contact_id);
                     $contact->type = Addressbook_Model_Contact::CONTACTTYPE_CONTACT;
                     Addressbook_Controller_Contact::getInstance()->update($contact);
 
                 } else {
-                    //or just delete it
-                    $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                    $contactsBackend->delete($_eventObject->account->contact_id);
+                    // or just delete it
+                    Addressbook_Controller_Contact::getInstance()->delete([$_eventObject->account->contact_id]);
                 }
+
+                unset($raii);
                 break;
             case 'Tinebase_Event_Container_BeforeCreate':
                 $this->_handleContainerBeforeCreateEvent($_eventObject);
@@ -126,23 +136,36 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      */
     public function createPersonalFolder($_account)
     {
-        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-        
-        $account = Tinebase_User::getInstance()->getUserById($_account);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal addressbook"), $account->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $account->getId(),
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
-            'model'             => 'Addressbook_Model_Contact'
-        ));
-        
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
-        $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-        
-        return $container;
+        static $recursion = false;
+
+        $container = null;
+        if (!$recursion) {
+            try {
+                $recursion = true;
+                $account = Tinebase_User::getInstance()->getUserById($_account);
+                $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                $name = sprintf($translation->_("%s's personal addressbook"), $account->accountFullName);
+
+                if (null === ($container = Tinebase_Container::getInstance()->getPersonalContainer($account->getId(),
+                        Addressbook_Model_Contact::class, $account->getId())->find('name', $name))) {
+                    $container = new Tinebase_Model_Container(array(
+                        'name' => $name,
+                        'type' => Tinebase_Model_Container::TYPE_PERSONAL,
+                        'owner_id' => $account->getId(),
+                        'backend' => 'Sql',
+                        'application_id' => Tinebase_Application::getInstance()
+                            ->getApplicationByName($this->_applicationName)->getId(),
+                        'model' => Addressbook_Model_Contact::class
+                    ));
+
+                    $container = Tinebase_Container::getInstance()->addContainer($container);
+                }
+            } finally {
+                $recursion = false;
+            }
+        }
+
+        return new Tinebase_Record_RecordSet(Tinebase_Model_Container::class, $container ? [$container] : []);
     }
 
     protected function _handleContainerBeforeCreateEvent(Tinebase_Event_Container_BeforeCreate $_eventObject)

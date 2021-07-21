@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Calendar_Convert_Event_VCalendar_EMClient
  */
-class Calendar_Convert_Event_VCalendar_EMClientTest extends PHPUnit_Framework_TestCase
+class Calendar_Convert_Event_VCalendar_EMClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Calendar_Convert_Event_VCalendar_EMClientTest extends PHPUnit_Framework_Te
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV EM Client Event Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar WebDAV EM Client Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Calendar_Convert_Event_VCalendar_EMClientTest extends PHPUnit_Framework_Te
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     /**
@@ -51,8 +51,8 @@ class Calendar_Convert_Event_VCalendar_EMClientTest extends PHPUnit_Framework_Te
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
     
     /**

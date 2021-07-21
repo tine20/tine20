@@ -59,7 +59,9 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
         });
 
         this.actionUpdater.addActions(this.tbar.items);
-        this.actionUpdater.updateActions([this.record]);
+        this.on('show', () => {
+            this.actionUpdater.updateActions([this.record]);
+        });
 
         if (this.tbar.items.getCount() < 2) {
             this.tbar.hide();
@@ -142,7 +144,10 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
     onNoPreviewAvailable: function () {
         var me = this;
         me.afterIsRendered().then(function() {
-            var text = '';
+            let text = '';
+            let contenttype =  me.record.get('contenttype');
+            let iconCls = me.record.get('type') === 'folder' ? 'mime-icon-folder' :
+                contenttype ? Tine.Tinebase.common.getMimeIconCls(contenttype) : 'mime-icon-file';
 
             if (!Tine.Tinebase.configManager.get('filesystem').createPreviews) {
                 text = '<b>' + me.app.i18n._('Sorry, Tine 2.0 would have liked to show you the contents of the file.') + '</b><br/><br/>' +
@@ -150,14 +155,15 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                     '<a href="https://www.tine20.com/kontakt/" target="_blank">' +
                     me.app.i18n._('Interested? Then let us know!') + '</a><br/>' +
                     me.app.i18n._('We would be happy to make you a non-binding offer.');
+            } else if (String(contenttype).match(/^vnd\.adobe\.partial-upload.*/)) {
+                const [, final] = contenttype.match(/final_type=(.+)$/);
+                iconCls = final ? Tine.Tinebase.common.getMimeIconCls(final) : 'mime-icon-file';
+                text = '<b>' + me.app.i18n._('This file has no contents. The Upload has failed or has not yet finished.') + '</b>';
             } else {
                 text = '<b>' + me.app.i18n._('No preview available yet - Please try again in a few minutes.') + '</b>';
             }
 
-            const contenttype =  me.record.get('contenttype');
-            const iconCls = me.record.get('type') === 'folder' ? 'mime-icon-folder' :
-                contenttype ? Tine.Tinebase.common.getMimeIconCls(contenttype) : 'mime-icon-file';
-
+            
             me.add({
                 border: false,
                 layout: 'vbox',

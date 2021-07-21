@@ -9,14 +9,14 @@
  */
 
 
-class BaseTest extends PHPUnit_Framework_TestCase
+class BaseTest extends \PHPUnit\Framework\TestCase
 {
 
     public static function main()
     {
         require_once 'PHPUnit/TextUI/TestRunner.php';
 
-        $suite  = new PHPUnit_Framework_TestSuite(get_class(self));
+        $suite  = new \PHPUnit\Framework\TestSuite(get_class(self));
         $result = PHPUnit_TextUI_TestRunner::run($suite);
     }
 

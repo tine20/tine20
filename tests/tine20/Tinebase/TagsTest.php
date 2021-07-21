@@ -27,10 +27,10 @@ class Tinebase_TagsTest extends TestCase
 
     /**
      * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
+     * @see \PHPUnit\Framework\TestCase::setUp()
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         $this->_instance = Tinebase_Tags::getInstance();
@@ -87,16 +87,6 @@ class Tinebase_TagsTest extends TestCase
     }
 
     /**
-     * test tags acl
-     *
-     * @todo implement
-     */
-    public function testTagsAcl()
-    {
-        // create tags out of scope for the test user!
-    }
-
-    /**
      * test resolving tag names to Tinebase_Model_Tag
      */
     public function testResolveTagNames()
@@ -123,7 +113,7 @@ class Tinebase_TagsTest extends TestCase
         $count = $this->_instance->getSearchTagsCount($filter);
 
         $this->assertTrue($count > 0, 'did not find created tag');
-        $this->assertContains('tagSingle::', $tags->getFirstRecord()->name);
+        $this->assertStringContainsString('tagSingle::', $tags->getFirstRecord()->name);
     }
 
     /**
@@ -283,7 +273,7 @@ class Tinebase_TagsTest extends TestCase
         $sharedTag1AfterMerge = $this->_instance->get($sharedTag1);
         self::assertEquals($sharedTag1->occurrence + 3, $sharedTag1AfterMerge->occurrence,
             'occurrence should have been increased by three: ' . print_r($sharedTag1AfterMerge->toArray(), TRUE));
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_instance->get($sharedTag2);
     }
     

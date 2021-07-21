@@ -20,8 +20,8 @@ class Tinebase_FileSystem_Preview_ServiceV2Test extends TestCase
      */
     protected $_networkAdapter;
 
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_networkAdapter = new Tinebase_FileSystem_Preview_TestNetworkAdapter();
         $this->_previewService = new Tinebase_FileSystem_Preview_ServiceV2($this->_networkAdapter);
     }

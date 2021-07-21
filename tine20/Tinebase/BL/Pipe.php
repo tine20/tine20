@@ -47,13 +47,17 @@ class Tinebase_BL_Pipe implements Tinebase_BL_PipeContext
      * Tinebase_BL_Pipe constructor.
      * @param Tinebase_Record_RecordSet $_config of type Tinebase_Model_BLConfig
      */
-    public function __construct(Tinebase_Record_RecordSet $_config)
+    public function __construct(Tinebase_Record_RecordSet $_config, $_sort = true)
     {
-        $this->_config = $_config->getClone()->sort(
-            function(Tinebase_Model_BLConfig $val1, Tinebase_Model_BLConfig $val2) {
-                return $val1->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD}
-                    ->cmp($val2->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD});
-            });
+        $this->_config = $_config->getClone();
+
+        if ($_sort) {
+            $this->_config->sort(
+                function(Tinebase_Model_BLConfig $val1, Tinebase_Model_BLConfig $val2) {
+                    return $val1->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD}
+                        ->cmp($val2->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD});
+                });
+        }
     }
 
     public function execute(Tinebase_BL_DataInterface $_data)

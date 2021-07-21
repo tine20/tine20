@@ -89,12 +89,23 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
     },
     
     getStrategy: function() {
-        var p = Tine.Calendar.ColorManager.colorStrategyBtn.prototype,
-            name = Ext.state.Manager.get(p.stateId, p).colorStrategy;
+        let p = Tine.Calendar.ColorManager.colorStrategyBtn.prototype;
+        let name = Ext.state.Manager.get(p.stateId, p).colorStrategy;
 
         return Tine.Calendar.colorStrategies[name];
     },
-    
+
+    getInfoBarStrategy: function() {
+        let p = Tine.Calendar.ColorManager.colorStrategyBtn.prototype;
+        let name = Ext.state.Manager.get(p.stateId, p).infoBarColorStrategy;
+        if (! Tine.Calendar.infoBarColorStrategies[name]) {
+            // fallback to default value
+            name = 'response';
+        }
+
+        return Tine.Calendar.infoBarColorStrategies[name];
+    },
+
     /**
      * hack for container only support
      * 
@@ -103,16 +114,17 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
      */
     getColor: function(event, attendeeRecord) {
         var color = this.getStrategy().getColor(event, attendeeRecord);
-        
+
         color = String(color).replace('#', '');
         if (! color.match(/[0-9a-fA-F]{6}/)) {
             return this.gray;
         }
-        
-        var schema = this.colorSchemata[color];
+
+        let schema = this.colorSchemata[color];
+
         return schema ? schema : this.getCustomSchema(color);
     },
-    
+
     getCustomSchema: function(color) {
         if (!this.customColorSchemataCache[color]) {
             const solid = "#" + color;
@@ -205,6 +217,7 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
     requiredGrant: 'readGrant',
     iconCls:'action_changecolor',
     colorStrategy: 'container',
+    infoBarColorStrategy: 'response',
     stateful: true,
     stateId: 'cal-calpanel-color-strategy-btn',
     stateEvents: [],
@@ -237,6 +250,20 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
             }, [])
         };
 
+        let sidebarItems =  _.reduce(Tine.Calendar.infoBarColorStrategies, function(items, strategy, key) {
+            return items.concat({
+                text: strategy.getName(),
+                checked: me.infoBarColorStrategy == key,
+                group: 'infoBarColorStrategy',
+                checkHandler: me.changeInfoBarColorStrategy.createDelegate(me, [key])
+            });
+        }, []);
+
+        this.menu.items.push({
+            text: this.app.i18n._('Side bar color'),
+            menu: sidebarItems
+        });
+
         Tine.Calendar.ColorManager.colorStrategyBtn.superclass.initComponent.apply(this, arguments);
     },
 
@@ -247,12 +274,17 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
     },
 
     getState: function() {
-        return {colorStrategy: this.colorStrategy}
-    }
+        return {colorStrategy: this.colorStrategy, infoBarColorStrategy: this.infoBarColorStrategy}
+    },
+
+    changeInfoBarColorStrategy: function(strategy) {
+        this.infoBarColorStrategy = strategy;
+        this.saveState();
+        this.app.getMainScreen().getCenterPanel().refresh();
+    },
 });
 
 Ext.ux.ItemRegistry.registerItem('Calendar-MainScreenPanel-ViewBtnGrp', Tine.Calendar.ColorManager.colorStrategyBtn, 30);
-
 
 /**
  * Color Strategies Registry
@@ -262,7 +294,7 @@ Ext.ux.ItemRegistry.registerItem('Calendar-MainScreenPanel-ViewBtnGrp', Tine.Cal
 Tine.Calendar.colorStrategies = {};
 Tine.Calendar.colorStrategies['container'] = {
     getName: function() {
-        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Color by Organizer Calendar');
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Color by Calendar');
     },
     getColor: function(event, attendeeRecord) {
         var container = null,
@@ -336,8 +368,11 @@ Tine.Calendar.colorStrategies['requiredAttendee'] = {
 
         if (attendeeRecord) {
             role = attendeeRecord.get('role');
+            
+            const roleStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeRoles');
+            const roleRecord = roleStore.getById(role);
 
-            color = role == 'REQ' ? 'FF0000' : '00FF00'
+            color = roleRecord ? roleRecord.get('color') : role === 'REQ' ? 'FF0000' : '00FF00';
         } else {
             color = 'C0C0C0' // light gray
         }
@@ -346,3 +381,89 @@ Tine.Calendar.colorStrategies['requiredAttendee'] = {
     }
 };
 
+/**
+ * Info Color Bar Strategies Registry
+ *
+ * @type Object
+ */
+Tine.Calendar.infoBarColorStrategies = {};
+
+Tine.Calendar.infoBarColorStrategies['response'] = {
+    getName: function () {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by response');
+    },
+    getColors: function (event, attendeeRecord) {
+        let attendees = event.get('attendee');
+        let colorMapping = {
+            'ACCEPTED': '00CC00',
+            'DECLINED': 'FF0000',
+            'TENTATIVE': 'FFDD00'
+        }
+        let colors = [];
+        _.forEach(attendees, function (att) {
+            colors.push(colorMapping[att.status] ?? 'C0C0C0');
+        });
+
+        return colors;
+    }
+};
+
+Tine.Calendar.infoBarColorStrategies['tag'] = {
+    getName: function() {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by tags');
+    },
+    getColors: function(event, attendeeRecord) {
+        let tags = event.get('tags');
+
+        let colors = [];
+        _.forEach(tags, function (tag) {
+            if (tag.color) {
+                colors.push(tag.color);
+            }
+        });
+
+        return colors;
+    }
+};
+
+Tine.Calendar.infoBarColorStrategies['attendees'] = {
+    getName: function() {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by attendee');
+    },
+    getColors: function(event, attendeeRecord) {
+        let attendees = event.get('attendee');
+
+        let colors = [];
+        _.forEach(attendees, function (att) {
+            if (att.user_type !== 'user' && att.user_type !== 'groupmember') {
+                return;
+            }
+            let container = att.displaycontainer_id;
+            let color = container ? String(container.color).replace('#', '') : 'C0C0C0';
+            colors.push(color);
+        });
+
+        return colors;
+    }
+};
+
+Tine.Calendar.infoBarColorStrategies['resource'] = {
+    getName: function() {
+        return Tine.Tinebase.appMgr.get('Calendar').i18n._('Colors by resource');
+    },
+    getColors: function(event, attendeeRecord) {
+        let attendees = event.get('attendee');
+
+        let colors = [];
+        _.forEach(attendees, function (att) {
+            if (att.user_type !== 'resource') {
+                return;
+            }
+            let user = att.user_id;
+            let color = user ? String(user.color).replace('#', '') : 'C0C0C0';
+            colors.push(color);
+        });
+
+        return colors;
+    }
+};

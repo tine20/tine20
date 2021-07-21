@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_User
  */
-class Tinebase_Tree_FileObjectTest extends PHPUnit_Framework_TestCase
+class Tinebase_Tree_FileObjectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -38,7 +38,7 @@ class Tinebase_Tree_FileObjectTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 fileobject backend tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 fileobject backend tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -48,8 +48,8 @@ class Tinebase_Tree_FileObjectTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_backend = new Tinebase_Tree_FileObject(null, [Tinebase_Config::FILESYSTEM_MODLOGACTIVE => true]);
         
         $this->objects['objects'] = array();
@@ -61,8 +61,8 @@ class Tinebase_Tree_FileObjectTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         foreach ($this->objects['objects'] as $object) {

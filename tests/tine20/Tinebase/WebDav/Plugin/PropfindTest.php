@@ -25,8 +25,8 @@ class Tinebase_WebDav_Plugin_PropfindTest extends Tinebase_WebDav_Plugin_Abstrac
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
             $this->markTestSkipped('only working in non-AD setups');
         }

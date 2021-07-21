@@ -34,7 +34,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
      */
     public static function main()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Plugin OwnCloud Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Plugin OwnCloud Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -44,8 +44,8 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->plugin = new Tinebase_WebDav_Plugin_OwnCloud();
@@ -65,8 +65,8 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
     }
@@ -186,11 +186,11 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
      */
     public function testInvalidOwnCloudVersion()
     {
-        static::setExpectedException(InvalidArgumentException::class, sprintf(
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
             'OwnCloud client min version is "%s"!',
             Tinebase_WebDav_Plugin_OwnCloud::OWNCLOUD_MIN_VERSION
         ));
-
 
         // use old owncloud user agent!
         $request = Tinebase_Http_Request::fromString(

@@ -41,8 +41,8 @@ class Calendar_Controller_PollTest extends TestCase
      * (non-PHPdoc)
      * @see Calendar/Calendar_TestCase::setUp()
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
 
         $this->_oldRequest = Tinebase_Core::get(Tinebase_Core::REQUEST);
@@ -54,8 +54,8 @@ class Calendar_Controller_PollTest extends TestCase
         $this->_uit = Calendar_Controller_Poll::getInstance();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         Tinebase_Core::set(Tinebase_Core::REQUEST, $this->_oldRequest);
         $this->jt->tearDown();
 
@@ -605,8 +605,8 @@ EOT;
             $confirmationMessage = $messages[0];
             $this->assertEquals('john@doe.net', $confirmationMessage->getRecipients()[0]);
             $text = $confirmationMessage->getBodyText()->getContent();
-            $this->assertContains('Thank you for attendening', $text);
-            $this->assertNotContains('Array', $text, 'notification did not cope with resolved stuff');
+            $this->assertStringContainsString('Thank you for attendening', $text);
+            $this->assertStringNotContainsString('Array', $text, 'notification did not cope with resolved stuff');
 
         } finally {
             Tinebase_Smtp::setDefaultTransport($oldTransport);
@@ -651,7 +651,7 @@ EOT;
             $text = $message->getBodyText()->getContent();
 //            $html = $message->getBodyHtml()->getContent();
 
-            $this->assertContains('has been closed', $text);
+            $this->assertStringContainsString('has been closed', $text);
 
         } finally {
             Tinebase_Smtp::setDefaultTransport($oldTransport);

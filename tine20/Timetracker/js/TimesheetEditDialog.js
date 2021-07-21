@@ -68,13 +68,15 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     
     onTimeaccountSelect: function(field, timeaccount) {
         this.onTimeaccountUpdate(field, timeaccount);
-        //set factor from timeaccount except it was manually changed before
-        if (!this.factorChanged) {
-            this.factor = timeaccount.data.accounting_time_factor;
+        // set factor from timeaccount except it was manually changed before
+        if (timeaccount) {
+            if (!this.factorChanged) {
+                this.factor = timeaccount.data.accounting_time_factor;
+            }
+            this.getForm().findField('accounting_time_factor').setValue(this.factor);
+
+            this.calculateAccountingTime();
         }
-        this.getForm().findField('accounting_time_factor').setValue(this.factor);
-        
-        this.calculateAccountingTime();
     },
 
     /**
@@ -98,7 +100,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 :  {});
         
         if (grants) {
-            var setDisabled = ! (grants.bookAllGrant || grants.adminGrant || manageRight);
+            var setDisabled = !(grants.bookAllGrant || grants.adminGrant || manageRight);
             var accountField = this.getForm().findField('account_id');
             accountField.setDisabled(setDisabled);
             // set account id to the current user, if he doesn't have the right to edit other users timesheets
@@ -107,9 +109,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     accountField.setValue(Tine.Tinebase.registry.get('currentAccount'));
                 }
             }
-            notBillable = ! (grants.manageBillableGrant || grants.adminGrant || manageRight);
-            notClearable = ! (grants.adminGrant || manageRight);
-            this.getForm().findField('billed_in').setDisabled(! (grants.adminGrant || manageRight));
+            notBillable = !(grants.manageBillableGrant || grants.adminGrant || manageRight);
+            notClearable = !(grants.adminGrant || manageRight);
+            // only if useInvoice = false
+            if(!this.useInvoice) {
+                this.getForm().findField('billed_in').setDisabled(!(grants.adminGrant || manageRight));
+            }
         }
 
         if (timeaccount && timeaccount.data) {
@@ -128,14 +133,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             }
 
             this.getForm().findField('timeaccount_description').setValue(timeaccount.data.description);
+
+            this.getForm().findField('is_billable').setDisabled(notBillable);
+            this.disableBillableFields(notBillable);
+            this.getForm().findField('is_cleared').setDisabled(notClearable);
+            this.disableClearedFields(notClearable);
         }
-
-        this.getForm().findField('is_billable').setDisabled(notBillable);
-        this.disableBillableFields(notBillable)
-        this.getForm().findField('is_cleared').setDisabled(notClearable);
-        this.disableClearedFields(notClearable);
-
-
+        
         if (this.record.id == 0 && timeaccount) {
             // set is_billable for new records according to the timeaccount setting
             this.getForm().findField('is_billable').setValue(timeaccount.data.is_billable);
@@ -151,7 +155,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         if (this.record.id == 0 && this.record.get('timeaccount_id') && this.record.get('timeaccount_id').is_billable) {
             this.getForm().findField('is_billable').setValue(this.record.get('timeaccount_id').is_billable);
         }
-        this.factor = this.getForm().findField('accounting_time_factor').getValue()
+        this.factor = this.getForm().findField('accounting_time_factor').getValue();
+        this.calculateAccountingTime();
         var focusFieldName = this.record.get('timeaccount_id') ? 'duration' : 'timeaccount_id',
             focusField = this.getForm().findField(focusFieldName);
 
@@ -168,10 +173,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      */
     onClearedUpdate: function(field, checked) {
         if (!this.useMultiple) {
-            this.getForm().findField('billed_in').setDisabled(! checked);
-            if (this.useInvoice) {
-                this.getForm().findField('invoice_id').setDisabled(! checked);
-            }
+            this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in').setDisabled(! checked);
         }
     },
 
@@ -202,25 +204,30 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     calculateAccountingTime: function() {
-        var factor = this.getForm().findField('accounting_time_factor').getValue(),
-            duration = this.getForm().findField('duration').getValue(),
-            accountingTime = Math.round(factor * duration);
-        if (factor != this.factor) {
-            this.factor = factor;
-            this.factorChanged = true;
+        if (!this.useMultiple) {
+            var factor = this.getForm().findField('accounting_time_factor').getValue(),
+                duration = this.getForm().findField('duration').getValue(),
+                accountingTime = Math.round(factor * duration);
+            if (factor != this.factor) {
+                this.factor = factor;
+                this.factorChanged = true;
+            }
+            this.getForm().findField('accounting_time').setValue(accountingTime);
         }
-        this.getForm().findField('accounting_time').setValue(accountingTime);
     },
 
     calculateFactor: function() {
-        var duration = this.getForm().findField('duration').getValue(),
-            accountingTime = this.getForm().findField('accounting_time').getValue(),
-            factor = accountingTime / duration;
-        if (factor != this.factor) {
-            this.factor = factor;
-            this.factorChanged = true;
+        if (!this.useMultiple) {
+            var duration = this.getForm().findField('duration').getValue(),
+                accountingTime = this.getForm().findField('accounting_time').getValue(),
+                factor = accountingTime / duration;
+            if (factor != this.factor) {
+                this.factor = factor;
+                this.factorChanged = true;
+            }
+            
+            this.getForm().findField('accounting_time_factor').setValue(factor);
         }
-        this.getForm().findField('accounting_time_factor').setValue(factor);
     },
     
     onCheckBillable: function(field, checked) {
@@ -248,12 +255,44 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     disableClearedFields: function(disable) {
-        this.getForm().findField('billed_in').setDisabled(disable);
-        if (this.useInvoice) {
-            this.getForm().findField('invoice_id').setDisabled(disable);
-        }
+        this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in').setDisabled(disable);
     },
 
+    onDurationChange: function() {
+        this.calculateAccountingTime();
+        // adopt endtime if starttime is set
+        const startTime = +this.getForm().findField('start_time').getValue();
+        if (startTime) {
+            const endTimeField = this.getForm().findField('end_time');
+            endTimeField.setValue(
+                new Date(startTime + this.getForm().findField('duration').getValue()*60000).format(endTimeField.format)
+            );
+        }
+    },
+    
+    onStartTimeChange: function() {
+        // adopt end_time if duration is set
+        const duration = +this.getForm().findField('duration').getValue()*60000;
+        const startTime = +this.getForm().findField('start_time').getValue();
+        if (duration && startTime) {
+            const endTimeField = this.getForm().findField('end_time');
+            endTimeField.setValue(
+                new Date(startTime + duration).format(endTimeField.format)
+            );
+        }
+    },
+    
+    onEndTimeChange: function() {
+        // adopt duration if starttime is set
+        const startTime = +this.getForm().findField('start_time').getValue();
+        const endTime = +this.getForm().findField('end_time').getValue();
+        if (startTime && endTime) {
+            const duration = (endTime - startTime)/60000;
+            this.getForm().findField('duration').setValue(duration);
+            this.calculateAccountingTime();
+        }
+    },
+    
     /**
      * returns dialog
      * 
@@ -293,6 +332,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     items: [{
                         xtype: 'columnform',
                         labelAlign: 'top',
+                        plugins: [{
+                            ptype: 'ux.itemregistry',
+                            key: 'Timetracker.Timesheet.CustomField',
+                        }],
                         formDefaults: {
                             xtype: 'textfield',
                             anchor: '100%',
@@ -318,13 +361,27 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 enableKeyEvents: true,
                                 listeners: {
                                     scope: this,
-                                    blur: this.calculateAccountingTime,
-                                    spin: this.calculateAccountingTime,
+                                    blur: this.onDurationChange,
+                                    spin: this.onDurationChange,
                                 }
                             }),
                             fieldManager('start_date', {disabled: this.record.get('workingtime_is_cleared') ? true : false}), 
-                            fieldManager('start_time', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
-                            fieldManager('end_time', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
+                            fieldManager('start_time', {
+                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                listeners: {
+                                    scope: this,
+                                    blur: this.onStartTimeChange,
+                                    select: this.onStartTimeChange,
+                                }
+                            }),
+                            fieldManager('end_time', {
+                                disabled: this.record.get('workingtime_is_cleared') ? true : false,
+                                listeners: {
+                                    scope: this,
+                                    blur: this.onEndTimeChange,
+                                    select: this.onEndTimeChange,
+                                }
+                            }),
                         ], [
                             fieldManager('description', {
                                 disabled: this.record.get('workingtime_is_cleared') ? true : false,
@@ -356,30 +413,38 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     columnWidth: .25
                                 },
                                 items: [[
-                                    fieldManager('is_billable', {disabled: (this.useMultiple) ? false : true,
+                                    fieldManager('is_billable', {
+                                        columnWidth: .4,
                                         listeners: {
                                             scope: this,
                                             check: this.onCheckBillable
                                         }}),
-                                    fieldManager('accounting_time_factor', {decimalSeparator: ',', listeners: {
-                                        scope: this,
-                                        change: this.calculateAccountingTime
+                                    fieldManager('accounting_time_factor', {
+                                        disabled: this.useMultiple,
+                                        columnWidth: .1,
+                                        decimalSeparator: ',',
+                                        fieldLabel: this.app.i18n._('Factor'),
+                                        listeners: {
+                                            scope: this,
+                                            change: this.calculateAccountingTime
                                     }}),
-                                    fieldManager('accounting_time', {listeners: {
+                                    fieldManager('accounting_time', {
+                                        disabled: this.useMultiple,
+                                        fieldLabel: this.app.i18n._('Accounting time'),
+                                        listeners: {
                                             scope: this,
                                             blur: this.calculateFactor,
                                             spin: this.calculateFactor
                                         }}),
                                     fieldManager('need_for_clarification'),
                                 ], [
-                                    fieldManager('is_cleared', {listeners: {
+                                    fieldManager('is_cleared', {columnWidth: .4, listeners: {
                                         scope: this,
                                         check: this.onClearedUpdate
                                     }}),
-                                    fieldManager('billed_in', {disabled: this.record.get('workingtime_is_cleared') ? true : false}),
-                                    this.useInvoice ? fieldManager('invoice_id') : {},
+                                    fieldManager(this.useInvoice ? 'invoice_id' : 'billed_in', {columnWidth: .5 }),
                                 ], [
-                                    fieldManager('workingtime_is_cleared', {disabled: true}),
+                                    fieldManager('workingtime_is_cleared', {columnWidth: .4, disabled: true}),
                                     fieldManager('workingtime_cleared_in', {disabled: true, columnWidth: .5}),
                                 ]]
                             }]
@@ -509,5 +574,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     initActions: function () {
         Tine.Timetracker.TimesheetEditDialog.superclass.initActions.call(this);
         this.action_export = null;
+    },
+
+    doCopyRecord: function() {
+        Tine.Timetracker.TimeaccountEditDialog.superclass.doCopyRecord.call(this);
+        const factor = this.record.data?.timeaccount_id?.accounting_time_factor;
+        this.record.set('accounting_time_factor', factor ?? 1);
     }
 });

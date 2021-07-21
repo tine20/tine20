@@ -36,8 +36,8 @@ class Sales_SuppliersTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_contactController  = Addressbook_Controller_Contact::getInstance();
@@ -129,7 +129,7 @@ class Sales_SuppliersTest extends TestCase
         foreach($deletedAddresses as $address) {
             $this->assertEquals(1, $address->is_deleted);
         }
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         return $this->_json->getSupplier($retVal['id']);
     }

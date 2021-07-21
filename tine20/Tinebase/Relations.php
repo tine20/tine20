@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Relations
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @todo        re-enable the caching (but check proper invalidation first) -> see task #232
@@ -132,10 +132,6 @@ class Tinebase_Relations
         $relations->own_backend = $_backend;
         $relations->own_id      = $_id;
         
-        // convert related_record to record objects
-        // @todo move this to a relation json class / or to model->setFromJson
-        $this->_relatedRecordToObject($relations);
-        
         // compute relations to add/delete
         $currentRelations = $this->getRelations($_model, $_backend, $_id, NULL, array(), $_ignoreACL);
         $currentIds   = $currentRelations->getArrayOfIds();
@@ -150,14 +146,6 @@ class Tinebase_Relations
             }
         }
 
-        // prevent two empty related_ids of the same relation type
-        $emptyRelatedId = array();
-        foreach ($toAdd as $idx) {
-            if (empty($relations[$idx]->related_id)) {
-                $relations[$idx]->related_id = Tinebase_Record_Abstract::generateUID();
-                $emptyRelatedId[$idx] = true;
-            }
-        }
         $this->_validateConstraintsConfig($_model, $relations, $toDel, $toUpdate);
         
         // break relations
@@ -168,14 +156,7 @@ class Tinebase_Relations
         // add new relations
         foreach ($toAdd as $idx) {
             $relation = $relations[$idx];
-            if (isset($emptyRelatedId[$idx])) {
-                // create related record
-                $relation->related_id = null;
-                $this->_setAppRecord($relation, $_doCreateUpdateCheck);
-            } else if ($_inspectRelated && ! empty($relation->related_id) && ! empty($relation->related_record)) {
-                // update related record
-                $this->_setAppRecord($relation, $_doCreateUpdateCheck);
-            }
+            $this->_setRelatedBackend($relation);
             $this->_addRelation($relation);
         }
         
@@ -185,7 +166,8 @@ class Tinebase_Relations
             $update = $relations->getById($relationId);
             
             // update related records if explicitly needed
-            if ($_inspectRelated && isset($current->related_record) && isset($update->related_record)) {
+            if ($_inspectRelated && isset($current->related_record) && !empty($update->related_record)) {
+                $this->_relatedRecordToObject($update);
                 // @todo do we need to omit so many fields?
                 if (! $current->related_record->isEqual(
                     $update->related_record, 
@@ -208,7 +190,7 @@ class Tinebase_Relations
                     if ( !$update->related_record->has('container_id') ||
                         Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser()->getId(), $update->related_record->container_id,
                             array(Tinebase_Model_Grants::GRANT_EDIT, Tinebase_Model_Grants::GRANT_ADMIN)) ) {
-                        $this->_setAppRecord($update, $_doCreateUpdateCheck);
+                        $this->_setRelatedBackend($update);
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
                             ' Permission denied to update related record');
@@ -517,84 +499,29 @@ class Tinebase_Relations
      * @param  Tinebase_Model_Relation|Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _relatedRecordToObject($_relations)
+    protected function _relatedRecordToObject(Tinebase_Model_Relation $relation)
     {
-        if(! $_relations instanceof Tinebase_Record_RecordSet) {
-            $_relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array($_relations));
+        if (! is_string($relation->related_model)) {
+            throw new Tinebase_Exception_InvalidArgument('missing relation model');
         }
-        
-        foreach ($_relations as $relation) {
-            if (! is_string($relation->related_model)) {
-                throw new Tinebase_Exception_InvalidArgument('missing relation model');
-            }
 
-            if (empty($relation->related_record) || $relation->related_record instanceof $relation->related_model) {
-                continue;
-            }
-            
-            $data = Zend_Json::encode($relation->related_record);
-            $relation->related_record = new $relation->related_model();
-            $relation->related_record->setFromJsonInUsersTimezone($data);
+        if (empty($relation->related_record) || $relation->related_record instanceof $relation->related_model) {
+            return;
         }
+
+        $data = Zend_Json::encode($relation->related_record);
+        $relation->related_record = new $relation->related_model();
+        $relation->related_record->setFromJsonInUsersTimezone($data);
     }
     
     /**
      * creates/updates application records
      * 
      * @param   Tinebase_Record_RecordSet $_relation of Tinebase_Model_Relation
-     * @param   bool $_doCreateUpdateCheck
-     * @throws  Tinebase_Exception_UnexpectedValue
      */
-    protected function _setAppRecord($_relation, $_doCreateUpdateCheck = false)
+    protected function _setRelatedBackend($_relation)
     {
-        if (! $_relation->related_record instanceof Tinebase_Record_Interface) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Relation: ' . print_r($_relation->toArray(), TRUE));
-            throw new Tinebase_Exception_UnexpectedValue('Related record is missing from relation.');
-        }
-
-        $appController = Tinebase_Core::getApplicationInstance($_relation->related_model);
-
-        if (! $_relation->related_record->getId()) {
-            $method = 'create';
-        } else {
-            $method = 'update';
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ' . ucfirst($method) . ' ' . $_relation->related_model . ' record.');
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Relation: ' . print_r($_relation->toArray(), TRUE));
-
-        if ($method === 'update' && $appController->doContainerACLChecks()
-            && ! Tinebase_Core::getUser()->hasGrant($_relation->related_record->container_id, Tinebase_Model_Grants::GRANT_EDIT)
-        ) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Don\'t update related record because user has no update grant');
-        } else {
-            try {
-                /** @var Tinebase_Record_Interface $record */
-                $record = $appController->$method($_relation->related_record,
-                    $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
-                $_relation->related_id = $record->getId();
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                // some right might prevent the update ... skipping update
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Don\'t update related record: ' . $tead->getMessage());
-            }
-        }
-
-        switch ($_relation->related_model) {
-            case 'Addressbook_Model_Contact':
-                $_relation->related_backend = ucfirst(Addressbook_Backend_Factory::SQL);
-                break;
-            case 'Tasks_Model_Task':
-                $_relation->related_backend = Tasks_Backend_Factory::SQL;
-                break;
-            default:
-                $_relation->related_backend = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
-                break;
-        }
+        $_relation->related_backend = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
     }
 
     /**

@@ -22,8 +22,8 @@ Tine.widgets.grid.jsonRenderer.displayField = function(value) {
     return Tine.widgets.grid.jsonRenderer.syntaxHighlight(result);
 };
 
-Tine.widgets.grid.jsonRenderer.syntaxHighlight =function(json) {
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+Tine.widgets.grid.jsonRenderer.syntaxHighlight = function(json) {
+    json = String(json).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
         var cls = 'number';
         if (/^"/.test(match)) {

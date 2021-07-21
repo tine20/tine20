@@ -18,14 +18,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Kontenieri i paracaktuar i artikujve te inventarit"
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Kontenieri i paracaktuar për artikujt e rinj"
-
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
 msgstr "Numëri aktiv duhet të jetë më i vogël ose i barabartë."
@@ -54,7 +46,7 @@ msgstr "Vendosni përshkrimin"
 msgid "Location"
 msgstr "Vendndodhja"
 
-#: js/InventoryItemEditDialog.js:162
+#: js/InventoryItemEditDialog.js:162 Model/InventoryItem.php:176
 msgid "Added"
 msgstr "Shtuar"
 
@@ -62,7 +54,7 @@ msgstr "Shtuar"
 msgid "Warranty"
 msgstr "Garancia"
 
-#: js/InventoryItemEditDialog.js:174
+#: js/InventoryItemEditDialog.js:174 Model/InventoryItem.php:186
 msgid "Removed"
 msgstr "Hequr"
 
@@ -98,21 +90,17 @@ msgstr "Faturë"
 msgid "Invoice date"
 msgstr "Data e Faturës"
 
-#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:193
+#: js/InventoryItemEditDialog.js:283 Model/InventoryItem.php:195
 msgid "Depreciate"
 msgstr "Zhvlerëso"
 
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:34
-msgid "All Inventory Items"
-msgstr "Të gjithë Artikujt e inventarit"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Kontenieri i paracaktuar i artikujve te inventarit"
 
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:35
-msgid "All existing Inventory Items"
-msgstr "Të gjithë Artikujt egzistues të inventarit"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventari"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Kontenieri i paracaktuar për artikujt e rinj"
 
 #: Config.php:31
 msgid "Inventory Status Available"
@@ -146,6 +134,18 @@ msgstr "hequr"
 msgid "unknown"
 msgstr "i/e panjohur"
 
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Import CSV i inventarit"
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "importo listen (###CURRENTDATE###)"
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Artikuj të importuar në ###CURRENTDATE### më ###CURRENTTIME### nga ###USERFULLNAME###"
+
 #: Model/InventoryItem.php:38
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -166,22 +166,20 @@ msgstr "ID Inventari"
 msgid "Cost Center"
 msgstr ""
 
-#: Model/InventoryItem.php:176
-msgid "Item added"
-msgstr "Artikull i  shtuar"
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventari"
 
-#: Model/InventoryItem.php:184
-msgid "Item removed"
-msgstr "Artikull i hequr"
+#: Setup/Initialize.php:34
+msgid "All Inventory Items"
+msgstr "Të gjithë Artikujt e inventarit"
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Import CSV i inventarit"
+#: Setup/Initialize.php:35
+msgid "All existing Inventory Items"
+msgstr "Të gjithë Artikujt egzistues të inventarit"
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "importo listen (###CURRENTDATE###)"
+#~ msgid "Item added"
+#~ msgstr "Artikull i  shtuar"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Artikuj të importuar në ###CURRENTDATE### më ###CURRENTTIME### nga ###USERFULLNAME###"
+#~ msgid "Item removed"
+#~ msgstr "Artikull i hequr"

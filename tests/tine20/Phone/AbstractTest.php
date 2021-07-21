@@ -31,8 +31,8 @@ class Phone_AbstractTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_adminUser = Tinebase_Core::getUser();
@@ -321,8 +321,8 @@ class Phone_AbstractTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         if ($this->_adminUser != Tinebase_Core::getUser()) {

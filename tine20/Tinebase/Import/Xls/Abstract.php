@@ -44,7 +44,9 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         'startColumn' => 'A',
         'endColumn' => null,
         'headlineRow' => null,
-        'mapping' => []
+        'mapping' => [],
+        'keepImportFile' => null,
+        'importFile' => null,
     ];
 
     /**
@@ -131,8 +133,20 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         if (!file_exists($_filename)) {
             throw new Tinebase_Exception_NotFound("File $_filename not found.");
         }
+        
+        if ($this->_options['keepImportFile']) {
+            $tmpFile = fopen($_filename, 'r');
+            $this->_options['importFile'] = Tinebase_TempFile::getInstance()->createTempFileFromStream($tmpFile, 'Import-' . Tinebase_DateTime::now() . '.xlsx');
+            fclose($tmpFile);
+        }
 
-        $this->_spreadsheet = IOFactory::load($_filename);
+        // we use the reader and switch to readonly to avoid massive performance-losses
+        // see https://stackoverflow.com/questions/16742647/phpexcel-taking-an-extremely-long-time-to-read-excel-file
+        // TODO allow to switch to Xls Reader via option / import definition?
+        $objReader = IOFactory::createReader('Xlsx');
+        $objReader->setReadDataOnly(true);
+        $this->_spreadsheet = $objReader->load($_filename);
+
         $this->_worksheet = $this->_spreadsheet->getSheet($this->_options['sheet']);
         $iterator = $this->_worksheet->getRowIterator($this->_options['startRow'], $this->_options['endRow']);
 
@@ -174,6 +188,7 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
      */
     public function importData($_data, $_clientRecordData = [])
     {
+        
         throw new Tinebase_Exception_NotImplemented('importData is not yet implemented.');
     }
     
@@ -183,5 +198,59 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
     public function getMapping()
     {
         return $this->_mapping;
+    }
+
+    /**
+     * do something with the imported record
+     *
+     * @param Tinebase_Record_Interface $importedRecord
+     */
+    protected function _inspectAfterImport($importedRecord)
+    {
+        $this->keepImportFile($importedRecord);
+    }
+
+    /**
+     * Save the Import file to the filemanager and create a relation to the imported Record
+     * 
+     * @param $importedRecord
+     * @throws Filemanager_Exception
+     * @throws Filemanager_Exception_Quarantined
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function keepImportFile($importedRecord) 
+    {
+        if ($this->_options['keepImportFile'] && $this->_options['importFile']) {
+            $tempFile = $this->_options['importFile'];
+            $nodeController = Filemanager_Controller_Node::getInstance();
+            $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders';
+
+            try {
+                $nodeController->createNodes('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/Import', 'folder', $_tempFileIds = array());
+            } catch (Filemanager_Exception_NodeExists $e){
+                // This is fine
+            };
+
+            try {
+                $nodeController->createNodes('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/Import/' . $tempFile->name, 'file', $_tempFileIds = array($tempFile->id));
+            } catch (Filemanager_Exception_NodeExists $e){
+                // This is fine
+            };
+           
+            $importFile = $nodeController->getFileNode(Tinebase_Model_Tree_Node_Path::createFromPath($prefix. '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/Import/' . $tempFile->name));
+
+            if  ($importFile) {
+                $relationData = array(
+                    array(
+                        'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                        'related_model' =>  Filemanager_Model_Node::class,
+                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                        'related_id' => $importFile->id,
+                        'type' => 'IMPORTFILE'
+                    )
+                );
+                Tinebase_Relations::getInstance()->setRelations(Tinebase_Model_CommunityIdentNr::class, Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND, $importedRecord->id, $relationData);
+            }
+        }
     }
 }

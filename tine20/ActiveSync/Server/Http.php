@@ -68,8 +68,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             }
 
             if ($authResult !== true) {
-                header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-                header('HTTP/1.1 401 Unauthorized');
+                $this->_unauthorized();
                 return;
             }
 
@@ -99,6 +98,12 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         } catch (Throwable $e) {
             $this->_handleException($e);
         }
+    }
+
+    protected function _unauthorized()
+    {
+        header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
+        header('HTTP/1.1 401 Unauthorized');
     }
 
     /**

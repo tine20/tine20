@@ -21,8 +21,8 @@ class HumanResources_BL_DailyWTReport_CalculateBreakTimeTest extends TestCase
      */
     protected static $_pipe;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass(): void
+{
         parent::setUpBeforeClass();
 
         $rs = new Tinebase_Record_RecordSet(Tinebase_Model_BLConfig::class, [
@@ -44,8 +44,8 @@ class HumanResources_BL_DailyWTReport_CalculateBreakTimeTest extends TestCase
         static::$_pipe = new Tinebase_BL_Pipe($rs);
     }
 
-    public static function tearDownAfterClass()
-    {
+    public static function setUptearDownAfterClass(): void
+{
         parent::tearDownAfterClass();
 
         static::$_pipe = null;
@@ -114,6 +114,30 @@ class HumanResources_BL_DailyWTReport_CalculateBreakTimeTest extends TestCase
                 static::assertSame($val, $_data->result->{$prop}, $debugOut);
             }
         }
+    }
+
+    public function testBreakUpOneTimeSlot()
+    {
+        $data = $this->_executePipe([
+            [
+                'start_time'        => '09:00:00',
+                'duration'          => 540,
+            ]
+        ]);
+
+        $this->_checkResult($data, [
+            self::TIME_SLOTS            => [
+                self::COUNT                 => 3,
+                self::DURATION_IN_SEC       => [
+                    0 => 4 * 3600,
+                    1 => 2 * 3600,
+                    2 => (int)(2.25 * 3600)
+                ],
+            ],
+            self::RESULT_PROPERTIES     => [
+                'break_time_deduction'      => 45 * 60,
+            ],
+        ]);
     }
 
     public function testSumUp()

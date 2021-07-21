@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Group_ActiveDirectory
  */
-class Tinebase_Group_ActiveDirectoryTest extends PHPUnit_Framework_TestCase
+class Tinebase_Group_ActiveDirectoryTest extends \PHPUnit\Framework\TestCase
 {
     protected $baseDN     = 'dc=example,dc=com';
     protected $groupsDN   = 'cn=users,dc=example,dc=com';
@@ -35,8 +35,8 @@ class Tinebase_Group_ActiveDirectoryTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_groupAD = new Tinebase_Group_ActiveDirectory(array(
             'userDn'     => $this->userDN,
             'groupsDn'   => $this->groupsDN,

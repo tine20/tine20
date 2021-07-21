@@ -22,7 +22,7 @@ class Tinebase_User_EmailUser_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All EmailUser Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All EmailUser Tests');
 
         $suite->addTestSuite('Tinebase_User_EmailUser_Imap_DbmailTest');
         $suite->addTestSuite('Tinebase_User_EmailUser_Imap_DovecotTest');

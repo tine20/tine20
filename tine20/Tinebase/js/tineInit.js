@@ -145,19 +145,23 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.common.reload({
                     clearCache: true
                 });
-            } else if (window.isMainWindow && e.getKey() === e.ESC) {
+            } else if (e.ctrlKey && e.altKey && e.getKey() === e.S ) {
+                Ext.ux.screenshot.ux(window, {download: true, grabMouse: !e.shiftKey});
+            }  else if (window.isMainWindow) {
                 // select first row of current grid panel if available
-                var app = Tine.Tinebase.MainScreen.getActiveApp(),
-                    centerPanel = app.getMainScreen().getCenterPanel(),
+                var app = Tine.Tinebase.MainScreen ? Tine.Tinebase.MainScreen.getActiveApp() : null,
+                    centerPanel = app ? app.getMainScreen().getCenterPanel() : null,
                     grid = centerPanel && Ext.isFunction(centerPanel.getGrid) ? centerPanel.getGrid() : null,
                     sm = grid ? grid.getSelectionModel() : null;
-                if (sm) {
-                    sm.selectFirstRow();
-                    grid.getView().focusRow(0);
+                
+                if (grid) {
+                    if (e.getKey() === e.ESC && sm) {
+                        sm.selectFirstRow();
+                        grid.getView().focusRow(0);
+                    } else {
+                        grid.fireEvent('keydown', e);
+                    }
                 }
-
-            } else if (e.ctrlKey && e.getKey() === e.S ) {
-                Ext.ux.screenshot.ux(window, {download: true, grabMouse: !e.shiftKey});
             }
         });
         
@@ -170,11 +174,11 @@ Tine.Tinebase.tineInit = {
 
         // generic context menu
         Ext.getBody().on('contextmenu', function (e) {
-            var target = e.getTarget('a',1 ,true) ||
-                e.getTarget('input[type=text]',1 ,true) ||
-                e.getTarget('textarea',1 ,true);
+            var target = e.getTarget('a', 1 , true) ||
+                e.getTarget('input[type=text]', 1 , true) ||
+                e.getTarget('textarea', 1, true);
             if (target) {
-                // allow native context menu for links
+                // allow native context menu for links + textareas + (text)input fields
                 return;
             }
 
@@ -184,7 +188,7 @@ Tine.Tinebase.tineInit = {
                 return;
             }
 
-            // deny native context menu if we have an oown one
+            // deny native context menu if we have an own one
             if (Tine.Tinebase.MainContextMenu.showIf(e)) {
                 e.stopPropagation();
                 e.preventDefault();
@@ -305,7 +309,8 @@ Tine.Tinebase.tineInit = {
             var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
             Tine.loginPanel = new Tine.Tinebase.LoginPanel({
                 defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
-                defaultPassword: Tine.Tinebase.registry.get('defaultPassword')
+                defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
+                allowBrowserPasswordManager: Tine.Tinebase.registry.get('allowBrowserPasswordManager')
             });
             mainCardPanel.add(Tine.loginPanel);
         }
@@ -325,9 +330,38 @@ Tine.Tinebase.tineInit = {
 
     renderWindow: function () {
         Tine.log.info('renderWindow::start');
+        Ext.MessageBox.hide();
 
         // check if user is already logged in
         if (! Tine.Tinebase.registry.get('currentAccount')) {
+            if (! window.isMainWindow) {
+                window.close();
+                // just in case it didn't succeed
+                return Ext.MessageBox.show({
+                    title: i18n._('Session Timed Out'),
+                    msg: i18n._('You can close this window.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.INFO,
+                    fn: window.close
+                });
+            }
+
+            const areaLockException = Tine.Tinebase.registry.get('areaLockedException')
+            if (areaLockException) {
+                // login from post - user is authenticated but mfa is required
+                return Tine.Tinebase.areaLocks.handleAreaLockException(areaLockException).then(() => {
+                    Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
+                    Tine.Tinebase.tineInit.initRegistry(true, Tine.Tinebase.tineInit.renderWindow, Tine.Tinebase.tineInit);
+                }).catch(async (error) => {
+                    Ext.MessageBox.wait(i18n._('Logging you out...'), i18n._('Please wait!'));
+                    await Tine.Tinebase.logout();
+                    return Tine.Tinebase.common.reload({
+                        keepRegistry: false,
+                        clearCache: true
+                    });
+
+                });
+            }
             Tine.Tinebase.tineInit.showLoginBox(function(response){
                 Tine.log.info('tineInit::renderWindow -fetch users registry');
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
@@ -367,7 +401,7 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.router = new director.Router().init();
         Tine.Tinebase.router.configure({notfound: function () {
             var defaultApp = Tine.Tinebase.appMgr.getDefault();
-            Tine.Tinebase.router.setRoute('/' + defaultApp.appName);
+            Tine.Tinebase.router.setRoute(defaultApp.getRoute());
         }});
 
         var route = Tine.Tinebase.router.getRoute(),
@@ -599,7 +633,7 @@ Tine.Tinebase.tineInit = {
                 };
                 
                 // encapsulate as jsonrpc response
-                var requestOptions = Ext.decode(options.jsonData);
+                var requestOptions = _.isString(options.jsonData) ? Ext.decode(options.jsonData) : options.jsonData;
                 response.responseText = Ext.encode({
                     jsonrpc: requestOptions.jsonrpc,
                     id: requestOptions.id,
@@ -775,6 +809,11 @@ Tine.Tinebase.tineInit = {
 
         Tine.Tinebase.tineInit.initExtDirect();
 
+
+        Ext.form.NumberField.prototype.decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
+        Ext.ux.form.NumberField.prototype.thousandSeparator = Tine.Tinebase.registry.get('thousandSeparator');
+
+
         formatMessage.setup({
             locale: Tine.Tinebase.registry.get('locale').locale || 'en'
         });
@@ -795,7 +834,7 @@ Tine.Tinebase.tineInit = {
         // downloads in a cloud :-(
         Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isIOS && !Ext.isAndorid);
 
-        var AreaLocks = require('./AreaLocks.es6');
+        var AreaLocks = require('./AreaLocks');
         Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
 
         // load initial js of user enabled apps
@@ -1036,6 +1075,7 @@ Tine.Tinebase.tineInit = {
      */
     initUploadMgr: function () {
         Tine.Tinebase.uploadManager = new Ext.ux.file.UploadManager();
+        Tine.Tinebase.uploadManager.InitChannels();
     },
     
     /**

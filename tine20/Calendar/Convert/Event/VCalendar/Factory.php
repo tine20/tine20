@@ -23,7 +23,6 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
     const CLIENT_EMCLIENT    = 'emclient';
-    const CLIENT_EMCLIENT7   = 'emclient7';
     const CLIENT_TINE        = 'tine';
     const CLIENT_DAVDROID    = 'davdroid';
     const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
@@ -69,9 +68,6 @@ class Calendar_Convert_Event_VCalendar_Factory
  
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT:
                 return new Calendar_Convert_Event_VCalendar_EMClient($_version);
-
-            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT7:
-                return new Calendar_Convert_Event_VCalendar_EMClient7($_version);
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_DAVDROID:
                 return new Calendar_Convert_Event_VCalendar_DavDroid($_version);
@@ -128,15 +124,9 @@ class Calendar_Convert_Event_VCalendar_Factory
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
             $version = $matches['version'];
 
-        // EMClient 7 calendar
-        } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient7::HEADER_MATCH, $_userAgent, $matches) && (floor($matches['version']) >= 7)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT7;
-            $version = $matches['version'];
-
         // EMClient
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT;
-
 
         // Evolution
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_Evolution::HEADER_MATCH, $_userAgent, $matches)) {

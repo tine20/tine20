@@ -164,8 +164,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 incrementValue : 1,
                 minValue: 1,
                 maxValue: 9999999,
-                allowDecimals: false
-            })
+            }),
+            allowDecimals: false
         });
 
         this.intervalEditor = new Ext.ux.form.Spinner({
@@ -176,8 +176,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 incrementValue : 1,
                 minValue: 1,
                 maxValue: 36,
-                allowDecimals: false
-            })
+            }),
+            allowDecimals: false
         });
         
         this.productQuickadd = Tine.widgets.form.RecordPickerManager.get('Sales', 'Product', {allowBlank: true});
@@ -190,8 +190,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 incrementValue : 1,
                 minValue: 1,
                 maxValue: 9999,
-                allowDecimals: false
-            })
+            }),
+            allowDecimals: false
         });
         this.intervalQuickadd = new Ext.ux.form.Spinner({
             fieldLabel: this.app.i18n._('Interval'),
@@ -202,8 +202,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 incrementValue : 1,
                 minValue: 1,
                 maxValue: 36,
-                allowDecimals: false
-            })
+            }),
+            allowDecimals: false
         });
         
         var cmp = {

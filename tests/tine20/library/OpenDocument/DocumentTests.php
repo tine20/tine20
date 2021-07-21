@@ -9,7 +9,7 @@
  */
 
 
-class OpenDocument_DocumentTests extends PHPUnit_Framework_TestCase
+class OpenDocument_DocumentTests extends \PHPUnit\Framework\TestCase
 {
     /**
      * Sets up the fixture.
@@ -17,8 +17,8 @@ class OpenDocument_DocumentTests extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
     /**
@@ -27,8 +27,8 @@ class OpenDocument_DocumentTests extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     

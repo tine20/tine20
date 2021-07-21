@@ -265,7 +265,7 @@ class Tinebase_FileSystem implements
         if (isset($this->_statCacheById[$_id])) {
             return $this->_statCacheById[$_id];
         }
-        return $this->get($_id);
+        return $this->_statCacheById[$_id] = $this->get($_id);
     }
 
     /**
@@ -652,7 +652,7 @@ class Tinebase_FileSystem implements
 
                     $this->clearStatCache($options['tine20']['path']);
 
-                    $newNode = $this->stat($options['tine20']['path']);
+                    $newNode = $this->_getTreeNodeBackend()->get($options['tine20']['node']->getId());
 
                     // write modlog and system notes
                     $this->_getTreeNodeBackend()->updated($newNode, $options['tine20']['node']);
@@ -725,24 +725,11 @@ class Tinebase_FileSystem implements
 
         if (is_file($_hashFile)) {
             $updatedFileObject->size = filesize($_hashFile);
-
-            if (function_exists('finfo_open')) {
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_file($finfo, $_hashFile);
-                if ($mimeType !== false) {
-                    if (PHP_VERSION_ID >= 70300 && ($mimeLen = strlen($mimeType)) % 2 === 0 &&
-                            substr($mimeType, 0, $mimeLen / 2) === substr($mimeType, $mimeLen / 2)) {
-                        $mimeType = substr($mimeType, 0, $mimeLen / 2);
-                    }
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                            " Setting file contenttype to " . $mimeType);
-                    $updatedFileObject->contenttype = $mimeType;
-                }
-                finfo_close($finfo);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' finfo_open() is not available: Could not get file information.');
+            if (null !== ($mimeType = $this->_getMimeType($_node->name, $_hashFile))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        " Setting file contenttype to " . $mimeType);
+                $updatedFileObject->contenttype = $mimeType;
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -785,10 +772,35 @@ class Tinebase_FileSystem implements
         }
 
         if (true === Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM)->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT}) {
-            Tinebase_ActionQueueLongRun::getInstance()->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
+            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
         }
 
         return $newFileObject;
+    }
+
+    protected function _getMimeType($_fileName, $_realFilePath)
+    {
+        if (null === ($mimeType = Tinebase_MimeType::getInstance()
+                ->getMimeTypeForExtention(pathinfo($_fileName, PATHINFO_EXTENSION)))) {
+            if (function_exists('finfo_open')) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_file($finfo, $_realFilePath);
+                if ($mimeType !== false) {
+                    if (PHP_VERSION_ID >= 70300 && ($mimeLen = strlen($mimeType)) % 2 === 0 &&
+                        substr($mimeType, 0, $mimeLen / 2) === substr($mimeType, $mimeLen / 2)) {
+                        $mimeType = substr($mimeType, 0, $mimeLen / 2);
+                    }
+                } else {
+                    $mimeType = null;
+                }
+                finfo_close($finfo);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' finfo_open() is not available: Could not get file information.');
+            }
+        }
+
+        return $mimeType;
     }
 
     public function getEffectiveAndLocalQuota(Tinebase_Model_Tree_Node $node)
@@ -907,12 +919,7 @@ class Tinebase_FileSystem implements
             $rootRevisionSize = (int)$applicationController->getApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, true);
 
-            $refLogBackend->addSelectHook(function(Zend_Db_Select $select) {
-                $select->forUpdate(true);
-            });
-            $raii = new Tinebase_RAII(function() use($refLogBackend) {
-                $refLogBackend->resetSelectHooks();
-            });
+            $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($refLogBackend);
             $refLogs = $refLogBackend->getMultiple($refLogIds);
             if (!$refLogs->count()) {
                 $transMgr->commitTransaction($transId);
@@ -923,12 +930,7 @@ class Tinebase_FileSystem implements
             unset($raii);
 
             $treeBackend = $this->_getTreeNodeBackend();
-            $treeBackend->addSelectHook(function(Zend_Db_Select $select) {
-                $select->forUpdate(true);
-            });
-            $raii = new Tinebase_RAII(function() use($treeBackend) {
-                $treeBackend->resetSelectHooks();
-            });
+            $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($treeBackend);
 
             $folders = $allFolders = $treeBackend->getMultiple($refLogs->{Tinebase_Model_Tree_RefLog::FLD_FOLDER_ID});
             while (!empty($parentIds = array_filter($folders->parent_id, function($val) use($allFolders) {
@@ -958,7 +960,7 @@ class Tinebase_FileSystem implements
             }
 
             if ($rootSize < 0) $rootSize = 0;
-            if ($rootRevisionSize) $rootRevisionSize = 0;
+            if ($rootRevisionSize < 0) $rootRevisionSize = 0;
             $applicationController->setApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $rootSize);
             $applicationController->setApplicationState($tinebaseApplication,
@@ -1193,14 +1195,14 @@ class Tinebase_FileSystem implements
         try {
 
             try {
-                $this->_fileObjectBackend->addSelectHook(function(Zend_Db_Select $select) {$select->forUpdate(true);});
+                $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_fileObjectBackend);
                 $fileObject = $this->_fileObjectBackend->get($_objectId);
             } catch(Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Could not find file object ' . $_objectId);
                 return true;
             } finally {
-                $this->_fileObjectBackend->resetSelectHooks();
+                unset($raii);
             }
             
             if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileObject->type) {
@@ -1366,7 +1368,7 @@ class Tinebase_FileSystem implements
 
         if (is_resource($handle)) {
             $contextOptions = array('tine20' => array(
-                'path' => $_path,
+                'path' => $this->getPathOfNode($node, true, true),
                 'mode' => $_mode,
                 'node' => $node
             ));
@@ -1484,8 +1486,7 @@ class Tinebase_FileSystem implements
                     return false;
                 }
 
-                if (null === $node->acl_node || ($node->acl_node === $oldParent->acl_node &&
-                        $newParent->acl_node !== $node->acl_node)) {
+                if (null === $node->acl_node || $newParent->acl_node !== $node->acl_node) {
                     $node->acl_node = $newParent->acl_node;
                     if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
                         if (null === $node->acl_node) {
@@ -2143,6 +2144,7 @@ class Tinebase_FileSystem implements
                 $fileObject = $this->_fileObjectBackend->create($fileObject);
 
                 $treeNode = new Tinebase_Model_Tree_Node(array(
+                    'type' => Tinebase_Model_Tree_FileObject::TYPE_FILE,
                     'name' => $_name,
                     'object_id' => $fileObject->getId(),
                     'parent_id' => $parentId,
@@ -2464,8 +2466,27 @@ class Tinebase_FileSystem implements
             }
 
             if ($oldValue != $newValue) {
-                $oldValue = count($oldValue) > 0 ? json_encode($oldValue) : null;
-                $newValue = count($newValue) > 0 ? json_encode($newValue) : null;
+                // ensure same order / same json string
+                if (count($oldValue) > 0) {
+                    $oldValue = json_encode([
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH   => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM     => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_ON      => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID => $oldValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID],
+                    ]);
+                } else {
+                    $oldValue = null;
+                }
+                if (count($newValue) > 0) {
+                    $newValue = json_encode([
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH   => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM     => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_ON      => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON],
+                        Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID => $newValue[Tinebase_Model_Tree_Node::XPROPS_REVISION_NODE_ID],
+                    ]);
+                } else {
+                    $newValue = null;
+                }
 
                 // update revisionProps of subtree if changed
                 $this->_recursiveInheritPropertyUpdate($_node, Tinebase_Model_Tree_Node::XPROPS_REVISION, $newValue, $oldValue, false);
@@ -2801,9 +2822,7 @@ class Tinebase_FileSystem implements
 
         // hard delete is ok here
         $this->_fileObjectBackend->delete($fileObjectIds);
-        if (true === $this->_indexingActive) {
-            Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($fileObjectIds);
-        }
+        Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($fileObjectIds);
 
         return $count;
     }
@@ -2823,7 +2842,7 @@ class Tinebase_FileSystem implements
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function copyTempfile($tempFile, $path, $deleteTempFileAfterCopy = false)
+    public function copyTempfile($tempFile, &$path, $deleteTempFileAfterCopy = false)
     {
         if ($tempFile === null) {
             $tempStream = fopen('php://memory', 'r');
@@ -2831,7 +2850,7 @@ class Tinebase_FileSystem implements
             $tempStream = $tempFile;
         } else if (is_string($tempFile) || is_array($tempFile)) {
             $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFile);
-            return $this->copyTempfile($tempFile, $path);
+            return $this->copyTempfile($tempFile, $path, $deleteTempFileAfterCopy);
         } else if ($tempFile instanceof Tinebase_Model_Tree_Node) {
             if (isset($tempFile->hash)) {
                 $hashFile = $this->getRealPathForHash($tempFile->hash);
@@ -2839,7 +2858,7 @@ class Tinebase_FileSystem implements
             } else if (is_resource($tempFile->stream)) {
                 $tempStream = $tempFile->stream;
             } else {
-                return $this->copyTempfile($tempFile->tempFile, $path);
+                return $this->copyTempfile($tempFile->tempFile, $path, $deleteTempFileAfterCopy);
             }
         } else if ($tempFile instanceof Tinebase_Model_TempFile) {
             $tempStream = fopen($tempFile->path, 'r');
@@ -2871,7 +2890,45 @@ class Tinebase_FileSystem implements
 
         return $node;
     }
-    
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_child
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
+     * @return Tinebase_Model_Tree_Node|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getParentByFilter(Tinebase_Model_Tree_Node $_child, Tinebase_Model_Tree_Node_Filter $_filter)
+    {
+        static $recursive = false;
+
+        if (null === $_child->parent_id) {
+            return null;
+        }
+
+        if (!$recursive) {
+            $tmpFilter = new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'id', 'operator' => 'equals', 'value' => $_child->parent_id]
+            ]);
+            // we do the pin protection only once, on the outer filter
+            $_filter->ignorePinProtection(true);
+
+            $tmpFilter->addFilterGroup($_filter);
+            $_filter = $tmpFilter;
+            $_filter->doIgnoreAcl(true);
+        } else {
+            $_filter->getFilter('id')->setValue($_child->parent_id);
+        }
+
+        try {
+            $recursive = true;
+            return $this->searchNodes($_filter)->getFirstRecord() ?:
+                $this->getParentByFilter($this->get($_child->parent_id), $_filter);
+        } finally {
+            $recursive = false;
+        }
+    }
+
     /**
      * copy stream data to file path
      *
@@ -2880,13 +2937,15 @@ class Tinebase_FileSystem implements
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public function copyStream($in, $path)
+    public function copyStream($in, &$path)
     {
         $deleteFile = !$this->fileExists($path);
         try {
             if (!$handle = $this->fopen($path, 'w')) {
                 throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $path . ')');
             }
+
+            $path = stream_context_get_options($handle)['tine20']['path'];
 
             if (!is_resource($in)) {
                 throw new Tinebase_Exception_UnexpectedValue('source needs to be of type stream');
@@ -3547,7 +3606,7 @@ class Tinebase_FileSystem implements
         $status = ['missing' => 0, 'created' => 0, 'missing_files' => []];
 
         if (! $this->isPreviewActive()) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' previews are disabled');
+            $status['missing_files'] = 'previews are disabled';
             return $status;
         }
 
@@ -3604,6 +3663,49 @@ class Tinebase_FileSystem implements
         }
 
         return $status;
+    }
+
+    public function sanitizeMimeTypes()
+    {
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' starting to sanitize mime types');
+
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+
+        foreach ($treeNodeBackend->search(
+                new Tinebase_Model_Tree_Node_Filter([
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
+                ], '', ['ignoreAcl' => true])
+                , null, true) as $id) {
+
+            $raii = Tinebase_RAII::getTransactionManagerRAII();
+
+            /** @var Tinebase_Model_Tree_Node $node */
+            try {
+                $node = $treeNodeBackend->get($id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $raii->release();
+                continue;
+            }
+
+            $mimeType = $this->_getMimeType($node->name, $this->getRealPathForHash($node->hash));
+            if (null !== $mimeType && $node->contenttype !== $mimeType) {
+                try {
+                    $fObj = $this->_fileObjectBackend->get($node->object_id);
+                    $fObj->contenttype = $mimeType;
+                    $this->_fileObjectBackend->update($fObj);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    $raii->release();
+                    continue;
+                }
+
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' updated mimetype for object ' .
+                    $node->object_id);
+            }
+
+            $raii->release();
+        }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' done to sanitize mime types');
     }
 
     /**
@@ -3804,7 +3906,7 @@ class Tinebase_FileSystem implements
             $node = $this->get($nodeId, true);
             $notificationProps = $node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION);
 
-            if (count($notificationProps) === 0) {
+            if (! is_array($notificationProps) || count($notificationProps) === 0) {
                 continue;
             }
 
@@ -3818,7 +3920,7 @@ class Tinebase_FileSystem implements
                 return true;
             });
 
-            foreach($notificationProps as $notificationProp) {
+            foreach ($notificationProps as $notificationProp) {
 
                 $notifyUsers = array();
 

@@ -28,7 +28,7 @@ class Tasks_Frontend_WebDAV_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('All tasks webdav frontend tests');
+        $suite = new \PHPUnit\Framework\TestSuite('All tasks webdav frontend tests');
         
         $suite->addTestSuite('Tasks_Frontend_WebDAV_TaskTest');
         $suite->addTestSuite('Tasks_Frontend_WebDAV_ContainerTest');

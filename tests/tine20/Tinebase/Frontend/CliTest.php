@@ -40,8 +40,8 @@ class Tinebase_Frontend_CliTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_cli = new Tinebase_Frontend_Cli();
@@ -55,8 +55,8 @@ class Tinebase_Frontend_CliTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $currentUser = Tinebase_Core::getUser();
         if ($currentUser->accountLoginName !== $this->_testUser->accountLoginName) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
@@ -114,11 +114,11 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->_cli->purgeDeletedRecords($opts);
         $out = ob_get_clean();
         
-        $this->assertContains('Removing all deleted entries before', $out);
-        $this->assertContains('Cleared table addressbook (deleted ', $out);
+        $this->assertStringContainsString('Removing all deleted entries before', $out);
+        $this->assertStringContainsString('Cleared table addressbook (deleted ', $out);
 
         $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $contactBackend->get($deletedRecord->getId(), TRUE);
     }
 
@@ -153,18 +153,18 @@ class Tinebase_Frontend_CliTest extends TestCase
         $out = ob_get_clean();
 
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
-            $this->assertContains('Cleared table tree_nodes (deleted ', $out);
-            $this->assertContains('Cleared table tree_fileobjects (deleted ', $out);
+            $this->assertStringContainsString('Cleared table tree_nodes (deleted ', $out);
+            $this->assertStringContainsString('Cleared table tree_fileobjects (deleted ', $out);
 
             static::assertSame(0, Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getMultipleByProperty(
                 $deletedFile->getId(), 'id', true)->count());
             static::assertSame(0, Tinebase_FileSystem::getInstance()->getFileObjectBackend()->getMultipleByProperty(
                 $deletedFile->object_id, 'id', true)->count());
         }
-        $this->assertContains('Removing all deleted entries before', $out);
-        $this->assertContains('Cleared table addressbook (deleted ', $out);
-        $this->assertContains('Cleared table metacrm_lead (deleted ', $out);
-        $this->assertNotContains('Failed to purge', $out);
+        $this->assertStringContainsString('Removing all deleted entries before', $out);
+        $this->assertStringContainsString('Cleared table addressbook (deleted ', $out);
+        $this->assertStringContainsString('Cleared table metacrm_lead (deleted ', $out);
+        $this->assertStringNotContainsString('Failed to purge', $out);
 
         // test deleted contact is gone
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
@@ -253,7 +253,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         ob_start();
         $result = $this->_cli->triggerAsyncEvents($opts);
         ob_get_clean();
-        static::assertTrue($result, 'cli triggerAsyncEvents did not return true');
+        static::assertEquals(0, $result, 'cli triggerAsyncEvents did run successfully');
         
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
         $this->assertTrue(! empty($cronuserId), 'got empty cronuser id');
@@ -271,6 +271,7 @@ class Tinebase_Frontend_CliTest extends TestCase
                 'Tinebase_FileSystemSizeRecalculation',
                 'Tinebase_TempFileCleanup',
                 'Tinebase_FileSystem::repairTreeIsDeletedState',
+                'Tinebase_User/Group::syncUsers/Groups',
             ])) {
                 // FIXME skip those checks as they fail at random (?)
                 continue;
@@ -314,6 +315,8 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * testMonitoringCheckCron
+     *
+     * @group nodockerci
      */
     public function testMonitoringCheckCron()
     {
@@ -324,10 +327,10 @@ class Tinebase_Frontend_CliTest extends TestCase
         $lastJob = Tinebase_Scheduler::getInstance()->getLastRun();
         if ($lastJob && $lastJob->last_run instanceof Tinebase_DateTime) {
             if ($lastJob->server_time->isLater($lastJob->last_run->getClone()->addHour(1))) {
-                $this->assertContains('CRON FAIL: NO JOB IN THE LAST HOUR', $out);
+                $this->assertStringContainsString('CRON FAIL: NO JOB IN THE LAST HOUR', $out);
                 $this->assertEquals(1, $result);
             } else {
-                $this->assertContains('CRON OK', $out);
+                $this->assertStringContainsString('CRON OK', $out);
                 $this->assertEquals(0, $result);
             }
         } else {
@@ -377,7 +380,27 @@ class Tinebase_Frontend_CliTest extends TestCase
         $result = $this->_cli->monitoringCheckCache();
         $out = ob_get_clean();
 
-        self::assertContains('CACHE ', $out);
+        self::assertStringContainsString('CACHE ', $out);
+        self::assertLessThanOrEqual(1, $result);
+    }
+    
+    /**
+     * testMonitoringMailServers
+     * @group nodockerci
+     */
+    public function testMonitoringMailServers()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        ob_start();
+        $result = $this->_cli->monitoringMailServers();
+        $out = ob_get_clean();
+
+        if ($result === 99) {
+            self::markTestSkipped('netcat is not installed');
+        }
+        
+        self::assertStringContainsString('CONNECTION ', $out);
         self::assertLessThanOrEqual(1, $result);
     }
 
@@ -654,7 +677,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertGreaterThan(1, count($matches));
         $this->assertGreaterThanOrEqual(1, $matches[1]);
 
-        $this->assertContains(Tinebase_Core::getUser()->accountLoginName, $out, 'unittest login name should be found');
-        $this->assertContains('Unit Test Client', $out, 'unittest should have a user agent');
+        $this->assertStringContainsString(Tinebase_Core::getUser()->accountLoginName, $out, 'unittest login name should be found');
+        $this->assertStringContainsString('Unit Test Client', $out, 'unittest should have a user agent');
     }
 }

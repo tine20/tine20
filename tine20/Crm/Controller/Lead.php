@@ -2,28 +2,26 @@
 /**
  * leads controller for CRM application
  * 
- * the main logic of the CRM application (for leads)
+ * leads controller class for CRM application
  *
  * @package     Crm
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- */
-
-/**
- * leads controller class for CRM application
- * 
- * @package     Crm
- * @subpackage  Controller
  */
 class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
 {
     /**
      * @see Tinebase_Controller_Record_Abstract
      */
-    protected $_inspectRelatedRecords = TRUE;
+    protected $_inspectRelatedRecords = true;
+
+    /**
+     * @var bool en/disable readonly check with this
+     */
+    protected $_doReadonlyCheck = true;
 
     /**
      * const for sendNotification
@@ -86,7 +84,18 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
-    }    
+    }
+
+    /**
+     * set/get checking lead readonly check
+     *
+     * @param  boolean $setTo
+     * @return boolean
+     */
+    public function doReadonlyCheck($setTo = NULL)
+    {
+        return $this->_setBooleanMemberVar('_doReadonlyCheck', $setTo);
+    }
     
     /****************************** overwritten functions ************************/
     
@@ -138,8 +147,30 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $result['leadtypes'] = $this->_backend->getGroupCountForField($_filter, 'leadtype_id');
         
         return $result;
-    }            
-    
+    }
+
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @param   boolean $skipEvent = false
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $skipEvent = false)
+    {
+        $updatedLead = parent::update($_record, $_duplicateCheck);
+
+        if ($skipEvent === false) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Crm_Event_InspectLeadAfterUpdate([
+                'observable' => $updatedLead
+            ]));
+        }
+
+        return $updatedLead;
+    }
+
     /********************* notifications ***************************/
     
     /**
@@ -293,6 +324,10 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
 
         // if no responsibles are defined, send message to all readers of container
         if (count($recipients) === 0) {
+            if (!(Crm_Config::getInstance()->get(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS))) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending of Lead notifications all people having read access to container disabled by config.');
+                return $recipients;
+            }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
                 $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id);
                 
@@ -368,11 +403,36 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $this->_checkReadonlyState($_oldRecord);
         $this->_setTurnover($_record);
     }
-    
+
     /**
-     * set turnover of record if empty by calulating sum of product prices
+     * Check if record lead state has a readonly flag and throw a exception
+     * if the record was already set to a readonly state.
+     * 
+     * @param $_record
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkReadonlyState($_record)
+    {
+        if (! $this->_doReadonlyCheck) {
+            return;
+        }
+
+        $leadState = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getValue($_record->leadstate_id);
+        $readonly = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getKeyfieldRecordByValue($leadState)['readonly'];
+
+        if ($readonly) {
+            $translate = Tinebase_Translation::getTranslation('Crm');
+            // _('This Lead state is set to read-only therefore updating this Lead is not possible.')
+            throw new Tinebase_Exception_SystemGeneric(
+                $translate->_('This Lead state is set to read-only therefore updating this Lead is not possible.'));
+        }
+    }
+
+    /**
+     * set turnover of record if empty by calculating sum of product prices
      * 
      * @param Tinebase_Record_Interface $_record
      * @return void

@@ -363,14 +363,31 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'start_date'   => clone $this->_referenceDate,
                 'billing_address_id' => $addressId
             ));
+
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->search(new Timetracker_Model_TimeaccountFilter(array(
+                array('field' => 'title', 'operator' => 'equals', 'value' => 'Test Timeaccount ' . $i))));
+            $timeaccount = $timeaccount->getFirstRecord();
+            if (!$timeaccount) {
+                $timeaccount = new Timetracker_Model_Timeaccount();
+                $timeaccount->title = 'Test Timeaccount ' . $i;
+                $timeaccount->number = $i;
+                $timeaccount->is_billable = true;
+                $timeaccount->status = 'to bill';
+                $timeaccount->price = 120;
+                $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($timeaccount);
+
+                $timeaccountRelation = array(
+                    'own_model'              => Sales_Model_Contract::class,
+                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_id'                 => NULL,
+                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => Timetracker_Model_Timeaccount::class,
+                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_id'             => $timeaccount->getId(),
+                    'type'                   => 'TIME_ACCOUNT'
+                );
+            }
             
-            $timeaccount = new Timetracker_Model_Timeaccount();
-            $timeaccount->title = 'Test Timeaccount ' . $i;
-            $timeaccount->number = $i;
-            $timeaccount->is_billable = true;
-            $timeaccount->status = 'to bill';
-            $timeaccount->price = 120;
-            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($timeaccount);
 
             for($ts = 0; $ts < 6; $ts++) {
                 $timesheet = new Timetracker_Model_Timesheet();
@@ -405,17 +422,12 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'related_id'             => $customer->getId(),
                     'type'                   => 'CUSTOMER'
                 ),
-                array(
-                    'own_model'              => Sales_Model_Contract::class,
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
-                    'own_id'                 => NULL,
-                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => Timetracker_Model_Timeaccount::class,
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
-                    'related_id'             => $timeaccount->getId(),
-                    'type'                   => 'TIME_ACCOUNT'
-                )
+                
             );
+            
+            if ($timeaccountRelation) {
+                $relations[] = $timeaccountRelation;
+            }
             
             $genericProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(
                 self::$_de

@@ -299,7 +299,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             this.groupSearchCombo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                 hidden: true,
                 accountsStore: this.store,
-                blurOnSelect: true,
                 recordClass: this.groupRecordClass,
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
@@ -318,7 +317,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             this.roleSearchCombo = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                 hidden: true,
                 accountsStore: this.store,
-                blurOnSelect: true,
                 recordClass: this.roleRecordClass,
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
@@ -358,8 +356,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
 
     /**
      * @param {Record} recordToAdd
-     *
-     * TODO make reset work correctly -> show emptyText again
      */
     onAddRecordFromCombo: function (recordToAdd) {
         var recordData = {},
@@ -398,6 +394,11 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
         this.collapse();
         this.clearValue();
         this.reset();
+        
+        // fluent adding
+        _.delay(() => {
+            this.el.focus();
+        }, 300);
     },
 
     /**

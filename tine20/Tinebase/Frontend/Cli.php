@@ -48,6 +48,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return true;
     }
 
+    public function sanitizeFSMimeTypes()
+    {
+        $this->_checkAdminRight();
+        Tinebase_FileSystem::getInstance()->sanitizeMimeTypes();
+        return true;
+    }
+
     /**
      * @param Zend_Console_Getopt $opts
      * @return boolean success
@@ -319,7 +326,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * handle request (call -ApplicationName-_Cli.-MethodName- or -ApplicationName-_Cli.getHelp)
      *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean success
+     * @return boolean|integer success
      */
     public function handle($_opts)
     {
@@ -333,12 +340,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             } else if (method_exists($object, $method)) {
                 $result = call_user_func(array($object, $method), $_opts);
             } else {
-                $result = FALSE;
+                $result = 1;
                 echo "Method $method not found.\n";
             }
         } else {
             echo "Class $class does not exist.\n";
-            $result = FALSE;
+            $result = 2;
         }
         
         return $result;
@@ -348,20 +355,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * trigger async events (for example via cronjob)
      *
      * @param Zend_Console_Getopt $_opts
-     * @return boolean success
+     * @return integer
      */
     public function triggerAsyncEvents($_opts)
     {
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::CRON_DISABLED)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                 __LINE__ . ' Cronjob is disabled.');
-            return false;
+            return 1;
         }
 
         if (Tinebase_Core::inMaintenanceModeAll()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
                 __LINE__ . ' Maintenance mode prevents trigger async events.');
-            return false;
+            return 1;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -374,12 +381,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
+        if (! $cronuser) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                __LINE__ . ' No valid cronuser found.');
+            return 1;
+        }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $scheduler = Tinebase_Core::getScheduler();
         $result = $scheduler->run();
         
-        return $result;
+        return $result ? 0 : 1;
     }
 
     /**
@@ -390,14 +402,20 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @return bool success
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function executeQueueJob($_opts)
+    public function executeQueueJob(Zend_Console_Getopt $_opts)
     {
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
-        
+
+        if (! $cronuser) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                __LINE__ . ' No valid cronuser found.');
+            return false;
+        }
+
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $args = $_opts->getRemainingArgs();
@@ -407,8 +425,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             throw new Tinebase_Exception_InvalidArgument('mandatory parameter "jobId" is missing');
         }
 
-        if (isset($args[1]) && $args[1] === 'longRunning=true') {
-            $actionQueue = Tinebase_ActionQueueLongRun::getInstance();
+        if (isset($args[1]) ) {
+            $actionQueue = Tinebase_ActionQueue::getInstance(preg_replace('/^queueName=/', '', $args[1]));
         } else {
             $actionQueue = Tinebase_ActionQueue::getInstance();
         }
@@ -419,7 +437,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $result = $actionQueue->executeAction($job);
-        
+
+        // NOTE: queue job execution expects boolean result - don't change to integer (0,1,2...) here
         return false !== $result;
     }
     
@@ -430,6 +449,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - access_log
      * - async_job
      * - temp_files
+     * - timemachine_modlog
      * 
      * if param date is given (date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * 
@@ -443,10 +463,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
         $dateString = (isset($args['date']) || array_key_exists('date', $args)) ? $args['date'] : NULL;
 
+        $date = ($dateString) ? new Tinebase_DateTime($dateString) : NULL;
+
         foreach ((array)$args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    $date = ($dateString) ? new Tinebase_DateTime($dateString) : NULL;
                     Tinebase_AccessLog::getInstance()->clearTable($date);
                     break;
                 case 'async_job':
@@ -457,6 +478,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     break;
                 case 'temp_files':
                     Tinebase_TempFile::getInstance()->clearTableAndTempdir($dateString);
+                    break;
+                case 'timemachine_modlog':
+                    Tinebase_Tinemachine_ModificationLog::getInstance()->clear_table($date);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
@@ -1244,7 +1268,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if (! $actionQueue->hasAsyncBackend()) {
                 $message = 'QUEUE INACTIVE';
             } else {
-                $actionLRQueue = Tinebase_ActionQueueLongRun::getInstance();
+                $actionLRQueue = Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN);
                 try {
                     if (null === ($lastDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION))) {
@@ -1527,6 +1551,59 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * nagios monitoring for mail servers
+     * imap/smtp/sieve
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringMailServers() {
+        $result = 0;
+        $servers = [
+            Tinebase_Config::SMTP,
+            Tinebase_Config::IMAP,
+            Tinebase_Config::SIEVE
+        ];
+        
+        $message = "\n";
+        
+        foreach ($servers as $server) {
+            $serverConfig = Tinebase_Config::getInstance()->{$server};
+            
+            $host = isset($serverConfig->{'hostname'}) ? $serverConfig->{'hostname'} : $serverConfig->{'host'};
+            $port = $serverConfig->{'port'};
+            
+            $message .= $server . ' | host: '. $host . ' | port: ' . $port;
+            
+            if (empty($host) || empty($port)) {
+                $message .= ' -> INVALID VALUE' . PHP_EOL;
+                $result = 2;
+                continue;
+            }
+        
+            $output = shell_exec('nc -d -N -w3 ' . $host . ' ' . $port . PHP_EOL);
+            
+            if (!$output) {
+                echo 'COMMAND CANNOT BE EXECUTE' . PHP_EOL;
+                return 99;
+            }
+            
+            if (strpos($output, 'OK') || strstr($output, '220')) {
+                $message .= ' -> CONNECTION OK' . PHP_EOL;
+            } else {
+                $message .= ' -> CONNECTION ERROR' . PHP_EOL;
+                $result = 1;
+            }
+            
+            $message .= PHP_EOL . $output . PHP_EOL;
+        }
+        
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
      * example: $ php tine20.php --username pschuele --method Tinebase.undo -d 
@@ -1563,7 +1640,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun, (isset($data['modified_attribute'])?$data['modified_attribute']:null));
         
         if (! $dryrun) {
-            $this->clearCache();
+            Setup_Controller::getInstance()->clearCache(false);
             echo 'Reverted ' . $result['totalcount'] . " change(s)\n";
         } else {
             echo "Dry run\n";
@@ -1829,6 +1906,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * import contacts
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function import($_opts)
+    {
+        parent::_import($_opts);
+    }
+
+    /**
      * transfer relations
      * 
      * @param Zend_Console_Getopt $opts
@@ -1985,13 +2072,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->clearFileObjects();
-    }
-
-    public function clearCache()
-    {
-        $this->_checkAdminRight();
-
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 
     public function cleanAclTables()

@@ -29,8 +29,8 @@ class Tinebase_GroupTest extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         Tinebase_Group::getInstance()->resetClassCache();
@@ -173,7 +173,7 @@ class Tinebase_GroupTest extends TestCase
         
         Tinebase_Group::getInstance()->deleteGroups($testGroup);
         
-        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
+        $this->expectException('Tinebase_Exception_Record_NotDefined');
         $group = Tinebase_Group::getInstance()->getGroupById($testGroup);
     }
 
@@ -182,7 +182,7 @@ class Tinebase_GroupTest extends TestCase
      */
     public function testConvertGroupIdToInt()
     {
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->expectException('Tinebase_Exception_InvalidArgument');
         Tinebase_Model_Group::convertGroupIdToInt (0);
     }
 
@@ -191,7 +191,7 @@ class Tinebase_GroupTest extends TestCase
      */
     public function testConvertGroupIdToIntWithGroup()
     {
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->expectException('Tinebase_Exception_InvalidArgument');
         Tinebase_Model_Group::convertGroupIdToInt(new Tinebase_Model_Group(array(
             'name'          => 'tine20phpunit noid',
             'description'   => 'noid group'

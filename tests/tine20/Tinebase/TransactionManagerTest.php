@@ -13,7 +13,7 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
+class Tinebase_TransactionManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
      */
     protected $_instance = NULL;
     
-    protected $_tableXML = '
+    protected static $_tableXML = '
         <table>
             <name>transactiontest</name>
             <version>1</version>
@@ -47,8 +47,12 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     /**
      * setup test
      */
-    protected function setup()
+    protected function setUp(): void
     {
+        $setupBackend = Setup_Backend_Factory::factory();
+        $setupBackend->dropTable('transactiontest');
+        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml(self::$_tableXML));
+
         $this->_testTableName = SQL_TABLE_PREFIX . 'transactiontest';
         $this->_instance      = Tinebase_TransactionManager::getInstance();
     }
@@ -58,24 +62,10 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
      *
      * @since Method available since Release 3.4.0
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $setupBackend = Setup_Backend_Factory::factory();
         $setupBackend->dropTable('transactiontest');
-    }
-    
-    /**
-     * create test data in database instance
-     *
-     * @param Zend_Db_Adapter_Abstract $_db
-     */
-    protected function _createDbTestTable($_db)
-    {
-        $setupBackend = Setup_Backend_Factory::factory();
-        
-        $setupBackend->dropTable('transactiontest');
-        
-        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml($this->_tableXML));
     }
     
     /**
@@ -110,7 +100,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     public function testNonTransactionable()
     {
         $date = Tinebase_DateTime::now();
-        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
+        $this->expectException('Tinebase_Exception_UnexpectedValue');
         $this->_instance->startTransaction($date);
     }
     
@@ -120,8 +110,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     public function testOneDbSingleTransaction()
     {
         $db = Zend_Registry::get('dbAdapter');
-        
-        $this->_createDbTestTable($db);
+
         $transactionId = $this->_instance->startTransaction($db);
         $db->insert($this->_testTableName, array(
             'Column1' => $transactionId
@@ -139,8 +128,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
     public function testOneDbRollback()
     {
         $db = Zend_Registry::get('dbAdapter');
-        
-        $this->_createDbTestTable($db);
+
         $transactionId = $this->_instance->startTransaction($db);
         $db->insert($this->_testTableName, array(
             'Column1' => $transactionId
@@ -148,9 +136,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
         $this->_instance->rollBack();
         
         $columns = $db->fetchAll("SELECT * FROM " . $this->_testTableName . " WHERE " . $db->quoteInto($db->quoteIdentifier('Column1') . ' = ?', $transactionId) . ";");
-        foreach ($columns as $column) {
-            $this->assertNotEquals($transactionId, $column['Column1'], 'RollBack failed, data was inserted anyway');
-        }
+        $this->assertSame(0, count($columns));
     }
     
     /**
@@ -175,7 +161,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
             $tm->rollBack();
         }
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         // try to get the created cost center
         $c2->get($costCenter->getId());

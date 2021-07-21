@@ -447,7 +447,7 @@ El.prototype = {
      * @return {String/Number}
      */
     getValue : function(asNumber){
-        var val = this.dom.value;
+        var val = this.dom ? this.dom.value : undefined;
         return asNumber ? parseInt(val, 10) : val;
     },
 

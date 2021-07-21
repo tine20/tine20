@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -27,7 +27,7 @@ class Sales_JsonTest extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Json Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -37,7 +37,7 @@ class Sales_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         
@@ -49,8 +49,8 @@ class Sales_JsonTest extends TestCase
         $this->_deleteContracts = array();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, false);
 
         parent::tearDown();
@@ -238,24 +238,6 @@ class Sales_JsonTest extends TestCase
     }
 
     /**
-     * try to update a contract (with relations)
-     */
-    public function testUpdateContract()
-    {
-        $contract = $this->_getContract();
-        $contractData = $this->_instance->saveContract($contract->toArray());
-        $contractData = $this->_instance->getContract($contractData['id']);
-
-        // add account and contact + update contract
-        $contractData['relations'] = $this->_getRelations();
-        $contractUpdated = $this->_instance->saveContract($contractData);
-
-        $this->assertEquals($contractData['id'], $contractUpdated['id']);
-        $this->assertGreaterThan(0, count($contractUpdated['relations']));
-        $this->assertEquals(2, count($contractUpdated['relations']));
-    }
-
-    /**
      * try to get a contract
      */
     public function testSearchContracts()
@@ -369,7 +351,7 @@ class Sales_JsonTest extends TestCase
     public function testSearchCustomers()
     {
         $customerController = Sales_Controller_Customer::getInstance();
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_personas['sclever']->getId());
         $i = 0;
         
         while ($i < 104) {
@@ -452,10 +434,10 @@ class Sales_JsonTest extends TestCase
     {
         $data = $this->_instance->getRegistryData();
 
-        $this->assertTrue(isset($data['defaultContainer']));
-        $this->assertTrue(isset($data['defaultContainer']['path']));
-        $this->assertTrue(isset($data['defaultContainer']['account_grants']));
-        $this->assertTrue(is_array($data['defaultContainer']['account_grants']));
+        $this->assertTrue(isset($data['defaultContractContainer']));
+        $this->assertTrue(isset($data['defaultContractContainer']['path']));
+        $this->assertTrue(isset($data['defaultContractContainer']['account_grants']));
+        $this->assertTrue(is_array($data['defaultContractContainer']['account_grants']));
     }
 
     /**
@@ -500,6 +482,20 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals('test test', $updatedCustomer['postal_id']['prefix1']);
         $this->assertEquals(3, $updatedCustomer['postal_id']['seq']);
         $this->assertEquals(3, $updatedCustomer['adr_seq']);
+    }
+
+    public function testSaveCustomerAndCreateInvoiceAddress()
+    {
+        $customer = $this->_instance->saveCustomer(array(
+            'name'      => Tinebase_Record_Abstract::generateUID(),
+            'adr_street' => '11212stree',
+            'adr_postalcode' => '1111',
+            'adr_locality' => '1dscscsd',
+        ));
+
+        // assert invoice address (same as postal address)
+        self::assertTrue(is_array($customer['billing']), print_r($customer, true));
+        self::assertCount(1, $customer['billing'], print_r($customer, true));
     }
     
     /**
@@ -573,44 +569,6 @@ class Sales_JsonTest extends TestCase
     {
         return array(
             array('field' => 'query', 'operator' => 'contains', 'value' => $search),
-        );
-    }
-
-    /**
-     * get relations
-     *
-     * @return array
-     */
-    protected function _getRelations()
-    {
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'),
-            Addressbook_Model_Contact::class,
-            Zend_Registry::get('currentAccount'),
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-
-        $currentUser = Tinebase_Core::getUser();
-
-        return array(
-            array(
-                'type'              => Sales_Model_Contract::RELATION_TYPE_CUSTOMER,
-                'related_record'    => array(
-                    'org_name'         => 'phpunit erp test customer',
-                    'container_id'  => $personalContainer[0]->getId(),
-                ),
-                'related_model' => 'Addressbook_Model_Contact',
-                'related_degree'=> 'sibling'
-            ),
-            array(
-                'type'              => Sales_Model_Contract::RELATION_TYPE_RESPONSIBLE,
-                'related_record'    => array(
-                    'org_name'         => 'phpunit erp test responsible',
-                    'container_id'  => $personalContainer[0]->getId(),
-                ),
-                'related_model' => 'Addressbook_Model_Contact',
-                'related_degree'=> 'sibling'
-            ),
         );
     }
 
@@ -725,7 +683,7 @@ class Sales_JsonTest extends TestCase
         
         $this->_instance->deleteDivisions(array($d['id']));
         
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         
         $d = $this->_instance->getDivision($d['id']);
     }
@@ -739,7 +697,7 @@ class Sales_JsonTest extends TestCase
     
         list($contact1, $contact2, $contact3, $contact4) = $this->_createContacts();
         
-        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
+        $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
         
         $this->_setContractRelations($contract, array($contact1, $contact2), 'CUSTOMER');
     }
@@ -815,7 +773,7 @@ class Sales_JsonTest extends TestCase
         
         $contact4->relations = array($relation);
         
-        $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
+        $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
         $contact4 = Addressbook_Controller_Contact::getInstance()->update($contact4);
     }
     

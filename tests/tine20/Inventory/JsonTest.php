@@ -19,8 +19,8 @@ class Inventory_JsonTest extends Inventory_TestCase
      *
      * @var Inventory_Frontend_Json
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         $this->_json = new Inventory_Frontend_Json();
     }
@@ -138,7 +138,7 @@ class Inventory_JsonTest extends Inventory_TestCase
         $returnValueDeletion = $this->_json->deleteInventoryItems($inventoryRecordID);
         $this->assertEquals($returnValueDeletion['status'], 'success');
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $returnValueGet = $this->_json->getInventoryItem($inventoryRecordID);
     }
     

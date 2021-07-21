@@ -34,7 +34,7 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         Tine.Sales.ContractGridPanel.superclass.initComponent.call(this);
         this.action_addInNewWindow.actionUpdater = function() {
-            var defaultContainer = this.app.getRegistry().get('defaultContainer');
+            let defaultContainer = this.app.getRegistry().get('defaultContractContainer');
             this.action_addInNewWindow.setDisabled(! defaultContainer.account_grants[this.action_addInNewWindow.initialConfig.requiredGrant]);
         }
     },
@@ -47,6 +47,10 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array} of Ext.Action
      */
     getActionToolbarItems: function() {
+        if (! this.app.featureEnabled('invoicesModule')) {
+            return [];
+        }
+
         this.actions_bill = new Ext.Action({
             text: this.app.i18n._('Bill Contract'),
             iconCls: 'action_bill',
@@ -139,10 +143,10 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array}
      */
     getContextMenuItems: function() {
-        var items = [
+        var items = this.app.featureEnabled('invoicesModule') ? [
             '-',
             this.actions_bill
-            ];
+            ] : [];
         
         return items;
     }

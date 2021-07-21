@@ -31,8 +31,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
      *
      * @access protected
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $this->calDAVTests = new Calendar_Frontend_WebDAV_EventTest();
         $this->calDAVTests->setup();
         
@@ -53,8 +53,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->server->httpResponse = $this->response;
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         if ($this->originalHostname) {
             $_SERVER['HTTP_HOST'] = $this->originalHostname;
         }
@@ -131,7 +131,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
             ->getRecordAttachments($event->getRecord()->exdate[0]);
         
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
-        $this->assertContains('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
+        $this->assertStringContainsString('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
         $this->assertEquals(1, $baseAttachments->count());
         $this->assertEquals($filename, $baseAttachments[0]->name);
         $this->assertEquals(1, $exdateAttachments->count());
@@ -182,7 +182,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         ->getRecordAttachments($event->getRecord());
         
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
-        $this->assertContains('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
+        $this->assertStringContainsString('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
         $this->assertEquals(1, $attachments->count());
         $this->assertEquals('agenda.html', $attachments[0]->name);
     }
@@ -210,8 +210,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $request->setBody($agenda);
         
         $vcalendar = $this->_execAndGetVCalendarFromRequest($request);
-        $this->assertContains('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
-         $this->assertNotContains($attachmentNode->hash, $vcalendar, 'old managed-id');
+        $this->assertStringContainsString('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
+         $this->assertStringNotContainsString($attachmentNode->hash, $vcalendar, 'old managed-id');
         //@TODO assert URI
         //@TODO /fetch attachment & assert contents
     }
@@ -236,7 +236,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         ));
         
         $vcalendar = $this->_execAndGetVCalendarFromRequest($request);
-        $this->assertNotContains('ATTACH;MANAGED-ID=', $vcalendar, $vcalendar);
+        $this->assertStringNotContainsString('ATTACH;MANAGED-ID=', $vcalendar, $vcalendar);
         
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($event->getRecord());
         $this->assertEquals(0, $attachments->count());

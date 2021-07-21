@@ -105,6 +105,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'hasTags'           => false,
         'hasXProps'         => true,
         'modlogActive'      => true,
+        self::HAS_DELETED_TIME_UNIQUE => true,
         'hasAttachments'    => false,
         'createModule'      => false,
         'exposeHttpApi'     => false,
@@ -116,6 +117,10 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'idProperty'        => 'accountId',
 
         'filterModel'       => [],
+
+        self::TABLE         => [
+            self::NAME          => 'accounts'
+        ],
 
         'fields'            => [
             'accountDisplayName'            => [
@@ -147,7 +152,11 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
                 'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
             ],
             'contact_id'                    => [
-                //'type'                          => 'record',
+                self::TYPE                      => self::TYPE_RECORD,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_PART_NAME,
+                ],
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
         ],

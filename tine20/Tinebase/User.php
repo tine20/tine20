@@ -475,7 +475,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if ($username instanceof Tinebase_Model_FullUser) {
             $username = $username->accountLoginName;
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Sync options: ' . print_r($options, true));
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
 
@@ -494,6 +497,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         try {
             $user = $userBackend->getUserByPropertyFromSyncBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Sync User: ' . print_r($user->toArray(), true));
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
                 . $tenf->getMessage());
@@ -614,6 +619,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (isset($options['syncAccountStatus']) && $options['syncAccountStatus']) {
             $fieldsToSync[] = 'accountStatus';
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Fields to sync: ' . print_r($fieldsToSync, true));
+
         $recordNeedsUpdate = false;
         foreach ($fieldsToSync as $field) {
             if ($currentUser->{$field} !== $user->{$field} && (! empty($user->{$field}) || ! in_array($field, $nonEmptyFields))) {
@@ -1085,10 +1094,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * create new system user
      *
      * @param string $accountLoginName
-     * @param Tinebase_Group $defaultGroup
+     * @param Tinebase_Model_Group|null $defaultGroup
      * @return Tinebase_Model_FullUser|null
      */
-    static public function createSystemUser($accountLoginName, $defaultGroup = null)
+    static public function createSystemUser($accountLoginName, Tinebase_Model_Group $defaultGroup = null)
     {
         try {
             $systemUser = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
@@ -1127,7 +1136,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         try {
             $systemUser = Tinebase_User::getInstance()->addUser($systemUser);
             Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
-        } catch(Zend_Ldap_Exception $zle) {
+        } catch (Zend_Ldap_Exception $zle) {
             Tinebase_Exception::log($zle);
             if (stripos($zle->getMessage(), 'Already exists') !== false) {
                 try {
@@ -1163,18 +1172,26 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
 
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                ' no system user could be created');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                ' No system user could be created');
+
             // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
-            Tinebase_Exception::log($e);
+
             try {
-                $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
-                Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
-            } catch(Exception $e) {
+                if ($e instanceof Zend_Db_Statement_Exception && Tinebase_Exception::isDbDuplicate($e)) {
+                    $systemUser = Tinebase_User::getInstance()->getUserByLoginName($accountLoginName);
+                } else {
+                    $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
+                    Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+                }
+            } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                    ' no system user could be created');
+                    ' no system user could be created: ' . $e->getMessage());
                 // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
-                Tinebase_Exception::log($e);
+
+                if (! ($e instanceof Zend_Db_Statement_Exception && Tinebase_Exception::isDbDuplicate($e))) {
+                    Tinebase_Exception::log($e);
+                }
                 $systemUser = null;
             }
         }
@@ -1195,5 +1212,35 @@ class Tinebase_User implements Tinebase_Controller_Interface
         }
 
         return $systemUser;
+    }
+
+    /**
+     * generate random password
+     *
+     * @param int $length
+     * @param boolean $useSpecialChar
+     * @return string
+     */
+    public static function generateRandomPassword($length = 10, $useSpecialChar = true)
+    {
+        $symbolsGeneral = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $symbolsSpecialChars = '!?~@#-_+<>[]{}';
+
+        $used_symbols = $symbolsGeneral;
+        $symbols_length = strlen($used_symbols) - 1; //strlen starts from 0 so to get number of characters deduct 1
+
+        $pass = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $pass .= $used_symbols[rand(0, $symbols_length)];
+        }
+
+        if ($useSpecialChar) {
+            $pass = substr($pass, 1) ;
+            $pass .= $symbolsSpecialChars[rand(0, strlen($symbolsSpecialChars) - 1)];
+
+        }
+
+        return str_shuffle($pass);
     }
 }

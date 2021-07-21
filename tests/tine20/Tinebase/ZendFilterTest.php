@@ -19,7 +19,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
+class Tinebase_ZendFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -34,7 +34,7 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_UserTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_UserTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -44,8 +44,8 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         
         // data to validate
         $this->objects['dataEmptyString'] = array ( 'notEmptyString' => '' );
@@ -69,8 +69,8 @@ class Tinebase_ZendFilterTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     
     }
     

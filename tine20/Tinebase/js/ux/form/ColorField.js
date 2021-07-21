@@ -24,7 +24,8 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
 Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
     listWidth: 150,
     editable: false,
-    
+    color: null,
+
     // private
     initComponent : function(){
         Ext.ux.form.ColorField.superclass.initComponent.call(this);
@@ -70,13 +71,13 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
         if(this.menu == null){
             this.menu = new Ext.menu.ColorMenu({
                 hideOnClick: false,
+                value: this.color,
                 listeners: {
                     scope: this,
                     select: this.onSelect,
                     pickerShow: this.onPickerShow
                 }
             });
-
         }
         this.onFocus();
         this.menuEvents('on');
@@ -86,6 +87,7 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
 
     setValue : function(color){
         color = color || '#FFFFFF';
+        this.color = color;
 
         this.el.setStyle('background', color);
         this.el.setStyle('color', color);
@@ -121,7 +123,7 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
 
         this.onFocus();
     },
-    
+
     //private
     onPickerShow: function(win) {
         // win is shown in a menu! ok btn is outside the menu and thus
@@ -129,11 +131,10 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
         win.on('close', () => {
             this.colorPickerWindow = null;
         });
-        
+
         this.colorPickerWindow = win;
-        
     },
-    
+
     //private
     onMenuHide: function(){
         this.focus(false, 60);

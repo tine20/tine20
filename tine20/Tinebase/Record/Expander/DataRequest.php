@@ -47,7 +47,8 @@ class Tinebase_Record_Expander_DataRequest
         }
 
         // get instances from datacache
-        $data = static::_getInstancesFromCache($this->controller->getModel(), $this->ids, $this->_getDeleted);
+        $model = $this->controller->getModel();
+        $data = static::_getInstancesFromCache($model, $model, $this->ids, $this->_getDeleted);
 
         if (!empty($this->ids)) {
             /** TODO make sure getMultiple doesnt do any resolving, customfields etc */
@@ -60,7 +61,7 @@ class Tinebase_Record_Expander_DataRequest
             } else {
                 $newRecords = $this->controller->getMultiple($this->ids);
             }
-            static::_addInstancesToCache($this->controller->getModel(), $newRecords, $this->_getDeleted);
+            static::_addInstancesToCache($model, $newRecords, $this->_getDeleted);
             $data->mergeById($newRecords);
         }
 
@@ -68,25 +69,25 @@ class Tinebase_Record_Expander_DataRequest
     }
 
     /**
-     * @param string $_model
+     * @param string $_cacheKey
      * @param Tinebase_Record_RecordSet $_data
      * @param bool $_getDeleted
      */
-    protected static function _addInstancesToCache($_model, Tinebase_Record_RecordSet $_data, $_getDeleted = false)
+    protected static function _addInstancesToCache($_cacheKey, Tinebase_Record_RecordSet $_data, $_getDeleted = false)
     {
         // always set both! we only check one below in \Tinebase_Record_Expander_DataRequest::_getInstancesFromCache
-        if (!isset(static::$_dataCache[$_model])) {
-            static::$_dataCache[$_model] = [];
+        if (!isset(static::$_dataCache[$_cacheKey])) {
+            static::$_dataCache[$_cacheKey] = [];
         }
-        if (!isset(static::$_deletedDataCache[$_model])) {
-            static::$_deletedDataCache[$_model] = [];
+        if (!isset(static::$_deletedDataCache[$_cacheKey])) {
+            static::$_deletedDataCache[$_cacheKey] = [];
         }
-        $array = &static::$_dataCache[$_model];
+        $array = &static::$_dataCache[$_cacheKey];
 
         /** @var Tinebase_Record_Abstract $record */
         foreach ($_data as $record) {
             if ($_getDeleted && $record->is_deleted) {
-                static::$_deletedDataCache[$_model][$record->getId()] = $record;
+                static::$_deletedDataCache[$_cacheKey][$record->getId()] = $record;
             } else {
                 $array[$record->getId()] = $record;
             }
@@ -95,23 +96,24 @@ class Tinebase_Record_Expander_DataRequest
     }
     /**
      * @param string $_model
+     * @param string $_cacheKey
      * @param array $_ids
      * @param bool $_getDeleted
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_NotAllowed
      */
-    protected static function _getInstancesFromCache($_model, &$_ids, $_getDeleted = false)
+    protected static function _getInstancesFromCache($_model, $_cacheKey, &$_ids, $_getDeleted = false)
     {
         $data = new Tinebase_Record_RecordSet($_model);
         // only one isset check, as we always set both arrays
-        if (isset(static::$_dataCache[$_model])) {
+        if (isset(static::$_dataCache[$_cacheKey])) {
             foreach ($_ids as $key => $id) {
-                if (isset(static::$_dataCache[$_model][$id])) {
-                    $data->addRecord(static::$_dataCache[$_model][$id]);
+                if (isset(static::$_dataCache[$_cacheKey][$id])) {
+                    $data->addRecord(static::$_dataCache[$_cacheKey][$id]);
                     unset($_ids[$key]);
-                } elseif ($_getDeleted && isset(static::$_deletedDataCache[$_model][$id])) {
-                    $data->addRecord(static::$_deletedDataCache[$_model][$id]);
+                } elseif ($_getDeleted && isset(static::$_deletedDataCache[$_cacheKey][$id])) {
+                    $data->addRecord(static::$_deletedDataCache[$_cacheKey][$id]);
                     unset($_ids[$key]);
                 }
             }

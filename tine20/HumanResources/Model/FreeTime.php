@@ -33,7 +33,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 8,
+        'version'         => 9,
         'recordName'      => 'Free Time', // ngettext('Free Time', 'Free Times', n)
         'recordsName'     => 'Free Times',
         'hasRelations'    => FALSE,
@@ -46,6 +46,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
         'titleProperty'   => 'description',
         'appName'         => 'HumanResources',
         'modelName'       => 'FreeTime',
+        'requiredRight'                 => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
@@ -57,18 +58,29 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                         'referencedColumnName'  => 'id'
                     ]],
                 ],
+                'type' => [
+                    'targetEntity' => HumanResources_Model_FreeTimeType::class,
+                    'fieldName' => 'type',
+                    'joinColumns' => [[
+                        'name' => 'type',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ],
             ],
         ],
-        
+
         'table'             => array(
             'name'    => 'humanresources_freetime',
             'indexes' => array(
                 'employee_id' => array(
                     'columns' => array('employee_id'),
                 ),
+                'type' => array(
+                    'columns' => array('type'),
+                ),
             )
         ),
-        
+
         'fields'          => array(
             'employee_id'       => array(
                 'label'      => 'Employee',    // _('Employee')
@@ -100,8 +112,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
                     'appName'     => HumanResources_Config::APP_NAME,
                     'modelName'   => HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
                 ),
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'nullable' => true,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
             ),
             'description'          => array(
                 'label' => 'Description', // _('Description')

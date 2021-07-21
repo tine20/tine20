@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tasks_Convert_Task_VCalendar_Thunderbird
  */
-class Tasks_Convert_Task_VCalendar_ThunderbirdTest extends PHPUnit_Framework_TestCase
+class Tasks_Convert_Task_VCalendar_ThunderbirdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Tasks_Convert_Task_VCalendar_ThunderbirdTest extends PHPUnit_Framework_Tes
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar WebDAV Thunderbird Event Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar WebDAV Thunderbird Event Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Tasks_Convert_Task_VCalendar_ThunderbirdTest extends PHPUnit_Framework_Tes
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->markTestIncomplete('tests not yet implemented');
     }
 
@@ -52,8 +52,8 @@ class Tasks_Convert_Task_VCalendar_ThunderbirdTest extends PHPUnit_Framework_Tes
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
     
     /**

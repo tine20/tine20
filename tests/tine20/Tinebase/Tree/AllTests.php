@@ -22,7 +22,7 @@ class Tinebase_Tree_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Filemanager All Backend Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Filemanager All Backend Tests');
         $suite->addTestSuite('Tinebase_Tree_NodeTest');
         $suite->addTestSuite('Tinebase_Tree_FileObjectTest');
         return $suite;

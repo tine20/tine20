@@ -47,6 +47,7 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Filemanager');
         this.label = this.app.i18n._('path');
         
         Tine.Filemanager.PathFilterModel.superclass.initComponent.call(this);
@@ -67,6 +68,10 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                 value = '/' + value;
             }
 
+            if (! this.el.findParent('.x-window') && Tine.Tinebase.MainScreen && 'Filemanager' === _.get(Tine.Tinebase.MainScreen.getActiveApp(), 'name')) {
+                Tine.Tinebase.router.setRoute(Tine.Tinebase.appMgr.get('Filemanager').getRoute(value));
+            }
+            
             return Ext.ux.form.ClearableTextField.prototype.setValue.call(this, value);
         };
 
@@ -89,4 +94,3 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
 });
 
 Tine.widgets.grid.FilterToolbar.FILTERS['tine.filemanager.pathfiltermodel'] = Tine.Filemanager.PathFilterModel;
-

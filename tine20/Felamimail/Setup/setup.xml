@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>13.1</version>
+    <version>14.1</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -488,7 +488,7 @@
         </table>
         <table>
             <name>felamimail_cache_message</name>
-            <version>11</version>
+            <version>13</version>
             <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
@@ -583,6 +583,11 @@
                     <name>timestamp</name>
                     <type>datetime</type>
                 </field>
+                <field>
+                    <name>is_spam_suspicions</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -603,6 +608,18 @@
                     <name>received</name>
                     <field>
                         <name>received</name>
+                    </field>
+                </index>
+                <index>
+                    <name>from_email</name>
+                    <field>
+                        <name>from_email</name>
+                    </field>
+                </index>
+                <index>
+                    <name>from_name</name>
+                    <field>
+                        <name>from_name</name>
                     </field>
                 </index>
                 <index>

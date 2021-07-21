@@ -226,7 +226,11 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function getETag()
     {
-        $node = Tinebase_FileSystem::getInstance()->stat($this->_path);
+        try {
+            $node = Tinebase_FileSystem::getInstance()->stat($this->_path);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $this->_path . ' not found');
+        }
         return '"' . (empty($node->hash) ? sha1($node->object_id) : $node->hash) . '"';
     }
 

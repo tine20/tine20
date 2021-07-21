@@ -18,7 +18,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * 
  * @package     ActiveSync
  */
-class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
+class ActiveSync_Backend_DeviceTests extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ActiveSync_Backend_Device
@@ -43,12 +43,12 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Backend Device Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 ActiveSync Backend Device Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_deviceBackend = new ActiveSync_Backend_Device();
@@ -60,8 +60,8 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -85,7 +85,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
     
         $this->_deviceBackend->delete($device);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         $this->_deviceBackend->get($device);
     }

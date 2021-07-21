@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * ldap group backend
@@ -41,7 +41,7 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_SqlTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_User_SqlTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -51,8 +51,8 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
             $this->markTestSkipped('LDAP backend not enabled');
         }
@@ -74,8 +74,8 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ($this->objects['users'] as $user) {
             $this->_backend->deleteUser($user);
         }

@@ -27,7 +27,8 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
     },
 
     routes: {
-        'showNode(.*)': 'showNode'
+        'showNode(.*)': 'showNode',
+        '(.*)': 'showNode'
     },
 
     /**
@@ -35,37 +36,45 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
      * /#/Filemanager/showNode/shared/someFolder/someFile
      */
     showNode: function(path) {
-        this.getMainScreen().getCenterPanel().initialLoadAfterRender = false;
+        const {type, dirname, sanitize} = Tine.Filemanager.Model.Node;
         Tine.Tinebase.MainScreenPanel.show(this);
-        // NOTE: decodeURIComponent can't cope with +
-        path = Ext.ux.util.urlCoder.decodeURIComponent(path);
+        path = sanitize(Ext.ux.util.urlCoder.decodeURIComponent(path));
 
-        // if file, show directory file is in
-        var dirPath = path;
-        if (String(path).match(/\/.*\..+$/)) {
-            var pathParts = path.split('/');
-            pathParts.pop();
-            dirPath = pathParts.join('/');
-        }
-
+        const isFile = type(path) === 'file';
+        const dir = isFile ? dirname(path) : path;
+        
         (function() {
             var cp = this.getMainScreen().getCenterPanel(),
                 grid = cp.getGrid(),
                 store = cp.getStore(),
                 ftb = cp.filterToolbar,
                 highlight = function() {
-                    store.un('load', highlight);
                     var sm = grid.getSelectionModel(),
-                        idx = store.find('path', path);
-                    if (idx) {
-                        sm.selectRow(idx);
+                        idx = store.findExact('path', path);
+                    if (idx >= 0) {
+                        sm.clearSelections();
+                        const row = grid.getView().getRow(idx);
+                        Ext.fly(row).highlight('#ffffff', {easing: 'bounceOut', duration: 1, endColor: '#dbecf4'});
+                        _.delay(() => { sm.selectRow(idx); }, 1000);
                     }
                 };
 
-            store.on('load', highlight);
-            ftb.setValue([{field: 'path', operator: 'equals', value: dirPath}]);
-            ftb.onFiltertrigger();
+            store.on('load', highlight, this, {single: true});
+            
+            const currentValue = ftb.getValue();
+            if (! (currentValue.length ===1 && currentValue[0].field === 'path' && currentValue[0].operator === 'equals'
+                && sanitize(currentValue[0].value) === dir)) {
+                ftb.setValue([{field: 'path', operator: 'equals', value: dir}]);
+                ftb.onFiltertrigger();
+            }
         }).defer(500, this);
+    },
+
+    getRoute(path) {
+        this.path = path = path || this.path || Tine.Tinebase.container.getMyFileNodePath();
+
+        const encodedPath = _.map(Tine.Filemanager.Model.Node.sanitize(path).split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/');
+        return `Filemanager${encodedPath}`;
     }
 });
 
@@ -84,6 +93,22 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     }
 });
 
+// special wording for contents filter
+Tine.widgets.grid.FilterRegistry.register('Filemanager', 'Node', {label : 'File Contents', field : 'content', operators : [ 'wordstartswith' ]},);
+
+// remove content filters if indexing is not enabled
+Tine.Tinebase.appMgr.isInitialised('Filemanager').then(() => {
+    if (! Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
+        const nodeFilterModels = [
+            Tine.widgets.grid.FilterRegistry.get('Filemanager', 'Node'),
+            Tine.widgets.grid.FilterRegistry.get('Tinebase', 'Tree_Node')
+        ];
+        _.each(nodeFilterModels, (filterModel) => {
+            _.remove(filterModel, _.find(filterModel, {field: 'content'}));
+            _.remove(filterModel, _.find(filterModel, {field: 'isIndexed'}));
+        });
+    }
+});
 /**
  * @namespace Tine.Filemanager
  * @class Tine.Filemanager.MainScreen

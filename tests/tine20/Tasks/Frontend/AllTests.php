@@ -22,7 +22,7 @@ class Tasks_Frontend_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('All tasks frontend tests');
+        $suite = new \PHPUnit\Framework\TestSuite('All tasks frontend tests');
         
         $suite->addTest(Tasks_Frontend_WebDAV_AllTests::suite());
         

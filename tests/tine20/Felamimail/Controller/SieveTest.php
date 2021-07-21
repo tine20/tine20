@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -20,6 +20,13 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 class Felamimail_Controller_SieveTest extends Felamimail_TestCase
 {
     protected $_oldXpropsSetting = null;
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'container', 'is_deleted = 1');
+    }
 
     public function testAdbMailinglistPutSieveRule()
     {
@@ -41,9 +48,9 @@ class Felamimail_Controller_SieveTest extends Felamimail_TestCase
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
 
         self::assertNotNull($script);
-        self::assertContains('require ["envelope","copy","reject"];', $script->getSieve());
+        self::assertStringContainsString('require ["envelope","copy","reject"];', $script->getSieve());
         $domains = Tinebase_EmailUser::getAllowedDomains();
-        self::assertContains('if address :is :domain "from" ' . json_encode($domains) . ' {
+        self::assertStringContainsString('if address :is :domain "from" ' . json_encode($domains) . ' {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 } else { reject', $script->getSieve());
 
@@ -65,7 +72,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         self::assertNotNull($script);
         $domains = Tinebase_EmailUser::getAllowedDomains();
-        self::assertContains('if address :is :domain "from" ' . json_encode($domains) . ' {
+        self::assertStringContainsString('if address :is :domain "from" ' . json_encode($domains) . ' {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 } else { reject "', $script->getSieve());
 
@@ -83,7 +90,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         self::assertNotNull($script);
-        self::assertNotContains('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"]', $script->getSieve());
+        self::assertStringNotContainsString('if address :is :domain "from" ["' . TestServer::getPrimaryMailDomain() . '"]', $script->getSieve());
 
         // TODO check sieve script functionality
     }
@@ -108,8 +115,8 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
-        self::assertContains('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $script->getSieve());
-        self::assertContains('reject "Your email has been rejected"', $script->getSieve());
+        self::assertStringContainsString('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $script->getSieve());
+        self::assertStringContainsString('reject "Your email has been rejected"', $script->getSieve());
 
         // TODO check sieve script functionality
 

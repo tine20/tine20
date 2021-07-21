@@ -84,7 +84,7 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
             $this->_exportFileHandle = null;
             $number = count($this->_exportFilenames) + 1;
             // TODO invent a helper function for filename generation (with numbers)
-            if (preg_match('/(n[0-9]+)*(.ics)$/i', $this->_currentExportFilename, $matches)) {
+            if (preg_match('/(n[0-9]+)*(.' . preg_quote($this->_format) . ')$/i', $this->_currentExportFilename, $matches)) {
                 $this->_currentExportFilename = str_replace($matches[0], 'n' . $number . $matches[2],
                     $this->_currentExportFilename);
             } else {
@@ -147,7 +147,8 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
         if (! $result && $this->_config->returnFileLocation) {
             // create a tempfile and return that
             $result = Tinebase_TempFile::getTempPath();
-            file_put_contents($result, $this->_document->serialize());
+            $exportString = is_string($this->_document) ? $this->_document : $this->_document->serialize();
+            file_put_contents($result, $exportString);
         } else if (is_array($result) && count($result) === 1) {
             $result = $this->_exportFilenames[0];
         }

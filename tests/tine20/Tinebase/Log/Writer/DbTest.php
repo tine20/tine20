@@ -34,14 +34,14 @@ class Tinebase_Log_Writer_DbTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_logger = new Tinebase_Log();
         Tinebase_Controller_LogEntry::getInstance()->cleanUp(Tinebase_DateTime::now());
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Log_Formatter::reset();
         $this->_writer->shutdown();
     }

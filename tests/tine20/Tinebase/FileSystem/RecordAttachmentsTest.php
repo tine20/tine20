@@ -26,8 +26,8 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
             self::markTestSkipped('filesystem base path not found');
         }
@@ -45,8 +45,8 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
@@ -134,19 +134,25 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
     
     /**
      * test getting record attachments
-     * 
-     * @todo add assertions
      */
     public function testGetRecordAttachments($record = null)
     {
         $recordAttachments = Tinebase_FileSystem_RecordAttachments::getInstance();
-        
+
+        $assert = false;
         if (!$record) {
             $record = new Addressbook_Model_Contact(array('n_family' => Tinebase_Record_Abstract::generateUID()));
             $record->setId(Tinebase_Record_Abstract::generateUID());
+            $assert = true;
         }
         
-        return $recordAttachments->getRecordAttachments($record);
+        $attachments = $recordAttachments->getRecordAttachments($record);
+
+        if ($assert) {
+            $this->assertSame(0, $attachments->count());
+        }
+
+        return $attachments;
     }
     
     /**
@@ -173,7 +179,7 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
         
         foreach ($records as $record) {
             self::assertEquals(2, $record->attachments->count(), 'Attachments missing');
-            self::assertContains('Test.txt', $record->attachments->getFirstRecord()->name);
+            self::assertStringContainsString('Test.txt', $record->attachments->getFirstRecord()->name);
         }
     }
 
@@ -197,6 +203,6 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
         $reflectionMethod->invokeArgs($http, [$attachment, $path, null, /* ignoreAcl */ true]);
         $output = ob_get_clean();
 
-        self::assertContains('Tinebase_FileSystem_RecordAttachmentsTest', $output);
+        self::assertStringContainsString('Tinebase_FileSystem_RecordAttachmentsTest', $output);
     }
 }

@@ -90,7 +90,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                 </field>";
         
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
-        $this->setExpectedException('Setup_Backend_Exception_NotImplemented');
+        $this->expectException('Setup_Backend_Exception_NotImplemented');
         
         $this->_backend->addCol($this->_table->name, $field, 1); //Cannot use 3rd parameter $_position in Oracle 
     }
@@ -107,7 +107,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
 
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         
-        $this->setExpectedException('Setup_Backend_Exception_NotImplemented');
+        $this->expectException('Setup_Backend_Exception_NotImplemented');
         $this->_backend->addCol($this->_table->name, $field);
     }
     
@@ -299,7 +299,7 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
         </table>';
         $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXml);
         $this->_tableNames[] = $table->name;
-        $this->setExpectedException('Zend_Db_Statement_Exception', '972'); //oracle identifiers cannot be longer than 30 characters 
+        $this->expectException('Zend_Db_Statement_Exception'); $this->expectExceptionMessageMatches('/972/'); //oracle identifiers cannot be longer than 30 characters
         $this->_backend->createTable($table);
     }
 

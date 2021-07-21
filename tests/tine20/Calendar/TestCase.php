@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -58,7 +58,7 @@ abstract class Calendar_TestCase extends TestCase
     /**
      * set up tests
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         
@@ -72,7 +72,7 @@ abstract class Calendar_TestCase extends TestCase
         }
         
         $this->_testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_originalTestUser->getId());
-        $this->_testCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
+        $this->_testCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, false, static::class);
         
         $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
         $this->_testCalendars->addRecord($this->_testCalendar);
@@ -81,7 +81,7 @@ abstract class Calendar_TestCase extends TestCase
     /**
      * tear down tests
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         
@@ -100,9 +100,10 @@ abstract class Calendar_TestCase extends TestCase
                     $this->_backend->delete($event->getId());
                 }
             }
-            foreach ($this->_testCalendars as $cal) {
-                Tinebase_Container::getInstance()->deleteContainer($cal, true);
-            }
+        }
+
+        foreach ($this->_testCalendars ?: [] as $cal) {
+            try { Tinebase_Container::getInstance()->deleteContainer($cal, true); } catch (Exception $e) {}
         }
         
         $this->_testUserContact = NULL;
@@ -111,6 +112,10 @@ abstract class Calendar_TestCase extends TestCase
         $this->_personas = NULL;
         $this->_personasContacts = array();
         $this->_personasDefaultCals = array();
+
+        Tinebase_Core::getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'cal_events WHERE container_id IN (SELECT id FROM '
+            . SQL_TABLE_PREFIX . 'container WHERE is_deleted = 1)');
+        Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'container', 'is_deleted = 1');
     }
     
     /**
@@ -312,8 +317,8 @@ abstract class Calendar_TestCase extends TestCase
     protected function _getAttendee()
     {
         return new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
-            $this->_createAttender($this->_getTestUserContact()->getId())->toArray(),
-            $this->_createAttender($this->_GetPersonasContacts('sclever')->getId())->toArray(),
+            $this->_createAttender($this->_getTestUserContact()->getId()),
+            $this->_createAttender($this->_GetPersonasContacts('sclever')->getId()),
         ));
     }
     
@@ -341,9 +346,9 @@ abstract class Calendar_TestCase extends TestCase
      * @param array|null $grants
      * @return Calendar_Model_Resource
      */
-    protected function _getResource($grants = null)
+    protected function _getResource($grants = null, $resourceData = [])
     {
-        return new Calendar_Model_Resource(array(
+        return new Calendar_Model_Resource(array_merge(array(
             'name'                 => 'Meeting Room',
             'description'          => 'Our main meeting room',
             'email'                => 'room@example.com',
@@ -360,7 +365,7 @@ abstract class Calendar_TestCase extends TestCase
                     Calendar_Model_ResourceGrants::EVENTS_EDIT => true,
                 ] : $grants),
             ]
-        ));
+        ), $resourceData));
     }
 
     /**

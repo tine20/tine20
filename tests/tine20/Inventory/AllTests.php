@@ -23,7 +23,7 @@ class Inventory_AllTests
     
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Inventory All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Inventory All Tests');
         
         $suite->addTestSuite('Inventory_JsonTest');
         $suite->addTestSuite('Inventory_ControllerTest');

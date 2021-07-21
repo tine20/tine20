@@ -7,7 +7,7 @@
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
@@ -41,7 +41,6 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param      $id
      * @param null $revision
      * @throws Filemanager_Exception
-     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _downloadFileNodeByPathOrId($path, $id, $revision = null)
     {
@@ -62,7 +61,7 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $nodeController->resolveMultipleTreeNodesPath($node);
             $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($node->path));
         } else {
-            throw new Tinebase_Exception_InvalidArgument('Either a path or id is needed to download a file.');
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
 
         $this->_downloadFileNode($node, $pathRecord->streamwrapperpath, $revision);

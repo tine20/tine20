@@ -37,8 +37,8 @@ class Tinebase_User_SqlTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::SQL) {
             $this->markTestSkipped('SQL backend not enabled');
         }
@@ -48,8 +48,8 @@ class Tinebase_User_SqlTest extends TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
@@ -307,9 +307,9 @@ class Tinebase_User_SqlTest extends TestCase
         $this->_backend->deleteUser($testUser);
         unset($this->objects['users']['addedUser']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
-        
-        $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
+        $user = $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
+        $this->assertTrue((bool)$user->is_deleted);
+        $this->assertSame(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $user->accountStatus);
     }
 
     /**
@@ -363,9 +363,9 @@ class Tinebase_User_SqlTest extends TestCase
         $calBackend = new Calendar_Backend_Sql();
         try {
             $calBackend->get($event->getId());
-            $this->fail('event should be deleted: ' . print_r($event->toArray(), true));
+            $this->fail('Event should be deleted: ' . print_r($event->toArray(), true));
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof Tinebase_Exception_NotFound, 'event should be deleted');
+            $this->assertTrue($e instanceof Tinebase_Exception_NotFound, $e);
         }
     }
 

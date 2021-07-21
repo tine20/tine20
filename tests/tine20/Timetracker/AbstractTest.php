@@ -34,8 +34,8 @@ abstract class Timetracker_AbstractTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
         $this->_deleteTimeAccounts = array();
@@ -53,8 +53,8 @@ abstract class Timetracker_AbstractTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         Tinebase_Acl_Roles::getInstance()->resetClassCache();

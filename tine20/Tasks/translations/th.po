@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # jaruwan <luca.ingianni@gmail.com>, 2014
 # jaruwan <luca.ingianni@gmail.com>, 2014
@@ -9,79 +9,14 @@ msgstr ""
 "PO-Revision-Date: 2018-11-28 11:10+0000\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Model/Task.php:37
-msgid "GENDER_Task"
-msgid_plural "GENDER_Tasks"
-msgstr[0] ""
-
-#: Model/Task.php:38 js/Models.js:66
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "หน้าที่"
-
-#: Model/Task.php:76 Model/Task.php:312 js/TaskGridPanel.js:138
-msgid "Percent"
-msgstr "เปอร์เซนต์"
-
-#: Model/Task.php:82 js/TaskEditDialog.js:235 js/TaskGridPanel.js:167
-#: Config.php:48 Setup/Update/Release5.php:75
-msgid "Completed"
-msgstr "เสร็จสิ้นแล้ว"
-
-#: Model/Task.php:87 Model/Task.php:307
-msgid "Due"
-msgstr "กำหนด"
-
-#: Model/Task.php:92
-msgid "Class"
-msgstr ""
-
-#: Model/Task.php:100 Model/Task.php:309
-msgid "Description"
-msgstr "การอธิบาย"
-
-#: Model/Task.php:106
-msgid "Geo"
-msgstr ""
-
-#: Model/Task.php:111
-msgid "Location"
-msgstr ""
-
-#: Model/Task.php:116 Model/Task.php:308 js/TaskEditDialog.js:204
-msgid "Organizer"
-msgstr "ผู้ดำเนินงาน"
-
-#: Model/Task.php:310 js/TaskEditDialog.js:196 js/TaskGridPanel.js:122
-msgid "Priority"
-msgstr "ลำดับความสำคัญ"
-
-#: Model/Task.php:311 js/TaskEditDialog.js:226 js/Models.js:110
-#: js/Models.js:168 js/TaskGridPanel.js:151
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] "สถานะ"
-
-#: Model/Task.php:319
-msgid "Lead"
-msgstr "ดำเนินการ"
-
-#: Model/Task.php:325
-msgid "Telephone"
-msgstr "โทรศัพท์"
-
-#: Model/Task.php:326
-msgid "Email"
-msgstr "อีเมล"
 
 #: js/TaskEditDialog.js:89
 msgid "Add New Task"
@@ -91,74 +26,48 @@ msgstr ""
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "คุณจำเป็นต้องกำหนดวันที่ เนื่องจากการเตือนได้ระบุไว้แล้ว"
 
-#: js/TaskEditDialog.js:185 js/Models.js:107 js/TaskGridPanel.js:100
+#: js/TaskEditDialog.js:184 js/TaskGridPanel.js:100 js/Models.js:114
 msgid "Summary"
 msgstr "ข้อสรุป"
 
-#: js/TaskEditDialog.js:192
+#: js/TaskEditDialog.js:191
 msgid "Due date"
 msgstr "วันครบกำหนด"
 
-#: js/TaskEditDialog.js:205
+#: js/TaskEditDialog.js:195 js/TaskGridPanel.js:127 Model/Task.php:311
+msgid "Priority"
+msgstr "ลำดับความสำคัญ"
+
+#: js/TaskEditDialog.js:202 Model/Task.php:116 Model/Task.php:309
+msgid "Organizer"
+msgstr "ผู้ดำเนินงาน"
+
+#: js/TaskEditDialog.js:203
 msgid "Add Responsible ..."
 msgstr "เพิ่มความรับผิดชอบ"
 
-#: js/TaskEditDialog.js:212
+#: js/TaskEditDialog.js:210
 msgid "Notes"
 msgstr "บันทึก"
 
-#: js/TaskEditDialog.js:213
+#: js/TaskEditDialog.js:211
 msgid "Enter description..."
 msgstr "ใส่ คำอธิบาย"
 
-#: js/TaskEditDialog.js:219
+#: js/TaskEditDialog.js:217
 msgid "Percentage"
 msgstr "อัตราส่วนร้อยละ"
 
-#: js/Models.js:66
-msgid "Tasks"
-msgstr "หน้าที่"
+#: js/TaskEditDialog.js:224 js/TaskGridPanel.js:155 js/Models.js:117
+#: js/Models.js:175 Model/Task.php:312
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] "สถานะ"
 
-#: js/Models.js:70
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "รายการที่ต้องทำ"
-
-#: js/Models.js:70
-msgid "to do lists"
-msgstr "รายการที่ต้องทำ"
-
-#: js/Models.js:105
-msgid "Quick Search"
-msgstr "ค้นหาอย่างรวดเร็ว"
-
-#: js/Models.js:108 js/TaskGridPanel.js:108
-msgid "Due Date"
-msgstr "วันครบกำหนด"
-
-#: js/Models.js:118 js/TaskGridPanel.js:174
-msgid "Responsible"
-msgstr "รับผิดชอบ"
-
-#: js/Models.js:120
-msgid "Last Modified Time"
-msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
-
-#: js/Models.js:121
-msgid "Last Modified By"
-msgstr "ปรับปรุงครั้งล่าสุด โดย"
-
-#: js/Models.js:122
-msgid "Creation Time"
-msgstr "เวลาที่สร้างขึ้น"
-
-#: js/Models.js:123
-msgid "Created By"
-msgstr "สร้าง โดย"
-
-#: js/Tasks.js:39
-msgid "New Task"
-msgstr "หน้าที่ใหม่"
+#: js/TaskEditDialog.js:233 js/TaskGridPanel.js:174 Config.php:49
+#: Model/Task.php:82
+msgid "Completed"
+msgstr "เสร็จสิ้นแล้ว"
 
 #: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
@@ -177,104 +86,190 @@ msgstr "ป้ายกำกับ"
 msgid "Lead name"
 msgstr ""
 
-#: js/TaskGridPanel.js:104
+#: js/TaskGridPanel.js:108
 msgid "Add a task..."
 msgstr "เพิ่มหน้าที่"
+
+#: js/TaskGridPanel.js:113 js/Models.js:115
+msgid "Due Date"
+msgstr "วันครบกำหนด"
+
+#: js/TaskGridPanel.js:142 Model/Task.php:76 Model/Task.php:313
+msgid "Percent"
+msgstr "เปอร์เซนต์"
+
+#: js/TaskGridPanel.js:181 js/Models.js:125
+msgid "Responsible"
+msgstr "รับผิดชอบ"
+
+#: js/Models.js:66 Model/Task.php:38
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "หน้าที่"
+
+#: js/Models.js:66
+msgid "Tasks"
+msgstr "หน้าที่"
+
+#: js/Models.js:70
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "รายการที่ต้องทำ"
+
+#: js/Models.js:70
+msgid "to do lists"
+msgstr "รายการที่ต้องทำ"
+
+#: js/Models.js:112
+msgid "Quick Search"
+msgstr "ค้นหาอย่างรวดเร็ว"
+
+#: js/Models.js:127
+msgid "Last Modified Time"
+msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
+
+#: js/Models.js:128
+msgid "Last Modified By"
+msgstr "ปรับปรุงครั้งล่าสุด โดย"
+
+#: js/Models.js:129
+msgid "Creation Time"
+msgstr "เวลาที่สร้างขึ้น"
+
+#: js/Models.js:130
+msgid "Created By"
+msgstr "สร้าง โดย"
+
+#: js/Tasks.js:39
+msgid "New Task"
+msgstr "หน้าที่ใหม่"
 
 #: Preference.php:24
 msgid "All my tasks"
 msgstr "หน้าที่ทั้งหมดของฉัน"
 
-#: Preference.php:66
+#: Preference.php:78
 msgid "Default Favorite"
 msgstr ""
 
-#: Preference.php:67
+#: Preference.php:79
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-#: Preference.php:70
+#: Preference.php:82
 msgid "Default Task List"
 msgstr "รายชื่อหน้าที่หลัก"
 
-#: Preference.php:71
+#: Preference.php:83
 msgid "The default task list to create new tasks in."
 msgstr "รายชื่อหน้าที่หลักเพื่อสร้างหน้าที่ใหม่เข้า"
+
+#: Preference.php:86
+msgid "Enable Standard Alarm"
+msgstr ""
+
+#: Preference.php:87
+msgid "New task get a standard alarm as defined below"
+msgstr ""
+
+#: Preference.php:90
+msgid "Standard Alarm Time"
+msgstr ""
+
+#: Preference.php:91
+msgid "Minutes before the task ends"
+msgstr ""
 
 #: Config.php:38
 msgid "Tasks status available"
 msgstr "สถานะหน้าที่ ว่าง"
 
 #: Config.php:40
-msgid ""
-"Possible tasks status. Please note that additional attendee status might "
-"impact other Tasks systems on export or syncronisation."
+msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:47 Setup/Update/Release5.php:74
+#: Config.php:48
 msgid "No response"
 msgstr "ไม่มีการตอบรับ"
 
-#: Config.php:49 Setup/Update/Release5.php:76
+#: Config.php:50
 msgid "Cancelled"
 msgstr "ยกเลิกแล้ว"
 
-#: Config.php:50 Setup/Update/Release5.php:77
+#: Config.php:51
 msgid "In process"
 msgstr "มีความคืบหน้า"
 
-#: Config.php:56
+#: Config.php:57
 msgid "Task priorities available"
 msgstr "ลำดับความสำคัญด้านหน้าที่ ว่าง"
 
-#: Config.php:58
-msgid ""
-"Possible task priorities. Please note that additional priorities might "
-"impact other Tasks systems on export or syncronisation."
+#: Config.php:59
+msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:65 Setup/Update/Release5.php:167
+#: Config.php:66
 msgid "low"
 msgstr "ต่ำ"
 
-#: Config.php:66 Setup/Update/Release5.php:168
+#: Config.php:67
 msgid "normal"
 msgstr "ธรรมดา"
 
-#: Config.php:67 Setup/Update/Release5.php:169
+#: Config.php:68
 msgid "high"
 msgstr "สูง"
 
-#: Config.php:68 Setup/Update/Release5.php:170
+#: Config.php:69
 msgid "urgent"
 msgstr "ด่วน"
-
-#: Acl/Rights.php:97
-msgid "manage shared task lists"
-msgstr "จัดการรายการหน้าที่ที่ใช้ร่วมกัน"
-
-#: Acl/Rights.php:98
-msgid "Create new shared tasks lists"
-msgstr "สร้างรายการหน้าที่ที่ใช้ร่วมกันใหม่"
-
-#: Acl/Rights.php:101
-msgid "manage shared tasks favorites"
-msgstr "จัดการ หน้าที่ร่วมที่ใช้บ่อย"
-
-#: Acl/Rights.php:102
-msgid "Create or update shared tasks favorites"
-msgstr "สร้าง หรือ ปรับปรุง หน้าที่ร่วมที่ใช้บ่อย"
 
 #: Controller.php:102
 #, python-format
 msgid "%s's personal tasks"
 msgstr "จำนวน %s ของหน้าที่ส่วนบุคคล"
 
+#: Model/Task.php:37
+msgid "GENDER_Task"
+msgstr ""
+
+#: Model/Task.php:87 Model/Task.php:308
+msgid "Due"
+msgstr "กำหนด"
+
+#: Model/Task.php:92
+msgid "Class"
+msgstr ""
+
+#: Model/Task.php:100 Model/Task.php:310
+msgid "Description"
+msgstr "การอธิบาย"
+
+#: Model/Task.php:106
+msgid "Geo"
+msgstr ""
+
+#: Model/Task.php:111
+msgid "Location"
+msgstr ""
+
+#: Model/Task.php:320
+msgid "Lead"
+msgstr "ดำเนินการ"
+
+#: Model/Task.php:326
+msgid "Telephone"
+msgstr "โทรศัพท์"
+
+#: Model/Task.php:327
+msgid "Email"
+msgstr "อีเมล"
+
 #: Controller/Task.php:211
 msgid "Notification for Task %1$s"
 msgstr ""
 
-#: Setup/Initialize.php:38 Setup/Update/Release3.php:65
+#: Setup/Initialize.php:38
 msgid "All tasks of my taskslists"
 msgstr "หน้าที่ทั้งหมดจากรายการหน้าที่ของฉัน"
 
@@ -305,3 +300,19 @@ msgstr "หน้าที่ทั้งหมดที่ฉันได้ป
 #: Setup/Initialize.php:83
 msgid "Tasks without responsible"
 msgstr "หน้าที่ที่ไม่ต้องรับผิดชอบ"
+
+#: Acl/Rights.php:97
+msgid "manage shared task lists"
+msgstr "จัดการรายการหน้าที่ที่ใช้ร่วมกัน"
+
+#: Acl/Rights.php:98
+msgid "Create new shared tasks lists"
+msgstr "สร้างรายการหน้าที่ที่ใช้ร่วมกันใหม่"
+
+#: Acl/Rights.php:101
+msgid "manage shared tasks favorites"
+msgstr "จัดการ หน้าที่ร่วมที่ใช้บ่อย"
+
+#: Acl/Rights.php:102
+msgid "Create or update shared tasks favorites"
+msgstr "สร้าง หรือ ปรับปรุง หน้าที่ร่วมที่ใช้บ่อย"

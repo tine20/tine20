@@ -136,6 +136,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $mimeType
      * @param boolean $_setSeen
      * @return Felamimail_Model_Message
+     * @throws Exception
      */
     public function getCompleteMessage($_id, $_partId = NULL, $mimeType = 'configured', $_setSeen = FALSE)
     {
@@ -158,6 +159,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($message)) {
             Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($message);
+        }
+
+        if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY)) {
+            $strategy = Felamimail_Spam_SuspicionStrategy_Factory::factory();
+            $message->is_spam_suspicions = $strategy->apply($message);
         }
 
         if ($_setSeen) {
@@ -220,7 +226,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $_message->has_attachment = true;
         }
 
-        $attachments = array_merge($attachments, $this->getAttachments($_message, $_partId));
+        $attachments = array_merge($attachments, $this->getAttachments($_message, $_partId, true));
 
         if ($_partId === null) {
             $message = $_message;
@@ -479,8 +485,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
     protected function _getPartStructureFromAttachments($message, $partId)
     {
-        $attachment = array_filter($message->attachments, function($el) use ($partId) {
-            return isset($el['partId']) && $el['partId'] === $partId;
+        $attachments = $message->attachments instanceof Tinebase_Record_RecordSet ? $message->attachments->toArray() : $message->attachments;
+        $attachment = array_filter($attachments, function($attach) use ($partId) {
+            return isset($attach['partId']) && $attach['partId'] === $partId;
         });
         if (count($attachment) >= 1) {
             $partAttachment = array_pop($attachment);
@@ -526,13 +533,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // remove possible harmful utf-8 chars
         // TODO should not be enabled by default (configurable?)
         $subjectAndMail = Tinebase_Helper::mbConvertTo($message->from_email . '_' . $subject, 'ASCII');
-        $name = str_replace(' ', '_', $message->received->toString('Y-m-d'))
+        return str_replace(' ', '_', $message->received->toString('Y-m-d'))
             . '_' . mb_substr($subjectAndMail, 0, 245)
             . '_' . mb_substr(md5($message->messageuid
             . $message->folder_id), 0, 10)
             . '.eml';
-
-        return $name;
     }
 
     /**
@@ -666,7 +671,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $cacheId = $this->_getMessageBodyCacheId($message, $_partId, $_contentType, $_account);
 
             if ($cache->test($cacheId)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting Message from cache.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Getting Message from cache.');
                 return $cache->load($cacheId);
             }
         }
@@ -1001,9 +1007,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get attachments of message
      *
      * @param array $_structure
+     * @param string $_partId
+     * @param boolean $_skipEmptyAttachments
      * @return array
      */
-    public function getAttachments($_messageId, $_partId = null)
+    public function getAttachments($_messageId, $_partId = null, $_skipEmptyAttachments = false)
     {
         if (!$_messageId instanceof Felamimail_Model_Message) {
             $message = $this->_backend->get($_messageId);
@@ -1063,6 +1071,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
                         if (!empty($expanded)) {
                             $attachments = array_merge($attachments, $expanded);
+                        } else if ($_skipEmptyAttachments) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . ' Skipping empty winmail.dat attachment.');
+                            continue;
                         }
                     }
                 }
@@ -1408,8 +1420,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // save draft in draft folder
-        $draft = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
-        return $draft;
+        return Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
     }
 
     /**
@@ -1432,7 +1443,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Remove old draft with uid ' . $uid);
         $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $imap->selectFolder($draftFolder->globalname);
+        $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($draftFolder->globalname));
         $imap->addFlags([$uid], [Zend_Mail_Storage::FLAG_DELETED]);
 
         return true;
@@ -1492,26 +1503,29 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($message->account_id);
-
-        $updatedMessage = clone($message);
-        $updatedMessage->subject = $newSubject;
         $imap = Felamimail_Backend_ImapFactory::factory($account);
-        $mailToAppend = Felamimail_Controller_Message_Send::getInstance()->createMailForSending(
-            $updatedMessage,
-            $account,
-            $_nonPrivateRecipients,
-            true
-        );
-        $transport = new Felamimail_Transport();
-        $mailAsString = $transport->getRawMessage($mailToAppend);
+        $updatedMessage = clone($message);
+
+        $mailAsString = $this->getMessageRawContent($updatedMessage);
+        $mailAsString = $this->_replaceHeaderInRawMessage($mailAsString, 'subject', $newSubject);
+
         $uid = $imap->appendMessage(
             $mailAsString,
             Felamimail_Model_Folder::encodeFolderName($folder->globalname),
             []
         );
-
+        
         if ($uid) {
             $updatedMessage->messageuid = $uid;
+
+            //append flags from original message to updated message
+            foreach ($updatedMessage->flags as $flag) {
+               $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
+                
+              if (in_array($flag, $supportedFlags)) {
+                   $imap->addFlags($updatedMessage->messageuid, [$flag]);
+                }
+            }
         } else {
             throw new Felamimail_Exception_IMAP('appendMessage failed');
         }
@@ -1521,6 +1535,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $imap->addFlags([$message->messageuid], [Zend_Mail_Storage::FLAG_DELETED]);
         }
 
+        $updatedMessage->subject = $newSubject;
         return $updatedMessage;
+    }
+
+    protected function _replaceHeaderInRawMessage($mailAsString, $header, $newValue)
+    {
+        return preg_replace(
+            // find header (also replaces multiline headers!)
+            '/(\n' . ucfirst($header) . ':) .*\n( .*\n)*/',
+            '${1} ' . mb_encode_mimeheader($newValue) . "\n",
+            $mailAsString);
     }
 }

@@ -91,7 +91,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
 
         Tinebase_Container::getInstance()->delete((string)$createResource->container_id);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Calendar_Controller_Resource::getInstance()->get((string)$createResource->container_id);
     }
 
@@ -99,7 +99,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     {
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
 
-        $this->setExpectedException('Tinebase_Exception_AccessDenied', 'No Permission.');
+        $this->expectException('Tinebase_Exception_AccessDenied'); $this->expectExceptionMessageMatches('/No Permission./');
         $this->testCreateResource();
     }
 
@@ -108,7 +108,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $resource = $this->testCreateResource();
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
 
-        $this->setExpectedException('Tinebase_Exception_AccessDenied', 'No Permission.');
+        $this->expectException('Tinebase_Exception_AccessDenied'); $this->expectExceptionMessageMatches('/No Permission./');
         Calendar_Controller_Resource::getInstance()->delete($resource);
     }
 
@@ -155,7 +155,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
                 'user_id'   => $resource->id
             ),
         ));
-        $this->setExpectedException('Calendar_Exception_AttendeeBusy');
+        $this->expectException('Calendar_Exception_AttendeeBusy');
         $conflictingEvent = Calendar_Controller_Event::getInstance()->create($event, TRUE);
     }
     
@@ -173,7 +173,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         Calendar_Controller_Resource::getInstance()->delete($resource->getId());
         
         $this->assertEquals(0, count(Calendar_Controller_Resource::getInstance()->getMultiple(array($resource->getId()))));
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_Container::getInstance()->getContainerById($resource->container_id);
     }
 

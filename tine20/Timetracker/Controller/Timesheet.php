@@ -201,7 +201,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $_record->start_time = $start->format('H:i');
         }
 
-        if (empty($_record->accounting_time)) {
+        if (!isset($_record->accounting_time)) {
             $_record->accounting_time = $_record->duration;
         }
     }
@@ -424,6 +424,13 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        if (! $this->_doTimesheetContainerACLChecks) {
+            $_filter->setRequiredGrants([]);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
+            return;
+        }
+        
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(

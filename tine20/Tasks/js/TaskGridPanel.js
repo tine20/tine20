@@ -101,10 +101,12 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 400,
             dataIndex: 'summary',
             editor: new Ext.form.TextField({
-                allowBlank: false
+                allowBlank: false,
+                maxLength: 255
             }),
             quickaddField: new Ext.form.TextField({
-                emptyText: this.app.i18n._('Add a task...')
+                emptyText: this.app.i18n._('Add a task...'),
+                maxLength: 255
             })
         }, {
             id: 'due',

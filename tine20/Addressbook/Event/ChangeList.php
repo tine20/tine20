@@ -4,14 +4,12 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * event class for changed list
- *
- * @package     Admin
  */
 class Addressbook_Event_ChangeList extends Tinebase_Event_Abstract
 {
@@ -21,4 +19,11 @@ class Addressbook_Event_ChangeList extends Tinebase_Event_Abstract
      * @var Addressbook_Model_List
      */
     public $list;
+
+    /**
+     * the current list object (pre-update)
+     *
+     * @var Addressbook_Model_List
+     */
+    public $currentList;
 }

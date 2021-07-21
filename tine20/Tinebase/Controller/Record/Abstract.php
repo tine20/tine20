@@ -53,9 +53,9 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * only do area lock validation once
      *
-     * @var boolean
+     * @var array
      */
-    protected $_areaLockValidated = false;
+    protected $_areaLockValidated = [];
 
     /**
      * do area lock check
@@ -322,9 +322,16 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($this->resolveCustomfields()) {
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
+
+            $result = $this->_doRightsCleanup($result);
         }
         
         return $result;
+    }
+
+    protected function _doRightsCleanup(&$data)
+    {
+        return $data;
     }
     
     /**
@@ -551,13 +558,17 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function exists($id)
     {
+        if (!$id) {
+            return false;
+        }
+
         $this->_checkRight(self::ACTION_GET);
         
         try {
             $record = $this->_backend->get($id);
-            $result = $this->_checkGrant($record, self::ACTION_GET, FALSE);
+            $result = $this->_checkGrant($record, self::ACTION_GET, false);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $result = FALSE;
+            $result = false;
         }
         
         return $result;
@@ -1162,13 +1173,14 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param   Tinebase_Record_Interface $_record
      * @param   boolean $_duplicateCheck
+     * @param   boolean $_updateDeleted
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      * 
      * @todo    fix duplicate check on update / merge needs to remove the changed record / ux discussion
      *          (duplicate check is currently only enabled in Sales_Controller_PurchaseInvoice)
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $_updateDeleted = false)
     {
         $this->_duplicateCheck = $_duplicateCheck;
 
@@ -1188,7 +1200,11 @@ abstract class Tinebase_Controller_Record_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             $_record->isValid(TRUE);
-            $currentRecord = $this->get($_record->getId());
+            if ($this->_backend instanceof Tinebase_Backend_Sql_Abstract) {
+                $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
+            }
+            $currentRecord = $this->get($_record->getId(), null, true, $_updateDeleted);
+            unset($raii);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
@@ -1347,14 +1363,25 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_Notes::getInstance()->setNotesOfRecord($updatedRecord);
             }
         }
-        if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())
-                && is_array($config->recordsFields)) {
-            foreach ($config->recordsFields as $property => $fieldDef) {
-                if ($isCreate) {
-                    $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
-                } else {
-                    $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
-                    $updatedRecord->{$property} = $record->{$property};
+        if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())) {
+            if (is_array($config->recordsFields)) {
+                foreach ($config->recordsFields as $property => $fieldDef) {
+                    if ($isCreate) {
+                        $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
+                    } else {
+                        $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
+                        $updatedRecord->{$property} = $record->{$property};
+                    }
+                }
+            }
+            if (is_array($config->recordFields)) {
+                foreach ($config->recordFields as $property => $fieldDef) {
+                    if ($isCreate) {
+                        $this->_createDependentRecord($updatedRecord, $record, $property, $fieldDef['config']);
+                    } else {
+                        $this->_updateDependentRecord($record, $currentRecord, $property, $fieldDef['config']);
+                        $updatedRecord->{$property} = $record->{$property};
+                    }
                 }
             }
         }
@@ -1395,15 +1422,6 @@ abstract class Tinebase_Controller_Record_Abstract
         $addRelations = [];
         $removeRelations = [];
 
-        if (null !== $record->relations) {
-            if (is_array($record->relations)) {
-                $record->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $record->relations);
-            }
-            $relationsNull = false;
-        } else {
-            $relationsNull = true;
-        }
-
         foreach (array_keys($mc->getVirtualFields()) as $virtualField) {
             if (!isset($properties[$virtualField][TMCC::CONFIG][TMCC::TYPE]) || (TMCC::TYPE_RELATION !==
                     $properties[$virtualField][TMCC::CONFIG][TMCC::TYPE] && TMCC::TYPE_RELATIONS !==
@@ -1421,30 +1439,34 @@ abstract class Tinebase_Controller_Record_Abstract
             }
 
             if (null === $record->{$virtualField}) {
-                if (!$relationsNull && $existingRelations->count() > 0) {
+                if ($existingRelations->count() > 0) {
                     $addRelations[] = $existingRelations;
                 }
                 continue;
             }
 
+            $toAdd = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
             foreach ($record->{$virtualField} as $item) {
                 if (is_array($item)) {
                     $item = $item['id'];
                 }
                 if (null === ($existingRel = $existingRelations->find('related_id', $item))) {
                     $relationsModified = true;
-                    $addRelations[] = new Tinebase_Model_Relation([
-                        'related_model'     => $model,
-                        'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                        'related_id'        => $item,
-                        'related_degree'    => $degree,
-                        'type'              => $type,
-                    ], true);
+                    $toAdd->addRecord(new Tinebase_Model_Relation([
+                            'related_model'     => $model,
+                            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                            'related_id'        => $item,
+                            'related_degree'    => $degree,
+                            'type'              => $type,
+                        ], true));
                 } else {
                     $existingRelations->removeById($existingRel->getId());
                 }
             }
 
+            if ($toAdd->count() > 0) {
+                $addRelations[] = $toAdd;
+            }
             if ($existingRelations->count() > 0) {
                 $relationsModified = true;
                 $removeRelations[] = $existingRelations;
@@ -1452,19 +1474,27 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if ($relationsModified) {
-            if ($relationsNull) {
+            if (null !== $record->relations) {
+                if (is_array($record->relations)) {
+                    $record->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, $record->relations);
+                }
+            } else {
                 if (null !== $currentRecord) {
-                    $record->relations = $currentRecord->relations;
+                    $record->relations = clone $currentRecord->relations;
                 } else {
                     $record->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
                 }
             }
 
+            /** @var Tinebase_Record_RecordSet $add */
             foreach ($addRelations as $add) {
-                if ($add instanceof Tinebase_Record_RecordSet) {
-                    $record->relations->mergeById($add);
-                } else {
-                    $record->relations->addRecord($add);
+                $firstRecord = $add->getFirstRecord();
+                $existingRelations = $record->relations->filter('related_model', $firstRecord->related_model)
+                    ->filter('type', $firstRecord->type)->filter('degree', $firstRecord->degree);
+                foreach ($add as $toAdd) {
+                    if ($existingRelations->find('related_id', $toAdd->related_id) === null) {
+                        $record->relations->addRecord($toAdd);
+                    }
                 }
             }
 
@@ -1893,32 +1923,33 @@ abstract class Tinebase_Controller_Record_Abstract
             $_ids = (array)$_ids->getId();
         }
 
-        /** @var string[] $_ids */
-        $ids = $this->_inspectDelete((array) $_ids);
-        if ($ids instanceof Tinebase_Record_RecordSet) {
-            /** @var Tinebase_Record_RecordSet $records */
-            $records = $ids;
-            $ids = array_unique($records->getId());
-        } else {
-            /** @var Tinebase_Record_RecordSet $records */
-            $records = $this->_backend->getMultiple((array)$ids);
-        }
-
-        if (count((array)$ids) != count($records)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
-                . ' of ' . count((array)$ids) . ' records exist.');
-        }
-        
-        if (empty($records)) {
-            return $records;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Deleting ' . count($records) . ' of ' . $this->_modelName . ' records ...');
-
         try {
-            $db = $this->_backend->getAdapter();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+            $raii = Tinebase_RAII::getTransactionManagerRAII();
+
+            /** @var string[] $_ids */
+            $ids = $this->_inspectDelete((array) $_ids);
+            if ($ids instanceof Tinebase_Record_RecordSet) {
+                /** @var Tinebase_Record_RecordSet $records */
+                $records = $ids;
+                $ids = array_unique($records->getId());
+            } else {
+                /** @var Tinebase_Record_RecordSet $records */
+                $records = $this->_backend->getMultiple((array)$ids);
+            }
+
+            if (count((array)$ids) != count($records)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records)
+                    . ' of ' . count((array)$ids) . ' records exist.');
+            }
+
+            if (empty($records)) {
+                $raii->release();
+                return $records;
+            }
+        
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Deleting ' . count($records) . ' of ' . $this->_modelName . ' records ...');
+
             $this->_checkRight(self::ACTION_DELETE);
             
             foreach ($records as $record) {
@@ -1936,7 +1967,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $pathController->deleteShadowPathParts($shadowPathParts);
             }
 
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $raii->release();
 
             // send notifications
             if ($this->sendNotifications()) {
@@ -2311,40 +2342,46 @@ abstract class Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_AreaLocked
      */
-    protected function _checkRight(/** @noinspection PhpUnusedParameterInspection */
-                                    $_action)
+    protected function _checkRight($_action)
     {
         if (! $this->_doRightChecks) {
             return;
         }
 
-        $this->_checkAreaLock();
+        $this->_checkAreaLock($_action);
     }
 
     /**
      * check area lock
      *
+     * @param string $_action {get|create|update|delete}
      * @throws Tinebase_Exception_AreaLocked
-     *
-     * TODO only check with json frontend? maybe we should enable this only from json frontends
      */
-    protected function _checkAreaLock()
+    protected function _checkAreaLock($_action)
     {
-        if ($this->_areaLockValidated) {
+        if (!Tinebase_AreaLock::getInstance()->isActivatedByFE()) {
             return;
         }
 
-        if (Tinebase_AreaLock::getInstance()->hasLock($this->_applicationName)) {
-            if (Tinebase_AreaLock::getInstance()->isLocked($this->_applicationName)) {
-                $teal = new Tinebase_Exception_AreaLocked('Application is locked: '
-                    . $this->_applicationName);
-                $teal->setArea($this->_applicationName);
+        $check = $this->_applicationName . '.' . $this->getModel() . '.' . $_action;
+
+        if (isset($this->_areaLockValidated[$check])) {
+            return;
+        }
+
+        if (Tinebase_AreaLock::getInstance()->hasLock($check)) {
+            if (Tinebase_AreaLock::getInstance()->isLocked($check)) {
+                $teal = new Tinebase_Exception_AreaLocked('Controller action is locked: '
+                    . $check);
+                $cfg = Tinebase_AreaLock::getInstance()->getLastAuthFailedAreaConfig();
+                $teal->setArea($cfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+                $teal->setMFAUserConfigs($cfg->getUserMFAIntersection(Tinebase_Core::getUser()));
                 throw $teal;
             } else {
-                $this->_areaLockValidated = true;
+                $this->_areaLockValidated[$check] = true;
             }
         } else {
-            $this->_areaLockValidated = true;
+            $this->_areaLockValidated[$check] = true;
         }
     }
 
@@ -2353,7 +2390,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function resetValidatedAreaLock()
     {
-        $this->_areaLockValidated = false;
+        $this->_areaLockValidated = [];
     }
 
     /**
@@ -2553,7 +2590,123 @@ abstract class Tinebase_Controller_Record_Abstract
 
         return $result;
     }
-    
+
+    /**
+     * creates dependent record after creating the parent record
+     *
+     * @param Tinebase_Record_Interface $_createdRecord
+     * @param Tinebase_Record_Interface $_record
+     * @param string $_property
+     * @param array $_fieldConfig
+     */
+    protected function _createDependentRecord(Tinebase_Record_Interface $_createdRecord, Tinebase_Record_Interface $_record, $_property, $_fieldConfig)
+    {
+        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS]) || ! $_fieldConfig[TMCC::DEPENDENT_RECORDS]) {
+            return;
+        }
+
+        if (! isset ($_fieldConfig[TMCC::REF_ID_FIELD])) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
+        }
+
+        if ($_record->has($_property) && $_record->{$_property}) {
+            $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
+            /** @var Tinebase_Controller_Interface $ccn */
+            $ccn = $_fieldConfig[TMCC::CONTROLLER_CLASS_NAME];
+            /** @var Tinebase_Controller_Record_Interface $controller */
+            $controller = $ccn::getInstance();
+
+            /** @var Tinebase_Record_Interface $rec */
+            // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
+            if (is_array($_record->{$_property})) {
+                /** @var Tinebase_Record_Interface $rec */
+                $rec = new $recordClassName(array(),true);
+                $tmp = $_record->{$_property};
+                $rec->setFromJsonInUsersTimezone($tmp);
+
+                $_record->{$_property} = $rec;
+            }
+            // legacy end
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating a dependent record on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+            }
+
+            if (strlen($_record->{$_property}->getId()) < 40) {
+                $_record->{$_property}->setId(Tinebase_Record_Abstract::generateUID());
+            }
+            $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_createdRecord->getId();
+
+            $_createdRecord->{$_property} = $controller->create($_record->{$_property});
+        }
+    }
+
+    /**
+     * updates dependent record on update the parent record
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_oldRecord
+     * @param string $_property
+     * @param array $_fieldConfig
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    protected function _updateDependentRecord(Tinebase_Record_Interface $_record, /** @noinspection PhpUnusedParameterInspection */
+                                               Tinebase_Record_Interface $_oldRecord, $_property, $_fieldConfig)
+    {
+        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS])|| ! $_fieldConfig[TMCC::DEPENDENT_RECORDS]) {
+            return;
+        }
+
+        if (! isset ($_fieldConfig[TMCC::REF_ID_FIELD])) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
+        }
+
+        // don't handle dependent records on property if it is set to null or doesn't exist.
+        if ($_record->{$_property} === NULL || ! $_record->has($_property)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Skip updating dependent record (got NULL) on property ' . $_property . ' for '
+                    . $this->_applicationName . ' ' . $this->_modelName . ' with id = "' . $_record->getId() . '"');
+            }
+            return;
+        }
+
+        /** @var Tinebase_Controller_Interface $ccn */
+        $ccn = $_fieldConfig[TMCC::CONTROLLER_CLASS_NAME];
+        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+        $controller = $ccn::getInstance();
+        $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
+        $existingDepRec = $controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName, [
+            ['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]
+        ]))->getFirstRecord();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($_record->{$_property}, TRUE));
+
+        // legacy - should be already done in frontend json - remove if all record properties are record instances before getting to controller
+        if (is_array($_record->{$_property}) && ! empty($_record->{$_property})) {
+            $rec = new $recordClassName(array(),true);
+            $tmp = $_record->{$_property};
+            $rec->setFromJsonInUsersTimezone($tmp);
+            $_record->{$_property} = $rec;
+        }
+        //legacy end
+
+        if ($_record->{$_property} instanceof $recordClassName) {
+
+            $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_record->getId();
+
+            if ($existingDepRec) {
+                $_record->{$_property}->setId($existingDepRec->getId());
+                $_record->{$_property} = $controller->update($_record->{$_property});
+            } else {
+                $_record->{$_property} = $controller->create($_record->{$_property});
+            }
+        } elseif ($existingDepRec) {
+            $controller->delete($existingDepRec);
+        }
+    }
 
     /**
      * creates dependent records after creating the parent record

@@ -40,8 +40,8 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
 
     const TT_TS_SYSCF_CLOCK_OUT_REASON = 'clock_out_reason';
 
-    const ID_SICKNESS = 'sickness';
-    const ID_VACATION = 'vacation';
+    const ID_SICKNESS       = 'sickness';
+    const ID_VACATION       = 'vacation';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -56,7 +56,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::RECORD_NAME               => 'Absence reason',
         self::RECORDS_NAME              => 'Absence reasons', // ngettext('Absence reason', 'Absence reasons', n)
         self::TITLE_PROPERTY            => 'name',
@@ -73,8 +73,26 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
         self::APP_NAME                  => HumanResources_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
 
+        self::ASSOCIATIONS              => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'wage_type' => [
+                    'targetEntity' => HumanResources_Model_WageType::class,
+                    'fieldName' => 'wage_type',
+                    'joinColumns' => [[
+                        'name' => 'wage_type',
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ],
+            ],
+        ],
+
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
+            self::INDEXES                   => [
+                'wage_type'                     => [
+                    self::COLUMNS                   => ['wage_type']
+                ]
+            ]
         ],
 
         self::FIELDS => [
@@ -108,6 +126,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::DEFAULT_VAL       => false,
                 self::LABEL             => 'System', // _('System')
+                self::DISABLED          => true,
             ],
             'wage_type' => [
                 self::TYPE              => self::TYPE_RECORD,

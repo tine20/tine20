@@ -119,6 +119,11 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
      */
     public function getNode()
     {
+        if (empty($this->{self::FLD_TYPE})) {
+            // default to fm node
+            $this->{self::FLD_TYPE} = self::TYPE_FM_NODE;
+        }
+
         switch ($this->{self::FLD_TYPE}) {
             case self::TYPE_FM_NODE:
                 $node = $this->_getFMNode();

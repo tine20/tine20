@@ -15,6 +15,8 @@
  * 
  * @package     Felamimail
  * @subpackage  Exception
+ *
+ * @todo this should extend Tinebase_Exception_Unauthorized
  */
 class Felamimail_Exception_IMAPInvalidCredentials extends Felamimail_Exception_IMAP
 {

@@ -34,6 +34,10 @@ Tine.widgets.form.FieldManager = function() {
          */
         CATEGORY_PROPERTYGRID: 'propertyGrid',
 
+        specialTypeMap: {
+            password : 'tw-passwordTriggerField'
+        },
+        
         /**
          * get form field of well known field names
          *
@@ -45,7 +49,7 @@ Tine.widgets.form.FieldManager = function() {
 
             return field;
         },
-
+        
         /**
          * get form field by data type
          *
@@ -59,11 +63,15 @@ Tine.widgets.form.FieldManager = function() {
         getByModelConfig: function(appName, modelName, fieldName, category, config) {
             var recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
-                fieldDefinition = modelConfig && modelConfig.fields ? modelConfig.fields[fieldName] : {};
+                fieldDefinition = _.get(modelConfig, 'fields.' + fieldName, {});
 
             // have self contained fieldDefinition 
             fieldDefinition.appName = appName;
             fieldDefinition.fieldName = fieldName;
+            
+            if (_.get(fieldDefinition, 'disabled')) {
+                return null;
+            }
             
             return this.getByFieldDefinition(fieldDefinition, category, config);
         },
@@ -74,7 +82,7 @@ Tine.widgets.form.FieldManager = function() {
             
             var field = {},
                 fieldType = fieldDefinition.type || 'textfield',
-                app = Tine.Tinebase.appMgr.get(fieldDefinition.appName),
+                app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || fieldDefinition.appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
             if (fieldType === 'virtual' && fieldDefinition.config) {
@@ -84,7 +92,7 @@ Tine.widgets.form.FieldManager = function() {
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
             field.name = fieldDefinition.fieldName || fieldDefinition.name;
-            field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
+            field.readOnly = !! fieldDefinition.readOnly || !! _.get(fieldDefinition, 'uiconfig.readOnly');
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
             // make field available via recordForm.formfield_NAME
             field.ref = '../../formfield_' + field.name;
@@ -106,6 +114,9 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.dateFormat) {
                         field.dateFormat = fieldDefinition.dateFormat;
                     }
+                    if (fieldDefinition.format) {
+                        field.format = fieldDefinition.format;
+                    }
                     break;
                 case 'time':
                     field.xtype = 'timefield';
@@ -117,10 +128,13 @@ Tine.widgets.form.FieldManager = function() {
                 case 'boolean':
                     if (category === 'editDialog') {
                         field.xtype = 'checkbox';
-                        field.boxLabel = field.fieldLabel;
-                        field.hideLabel = true;
+                        field.boxLabel = _.get(fieldDefinition, 'boxLabel', field.fieldLabel);
+                        field.checked = field['default'];
+                        field.hideLabel = !_.get(fieldDefinition, 'boxLabel');
+                        field.blurOnChange = true;
                     } else {
                         field.xtype = 'booleancombo';
+                        field.blurOnSelect = true;
                     }
                     break;
                 case 'integer':
@@ -174,6 +188,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.useAccountRecord = true;
                     break;
                 case 'relation':
+                case 'relations':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
                         field.xtype = 'tinerelationpickercombo';
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
@@ -185,26 +200,55 @@ Tine.widgets.form.FieldManager = function() {
                         }
                         // TODO pass degree and other options in config?
                         field.relationDegree = 'sibling';
+
+                        if (fieldType === 'relations') {
+                            _.assign(field, {
+                                xtype: 'tinerelationpickergridpanel',
+                                isFormField: true,
+                                fieldName: fieldDefinition.fieldName,
+                                hideHeaders: true,
+                                height: 80 /* 4 records */ + 2 * 26 /* 2 toolbars */
+                            });
+                        }
                     }
                     break;
                 case 'record':
                     if (fieldDefinition.config && fieldDefinition.config.appName && fieldDefinition.config.modelName) {
+                        if (fieldDefinition.config.additionalFilterSpec) {
+                            field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
+                        }
+                        if (category === 'editDialog' && fieldDefinition.config.dependentRecords) {
+                            field.xtype = 'tw-recordEditField';
+                            field.appName = fieldDefinition.config.appName;
+                            field.modelName = fieldDefinition.config.modelName;
+                            field.fieldName = fieldDefinition.fieldName;
+                            break;
+                        }
                         var picker = Tine.widgets.form.RecordPickerManager.get(
                             fieldDefinition.config.appName,
                             fieldDefinition.config.modelName,
                             Ext.apply(field, config)
                         );
+
                         field = picker;
                     }
                     break;
                 case 'records':
                     if (category === 'editDialog') {
+                        if (fieldDefinition.config.additionalFilterSpec) {
+                            field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
+                        }
                         field.xtype = 'wdgt.pickergrid';
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
+                        field.allowCreateNew = _.get(fieldDefinition, 'config.dependentRecords', false);
+                        field.enableTbar = !_.get(fieldDefinition, 'config.dependentRecords', false);
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
                         field.hideHeaders = true;
-                        field.height = 170; // 5 records
+                        field.height = 80 /* 4 records */ + field.enableTbar * 26  +  26 /* 2 toolbars */
+                        if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
+                            _.set(field, 'editDialogConfig.mode', 'local');
+                        }
                     } else {
                         var picker = Tine.widgets.form.RecordsPickerManager.get(
                             fieldDefinition.config.appName,
@@ -214,6 +258,17 @@ Tine.widgets.form.FieldManager = function() {
                         field = picker;
                     }
                     break;
+                case 'dynamicRecord':
+                    // NOTE: this editor depends and the className _data_ and therefore can't be assigned statically
+                    //       as the editor api (get/setValue) does not know about the record the value comes from
+                    //       it's not possible to auto create a editor here
+                    // return null;
+                    const classNameField = fieldDefinition.config.refModelField;
+                    field.xtype = 'tw-recordEditField';
+                    field.appName = fieldDefinition.config.appName;
+                    field.modelName = classNameField;
+                    field.fieldName = fieldDefinition.fieldName;
+                    break
                 case 'keyfield':
                     field.xtype = 'widget-keyfieldcombo';
                     field.app = app;
@@ -259,8 +314,15 @@ Tine.widgets.form.FieldManager = function() {
                     field.initialPath = fieldDefinition.config.initialPath;
                     field.fileName = fieldDefinition.config.fileName;
                     break;
+                case 'hexcolor':
+                    field.xtype = 'colorfield';
+                    field.width = 80;
+                    break;
+                case 'label':
+                    field.xtype = 'label';
+                    break;
                 default:
-                    field.xtype = 'textfield';
+                    field.xtype = this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
                     if (fieldDefinition.length) {
                         field.maxLength = fieldDefinition.length;
                     }
@@ -320,6 +382,7 @@ Tine.widgets.form.FieldManager = function() {
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
                 genericKey = this.getKey([appName, modelName, fieldName]);
 
+            field.name = fieldName;
             fields[category ? categoryKey : genericKey] = field;
         },
 

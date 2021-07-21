@@ -36,8 +36,8 @@ class Tinebase_ContainerTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_instance = Tinebase_Container::getInstance();
@@ -81,8 +81,8 @@ class Tinebase_ContainerTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         
         Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false);
@@ -226,7 +226,7 @@ class Tinebase_ContainerTest extends TestCase
     {
         $this->_instance->deleteContainer($this->objects['initialContainer']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_instance->getContainerById($this->objects['initialContainer']);
     }
     
@@ -253,7 +253,7 @@ class Tinebase_ContainerTest extends TestCase
         }
         static::assertTrue($catched, 'excpected Tinebase_Exception_NotFound was not thrown');
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Addressbook_Controller_Contact::getInstance()->get($contact->getId());
     }
     
@@ -278,7 +278,7 @@ class Tinebase_ContainerTest extends TestCase
                 
         $this->_instance->deleteContainer($this->objects['initialContainer']);
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         
         $this->_instance->getContainerById($this->objects['initialContainer']);
     }

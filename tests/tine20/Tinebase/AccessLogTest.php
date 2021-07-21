@@ -23,8 +23,8 @@ class Tinebase_AccessLogTest extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_uit = Tinebase_AccessLog::getInstance();
     }
@@ -48,10 +48,9 @@ class Tinebase_AccessLogTest extends TestCase
         $this->_uit->setSessionId($accessLog);
         $this->_uit->create($accessLog);
 
+        $now = Tinebase_DateTime::now();
         $accessLog = $this->_uit->setLogout();
 
-        $now = Tinebase_DateTime::now();
-        $this->assertTrue($now->toString() === $accessLog->lo->toString() || $now->subSecond(1)->toString() === $accessLog->lo->toString(),
-            'logout time mismatch/empty: ' . print_r($accessLog->toArray(), true));
+        $this->assertTrue($accessLog->lo->isLaterOrEquals($now));
     }
 }

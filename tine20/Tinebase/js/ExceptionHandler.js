@@ -165,22 +165,15 @@ Tine.Tinebase.ExceptionHandler = function() {
         switch (exception.code) {
             // not authorised
             case 401:
-                Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: i18n._('Authorisation Required'),
-                    msg: i18n._('Your session timed out. You need to login again.'),
-                    fn: function() {
-                        Tine.Tinebase.tineInit.isReloading = true;
-                        Tine.Tinebase.tineInit.clearRegistry();
-
-                        if (! window.isMainWindow) {
-                            Ext.ux.PopupWindow.close();
-                            return;
-                        }
-                        Tine.Tinebase.common.reload({
-                            clearCache: true
-                        });
-                    }
-                }));
+                Tine.Tinebase.tineInit.isReloading = true;
+                Tine.Tinebase.tineInit.clearRegistry();
+                if (! window.isMainWindow) {
+                    Ext.ux.PopupWindow.close();
+                    return;
+                }
+                Tine.Tinebase.common.reload({
+                    clearCache: true
+                });
                 break;
             
             // insufficient rights
@@ -286,7 +279,7 @@ Tine.Tinebase.ExceptionHandler = function() {
 
             // area is locked
             case 630:
-                Tine.Tinebase.areaLocks.lock(exception.area);
+                Tine.Tinebase.areaLocks.handleAreaLockException(exception);
                 break;
 
             // Tinebase_Exception_InvalidRelationConstraints

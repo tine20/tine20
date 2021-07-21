@@ -349,7 +349,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if ($updatedRecord->type === Addressbook_Model_Contact::CONTACTTYPE_USER) {
             if (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE]) ||
                 !$this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE]) {
-                Tinebase_User::getInstance()->updateContact($updatedRecord);
+                try {
+                    Tinebase_User::getInstance()->updateContact($updatedRecord);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Don\'t update contact record: ' . $tenf->getMessage());
+                }
             }
         }
 
@@ -473,7 +478,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             foreach ($lists->filter(function($list) {
                 return $list->xprops[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST];}) as $list) {
                 Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
-                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                    try {
+                        Felamimail_Sieve_AdbList::setScriptForList($list);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    }
                 }, [$list]);
             }
 
@@ -572,6 +582,40 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * @param $mails
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function doMailsBelongToAccount($mails) {
+        $contactFilter = new Addressbook_Model_ContactFilter([
+            [
+                'field' => 'type',
+                'operator' => 'equals',
+                'value' => Addressbook_Model_Contact::CONTACTTYPE_USER
+            ],
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    [
+                        'field' => 'email',
+                        'operator' => 'in',
+                        'value' => $mails
+                    ],
+                    [
+                        'field' => 'email_home',
+                        'operator' => 'in',
+                        'value' => $mails
+                    ]
+                ]
+            ]
+        ]);
+
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
+        $usermails = array_filter(array_merge($contacts->email, $contacts->email_home));
+        return array_diff($mails, $usermails);
+    }
+
+    /**
      * delete one record
      * - don't delete if it belongs to an user account
      *
@@ -581,7 +625,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     protected function _deleteRecord(Tinebase_Record_Interface $_record)
     {
         /** @var Addressbook_Model_Contact $_record */
-        if (!empty($_record->account_id)) {
+        if (($this->_doContainerACLChecks || $this->_doRightChecks) && !empty($_record->account_id)) {
             $translation = Tinebase_Translation::getTranslation('Addressbook');
             throw new Addressbook_Exception_AccessDenied($translation->_('It is not allowed to delete a contact linked to an user account!'));
         }

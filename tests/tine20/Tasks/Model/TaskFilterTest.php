@@ -17,14 +17,14 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * 
  * @package     Tasks
  */
-class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
+class Tasks_Model_TaskFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * set up tests
      *
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $user = Tinebase_Core::getUser();
         $container = Tinebase_Container::getInstance()->getPersonalContainer($user, Tasks_Model_Task::class, $user, Tinebase_Model_Grants::GRANT_ADMIN);
         $container_id = $container[0]->getId();
@@ -75,8 +75,8 @@ class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
      * tear down tests
      *
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         $pfe->deleteByProperty('All my tasks', 'description');
         $backend = new Tasks_Backend_Sql();

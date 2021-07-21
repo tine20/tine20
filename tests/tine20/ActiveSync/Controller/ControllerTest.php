@@ -31,13 +31,13 @@ abstract class ActiveSync_Controller_ControllerTest extends ActiveSync_TestCase
      *
      * @return Syncroton_Model_Folder
      */
-    public function testCreateFolder()
+    public function testCreateFolder($name = null)
     {
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
         
         $syncrotonFolder = $controller->createFolder(new Syncroton_Model_Folder(array(
             'parentId' => 0, 
-            'displayName' => 'TestFolder'
+            'displayName' => $name ?: 'TestFolder'
         )));
     
         $this->assertTrue(!empty($syncrotonFolder->serverId));
@@ -185,7 +185,7 @@ abstract class ActiveSync_Controller_ControllerTest extends ActiveSync_TestCase
     
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
     
-        $this->setExpectedException('Syncroton_Exception_NotFound');
+        $this->expectException('Syncroton_Exception_NotFound');
     
         $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), 'jdszfegd63gfrk');
     }

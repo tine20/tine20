@@ -35,8 +35,9 @@
  * @property    integer $reading_conf       true if it must send a reading confirmation
  * @property    boolean $massMailingFlag    true if message should be treated as mass mailing
  * @property    array   $fileLocations      file locations of this message
+ * @property    boolean $is_spam_suspicions true if is spam suspicions
  */
-class Felamimail_Model_Message extends Tinebase_Record_Abstract
+class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tinebase_BL_DataInterface
 {
     /**
      * message content type (rfc822)
@@ -109,6 +110,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     protected $_application = 'Felamimail';
 
+    protected $_structureFetchCount = 0;
+
     /**
      * list of zend validator
      * 
@@ -170,6 +173,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             array('InArray', array(0, 1)),
         ),
         'fileLocations'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_spam_suspicions'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -301,19 +305,30 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $cacheId = $this->_getStructureCacheId();
         $cache = Tinebase_Core::getCache();
         if ($cache->test($cacheId)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting message structure from cache: ' . $cacheId);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' Getting message structure from cache: ' . $cacheId);
             $result = $cache->load($cacheId);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting message structure from IMAP server.');
-            
-            try {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' Getting message structure from IMAP server.');
+
+            $result = array();
+            if ($this->_structureFetchCount < 5) {
+                try {
+                    $this->_structureFetchCount++;
+                    $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id, $this->folder_id);
+                    $result = $summary['structure'];
+                } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                    // imap server might have gone away
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' IMAP protocol error during summary fetching: ' . $zmpe->getMessage());
+                }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' Message structure fetching failed (5 times) ... message might be broken on IMAP server');
                 $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id, $this->folder_id);
-                $result = $summary['structure'];
-            } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                // imap server might have gone away
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' IMAP protocol error during summary fetching: ' . $zmpe->getMessage());
-                $result = array();
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' broken summary: ' . print_r($summary, true));
             }
             $this->_setStructure($result);
         }
@@ -842,6 +857,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                     if (empty($recipient)) {
                         unset($recipients[$key]);
                     }
+                    $recipient = trim($recipient);
                 }
                 unset($recipient);
 

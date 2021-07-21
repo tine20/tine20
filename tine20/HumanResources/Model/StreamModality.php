@@ -53,6 +53,8 @@ class HumanResources_Model_StreamModality extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION               => 1,
+        self::RECORD_NAME               => 'Modality',
+        self::RECORDS_NAME              => 'Modalities', // ngettext('Modality', 'Modalities', n)
         self::HAS_RELATIONS         => true,
         self::COPY_RELATIONS        => false,
         self::HAS_NOTES             => true,
@@ -62,6 +64,8 @@ class HumanResources_Model_StreamModality extends Tinebase_Record_NewAbstract
 
         self::APP_NAME              => HumanResources_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
+
+        self::TITLE_PROPERTY=> "{# {{start - sorting! #}{{ start |localizeddate('short', 'none', app.request.locale ) }} - {% if end %}{{ end | localizeddate('short', 'none', app.request.locale ) }}{% else %}...{% endif %} {{ interval }} {{ num_interval }}× á {{ hours_interval }}h",
 
         self::ASSOCIATIONS          => [
             ClassMetadataInfo::MANY_TO_ONE => [
@@ -89,6 +93,7 @@ class HumanResources_Model_StreamModality extends Tinebase_Record_NewAbstract
             self::FLD_STREAM_ID         => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'],
+                self::DISABLED              => true,
                 self::CONFIG                => [
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME            => HumanResources_Model_Stream::MODEL_NAME_PART,
@@ -106,6 +111,7 @@ class HumanResources_Model_StreamModality extends Tinebase_Record_NewAbstract
             self::FLD_END               => [
                 self::LABEL                 => 'End', // _('End')
                 self::TYPE                  => self::TYPE_VIRTUAL,
+                self::READ_ONLY             => true,
                 self::CONFIG                => [
                     self::TYPE                  => self::TYPE_DATE,
                 ]
@@ -150,6 +156,9 @@ class HumanResources_Model_StreamModality extends Tinebase_Record_NewAbstract
             self::FLD_REPORTS           => [
                 self::LABEL                 => 'Stream Modality Reports', // _('Stream Modality Reports')
                 self::TYPE                  => self::TYPE_RECORDS,
+                self::UI_CONFIG         => [
+                    self::READ_ONLY         => true,
+                ],
                 self::CONFIG                => [
                     self::APP_NAME              => HumanResources_Config::APP_NAME,
                     self::MODEL_NAME            => HumanResources_Model_StreamModalReport::MODEL_NAME_PART,

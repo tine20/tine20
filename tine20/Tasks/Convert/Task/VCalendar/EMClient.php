@@ -20,7 +20,7 @@ class Tasks_Convert_Task_VCalendar_EMClient extends Tasks_Convert_Task_VCalendar
 {
 
     // eM Client/5.0.17595.0
-    const HEADER_MATCH = '/eM Client\/(?P<version>.*)/';
+    const HEADER_MATCH = '/e[Mm] ?Client\/(?P<version>.*)/';
     
     protected $_supportedFields = array(
         'seq',

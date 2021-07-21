@@ -5,11 +5,11 @@ require('dotenv').config();
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
-const uuid = require('uuid/v1');
+const uuid = require('uuid');
 
 module.exports = {
     download: async function (page, selector, option = {}) {
-        const downloadPath = path.resolve(__dirname, 'download', uuid());
+        const downloadPath = path.resolve(__dirname, 'download', uuid.v1());
         mkdirp(downloadPath);
         console.log('Downloading file to:', downloadPath);
         await page._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: downloadPath});
@@ -28,17 +28,24 @@ module.exports = {
         return filename;
     },
 
+    uploadFile: async function (page,file) {
+        let inputUploadHandle;
+
+        inputUploadHandle = await page.$('input[type=file]');
+        await inputUploadHandle.uploadFile(file);
+    },
+
     getNewWindow: async function () {
         return new Promise((fulfill) => browser.once('targetcreated', (target) => fulfill(target.page())));
     },
 
     getEditDialog: async function (btnText, win) {
         await expect(win || page).toMatchElement('.x-btn-text', {text: btnText});
-        await page.waitFor(100); // wait for btn to get active
+        await page.waitForTimeout(100); // wait for btn to get active
         await expect(win || page).toClick('.x-btn-text', {text: btnText});
         let popupWindow = await this.getNewWindow();
         await popupWindow.waitForSelector('.ext-el-mask');
-        await popupWindow.waitFor(() => !document.querySelector('.ext-el-mask'));
+        await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
         await popupWindow.screenshot({path: 'screenshots/test.png'});
         return popupWindow;
     },
@@ -91,16 +98,15 @@ module.exports = {
         console.log('setting preference ' + preference + ' of app '
             + appName + ' to "' + value + '"');
 
+        await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
         await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
-        await page.waitFor(2000);
         const frame = await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
         await expect(frame).toClick('.x-menu-item-icon.action_adminMode');
         const preferencePopup = await this.getNewWindow();
-        await preferencePopup.waitFor(() => document.querySelector('.ext-el-mask'));
-        await preferencePopup.waitFor(() => !document.querySelector('.ext-el-mask'));
         await preferencePopup.waitForSelector('.x-tree-node');
+        //wait for finish load dialog
+        await expect(preferencePopup).toMatchElement('input[name=timezone]');
         await expect(preferencePopup).toClick('span', {text: appName});
-        await preferencePopup.waitFor(1000);
 
         // change setting to YES
         await expect(preferencePopup).toMatchElement('input[name=' + preference + ']');
@@ -119,16 +125,28 @@ module.exports = {
 
         expect.setDefaultOptions({timeout: 5000});
 
-        browser = await puppeteer.launch({
-            // set this to false for dev/debugging
-            headless: process.env.TEST_MODE != 'debug',
-            //ignoreDefaultArgs: ['--enable-automation'],
-            //slowMo: 250,
-            //defaultViewport: {width: 1366, height: 768},
-            args: ['--lang=de-DE,de']
-        });
+        args = ['--lang=de-DE,de'];
 
+        if(process.env.TEST_DOCKER === 'true') {
+            args.push('--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage');
+        }
+
+	try {
+            browser = await puppeteer.launch({
+                headless: process.env.TEST_MODE != 'debug',
+                //ignoreDefaultArgs: ['--enable-automation'],
+                //slowMo: 250,
+                //defaultViewport: {width: 1366, height: 768},
+                args: args
+            });
+	} catch (e) {
+	    console.log(e);
+	}
         page = await browser.newPage();
+
+        await page.setExtraHTTPHeaders({
+            'Accept-Language': 'de'
+        });
         await page.setDefaultTimeout(15000);
         await page.setViewport({
             width: 1366,
@@ -150,7 +168,7 @@ module.exports = {
         await page.waitForSelector('input[name=username]');
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toMatchElement('input[name=username]');
-        await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")')
+        await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")');
         await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME);
         await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD);
         await expect(page).toClick('button', {text: 'Anmelden'});
@@ -170,4 +188,17 @@ module.exports = {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: module});
         }
     },
+    
+    clickSlitButton: async function(page, text) {
+        return await page.evaluate((text) => {
+            const btn = document.evaluate('//em[button[text()="' + text + '"]]', document).iterateNext();
+            const box = btn.getBoundingClientRect();
+
+            // cruid split btn hack
+            const tmp = Ext.EventObject.getPageX;
+            Ext.EventObject.getPageX = () => {return 10000}
+            document.elementFromPoint(box.x+box.width, box.y).click();
+            Ext.EventObject.getPageX = tmp;
+        }, text);
+    }
 };

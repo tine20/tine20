@@ -1,0 +1,19 @@
+"js: end to end tests source":
+  extends: .abstract_jobs.e2e_test
+  stage: test
+  needs:
+    - docker_build_source
+  variables:
+    ARG_COPY_SOURCE: "true"
+    ARG_IMAGE: test-source
+  interruptible: true
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $JS_E2E_TEST_SOURCE == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $JS_E2E_TEST_SOURCE == "true"
+      when: on_success
+    - when: never

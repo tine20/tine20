@@ -58,16 +58,22 @@ class Calendar_Frontend_iMIP
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  string                $_status
-     * @param  boolean               $_retry    retry in case a deadlock occured
+     * @param  boolean               $_retry    retry in case a deadlock occurred
      * @return boolean
      */
     public function process($_iMIP, $_status = NULL, $_retry = true)
     {
         try {
             // client spoofing protection - throws exception if spoofed
-            Tinebase_EmailUser_Factory::getInstance('Controller_Message')->getiMIP($_iMIP->getId());
+            if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+                Felamimail_Controller_Message::getInstance()->getiMIP($_iMIP->getId());
+                return $this->_process($_iMIP, $_status);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Felamimail is needed for iMIP processing');
+                return false;
+            }
 
-            return $this->_process($_iMIP, $_status);
         } catch (Zend_Db_Statement_Exception $zdbse) {
             if ($_retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
                 return $this->process($_iMIP, $_status, false);
@@ -155,19 +161,24 @@ class Calendar_Frontend_iMIP
      */
     protected function _process($_iMIP, $_status = NULL)
     {
-        $method                  = ucfirst(strtolower($_iMIP->method));
-        $processMethodName       = '_process'   . $method;
-        
-        if (! method_exists($this, $processMethodName)) {
+        if (empty($_iMIP->method)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' iMIP method empty ... assuming "REQUEST"');
+            $_iMIP->method = 'REQUEST';
+        }
+        $method = ucfirst(strtolower($_iMIP->method));
+        $processMethodName = '_process' . $method;
+
+        if (!method_exists($this, $processMethodName)) {
             throw new Tinebase_Exception_UnexpectedValue("Method {$_iMIP->method} not supported");
         }
 
         $this->_checkPreconditions($_iMIP, true, $_status);
         $result = $this->{$processMethodName}($_iMIP, $_status);
 
-        //clear existing event cache
+        // clear existing event cache
         unset($_iMIP->existing_event);
-        
+
         return $result;
     }
     
@@ -227,7 +238,7 @@ class Calendar_Frontend_iMIP
             }
             
             // allow if not rescheduled
-            if ($isObsoleted && $existingEvent->isRescheduled($iMIPEvent)) {
+            if ($isObsoleted && $iMIPEvent->isRescheduled($existingEvent)) {
                 $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
                 $result = FALSE;
             }
@@ -505,7 +516,7 @@ class Calendar_Frontend_iMIP
         $eventAttender = $eventAttenderIdx !== FALSE ? $existingEvent->attendee[$eventAttenderIdx] : NULL;
         $eventAttenderStatus = $eventAttender ? $eventAttender->status : NULL;
 
-        if ($existingEvent->isRescheduled($_iMIP->getEvent())) {
+        if ($_iMIP->getEvent()->isRescheduled($existingEvent)) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "event was rescheduled");
             $result = FALSE;
         }

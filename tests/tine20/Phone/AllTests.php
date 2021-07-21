@@ -22,7 +22,7 @@ class Phone_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Phone All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Phone All Tests');
         $suite->addTestSuite('Phone_Frontend_JsonTest');
         $suite->addTestSuite('Phone_Frontend_SnomTest');
         $suite->addTestSuite('Phone_ControllerTest');

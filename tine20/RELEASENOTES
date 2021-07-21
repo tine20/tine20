@@ -2,113 +2,102 @@
 TINE 2.0 RELEASENOTES
 =====================
                     
-  Release:     TBA (2020.11)
-  Last change: 2019-10-28
+  Release:     Amon (2020.11)
+  Last change: 2021-02-16
 
-#SUPPORTED BROWSERS
----
+# GENERAL CHANGES (Administrative)
 
-We changed the way how we deal with supported browsers. It's now based on https://browserl.ist in the following configuration:
-https://browserl.ist/?q=%3E+1%25%2C+last+2+Chrome+versions%2C+last+2+Firefox+versions%2C+Firefox+ESR%2C+last+2+safari+versions%2C+not+ie%3C12
+## MFA / SecondFactor Pin refactoring
 
-This means support for (at the time of the package release):
+moving the current second factor pin into the new MFA facility, it is required to configure a MFA with the provider
+Tinebase_Auth_MFA_PinAdapter
+in order for the update script to be able to copy the hashes of the old pins into the new MFA data structure.
+If the update script is being run without configuring such an MFA, all accounts pins will be permanently lost
+(except for any preexisting database backups of course)
 
-* All Browsers (except IE) which have more than 1% market share
-* And the latest two Chrome versions additionally
-* And the latest two Safari versions additionally
-* And the latest two Firefox versions additionally
-* And the latest Firefox ESR
+We refactored the login and added support for multiple MFA providers (SMS, yubico, ...). The old "captcha" has been removed.
 
-#GENERAL CHANGES (Administrative)
----
+see 41610e5 feature(Tinebase): mfa UI
+see 0c6fcb3 feature(Tinebase): introduce MTA and refactor area lock
 
-### PHP extension intl is now mandatory
+## Disable Browser Password Safe
 
-### PHP extension bcmath is required for AD integration
+A new config option has been added to disable the Browser Password Safe (for example for the login screen).
 
-### MySQL with UTF8 MB4 charset
+see cf14e3c feature(Tinebase): prevent browser password safe in ux.passwordField
 
-We changed the default charset to UTF8MB4. All tables in the Tine 2.0 Database can be converted using a CLI method.
-This requires either MySQL 5.7.7+ or MariaDB 10.2.2+ with default settings. Earlier versions are supported
- with non default settings. MySQL 5.6+ and MariaDB 10.0+ need to set:
-    innodb_large_prefix = 1
-    innodb_file_format = 'Barracuda'
-    innodb_file_per_table = 'ON'
-The conversion script will test these settings and abort if prerequisites are not met.
-the CLI method to convert to utf8mb4 is "setup.php --migrateUtf8mb4"
+## MySQL 8 Support
 
-### OpenID Connect support
+But be careful, MySQL 8.0.20 has a major bug (see https://bugs.mysql.com/bug.php?id=99398 for more information) and should not be used!
+We mitigated the bug before, but removed that because it created other issues (see commit 77abad0).
 
-SSO via OpenID Connect has been added. Add this to your config to make it work:
+## PHP 7.4 Support
 
-    'sso' => [
-        'active' => true,
-        'providerUrl' => 'OIDC_PROVIDER_URL',
-        'clientId' => 'CLIENT_ID_STRING',
-        'clientSecret' => 'CLIENT_SECRET_STRING',
-        'redirectUrl' => 'YOUR_LOCAL_TINE_URL',
-    ],
+Support PHP < 7.2 has been dropped.
 
-You also have to add the users email address (known by the sso provider) as "open id" in the user record.
+## Clear Cache (CLI)
 
-### Improved JSON-Logger (for Elastic Stack)
+The Tinebase.clearCache function has been removed - please use this command now:
 
-### Improved Sentry-Integration
+    $ setup.php --clear_cache [-v]
 
-### Antivirus-Scanning of files via ClamAV
+# GENERAL CHANGES (User Interface)
 
-#GENERAL CHANGES (Webclient)
----
+## Minor Layout Changes
 
-### New Layout (Flat design)
+- Toolbar background color
+- Application Tabs background colors
 
-### Improved key-bindings in grid panels
+## Inline Editor
 
-### "Prevent Data-Loss" check in edit dialog
+For example for XML in Import/Export-Definitions Editor.
 
-#ADDRESSBOOK
----
+## Filemanager Folder Relations
 
-### Support VCard "CardBook" client (Thunderbird Addon)
--> https://addons.thunderbird.net/de/thunderbird/addon/cardbook/
+# Admin
 
-#FELAMIMAIL
----
+## Import/Export-Definitions Editor
 
-### New Preference "mark as read"
+## DB-Logger
 
-### Auto-Save Drafts
+# Adressbook
 
-### Support of multiple Signatures for each account
+## VCARD Exports
 
-### "File as" (file locations) for emails (for example as record attachements or in fileamanger)
+# Crm
 
-#CALENDAR
----
+## Notification-Features
 
-### Support for "Fantastical" client
--> https://flexibits.com/fantastical
+More configuration for Notifications.
 
-#ADMIN
----
+# Calendar
 
-### E-Mail-Account Administration
-- Shared Accounts (with grants for groups/users/roles)
-- Mailinglists
-- multiple system account for each user
-- Sieve management for all accounts
-- and more
--> note: you need special configuration (dovecot + postfix) for shared accounts, system accounts and mailinglists
+## Notification-Features
 
-### checkbox for PW change
-- user needs to change his password on next login
+Configuration for Muting Notifications.
 
-#CRM / PROJECTS
----
+## Customizable Calendar Colors
 
-### Add Projects to Leads migration script
+## Configuration for Week View Days
 
-#FILEMANAGER
----
+- define visible week days
 
-### Show previews of EML Files and allow to open them in Felamimail
+## VCALENDAR/ICS Exports
+
+- Multiple Calendars at once
+- Save Export in Filemanager (File Location)
+- ICS Report export contains ALL events of a calendar
+
+# Felamimail
+
+## Multiple Signatures
+
+## Auto-Save as Draft
+
+## Show Total Message Count Of Draft Folder
+
+# Human Resources
+
+## FreeTime Planning
+
+

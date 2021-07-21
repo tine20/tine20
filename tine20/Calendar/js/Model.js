@@ -191,6 +191,10 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
 
     getTitle: function() {
         return this.get('summary') + (this.hasPoll() ? '\u00A0\uFFFD' : '');
+    },
+    
+    getComboBoxTitle: function() {
+        return this.get('summary') + ' (' + Tine.Tinebase.common.dateTimeRenderer(this.get('dtstart')) + ')';
     }
 });
 
@@ -231,19 +235,23 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         'class': eventClass,
         dtstart: dtstart,
         dtend: dtstart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
+        status: 'CONFIRMED',
         container_id: container,
         transp: 'OPAQUE',
         editGrant: true,
         // needed for action updater / save and close in edit dialog
         readGrant: true,
         organizer: organizer,
-        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container)
+        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container),
+        mute: false
     };
     
     if (prefs.get('defaultalarmenabled')) {
         data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
     }
-    
+
+    app.emit('createEvent', data);
+
     return data;
 };
 
@@ -762,14 +770,14 @@ Tine.Calendar.Model.Attender.getSortOrder = function(user_type) {
  * @return {Object} default data
  * @static
  */ 
-Tine.Calendar.Model.Attender.getDefaultData = function() {
-    return {
+Tine.Calendar.Model.Attender.getDefaultData = function(overrides) {
+    return _.assign({
         // @TODO have some config here? user vs. default?
         user_type: 'any',
         role: 'REQ',
         quantity: 1,
         status: 'NEEDS-ACTION'
-    };
+    }, overrides);
 };
 
 /**
@@ -1009,7 +1017,8 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     {name: 'grants'},
     { name: 'attachments'},
     { name: 'relations',   omitDuplicateResolving: true},
-    { name: 'customfields', omitDuplicateResolving: true}
+    { name: 'customfields', omitDuplicateResolving: true},
+    {name: 'color'}
 ]), {
     appName: 'Calendar',
     modelName: 'Resource',

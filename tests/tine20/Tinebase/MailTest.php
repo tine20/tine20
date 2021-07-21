@@ -12,7 +12,7 @@
 /**
  * Test class for Tinebase_MailTest
  */
-class Tinebase_MailTest extends PHPUnit_Framework_TestCase
+class Tinebase_MailTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @see 0011556: sending mails to multiple recipients fails

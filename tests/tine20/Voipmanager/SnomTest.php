@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Voipmanager_SnomTest extends PHPUnit_Framework_TestCase
+class Voipmanager_SnomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Backend
@@ -34,7 +34,7 @@ class Voipmanager_SnomTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Json Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Voipmanager Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -44,8 +44,8 @@ class Voipmanager_SnomTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_snom = new Voipmanager_Frontend_Snom();
     }
@@ -56,8 +56,8 @@ class Voipmanager_SnomTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -85,7 +85,7 @@ class Voipmanager_SnomTest extends PHPUnit_Framework_TestCase
         $this->_snom->settings($phone['macaddress']);
         $out = ob_get_clean();
         
-        $this->assertContains('<settings><phone-settings><firmware_interval perm="RO">0</firmware_interval><update_policy perm="RO">auto_update</update_policy>', $out);
-        $this->assertContains('<transfer_on_hangup perm="RO">on</transfer_on_hangup>', $out);
+        $this->assertStringContainsString('<settings><phone-settings><firmware_interval perm="RO">0</firmware_interval><update_policy perm="RO">auto_update</update_policy>', $out);
+        $this->assertStringContainsString('<transfer_on_hangup perm="RO">on</transfer_on_hangup>', $out);
     }
 }

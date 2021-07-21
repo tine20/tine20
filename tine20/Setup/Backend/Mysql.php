@@ -443,7 +443,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         $ignoreTables = '';
         if (count($option['structTables']) > 0) {
-            $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data ' .
+            $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data --no-tablespaces ' .
                 escapeshellarg($this->_config->database->dbname);
             foreach($option['structTables'] as $table) {
                 $structDump .= ' ' . escapeshellarg($table);
@@ -457,7 +457,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
               ."mysqldump --defaults-extra-file=$mycnf "
               .$ignoreTables
               ."--single-transaction --max_allowed_packet=512M "
-              ."--opt "
+              ."--opt --no-tablespaces "
               . escapeshellarg($this->_config->database->dbname)
               . ($structDump!==false?'; ' . $structDump . '; }':'')
               ." | bzip2 > $backupDir/tine20_mysql.sql.bz2";
@@ -540,22 +540,24 @@ EOT;
      */
     public function supports($requirement)
     {
-        return static::mariaDBFuckedUsSupports($this->_db, $requirement);
+        return static::dbSupportsVersion($this->_db, $requirement);
     }
 
-
-    public static function mariaDBFuckedUsSupports($db, $requirement)
+    /**
+     * @param Zend_Db_Adapter_Abstract $db
+     * @param string $requirement
+     * @return bool
+     */
+    public static function dbSupportsVersion(Zend_Db_Adapter_Abstract $db, $requirement)
     {
-        if (preg_match('/mysql ([<>=]+) ([\d\.]+)/', $requirement, $m))
-        {
-            $version = $db->getServerVersion();
+        $version = $db->getServerVersion();
+
+        if (preg_match('/mysql ([<>=]+) ([\d\.]+)/', $requirement, $m)){
             if (version_compare($version, '10', '<') === true && version_compare($version, $m[2], $m[1]) === true) {
                 return true;
             }
         }
-        if (preg_match('/mariadb ([<>=]+) ([\d\.]+)/', $requirement, $m))
-        {
-            $version = $db->getServerVersion();
+        if (preg_match('/mariadb ([<>=]+) ([\d\.]+)/', $requirement, $m)){
             if (version_compare($m[2], '10', '>=') === true && version_compare($version, $m[2], $m[1]) === true) {
                 return true;
             }

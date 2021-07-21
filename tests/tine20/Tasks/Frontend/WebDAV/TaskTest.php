@@ -27,8 +27,8 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
      * Sets up the fixture.
      * This method is called before a test is executed.
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
         
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -160,11 +160,11 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
         
         $vcalendar = stream_get_contents($task->get());
         
-        $this->assertContains('SUMMARY:New Task', $vcalendar);
+        $this->assertStringContainsString('SUMMARY:New Task', $vcalendar);
 
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::ACTIVEDIRECTORY) {
             // non-AD only because AD setup currently doesn't have user email address
-            $this->assertContains('ORGANIZER;CN=', $vcalendar);
+            $this->assertStringContainsString('ORGANIZER;CN=', $vcalendar);
         }
     }
     
@@ -215,7 +215,7 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $task->put($vcalendarStream);
         

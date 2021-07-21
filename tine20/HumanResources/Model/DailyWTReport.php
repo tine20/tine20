@@ -72,7 +72,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 2,
+        'version' => 3,
         'recordName' => 'Daily Working Time Report',
         'recordsName' => 'Daily Working Time Reports', // ngettext('Daily Working Time Report', 'Daily Working Time Reports', n)
         'containerProperty' => null,
@@ -88,6 +88,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 
         'appName' => 'HumanResources',
         'modelName' => self::MODEL_NAME_PART,
+        'requiredRight' => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
 
         self::TITLE_PROPERTY=> "{# {{date - sorting! #}{% if working_time_actual %}{{ working_time_actual |date('H:i', 'GMT')}}{% else %}00:00{% endif %} - {{ date | localizeddate('full', 'none', app.request.locale ) }}",
 
@@ -142,8 +143,11 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 'config' => [
                     'appName'     => 'HumanResources',
                     'modelName'   => 'Employee',
+                    self::RESOLVE_DELETED => true,
                 ],
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
                 self::QUERY_FILTER          => true,
             ],
             'monthlywtreport' => [
@@ -158,7 +162,9 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                     'appName'     => HumanResources_Config::APP_NAME,
                     'modelName'   => HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
                 ],
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
                 self::QUERY_FILTER          => true,
             ],
             'date' => [
@@ -168,7 +174,10 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 ],
                 self::LABEL                 => 'Date', // _('Date')
                 self::TYPE                  => 'date',
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
+                
             ],
             // kommt aus WorkingTime, z.b. von 9-17 uhr, kann auf tagesbasis im report geändert werden, siehe correction properties
             // änderungen stoßen neuberechnung an
@@ -177,14 +186,18 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::LABEL                 => 'Evaluation Start Time', // _('Evaluation Start Time')
                 self::TYPE                  => 'time',
                 self::NULLABLE              => true,
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
             ],
             'evaluation_period_end' => [ // kommt aus WorkingTime
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                 => 'Evaluation End Time', // _('Evaluation End Time')
                 self::TYPE                  => 'time',
                 self::NULLABLE              => true,
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
             ],
             'evaluation_period_start_correction' => [
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -206,18 +219,20 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Target Working Time', // _('Target Working Time')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
             ],
             'working_time_target_correction' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Target Working Time Correction', // _('Target Working Time Correction')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
             ],
 
             //  zeit zwischen den zetteln (brutto pausenzeit - in transportklasse) + break_time_deduction
@@ -225,17 +240,22 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Break Time Net', // _('Break Time Net')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
             ],
             // WorkingTime - passiert, wenn MA zu wenig pause gemacht hat
-            'break_time_deduction' => [self::TYPE                  => self::TYPE_INTEGER,
+            'break_time_deduction' => [
+                self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Break Deduction Time', // _('Break Deduction Time')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
             ],
             self::FLDS_WORKING_TIMES  => [
                 self::TYPE                  => self::TYPE_RECORDS,
@@ -246,35 +266,41 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                     self::MODEL_NAME            => HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
                     self::STORAGE               => self::TYPE_JSON,
                 ],
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
             ],
             // echte arbeitszeit nach regelanwendung
             'working_time_actual' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Actual Working Time', // _('Actual Working Time')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
             ],
             // manuelles feld für korrekturen ("musterschüler")
             'working_time_correction' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Working Time Correction', // _('Working Time Correction')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
             ],
             'working_time_total' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::LABEL                 => 'Total Working Time', // _('Total Working Time')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => null],
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
+                self::DEFAULT_VAL           => 0,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
+                self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
             ],
             // z.b. krankheit, urlaub, feiertag (bei regelarbeit leer)
             'system_remark' => [
@@ -282,7 +308,9 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::TYPE                  => 'string',
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
                 self::QUERY_FILTER          => true,
             ],
             'user_remark' => [
@@ -300,7 +328,9 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::DEFAULT_VAL           => 0,
                 self::SHY                   => true,
                 self::COPY_OMIT             => true,
-                self::DISABLED              => true,
+                self::UI_CONFIG             => [
+                    self::READ_ONLY             => true,
+                ],
             ],
             'calculation_failure' => [
                 self::LABEL                 => 'Calculation Error', // _('Calculation Error')

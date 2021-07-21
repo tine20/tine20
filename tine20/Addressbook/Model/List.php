@@ -22,6 +22,7 @@
  * @property    string      $email
  * @property    string      $type                 type of list
  * @property    string      $emails
+ * @property    string      $list_type
  */
 class Addressbook_Model_List extends Tinebase_Record_Abstract
 {
@@ -78,7 +79,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'List',
+        'recordName'        => 'List', // gettext('GENDER_List')
         'recordsName'       => 'Lists', // ngettext('List', 'Lists', n)
         'hasRelations'      => true,
         'hasCustomFields'   => true,
@@ -167,7 +168,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             ),
             'list_type'         => array(
                 'label'             => 'List type', //_('List type')
-                'type'              => 'string',
+                'type'              => 'keyfield',
+                'name'              => Addressbook_Config::LIST_TYPE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'group_id'          => array(

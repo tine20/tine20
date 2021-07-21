@@ -23,6 +23,11 @@ class Tinebase_ModelConfiguration_Const {
     const ASSOCIATIONS = 'associations';
     const AVAILABLE_MODELS = 'availableModels';
 
+    /**
+     * additional boxLabel for checkboxes
+     */
+    const BOX_LABEL = 'boxLabel';
+    
     const CONFIG = 'config';
     const CONTROLLER = 'controller';
     const CONTROLLER_CLASS_NAME = 'controllerClassName';
@@ -37,12 +42,18 @@ class Tinebase_ModelConfiguration_Const {
     const DEFAULT_VAL = 'default';
     const DEGREE = 'degree';
     const DEPENDENT_RECORDS = 'dependentRecords';
+    /**
+     * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
+     */
     const DISABLED = 'disabled';
+    const DOCTRINE_IGNORE = 'doctrineIgnore';
 
+    const EXPORT = 'export';
     const EXPOSE_HTTP_API = 'exposeHttpApi';
     const EXPOSE_JSON_API = 'exposeJsonApi';
 
     const FIELDS = 'fields';
+    const FIELD_NAME = 'fieldName';
     const FILTER = 'filter';
     const FILTER_CLASS_NAME = 'filterClassName';
     const FILTER_DEFINITION = 'filterDefinition';
@@ -72,6 +83,8 @@ class Tinebase_ModelConfiguration_Const {
     const IS_DEPENDENT = 'isDependent';
     const IS_VIRTUAL = 'isVirtual';
 
+    const JOIN_COLUMNS = 'joinColumns';
+
     const LABEL = 'label';
     const LENGTH = 'length';
 
@@ -82,29 +95,46 @@ class Tinebase_ModelConfiguration_Const {
     const NULLABLE = 'nullable';
 
     const OMIT_MOD_LOG = 'modlogOmit';
+    const ON_DELETE = 'onDelete';
+    const ON_UPDATE = 'onUpdate';
     const OPTIONS = 'options';
+    // used for example by system customfields. Tells the receiving model, that this property originates from a different app
+    // relevant for translation, keyfields, etc.
+    const OWNING_APP = 'owningApp';
 
     const PAGING = 'paging';
 
     const QUERY_FILTER = 'queryFilter';
 
+    /**
+     * If this is set to true, the field can't be updated in BE and will be shown as readOnly in the frontend
+     */
     const READ_ONLY = 'readOnly';
+    const REFERENCED_COLUMN_NAME = 'referencedColumnName';
     const REF_ID_FIELD = 'refIdField';
     const REF_MODEL_FIELD = 'refModelField';
     const RECORD_CLASS_NAME = 'recordClassName';
     const RECORD_NAME = 'recordName';
     const RECORDS_NAME = 'recordsName';
+    const RESOLVE_DELETED = 'resolveDeleted';
     const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
+    /**
+     * frontends do not show this field in grids per default
+     */
     const SHY = 'shy';
     const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
     const SPECIAL_TYPE = 'specialType';
     const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
+    const SPECIAL_TYPE_PASSWORD = 'password';
     const STORAGE = 'storage';
+    const SUPPORTED_FORMATS = 'supportedFormats';
     const SYSTEM = 'system';
 
     const TABLE = 'table';
+    const TARGET_ENTITY = 'targetEntity';
     const TITLE_PROPERTY = 'titleProperty';
+    const TOOLTIP = 'tooltip';
     const TYPE = 'type';
     const TYPE_ATTACHMENTS = 'attachments';
     const TYPE_BIGINT = 'bigint';
@@ -115,9 +145,16 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_DYNAMIC_RECORD = 'dynamicRecord';
     const TYPE_FLOAT = 'float';
     const TYPE_FULLTEXT = 'fulltext';
+
+    /**
+     * Colour in the web standard hexadecimal format (#000000 to #FFFFFF)
+     */
+    const TYPE_HEX_COLOR = 'hexcolor';
+
     const TYPE_INTEGER = 'integer';
     const TYPE_JSON = 'json';
     const TYPE_KEY_FIELD = 'keyfield';
+    const TYPE_LABEL = 'label';
     const TYPE_MODEL = 'model';
     const TYPE_MONEY = 'money';
     const TYPE_NOTE = 'note';
@@ -127,6 +164,7 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_RECORDS = 'records';
     const TYPE_RELATION = 'relation';
     const TYPE_RELATIONS = 'relations';
+    const TYPE_STRICTFULLTEXT = 'strictFulltext';
     const TYPE_STRING = 'string';
     const TYPE_STRING_AUTOCOMPLETE = 'stringAutocomplete';
     const TYPE_TAG = 'tag';
@@ -137,6 +175,7 @@ class Tinebase_ModelConfiguration_Const {
 
     const UNIQUE_CONSTRAINTS = 'uniqueConstraints';
     const UNSIGNED = 'unsigned';
+    const UI_CONFIG = 'uiconfig';
 
     const VALIDATORS = 'validators';
     const VERSION = 'version';

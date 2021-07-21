@@ -18,10 +18,10 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  * 
  * @package     Calendar
  */
-class Calendar_RruleTests extends PHPUnit_Framework_TestCase
+class Calendar_RruleTests extends \PHPUnit\Framework\TestCase
 {
-    public function setUp()
-    {
+    public function setUp(): void
+{
         
     }
     
@@ -60,7 +60,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($rrule->isValid(false), 'until & count');
         
         // test invalid by setFromString
-        $this->setExpectedException('Tinebase_Exception_Record_Validation');
+        $this->expectException('Tinebase_Exception_Record_Validation');
         $rruleString = "FREQ=WEEKLY;INTERVAL=NotAnInt";
         $rrule = new Calendar_Model_Rrule(array());
         $rrule->setFromString($rruleString);

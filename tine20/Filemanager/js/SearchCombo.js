@@ -36,7 +36,8 @@ Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
 
     itemSelector: 'div.search-item',
     minListWidth: 200,
-
+    enableKeyEvents: true,
+    
     app: null,
     
     recordClass: null,
@@ -44,7 +45,7 @@ Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
     
     initComponent: function(){
         this.recordClass = Tine.Filemanager.Model.Node;
-        this.recordProxy = Tine.Filemanager.fileRecordBackend;
+        this.recordProxy = Tine.Filemanager.nodeBackend;
 
         if (null === this.app) {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
@@ -59,6 +60,14 @@ Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
             'select'
         );
     },
+
+    onKeyDown : function(e){
+        this.supr().onKeyDown.call(this, e);
+        if (e.getKey() === e.DOWN) {
+            this.onTriggerClick();
+        }
+        e.stopEvent();
+    },
     
     onTriggerClick: function () {
         var filepicker = new Tine.Filemanager.FilePickerDialog({
@@ -72,9 +81,8 @@ Tine.Filemanager.SearchCombo = Ext.extend(Ext.form.TriggerField, {
                 return true;
             }
 
-            this.fireEvent('select', node[0]);
             this.setValue(node[0].path);
-
+            this.fireEvent('select', node[0]);
         }, this);
 
         filepicker.openWindow();

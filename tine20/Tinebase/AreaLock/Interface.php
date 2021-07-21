@@ -6,7 +6,7 @@
  * @subpackage  Adapter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,28 +17,15 @@
  */
 interface Tinebase_AreaLock_Interface
 {
-    /**
-     * @param string $area
-     * @return Tinebase_DateTime
-     */
-    public function saveValidAuth($area);
+    public function saveValidAuth(): Tinebase_DateTime;
 
     /**
-     * @param string $area
-     * @return bool
      * @throws Exception
      * @throws Zend_Session_Exception
      */
-    public function hasValidAuth($area);
+    public function hasValidAuth(): bool;
 
-    /**
-     * @param $area
-     * @return bool|Tinebase_DateTime
-     */
-    public function getAuthValidity($area);
+    public function getAuthValidity(): ?Tinebase_DateTime;
 
-    /**
-     * @param string $area
-     */
-    public function resetValidAuth($area);
+    public function resetValidAuth(): void;
 }

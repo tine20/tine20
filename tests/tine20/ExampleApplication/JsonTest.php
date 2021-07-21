@@ -5,14 +5,9 @@
  * @package     ExampleApplication
  * @subpackage  Test
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for ExampleApplication_JsonTest
@@ -21,8 +16,8 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
 {
     protected $_recordsToDelete = array();
 
-    public function setUp()
-    {
+    public function setUp(): void
+{
         Tinebase_Application::getInstance()->setApplicationStatus(array(
             Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId()
         ), Tinebase_Application::ENABLED);
@@ -32,8 +27,8 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $this->_recordsToDelete = array();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if (count($this->_recordsToDelete) > 0)
         {
             $this->_json->deleteExampleRecords(array_keys($this->_recordsToDelete));
@@ -115,6 +110,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $this->assertTrue(isset($returnedGet['number_str']), 'number_str missing');
         $this->assertEquals('ER-' . $expectedNumber, $returnedGet['number_str']);
         $this->assertEquals('some words in the description for the fulltext search', $returnedGet['description']);
+        $this->assertSame(false, $returnedGet['is_deleted']);
         
         return $returnedRecord;
     }
@@ -181,19 +177,33 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $exampleRecordWithTag = $this->testCreateExampleRecord();
         // create a second record with no tag
         $this->testCreateExampleRecord(2);
-        
+
+        $tagName = 'nice/supi';
         $exampleRecordWithTag['tags'] = array(array(
-            'name'    => 'supi',
+            'name'    => $tagName,
             'type'    => Tinebase_Model_Tag::TYPE_PERSONAL,
         ));
         $exampleRecordWithTag = $this->_json->saveExampleRecord($exampleRecordWithTag);
         $exampleRecordTagID = $exampleRecordWithTag['tags'][0]['id'];
         
         $searchTagFilter = array(array('field' => 'tag', 'operator' => 'equals', 'value' => $exampleRecordTagID));
-        
         $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
-        
         $this->assertEquals(1, $returned['totalcount']);
+
+        // test search again with tag name contains ...
+        $searchTagFilter = array(array('field' => 'tag', 'operator' => 'contains', 'value' => $tagName));
+        $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
+        $this->assertEquals(1, $returned['totalcount'], 'did not find records by tag name (contains)');
+
+        // test search again with tag name contains ... this time only with the first chars
+        $searchTagFilter = array(array('field' => 'tag', 'operator' => 'contains', 'value' => substr($tagName, 0, 4)));
+        $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
+        $this->assertEquals(1, $returned['totalcount'], 'did not find records by tag name (contains)');
+
+        // test search again with tag name contains ... once more with a non-matching string
+        $searchTagFilter = array(array('field' => 'tag', 'operator' => 'contains', 'value' => '1234'));
+        $returned = $this->_json->searchExampleRecords($searchTagFilter, $this->_getPaging());
+        $this->assertEquals(0, $returned['totalcount'], 'should not find any records');
     }
     
     /**
@@ -207,7 +217,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $returnValueDeletion = $this->_json->deleteExampleRecords($exampleRecordID);
         $this->assertEquals($returnValueDeletion['status'], 'success');
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_json->getExampleRecord($exampleRecordID);
     }
 

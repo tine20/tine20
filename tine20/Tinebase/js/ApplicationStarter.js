@@ -20,7 +20,8 @@ require('widgets/grid/ImageRenderer');
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
-Tine.Tinebase.ApplicationStarter = {
+Tine.Tinebase.ApplicationStarter = {};
+Ext.apply(Tine.Tinebase.ApplicationStarter,{
     
     /**
      * the applictions the user has access to
@@ -44,7 +45,11 @@ Tine.Tinebase.ApplicationStarter = {
         'integer':  'int',
         'float':    'float'
     },
-    
+
+    __applicationStarterInitialized: new Promise( (resolve) => {
+        Tine.Tinebase.ApplicationStarter.__applicationStarterInitializedResolve = resolve;
+    }),
+
     /**
      * initializes the starter
      */
@@ -60,9 +65,14 @@ Tine.Tinebase.ApplicationStarter = {
         if (! this.userApplications || this.userApplications.length == 0) {
             this.userApplications = Tine.Tinebase.registry.get('userApplications');
             this.createStructure(true);
+            Tine.Tinebase.ApplicationStarter.__applicationStarterInitializedResolve();
         }
     },
-    
+
+    isInitialised: function() {
+        return Tine.Tinebase.ApplicationStarter.__applicationStarterInitialized;
+    },
+
     /**
      * returns the field
      * 
@@ -109,141 +119,6 @@ Tine.Tinebase.ApplicationStarter = {
         // TODO: create field registry, add fields here
         return field;
     },
-    /**
-     * returns the grid renderer
-     * @param {Object} config
-     * @param {String} field
-     * @return {Function}
-     */
-    getGridRenderer: function(config, field, appName, modelName) {
-        var gridRenderer = null;
-        if (config && field) {
-            switch (config.type) {
-                case 'record':
-                    if (Tine.Tinebase.common.hasRight('view', config.config.appName, config.config.modelName.toLowerCase())) {
-                        if (config.config.appName == appName && config.config.modelName == modelName) {
-                            // pointing to same model
-                            gridRenderer = function (value, row, record) {
-                                var title = value && config.config.titleProperty ? value[config.config.titleProperty] : '';
-                                return Ext.util.Format.htmlEncode(title);
-                            };
-                        } else {
-                            gridRenderer = function (value, row, record) {
-                                var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
-                                if (foreignRecordClass) {
-                                    const titleProperty = foreignRecordClass.getMeta('titleProperty');
-                                    let value = record ? record.get(field) : '';
-                                    value = _.isFunction(_.get(value, 'getTitle')) ? value.getTitle() : _.get(value, titleProperty, '');
-                                    return Ext.util.Format.htmlEncode(value);
-                                } else {
-                                    return value;
-                                }
-                            };
-                        }
-                    } else {
-                        gridRenderer = null;
-                    }
-                    break;
-                case 'integer':
-                case 'float':
-                    if (config.hasOwnProperty('specialType')) {
-                        switch (config.specialType) {
-                            case 'bytes1000':
-                                gridRenderer = function(value, cell, record) {
-                                    return Tine.Tinebase.common.byteRenderer(value, cell, record, 2, true);
-                                };
-                                break;
-                            case 'bytes':
-                                gridRenderer = function(value, cell, record) {
-                                    return Tine.Tinebase.common.byteRenderer(value, cell, record, 2, false);
-                                };
-                                break;
-                            case 'minutes':
-                                gridRenderer = Tine.Tinebase.common.minutesRenderer;
-                                break;
-                            case 'seconds':
-                                gridRenderer = Tine.Tinebase.common.secondsRenderer;
-                                break;
-                            case 'percent':
-                                gridRenderer = function(value, cell, record) {
-                                    return Tine.Tinebase.common.percentRenderer(value, config.type);
-                                };
-                                break;
-                            case 'durationSec':
-                                gridRenderer = function(value, cell, record) {
-                                    return Ext.ux.form.DurationSpinner.durationRenderer(value, {
-                                        baseUnit: 'seconds'
-                                    });
-                                };
-                                break;
-                            default:
-                                gridRenderer = Ext.util.Format.htmlEncode;
-                        }
-
-                        gridRenderer = gridRenderer.createSequence(function(value, metadata, record) {
-                            if (metadata) {
-                                metadata.css = 'tine-gird-cell-number';
-                            }
-                        });
-
-                    }
-                    break;
-                case 'user':
-                    gridRenderer = Tine.Tinebase.common.usernameRenderer;
-                    break;
-                case 'keyfield': 
-                    gridRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, config.name);
-                    break;
-                case 'datetime_separated_date':
-                case 'date':
-                    gridRenderer = Tine.Tinebase.common.dateRenderer;
-                    break;
-                case 'datetime':
-                    gridRenderer = Tine.Tinebase.common.dateTimeRenderer;
-                    break;
-                case 'time':
-                    gridRenderer = Tine.Tinebase.common.timeRenderer;
-                    break;
-                case 'tag':
-                    gridRenderer = Tine.Tinebase.common.tagsRenderer;
-                    break;
-                case 'container':
-                    gridRenderer = Tine.Tinebase.common.containerRenderer;
-                    break;
-                case 'boolean':
-                    gridRenderer = Tine.Tinebase.common.booleanRenderer;
-                    break;
-                case 'money':
-                    if (config.hasOwnProperty('specialType')) {
-                        if (config.specialType == 'zeroMoney') {
-                            // if this option is set, zero values are hidden in the grid
-                            gridRenderer = function (value) {
-                                return Ext.util.Format.money(value, {zeroMoney: true});
-                            };
-                            break;
-                        }
-                    }
-                    gridRenderer = Ext.util.Format.money;
-                    break;
-                case 'attachments':
-                    gridRenderer = Tine.widgets.grid.attachmentRenderer;
-                    break;
-                case 'image':
-                    gridRenderer = Tine.widgets.grid.imageRenderer;
-                    break;
-                case 'json':
-                    gridRenderer = Tine.widgets.grid.jsonRenderer;
-                    break;
-                case 'relation':
-                    // moved to renderer manager
-                    gridRenderer = null;
-                    break;
-                default:
-                    gridRenderer = Ext.util.Format.htmlEncode;
-            }
-        }
-        return gridRenderer;
-    },
 
     /**
      * used in getFilter for mapping types to filter
@@ -284,6 +159,15 @@ Tine.Tinebase.ApplicationStarter = {
                 Tine.widgets.grid.FilterToolbar.FILTERS[fc] = filterclass;
                 filter = {filtertype: fc};
                 break;
+            case 'relation':
+                _.assign(filter, {
+                    filtertype: 'foreignrecord',
+                    valueType: 'relation',
+                    app: _.get(filterconfig, 'options.appName', appName),
+                    ownRecordClass: _.get(filterconfig, 'options.own_model'),
+                    foreignRecordClass: _.get(filterconfig, 'options.related_model')
+                });
+                break;
             case 'tag': 
                 filter = {filtertype: 'tinebase.tag', app: appName};
                 break;
@@ -301,7 +185,7 @@ Tine.Tinebase.ApplicationStarter = {
                 break;
             case 'keyfield':
                 filter.filtertype = 'tine.widget.keyfield.filter';
-                filter.app = {name: appName};
+                filter.app = {name: _.get(fieldconfig, 'owningApp', appName)};
                 filter.keyfieldName = fieldconfig.name;
                 break;
             case 'date':
@@ -341,15 +225,15 @@ Tine.Tinebase.ApplicationStarter = {
         var fieldconfig = modelConfig.fields[fieldKey];
 
         if (fieldconfig && fieldconfig.type === 'virtual') {
-            fieldconfig = fieldconfig.config;
+            fieldconfig = fieldconfig.config || {};
         }
 
-        var appName = modelConfig.appName;
-        var modelName = modelConfig.modelName;
-        
-        var app = Tine.Tinebase.appMgr.get(appName);
+        const appName = modelConfig.appName;
+        const modelName = modelConfig.modelName;
+        const owningAppName = _.get(fieldconfig, 'owningApp') || appName;
+        const app = Tine.Tinebase.appMgr.get(owningAppName);
         if (! app) {
-            Tine.log.error('Application ' + appName + ' not found!');
+            Tine.log.error('Application ' + owningAppName + ' not found!');
             return null;
         }
         
@@ -367,7 +251,7 @@ Tine.Tinebase.ApplicationStarter = {
             globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation'))),
             i18n = globalI18n ? window.i18n : app.i18n;
         
-        if (! label) {
+        if (! label || _.get(fieldconfig, 'disabled')) {
             return null;
         }
         // prepare filter
@@ -488,34 +372,11 @@ Tine.Tinebase.ApplicationStarter = {
                         var fieldDefinition = modelConfig.fields[key];
 
                         if (fieldDefinition.type === 'virtual') {
-                            fieldDefinition = fieldDefinition.config;
+                            fieldDefinition = fieldDefinition.config || {};
                         }
 
                         // add field to model array
                         modelArray.push(this.getField(fieldDefinition, key));
-
-                        if (fieldDefinition.label) {
-                            // register grid renderer
-                            if (initial) {
-                                var renderer = null;
-                                try {
-                                    renderer = this.getGridRenderer(fieldDefinition, key, appName, modelName);
-                                } catch (e) {
-                                    Tine.log.err(e);
-                                    renderer = null;
-                                }
-                                
-                                if (Ext.isFunction(renderer)) {
-                                    if (! Tine.widgets.grid.RendererManager.has(appName, modelName, key)) {
-                                        Tine.widgets.grid.RendererManager.register(appName, modelName, key, renderer);
-                                    }
-                                } else if (Ext.isObject(renderer)) {
-                                    if (! Tine.widgets.grid.RendererManager.has(appName, modelName, key)) {
-                                        Tine.widgets.grid.RendererManager.register(appName, modelName, key, renderer.render, null, renderer);
-                                    }
-                                }
-                            }
-                        }
                         
                     }, this);
                     
@@ -536,14 +397,14 @@ Tine.Tinebase.ApplicationStarter = {
                                 'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle')
                         );
 
+                        // called from legacy code - but all filters should come from registy (see below)
+                        Tine[appName].Model[modelName].getFilterModel = function() { return [];};
+
                         // NOTE: no constructor, super magic here
                         if (Tine[appName].Model.hasOwnProperty(modelName + 'Mixin')) {
                             Ext.override(Tine[appName].Model[modelName], Tine[appName].Model[modelName + 'Mixin']);
                             Ext.apply(Tine[appName].Model[modelName], _.get(Tine[appName].Model[modelName + 'Mixin'], 'statics', {}));
                         }
-                        
-                        // called from legacy code - but all filters should come from registy (see below)
-                        Tine[appName].Model[modelName].getFilterModel = function() { return [];};
                     }
 
                     // register filters
@@ -563,7 +424,15 @@ Tine.Tinebase.ApplicationStarter = {
                             modelName: modelName,
                             recordClass: Tine[appName].Model[modelName]
                         });
+
+                        if (Tine[appName].hasOwnProperty([recordProxyName] + 'Mixin')) {
+                            Ext.apply(Tine[appName][recordProxyName], Tine[appName][recordProxyName + 'Mixin']);
+                            Ext.apply(Tine[appName][recordProxyName], _.get(Tine[appName][recordProxyName + 'Mixin'], 'statics', {}));
+                        }
                     }
+
+                    if (recordProxyName === 'nodeBackend') return;
+
                     // if default data is empty, it will be resolved to an array
                     if (Ext.isArray(modelConfig.defaultData)) {
                         modelConfig.defaultData = {};
@@ -696,4 +565,4 @@ Tine.Tinebase.ApplicationStarter = {
         
         var stop = new Date();
     }
-}
+});

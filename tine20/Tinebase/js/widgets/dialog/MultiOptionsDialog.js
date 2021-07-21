@@ -90,6 +90,12 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
             }]
         }];
         
+        this.afterIsRendered().then(() => {
+            this.mon(this.el, 'dblclick', (e) => {
+                window.getSelection().removeAllRanges();
+                _.defer(_.bind(this.onOk, this));
+            });
+        });
         this.supr().initComponent.call(this);
     },
     
@@ -99,19 +105,19 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
     initButtons: function() {
         this.fbar = ['->', {
             xtype: 'button',
-            text: i18n._('Ok'),
-            minWidth: 70,
-            scope: this,
-            handler: this.onOk,
-            iconCls: 'action_saveAndClose'
-        }, {
-            xtype: 'button',
             text: i18n._('Cancel'),
             minWidth: 70,
             scope: this,
             hidden: !this.allowCancel,
             handler: this.onCancel,
             iconCls: 'action_cancel'
+        }, {
+            xtype: 'button',
+            text: i18n._('Ok'),
+            minWidth: 70,
+            scope: this,
+            handler: this.onOk,
+            iconCls: 'action_saveAndClose'
         }];
     },
     
@@ -152,6 +158,16 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
     }
 });
 
+Tine.widgets.dialog.MultiOptionsDialog.getOption = function(config) {
+    return new Promise((resolve, reject) => {
+        const dlg = Tine.widgets.dialog.MultiOptionsDialog.openWindow(_.assign(config, {handler: (option) => {
+            if (option === 'cancel') {
+                reject(new Error('USERABORT'));
+            }
+            resolve(option);
+        }}));
+    });
+} 
 /**
  * grants dialog popup / window
  */

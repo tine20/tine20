@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -94,6 +94,8 @@ class Tinebase_Core
      * constant for database adapter
      */
     const DB = 'dbAdapter';
+
+    const DB_EXTERNAL = 'dbExt';
     
     /**
      * constant for database adapter name
@@ -407,7 +409,7 @@ class Tinebase_Core
 
         $controllerName = $appNameString;
         if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && ! $modelName)) {
-            // only app controllers are called "App_Controller_Model"
+            // app controllers are called "App_Controller_Model", most Tinebase controllers are just "Tinebase_Model"
             $controllerName .= '_Controller';
         }
         
@@ -421,10 +423,13 @@ class Tinebase_Core
             $modelName = preg_replace('/^' . $appName . '_' . 'Model_/', '', $modelName);
             $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
-                throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerNameModel . ')!');
-            } else {
-                $controllerName = $controllerNameModel;
+                $controllerNameModel = $controllerName . '_Controller_' . $modelName;
+                if (! class_exists($controllerNameModel)) {
+                    throw new Tinebase_Exception_NotFound('No Application Controller found (checked classes '
+                        . $controllerName . '_' . $modelName . ' and ' . $controllerNameModel . ')!');
+                }
             }
+            $controllerName = $controllerNameModel;
         } else if (! class_exists($controllerName)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Use generic application controller');
@@ -519,8 +524,10 @@ class Tinebase_Core
                 ]
             );
             $writer = $logger->getWriter($loggerConfig);
-            $writer->setFormatter($logger->getFormatter($loggerConfig));
-            $logger->addWriter($writer);
+            if ($writer) {
+                $writer->setFormatter($logger->getFormatter($loggerConfig));
+                $logger->addWriter($writer);
+            }
         }
     }
     
@@ -809,8 +816,8 @@ class Tinebase_Core
                 @mkdir($tmpdir, 0777, true);
             }
         }
-        
-        return $tmpdir;
+
+        return rtrim($tmpdir, DIRECTORY_SEPARATOR);
     }
     
     /**
@@ -1072,11 +1079,7 @@ class Tinebase_Core
         }
         
         $dbConfig = $config->database;
-        
-        if (!empty($dbConfig->password)) {
-            self::getLogger()->addReplacement($dbConfig->password);
-        }
-        
+
         if (! defined('SQL_TABLE_PREFIX')) {
             define('SQL_TABLE_PREFIX', $dbConfig->get('tableprefix') ? $dbConfig->get('tableprefix') : 'tine20_');
         }
@@ -1091,6 +1094,38 @@ class Tinebase_Core
         
         return $db;
     }
+
+    /**
+     * @param string $dbName
+     * @return Zend_Db_Adapter_Abstract
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public static function setupDatabaseConnectionByName(string $dbName): Zend_Db_Adapter_Abstract
+    {
+        $dbConfig = self::getConfig();
+
+        if (!isset($dbConfig->{Tinebase_Config::EXTERNAL_DATABASE})) {
+            die ("external database section not found in central configuration file.\n");
+        }
+
+        $dbConfig = $dbConfig->{Tinebase_Config::EXTERNAL_DATABASE};
+        if (!isset($dbConfig->{$dbName})) {
+            die ("external database section with name '$dbName' not found in central configuration file.\n");
+        }
+
+        $dbConfig = $dbConfig->{$dbName};
+        if (!isset($dbConfig->useUtf8mb4)) {
+            die ("external database section with name '$dbName' does not provide mandatory useUtf8mb4 flag.\n");
+        }
+        if (!isset($dbConfig->tableprefix)) {
+            $dbConfig->tableprefix = SQL_TABLE_PREFIX;
+        }
+
+        $db = self::createAndConfigureDbAdapter($dbConfig->toArray());
+        $db->table_prefix = $dbConfig->tableprefix;
+
+        return $db;
+    }
     
     /**
      * create db adapter and configure it for Tine 2.0
@@ -1103,6 +1138,10 @@ class Tinebase_Core
      */
     public static function createAndConfigureDbAdapter($dbConfigArray, $dbBackend = NULL)
     {
+        if (!empty($dbConfigArray['password'])) {
+            self::getLogger()->addReplacement($dbConfigArray['password']);
+        }
+
         if ($dbBackend === NULL) {
             $constName = 'self::' . strtoupper($dbConfigArray['adapter']);
             if (empty($dbConfigArray['adapter']) || ! defined($constName)) {
@@ -1497,7 +1536,7 @@ class Tinebase_Core
      * @param mixed $value
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function set($index, $value)
+    public static function set($index, $value, $returnCurrent=false)
     {
         if ($index === self::USER) {
             if ($value === null) {
@@ -1516,8 +1555,10 @@ class Tinebase_Core
                 Tinebase_Log_Formatter::resetUsername();
             }
         }
-        
+
+        $retVal = $returnCurrent ? self::get($index) : null;
         Zend_Registry::set($index, $value);
+        return $retVal;
     }
 
     /**
@@ -1680,7 +1721,7 @@ class Tinebase_Core
      */
     public static function setUser($user)
     {
-        self::set(self::USER, $user);
+        return self::set(self::USER, $user, true);
     }
 
     /**
@@ -1774,6 +1815,25 @@ class Tinebase_Core
         }
         
         return self::get(self::DB);
+    }
+
+    /**
+     * @param string $dbName
+     * @return Zend_Db_Adapter_Abstract
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function getExternalDb(string $dbName): Zend_Db_Adapter_Abstract
+    {
+        if (!is_array($externalDbs = self::get(self::DB_EXTERNAL))) {
+            $externalDbs = [];
+        }
+        if (!isset($externalDbs[$dbName])) {
+            $db = self::setupDatabaseConnectionByName($dbName);
+            $externalDbs[$dbName] = $db;
+            self::set(self::DB_EXTERNAL, $externalDbs);
+        }
+
+        return $externalDbs[$dbName];
     }
 
     /**
@@ -2297,6 +2357,8 @@ class Tinebase_Core
 
     /**
      * @return bool
+     *
+     * @deprecated use isReplica
      */
     public static function isReplicationSlave()
     {
@@ -2328,6 +2390,7 @@ class Tinebase_Core
 
     /**
      * @return bool
+     * @deprecated use isReplicationPrimary
      */
     public static function isReplicationMaster()
     {
@@ -2384,12 +2447,11 @@ class Tinebase_Core
     }
 
     /**
-     * @return Raven_client|null
+     * @return Raven_Client|null
      */
     public static function getSentry()
     {
-        $sentryClient = Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
-        return $sentryClient;
+        return Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
     }
 
     /**

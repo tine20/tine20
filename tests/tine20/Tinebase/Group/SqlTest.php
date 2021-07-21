@@ -37,8 +37,8 @@ class Tinebase_Group_SqlTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_backend = new Tinebase_Group_Sql();
@@ -132,7 +132,7 @@ class Tinebase_Group_SqlTest extends TestCase
         
         $this->_backend->deleteGroups($this->objects['initialGroup']);
 
-        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
+        $this->expectException('Tinebase_Exception_Record_NotDefined');
         $group = $this->_backend->getGroupById($this->objects['initialGroup']);
     }
     

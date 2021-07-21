@@ -12,14 +12,9 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Group
  */
-class Crm_ControllerTest extends PHPUnit_Framework_TestCase
+class Crm_ControllerTest extends Crm_AbstractTest
 {
     /**
      * @var array test objects
@@ -46,7 +41,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Controller Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Crm Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -56,8 +51,8 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $GLOBALS['Crm_ControllerTest'] = (isset($GLOBALS['Crm_ControllerTest']) || array_key_exists('Crm_ControllerTest', $GLOBALS)) ? $GLOBALS['Crm_ControllerTest'] : array();
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
@@ -185,10 +180,10 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
     }
-    
+
     /**
      * try to add a lead
      *
@@ -200,6 +195,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $lead = $this->_objects['initialLead'];
         $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
         $lead = Crm_Controller_Lead::getInstance()->create($lead);
+        // TODO remove this nonsense
         $GLOBALS['Addressbook_ControllerTest']['leadId'] = $lead->getId();
         
         $this->assertEquals($GLOBALS['Addressbook_ControllerTest']['leadId'], $lead->id);
@@ -255,7 +251,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $leads = Crm_Controller_Lead::getInstance()->search($filter);
         $count = Crm_Controller_Lead::getInstance()->searchCount($filter);
-                
+        
         $this->assertEquals(1, count($leads), 'count mismatch');
         $this->assertEquals($count['totalcount'], count($leads), 'wrong totalcount');
         $this->assertEquals(1, $count['leadstates'][1], 'leadstates count mismatch');
@@ -308,6 +304,23 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to update a lead with the read only state
+     *
+     */
+    public function testUpdateReadonlyLead()
+    {
+        $lead = Crm_Controller_Lead::getInstance()->create($this->_getLead(true, true, false, Tinebase_Record_Abstract::generateUID(10)));
+        // save read-only status
+        $lead->leadstate_id = 7; //read-only
+        $updatedLead = Crm_Controller_Lead::getInstance()->update($lead);
+        // try to save the Lead again
+        $translation = Tinebase_Translation::getTranslation('Crm');
+        $this->expectException('Tinebase_Exception_SystemGeneric');
+        $this->expectExceptionMessage($translation->_('This Lead state is set to read-only therefore updating this Lead is not possible.'));
+        Crm_Controller_Lead::getInstance()->update($updatedLead);
+    }
+
+    /**
      * try to delete a lead
      *
      */
@@ -322,7 +335,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         // delete contact
         Addressbook_Controller_Contact::getInstance()->delete($this->_objects['user']->getId());
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
     }
     

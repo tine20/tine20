@@ -136,7 +136,12 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                 }
             } else if ($attenderValue['user_type'] == self::USERTYPE_MEMBEROF) {
                 // resolve group members
-                $group = Tinebase_Group::getInstance()->getGroupById($attenderValue['user_id']);
+                try {
+                    $group = Tinebase_Group::getInstance()->getGroupById($attenderValue['user_id']);
+                // legacy! should be notfound exception .-/
+                } catch (Tinebase_Exception_Record_NotDefined $e) {
+                    $group = new Tinebase_Model_Group(['list_id' => $attenderValue['user_id']], true);
+                }
                 
                 $attendee = array();
                 
@@ -173,10 +178,27 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
             }
             
             foreach ($attendee as $attender) {
-                $gs->orWhere(
-                    ($isExcept ? '' : $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_type') . ' = ?', $attender['user_type']) . ' AND ') .
-                    $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_id') .   ' ' . $sign . ' ?', $attender['user_id'])
-                );
+                if ($attender['user_type'] === Calendar_Model_Attender::USERTYPE_GROUP) {
+                    $op = $isExcept ? 'NOT IN' : 'IN';
+                    $ids = [$attender['user_id']];
+                    try {
+                        $group = Tinebase_Group::getInstance()->getGroupById($attender['user_id']);
+                        $ids[] = $group->list_id;
+
+                    // legacy! should be notfound exception .-/
+                    } catch (Tinebase_Exception_Record_NotDefined $e) {
+                        $ids[] = Addressbook_Controller_List::getInstance()->get($attender['user_id'])->group_id;
+                    }
+                    $gs->orWhere(
+                        ($isExcept ? '' : $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_type') . ' = ?', $attender['user_type']) . ' AND ') .
+                        $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_id') . ' ' . $op . ' (?)', $ids)
+                    );
+                } else {
+                    $gs->orWhere(
+                        ($isExcept ? '' : $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_type') . ' = ?', $attender['user_type']) . ' AND ') .
+                        $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_id') . ' ' . $sign . ' ?', $attender['user_id'])
+                    );
+                }
             }
         }
 

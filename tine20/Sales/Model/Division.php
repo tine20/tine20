@@ -30,7 +30,7 @@ class Sales_Model_Division extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Division',
+        'recordName'        => 'Division', // gettext('GENDER_Division')
         'recordsName'       => 'Divisions', // ngettext('Division', 'Divisions', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => FALSE,

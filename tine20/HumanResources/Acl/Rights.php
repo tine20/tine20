@@ -20,7 +20,25 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * the right to show private data of the employee records
      * @static string
      */
-    const EDIT_PRIVATE = 'edit_private';
+    const MANAGE_PRIVATE = 'manage_private';
+
+    /**
+     * the right to show and edit working streams
+     * @static string
+     */
+    const MANAGE_STREAMS = 'manage_streams';
+
+    /**
+     * the right to show and edit working times
+     * @static string
+     */
+    const MANAGE_WORKINGTIME = 'manage_workingtime';
+
+    /**
+     * the right to show and edit employee and free time data
+     * @static string
+     */
+    const MANAGE_EMPLOYEE = 'manage_employee';
 
     /**
      * holds the instance of the singleton
@@ -72,7 +90,10 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
 
         $addRights = array (
-            self::EDIT_PRIVATE,
+            self::MANAGE_PRIVATE,
+            self::MANAGE_STREAMS,
+            self::MANAGE_WORKINGTIME,
+            self::MANAGE_EMPLOYEE
         );
         $allRights = array_merge($allRights, $addRights);
 
@@ -89,9 +110,21 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('HumanResources');
 
         $rightDescriptions = array(
-            self::EDIT_PRIVATE  => array(
+            self::MANAGE_PRIVATE => array(
                 'text'          => $translate->_('edit private employee data'),
                 'description'   => $translate->_('Edit birthday, account data and other private information of employee records'),
+            ),
+            self::MANAGE_STREAMS => array(
+                'text'          => $translate->_('edit stream data'),
+                'description'   => $translate->_('Show and edit working streams'),
+            ),
+            self::MANAGE_WORKINGTIME => array(
+                'text'          => $translate->_('edit working times'),
+                'description'   => $translate->_('Show and edit working time reports'),
+            ),
+            self::MANAGE_EMPLOYEE => array(
+                'text'          => $translate->_('edit employee data'),
+                'description'   => $translate->_('Show and edit employee data and free time management'),
             )
         );
 

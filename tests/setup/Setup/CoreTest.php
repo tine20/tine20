@@ -19,7 +19,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Setup_CoreTest extends PHPUnit_Framework_TestCase
+class Setup_CoreTest extends \PHPUnit\Framework\TestCase
 {
     
     /**
@@ -30,7 +30,7 @@ class Setup_CoreTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Controller Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Setup Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 

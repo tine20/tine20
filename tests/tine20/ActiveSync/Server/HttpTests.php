@@ -55,7 +55,7 @@ class ActiveSync_Server_HttpTests extends ServerTestCase
         ob_end_clean();
         
         //TODO needs to be improved (use XML document here)
-        $this->assertContains('AwFqAAAHVkwDMQABUgMxAAFOVwM', base64_encode($result),0,30);
+        $this->assertStringContainsString('AwFqAAAHVkwDMQABUgMxAAFOVwM', base64_encode($result),0,30);
     }
 
     /**

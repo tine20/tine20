@@ -211,12 +211,12 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             // update default user group if name has changed
             $oldGroup = Tinebase_Group::getInstance()->getGroupById($_group->getId());
 
-            $defaultGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
-            if ($oldGroup->name == $defaultGroupName && $oldGroup->name != $_group->name) {
+            if ($oldGroup->name !== $_group->name &&
+                    false !== ($confKey = Tinebase_Group::getDefaultGroupConfigKey($oldGroup->name))) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Updated default group name: ' . $oldGroup->name . ' -> ' . $_group->name
                 );
-                Tinebase_User::setBackendConfiguration($_group->name, Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY);
+                Tinebase_User::setBackendConfiguration($_group->name, $confKey);
                 Tinebase_User::saveBackendConfiguration();
             }
 

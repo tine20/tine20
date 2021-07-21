@@ -18,8 +18,8 @@ class Crm_Import_DemoDataTest extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Crm_Controller_Lead::getInstance()->deleteByFilter(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel('Crm_Model_Lead', [
                     ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']

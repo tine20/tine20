@@ -27,7 +27,6 @@ Tine.Tinebase.widgets.form.AutoCompleteField = Ext.extend(Ext.form.ComboBox, {
      */
     forceSelection: false,
     triggerAction: 'all',
-    minChars: 3,
     queryParam: 'startswith',
     hideTrigger: true,
     

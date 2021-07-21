@@ -30,7 +30,7 @@ class Sales_Model_CostCenter extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Cost Center',
+        'recordName'        => 'Cost Center', // gettext('GENDER_Cost Center')
         'recordsName'       => 'Cost Centers', // ngettext('Cost Center', 'Cost Centers', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => FALSE,

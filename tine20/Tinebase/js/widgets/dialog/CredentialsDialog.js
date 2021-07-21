@@ -64,7 +64,8 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
             },{
                 fieldLabel: i18n._('Password'),
                 name: 'password',
-                inputType: 'password'
+                xtype: 'tw-passwordTriggerField',
+                clipboard: false
             }]
         };
     },
@@ -95,7 +96,7 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     onApplyChanges: function() {
         var form = this.getForm();
         if(form.isValid()) {
-            var values = form.getValues();
+            var values = form.getFieldValues();
             
             if (this.sendRequest) {
                 this.loadMask.show();

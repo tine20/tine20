@@ -18,8 +18,8 @@ class Sales_Import_Division extends TestCase
      */
     protected $_importContainer = null;
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         self::clear('Sales','Division');
     }

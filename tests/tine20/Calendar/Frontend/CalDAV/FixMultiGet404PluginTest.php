@@ -41,8 +41,8 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
      *
      * @access protected
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $this->calDAVTests = new Calendar_Frontend_WebDAV_EventTest();
         $this->calDAVTests->setup();
 
@@ -108,6 +108,6 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
         $this->server->exec();
 
         static::assertSame('HTTP/1.1 207 Multi-Status', $this->response->status);
-        static::assertContains('SUMMARY:' . $jmcblacksEvent->summary, $this->response->body);
+        static::assertStringContainsString('SUMMARY:' . $jmcblacksEvent->summary, $this->response->body);
     }
 }

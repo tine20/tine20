@@ -32,6 +32,14 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_defaultImportDefinitionName = 'adb_tine_import_csv';
 
     /**
+     * the models handled by this frontend
+     * @var array
+     */
+    protected $_configuredModels = [
+        Addressbook_Model_ListRole::MODEL_NAME_PART
+    ];
+
+    /**
      * resolve images
      * @param Tinebase_Record_RecordSet $_records
      */
@@ -115,8 +123,8 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchEmailAddresss($filter, $paging)
     {
         $results = array();
-        $contactPaging = $paging;
-        $contactPaging["sort"] = "n_fn"; // Field are not named the same for contacts and lists
+        $contactPaging = $this->_preparePaginationParameter($paging);
+        $contactPaging->sort = "n_fn"; // Field are not named the same for contacts and lists
         $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
 
         $emailFields = ['n_fileas', 'email', 'email_home'];
@@ -300,7 +308,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save list role
      *
-     * @param $recordData
+     * @param array $recordData
      * @return array
      */
     public function saveListRole($recordData)
@@ -345,7 +353,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save industry
      *
-     * @param $recordData
+     * @param array $recordData
      * @return array
      */
     public function saveIndustry($recordData)
@@ -463,7 +471,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
-     * @param Tinebase_Model_Filter_FilterGroup
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data
      */

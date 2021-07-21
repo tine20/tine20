@@ -42,8 +42,8 @@ Ext.form.VTypes = function(){
     // closure these in so they are only created once.
     var alpha = /^[a-zA-Z_]+$/,
         alphanum = /^[a-zA-Z0-9_]+$/,
-        email = /^(\w+)([\-+.][\w]+)*@(\w[\-\w]*\.){1,5}([A-Za-z]){2,6}$/,
-        url = /(((^https?)|(^ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i;
+        email = /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:([^\s,\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]|-)+\.)*[^\s,\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]([^\s,\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]|-){0,63})\.([^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]{2,63}?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,63}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,63})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,63})\]?$)/i,
+        url = /(((^https?)|(^ftp)):\/\/(([^\s,\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]|-)+\.)+[^\s,\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]{2,63}(\/([^\s,\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]|-|%)+(\.[^\s,\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]{2,})?)*((([^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]|[\-\.\?\\\/+@&#;`~=%!])*)(\.[^\s,\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]{2,})?)*\/?)/i;
 
     // All these messages and functions are configurable
     return {
@@ -73,7 +73,7 @@ Ext.form.VTypes = function(){
          * <tt>/[a-z0-9_\.\-@]/i</tt>
          * @type RegExp
          */
-        'emailMask' : /[a-z0-9_\.\-@]/i,
+        'emailMask' : /[\p{L}\d_\.\-@]/u,
 
         /**
          * The function used to validate URLs

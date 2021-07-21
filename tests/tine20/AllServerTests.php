@@ -17,7 +17,7 @@ class AllServerTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 all server tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 all server tests');
         
         $suite->addTestSuite(ActiveSync_Server_HttpTests::class);
         $suite->addTestSuite(Tinebase_ControllerServerTest::class);

@@ -212,8 +212,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                 scope: editor,
                 handler:handler||editor.relayBtnCmd,
                 clickEvent:'mousedown',
-                tooltip: tipsEnabled ? editor.buttonTips[id] || undefined : undefined,
-                overflowText: editor.buttonTips[id].title || undefined,
+                tooltip: tipsEnabled ? _.get(editor, `buttonTips[${id}]`, undefined) : undefined,
+                overflowText: _.get(editor, `buttonTips[${id}].title`, undefined),
                 tabIndex:-1
             };
         }
@@ -238,7 +238,9 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             items.push(
                 btn('bold'),
                 btn('italic'),
-                btn('underline')
+                btn('underline'),
+                btn('strikeThrough'),
+                btn('formatblockPre', false, this.toggleCodeBlock)
             );
         }
 
@@ -727,6 +729,10 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             ss['background-attachment'] = 'fixed'; // w3c
             dbody.bgProperties = 'fixed'; // ie
 
+            if(this.enableFont && !Ext.isSafari2 && this.defaultFont) {
+                ss['font-family'] = this.defaultFont;
+            }
+
             Ext.DomHelper.applyStyles(dbody, ss);
 
             doc = this.getDoc();
@@ -821,30 +827,24 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         var adjust = btn.getItemId() == 'increasefontsize' ? 1 : -1,
             doc = this.getDoc(),
             v = parseInt(doc.queryCommandValue('FontSize') || 2, 10);
-        if((Ext.isSafari && !Ext.isSafari2) || Ext.isChrome || Ext.isAir){
-            // Safari 3 values
-            // 1 = 10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px
-            if(v <= 10){
-                v = 1 + adjust;
-            }else if(v <= 13){
-                v = 2 + adjust;
-            }else if(v <= 16){
-                v = 3 + adjust;
-            }else if(v <= 18){
-                v = 4 + adjust;
-            }else if(v <= 24){
-                v = 5 + adjust;
-            }else {
-                v = 6 + adjust;
-            }
-            v = v.constrain(1, 6);
-        }else{
-            if(Ext.isSafari){ // safari
-                adjust *= 2;
-            }
-            v = Math.max(1, v+adjust) + (Ext.isSafari ? 'px' : 0);
+
+        this.execCmd('FontSize', Math.max(1, v+adjust));
+    },
+
+    // private
+    toggleCodeBlock: function(btn) {
+        let doc = this.getDoc();
+        if (doc.queryCommandValue('formatblock') === 'pre') {
+            let selection = this.getWin().getSelection()
+            _.each(doc.querySelectorAll('pre'), function (node) {
+                if (selection.containsNode(node, true)) {
+                    node.after(document.createElement('br'));
+                    node.replaceWith(node.textContent);
+                }
+            });
+        } else {
+            this.execCmd('formatblock', 'pre');
         }
-        this.execCmd('FontSize', v);
     },
 
     // private
@@ -872,7 +872,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             doc = this.getDoc();
 
         if(this.enableFont && !Ext.isSafari2){
-            var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase();
+            var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase().replace(/"/g, '');
+            
             if(name != this.fontSelect.dom.value){
                 this.fontSelect.dom.value = name;
             }
@@ -881,6 +882,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             btns.bold.toggle(doc.queryCommandState('bold'));
             btns.italic.toggle(doc.queryCommandState('italic'));
             btns.underline.toggle(doc.queryCommandState('underline'));
+            btns.strikeThrough.toggle(doc.queryCommandState('strikeThrough'));
+            btns.formatblockPre.toggle(doc.queryCommandValue('formatblock') === 'pre');
         }
         if(this.enableAlignments){
             btns.justifyleft.toggle(doc.queryCommandState('justifyleft'));
@@ -944,6 +947,9 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                     break;
                     case 'u':
                         cmd = 'underline';
+                    break;
+                    case 'd':
+                        cmd = 'strikeThrough';
                     break;
                 }
                 if(cmd){
@@ -1079,6 +1085,11 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             text: 'Underline the selected text.',
             cls: 'x-html-editor-tip'
         },
+        strikeThrough : {
+            title: 'Strike out',
+            text: 'Strike out the selected text.',
+            cls: 'x-html-editor-tip'
+        },
         increasefontsize : {
             title: 'Grow Text',
             text: 'Increase the font size.',
@@ -1127,6 +1138,11 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         createlink : {
             title: 'Hyperlink',
             text: 'Make the selected text a hyperlink.',
+            cls: 'x-html-editor-tip'
+        },
+        formatblockPre : {
+            title: 'Code block',
+            text: 'Insert pre-formatted code block',
             cls: 'x-html-editor-tip'
         },
         sourceedit : {

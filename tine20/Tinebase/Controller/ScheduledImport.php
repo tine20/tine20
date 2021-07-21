@@ -253,8 +253,9 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         try {
             $container = Tinebase_Container::getInstance()->getContainerById($containerId);
         } catch (Tinebase_Exception_InvalidArgument $e) {
+            $name = 'Import ' . Tinebase_DateTime::now()->getIso();
             $container = new Tinebase_Model_Container(array(
-                'name'              => $containerId,
+                'name'              => $name,
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
                 'backend'           => Tinebase_User::SQL,
                 'color'             => '#ff0000',

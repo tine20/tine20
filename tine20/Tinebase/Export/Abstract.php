@@ -10,6 +10,9 @@
  *
  */
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * Tinebase Abstract export class
  *
@@ -593,6 +596,17 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     abstract public function getDownloadContentType();
 
+    public function getContentDescriptionHeaderValue(): string
+    {
+        return $this->_format . ' file';
+    }
+
+    public function getContentDispositionHeaderValue(): string
+    {
+        // pdfs might want to do inline instead of attachment, maybe? why? always?
+        return 'attachment; filename=' . $this->getDownloadFilename();
+    }
+
     /**
      * return download filename
      *
@@ -748,6 +762,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if ($this->_config->columns) {
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
                 if ($column->twig) {
+                    if (!$this->_templateFileName) {
+                        // cache busting, mostly for unittest
+                        $this->_templateFileName = Tinebase_Record_Abstract::generateUID();
+                    }
                     return true;
                 }
             }
@@ -775,7 +793,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         $this->_extendTwigSetup();
 
-        $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
+        try {
+            $this->_twigTemplate = $this->_twig->load($this->_templateFileName);
+        } catch (Twig_Error $e) {
+            throw new Tinebase_Exception_Backend('twig error: ' . $e->getMessage() . ' for twig source: ' .
+                $this->_getTwigSource());
+        }
     }
 
     protected function _extendTwigSetup()
@@ -794,7 +817,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (true !== $this->_hasTemplate && $this->_config->columns) {
             foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
                 if ($column->twig) {
-                    $source .= ($source!=='' ? ',"' : '""') . (string)$column->twig . '"';
+                    $source .= ($source!=='[' ? ',' : '') . (string)$column->twig;
                 }
             }
         }
@@ -806,7 +829,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getLastModifiedTimeStamp()
     {
-        return filemtime($this->_templateFileName);
+        if (is_file($this->_templateFileName)) {
+            return filemtime($this->_templateFileName);
+        } else {
+            return time();
+        }
     }
 
     protected function _getCurrentState()
@@ -1430,6 +1457,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     }
                 } elseif ($column->recordProperty) {
                     $this->_writeValue($this->_convertToString($_record->{$column->recordProperty}));
+                } elseif ($column->identifier) {
+                    $this->_writeValue($this->_convertToString($_record->{$column->identifier}));
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                         ' pointless column found: ' . print_r($column, true));
@@ -1652,5 +1681,37 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD,
             Tinebase_Model_Tree_FileLocation::FLD_TEMPFILE_ID => $tempFile->getId(),
         ]);
+    }
+
+    public static function expressiveApi(string $definitionId): ResponseInterface
+    {
+        /** @var Tinebase_Model_ImportExportDefinition $definition */
+        $definition = Tinebase_ImportExportDefinition::getInstance()->get($definitionId);
+
+        /** @var \Zend\Diactoros\Request $request */
+        $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
+
+        $filter = null;
+        $request->getBody()->rewind();
+        if (($rawBody = json_decode($request->getBody()->getContents(), true)) && is_array($rawBody)
+                && isset($rawBody['filter']) && is_array($rawBody['filter'])) {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($definition->model);
+            $filter->setFromArrayInUsersTimezone($rawBody['filter']);
+        }
+
+        $exportClass = $definition->plugin;
+        /** @var Tinebase_Export_Abstract $export */
+        $export = new $exportClass($filter, null, ['definitionId' => $definitionId]);
+
+        $export->generateToStream(($stream = fopen('php://memory', 'w+')));
+        $response = new \Zend\Diactoros\Response($stream, 200, [
+            'Pragma' => 'public',
+            'Cache-Control' => 'max-age=0',
+            'Content-Disposition' => $export->getContentDispositionHeaderValue(),
+            'Content-Description' => $export->getContentDescriptionHeaderValue(),
+            'Content-Type' => $export->getDownloadContentType(),
+        ]);
+
+        return $response;
     }
 }

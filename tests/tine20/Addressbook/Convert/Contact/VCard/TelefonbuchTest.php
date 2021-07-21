@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Addressbook_Convert_Contact_VCard_TelefonbuchTest
  */
-class Addressbook_Convert_Contact_VCard_TelefonbuchTest extends PHPUnit_Framework_TestCase
+class Addressbook_Convert_Contact_VCard_TelefonbuchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Addressbook_Convert_Contact_VCard_TelefonbuchTest extends PHPUnit_Framewor
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Telefonbuch Contact Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook WebDAV Telefonbuch Contact Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Addressbook_Convert_Contact_VCard_TelefonbuchTest extends PHPUnit_Framewor
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
     }
 
     /**
@@ -51,8 +51,8 @@ class Addressbook_Convert_Contact_VCard_TelefonbuchTest extends PHPUnit_Framewor
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
 
     /**

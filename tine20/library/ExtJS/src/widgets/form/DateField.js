@@ -136,6 +136,9 @@ disabledDates: ["^03"]
         if(Ext.isString(this.maxValue)){
             this.maxValue = this.parseDate(this.maxValue);
         }
+        if ((this.value === undefined || this.value === null) && this.default === 'CURRENT_TIMESTAMP') {
+            this.value = this.fullDateTime = new Date().clearTime();
+        }
         this.disabledDatesRE = null;
         this.initDisabledDays();
     },
@@ -268,7 +271,12 @@ disabledDates: ["^03"]
      * @return {Date} The date value
      */
     getValue : function(){
-        return this.parseDate(Ext.form.DateField.superclass.getValue.call(this)) || "";
+        // return this.parseDate(Ext.form.DateField.superclass.getValue.call(this)) || "";
+        
+        // return the value that was set (has time information when unchanged in client) 
+        // and not just the date part!
+        var value =  this.fullDateTime;
+        return value || "";
     },
 
     /**
@@ -294,6 +302,39 @@ dateField.setValue('2006-05-04');
      * @return {Ext.form.Field} this
      */
     setValue : function(date){
+        /**
+         * fix timezone handling for date picker
+         *
+         * The getValue function always returns 00:00:00 as time. So if a form got filled
+         * with a date like 2008-10-01T21:00:00 the form returns 2008-10-01T00:00:00 although
+         * the user did not change the fieled.
+         *
+         * In a multi timezone context this is fatal! When a user in a certain timezone set
+         * a date (just a date and no time information), this means in his timezone the
+         * time range from 2008-10-01T00:00:00 to 2008-10-01T23:59:59.
+         * _BUT_ for an other user sitting in a different timezone it means e.g. the
+         * time range from 2008-10-01T02:00:00 to 2008-10-02T21:59:59.
+         *
+         * So on the one hand we need to make sure, that the date picker only returns
+         * changed datetime information when the user did a change.
+         *
+         * @todo On the other hand we
+         * need adjust the day +/- one day according to the timeshift.
+         */
+        // get value must not return a string representation, so we convert this always here
+        // before memorisation
+        if (Ext.isString(date)) {
+            var v = Date.parseDate(date, Date.patterns.ISO8601Long);
+            if (Ext.isDate(v)) {
+                date = v;
+            } else {
+                date = Ext.form.DateField.prototype.parseDate.call(this, date);
+            }
+        }
+
+        // preserve original datetime information
+        this.fullDateTime = date;
+        
         return Ext.form.DateField.superclass.setValue.call(this, this.formatDate(this.parseDate(date)));
     },
 

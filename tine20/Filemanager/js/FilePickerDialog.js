@@ -53,7 +53,7 @@ Tine.Filemanager.FilePickerDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      * initial path
      * @cfg {String} initialPath
      */
-    initialPath: 'null',
+    initialPath: null,
     
     // private
     layout: 'fit',

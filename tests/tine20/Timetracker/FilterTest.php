@@ -40,7 +40,7 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker Filter Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Timetracker Filter Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -50,8 +50,8 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
     }

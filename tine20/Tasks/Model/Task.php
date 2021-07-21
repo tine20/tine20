@@ -34,7 +34,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Task',  // ngettext('GENDER_Task', 'GENDER_Tasks', n)
+        'recordName'        => 'Task',  // gettext('GENDER_Task')
         'recordsName'       => 'Tasks', // ngettext('Task', 'Tasks', n)
         'hasRelations'      => true,
         'hasCustomFields'   => true, // TODO ?!? yes or no?

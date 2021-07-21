@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -20,7 +20,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestHelper.php';
  *
  * TODO separation of concerns: split into multiple classes/traits with cleanup / fixture / ... functionality
  */
-abstract class TestCase extends PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * transaction id if test is wrapped in an transaction
@@ -100,6 +100,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected $_customfieldIdsToDelete = array();
 
     protected $_areaLocksToInvalidate = [];
+    protected $_oldAreaLockCfg;
 
     protected $_originalSmtpConfig = null;
 
@@ -110,10 +111,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected $_listsToDelete = [];
 
+    protected $_pin = '1234';
+
+    protected $_containerToDelete = [];
+
     /**
      * set up tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         foreach ($this->_customfieldIdsToDelete as $cfd) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
@@ -132,19 +137,20 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
         
         $this->_originalTestUser = Tinebase_Core::getUser();
+        $this->_oldAreaLockCfg = null;
     }
     
     /**
      * tear down tests
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
             $this->_deleteUsers();
             $this->_deleteGroups();
         }
-        if ($this->_transactionId) {
-            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
+        if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back test transaction');
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -167,6 +173,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         foreach ($this->_areaLocksToInvalidate as $area) {
             Tinebase_AreaLock::getInstance()->resetValidAuth($area);
         }
+        if (null !== $this->_oldAreaLockCfg) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS} = $this->_oldAreaLockCfg;
+        }
 
         if ($this->_originalSmtpConfig) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_originalSmtpConfig);
@@ -177,7 +186,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         foreach ($this->_listsToDelete as $list) {
-            Addressbook_Controller_List::getInstance()->delete($list->getId());
+            $listId = $list instanceof Addressbook_Model_List ? $list->getId() : $list;
+            Addressbook_Controller_List::getInstance()->delete($listId);
+        }
+
+        if (!empty($this->_containerToDelete)) {
+            try {
+                Tinebase_Container::getInstance()->delete($this->_containerToDelete);
+            } catch (Tinebase_Exception $e) {}
         }
 
         Tinebase_Lock_UnitTestFix::clearLocks();
@@ -204,7 +220,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * tear down after test class
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         Tinebase_Core::getDbProfiling();
     }
@@ -513,14 +529,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     
     /**
      * get test temp file
-     * 
+     *
+     * @param string|null $path
+     * @param string $filename
+     * @param string $type
+     *
      * @return Tinebase_Model_TempFile
      */
-    protected function _getTempFile()
+    protected function _getTempFile($path = null, $filename = 'test.txt', $type = 'text/plain')
     {
         $tempFileBackend = new Tinebase_TempFile();
-        $handle = fopen(dirname(__FILE__) . '/Filemanager/files/test.txt', 'r');
-        $tempfile = $tempFileBackend->createTempFileFromStream($handle);
+        $handle = fopen($path ? $path : dirname(__FILE__) . '/Filemanager/files/test.txt', 'r');
+        $tempfile = $tempFileBackend->createTempFileFromStream($handle, $filename, $type);
         fclose($handle);
         return $tempfile;
     }
@@ -713,7 +733,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         $newRecord = array();
 
-        if ($nameField) {
+        if ($nameField && ! isset($recordData[$nameField])) {
             $newRecord[$nameField] = 'my test ' . $modelName;
         }
 
@@ -733,7 +753,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         if ($nameField) {
             self::assertTrue(isset($savedRecord[$nameField]), 'name field missing: ' . print_r($savedRecord, true));
-            self::assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
+            $nameValue = isset($recordData[$nameField]) ? $recordData[$nameField] : 'my test ' . $modelName;
+            self::assertEquals($nameValue, $savedRecord[$nameField], print_r($savedRecord, true));
             if (null !== $configuration && $configuration->modlogActive) {
                 self::assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
                     print_r($savedRecord, true));
@@ -809,44 +830,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string', $definition = null)
     {
-        if ($type === 'keyField') {
-            $definition = [
-                'label' => Tinebase_Record_Abstract::generateUID(),
-                'type' => $type,
-                'required' => false,
-                'keyFieldConfig' => [
-                    'value' => [
-                        'records' => [
-                            ['id' => 'test', 'value' => 'test'],
-                            ['id' => 'go', 'value' => 'go'],
-                        ],
-                        'default' => 'go'
-                    ]
-                ]
-            ];
-        }
         if ($definition === null) {
             $definition = array(
                 'label' => Tinebase_Record_Abstract::generateUID(),
-                'type' => $type,
+                'type'  => $type,
                 'recordConfig' => $type === 'record'
                     ? array('value' => array('records' => 'Tine.Addressbook.Model.Contact'))
                     : null,
-                'keyFieldConfig' => $type === 'keyField'
-                    ? ['value' => [
-                        'records' => [
-                            ['id' => 'test', 'value' => 'test'],
-                            ['id' => 'go', 'value' => 'go'],
-                        ],
-                        'default' => 'go'
-                    ]
-                    ]
-                    : null,
                 'uiconfig' => array(
-                    'xtype' => Tinebase_Record_Abstract::generateUID(),
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
                     'length' => 10,
-                    'group' => 'unittest',
-                    'order' => 100,
+                    'group'  => 'unittest',
+                    'order'  => 100,
                 )
             );
         }
@@ -914,21 +909,65 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         ) . '/' . $userId;
     }
 
+    protected function _setPin()
+    {
+        if (!Tinebase_Core::getUser()->mfa_configs) {
+            Tinebase_Core::getUser()->mfa_configs =
+                new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        }
+        if (!($pinCfg = Tinebase_Core::getUser()->mfa_configs->find(
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID, 'pin'))) {
+            $pinCfg = new Tinebase_Model_MFA_UserConfig([
+                Tinebase_Model_MFA_UserConfig::FLD_ID => 'userpin',
+                Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'pin',
+                Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                    Tinebase_Model_MFA_PinUserConfig::class,
+                Tinebase_Model_MFA_UserConfig::FLD_CONFIG => new Tinebase_Model_MFA_PinUserConfig()
+            ]);
+            Tinebase_Core::getUser()->mfa_configs->addRecord($pinCfg);
+        }
+
+        $pinCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG} = new Tinebase_Model_MFA_PinUserConfig([
+            Tinebase_Model_MFA_PinUserConfig::FLD_HASHED_PIN => Hash_Password::generate('SSHA256', $this->_pin)
+        ]);
+    }
+
     /**
      * @param array $config
      */
-    protected function _createAreaLockConfig($config = [])
+    protected function _createAreaLockConfig($config = [], $mfaConfig = [])
     {
         $config = array_merge([
-            'area' => Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-            'provider' => Tinebase_Model_AreaLockConfig::PROVIDER_PIN,
-            'validity' => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
+            Tinebase_Model_AreaLockConfig::FLD_AREA_NAME => 'login',
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => [Tinebase_Model_AreaLockConfig::AREA_LOGIN],
+            Tinebase_Model_AreaLockConfig::FLD_MFAS => ['pin'],
+            Tinebase_Model_AreaLockConfig::FLD_VALIDITY => Tinebase_Model_AreaLockConfig::VALIDITY_SESSION,
         ], $config);
+        $this->_oldAreaLockCfg = Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS};
         $locks = new Tinebase_Config_KeyField([
-            'records' => new Tinebase_Record_RecordSet('Tinebase_Model_AreaLockConfig', [$config])
+            'records' => new Tinebase_Record_RecordSet(Tinebase_Model_AreaLockConfig::class, [$config])
         ]);
         Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, $locks);
-        $this->_areaLocksToInvalidate[] = $config['area'];
+
+        $mfaConfig = array_merge([
+            Tinebase_Model_MFA_Config::FLD_ID => 'pin',
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_PinConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG =>
+                new Tinebase_Model_MFA_PinConfig(),
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_PinAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_PinUserConfig::class,
+        ], $mfaConfig);
+        $mfas = new Tinebase_Config_KeyField([
+            'records' => new Tinebase_Record_RecordSet(Tinebase_Model_MFA_Config::class, [$mfaConfig])
+        ]);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::MFA, $mfas);
+
+        $this->_areaLocksToInvalidate[] = $config[Tinebase_Model_AreaLockConfig::FLD_AREAS][0];
+        Tinebase_AreaLock::destroyInstance();
+        Tinebase_AreaLock::getInstance()->activatedByFE();
     }
 
     /**
@@ -963,13 +1002,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     /**
      * skips this test if LDAP or AD user backend is configured
+     *
+     * @param string $message
      */
-    protected function _skipIfLDAPBackend()
+    protected function _skipIfLDAPBackend($message = 'Does not work with LDAP/AD backend')
     {
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
         ) {
-            self::markTestSkipped('Does not work with LDAP/AD backend');
+            self::markTestSkipped($message);
         }
     }
 
@@ -1048,7 +1089,26 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
         $mailinglist = Addressbook_Controller_List::getInstance()->create($list);
         $this->_listsToDelete[] = $mailinglist;
+        $this->_containerToDelete[] = $mailinglist->container_id;
         return $mailinglist;
+    }
+
+    /**
+     * @return Tinebase_Model_Group|unknown
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     *
+     * TODO add more data?
+     */
+    protected function _createGroup()
+    {
+        $group = Tinebase_Group::getInstance()->addGroup(new Tinebase_Model_Group([
+            'name'      => 'unittestgroup' . Tinebase_Record_Abstract::generateUID(5)
+        ]));
+        $this->_listsToDelete[] = $group->list_id;
+
+        return $group;
     }
 
     /**

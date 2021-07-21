@@ -17,7 +17,7 @@ class HumanResources_AllTests
 {
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 HumanResources All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 HumanResources All Tests');
         $suite->addTestSuite(HumanResources_BL_DailyWTReport_CalculateBreakTimeTest::class);
         $suite->addTestSuite(HumanResources_BL_DailyWTReport_LimitWorkingTimeTest::class);
         $suite->addTestSuite(HumanResources_CliTests::class);

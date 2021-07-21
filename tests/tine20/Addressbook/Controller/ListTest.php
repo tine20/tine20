@@ -40,8 +40,8 @@ class Addressbook_Controller_ListTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_instance = Addressbook_Controller_List::getInstance();
@@ -147,8 +147,8 @@ class Addressbook_Controller_ListTest extends TestCase
         ));
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         foreach ([$this->objects['contact1'], $this->objects['contact2']] as $contact) {
             try {
                 Addressbook_Controller_Contact::getInstance()->delete([$contact->getId()]);
@@ -318,7 +318,7 @@ class Addressbook_Controller_ListTest extends TestCase
         $id = $this->testAddList()->getId();
         $this->_instance->delete($id);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $list = $this->_instance->get($id);
     }
     
@@ -410,7 +410,7 @@ class Addressbook_Controller_ListTest extends TestCase
      */
     public function _testDeleteUserAccountContact()
     {
-        $this->setExpectedException('Addressbook_Exception_AccessDenied');
+        $this->expectException('Addressbook_Exception_AccessDenied');
         $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         Addressbook_Controller_Contact::getInstance()->delete($userContact->getId());
     }

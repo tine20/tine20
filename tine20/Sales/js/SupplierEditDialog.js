@@ -238,11 +238,9 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     incrementValue : 0.01,
                                     alternateIncrementValue: 0.1,
                                     minValue: 0.01,
-                                    allowDecimals : true
                                 }),
+                                allowDecimals : true,
                                 decimalPrecision: 2,
-                                decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
-                                regex: /^[0-9]+\.?[0-9]*$/
                             }], [{
                                 name: 'iban',
                                 fieldLabel: this.app.i18n._('IBAN')

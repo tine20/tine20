@@ -130,7 +130,8 @@ Tine.Admin.Model.Application = Tine.Tinebase.data.Record.create([
     {name: 'status'},
     {name: 'order'},
     {name: 'app_tables'},
-    {name: 'version'}
+    {name: 'version'},
+    {name: 'title'}
 ], {
     appName: 'Admin',
     modelName: 'Application',

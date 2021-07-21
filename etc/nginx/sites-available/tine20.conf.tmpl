@@ -1,0 +1,20 @@
+server {
+    include /etc/nginx/snippets/tine20-common.conf;
+
+    listen 80;
+    listen [::]:80;
+
+    server_name {{getv "/server/name" "_"}};
+
+    error_log /dev/stderr;
+    access_log /dev/stdout {{getv "/log/format" "tine20"}};
+
+    set $PHP_ADMIN_VALUE "error_log = /var/log/nginx/php-error.log";
+    set $PHP_VALUE "include_path={{getv "/tine20/config/dir" "/etc/tine20"}}:/usr/share/tine20
+                    max_execution_time = 1800
+                    memory_limit = 400M
+                    post_max_size = 2G";
+
+    include /etc/nginx/snippets/tine20-rewriterules.conf;
+    include /etc/nginx/snippets/tine20-locations.conf;
+}

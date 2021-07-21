@@ -159,8 +159,8 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             }
 
             if (fieldType === 'virtual') {
-                field.fieldLabel = this.app.i18n._hidden(fieldDefinition.config.label);
-                fieldType = fieldDefinition.config.type || 'textfield';
+                field.fieldLabel = this.app.i18n._hidden(_.get(fieldDefinition, 'config.label', fieldDefinition.fieldName));
+                fieldType = _.get(fieldDefinition, 'config.type', 'textfield');
             }
 
             if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && !fieldDefinition.shy) {

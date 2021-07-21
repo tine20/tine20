@@ -1027,7 +1027,12 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 Tinebase_FileSystem::getInstance()->checkPathACL($path, 'add');
                 $statpath = $path->statpath . '/' . $properties['name'];
                 if ($path->isToplevelPath()) {
-                    $container = Tinebase_FileSystem::getInstance()->createAclNode($statpath);
+                    try {
+                        $container = Tinebase_FileSystem::getInstance()->createAclNode($statpath);
+                    } catch (Tinebase_Exception_SystemGeneric $tesg) {
+                        // node already exists
+                        $container = Tinebase_FileSystem::getInstance()->stat($statpath);
+                    }
                 } else {
                     $container = Tinebase_FileSystem::getInstance()->mkdir($statpath);
                     Tinebase_FileSystem::getInstance()->setAclFromParent($statpath);

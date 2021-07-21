@@ -54,6 +54,7 @@
     background-image:url(../../images/icon-set/icon_filemanager_red.svg) !important;
 }
 
+
 .x-tree-node .x-type-data-safe a span,
 .x-type-data-safe td {
     color: red;
@@ -75,11 +76,8 @@ table.x-btn.x-type-data-safe {
     padding-left: 19px;
 }
 
-.x-tinebase-virus .x-grid3-cell-inner {
+.x-tinebase-virus {
     background-image:url(../../images/icon-set/icon_virus.svg);
-    background-repeat: no-repeat;
-    background-size: 16px;
-    padding-left: 19px;
 }
 
 .action_publish {

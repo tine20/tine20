@@ -121,14 +121,14 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         this.record.set('conditions', this.getConditions());
 
-        var argumentFieldName = 'action_argument_' + this.actionTypeCombo.getValue();
+        var argumentFieldName = 'action_argument_' + this.actionTypeCombo.getValue(),
             argumentField = this.getForm().findField(argumentFieldName),
             argumentValue = (argumentField !== null) ? argumentField.getValue() : '';
 
         // add additional action arguments
         if (argumentFieldName === 'action_argument_redirect') {
             argumentValue = {
-                emails: argumentValue,
+                emails: argumentValue.trim(),
                 copy: this.getForm().findField('action_argument_redirect_copy').getValue()
             };
         }
@@ -377,6 +377,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             xtype: 'textfield',
                             emptyText: 'test@example.org',
                             width: 200,
+                            maxLength: 255,
                             hideLabel: true
                         }, {
                             name: 'action_argument_redirect_copy',
@@ -390,6 +391,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             name: 'action_argument_reject',
                             xtype: 'textarea',
                             width: 300,
+                            maxLength: 255,
                             height: 60,
                             hideLabel: true
                         }]

@@ -18,7 +18,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  * 
  * @package     Calendar
  */
-class Calendar_performanceTests extends PHPUnit_Framework_TestCase
+class Calendar_performanceTests extends \PHPUnit\Framework\TestCase
 {
     /**
      * Calendar Json Object
@@ -27,8 +27,8 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
      */
     protected $_json = null;
     
-    public function setUp()
-    {
+    public function setUp(): void
+{
         // invalidate all caches
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
         if (!$cache || !$cache->getOption('caching')) {

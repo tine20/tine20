@@ -1,19 +1,14 @@
 <?php
 /**
  * Tine 2.0
+ *
+ * class to hold contact data
  * 
  * @package     Addressbook
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- */
-
-/**
- * class to hold contact data
- * 
- * @package     Addressbook
- * @subpackage  Model
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @property    string $account_id                 id of associated user
  * @property    string $adr_one_countryname        name of the country the contact lives in
@@ -64,6 +59,7 @@
  * @property    string $salutation                 Salutation
  * @property    string $url_home                   private url of the contact
  * @property    integer $preferred_address         defines which is the preferred address of a contact, 0: business, 1: private
+ * @property    string $color                      color
  */
 class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
@@ -112,7 +108,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 26,
+        self::VERSION       => 27,
         'containerName'     => 'Addressbook',
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
         'recordName'        => self::MODEL_PART_NAME,
@@ -131,9 +127,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         'containerProperty' => 'container_id',
         'multipleEdit'      => true,
 
-        'titleProperty'     => 'n_fn',
+        'titleProperty'     => 'n_fileas',
         'appName'           => 'Addressbook',
-        'modelName'         => self::MODEL_PART_NAME,
+        'modelName'         => self::MODEL_PART_NAME, // _('GENDER_Contact')
         self::TABLE         => [
             self::NAME          => 'addressbook',
             self::INDEXES       => [
@@ -185,11 +181,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'showDisabled'      => [
                 'filter'            => Addressbook_Model_ContactHiddenFilter::class,
-                'title'             => 'Show Disabled', // _('Show Disabled') // TODO is this right?
+                'title'             => 'Show Disabled', // _('Show Disabled')
                 'options'           => [
                     'requiredCols'      => ['account_id' => 'accounts.id'],
                 ],
-                'jsConfig'          => ['filtertype' => 'addressbook.contactshowDisabled'] // TODO later with FE fix it
+                'jsConfig'          => ['filtertype' => 'addressbook.contactshowDisabled']
             ],
             'path'              => [
                 'filter'            => Tinebase_Model_Filter_Path::class,
@@ -317,14 +313,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'adr_one_street'                => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Street', // _('Street')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'adr_one_street2'               => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Street 2', // _('Street 2')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -413,6 +409,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LABEL                     => 'Birthday', // _('Birthday')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
+            'color'                         => [
+                self::TYPE                      => self::TYPE_HEX_COLOR,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Color', // _('Color')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
             'calendar_uri'                  => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 128,
@@ -480,6 +482,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::OMIT_MOD_LOG              => true,
                 self::SYSTEM                    => true,
             ],
+            'language'           => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Language', // _('Language')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
             'note'                          => [
                 self::TYPE                      => self::TYPE_FULLTEXT,
                 self::LENGTH                    => 2147483647, // mysql longtext, really?!?
@@ -527,7 +536,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'n_prefix'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Title', // _('Title')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -556,7 +565,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'org_unit'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Unit', // _('Unit')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -779,7 +788,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'title'                         => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Job Title', // _('Job Title')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -806,7 +815,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'url'                           => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 128,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Web', // _('Web')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -814,13 +823,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'url_home'                      => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 128,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'URL (private)', // _('URL (private)')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class],
             ],
-
 
             // do we want to remove those?
             'label'                         => [

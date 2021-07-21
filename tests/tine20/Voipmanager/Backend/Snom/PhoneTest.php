@@ -30,7 +30,7 @@ class Voipmanager_Backend_Snom_PhoneTest extends Voipmanager_Backend_Snom_Abstra
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Snom Phone Backend Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Voipmanager Snom Phone Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -40,8 +40,8 @@ class Voipmanager_Backend_Snom_PhoneTest extends Voipmanager_Backend_Snom_Abstra
      * 
      * This method is called before a test is executed.
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_backend = new Voipmanager_Backend_Snom_Phone();
     }

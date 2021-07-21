@@ -109,11 +109,11 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
             getPeriod: function() {
                 return this.grid.getTopToolbar().periodPicker.getPeriod();
             },
-            updatePeriod: function(periodStart, period) {
+            updatePeriod: function(period) {
                 this.startDate = period.from;
                 var tbar = this.grid.getTopToolbar();
                 if (tbar) {
-                    tbar.periodPicker.update(periodStart, period);
+                    tbar.periodPicker.update(period);
                     this.startDate = tbar.periodPicker.getPeriod().from;
                 }
             },

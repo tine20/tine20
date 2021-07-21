@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_User
  */
-class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
+class Addressbook_Backend_SqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Backend
@@ -40,7 +40,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook SQL Backend Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook SQL Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -50,8 +50,8 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
@@ -73,8 +73,8 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
@@ -137,7 +137,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
     
         $this->assertTrue($contact instanceof Addressbook_Model_Contact);
     
-        $this->setExpectedException('Addressbook_Exception_NotFound');
+        $this->expectException('Addressbook_Exception_NotFound');
         
         $this->_backend->getByUserId('invalid_id');
         
@@ -264,7 +264,7 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->_backend->delete($contact->getId());
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');   
+        $this->expectException('Tinebase_Exception_NotFound');
         $contact = $this->_backend->get($contact->getId());
     }
     

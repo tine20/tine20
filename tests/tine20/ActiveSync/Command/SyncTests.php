@@ -44,8 +44,8 @@ class ActiveSync_Command_SyncTests extends TestCase
      * (non-PHPdoc)
      * @see ActiveSync/ActiveSync_TestCase::setUp()
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
@@ -71,8 +71,8 @@ class ActiveSync_Command_SyncTests extends TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         if (! $this->_transactionId) {
@@ -279,7 +279,7 @@ class ActiveSync_Command_SyncTests extends TestCase
         $doc->loadXML($xmlFile, LIBXML_NOWARNING);
 
         $output = Felamimail_Frontend_ActiveSyncTest::encodeXml($doc);
-        $this->assertContains(' Mein Kopf ist gerade zu voll... 😃', $output);
+        $this->assertStringContainsString(' Mein Kopf ist gerade zu voll... 😃', $output);
     }
     
     /**
@@ -527,7 +527,7 @@ class ActiveSync_Command_SyncTests extends TestCase
 
         $output = $this->testSyncOfEmails('emoji.eml', 'emoji.eml');
 
-        $this->assertContains(Tinebase_Core::filterInputForDatabase('Mein Kopf ist gerade zu voll...😃?'), $output,
+        $this->assertStringContainsString(Tinebase_Core::filterInputForDatabase('Mein Kopf ist gerade zu voll...😃?'), $output,
             'handling of utf8mb4 failed');
     }
     
@@ -571,7 +571,7 @@ class ActiveSync_Command_SyncTests extends TestCase
         $this->_device->model = 'Redmi 4X';
 
         try {
-            $this->assertContains('<SyncKey>0</SyncKey>', $this->_syncFolder()->saveXML());
+            $this->assertStringContainsString('<SyncKey>0</SyncKey>', $this->_syncFolder()->saveXML());
         } finally {
             ActiveSync_Config::getInstance()->{ActiveSync_Config::DEVICE_MODEL_DENY_LIST} = $denyList;
         }

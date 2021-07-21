@@ -108,8 +108,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         // connect to DB
         $this->_getDB();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
     }
 
     /**
@@ -211,8 +212,10 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         $stmt->closeCursor();
 
         if (!$queryResult) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' ' . $this->_subconfigKey . ' config for user with ' . $this->_propertyMapping[$property] . ' = ' . $value . ' not found');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__. ' ' . $this->_subconfigKey . ' config for user with '
+                . $this->_propertyMapping[$property] . ' = ' . $value . ' not found. '
+                . '(' . $select . ')');
         }
 
         return $queryResult;
@@ -288,6 +291,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
                 substr($_userId, 0,32) . '#~#%') . ')'
         );
         $this->_appendClientIdOrDomain($where);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' where: ' . print_r($where, true));
         
         $this->_db->update($this->_userTable, $values, $where);
     }

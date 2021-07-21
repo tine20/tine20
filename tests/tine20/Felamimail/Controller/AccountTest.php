@@ -36,8 +36,8 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_controller = Felamimail_Controller_Account::getInstance();
@@ -49,8 +49,8 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if ($this->_userChanged) {
             $originalUser = Admin_Controller_User::getInstance()->update($this->_originalTestUser);
             Tinebase_Core::setUser($originalUser);
@@ -320,7 +320,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         // try to access the message
         $messageViaGet = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
-        self::assertContains('aaaaaä', $messageViaGet->body);
+        self::assertStringContainsString('aaaaaä', $messageViaGet->body);
     }
 
     public function testUpdateSharedAccount()
@@ -452,7 +452,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             . print_r($extraUserInBackend, true));
         self::assertNotEmpty($extraUserInBackend['username'], 'username empty: '
             . print_r($extraUserInBackend, true));
-        self::assertContains(TestServer::getPrimaryMailDomain() . '/'
+        self::assertStringContainsString(TestServer::getPrimaryMailDomain() . '/'
             . $extraUserInBackend['userid'], $extraUserInBackend['home'],
             'home not matching: ' . print_r($extraUserInBackend, true));
 
@@ -492,7 +492,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             $accountBackend->get($accountArray['id']);
             self::fail('account should be deleted: ' . print_r($accountArray, true));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            self::assertContains('Felamimail_Model_Account record with id', $tenf->getMessage());
+            self::assertStringContainsString('Felamimail_Model_Account record with id', $tenf->getMessage());
         }
     }
 
@@ -527,8 +527,8 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
         $sievescript = $script->getSieve();
-        self::assertContains('Notification', $sievescript);
-        self::assertContains('fileinto', $sievescript);
+        self::assertStringContainsString('Notification', $sievescript);
+        self::assertStringContainsString('fileinto', $sievescript);
 
         return $account;
     }
@@ -542,7 +542,29 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
         $sievescript = $script->getSieve();
-        self::assertNotContains('Notification', $sievescript);
-        self::assertNotContains('fileinto', $sievescript);
+        self::assertStringNotContainsString('Notification', $sievescript);
+        self::assertStringNotContainsString('fileinto', $sievescript);
+    }
+
+    public function testChangeFrom()
+    {
+        $user = $this->_createUserWithEmailAccount();
+
+        // from of system account should change
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $account->from = 'changeFrom';
+        $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+        self::assertEquals('changeFrom', $account->from);
+    }
+
+    public function testChangeOrganization()
+    {
+        $user = $this->_createUserWithEmailAccount();
+
+        // from of system account should change
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $account->organization = 'changeOrganization';
+        $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+        self::assertEquals('changeOrganization', $account->organization);
     }
 }

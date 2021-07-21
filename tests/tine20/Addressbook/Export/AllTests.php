@@ -17,7 +17,7 @@ class Addressbook_Export_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook All Export Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook All Export Tests');
         $suite->addTestSuite(Addressbook_Export_CsvTest::class);
         $suite->addTestSuite(Addressbook_Export_DocTest::class);
         $suite->addTestSuite(Addressbook_Export_VCardTest::class);

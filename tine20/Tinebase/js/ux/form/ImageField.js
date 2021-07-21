@@ -36,7 +36,11 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      * @cfg {String}
      */
     defaultImage: 'images/icon-set/icon_undefined_contact.svg',
-    
+
+    /**
+     * @cfg {Array} extra context actions
+     */
+    extraContextActions: null,
     
     defaultAutoCreate: {tag: 'div', cls: 'ux-imagefield-ct', cn: [
         {tag: 'img', cls: 'ux-imagefield-img'},
@@ -66,11 +70,17 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.imageCt = this.el.child('img');
         this.buttonCt = this.el.child('div[class=ux-imagefield-button]');
         this.textCt = this.el.child('div[class=ux-imagefield-text]');
-        
+
         if (this.border === false) {
             this.el.applyStyles({
                 border: '0'
             });
+        } else {
+            if (this.borderColor) {
+                this.el.applyStyles({
+                    border: '2px solid #'+this.borderColor
+                });
+            }
         }
         
         this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: i18n._('Loading'), msgCls: 'x-mask-loading'});
@@ -114,8 +124,8 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         } else {
             if (value instanceof Ext.ux.util.ImageURL || (Ext.isString(value) && value.match(/&/))) {
                 this.value = Ext.ux.util.ImageURL.prototype.parseURL(value);
-                this.value.width = (this.border === false ? this.width : this.width-2);
-                this.value.height = (this.border === false ? this.height : this.height-2);
+                this.value.width = (this.border === false ? this.width : this.width-4);
+                this.value.height = (this.border === false ? this.height : this.height-4);
                 this.value.ratiomode = 0;
             } else {
                 this.setDefaultImage(value);
@@ -172,18 +182,18 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }
         
         var files = fileSelector.getFileList();
+
         this.uploader = new Ext.ux.file.Upload({
             file: files[0],
-            fileSelector: fileSelector
+            fileSelector: fileSelector,
+            id: Tine.Tinebase.uploadManager.generateUploadId()
         });
         
         this.uploader.on('uploadcomplete', this.onUploadComplete, this);
         this.uploader.on('uploadfailure', this.onUploadFail, this);
         
         this.loadMask.show();
-        
-        var uploadKey = Tine.Tinebase.uploadManager.queueUpload(this.uploader);
-        var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
+        this.uploader.upload();
         
         if (this.ctxMenu) {
             this.ctxMenu.hide();
@@ -273,12 +283,16 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                 scope: this,
                 handler: this.downloadImage
                 
-            }]
+            }].concat(this.getExtraContextActions())
         });
         this.ctxMenu.showAt(e.getXY());
         
     },
-    
+
+    getExtraContextActions: function () {
+        return this.extraContextActions || []
+    },
+
     downloadImage: function () {
         var url = Ext.apply(this.value, {
             height: -1,

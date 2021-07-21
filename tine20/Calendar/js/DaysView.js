@@ -201,12 +201,12 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
      * @param {Array} period
      */
     updatePeriod: function(period) {
-        this.startDate = period.from;
+        this.startDate = period.from.clearTime(true);
         
         var tbar = this.findParentBy(function(c) {return c.getTopToolbar()}).getTopToolbar();
         if (tbar && tbar.periodPicker) {
             tbar.periodPicker.update(this.startDate);
-            this.startDate = tbar.periodPicker.getPeriod().from;
+            this.startDate = tbar.periodPicker.getPeriod().from.clearTime(true);
         }
         
         this.endDate = this.startDate.add(Date.DAY, this.numOfDays+1);
@@ -230,10 +230,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         this.newEventSummary      =  this.app.i18n._hidden(this.newEventSummary);
         this.dayFormatString      =  this.app.i18n._hidden(this.dayFormatString);
         
-        this.startDate.setHours(0);
-        this.startDate.setMinutes(0);
-        this.startDate.setSeconds(0);
-        
+        this.startDate.clearTime();
         this.endDate = this.startDate.add(Date.DAY, this.numOfDays+1);
         
         this.boxMinWidth = 60*this.numOfDays;
@@ -1079,7 +1076,9 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
     },
 
     getPeriod: function() {
-        return {
+        var tbar = this.findParentBy(function(c) {return c.getTopToolbar()}).getTopToolbar();
+                
+        return tbar && tbar.periodPicker ? tbar.periodPicker.getPeriod() : {
             from: this.startDate,
             until: this.startDate.add(Date.DAY, this.numOfDays)
         };
@@ -1554,7 +1553,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         );
         
         ts.event = new Ext.XTemplate(
-            '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-color: {color};">',
+            '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-image: {infoColors};">',
                 '<div class="cal-daysviewpanel-event-header" style="background-color: {bgColor};">',
                     '<div class="cal-daysviewpanel-event-header-inner" style="color: {textColor}; background-color: {bgColor}; z-index: {zIndex};">{startTime}</div>',
                     '<div class="cal-daysviewpanel-event-header-icons">',

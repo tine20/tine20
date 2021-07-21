@@ -24,7 +24,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar CalDAV PluginInverse Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar CalDAV PluginInverse Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -34,8 +34,8 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         parent::setupCalendarContainer();
@@ -88,7 +88,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
         $this->server->exec();
         //var_dump($this->response->body);
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<user><id>' . Tinebase_Core::getUser()->contact_id . '</id>', $this->response->body);
+        $this->assertStringContainsString('<user><id>' . Tinebase_Core::getUser()->contact_id . '</id>', $this->response->body);
     }
     
     /**
@@ -112,7 +112,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
         $this->server->exec();
         
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<roles><ObjectViewer/><ObjectCreator/><ObjectEditor/><ObjectEraser/><PrivateViewer/></roles>', $this->response->body);
+        $this->assertStringContainsString('<roles><ObjectViewer/><ObjectCreator/><ObjectEditor/><ObjectEraser/><PrivateViewer/></roles>', $this->response->body);
     }
     
     /**
@@ -228,7 +228,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
         $this->server->exec();
         
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<d:response><d:href>/principals/users/' . Tinebase_Core::getUser()->contact_id . '</d:href>', $this->response->body);
+        $this->assertStringContainsString('<d:response><d:href>/principals/users/' . Tinebase_Core::getUser()->contact_id . '</d:href>', $this->response->body);
     }
     
     /**
@@ -252,7 +252,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
         $this->server->exec();
         
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<displayName>' . Tinebase_Core::getUser()->accountDisplayName . '</displayName>', $this->response->body);
-        $this->assertContains('<id>' . Tinebase_Core::getUser()->contact_id . '</id>', $this->response->body);
+        $this->assertStringContainsString('<displayName>' . Tinebase_Core::getUser()->accountDisplayName . '</displayName>', $this->response->body);
+        $this->assertStringContainsString('<id>' . Tinebase_Core::getUser()->contact_id . '</id>', $this->response->body);
     }
 }

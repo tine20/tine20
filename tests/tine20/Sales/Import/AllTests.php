@@ -22,7 +22,7 @@ class Sales_Import_AllTests
 
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales All Import Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales All Import Tests');
         $suite->addTestSuite('Sales_Import_DemoDataTest');
         return $suite;
     }

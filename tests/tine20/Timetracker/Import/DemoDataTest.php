@@ -22,7 +22,7 @@ class Timetracker_Import_DemoDataTest
 
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker All DemoData Import Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Timetracker All DemoData Import Tests');
         //$suite->addTestSuite('Timetracker_Import_TimeaccountTest');
         $suite->addTestSuite('Timetracker_Import_TimesheetTest');
         return $suite;

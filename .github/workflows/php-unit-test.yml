@@ -1,0 +1,50 @@
+name: tine20 php unit test CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+
+  test:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-18.04]
+        php-versions: ['7.2', '7.4']
+
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+
+    - name: Run mysql
+      run: |
+        sudo systemctl start mysql.service
+        mysql -uroot -proot --host 127.0.0.1  -e 'CREATE DATABASE IF NOT EXISTS tine20;'  
+
+    - name: Install tine20
+      run: |      
+        cd tine20
+        composer install --ignore-platform-reqs
+        cp config.inc.github.php config.inc.php
+        cp install.properties.github install.properties
+        vendor/bin/phing tine-install
+
+    - name: Unit tests
+      run: |
+        cd tests/tine20
+        ../../tine20/vendor/bin/phpunit --color GithubTests.php

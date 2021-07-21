@@ -45,6 +45,25 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         $this->assertEquals('catched record update for observing id: exampleIdentifier', $result);
     }
 
+    public function testExternalDb()
+    {
+        $exampleRecord = $this->_getExampleRecord();
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($exampleRecord);
+        try {
+            ExampleApplication_Controller_ExternalDbRecord::getInstance()->get($exampleRecord->getId());
+            $this->fail('we should be on a different connection => not set uncommited insert');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $externalRecord = ExampleApplication_Controller_ExternalDbRecord::getInstance()->get($exampleRecord->getId());
+        } finally {
+            Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . ExampleApplication_Model_ExampleRecord::TABLE_NAME,
+                'id = "' . $exampleRecord->getId() . '"');
+        }
+
+        $this->assertSame($exampleRecord->getId(), $externalRecord->getId());
+    }
+
     public function testDateFilter()
     {
         $exampleRecord = $this->_getExampleRecord();
@@ -62,5 +81,74 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
                 [['field' => 'datetime', 'operator' => 'after', 'value' => Tinebase_DateTime::now()]])
         );
         static::assertSame(1, $result->count());
+    }
+
+    public function testOneToOne()
+    {
+        $record = $this->_getExampleRecord();
+        $record->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE} = [
+            ExampleApplication_Model_OneToOne::FLD_NAME => 'unittest'
+        ];
+
+        $createdRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($record);
+        $expander = new Tinebase_Record_Expander(ExampleApplication_Model_ExampleRecord::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE => []
+            ]
+        ]);
+        $expander->expand(new Tinebase_Record_RecordSet(ExampleApplication_Model_ExampleRecord::class, [$createdRecord]));
+
+        static::assertTrue($createdRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE} instanceof
+            ExampleApplication_Model_OneToOne, 'onetoone not instance of ' . ExampleApplication_Model_OneToOne::class);
+        static::assertNull($createdRecord
+            ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD});
+
+        $createdRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD} = Addressbook_Controller_Contact::getInstance()
+            ->get($this->_personas['sclever']->contact_id)->toArray();
+
+        $updatedRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($createdRecord);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $expander->expand(new Tinebase_Record_RecordSet(ExampleApplication_Model_ExampleRecord::class, [$updatedRecord]));
+
+        static::assertSame($this->_personas['sclever']->contact_id, $updatedRecord
+            ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD});
+
+        $updatedRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_NAME} = 'unittestUpdate';
+        $updatedRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($updatedRecord);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $expander->expand(new Tinebase_Record_RecordSet(ExampleApplication_Model_ExampleRecord::class, [$updatedRecord]));
+
+        static::assertSame($this->_personas['sclever']->contact_id, $updatedRecord
+            ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD});
+        static::assertSame('unittestUpdate', $updatedRecord
+            ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_NAME});
+
+        // empty string means nulling the field
+        $updatedRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD} = '';
+        $updatedRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($updatedRecord);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $expander->expand(new Tinebase_Record_RecordSet(ExampleApplication_Model_ExampleRecord::class, [$updatedRecord]));
+
+        static::assertNull($updatedRecord
+            ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD});
+
+        $updatedRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD} = $this->_personas['pwulf']->contact_id;
+
+        $updatedRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($updatedRecord);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $expander->expand(new Tinebase_Record_RecordSet(ExampleApplication_Model_ExampleRecord::class, [$updatedRecord]));
+
+        static::assertSame($this->_personas['pwulf']->contact_id, $updatedRecord
+            ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
+            ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD});
     }
 }

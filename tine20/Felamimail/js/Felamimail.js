@@ -787,16 +787,18 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             });
             this.accountStore.load();
 
-            postal.subscribe({
+            this.postalSubscriptions = [];
+
+            this.postalSubscriptions.push(postal.subscribe({
                 channel: "recordchange",
                 topic: "Felamimail.Account.*",
                 callback: _.bind(this.onAccountRecordChange, this)
-            });
-            postal.subscribe({
+            }));
+            this.postalSubscriptions.push(postal.subscribe({
                 channel: "recordchange",
                 topic: "Admin.EmailAccount.*",
                 callback: _.bind(this.onAccountRecordChange, this)
-            });
+            }));
         }, this));
     },
 

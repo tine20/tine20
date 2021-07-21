@@ -17,6 +17,8 @@
  */
 class Admin_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'Admin';
+
     /**
      * Default IMAP user settings
      * 
@@ -63,7 +65,7 @@ class Admin_Config extends Tinebase_Config_Abstract
             'description'           => 'Default password must change for new user settings',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
+            'setByAdminModule'      => true,
             'setBySetupModule'      => false,
             'default'               => false
         ],

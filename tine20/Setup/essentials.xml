@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <essential>
-    <enviroment name="PHP" version="7.0"/>
+    <enviroment name="PHP" version="7.1"/>
     <extensions>
         <extension name="bcmath" />
         <extension name="SPL" />

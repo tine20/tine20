@@ -251,7 +251,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     id:'relation_type', 
                     header: this.app.i18n._("Role"), 
                     dataIndex: 'relation_type', 
-                    width: 60, 
+                    width: 150,
                     sortable: true,
                     renderer: Tine.Crm.Contact.typeRenderer,
                     editor: new Tine.Crm.Contact.TypeComboBox({
@@ -301,6 +301,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 myContact.set(p, contact.get(p));
             }
             myContact.endEdit();
+            myContact.commit();
         } else {
             contact.data.relation_type = 'customer';
             this.store.add(contact);

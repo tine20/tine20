@@ -26,8 +26,8 @@ class Tinebase_ActionQueue_Backend_RedisTest extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $redis = Tinebase_Config::getInstance()->{Tinebase_Config::CACHE}->redis;
@@ -49,8 +49,8 @@ class Tinebase_ActionQueue_Backend_RedisTest extends TestCase
         }
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         if ($this->_redis instanceof Redis) {

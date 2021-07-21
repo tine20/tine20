@@ -25,8 +25,8 @@ class ActiveSync_Controller_DeviceTests extends TestCase
      */
     protected $objects = array();
     
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         ########### define test device

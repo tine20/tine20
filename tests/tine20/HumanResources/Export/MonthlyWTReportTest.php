@@ -30,7 +30,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
                 'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
                     Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                         'model' => HumanResources_Model_MonthlyWTReport::class,
-                        'name' => 'monthlyWTReport'
+                        'name' => 'Monthly Report'
                     ]))->getFirstRecord()->getId()
             ]);
         $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(
@@ -41,6 +41,16 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
         $export->save($tempfile);
 
         $this->assertGreaterThan(4000, filesize($tempfile));
+
+
+        $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($tempfile);
+        $spreadsheet->setActiveSheetIndex(0);
+        $this->assertTrue(empty($spreadsheet->getActiveSheet()->getCell('B8')->getValue()));
+        $this->assertSame('10:00', $spreadsheet->getActiveSheet()->getCell('B9')->getValue());
+        $this->assertSame('10:00', $spreadsheet->getActiveSheet()->getCell('B14')->getValue());
+        $this->assertSame('10:00', $spreadsheet->getActiveSheet()->getCell('B15')->getValue());
+        $this->assertSame('15:00', $spreadsheet->getActiveSheet()->getCell('B16')->getValue());
+
         unlink($tempfile);
     }
 
@@ -62,10 +72,10 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
             'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
                     'model' => HumanResources_Model_MonthlyWTReport::class,
-                    'name' => 'monthlyWTReport'
+                    'name' => 'Monthly Report'
                 ]))->getFirstRecord()->getId()
         ]);
-        $obData = ob_get_clean(); ob_end_clean();
+        $obData = ob_get_clean();
 
         $this->assertGreaterThan(4000, strlen($obData));
     }

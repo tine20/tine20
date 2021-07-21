@@ -457,20 +457,34 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     initMessageBus: function() {
-        postal.subscribe({
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
             callback: this.onRecordChanges.createDelegate(this)
-        });
+        }));
     },
-
+    
+    getRecordByData(data) {
+        const idProperty = this.recordClass.getMeta('idProperty');
+        return this.store.getById(_.get(data, idProperty));
+    },
+    
     /**
      * bus notified about record changes
      */
     onRecordChanges: function(data, e) {
-        var existingRecord = this.store.getById(data.id);
-        if (existingRecord && e.topic.match(/\.update/)) {
+        var existingRecord = this.getRecordByData(data);
+        
+        if (e.topic.match(/\.create/)) {
+            this.onCreateRecord(data);
+        }else if (existingRecord && e.topic.match(/\.update/)) {
             // NOTE: local mode saves again (and again...)
             this.onUpdateRecord(JSON.stringify(data)/*, 'local'*/);
         } else if (existingRecord && e.topic.match(/\.delete/)) {
@@ -541,7 +555,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         
         // init generic columnModel
-        this.initGenericColumnModel();
+        _.assign(this.gridConfig, this.initGenericColumnModel());
     },
     
     /**
@@ -575,10 +589,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * initializes the generic column model on auto bootstrap
+     * Note this method is mixedin Tine.widgets.grid.QuickaddGridPanel
      */
     initGenericColumnModel: function() {
-        var _ = window.lodash;
-
+        const gridConfig = {};
+        
         if (this.modelConfig) {
             var columns = [],
                 appName = this.recordClass.getMeta('appName'),
@@ -592,7 +607,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     return;
                 }
 
-                if (this.hideColumns.indexOf(key) !== -1) {
+                if (this.hideColumns && this.hideColumns.indexOf(key) !== -1) {
                     return;
                 }
 
@@ -605,6 +620,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 columns = columns.concat(this.getCustomfieldColumns());
             }
 
+            if (_.find(columns, {dataIndex: 'tags'})) {
+                var tagsCol = _.find(columns, {dataIndex: 'tags'});
+                _.remove(columns, tagsCol);
+                columns.unshift(tagsCol);
+            }
+            
             if (_.find(columns, {dataIndex: 'attachments'})) {
                 var attachCol = _.find(columns, {dataIndex: 'attachments'});
                 _.remove(columns, attachCol);
@@ -619,16 +640,26 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             });
 
-            columns = columns.concat(this.getCustomColumns());
-            columns = this.customizeColumns(columns);
+            columns = columns.concat(this.getCustomColumns ? this.getCustomColumns() : []);
+            columns = this.customizeColumns ? this.customizeColumns(columns) || columns : columns;
             
-            this.gridConfig.cm = new Ext.grid.ColumnModel({
+            gridConfig.cm = new Ext.grid.ColumnModel({
                 defaults: {
                     resizable: true
                 },
                 columns: columns
             });
+
+            gridConfig.autoExpandColumn =
+                gridConfig.autoExpandColumn ||
+                this.autoExpandColumn ||
+                this.recordClass.getMeta('titleProperty');
+
+            gridConfig.autoExpandColumn = this.recordClass.hasField(gridConfig.autoExpandColumn) ?
+                gridConfig.autoExpandColumn : null;
+            
         }
+        return gridConfig;
     },
     
     /**
@@ -654,7 +685,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 var column = _.find(columns, { id: value.id });
                 if (column) {
                     // apply custom cfg
-                    column = Ext.applyIf(column, value);
+                    column = Ext.apply(column, value);
                 }
             });
 
@@ -1148,16 +1179,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         const onAfterEdit = async (o) => {
             ed.un('canceledit', onCancelEdit);
-
+            
             this.pagingToolbar.refresh.disable();
+            localRecord.data.path = `${localRecord.get('path')}${localRecord.get('name')}/`;
+
             this.store.remove(localRecord);
             this.store.addSorted(localRecord);
             this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
             
             const remoteRecord = await proxyFn(localRecord);
-            this.store.remove(localRecord);
-            this.store.addSorted(remoteRecord);
-            this.grid.getSelectionModel().selectRow(this.store.indexOf(remoteRecord));
+            
+            window.postal.publish({
+                channel: "recordchange",
+                topic: 'Filemanager.Node.update',
+                data: remoteRecord.data
+            });
+            
             this.pagingToolbar.refresh.enable();
         }
         this.grid.on('afteredit', onAfterEdit, this, {single: true, buffer: 100});
@@ -1252,7 +1289,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
-
         // define a transaction
         this.lastStoreTransactionId = options.transactionId = Ext.id();
 
@@ -1287,7 +1323,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 //        if (this.store.getCount() > 0) {
 //            this.grid.getView().focusRow(0);
 //        }
-
         // restore selection
         if (Ext.isArray(options.preserveSelection)) {
             Ext.each(options.preserveSelection, function(record) {
@@ -1486,6 +1521,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // init sel model
         if (! this.selectionModel) {
             this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
+                moveEditorOnEnter: false,
                 store: this.store,
                 gridPanel: this
             });
@@ -1533,7 +1569,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // activate grid header menu for column selection
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-        this.gridConfig.enableHdMenu = false;
 
         if (this.stateful) {
             this.gridConfig.stateful = true;
@@ -1546,7 +1581,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             sm: this.selectionModel,
             parentScope: this,
             view: this.createView(),
-            recordClass: this.recordClass
+            recordClass: this.recordClass,
+            getDragDropText: this.getDragDropText.createDelegate(this)
         }));
 
         // init various grid / sm listeners
@@ -1560,6 +1596,29 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     },
 
+    getDragDropText: function() {
+        const titleProperty = this.recordClass.getMeta('titleProperty');
+        if (! titleProperty) {
+            return Ext.grid.GridView.prototype.getDragDropText.call(this.grid);
+        }
+        
+        const col = _.indexOf(this.grid.colModel.config, _.find(this.grid.colModel.config, {dataIndex: titleProperty}));
+        const selections = this.grid.selModel.getSelections();
+        
+        if (!col || selections.length > 10) {
+            return formatMessage('{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}', {
+                recordGender: this.recordClass.getRecordGender(),
+                recordCount: selections.length,
+                recordName: this.recordClass.getRecordName(),
+                recordsName: this.recordClass.getRecordsName()
+            })
+        }
+        // else
+        return _.reduce(selections, (html, node) => {
+            return html += '<tr>' + this.grid.getView().getCell(this.store.indexOf(node), col).cloneNode(true).outerHTML + '</tr>';
+        }, '<table>') + '</table>';
+    },
+    
     /**
      * creates and returns the view for the grid
      * 
@@ -1571,16 +1630,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.groupField && ! this.groupTextTpl) {
             this.groupTextTpl = '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "' + i18n._("Records") + '" : "' + i18n._("Record") + '"]})';
         }
-        
-        var viewClass = this.groupField ? Ext.grid.GroupingView : Ext.grid.GridView;
-        var view =  new viewClass({
+
+        const viewClass = this.groupField ? Ext.grid.GroupingView : Ext.grid.GridView;
+        return new viewClass({
             getRowClass: this.getViewRowClass.bind(this),
             autoFill: true,
-            forceFit:true,
+            forceFit: true,
             ignoreAdd: true,
             emptyText: this.i18nEmptyText,
             groupTextTpl: this.groupTextTpl,
-            onLoad: Ext.grid.GridView.prototype.onLoad.createInterceptor(function() {
+            onLoad: Ext.grid.GridView.prototype.onLoad.createInterceptor(function () {
                 if (this.grid.getView().isPagingRefresh) {
                     this.grid.getView().isPagingRefresh = false;
                     return true;
@@ -1589,8 +1648,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 return false;
             }, this)
         });
-        
-        return view;
     },
     
     /**
@@ -1747,7 +1804,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
-            } 
+            }
+            
+            this.actionUpdater.addActions(this.actionToolbar.items);
         }
 
         return this.actionToolbar;
@@ -1965,6 +2024,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                             });
                         }
                         break;
+                    case 'keyField':
+                        result.push({filtertype:'tine.widget.keyfield.filter',field:'customfield:' + cfConfig.id, app: this.app, keyfieldName: cfDefinition.label , label:cfDefinition.label});
+                        break;
                     default:
                         result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
                         break;
@@ -2042,14 +2104,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             case e.A:
                 // select only current page
                 this.grid.getSelectionModel().selectAll(true);
-                e.preventDefault();
+                e.stopEvent();
                 break;
             case e.C:
                 if (this.action_editCopyInNewWindow && !this.action_editCopyInNewWindow.isDisabled()) {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'copy'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.E:
@@ -2057,7 +2119,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'edit'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.N:
@@ -2065,23 +2127,34 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     this.onEditInNewWindow.call(this, {
                         actionType: 'add'
                     });
-                    e.preventDefault();
+                    e.stopEvent();
                 }
                 break;
             case e.F:
                 if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
-                    e.preventDefault();
+                    e.stopEvent();
                     this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
                 }
                 break;
             case e.R:
                 this.bufferedLoadGridData();
+                e.stopEvent();
+                break;
+            case e.ENTER:
+                if (_.isFunction(this.grid.startEditing)) {
+                    const col = _.find(this.grid.colModel.columns, {dataIndex: this.recordClass.getMeta('titleProperty')});
+                    const selections = this.selectionModel.getSelections();
+                    if (col && selections && selections.length === 1) {
+                        this.grid.startEditing(this.store.indexOf(selections[0]), _.indexOf(this.grid.colModel.columns, col));
+                        e.stopEvent();
+                    }
+                }
                 break;
             default:
                 if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
                     if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
                         this.onDeleteRecords.call(this);
-                        e.preventDefault();
+                        e.stopEvent();
                     }
                 }
                 if (e.browserEvent.key === '?') {
@@ -2099,6 +2172,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.INFO
                     });
+                    e.stopEvent();
                 }
         }
     },
@@ -2271,22 +2345,25 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.store.reload();
     },
 
-    /**
-     * on update after edit
-     * 
-     * @param {String|Tine.Tinebase.data.Record} record
-     * @param {String} mode
-     */
-    onUpdateRecord: function(record, mode) {
-        if (! this.rendered) {
-            return;
+    onCreateRecord(nodeData, mode) {
+        const record = this.createRecord(JSON.stringify(nodeData), mode);
+        // Problem: we can't evaluate filters on client side !!!
+        if (mode === 'local') {
+            // @TODO add sorted!! (see sort code in onUpdateRecord
+            this.store.insert(0 , [record]);
+        } else {
+            this.bufferedLoadGridData({
+                removeStrategy: 'keepBuffered',
+            });
         }
+    },
 
+    createRecord(record, mode) {
         if (! mode && ! this.recordProxy) {
             // proxy-less = local if not defined otherwise
             mode = 'local';
         }
-        
+
         if (Ext.isString(record)) {
             record = this.recordProxy
                 ? this.recordProxy.recordReader({responseText: record})
@@ -2302,6 +2379,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record.id = 'new-' + Ext.id();
             record.setId(record.id);
         }
+        
+        return record;
+    },
+
+
+    /**
+     * on update after edit
+     * 
+     * @param {String|Tine.Tinebase.data.Record} record
+     * @param {String} mode
+     */
+    onUpdateRecord: function(record, mode) {
+        if (! this.rendered) {
+            return;
+        }
+        
+        record = this.createRecord(record, mode);
 
         Tine.log.debug('Tine.widgets.grid.GridPanel::onUpdateRecord() -> record:');
         Tine.log.debug(record, mode);
@@ -2314,14 +2408,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (idx >= 0) {
                 // only run do this in local mode as we reload the store in remote mode
                 // NOTE: this would otherwise delete the record if a record proxy exists!
-                if (mode == 'local') {
+                if (mode === 'local') {
                     store.removeAt(idx);
                     store.insert(idx, [record]);
                 }
             } else {
                 this.getStore().add([record]);
             }
-
+            //TODO: use this for msg bus
+            
             // sort new/edited record
             store.remoteSort = false;
             store.sort(
@@ -2440,7 +2535,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             return;
         }
-        var records = sm.getSelections();
+        var records = sm.getSelectedRecords ? sm.getSelectedRecords() : sm.getSelections();
 
         if (this.disableDeleteConfirmation || (Tine[this.app.appName].registry.get('preferences')
             && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') !== null

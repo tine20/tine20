@@ -82,7 +82,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $this->connectAndLogin($params);
 
-        if ($params->account) {
+        if ($params->account && $params->account->getId()) {
             $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($params->account, $this);
         } else {
             $capabilities['capabilities'] = [];
@@ -459,9 +459,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         // sometimes ctype_digit($from) is false even if we got a single message, maybe mailserver dependend
         $singleMessage = ($to === null && ctype_digit($from) || isset($summary['UID']));
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' to: ' . print_r($to, true) . ' from: ' . print_r($from, true) . ' ctype_digit(from): ' . (int) ctype_digit($from));
-        
+            . ' to: ' . print_r($to, true) . ' from: ' . print_r($from, true)
+            . ' ctype_digit(from): ' . (int) ctype_digit($from)
+            . ' single message: ' . (int) $singleMessage);
+
         // fetch returns a different structure when fetching one or multiple messages
         if ($singleMessage) {
             $summary = array(
@@ -1091,7 +1094,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Non-ASCII character (encoding:' . $encoding .') detected, mime encode some headers.');
-            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Before iconv_mime_encode: ' . $result);
+
             foreach (array('subject', 'from', 'to', 'cc', 'bcc') as $field) {
                 if (preg_match('/' . $field . ': (.*?[\n][\s]*?)/i', $result, $matches)) {
                     $headerValue = str_replace("\n", '', $matches[1]);
@@ -1104,7 +1109,17 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
 
             // remove other bad chars to prevent "iconv_mime_decode_headers(): Detected an illegal character in input string"
             // TODO catch exceptions here? this still sometimes throws ErrorException "iconv(): Detected an illegal character in input string"
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Before iconv: ' . $result);
             $result = @iconv('UTF-8', 'ASCII//TRANSLIT', $result);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' After iconv: ' . $result);
+
+            if (empty($result)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Something bad happened - we lost the header - switch back to original');
+                return $_header;
+            }
         }
         
         return $result;

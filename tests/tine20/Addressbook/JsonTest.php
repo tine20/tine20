@@ -4,7 +4,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  */
@@ -69,7 +69,7 @@ class Addressbook_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_geodata = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
         
@@ -113,7 +113,7 @@ class Addressbook_JsonTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
 
@@ -242,9 +242,9 @@ class Addressbook_JsonTest extends TestCase
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
         ) {
-            self::assertEquals('0', $list['account_only']);
+            self::assertFalse($list['account_only']);
         } else {
-            self::assertEquals('1', $list['account_only']);
+            self::assertTrue($list['account_only']);
         }
     }
     
@@ -617,7 +617,7 @@ class Addressbook_JsonTest extends TestCase
         $changedNote = preg_replace('/\s*GDPR_DataProvenance \([^)]+\)/', '',
             $history['results'][$_changedNoteNumber - 1]);
         foreach ((array) $_expectedText as $text) {
-            $this->assertContains($text, $changedNote['note'], print_r($changedNote, TRUE));
+            $this->assertStringContainsString($text, $changedNote['note'], print_r($changedNote, TRUE));
         }
     }
 
@@ -919,7 +919,7 @@ class Addressbook_JsonTest extends TestCase
 
         $this->_uit->deleteContacts($contact['id']);
 
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $contact = $this->_uit->getContact($contact['id']);
     }
 
@@ -949,8 +949,8 @@ class Addressbook_JsonTest extends TestCase
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
         $filename = $exporter->generate();
         $export = file_get_contents($filename);
-        $this->assertContains($sharedTagName, $export, 'shared tag was not found in export:' . $export);
-        $this->assertContains($personalTagName, $export, 'personal tag was not found in export:' . $export);
+        $this->assertStringContainsString($sharedTagName, $export, 'shared tag was not found in export:' . $export);
+        $this->assertStringContainsString($personalTagName, $export, 'personal tag was not found in export:' . $export);
 
         // cleanup
         unset($filename);
@@ -1003,9 +1003,9 @@ class Addressbook_JsonTest extends TestCase
         $xlswriter->save('php://output');
         $out = ob_get_clean();
         
-        $this->assertContains(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
-        $this->assertContains('exportcf', $out, 'customfield not found in headline.');
-        $this->assertContains('testcustomfieldvalue', $out, 'customfield value not found.');
+        $this->assertStringContainsString(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
+        $this->assertStringContainsString('exportcf', $out, 'customfield not found in headline.');
+        $this->assertStringContainsString('testcustomfieldvalue', $out, 'customfield value not found.');
     }
     
     /**
@@ -1038,8 +1038,8 @@ class Addressbook_JsonTest extends TestCase
         $xlswriter->save('php://output');
         $out = ob_get_clean();
         
-        $this->assertContains(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
-        $this->assertContains('Herr', $out, 'no translated salutation found.');
+        $this->assertStringContainsString(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
+        $this->assertStringContainsString('Herr', $out, 'no translated salutation found.');
     }
     
     /**
@@ -1366,6 +1366,17 @@ class Addressbook_JsonTest extends TestCase
         $klaus = $this->_tagImportHelper('discard');
         $this->assertEquals(2, count($klaus['tags']), 'klaus should have both tags: ' . print_r($klaus['tags'], TRUE));
     }
+
+    public function testQueryFilterReturnedFromSrv()
+    {
+        $result = $this->_uit->searchContacts(json_decode('[{"condition":"OR","filters":[{"field":"foreignRecord","operator":"AND","value":{"appName":"Addressbook","modelName":"Contact","linkType":"relation","filters":[{"field":"foreignRecord","operator":"AND","value":{"appName":"Addressbook","modelName":"Contact","linkType":"relation","filters":[{"field":"query","operator":"contains","value":"adf","id":"ext-record-206"}]},"id":"ext-record-110"}]},"id":"ext-record-91"}],"id":"FilterPanel"},{"field":"query","operator":"contains","value":"","id":"quickFilter"}]', true), []);
+
+        $this->assertArrayHasKey('filter', $result);
+        $filters = $result['filter'][0]['filters'][0]['value']['filters'][0]['value']['filters'];
+        // make sure the query filter is not getting expanded
+        $count = count($filters);
+        $this->assertTrue(2 <= $count && 3 >= $count, '2019.11 should find 2, 2020.11+ should find 3 filters, found: ' . $count);
+    }
     
     /**
      * testImportMergeTheirsWithTag
@@ -1480,128 +1491,6 @@ class Addressbook_JsonTest extends TestCase
         $this->objects['createdTagIds'] = $tags->getArrayOfIds();
         $this->assertEquals(1, count($tags), 'tag not found');
         $this->assertEquals(2, $tags->getFirstRecord()->occurrence);
-    }
-    
-    /**
-     * test project relation filter
-     *
-     * @return array
-     */
-    public function testProjectRelationFilter()
-    {
-        if (! Setup_Controller::getInstance()->isInstalled('Projects')) {
-            $this->markTestSkipped('Projects not installed.');
-        }
-        
-        $contact = $this->_uit->saveContact($this->_getContactData());
-        $project = $this->_getProjectData($contact);
-
-        $projectJson = new Projects_Frontend_Json();
-        $newProject = $projectJson->saveProject($project);
-
-        $this->_testProjectRelationFilter($contact, 'definedBy', $newProject);
-        $this->_testProjectRelationFilter($contact, 'in', $newProject);
-        $this->_testProjectRelationFilter($contact, 'equals', $newProject);
-
-        return $contact;
-    }
-
-    /**
-     * get Project (create and link project + contacts)
-     *
-     * @return array
-     */
-    protected function _getProjectData($_contact)
-    {
-        $project = array(
-            'title'         => Tinebase_Record_Abstract::generateUID(),
-            'description'   => 'blabla',
-            'status'        => 'IN-PROCESS',
-        );
-
-        $project['relations'] = array(
-            array(
-                'own_model'              => 'Projects_Model_Project',
-                'own_backend'            => 'Sql',
-                'own_id'                 => 0,
-                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'type'                   => 'COWORKER',
-                'related_backend'        => 'Sql',
-                'related_id'             => $_contact['id'],
-                'related_model'          => 'Addressbook_Model_Contact',
-                'remark'                 => NULL,
-            ),
-            array(
-                'own_model'              => 'Projects_Model_Project',
-                'own_backend'            => 'Sql',
-                'own_id'                 => 0,
-                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'type'                   => 'RESPONSIBLE',
-                'related_backend'        => 'Sql',
-                'related_id'             => Tinebase_Core::getUser()->contact_id,
-                'related_model'          => 'Addressbook_Model_Contact',
-                'remark'                 => NULL,
-            )
-
-        );
-
-        return $project;
-    }
-
-    /**
-     * helper for project relation filter test
-     *
-     * @param array $_contact
-     * @param string
-     * @param array $_project
-     */
-    protected function _testProjectRelationFilter($_contact, $_operator, $_project)
-    {
-        switch ($_operator) {
-            case 'definedBy':
-                $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
-                $filters = array(
-                    array('field' => ":relation_type", "operator" => "equals", "value" => "COWORKER"),
-                    array('field' => "status",         "operator" => "notin",  "value" => $closedStatus->getId()),
-                    array('field' => 'id',             'operator' =>'in',      'value' => array($_project['id']))
-                );
-                break;
-            case 'in':
-                $filters = array(array('field' => 'id', 'operator' => $_operator, 'value' => array($_project['id'])));
-                break;
-            case 'equals':
-                $filters = array(array('field' => 'id', 'operator' => $_operator, 'value' => $_project['id']));
-                break;
-        }
-
-        $filterId = Tinebase_Record_Abstract::generateUID();
-        $filter = array(
-            array(
-                'field'     => 'foreignRecord',
-                'operator'  => 'AND',
-                'id'        => $filterId,
-                'value' => array(
-                    'linkType'      => 'relation',
-                    'appName'       => 'Projects',
-                    'modelName'     => 'Project',
-                    'filters'       => $filters
-                )
-            ),
-            array('field' => 'id', 'operator' => 'in', 'value' => array($_contact['id'], Tinebase_Core::getUser()->contact_id)),
-        );
-        $result = $this->_uit->searchContacts($filter, array());
-
-        $this->assertEquals('relation', $result['filter'][0]['value']['linkType']);
-        $this->assertTrue(isset($result['filter'][0]['id']), 'id expected');
-        $this->assertEquals($filterId, $result['filter'][0]['id']);
-
-        if ($_operator === 'definedBy') {
-            $this->assertEquals(':relation_type',        $result['filter'][0]['value']['filters'][0]['field']);
-            $this->assertEquals(1, $result['totalcount'], 'Should find only the COWORKER!');
-            $this->assertEquals($_contact['org_name'], $result['results'][0]['org_name']);
-        } else {
-            $this->assertEquals(2, $result['totalcount'], 'Should find both contacts!');
-        }
     }
 
     /**
@@ -1939,8 +1828,14 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportDefinitionsInRegistry()
     {
+        if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+            Tinebase_AreaLock::getInstance()->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        }
+
         $tfj = new Tinebase_Frontend_Json();
         $allRegistryData = $tfj->getAllRegistryData();
+        self::assertArrayHasKey('Addressbook', $allRegistryData, 'no Addressbook data found in registry: '
+            . print_r(array_keys($allRegistryData), true));
         $registryData = $allRegistryData['Addressbook'];
 
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
@@ -2214,10 +2109,11 @@ Steuernummer 33/111/32212";
     public function testCreateListWithMemberAndRole($listRoleName = 'my test role')
     {
         $contact = $this->_addContact();
-        $listRole = $this->_uit->saveListRole(array(
-            'name'          => $listRoleName,
-            'description'   => 'my test description'
-        ));
+        $listRole = $this->_uit->saveListRole([
+            Addressbook_Model_ListRole::FLD_NAME => $listRoleName,
+            Addressbook_Model_ListRole::FLD_DESCRIPTION => 'my test description',
+            Addressbook_Model_ListRole::FLD_MAX_MEMBERS => 1,
+        ]);
         $memberroles = array(array(
             'contact_id'   => $contact['id'],
             'list_role_id' => $listRole['id'],
@@ -2225,7 +2121,7 @@ Steuernummer 33/111/32212";
         $list = $this->_uit->saveList(array(
             'name'                  => 'my test list',
             'description'           => '',
-            'members'               => array($contact['id']),
+            'members'               => [$contact['id']],
             'memberroles'           => $memberroles,
             'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
         ));
@@ -2348,8 +2244,7 @@ Steuernummer 33/111/32212";
                 'related_degree' => 'sibling',
                 'related_model' => 'Addressbook_Model_List',
                 'related_backend' => 'Sql',
-                'related_id' => $relatedList['id'],
-                'related_record' => $relatedList
+                'related_id' => $relatedList['id']
             )
         );
         $list = $this->_uit->saveList($list);
@@ -2370,6 +2265,28 @@ Steuernummer 33/111/32212";
         $updatedList['email'] = 'somelistemailupdated@' . TestServer::getPrimaryMailDomain();
         $updatedListAgain = $this->_uit->saveList($updatedList);
         self::assertEquals($updatedList['email'], $updatedListAgain['email']);
+    }
+
+    public function testListMaxRoleMembers()
+    {
+        $list = $this->testCreateListWithMemberAndRole();
+        // try to add another contact with the same role
+        $contact2 = $this->_addContact();
+        $memberrole1 = $list['memberroles'][0];
+        $memberrole1['list_role_id'] = $memberrole1['list_role_id']['id'];
+        $memberrole1['contact_id'] = $memberrole1['contact_id']['id'];
+        $memberrole2 = $memberrole1;
+        unset($memberrole2['id']);
+        $memberrole2['contact_id'] = $contact2['id'];
+        $list['memberroles'] = [$memberrole1, $memberrole2];
+        $list['members'] = [$memberrole1['contact_id'], $contact2['id']];
+        try {
+            $list = $this->_uit->saveList($list);
+            self::fail('should not be possible to add another member with the same function/role: ' . print_r($list, true));
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translate = Tinebase_Translation::getTranslation('Addressbook');
+            self::assertStringContainsString($translate->_('Maximum number of role members reached'), $tesg->getMessage());
+        }
     }
 
     public function testUpdateListEmailOfSystemGroup()
@@ -2396,7 +2313,7 @@ Steuernummer 33/111/32212";
             $this->_uit->saveList($list);
             self::fail('jsmith should not be able to update the record');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::assertContains('permission', $tead->getMessage());
+            self::assertStringContainsString('permission', $tead->getMessage());
         }
 
         // give jsmith edit grant
@@ -2415,7 +2332,7 @@ Steuernummer 33/111/32212";
             $this->_uit->saveList($list);
             self::fail('jsmith should not be able to update the record');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::assertContains('ACCOUNTS', $tead->getMessage());
+            self::assertStringContainsString('ACCOUNTS', $tead->getMessage());
         }
     }
 
@@ -2596,41 +2513,6 @@ Steuernummer 33/111/32212";
         });
         self::assertEquals(0, count($listaccounts), 'found adb list account(s): '
             . print_r($listaccounts, true));
-    }
-
-    /**
-     * testSaveContactWithAreaLockedRelation
-     */
-    public function testSaveContactWithAreaLockedRelation()
-    {
-        // create contact with project relation
-        $contact = $this->testProjectRelationFilter();
-
-        // lock projects
-        $this->_createAreaLockConfig([
-            'area' => 'Projects'
-        ]);
-        Projects_Controller_Project::getInstance()->resetValidatedAreaLock();
-
-        // fetch & save contact again
-        $contactWithLockedProject = $this->_uit->getContact($contact['id']);
-        self::assertEquals(1, count($contactWithLockedProject['relations']));
-        self::assertFalse(isset($contactWithLockedProject['relations'][0]['related_record']));
-        self::assertEquals(Tinebase_Model_Relation::REMOVED_BY_AREA_LOCK,
-            $contactWithLockedProject['relations'][0]['record_removed_reason']);
-        $contactWithLockedProjectSaved = $this->_uit->saveContact($contactWithLockedProject);
-        self::assertEquals(1, count($contactWithLockedProjectSaved['relations']));
-
-        // unlock projects
-        $user = Tinebase_Core::getUser();
-        Tinebase_User::getInstance()->setPin($user, '1234');
-        Tinebase_AreaLock::getInstance()->unlock('Projects', '1234');
-
-        // save contact again
-        $contactWithUnlockedProjectSaved = $this->_uit->saveContact($contactWithLockedProjectSaved);
-        self::assertEquals(1, count($contactWithUnlockedProjectSaved['relations']),'project relation should not be removed!');
-        self::assertTrue(isset($contactWithUnlockedProjectSaved['relations'][0]['related_record']));
-        self::assertEquals('blabla', $contactWithUnlockedProjectSaved['relations'][0]['related_record']['description']);
     }
 
     public function testSetImage()

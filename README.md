@@ -3,7 +3,7 @@
 
 # Tine 2.0 - Community Edition
 
-Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](http://www.tine20.com).
+Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](https://www.tine20.com/en.html).
 
 ## Official Community resources
 * [Tine2.0 Contributors Guide](https://github.com/tine20/tine20/blob/master/CONTRIBUTING.md)
@@ -14,7 +14,6 @@ Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Bus
 * [Package Downloads](https://github.com/tine20/tine20/releases)
 * [Twitter](https://twitter.com/tine20org)
 * [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
-* [Gitter chat room](https://gitter.im/tine20/Lobby)
 
 ## Other Community resources
 * [all in one docker image - by talsen-team](https://github.com/talsen-team/docker-app--tine20)
@@ -56,8 +55,8 @@ who prefer stability and support over innovation we created our [Tine 2.0 Busine
 Once a year we take a subset of well proven and stable applications and features from our community edition and build
 a new major release of our business edition.
 
-Each [Tine 2.0 Business Edition](http://www.tine20.com) is maintained with security patches and bug fixes for at least two 
-years. Our [partners](https://www.tine20.com/partner/) offer a wide range of commercial support for different business needs.
+Each [Tine 2.0 Business Edition](https://www.tine20.com/en.html) is maintained with security patches and bug fixes for at least two 
+years. Our [partners](https://www.tine20.com/en/contact.html/) offer a wide range of commercial support for different business needs.
 
 ## Quickstart with Docker Compose
 
@@ -69,10 +68,10 @@ If you found any security relevant issue you can mail us [security@tine20.com](m
 
 ## Server Requirements
 * Webserver like [Apache](https://httpd.apache.org/), [Ngnix](https://www.nginx.com/), …
-* [MySQL](http://www.mysql.com/) >= 5.4 or [MariaDB](https://mariadb.org) >= 5.5 (mysql5.7 / mariadb 10.0 recommended)
-* [PHP](http://www.php.net/) 7.0 - 7.3, version 7.2 recommended.
-  + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring, intl, 
-  + Optional Extensions: Redis, LDAP, Memcache, bcmath (for ActiveDirectory)
+* [MySQL](http://www.mysql.com/) 5.6 - 8.0 or [MariaDB](https://mariadb.org) 10.0 - 10.4
+* [PHP](http://www.php.net/) 7.2 - 7.4
+  + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring, intl, yaml
+  + Optional Extensions: redis, ldap, bcmath (for ActiveDirectory)
 
 ## Licenses, Copyrights and Trademarks 
 Tine 2.0 - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.

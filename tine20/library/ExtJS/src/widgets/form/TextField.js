@@ -225,12 +225,14 @@ var myField = new Ext.form.NumberField({
         }
         if(this.grow){
         	this.mon(this.el, 'keyup', this.onKeyUpBuffered, this, {buffer: 50});
+        	this.mon(this.el, 'paste', this.onKeyUpBuffered, this, {buffer: 50});
 			this.mon(this.el, 'click', this.autoSize, this);
         }
         if(this.enableKeyEvents){
             this.mon(this.el, {
                 scope: this,
                 keyup: this.onKeyUp,
+                paste: this.onPaste,
                 keydown: this.onKeyDown,
                 keypress: this.onKeyPress
             });
@@ -294,6 +296,11 @@ var myField = new Ext.form.NumberField({
     },
 
     // private
+    onPaste: function(e){
+        this.fireEvent('paste', this, e);
+    },
+    
+    // private
     onKeyDown : function(e){
         this.fireEvent('keydown', this, e);
     },
@@ -314,7 +321,7 @@ var myField = new Ext.form.NumberField({
     },
 
     applyEmptyText : function(){
-        if(this.rendered && this.emptyText && this.getRawValue().length < 1 && !this.hasFocus){
+        if(this.rendered && this.el.dom && this.emptyText && this.getRawValue().length < 1 && !this.hasFocus){
             this.setRawValue(this.emptyText);
             this.el.addClass(this.emptyClass);
         }

@@ -27,8 +27,10 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      *
      * @access protected
      */
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         // always resolve customfields
         Addressbook_Controller_Contact::getInstance()->resolveCustomfields(TRUE);
 
@@ -43,13 +45,17 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      *
      * @access protected
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // cleanup
         if (file_exists($this->_filename) && $this->_deleteImportFile) {
             unlink($this->_filename);
         }
 
+        if ($this->_testContainer) {
+            Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'addressbook', 'container_id = "' .
+                $this->_testContainer->getId() . '"');
+        }
         parent::tearDown();
 
         Addressbook_Controller_Contact::getInstance()->duplicateCheckFields(Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_DUP_FIELDS));

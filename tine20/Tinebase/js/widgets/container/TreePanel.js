@@ -655,6 +655,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {Object} attr
      */
     onBeforeCreateNode: function(attr) {
+        attr.cls = attr.cls || '';
+        
         if (attr.accountDisplayName) {
             attr.name = attr.accountDisplayName;
             attr.path = '/personal/' + attr.accountId;
@@ -795,7 +797,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         ftb.filterStore.each(function(filter) {
             var field = filter.get('field');
             if (this.filtersToRemove.indexOf(field) > -1) {
-                ftb.deleteFilter(filter);
+                ftb.deleteFilter(filter, true);
             }
         }, this);
         ftb.supressEvents = false;

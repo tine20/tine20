@@ -203,9 +203,17 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         // add default prefs if not already in array (only if no name or type filters are set)
         if (! $_filter->isFilterSet('name') && ! $_filter->isFilterSet('type')) {
-            $missingDefaultPrefs = array_diff($allAppPrefs, $_prefs->name);
-            foreach ($missingDefaultPrefs as $prefName) {
-                $_prefs->addRecord($this->getApplicationPreferenceDefaults($prefName));
+            $dbPrefNames = $_prefs->name;
+            foreach($allAppPrefs as $prefName) {
+                $default = $this->getApplicationPreferenceDefaults($prefName);
+                if (($idx = array_search($prefName, $dbPrefNames)) !== false) {
+                    $_prefs[$idx]->options = $default->options;
+                    $_prefs[$idx]->uiconfig = $default->uiconfig;
+                    $_prefs[$idx]->recordConfig = $default->recordConfig;
+                    $_prefs[$idx]->personal_only = $default->personal_only;
+                } else {
+                    $_prefs->addRecord($default);
+                }
             }
         }
         // remove all prefs that are not defined
@@ -493,7 +501,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 throw new Tinebase_Exception_AccessDenied('You are not allowed to change the locked preference.');
             }
 
-            if ($_value === Tinebase_Model_Preference::DEFAULT_VALUE) {
+            if ($_value === Tinebase_Model_Preference::DEFAULT_VALUE || null === $_value) {
                 // delete if new value = use default
                 $this->delete($preference->getId());
                 $action = 'Reset';

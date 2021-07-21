@@ -13,8 +13,15 @@ class Admin_Setup_Update_13 extends Setup_Update_Abstract
 {
     const RELEASE013_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
+        self::PRIO_TINEBASE_STRUCTURE       => [
+            self::RELEASE013_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
+            ]
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE013_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
@@ -62,5 +69,16 @@ class Admin_Setup_Update_13 extends Setup_Update_Abstract
             }
         }
         $this->addApplicationUpdate('Admin', '13.1', self::RELEASE013_UPDATE001);
+    }
+
+    /**
+     * add JWTAccessRoutes model
+     */
+    public function update002()
+    {
+        Setup_SchemaTool::updateSchema([
+            Admin_Model_JWTAccessRoutes::class
+        ]);
+        $this->addApplicationUpdate('Admin', '13.2', self::RELEASE013_UPDATE002);
     }
 }

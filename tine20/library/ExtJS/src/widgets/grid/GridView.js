@@ -1290,6 +1290,9 @@ viewConfig: {
      * @param {Boolean} headersToo (optional) True to also refresh the headers
      */
     refresh : function(headersToo){
+        if (!this.grid) {
+            return;
+        }
         this.fireEvent('beforerefresh', this);
         this.grid.stopEditing(true);
 

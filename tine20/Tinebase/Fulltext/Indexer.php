@@ -2,22 +2,19 @@
 /**
  * Tine 2.0
  *
- * @package     Tinebase
- * @subpackage  Fulltext
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
- */
-
-/**
  * class to index text content
  *
  * @package     Tinebase
  * @subpackage  Fulltext
-
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Paul Mehrer <p.mehrer@metaways.de>
+ * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 class Tinebase_Fulltext_Indexer
 {
+    /**
+     * @var float|int
+     */
     protected $_maxBlobSize = 0;
 
     /**
@@ -70,20 +67,32 @@ class Tinebase_Fulltext_Indexer
             throw new Tinebase_Exception_NotImplemented('only Sql backend is implemented currently');
         }
 
+        $this->_maxBlobSize = self::getMaxBlobSize();
+    }
+
+    /**
+     * @return float|int
+     */
+    public static function getMaxBlobSize()
+    {
+        $maxBlobSize = 0;
+
         $db = Tinebase_Core::getDb();
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
             $logFileSize = (int) Tinebase_Core::getDbVariable('innodb_log_file_size', $db);
             if ($logFileSize > 0) {
-                $this->_maxBlobSize = round($logFileSize / 10);
+                $maxBlobSize = round($logFileSize / 10);
             }
             $maxPacketSize = (int) Tinebase_Core::getDbVariable('max_allowed_packet', $db);
-            if ($maxPacketSize > 0 && ($this->_maxBlobSize === 0 || $maxPacketSize < $this->_maxBlobSize)) {
-                $this->_maxBlobSize = $maxPacketSize;
+            if ($maxPacketSize > 0 && ($maxBlobSize === 0 || $maxPacketSize < $maxBlobSize)) {
+                $maxBlobSize = $maxPacketSize;
             }
-            if ($this->_maxBlobSize > 0) {
-                $this->_maxBlobSize -= 64*1024;
+            if ($maxBlobSize > 0) {
+                $maxBlobSize -= 64*1024;
             }
         }
+
+        return $maxBlobSize;
     }
 
     /**

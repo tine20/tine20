@@ -152,10 +152,10 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function update(Tinebase_Record_Interface $_task, $_duplicateCheck = true)
+    public function update(Tinebase_Record_Interface $_task, $_duplicateCheck = true, $_updateDeleted = false)
     {
         $this->_handleCompleted($_task);
-        return parent::update($_task, $_duplicateCheck);
+        return parent::update($_task, $_duplicateCheck, $_updateDeleted);
     }
     
     /**

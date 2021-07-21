@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Voipmanager_Backend_Snom_AbstractTest
  */
-abstract class Voipmanager_Backend_Snom_AbstractTest extends PHPUnit_Framework_TestCase
+abstract class Voipmanager_Backend_Snom_AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Fixtures
@@ -37,8 +37,8 @@ abstract class Voipmanager_Backend_Snom_AbstractTest extends PHPUnit_Framework_T
      * 
      * This method is called before a test is executed.
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // we need that because the voip db tables can have a different prefix
@@ -116,8 +116,8 @@ abstract class Voipmanager_Backend_Snom_AbstractTest extends PHPUnit_Framework_T
      * This method is called after a test is executed.
      *
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
 }

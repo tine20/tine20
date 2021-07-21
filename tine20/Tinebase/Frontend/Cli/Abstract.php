@@ -152,6 +152,73 @@ class Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * setContainerGrantsReadOnly
+     *
+     * - see setContainerGrants for filter params, application can be added via app=Addressbook
+     * - supports -v (verbose) and -d (dry-run) flags
+     * - sets all containers of all container-based models to read-only for all current grant-users of the container
+     * - default admin role gets admin grant for the containers
+     * - NOTE: this does not have an undo button!
+     * - HINT: use backup tine20_container_acl table first to be able to restore the previous acl:
+     *   $ mysqldump $DBCONNECT tine20 tine20_container_acl > $BACKUPFILE
+     *   $ mysql $DBCONNECT tine20 < $BACKUPFILE
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function setContainerGrantsReadOnly(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+        $data = $this->_parseArgs($_opts);
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
+        $containers = $this->_getContainers($data);
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $counter = 0;
+        foreach ($containers as $container) {
+            $currentGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($container, true);
+            if ($_opts->v) {
+                print_r($container->toArray());
+                print_r($currentGrants->toArray());
+            }
+            $newGrants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
+            foreach ($currentGrants as $grant) {
+                if ($grant->account_id === $adminGroup->getId()) {
+                    // skip
+                    continue;
+                }
+                $newGrants->addRecord(new Tinebase_Model_Grants([
+                    Tinebase_Model_Grants::GRANT_READ => true,
+                    Tinebase_Model_Grants::GRANT_SYNC => $grant->syncGrant || $grant->admitGrant,
+                    'account_type' => $grant->account_type,
+                    'account_id' => $grant->account_id,
+                ]));
+            }
+            $adminGrants = new Tinebase_Model_Grants([
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                'account_id' => $adminGroup->getId(),
+            ]);
+            $adminGrants->sanitizeAccountIdAndFillWithAllGrants();
+            $newGrants->addRecord($adminGrants);
+
+            if ($_opts->v) {
+                if ($_opts->d) {
+                    echo "[DRY-RUN]";
+                }
+                echo "Setting container " . $container->name . " (ID " . $container->getId() . ") to read-only for non-admins:\n";
+                print_r($newGrants->toArray());
+            }
+            if (! $_opts->d) {
+                Tinebase_Container::getInstance()->setGrants($container, $newGrants, true);
+            }
+            $counter++;
+        }
+        if ($_opts->d) {
+            echo "[DRY-RUN]";
+        }
+        echo "Updated grants for " . $counter . " containers.\n";
+        return 0;
+    }
+
+    /**
      * create demo data
      * 
      * example usages: 
@@ -324,9 +391,9 @@ class Tinebase_Frontend_Cli_Abstract
     protected function _getContainers($_params)
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        $containerFilterData = array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()),
-        );
+        $containerFilterData = [
+            ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()]
+        ];
 
         foreach (['id', 'name', 'type'] as $field) {
             if (isset($_params[$field])) {
@@ -409,6 +476,7 @@ class Tinebase_Frontend_Cli_Abstract
     
     /**
      * import records
+     * Usage example: php tine20.php --method Addressbook.import /path/to/import.vcf -- definition=adb_import_vcard
      *
      * @param Zend_Console_Getopt   $_opts
      * @return array import result
@@ -445,7 +513,8 @@ class Tinebase_Frontend_Cli_Abstract
             $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($args['model']);
             $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $args);
         } else {
-            echo "You need to define a plugin OR a definition OR a model at least! \n";
+            echo "You need to define a plugin OR a definition OR a model at least!\n";
+            echo "Usage example: php tine20.php --method Addressbook.import /path/to/import.vcf -- definition=adb_import_vcard\n";
             exit;
         }
         
@@ -628,7 +697,13 @@ class Tinebase_Frontend_Cli_Abstract
 
             $cronuser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_CRON);
             if ($cronuser) {
-                Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
+                try {
+                    Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                        throw $zdse;
+                    }
+                }
             }
         }
 
@@ -642,6 +717,7 @@ class Tinebase_Frontend_Cli_Abstract
      * @param string $_model
      * @param string $_exportClass
      * @return boolean
+     * @throws Tinebase_Exception_InvalidArgument
      *
      * TODO use Calendar_Export_VCalendarReport / Addressbook_Export_VCardReport here
      */
@@ -649,18 +725,25 @@ class Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($_opts);
 
-        // @todo implement
-        //   - allow to export all shared containers
-
-        if (isset($args['type']) && $args['type'] === 'personal') {
+        if (isset($args['type']) && in_array($args['type'], [
+            Tinebase_Model_Container::TYPE_PERSONAL,
+            Tinebase_Model_Container::TYPE_SHARED,
+        ])) {
             // get all containers of given type
-            $containers = Tinebase_Container::getInstance()->getPersonalContainer(
-                Tinebase_Core::getUser(),
-                $_model,
-                Tinebase_Core::getUser()
-            )->getArrayOfIds();
+            $containers = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter([
+                ['field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()
+                    ->getApplicationByName($this->_applicationName)->getId()],
+                ['field' => 'model', 'operator' => 'equals', 'value' => $_model],
+                ['field' => 'type', 'operator' => 'equals', 'value' => $args['type']],
+            ]))->getArrayOfIds();
         } else if (isset($args['container_id'])) {
             $containers = explode(',', $args['container_id']);
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('type (personal|shared) or container_id required');
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Got ' . count($containers) . ' containers for export');
         }
 
         foreach ($containers as $containerId) {
@@ -684,7 +767,18 @@ class Tinebase_Frontend_Cli_Abstract
     protected function _getVObjectExportFilename($container, $args, $extension)
     {
         $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
-        return $path . DIRECTORY_SEPARATOR . Tinebase_Core::getUser()->accountLoginName
+        if ($container->type === Tinebase_Model_Container::TYPE_SHARED) {
+            $owner = 'shared';
+        } else {
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserById($container->owner_id);
+                $owner = $user->accountLoginName;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $owner = $container->owner_id;
+            }
+        }
+
+        return $path . DIRECTORY_SEPARATOR . $owner
             // . '_' . $container->name
             . '_' . substr($container->getId(), 0, 8) . '.' . $extension;
     }
@@ -716,13 +810,30 @@ class Tinebase_Frontend_Cli_Abstract
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
             ['field' => 'container_id', 'operator' => 'equals', 'value' => $containerId],
         ]);
+
+        $this->_export($exportClass, $filter, $options);
+    }
+
+    protected function _export($exportClass, $filter = null, $options = [])
+    {
         $export = new $exportClass($filter, null, $options);
         $filename = $export->generate();
         if (! $filename) {
             // TODO refactor function signature - write does not write content to file but to stdout/browser
             $export->write();
         } else {
-            echo 'Exported container ' . $containerId . ' into file ' . $filename . "\n";
+            if (isset($options['fm_path'])) {
+                foreach ((array) $filename as $file) {
+                    $tempFile = Tinebase_TempFile::getInstance()->createTempFile($file);
+                    $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($options['fm_path'] ,
+                        Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+                    $targetPath = $nodePath->statpath . '/' . basename($file);
+                    Tinebase_FileSystem::getInstance()->copyTempfile($tempFile, $targetPath);
+                    echo 'Exported to Filemanager path ' . $options['fm_path'] . '/' . basename($file) ."\n";
+                }
+            } else {
+                echo 'Exported into file ' . $filename . "\n";
+            }
         }
     }
 }

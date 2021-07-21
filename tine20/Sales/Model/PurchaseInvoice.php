@@ -62,18 +62,6 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 ),
                 'jsConfig' => array('filtertype' => 'sales.supplier')
             ),
-            'costcenter' => array(
-                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
-                'label' => 'Cost Center', // _('Cost Center')
-                'options' => array(
-                    'controller'      => 'Sales_Controller_CostCenter',
-                    'filtergroup'     => 'Sales_Model_CostCenterFilter',
-                    'own_filtergroup' => 'Sales_Model_PurchaseInvoiceFilter',
-                    'own_controller'  => 'Sales_Controller_PurchaseInvoice',
-                    'related_model'   => 'Sales_Model_CostCenter',
-                ),
-                'jsConfig' => array('filtertype' => 'sales.contractcostcenter')
-            ),
             'approver' => array(
                 'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
                 'label' => 'Approver', // _('Approver')
@@ -95,9 +83,10 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'queryFilter' => TRUE,
             ),
             'description' => array(
-                'label'   => 'Description',     // _('Description')
-                'queryFilter' => TRUE,
-                'type' => 'fulltext'
+                self::LABEL         => 'Description', // _('Description')
+                self::TYPE          => self::TYPE_STRICTFULLTEXT,
+                self::VALIDATORS    => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::QUERY_FILTER  => TRUE,
             ),
             'date' => array(
                 'type'  => 'date',
@@ -170,7 +159,10 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'label' => 'Sales Tax', // _('Sales Tax')
                 'type'  => 'float',
                 'specialType' => 'percent',
-                'default' => 16,
+                'defaultConfig' => [
+                    'appName' => 'Tinebase',
+                    'config' => Tinebase_Config::SALES_TAX
+                ],
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),

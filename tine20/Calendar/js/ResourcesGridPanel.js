@@ -89,6 +89,13 @@ Tine.Calendar.ResourceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dataIndex: 'relations',
             renderer: Tine.Calendar.ResourceGridPanel.locationRenderer,
             sortable: false
+        }, {
+            id: 'color',
+            header: this.app.i18n._('Color'),
+            width: 30,
+            sortable: false,
+            renderer: Tine.Tinebase.common.colorRenderer,
+            dataIndex: 'color'
         }];
 
         Tine.Calendar.ResourceGridPanel.superclass.initComponent.call(this);

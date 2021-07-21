@@ -4,11 +4,10 @@
  * @package     MailFiler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Felamimail');
-
 /**
  * @param config
  * @constructor
@@ -179,6 +178,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             '</div>',
             '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, values)]}</div>',
             '<div class="preview-panel-felamimail-filelocations">{[this.showFileLocations(values)]}</div>',
+            '<div class="preview-panel-felamimail-preparedPart"></div>',
             '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
             '</div>',{
                 app: this.app,
@@ -243,14 +243,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 height = 500;
                             }
 
-                            // TODO fix linkify? this destroys the textarea
-                            /*
-                            Tine.Tinebase.common.linkifyText(body, function(linkified) {
-                                var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
-                                Ext.fly(bodyEl).update(linkified);
-                            }, this.panel);
-                            */
-
                             body = '<textarea ' +
                                 'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                                 'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
@@ -258,6 +250,11 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         } else if (messageData.body_content_type != 'text/html' || messageData.body_content_type_of_body_property_of_this_record == 'text/plain') {
                             // message content is text and account format non-text
                             body = Ext.util.Format.nl2br(body);
+                        } else {
+                            Tine.Tinebase.common.linkifyText(body, function(linkified) {
+                                var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
+                                Ext.fly(bodyEl).update(linkified);
+                            }, this.panel);
                         }
                     }
                     return body;
@@ -573,7 +570,70 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             Ext.fly(target).removeClass('tinebase-download-link-anim');
         }
 
-    }
+    },
+    
+    /**
+     * process spam strategy and refresh grid panel
+     *
+     * @param option
+     */
+    processSpamStrategy: async function (option) {
+        this.spamToolbar.hide();
+        this.messageRecordPanel.doLayout();
+        await this.app.getMainScreen().getCenterPanel().processSpamStrategy(option);
+    },
+
+    /**
+     * show spam toolbar
+     *
+     * @param record
+     */
+    showSpamToolbar: function (record) {
+        
+        if (!this.spamToolbar) {
+            this.spamToolbar = new Ext.Toolbar({
+                items: [{
+                        xtype: 'tbtext',
+                        text: this.app.i18n._('This message is probably SPAM. Please help to train your anti-SPAM system with a decision: "Yes, it is SPAM" or "No, it is not"')
+                    },
+                    '->',
+                    {
+                        iconCls: 'action_about',
+                        handler: () => {
+                            Ext.Msg.alert(
+                                this.app.i18n._('Confirm SPAM Suspicion'),
+                                Tine.Tinebase.configManager.get('spamInfoDialogContent', 'Felamimail')
+                            );
+                        }
+                    }, {
+                        xtype: 'tbspacer', width: 20
+                    }, {
+                        iconCls: 'felamimail-action-spam',
+                        text: this.app.i18n._('Yes, it is SPAM'),
+                        handler: this.processSpamStrategy.bind(this, 'spam'),
+                    }, {
+                        iconCls: 'felamimail-action-ham',
+                        text: this.app.i18n._('No, it is not'),
+                        handler: this.processSpamStrategy.bind(this, 'ham'),
+                    }]
+            })
+
+            this.messageRecordPanel.add(this.spamToolbar);
+        }
+        
+        if(record.get('is_spam_suspicions')) {
+            const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(record.get('account_id'));
+            const folder = this.app.getFolderStore().getById(record.get('folder_id'));
+
+            if (folder && account) {
+                this.spamToolbar.show();
+            }
+        } else {
+            this.spamToolbar.hide();
+        }
+        
+        this.messageRecordPanel.doLayout();
+    },
 });
 
 Ext.reg('felamimaildetailspanel', Tine.Felamimail.MailDetailsPanel);

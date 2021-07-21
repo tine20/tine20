@@ -197,8 +197,8 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     alternateIncrementValue: 1,
                                     minValue: 1,
                                     maxValue: 4294967296,
-                                    allowDecimals : false
-                                })
+                                }),
+                                allowDecimals : false,
                             }, {
                                 columnWidth: .750,
                                 allowBlank: false,
@@ -247,8 +247,8 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     alternateIncrementValue: 1,
                                     minValue: 0,
                                     maxValue: 1024,
-                                    allowDecimals : false
-                                })
+                                }),
+                                allowDecimals : false,
                             }], [{
                                 name: 'currency',
                                 fieldLabel: this.app.i18n._('Currency'),
@@ -262,10 +262,9 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     incrementValue : 0.01,
                                     alternateIncrementValue: 0.1,
                                     minValue: 0.01,
-                                    allowDecimals : true
                                 }),
+                                allowDecimals : true,
                                 decimalPrecision: 2,
-                                decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
                             }], [{
                                 name: 'iban',
                                 fieldLabel: this.app.i18n._('IBAN')
@@ -281,8 +280,8 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     alternateIncrementValue: 1,
                                     minValue: 0,
                                     maxValue: 100,
-                                    allowDecimals : true
                                 }),
+                                allowDecimals : true,
                                 decimalPrecision: 1,
                                 decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
                             }, {

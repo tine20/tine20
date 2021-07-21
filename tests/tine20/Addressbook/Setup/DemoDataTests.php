@@ -14,23 +14,23 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * 
  * @package     Addressbook
  */
-class Addressbook_Setup_DemoDataTests extends PHPUnit_Framework_TestCase
+class Addressbook_Setup_DemoDataTests extends \PHPUnit\Framework\TestCase
 {
     /**
      * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
+     * @see \PHPUnit\Framework\TestCase::setUp()
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
          Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 
     /**
      * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::tearDown()
+     * @see \PHPUnit\Framework\TestCase::tearDown()
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
          Tinebase_TransactionManager::getInstance()->rollBack();
     }
     

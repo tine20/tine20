@@ -43,7 +43,6 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     allowBlank: false,
     triggerAction: 'all',
     itemSelector: 'div.search-item',
-    minChars: 3,
 
     forceSelection: true,
     minListWidth: 400,

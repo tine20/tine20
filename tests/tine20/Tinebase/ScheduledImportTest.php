@@ -28,8 +28,8 @@ class Tinebase_ScheduledImportTest extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_testCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
         $this->_uit = Tinebase_Controller_ScheduledImport::getInstance();

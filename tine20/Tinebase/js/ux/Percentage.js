@@ -162,7 +162,7 @@ Ext.ux.PercentRenderer = function(percent) {
 Ext.ux.PercentRendererWithName = function(value, metadata, record) {
   
     var metaStyle = '',
-        dataSafeEnabled = Tine.Tinebase.areaLocks.hasLock('Tinebase.datasafe');
+        dataSafeEnabled = !!Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length;
 
     if(record.fileRecord) {
         record = record.fileRecord;
@@ -170,18 +170,14 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
 
     metadata.css = 'x-grid-mimeicon';
 
-    if(record.get('type') == 'folder') {
-
+    if(record.get('type') === 'folder') {
         metadata.css += ' mime-icon-folder';
+        
         if (dataSafeEnabled && !!record.get('pin_protected_node')) {
             metadata.css += ' x-type-data-safe'
         }
 
-    }else if(record.get('is_quarantined') == '1') {
-
-        metadata.css = 'x-tinebase-virus';
-    }
-    else {
+    } else {
         metadata.css += ' mime-icon-file';
 
         var contenttype =  record.get('contenttype');
@@ -189,10 +185,14 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
             metadata.css += ' ' + Tine.Tinebase.common.getMimeIconCls(contenttype);
         }
     }
-    
-    
-    if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
 
+    if (Tine.Tinebase.common.hasRight('run', 'Filemanager')) {
+        metadata.css += ' ' + Tine.Filemanager.Model.Node.getStyles(record).join(' ');
+    }
+    
+    // all browsers should support chunk upload
+    /*
+    if (!Ext.ux.file.Upload.isHtml5ChunkedUpload()) {
         var fileName = value;
         if (typeof value == 'object') {
             fileName = value.name;
@@ -204,6 +204,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         
         return Ext.util.Format.htmlEncode(fileName);
     }
+    */
     
     if (! Ext.ux.PercentRendererWithName.template) {
         Ext.ux.PercentRendererWithName.template = new Ext.XTemplate(
@@ -232,10 +233,35 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
         fileName = value.name;
     }
     fileName = Ext.util.Format.htmlEncode(fileName);
-    var percent = record.get('progress');
+    
+    if (_.get(record, 'data.type', _.get(record, 'type')) === 'link') {
+        fileName = '<div class="mime-icon-overlay mime-icon-link"></div>' + fileName;
+    }
+    
+    if(record.get('is_quarantined') == '1') {
+        const warningText = i18n._('This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded.');
+        fileName = '<div class="mime-icon-overlay x-tinebase-virus" ext:qtip="'+ Tine.Tinebase.common.doubleEncode(warningText) +'"></div>' + fileName + ' (' + i18n._('quarantined') + ')';
+    }
 
+    if (_.get(record, 'data.type', _.get(record, 'type')) === 'link') {
+        fileName = '<div class="mime-icon-overlay mime-icon-link"></div>' + fileName;
+    }
+
+    // check contenttype and get info , update ui based on it
+    
+    let percent = -1;
+    
+    if (String(record.get('contenttype')).match(/^vnd\.adobe\.partial-upload.*/)) {
+        const progress = parseInt(_.last(_.split(record.get('contenttype'), ';')).replace('progress=', ''));
+        if(progress > -1) {
+            percent = progress;
+        }
+    } else {
+        percent = record.get('progress');
+    }
+    
     var additionalStyle = '';
-    if(record.get('status') == 'paused' && percent < 100) {
+    if(record.get('status') === 'paused' && percent < 100) {
         fileName = i18n._('(paused)') + '&#160;&#160;' + fileName;
         additionalStyle = 'background-image: url(\'styles/images/tine20/progress/progress-bg-y.gif\') !important;';
     }

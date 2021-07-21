@@ -30,11 +30,15 @@ if (!window.Promise) {
         });
     }, 2000);
 } else {
-    require.ensure(['Tinebase.js'], function () {
-        var libs = require('Tinebase.js');
+    try {
+        require.ensure(['Tinebase.js'], function () {
+            var libs = require('Tinebase.js');
 
-        libs.lodash.assign(window, libs);
-        require('tineInit');
-    }, 'Tinebase/js/Tinebase');
+            libs.lodash.assign(window, libs);
+            require('tineInit');
+        }, 'Tinebase/js/Tinebase');
+    } catch (e) {
+        window.location.reload(true);
+    }
 }
 

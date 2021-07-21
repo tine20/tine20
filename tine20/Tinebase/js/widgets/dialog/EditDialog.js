@@ -244,6 +244,22 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     useMultiple: false,
 
+    inheritableStatics: {
+        /**
+         * register checkState provider
+         * @param {String} field
+         * @param {Funciton} fn check state function
+         */
+        registerCheckStateProvider: function(field, fn) {
+            arguments.callee.__providers = arguments.callee.__providers || {};
+            arguments.callee.__providers[field] = arguments.callee.__providers[field] || [];
+            arguments.callee.__providers[field].push(fn);
+        },
+        getCheckStateProviders(field) {
+            return _.get(this, `registerCheckStateProvider.__providers.${field}`, []);
+        }
+    },
+    
     //private
     initComponent: function() {
         this.relationPanelRegistry = this.relationPanelRegistry ? this.relationPanelRegistry : [];
@@ -363,10 +379,19 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
         // added possibility to disable using customfield plugin
         if (this.disableCfs !== true) {
-            this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+            const cfPlugin = new Tine.widgets.customfields.EditDialogPlugin({});
+            this.plugins.push(cfPlugin);
+            this.initPlugin(cfPlugin);
+            
         }
         Ext.ux.pluginRegistry.addRegisteredPlugins(this);
 
+        // multiEditPlugin need to load before record is initialised
+        const multiEditPlugin = _.find(this.plugins, { ptype: "multiple_edit_dialog"});
+        if (multiEditPlugin) {
+            this.initPlugin(multiEditPlugin);
+        }
+        
         // init actions
         this.initActions();
         // init buttons and tbar
@@ -448,6 +473,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             },
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
             }],
             items:[
                 {
@@ -562,10 +590,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         var foreignRecordClass = this.recordClass.getField(key).type;
                         var record = new foreignRecordClass(value);
                         field.selectedRecord = record;
-                        field.setValue(value);
+                        field.setValue(value, this.record);
                         field.fireEvent('select');
                     } else {
-                        field.setValue(value);
+                        field.setValue(value, this.record);
                     }
                     field.disable();
                 }
@@ -584,6 +612,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.getForm().items.each(function (item) {
             if (Ext.isFunction(item.checkState)) {
                 item.checkState(this, this.record);
+            }
+            if (item.name) {
+                _.each(this.constructor.getCheckStateProviders(item.name), (fn) => {
+                    fn.call(item, this, this.record);
+                });
             }
         }, this)
     },
@@ -937,7 +970,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Tine.log.debug(this.record);
 
 
-        if (!this.record.id || !_.get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
+        if (!this.record.id || this.recordClass.getMeta('containerProperty') && !_.get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
             _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
@@ -1036,7 +1069,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         // force set last selected field
                         this.getForm().items.each(function(item) {
                             if (item.hasFocus) {
-                                item.setValue(item.getRawValue());
+                                item.setValue(item.getRawValue(), this.record);
                             }
                         }, this);
                     }

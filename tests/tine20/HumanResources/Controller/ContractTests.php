@@ -87,7 +87,7 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
 
         // LAST ASSERTION, do not add assertions after an expected Exception, they won't be executed
 
-        $this->setExpectedException('HumanResources_Exception_ContractNotEditable');
+        $this->expectException('HumanResources_Exception_ContractNotEditable');
 
         $contract2->feast_calendar_id = $newCalendar->getId();
         $contract2 = $contractController->update($contract2);

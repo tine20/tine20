@@ -122,42 +122,52 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         this.stateId = 'ux.popupwindow-' + this.contentPanelConstructor;
         this.on('resize', this.saveState, this, {delay:100});
 
-        // M$ IE has its internal location bar in the viewport
-        if (Ext.isIE) {
-            this.height += 20;
-        }
-
-        // chrome counts window decoration and location bar to window height
-        if (Ext.isChrome) {
-            this.height += 40;
-        }
+        // window decoration and location bar count to window height
+        this.height += 20;
 
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
-
-        //limit the window size
-        this.width = Math.min(screen.availWidth, this.width);
-        this.height = Math.min(screen.availHeight, this.height);
     },
 
     render: function() {
         // open popup window first to save time
         if (! this.popup) {
             try {
+                // NOTE: safaris devicePixelRatio is always 2 and does not change with zoom-level 
+                this.evalDevicePixelRatio = !Ext.isSafari;
+                
+                // NOTE: FF scales windows itself -> no need for adoption
+                // NOTE: Chrome/FF on MacOS with retina display have their devicePixelRatio multiplied by 2
+                //       what about mac-mini? -> pls. report
+                const devicePixelRatio = Ext.isGecko ? 1 : (window.devicePixelRatio / (Ext.isMac ? 2 : 1));
+                if (this.evalDevicePixelRatio && devicePixelRatio) {
+                    this.width = Math.round(this.width * devicePixelRatio);
+                    this.height = Math.round(this.height * devicePixelRatio);
+                }
+
+                //limit the window size
+                this.width = Math.min(screen.availWidth, this.width);
+                this.height = Math.min(screen.availHeight, this.height);
+                
                 this.popup = this.openWindow(this.name, this.url, this.width, this.height);
+                
                 if (this.noParent) {
                     this.popup.opener = null;
                 }
             } catch (e) {
-                return Ext.MessageBox.alert(
-                    i18n._('Cannot open new window'),
-                    String.format(i18n._('A new window cannot be opened. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
-                    function () {
-                        this.render()
-                    }.bind(this)
-                );
+                this.popup = null;
             }
         }
 
+        if (! this.popup) {
+            return Ext.MessageBox.alert(
+                i18n._('Cannot open new window'),
+                String.format(i18n._('An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}'), Tine.title),
+                function () {
+                    this.render();
+                }.bind(this)
+            );
+        }
+        
         //. register window ( in fact register complete PopupWindow )
         this.windowManager.register(this);
 
@@ -168,27 +178,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
                 e.returnValue = '';
             }
         }, this));
-
-        // does not work on reload!
-        //this.popup.PopupWindow = this;
-
-        // strange problems in FF
-        //this.injectFramework(this.popup);
-
-        // NOTE: Do not register unregister with this events,
-        //       as it would be broken on window reloads!
-        /*
-         if (this.popup.addEventListener) {
-         this.popup.addEventListener('load', this.onLoad, true);
-         this.popup.addEventListener('unload', this.onClose, true);
-         } else if (this.popup.attachEvent) {
-         this.popup.attachEvent('onload', this.onLoad);
-         this.popup.attachEvent('onunload', this.onClose);
-         } else {
-         this.popup.onload = this.onLoad;
-         this.popup.onunload = this.onClose;
-         }
-         */
     },
 
     /**
@@ -200,64 +189,34 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      * @param height
      */
     openWindow: function (windowName, url, width, height) {
-        var dualScreenLeft,
-            dualScreenTop,
-            w,
-            h,
-            left,
-            top,
-            popup;
-
         windowName = Ext.isString(windowName) ? windowName.replace(/[^a-zA-Z0-9_]/g, '') : windowName;
 
         // thanks to http://www.nigraphic.com/blog/java-script/how-open-new-window-popup-center-screen
 
         // Determine offsets in case of dualscreen
-        dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-        dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+        const dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+        const dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
 
         // Window should be opened on mid of tine window
-        w = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-        h = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+        const w = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        const h = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
 
         // Determine correct left and top values including dual screen setup
-        left = ((w / 2) - (width / 2)) + dualScreenLeft;
-        top = ((h / 2) - (height / 2)) + dualScreenTop;
+        const left = ((w / 2) - (width / 2)) + dualScreenLeft;
+        const top = ((h / 2) - (height / 2)) + dualScreenTop;
 
-        try {
-            popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left +
-                ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
-        }
-        catch(e) {
-            Tine.log.info('window.open Exception: ');
-            Tine.log.info(e);
-
-            popup = null;
-
-        }
-
-        if (! popup) {
-            var openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + top + ",left=" + left +
-                ",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
-
-            var exception = {
-                openCode: openCode,
-                popup: null
-            };
-
-            Tine.log.error('could not open popup window. openCode: ' + openCode);
-            throw exception;
-        }
-
-        return popup;
-
+        return popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left +
+            ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
     },
 
     getState : function() {
-        return {
+        // NOTE: innerWidth/Height is the original dimension without scaling
+        // NOTE: FF does auto scaling!
+        const state = {
             width: this.popup.innerWidth,
             height: this.popup.innerHeight
         };
+        return state;
     },
 
     // state might have tiny window (e.g. because of small beamer attached)
@@ -330,8 +289,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     onLoad: function() {
         this.Ext.onReady(function() {
             this.navigateBackOnClose = this.popup.history.length > 1;
-            //console.log(this);
-            //console.log(window);
         }, this);
     },
     

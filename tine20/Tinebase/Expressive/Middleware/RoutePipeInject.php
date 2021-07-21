@@ -9,9 +9,10 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-use \Interop\Http\Server\RequestHandlerInterface;
-use \Interop\Http\Server\MiddlewareInterface;
+use \Psr\Http\Server\RequestHandlerInterface;
+use \Psr\Http\Server\MiddlewareInterface;
 use \Psr\Http\Message\ServerRequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 
 /**
  * expressive route pipe injection middleware, reads matched route for additional middleware to pipe
@@ -26,11 +27,11 @@ class Tinebase_Expressive_Middleware_RoutePipeInject implements MiddlewareInterf
      * to the next middleware component to create the response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Interop\Http\Server\RequestHandlerInterface $delegate
+     * @param \Psr\Http\Server\RequestHandlerInterface $delegate
      * @throws Tinebase_Exception_UnexpectedValue
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . ' processing...');
@@ -46,9 +47,7 @@ class Tinebase_Expressive_Middleware_RoutePipeInject implements MiddlewareInterf
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' injecting: ' . print_r($pipeInjectData, true));
 
-            $responsePrototype = new \Zend\Diactoros\Response();
             $middleWarePipe = new \Zend\Stratigility\MiddlewarePipe();
-            $middleWarePipe->setResponsePrototype($responsePrototype);
 
             // add dynamic middleware here
             foreach ($pipeInjectData as $pIData) {
@@ -59,9 +58,7 @@ class Tinebase_Expressive_Middleware_RoutePipeInject implements MiddlewareInterf
                 }
             }
 
-            return $middleWarePipe($request, $responsePrototype, function($request) use ($delegate) {
-                return $delegate->handle($request);
-            });
+            return $middleWarePipe->process($request, $delegate);
         } else {
             return $delegate->handle($request);
         }

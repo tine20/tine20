@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Addressbook_Frontend_WebDAV_Container
  */
-class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
+class Addressbook_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook WebDAV Container Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook WebDAV Container Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
@@ -62,8 +62,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
         
         Tinebase_TransactionManager::getInstance()->rollBack();
@@ -138,8 +138,8 @@ class Addressbook_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCa
         
         $vcard = stream_get_contents($contact->get());
         
-        $this->assertContains('TEL;TYPE=WORK:+49 BUSINESS', $vcard);
-        $this->assertContains('CATEGORIES:CATEGORY', $vcard);
+        $this->assertStringContainsString('TEL;TYPE=WORK:+49 BUSINESS', $vcard);
+        $this->assertStringContainsString('CATEGORIES:CATEGORY', $vcard);
         
         return $contact;
     }    

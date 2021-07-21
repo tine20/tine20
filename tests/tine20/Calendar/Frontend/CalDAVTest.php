@@ -157,7 +157,7 @@ class Calendar_Frontend_CalDAVTest extends TestCase
     {
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
-        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $collection->createFile('foobar');
     }

@@ -26,8 +26,8 @@ abstract class Admin_Frontend_TestCase extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_json = new Admin_Frontend_Json();
@@ -38,8 +38,8 @@ abstract class Admin_Frontend_TestCase extends TestCase
         ));
     }
     
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false);
     }
@@ -53,17 +53,28 @@ abstract class Admin_Frontend_TestCase extends TestCase
         );
     }
 
+    /**
+     * @return array
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
     protected function _createGroup()
     {
-        $group = new Tinebase_Model_Group(array(
-            'name'          => 'tine20phpunitgroup',
-            'description'   => 'initial group',
-            'members'       => [],
-        ));
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
-            $group->container_id = $this->_getInternalAddressbook()->getId();
+        try {
+            $group = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup');
+            $groupArray = $this->_json->getGroup($group->getId());
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            $group = new Tinebase_Model_Group(array(
+                'name'          => 'tine20phpunitgroup',
+                'description'   => 'initial group',
+                'members'       => [],
+            ));
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $group->container_id = $this->_getInternalAddressbook()->getId();
+            }
+            $groupArray = $this->_json->saveGroup($group->toArray());
         }
-        $groupArray = $this->_json->saveGroup($group->toArray());
+
         $this->_groupIdsToDelete[] = $groupArray['id'];
         return $groupArray;
     }

@@ -26,7 +26,15 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_applicationName = 'Filemanager';
-    
+
+    /**
+     * All configured models
+     * @var array
+     */
+    protected $_configuredModels = [
+        'Node',
+    ];
+
     /**
      * search file/directory nodes
      *
@@ -144,7 +152,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function moveNodes($sourceFilenames, $destinationFilenames, $forceOverwrite)
     {
         $nodes = Filemanager_Controller_Node::getInstance()->moveNodes((array)$sourceFilenames, $destinationFilenames, $forceOverwrite);
-        
+
         return $this->_multipleRecordsToJson($nodes);
     }
 
@@ -214,6 +222,23 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {    // on upload complete
             return $recordData;
         }
+    }
+
+    /**
+     * @param string $id
+     * @param array $filter
+     * @return array
+     * @throws Filemanager_Exception_Quarantined
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getParentNodeByFilter($id, $filter)
+    {
+        $filter = $this->_decodeFilter($filter, Filemanager_Model_NodeFilter::class);
+
+        $controller = Filemanager_Controller_Node::getInstance();
+        $childNode = $controller->get($id);
+        return $this->_recordToJson($controller->getParentByFilter($childNode, $filter));
     }
     
     /**

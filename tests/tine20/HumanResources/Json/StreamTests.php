@@ -18,8 +18,8 @@ use HumanResources_Model_StreamModality as StreamModality;
  */
 class HumanResources_Json_StreamTests extends HumanResources_TestCase
 {
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_uit = new HumanResources_Frontend_Json();
 
         parent::setUp();
@@ -40,6 +40,8 @@ class HumanResources_Json_StreamTests extends HumanResources_TestCase
             Stream::FLD_STREAM_MODALITIES => [
                 [
                     StreamModality::FLD_START => Tinebase_DateTime::now()->toString('Y-m-d'),
+                    // set end date to test filtering
+                    StreamModality::FLD_END => Tinebase_DateTime::now()->addWeek(10)->toString('Y-m-d'),
                     StreamModality::FLD_INTERVAL => StreamModality::INT_WEEKLY,
                     StreamModality::FLD_NUM_INTERVAL => 10,
                     StreamModality::FLD_HOURS_INTERVAL => 16,

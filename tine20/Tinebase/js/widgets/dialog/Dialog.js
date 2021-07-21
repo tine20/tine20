@@ -79,15 +79,30 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
             handler: this.onButtonApply,
             iconCls: 'action_saveAndClose'
         }];
-
+        
         Tine.Tinebase.dialog.Dialog.superclass.initComponent.call(this);
     },
 
+    onWindowInject: function(win) {
+        win.onEsc = _.bind(this.onButtonCancel, this);
+    },
+    
+    afterRender: function() {
+        Tine.Tinebase.dialog.Dialog.superclass.afterRender.call(this);
+        
+        if (this.enableKeyEvents) {
+            this.getEl().on('keydown', (e) => {
+                if (e.getKey() === e.ENTER) this.onButtonApply();
+                if (e.getKey() === e.ESC) this.onButtonCancel();
+            });
+        }
+    },
+    
     /**
      * template fn, implement to have specific data in the events
      */
     getEventData: Ext.emptyFn,
-
+    
     onButtonCancel: function() {
         this.fireEvent.apply(this, ['cancel', this.getEventData('cancel')]);
         if (this.window.closeAction !== 'hide') {

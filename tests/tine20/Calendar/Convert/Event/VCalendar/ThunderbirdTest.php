@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_S
 /**
  * Test class for Calendar_Convert_Event_VCalendar_Thunderbird
  */
-class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends PHPUnit_Framework_TestCase
+class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * test converting vcard from sogo connector to Calendar_Model_Event 

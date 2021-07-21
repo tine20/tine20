@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 /**
  * Test class for Tasks_Frontend_WebDAV_Container
  */
-class Tasks_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
+class Tasks_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Tasks_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Tasks WebDAV Container Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tasks WebDAV Container Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Tasks_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -65,8 +65,8 @@ class Tasks_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
     

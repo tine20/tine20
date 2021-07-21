@@ -389,7 +389,7 @@ var form = new Ext.form.FormPanel({
      * @return {Boolean} True if the value is valid, else false
      */
     isValid : function(preventMark){
-        if(this.disabled){
+        if(this.disabled || this.hidden || this.readOnly){
             return true;
         }
         var restore = this.preventMark;
@@ -404,7 +404,7 @@ var form = new Ext.form.FormPanel({
      * @return {Boolean} True if the value is valid, else false
      */
     validate : function(){
-        if(this.disabled || this.validateValue(this.processValue(this.getRawValue()))){
+        if(this.disabled || this.hidden || this.readOnly || this.validateValue(this.processValue(this.getRawValue()))){
             this.clearInvalid();
             return true;
         }
@@ -518,7 +518,7 @@ var form = new Ext.form.FormPanel({
      * @return {Mixed} value The field value
      */
     getRawValue : function(){
-        var v = this.rendered ? this.el.getValue() : Ext.value(this.value, '');
+        var v = this.rendered ? this.el.getValue() || "" : Ext.value(this.value, '');
         if(v === this.emptyText){
             v = '';
         }
@@ -546,7 +546,7 @@ var form = new Ext.form.FormPanel({
      * @return {Mixed} value The field value that is set
      */
     setRawValue : function(v){
-        return this.rendered ? (this.el.dom.value = (Ext.isEmpty(v) ? '' : v)) : '';
+        return this.rendered && this.el.dom ? (this.el.dom.value = (Ext.isEmpty(v) ? '' : v)) : '';
     },
 
     /**

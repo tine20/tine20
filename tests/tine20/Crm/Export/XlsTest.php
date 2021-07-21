@@ -35,7 +35,7 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm_Export_XlsTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Crm_Export_XlsTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -46,8 +46,8 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_instance = Tinebase_Export::factory(new Crm_Model_LeadFilter($this->_getLeadFilter()), 'xls');
         parent::setUp();
     }

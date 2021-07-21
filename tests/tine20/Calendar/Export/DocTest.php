@@ -158,11 +158,11 @@ class Calendar_Export_DocTest extends Calendar_TestCase
 
         $plain = $this->getPlainTextFromDocx($doc);
 
-        static::assertContains($event->summary, $plain);
-        static::assertContains($event->customfields['testCF'], $plain);
-        static::assertContains($cfc->definition->label, $plain);
+        static::assertStringContainsString($event->summary, $plain);
+        static::assertStringContainsString($event->customfields['testCF'], $plain);
+        static::assertStringContainsString($cfc->definition->label, $plain);
         $relatedRecord = new Addressbook_Model_Contact($event->relations[0]['related_record'], true);
-        static::assertContains($relatedRecord->getTitle(), $plain);
+        static::assertStringContainsString($relatedRecord->getTitle(), $plain);
     }
 
     public function testFileNameTemplate()

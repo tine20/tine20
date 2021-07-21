@@ -74,6 +74,15 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
                 $this->_fields[] = $column->identifier;
             }
         }
+
+        if ($this->_hasTwig()) {
+            $this->_dumpRecords = false;
+        }
+    }
+
+    public function generateToStream($stream)
+    {
+        $this->generate($stream);
     }
 
     /**

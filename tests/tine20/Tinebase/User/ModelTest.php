@@ -20,7 +20,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_User_Model_*
  */
-class Tinebase_User_ModelTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_ModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -35,7 +35,7 @@ class Tinebase_User_ModelTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_ModelTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_User_ModelTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -45,8 +45,8 @@ class Tinebase_User_ModelTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->objects['account'] = Zend_Registry::get('currentAccount');
     }
 
@@ -56,8 +56,8 @@ class Tinebase_User_ModelTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
     }
 
     /**

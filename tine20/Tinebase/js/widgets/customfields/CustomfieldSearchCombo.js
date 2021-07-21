@@ -44,7 +44,6 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
      */
     forceSelection: false,
     triggerAction: 'all',
-    minChars: 1,
     pageSize: 50,
     displayField: 'value',
     valueField: 'value',

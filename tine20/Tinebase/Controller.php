@@ -43,7 +43,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     protected $_applicationName = 'Tinebase';
     
     protected $_writeAccessLog;
-    
+
+    protected $_forceUnlockLoginArea = false;
+
+    public function forceUnlockLoginArea(bool $bool = true)
+    {
+        $this->_forceUnlockLoginArea = $bool;
+    }
+
     /**
      * the constructor
      *
@@ -140,6 +147,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return true;
     }
 
+    protected function _throwMFAException(Tinebase_Model_AreaLockConfig $config, Tinebase_Record_RecordSet $feCfg)
+    {
+        $e = new Tinebase_Exception_AreaLocked('mfa required');
+        $e->setArea($config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+        $e->setMFAUserConfigs($feCfg);
+        throw $e;
+    }
+
     /**
      * create new user session (via openID connect)
      *
@@ -161,6 +176,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         $adapterName = $ssoConfig->{Tinebase_Config::SSO_ADAPTER};
+        /** @var Tinebase_Auth_OpenIdConnect $authAdapter */
         $authAdapter = Tinebase_Auth_Factory::factory($adapterName);
         $authAdapter->setOICDResponse($oidcResponse);
         $authResult = $authAdapter->authenticate();
@@ -450,69 +466,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             __METHOD__ . '::' . __LINE__ . ' Auth result messages: ' . print_r($authResult->getMessages(), TRUE));
 
         Tinebase_AccessLog::getInstance()->create($accessLog);
-    }
-    
-     /**
-     * renders and send to browser one captcha image
-     *
-     * @return array
-     */
-    public function makeCaptcha()
-    {
-        return $this->_makeImage();
-    }
-
-    /**
-     * renders and send to browser one captcha image
-     *
-     * @return array
-     */
-    protected function _makeImage()
-    {
-        $result = array();
-        $width='170';
-        $height='40';
-        $characters= mt_rand(5,7);
-        $possible = '123456789aAbBcCdDeEfFgGhHIijJKLmMnNpPqQrRstTuUvVwWxXyYZz';
-        $code = '';
-        $i = 0;
-        while ($i < $characters) {
-            $code .= substr($possible, mt_rand(0, strlen($possible)-1), 1);
-            $i++;
-        }
-        $font = './fonts/Milonga-Regular.ttf';
-        /* font size will be 70% of the image height */
-        $font_size = $height * 0.67;
-        try {
-            $image = @imagecreate($width, $height);
-            /* set the colours */
-            $text_color = imagecolorallocate($image, 20, 40, 100);
-            $noise_color = imagecolorallocate($image, 100, 120, 180);
-            /* generate random dots in background */
-            for( $i=0; $i<($width*$height)/3; $i++ ) {
-                imagefilledellipse($image, mt_rand(0,$width), mt_rand(0,$height), 1, 1, $noise_color);
-            }
-            /* generate random lines in background */
-            for( $i=0; $i<($width*$height)/150; $i++ ) {
-                imageline($image, mt_rand(0,$width), mt_rand(0,$height), mt_rand(0,$width), mt_rand(0,$height), $noise_color);
-            }
-            /* create textbox and add text */
-            $textbox = imagettfbbox($font_size, 0, $font, $code);
-            $x = ($width - $textbox[4])/2;
-            $y = ($height - $textbox[5])/2;
-            imagettftext($image, $font_size, 0, $x, $y, $text_color, $font , $code);
-            ob_start();
-            imagejpeg($image);
-            $image_code = ob_get_contents ();
-            ob_end_clean();
-            imagedestroy($image);
-            $result = array();
-            $result['1'] = base64_encode($image_code);
-            Tinebase_Session::getSessionNamespace()->captcha['code'] = $code;
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-        }
-        return $result;
     }
 
     /**
@@ -876,16 +829,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             return false;
         }
 
-        if (! $this->_validateSecondFactor($accessLog, $user)) {
-            $authResult = new Zend_Auth_Result(
-                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
-                $user->accountLoginName,
-                array('Second factor authentication failed.')
-            );
-            $accessLog->result = Tinebase_Auth::FAILURE;
-            $this->_loginFailed($authResult, $accessLog);
-            return false;
-        }
+        $this->_validateSecondFactor($accessLog, $user);
 
         return $user;
     }
@@ -895,29 +839,73 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Tinebase_Model_FullUser $user
      * @return bool
      */
-    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user)
+    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
     {
-        if (! Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
-            || $accessLog->clienttype !== 'JSON-RPC'
+        $areaLock = Tinebase_AreaLock::getInstance();
+        $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+        if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+            foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
+                $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
+            }
+
+            // user has no 2FA config -> currently its sort of optional -> no check
+            if ($this->_forceUnlockLoginArea && count($userConfigIntersection->mfa_configs) === 0) {
+                $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+                return;
+            }
+        }
+
+        if ($accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE ||
+                ! $areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
+                ! $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
         ) {
             // no login lock or non json access
-            return true;
+            return;
         }
+
+        $areaConfig = $areaLock->getLastAuthFailedAreaConfig();
 
         $context = $this->getRequestContext();
-        $password = $context['otp'];
-        try {
-            Tinebase_AreaLock::getInstance()->unlock(
-                Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-                $password,
-                $user->accountLoginName
-            );
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            return false;
+        $mfaId = $context['MFAId'];
+        $password = $context['MFAPassword'];
+
+        // check if FE send mfa or if we only have one 2FA configured anyway
+        if ((!empty($mfaId) && $userConfigIntersection->getById($mfaId)) || (1 === $userConfigIntersection->count() &&
+                ($mfaId = $userConfigIntersection->getFirstRecord()->getId()))) {
+            $userCfg = $userConfigIntersection->getById($mfaId);
+            // FE send provider and password -> validate it
+            if (!empty($password)) {
+                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(function($rec) use($userCfg) {
+                            return in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
+                        }) as $areaCfg) {
+                    if (!$areaCfg->getBackend()->hasValidAuth()) {
+                        $areaLock->unlock(
+                            $areaCfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
+                            $mfaId,
+                            $password,
+                            $user
+                        );
+                        break;
+                    }
+                }
+                return;
+            } else {
+                if (!Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+                        ->sendOut($userCfg)) {
+                    throw new Tinebase_Exception('mfa send out failed');
+                } else {
+                    // success, FE to render input field
+                    $this->_throwMFAException($areaConfig, new Tinebase_Record_RecordSet(
+                        Tinebase_Model_MFA_UserConfig::class, [$userConfigIntersection->getById($mfaId)]));
+                }
+            }
+        } else {
+            // FE to render selection which 2FA to use
+            $this->_throwMFAException($areaConfig, $areaConfig->getUserMFAIntersection($user));
         }
 
-        return true;
+        // must never reach this
+        assert(false, 'should return true or throw, line must not be reached');
     }
 
     /**
@@ -1058,9 +1046,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'getFavicon', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-        });
 
-        $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/logo[/{type}[/{size}]]', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getLogo', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+
             $routeCollector->get('/health', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'healthCheck', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -1072,6 +1063,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'getStatus', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
+
+            $routeCollector->addRoute(['GET', 'POST'], '/export/{definitionId}', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Export_Abstract::class, 'expressiveApi'))->toArray());
         });
 
         $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1222,7 +1216,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @todo fix $size param - it should not be allowed to set it to png/svg
      */
-    public function getFavicon($size = 16, $ext = 'png')
+    public function getFavicon($size = 16, string $ext = 'png')
     {
         if ($size == 'svg' || $ext == 'svg') {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG);
@@ -1238,11 +1232,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
         $mime = Tinebase_ImageHelper::getMime($ext);
         if (! in_array($mime, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
-            throw new Tinebase_Exception_UnexpectedValue('image format not supported');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Image format not supported: ' . $mime . ' ... using png');
+            $mime = Tinebase_ImageHelper::getMime('png');
         }
 
         if (! is_numeric($size)) {
-            throw new Tinebase_Exception_UnexpectedValue('size should be numeric');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Size should be numeric ... setting it to 16');
+            $size = 16;
         }
 
         $cacheId = sha1(self::class . 'getFavicon' . $size . $mime);
@@ -1285,6 +1285,42 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ->withAddedHeader('Content-Type', $mime);
     }
 
+    public function getLogo($type='b', $size='135x50')
+    {
+        $mime = 'image/png';
+
+        if (! in_array($type, ['b', 'i'])) {
+            throw new Tinebase_Exception_UnexpectedValue('invalid type');
+        }
+        
+        if (! in_array($size, ['135x50'])) {
+            throw new Tinebase_Exception_UnexpectedValue('invalid size format');
+        }
+
+        $cacheId = sha1(self::class . 'getLogo' . $type . $size . $mime);
+        $imageBlob = Tinebase_Core::getCache()->load($cacheId);
+        
+        if (!$imageBlob) {
+            preg_match('/^(\d+)x(\d+)$/', $size, $matches);
+
+            $path = $type === 'i' ?
+                Tinebase_Core::getInstallLogo() :
+                Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO);
+            
+            $blob = Tinebase_Helper::getFileOrUriContents($path);
+            $image = Tinebase_Model_Image::getImageFromBlob($blob);
+            Tinebase_ImageHelper::resize($image, $matches[1], $matches[2], Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
+            $imageBlob = $image->getBlob($mime);
+            Tinebase_Core::getCache()->save($imageBlob, $cacheId);
+        }
+
+        $response = new \Zend\Diactoros\Response();
+        $response->getBody()->write($imageBlob);
+        
+        return $response
+            ->withAddedHeader('Content-Type', $mime);
+    }
+    
     /**
      * @return bool
      */
@@ -1311,7 +1347,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'actionQueueLR' => ['dataWarn' => 60, 'dataErr' => 5 * 60],
             ];
 
-            foreach (['actionQueue' => Tinebase_ActionQueue::getInstance(), 'actionQueueLR' => Tinebase_ActionQueueLongRun::getInstance()] as $qName => $actionQueue) {
+            foreach ([
+                        'actionQueue' => Tinebase_ActionQueue::getInstance(),
+                        'actionQueueLR' => Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)
+                     ] as $qName => $actionQueue) {
 
                 $missingQueueKeys = [];
                 $missingDaemonKeys = [];
@@ -1405,7 +1444,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'action'    => 'Tinebase.measureActionQueue',
                 'params'    => [microtime(true)]
             ]);
-            Tinebase_ActionQueueLongRun::getInstance()->executeAction([
+            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->executeAction([
                 'action'    => 'Tinebase.measureActionQueueLongRun',
                 'params'    => [microtime(true)]
             ]);
@@ -1632,5 +1671,42 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 (string)$response->getBody());
 
         return $response;
+    }
+
+    /**
+     * enable Maintenance Mode
+     */
+    public function goIntoMaintenanceMode()
+    {
+        parent::goIntoMaintenanceMode();
+
+        // delete sessions
+        Zend_Session::getSaveHandler()->gc(0);
+    }
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = parent::getCoreDataForApplication();
+
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+
+        if (Tinebase_Config::getInstance()->featureEnabled(
+            Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR)
+        ) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'cs_community_identification_number',
+                'application_id' => $application,
+                'model' => 'Tinebase_Model_CommunityIdentNr',
+                'label' => 'Community Identification Number' // _('Community Identification Number')
+            )));
+        }
+
+
+        return $result;
     }
 }

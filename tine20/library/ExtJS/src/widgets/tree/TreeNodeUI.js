@@ -65,9 +65,11 @@ Ext.tree.TreeNodeUI.prototype = {
     },
 
     // private
-    onSelectedChange : function(state){
+    onSelectedChange : function(state, focus=true){
         if(state){
-            this.focus();
+            if (focus) {
+                this.focus();
+            }
             this.addClass("x-tree-selected");
         }else{
             //this.blur();

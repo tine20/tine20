@@ -22,7 +22,7 @@ class Tinebase_Acl_AllTests
     }
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Acl Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All Acl Tests');
         $suite->addTestSuite('Tinebase_Acl_RolesTest');
         $suite->addTestSuite('Tinebase_Acl_RightsTest');
         return $suite;

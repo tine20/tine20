@@ -4,7 +4,7 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -116,8 +116,8 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         Felamimail_Controller_Account::destroyInstance();
@@ -151,14 +151,13 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Tearing down ...');
 
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
-                //echo "delete $folderName\n";
                 try {
                     $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
                 } catch (Zend_Mail_Storage_Exception $zmse) {
@@ -258,7 +257,7 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @param string $_subject
      * @param string $_folderName
-     * @return string message data
+     * @return string|null|array message data
      */
     protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX', $_doAssertions = true)
     {
@@ -267,7 +266,7 @@ abstract class Felamimail_TestCase extends TestCase
 
         $result = $this->_getMessages($_folderName);
 
-        $message = array();
+        $message = [];
         foreach ($result['results'] as $mail) {
             if ($mail['subject'] == $_subject) {
                 $message = $mail;
@@ -318,7 +317,7 @@ abstract class Felamimail_TestCase extends TestCase
      * @param Felamimail_Model_Account $account
      * @return Felamimail_Model_Folder|NULL
      */
-    protected function _getFolder($name, $createFolder = TRUE, $account = null)
+    protected function _getFolder($name, $createFolder = TRUE, Felamimail_Model_Account $account = null)
     {
         $account = $account ? $account : $this->_account;
         Felamimail_Controller_Cache_Folder::getInstance()->update($account->getId());
@@ -376,7 +375,7 @@ abstract class Felamimail_TestCase extends TestCase
             $messageToSend['attachments'] = [];
             for ($i = 1; $i <= $_attachments; $i++) {
                 $filename = 'test' . $i . '.txt';
-                $tempFiles[$i] = $this->_createTempFile($filename);
+                $tempFiles[$i] = $this->_getTempFile(null, $filename);
                 $messageToSend['attachments'][] = array(
                     'tempFile' => array(
                         'id' => $tempFiles[$i]->getId(),
@@ -440,19 +439,6 @@ abstract class Felamimail_TestCase extends TestCase
     }
 
     /**
-     * @param string $tempfileName
-     * @return Tinebase_Model_TempFile
-     *
-     * @refactor TODO use \TestCase::_getTempFile
-     */
-    protected function _createTempFile($tempfileName = 'test.txt')
-    {
-        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
-        file_put_contents($tempfilePath, 'some content');
-        return Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName);
-    }
-
-    /**
      * returns message array from result
      *
      * @param array $_result
@@ -501,7 +487,7 @@ abstract class Felamimail_TestCase extends TestCase
             if ($_isMime) {
                 // TODO check why behaviour changed with php 7 (test was relaxed to hotfix this)
                 //$this->assertEquals(html_entity_decode('unittest vacation&nbsp;message', ENT_NOQUOTES, 'UTF-8'), $resultSet['reason']);
-                self::assertContains('unittest vacation', $resultSet['reason']);
+                self::assertStringContainsString('unittest vacation', $resultSet['reason']);
             } else {
                 $this->assertEquals($_sieveData['reason'], $resultSet['reason']);
             }

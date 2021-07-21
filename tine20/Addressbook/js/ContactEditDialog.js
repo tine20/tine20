@@ -58,6 +58,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             });
         }
 
+        var allLanguages = Locale.getTranslationList('Language');
+
         this.preferredAddressBusinessCheckbox = new Ext.form.Checkbox({
             checked: this.record.get('preferred_address') === "0",
             hideLabel: false,
@@ -179,7 +181,36 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     new Ext.ux.form.ImageField({
                         name: 'jpegphoto',
                         width: 90,
-                        height: 120
+                        height: 120,
+                        border: true,
+                        borderColor: this.record.get('color'),
+                        getExtraContextActions: () => {
+                            return [
+                                {
+                                    text: i18n._('Select color'),
+                                    iconCls: 'action_changecolor',
+                                    scope: this,
+                                    menu: new Ext.menu.ColorMenu({
+                                        scope: this,
+                                        listeners: {
+                                            show: function (cmp) {
+                                                const colorPalette = cmp.items.get(0)
+                                                colorPalette.suspendEvents()
+                                                colorPalette.select(this.record.get('color'))
+                                                colorPalette.resumeEvents()
+                                            },
+                                            select: function (p, color) {
+                                                p.scope.record.set('color', color)
+                                                p.scope.find('name', 'jpegphoto')[0].el.applyStyles({
+                                                    border: '2px solid #'+color
+                                                });
+                                            },
+                                            scope: this
+                                        }
+                                    })
+                                }
+                            ]
+                        }
                     })
                 ]
             }, {
@@ -207,7 +238,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     }, {
                         width: 110,
                         xtype: 'extuxclearabledatefield',
-                        fieldLabel: this.app.i18n._('Birthday'),
+                        fieldLabel: this.app.i18n._('Birthday (private)'),
                         name: 'bday',
                         requiredGrant: 'privateDataGrant'
                     }
@@ -302,11 +333,21 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             }
                         }
                     }
+                }, {
+                    fieldLabel: this.app.i18n._('Language'),
+                    name: 'language',
+                    xtype: 'combo',
+                    mode: 'local',
+                    allowBlank: true,
+                    editable: true,
+                    forceSelection: true,
+                    store: Object.entries(allLanguages)
                 }]]
             }]
         };
+        
 
-        var contactSouthPanel = {
+        this.postalAddressesTabPanel = Ext.create({
             xtype: 'tabpanel',
             region: 'south',
             border: false,
@@ -398,7 +439,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     requiredGrant: 'privateDataGrant'
                 }], [this.preferredAddressPrivateCheckbox]]
             }]
-        };
+        });
 
         // activities and tags
         var contactEastPanel = {
@@ -464,7 +505,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 items: [
                     contactNorthPanel,
                     contactCenterPanel,
-                    contactSouthPanel
+                    this.postalAddressesTabPanel
                 ]
             }, contactEastPanel]
         };
@@ -638,6 +679,11 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         }
         if (this.record.id) {
             this.groupsPanel.store.loadData(this.record.get('groups'));
+
+            const preferredAddress = +this.record.get('preferred_address');
+            if (this.postalAddressesTabPanel.items.get(preferredAddress)) {
+                this.postalAddressesTabPanel.setActiveTab(preferredAddress);
+            }
         }
         
         this.supr().onRecordLoad.apply(this, arguments);

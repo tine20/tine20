@@ -38,7 +38,6 @@ Tine.Felamimail.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPan
  * <pre>
  * low priority:
  * TODO         make inbox/drafts/templates configurable in account
- * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
  * TODO         disable delete action in account ctx menu if user has no manage_accounts right
  * </pre>
  * 
@@ -409,7 +408,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             this.applyingState = false;
         }
 
-        let node = this.getNodeById(state.selected);
+        let node = this.getNodeById(_.get(state, 'selected'));
 
         if(node) {
             node.select();
@@ -532,7 +531,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
             var folder = this.app.getFolderStore().getById(node.id);
-            this.app.checkMailsDelayedTask.delay(0);
+            if (folder) {
+                if (folder.get('cache_status') === 'pending') {
+                    this.app.checkMails(folder, Ext.emptyFn);
+                }
+                // lasy wait for selection change
+                _.delay(() => {this.updateFolderStatus(folder);}, 100);
+            }
         }
     },
     
@@ -563,28 +568,36 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 // disable some account actions if needed
                 this.contextMenuAccount.items.each(function(item) {
                     // TODO don't rely on iconCls here!
-                    // check account personal namespace -> disable 'add folder' if namespace is other than root 
-                    if (item.iconCls == 'action_add') {
-                        item.setDisabled(account.get('ns_personal') != '');
-                    }
-                    // disable filter rules/vacation if no sieve hostname is set
-                    if (item.iconCls == 'action_email_replyAll' || item.iconCls == 'action_email_forward') {
-                        item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
-                    }
-                    // disable account migration approval if already approved
-                    if (item.iconCls == 'action_approve_migration') {
-                        item.setDisabled(
-                               account.get('migration_approved') == 1
-                            || account.get('type') == 'user'
-                            || account.get('type') == 'shared'
-                        );
+                    switch (item.iconCls) {
+                        case 'action_add':
+                            // check account personal namespace -> disable 'add folder' if namespace is other than root
+                            item.setDisabled(account.get('ns_personal') != '');
+                            break;
+                        case 'action_email_replyAll':
+                        case 'action_email_forward':
+                            // disable filter rules/vacation if no sieve hostname is set
+                            item.setDisabled(account.get('sieve_hostname') == null || account.get('sieve_hostname') == '');
+                            break;
+                        case 'action_approve_migration':
+                            item.setDisabled(
+                                account.get('migration_approved') == 1
+                                || account.get('type') === 'user'
+                                || account.get('type') === 'shared'
+                            );
+                            break;
+                        case 'action_delete':
+                            item.setDisabled(
+                                account.get('type') === 'system'
+                                || account.get('type') === 'shared'
+                            );
+                            break;
                     }
                 });
                 
                 this.contextMenuAccount.showAt(event.getXY());
             }
         } else {
-            if (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/junk/i)) {
+            if (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/^junk$/i)) {
                 this.contextMenuTrash.showAt(event.getXY());
             } else if (! folder.get('is_selectable')){
                 this.unselectableFolder.showAt(event.getXY());
@@ -640,7 +653,13 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
         
         Tine.log.debug('Added new folder:' + newRecord.get('globalname'));
-        
+
+        this.ctxNode.leaf = false;
+        this.ctxNode.expand();
+        this.ctxNode.appendChild(this.loader.createNode(folderData));
+
+        const parentRecord = this.folderStore.getById(this.ctxNode.id);
+        if (parentRecord) parentRecord.set('has_children', true);
         this.folderStore.add([newRecord]);
         this.initNewFolderNode(newRecord);
     },
@@ -742,13 +761,15 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     updateFolderStatus: function(folder) {
         var unreadcount = folder.get('cache_unreadcount'),
+            totalcount = folder.get('cache_totalcount'),
             progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_est') * 10) * 10,
             node        = this.getNodeById(folder.id),
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
             cacheStatus = folder.get('cache_status'),
             lastCacheStatus = folder.modified ? folder.modified.cache_status : null,
-            isSelected = folder.isCurrentSelection();
+            isSelected = folder.isCurrentSelection(),
+            account =  folder ? this.accountStore.getById(folder.get('account_id')) : this.accountStore.getById(node.id);
 
         this.setUnreadClass(folder.id);
             
@@ -756,18 +777,22 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             var domNode = Ext.DomQuery.selectNode('span[class=felamimail-node-statusbox-unread]', nodeEl);
             if (domNode) {
                 
-                // update unreadcount + visibity
-                Ext.fly(domNode).update(unreadcount).setVisible(unreadcount > 0);
-                
+                //draft folder show totalcount instead  
+                if(folder.get('globalname') === account.get('drafts_folder')) {
+                    Ext.fly(domNode).update(totalcount).setVisible(totalcount > 0);
+                } else {
+                    // update unreadcount + visibity
+                    Ext.fly(domNode).update(unreadcount).setVisible(unreadcount > 0);
+                }
+
                 // update progress
                 var progressEl = Ext.get(Ext.DomQuery.selectNode('img[class^=felamimail-node-statusbox-progress]', nodeEl));
                 progressEl.removeClass(['felamimail-node-statusbox-progress-pie', 'felamimail-node-statusbox-progress-loading']);
                 if (! Ext.isNumber(progress)) {
-                    progressEl.setStyle('background-position', 0 + 'px');
                     progressEl.addClass('felamimail-node-statusbox-progress-loading');
                 } else {
-                    progressEl.setStyle('background-position', progress + '%');
                     progressEl.addClass('felamimail-node-statusbox-progress-pie');
+                    progressEl.addClass('felamimail-node-statusbox-progress-pie-' + progress);
                 }
                 progressEl.setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete');
             }

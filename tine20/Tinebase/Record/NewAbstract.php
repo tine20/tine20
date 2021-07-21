@@ -449,8 +449,9 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         }
 
         if ($_throwExceptionOnInvalidData) {
-            $e = new Tinebase_Exception_Record_Validation('Some fields ' . implode(',', array_keys($inputFilter->getMessages()))
-                . ' have invalid content');
+            $e = new Tinebase_Exception_Record_Validation('Some fields ('
+                . implode(',', array_keys($inputFilter->getMessages()))
+                . ') have invalid content (' . get_class($this) . ')');
 
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " "
                 . $e->getMessage()
@@ -872,7 +873,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function isEqual($_record, array $_toOmit = [])
     {
-        $diff = $this->diff($_record);
+        $diff = $this->diff($_record, $_toOmit);
         return ($diff) ? $diff->isEmpty($_toOmit) : false;
     }
 
@@ -964,9 +965,16 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     }
 
     /**
-     * @param array $_defintiion
+     * @param array $_definition
      */
-    public static function inheritModelConfigHook(array &$_defintion)
+    public static function inheritModelConfigHook(array &$_definition)
+    {
+    }
+
+    /**
+     * @param array $_definition
+     */
+    public static function modelConfigHook(array &$_definition)
     {
     }
 
@@ -1551,7 +1559,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
 
             foreach ($toConvert as $convertField => &$value) {
                 if (! method_exists($value, 'setTimezone')) {
-                    throw new Tinebase_Exception_Record_Validation($convertField . ' must be a method setTimezone');
+                    throw new Tinebase_Exception_Record_Validation($field . ' must have a method setTimezone');
                 }
                 $value->setTimezone($_timezone);
             }

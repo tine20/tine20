@@ -20,8 +20,8 @@ class Tinebase_User_ActiveDirectoryTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::ACTIVEDIRECTORY) {
             $this->markTestSkipped('ACTIVEDIRECTORY backend not enabled');
         }

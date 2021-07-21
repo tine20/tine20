@@ -65,6 +65,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected $_throwOnGetQuarantined = true;
 
     protected $_createNodeInBackendInterceptor = [];
+    protected $_moveNodesHook = [];
+
+    protected $_allowedProperties = ['name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'];
     
     /**
      * holds the instance of the singleton
@@ -106,6 +109,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
 
+    public function addAllowedProperty($property) {
+        if (!in_array($property, $this->_allowedProperties)) {
+            $this->_allowedProperties[] = $property;
+        }
+    }
+
     /**
      * get/set whether to throw on access on quarantined file
      *
@@ -122,10 +131,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_Controller_Record_Abstract::update()
+     * @param Tinebase_Record_Interface $_record
+     * @param bool $_duplicateCheck
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     *
+     * @refactor should be improved:
+     *   1) move notification update stuff to separate function
+     *   2) remove code duplication (xprops loops)
+     *   3) find out, why xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) does not return an array in some cases
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true, $_updateDeleted = false)
     {
         // be careful, don't put $_record in here, like that parent_id might be spoofed! It must be only the id!
         $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
@@ -137,13 +153,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
             $usersNotificationSettings = null;
             $currentUserId = Tinebase_Core::getUser()->getId();
-            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
-                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+            if (is_array($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
+                foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $xpNotification) {
+                    if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
                         isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
                         Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
-                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
-                    $usersNotificationSettings = $xpNotification;
-                    break;
+                        $currentUserId === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                        $usersNotificationSettings = $xpNotification;
+                        break;
+                    }
                 }
             }
 
@@ -160,20 +178,23 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
 
             $found = false;
-            foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
-                if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
+            if (is_array($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
+                foreach ($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $key => &$xpNotification) {
+                    if (isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) &&
                         isset($xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
                         Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] &&
-                        $currentUserId ===  $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
-                    if (null !== $usersNotificationSettings) {
-                        $xpNotification = $usersNotificationSettings;
-                    } else {
-                        unset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[$key]);
+                        $currentUserId === $xpNotification[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID]) {
+                        if (null !== $usersNotificationSettings) {
+                            $xpNotification = $usersNotificationSettings;
+                        } else {
+                            unset($_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[$key]);
+                        }
+                        $found = true;
+                        break;
                     }
-                    $found = true;
-                    break;
                 }
             }
+
             if (false === $found && null !== $usersNotificationSettings) {
                 $_record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)[] = $usersNotificationSettings;
             }
@@ -183,9 +204,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        return parent::update($_record, $_duplicateCheck);
+        return parent::update($_record, $_duplicateCheck, $_updateDeleted);
     }
-    
+
     /**
      * inspect update of one record (before update)
      *
@@ -197,7 +218,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         // protect against file object spoofing
         foreach (array_keys($_record->toArray()) as $property) {
-            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes', 'acl_node', 'grants', 'quota', Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION, Tinebase_Model_Tree_Node::XPROPS_REVISION, 'pin_protected_node'))) {
+            if (! in_array($property, $this->_allowedProperties)) {
                 $_record->{$property} = $_oldRecord->{$property};
             }
         }
@@ -357,6 +378,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $this->resolveGrants($record);
 
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $record->type) {
+            $record->path = rtrim($record->path, '/') . '/';
             $context = $this->getRequestContext();
             if (is_array($context) && isset($context['quotaResult'])) {
                 $context['quotaResult'] = $this->_backend->getEffectiveAndLocalQuota($record);
@@ -482,7 +504,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             if ($parents[$fileNode->parent_id] === false) {
                 $result->removeRecord($fileNode);
             } else {
-                $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name;
+                $fileNode->path = $parents[$fileNode->parent_id] . '/' . $fileNode->name . ( 'folder' === $fileNode->type ? '/' : '');
             }
         }
 
@@ -500,7 +522,33 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         
         return $result;
     }
-    
+
+    /**
+     * @param Tinebase_Model_Tree_Node $_child
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getParentByFilter(Tinebase_Model_Tree_Node $_child, Tinebase_Model_Tree_Node_Filter $_filter)
+    {
+        if (null === ($parent = $this->_backend->getParentByFilter($_child, $_filter))) {
+            throw new Tinebase_Exception_NotFound('no parent matching given filter found');
+        }
+        $parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($parent, true));
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $appPath = '/' . $app->getId() . '/' . Tinebase_Model_Tree_Node_Path::FOLDERS_PART;
+
+        if (strpos($parentPath->statpath, $appPath) !== 0) {
+            throw new Tinebase_Exception_NotFound('no parent matching given filter found');
+        }
+        $this->_backend->checkPathACL($parentPath, 'get');
+        $parent->path = substr($parentPath->statpath, strlen($appPath));
+
+        return $parent;
+    }
+
     /**
      * checks filter acl and adds base path
      * 
@@ -569,21 +617,21 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
             array(
                 'name'   => $translate->_('My folders'),
-                'path'   => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
+                'path'   => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/',
                 'type'   => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                 'id'     => 'myUser',
                 'grants' => array(),
             ),
             array(
                 'name' => $translate->_('Shared folders'),
-                'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+                'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/',
                 'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                 'id' => Tinebase_FileSystem::FOLDER_TYPE_SHARED,
                 'grants' => array(),
             ),
             array(
                 'name' => $translate->_('Other users folders'),
-                'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
+                'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/',
                 'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                 'id' => Tinebase_Model_Container::TYPE_OTHERUSERS,
                 'grants' => array(),
@@ -634,13 +682,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param integer|null $_revision
      * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_NotFound
+     * @throws Filemanager_Exception
+     * @throws Filemanager_Exception_Quarantined
      */
     public function getFileNode(Tinebase_Model_Tree_Node_Path $_path, $_revision = null)
     {
         $this->_backend->checkPathACL($_path, 'get');
         
         if (! $this->_backend->fileExists($_path->statpath, $_revision)) {
-            throw new Filemanager_Exception('File does not exist,');
+            throw new Tinebase_Exception_NotFound('File does not exist,');
         }
         
         if (! $this->_backend->isFile($_path->statpath)) {
@@ -864,9 +915,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $newNode;
     }
 
-    public function registerCreateNodeInBackendInterceptor($callable)
+    public function registerCreateNodeInBackendInterceptor($key, $callable)
     {
-        $this->_createNodeInBackendInterceptor[] = $callable;
+        $this->_createNodeInBackendInterceptor[$key] = $callable;
+    }
+
+    public function registerMoveNodesHook($key, $callable)
+    {
+        $this->_moveNodesHook[$key] = $callable;
     }
 
     /**
@@ -904,7 +960,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     $_type = null;
                 }
                 if (! $_tempFileId) {
-                    $this->_backend->createFileTreeNode($this->_backend->stat(dirname($_statpath)),
+                    $node = $this->_backend->createFileTreeNode($this->_backend->stat(dirname($_statpath)),
                         basename($_statpath), Tinebase_Model_Tree_FileObject::TYPE_FILE, $_type);
                 } else {
                     try {
@@ -1000,10 +1056,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             ? new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($_records)) : $_records;
 
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
+        $flatpathWithoutBasepath = rtrim(Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app), '/');
         if ($records) {
             foreach ($records as $record) {
-                $record->path = $flatpathWithoutBasepath . '/' . $record->name;
+                $record->path = $flatpathWithoutBasepath . '/' . $record->name . ( 'folder' === $record->type ? '/' : '');
             }
         }
 
@@ -1314,6 +1370,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function moveNodes($_sourceFilenames, $_destinationFilenames, $_forceOverwrite = FALSE)
     {
+        // yeah, really...
+        new Filemanager_Model_Node([], true);
+        // we need to save the result of the hook, it might be a scoped object that gets destructed at the end of scope
+        $hookResult = [];
+        foreach ($this->_moveNodesHook as $hook) {
+            $hookResult[] = call_user_func($hook);
+        }
+        
         return $this->_copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, 'move', $_forceOverwrite);
     }
     

@@ -26,8 +26,8 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
      * (non-PHPdoc)
      * @see Calendar/Calendar_TestCase::setUp()
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setUp();
 
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
@@ -136,7 +136,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $persistentEvent = $this->testCreatePoll();
         $persistentEvent['rrule'] = 'FREQ=DAILY;INTERVAL=1';
 
-        $this->setExpectedException(Tinebase_Exception_SystemGeneric::class);
+        $this->expectException(Tinebase_Exception_SystemGeneric::class);
         $this->_uit->saveEvent($persistentEvent);
     }
 
@@ -192,7 +192,7 @@ class Calendar_Frontend_Json_PollTest extends Calendar_TestCase
         $container = Tinebase_Container::getInstance()->setGrants($poll['container_id']['id'],
             new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class), true, false);
 
-        $this->setExpectedException(Tinebase_Exception_AccessDenied::class);
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
         $poll = $this->_uit->getPoll($persistentEvent['poll_id']['id']);
     }
 

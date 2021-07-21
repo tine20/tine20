@@ -50,7 +50,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // group data
         $groupData = Admin_Controller_Group::getInstance()->get($_record->group_id)->toArray();
         unset($groupData['id']);
-        $groupData['members'] = $this->_getCourseMembers($_record->group_id);
+        $groupData['members'] = Courses_Controller_Course::getInstance()->getCourseMembers($_record->group_id);
         
         // course type
         $recordArray['type'] = array(
@@ -104,35 +104,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
-    
-    /**
-     * get course members
-     *
-     * @param int $_groupId
-     * @return array
-     */
-    protected function _getCourseMembers($_groupId)
-    {
-        $adminJson = new Admin_Frontend_Json();
-        $members = $adminJson->getGroupMembers($_groupId);
-        
-        $result = array();
-        foreach ($members['results'] as $member) {
-            
-            // get full user for login name
-            $fullUser = Tinebase_User::getInstance()->getFullUserById($member['id']);
-            
-            $result[] = array(
-                'id'    => $member['id'],
-                'name'  => $member['name'],
-                'data'  => $fullUser->accountLoginName,
-                'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            );
-        }
-        
-        return $result;
-    }
-    
+
     /************************************** public API **************************************/
     
     /**
@@ -141,6 +113,20 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return mixed array 'variable name' => 'data'
      */
     public function getRegistryData()
+    {
+        return [
+            'defaultType' => array(
+                'value' => $this->_getDefaultCourseType(),
+                'records' => $this->searchCourseTypes(NULL, NULL)
+            ),
+            'additionalGroupMemberships' => Courses_Controller_Course::getInstance()->getAdditionalGroupMemberships()->toArray(),
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function _getDefaultCourseType()
     {
         $config = Courses_Config::getInstance();
         $courseTypes = Tinebase_Department::getInstance()->search(new Tinebase_Model_DepartmentFilter());
@@ -156,18 +142,9 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else if (count($courseTypes) > 0) {
             $defaultType = $courseTypes->getFirstRecord()->getId();
         }
-        $result = array(
-            'defaultType' => array(
-                'value' => $defaultType,
-                'records' => $this->searchCourseTypes(NULL, NULL)
-            )
-        );
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' result: ' . print_r($result, true));
-        
-        return $result;
+        return $defaultType;
     }
-    
+
     /**
      * Search for records matching given arguments
      *
@@ -204,8 +181,9 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $course->setFromJsonInUsersTimezone($recordData);
         $group = new Tinebase_Model_Group(array(), TRUE);
         $group->setFromJsonInUsersTimezone($recordData);
+        $memberData = isset($recordData['members']) ? $recordData['members'] : [];
         
-        $savedRecord = $this->_controller->saveCourseAndGroup($course, $group);
+        $savedRecord = $this->_controller->saveCourseAndGroup($course, $group, $memberData);
 
         return $this->_recordToJson($savedRecord);
     }
@@ -213,8 +191,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param string $ids 
-     * @return string
+     * @param array $ids
+     * @return array
      */
     public function deleteCourses($ids)
     {
@@ -236,7 +214,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // return members to update members grid
         return array(
-            'results'   => $this->_getCourseMembers($groupId),
+            'results'   => Courses_Controller_Course::getInstance()->getCourseMembers($groupId),
             'status'    => 'success'
         );
     }
@@ -266,7 +244,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         // return members to update members grid
         return array(
-            'results'   => $this->_getCourseMembers($course->group_id),
+            'results'   => Courses_Controller_Course::getInstance()->getCourseMembers($course->group_id),
             'status'    => 'success'
         );
     }

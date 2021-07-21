@@ -14,6 +14,36 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
+msgstr "Total Example Records"
+
+#: js/ExampleDetailsPanel.js:74 js/ExampleRecordEditDialog.js:66
+#: Model/ExampleRecord.php:97 Model/OneToOne.php:92
+msgid "Name"
+msgstr "Name"
+
+#: js/ExampleDetailsPanel.js:78 js/ExampleRecordEditDialog.js:72
+#: Model/ExampleRecord.php:110
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordEditDialog.js:49
+msgid "ExampleRecord"
+msgstr "ExampleRecord"
+
+#: js/ExampleRecordEditDialog.js:78 Model/ExampleRecord.php:117
+msgid "Reason"
+msgstr "Reason"
+
+#: js/ExampleRecordEditDialog.js:84 Model/ExampleRecord.php:104
+msgid "Description"
+msgstr "Description"
+
+#: js/Example.js:23
+msgid "New Example"
+msgstr "New Example"
+
 #: Preference.php:60
 msgid "Default Example Record Container"
 msgstr "Default Example Record Container"
@@ -22,138 +52,108 @@ msgstr "Default Example Record Container"
 msgid "The default container for new records"
 msgstr "The default container for new records"
 
-#: js/ExampleRecordEditDialog.js:50
-msgid "ExampleRecord"
-msgstr "ExampleRecord"
-
-#: js/ExampleRecordEditDialog.js:67 js/ExampleDetailsPanel.js:74
-#: Model/ExampleRecord.php:83
-msgid "Name"
-msgstr "Name"
-
-#: js/ExampleRecordEditDialog.js:73 js/ExampleDetailsPanel.js:78
-#: Model/ExampleRecord.php:95
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleRecordEditDialog.js:79 Model/ExampleRecord.php:103
-msgid "Reason"
-msgstr "Reason"
-
-#: js/ExampleRecordEditDialog.js:85 Model/ExampleRecord.php:90
-msgid "Description"
-msgstr "Description"
-
-#: js/ExampleDetailsPanel.js:56
-msgid "Total Example Records"
-msgstr "Total Example Records"
-
-#: js/Example.js:23
-msgid "New Example"
-msgstr "New Example"
-
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr "ExampleApplication"
-
-#: Config.php:122
+#: Config.php:124
 msgid "Status Available"
 msgstr "Status Available"
 
-#: Config.php:124
+#: Config.php:126
 msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
 msgstr "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
 
-#: Config.php:133
+#: Config.php:135
 msgid "Completed"
 msgstr "Completed"
 
-#: Config.php:134
+#: Config.php:136
 msgid "Cancelled"
 msgstr "Cancelled"
 
-#: Config.php:135
+#: Config.php:137
 msgid "In process"
 msgstr "In process"
 
-#: Config.php:142
+#: Config.php:144
 msgid "Reasons Available"
 msgstr "Reasons Available"
 
-#: Config.php:144
+#: Config.php:146
 msgid "Possible status reasons."
 msgstr "Possible status reasons."
 
-#: Config.php:155
+#: Config.php:157
 msgid "Change"
 msgstr "Change"
 
-#: Config.php:156
+#: Config.php:158
 msgid "Documentation"
 msgstr "Documentation"
 
-#: Config.php:157
+#: Config.php:159
 msgid "Requirement Changed"
 msgstr "Requirement Changed"
 
-#: Config.php:158
+#: Config.php:160
 msgid "Not Possible"
 msgstr "Not Possible"
 
-#: Config.php:159
+#: Config.php:161
 msgid "Implementation"
 msgstr "Implementation"
 
-#: Config.php:160
+#: Config.php:162
 msgid "Review"
 msgstr "Review"
 
-#: Config.php:161
+#: Config.php:163
 msgid "Integration"
 msgstr "Integration"
 
-#: Config.php:168
+#: Config.php:170
 msgid "Enabled Features"
 msgstr "Enabled Features"
 
-#: Config.php:170
+#: Config.php:172
 msgid "Enabled Features in Example Application."
 msgstr "Enabled Features in Example Application."
 
-#: Config.php:177
+#: Config.php:179
 msgid "Invoices Module"
 msgstr "Invoices Module"
 
-#: Config.php:187
+#: Config.php:189
 msgid "Example String"
 msgstr "Example String"
 
-#: Config.php:189
+#: Config.php:191
 msgid "Just an example string for test purpose"
 msgstr "Just an example string for test purpose"
 
-#: Model/ExampleRecord.php:38
+#: Model/ExampleRecord.php:52
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] "example record"
 msgstr[1] "example records"
 
-#: Model/ExampleRecord.php:39
+#: Model/ExampleRecord.php:53
 msgid "example records"
 msgstr "example records"
 
-#: Model/ExampleRecord.php:42
+#: Model/ExampleRecord.php:56
 msgid "example record list"
 msgstr "example record list"
 
-#: Model/ExampleRecord.php:43
+#: Model/ExampleRecord.php:57
 msgid "example record lists"
 msgstr "example record lists"
 
-#: Model/ExampleRecord.php:110 Model/ExampleRecord.php:131
+#: Model/ExampleRecord.php:124 Model/ExampleRecord.php:145
 msgid "Number"
 msgstr "Number"
 
-#: Model/ExampleRecord.php:142
+#: Model/ExampleRecord.php:156
 msgid "datetime"
 msgstr "datetime"
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr "ExampleApplication"

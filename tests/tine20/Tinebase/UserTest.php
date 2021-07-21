@@ -27,8 +27,8 @@ class Tinebase_UserTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_originalBackendConfiguration = Tinebase_User::getBackendConfiguration();
         $this->_originalBackendType = Tinebase_User::getConfiguredBackend();
         
@@ -41,8 +41,8 @@ class Tinebase_UserTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
         Tinebase_Config::getInstance()->clearCache();
         
@@ -204,16 +204,15 @@ class Tinebase_UserTest extends TestCase
         $sclever = Tinebase_User::getInstance()->getUserByLoginName('sclever');
         try {
             Tinebase_User::getInstance()->setPassword($sclever, $pw);
-            if (! $pwIsValid) {
-                $this->fail('Expected Tinebase_Exception_PasswordPolicyViolation with message: ' . $expectedMessage . ' / used pw: ' . $pw);
-            }
+            $this->assertTrue($pwIsValid, 'Expected Tinebase_Exception_PasswordPolicyViolation with message: ' .
+                $expectedMessage . ' / used pw: ' . $pw);
         } catch (Tinebase_Exception_PasswordPolicyViolation $tppv) {
             if ($pwIsValid) {
                 $this->fail('pw is valid, got message: ' . $tppv->getMessage());
             } else {
-                $this->assertContains('Password failed to match the following policy requirements:', $tppv->getMessage());
+                $this->assertStringContainsString('Password failed to match the following policy requirements:', $tppv->getMessage());
                 foreach(explode('|', $expectedMessage) as $part) {
-                    $this->assertContains(trim($part), $tppv->getMessage());
+                    $this->assertStringContainsString(trim($part), $tppv->getMessage());
                 }
             }
         }

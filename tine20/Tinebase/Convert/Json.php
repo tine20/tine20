@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_ModelConfiguration_Const as MCC;
@@ -228,9 +228,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 
                 $cfg = $resolveFields[$fields[0]];
 
-                if ($cfg['type'] === 'user') {
+                if ($cfg[MCC::TYPE] === 'user') {
                     $foreignRecords = Tinebase_User::getInstance()->getMultiple($foreignIds);
-                } else if ($cfg['type'] === 'container') {
+                } else if ($cfg[MCC::TYPE] === 'container') {
                     // TODO: resolve recursive records of records better in controller
                     // TODO: resolve containers
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -241,7 +241,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     continue;
                 } else {
                     try {
-                        $foreignRecords = $this->_getForeignRecords($foreignIds, $foreignRecordClassName);
+                        $foreignRecords = $this->_getForeignRecords($foreignIds, $foreignRecordClassName,
+                            isset($cfg[MCC::CONFIG][MCC::RESOLVE_DELETED]) ?
+                                $cfg[MCC::CONFIG][MCC::RESOLVE_DELETED] : false);
                     } catch (Tinebase_Exception_AccessDenied $tead) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                             . ' No right to access application of record ' . $foreignRecordClassName);
@@ -281,10 +283,10 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param $foreignRecordClassName
      * @return Tinebase_Record_RecordSet
      */
-    protected function _getForeignRecords($foreignIds, $foreignRecordClassName)
+    protected function _getForeignRecords($foreignIds, $foreignRecordClassName, $resovleDeleted = false)
     {
         $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
-        $foreignRecords = $controller->getMultiple($foreignIds);
+        $foreignRecords = $controller->getMultiple($foreignIds, false, null, $resovleDeleted);
         return $foreignRecords;
     }
 
@@ -717,6 +719,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
             $this->_recursiveResolvingProtection = [];
             $this->_resolveRecursive($records, $modelConfiguration, $multiple);
+
+            if ($expanderDef = $modelConfiguration->jsonExpander) {
+                $expander = new Tinebase_Record_Expander($records->getRecordClassName(), $expanderDef);
+                $expander->expand($records);
+            }
         }
     }
 
@@ -763,8 +770,53 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
         $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
+        $result = $this->_resolveBoolFields($result, $modelConfiguration, $multiple);
         $result = $this->_convertRightToAccountGrants($result, $modelConfiguration, $multiple);
         return $result;
+    }
+
+    /**
+     * adds account_grants if configured in model
+     *
+     * @param array $resultSet
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     * @return array
+     */
+    protected function _resolveBoolFields($resultSet, $modelConfiguration, $multiple)
+    {
+        if (! $modelConfiguration) {
+            return $resultSet;
+        }
+        $fields = [];
+        foreach ($modelConfiguration->getFields() as $field) {
+            if (isset($field[MCC::TYPE]) && MCC::TYPE_BOOLEAN === $field[MCC::TYPE]) {
+                $fields[$field[MCC::FIELD_NAME]] = isset($field[MCC::NULLABLE]) && $field[MCC::NULLABLE];
+            }
+        }
+        if (empty($fields)) {
+            return $resultSet;
+        }
+
+        $tmp = $multiple ? $resultSet : [$resultSet];
+        if (is_object($resultSet)) {
+            foreach ($tmp as &$record) {
+                foreach ($fields as $field => $nullable) {
+                    if (isset($record[$field]) || !$nullable) {
+                        $record[$field] = (bool)$record[$field];
+                    }
+                }
+            }
+        } else {
+            foreach ($tmp as &$record) {
+                foreach ($fields as $field => $nullable) {
+                    if (isset($record[$field]) || (!$nullable && array_key_exists($field, $record))) {
+                        $record[$field] = (bool)$record[$field];
+                    }
+                }
+            }
+        }
+        return $multiple ? $tmp : $tmp[0];
     }
 
     /**

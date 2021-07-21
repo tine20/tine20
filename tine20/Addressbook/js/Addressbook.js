@@ -59,41 +59,6 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
         });
 
         Tine.CoreData.Manager.registerGrid(
-            'adb_list_roles',
-            Tine.widgets.grid.GridPanel,
-            {
-                recordClass: Tine.Addressbook.Model.ListRole,
-                app: this,
-                initialLoadAfterRender: false,
-                // TODO move this to a generic place
-                gridConfig: {
-                    autoExpandColumn: 'name',
-                    columns: [{
-                        id: 'id',
-                        header: this.i18n._("ID"),
-                        width: 150,
-                        sortable: true,
-                        dataIndex: 'id',
-                        hidden: true
-                    }, {
-                        id: 'name',
-                        header: this.i18n._("Name"),
-                        width: 300,
-                        sortable: true,
-                        dataIndex: 'name'
-                    }, {
-                        id: 'description',
-                        header: this.i18n._("Description"),
-                        width: 300,
-                        sortable: true,
-                        dataIndex: 'description',
-                        hidden: true
-                    }]
-                }
-            }
-        );
-        
-        Tine.CoreData.Manager.registerGrid(
             'adb_industries',
             Tine.widgets.grid.GridPanel,
             {
@@ -254,7 +219,7 @@ Tine.widgets.container.GrantsManager.register('Addressbook_Model_List', function
 
 
 Ext.override(Tine.widgets.container.GrantsGrid, {
-    privateDataGrantTitle: 'Private', // i18n._('Private')
-    privateDataGrantDescription: 'The grant to access contacts private information', // i18n._('The grant to access contacts private information')
+    privateDataGrantTitle: i18n._('Private'), // i18n._('Private')
+    privateDataGrantDescription: i18n._('The grant to access contacts private information'), // i18n._('The grant to access contacts private information')
 
 });

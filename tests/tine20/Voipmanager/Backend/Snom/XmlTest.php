@@ -30,7 +30,7 @@ class Voipmanager_Backend_Snom_XmlTest extends Voipmanager_Backend_Snom_Abstract
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Voipmanager Snom Phone Backend Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Voipmanager Snom Phone Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -39,8 +39,8 @@ class Voipmanager_Backend_Snom_XmlTest extends Voipmanager_Backend_Snom_Abstract
      * 
      * This method is called before a test is executed.
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_backend = new Voipmanager_Backend_Snom_Xml();
     }
@@ -54,6 +54,6 @@ class Voipmanager_Backend_Snom_XmlTest extends Voipmanager_Backend_Snom_Abstract
     {
         $config = $this->_backend->getConfig($this->_objects['phone']);
         
-        $this->assertContains('<language perm="RW">Deutsch</language>', $config);
+        $this->assertStringContainsString('<language perm="RW">Deutsch</language>', $config);
     }
 }

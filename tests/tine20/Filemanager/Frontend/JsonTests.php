@@ -4,7 +4,7 @@
  *
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -13,6 +13,7 @@
  * Test class for Filemanager_Frontend_Json
  *
  * @package     Filemanager
+ * @group nodockerci
  */
 class Filemanager_Frontend_JsonTests extends TestCase
 {
@@ -81,7 +82,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -106,7 +107,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -130,6 +131,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_personalContainer  = null;
         $this->_sharedContainer    = null;
         $this->_otherUserContainer = null;
+
+        clearstatcache();
     }
 
     /**
@@ -164,12 +167,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     protected function _assertRootNodes($searchResult)
     {
+        foreach ($searchResult['results'] as &$result) {
+            if (array_key_exists('efile_file_metadata', $result)) {
+                unset($result['efile_file_metadata']);
+            }
+        }
         $translate = Tinebase_Translation::getTranslation('Filemanager');
         $this->assertEquals(3, $searchResult['totalcount'], 'did not get root nodes: ' . print_r($searchResult, true));
         $this->assertEquals(array(
             'id'             => 'myUser',
             'path'           => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' .
-                Tinebase_Core::getUser()->accountLoginName,
+                Tinebase_Core::getUser()->accountLoginName . '/',
             'name'           => $translate->_('My folders'),
             'type'           => 'folder',
             'grants'         => array(),
@@ -194,7 +202,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             ), $searchResult['results'][0], 'my user folder mismatch');
         $this->assertEquals(array(
             'id'    => Tinebase_Model_Container::TYPE_SHARED,
-            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/',
             'name' => $translate->_('Shared folders'),
             'type' => 'folder',
             'grants'         => array(),
@@ -219,7 +227,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ), $searchResult['results'][1], 'shared folder mismatch');
         $this->assertEquals(array(
             'id'    => Tinebase_Model_Container::TYPE_OTHERUSERS,
-            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
+            'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/',
             'name' => $translate->_('Other users folders'),
             'type' => 'folder',
             'grants'         => array(),
@@ -261,7 +269,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_searchHelper($filter, 'unittestdir_personal');
         // check correct path resolving
         $node = $this->_getNodeByNameFromResult('unittestdir_personal', $result);
-        self::assertEquals($path . '/unittestdir_personal', $node['path']);
+        self::assertEquals($path . '/unittestdir_personal/', $node['path']);
     }
     
     /**
@@ -409,7 +417,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         // check correct path resolving
         $node = $this->_getNodeByNameFromResult($this->_personas['sclever']->accountLoginName, $result);
         $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . $this->_personas['sclever']->accountLoginName;
-        self::assertEquals($path, $node['path']);
+        self::assertEquals($path . '/', $node['path']);
         self::assertEquals(1, $result['totalcount'],
             'only expected sclever personal folder in result. got: ' . print_r($result['results'], true));
     }
@@ -419,6 +427,13 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testSearchContainersOfOtherUser()
     {
+        if (Tinebase_DateTime::now()->get('N') == 7 // Sunday
+            && (Tinebase_DateTime::now()->get('H') == 22 || Tinebase_DateTime::now()->get('H') == 23)
+        ) {
+            self::markTestSkipped('FIXME: this fails around Sunday -> Monday midnight ' .
+                'as inweek filter uses user tz, but creation_time contains utc');
+        }
+
         $this->_setupTestPath(Tinebase_Model_Container::TYPE_OTHERUSERS);
         
         $filter = array(array(
@@ -435,7 +450,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $expectedPath = $filter[0]['value'] . '/' . $this->_getOtherUserContainer()->name;
         $node = $this->_getNodeByNameFromResult($this->_getOtherUserContainer()->name, $result);
         self::assertNotNull($node);
-        self::assertEquals($expectedPath, $node['path'], 'node path mismatch');
+        self::assertEquals($expectedPath . '/', $node['path'], 'node path mismatch');
         self::assertEquals($filter[0]['value'], $result['filter'][0]['value']['path'], 'filter path mismatch');
     }
 
@@ -540,7 +555,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $node = $this->testCreateContainerNodeInPersonalFolder();
         $node['grants'] = [];
 
-        static::setExpectedException(Tinebase_Exception_SystemGeneric::class, 'you can\'t remove your own admin grant');
+        static::expectException(Tinebase_Exception_SystemGeneric::class); $this->expectExceptionMessageMatches('/you can\'t remove your own admin grant/');
         $this->_getUit()->saveNode($node);
     }
 
@@ -553,7 +568,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     {
         $testPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcon/tainer';
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_getUit()->createNodes($testPath, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
     }
 
@@ -570,7 +585,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $createdNode = $result;
         
         $this->assertEquals($_name, $createdNode['name']);
-        $this->assertEquals($testPath, $createdNode['path']);
+        $this->assertEquals($testPath . '/', $createdNode['path']);
         
         return $createdNode;
     }
@@ -593,32 +608,40 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     public function testCreateFileNodeInShared()
     {
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
-            'it should not be possible to create a file in /shared/ folder');
+        // it should not be possible to create a file in /shared/ folder
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->expectExceptionCode(403);
+
         $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/test.file',
             Tinebase_Model_Tree_FileObject::TYPE_FILE);
     }
 
     public function testCreateFileNodeInOwnPersonalFolder()
     {
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
-            'it should not be possible to create a file in own personal folder');
+        // it should not be possible to create a file in own personal folder
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->expectExceptionCode(403);
+
         $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()
                 ->accountLoginName . '/test.file', Tinebase_Model_Tree_FileObject::TYPE_FILE);
     }
 
     public function testCreateFileNodeInForeignPersonalFolder()
     {
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
-            'it should not be possible to create a file in a foreign personal folder');
+        // it should not be possible to create a file in a foreign personal folder
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->expectExceptionCode(403);
+
         $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/test.file',
             Tinebase_Model_Tree_FileObject::TYPE_FILE);
     }
 
     public function testCreateFolderNodeInForeignPersonalFolder()
     {
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class, null, 403,
-            'it should not be possible to create a file in a foreign personal folder');
+        // it should not be possible to create a file in a foreign personal folder
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->expectExceptionCode(403);
+
         $this->_getUit()->createNode('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/testFolder',
             Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
     }
@@ -636,8 +659,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($sharedContainerNode['path']);
         
         $filepaths = array(
-            $sharedContainerNode['path'] . '/file1',
-            $sharedContainerNode['path'] . '/file2',
+            $sharedContainerNode['path'] . 'file1',
+            $sharedContainerNode['path'] . 'file2',
         );
 
         $tempFileIds = array();
@@ -655,8 +678,10 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('file1', $result[0]['name']);
+        $this->assertEquals($sharedContainerNode['path'] . 'file1', $result[0]['path']);
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[0]['type']);
         $this->assertEquals('file2', $result[1]['name']);
+        $this->assertEquals($sharedContainerNode['path'] . 'file2', $result[1]['path']);
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $result[1]['type']);
         if (false === $_addData ||
                 empty(Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) ||
@@ -810,7 +835,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $tempFileIds, false);
             self::fail('it is not allowed to create new files here');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::assertContains('No permission to add nodes in path', $tead->getMessage());
+            self::assertStringContainsString('No permission to add nodes in path', $tead->getMessage());
         }
     }
 
@@ -963,12 +988,16 @@ class Filemanager_Frontend_JsonTests extends TestCase
         // create empty file first (like the js frontend does)
         $result = $this->_getUit()->createNode($filepath, Tinebase_Model_Tree_FileObject::TYPE_FILE, array(), false);
 
+        $tempFileFileFile = Tinebase_Core::getTempDir() . '/test.tmp';
+        copy(dirname(dirname(__FILE__)) . '/files/test.txt', $tempFileFileFile);
+        
         $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/files/test.txt');
+        $tempFile = $tempFileBackend->createTempFile($tempFileFileFile);
         $result = $this->_getUit()->createNode($filepath, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFile->getId(), true);
         
         $this->assertEquals('text/plain', $result['contenttype'], print_r($result, true));
         $this->assertEquals(17, $result['size']);
+        $this->assertFalse(is_file($tempFileFileFile));
         
         return $result;
     }
@@ -1008,8 +1037,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($sharedContainerNode['path']);
         
         $dirpaths = array(
-            $sharedContainerNode['path'] . '/dir1',
-            $sharedContainerNode['path'] . '/dir2',
+            $sharedContainerNode['path'] . 'dir1',
+            $sharedContainerNode['path'] . 'dir2',
         );
         $result = $this->_getUit()->createNodes($dirpaths, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
         
@@ -1081,7 +1110,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
         $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder();
         
-        $this->assertEquals('/personal/sclever/testcontainer', $personalContainerNodeOfsclever['path']);
+        $this->assertEquals('/personal/sclever/testcontainer/', $personalContainerNodeOfsclever['path']);
     }
 
     /**
@@ -1141,13 +1170,13 @@ class Filemanager_Frontend_JsonTests extends TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
         $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder('testcontainer2');
         
-        $this->assertEquals('/personal/sclever/testcontainer2', $personalContainerNodeOfsclever['path']);
+        $this->assertEquals('/personal/sclever/testcontainer2/', $personalContainerNodeOfsclever['path']);
         
         // rename
         $newPath = '/personal/sclever/testcontainer';
         $result = $this->_getUit()->moveNodes(array($personalContainerNodeOfsclever['path']), array($newPath), false);
         $this->assertEquals(1, count($result));
-        $this->assertEquals($newPath, $result[0]['path']);
+        $this->assertEquals($newPath . '/', $result[0]['path']);
     }
     
     /**
@@ -1158,9 +1187,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $dirsToCopy = $this->testCreateDirectoryNodesInShared();
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
         
-        $result = $this->_getUit()->copyNodes($dirsToCopy, $targetNode['path'], false);
+        $result = $this->_getUit()->copyNodes($dirsToCopy, rtrim($targetNode['path'], '/'), false);
         $this->assertEquals(2, count($result));
-        $this->assertEquals($targetNode['path'] . '/dir1', $result[0]['path']);
+        $this->assertEquals($targetNode['path'] . 'dir1/', $result[0]['path']);
     }
 
     /**
@@ -1189,7 +1218,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $result = $this->_getUit()->copyNodes($filesToCopy, $targetNode['path'], false);
         $this->assertEquals(2, count($result));
-        $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
+        $this->assertEquals($targetNode['path'] . 'file1', $result[0]['path']);
         static::assertNotEquals($this->_createdNodesJson[0]['object_id'], $result[0]['object_id'],
             'object_id should change');
         static::assertNotEquals($this->_createdNodesJson[1]['object_id'], $result[1]['object_id'],
@@ -1206,7 +1235,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
         file_put_contents($tempPath, 'otherData');
 
-        $changedResult = $this->_getUit()->createNode($targetNode['path'] . '/file1',
+        $changedResult = $this->_getUit()->createNode($targetNode['path'] . 'file1',
             Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileId->getId(), true);
 
         static::assertNotEquals($changedResult['object_id'], $this->_createdNodesJson[0]['object_id']);
@@ -1257,7 +1286,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $result = $this->_getUit()->copyNodes($fileToCopy['path'], $targetNode['path'], false);
         $this->assertEquals(1, count($result));
-        $this->assertEquals($targetNode['path'] . '/test.txt', $result[0]['path']);
+        $this->assertEquals($targetNode['path'] . 'test.txt', $result[0]['path']);
         $this->assertEquals('text/plain', $result[0]['contenttype']);
     }
     
@@ -1270,7 +1299,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $file1 = $filesToCopy[0];
         $file2 = $filesToCopy[1];
         
-        $this->setExpectedException('Filemanager_Exception_NodeExists');
+        $this->expectException('Filemanager_Exception_NodeExists');
         $result = $this->_getUit()->copyNodes(array($file1), array($file2), false);
     }
     
@@ -1302,9 +1331,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $dirsToMove = $this->testCreateDirectoryNodesInShared();
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
         
-        $result = $this->_getUit()->moveNodes($dirsToMove, $targetNode['path'], false);
+        $result = $this->_getUit()->moveNodes($dirsToMove, rtrim($targetNode['path'], '/'), false);
         $this->assertEquals(2, count($result));
-        $this->assertEquals($targetNode['path'] . '/dir1', $result[0]['path'], 'no new path: ' . print_r($result, true));
+        $this->assertEquals($targetNode['path'] . 'dir1/', $result[0]['path'], 'no new path: ' . print_r($result, true));
         
         $filter = array(array(
             'field'    => 'path', 
@@ -1337,7 +1366,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         } catch (Filemanager_Exception_NodeExists $fene) {
             $result = $this->_getUit()->moveNodes(array($testPath), '/shared/testcontainer', true);
             $this->assertEquals(1, count($result));
-            $this->assertEquals('/shared/testcontainer/dir1', $result[0]['path']);
+            $this->assertEquals('/shared/testcontainer/dir1/', $result[0]['path']);
         }
     }
 
@@ -1360,7 +1389,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         } catch (Filemanager_Exception_NodeExists $fene) {
             $result = $this->_getUit()->moveNodes(array($targetNode['path']), array($createdNode['path']), true);
             $this->assertEquals(1, count($result));
-            $this->assertEquals($testPath, $result[0]['path']);
+            $this->assertEquals($testPath . '/', $result[0]['path']);
         }
     }
     
@@ -1379,7 +1408,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $result = $this->_getUit()->moveNodes($dirsToMove, $targetPath, false);
         $this->assertEquals(2, count($result));
-        $this->assertEquals($targetPath . '/dir1', $result[0]['path']);
+        $this->assertEquals($targetPath . '/dir1/', $result[0]['path']);
     }
     
     /**
@@ -1392,7 +1421,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $newPath = '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainermoved';
         $result = $this->_getUit()->moveNodes($sourceNode['path'], array($newPath), false);
         $this->assertEquals(1, count($result));
-        $this->assertEquals($newPath, $result[0]['path'], 'no new path: ' . print_r($result, true));
+        $this->assertEquals($newPath . '/', $result[0]['path'], 'no new path: ' . print_r($result, true));
 
         $filter = array(array(
             'field'    => 'path', 
@@ -1420,7 +1449,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $newPath = $oldPath . 'moved';
         $result = $this->_getUit()->moveNodes(array($oldPath), array($newPath), false);
         $this->assertEquals(1, count($result));
-        $this->assertEquals($newPath, $result[0]['path']);
+        $this->assertEquals($newPath . '/', $result[0]['path']);
 
         $filter = array(array(
             'field'    => 'path', 
@@ -1447,7 +1476,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $result = $this->_getUit()->moveNodes($filesToMove, $targetNode['path'], false);
         $this->assertEquals(2, count($result));
-        $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
+        $this->assertEquals($targetNode['path'] . 'file1', $result[0]['path']);
 
         $filter = array(array(
             'field'    => 'path', 
@@ -1510,7 +1539,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $orgFolder = $this->testCreateContainerNodeInPersonalFolder();
 
         sleep(1);
-        $result = $this->_getUit()->moveNodes($orgFolder['path'], [$orgFolder['path'] . 'foo'], false);
+        $path = rtrim($orgFolder['path'], '/');
+        $result = $this->_getUit()->moveNodes($path, [$path . 'foo'], false);
         Tinebase_FileSystem::flushRefLogs();
         $this->_fsController->processRefLogs();
         $this->_fsController->clearStatCache();
@@ -1530,7 +1560,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         $result = $this->_getUit()->getNode($node['id']);
 
-        $this->assertEquals('/personal/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer', $result['path']);
+        $this->assertEquals('/personal/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer/', $result['path']);
         $this->assertTrue(isset($result['effectiveAndLocalQuota']['localUsage']), 'effectiveAndLocalQuota not present in result: ' . print_r($result, true));
     }
 
@@ -1544,7 +1574,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->deleteNodes($sharedContainerNode['path']);
 
         // check if node is deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $this->_fsController->stat($sharedContainerNode['path']);
     }
 
@@ -1626,7 +1656,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->deleteNodes($dirpaths);
 
         // check if node is deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $node = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($dirpaths[0]));
     }
     
@@ -1711,6 +1741,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     protected function _getRelationData($node)
     {
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_given'           => 'ali',
+            'n_family'          => 'PHPUNIT',
+            'org_name'          => Tinebase_Record_Abstract::generateUID(),
+            'tel_cell_private'  => '+49TELCELLPRIVATE',
+        ]));
         return array(
             'own_model'              => 'Filemanager_Model_Node',
             'own_backend'            => 'Sql',
@@ -1720,12 +1756,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             'related_backend'        => 'Sql',
             'related_model'          => 'Addressbook_Model_Contact',
             'remark'                 => null,
-            'related_record'         => array(
-                'n_given'           => 'ali',
-                'n_family'          => 'PHPUNIT',
-                'org_name'          => Tinebase_Record_Abstract::generateUID(),
-                'tel_cell_private'  => '+49TELCELLPRIVATE',
-            )
+            'related_id'             => $contact->getId()
         );
     }
 
@@ -1762,7 +1793,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->createNode($path . '/Test1/Test2', 'folder', null, false);
         $this->_getUit()->createNode($path . '/Test1/Test3', 'folder', null, false);
         
-        $this->setExpectedException('Filemanager_Exception_NodeExists');
+        $this->expectException('Filemanager_Exception_NodeExists');
         
         $this->_getUit()->moveNodes(array($path . '/Test1/Test3'), array($path . '/Test1/Test2'), false);
      }
@@ -1783,7 +1814,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             $node = $this->_getUit()->createNode($path[0], Tinebase_Model_Tree_FileObject::TYPE_FOLDER, null, false);
             
             $this->assertEquals(str_replace('/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/', '', $path[0]), $node['name']);
-            $this->assertEquals($path[0], $node['path']);
+            $this->assertEquals($path[0] . '/', $node['path']);
             
             $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($node['path']);
     
@@ -1855,7 +1886,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->createNode('/shared/Parent', 'folder', null, false);
         $this->_getUit()->createNode('/shared/Parent/Child', 'folder', null, false);
         
-        $this->setExpectedException('Filemanager_Exception_DestinationIsOwnChild');
+        $this->expectException('Filemanager_Exception_DestinationIsOwnChild');
         
         // this must not work
         $this->_getUit()->moveNodes(array('/shared/Parent'), array('/shared/Parent/Child/Parent'), false);
@@ -1871,7 +1902,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_getUit()->createNode('/shared/Parent', 'folder', null, false);
         $this->_getUit()->createNode('/shared/Parent/Child', 'folder', null, false);
     
-        $this->setExpectedException('Filemanager_Exception_DestinationIsSameNode');
+        $this->expectException('Filemanager_Exception_DestinationIsSameNode');
     
         // this must not work
         $this->_getUit()->moveNodes(array('/shared/Parent/Child'), array('/shared/Parent/Child'), false);
@@ -2155,7 +2186,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         self::assertEquals(1, $result['totalcount']);
         $node = $result['results'][0];
-        self::assertEquals('/shared/testcontainer', $node['path'], 'no path found in node: ' . print_r($node, true));
+        self::assertEquals('/shared/testcontainer/', $node['path'], 'no path found in node: ' . print_r($node, true));
         $this->_assertGrantsInNode($node);
 
         // search files + assert grants
@@ -2167,11 +2198,11 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_getUit()->searchNodes($filter, array());
         self::assertEquals(2, $result['totalcount'], 'no files found in path: ' . print_r($result, true));
         $file1Node = $result['results'][0];
-        self::assertContains('/shared/testcontainer/file', $file1Node['path'], 'no path found in node: ' . print_r($file1Node, true));
+        self::assertStringContainsString('/shared/testcontainer/file', $file1Node['path'], 'no path found in node: ' . print_r($file1Node, true));
         $this->_assertGrantsInNode($file1Node);
 
         $file2Node = $this->_getUit()->getNode($result['results'][1]['id']);
-        self::assertContains('/shared/testcontainer/file', $file2Node['path'], 'no path found in node: ' . print_r($file2Node, true));
+        self::assertStringContainsString('/shared/testcontainer/file', $file2Node['path'], 'no path found in node: ' . print_r($file2Node, true));
         $this->_assertGrantsInNode($file2Node);
     }
 
@@ -2413,6 +2444,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         $fileSystem->clearStatCache();
         $nodes = $this->_statPaths($paths);
+        static::assertSame(count($paths), count($nodes));
         $this->_assertRevisionProperties($nodes, array(), array(
             'dir1'      => $dir1TreeRevisionProperties,
             'subDir11'  => $dir1TreeRevisionProperties,
@@ -2429,6 +2461,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp/subdir11');
         $paths['subDir12'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp/subdir12');
         $nodes = $this->_statPaths($paths);
+        static::assertSame(count($paths), count($nodes));
         $this->_assertRevisionProperties($nodes, array(), array(
             'dir1'      => $dir1TreeRevisionProperties,
             'subDir11'  => $dir1TreeRevisionProperties,
@@ -2455,6 +2488,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir22/tmp/subdir11');
         $paths['subDir12'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir22/tmp/subdir12');
         $nodes = $this->_statPaths($paths);
+        static::assertSame(count($paths), count($nodes));
         $this->_assertRevisionProperties($nodes, array(), array(
             'subDir22'  => $subdir22TreeRevisionProperties,
             'dir1'      => $dir1TreeRevisionProperties,
@@ -2470,6 +2504,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $fileSystem->clearStatCache();
         $paths['subDir11'] = Tinebase_Model_Tree_Node_Path::createFromPath($prefix . $path . '/dir2/subdir21/tmp');
         $nodes = $this->_statPaths($paths);
+        static::assertSame(count($paths), count($nodes));
         $this->_assertRevisionProperties($nodes, array(), array(
             'subDir22'  => $subdir22TreeRevisionProperties,
             'dir1'      => $dir1TreeRevisionProperties,
@@ -2478,7 +2513,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
 
 
-        // reset properties for whole tree
+        // reset properties for whole tree, should not change dirs that have properties
         $testContainerRevisionProperties = array(
             Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH => 6,
             Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM   => 5,
@@ -2490,7 +2525,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         $fileSystem->clearStatCache();
         $nodes = $this->_statPaths($paths);
-        $this->_assertRevisionProperties($nodes, $testContainerRevisionProperties);
+        static::assertSame(count($paths), count($nodes));
+        $this->_assertRevisionProperties($nodes, $testContainerRevisionProperties, array(
+            'subDir22'  => $subdir22TreeRevisionProperties,
+            'dir1'      => $dir1TreeRevisionProperties,
+            'subDir12'  => $dir1TreeRevisionProperties
+        ));
     }
 
     public function testGetFolderUsage()
@@ -2538,11 +2578,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
     /**
      * testPinProtection with area lock
+     * @group nodockerci
      */
     public function testPinProtection()
     {
         $this->_createAreaLockConfig([
-            'area' => Tinebase_Model_AreaLockConfig::AREA_DATASAFE,
+            Tinebase_Model_AreaLockConfig::FLD_AREAS => [Tinebase_Model_AreaLockConfig::AREA_DATASAFE],
         ]);
         $folder = $this->testCreateContainerNodeInSharedFolder('protected');
 
@@ -2585,8 +2626,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
 
         // unlock
         $user = Tinebase_Core::getUser();
-        Tinebase_User::getInstance()->setPin($user, 1234);
-        Tinebase_AreaLock::getInstance()->unlock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE, 1234);
+        $this->_setPin();
+        Tinebase_AreaLock::getInstance()->unlock('login', 'userpin', '1234', Tinebase_Core::getUser());
 
         $result = $this->_getUit()->searchNodes($filter, array());
         $protectedNodes = array_filter($result['results'], function($item) use ($folder) {

@@ -27,6 +27,8 @@ Tine.Tinebase.data.RecordProxy = function(c) {
     Tine.Tinebase.data.RecordProxy.superclass.constructor.call(this, c);
     
     Ext.apply(this, c);
+    this.init();
+    
     this.appName    = this.appName    ? this.appName    : this.recordClass.getMeta('appName');
     this.modelName  = this.modelName  ? this.modelName  : this.recordClass.getMeta('modelName');
     this.idProperty = this.idProperty ? this.idProperty : this.recordClass.getMeta('idProperty');
@@ -113,6 +115,8 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      */
     onDestroyRecords: Ext.emptyFn,
     removeFromBatch: Ext.emptyFn,
+    
+    init: Ext.emptyFn,
     
     /**
      * Aborts any outstanding request.
@@ -482,6 +486,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             scope: this,
             params: options.params,
             callback: options.callback,
+            headers: options.headers,
             success: function(response) {
                 var args = [];
                 if (typeof options.beforeSuccess == 'function') {

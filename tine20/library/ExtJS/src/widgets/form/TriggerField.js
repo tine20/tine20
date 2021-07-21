@@ -97,7 +97,7 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
 
     getTriggerWidth: function(){
         var tw = this.trigger.getWidth();
-        if(!this.hideTrigger && tw === 0){
+        if(!(this.hideTrigger || this.readOnly) && tw === 0){
             tw = this.defaultTriggerWidth;
         }
         return tw;
@@ -226,6 +226,7 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
     },
 
     // private
+    // clicking in list would blur field -> see minicBlur
     onBlur : Ext.emptyFn,
 
     // private
@@ -349,12 +350,17 @@ Ext.form.TwinTriggerField = Ext.extend(Ext.form.TriggerField, {
         this.triggers = ts.elements;
     },
 
+    onRender : function(ct, position){
+        Ext.form.TwinTriggerField.superclass.onRender.apply(this, arguments);
+        this.wrap.addClass('x-form-field-twin-trigger-wrap');
+    },
+    
     getTriggerWidth: function(){
         var tw = 0;
         Ext.each(this.triggers, function(t, index){
             var triggerIndex = 'Trigger' + (index + 1),
                 w = t.getWidth();
-            if(w === 0 && !this['hidden' + triggerIndex]){
+            if(w === 0 && !t['hidden' + triggerIndex]){
                 tw += this.defaultTriggerWidth;
             }else{
                 tw += w;

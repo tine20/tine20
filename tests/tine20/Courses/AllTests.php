@@ -22,7 +22,7 @@ class Courses_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Courses All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Courses All Tests');
         $suite->addTestSuite('Courses_JsonTest');
         $suite->addTestSuite('Courses_CliTest');
         return $suite;

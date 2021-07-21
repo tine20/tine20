@@ -26,7 +26,7 @@ describe('employee', () => {
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
         });
     
-        describe('vacation (freetime)', () => {
+        describe.skip('vacation (freetime)', () => {
             const testString = 'test vacation ' + Math.round(Math.random() * 10000000);
             test('vacation grid', async () => {
                 await expect(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Urlaub'});
@@ -137,7 +137,7 @@ describe('employee', () => {
             });
         });
 
-        describe('sickness (freetime)', () => {
+        describe.skip('sickness (freetime)', () => {
             const testString = 'test sickness ' + Math.round(Math.random() * 10000000);
             test('sickness grid', async () => {
                 await expect(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Krankheit'});
@@ -175,7 +175,9 @@ describe('employee', () => {
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled');
                     await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
-                    
+
+                    await employeeEditDialog.screenshot({path: 'screenshots/HumanResources/13_humanresources_mitarbeiter_krankheit.png'});
+
                     await expect(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-SICKNESS .x-grid3-col-description', {text: testString});
                 });
             });

@@ -29,8 +29,8 @@ class CoreData_JsonTest extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_uit = new CoreData_Frontend_Json();
     }

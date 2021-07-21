@@ -6,7 +6,7 @@
  * @subpackage  Adapter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,14 +18,10 @@
 class Tinebase_AreaLock_Presence implements Tinebase_AreaLock_Interface
 {
     /**
-     * @var null|Tinebase_Model_AreaLockConfig
+     * @var Tinebase_Model_AreaLockConfig
      */
-    protected $_config = null;
+    protected $_config;
 
-    /**
-     * Tinebase_AreaLock_Presence constructor.
-     * @param Tinebase_Model_AreaLockConfig $config
-     */
     public function __construct(Tinebase_Model_AreaLockConfig $config)
     {
         if (! $config->lifetime) {
@@ -35,48 +31,36 @@ class Tinebase_AreaLock_Presence implements Tinebase_AreaLock_Interface
         $this->_config = $config;
     }
 
-    /**
-     * @param string $area
-     * @return Tinebase_DateTime
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    public function saveValidAuth($area)
+    public function saveValidAuth(): Tinebase_DateTime
     {
         $lifetimeSeconds = $this->_config->lifetime * 60;
         $validity = Tinebase_DateTime::now()->addSecond($lifetimeSeconds);
-        Tinebase_Presence::getInstance()->setPresence(__CLASS__ . '#' . $area, $lifetimeSeconds);
+        Tinebase_Presence::getInstance()->setPresence($this->_getPresenceKey(), $lifetimeSeconds);
         return $validity;
     }
 
-    /**
-     * @param $area
-     * @return bool
-     */
-    public function hasValidAuth($area)
+    public function hasValidAuth(): bool
     {
-        if ($validUntil = $this->getAuthValidity($area)) {
+        if ($validUntil = $this->getAuthValidity()) {
             return Tinebase_DateTime::now()->isEarlier($validUntil);
         } else {
             return false;
         }
     }
 
-    /**
-     * @param $area
-     * @return bool|Tinebase_DateTime
-     */
-    public function getAuthValidity($area)
+    public function getAuthValidity(): ?Tinebase_DateTime
     {
-        $lastPresence = Tinebase_Presence::getInstance()->getLastPresence(__CLASS__ . '#' . $area);
-        $lifetimeSeconds = $this->_config->lifetime * 60;
-        return $lastPresence ? $lastPresence->addSecond($lifetimeSeconds) : false;
+        $lastPresence = Tinebase_Presence::getInstance()->getLastPresence($this->_getPresenceKey());
+        return $lastPresence ? $lastPresence->addSecond($this->_config->lifetime * 60) : null;
     }
 
-    /**
-     * @param string $area
-     */
-    public function resetValidAuth($area)
+    public function resetValidAuth(): void
     {
-        Tinebase_Presence::getInstance()->resetPresence(__CLASS__ . '#' . $area);
+        Tinebase_Presence::getInstance()->resetPresence($this->_getPresenceKey());
+    }
+
+    protected function _getPresenceKey(): string
+    {
+        return __CLASS__ . '#' . $this->_config->getKey();
     }
 }

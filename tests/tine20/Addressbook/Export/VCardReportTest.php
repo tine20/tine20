@@ -49,8 +49,8 @@ class Addressbook_Export_VCardReportTest extends Calendar_TestCase
         $exportFilenamePath = 'Filemanager/folders/shared/unittestexport/'
             . str_replace([' ', DIRECTORY_SEPARATOR], '', $this->_getTestAddressbook()->name . '.vcf');
         $vcf = file_get_contents('tine20:///' . $exportFilenamePath);
-        self::assertContains('Platz der Deutschen Einheit 4', $vcf);
-        self::assertContains('BEGIN:VCARD', $vcf);
+        self::assertStringContainsString('Platz der Deutschen Einheit 4', $vcf);
+        self::assertStringContainsString('BEGIN:VCARD', $vcf);
         self::assertEquals(7, substr_count($vcf, 'BEGIN:VCARD'),
             'expected 7 contacts');
     }

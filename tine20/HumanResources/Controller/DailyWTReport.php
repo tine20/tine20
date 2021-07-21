@@ -116,16 +116,22 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             return true;
         }
 
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
-            ['field' => 'employment_end', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMonth(2)]
-        ], '', [Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL => true]);
-        $iterator = new Tinebase_Record_Iterator(array(
-            'iteratable' => $this,
-            'controller' => HumanResources_Controller_Employee::getInstance(),
-            'filter'     => $filter,
-            'function'   => 'calculateReportsForEmployees',
-        ));
-        $iterator->iterate();
+        Tinebase_Core::acquireMultiServerLock(__METHOD__);
+
+        try {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                ['field' => 'employment_end', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->subMonth(2)]
+            ], '', [Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL => true]);
+            $iterator = new Tinebase_Record_Iterator(array(
+                'iteratable' => $this,
+                'controller' => HumanResources_Controller_Employee::getInstance(),
+                'filter' => $filter,
+                'function' => 'calculateReportsForEmployees',
+            ));
+            $iterator->iterate();
+        } finally {
+            Tinebase_Core::releaseMultiServerLock(__METHOD__);
+        }
 
         return true;
     }
@@ -175,8 +181,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         // init some member vars
         $this->_monthlyWTR = [];
         $this->_employee = $employee;
-        $this->_startDate = $startDate ? $startDate : $this->_getStartDate();
-        $this->_endDate = $endDate ? $endDate : $this->_getEndDate();
+        $this->_startDate = $startDate ?: $this->_getStartDate();
+        $this->_endDate = $endDate ?: $this->_getEndDate();
         $this->_reportResult = [
             'created' => 0,
             'updated' => 0,
@@ -377,8 +383,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     protected function _getBLPipe(HumanResources_Model_WorkingTimeScheme $_wts)
     {
         if (!isset($this->_wtsBLPipes[$_wts->getId()])) {
-            if (! $_wts->blpipe instanceof  Tinebase_Record_RecordSet || $_wts->blpipe->count() === 0) {
-                return $this->_wtsBLPipes[$_wts->getId()] = false; // assignment on purpose
+            if (! $_wts->blpipe instanceof Tinebase_Record_RecordSet) {
+                $_wts->blpipe = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_Config::class);
             }
             $rs = $_wts->blpipe->getClone(true);
             $record = new HumanResources_Model_BLDailyWTReport_Config([
@@ -402,15 +408,21 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     {
         if (!isset($this->_feastDays[$feastCalendarId])) {
             $this->_feastDays[$feastCalendarId] = [];
+            /** @var Calendar_Model_EventFilter $filter */
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
                 ['field' => 'container_id', 'operator' => 'equals', 'value' => $feastCalendarId],
-                ['field' => 'dtstart', 'operator' => 'before_or_equals', 'value' => $this->_endDate],
-                ['field' => 'dtend', 'operator' => 'after_or_equals', 'value' => $this->_startDate],
-
+                ['field' => 'period', 'operator' => 'within', 'value' => [
+                    'from' => $this->_startDate,
+                    'until' => $this->_endDate,
+                ]]
             ]);
+
+            $events = Calendar_Controller_Event::getInstance()->search($filter);
+            Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $filter);
+
             // turn off acl?
             /** @var Calendar_Model_Event $event */
-            foreach (Calendar_Controller_Event::getInstance()->search($filter) as $event) {
+            foreach ($events as $event) {
                 $event->dtstart->setTimezone($event->originator_tz);
                 $day = $event->dtstart->format('Y-m-d');
                 if (!isset($this->_feastDays[$feastCalendarId][$day])) {
@@ -430,7 +442,75 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
      */
     protected function _getStartDate()
     {
-        return Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST);
+        $lastClearedReport = HumanResources_Controller_MonthlyWTReport::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
+                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID, 'operator' => 'equals', 'value' => $this->_employee->getId()],
+                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_IS_CLEARED, 'operator' => 'equals', 'value' => true]
+            ]), new Tinebase_Model_Pagination([
+                'sort'  => HumanResources_Model_MonthlyWTReport::FLDS_MONTH,
+                'dir'   => 'DESC',
+                'limit' => 1
+            ]))->getFirstRecord();
+        if ($lastClearedReport) {
+            $start_date = (new Tinebase_DateTime($lastClearedReport->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}
+                . '-01 00:00:00'))->addMonth(1);
+        } elseif ($this->_employee->contracts instanceof Tinebase_Record_RecordSet) {
+            $this->_employee->contracts->sort('start_date');
+            $start_date = clone $this->_employee->contracts->getFirstRecord()->start_date;
+        } else {
+            return Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST);
+        }
+
+        $lastReport = HumanResources_Controller_MonthlyWTReport::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
+                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID, 'operator' => 'equals', 'value' => $this->_employee->getId()],
+                ['field' => HumanResources_Model_MonthlyWTReport::FLDS_IS_CLEARED, 'operator' => 'equals', 'value' => false]
+            ]), new Tinebase_Model_Pagination([
+                'sort'  => HumanResources_Model_MonthlyWTReport::FLDS_MONTH,
+                'dir'   => 'DESC',
+                'limit' => 1
+            ]))->getFirstRecord();
+        if ($lastReport) {
+            $time = ($lastReport->last_modified_time ?: $lastReport->creation_time)->getCLone()->subMinute(5);
+            if ($this->_employee->contracts->filter(function(HumanResources_Model_Contract $c) use($time) {
+                        if ($c->last_modified_time && $c->last_modified_time->isLater($time)) return true;
+                        return false;
+                    })->count() === 0) {
+                // no contract changes
+                // check TS
+                $filterData = [
+                    ['field' => 'account_id', 'operator' => 'equals', 'value' => $this->_employee->account_id],
+                    ['field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $start_date->format('Y-m-d')],
+                    ['field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $this->_getEndDate()->format('Y-m-d')],
+                ];
+
+                // fetch all timesheets of an employee that changed after last calculation and that start_date after time of interest
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Timetracker_Model_Timesheet::class,
+                    $filterData
+                );
+                $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Timetracker_Model_Timesheet::class,
+                    [
+                        ['field' => 'last_modified_time', 'operator' => 'after_or_equals', 'value' => $time],
+                        ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $time],
+                    ],
+                    'OR'
+                ));
+
+                if (($firstTS = Timetracker_Controller_Timesheet::getInstance()->search($filter, new Tinebase_Model_Pagination([
+                            'sort'  => 'start_date',
+                            'dir'   => 'ASC',
+                            'limit' => 1
+                        ]))->getFirstRecord()) && $firstTS->start_date->isLater($start_date)) {
+                    $start_date = $firstTS->start_date;
+                } else {
+                    $start_date = Tinebase_DateTime::now()->setTime(0, 0, 0);
+                }
+            }
+        }
+
+        return $start_date;
     }
 
     /**
@@ -484,7 +564,6 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             ]],
             ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $this->_startDate->format('Y-m-d')],
             ['field' => 'date', 'operator' => 'before_or_equals', 'value' => $this->_endDate->format('Y-m-d')],
-
         ]);
 
         $result = [];
@@ -648,5 +727,26 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 break;
             }
         }
+    }
+
+    /**
+     * check rights
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_WORKINGTIME, FALSE);
+
+        if (! $hasRight) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' daily WT report.');
+        }
+        parent::_checkRight($_action);
     }
 }

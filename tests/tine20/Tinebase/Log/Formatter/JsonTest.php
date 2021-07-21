@@ -35,6 +35,6 @@ class Tinebase_Log_Formatter_JsonTest extends Tinebase_Log_Formatter_AbstractTes
 
         $this->_logger->notice("test logging");
         $loggerLines = file_get_contents($this->_logfile);
-        self::assertContains(PHP_EOL, $loggerLines, 'no linebreak between log statements');
+        self::assertStringContainsString(PHP_EOL, $loggerLines, 'no linebreak between log statements');
     }
 }

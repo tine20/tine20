@@ -124,8 +124,8 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
         try {
             $messageId = $this->_getMessageId($message);
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Message might be removed from cache. Error: ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Message might be removed from cache (' . $e->getMessage() . ')');
             return $result;
         }
         $locations = Felamimail_Controller_MessageFileLocation::getInstance()->getLocationsByReference(
@@ -149,6 +149,13 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
             throw new Tinebase_Exception_InvalidArgument('existing record is required');
         }
 
+        if (strlen($record->getId()) > 40) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' record: ' . print_r($record->toArray(), true));
+            }
+            throw new Tinebase_Exception_InvalidArgument('record id is too long: ' . $record->getId());
+        }
+
         $messageId = $this->_getMessageId($message);
         $locationToCreate = clone($location);
         $locationToCreate->message_id = $messageId;
@@ -167,8 +174,10 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
         try {
             $this->create($locationToCreate);
         } catch (Zend_Db_Statement_Exception $zdse) {
-            if (Tinebase_Exception::isDbDuplicate($zdse) && Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+            if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                }
             } else {
                 throw $zdse;
             }

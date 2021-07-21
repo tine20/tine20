@@ -73,9 +73,6 @@ Ext.ux.form.Spinner.NumberStrategy = function(config){
 
 Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
 
-    allowDecimals : true,
-    decimalPrecision : 2,
-    
     init : function(field) {
         field.setValue = Ext.ux.form.NumberField.prototype.setValue;
         field.parseValue = Ext.ux.form.NumberField.prototype.parseValue;
@@ -83,7 +80,12 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
         field.getValue = Ext.ux.form.NumberField.prototype.getValue;
         field.fixPrecision = Ext.ux.form.NumberField.prototype.fixPrecision;
         field.beforeBlur = Ext.ux.form.NumberField.prototype.beforeBlur;
-        
+        field.decimalSeparator =  Ext.ux.form.NumberField.prototype.decimalSeparator;
+        field.thousandSeparator =  Ext.ux.form.NumberField.prototype.thousandSeparator;
+        field.useThousandSeparator =  field.useThousandSeparator === undefined ? Ext.ux.form.NumberField.prototype.useThousandSeparator : field.useThousandSeparator;
+        this.decimalPrecision = field.decimalPrecision ? field.decimalPrecision : Ext.ux.form.NumberField.prototype.decimalPrecision;
+        field.allowDecimals = field.allowDecimals ? field.allowDecimals : this.allowDecimals;
+
         field.el.applyStyles('text-align: right');
     },
     spin : function(field, down, alternate){

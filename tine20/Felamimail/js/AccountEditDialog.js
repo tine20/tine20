@@ -11,7 +11,7 @@
 Ext.namespace('Tine.Felamimail');
 
 require('./SignatureGridPanel');
-
+require('./sieve/VacationPanel');
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.AccountEditDialog
@@ -60,7 +60,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 idProperty: 'id'
             });
         }
-
+        
         Tine.Felamimail.AccountEditDialog.superclass.initComponent.call(this);
     },
 
@@ -88,7 +88,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.grantsGrid.setValue(this.record.get('grants'));
         }
-
+        
+        if (this.isSystemAccount()) {
+            this.loadVacationRecord();
+            this.loadRuleRecord();
+        }
+        
         this.disableFormFields();
     },
 
@@ -105,6 +110,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordUpdate.apply(this, arguments);
 
         this.record.set('grants', this.grantsGrid.getValue());
+
+        if (this.isSystemAccount()) {
+            this.updateVacationRecord();
+            this.updateRuleRecord();
+        }
     },
 
     disableFormFields: function() {
@@ -121,10 +131,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(disabled);
                     break;
                 case 'signatures':
+                case 'from':
                 case 'signature_position':
                 case 'display_format':
                 case 'compose_format':
                 case 'preserve_format':
+                case 'organization':
                 case 'reply_to':
                 case 'sent_folder':
                 case 'trash_folder':
@@ -169,6 +181,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     // always disabled for non-system accounts
                     item.setDisabled(! this.isSystemAccount());
                     break;
+                case 'enabled':
+                    item.setDisabled(! this.isSystemAccount());
+                    break;
                 default:
                     item.setDisabled(! this.asAdminModule && this.isSystemAccount());
             }
@@ -203,6 +218,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return this.record.get('type') === 'system' || this.record.get('type') === 'shared' || this.record.get('type') === 'userInternal' || this.record.get('type') === 'adblist';
     },
     
+    isExternalUserAccount: function () {
+        return this.record.get('type') === 'user';
+    },
+    
     /**
      * returns dialog
      * 
@@ -210,6 +229,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+        const me = this;
         this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
             selectType: 'both',
             title:  i18n._('Permissions'),
@@ -219,7 +239,26 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             selectTypeDefault: 'group',
             height : 250,
             disabled: ! this.asAdminModule,
-            recordClass: Tine.Tinebase.Model.Grant
+            recordClass: Tine.Tinebase.Model.Grant,
+            checkState: function() {
+                const disabled = ! (me.record.get('type') === 'shared' && me.asAdminModule);
+                me.grantsGrid.setDisabled(disabled);
+            }
+        });
+
+        this.rulesGridPanel = new Tine.Felamimail.sieve.RulesGridPanel({
+            title: i18n._('Rules'),
+            account: this.record ? this.record : null,
+            recordProxy: this.ruleRecordProxy,
+            initialLoadAfterRender: false,
+            disabled: !this.isSystemAccount()
+        });
+        
+        this.vacationPanel = new Tine.Felamimail.sieve.VacationPanel({
+            title: i18n._('Vacation'),
+            account: this.record,
+            editDialog: this,
+            disabled: !this.isSystemAccount()
         });
         
         var commonFormDefaults = {
@@ -232,6 +271,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return {
             xtype: 'tabpanel',
+            name: 'accountEditPanel',
             deferredRender: false,
             border: false,
             activeTab: 0,
@@ -290,6 +330,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     }
                                 },
                                 scope: this
+                            },
+                            checkState: function() {
+                                const disabled = me.record.get('type') === 'shared' || me.record.get('type') === 'adblist';
+                                this.setDisabled(disabled);
                             }
                         }, this.userAccountPicker = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
@@ -340,14 +384,20 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: [[{
                     fieldLabel: this.app.i18n._('Host'),
                     name: 'host',
-                    allowBlank: this.asAdminModule
+                    allowBlank: this.asAdminModule,
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Port (Default: 143 / SSL: 993)'),
                     name: 'port',
                     allowBlank: this.asAdminModule,
                     maxLength: 5,
                     value: 143,
-                    xtype: 'numberfield'
+                    xtype: 'numberfield',
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'ssl',
@@ -363,18 +413,48 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['none', this.app.i18n._('None')],
                         ['tls',  this.app.i18n._('TLS')],
                         ['ssl',  this.app.i18n._('SSL')]
-                    ]
+                    ],
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 },{
                     fieldLabel: this.app.i18n._('Username'),
                     name: 'user',
-                    allowBlank: this.asAdminModule
+                    allowBlank: this.asAdminModule,
+                    checkState: function() {
+                        const disabled = !(
+                            !me.record.get('type')
+                            || me.record.get('type') === 'userInternal'
+                            || me.record.get('type') === 'user'
+                        );
+                        this.setDisabled(disabled);
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Password'),
                     name: 'password',
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
-                    inputType: 'password'
-                }]]
+                    clipboard: false,
+                    listeners: {
+                        scope: this,
+                        keyup: (field)=> {
+                            if ('' !== field.getValue()) {
+                                this.imapButton.setDisabled(false);
+                                this.smtpButton.setDisabled(false);
+                            }
+                        }
+                    },
+                    checkState: function() {
+                        me.disablePasswordField(me.getForm().findField('password'));
+                    }
+                },
+                this.imapButton = new Ext.Button({
+                    text: this.app.i18n._('Test IMAP Connection'),
+                    handler: () => {
+                        this.testConnection('IMAP', true, true);
+                    },
+                    disabled: true
+                })]]
             }, {
                 title: this.app.i18n._('SMTP'),
                 autoScroll: true,
@@ -384,14 +464,20 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 formDefaults: commonFormDefaults,
                 items: [[ {
                     fieldLabel: this.app.i18n._('Host'),
-                    name: 'smtp_hostname'
+                    name: 'smtp_hostname',
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Port (Default: 25)'),
                     name: 'smtp_port',
                     maxLength: 5,
                     xtype:'numberfield',
                     value: 25,
-                    allowBlank: this.asAdminModule
+                    allowBlank: this.asAdminModule,
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'smtp_ssl',
@@ -406,7 +492,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['none', this.app.i18n._('None')],
                         ['tls',  this.app.i18n._('TLS')],
                         ['ssl',  this.app.i18n._('SSL')]
-                    ]
+                    ],
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Authentication'),
                     name: 'smtp_auth',
@@ -421,17 +510,44 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ['none',    this.app.i18n._('None')],
                         ['login',   this.app.i18n._('Login')],
                         ['plain',   this.app.i18n._('Plain')]
-                    ]
+                    ],
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 },{
                     fieldLabel: this.app.i18n._('Username (optional)'),
-                    name: 'smtp_user'
+                    name: 'smtp_user',
+                    checkState: function() {
+                        const disabled = me.isSystemAccount() || (me.asAdminModule && me.record.get('type') === 'user');
+                        this.setDisabled(disabled);
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Password (optional)'),
                     name: 'smtp_password',
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
-                    inputType: 'password'
-                }]]
+                    clipboard: false,
+                    listeners: {
+                        scope: this,
+                        keyup: (field)=> {
+                            if ('' !== field.getValue()) {
+                                this.imapButton.setDisabled(false);
+                                this.smtpButton.setDisabled(false);
+                            }
+                        }
+                    },
+                    checkState: function() {
+                        const disabled = me.isSystemAccount() || (me.asAdminModule && me.record.get('type') === 'user');
+                        this.setDisabled(disabled);
+                    }
+                },
+                    this.smtpButton = new Ext.Button({
+                    text: this.app.i18n._('Test SMTP Connection'),
+                    handler: () => {
+                        this.testConnection('SMTP',true, true);
+                    },
+                    disabled: true
+                })]]
             }, {
                 title: this.app.i18n._('Sieve'),
                 autoScroll: true,
@@ -442,13 +558,19 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: [[{
                     fieldLabel: this.app.i18n._('Host'),
                     name: 'sieve_hostname',
-                    maxLength: 64
+                    maxLength: 64,
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Port (Default: 2000)'),
                     name: 'sieve_port',
                     maxLength: 5,
                     value: 2000,
-                    xtype:'numberfield'
+                    xtype:'numberfield',
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Secure Connection'),
                     name: 'sieve_ssl',
@@ -462,21 +584,33 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     store: [
                         ['none', this.app.i18n._('None')],
                         ['tls',  this.app.i18n._('TLS')]
-                    ]
+                    ],
+                    checkState: function() {
+                        this.setDisabled(me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Notification Email'),
                     name: 'sieve_notification_email',
-                    vtype: 'email'
+                    vtype: 'email',
+                    checkState: function() {
+                        this.setDisabled(! me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Auto-move notifications'),
                     name: 'sieve_notification_move',
                     xtype: 'checkbox',
-                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications')
+                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications'),
+                    checkState: function() {
+                        this.setDisabled(! me.isSystemAccount());
+                    }
                 }, {
                     fieldLabel: this.app.i18n._('Auto-move notifications folder'),
                     name: 'sieve_notification_move_folder',
                     maxLength: 255,
-                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications')
+                    hidden: ! Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications'),
+                    checkState: function() {
+                        this.setDisabled(! me.isSystemAccount());
+                    }
                 }
                 ]]
             }, {
@@ -569,8 +703,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     app: this.appName,
                     record_id: this.record.id,
                     record_model: this.modelName
-            }),
-            this.grantsGrid
+            }), 
+                this.rulesGridPanel,
+                this.vacationPanel,
+                this.grantsGrid
             ]
         };
     },
@@ -697,6 +833,258 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
         }
         return this.grantsStore;
+    },
+
+    /**
+     * generic apply changes handler
+     */
+    onApplyChanges: async function(closeWindow) {
+
+        let result = true;
+        let errorMessage = '';
+        const password = this.getForm().findField('password').getValue();
+        
+        //only test connection for external user account
+        if (this.isExternalUserAccount() && '' !== password) {
+            await (_.reduce(['IMAP', 'SMTP'], (pre, server) => {
+                return pre.then(async () => {
+                    await this.testConnection(server, false)
+                        .catch((e) => {
+                            result = false;
+                            errorMessage = errorMessage + '</b><br>' + e.message;
+                        });
+                })
+            }, Promise.resolve()));
+        }
+        
+        if(!result) {
+            Ext.MessageBox.show({
+                title: this.app.i18n._('Warning'),
+                msg: this.app.i18n._(
+                    'Server connection failed. Do you still want to save this setting and exit?')
+                    + '<br>'
+                    + errorMessage,
+                buttons: Ext.MessageBox.YESNO,
+                fn: (btn) => {
+                    if (btn === 'yes') {
+                        Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
+                    }
+                },
+                icon: Ext.MessageBox.WARNING
+            });
+        } else {
+            Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+        }
+    },
+
+    /**
+     * test IMAP or SMTP connection
+     *
+     */
+    testConnection: async function (server, showDialog = true, forceConnect = false) {
+
+        let message = this.app.i18n._('Connection succeed');
+        let fields = {
+            'SMTP': {
+                'smtp_hostname': '',
+                'smtp_port': '',
+                'smtp_ssl': '',
+                'smtp_auth': '',
+                'smtp_user': '',
+                'smtp_password': '',
+                'user': '', //use Imap username if not set
+                'password': '' //use Imap password if not set
+            },
+            'IMAP': {
+                'host': '',
+                'port': '',
+                'ssl': '',
+                'user': '',
+                'password': ''
+            }
+        };
+
+        _.each(fields[server], (val, key) => {
+            val = this.getForm().findField(key).getValue();
+            fields[server][key] = val ? val : '';
+        }, this);
+        
+        try {
+            //show load mask
+            if (!this['connectLoadMask' + server]) {
+                this['connectLoadMask' + server] = new Ext.LoadMask(this.getEl(), {
+                    msg: String.format(this.app.i18n._('Connecting to {0} server...'), server)
+                });
+            }
+            
+            this['connectLoadMask' + server].show();
+            
+            //test connection
+            await Tine.Felamimail[server === 'SMTP' ? 'testSmtpSettings' : 'testIMapSettings'](this.record.id, fields[server], forceConnect);
+        } catch (e) {
+            message = this.app.i18n._hidden(_.get(e,'message',this.app.i18n._('Connection failed')));
+            return Promise.reject(new Error(message));
+        } finally {
+            this['connectLoadMask' + server].hide();
+            
+            if (showDialog) {
+                Ext.MessageBox.alert(
+                    this.app.formatMessage('{server} Connection Status',{server : server}),
+                    message
+                ).setIcon(result ? Ext.MessageBox.INFO : Ext.MessageBox.WARNING);
+            }
+        }
+        
+        return message;
+    },
+
+    /**
+     * load vacation record
+     *
+     */
+    loadVacationRecord: async function() {
+        let me = this;
+
+        if (!me.record.id) {
+            return;
+        }
+
+        if (!me.vacationRecordProxy) {
+            me.vacationRecordProxy = new Tine.Tinebase.data.RecordProxy({
+                appName: me.asAdminModule ? 'Admin' : 'Felamimail',
+                modelName: me.asAdminModule ? 'SieveVacation' : 'Vacation',
+                recordClass: Tine.Felamimail.Model.Vacation,
+                idProperty: 'id'
+            });
+        }
+
+        try {
+            me.vacationRecord = await me.vacationRecordProxy.promiseLoadRecord(me.record);
+            await me.afterIsRendered();
+
+            // mime type is always multipart/alternative
+            me.vacationRecord.set('mime', 'multipart/alternative');
+            if (me.record && me.record.get('signature')) {
+                me.vacationRecord.set('signature', me.record.get('signature'));
+            }
+
+            me.getForm().loadRecord(me.vacationRecord);
+            me.record.set('vacation',me.vacationRecord.data);
+
+            this.checkStates();
+        } catch (e) {
+            //deactivate the panel
+            me.vacationPanel.setDisabled(true);
+        }
+    },
+
+    
+    /*
+     * load rule record
+     *
+     */
+    loadRuleRecord: function() {
+        let me = this;
+        if (!me.record.id) {
+            return;
+        }
+
+        if (!me.ruleRecordProxy) {
+            me.ruleRecordProxy = me.asAdminModule ? new Tine.Felamimail.RulesBackend({
+                appName: 'Admin',
+                modelName: 'SieveRule'
+            }) : Tine.Felamimail.rulesBackend;
+        }
+
+        me.ruleRecord = me.ruleRecordProxy.searchRecords(me.record.id, null, {
+            scope: me,
+            success: function(response) {
+                if (Ext.isArray(response.records)) {
+                    Ext.each(response.records, function(item) {
+                        let record = me.ruleRecordProxy.recordReader({responseText: Ext.encode(item)});
+                        me.rulesGridPanel.store.addSorted(record);
+                    });
+                }
+                me.ruleRecord = response.records;
+            },
+            failure: function (exception) {
+                Tine.Felamimail.handleRequestException(exception);
+            },
+        });
+
+        me.getForm().loadRecord(me.ruleRecord);
+    },
+
+    /**
+     * update vacation record
+     *
+     */
+    updateVacationRecord: async function() {
+        let me = this;
+        
+        if (!me.record.id || 
+            !me.vacationRecord || 
+            !me.vacationPanel) {
+            return;
+        }
+
+        let form = me.getForm();
+        let contactIds = [];
+        
+        form.updateRecord(me.vacationRecord);
+        
+        Ext.each(['contact_id1', 'contact_id2'], function (field) {
+            if (form.findField(field) && form.findField(field).getValue() !== '') {
+                contactIds.push(form.findField(field).getValue());
+            }
+        }, this);
+        
+        let template = form.findField('template_id').getValue();
+
+        me.vacationRecord.set('contact_ids', contactIds);
+        me.vacationRecord.set('template_id', template);
+        
+        if (template !== '') {
+            try {
+                let response = await Tine.Felamimail.getVacationMessage(me.vacationRecord.data);
+                me.vacationPanel.reasonEditor.setValue(response.message);
+            } catch (e) {
+                Tine.Felamimail.handleRequestException(e);
+            }
+        }
+
+        await me.vacationRecordProxy.saveRecord(me.vacationRecord);
+    },
+
+    /**
+     * update rule record
+     *
+     */
+    updateRuleRecord: async function () {
+        let me = this;
+        
+        if (!me.ruleRecordProxy || 
+            !me.record.id ||
+            me.rulesGridPanel.store.getCount() === 0
+        ) {
+            return;
+        }
+
+        let rules = [];
+        me.rulesGridPanel.store.each(function (record) {
+            rules.push(record.data);
+        });
+
+        await me.ruleRecordProxy.saveRules(me.record.id, rules, {
+            scope: me,
+            success: function (record) {
+                me.purgeListeners();
+            },
+            failure: Tine.Felamimail.handleRequestException.createSequence(function () {
+                me.hideLoadMask();
+            }, me),
+            timeout: 150000 // 3 minutes
+        });
     }
 });
 

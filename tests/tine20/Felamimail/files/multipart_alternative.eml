@@ -2,8 +2,8 @@ Received-SPF: none (mail-3.metaways.net: domain of
 	newsletter@infin-online.de does not designate permitted sender hosts)
 Received: from mail.infin-online.de (mail.infin-online.de [82.149.86.186])
 	by mail3.metaways.net (Postfix) with SMTP id 0F8431951
-	for <lars@kneschke.de>; Thu,  9 Apr 2009 23:12:42 +0200 (MEST)
-Received: from mailserver2 by mail.infin-online.de for lars@kneschke.de;
+	for <someone@mail.test>; Thu,  9 Apr 2009 23:12:42 +0200 (MEST)
+Received: from mailserver2 by mail.infin-online.de for someone@mail.test;
 	Thu, 9 Apr 2009 23:12:43 +0200
 Message-ID: <07D9040973EF170C2A26@mail.infin-online.de>
 Subject: =?iso-8859-1?q?Kondome=20im=20Test=3a=20Fast=20schon=20perfekt?=
@@ -13,9 +13,9 @@ X-DATA1: t0me0048
 X-USER_ID: 285996
 X-FSNUM: PSSW56988452
 Date: Thu, 9 Apr 2009 23:12:43 +0200
-To: lars@kneschke.de
+To: someone@mail.test
 X-Mailer: Copia emailFacts v7.249
-X-Tine20TestMessage: multipart/alternative
+X-Tine20TestMessage: multipart_alternative.eml
 X-Antispam: No, score=1.0/5.0, scanned in 4.062sec at (mail3.metaways.net
 	[127.0.0.1])
 	by smf-spamd v1.3.1 - http://smfs.sf.net/

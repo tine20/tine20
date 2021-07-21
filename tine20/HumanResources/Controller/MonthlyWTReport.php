@@ -27,7 +27,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_applicationName = HumanResources_Config::APP_NAME;
         $this->_modelName = HumanResources_Model_MonthlyWTReport::class;
@@ -42,6 +42,27 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         $this->_doContainerACLChecks = false;
     }
 
+    /**
+     * @param string|HumanResources_Model_Employee $employeeId
+     * @param strig|Date $month default current year
+     * @return HumanResources_Model_MonthlyWTReport|NULL
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getByEmployeeMonth($employeeId, $month=null)
+    {
+        $employeeId = !($employeeId instanceof HumanResources_Model_Employee) ?: $employeeId->getId();
+        $month = $month ?: Tinebase_DateTime::now();
+        $month = !($month instanceof DateTime) ?: $month->format('Y-m');
+
+        // find account
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
+            ['field' => HumanResources_Model_MonthlyWTReport::FLDS_MONTH,         'operator' => 'equals', 'value' => $month],
+            ['field' => HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID ,  'operator' => 'equals', 'value' => $employeeId]
+        ]);
+
+        return $this->search($filter)->getFirstRecord();
+    }
+    
     /**
      * will recalculate the given monthly report and all reports that exist after the given one
      *
@@ -232,5 +253,26 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
                 $dailyCtrl->setRequestContext([]);
             }
         }
+    }
+
+    /**
+     * check rights
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_WORKINGTIME, FALSE);
+
+        if (! $hasRight) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' monthly WT report.');
+        }
+        parent::_checkRight($_action);
     }
 }

@@ -209,7 +209,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @param string|Felamimail_Model_Account $_accountId
      * @param string $_folderName to create
-     * @param string $_parentFolder
+     * @param string $_parentFolder parent folder globalname
      * @return Felamimail_Model_Folder
      * @throws Felamimail_Exception_IMAPServiceUnavailable
      * @throws Tinebase_Exception_SystemGeneric
@@ -242,11 +242,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             
             $folder = $this->_backend->create($folder);
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new folder: ' . $globalname);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Create new folder: ' . $globalname);
             
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // perhaps the folder already exists
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not create new folder: ' . $globalname . ' (' . $zmse->getMessage() . ')');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Could not create new folder: ' . $globalname . ' (' . $zmse->getMessage() . ')');
             
             // reload folder cache of parent
             $parentSubs = $this->_cacheController->update($account, $_parentFolder);
@@ -256,7 +258,11 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             }
 
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            $nodeExistException = new Tinebase_Exception_SystemGeneric($translation->translate('Folder with this name already exists!'));
+            $nodeExistException = new Tinebase_Exception_SystemGeneric(str_replace(
+                ['{0}'],
+                [$globalname],
+                $translation->translate('Folder with name {0} already exists!')
+            ));
             $nodeExistException->setTitle($translation->translate('Failure on create folder'));
             throw $nodeExistException;
         }
@@ -698,5 +704,34 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         ));
         
         return $this->_backend->search($filter);
+    }
+
+    /**
+     * reload folder cache on primary account - only do this once an hour (with caching)
+     *
+     * @param Felamimail_Model_Account $account
+     * @return boolean
+     */
+    public function reloadFolderCacheOnAccount($account)
+    {
+        if (Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} !== $account->getId()) {
+            return false;
+        }
+
+        $cache = Tinebase_Core::getCache();
+        $cacheId = Tinebase_Helper::convertCacheId('_reloadFolderCacheOnPrimaryAccount' . $account->getId());
+        if ($cache->test($cacheId)) {
+            return $cache->load($cacheId);
+        }
+
+        try {
+            Felamimail_Controller_Cache_Folder::getInstance()->update($account->getId(), '', TRUE);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Could not update account folder cache: ' . $e->getMessage()
+            );
+        }
+        $cache->save(true, $cacheId, [], 3600);
+        return true;
     }
 }

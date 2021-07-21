@@ -78,6 +78,7 @@ class Crm_Config extends Tinebase_Config_Abstract
     const SEND_NOTIFICATION_TO_RESPONSIBLE = 'sendnotificationtoresponsible';
     const SEND_NOTIFICATION_TO_CUSTOMER = 'sendnotificationtocustomer';
     const SEND_NOTIFICATION_TO_PARTNER = 'sendnotificationtopartner';
+    const SEND_NOTIFICATION_TO_ALL_ACCESS = 'sendnotificationtoallaccess';
 
 
     /**
@@ -87,6 +88,14 @@ class Crm_Config extends Tinebase_Config_Abstract
     protected static $_properties = array(
         self::SEND_NOTIFICATION => array(
             'label' => 'send notification', //_('send notification'')
+            'description' => 'controls sending notification of Leads', //_('controls sending notification of Leads')
+            'type' => Tinebase_Config_Abstract::TYPE_BOOL,
+            'default' => true,
+            'setByAdminModule' => true,
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::SEND_NOTIFICATION_TO_ALL_ACCESS => array(
+            'label' => 'send notification to all access container', //_('send notification to all access container')
             'description' => 'controls sending notification of Leads', //_('controls sending notification of Leads')
             'type' => Tinebase_Config_Abstract::TYPE_BOOL,
             'default' => true,
@@ -129,12 +138,13 @@ class Crm_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
-                    array('id' => 1, 'value' => 'open',                  'probability' => 0,     'endslead' => 0), //_('open')
-                    array('id' => 2, 'value' => 'contacted',             'probability' => 10,    'endslead' => 0), //_('contacted')
-                    array('id' => 3, 'value' => 'waiting for feedback',  'probability' => 30,    'endslead' => 0), //_('waiting for feedback')
-                    array('id' => 4, 'value' => 'quote sent',            'probability' => 50,    'endslead' => 0), //_('quote sent')
-                    array('id' => 5, 'value' => 'accepted',              'probability' => 100,   'endslead' => 1), //_('accepted')
-                    array('id' => 6, 'value' => 'lost',                  'probability' => 0,     'endslead' => 1), //_('lost')
+                    array('id' => 1, 'value' => 'open',                  'probability' => 0,     'endslead' => 0,   'readonly' => 0), //_('open')
+                    array('id' => 2, 'value' => 'contacted',             'probability' => 10,    'endslead' => 0,   'readonly' => 0), //_('contacted')
+                    array('id' => 3, 'value' => 'waiting for feedback',  'probability' => 30,    'endslead' => 0,   'readonly' => 0), //_('waiting for feedback')
+                    array('id' => 4, 'value' => 'quote sent',            'probability' => 50,    'endslead' => 0,   'readonly' => 0), //_('quote sent')
+                    array('id' => 5, 'value' => 'accepted',              'probability' => 100,   'endslead' => 1,   'readonly' => 0), //_('accepted')
+                    array('id' => 6, 'value' => 'lost',                  'probability' => 0,     'endslead' => 1,   'readonly' => 0), //_('lost')
+                    array('id' => 7, 'value' => 'read-only',             'probability' => 100,   'endslead' => 1,   'readonly' => 1), //_('read-only')
                 ),
                 'default' => 1
             )

@@ -26,8 +26,8 @@ class Scheduler_SchedulerTest extends TestCase
     /**
      * Sets up unit tests.
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         parent::setup();
 
         $this->_scheduler = Tinebase_Core::getScheduler();
@@ -37,8 +37,8 @@ class Scheduler_SchedulerTest extends TestCase
     /**
      * tears down the fixture
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         parent::tearDown();
     }
     

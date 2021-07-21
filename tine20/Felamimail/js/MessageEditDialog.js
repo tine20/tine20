@@ -1299,7 +1299,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 // add identities / aliases to store (for systemaccounts)
                 var user = Tine.Tinebase.registry.get('currentAccount');
                 var systemAliases = _.get(user, 'emailUser.emailAliases', []);
-                if (Tine.Tinebase.registry.get('smtpAliasesDispatchFlag')) {
+                if ((systemAliases.length > 0) && (typeof systemAliases[0].dispatch_address !== 'undefined')) {
                     var systemAliasAdresses = _.reduce(systemAliases, (aliases, alias) => {
                         if (!!+alias.dispatch_address) {
                             aliases.push(alias.email);
@@ -1320,7 +1320,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     aliasAccount.data.id = id;
                     aliasAccount.set('email', aliases[i]);
                 }
-                aliasAccount.set('name', aliasAccount.get('name') + ' (' + aliases[i] + ')');
+                let name = aliasAccount.get('from') ? aliasAccount.get('from') : aliasAccount.get('name');
+                aliasAccount.set('name', name + ' (' + aliases[i] + ')');
                 aliasAccount.set('original_id', account.id);
                 accountComboStore.add(aliasAccount);
             }
@@ -1555,6 +1556,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'subject',
                             ref: '../../subjectField',
                             enableKeyEvents: true,
+                            maxLength: 998,
                             listeners: {
                                 scope: this,
                                 // update title on keyup event
@@ -1611,18 +1613,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     validateSystemlinkRecipients: function () {
         var me = this;
 
-        return new Promise(function (fulfill, reject) {
+        return new Promise(async function (fulfill, reject) {
             var recipients = [],
                 resolvePromise = fulfill;
 
-            me.recipientGrid.getStore().each(function (recipient) {
+            me.recipientGrid.getStore().each(async function (recipient) {
                 var address = recipient.get('address');
 
                 if (!address) {
                     return;
                 }
 
-                recipients.push(me.extractMailFromString(address));
+                recipients.push(await me.extractMailFromString(address));
             });
 
             var hasSystemlinks = false;
@@ -1645,18 +1647,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
 
-    extractMailFromString: function (string) {
-        string = String(string).trim();
-        if (Ext.form.VTypes.email(string)) {
-            return string;
-        }
-
-        let angleBracketExtraction = string.match(/<([^>;]+)>/i);
-        if (angleBracketExtraction && angleBracketExtraction[1] && Ext.form.VTypes.email(angleBracketExtraction)) {
-            return angleBracketExtraction;
-        }
-
-        return string;
+    extractMailFromString: async function (string) {
+        return await import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses').then((addrs) => {
+            const parsed = addrs.parseOneAddress(string.replace(',', ''));
+            return parsed.address;
+        });
     },
 
     /**
@@ -1782,6 +1777,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             if (all.length == 0) {
                 reject(me.app.i18n._('No recipients set.'));
+            }
+
+            if (me.record.get('massMailingFlag') && (cc.length > 0 || bcc.length > 0)) {
+                reject(me.app.i18n._('Mass mailing is not allowed for CC or BCC recipients. Please remove them.'));
             }
 
             if (me.button_toggleEncrypt.pressed && me.mailvelopeEditor) {

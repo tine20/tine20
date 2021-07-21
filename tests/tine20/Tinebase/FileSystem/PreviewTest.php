@@ -31,8 +31,8 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
 
     protected $_rmDir = array();
 
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
             $this->markTestSkipped('filesystem base path not found');
         }
@@ -58,8 +58,8 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
         $this->_previews->setPreviewService($this->_previewService);
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
         Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $this->_oldQuota;
 

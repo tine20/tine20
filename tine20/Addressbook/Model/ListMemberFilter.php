@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,17 +17,62 @@
  * @package     Addressbook
  * @subpackage  Model
  */
-class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract 
+class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_ForeignRecords
 {
     /**
-     * @var array list of allowed operators
+     * set options
+     *
+     * @param array $_options
      */
-    protected $_operators = array(
-        0 => 'equals',
-        1 => 'in',
-        2 => 'all',
-        3 => 'AND'
-    );
+    protected function _setOptions(array $_options)
+    {
+        Tinebase_Model_Filter_ForeignRecord::_setOptions($_options);
+    }
+
+    /**
+     * get foreign filter group
+     *
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _setFilterGroup()
+    {
+        if ($this->_field === 'contact') {
+            $this->_options['filtergroup'] = Addressbook_Model_Contact::class;
+        } else {
+            $this->_options['filtergroup'] = Addressbook_Model_List::class;
+        }
+
+        parent::_setFilterGroup();
+
+        if ('OR' === $this->_conditionSubFilter) {
+            $outerFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                $this->_options['filtergroup'],
+                [],
+                'AND',
+                $this->_options
+            );
+            $outerFilter->addFilterGroup($this->_filterGroup);
+            $this->_filterGroup = $outerFilter;
+        }
+    }
+
+    /**
+     * get foreign controller
+     *
+     * @return Tinebase_Controller_Record_Abstract
+     */
+    protected function _getController()
+    {
+        if ($this->_controller === NULL) {
+            if ($this->_field === 'contact') {
+                $this->_controller = Addressbook_Controller_Contact::getInstance();
+            } else {
+                $this->_controller = Addressbook_Controller_List::getInstance();
+            }
+        }
+
+        return $this->_controller;
+    }
 
     /**
      * appends sql to given select statement
@@ -37,72 +82,57 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if (null !== $this->_filterGroup) {
+            if (! is_array($this->_foreignIds)) {
+                $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
+            }
+            if (empty($this->_foreignIds)) {
+                if (strpos($this->_operator, 'not') === 0) {
+                    $_select->where('1 = 1');
+                    return;
+                } else {
+                    $_select->where('1 = 0');
+                    return;
+                }
+            }
+        }
+
         // make filter work for lists and contacts
         if ($this->_field === 'contact') {
             $myField = 'list_id';
             $foreignField = 'contact_id';
-            if ('AND' === $this->_operator) {
-                throw new Tinebase_Exception_NotImplemented('defined_by is not supported for list searches');
-            }
         } else {
             $myField = 'contact_id';
             $foreignField = 'list_id';
-            if ('AND' === $this->_operator) {
-                $listFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class,
-                    $this->_value);
-                $this->_value = Addressbook_Controller_List::getInstance()->search($listFilter, null, false, true);
-                if (empty($this->_value)) {
-                    $this->_value = null;
-                }
-            }
         }
-
-        $values = 'all' === $this->_operator ? (array)($this->_value ?: [null]) : [$this->_value];
         $db = $_backend->getAdapter();
+        $values = $this->_foreignIds ? ($this->_oneOfSetOperator ? [$this->_foreignIds] : $this->_foreignIds) : [null];
+        $notOperator = strpos($this->_operator, 'not') === 0;
 
         foreach ($values as $value) {
             $correlationName = Tinebase_Record_Abstract::generateUID(30);
-
             $_select->joinLeft(
             /* table  */ array($correlationName => $db->table_prefix . 'addressbook_list_members'),
                 /* on     */ $db->quoteIdentifier($correlationName . '.' . $myField)
-                . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id'),
+                . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id') .
+                ($notOperator && null !== $value ? ' AND ' . $db->quoteInto(
+                        $db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IN (?)', (array)$value) : ''),
                 /* select */ array()
             );
-            if (null === $value) {
-                $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IS NULL');
-            } else {
-                $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IN (?)', (array)$value);
-            }
-        }
-    }
-    
-    /**
-     * returns array with the filter settings of this filter group
-     *
-     * @param  bool $_valueToJson resolve value for json api?
-     * @return array
-     */
-    public function toArray($_valueToJson = false)
-    {
-        if (is_string($this->_value)) {
-            try {
-                if ($this->_field === 'list') {
-                    $this->_value = Addressbook_Controller_List::getInstance()->get($this->_value)->toArray();
+
+            if ($notOperator) {
+                if (null === $value) {
+                    $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IS NOT NULL');
                 } else {
-                    $this->_value = Addressbook_Controller_Contact::getInstance()->get($this->_value)->toArray();
+                    $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IS NULL');
                 }
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__
-                    . " Failed to expand filter. Exception: \n". $tenf);
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__
-                    . " Failed to expand filter. Exception: \n". $tead);
+            } else {
+                if (null === $value) {
+                    $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IS NULL');
+                } else {
+                    $_select->where($db->quoteIdentifier($correlationName . '.' . $foreignField) . ' IN (?)', (array)$value);
+                }
             }
         }
-        
-        return parent::toArray($_valueToJson);
     }
 }

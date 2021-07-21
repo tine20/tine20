@@ -21,8 +21,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // switch back to admin user
         if ($this->_testUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
@@ -51,7 +51,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
 
         // check if it got deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
     }
 
@@ -128,6 +128,30 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         //self::assertGreaterThan(0, count($ta['grants']), 'grants not resolved in ' . print_r($ta, true));
     }
 
+    // we are testing pagination with \Timetracker_Backend_Timesheet::$_defaultSecondarySort here
+    public function testSearchTimesheetsDESC()
+    {
+        $pagination = $this->_getPaging();
+        $pagination['dir'] = 'DESC';
+
+        $filter = [
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    [
+                        'condition' => 'AND',
+                        'filters' => [
+                            ['field' => 'start_date', 'operator' => 'within', 'value' => ["from" => "2021-06-14 00:00:00", "until" => "2021-06-20 23:59:59"]],
+                        ]
+                    ]
+                ]
+            ],
+            ['field' => 'query', 'operator' => 'contains', 'value' => '']
+        ];
+
+        $this->_json->searchTimesheets($filter, $pagination);
+    }
+
     /**
      * try to get a Timeaccount with a TA filter
      * 
@@ -169,6 +193,27 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         $filter = array(
             array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $timesheetData['timeaccount_id']['id']),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount']);
+    }
+
+    public function testSearchTimesheetsWithTimeaccountForeignIdFilter()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+
+        $filter = array(
+            array('field' => 'timeaccount_id', 'operator' => 'definedBy?a=b', 'value' => [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $timesheetData['timeaccount_id']['id']]
+            ]),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount']);
+
+        // this is deprected and eventually should be removed together with Tinebase_Model_Filter_FilterGroup::createFilter ->
+        $filter = array(
+            array('field' => 'timeaccount_id', 'operator' => 'contains', 'value' => $timesheetData['timeaccount_id']['title']),
         );
         $searchResult = $this->_json->searchTimesheets($filter, array());
         $this->assertEquals(1, $searchResult['totalcount']);
@@ -283,7 +328,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
 
         // check if it got deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
     }
     
@@ -321,7 +366,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
 
         // check if everything got deleted
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timesheet::getInstance()->get($timesheetData['id']);
     }
 
@@ -603,6 +648,11 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     public function testSearchTimesheetsWithDateMonthLast()
     {
         $today = Tinebase_DateTime::now();
+        $lastDayOfMonth = new Tinebase_DateTime('last day of this month');
+        if ($today->get(Tinebase_DateTime::MODIFIER_HOUR) === 23
+            && $today->get(Tinebase_DateTime::MODIFIER_DAY) === $lastDayOfMonth->get(Tinebase_DateTime::MODIFIER_DAY)) {
+            self::markTestSkipped('this fails on the last day of the current month');
+        }
         $lastMonth = $today->setDate($today->get('Y'), $today->get('m') - 1, 1);
         $this->_createTsAndSearch($lastMonth, 'monthLast');
     }
@@ -1341,7 +1391,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_Relations::getInstance()->setRelations('Sales_Model_Invoice', 'Sql', $invoice->id, array(array(
             'related_id' => $ta->id,
             'related_model' => 'Timetracker_Model_Timeaccount',
-            'related_record' => $ta,
             'related_degree' => 'sibling',
             'type' => 'INVOICE'
         )));
@@ -1444,12 +1493,9 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
         $this->assertEquals('', $timeaccount['price_unit']);
-        
-        $timeaccount->price_unit = 'days';
-        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
-        $this->assertEquals('days', $timeaccount['price_unit']);
-        
 
-
+        $timeaccountData['price_unit'] = 'days';
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccountData);
+        $this->assertEquals('days', $timeaccountData['price_unit']);
     }
 }

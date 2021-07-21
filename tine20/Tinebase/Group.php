@@ -363,7 +363,12 @@ class Tinebase_Group
                 }
             }
 
-            Tinebase_Lock::keepLocksAlive();
+            try {
+                Tinebase_Lock::keepLocksAlive();
+            } catch  (Tinebase_Exception_Backend $teb) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $teb->getMessage());
+            }
         }
 
         return true;
@@ -412,6 +417,32 @@ class Tinebase_Group
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($anonymousGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($anonymousGroup);
+    }
+
+    /**
+     * returns the config key of the default group for that name or false in case that group name is not a default group
+     *
+     * @param string $groupName
+     * @return false|string
+     */
+    public static function getDefaultGroupConfigKey($groupName)
+    {
+        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)
+                ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)
+                : self::DEFAULT_ADMIN_GROUP) === $groupName) {
+            return Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY;
+        }
+        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY)
+                ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY)
+                : self::DEFAULT_USER_GROUP) === $groupName) {
+            return Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY;
+        }
+        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
+                ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
+                : self::DEFAULT_ANONYMOUS_GROUP) === $groupName) {
+            return Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY;
+        }
+        return false;
     }
 
     public static function unsetInstance()

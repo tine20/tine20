@@ -117,6 +117,11 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         
         this.on('click', this.saveClickedNodeState, this);
 
+        _.each(this.contentTypes, (ct, idx) => {
+            ct.pos = ct.hasOwnProperty('pos') ? ct.pos : idx * 100;
+        });
+        this.contentTypes = _.sortBy(this.contentTypes, 'pos');
+
         Ext.each (this.contentTypes, function(ct) {
             var modelName = ct.hasOwnProperty('meta') 
                 ? ct.meta.modelName 

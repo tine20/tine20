@@ -18,7 +18,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  * 
  * @package     Tinebase
  */
-class Tinebase_NotificationTest extends PHPUnit_Framework_TestCase
+class Tinebase_NotificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Zend_Mail_Transport_Array
@@ -29,8 +29,8 @@ class Tinebase_NotificationTest extends PHPUnit_Framework_TestCase
      * Sets up the fixture.
      * This method is called before a test is executed.
      */
-    public function setUp()
-    {
+    public function setUp(): void
+{
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         if (empty($smtpConfig)) {
              $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');

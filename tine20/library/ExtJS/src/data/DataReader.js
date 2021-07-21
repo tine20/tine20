@@ -37,6 +37,8 @@ Ext.data.DataReader = function(meta, recordType){
     // if recordType defined make sure extraction functions are defined
     if (this.recordType){
         this.buildExtractors();
+        
+        this.recordType.prototype.fields.on('add', this.onMetaChange.createDelegate(this, [], false), this, {buffer: 10});
     }
 };
 
@@ -213,8 +215,10 @@ Ext.data.DataReader.prototype = {
     // private function a store will createSequence upon
     onMetaChange : function(meta){
         delete this.ef;
-        this.meta = meta;
-        this.recordType = Ext.data.Record.create(meta.fields);
+        if (meta) {
+            this.meta = meta;
+            this.recordType = Ext.data.Record.create(meta.fields);
+        }
         this.buildExtractors();
     }
 };

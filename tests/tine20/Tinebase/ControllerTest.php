@@ -34,8 +34,8 @@ class Tinebase_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = Tinebase_Controller::getInstance();
     }
@@ -46,8 +46,8 @@ class Tinebase_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_Config::getInstance()->maintenanceMode = 0;
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
@@ -57,8 +57,8 @@ class Tinebase_ControllerTest extends TestCase
      */
     public function testGetIdByTitleProperty()
     {
-        $record = Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty('Tine 2.0 Admin Account');
-        self::assertEquals('Tine 2.0 Admin Account',$record->n_fn);
+        $record = Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty('Admin Account, Tine 2.0');
+        self::assertEquals('Admin Account, Tine 2.0',$record->n_fileas);
     }
 
     /**
@@ -209,13 +209,14 @@ class Tinebase_ControllerTest extends TestCase
             Tinebase_User::getInstance()->deleteUser($account->getId());
 
             foreach ($aclTables as $table) {
-                if ('filter_acl' === $table) {
-                    // constraint and delete filter => no acl anymore ... :-/
-                    continue;
-                }
                 $row = $db->select()->from(SQL_TABLE_PREFIX . $table, new Zend_Db_Expr('count(*)'))->query()->
                     fetch(Zend_Db::FETCH_NUM);
-                static::assertEquals($newCounts[$table], $row[0], 'number of acl changed in table: ' . $table);
+                if ('filter_acl' === $table) {
+                    static::assertNotEquals($newCounts[$table], $row[0], 'number of acl not changed in table: ' . $table);
+                    $newCounts[$table] = $row[0];
+                } else {
+                    static::assertEquals($newCounts[$table], $row[0], 'number of acl changed in table: ' . $table);
+                }
             }
 
             $this->_instance->cleanAclTables();
@@ -223,12 +224,7 @@ class Tinebase_ControllerTest extends TestCase
             foreach ($aclTables as $table) {
                 $row = $db->select()->from(SQL_TABLE_PREFIX . $table, new Zend_Db_Expr('count(*)'))->query()->
                     fetch(Zend_Db::FETCH_NUM);
-                if ('container_acl' === $table) {
-                    static::assertLessThan($newCounts[$table], $row[0], 'container_acls did not decrease');
-                } else {
-                    static::assertEquals($counts[$table], $row[0],
-                        'number of acl not back to normal in table: ' . $table);
-                }
+                static::assertEquals($newCounts[$table], $row[0], 'number of acl changed in table: ' . $table);
             }
         } finally {
             Tinebase_PersistentFilter::getInstance()->purgeRecords($oldPurgeValue);
@@ -259,7 +255,7 @@ class Tinebase_ControllerTest extends TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_API_KEY, 'fooobar123');
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_INFO, true);
 
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class);
+        static::expectException(Tinebase_Exception_AccessDenied::class);
         Tinebase_Controller::getInstance()->getStatus('hahahaIhackyou!!!');
     }
 
@@ -271,7 +267,7 @@ class Tinebase_ControllerTest extends TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_API_KEY, 'fooobar123');
         Tinebase_Config::getInstance()->set(Tinebase_Config::STATUS_INFO, true);
 
-        static::setExpectedException(Tinebase_Exception_AccessDenied::class);
+        static::expectException(Tinebase_Exception_AccessDenied::class);
         Tinebase_Controller::getInstance()->getStatus();
     }
 

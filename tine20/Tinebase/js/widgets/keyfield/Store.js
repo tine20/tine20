@@ -87,8 +87,6 @@ Ext.extend(Tine.Tinebase.widgets.keyfield.Store, Ext.data.JsonStore, {
  * @singleton
  */
 Tine.Tinebase.widgets.keyfield.StoreMgr = function(){
-    var stores = {};
-    
     return {
         /**
          * returns key field record store
@@ -98,17 +96,13 @@ Tine.Tinebase.widgets.keyfield.StoreMgr = function(){
          * @return Ext.data.Store
          */
         get: function(app, keyFieldName) {
-            var appName = Ext.isString(app) ? app : app.appName,
-                key = appName + '_' + keyFieldName;
+            var appName = Ext.isString(app) ? app : app.appName;
                 
-            if (! stores[key]) {
-                stores[key] = new Tine.Tinebase.widgets.keyfield.Store({
-                    app: app,
-                    keyFieldName: keyFieldName
-                });
-            }
+            return new Tine.Tinebase.widgets.keyfield.Store({
+                app: app,
+                keyFieldName: keyFieldName
+            });
             
-            return stores[key];
         },
 
         has: function(app, keyFieldName) {

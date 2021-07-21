@@ -49,7 +49,7 @@ class Setup_Backend_Schema_IndexTest extends Setup_Backend_AbstractTest
         
         $this->assertFalse($index->isValid(), 'Test if a too long field name is invalid');
         
-        $this->setExpectedException('Setup_Exception_InvalidSchema');
+        $this->expectException('Setup_Exception_InvalidSchema');
         $index->isValid(true); //Test if the parameter throwException works as expected
     }
     

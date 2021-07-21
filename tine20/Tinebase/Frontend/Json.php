@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -30,12 +30,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_applicationName = 'Tinebase';
     
     /**
-     *
-     * @var boolean
-     */
-    protected $_hasCaptcha = null;
-
-    /**
      * All full configured models
      *
      * @var array
@@ -44,7 +38,25 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'BLConfig',
         'ImportExportDefinition',
         'LogEntry',
+        'Tree_Node',
+        Tinebase_Model_MFA_UserConfig::MODEL_NAME_PART,
+        Tinebase_Model_MFA_PinUserConfig::MODEL_NAME_PART,
+        Tinebase_Model_MFA_SmsUserConfig::MODEL_NAME_PART,
+        Tinebase_Model_MFA_YubicoOTPUserConfig::MODEL_NAME_PART,
+        Tinebase_Model_CommunityIdentNr::MODEL_NAME_PART,
+        Tinebase_Model_AuthToken::MODEL_NAME_PART,
     ];
+    
+    public function __construct()
+    {
+        if (!Tinebase_Config::getInstance()->featureEnabled(
+            Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR)
+        ) {
+            $this->_configuredModels = array_diff($this->_configuredModels, [
+                Tinebase_Model_CommunityIdentNr::MODEL_NAME_PART
+            ]);
+        }
+    }
 
     /**
      * wait for changes
@@ -268,10 +280,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setState($name, $value)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
-        Tinebase_State::getInstance()->setState($name, $value);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
+
+        try {
+            Tinebase_State::getInstance()->setState($name, $value);
+            $success = true;
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' Failed to set state: ' . $tead->getMessage());
+            $success = false;
+        }
         
-        return ['success' => true];
+        return ['success' => $success];
     }
     
     /**
@@ -551,11 +572,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  string $username the username
      * @param  string $password the password
-     * @param  string $securitycode the security code(captcha)
-     * @param  string $otp  the second factor password
+     * @param  string $MFAUserConfig config for mfa device to use
+     * @param  string $MFAPassword otp from mfa device
      * @return array
      */
-    public function login($username, $password, $securitycode = null, $otp = null)
+    public function login($username, $password, string $MFAUserConfigId = null, $MFAPassword = null)
     {
         try {
             Tinebase_Core::startCoreSession();
@@ -568,14 +589,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'errorMessage' => "Could not start session!",
             );
         }
-        
-        if (is_array(($response = $this->_getCaptchaResponse($securitycode)))) {
-            return $response;
-        }
 
-        // TODO move security code here and use params
+        Tinebase_Controller::getInstance()->forceUnlockLoginArea();
         Tinebase_Controller::getInstance()->setRequestContext(array(
-            'otp' => $otp
+            'MFAPassword' => $MFAPassword,
+            'MFAId'       => $MFAUserConfigId
         ));
 
         // try to login user
@@ -583,8 +601,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $username,
             $password,
             Tinebase_Core::get(Tinebase_Core::REQUEST),
-            self::REQUEST_TYPE,
-            $securitycode
+            self::REQUEST_TYPE
         );
         
         if ($success === true) {
@@ -613,55 +630,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             return $this->_getLoginFailedResponse();
         }
-    }
-
-    /**
-     * Returns TRUE if there is a captcha
-     * @return boolean
-     */
-    protected function _hasCaptcha()
-    {
-        if ($this->_hasCaptcha === null){
-            $this->_hasCaptcha = isset(Tinebase_Core::getConfig()->captcha->count) && Tinebase_Core::getConfig()->captcha->count != 0;
-        }
-        
-        return $this->_hasCaptcha;
-    }
-    
-    /**
-     *
-     * @param string $securitycode
-     * @return array | NULL
-     */
-    protected function _getCaptchaResponse($securitycode)
-    {
-        if ($this->_hasCaptcha()) {
-            $config_count = Tinebase_Core::getConfig()->captcha->count;
-            
-            $count = (isset(Tinebase_Session::getSessionNamespace()->captcha['count'])
-                ? Tinebase_Session::getSessionNamespace()->captcha['count']
-                : 1
-            );
-            
-            if ($count >= $config_count) {
-                $aux = isset(Tinebase_Session::getSessionNamespace()->captcha['code'])
-                    ? Tinebase_Session::getSessionNamespace()->captcha['code']
-                    : null;
-                
-                if ($aux != $securitycode) {
-                    $rets = Tinebase_Controller::getInstance()->makeCaptcha(); 
-                    $response = array(
-                        'success'      => false,
-                        'errorMessage' => "Wrong username or password!",
-                        'c1'           => $rets['1']
-                    );
-                    
-                    return $response;
-                }
-            }
-        }
-        
-        return null;
     }
     
     /**
@@ -703,27 +671,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
         
         Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
-        
-        if ($this->_hasCaptcha()) {
-            $config_count = Tinebase_Core::getConfig()->captcha->count;
-            
-            if (!isset(Tinebase_Session::getSessionNamespace()->captcha['count'])) {
-                Tinebase_Session::getSessionNamespace()->captcha['count'] = 1;
-            } else {
-                Tinebase_Session::getSessionNamespace()->captcha['count'] = Tinebase_Session::getSessionNamespace()->captcha['count'] + 1;
-            }
-            
-            if (Tinebase_Session::getSessionNamespace()->captcha['count'] >= $config_count) {
-                $rets = Tinebase_Controller::getInstance()->makeCaptcha(); 
-                $response = array(
-                    'success'      => false,
-                    'errorMessage' => "Wrong username or password!",
-                    'c1'           => $rets['1']
-                );
-            }
-        } else {
-            Tinebase_Session::destroyAndMantainCookie();
-        }
         
         return $response;
     }
@@ -807,8 +754,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData = $this->_getAnonymousRegistryData();
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            $userRegistryData = $this->_getUserRegistryData();
-            $registryData += $userRegistryData;
+            if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) &&
+                    Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+                $areaConfig = Tinebase_AreaLock::getInstance()->getLastAuthFailedAreaConfig();
+                $e = new Tinebase_Exception_AreaLocked('mfa required');
+                $e->setArea($areaConfig->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
+                $e->setMFAUserConfigs($areaConfig->getUserMFAIntersection(Tinebase_Core::getUser()));
+                $registryData['areaLockedException'] = $e->toArray();
+            } else {
+                $userRegistryData = $this->_getUserRegistryData();
+                $registryData += $userRegistryData;
+            }
         }
         
         return $registryData;
@@ -847,9 +803,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
 
-             // secondfactor config
-            'secondFactor' => $this->_getSecondFactorConfig(),
-
             // sso
             'sso'               => Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ACTIVE},
 
@@ -869,6 +822,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'setupRequired'     => Setup_Controller::getInstance()->setupRequired(),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
+            'allowBrowserPasswordManager'=> Tinebase_Config::getInstance()->get(Tinebase_Config::ALLOW_BROWSER_PASSWORD_MANAGER),
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
             'titlePostfix'      => Tinebase_Config::getInstance()->get(Tinebase_Config::PAGETITLEPOSTFIX),
             'redirectUrl'       => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL),
@@ -880,14 +834,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-            'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
+            'brandingLogo'      => 'logo',
             'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
             'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
             'brandingDescription'=> Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION),
             'brandingHelpUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_HELPURL),
             'brandingShopUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_SHOPURL),
             'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
-            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
+            'installLogo'       => 'logo/i',
             'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5') &&
                 Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX),
@@ -897,15 +851,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             . ' Anonymous registry: ' . print_r($registryData, TRUE));
         
         return $registryData;
-    }
-
-    /**
-     * @return array|null
-     */
-    protected function _getSecondFactorConfig()
-    {
-        $config = Tinebase_AreaLock::getInstance()->getAreaConfig(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
-        return $config ? $config->toArray() : null;
     }
     
     /**
@@ -943,7 +888,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
-        $smtpConfig = $manageSmtpEmailUser ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+        $smtpConfig = $manageSmtpEmailUser
+            ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)
+            : $smtpConfig = array();
 
         $userRegistryData = array(
             'accountBackend' => Tinebase_User::getConfiguredBackend(),
@@ -986,7 +933,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $registryData = array();
         
-        if (Tinebase_Core::getUser()) {
+        if (Tinebase_Core::getUser() && (!Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
+                !Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN))) {
             $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             
@@ -1070,27 +1018,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
         $appRegistry['customfields'] = $customfields->toArray();
 
-        // add preferences for app
         try {
             $prefRegistry = $this->_getAppPreferencesForRegistry($application);
             $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
-        } catch (Tinebase_Exception_AccessDenied $tead) {
-            // do not add prefs if user has no run right
-        }
-
-        $customAppRegistry = $this->_getCustomAppRegistry($application);
-        if (empty($customAppRegistry)) {
-            // TODO always get this from app controller (and remove from _getCustomAppRegistry)
-            try {
+            $customAppRegistry = $this->_getCustomAppRegistry($application);
+            if (empty($customAppRegistry)) {
+                // TODO always get this from app controller (and remove from _getCustomAppRegistry)
                 $appController = Tinebase_Core::getApplicationInstance($application->name);
                 $models = $appController->getModels();
                 $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                // do not add prefs if user has no run right
+            } else {
+                $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
             }
-
-        } else {
-            $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Do not add app registry data. Exception message: ' . $tead->getMessage());
         }
 
         if (! isset($appRegistry['importDefinitions'])) {
@@ -1612,6 +1554,62 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
+    public function checkAuthToken($token, $channel)
+    {
+        /** @var Tinebase_Model_AuthToken $t */
+        $t = Tinebase_Controller_AuthToken::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Tinebase_Model_AuthToken::class, [
+                ['field' => Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, 'operator' => 'equals', 'value' => $token]
+            ]
+        ))->getFirstRecord();
+
+        if ($t && in_array($channel, $t->{Tinebase_Model_AuthToken::FLD_CHANNELS})) {
+            return $t->toArray();
+        }
+
+        throw new Tinebase_Exception_AccessDenied('auth token not valid');
+    }
+
+    public function getAuthToken($channels, $ttl = null)
+    {
+        if (!is_array($channels) || empty($channels)) {
+            throw new Tinebase_Exception_UnexpectedValue('channels needs to be a non empty array of channel names');
+        }
+        sort($channels);
+
+        $token = hash('sha256', uniqid('', true) . hash('sha256', uniqid('', true) . Tinebase_Record_Abstract::generateUID()));
+
+        $maxTtl = Tinebase_Config::getInstance()->{Tinebase_Config::AUTH_TOKEN_DEFAULT_TTL};
+        $tokenRecord = new Tinebase_Model_AuthToken([
+            Tinebase_Model_AuthToken::FLD_AUTH_TOKEN   => $token,
+            Tinebase_Model_AuthToken::FLD_ACCOUNT_ID   => Tinebase_Core::getUser()->getId(),
+            Tinebase_Model_AuthToken::FLD_CHANNELS     => $channels,
+            Tinebase_Model_AuthToken::FLD_MAX_TTL      => $maxTtl,
+        ], true);
+
+        $configuredChannels = Tinebase_Config::getInstance()->{Tinebase_Config::AUTH_TOKEN_CHANNELS};
+        foreach ($channels as $channel) {
+            if (!($channelCfg = $configuredChannels->records
+                    ->find(Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME, $channel))) {
+                throw new Tinebase_Exception_UnexpectedValue('unknown channel "' . $channel . '"');
+            }
+            if (is_callable($channelCfg->{Tinebase_Model_AuthTokenChannelConfig::FLDS_TOKEN_CREATE_HOOK})) {
+                call_user_func($channelCfg->{Tinebase_Model_AuthTokenChannelConfig::FLDS_TOKEN_CREATE_HOOK},
+                    $tokenRecord);
+            }
+        }
+
+        $ttl = intval($ttl);
+        if ($ttl < 1 || $ttl > $tokenRecord->{Tinebase_Model_AuthToken::FLD_MAX_TTL}) {
+            $ttl = $tokenRecord->{Tinebase_Model_AuthToken::FLD_MAX_TTL};
+        }
+        $tokenRecord->{Tinebase_Model_AuthToken::FLD_VALID_UNTIL} = Tinebase_DateTime::now()->addSecond($ttl);
+
+        $tokenRecord = Tinebase_Controller_AuthToken::getInstance()->create($tokenRecord);
+
+        return $tokenRecord->toArray();
+    }
+
     public function restoreRevision($fileLocationSrc, $fileLocationTrgt = null)
     {
         $src = new Tinebase_Model_Tree_FileLocation($fileLocationSrc);
@@ -1710,10 +1708,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function reportPresence()
     {
-        Tinebase_Presence::getInstance()->reportPresence();
+        $success = Tinebase_Presence::getInstance()->reportPresence();
 
         return array(
-            'success' => true
+            'success' => $success
         );
     }
 

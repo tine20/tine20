@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Exception
  */
-class Tinebase_ExceptionTest extends PHPUnit_Framework_TestCase
+class Tinebase_ExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testAppName()
     {

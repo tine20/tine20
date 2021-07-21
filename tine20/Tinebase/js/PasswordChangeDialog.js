@@ -45,23 +45,21 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
             anchor:'100%',
             id: 'changePasswordPanel',
             defaults: {
-                xtype: 'textfield',
-                inputType: 'password',
+                xtype: 'tw-passwordTriggerField',
                 anchor: '100%'
             },
             items: [{
                 id: 'oldPassword',
+                clipboard: false,
                 fieldLabel: String.format(i18n._('Old {0}'), this.passwordLabel),
                 name:'oldPassword'
             },{
                 id: 'newPassword',
-                xtype: 'tw-passwordTriggerField',
                 autocomplete: 'new-password',
                 fieldLabel: String.format(i18n._('New {0}'), this.passwordLabel),
                 name:'newPassword'
             },{
                 id: 'newPasswordSecondTime',
-                xtype: 'tw-passwordTriggerField',
                 autocomplete: 'new-password',
                 fieldLabel: String.format(i18n._('Repeat new {0}'), this.passwordLabel),
                 name:'newPasswordSecondTime'
@@ -84,7 +82,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                     this.loadMask.show();
 
                     if (form.isValid()) {
-                        values = form.getValues();
+                        values = form.getFieldValues();
                         if (values.newPassword == values.newPasswordSecondTime) {
                             Ext.Ajax.request({
                                 params: {
@@ -123,11 +121,12 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                 scope: this
                             });
                         } else {
+                            this.loadMask.hide();
                             Ext.MessageBox.show({
                                 title: i18n._('Failure'),
                                 msg: String.format(i18n._('{0} mismatch, please correct.'), this.passwordLabel),
                                 buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR 
+                                icon: Ext.MessageBox.ERROR
                             });
                         }
                     }

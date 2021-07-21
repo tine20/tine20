@@ -49,7 +49,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * ui properties for customfield
      * @type {Array}
      */
-    uiconfigFields: ['order', 'group', 'tab'],
+    uiconfigFields: ['order', 'group', 'tab', 'key'],
     
     /**
      * type of field with stores
@@ -497,6 +497,11 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'textfield',
                     fieldLabel: this.app.i18n._('Order'),
                     name: 'order',
+                    maxLength: 50
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: this.app.i18n._('Key'),
+                    name: 'key',
                     maxLength: 50
                 }]
             }, {

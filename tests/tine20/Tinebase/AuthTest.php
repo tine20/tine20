@@ -42,8 +42,8 @@ class Tinebase_AuthTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_originalBackendConfiguration = Tinebase_Auth::getBackendConfiguration();
@@ -56,8 +56,8 @@ class Tinebase_AuthTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // this needs to be done because Tinebase_Auth & Tinebase_Config use caching mechanisms
         Tinebase_Auth::setBackendType($this->_originalBackendType);
         Tinebase_Auth::deleteBackendConfiguration();
@@ -222,29 +222,39 @@ class Tinebase_AuthTest extends TestCase
         $this->assertEquals(true, $result->isValid());
     }
 
-    /**
-     * @see 0013272: add pin column, backend and config
-     */
-    public function testPinAuth()
+    // mock function for testAuthToken()
+    public static function authTokenTestHook(Tinebase_Model_AuthToken $authToken)
     {
-        $user = Tinebase_Core::getUser();
+        $authToken->{Tinebase_Model_AuthToken::FLD_AUTH_TOKEN} = 'unittest';
+        $authToken->{Tinebase_Model_AuthToken::FLD_MAX_TTL} = 60;
+    }
 
-        try {
-            Tinebase_User::getInstance()->setPin($user, 'abcd1234');
-            self::fail('expected exception - it is not allowed to have non-numbers in pin');
-        } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            self::assertEquals('Only numbers are allowed for PINs', $tesg->getMessage());
-        }
+    public function testAuthToken()
+    {
+        // register an auth token channel
+        Tinebase_Config::getInstance()->{Tinebase_Config::AUTH_TOKEN_CHANNELS}->records->addRecord(
+            new Tinebase_Model_AuthTokenChannelConfig([
+                Tinebase_Model_AuthTokenChannelConfig::FLDS_NAME                => 'unittest',
+                Tinebase_Model_AuthTokenChannelConfig::FLDS_TOKEN_CREATE_HOOK   => [
+                    self::class,
+                    'authTokenTestHook'
+                ]
+            ])
+        );
+        $jsonFE = new Tinebase_Frontend_Json();
 
-        Tinebase_User::getInstance()->setPin($user, '1234');
-        $authAdapter = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
-        $authAdapter->setIdentity($user->accountLoginName);
-        $authAdapter->setCredential('');
-        $result = $authAdapter->authenticate();
-        $this->assertFalse($result->isValid(), 'empty pin should always fail');
+        $before = Tinebase_DateTime::now()->addSecond(60);
+        $result = $jsonFE->getAuthToken(['unittest']);
+        $after = Tinebase_DateTime::now()->addSecond(60);
 
-        $authAdapter->setCredential('1234');
-        $result = $authAdapter->authenticate();
-        $this->assertTrue($result->isValid());
+        static::assertSame('unittest', $result[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN]);
+        static::assertTrue($before->isEarlierOrEquals(new Tinebase_DateTime($result[Tinebase_Model_AuthToken::FLD_VALID_UNTIL])));
+        static::assertTrue($after->isLaterOrEquals(new Tinebase_DateTime($result[Tinebase_Model_AuthToken::FLD_VALID_UNTIL])));
+
+        $checkResult = $jsonFE->checkAuthToken($result[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN], 'unittest');
+
+        static::assertTrue(is_array($checkResult));
+        static::assertSame($result[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN],
+            $checkResult[Tinebase_Model_AuthToken::FLD_AUTH_TOKEN]);
     }
 }

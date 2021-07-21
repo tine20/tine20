@@ -22,7 +22,7 @@ class Addressbook_Frontend_WebDAV_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook All Frontend WebDAV Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook All Frontend WebDAV Tests');
         $suite->addTestSuite('Addressbook_Frontend_WebDAV_ContactTest');
         $suite->addTestSuite('Addressbook_Frontend_WebDAV_ContainerTest');
         return $suite;

@@ -26,8 +26,8 @@ class Tinebase_ContainerPersistentCacheTest extends Tinebase_ContainerTest
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         // this shows how to set up the persistent cache for some Tinebase_Container methods
         Tinebase_Cache_PerRequest::getInstance()->setPersistentCacheMethods('Tinebase_Container', array(
             'getContainerByACL',
@@ -44,8 +44,8 @@ class Tinebase_ContainerPersistentCacheTest extends Tinebase_ContainerTest
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         Tinebase_Cache_PerRequest::getInstance()->setPersistentCacheMethods('Tinebase_Container', array());

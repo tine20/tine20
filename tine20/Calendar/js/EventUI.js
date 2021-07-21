@@ -147,6 +147,8 @@ Tine.Calendar.EventUI.prototype = {
         this.colorSet = Tine.Calendar.colorMgr.getColor(this.event, this.attendeeRecord);
         this.event.colorSet = this.colorSet;
 
+        this.infoBarColors = Tine.Calendar.colorMgr.getInfoBarStrategy().getColors(this.event);
+
         this.dtStart = this.event.get('dtstart');
         this.dtEnd = this.event.get('dtend');
         // 00:00 in users timezone is a spechial case where the user expects

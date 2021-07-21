@@ -188,31 +188,33 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         // $properties = $card->getProperties('LABEL'); //NOT_IMPLEMENTED
         if ($card->getProperty('TEL')) {
             $properties = $card->getProperties('TEL');
-            foreach($properties as $property){
+            foreach ($properties as $property){
                 // types available from RFC : "home", "msg", "work", "pref", "voice", "fax", "cell", "video", "pager", "bbs", "modem", "car", "isdn", "pcs"
-                $types = $property->params['TYPE'];
-                
                 $key = 'tel_work';
-                if($types){
-                    if(Tinebase_Helper::in_array_case($types, 'home') && !Tinebase_Helper::in_array_case($types, 'cell') && !Tinebase_Helper::in_array_case($types, 'fax')){
-                        $key = 'tel_home';    
-                    }else if(Tinebase_Helper::in_array_case($types, 'home') && Tinebase_Helper::in_array_case($types, 'cell')){
+                if (isset($property->params['TYPE']) && $types = $property->params['TYPE']) {
+                    if (Tinebase_Helper::in_array_case($types, 'home') && !Tinebase_Helper::in_array_case($types, 'cell')
+                        && !Tinebase_Helper::in_array_case($types, 'fax')
+                    ) {
+                        $key = 'tel_home';
+                    } else if (Tinebase_Helper::in_array_case($types, 'home') && Tinebase_Helper::in_array_case($types, 'cell')) {
                         $key = 'tel_cell_private';
-                    }else if(Tinebase_Helper::in_array_case($types, 'home') && Tinebase_Helper::in_array_case($types, 'fax')){
+                    } else if (Tinebase_Helper::in_array_case($types, 'home') && Tinebase_Helper::in_array_case($types, 'fax')) {
                         $key = 'tel_fax_home';
-                    }else if(Tinebase_Helper::in_array_case($types, 'work') && !Tinebase_Helper::in_array_case($types, 'cell') && !Tinebase_Helper::in_array_case($types, 'fax')){
+                    } else if (Tinebase_Helper::in_array_case($types, 'work') && !Tinebase_Helper::in_array_case($types, 'cell')
+                        && !Tinebase_Helper::in_array_case($types, 'fax')
+                    ) {
                         $key = 'tel_work';
-                    }else if(Tinebase_Helper::in_array_case($types, 'work') && Tinebase_Helper::in_array_case($types, 'cell')){
+                    } else if (Tinebase_Helper::in_array_case($types, 'work') && Tinebase_Helper::in_array_case($types, 'cell')) {
                         $key = 'tel_cell';
-                    }else if(Tinebase_Helper::in_array_case($types, 'work') && !Tinebase_Helper::in_array_case($types, 'fax')){
+                    } else if (Tinebase_Helper::in_array_case($types, 'work') && !Tinebase_Helper::in_array_case($types, 'fax')) {
                         $key = 'tel_fax';
-                    }else if(Tinebase_Helper::in_array_case($types, 'car')){
+                    } else if (Tinebase_Helper::in_array_case($types, 'car')) {
                         $key = 'tel_car';
-                    }else if(Tinebase_Helper::in_array_case($types, 'pager')){
+                    } else if (Tinebase_Helper::in_array_case($types, 'pager')) {
                         $key = 'tel_pager';
-                    }else if(Tinebase_Helper::in_array_case($types, 'fax')){
+                    } else if (Tinebase_Helper::in_array_case($types, 'fax')) {
                         $key = 'tel_fax';
-                    }else if(Tinebase_Helper::in_array_case($types, 'cell')){
+                    } else if (Tinebase_Helper::in_array_case($types, 'cell')) {
                         $key = 'tel_cell';
                     }
                 }

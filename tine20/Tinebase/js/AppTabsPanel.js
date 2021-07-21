@@ -112,7 +112,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
                 activeApp = Tine.Tinebase.MainScreen.getActiveApp();
 
             if (app != activeApp) {
-                Tine.Tinebase.router.setRoute('/' + app.appName);
+                Tine.Tinebase.router.setRoute(app.getRoute());
             }
         }
     },

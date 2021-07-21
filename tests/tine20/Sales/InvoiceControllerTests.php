@@ -22,8 +22,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         if ($this->_dbIsPgsql() || ! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             $this->markTestSkipped('0011670: fix Sales_Invoices Tests with postgresql backend');
         }
@@ -35,8 +35,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      * (non-PHPdoc)
      * @see TestCase::tearDown()
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         // switch back to admin user
         if ($this->_testUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
@@ -238,6 +238,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(3.5, $c3InvoicePositions->getFirstRecord()->quantity);
         
         $invoice = $customer1Invoices->getFirstRecord();
+        self::assertEquals(Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX), $invoice->sales_tax, 'invoice sales_tax mismatch');
+
         $invoice->relations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $invoice->getId())->toArray();
         
         $filter = new Sales_Model_InvoicePositionFilter(array());
@@ -263,7 +265,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         // check disallow editing invoice after clearing
         $invoice->credit_term = 20;
-        $this->setExpectedException('Sales_Exception_InvoiceAlreadyClearedEdit');
+        $this->expectException('Sales_Exception_InvoiceAlreadyClearedEdit');
         
         $this->_invoiceController->update($invoice);
     }
@@ -1306,7 +1308,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(2, $timesheets->count());
         
         // now try to delete the first invoice, which is not allowed
-        $this->setExpectedException('Sales_Exception_DeletePreviousInvoice');
+        $this->expectException('Sales_Exception_DeletePreviousInvoice');
         
         $this->_invoiceController->delete(array($invoice1Id));
     }
@@ -1710,7 +1712,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
                     'related_degree' => 'sibling',
                     'related_model' => Sales_Model_Customer::class,
                     'related_backend' => 'Sql',
-                    'related_record' => $customer->toArray(),
+                    'related_id' => $customer->getId(),
                     'type' => 'CUSTOMER'
                 ]
             ]

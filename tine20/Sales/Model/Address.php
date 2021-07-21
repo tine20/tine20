@@ -31,7 +31,7 @@ class Sales_Model_Address extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = array(
         'recordName'      => 'Address', // ngettext('Address', 'Addresss', n)
-        'recordsName'     => 'Addresss',
+        'recordsName'     => 'Addresss', // gettext('GENDER_Address')
         'hasRelations'    => TRUE,
         'hasCustomFields' => FALSE,
         'hasNotes'        => FALSE,

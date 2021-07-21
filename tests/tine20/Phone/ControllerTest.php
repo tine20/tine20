@@ -33,8 +33,8 @@ class Phone_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         $this->_backend = Phone_Controller::getInstance();

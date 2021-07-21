@@ -60,11 +60,19 @@ Tine.widgets.grid.ColumnManager = function() {
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
                 fieldDefinition = _.get(modelConfig, 'fields.' + fieldName , {}),
                 fieldType = fieldDefinition.type || 'string',
-                app = Tine.Tinebase.appMgr.get(appName),
+                app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
+            if (_.get(fieldDefinition, 'disabled')) {
+                return null;
+            }
+            
+            if (! app) { // e.g. no access to owningApp
+                return null;
+            }
+            
             if (fieldDefinition.type === 'virtual') {
-                fieldDefinition = fieldDefinition.config;
+                fieldDefinition = fieldDefinition.config || {};;
             }
 
             // don't show multiple record fields
@@ -72,6 +80,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 return null;
             }
 
+            if (fieldDefinition.disabled) {
+                return null;
+            }
+            
             // don't show parent property in dependency of an editDialog
             if (this.editDialog && fieldDefinition.hasOwnProperty('config') && fieldDefinition.config.isParent) {
                 return null;
@@ -104,6 +116,18 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.align = 'right';
             }
 
+            if(fieldDefinition.type == 'hexcolor') {
+                config.width = 40;
+            }
+
+            if(fieldDefinition.type == 'model') {
+                config.width = config.width || 125;
+            }
+
+            if(fieldDefinition.type == 'dynamicRecord') {
+                config.width = config.width || 400;
+            }
+
             // If no label exists, don't use in grid
             if (! fieldDefinition.label) {
                 return null;
@@ -113,6 +137,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 id: fieldName,
                 dataIndex: fieldName,
                 header: i18n._(fieldDefinition.label),
+                tooltip: i18n._(fieldDefinition.tooltip),
                 hidden: fieldDefinition.hasOwnProperty('shy') ? fieldDefinition.shy : false,    // defaults to false
                 sortable: (fieldDefinition.hasOwnProperty('sortable') && fieldDefinition.sortable == false) ? false : true // defaults to true
             });
@@ -121,7 +146,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 column.summaryType = fieldDefinition.summaryType;
             }
 
-            var renderer = Tine.widgets.grid.RendererManager.get(appName, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+            var renderer = Tine.widgets.grid.RendererManager.get(app, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
             if (renderer) {
                 column.renderer = renderer;
             }

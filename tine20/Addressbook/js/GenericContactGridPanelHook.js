@@ -29,7 +29,7 @@ Tine.Addressbook.GenericContactGridPanelHook = function(config) {
     this.addRecordAction = new Ext.Action({
         actionType: 'add',
         requiredGrant: 'readGrant',
-        text: text,
+        text: this.app.i18n._(text),
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onUpdateRecord,
@@ -43,7 +43,7 @@ Tine.Addressbook.GenericContactGridPanelHook = function(config) {
     this.newRecordAction = new Ext.Action({
         actionType: 'new',
         requiredGrant: 'readGrant',
-        text: text,
+        text: this.app.i18n._(text),
         iconCls: this.app.getIconCls(),
         scope: this,
         handler: this.onAddRecord,

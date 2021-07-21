@@ -70,6 +70,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         return self::$_instance;
     }
 
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
+    }
+
     /**
      * get list of full accounts -> renamed to search full users
      *
@@ -185,24 +190,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     }
 
     /**
-     * set the pin for a given account
-     *
-     * @param  Tinebase_Model_FullUser  $_account the account
-     * @param  string                   $_password the new password
-     * @return void
-     */
-    public function setAccountPin(Tinebase_Model_FullUser $_account, $_password)
-    {
-        $this->checkRight('MANAGE_ACCOUNTS');
-
-        $this->_userBackend->setPin($_account, $_password);
-
-        Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ .
-            ' Set new pin for user ' . $_account->accountLoginName);
-    }
-
-    /**
      * update user
      *
      * @param  Tinebase_Model_FullUser    $_user            the user
@@ -227,6 +214,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $deactivated = false;
 
         $this->_checkSystemEmailAccountCreation($_user, $oldUser, $_password);
+        $this->_checkSystemEmailAccountDuplicate($_user, $oldUser);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
@@ -287,12 +275,36 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     protected function _checkSystemEmailAccountCreation($user, $oldUser, $password)
     {
-        if (Tinebase_EmailUser::isEmailSystemAccountConfigured()
-            && empty($oldUser->accountEmailAddress)
+        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            return;
+        }
+
+        if ((! $oldUser || empty($oldUser->accountEmailAddress))
             && ! empty($user->accountEmailAddress)
-            && ! $password ) {
+            && empty($password)
+        ) {
             $translate = Tinebase_Translation::getTranslation('Admin');
             throw new Tinebase_Exception_SystemGeneric($translate->_('Password is needed for system account creation'));
+        }
+    }
+
+    /**
+     * @param $user
+     * @param $oldUser
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkSystemEmailAccountDuplicate($user, $oldUser = null)
+    {
+        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
+            return;
+        }
+
+        if ((! $oldUser || empty($oldUser->accountEmailAddress))
+            && ! empty($user->accountEmailAddress)
+        ) {
+            if (! $oldUser || $oldUser->accountEmailAddress !== $user->accountEmailAddress) {
+                Tinebase_EmailUser::checkIfEmailUserExists($user);
+            }
         }
     }
 
@@ -348,7 +360,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected function _updateCurrentUser($updatedUser)
     {
         $currentUser = Tinebase_Core::getUser();
-        if ($currentUser->getId() === $updatedUser->getId()) {
+        if ($currentUser->getId() === $updatedUser->getId() && Tinebase_Session::isStarted()) {
             // update current user in session!
             Tinebase_Core::set(Tinebase_Core::USER, $updatedUser);
             Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
@@ -381,7 +393,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_passwordRepeat = '';
         }
         if (!$_ignorePwdPolicy) {
-            Tinebase_User::getInstance()->checkPasswordPolicy($_password, $_user);
+            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $_user);
         }
 
         try {
@@ -390,6 +402,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $this->_checkLoginNameExistance($_user);
             $this->_checkLoginNameLength($_user);
             $this->_checkPrimaryGroupExistance($_user);
+            $this->_checkSystemEmailAccountCreation($_user, null, $_password);
+            $this->_checkSystemEmailAccountDuplicate($_user);
+
         } catch (Tinebase_Exception_SystemGeneric $sytemEx) {
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
@@ -442,13 +457,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         try {
             $existing = Tinebase_User::getInstance()->getUserByLoginName($user->accountLoginName);
+            if ($existing->is_deleted) {
+                return true;
+            }
             if ($user->getId() === NULL || $existing->getId() !== $user->getId()) {
                 throw new Tinebase_Exception_SystemGeneric('Login name already exists. Please choose another one.');
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
         }
         
-        return TRUE;
+        return true;
     }
     
     /**
@@ -569,7 +587,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->checkRight('MANAGE_ACCOUNTS');
 
         foreach (Tinebase_User::getInstance()->getFullUsers() as $user) {
-            if (empty($user->accountEmailAddress)) {
+            if (empty($user->accountEmailAddress) || ! Tinebase_EmailUser::checkDomain($user->accountEmailAddress)) {
                 continue;
             }
 

@@ -162,12 +162,18 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     initMessageBus: function() {
-        postal.subscribe({
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
             callback: this.onRecordChanges.createDelegate(this)
-        });
+        }));
     },
 
     /**

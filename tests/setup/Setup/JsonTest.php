@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Setup_JsonTest extends PHPUnit_Framework_TestCase
+class Setup_JsonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Setup_Frontend_Json
@@ -42,7 +42,7 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Json Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Setup Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
   }
 
@@ -52,8 +52,8 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_json = new Setup_Frontend_Json();
         $this->_originalAuthenticationData = $this->_json->loadAuthenticationData();
     }
@@ -64,8 +64,8 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         $this->_installAllApps();
     }
     

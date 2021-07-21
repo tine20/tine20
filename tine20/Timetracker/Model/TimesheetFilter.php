@@ -64,7 +64,9 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $this->_appendAclSqlFilter($_select);
+        if (count($this->_requiredGrants)) {
+            $this->_appendAclSqlFilter($_select);
+        }
 
         $db = $_backend->getAdapter();
         foreach ($this->_customData as $customData) {

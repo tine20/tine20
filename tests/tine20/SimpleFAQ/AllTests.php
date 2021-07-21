@@ -22,7 +22,7 @@ class SimpleFAQ_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 SimpleFAQ All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 SimpleFAQ All Tests');
         $suite->addTestSuite('SimpleFAQ_JsonTest');
         return $suite;
     }

@@ -25,6 +25,7 @@ class HumanResources_Convert_Employee_Json extends Tinebase_Convert_Json
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'contracts' => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'is_editable' => [],
                         HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME => [],
                     ],
                 ],

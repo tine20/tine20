@@ -37,7 +37,7 @@ class Crm_Backend_LeadTest extends TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm Leads Backend Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Crm Leads Backend Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
@@ -46,8 +46,8 @@ class Crm_Backend_LeadTest extends TestCase
      * 
      * This method is called before a test is executed.
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         $this->_backend = new Crm_Backend_Lead();
 
@@ -153,7 +153,7 @@ class Crm_Backend_LeadTest extends TestCase
         
         $this->_backend->delete($lead->getId());
         
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         $lead = $this->_backend->get($lead->getId());
     }
 

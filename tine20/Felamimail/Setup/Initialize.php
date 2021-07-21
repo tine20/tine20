@@ -14,6 +14,7 @@
  * 
  * @package     Setup
  */
+
 class Felamimail_Setup_Initialize extends Setup_Initialize
 {
     /**
@@ -80,7 +81,7 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
         self::createVacationTemplatesFolder();
         self::createEmailNotificationTemplatesFolder();
     }
-    
+
     /**
      * create vacation templates folder
      */
@@ -88,13 +89,38 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Creating vacation template in vfs ...');
-        
+
         try {
-            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+            $basePath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
                 'Felamimail',
                 Tinebase_FileSystem::FOLDER_TYPE_SHARED
             );
-            $node = Tinebase_FileSystem::getInstance()->createAclNode($basepath . '/Vacation Templates');
+            
+            $node = Tinebase_FileSystem::getInstance()->createAclNode($basePath . '/Vacation Templates');
+
+            if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basePath . '/Vacation Templates/vacation_template_test.tpl', 'w'))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create vacation_template_test.tpl file');
+                return;
+            }
+
+            fwrite($fh, <<<'vacation_template_test'
+Ich bin vom {startDate-de_DE} bis zum {endDate-de_DE} im Urlaub. Bitte kontaktieren Sie
+ {representation-n_fn-1} ({representation-email-1}) oder {representation-n_fn-2} ({representation-email-2}).
+
+I am on vacation until {endDate-en_US}. Please contact {representation-n_fn-1}
+({representation-email-1}) or {representation-n_fn-2} ({representation-email-2}) instead.
+
+{owncontact-n_fn}
+vacation_template_test
+            );
+
+            if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create vacation_template_test.tpl file');
+                return;
+            }
+            
             Felamimail_Config::getInstance()->set(Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID, $node->getId());
         } catch (Tinebase_Exception_Backend $teb) {
             Tinebase_Exception::log($teb);

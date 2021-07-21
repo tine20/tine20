@@ -9,6 +9,8 @@
  */
 
 require('widgets/form/ApplicationPickerCombo');
+require('widgets/form/RecordEditField');
+
 Ext.ns('Tine.Tinebase');
 
 /**

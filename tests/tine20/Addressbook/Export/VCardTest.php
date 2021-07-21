@@ -16,6 +16,16 @@ class Addressbook_Export_VCardTest extends TestCase
 {
     protected $_testContainer = null;
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if ($this->_testContainer) {
+            Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'addressbook', 'container_id = "' . $this->_testContainer->getId() . '"');
+            Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'container', 'id = "' . $this->_testContainer->getId() . '"');
+        }
+    }
+
     public function testExportPersonalContainer()
     {
         $this->_testNeedsTransaction();
@@ -23,8 +33,8 @@ class Addressbook_Export_VCardTest extends TestCase
         $this->_import();
         $result = $this->_export('stdout=1');
 
-        self::assertContains('Platz der Deutschen Einheit 4', $result);
-        self::assertContains('BEGIN:VCARD', $result);
+        self::assertStringContainsString('Platz der Deutschen Einheit 4', $result);
+        self::assertStringContainsString('BEGIN:VCARD', $result);
         self::assertEquals(7, substr_count($result, 'BEGIN:VCARD'),
             'expected 7 contacts');
     }
@@ -72,9 +82,9 @@ class Addressbook_Export_VCardTest extends TestCase
         self::assertTrue(file_exists($filename), 'export file does not exist');
         $result = file_get_contents($filename);
         unlink($filename);
-        self::assertContains('Platz der Deutschen Einheit 4', $result);
-        self::assertContains('BEGIN:VCARD', $result);
-        self::assertContains('END:VCARD', $result);
+        self::assertStringContainsString('Platz der Deutschen Einheit 4', $result);
+        self::assertStringContainsString('BEGIN:VCARD', $result);
+        self::assertStringContainsString('END:VCARD', $result);
     }
 
     public function testExportAllAddressbooks()
@@ -87,7 +97,7 @@ class Addressbook_Export_VCardTest extends TestCase
         mkdir($path);
         $output = $this->_export('path=' . $path . ' type=personal', false);
 
-        self::assertContains('Exported container ' . $this->_getTestAddressbook()->getId() . ' into file', $output);
+        self::assertStringContainsString('Exported into file', $output);
 
         // loop files in export dir
         $exportFilesFound = 0;
@@ -98,9 +108,9 @@ class Addressbook_Export_VCardTest extends TestCase
             if ($filename === '.' || $filename === '..') {
                 continue;
             }
-            self::assertContains(Tinebase_Core::getUser()->accountLoginName, $filename);
+            self::assertStringContainsString(Tinebase_Core::getUser()->accountLoginName, $filename);
             $result = file_get_contents($splFileInfo->getPathname());
-            self::assertContains('END:VCARD', $result);
+            self::assertStringContainsString('END:VCARD', $result);
             $exportFilesFound++;
             unlink($splFileInfo->getPathname());
         }

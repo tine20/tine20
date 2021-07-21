@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_ModelConfiguration, using the test class from hr
  */
-class HumanResources_ModelConfigurationTest extends PHPUnit_Framework_TestCase
+class HumanResources_ModelConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * tests if the modelconfiguration gets created using the static call

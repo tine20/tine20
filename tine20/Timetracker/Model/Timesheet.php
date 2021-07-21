@@ -14,11 +14,11 @@
  * 
  * @package     Timetracker
  *
- * @property    integer             accounting_time
- * @property    integer             duration
- * @property    Tinebase_DateTime   start_date
- * @property    string              start_time
- * @property    string              timeaccount_id
+ * @property integer $accounting_time
+ * @property integer $duration
+ * @property Tinebase_DateTime $start_date
+ * @property string $start_time
+ * @property string $timeaccount_id
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
@@ -120,7 +120,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ),
             ),
             'is_billable'           => array(
-                'label'                 => 'Billable', // _('Billable')
+                'label'                 => 'Project time billable', // _('Project time billable')
+                'tooltip'               => 'Project time billable',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
                 'type'                  => 'boolean',
                 'default'               => 1,
@@ -131,7 +132,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'type'                  => 'virtual',
                 'config'                => [
-                    'label'                 => 'Billable (combined)', // _('Billable (combined)')
+                    'label'                 => 'Project time billable (combined)', // _('Project time billable (combined)')
+                    'tooltip'               => 'Project time billable (combined)',
                     'type'                  => 'boolean',
                 ],
                 'filterDefinition'      => [
@@ -144,7 +146,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ],
             ),
             'billed_in'             => array(
-                'label'                 => 'Cleared in', // _('Cleared in')
+                'label'                 => 'Project time cleared in', // _('Project time cleared in')
+                'tooltip'               => 'Project time cleared in',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'shy'                   => true,
                 'nullable'              => true,
@@ -152,7 +155,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             ),
             'invoice_id'            => array(
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label'                 => 'Invoice', // _('Invoice')
+                'label'                 => 'Project time Invoice', // _('Project time Invoice')
+                'tooltip'               => 'Project time Invoice',
                 'type'                  => 'record',
                 'nullable'              => true,
                 'inputFilters'          => array('Zend_Filter_Empty' => null),
@@ -167,7 +171,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'copyOmit'              => true,
             ),
             'is_cleared'            => array(
-                'label'                 => 'Cleared', // _('Cleared')
+                'label'                 => 'Project time is cleared', // _('Project time is cleared')
+                'tooltip'               => 'Project time is cleared',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'                  => 'boolean',
                 'default'               => 0,
@@ -178,7 +183,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             'is_cleared_combined'   => array(
                 'type'                  => 'virtual',
                 'config'                => [
-                    'label'                 => 'Cleared (combined)', // _('Cleared (combined)')
+                    'label'                 => 'Projecttime cleared (combined)', // _('Projecttime cleared (combined)')
+                    'tooltip'               => 'Projecttime cleared (combined)',
                     'type'                  => 'boolean',
                 ], 
                 'filterDefinition'      => array(
@@ -237,7 +243,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 'type'                  => 'integer',
                 'specialType'           => 'minutes',
-                'default'               => '30'
+                'default'               => '30',
             ),
             'description'           => array(
                 'label'                 => 'Description', // _('Description')
@@ -252,13 +258,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'default'               => 0
             ),
             'accounting_time_factor'    => array(
-                'label'                 => 'Accounting time factor', // _('Accounting time factor')
-                'inputFilters' => array('Zend_Filter_Empty' => 1),
+                'label'                 => 'Projecttime Accounting factor', // _('Projecttime Accounting factor')
+                'inputFilters'          => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'float',
                 'default'               => 1
             ),
             'accounting_time'  => array(
-                'label'                 => 'Accounting time', // _('Accounting time')
+                'label'                 => 'Accounting Projecttime', // _('Accounting Projecttime')
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'integer',
                 'specialType'           => 'minutes',

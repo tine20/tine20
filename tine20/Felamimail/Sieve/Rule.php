@@ -141,6 +141,9 @@ class Felamimail_Sieve_Rule
      */
     public function isEnabled()
     {
+        if (! $this->validate()) {
+            $this->setEnabled(false);
+        }
         return $this->_enabled;
     }
     
@@ -225,5 +228,23 @@ class Felamimail_Sieve_Rule
             'enabled'               => (integer) $this->_enabled,
             'id'                    => $this->_id,
         );
+    }
+
+    /**
+     * validates the rule
+     *
+     * TODO add more validations?
+     *
+     * @return boolean
+     */
+    public function validate()
+    {
+        if ($this->_conjunction === 'allof' && empty($this->_conditions)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Invalid rule (conjunction allof and no conditions)');
+            return false;
+        }
+
+        return true;
     }
 }

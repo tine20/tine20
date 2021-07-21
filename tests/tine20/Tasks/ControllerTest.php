@@ -44,8 +44,8 @@ class Tasks_ControllerTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->_controller = Tasks_Controller_Task::getInstance();
@@ -267,7 +267,7 @@ class Tasks_ControllerTest extends TestCase
         $conflictTask = clone $utask;
         $conflictTask->seq = 0;
         $conflictTask->summary = 'Non resolvable conflict';
-        $this->setExpectedException('Tinebase_Exception_ConcurrencyConflict');
+        $this->expectException('Tinebase_Exception_ConcurrencyConflict');
         $this->_controller->update($conflictTask);
     }
 

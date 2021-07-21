@@ -18,7 +18,6 @@
  * @package     Tinebase
  * @subpackage  User
  */
- 
 abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 {
     /**
@@ -674,31 +673,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         }
     }
 
-    /**
-     * set PIN
-     *
-     * @param  string  $_userId
-     * @param  string  $_pin (only numbers are allowed)
-     * @return array
-     * @throws Tinebase_Exception_SystemGeneric
-     *
-     * TODO move to Tinebase_User_sql and replace with abstract fn here
-     * TODO replicate PIN?
-     */
-    public function setPin($_userId, $_pin)
-    {
-        if (preg_match('/[^0-9]+/', (string) $_pin)) {
-            throw new Tinebase_Exception_SystemGeneric('Only numbers are allowed for PINs'); // _('Only numbers are allowed for PINs')
-        }
-
-        if (strlen((string) $_pin) < Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PIN_MIN_LENGTH)) {
-            throw new Tinebase_Exception_SystemGeneric('PIN too short'); // _('PIN too short')
-        }
-
-        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
-        return $this->_updatePasswordProperty($userId, $_pin, 'pin');
-    }
-
     /******************* abstract functions *********************/
     
     /**
@@ -782,8 +756,64 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User');
 
+    /**
+     * @return string
+     */
     public function getModel()
     {
-        return Tinebase_Model_FullUser::class;
+        return Tinebase_Model_User::class;
+    }
+
+    /**
+     * send welcome / password update mail to a user
+     *
+     * @param $user
+     * @param $newPw
+     * @param null $email
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function sendPasswordChangeMail(Tinebase_Model_FullUser $user, $newPw, $email = null)
+    {
+        $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user);
+        if ($email) {
+            $recipient->email = $email;
+        }
+
+        // @todo translate / add to config
+        $subject = 'Neues Tine 2.0 / E-Mail Passwort';
+        // TODO add only if configured
+        $emailSettings = "\r\nZugangsdaten für den Zugriff auf das Mailkonto über einen anderen E-Mail-Client:\r\n"
+            . "IMAP: Host: {{ imap.host }} Port: {{ imap.port }}\r\n"
+            . "SMTP: Host: {{ smtp.hostname }} Port: {{ smtp.port }}\r\n"
+            . "Benutzername: Ihre E-Mail Adresse ({{ email }})\r\n";
+        $message = "Guten Tag!\r\n\r\nIhr neues Tine 2.0 / E-Mail-Passwort lautet: {{ password|raw }}\r\n" .
+            "Bitte ändern Sie es gleich nach dem ersten Login.\r\n" .
+            "\r\nTine 2.0 URL: {{ tine20url }} (Benutzername: {{ username }})\r\n" .
+            $emailSettings .
+            "\r\nEinen schönen Tag wünscht: Ihr Metaways Team\r\n";
+
+        $tbConfig = Tinebase_Config::getInstance();
+        $twig = new Twig_Environment(new Twig_Loader_Array());
+
+        $message = $twig->createTemplate($message)->render([
+            'tine20url' => $tbConfig->get(Tinebase_Config::TINE20_URL),
+            'smtp' => $tbConfig->get(Tinebase_Config::SMTP)->toArray(),
+            'imap' => $tbConfig->get(Tinebase_Config::IMAP)->toArray(),
+            'password' => $newPw,
+            'email' => $user->accountEmailAddress,
+            'username' => $user->accountLoginName,
+        ]);
+
+        $smtp = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
+        $smtp->send(
+            Tinebase_Core::getUser(),
+            $recipient,
+            $subject,
+            $message
+        );
     }
 }

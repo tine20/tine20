@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Event
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -28,7 +28,8 @@ class Tinebase_Event
     /**
      * calls the handleEvent function in the controller of all enabled applications 
      *
-     * @param  Tinebase_Event_Object  $_eventObject  the event object
+     * @param  Tinebase_Event_Abstract $_eventObject  the event object
+     * @return boolean success (false if event handler throws an exception)
      */
     static public function fireEvent(Tinebase_Event_Abstract $_eventObject)
     {
@@ -38,32 +39,36 @@ class Tinebase_Event
         
         if (self::isDuplicateEvent($_eventObject)) {
             // do nothing
-            return;
+            return true;
         }
         
         foreach (Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
             try {
                 $controller = Tinebase_Core::getApplicationInstance($application, NULL, TRUE);
-            } catch (Tinebase_Exception_NotFound $e) {
-                // application has no controller or is not useable at all
+                if ($controller instanceof Tinebase_Event_Interface) {
+                    static::$history[$historyOffset][$application->getId()] = true;
+                    $controller->handleEvent($_eventObject);
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // application has no controller or is not usable at all OR record not found...
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' '
+                    . __LINE__ . ' ' . (string) $application . ' threw an exception: '
+                    . $tenf->getMessage()
+                );
                 continue;
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . ' ' . __LINE__ . ' Access denied to app ' . $application->name);
+                    __METHOD__ . ' ' . __LINE__ . ' Access denied to app (or record) ' . $application->name
+                    . ' exception: ' . $tead->getMessage());
                 continue;
-            }
-            if ($controller instanceof Tinebase_Event_Interface) {
-                static::$history[$historyOffset][$application->getId()] = true;
-                try {
-                    $controller->handleEvent($_eventObject);
-                } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' '
-                        . __LINE__ . ' ' . (string) $application . ' threw an exception: '
-                        . $e->getMessage()
-                    );
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
-                        . __LINE__ . ' ' . $e->getTraceAsString());
-                }
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' '
+                    . __LINE__ . ' ' . (string) $application . ' threw an exception: '
+                    . $e->getMessage()
+                );
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
+                    . __LINE__ . ' ' . $e->getTraceAsString());
+                return false;
             }
         }
         
@@ -78,9 +83,12 @@ class Tinebase_Event
             }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' ' . ' failed to process user defined event hook with message: ' . $e);
+            return false;
         }
         
         unset(self::$events[get_class($_eventObject)][$_eventObject->getId()]);
+
+        return true;
     }
     
     /**

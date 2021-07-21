@@ -60,7 +60,7 @@ class Tinebase_Model_LogEntry extends Tinebase_Record_Abstract
                 'length' => 255,
                 'nullable' => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label' => 'Clinent Requestid', // _('Clinent Requestid')
+                'label' => 'Client Requestid', // _('Client Requestid')
             ),
             'request_id' => array(
                 'type' => 'string',

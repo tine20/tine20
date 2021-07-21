@@ -236,6 +236,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         if (!empty($username)) {
             // try to login user
+            Tinebase_Controller::getInstance()->forceUnlockLoginArea();
             $success = (Tinebase_Controller::getInstance()->login(
                 $username,
                 $password,
@@ -312,7 +313,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $jsFiles[] = "index.php?method=Tinebase.getCustomJsFiles";
         }
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig');
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig', [
+            'lang' => $locale
+        ]);
     }
 
     /**

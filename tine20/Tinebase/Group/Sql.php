@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -99,20 +99,21 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * return all groups an account is member of
      *
      * @param mixed $_accountId the account as integer or Tinebase_Model_User
+     * @param boolean $_fromCache
      * @return array
      */
-    public function getGroupMemberships($_accountId)
+    public function getGroupMemberships($_accountId, $_fromCache = true)
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         $classCacheId = $accountId;
         
-        if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
+        if ($_fromCache && isset($this->_classCache[__FUNCTION__][$classCacheId])) {
             return $this->_classCache[__FUNCTION__][$classCacheId];
         }
         
         $cacheId     = Tinebase_Helper::convertCacheId(__FUNCTION__ . $classCacheId);
-        $memberships = Tinebase_Core::getCache()->load($cacheId);
+        $memberships = $_fromCache ? Tinebase_Core::getCache()->load($cacheId) : false;
         
         if (! $memberships) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -139,14 +140,15 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      * get list of groupmembers
      *
      * @param int $_groupId
+     * @param boolean $_fromCache
      * @return array with account ids
      */
-    public function getGroupMembers($_groupId)
+    public function getGroupMembers($_groupId, $_fromCache = true)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $cacheId = Tinebase_Helper::convertCacheId(__FUNCTION__ . $groupId);
-        $members = Tinebase_Core::getCache()->load($cacheId);
+        $members = $_fromCache ? Tinebase_Core::getCache()->load($cacheId) : false;
 
         if (false === $members) {
             $members = array();
@@ -202,7 +204,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
 
-        $oldGroupMembers = $this->getGroupMembers($groupId);
+        $oldGroupMembers = $this->getGroupMembers($groupId, false);
 
         // remove old members
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' = ?', $groupId);
@@ -319,8 +321,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }
         
         $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        
-        $groupMemberships = $this->getGroupMemberships($userId);
+
+        $groupMemberships = $this->getGroupMemberships($userId, false);
         
         $removeGroupMemberships = array_diff($groupMemberships, $_groupIds);
         $addGroupMemberships    = array_diff($_groupIds, $groupMemberships);
@@ -360,8 +362,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         if ($this instanceof Tinebase_Group_Interface_SyncAble) {
             $this->addGroupMemberInSyncBackend($_groupId, $_accountId);
         }
-        
-        $this->addGroupMemberInSqlBackend($_groupId, $_accountId);
+
+        try {
+            $this->addGroupMemberInSqlBackend($_groupId, $_accountId);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                throw $zdse;
+            }
+        }
     }
     
     /**
@@ -891,50 +899,52 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $modification)
     {
-        switch ($modification->change_type) {
-            case Tinebase_Timemachine_ModificationLog::CREATED:
-                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                $record = new Tinebase_Model_Group($diff->diff);
-                Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
-                Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
-                $this->addGroup($record);
-                break;
-
-            case Tinebase_Timemachine_ModificationLog::UPDATED:
-                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                if (isset($diff->diff['members']) && is_array($diff->diff['members'])) {
-                    $toAdd = array_diff($diff->diff['members'], $diff->oldData['members']);
-                    $toDelete = array_diff($diff->oldData['members'], $diff->diff['members']);
-                    $members = array_unique(array_merge($toAdd,
-                        array_diff($this->getGroupMembers($modification->record_id), $toDelete)));
-                    $this->setGroupMembers($modification->record_id, $members);
-                    $record = $this->getGroupById($modification->record_id);
-                    $record->members = $this->getGroupMembers($record->getId());
+        try {
+            switch ($modification->change_type) {
+                case Tinebase_Timemachine_ModificationLog::CREATED:
+                    $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                    $record = new Tinebase_Model_Group($diff->diff);
                     Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
-                } else {
-                    $record = $this->getGroupById($modification->record_id);
-                    $currentRecord = clone $record;
-                    $record->applyDiff($diff);
-                    $record->members = $this->getGroupMembers($record->getId());
-                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
-                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
-                    $this->updateGroup($record);
-                }
-                break;
+                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'create');
+                    $this->addGroup($record);
+                    break;
 
-            case Tinebase_Timemachine_ModificationLog::DELETED:
-                try {
+                case Tinebase_Timemachine_ModificationLog::UPDATED:
+                    $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                     $record = $this->getGroupById($modification->record_id);
-                    if (!empty($record->list_id)) {
-                        Addressbook_Controller_List::getInstance()->delete($record->list_id);
+                    if (isset($diff->diff['members']) && is_array($diff->diff['members'])) {
+                        $toAdd = array_diff($diff->diff['members'], $diff->oldData['members']);
+                        $toDelete = array_diff($diff->oldData['members'], $diff->diff['members']);
+                        $members = array_unique(array_merge($toAdd,
+                            array_diff($this->getGroupMembers($modification->record_id), $toDelete)));
+                        $this->setGroupMembers($modification->record_id, $members);
+                        $record->members = $this->getGroupMembers($record->getId());
+                        Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
+                    } else {
+                        $currentRecord = clone $record;
+                        $record->applyDiff($diff);
+                        $record->members = $this->getGroupMembers($record->getId());
+                        Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
+                        Tinebase_Timemachine_ModificationLog::setRecordMetaData($record, 'update', $currentRecord);
+                        $this->updateGroup($record);
                     }
-                    $this->deleteGroups($modification->record_id);
-                } catch (Tinebase_Exception_Record_NotDefined $e) {}
-                break;
+                    break;
 
-            default:
-                throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
-        }
+                case Tinebase_Timemachine_ModificationLog::DELETED:
+                    try {
+                        $record = $this->getGroupById($modification->record_id);
+                        if (!empty($record->list_id)) {
+                            Addressbook_Controller_List::getInstance()->delete($record->list_id);
+                        }
+                        $this->deleteGroups($modification->record_id);
+                    } catch (Tinebase_Exception_Record_NotDefined $e) {
+                    }
+                    break;
+
+                default:
+                    throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
+            }
+        } catch (Tinebase_Exception_Record_NotDefined $groupNotFound){}
     }
 
     /**

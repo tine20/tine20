@@ -26,8 +26,8 @@ class Crm_Acl_RolesTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
         
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
@@ -65,8 +65,8 @@ class Crm_Acl_RolesTest extends TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
         
         parent::tearDown();
@@ -256,7 +256,7 @@ class Crm_Acl_RolesTest extends TestCase
         
         Tinebase_Acl_Roles::getInstance()->deleteRoles(array($this->objects['role']->getId(), $this->objects['role_2']->getId()));
       
-        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_Acl_Roles::getInstance()->getRoleById($this->objects['role']->getId());
     }
 }

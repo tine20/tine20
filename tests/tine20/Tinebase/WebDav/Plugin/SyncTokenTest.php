@@ -24,7 +24,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase WebDav Plugin SyncToken Tests');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase WebDav Plugin SyncToken Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -34,8 +34,8 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         parent::setUp();
 
         parent::setupCalendarContainer();
@@ -49,8 +49,8 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
     /**
      * tear down tests
      */
-    public function tearDown()
-    {
+    public function tearDown(): void
+{
         parent::tearDown();
     }
 
@@ -125,7 +125,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
         $this->server->httpRequest = $request;
         $this->server->exec();
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/5</d:sync-token></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response></d:multistatus>', $this->response->body);
+        $this->assertStringContainsString('<d:sync-token>http://tine20.net/ns/sync/5</d:sync-token></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response></d:multistatus>', $this->response->body);
     }
 
     public function testSyncCollectionEmptyContainer()
@@ -153,7 +153,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
         $this->server->exec();
 
         static::assertSame('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/-1</d:sync-token></d:multistatus>', $this->response->body);
+        $this->assertStringContainsString('<d:sync-token>http://tine20.net/ns/sync/-1</d:sync-token></d:multistatus>', $this->response->body);
     }
 
     /**
@@ -182,7 +182,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
         $this->server->exec();
         
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/5</d:sync-token></d:multistatus>', $this->response->body);
+        $this->assertStringContainsString('<d:sync-token>http://tine20.net/ns/sync/5</d:sync-token></d:multistatus>', $this->response->body);
 
         //check that we only got 2 responses, so no reoccuring events!
         $this->assertEquals(2, preg_match_all('/<d:response>/', $this->response->body, $m));

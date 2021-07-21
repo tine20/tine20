@@ -70,19 +70,25 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     initMessageBus: function() {
-        if (Tine.Tinebase.areaLocks.hasLock(this.app.appName)) {
-            postal.subscribe({
+        this.postalSubscriptions = [];
+        _.each(Tine.Tinebase.areaLocks.getLocks(this.app.appName), (areaLock) => {
+            this.postalSubscriptions.push(postal.subscribe({
                 channel: "areaLocks",
-                topic: this.app.appName + '.*',
+                topic: areaLock + '.*',
                 callback: this.onAreaLockChange.createDelegate(this)
-            });
-        }
+            }));
+        });
     },
 
     onAreaLockChange: function(data, e) {
         var topic = e.topic,
-            locked = !topic.match(/unlocked$/),
+            locked = !!Tine.Tinebase.areaLocks.getLocks(this.app.appName, true).length,
             cp = this.getCenterPanel(),
             grid = cp ? cp.getGrid() : null,
             store = grid.getStore();
@@ -118,7 +124,10 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     
     applyState: function(state) {
         this.westRegionPanel.setWidth(state.westWidth);
-        this.northCardPanel.setHeight(state.northHeight);
+        if (state.northHeight > 0) {
+            // NOTE: in some wired cases the state is 0 - and the user has no option to resize it
+            this.northCardPanel.setHeight(state.northHeight);
+        }
     },
     
     /**
@@ -204,12 +213,12 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     afterRender: function() {
         Tine.widgets.MainScreen.superclass.afterRender.call(this);
 
-        if (Tine.Tinebase.areaLocks.hasLock(this.app.appName)) {
-            Tine.Tinebase.areaLocks.setOptions(this.app.appName, {
+        _.each(Tine.Tinebase.areaLocks.getLocks(this.app.appName), (areaLock) => {
+            Tine.Tinebase.areaLocks.setOptions(areaLock, {
                 maskEl: this.getEl()
             });
-            Tine.Tinebase.areaLocks.unlock(this.app.appName)
-        }
+            Tine.Tinebase.areaLocks.unlock(areaLock);
+        });
         this.setActiveContentType(this.activeContentType);
     },
 
@@ -239,15 +248,18 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     getCenterPanel: function(contentType) {
         contentType = contentType || this.getActiveContentType();
 
-        var def = this.getContentTypeDefinition(contentType),
+        var def = this.getContentTypeDefinition(contentType) || {},
             suffix = def && def.xtype ? '' : this.centerPanelClassNameSuffix;
 
         if (! this[contentType + suffix]) {
             try {
                 this[contentType + suffix] = def && def.xtype ? Ext.create(def) :
-                    new Tine[this.app.appName][contentType + suffix]({
-                        app: this.app,
-                        plugins: [this.getWestPanel().getFilterPlugin(contentType)]
+                    new Tine[def.appName || this.app.appName][contentType + suffix]({
+                        app: def.appName ? Tine.Tinebase.appMgr.get(def.appName) : this.app,
+                        plugins: (() => {
+                            const wp = this.getWestPanel();
+                            return wp && wp.getFilterPlugin ? [wp.getFilterPlugin(contentType)] : []
+                        })()
                     });
 
                 if (this[contentType + suffix].cls) {
@@ -533,13 +545,20 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
  *
  * @param {String} appName
  * @param {Collection} contentType
- *   contentType:   {String}
+ *   contentType:   {String|Object|Model}
  *   text:          {String}
  *   group:         {String} (optional)
  *   xtype:         {String} (optional)
  */
 Tine.widgets.MainScreen.registerContentType = function(appName, contentType) {
     var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + appName, []);
+    if (_.isFunction(contentType.getMeta)) {
+        contentType = {
+            appName: contentType.getMeta('appName'),
+            modelName: contentType.getMeta('modelName')
+        };
+    }
+    
     registeredContentTypes.push(contentType);
 
     _.set(Tine.widgets.MainScreen.registerContentType, 'registry.' + appName, registeredContentTypes);

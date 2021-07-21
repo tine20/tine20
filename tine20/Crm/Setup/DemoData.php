@@ -44,17 +44,11 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected static $_requiredApplications = array('Admin', 'Addressbook', 'Sales');
         
     /**
-     * private containers
-     * 
-     * @var Array
-     */
-    protected $_calendars = array();
-    
-    /**
      * holds the shared container
      */
     protected $_sharedContainer     = NULL;
     protected $_sharedTaskContainer = NULL;
+
     /**
      * the constructor
      *

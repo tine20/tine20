@@ -17,7 +17,7 @@ class Addressbook_Convert_AllTests
 {
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('All Addressbook Converter tests');
+        $suite = new \PHPUnit\Framework\TestSuite('All Addressbook Converter tests');
 
         $suite->addTestSuite('Addressbook_Convert_Contact_StringTest');
         $suite->addTest(Addressbook_Convert_Contact_VCard_AllTests::suite());

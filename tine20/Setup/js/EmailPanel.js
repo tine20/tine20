@@ -147,7 +147,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         };
         
         // imap combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail  MySQL'], ['ldap_imap', 'DBmail Ldap'], ['cyrus', 'Cyrus'], ['dovecot_imap', 'Dovecot MySQL'], ['dovecotcombined', 'Dovecot SQL (combined schema)'], ['ldap_univention', 'Univention']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['cyrus', 'Cyrus'], ['dovecot_imap', 'Dovecot MySQL'], ['dovecotcombined', 'Dovecot SQL (combined schema)'], ['ldap_univention', 'Univention']];
         backendComboConfig.name = 'imap_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -163,10 +163,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             ['postfixcombined', 'Postfix SQL (combined schema)'],
             ['postfixmultiinstance', 'Postfix SQL (multi instance)'],
             ['Ldapsmtpmail', 'Ldap (only mail attribute)'],
-            ['ldapSmtp', 'Postfix Ldap (dbmail schema)'],
             ['ldapSmtpQmail', 'Postfix Ldap (qmail schema)'],
-            ['ldap_univention', 'Univention'],
-            ['ldap_simplemail', 'SimpleMail or custom Ldap (BETA)']
+            ['ldap_univention', 'Univention']
         ];
         backendComboConfig.name = 'smtp_backend';
         backendComboConfig.listeners = {
@@ -199,7 +197,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     name: 'imap_password',
                     fieldLabel: this.app.i18n._('Password'),
                     xtype: 'textfield',
-                    inputType: 'password'
+                    xtype: 'tw-passwordTriggerField',
+                    clipboard: false
                 }, */{
                     name: 'imap_port',
                     fieldLabel: this.app.i18n._('Port'),
@@ -246,16 +245,6 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         layout: 'form',
                         items: []
                     }, {
-                        // dbmail config options
-                        id: this.imapBackendIdPrefix + 'dbmail',
-                        layout: 'form',
-                        autoHeight: 'auto',
-                        defaults: {
-                            width: 300,
-                            xtype: 'textfield'
-                        },
-                        items: this.getDbConfigFields('imap', 'dbmail')
-                    }, {
                         // nothing in here yet
                         id: this.imapBackendIdPrefix + 'ldap_imap',
                         layout: 'form',
@@ -279,7 +268,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         }, {
                             name: 'imap_cyrus_password',
                             fieldLabel: this.app.i18n._('Cyrus Admin Password'),
-                            inputType: 'password'
+                            xtype: 'tw-passwordTriggerField',
+                            clipboard: false
                         },
                         Ext.applyIf({
                                 name: 'imap_cyrus_useProxyAuth',
@@ -362,8 +352,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 }, {
                     name: 'smtp_password',
                     fieldLabel: this.app.i18n._('Notification Password'),
-                    inputType: 'password',
-                    xtype: 'textfield'
+                    xtype: 'tw-passwordTriggerField',
+                    clipboard: false
                 }, {
                     name: 'smtp_name',
                     fieldLabel: this.app.i18n._('Notifications local client (hostname or IP address)'),
@@ -495,7 +485,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             store: [
                 ['pdo_mysql', 'MySQL'],
                 ['pdo_pgsql', 'PostgreSQL']
-            ],
+            ]
         }];
     },
     
@@ -503,7 +493,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * get db config fields
      * 
      * @param {String} type1 (imap, smtp)
-     * @param {String} type2 (dbmail, postfix, ...)
+     * @param {String} type2 (postfix, ...)
      * @return {Array}
      */
     getDbConfigFields: function (type1, type2) {
@@ -521,7 +511,8 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         }, {
             name: type1 + '_' + type2 + '_password',
             fieldLabel: typeString + this.app.i18n._('MySql Password'),
-            inputType: 'password'
+            xtype: 'tw-passwordTriggerField',
+            clipboard: false
         }, {
             name: type1 + '_' + type2 + '_port',
             fieldLabel: typeString + this.app.i18n._('MySql Port'),

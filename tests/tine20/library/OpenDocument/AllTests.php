@@ -25,7 +25,7 @@ class OpenDocument_AllTests
     
     public static function suite ()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 OpenDocument All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 OpenDocument All Tests');
         $suite->addTestSuite('OpenDocument_DocumentTests');
         return $suite;
     }

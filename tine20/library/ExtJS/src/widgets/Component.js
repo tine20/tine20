@@ -278,28 +278,37 @@ Ext.Component = function(config){
         this.baseAction.addComponent(this);
     }
 
-    this.initComponent();
-
-    if(this.plugins){
-        if(Ext.isArray(this.plugins)){
-            for(var i = 0, len = this.plugins.length; i < len; i++){
-                this.plugins[i] = this.initPlugin(this.plugins[i]);
+    const v = this.initComponent();
+    const afterInit = () => {
+        if (this.plugins) {
+            if (Ext.isArray(this.plugins)) {
+                for (var i = 0, len = this.plugins.length; i < len; i++) {
+                    this.plugins[i] = this.initPlugin(this.plugins[i]);
+                }
+            } else {
+                this.plugins = this.initPlugin(this.plugins);
             }
-        }else{
-            this.plugins = this.initPlugin(this.plugins);
+        }
+
+        if (this.stateful !== false) {
+            this.initState();
+        }
+
+        if (this.applyTo) {
+            this.applyToMarkup(this.applyTo);
+            delete this.applyTo;
+        } else if (this.renderTo) {
+            this.render(this.renderTo);
+            delete this.renderTo;
         }
     }
 
-    if(this.stateful !== false){
-        this.initState();
-    }
-
-    if(this.applyTo){
-        this.applyToMarkup(this.applyTo);
-        delete this.applyTo;
-    }else if(this.renderTo){
-        this.render(this.renderTo);
-        delete this.renderTo;
+    if (Ext.isThenable(v)) {
+        v.then(() => {
+            afterInit();
+        });
+    } else {
+        afterInit();
     }
 };
 
@@ -857,6 +866,7 @@ new Ext.Panel({
                 ptype: p
             });
         }
+        
         p.init(this);
         return p;
     },
@@ -977,6 +987,7 @@ Ext.Foo = Ext.extend(Ext.Bar, {
                 }
             }
             this.afterRender(this.container);
+            _.defer(_.bind(this.componentDidMount, this, this));
 
 
             if(this.hidden){
@@ -1028,7 +1039,6 @@ Ext.Foo = Ext.extend(Ext.Bar, {
             contentTarget.update(html, loadScripts, cb);
         }
     },
-
 
     /**
      * @private
@@ -1125,7 +1135,7 @@ var myGrid = new Ext.grid.EditorGridPanel({
         if(Ext.state.Manager){
             var id = this.getStateId();
             if(id){
-                var state = Ext.state.Manager.get(id);
+                var state = Ext.state.Manager.get(id) || this.initialState;
                 if(state){
                     if(this.fireEvent('beforestaterestore', this, state) !== false){
                         this.applyState(Ext.apply({}, state));
@@ -1254,6 +1264,9 @@ var myGrid = new Ext.grid.EditorGridPanel({
     // private
     afterRender : Ext.emptyFn,
 
+    // https://reactjs.org/docs/react-component.html#componentdidmount
+    componentDidMount: Ext.emptyFn,
+
     /**
      * Destroys this component by purging any event listeners, removing the component's element from the DOM,
      * removing the component from its {@link Ext.Container} (if applicable) and unregistering it from
@@ -1266,6 +1279,7 @@ var myGrid = new Ext.grid.EditorGridPanel({
             if(this.fireEvent('beforedestroy', this) !== false){
                 this.destroying = true;
                 this.beforeDestroy();
+                this.componentWillUnmount(this);
                 if(this.ownerCt && this.ownerCt.remove){
                     this.ownerCt.remove(this, false);
                 }
@@ -1294,6 +1308,9 @@ var myGrid = new Ext.grid.EditorGridPanel({
 
     // private
     beforeDestroy : Ext.emptyFn,
+
+    // https://reactjs.org/docs/react-component.html#componentwillunmount
+    componentWillUnmount : Ext.emptyFn,
 
     // private
     onDestroy  : Ext.emptyFn,
@@ -1501,6 +1518,10 @@ new Ext.Panel({
         return this.rendered && this.getVisibilityEl().isVisible();
     },
 
+    isHidden: function(){
+        return !this.isVisible();
+    },
+    
     /**
      * Clone the current component using the original config values passed into this instance by default.
      * @param {Object} overrides A new config containing any properties to override in the cloned version.
@@ -1749,6 +1770,20 @@ myGridPanel.mon(myGridPanel.getSelectionModel(), {
      */
     getBubbleTarget : function(){
         return this.ownerCt;
+    },
+
+    /**
+     * is this component rendered?
+     * @return {Promise}
+     */
+    afterIsRendered : function(){
+        var me = this;
+        if (this.rendered) {
+            return Promise.resolve(me);
+        }
+        return new Promise(function(resolve) {
+            me.on('render', resolve);
+        });
     }
 });
 

@@ -27,14 +27,14 @@ class Setup_CliTest extends TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_cli = new Setup_Frontend_Cli();
         parent::setUp();
     }
 
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         parent::tearDown();
 
         // reset old configs
@@ -50,7 +50,7 @@ class Setup_CliTest extends TestCase
     {
         $this->_oldConfigs[Tinebase_Config::ALLOWEDJSONORIGINS] = Tinebase_Config::getInstance()->get(Tinebase_Config::ALLOWEDJSONORIGINS);
         $output = $this->_cliHelper('setconfig', array('--setconfig','--','configkey=allowedJsonOrigins', 'configvalue='.'["foo","bar"]'));
-        $this->assertContains('OK - Updated configuration option allowedJsonOrigins for application Tinebase', $output);
+        $this->assertStringContainsString('OK - Updated configuration option allowedJsonOrigins for application Tinebase', $output);
         $result = Tinebase_Config_Abstract::factory('Tinebase')->get('allowedJsonOrigins');
         $this->assertEquals("foo", $result[0]);
         $this->assertEquals("bar", $result[1]);
@@ -67,7 +67,7 @@ class Setup_CliTest extends TestCase
         $values = array(1, "true");
         foreach ($values as $configValue) {
             $output = $this->_cliHelper('setconfig', array('--setconfig', '--', 'configkey=' . $config, 'configvalue=' . $configValue));
-            $this->assertContains('OK - Updated configuration option ' . $config . ' for application Tinebase', $output);
+            $this->assertStringContainsString('OK - Updated configuration option ' . $config . ' for application Tinebase', $output);
             $result = Tinebase_Config_Abstract::factory('Tinebase')->get($config);
             $this->assertTrue($result);
         }
@@ -93,7 +93,7 @@ class Setup_CliTest extends TestCase
         $this->testSetConfig();
         $result = $this->_cliHelper('compare', array('--compare','--','otherdb='
             . Tinebase_Config::getInstance()->get('database')->dbname));
-        $this->assertContains("Array
+        $this->assertStringContainsString("Array
 (
 )", $result);
     }

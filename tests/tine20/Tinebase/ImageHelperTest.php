@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_ImageHelper
  */
-class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
+class Tinebase_ImageHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array test objects
@@ -31,7 +31,7 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_ImageHelperTest');
+        $suite  = new \PHPUnit\Framework\TestSuite('Tinebase_ImageHelperTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
 
@@ -41,8 +41,8 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function setUp()
-    {
+    protected function setUp(): void
+{
         $this->_testImagePath = dirname(__FILE__) . '/ImageHelper/phpunit-logo.gif';
         $this->_testImage = Tinebase_Model_Image::getImageFromPath($this->_testImagePath);
         $this->_testImageData = array(
@@ -60,8 +60,8 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
      *
      * @access protected
      */
-    protected function tearDown()
-    {
+    protected function tearDown(): void
+{
         
     }
     
@@ -84,7 +84,7 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
     public function testGetImageInfoFromBlobException()
     {
         $rwongBlob = file_get_contents(__FILE__);
-        $this->setExpectedException('Tinebase_Exception_UnexpectedValue');
+        $this->expectException('Tinebase_Exception_UnexpectedValue');
         Tinebase_ImageHelper::getImageInfoFromBlob($rwongBlob);
     }
     

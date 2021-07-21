@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -18,6 +18,8 @@
  */
 class Tinebase_FileSystem_StreamWrapper
 {
+    protected static $openStreams = [];
+
     /**
      * the context
      * 
@@ -244,11 +246,17 @@ class Tinebase_FileSystem_StreamWrapper
             }
             return false;
         }
-        
+
+        static::$openStreams[$_path] = $stream;
         $this->_stream = $stream;
         $_opened_path = $_path;
         
         return true;
+    }
+
+    public static function getStream($path)
+    {
+        return isset(static::$openStreams[$path]) ? static::$openStreams[$path] : null;
     }
     
     /**

@@ -126,14 +126,20 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }, this);
         }
 
-        postal.subscribe({
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: 'Tinebase.TempFile.*',
             callback: this.onTempFileChanges.createDelegate(this)
-        });
+        }));
 
     },
 
+    onDestroy: function() {
+        _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
+        return this.supr().onDestroy.call(this);
+    },
+    
     /**
      * bus notified about record changes
      */
@@ -382,25 +388,24 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 xhr.onload = function (e) {
 //                    attachment.set('type', xhr.response.type);
 //                    attachment.set('size', xhr.response.size);
-
-                    var upload = new Ext.ux.file.Upload({
+                    
+                    const upload = new Ext.ux.file.Upload({
                         file: new File([xhr.response], name),
                         type: xhr.response.type,
-                        size: xhr.response.size
+                        size: xhr.response.size,
+                        id: Tine.Tinebase.uploadManager.generateUploadId()
                     });
                     // work around chrome bug which dosn't take type from blob
                     upload.file.fileType = xhr.response.type;
-
-                    var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-                    var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
-
+                    
                     upload.on('uploadfailure', me.onUploadFail, me);
-                    upload.on('uploadcomplete', me.onUploadComplete, fileRecord);
+                    upload.on('uploadcomplete', me.onUploadComplete, upload.fileRecord);
                     upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, me);
 
-                    store.remove(attachment);
-                    store.add(fileRecord);
+                    upload.upload();
 
+                    store.remove(attachment);
+                    store.add(upload.fileRecord);
                 };
 
                 xhr.send();
@@ -555,22 +560,19 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (_.get(fileList, '[0].type') === 'fm_node') {
             this.onFileSelectFromFilemanager(fileList);
         } else {
-            Ext.each(fileList, function (file) {
-                var upload = new Ext.ux.file.Upload({
-                    file: file
+             _.each(fileList, (file) => {
+                const upload =  new Ext.ux.file.Upload({
+                    file: _.get(file, 'fileObject'),
+                    id: Tine.Tinebase.uploadManager.generateUploadId(),
+                    isFolder: false
                 });
-
-                var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-                var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
-
+                
                 upload.on('uploadfailure', this.onUploadFail, this);
-                upload.on('uploadcomplete', this.onUploadComplete, fileRecord);
+                upload.on('uploadcomplete', this.onUploadComplete, upload.fileRecord);
                 upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
-
-                if (fileRecord.get('status') !== 'failure') {
-                    this.store.addUnique(fileRecord, 'name');
-                }
-            }, this);
+                upload.on('uploadinitial', this.onUploadInitial, this);
+                upload.upload();
+            });
         }
 
         this.fireEvent('filesSelected');
@@ -589,6 +591,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 name: _.get(fileLocation, 'node_id.name'),
                 size: _.get(fileLocation, 'node_id.size'),
                 type: _.get(fileLocation, 'node_id.contenttype'),
+                id: _.get(fileLocation, 'node_id.id'),
                 status: 'uploading',
                 progress: 80
             });
@@ -596,7 +599,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
             Tine.Tinebase.createTempFile(fileLocation).then((tempFileData) => {
                 fileRecord.beginEdit();
-                fileRecord.set('id', tempFileData.id);
+                fileRecord.set('id', _.get(fileRecord, 'data.id', tempFileData.id));
                 fileRecord.set('tempFile', tempFileData);
                 fileRecord.set('status', 'complete');
                 fileRecord.set('progress', 100);
@@ -615,6 +618,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             console.log(e);
         }
         Tine.Tinebase.uploadManager.onUploadComplete();
+    },
+
+    onUploadInitial: function (upload, fileRecord) {
+        if (fileRecord.get('status') !== 'failure') {
+            this.store.addUnique(fileRecord, 'name');
+        }
     },
 
     /**

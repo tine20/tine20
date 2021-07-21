@@ -1,41 +1,3 @@
-(function(){
-    var ua = navigator.userAgent.toLowerCase(),
-        check = function(r){
-            return r.test(ua);
-        },
-        docMode = document.documentMode,
-        isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
-        isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
-        isNewIE = (Ext.isIE9 || isIE10 || isIE11),
-        isEdge = check(/edge/),
-        isIOS = check(/ipad/) || check(/iphone/),
-        isAndroid = check(/android/),
-        isTouchDevice =
-            // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
-            'ontouchstart' in window        // works on most browsers
-            || navigator.maxTouchPoints,    // works on IE10/11 and Surface
-        isWebApp =
-            // @see https://stackoverflow.com/questions/17989777/detect-if-ios-is-using-webapp/40932301#40932301
-            (window.navigator.standalone == true)                           // iOS safari
-            || (window.matchMedia('(display-mode: standalone)').matches),   // android chrome
-        // NOTE: some browsers require user interaction (like click events)
-        //       for focus to work (e.g. iOS dosn't show keyborad)
-        supportsUserFocus = ! (isTouchDevice && !isWebApp);
-
-    Ext.apply(Ext, {
-        isIE10: isIE10,
-        isIE11: isIE11,
-        isNewIE: isNewIE,
-        isEdge: isEdge,
-        isIOS: isIOS,
-        isAndroid: isAndroid,
-        isTouchDevice: isTouchDevice,
-        isWebApp: isWebApp,
-        supportsUserFocus: supportsUserFocus,
-        supportsPopupWindows: !isIOS && !isAndroid
-    });
-})();
-
 /**
  * for some reasons the original fix insertes two <br>'s on enter for webkit. But this is one to much
  */
@@ -89,27 +51,6 @@ Ext.apply(Ext.form.HtmlEditor.prototype, {
         }
     }()
 });
-
-/**
- * fix broken ext email validator
- * 
- * @type RegExp
- */
-Ext.apply(Ext.form.VTypes, {
-    // 2011-01-05 replace \w with [^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F] to allow idn's
-    emailFixed: /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:([^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]|-)+\.)*[^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]([^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]|-){0,63})\.([^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]{2,63}?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,63}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,63})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,63})\]?$)/i,
-
-    urlFixed: /(((^https?)|(^ftp)):\/\/(([^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]|-)+\.)+[^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]{2,63}(\/([^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]|-|%)+(\.[^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]{2,})?)*((([^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]|[\-\.\?\\\/+@&#;`~=%!])*)(\.[^\s,\x00-\x2F,\x3A-\x40,\x5B-\x60,\x7B-\x7F]{2,})?)*\/?)/i,
-    
-    email:  function(v) {
-        return this.emailFixed.test(v);
-    },
-    
-    url: function(v) {
-        return this.urlFixed.test(v);
-    }
-});
-
 
 /**
  * fix textfield allowBlank validation
@@ -242,57 +183,6 @@ Ext.override(Ext.tree.AsyncTreeNode, {
         wrapTicket();
     }
 });
-
-/**
- * fix timezone handling for date picker
- * 
- * The getValue function always returns 00:00:00 as time. So if a form got filled
- * with a date like 2008-10-01T21:00:00 the form returns 2008-10-01T00:00:00 although 
- * the user did not change the fieled.
- * 
- * In a multi timezone context this is fatal! When a user in a certain timezone set
- * a date (just a date and no time information), this means in his timezone the 
- * time range from 2008-10-01T00:00:00 to 2008-10-01T23:59:59. 
- * _BUT_ for an other user sitting in a different timezone it means e.g. the 
- * time range from 2008-10-01T02:00:00 to 2008-10-02T21:59:59.
- * 
- * So on the one hand we need to make sure, that the date picker only returns 
- * changed datetime information when the user did a change. 
- * 
- * @todo On the other hand we
- * need adjust the day +/- one day according to the timeshift. 
- */
-/**
- * @private
- */
- Ext.form.DateField.prototype.setValue = function(date){
-    // get value must not return a string representation, so we convert this always here
-    // before memorisation
-    if (Ext.isString(date)) {
-        var v = Date.parseDate(date, Date.patterns.ISO8601Long);
-        if (Ext.isDate(v)) {
-            date = v;
-        } else {
-            date = Ext.form.DateField.prototype.parseDate.call(this, date);
-        }
-    }
-    
-    // preserve original datetime information
-    this.fullDateTime = date;
-    
-    Ext.form.DateField.superclass.setValue.call(this, this.formatDate(this.parseDate(date)));
-};
-/**
- * @private
- */
-Ext.form.DateField.prototype.getValue = function(){
-    //var value = this.parseDate(Ext.form.DateField.superclass.getValue.call(this));
-    
-    // return the value that was set (has time information when unchanged in client) 
-    // and not just the date part!
-    var value =  this.fullDateTime;
-    return value || "";
-};
 
 /**
  * Need this for ArrowEvents to navigate.
@@ -630,8 +520,9 @@ Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(funct
 
 Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
 
-Ext.form.TriggerField.prototype.cmpRegForResize = [];
 
+
+Ext.form.TriggerField.prototype.cmpRegForResize = [];
 
 Ext.form.TriggerField.prototype.initComponent = Ext.form.TriggerField.prototype.initComponent.createSequence(function() {
     Ext.form.TriggerField.prototype.cmpRegForResize.push(this);
@@ -661,22 +552,6 @@ Ext.form.TriggerField.prototype.taskForResize = new Ext.util.DelayedTask(functio
 });
 
 Ext.form.TriggerField.prototype.taskForResize.delay(300);
-
-Ext.override(Ext.form.TwinTriggerField, {
-    getTriggerWidth: function(){
-        var tw = 0;
-        Ext.each(this.triggers, function(t, index){
-            var triggerIndex = 'Trigger' + (index + 1),
-                w = t.getWidth();
-            if(w === 0 && !t['hidden' + triggerIndex]){
-                tw += this.defaultTriggerWidth;
-            }else{
-                tw += w;
-            }
-        }, this);
-        return tw;
-    }
-});
 
 // fixing layers in LayerCombo
 // TODO maybe expand this to all Ext.Layers:
@@ -910,38 +785,6 @@ Ext.override(Ext.menu.DateMenu, {
     }
 });
 
-Ext.override(Ext.Component, {
-    /**
-     * is this component rendered?
-     * @return {Promise}
-     */
-    afterIsRendered : function(){
-        var me = this;
-        if (this.rendered) {
-            return Promise.resolve(me);
-        }
-        return new Promise(function(resolve) {
-            me.on('render', resolve);
-        });
-    },
-
-    // support initialState
-    initState : function(){
-        if(Ext.state.Manager){
-            var id = this.getStateId();
-            if(id){
-                var state = Ext.state.Manager.get(id) || this.initialState;
-                if(state){
-                    if(this.fireEvent('beforestaterestore', this, state) !== false){
-                        this.applyState(Ext.apply({}, state));
-                        this.fireEvent('staterestore', this, state);
-                    }
-                }
-            }
-        }
-    }
-});
-
 Ext.override(Ext.tree.TreePanel, {
     /**
      * Gets a node in this tree by its id
@@ -951,6 +794,23 @@ Ext.override(Ext.tree.TreePanel, {
     getNodeById : function(id){
         try {
             return this.nodeHash[id];
+        } catch(e) {
+            return null;
+        }
+    },
+
+    /**
+     * Gets a node in this tree by its path
+     * @param {String} path
+     * @return {Node}
+     */
+    getNodeByPath : function(path){
+        try {
+            const node = _.filter(this.nodeHash, (node) => {
+                return node?.attributes?.path === path;
+            });
+            
+            return node[0];
         } catch(e) {
             return null;
         }

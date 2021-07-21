@@ -15,7 +15,7 @@ Tine.Tinebase.widgets.form.JsonField = Ext.extend(Ext.form.Field, {
 
         Tine.Tinebase.widgets.form.JsonField.superclass.afterRender.apply(this, arguments);
 
-        import('widgets/ace').then(() => {
+        import(/* webpackChunkName: "Tinebase/js/ace" */ 'widgets/ace').then(() => {
             this.ed = ace.edit(this.el.id, {
                 mode: 'ace/mode/json',
                 fontFamily: 'monospace',

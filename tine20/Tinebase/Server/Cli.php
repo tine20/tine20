@@ -106,7 +106,10 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
                 $result = 1;
             }
         } catch (Throwable $e) {
-            Tinebase_Exception::log($e);
+            if (! preg_match('/Base table or view not found/', $e->getMessage())) {
+                // tine might not be installed yet, don't log exception in that case
+                Tinebase_Exception::log($e);
+            }
             echo $e . "\n";
             $result = 1;
         }

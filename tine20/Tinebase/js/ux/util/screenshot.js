@@ -26,21 +26,11 @@ Ext.ux.screenshot.get = function(win, options) {
     return new Promise(function (fulfill, reject) {
             require.ensure(["html2canvas"], function() {
                 var html2canvas = require ("html2canvas");
-                var canvas = win.document.createElement("canvas");
-                canvas.width = win.innerWidth;
-                canvas.height = win.innerHeight;
-
-                Ext.ux.screenshot.setDPI(canvas, options.dpi);
-
-                // Ext.getBody().addClass('x-html2canvas');
 
                 html2canvas(win.document.body, {
-                    canvas: canvas,
                     grabMouse: options.grabMouse,
+                    scale: options.dpi/96
                 }).then(function(canvas) {
-
-                    // Ext.getBody().removeClass('x-html2canvas');
-                    
                     var mimeType = 'image/' + options.type,
                         dataUrl = canvas.toDataURL(mimeType);
 
@@ -71,18 +61,4 @@ Ext.ux.screenshot.ux = function(win, options) {
 
     Ext.getBody().unmask();
     Ext.ux.screenshot.get(win, options);
-};
-
-Ext.ux.screenshot.setDPI = function (canvas, dpi) {
-    // Set up CSS size if it's not set up already
-    if (!canvas.style.width)
-        canvas.style.width = canvas.width + 'px';
-    if (!canvas.style.height)
-        canvas.style.height = canvas.height + 'px';
-
-    var scaleFactor = dpi / 96;
-    canvas.width = Math.ceil(canvas.width * scaleFactor);
-    canvas.height = Math.ceil(canvas.height * scaleFactor);
-    var ctx = canvas.getContext('2d');
-    ctx.scale(scaleFactor, scaleFactor);
 };
