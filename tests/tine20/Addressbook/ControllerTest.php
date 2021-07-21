@@ -308,15 +308,31 @@ class Addressbook_ControllerTest extends TestCase
         $this->assertTrue(48143 == $updatedContact->adr_two_postalcode || is_null($updatedContact->adr_two_postalcode));
     }
 
-    /**
-     * try to get a contact
-     */
+    public function testSearchContactCS()
+    {
+        $this->objects['initialContact']->adr_one_street = 'caseSensitivityIsVerySensitive';
+        $contact = $this->_addContact();
+        $this->assertEquals($this->objects['initialContact']->adr_one_street, $contact->adr_one_street);
+
+        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => 'isverys']
+        ]))->count(), 'ci search did not work');
+        $this->assertSame(0, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+                ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => 'isverys']
+            ], '', [Tinebase_Model_Filter_Text::CASE_SENSITIVE => true]))->count(), 'cs search did not work');
+        $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => 'IsVeryS']
+        ], '', [Tinebase_Model_Filter_Text::CASE_SENSITIVE => true]))->count(), 'cs search did not work');
+    }
+
     public function testSearchContactWithBackslash()
     {
         $this->objects['initialContact']->adr_one_street = '\\\\';
         $this->objects['initialContact']->adr_two_street = 'test\\hola\\*uijuiui';
         $contact = $this->_addContact();
-
         $this->assertEquals($this->objects['initialContact']->adr_two_street, $contact->adr_two_street);
 
         $this->assertSame(1, $this->_instance->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
