@@ -168,7 +168,7 @@ class Tinebase_ApplicationTest extends TestCase
 
         $this->assertInstanceOf('Tinebase_Record_RecordSet', $applications);
         $this->assertGreaterThanOrEqual(2, count($applications));
-        $this->assertContains($application->id, $applications->id);
+        $this->assertNotContains($application->id, $applications->id, print_r($applications->toArray(), true));
 
         Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::DISABLED);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
@@ -176,15 +176,13 @@ class Tinebase_ApplicationTest extends TestCase
 
         $application2 = $this->testAddApplication();
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        $this->assertContains($application2->id, $applications->id);
+        $this->assertNotContains($application2->id, $applications->id);
 
         Tinebase_Application::getInstance()->deleteApplication($application2);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertNotContains($application2->id, $applications->id);
 
-        Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::ENABLED);
-        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        $this->assertContains($application->id, $applications->id);
+        $this->assertContains('Tinebase', $applications->name, print_r($applications->name, true));
     }
     
     /**
