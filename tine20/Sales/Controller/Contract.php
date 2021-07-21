@@ -388,7 +388,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
             }
             
             foreach($models as $model) {
-                $filter = new Sales_Model_ProductFilter(array(array('field' => 'accountable', 'operator' => 'equals', 'value' => $model)));
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array(array('field' => 'accountable', 'operator' => 'equals', 'value' => $model)));
                 $product = Sales_Controller_Product::getInstance()->search($filter)->getFirstRecord();
                 
                 if (! $product) {

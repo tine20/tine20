@@ -1644,9 +1644,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $startDate->addDay(5);
         $result = $this->_invoiceController->createAutoInvoices($startDate);
     
-        $this->assertEquals(1, $result['created_count']);
+        $this->assertEquals(1, $result['created_count'], 'no invoice was created');
         
-        $filter = new Sales_Model_ProductFilter(array());
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'accountable', 'operator' => 'equals', 'value' => 'Timetracker_Model_Timeaccount')));
         
         $products = Sales_Controller_Product::getInstance()->search($filter);

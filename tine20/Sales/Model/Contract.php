@@ -276,7 +276,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
     public function findProductAggregate(Sales_Model_Accountable_Interface $record) {
         
         $accountableClassName = get_class($record);
-        $filter = new Sales_Model_ProductFilter(array());
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'accountable', 'operator' => 'equals', 'value' => $accountableClassName)));
         $products = Sales_Controller_Product::getInstance()->search($filter);
         

@@ -34,7 +34,7 @@ class Sales_Model_Filter_ContractProductAggregateFilter extends Tinebase_Model_F
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $filter = new Sales_Model_ProductFilter(array(
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array(
             array('field' => 'query', 'operator' => $this->_operator, 'value' => $this->_value)
         ));
         $productIds = Sales_Controller_Product::getInstance()->search($filter, new Tinebase_Model_Pagination(), FALSE, TRUE);
