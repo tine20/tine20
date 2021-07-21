@@ -224,7 +224,9 @@ function createArchives()
                     echo " $FILE"
                     echo "building "
                     (cd ${TINE20ROOT}/tine20; tar cjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.tar.bz2 $FILE)
-                    (cd ${TINE20ROOT}/tine20; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.zip     $FILE)
+                    if [ "$ZIP_PACKAGES" == "true" ]; then
+                        (cd ${TINE20ROOT}/tine20; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.zip $FILE)
+                    fi
                     ;;
 
                 Tinebase)
@@ -240,7 +242,9 @@ function createArchives()
                     fi
 
                     (cd ${TINE20ROOT}/tine20; tar cjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.tar.bz2 $FILES)
-                    (cd ${TINE20ROOT}/tine20; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.zip     $FILES)
+                    if [ "$ZIP_PACKAGES" == "true" ]; then
+                        (cd ${TINE20ROOT}/tine20; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.zip $FILES)
+                    fi
 
                     echo ""
                     ;;
@@ -249,7 +253,9 @@ function createArchives()
                     echo " $FILE"
                     echo "building "
                     (cd ${TINE20ROOT}/tine20; tar cjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.tar.bz2 $FILE)
-                    (cd ${TINE20ROOT}/tine20; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.zip     $FILE)
+                    if [ "$ZIP_PACKAGES" == "true" ]; then
+                        (cd ${TINE20ROOT}/tine20; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-${UCFILE}_${RELEASE}.zip $FILE)
+                    fi
                     ;;
             esac
         fi
@@ -268,8 +274,9 @@ function createSpecialArchives()
     done
 
     (cd /root/allinone; tar cjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-allinone_${RELEASE}.tar.bz2 .)
-    (cd /root/allinone; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-allinone_${RELEASE}.zip     .)
-
+    if [ "$ZIP_PACKAGES" == "true" ]; then
+        (cd /root/allinone; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-allinone_${RELEASE}.zip .)
+    fi
 
     echo "building Tine 2.0 voip archive... "
     mkdir /root/voip
@@ -279,7 +286,9 @@ function createSpecialArchives()
     done
 
     (cd /root/voip; tar cjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-voip_${RELEASE}.tar.bz2 .)
-    (cd /root/voip; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-voip_${RELEASE}.zip     .)
+    if [ "$ZIP_PACKAGES" == "true" ]; then
+        (cd /root/voip; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-voip_${RELEASE}.zip .)
+    fi
 }
 
 function packageTranslations()
