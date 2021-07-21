@@ -475,6 +475,6 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         $state = json_decode($appCtrl->getApplicationState($exampleApp, Tinebase_Application::STATE_UPDATES), true);
         static::assertTrue(is_array($state) && isset($state[ExampleApplication_Setup_Update_0::RELEASE000_UPDATE001])
             && isset($state[ExampleApplication_Setup_Update_12::RELEASE012_UPDATE001]), print_r($state, true));
-        static::assertCount(5, $state, print_r($state, true));
+        static::assertCount(6, $state, print_r($state, true));
     }
 }
