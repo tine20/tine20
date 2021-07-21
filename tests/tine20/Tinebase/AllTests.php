@@ -35,6 +35,7 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_AuthTest::class);
         $suite->addTestSuite(Tinebase_CacheTest::class);
         $suite->addTestSuite(Tinebase_CommunityIdentNr_ImportTest::class);
+        $suite->addTestSuite(Tinebase_CommunityIdentNr_ControllerTest::class);
         $suite->addTestSuite(Tinebase_CoreTest::class);
         $suite->addTestSuite(Tinebase_DateTimeTest::class);
         $suite->addTestSuite(Tinebase_ExceptionTest::class);

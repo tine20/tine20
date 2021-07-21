@@ -40,4 +40,39 @@ class Tinebase_Controller_CommunityIdentNr extends Tinebase_Controller_Record_Ab
             array('arsCombined')
         ));
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_Controller_Record_Abstract::get()
+     * @return Tinebase_Model_CommunityIdentNr
+     */
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    {
+        $communityNumber = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        return $this->aggregatePopulation($communityNumber);
+    }
+
+
+    /**
+     * @param $_communityNumber
+     * @return mixed
+     */
+    public function aggregatePopulation($_communityNumber)
+    {
+        if (!$_communityNumber->bevoelkerungGesamt) {
+            $population = 0;
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CommunityIdentNr::class, [
+                ['field' => 'arsCombined', 'operator' => 'startswith', 'value' => $_communityNumber->arsCombined]
+            ]);
+            $relatedCommunitys = $this->search($filter);
+            
+            foreach ($relatedCommunitys as $community) {
+                $population += $community->bevoelkerungGesamt;
+            }
+            
+            $_communityNumber->bevoelkerungGesamt = $population;
+        }
+        
+        return $_communityNumber;
+    }
 }
