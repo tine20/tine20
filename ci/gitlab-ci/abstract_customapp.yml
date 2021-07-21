@@ -36,7 +36,7 @@ workflow:
       when: never
     - when: always
 
-build:
+docker_build_source:
   stage: build
   trigger:
     project: tine20/tine20
