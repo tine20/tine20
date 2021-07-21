@@ -38,8 +38,7 @@ trait Tinebase_Export_DocumentPdfTrait
         array $_additionalOptions = [],
         $_previewService = null
     ) {
-        $this->_previewService = $_previewService !== null ? $_previewService : static::$previewService !== null ?
-            static::$previewService : Tinebase_Core::getPreviewService();
+        $this->_previewService = $_previewService ?: (static::$previewService ?: Tinebase_Core::getPreviewService());
 
         $this->_format = 'pdf';
 
