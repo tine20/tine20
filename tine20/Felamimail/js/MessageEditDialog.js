@@ -1557,6 +1557,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             ref: '../../subjectField',
                             enableKeyEvents: true,
                             maxLength: 998,
+                            // prevent long input
+                            autoCreate: {tag: 'input', type: 'text', maxlength: '900'},
                             listeners: {
                                 scope: this,
                                 // update title on keyup event
