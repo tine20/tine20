@@ -19,28 +19,28 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
 {
-    const FLD_SATZ_ART = 'satzArt';
-    const FLD_TEXTKENNZEICHEN = 'textkenzeichen';
-    const FLD_ARS_LAND = 'arsLand';
-    const FLD_ARS_RB = 'arsRB';
-    const FLD_ARS_KREIS = 'arsKreis';
-    const FLD_ARS_VB = 'arsVB';
-    const FLD_ARS_GEM = 'arsGem';
-    const FLD_ARS_COMBINED = 'arsCombined';
-    const FLD_GEMEINDENAMEN = 'gemeindenamen';
-    const FLD_FLAECHE = 'flaeche';
-    const FLD_BEVOELKERUNG_GESAMT = 'bevoelkerungGesamt';
-    const FLD_BEVOELKERUNG_MAENNLICH = 'bevoelkerungMaennlich';
-    const FLD_BEVOELKERUNG_WEIBLICH = 'bevoelkerungWeiblich';
-    const FLD_BEVOELKERUNG_JE_KM = 'bevoelkerungJeKm';
-    const FLD_PLZ = 'plz';
-    const FLD_LAENGENGRAD = 'laengengrad';
-    const FLD_BREITENGRAD = 'breitengrad';
-    const FLD_REISEGEBIET = 'reisegebiet';
-    const FLD_GRAD_DER_VERSTAEDTERUNG = 'gradDerVerstaedterung';
-    
-    const MODEL_NAME_PART = 'CommunityIdentNr';
-    const TABLE_NAME = 'cinumber';
+    public const FLD_SATZ_ART = 'satzArt';
+    public const FLD_TEXTKENNZEICHEN = 'textkenzeichen';
+    public const FLD_ARS_LAND = 'arsLand';
+    public const FLD_ARS_RB = 'arsRB';
+    public const FLD_ARS_KREIS = 'arsKreis';
+    public const FLD_ARS_VB = 'arsVB';
+    public const FLD_ARS_GEM = 'arsGem';
+    public const FLD_ARS_COMBINED = 'arsCombined';
+    public const FLD_GEMEINDENAMEN = 'gemeindenamen';
+    public const FLD_FLAECHE = 'flaeche';
+    public const FLD_BEVOELKERUNG_GESAMT = 'bevoelkerungGesamt';
+    public const FLD_BEVOELKERUNG_MAENNLICH = 'bevoelkerungMaennlich';
+    public const FLD_BEVOELKERUNG_WEIBLICH = 'bevoelkerungWeiblich';
+    public const FLD_BEVOELKERUNG_JE_KM = 'bevoelkerungJeKm';
+    public const FLD_PLZ = 'plz';
+    public const FLD_LAENGENGRAD = 'laengengrad';
+    public const FLD_BREITENGRAD = 'breitengrad';
+    public const FLD_REISEGEBIET = 'reisegebiet';
+    public const FLD_GRAD_DER_VERSTAEDTERUNG = 'gradDerVerstaedterung';
+
+    public const MODEL_NAME_PART = 'CommunityIdentNr';
+    public const TABLE_NAME = 'cinumber';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
