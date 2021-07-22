@@ -23,6 +23,7 @@ require('../../library/ExtJS/ext-custom');
 require('./../../Tinebase/Tinebase.jsb2');
 require('./CommunityIdentNr/explainer');
 require('./CommunityIdentNr/picker');
+require('./CommunityIdentNr/grid');
 
 
 // UI style >= 2019
