@@ -386,6 +386,20 @@ class Addressbook_Controller_ListTest extends TestCase
         // TODO fixme, finish this test
     }
 
+    public function testSearchForListMembersOfEmptyList()
+    {
+        $this->objects['initialList']->members = [];
+        $list = $this->testAddList();
+
+        // this used to create an sql error once
+        $this->assertSame(0, Addressbook_Controller_Contact::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Addressbook_Model_Contact::class, [
+                    ['field' => 'list', 'operator' => 'equals', 'value' => $list->toArray(false)]
+                ]
+            ))->count());
+    }
+
     /**
      * testInternalAddressbookConfig
      *
