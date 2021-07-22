@@ -671,7 +671,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         // check if related record exists
         $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
-        $filterModel = $field['related_model'] . 'Filter';
         $operator = isset($field['operator']) ? $field['operator'] : 'equals';
         
         $filterValueToAdd = '';
@@ -691,7 +690,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             }
         }
         
-        $filter = new $filterModel(array(
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($field['related_model'], array(
                 array('field' => $field['filter'], 'operator' => $operator, 'value' => $value . $filterValueToAdd)
         ));
         $result = $controller->search($filter, null, /* $_getRelations */ true);

@@ -39,6 +39,11 @@ class Tinebase_ModelConfiguration_Const {
     const CREATE_MODULE = 'createModule';
 
     const DB_COLUMNS = 'dbColumns';
+    /**
+     * default sort info
+     *
+     * example: ['field' => 'number', 'direction' => 'DESC']
+     */
     const DEFAULT_SORT_INFO = 'defaultSortInfo';
     const DEFAULT_VAL = 'default';
     const DEGREE = 'degree';
