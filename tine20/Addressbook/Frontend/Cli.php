@@ -498,7 +498,8 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * usage: method=Addressbook.importMailList csv=test.csv
+     * usage: method=Addressbook.importMailList csv=test.csv domain=secondarydomains
+     *csv file = "listname","listEmailAdress"
      * @param $opts
      * @return false
      * @throws Tinebase_Exception_AccessDenied
@@ -508,16 +509,17 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($opts);
         $csv = $args['csv'];
+
         $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
-        $domain = isset($config['secondarydomains']) ? $config['secondarydomains'] : $config['primarydomain'];
-        if (! $csv) {
-            return false;
+        $domain = isset($args['domain']) ? $config[$args['domain']]: $config['primarydomain'];
+        if (!$csv) {
+            return 2;
         }
 
         $stream = fopen($csv, 'r');
         if (!$stream) {
             echo "file could not be opened: " . $csv . "\n";
-            return false;
+            return 2;
         }
         while ($line = fgetcsv($stream, 0, ',')) {
             $list = Addressbook_Controller_List::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
@@ -530,11 +532,14 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     ['name' => $line[0]]));
             }
 
-            $list->email = $line[1] . '@' . $domain;
+            if( !isset($list->email) || $list->email === '') {
+                $list->email = $line[1] . '@' . $domain;
+            }
             $list->list_type = 'MAILINGLIST';
             $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
             Addressbook_Controller_List::getInstance()->update($list);
         }
         fclose($stream);
+        return 0;
     }
 }
