@@ -52,7 +52,19 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
         $this->_identity = $canonicalName;
         return $this;
     }
-    
+
+    /**
+     * getDbSelect() - Return the preauthentication Db Select object for userland select query modification
+     *
+     * @return Zend_Db_Select
+     */
+    public function getDbSelect()
+    {
+        $dbSelect = parent::getDbSelect();
+        $dbSelect->where('is_deleted = 0');
+        return $dbSelect;
+    }
+
     /**
      * @param string $acctname The name to canonicalize
      * @param int $form The desired form of canonicalization
