@@ -336,24 +336,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
 
             const action_resetPwd = new Ext.Action({
-                text: i18n._('Reset Password'),
+                text: this.app.i18n._('Reset Password'),
                 scope: this,
-                handler: function(_button, _event) {
-                    this.loadMask.show();
-                    var accountObject = this.membersGrid.getSelectionModel().getSelected().data;
-                    Ext.Ajax.request( {
-                        params : {
-                            method    : 'Courses.resetPassword',
-                            account   : accountObject.id,
-                            password  : this.record.data.name,
-                            mustChange: true
-                        },
-                        scope: this,
-                        success: function() {
-                            this.hideLoadMask();
-                        }
-                    });
-                },
+                handler: this.onResetPassword,
                 iconCls: 'action_password'
             });
             
@@ -366,6 +351,23 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         return this.membersGrid;
     },
+    
+    onResetPassword() {
+        const passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
+            allowEmptyPassword: false,
+            locked: false,
+            questionText: i18n._('Please enter the new Password.')
+        });
+        passwordDialog.openWindow();
+
+        passwordDialog.on('apply', function (password) {
+            this.loadMask.show();
+            const accountObject = this.membersGrid.getSelectionModel().getSelected().data;
+            Tine.Courses.resetPassword(accountObject.id, password, true).finally(() => {
+                this.hideLoadMask();
+            });
+        }, this);
+    }
 });
 
 /**
