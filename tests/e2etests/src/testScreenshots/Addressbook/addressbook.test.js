@@ -94,7 +94,7 @@ describe('Contacts', () => {
             await expect(popupWindow).toClick('button', {text: 'Notizen hinzufügen'});
             await popupWindow.waitForSelector('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
             await popupWindow.click('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
-            //await popupWindow.waitFor(1000);
+            //await popupWindow.waitForTimeout(1000);
             await popupWindow.screenshot({path: 'screenshots/StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz.png'});
             await expect(popupWindow).toClick('.x-window-bwrap button', 'Abbrechen');
         });
@@ -203,7 +203,7 @@ describe('Contacts', () => {
             await popupWindow.waitForXPath('//input');
             // @ todo make a array wiht key(n_prefix....) and value -> forech!
             await expect(popupWindow).toMatchElement('input[name=n_prefix]');
-            //await popupWindow.waitFor(2000);
+            //await popupWindow.waitForTimeout(2000);
             //console.log('wait ');
             await expect(popupWindow).toFill('input[name=n_prefix]', 'Dr.');
             await expect(popupWindow).toFill('input[name=n_given]', 'Thomas');

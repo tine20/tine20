@@ -20,7 +20,7 @@ describe('Edit Contact', () => {
     test.skip('notification', async () => {
         await expect(popupWindow).toClick('span', {text: 'Alarm', clickCount: 1});
         await popupWindow.click('.new-row .x-form-trigger.x-form-arrow-trigger');
-        await popupWindow.waitFor(500);
+        await popupWindow.waitForTimeout(500);
         await popupWindow.screenshot({path: 'screenshots/Aufgaben/3_aufgaben_alarm.png'});
     });
 });

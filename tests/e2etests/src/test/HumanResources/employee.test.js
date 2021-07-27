@@ -60,7 +60,7 @@ describe('employee', () => {
 
                     await expect(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
                     await expect(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(4) > a > em > span');
-                    await freetimeEditDialog.waitFor(50);
+                    await freetimeEditDialog.waitForTimeout(50);
                     
                     if (remainingDays-2 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=remaining_vacation_days]').value)) {
                         throw new Error('remaining days do not decrease');
@@ -71,7 +71,7 @@ describe('employee', () => {
                     let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=remaining_vacation_days]').value);
 
                     await expect(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
-                    await freetimeEditDialog.waitFor(50);
+                    await freetimeEditDialog.waitForTimeout(50);
                     
                     if (remainingDays+1 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=remaining_vacation_days]').value)) {
                         throw new Error('remaining days do not increase');
@@ -83,7 +83,7 @@ describe('employee', () => {
 
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
-                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
 
                     await expect(employeeEditDialog).toClick('.x-grid3-col-description', {text: testString});
                 });
@@ -107,11 +107,11 @@ describe('employee', () => {
 
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
-                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
                     
                     await expect(employeeEditDialog).toClick('.x-grid3-col-description', {text: testString + ' update'});
                     
-                    await employeeEditDialog.waitFor(500); // wait till view is updated
+                    await employeeEditDialog.waitForTimeout(500); // wait till view is updated
                     const daysEl = await employeeEditDialog.$x('//label[text()="Anzahl der Tage:"]/following-sibling::div/div');
                     const days = await employeeEditDialog.evaluate(div => div.textContent, daysEl[0]);
                     
@@ -130,7 +130,7 @@ describe('employee', () => {
                 test('vacation is deleted', async () => {
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
-                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
 
                     await expect(employeeEditDialog).not.toMatchElement('.x-grid3-col-description', {text: testString});
                 });
@@ -174,7 +174,7 @@ describe('employee', () => {
                     
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled');
-                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
 
                     await employeeEditDialog.screenshot({path: 'screenshots/HumanResources/13_humanresources_mitarbeiter_krankheit.png'});
 
@@ -202,7 +202,7 @@ describe('employee', () => {
                 test('vacation is deleted', async () => {
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
-                    await employeeEditDialog.waitFor(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled'));
 
                     await expect(employeeEditDialog).not.toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-grid3-col-description', {text: testString});
                 });
