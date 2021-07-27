@@ -12,7 +12,7 @@ Tine.Tinebase.CommunityIdentNrPicker = Ext.extend(Tine.Tinebase.widgets.form.Rec
     
     allowBlank: true,
     itemSelector: 'div.search-item',
-    minListWidth: 350,
+    minListWidth: 450,
 
     // private
     initComponent: function(){
@@ -58,13 +58,31 @@ Tine.Tinebase.CommunityIdentNrPicker = Ext.extend(Tine.Tinebase.widgets.form.Rec
                 '<tpl for="."><div class="search-item">',
                     '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                         '<tr>',
-                            '<td style="width:50%">{[this.encode(values.arsCombined)]}</td>',
-                            '<td style="width:50%">{[this.encode(values.gemeindenamen)]}</td>',
+                            '<td style="width:30%">{[this.encode(values.arsCombined)]}</td>',
+                            '<td style="width:40%">{[this.encode(values.gemeindenamen)]}</td>',
+                            '<td style="width:30%">{[this.getType(values.satzArt)]}</td>',
                         '</tr>',
                     '</table>',
                 '</div></tpl>',
                 {
-                    encode: function(values) { return Ext.util.Format.htmlEncode(values) }
+                    encode: function(values) { return Ext.util.Format.htmlEncode(values) },
+                    getType: function(values) {
+                        switch (values) {
+                            case 10: return 'Land';
+                                break;
+                            case 20: return 'Regierungsbezirk';
+                                break;
+                            case 30: return 'Region (nur in Baden-Württemberg)';
+                                break;
+                            case 40: return 'Kreis';
+                                break;
+                            case 50: return 'Gemeindeverband';
+                                break;
+                            case 60: return 'Gemeinde';
+                                break;
+                            default: return '';
+                        }
+                    }
                 }
             );
         }
