@@ -61,13 +61,16 @@ RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then \
 COPY ci/dockerimage/utility/.gitconfig /root/.gitconfig
 
 RUN mkdir -p ${TINE20ROOT}/tine20/Tinebase/js
+RUN mkdir ${TINE20ROOT}/scripts
 
 COPY tine20/library ${TINE20ROOT}/tine20/library
 COPY tine20/composer.json ${TINE20ROOT}/tine20/composer.json
 COPY tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
 COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
 COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
+COPY scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php 
 
+RUN php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
 RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
 
@@ -81,6 +84,7 @@ COPY tine20 ${TINE20ROOT}/tine20/
 COPY tests ${TINE20ROOT}/tests/
 COPY scripts ${TINE20ROOT}/scripts/
 
+RUN php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest --no-scripts
 
 COPY --from=icon-set-provider ${TINE20ROOT}/tine20/images/icon-set/ ${TINE20ROOT}/tine20/images/icon-set
