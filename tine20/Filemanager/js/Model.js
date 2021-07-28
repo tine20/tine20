@@ -234,7 +234,7 @@ Tine.Filemanager.nodeBackendMixin = {
         if(record.hasOwnProperty('fileRecord')) {
             return;
         } else {
-            //Tine.Tinebase.data.RecordProxy.prototype.saveRecord.call(this, record, request);
+            Tine.Tinebase.data.RecordProxy.prototype.saveRecord.call(this, record, request);
         }
     },
     
