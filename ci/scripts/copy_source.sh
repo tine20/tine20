@@ -3,6 +3,7 @@ set -e
 
 echo $0 init git submodules ...
 
+cd ${CI_BUILDS_DIR}/tine20/tine20
 git submodule init
 
 echo $0 copying ...
