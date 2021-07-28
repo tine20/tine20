@@ -63,7 +63,7 @@ class Sales_Export_Ods_InvoicePosition extends Sales_Export_Ods_Abstract
         $paFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $productAggregateIds)));
         $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($paFilter);
         
-        $pFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, );
+        $pFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class);
         $pFilter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => array_unique($productAggregates->product_id))));
         
         $products = Sales_Controller_Product::getInstance()->search($pFilter);
