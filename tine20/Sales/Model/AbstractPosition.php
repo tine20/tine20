@@ -98,11 +98,11 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     // im rahmen der leistungserfassung werden die tatsächlichen "Anzahl-Werte" ermittelt
 
     
-    
-    // @TODO: Textbausteine designen
+    // @rethink: kunde muss immer sales_customer sein?! und kontakte/ap/rechnungsempfänger noch mal KB mäßig durchdenken.
+    // @TODO: Vertäge - wie passt das rein? Klammer / auch im Standard? Muss es den geben?
+
     // @TODO: Preisstaffeln
     
-    // @TODO: Vertäge - wie passt das rein? Klammer / auch im Standard? Muss es den geben?
     // @TODO: durchdenken zusatzfelder unten und velo sachen
     // zusatzfelder wegen 'dauerschuldverhältnissen'
     // laufzeit, start, ende etc.
