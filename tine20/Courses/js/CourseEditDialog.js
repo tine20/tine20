@@ -65,17 +65,17 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO wrap this into a uploadAction widget
      */
     onFileSelect: function(fileSelector) {
-        
-        var files = fileSelector.getFileList();
+        const files = fileSelector.getFileList();
         this.loadMask.show();
-        var upload = new Ext.ux.file.Upload({
-            file: files[0],
+        
+        let upload = new Ext.ux.file.Upload({
+            file: files[0]?.fileObject,
             fileSelector: fileSelector,
             id: Tine.Tinebase.uploadManager.generateUploadId()
         });
         
         upload.on('uploadcomplete', function(uploader, record){
-            var tempFile = record.get('tempFile');
+            const tempFile = record.get('tempFile');
             Ext.Ajax.request({
                 scope: this,
                 timeout: 1200000, // 20 minutes
