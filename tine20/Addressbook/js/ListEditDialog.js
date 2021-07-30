@@ -44,13 +44,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             frame: true,
             margins: '6 0 0 0'
         });
-        this.memberRolesPanel = new Tine.Addressbook.ListEditDialogRoleGridPanel({
-            recordClass: Tine.Addressbook.Model.ListRole,
-            region: "south",
-            frame: true,
-            margins: '6 0 0 0',
-            height: 150
-        });
+       
         this.supr().initComponent.apply(this, arguments);
     },
 
@@ -113,8 +107,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]
                 },
                     // TODO allow user to switch between those two grid panels (card layout?)
-                    this.memberGridPanel,
-                    this.memberRolesPanel
+                    this.memberGridPanel
                 ]
             }, {
                 // activities and tags
@@ -216,22 +209,10 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     resolveMemberData: function (editDialog, record, ticketFn) {
         this.memberGridPanel.record = this.record;
         if (this.record.id) {
-            var ticket = ticketFn();
-            this.memberGridPanel.setMembers(ticket);
-            this.memberGridPanel.memberRolesPanel = this.memberRolesPanel;
-            if (this.record.get('account_only') === '1') {
+            if (this.record.get('account_only') === true) {
                 this.memberGridPanel.searchCombo.userOnly = true;
             }
         }
-    },
-
-    /**
-     * onRecordUpdate
-     */
-    onRecordUpdate: function() {
-        Tine.Addressbook.ListEditDialog.superclass.onRecordUpdate.apply(this, arguments);
-        this.record.set("members", this.memberGridPanel.getMembers());
-        this.record.set("memberroles", this.memberGridPanel.getMemberRoles());
     }
 });
 
