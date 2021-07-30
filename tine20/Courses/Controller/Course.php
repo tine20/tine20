@@ -171,7 +171,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     * @todo should be moved to inspectAfter*
     * @todo allow fileserver group management, too
     */
-    protected function _manageAccessGroups(array $members, $course, $accessType = 'internet')
+    protected function _manageAccessGroups(array $members, Courses_Model_Course $course, $accessType = 'internet')
     {
         $configField = $accessType . '_group';
         $secondConfigField = $configField;
@@ -494,7 +494,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         foreach ($_members as $userId) {
             $userId = (is_array($userId)) ? $userId['id'] : $userId;
             $user = $tinebaseUser->getFullUserById($userId);
-            $oldPrimaryGroup = $user->accountPrimaryGroup;
             
             if ($this->_config->get(Courses_Config::STUDENT_LOGINNAME_PREFIX, FALSE) && ($position = strrpos($user->accountLoginName, '-')) !== false) {
                 $user->accountLoginName = $courseName . '-' . substr($user->accountLoginName, $position + 1);
@@ -502,9 +501,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                 //short User name
                 $user->accountLoginName = $user->shortenUsername();
             }
-            
-            $user->accountPrimaryGroup  = $course->group_id;
-            $tinebaseGroup->addGroupMember($user->accountPrimaryGroup, $user);
             
             $user->accountHomeDirectory = (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $courseName . '/' . $user->accountLoginName : '';
             
@@ -519,11 +515,21 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             }
             
             $tinebaseUser->updateUser($user);
-            $tinebaseGroup->removeGroupMember($oldPrimaryGroup, $user);
-            $this->_addToStudentGroup(array($user->getId()));
+
+            $memberIds = [$user->getId()];
+            $this->_addToCourseGroup($memberIds, $course);
+            $this->_manageAccessGroups($memberIds, $course);
+            $this->_addToStudentGroup($memberIds);
         }
     }
-    
+
+    protected function _addToCourseGroup(array $members, Courses_Model_Course $course)
+    {
+        foreach ($members as $memberId) {
+            $this->_groupController->addGroupMember($course->group_id, $memberId);
+        }
+    }
+
     /**
      * add user ids to student group (if configured)
      * 
@@ -539,22 +545,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             foreach ($userIds as $id) {
                 $this->_groupController->addGroupMember($this->_config->students_group, $id);
             }
-        }
-    }
-
-    /**
-     * add user ids to default user group
-     *
-     * @param array $userIds
-     */
-    protected function _addToUserDefaultGroup($userIds)
-    {
-        $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Adding ' . print_r($userIds, TRUE) . ' to default group (id ' . $defaultGroup->getId() . ')');
-
-        foreach ($userIds as $id) {
-            $this->_groupController->addGroupMember($defaultGroup->getId(), $id);
         }
     }
 
@@ -579,21 +569,24 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using import definition: ' . $definitionName);
         
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
-        
+
+        /** @var Courses_Model_Course $course */
         $course = $this->get($courseId);
         // check if group exists, too
-        $group = $this->_groupController->get($course->group_id);
+        $this->_groupController->get($course->group_id);
         
         $importer = Admin_Import_User_Csv::createFromDefinition($definition, $this->_getNewUserConfig($course));
         $result = $importer->importFile($tempFile->path);
-        
-        $groupMembers = $this->_groupController->getGroupMembers($course->group_id);
-        $this->_manageAccessGroups($groupMembers, $course);
-        $this->_addToStudentGroup($groupMembers);
-        $this->_addToUserDefaultGroup($groupMembers);
 
-        $createdAccounts = $importer->getCreatedAccounts();
+        if (empty($createdAccounts = $importer->getCreatedAccounts())) {
+            return $result;
+        }
         $createdPwds = $importer->getCreatedPasswords();
+
+        $memberIds = array_keys($createdAccounts);
+        $this->_addToCourseGroup($memberIds, $course);
+        $this->_manageAccessGroups($memberIds, $course);
+        $this->_addToStudentGroup($memberIds);
 
         // feed data into export and store it as course attachment
         $export = new Courses_Export_PwdPrintableDoc(new Tinebase_Record_RecordSet(Tinebase_Model_FullUser::class,
@@ -633,7 +626,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         
         return array(
             'accountLoginNamePrefix'        => ($this->_config->get(Courses_Config::STUDENT_LOGINNAME_PREFIX, FALSE)) ? $course->name . '-' : '',
-            'group_id'                      => $course->group_id,
+            'group_id'                      => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
             'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
             'userNameSchema'                => $this->_config->get(Courses_Config::STUDENTS_USERNAME_SCHEMA, 1),
@@ -675,11 +668,11 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($user->toArray(), TRUE));
         $newMember = $this->_userController->create($user, $password, $password);
-        
-        // add to default group and manage access group for user
-        $this->_groupController->addGroupMember(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $newMember->getId());
-        $this->_manageAccessGroups(array($newMember->getId()), $course);
-        $this->_addToStudentGroup(array($newMember->getId()));
+
+        $memberIds = [$newMember->getId()];
+        $this->_addToCourseGroup($memberIds, $course);
+        $this->_manageAccessGroups($memberIds, $course);
+        $this->_addToStudentGroup($memberIds);
         
         return $newMember;
     }
