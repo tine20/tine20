@@ -293,7 +293,29 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         $this->_config['emailUID']    = $this->_config['uid'];
         $this->_config['emailGID']    = $this->_config['gid'];
     }
-    
+
+    /**
+     * interceptor before add/update
+     *
+     * @param array{loginname:string, domain:string, userid:string} $emailUserData
+     */
+    protected function _beforeAddOrUpdate(&$emailUserData)
+    {
+        // prevent duplicate loginname
+        $select = $this->_getSelect();
+        $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'loginname') . " = ?",
+            $emailUserData['loginname']);
+        if (isset($emailUserData['userid'])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'userid') . " != ?",
+                $emailUserData['userid']);
+        }
+        $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+        if (count($result) > 0) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+        }
+    }
+
     /**
      * get the basic select object to fetch records from the database
      *  
