@@ -517,50 +517,50 @@ class SSO_Controller extends Tinebase_Controller_Event
             $response = new \Zend\Diactoros\Response();
             $response->getBody()->write('mfa mask');
         } catch (SSO_Facade_SAML_LoginMaskException $e) {
-            // render login mask
-            $response = new \Zend\Diactoros\Response();
-            $response->getBody()->write('<html>
-<body>
-<form method="post" action="/sso/saml2/redirect/signon' . /* RelayState= urlencode($message->getRelayState()) .
-                'SAMLRequest=' . urlencode($_GET['SAMLRequest']) .*/ '">');
-            foreach ($request->getQueryParams() as $name => $value) {
-                if ('SAMLRequest' === $name) {
-                    $value = base64_decode($value);
-                    $value = gzinflate($value);
-                    $value = base64_encode($value);
-                }
-                $response->getBody()->write('<input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
-                    . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>');
-            }
-            $response->getBody()->write('<input type="text" name="username"/><br/>
-<input type="password" name="password"/><br/>
-<input type="submit" value="Login"/>
-</form>
-</body>
-</html>');
+            $data = $request->getQueryParams();
+            $data['SAMLRequest'] = base64_encode(gzinflate(base64_decode($data['SAMLRequest'])));
+
+            $locale = Tinebase_Core::getLocale();
+
+            $jsFiles = ['SSO/js/login.js'];
+            $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
+
+            $response = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+                'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+                'lang' => $locale,
+                'initialData' => json_encode(['sso' => $data])
+            ]);
         } catch (SSO_Facade_SAML_RedirectException $e) {
             $response = new \Zend\Diactoros\Response();
             $response->getBody()->write('<html>
 <body>
+<p class="pulsate">'.Tinebase_Translation::getTranslation()->translate('redirecting ...').'</p>
 <form method="post" action="' . $e->redirectUrl . '">');
             foreach ($e->data as $name => $value) {
-                /*if ('SAMLResponse' === $name) {
-                    $value = base64_decode($value);
-                    $value = gzdeflate($value);
-                    $value = base64_encode($value);
-                }*/
                 $response->getBody()->write('<input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
                     . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>');
             }
             $response->getBody()->write('
-    <input type="submit" value="continue"/>
+    <input type="submit" value="continue" style="display: none;"/>
+    <script type="text/javascript">window.onload = function() { document.getElementsByTagName("form")[0].submit() };</script>
+    <style>
+        .pulsate {
+            animation: pulsate 1s ease-out;
+            animation-iteration-count: infinite; 
+        }
+        @keyframes pulsate {
+            0% { opacity: 0.5; }
+            50% { opacity: 1.0; }
+            100% { opacity: 0.5; }
+        }
+</style>
 </form>
 </html>');
         }
 
         return $response;
     }
-
+    
     protected static function getOpenIdConnectServer(): \League\OAuth2\Server\AuthorizationServer
     {
         // Setup the authorization server

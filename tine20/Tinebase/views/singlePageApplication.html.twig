@@ -4,6 +4,10 @@
     {% block head -%}
     <title>{{ config(constant('Tinebase_Config::BRANDING_TITLE')) }}</title>
 
+    {% if base is defined -%}
+    <base href='{{ base }}'>
+    {% endif %}
+    
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-Tine20-Version" content="{{ constant('TINE20_PACKAGESTRING') }}" />
     <meta name="google" content="notranslate">
@@ -48,6 +52,10 @@
     {%- include 'Tinebase/views/partials/jsInclude.html.twig' -%}
     {%- endblock %}
 
+    {% if initialData is defined -%}
+    <script type="text/javascript">window.initialData={{ initialData | raw }};</script>
+    {% endif %}
+    
     {% if not noLoadingAnnimation -%}
     <noscript><p>You need to enable javascript to use <a target="_blank" href="{{ config(constant('Tinebase_Config::BRANDING_WEBURL')) }}" title="{{ config(constant('Tinebase_Config::BRANDING_DESCRIPTION')) }}">{{ config(constant('Tinebase_Config::BRANDING_TITLE')) }}</a></p></noscript>
     {%- endif %}
