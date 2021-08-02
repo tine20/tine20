@@ -361,9 +361,7 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
              )
         );
 
-        if ('' === ($baseUri = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH))) {
-            $baseUri = '/';
-        }
+        $baseUri = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
         $options['cookie_path'] = $baseUri;
         
         if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {

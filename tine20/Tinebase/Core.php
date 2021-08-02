@@ -1947,12 +1947,12 @@ class Tinebase_Core
         } else {
             $protocol = parse_url($configUrl, PHP_URL_SCHEME);
             $hostname = parse_url($configUrl, PHP_URL_HOST);
-            $pathname = rtrim(str_replace($protocol . '://' . $hostname, '', $configUrl), '/');
+            $pathname = parse_url($configUrl, PHP_URL_PATH);
         }
 
         switch ($part) {
             case self::GET_URL_PATH:
-                $url = $pathname;
+                $url = '' === $pathname || null === $pathname ? '/' : $pathname;
                 break;
             case self::GET_URL_HOST:
                 $url = $hostname;
