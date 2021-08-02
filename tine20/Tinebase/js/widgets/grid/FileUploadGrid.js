@@ -562,7 +562,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         } else {
              _.each(fileList, (file) => {
                 const upload =  new Ext.ux.file.Upload({
-                    file: _.get(file, 'fileObject'),
+                    file: file,
                     id: Tine.Tinebase.uploadManager.generateUploadId(),
                     isFolder: false
                 });
