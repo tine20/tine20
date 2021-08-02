@@ -69,7 +69,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.loadMask.show();
         
         let upload = new Ext.ux.file.Upload({
-            file: files[0]?.fileObject,
+            file: files[0],
             fileSelector: fileSelector,
             id: Tine.Tinebase.uploadManager.generateUploadId()
         });
