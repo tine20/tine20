@@ -153,6 +153,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_STRING,
                 self::LABEL => 'Amtlicher Regionalschlüssel', // _('Amtlicher Regionalschlüssel')
                 self::NULLABLE => false,
+                self::QUERY_FILTER => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                 ],
@@ -161,6 +162,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
                 self::LABEL => 'Gemeindename', // _('Gemeindename')
+                self::QUERY_FILTER => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
