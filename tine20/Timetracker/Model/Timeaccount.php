@@ -68,6 +68,8 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         'multipleEdit'      => TRUE,
         'requiredRight'     => 'manage',
 
+        // because of the titleProperty misuse below, default sort must! to be set for Pagination to work (for virtual relation fields...)
+        self::DEFAULT_SORT_INFO => ['field' => 'title'],
         'titleProperty'     => '{{number}} - {{title}}{% if not is_open %} (closed) {% endif %}',
         'appName'           => Timetracker_Config::APP_NAME,
         'modelName'         => self::MODEL_NAME_PART,

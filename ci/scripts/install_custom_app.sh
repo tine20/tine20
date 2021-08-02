@@ -3,7 +3,7 @@ set -e
 
 echo $0 installing ...
 
-if [ "$CI_IS_CUSTOMAPP" == "true" ]; then
+if [ "$CI_IS_CUSTOMAPP" = "true" ]; then
 	name=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
 
 	cd ${TINE20ROOT}/tine20

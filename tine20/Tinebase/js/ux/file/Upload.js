@@ -72,7 +72,7 @@ Ext.ux.file.Upload = function(config) {
     if (! this.file && this.fileSelector) {
         this.file = this.fileSelector.getFileList()[0];
     }
-    
+    this.file = this.file?.fileObject ?? this.file;
     this.fileSize = (this.file.size ? this.file.size : this.file.fileSize);
 
     this.maxChunkSize = this.maxPostSize - 16384;
@@ -298,7 +298,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             "X-Tine20-Request-Type" : "HTTP",
             "X-Requested-With"      : "XMLHttpRequest"
         };
-        
+
         var xmlData = this.file;
                
         if(this.isHtml5ChunkedUpload()) {

@@ -65,6 +65,20 @@ class Admin_Controller_UserTest extends TestCase
         $this->assertInstanceOf(Tinebase_Model_MFA_UserConfig::class, $user->mfa_configs->getFirstRecord());
     }
 
+    /** this test makes Admin_Frontend_Json_EmailAccountTest::testGetSetSieveRuleForSclever fail
+     * something doesnt properly get cleaned up in the email account area
+    public function testDeleteRenameLogin()
+    {
+        Admin_Controller_User::getInstance()->delete([$this->_personas['sclever']->getId()]);
+        /** @var Tinebase_Model_FullUser $jmcblack *
+        $jmcblack = clone $this->_personas['jmcblack'];
+        $jmcblack->accountLoginName = 'sclever';
+        Admin_Controller_User::getInstance()->update($jmcblack);
+        Admin_Controller_User::getInstance()->setAccountPassword($jmcblack, '1234qweRT!', '1234qweRT!');
+        $authResult = Tinebase_Auth::getInstance()->authenticate('sclever', '1234qweRT!');
+        $this->assertSame(Tinebase_Auth::SUCCESS, $authResult->getCode(), print_r($authResult->getMessages(), true));
+    }*/
+
     public function testAddAccountWithEmailUserXprops()
     {
         $this->_skipWithoutEmailSystemAccountConfig();

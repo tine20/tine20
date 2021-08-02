@@ -210,7 +210,7 @@ class Tinebase_Application
         }
         
         $result = $this->_getBackend()->search($filter, $pagination);
-        
+
         if ($filter === null && $pagination === null) {
             // cache result in persistent shared cache too
             // cache will be cleared, when an application will be added or updated
@@ -237,9 +237,21 @@ class Tinebase_Application
         if (!in_array($state, array(Tinebase_Application::ENABLED, Tinebase_Application::DISABLED))) {
             throw new Tinebase_Exception_InvalidArgument('$status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
-        
+
         $result = $this->getApplications(null, /* sort = */ 'order')->filter('status', $state);
-        
+
+        if ($state === Tinebase_Application::ENABLED) {
+            // check if app code exists
+            // @todo cache results?
+            foreach ($result as $app) {
+                if (!file_exists(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $app->name)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' APP ' . $app->name . ' is no longer available');
+                    $result->removeRecord($app);
+                }
+            }
+        }
+
         return $result;
     }
     

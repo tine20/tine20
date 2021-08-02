@@ -87,6 +87,9 @@ msgstr "unbekannt"
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
+msgid "Please enter the new Password."
+msgstr "Bitte geben sie das neue Password ein."
+
 #: js/CourseGridPanel.js:44 js/Models.js:68
 msgid "Name"
 msgstr "Name"

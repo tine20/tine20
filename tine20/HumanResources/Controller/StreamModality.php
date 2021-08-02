@@ -92,7 +92,7 @@ class HumanResources_Controller_StreamModality extends Tinebase_Controller_Recor
                 ' needs to earlier or equal ' . StreamModality::FLD_TRACKING_END);
         }
         if ($modality->{StreamModality::FLD_TRACKING_END} && ! $modality->{StreamModality::FLD_TRACKING_END}
-                ->isAfterOrEquals($modality->{StreamModality::FLD_START})) {
+                ->isLaterOrEquals($modality->{StreamModality::FLD_START})) {
             throw new Tinebase_Exception_UnexpectedValue(StreamModality::FLD_TRACKING_END . ' needs to after or equal '
                 . StreamModality::FLD_START);
         }

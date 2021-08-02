@@ -5049,3 +5049,6 @@ msgid ""
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token "
 "vom Gerät {mfaDevice.device_name} eingeben."
+
+msgid "Search for Community Identification Numbers ..."
+msgstr "Suche nach Gemeindeschlüsseln ..."

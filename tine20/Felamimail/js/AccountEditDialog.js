@@ -89,11 +89,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.grantsGrid.setValue(this.record.get('grants'));
         }
         
-        if (this.isSystemAccount()) {
-            this.loadVacationRecord();
-            this.loadRuleRecord();
-        }
-        
+        this.disableSieveTabs();
         this.disableFormFields();
     },
 
@@ -211,6 +207,18 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             item.setDisabled(! (
                 !this.record.get('type') || this.record.get('type') === 'shared')
             );
+        }
+    },
+    
+    disableSieveTabs() {
+        if (this.asAdminModule && !Tine.Admin.registry.get('masterSieveAccess')) {
+            this.vacationPanel.setDisabled(true);
+            this.rulesGridPanel.setDisabled(true);
+        } else {
+            if (this.isSystemAccount()) {
+                this.loadVacationRecord();
+                this.loadRuleRecord();
+            }
         }
     },
 

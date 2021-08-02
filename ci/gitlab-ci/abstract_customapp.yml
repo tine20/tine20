@@ -4,7 +4,6 @@ include:
   - local: '/ci/gitlab-ci/test_php_jobs.yml'
   - local: '/ci/gitlab-ci/test_js_jobs.yml'
   - local: '/ci/gitlab-ci/test_jobs.yml'
-  - local: '/ci/gitlab-ci/code_analysis.yml'
   - local: '/ci/gitlab-ci/merge_customapp.yml'
 
 stages:

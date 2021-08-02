@@ -23,7 +23,6 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     enableHdMenu: false,
     autoExpandColumn: 'n_fileas',
     memberroles: null,
-    memberRolesPanel: null,
 
     // the list record
     record: null,
@@ -34,6 +33,12 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Addressbook');
 
+        this.memberProperty = this.memberProperty ? this.memberProperty : 'members';
+        this.roleProperty = this.roleProperty ? this.roleProperty : 'memberroles';
+
+        this.memberDataPath = 'data.' + this.memberProperty;
+        this.roleDataPath = 'data.' + this.roleProperty;
+        
         this.title = this.hasOwnProperty('title') ? this.title : this.app.i18n._('Members');
         this.plugins = this.plugins || [];
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
@@ -41,16 +46,10 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         this.sm = new Ext.grid.RowSelectionModel({singleSelect:true});
 
         this.initColumns();
+
         this.store = new Ext.data.Store({
             autoSave: false,
-            fields:  Tine.Addressbook.Model.Contact,
-            proxy: Tine.Addressbook.contactBackend,
-            reader: Tine.Addressbook.contactBackend.getReader(),
-            listeners: {
-                load: this.onLoad,
-                beforeload: this.onBeforeLoad,
-                scope: this
-            }
+            fields:  Tine.Addressbook.Model.Contact
         });
 
         this.addListener("beforeedit", this.onBeforeEdit, this);
@@ -74,6 +73,22 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         Tine.Addressbook.ListMemberRoleGridPanel.superclass.initComponent.call(this);
     },
 
+    onRender: function() {
+        this.supr().onRender.apply(this, arguments);
+
+        if (! this.editDialog) {
+            this.editDialog = this.findParentBy(function (c) {
+                return c instanceof Tine.widgets.dialog.EditDialog
+            });
+        }
+
+        this.editDialog.on('load', this.onRecordLoad, this);
+        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
+
+        // NOTE: in case we are rendered after record was load
+        this.onRecordLoad(this.editDialog, this.editDialog.record);
+    },
+
     /**
      * before cell edit
      *
@@ -91,112 +106,6 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
      */
     onAfterEdit: function(o) {
         o.record.commit();
-
-        // update this.memberroles + memberRolesPanel
-        this.memberRolesPanel.setListRolesOfContact(o.record);
-    },
-
-    /**
-     * initialises grid with an array of member uids
-     */
-    setMembers: function(cb, scope) {
-        var options = {
-            loadCb: cb || Ext.emptyFn,
-            scope: scope
-        };
-
-        this.memberroles = this.record.get("memberroles");
-
-        // NOTE: load with option add can't cope with duplicates
-        options.loadCb = options.loadCb.createInterceptor(function() {
-            // add members with limited acl
-            Ext.each(this.record.get("members"), function(member) {
-                if (member.n_fn) {
-                    if (! this.store.getById(member.id)) {
-                        this.store.add([new Tine.Addressbook.Model.Contact(member)]);
-                    }
-                }
-            }, this);
-        }, this);
-
-        this.store.load(options);
-    },
-
-    onBeforeLoad: function (store, options) {
-        var members = this.record.get("members") || [];
-
-        options.params = options.params || {};
-        options.params.paging = {"sort":"n_fileas","dir":"ASC"};
-        options.params.filter = [
-            {"field": "id", "operator": "in", "value": members}
-        ];
-    },
-
-    onLoad: function(store, records, options) {
-        this.store.sort("n_fileas", "ASC");
-        
-        if (this.memberroles) {
-            this.store.each(function(contact) {
-                var contactRoles = [];
-                Tine.log.debug(contact);
-                // TODO improve detection of matching contact (filter?)
-                Ext.each(this.memberroles, function(memberrole) {
-                    if (memberrole.contact_id.id == contact.get('id')
-                        && memberrole.list_id == this.record.get('id')
-                        && memberrole.list_role_id.id
-                    )
-                    {
-                        contactRoles.push(memberrole);
-                    }
-                }, this);
-                if (contactRoles.length > 0) {
-                    contact.set('memberroles', contactRoles);
-                    contact.commit();
-                }
-            }, this);
-
-            this.memberRolesPanel.setListRoles(this.memberroles);
-        }
-
-        if (Ext.isFunction(options.loadCb)) {
-            options.loadCb.call(options.scope || window);
-        }
-    },
-
-    /**
-     * returns current array of member uids
-     *
-     * @return []
-     */
-    getMembers: function() {
-        var result = [],
-            roles = null;
-        this.memberroles = [];
-
-        this.store.each(function(contact) {
-            if (contact.get('id')) {
-                result.push(contact.get('id'));
-                if (contact.get('memberroles') && contact.get('memberroles').length > 0) {
-                    roles = contact.get('memberroles');
-                    Ext.each(roles, function (role) {
-                        role.contact_id = contact.get('id');
-                        role.list_id = this.record.get('id');
-                        this.memberroles.push(role);
-                    }, this);
-                }
-            }
-        }, this);
-
-        return result;
-    },
-
-    /**
-     * returns current array of member roles
-     *
-     * @return []
-     */
-    getMemberRoles: function() {
-        return this.memberroles;
     },
 
     /**
@@ -301,5 +210,103 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         }
 
         return '';
+    },
+
+
+    onRecordLoad: function(editDialog, record) {
+        var _ = window.lodash,
+            memberData = _.get(record, this.memberDataPath) || [],
+            rolesData = _.get(record, this.roleDataPath) || [];
+        
+        this.setStoreFromArray(memberData);
+        this.setRolesFromData(rolesData);
+    },
+
+    onRecordUpdate: function(editDialog, record) {
+        var _ = window.lodash,
+            memberData = this.getFromStoreAsArray(),
+            roleData = this.getRolesFromData(memberData);
+        
+        _.set(record, this.memberDataPath, memberData);
+        _.set(record, this.roleDataPath, roleData);
+    },
+
+    /**
+     * get values from store (as array)
+     *
+     * @param {Array}
+     *
+     */
+    setStoreFromArray: function(data) {
+        this.store.clearData();
+
+        for (var i = data.length-1; i >=0; --i) {
+            var recordData = {}
+            recordData = data[i];
+            this.store.insert(0, new this.recordClass(recordData));
+        }
+    },
+
+    /**
+     * get values from store (as array)
+     *
+     * @return {Array}
+     */
+    getFromStoreAsArray: function() {
+        var result = Tine.Tinebase.common.assertComparable([]);
+        this.store.each(function(record) {
+            var data = record.data;
+            result.push(data);
+        }, this);
+
+        return result;
+    },
+
+    /**
+     * get memberrole records from store
+     * 
+     * @param data
+     * @returns {mixed}
+     */
+    getRolesFromData: function(data) {
+        var result = Tine.Tinebase.common.assertComparable([]);
+
+        if (Ext.isArray(data)) {
+            Ext.each(data, function(contact) {
+                if (contact.memberroles) {
+                    var roles = contact.memberroles;
+
+                    Ext.each(roles, function(role) {
+                        role.contact_id = contact.id;
+
+                        result.push(role);
+                    });
+                }
+            });
+        }
+        
+        return result;
+    },
+
+    /**
+     * get memberroles
+     * 
+     * @param roles
+     * @param list
+     */
+    setRolesFromData: function(roles) {
+        this.store.each(function(contact) {
+            var contactRoles = [];
+            Ext.each(roles, function(role) {
+                if (role.contact_id.id == contact.get('id'))
+                {
+                    contactRoles.push(role);
+                }
+            }, this);
+            if (contactRoles.length > 0) {
+                contact.set('memberroles', contactRoles);
+                contact.commit();
+            }
+        }, this);
     }
 });

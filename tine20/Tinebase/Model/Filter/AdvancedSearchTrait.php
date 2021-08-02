@@ -46,11 +46,10 @@ trait Tinebase_Model_Filter_AdvancedSearchTrait {
         }
         $ownIds = array();
         foreach ((array) $relationsToSearchIn as $relatedModel) {
-            $filterModel = $relatedModel . 'Filter';
             // prevent recursion here
             // TODO find a better way for this, maybe we could pass this an option to all filters in filter model
             Tinebase_Core::set('ADVANCED_SEARCHING', true);
-            $relatedFilter = new $filterModel(array(
+            $relatedFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($relatedModel, array(
                 array('field' => 'query',   'operator' => $operator, 'value' => $this->_value),
             ));
 

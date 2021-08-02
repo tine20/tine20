@@ -249,6 +249,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
 
     public function update009()
     {
+        // update needs this - it waits for table metadata lock for a very long time otherwise ...
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Tinebase_Model_CommunityIdentNr::TABLE_NAME
+            . ' SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
         Setup_SchemaTool::updateSchema([Tinebase_Model_CommunityIdentNr::class]);
         $this->addApplicationUpdate('Tinebase', '14.9', self::RELEASE014_UPDATE009);
     }
