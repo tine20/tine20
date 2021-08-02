@@ -167,11 +167,15 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     /**
      * check if imap/sieve backend supports setting a sieve master password
      *
-     * @param $account
+     * @param Felamimail_Model_Account|null $account
      * @return bool
      */
-    public function sieveBackendSupportsMasterPassword($account = null)
+    public function sieveBackendSupportsMasterPassword(Felamimail_Model_Account $account = null): bool
     {
+        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            return false;
+        }
+
         if ($account && ! in_array($account->type, [
             Felamimail_Model_Account::TYPE_SYSTEM,
             Felamimail_Model_Account::TYPE_SHARED,
