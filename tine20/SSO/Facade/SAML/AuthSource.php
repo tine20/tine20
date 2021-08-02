@@ -68,59 +68,27 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
         }
 
         if ($user = Tinebase_Core::getUser()) {
-            $areaLock = Tinebase_AreaLock::getInstance();
-            $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
-            if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) &&
-                $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
-                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
-                    $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
-                }
 
-                // user has no 2FA config -> currently its sort of optional -> no check
-                if ($userConfigIntersection->count() === 0) {
-                    $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
-                } else {
-
-                    if (isset($request->getQueryParams()['mfaid'])) {
-                        $mfaId = $request->getQueryParams()['mfaid'];
-                        $userCfg = $userConfigIntersection->getById($mfaId);
-
-                        if (isset($request->getQueryParams()['mfa'])) {
-                            foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(function ($rec) use ($userCfg) {
-                                return in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
-                            }) as $areaCfg) {
-                                if (!$areaCfg->getBackend()->hasValidAuth()) {
-                                    $areaLock->unlock(
-                                        $areaCfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
-                                        $mfaId,
-                                        $request->getQueryParams()['mfa'],
-                                        $user
-                                    );
-                                    break;
-                                }
-                            }
-                        } else {
-                            if (!Tinebase_Auth_MFA::getInstance($userCfg
-                                    ->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})->sendOut($userCfg)) {
-                                throw new Tinebase_Exception('mfa send out failed');
-                            } else {
-                                throw new SSO_Facade_SAML_MFAMaskException();
-                            }
-                        }
-                    }
-
-                    if ($areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
-                        throw new SSO_Facade_SAML_MFAMaskException();
-                    }
-                }
+            $accessLog = new Tinebase_Model_AccessLog(['clienttype' => Tinebase_Frontend_Json::REQUEST_TYPE], true);
+            Tinebase_Controller::getInstance()->forceUnlockLoginArea();
+            Tinebase_Controller::getInstance()->setRequestContext(array(
+                'MFAPassword' => isset($request->getQueryParams()['MFAPassword']) ? $request->getQueryParams()['MFAPassword'] : null,
+                'MFAId'       => isset($request->getQueryParams()['MFAUserConfigId']) ? $request->getQueryParams()['MFAUserConfigId'] : null,
+            ));
+            try {
+                Tinebase_Controller::getInstance()->_validateSecondFactor($accessLog, $user);
+            } catch (Tinebase_Exception_AreaUnlockFailed $teauf) { // 631
+                throw new SSO_Facade_SAML_MFAMaskException($teauf);
+            } catch (Tinebase_Exception_AreaLocked $teal) { // 630
+                throw new SSO_Facade_SAML_MFAMaskException($teal);
             }
         } else {
-            // must never happen! but just in case, lets throw a login mask, that'll be just fine
+            // should never happen, but just in case, lets throw a login mask, that'll be just fine
+            // do not not throw! otherwise we would be authenticated and have an undefined state
             throw new SSO_Facade_SAML_LoginMaskException();
         }
 
         // we are authenticated now...
-        // we maybe should add some data somewhere...
         $state['Attributes'] = [
             'eduPersonPrincipalName' => [$user->accountDisplayName],
             'uid' => [$user->accountLoginName],

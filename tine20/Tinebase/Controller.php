@@ -839,7 +839,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Tinebase_Model_FullUser $user
      * @return bool
      */
-    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
+    public function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
     {
         $areaLock = Tinebase_AreaLock::getInstance();
         $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);

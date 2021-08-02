@@ -11,8 +11,12 @@
  */
 class SSO_Facade_SAML_MFAMaskException extends \SimpleSAML\Error\Exception
 {
-    public function __construct()
+    public $mfaException;
+
+    public function __construct(Tinebase_Exception_AreaLocked $mfaException)
     {
+        $this->mfaException = $mfaException;
+
         parent::__construct('');
     }
 }
