@@ -513,21 +513,24 @@ class SSO_Controller extends Tinebase_Controller_Event
 
             throw new Tinebase_Exception('expect simplesaml to throw a resolution');
         } catch (SSO_Facade_SAML_MFAMaskException $e) {
-            // render MFA mask
-            $response = (new \Zend\Diactoros\Response())->withHeader('content-type', 'application/json');
-            $response->getBody()->write(json_encode([
-                'jsonrpc' => '2.0',
-                'id' => 'fakeid',
-                'error' => [
-                    'code' => -32000,
-                    'message' => $e->mfaException->getMessage(),
-                    'data' => $e->mfaException->toArray(),
-                ],
-            ]));
+            if (array_key_exists('username', $request->getParsedBody())) {
+                // render MFA mask
+                $response = (new \Zend\Diactoros\Response())->withHeader('content-type', 'application/json');
+                $response->getBody()->write(json_encode([
+                    'jsonrpc' => '2.0',
+                    'id' => 'fakeid',
+                    'error' => [
+                        'code' => -32000,
+                        'message' => $e->mfaException->getMessage(),
+                        'data' => $e->mfaException->toArray(),
+                    ],
+                ]));
+            } else {
+                // reload while in mfa required state
+                $response = self::getLoginPage($request);
+            }
         } catch (SSO_Facade_SAML_LoginMaskException $e) {
-            $data = $request->getQueryParams();
-
-            if (array_key_exists('username', $data)) {
+            if (array_key_exists('username', $request->getParsedBody())) {
                 // this is our js client trying to login
                 $response = (new \Zend\Diactoros\Response())->withHeader('content-type', 'application/json');
                 $response->getBody()->write(json_encode([
@@ -536,18 +539,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                     'result' => (new Tinebase_Frontend_Json())->_getLoginFailedResponse(),
                 ]));
             } else {
-                $data['SAMLRequest'] = base64_encode(gzinflate(base64_decode($data['SAMLRequest'])));
-
-                $locale = Tinebase_Core::getLocale();
-
-                $jsFiles = ['SSO/js/login.js'];
-                $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
-
-                $response = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
-                    'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
-                    'lang' => $locale,
-                    'initialData' => json_encode(['sso' => $data])
-                ]);
+                $response = self::getLoginPage($request);
             }
         } catch (SSO_Facade_SAML_RedirectException $e) {
             $response = new \Zend\Diactoros\Response();
@@ -578,6 +570,23 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         return $response;
+    }
+    
+    protected static function getLoginPage($request)
+    {
+        $data = $request->getQueryParams();
+        $data['SAMLRequest'] = base64_encode(gzinflate(base64_decode($data['SAMLRequest'])));
+
+        $locale = Tinebase_Core::getLocale();
+
+        $jsFiles = ['SSO/js/login.js'];
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
+
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+            'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+            'lang' => $locale,
+            'initialData' => json_encode(['sso' => $data])
+        ]);
     }
     
     protected static function getOpenIdConnectServer(): \League\OAuth2\Server\AuthorizationServer

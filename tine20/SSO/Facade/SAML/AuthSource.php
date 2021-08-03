@@ -72,8 +72,8 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
             $accessLog = new Tinebase_Model_AccessLog(['clienttype' => Tinebase_Frontend_Json::REQUEST_TYPE], true);
             Tinebase_Controller::getInstance()->forceUnlockLoginArea();
             Tinebase_Controller::getInstance()->setRequestContext(array(
-                'MFAPassword' => isset($request->getQueryParams()['MFAPassword']) ? $request->getQueryParams()['MFAPassword'] : null,
-                'MFAId'       => isset($request->getQueryParams()['MFAUserConfigId']) ? $request->getQueryParams()['MFAUserConfigId'] : null,
+                'MFAPassword' => isset($request->getParsedBody()['MFAPassword']) ? $request->getParsedBody()['MFAPassword'] : null,
+                'MFAId'       => isset($request->getParsedBody()['MFAUserConfigId']) ? $request->getParsedBody()['MFAUserConfigId'] : null,
             ));
             try {
                 Tinebase_Controller::getInstance()->_validateSecondFactor($accessLog, $user);
