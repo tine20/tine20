@@ -239,7 +239,7 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
     // private
     triggerBlur : function(){
         this.mimicing = false;
-        this.doc.un('mousedown', this.mimicBlur, this);
+        this.doc?.un('mousedown', this.mimicBlur, this);
         if(this.monitorTab && this.el){
             this.un('specialkey', this.checkTab, this);
         }
