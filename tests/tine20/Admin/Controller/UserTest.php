@@ -20,7 +20,7 @@ class Admin_Controller_UserTest extends TestCase
         parent::setUp();
     }
 
-    public function testAddUserWithAlreadyExistingEmailData()
+    public function testAddUserWithAlreadyExistingEmailData($mode = 'create')
     {
         $this->_skipWithoutEmailSystemAccountConfig();
         $this->_skipIfLDAPBackend();
@@ -34,18 +34,32 @@ class Admin_Controller_UserTest extends TestCase
         ));
         $pw = Tinebase_Record_Abstract::generateUID(12);
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
-
-        // delete user and add again
-        $backend = new Tinebase_User_Sql();
-        $backend->deleteUserInSqlBackend($user);
+        $this->_usernamesToDelete[] = $user->accountLoginName;
 
         try {
-            $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+            if ($mode === 'create') {
+                // remove user from tine20 table and add again
+                $backend = new Tinebase_User_Sql();
+                $backend->deleteUserInSqlBackend($user);
+                $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+            } else if ($mode === 'update') {
+                // try update with existing email account with the same address
+                $user->accountEmailAddress = Tinebase_Core::getUser()->accountEmailAddress;
+                $user->smtpUser = new Tinebase_Model_EmailUser(array(
+                    'emailAddress'     => $user->accountEmailAddress,
+                ));
+                $user = Admin_Controller_User::getInstance()->update($user);
+            }
             self::fail('should throw an exception: "email address already exists". user: ' . print_r($user->toArray(), true));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             $translate = Tinebase_Translation::getTranslation('Tinebase');
             self::assertEquals($translate->_('Email account already exists'), $tesg->getMessage());
         }
+    }
+
+    public function testUpdateUserWithAlreadyExistingEmailAddress()
+    {
+        $this->testAddUserWithAlreadyExistingEmailData('update');
     }
 
     public function testAddAccountWithMFAConfigs()
