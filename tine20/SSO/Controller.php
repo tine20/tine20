@@ -527,7 +527,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         } catch (SSO_Facade_SAML_LoginMaskException $e) {
             $data = $request->getQueryParams();
 
-            if (array_key_exists($data['username'])) {
+            if (array_key_exists('username', $data)) {
                 // this is our js client trying to login
                 $response = (new \Zend\Diactoros\Response())->withHeader('content-type', 'application/json');
                 $response->getBody()->write(json_encode([
