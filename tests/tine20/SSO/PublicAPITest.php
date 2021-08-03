@@ -24,10 +24,26 @@ class SSO_PublicAPITest extends TestCase
         $config = SSO_Config::getInstance();
         $config->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED} = true;
         $config->{SSO_Config::SAML2}->{SSO_Config::ENABLED} = true;
+
+        $keys = $config->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS}[0];
+        $dir = '';
+        if (isset($keys['privatekey']) && is_file($keys['privatekey'])) {
+            $dir = dirname($keys['privatekey']);
+            chmod($keys['privatekey'], 0600);
+        }
+        if (isset($keys['certificate']) && is_file($keys['certificate'])) {
+            $dir = dirname($keys['certificate']);
+            chmod($keys['certificate'], 0600);
+        }
+        if (is_file($dir . '/private.key')) {
+            chmod($dir . '/private.key', 0600);
+        }
     }
 
     public function testCreateSAML2Config()
     {
+        $this->markTestSkipped('this is only for debugging purposes');
+
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = null;
 
