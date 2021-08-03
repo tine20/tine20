@@ -262,7 +262,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $a = $ui->getFullUserById($e['account_id']['accountId']);
         
         $a->accountStatus = 'disabled';
-        $ui->updateUser($a);
+        $ui->updateUserInSqlBackend($a);
         
         $e = $this->_json->getEmployee($e['id']);
         
