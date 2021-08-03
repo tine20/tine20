@@ -1059,7 +1059,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         if ($skipEvent === false) {
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Calendar_Event_InspectEventAfterUpdate([
-                'observable' => $updatedEvent
+                'observable' => $updatedEvent,
+                'oldEvent' => $_record
             ]));
         }
 
@@ -1397,7 +1398,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($baseEvent->last_modified_time != $_event->last_modified_time) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . " It is not allowed to create recur instance if it is clone of base event");
+                . " It is not allowed to create recur instance if it is not a clone of base event");
             throw new Tinebase_Exception_ConcurrencyConflict('concurrency conflict!');
         }
 
