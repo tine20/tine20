@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tinebase Doc/Docx generation class
  *
@@ -6,7 +7,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,7 +16,6 @@
  * @package     Tinebase
  * @subpackage  Export
  */
-
 class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface, Tinebase_Export_Convertible
 {
     use Tinebase_Export_Convertible_PreviewServicePdf;
@@ -93,6 +93,9 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     {
         $this->generate();
         $document = $this->getDocument();
+        if (!$document instanceof \PhpOffice\PhpWord\TemplateProcessor) {
+            throw new Tinebase_Exception_InvalidArgument('TemplateProcessor expected for saving doc');
+        }
         $tempfile = $document->save();
         try {
             $fh = fopen($tempfile, 'r');
@@ -152,10 +155,12 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected function _startDataSource($_name)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' starting datasource ' . $_name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' starting datasource ' . $_name);
 
-        if (!isset($this->_dataSources[$_name])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' datasource not found, skipping data!');
+        if (!isset($this->_dataSources[$_name]) || empty($this->_dataSources[$_name])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' datasource not found, skipping data!');
             $this->_skip = true;
             return;
         }
@@ -510,13 +515,12 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     /**
      * get word object
      *
-     * @return \PhpOffice\PhpWord\PhpWord | \PhpOffice\PhpWord\TemplateProcessor
+     * @return \PhpOffice\PhpWord\TemplateProcessor | \PhpOffice\PhpWord\PhpWord
      */
     public function getDocument()
     {
-        return $this->_docTemplate ? $this->_docTemplate : $this->_docObject;
+        return $this->_docTemplate ?: $this->_docObject;
     }
-
 
     /**
      * create new PhpWord document
