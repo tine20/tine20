@@ -173,7 +173,7 @@ Ext.Element.addMethods(function(){
                         wk = Ext.isWebKit,
                         display;
                         
-                    if(el == document){
+                    if(!el || el == document){
                         return null;
                     }
                     prop = chkCache(prop);
@@ -336,7 +336,7 @@ Ext.Element.addMethods(function(){
             var me = this,
                 dom = me.dom,
                 hidden = Ext.isIE && me.isStyle('display', 'none'),
-                w = MATH.max(dom.offsetWidth, hidden ? 0 : dom.clientWidth) || 0;
+                w = MATH.max(dom?.offsetWidth, hidden ? 0 : dom?.clientWidth) || 0;
             w = !contentWidth ? w : w - me.getBorderWidth("lr") - me.getPadding("lr");
             return w < 0 ? 0 : w;
         },
@@ -352,6 +352,7 @@ Ext.Element.addMethods(function(){
          */
         setWidth : function(width, animate){
             var me = this;
+            if (!me?.dom?.style) return me;
             width = me.adjustWidth(width);
             !animate || !me.anim ?
                 me.dom.style.width = me.addUnits(width) :
