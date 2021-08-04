@@ -48,17 +48,17 @@ class Tinebase_Auth_MFATest extends TestCase
             Tinebase_Model_MFA_UserConfig::FLD_ID => 'TOTPunittest',
             Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
             Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
-                Tinebase_Model_MFA_HTOTPUserConfig::class,
+                Tinebase_Model_MFA_TOTPUserConfig::class,
             Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
-                new Tinebase_Model_MFA_HTOTPUserConfig([
-                    Tinebase_Model_MFA_HTOTPUserConfig::FLD_SECRET => $secret,
+                new Tinebase_Model_MFA_TOTPUserConfig([
+                    Tinebase_Model_MFA_TOTPUserConfig::FLD_SECRET => $secret,
                 ]),
         ]]);
 
         $this->_createAreaLockConfig([], [
             Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
             Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
-                Tinebase_Model_MFA_HTOTPUserConfig::class,
+                Tinebase_Model_MFA_TOTPUserConfig::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
                 Tinebase_Model_MFA_HTOTPConfig::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
@@ -92,18 +92,18 @@ class Tinebase_Auth_MFATest extends TestCase
             Tinebase_Model_MFA_UserConfig::FLD_ID => 'HOTPunittest',
             Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
             Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
-                Tinebase_Model_MFA_HTOTPUserConfig::class,
+                Tinebase_Model_MFA_HOTPUserConfig::class,
             Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
-                new Tinebase_Model_MFA_HTOTPUserConfig([
-                    Tinebase_Model_MFA_HTOTPUserConfig::FLD_COUNTER => 0,
-                    Tinebase_Model_MFA_HTOTPUserConfig::FLD_SECRET => $secret,
+                new Tinebase_Model_MFA_HOTPUserConfig([
+                    Tinebase_Model_MFA_HOTPUserConfig::FLD_COUNTER => 0,
+                    Tinebase_Model_MFA_HOTPUserConfig::FLD_SECRET => $secret,
                 ]),
         ]]);
 
         $this->_createAreaLockConfig([], [
             Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
             Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
-                Tinebase_Model_MFA_HTOTPUserConfig::class,
+                Tinebase_Model_MFA_HOTPUserConfig::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
                 Tinebase_Model_MFA_HTOTPConfig::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>

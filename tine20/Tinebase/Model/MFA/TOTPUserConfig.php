@@ -13,23 +13,18 @@ use ParagonIE\ConstantTime\Base32;
 
 
 /**
- * Yubico OTP MFA UserConfig Model
+ * TOTP MFA UserConfig Model
  *
  * @package     Tinebase
  * @subpackage  Auth
  */
-class Tinebase_Model_MFA_HTOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserConfig
+class Tinebase_Model_MFA_TOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserConfig
 {
-    public const MODEL_NAME_PART = 'MFA_HTOTPUserConfig';
+    public const MODEL_NAME_PART = 'MFA_TOTPUserConfig';
 
     public const FLD_ACCOUNT_ID = 'account_id';
     public const FLD_CC_ID = 'cc_id';
-    public const FLD_COUNTER = 'counter';
     public const FLD_SECRET = 'secret';
-    public const FLD_TYPE = 'type'; // only for the FE, it is not a BE model config field!
-
-    public const TYPE_HOTP = 'hotp';
-    public const TYPE_TOTP = 'totp';
 
     protected $_secret;
 
@@ -41,8 +36,8 @@ class Tinebase_Model_MFA_HTOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserC
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'H/T OTP',
-        self::TITLE_PROPERTY                => 'H/T OTP',
+        self::RECORD_NAME                   => 'TOTP',
+        self::TITLE_PROPERTY                => 'TOTP',
 
         self::FIELDS                        => [
             self::FLD_ACCOUNT_ID                => [
@@ -59,10 +54,6 @@ class Tinebase_Model_MFA_HTOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserC
             ],
             self::FLD_CC_ID                     => [
                 self::TYPE                          => self::TYPE_STRING,
-                self::DISABLED                      => true,
-            ],
-            self::FLD_COUNTER                   => [
-                self::TYPE                          => self::TYPE_INTEGER,
                 self::DISABLED                      => true,
             ],
         ]
@@ -121,12 +112,5 @@ class Tinebase_Model_MFA_HTOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserC
                 $cc->setCacheAdapter($adapter);
             }
         }
-    }
-
-    public function toFEArray(): array
-    {
-        return [
-            self::FLD_TYPE => is_numeric($this->{self::FLD_COUNTER}) ? self::TYPE_HOTP : self::TYPE_TOTP
-        ];
     }
 }

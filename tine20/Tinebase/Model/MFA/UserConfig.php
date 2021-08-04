@@ -63,7 +63,8 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
                         Tinebase_Model_MFA_SmsUserConfig::class,
                         Tinebase_Model_MFA_PinUserConfig::class,
                         Tinebase_Model_MFA_YubicoOTPUserConfig::class,
-                        Tinebase_Model_MFA_HTOTPUserConfig::class,
+                        Tinebase_Model_MFA_HOTPUserConfig::class,
+                        Tinebase_Model_MFA_TOTPUserConfig::class,
                     ],
                 ],
                 self::VALIDATORS            => [
