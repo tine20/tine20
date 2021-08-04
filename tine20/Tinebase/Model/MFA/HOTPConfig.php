@@ -15,9 +15,9 @@
  * @package     Tinebase
  * @subpackage  Auth
  */
-class Tinebase_Model_MFA_HTOTPConfig extends Tinebase_Auth_MFA_AbstractUserConfig
+class Tinebase_Model_MFA_HOTPConfig extends Tinebase_Auth_MFA_AbstractUserConfig
 {
-    public const MODEL_NAME_PART = 'MFA_HTOTPConfig';
+    public const MODEL_NAME_PART = 'MFA_HOTPConfig';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

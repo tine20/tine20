@@ -60,7 +60,7 @@ class Tinebase_Auth_MFATest extends TestCase
             Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
                 Tinebase_Model_MFA_TOTPUserConfig::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
-                Tinebase_Model_MFA_HTOTPConfig::class,
+                Tinebase_Model_MFA_TOTPConfig::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
                 Tinebase_Auth_MFA_HTOTPAdapter::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => []
@@ -105,7 +105,7 @@ class Tinebase_Auth_MFATest extends TestCase
             Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
                 Tinebase_Model_MFA_HOTPUserConfig::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
-                Tinebase_Model_MFA_HTOTPConfig::class,
+                Tinebase_Model_MFA_HOTPConfig::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
                 Tinebase_Auth_MFA_HTOTPAdapter::class,
             Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => []
