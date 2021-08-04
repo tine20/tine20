@@ -36,8 +36,8 @@ class Tinebase_Model_MFA_TOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'TOTP',
-        self::TITLE_PROPERTY                => 'TOTP',
+        self::RECORD_NAME                   => 'Time based OTP (TOTP)', // _('Time based OTP')
+        self::TITLE_PROPERTY                => 'Time based OTP (TOPT) is configured', // _('Time based OTP (TOPT) is configured')
 
         self::FIELDS                        => [
             self::FLD_ACCOUNT_ID                => [
@@ -50,7 +50,7 @@ class Tinebase_Model_MFA_TOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
             ],
             self::FLD_SECRET                    => [
                 self::TYPE                          => self::TYPE_STRING,
-                self::LABEL                         => 'H/T OTP secret', // _('H/T OTP secret')
+                self::LABEL                         => 'Secret Key', // _('Secret Key')
             ],
             self::FLD_CC_ID                     => [
                 self::TYPE                          => self::TYPE_STRING,

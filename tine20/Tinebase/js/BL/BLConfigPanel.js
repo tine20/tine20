@@ -59,6 +59,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
         // @TODO: move to fieldManager?
         this.BLElementConfigClassNames = _.get(this.recordClass.getField(this.classNameField), 'fieldDefinition.config.availableModels', [])
         this.BLElementPicker = new Ext.form.ComboBox({
+            listWidth: 200,
             store: _.reduce(this.BLElementConfigClassNames, function(arr, classname) {
                 var recordClass = Tine.Tinebase.data.RecordMgr.get(classname);
                 if (recordClass) {
