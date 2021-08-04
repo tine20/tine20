@@ -447,7 +447,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Exception::log($e);
+            if (! $e instanceof Tinebase_Exception_SystemGeneric) {
+                Tinebase_Exception::log($e);
+            }
             throw $e;
         }
 
