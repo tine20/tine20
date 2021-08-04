@@ -250,6 +250,17 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     abstract protected function _updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties);
 
     /**
+     * updates email properties for an existing user
+     *
+     * @param  Tinebase_Model_FullUser  $_updatedUser
+     * @param  Tinebase_Model_FullUser  $_newUserProperties
+     */
+    public function updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
+    {
+        return $this->_updateUser($_updatedUser, $_newUserProperties);
+    }
+    
+    /**
      * check if user exists already in plugin user table
      *
      * @param Tinebase_Model_FullUser $_user
