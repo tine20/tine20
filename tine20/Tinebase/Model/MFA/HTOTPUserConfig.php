@@ -26,6 +26,10 @@ class Tinebase_Model_MFA_HTOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserC
     public const FLD_CC_ID = 'cc_id';
     public const FLD_COUNTER = 'counter';
     public const FLD_SECRET = 'secret';
+    public const FLD_TYPE = 'type'; // only for the FE, it is not a BE model config field!
+
+    public const TYPE_HOTP = 'hotp';
+    public const TYPE_TOTP = 'totp';
 
     protected $_secret;
 
@@ -117,5 +121,12 @@ class Tinebase_Model_MFA_HTOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserC
                 $cc->setCacheAdapter($adapter);
             }
         }
+    }
+
+    public function toFEArray(): array
+    {
+        return [
+            self::FLD_TYPE => is_numeric($this->{self::FLD_COUNTER}) ? self::TYPE_HOTP : self::TYPE_TOTP
+        ];
     }
 }
