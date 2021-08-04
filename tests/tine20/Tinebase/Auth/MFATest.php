@@ -41,7 +41,7 @@ class Tinebase_Auth_MFATest extends TestCase
 
     public function testTOTP()
     {
-        $secret = random_bytes(64);
+        $secret = Base32::encodeUpperUnpadded(random_bytes(64));
 
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
             Tinebase_Model_MFA_UserConfig::class, [[
@@ -68,7 +68,7 @@ class Tinebase_Auth_MFATest extends TestCase
 
         $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
         $mfa = Tinebase_Auth_MFA::getInstance('unittest');
-        $totp = TOTP::create(Base32::encodeUpper($secret));
+        $totp = TOTP::create($secret);
 
         $this->assertFalse($mfa->validate('shaaaaaaaaaalala', $this->_originalTestUser->mfa_configs->getFirstRecord()),
             'validate didn\'t fail as expected');
@@ -85,7 +85,7 @@ class Tinebase_Auth_MFATest extends TestCase
 
     public function testHOTP()
     {
-        $secret = random_bytes(64);
+        $secret = Base32::encodeUpperUnpadded(random_bytes(64));
 
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
             Tinebase_Model_MFA_UserConfig::class, [[
@@ -113,7 +113,7 @@ class Tinebase_Auth_MFATest extends TestCase
 
         $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
         $mfa = Tinebase_Auth_MFA::getInstance('unittest');
-        $hotp = HOTP::create(Base32::encodeUpper($secret));
+        $hotp = HOTP::create($secret);
 
         $this->assertFalse($mfa->validate('shaaaaaaaaaalala', $this->_originalTestUser->mfa_configs->getFirstRecord()),
             'validate didn\'t fail as expected');

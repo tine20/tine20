@@ -89,9 +89,6 @@ class Tinebase_Model_MFA_HOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
     {
         $this->{self::FLD_ACCOUNT_ID} = $newUser->getId();
         if (($newSecret = $this->getSecret())) {
-            $newSecret = Base32::encodeUpperUnpadded($newSecret);
-            // TODO cleanup, remove this Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' new secret ' . $newSecret);
-
             if (preg_match('/[^A-Z2-7]/', $newSecret)) {
                 throw new Tinebase_Exception_UnexpectedValue('secret needs to be base32 conform, consisting only of A-Z + 2-7 chars');
             }
