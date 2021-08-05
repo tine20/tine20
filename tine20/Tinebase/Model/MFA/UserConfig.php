@@ -63,6 +63,8 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
                         Tinebase_Model_MFA_SmsUserConfig::class,
                         Tinebase_Model_MFA_PinUserConfig::class,
                         Tinebase_Model_MFA_YubicoOTPUserConfig::class,
+                        Tinebase_Model_MFA_HOTPUserConfig::class,
+                        Tinebase_Model_MFA_TOTPUserConfig::class,
                     ],
                 ],
                 self::VALIDATORS            => [
@@ -102,5 +104,19 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
         $result[self::FLD_CONFIG] = $this->{self::FLD_CONFIG}->toFEArray();
 
         return $result;
+    }
+
+    public function updateUserOldRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser)
+    {
+        if (method_exists($this->{self::FLD_CONFIG}, __FUNCTION__)) {
+            $this->{self::FLD_CONFIG}->updateUserOldRecordCallback($newUser, $oldUser, $this);
+        }
+    }
+
+    public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser)
+    {
+        if (method_exists($this->{self::FLD_CONFIG}, __FUNCTION__)) {
+            $this->{self::FLD_CONFIG}->updateUserNewRecordCallback($newUser, $oldUser, $this);
+        }
     }
 }
