@@ -98,9 +98,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     // im rahmen der leistungserfassung werden die tatsächlichen "Anzahl-Werte" ermittelt
 
     
-    // @rethink: kunde muss immer sales_customer sein?! und kontakte/ap/rechnungsempfänger noch mal KB mäßig durchdenken.
     // @TODO: Vertäge - wie passt das rein? Klammer / auch im Standard? Muss es den geben?
-
     // @TODO: Preisstaffeln
     
     // @TODO: durchdenken zusatzfelder unten und velo sachen

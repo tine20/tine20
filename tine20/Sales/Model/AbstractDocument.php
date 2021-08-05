@@ -25,11 +25,11 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
     const FLD_REFERENCE_DOCUMENT = 'reference_document'; // virtual, link
     const FLD_NOTE = 'note';
-    const FLD_RECIPIENT_CLASS = 'recipient_class'; // Kunde od. Organisation
-    const FLD_RECIPIENT_ID = 'recipient_id';
-    const FLD_RECIPIENT_REFERENCE = 'recipient_reference'; // varchar 255
-    const FLD_CONTACT_CLASS = 'contact_class'; // Anprechpartner
-    const FLD_CONTACT_ID = 'contact_id';
+    const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg
+    const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern
+    const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
+    const FLD_CUSTOMER_REFERENCE = 'customer_reference'; // varchar 255
+    
     const FLD_DOCUMENT_DATE = 'date'; // Belegdatum NICHT Buchungsdatum, das kommt noch unten
     const FLD_PAYMENT_TERMS_ID = 'payment_terms_id'; // Sales_Model_PaymentTerms
     
@@ -44,9 +44,9 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
     const FLD_SALES_TAX = 'sales_tax';
     const FLD_GROSS_SUM = 'gross_sum';
     
-    const FLD_HEADER_TEXT = 'cost_bearer_id';
-    const FLD_FOOTER_TEXT = 'cost_bearer_id';
-    
+    const FLD_COST_CENTER_ID = 'cost_center_id';
+    const FLD_COST_BEARER_ID = 'cost_bearer_id';
+
     const FLD_BOOKING_DATE = 'booking_date'; // ggf. nur bei Rechnung ud. Storno
     
     // jedes dokument bekommt noch:
@@ -55,6 +55,12 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
     // <dokumentenart>_STATUS z.B. Rechnungsstatus (Ungebucht, Gebucht, Verschickt, Bezahlt)
     //   übergänge haben regeln (siehe SAAS mechanik)
     
+    // ORDER:
+    //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
+    //  - INVOICE_CONTACT_ID // abweichender Rechnungskontakt, CONTACT_ID wenn leer
+    //  - DELIVERY_RECIPIENT_ID // abweichende Lieferadresse, RECIPIENT_ID wenn leer
+    //  - DELIVERY_CONTACT_ID // abweichender Lieferkontakt, CONTACT_ID wenn leer
+
     // INVOICE: 
     //  - IS_REVERSED bool // storno
     //  - INVOICE_REPORTING enum (AUTO|MANU) // Rechnungslegung
