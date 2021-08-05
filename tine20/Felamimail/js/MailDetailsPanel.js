@@ -223,7 +223,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
                     id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(firstname) + ':' + Ext.util.Format.trim(lastname));
                     result = '<a id="' + id + '" class="tinebase-email-link">' + result + '</a>'
-                    result += ' <span ext:qtip="' + Tine.Tinebase.common.doubleEncode(qtip) + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
+                    
                     return result;
                 },
 
@@ -324,7 +324,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         var selectors = [
             'span[class^=tinebase-download-link]',
             'a[class=tinebase-email-link]',
-            'span[class=tinebase-addtocontacts-link]',
             'span[class=tinebase-showheaders-link]',
             'a[href^=#]'
         ];
@@ -481,44 +480,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
 
                 break;
-
-            case 'a[class=tinebase-email-link]':
-                // open compose dlg
-                var email = target.id.split(':')[1];
-                var defaults = Tine.Felamimail.Model.Message.getDefaultData();
-                defaults.to = [email];
-                defaults.body = Tine.Felamimail.getSignature();
-
-                var record = new Tine.Felamimail.Model.Message(defaults, 0);
-                Tine.Felamimail.MessageEditDialog.openWindow({
-                    record: record
-                });
-                break;
-
-            case 'span[class=tinebase-addtocontacts-link]':
-                // open edit contact dlg
-
-                // check if addressbook app is available
-                if (! Tine.Addressbook || ! Tine.Tinebase.common.hasRight('run', 'Addressbook')) {
-                    return;
-                }
-
-                var id = Ext.util.Format.htmlDecode(target.id);
-                var parts = id.split(':');
-
-                var popupWindow = Tine.Addressbook.ContactEditDialog.openWindow({
-                    listeners: {
-                        scope: this,
-                        'load': function(editdlg) {
-                            editdlg.record.set('email', parts[1]);
-                            editdlg.record.set('n_given', parts[2]);
-                            editdlg.record.set('n_family', parts[3]);
-                        }
-                    }
-                });
-
-                break;
-
             case 'span[class=tinebase-showheaders-link]':
                 // show headers
 

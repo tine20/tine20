@@ -238,28 +238,8 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
             this.body.on('click', this.onClick, this);
         }
     },
-
-    /**
-     * on click for compose mail
-     *
-     * @param {} e
-     *
-     * TODO check if account is configured?
-     * TODO generalize that
-     */
+    
     onClick: function(e) {
-        var target = e.getTarget('a[class=tinebase-email-link]');
-        if (target) {
-            var email = target.id.split(':')[1];
-            var defaults = Tine.Felamimail.Model.Message.getDefaultData();
-            defaults.to = [email];
-            defaults.body = Tine.Felamimail.getSignature();
-
-            var record = new Tine.Felamimail.Model.Message(defaults, 0);
-
-            Tine.Felamimail.MessageEditDialog.openWindow({
-                record: record
-            });
-        }
+     
     }
 });
