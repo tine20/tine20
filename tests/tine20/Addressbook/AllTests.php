@@ -33,7 +33,6 @@ class Addressbook_AllTests
         $suite->addTestSuite(Addressbook_ControllerTest::class);
         $suite->addTestSuite(Addressbook_Controller_ListTest::class);
         $suite->addTestSuite(Addressbook_PdfTest::class);
-        $suite->addTestSuite(Addressbook_JsonTest::class);
         $suite->addTestSuite(Addressbook_CliTest::class);
         $suite->addTestSuite(Addressbook_Model_ContactIdFilterTest::class);
 

@@ -866,11 +866,6 @@ parameters:
 			path: tine20/Addressbook/Model/ListMemberFilter.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListRoleMemberFilter.php
-
-		-
 			message: "#^Access to an undefined property Tinebase_Model_Preference\\:\\:\\$value\\.$#"
 			count: 3
 			path: tine20/Addressbook/Preference.php
