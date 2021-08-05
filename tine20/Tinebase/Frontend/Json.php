@@ -665,7 +665,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @return array
      */
-    protected function _getLoginFailedResponse()
+    public function _getLoginFailedResponse()
     {
         $response = array(
             'success'      => false,

@@ -688,6 +688,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const WEBDAV_SYNCTOKEN_ENABLED = 'webdavSynctokenEnabled';
 
+    const WEBFINGER_REL_HANDLER = 'webfingerRelHandler';
+
     /**
      * @var string
      */
@@ -1925,6 +1927,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ),
             ],
         ),
+        self::WEBFINGER_REL_HANDLER => [
+            self::LABEL                 => 'Webfinder Rel Handler',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [],
+        ],
         self::DOWNLOAD_PASSWORD_POLICY => array(
             //_('Download password policy')
             'label'                 => 'Download password policy',

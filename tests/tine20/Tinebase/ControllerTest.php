@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo make testLoginAndLogout work (needs to run in separate process)
@@ -269,6 +269,63 @@ class Tinebase_ControllerTest extends TestCase
 
         static::expectException(Tinebase_Exception_AccessDenied::class);
         Tinebase_Controller::getInstance()->getStatus();
+    }
+
+    public function testWebfinger()
+    {
+        $relHandler = Tinebase_Config::getInstance()->{Tinebase_Config::WEBFINGER_REL_HANDLER};
+        $relHandler['b'] = [self::class, 'webfingerHandlerMock'];
+        Tinebase_Config::getInstance()->{Tinebase_Config::WEBFINGER_REL_HANDLER} = $relHandler;
+
+        $emitter = new Tinebase_Server_UnittestEmitter();
+        $server = new Tinebase_Server_Expressive($emitter);
+
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+            'GET /.well-known/webfinger?resource=a&rel=b HTTP/1.1' . "\r\n"
+            . 'Host: localhost' . "\r\n"
+            . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . 'Referer: http://tine20.vagrant/' . "\r\n"
+            . 'Accept-Encoding: gzip, deflate' . "\r\n"
+            . 'Accept-Language: en-US,en;q=0.8,de-DE;q=0.6,de;q=0.4' . "\r\n\r\n"
+        ));
+
+        /** @var \Symfony\Component\DependencyInjection\Container $container */
+        $container = Tinebase_Core::getPreCompiledContainer();
+        $container->set(\Psr\Http\Message\RequestInterface::class, $request);
+        Tinebase_Core::setContainer($container);
+
+        $server->handle();
+
+        $this->assertSame('application/jrd+json', $emitter->response->getHeader('Content-Type')[0]);
+
+        $this->assertIsArray($jsonResponse = json_decode((string)$emitter->response->getBody(), true));
+        $this->assertArrayHasKey('subject', $jsonResponse);
+        $this->assertSame('a', $jsonResponse['subject']);
+
+        $this->assertArrayHasKey('aliases', $jsonResponse);
+        $this->assertEmpty($jsonResponse['aliases']);
+
+        $this->assertArrayHasKey('properties', $jsonResponse);
+        $this->assertEmpty($jsonResponse['properties']);
+
+        $this->assertArrayHasKey('links', $jsonResponse);
+        $this->assertArrayHasKey(0, $jsonResponse['links']);
+        $this->assertSame([
+            'rel' => 'b',
+            'href' => 'c'
+        ], $jsonResponse['links'][0]);
+        $this->assertCount(1, $jsonResponse['links']);
+
+        $this->assertCount(4, $jsonResponse);
+    }
+
+    public static function webfingerHandlerMock(&$result)
+    {
+        $result['links'][] = [
+            'rel' => 'b',
+            'href' => 'c'
+        ];
     }
 
     public function testGetFaviconLegacy()

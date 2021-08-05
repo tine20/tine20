@@ -145,6 +145,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
+        if ($this->_originalTestUser instanceof Tinebase_Model_User) {
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+
         if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
             $this->_deleteUsers();
             $this->_deleteGroups();
@@ -157,10 +161,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
-
-        if ($this->_originalTestUser instanceof Tinebase_Model_User) {
-            Tinebase_Core::setUser($this->_originalTestUser);
-        }
 
         if ($this->_invalidateRolesCache) {
             Tinebase_Acl_Roles::getInstance()->resetClassCache();
