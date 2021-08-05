@@ -69,7 +69,12 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
         
         if (action === 'delete') {
             // delete grant required
-            isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.deleteGrant')
+            isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.deleteGrant', false);
+        }
+
+        if (action === 'edit') {
+            // edit grant required
+            isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.editGrant', false);
         }
 
         // don't allow any actions 
@@ -164,6 +169,11 @@ Tine.Filemanager.nodeActions.CreateFolder = {
             const newRecord = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
                 name: app.i18n._('New Folder'),
                 type: 'folder',
+                account_grants: {
+                    addGrant: true,
+                    editGrant: true,
+                    deleteGrant: true
+                }
                 path: `${currentPath}`,
             }));
             
@@ -363,7 +373,7 @@ Tine.Filemanager.nodeActions.Delete = {
                                 data: record.data
                             });
                         });
-                        
+
                         await Tine.Filemanager.deleteNodes(_.map(nodes, 'data.path'));
                     } catch (e) {
                         Tine.Tinebase.ExceptionHandler.handleRequestException(e);

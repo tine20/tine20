@@ -12,8 +12,8 @@ for error in $errors; do
 	n=$(echo $error | jq -r '.name')
 	e=$(echo $error | jq -r '.error_count')
 	f=$(echo $error | jq -r '.failed_count')
-	message="$message"'\n'"+ $n  --  errors: $e failes: $f"
-done	
+	message="$message"'\n'"+ $n  --  errors: $e failures: $f"
+done
 
 message="$message"'\n'"$CI_PIPELINE_URL"
 
