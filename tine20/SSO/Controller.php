@@ -513,7 +513,7 @@ class SSO_Controller extends Tinebase_Controller_Event
 
             throw new Tinebase_Exception('expect simplesaml to throw a resolution');
         } catch (SSO_Facade_SAML_MFAMaskException $e) {
-            if (array_key_exists('username', $request->getParsedBody())) {
+            if ($request->getParsedBody() && array_key_exists('username', $request->getParsedBody())) {
                 // render MFA mask
                 $response = (new \Zend\Diactoros\Response())->withHeader('content-type', 'application/json');
                 $response->getBody()->write(json_encode([
@@ -530,7 +530,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                 $response = self::getLoginPage($request);
             }
         } catch (SSO_Facade_SAML_LoginMaskException $e) {
-            if (array_key_exists('username', $request->getParsedBody())) {
+            if ($request->getParsedBody() && array_key_exists('username', $request->getParsedBody())) {
                 // this is our js client trying to login
                 $response = (new \Zend\Diactoros\Response())->withHeader('content-type', 'application/json');
                 $response->getBody()->write(json_encode([
