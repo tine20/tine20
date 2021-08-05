@@ -44,7 +44,7 @@ class Felamimail_Model_MessagePipeConfig extends Tinebase_Model_BLConfig
 
             case 'rewrite_subject':
                 return new Felamimail_Model_MessagePipeRewriteSubject($options['config']);
-                /* $options['config'] = ['pattern' => '/^SPAM\? \(.+\) \*\*\* /',
+                /* $options['config'] = ['pattern' => '/SPAM\? \(.+\) \*\*\* /',
                                          'replacement => ''] */
                 break;
 
