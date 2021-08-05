@@ -59,7 +59,7 @@ class SSO_Config extends Tinebase_Config_Abstract
             self::CONTENT               => [
                 self::ENABLED               => [
                     self::TYPE                  => self::TYPE_BOOL,
-                    self::DEFAULT_STR           => true
+                    self::DEFAULT_STR           => false
                 ],
                 self::SAML2_ENTITYID        => [
                     self::TYPE                  => self::TYPE_STRING,
