@@ -44,6 +44,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_MFA_UserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_PinUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_SmsUserConfig::MODEL_NAME_PART,
+        Tinebase_Model_MFA_WebAuthnUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_YubicoOTPUserConfig::MODEL_NAME_PART,
         Tinebase_Model_CommunityIdentNr::MODEL_NAME_PART,
         Tinebase_Model_AuthToken::MODEL_NAME_PART,
@@ -1522,6 +1523,39 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $result;
+    }
+
+    public function getWebAuthnAuthenticateOptions(string $accountId)
+    {
+        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($accountId)->jsonSerialize();
+    }
+
+    public function getWebAuthnRegisterPublicKeyOptions(?string $accountId = null)
+    {
+        if (null !== $accountId) {
+            if (!Tinebase_Core::getUser()->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
+                throw new Tinebase_Exception_AccessDenied('user has not right to register webauthn devices for other users');
+            }
+            $user = Tinebase_User::getInstance()->getFullUserById($accountId);
+        } else {
+            $user = Tinebase_Core::getUser();
+        }
+
+        return Tinebase_Auth_Webauthn::getWebAuthnCreationOptions(true, $user)->jsonSerialize();
+    }
+
+    public function registerWebAuthnPublicKey(string $data, ?string $accountId = null)
+    {
+        if (null !== $accountId) {
+            if (!Tinebase_Core::getUser()->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
+                throw new Tinebase_Exception_AccessDenied('user has not right to register webauthn devices for other users');
+            }
+            $user = Tinebase_User::getInstance()->getFullUserById($accountId);
+        } else {
+            $user = Tinebase_Core::getUser();
+        }
+
+        Tinebase_Auth_Webauthn::webAuthnRegister($data, $user);
     }
 
     /**

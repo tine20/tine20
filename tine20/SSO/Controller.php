@@ -16,6 +16,10 @@ use SAML2\XML\saml\Issuer;
 use SimpleSAML\Logger;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Stats;
+use Webauthn\PublicKeyCredentialCreationOptions;
+use Webauthn\PublicKeyCredentialRequestOptions;
+use Webauthn\PublicKeyCredentialSource;
+use Webauthn\PublicKeyCredentialSourceRepository;
 
 /**
  * 
@@ -65,6 +69,20 @@ class SSO_Controller extends Tinebase_Controller_Event
             ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/saml2/redirect/logout', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicSaml2RedirectLogout', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->get('/webauthn/registeroptions', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'webAuthnGetRegisterOptions'))->toArray()
+            );
+            $routeCollector->get('/webauthn/authchallenge/{accountId}', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicWebAuthnGetChallenge', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->post('/webauthn/register', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'webAuthnRegister'))->toArray()
+            );
+            $routeCollector->post('/webauthn/authenticate', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicWebAuthnAuthenticate', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });
@@ -655,5 +673,61 @@ class SSO_Controller extends Tinebase_Controller_Event
         \SimpleSAML\Configuration::setPreLoadedConfig(new \SimpleSAML\Configuration([
             'tine20' => [SSO_Facade_SAML_AuthSourceFactory::class]
         ], 'authsources.php'), 'authsources.php');
+    }
+
+    public function publicWebAuthnGetChallenge(string $accountId): \Psr\Http\Message\ResponseInterface
+    {
+        $response = new \Zend\Diactoros\Response('php://memory', 200, ['Content-Type' => 'application/json']);
+        $response->getBody()->write(
+            json_encode(
+                Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($accountId)->jsonSerialize()
+            )
+        );
+        return $response;
+    }
+
+    public function webAuthnGetRegisterOptions(): \Psr\Http\Message\ResponseInterface
+    {
+        $response = new \Zend\Diactoros\Response('php://memory', 200, ['Content-Type' => 'application/json']);
+        $response->getBody()->write(
+            json_encode(
+                Tinebase_Auth_Webauthn::getWebAuthnCreationOptions(true)->jsonSerialize()
+            )
+        );
+        return $response;
+    }
+
+    public function webAuthnRegister(): \Psr\Http\Message\ResponseInterface
+    {
+        Tinebase_Auth_Webauthn::webAuthnRegister();
+
+        $response = new \Zend\Diactoros\Response('php://memory', 200, ['Content-Type' => 'application/json']);
+        $response->getBody()->write(
+            json_encode(['success'])
+        );
+
+        return $response;
+    }
+
+    public function publicWebAuthnAuthenticate(): \Psr\Http\Message\ResponseInterface
+    {
+        $user = Tinebase_Auth_Webauthn::webAuthnAuthenticate();
+
+        try {
+            Tinebase_Core::startCoreSession();
+        } catch (Zend_Session_Exception $zse) {
+            // expire session cookie for client
+            Tinebase_Session::expireSessionCookie();
+            return new \Zend\Diactoros\Response($body = 'php://memory', $status = 500);
+        }
+
+        Tinebase_Controller::getInstance()->initUser($user);
+
+        $response = new \Zend\Diactoros\Response('php://memory', 200, ['Content-Type' => 'application/json']);
+        $response->getBody()->write(
+            json_encode(['success'])
+        );
+
+        return $response;
     }
 }

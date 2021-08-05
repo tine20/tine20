@@ -1,0 +1,129 @@
+<html>
+<!-- https://webauthn.guide/#registration -->
+<head>
+    <script>
+        //const accountId = 'fc89ba941b952649f565f4f26e5e86568e72b02a';
+
+        let userId = '';
+
+        function _arrayBufferToBase64( buffer ) {
+            var binary = '';
+            var bytes = new Uint8Array( buffer );
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode( bytes[ i ] );
+            }
+            return window.btoa( binary )//.replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '%30');
+        }
+
+        function _base64ToArrayBuffer( string ) {
+            return Uint8Array.from(window.atob(string.replaceAll('-','+').replaceAll('_', '/').replaceAll('%30', '=')), c => c.charCodeAt(0))
+        }
+
+        function register() {
+            fetch('http://localhost:4000/sso/webauthn/registeroptions').then(response => response.json())
+                .then(async (data) => {
+                    userId = data.user.id;
+                    console.log(userId)
+                    console.log(data)
+                    console.log(data.challenge)
+                    data.challenge = _base64ToArrayBuffer(data.challenge)
+                    data.user.id = _base64ToArrayBuffer(data.user.id)
+                    data.pubKeyCredParams = [{alg: -7, type: "public-key"}]
+                    data.authenticatorSelection = {
+                        authenticatorAttachment: "cross-platform"
+                    }
+                    data.timeout = 60000
+                    data.attestation = "direct"
+                    console.log(data)
+                    const credential = await navigator.credentials.create({
+                        publicKey: data
+                    })
+                    console.log(credential)
+                    const cred = {};
+                    cred.id =     credential.id;
+                    cred.rawId =  _arrayBufferToBase64(credential.rawId);
+                    cred.type =   credential.type;
+
+                    if (credential.response) {
+                        const clientDataJSON =
+                            _arrayBufferToBase64(credential.response.clientDataJSON);
+                        const attestationObject =
+                            _arrayBufferToBase64(credential.response.attestationObject);
+                        cred.response = {
+                            clientDataJSON,
+                            attestationObject
+                        };
+                    }
+
+                    console.log(cred)
+                    const response1 = await fetch('http://localhost:4000/sso/webauthn/register', {
+                        method: 'POST',
+                        body: JSON.stringify(cred)
+                    })
+                    response1.json().then(data => console.log(data))
+                })
+        }
+        function authenticate() {
+            fetch('http://localhost:4000/sso/webauthn/authchallenge/' + window.atob(userId)).then(response => response.json())
+            .then(async (options) => {
+                console.log(options)
+                if (options.allowCredentials.length === 0) {
+                    console.info('No registered credentials found.')
+                    return
+                }
+
+                options.challenge = _base64ToArrayBuffer(options.challenge)
+
+                for (let cred of options.allowCredentials) {
+                    cred.id = _base64ToArrayBuffer(cred.id)
+                }
+
+                console.log(options)
+
+                const cred = await navigator.credentials.get({
+                    publicKey: options
+                });
+
+                console.log(cred)
+
+                const credential = {};
+                credential.id = cred.id;
+                credential.type = cred.type;
+                credential.rawId = _arrayBufferToBase64(cred.rawId);
+
+                if (cred.response) {
+                    const clientDataJSON =
+                        _arrayBufferToBase64(cred.response.clientDataJSON);
+                    const authenticatorData =
+                        _arrayBufferToBase64(cred.response.authenticatorData);
+                    const signature =
+                        _arrayBufferToBase64(cred.response.signature);
+                    const userHandle = userId
+                    credential.response = {
+                        clientDataJSON,
+                        authenticatorData,
+                        signature,
+                        userHandle,
+                    };
+                }
+
+                const response = await fetch('http://localhost:4000/sso/webauthn/authenticate', {
+                    method: 'POST',
+                    body: JSON.stringify(credential)
+                })
+                console.log(response.json())
+
+            })
+        }
+    </script>
+</head>
+
+<body>
+
+<input type="button" value="register" onclick="register()"/><br/>
+<input type="button" value="authenticate" onclick="authenticate()"/>
+
+</body>
+
+</html>
