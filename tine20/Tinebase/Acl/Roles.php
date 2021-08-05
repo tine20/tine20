@@ -65,7 +65,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             'modelName' => 'Tinebase_Model_Role',
             'tableName' => 'roles',
         ), $this->_getDb());
-        //$this->_purgeRecords = TRUE;
+        $this->_purgeRecords = false;
         //$this->_resolveCustomFields = FALSE;
         $this->_updateMultipleValidateEachRecord = TRUE;
         $this->_doContainerACLChecks = FALSE;
@@ -968,6 +968,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             $this->_rolesBackend = new Tinebase_Backend_Sql(array(
                 'modelName' => 'Tinebase_Model_Role', 
                 'tableName' => 'roles',
+                Tinebase_Backend_Sql::MODLOG_ACTIVE => true,
             ), $this->_getDb());
         }
         
