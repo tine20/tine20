@@ -40,13 +40,8 @@ class SSO_PublicAPITest extends TestCase
         }
     }
 
-    public function testCreateSAML2Config()
+    protected function _createSAML2Config()
     {
-        $this->markTestSkipped('this is only for debugging purposes');
-
-        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        $this->_transactionId = null;
-
         SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'https://localhost:8443/auth/saml2/sp/metadata.php',
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_Saml2RPConfig::class,
@@ -63,6 +58,8 @@ class SSO_PublicAPITest extends TestCase
 
     public function testSaml2RedirectRequestAlreadyLoggedIn()
     {
+        $this->_createSAML2Config();
+
         $authNRequest = new \SAML2\AuthnRequest();
         ($issuer = new \SAML2\XML\saml\Issuer())->setValue('https://localhost:8443/auth/saml2/sp/metadata.php');
         $authNRequest->setIssuer($issuer);
@@ -74,6 +71,14 @@ class SSO_PublicAPITest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['QUERY_STRING'] = 'SAMLRequest='.urlencode($msgStr);
         $_GET['SAMLRequest'] = $msgStr;
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest([], [], 'https://unittest/shalala?SAMLRequest=' .
+                urlencode($msgStr), 'GET'))
+                ->withQueryParams([
+                    'SAMLRequest' => $msgStr,
+                ])
+        );
 
         $response = SSO_Controller::publicSaml2RedirectRequest();
         $response->getBody()->rewind();
