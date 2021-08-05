@@ -64,8 +64,9 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
     // INVOICE: 
     //  - IS_REVERSED bool // storno
     //  - INVOICE_REPORTING enum (AUTO|MANU) // Rechnungslegung
-    //  - DOCUMENT_TYPE (jetziger TYPE) // Belegart (Rechnung/Storno/Gutschrift)
+    //  - DOCUMENT_TYPE (jetziger TYPE) // Belegart (Rechnung/Storno)
     //  - INVOICE_TYPE (Beitragsrechnung, ...) // Rechnungsart
+    //  obacht: bei storno rechnung wird der betrag (pro zeile) im vorzeichen umgekehrt
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
