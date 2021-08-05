@@ -27,6 +27,7 @@ class Addressbook_Frontend_AllTests
         $suite->addTest(Addressbook_Frontend_WebDAV_AllTests::suite());
         
         $suite->addTestSuite('Addressbook_Frontend_ActiveSyncTest');
+        $suite->addTestSuite(Addressbook_Frontend_JsonTest::class);
         $suite->addTestSuite('Addressbook_Frontend_CardDAVTest');
         
         return $suite;

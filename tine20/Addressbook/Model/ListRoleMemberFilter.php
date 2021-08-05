@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  * 
@@ -6,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -20,10 +21,34 @@ class Addressbook_Model_ListRoleMemberFilter extends Tinebase_Model_Filter_Abstr
     /**
      * @var array list of allowed operators
      */
-    protected $_operators = array(
-        0 => 'equals',
-        1 => 'in',
-    );
+    protected $_operators = [
+        'equals',
+        'in',
+        'definedBy',
+    ];
+
+    /**
+     * sets operator
+     *
+     * @param string $_operator
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function setOperator($_operator)
+    {
+        if (strpos($_operator, 'definedBy') !== false) {
+            $_operator = $this->_parseOperator($_operator, [
+                'setOperator' => [
+                    'oneOf' => true,
+                    'allOf' => true,
+                ],
+                'condition' => [
+                    'and' => true,
+                    'or' => true,
+                ]
+            ], $operatorParams);
+        }
+        parent::setOperator($_operator);
+    }
 
     /**
      * appends sql to given select statement
@@ -36,7 +61,7 @@ class Addressbook_Model_ListRoleMemberFilter extends Tinebase_Model_Filter_Abstr
         $correlationName = Tinebase_Record_Abstract::generateUID(30);
         $db = $_backend->getAdapter();
         $_select->joinLeft(
-            /* table  */ array($correlationName => $db->table_prefix . 'adb_list_m_role'),
+            /* table  */ array($correlationName => $_backend->getTablePrefix() . 'adb_list_m_role'),
             /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
             /* select */ array()
         );
