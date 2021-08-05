@@ -42,7 +42,7 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
     setValue: function(value, record) {
         const supr = Ext.form.TextField.prototype.setValue.createDelegate(this.secretField);
         
-        if (! record.get('secret')) {
+        if (!value && !record.id) {
             supr(i18n._('Generating secret key ...'));
             this.secretField.setDisabled(true);
             import(/* webpackChunkName: "Tinebase/js/base32-encode" */ 'base32-encode').then((module) => {
@@ -53,39 +53,38 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
                 this.onValueChange();
             });
         } else {
-            supr(value);
-            this.onValueChange();
+            this.explainText.setText(i18n._("Existing secret keys can't be viewed. You need to generate a new one if the old got lost."));
+            this.secretField.hide();
+            this.qrField.hide();
         }
+        
+        // this.afterIsRendered().then(() => {
+        //     this.editDialog.window.setTitle('yes');
+        // });
         
     },
 
     onValueChange: async function() {
-        const QRCode = await import(/* webpackChunkName: "Tinebase/js/qrcode" */ 'qrcode');
-        const otpURI = this.getOTPAuthURI();
-        const imgURL = await QRCode.toDataURL(otpURI);
-
-        this.qrField.el.child('img').dom.src = imgURL;
-    },
-
-    getOTPAuthURI: function() {
         const secret = this.secretField.getValue();
         const type = this.type.toLowerCase();
         const account = encodeURIComponent(JSON.parse(this.editDialog.record.json.account_id).accountLoginName);
         const issuer = encodeURIComponent(window.location.hostname);
 
         let uri = `otpauth://${type}/${issuer}:${account}?secret=${secret}&issuer=${issuer}`;
-        
         // uri += "&algorithm=" + this.editDialog.record.get('algorithm');
         // uri += "&digits=" + this.editDialog.record.get('digits');
         // uri += "&period=" + this.editDialog.record.get('period');
-
         if (type == "hotp")
             uri += "&counter=" + (this.editDialog.record.get('counter') || 0);
-
         // uri += "&lock=" + ???; // freeOTP only?
         uri += "&image=" + encodeURIComponent(Tine.Tinebase.common.getUrl() + Tine.Tinebase.registry.get('installLogo')); // freeOTP only?;
-    
-        return uri;
+        
+        const QRCode = await import(/* webpackChunkName: "Tinebase/js/qrcode" */ 'qrcode');
+        const imgURL = await QRCode.toDataURL(uri);
+        this.qrField.el.child('img').dom.src = imgURL;
+
+        const typeString = this.editDialog.record.constructor.getRecordName();
+        this.editDialog.window.setTitle(`${typeString} ${i18n._('for')} ${account} : ${issuer}`);
     }
 
 
