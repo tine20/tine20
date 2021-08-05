@@ -173,8 +173,8 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                     addGrant: true,
                     editGrant: true,
                     deleteGrant: true
-                }
-                path: `${currentPath}`,
+                },
+                path: `${currentPath}`
             }));
             
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
