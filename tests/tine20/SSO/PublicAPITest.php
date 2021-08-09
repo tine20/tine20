@@ -185,8 +185,8 @@ class SSO_PublicAPITest extends TestCase
                     'nonce' => 'nonce',
                     'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0],
                 ])->withParsedBody([
-                    'username' => 'tine20admin',
-                    'password' => 'tine20admin'
+                    'username' => TestServer::getInstance()->getTestCredentials()['username'],
+                    'password' => TestServer::getInstance()->getTestCredentials()['password'],
                 ])
         );
 
