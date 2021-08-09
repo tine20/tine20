@@ -1530,7 +1530,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($accountId)->jsonSerialize();
     }
 
-    public function getWebAuthnRegisterPublicKeyOptions(?string $accountId = null)
+    public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null)
     {
         if (null !== $accountId) {
             if (!Tinebase_Core::getUser()->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
@@ -1540,22 +1540,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $user = Tinebase_Core::getUser();
         }
+
+        /** @var Tinebase_Auth_MFA_WebAuthnAdapter $webauthnAdapter *
+        $webauthnAdapter = Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter();*/
 
         return Tinebase_Auth_Webauthn::getWebAuthnCreationOptions(true, $user)->jsonSerialize();
-    }
-
-    public function registerWebAuthnPublicKey(string $data, ?string $accountId = null)
-    {
-        if (null !== $accountId) {
-            if (!Tinebase_Core::getUser()->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
-                throw new Tinebase_Exception_AccessDenied('user has not right to register webauthn devices for other users');
-            }
-            $user = Tinebase_User::getInstance()->getFullUserById($accountId);
-        } else {
-            $user = Tinebase_Core::getUser();
-        }
-
-        Tinebase_Auth_Webauthn::webAuthnRegister($data, $user);
     }
 
     /**

@@ -60,11 +60,12 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
                     // not used in client, @see \Admin_Frontend_Json::getPossibleMFAs
                     // needs to implement Tinebase_Auth_MFA_UserConfigInterface
                     self::AVAILABLE_MODELS              => [
-                        Tinebase_Model_MFA_SmsUserConfig::class,
-                        Tinebase_Model_MFA_PinUserConfig::class,
-                        Tinebase_Model_MFA_YubicoOTPUserConfig::class,
                         Tinebase_Model_MFA_HOTPUserConfig::class,
+                        Tinebase_Model_MFA_PinUserConfig::class,
+                        Tinebase_Model_MFA_SmsUserConfig::class,
                         Tinebase_Model_MFA_TOTPUserConfig::class,
+                        Tinebase_Model_MFA_WebAuthnUserConfig::class,
+                        Tinebase_Model_MFA_YubicoOTPUserConfig::class,
                     ],
                 ],
                 self::VALIDATORS            => [

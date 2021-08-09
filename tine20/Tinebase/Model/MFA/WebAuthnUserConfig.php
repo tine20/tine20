@@ -22,6 +22,8 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
 {
     public const MODEL_NAME_PART = 'MFA_WebAuthnUserConfig';
 
+    public const FLD_PUBLIC_KEY_DATA = 'publicKeyData';
+
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -35,8 +37,18 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
         self::TITLE_PROPERTY                => 'Time based OTP (TOPT) is configured', // _('Time based OTP (TOPT) is configured')
 
         self::FIELDS                        => [
+            self::FLD_PUBLIC_KEY_DATA           => [
+                self::TYPE                          => self::TYPE_STRING,
+                self::DISABLED                      => true,
+            ],
         ]
     ];
+
+    public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
+    {
+        Tinebase_Auth_Webauthn::webAuthnRegister($this->{self::FLD_PUBLIC_KEY_DATA}, $newUser);
+        $this->{self::FLD_PUBLIC_KEY_DATA} = null;
+    }
 
     /**
      * holds the configuration object (must be declared in the concrete class)
