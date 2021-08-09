@@ -596,8 +596,8 @@ class SSO_Controller extends Tinebase_Controller_Event
             new SSO_Facade_OAuth2_ClientRepository(),
             new SSO_Facade_OAuth2_AccessTokenRepository(),
             new SSO_Facade_OAuth2_ScopeRepository(),
-            __DIR__ . '/keys/private.key',
-            __DIR__ . '/keys/public.key',
+            SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'],
+            SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey'],
             new \Idaas\OpenID\ResponseTypes\BearerTokenResponse
         );
 
