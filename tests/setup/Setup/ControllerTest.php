@@ -44,7 +44,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         }
         Tinebase_Group::unsetInstance();
         foreach (Tinebase_Acl_Roles::getInstance()->getRoleMemberships($setupUser->accountId) as $rId) {
-            Tinebase_Acl_Roles::getInstance()->removeRoleMember($rId, $setupUser->accountId);
+            Tinebase_Acl_Roles::getInstance()->removeRoleMember($rId, ['id' => $setupUser->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP]);
         }
         Tinebase_Acl_Roles::unsetInstance();
 
