@@ -216,6 +216,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
                 </field>'));
         }
 
+        $defaultContainer = null;
         if (Tinebase_Core::isReplica()) {
             $tries = 0;
             do {
@@ -228,6 +229,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
         } else {
             $defaultContainer = Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
         }
+        if (! $defaultContainer) {
+            throw new Setup_Exception('could not find default container');
+        }
+
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'importexport_definition SET container_id = "' .
             $defaultContainer->getId() . '"');
 
