@@ -590,6 +590,9 @@ msgstr "Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen od
 msgid "No preview available yet - Please try again in a few minutes."
 msgstr "Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einigen Minuten erneut."
 
+msgid "No preview available."
+msgstr "Keine Vorschau verfügbar."
+
 #: js/FilePicker.js:455
 msgid "Checking ..."
 msgstr "Prüfe…"
