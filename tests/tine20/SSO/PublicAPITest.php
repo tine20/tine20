@@ -17,6 +17,9 @@ use SAML2\Utils;
  */
 class SSO_PublicAPITest extends TestCase
 {
+    protected $_oldSaml2KeyCfg = null;
+    protected $_oldOauth2KeyCfg = null;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -25,19 +28,42 @@ class SSO_PublicAPITest extends TestCase
         $config->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED} = true;
         $config->{SSO_Config::SAML2}->{SSO_Config::ENABLED} = true;
 
-        $keys = $config->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS}[0];
-        $dir = '';
-        if (isset($keys['privatekey']) && is_file($keys['privatekey'])) {
-            $dir = dirname($keys['privatekey']);
-            chmod($keys['privatekey'], 0600);
+        $keys = $config->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS};
+        $this->_oldSaml2KeyCfg = is_object($keys) ? $keys->toArray() : $keys;
+        if (!isset($keys[0]['privatekey']) || !is_file($keys[0]['privatekey'])) {
+            $path = Tinebase_TempFile::getTempPath();
+            copy(__DIR__ . '/keys/saml2.pem', $path);
+            chmod($path, 0600);
+            $keys[0]['privatekey'] = $path;
         }
-        if (isset($keys['certificate']) && is_file($keys['certificate'])) {
-            $dir = dirname($keys['certificate']);
-            chmod($keys['certificate'], 0600);
+        if (!isset($keys[0]['certificate']) || !is_file($keys[0]['certificate'])) {
+            $path = Tinebase_TempFile::getTempPath();
+            copy(__DIR__ . '/keys/saml2.crt', $path);
+            chmod($path, 0600);
+            $keys[0]['certificate'] = $path;
         }
-        if (is_file($dir . '/private.key')) {
-            chmod($dir . '/private.key', 0600);
+        $config->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS} = $keys;
+
+        $keys = $config->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS};
+        $this->_oldOauth2KeyCfg = is_object($keys) ? $keys->toArray() : $keys;
+        if (!isset($keys[0]['privatekey']) || !is_file($keys[0]['privatekey'])) {
+            $path = Tinebase_TempFile::getTempPath();
+            copy(__DIR__ . '/keys/private.key', $path);
+            chmod($path, 0600);
+            $keys[0]['privatekey'] = $path;
         }
+        if (!isset($keys[0]['publickey']) || !is_file($keys[0]['publickey'])) {
+            $keys[0]['publickey'] = __DIR__ . '/keys/public.key';
+        }
+        $config->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} = $keys;
+    }
+
+    protected function tearDown(): void
+    {
+        SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS} = $this->_oldSaml2KeyCfg;
+        SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} = $this->_oldOauth2KeyCfg;
+
+        parent::tearDown();
     }
 
     protected function _createSAML2Config()

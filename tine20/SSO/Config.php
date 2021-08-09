@@ -21,6 +21,7 @@ class SSO_Config extends Tinebase_Config_Abstract
     public const ENABLED = 'enabled';
 
     public const OAUTH2 = 'oauth2';
+    public const OAUTH2_KEYS = 'keys';
 
     public const SAML2 = 'saml2';
     public const SAML2_ENTITYID = 'entityid';
@@ -45,6 +46,10 @@ class SSO_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false
                 ],
+                self::OAUTH2_KEYS           => [
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::DEFAULT_STR           => []
+                ]
             ],
             self::DEFAULT_STR           => [],
         ],
@@ -67,12 +72,7 @@ class SSO_Config extends Tinebase_Config_Abstract
                 ],
                 self::SAML2_KEYS            => [
                     self::TYPE                  => self::TYPE_ARRAY,
-                    self::DEFAULT_STR           => [
-                        [
-                            'privatekey' => __DIR__ . '/keys/saml2.pem',
-                            'certificate' => __DIR__ . '/keys/saml2.crt',
-                        ]
-                    ]
+                    self::DEFAULT_STR           => []
                 ]
             ],
             self::DEFAULT_STR           => [],
