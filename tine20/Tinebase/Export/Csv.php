@@ -109,13 +109,24 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
      * @param char $enclosure
      * @param char $escapeEnclosure
      */
-    public static function fputcsv($filePointer, $dataArray, $delimiter = ',', $enclosure = '"', $escapeEnclosure = '"')
+    public function fputcsv($filePointer, $dataArray, $delimiter = ',', $enclosure = '"', $escapeEnclosure = '"')
     {
         $string = "";
         $writeDelimiter = false;
         foreach($dataArray as $dataElement) {
             if ($writeDelimiter) {
                 $string .= $delimiter;
+            }
+            if (!$this->_config->raw && strlen($dataElement) > 0) {
+                switch (ord($dataElement)) {
+                    case 9:  // tab vertical
+                    case 13: // carriage return
+                    case 43: // +
+                    case 45: // -
+                    case 61: // =
+                    case 64: // @
+                        $dataElement = '\'' . $dataElement;
+                }
             }
             $escapedDataElement = (! is_array($dataElement)) ? preg_replace("/$enclosure/", $escapeEnclosure . $enclosure , $dataElement) : '';
             $string .= $enclosure . $escapedDataElement . $enclosure;
@@ -139,7 +150,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
         $this->_filehandle = ($this->_toStdout) ? STDOUT : fopen($filename, 'w');
         
         $fields = $this->_getFields();
-        self::fputcsv($this->_filehandle, $fields);
+        $this->fputcsv($this->_filehandle, $fields);
         
         $this->_exportRecords();
         
@@ -257,7 +268,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
                     $csvArray[] = $record->{$fieldName};
                 }
             }
-            self::fputcsv($this->_filehandle, $csvArray);
+            $this->fputcsv($this->_filehandle, $csvArray);
         }
     }
     

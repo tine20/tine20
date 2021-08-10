@@ -81,7 +81,7 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
             . '"RESPONSIBLE-adr_one_countryname","RESPONSIBLE-tel_work","RESPONSIBLE-tel_cell","RESPONSIBLE-email",', $export, 'headline wrong: ' . substr($export, 0, 360));
         $this->assertStringContainsString('"TASK-summary","PRODUCT-name"', $export, 'headline wrong: ' . substr($export, 0, 360));
         $this->assertStringContainsString('"PHPUnit LEAD","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market'), $export, 'data #1 wrong');
-        $this->assertStringContainsString('"Metaways Infosystems GmbH","Kneschke","Lars","Pickhuben 4","24xxx","Hamburg","DE","+49TELWORK","+49TELCELL","unittests@tine20.org","","","","","","","","","","","","","","","","","","","","","phpunit: crm test task",""', $export, 'relations wrong');
+        $this->assertStringContainsString('"Metaways Infosystems GmbH","Kneschke","Lars","Pickhuben 4","24xxx","Hamburg","DE","\'+49TELWORK","\'+49TELCELL","unittests@tine20.org","","","","","","","","","","","","","","","","","","","","","phpunit: crm test task",""', $export, 'relations wrong');
         
         $dateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat(NULL, NULL, NULL, 'date');
         $this->assertStringContainsString($dateString, $export, 'note date wrong');
