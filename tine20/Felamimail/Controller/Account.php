@@ -405,6 +405,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         Tinebase_EmailUser_XpropsFacade::setXprops($_record);
         $newEmailUserId = self::getUserInternalEmailUserId($_record);
         $newEmailUserUsername = $emailUserBackend->getLoginName($newEmailUserId, $user->accountLoginName, $_record->email);
+        if ($newEmailUserUsername === $user->accountEmailAddress) {
+            $newEmailUserUsername = $newEmailAddress;;
+        }
         $newEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user, [
             'user_id' => $newEmailUserId,
         ]);
