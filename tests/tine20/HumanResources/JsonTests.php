@@ -482,6 +482,14 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $taRelation['related_id'] = $ta2->getId();
         $stream[HumanResources_Model_Stream::FLD_TIME_ACCOUNTS][] = $ta2->getId();
         $stream['relations'][] = $taRelation;
+        $mods = $stream[HumanResources_Model_Stream::FLD_STREAM_MODALITIES];
+        $mods[] = [
+                HumanResources_Model_StreamModality::FLD_START => Tinebase_DateTime::now()->addMonth(3)->toString('Y-m-d'),
+                HumanResources_Model_StreamModality::FLD_INTERVAL => HumanResources_Model_StreamModality::INT_WEEKLY,
+                HumanResources_Model_StreamModality::FLD_NUM_INTERVAL => 10,
+                HumanResources_Model_StreamModality::FLD_HOURS_INTERVAL => 16,
+            ];
+        $stream[HumanResources_Model_Stream::FLD_STREAM_MODALITIES] = $mods;
 
         $stream = $this->_json->saveStream($stream);
         $this->assertArrayHasKey('relations', $stream);
