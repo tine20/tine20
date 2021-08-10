@@ -158,4 +158,21 @@ class Sales_SuppliersTest extends TestCase
         $record = $controller->create(new Sales_Model_Supplier(array('name' => 'auto3')));
         $this->assertEquals($initialNumber + 4, $record->number);
     }
+    
+    public function testUpdateSupplier()
+    {
+        $retVal = $this->_createSupplier();
+        $retVal['adr_name'] = 'test Name';
+        $retVal['adr_email'] = 'testMail@mail.test';
+
+        $result = $this->_json->saveSupplier($retVal);
+        $this->assertEquals('test Name', $result['postal_id']['name']);
+        $this->assertEquals('testMail@mail.test', $result['postal_id']['email']);
+
+        $retVal['adr_name'] = '';
+        $retVal['adr_email'] = '';
+        $result = $this->_json->saveSupplier($retVal);
+        $this->assertEquals('', $result['postal_id']['name']);
+        $this->assertEquals('', $result['postal_id']['email']);
+    }
 }

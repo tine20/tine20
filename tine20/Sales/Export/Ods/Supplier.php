@@ -118,7 +118,7 @@ class Sales_Export_Ods_Supplier extends Sales_Export_Ods_Abstract
 
         $this->_specialFieldDefinitions = array(array('header' => 'Postal Address', 'identifier' => 'postal_address', 'type' => 'postal'));
 
-        $filter = new Sales_Model_AddressFilter(array());
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'customer_id', 'operator' => 'in', 'value' => $supplierIds)
         ));

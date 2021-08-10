@@ -80,6 +80,8 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $i18n = Tinebase_Translation::getTranslation($this->_applicationName)->getAdapter();
         $type = $address['type'];
         
+        $ft .= !empty($address['name']) ? $address['name'] : '';
+        $ft .= !empty($address['email']) ? $address['email'] : '';
         $ft .= !empty($address['prefix1']) ? $address['prefix1'] : '';
         $ft .= !empty($address['prefix1']) && !empty($address['prefix2']) ? ' ' : '';
         $ft .= !empty($address['prefix2']) ? $address['prefix2'] : '';
@@ -143,5 +145,54 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         }
     
         return $_ids;
+    }
+
+
+    /**
+     * handle address
+     * save properties in record
+     * @param Tinebase_Record_Interface $_record the record
+     * @return  Tinebase_Record_Interface
+     *
+     */
+    public function resolvePostalAddress($_record) {
+        $postalAddress = [];
+        
+        foreach( $_record as $field => $value) {
+            if (strpos($field, 'adr_') !== FALSE) {
+                $postalAddress[substr($field, 4)] = $value;
+            }
+        }
+
+        //its only for the occasion after resolveVirtualFields
+        if (!isset($postalAddress['seq']) && isset($_record['postal_id']) && isset($_record['postal_id']['seq'])) {
+            $postalAddress['seq'] = $_record['postal_id']['seq'];
+        }
+
+        $postalAddress['customer_id'] = isset($_record['id']) ? $_record['id'] : $_record['name'];
+        $postalAddress['type'] = 'postal';
+
+        $_record['postal_id'] = $postalAddress;
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $_record['id'])));
+
+        $postalAddressRecord = Sales_Controller_Address::getInstance()->search($filter)->getFirstRecord();
+
+        // create if none has been found
+        if (! $postalAddressRecord) {
+            $postalAddressRecord = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($_record['postal_id']));
+        } else {
+            // update if it has changed
+            foreach ($postalAddressRecord as $field => $value) {
+                if (array_key_exists("adr_$field", $_record->toArray())) {
+                    $postalAddressRecord[$field] = $_record["adr_$field"];
+                }
+            }
+
+            $postalAddressRecord = Sales_Controller_Address::getInstance()->update($postalAddressRecord);
+        }
+        
+        return $_record;
     }
 }

@@ -197,7 +197,22 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'label'         => NULL,
                 )
             ),
-            
+            'adr_name' => [
+                'config' => [
+                    'duplicateOmit' => TRUE,
+                    'label'         => 'Name', //_('Name')
+                    'shy'           => TRUE
+                ],
+                'type'   => 'virtual',
+            ],
+            'adr_email' => [
+                'config' => [
+                    'duplicateOmit' => TRUE,
+                    'label'         => 'Email', //_('Name')
+                    'shy'           => TRUE
+                ],
+                'type'   => 'virtual',
+            ],
             'adr_prefix1' => array(
                 'config' => array(
                     'duplicateOmit' => TRUE,

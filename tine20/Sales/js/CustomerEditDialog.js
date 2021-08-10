@@ -301,6 +301,14 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [
                             [{
+                                name: 'adr_name',
+                                fieldLabel: this.app.i18n._('Name'),
+                                columnWidth: 47/100
+                            }, {
+                                name: 'adr_email',
+                                fieldLabel: this.app.i18n._('Email'),
+                                columnWidth: 47/100
+                            }, {
                                 name: 'adr_street',
                                 fieldLabel: this.app.i18n._('Street'),
                                 columnWidth: 47/100

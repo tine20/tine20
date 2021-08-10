@@ -173,6 +173,22 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
                 ),
                 'type'   => 'virtual',
             ),
+            'adr_name' => [
+                'config' => [
+                    'duplicateOmit' => TRUE,
+                    'label'         => 'Name', //_('Name')
+                    'shy'           => TRUE
+                ],
+                'type'   => 'virtual',
+            ],
+            'adr_email' => [
+                'config' => [
+                    'duplicateOmit' => TRUE,
+                    'label'         => 'Email', //_('Name')
+                    'shy'           => TRUE
+                ],
+                'type'   => 'virtual',
+            ],
             'adr_street' => array(
                 'config' => array(
                     'duplicateOmit' => TRUE,
