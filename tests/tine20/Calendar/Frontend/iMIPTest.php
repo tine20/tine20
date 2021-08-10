@@ -156,8 +156,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
     public function testExternalInvitationRequestMultiImport()
     {
-        if (Tinebase_Core::getUser()->accountLoginName === 'travis') {
-            static::markTestSkipped('FIXME on travis-ci');
+        if (Tinebase_Core::getUser()->accountLoginName === 'github') {
+            static::markTestSkipped('FIXME on github-ci');
         }
 
         $firstIMIP = $this->testExternalInvitationRequestAutoProcess();

@@ -13,11 +13,11 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestHelper.php';
 /**
  * @package     Tinebase
  */
-class TravisTests
+class GithubTests
 {
     public static function suite()
     {
-        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Travis Smoke Testing');
+        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Github Action Smoke Testing');
 
         // addressbook
         $suite->addTestSuite(Addressbook_JsonTest::class);

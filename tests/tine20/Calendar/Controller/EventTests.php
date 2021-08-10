@@ -1971,8 +1971,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             static::markTestSkipped('pgsql will be dropped, roll back of data not supported on pgsql');
         }
 
-        if (Tinebase_Core::getUser()->accountLoginName === 'travis') {
-            static::markTestSkipped('FIXME on travis-ci');
+        if (Tinebase_Core::getUser()->accountLoginName === 'github') {
+            static::markTestSkipped('FIXME on github-ci');
         }
 
         $instanceSeq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
