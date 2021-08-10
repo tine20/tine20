@@ -24,11 +24,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     protected $_db;
     
-    /**
-     * @var Tinebase_Backend_Sql
-     */
-    protected $_rolesBackend;
-    
     protected $_classCache = array(
         'getRoleMemberships' => array(),
         'hasRight'           => array(),
@@ -59,11 +54,12 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     protected function __construct()
     {
-        $this->_applicationName = 'Tinebase';
-        $this->_modelName = 'Tinebase_Model_Role';
+        $this->_applicationName = Tinebase_Config::APP_NAME;
+        $this->_modelName = Tinebase_Model_Role::class;
         $this->_backend = new Tinebase_Backend_Sql(array(
-            'modelName' => 'Tinebase_Model_Role',
-            'tableName' => 'roles',
+            Tinebase_Backend_Sql::MODEL_NAME    => Tinebase_Model_Role::class,
+            Tinebase_Backend_Sql::TABLE_NAME    => 'roles',
+            Tinebase_Backend_Sql::MODLOG_ACTIVE => true,
         ), $this->_getDb());
         $this->_purgeRecords = false;
         //$this->_resolveCustomFields = FALSE;
@@ -265,7 +261,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     public function getRoleById($_roleId)
     {
         /** @var Tinebase_Model_Role $role */
-        $role = $this->_getRolesBackend()->get((string)$_roleId);
+        $role = $this->_backend->get((string)$_roleId);
         return $role;
     }
     
@@ -279,7 +275,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     public function getRoleByName($_roleName)
     {
         /** @var Tinebase_Model_Role $role */
-        $role = $this->_getRolesBackend()->getByProperty($_roleName, 'name');
+        $role = $this->_backend->getByProperty($_roleName, 'name');
         return $role;
     }
 
@@ -294,7 +290,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        return $this->_getRolesBackend()->getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
+        return $this->_backend->getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
     }
     
     /**
@@ -354,7 +350,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     public function deleteAllRoles()
     {
-        $roleIds = $this->_getRolesBackend()
+        $roleIds = $this->_backend
             ->getAll()
             ->getArrayOfIds();
         
@@ -489,6 +485,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $select = $this->_getDb()->select()
             ->distinct()
             ->from(array('role_accounts' => SQL_TABLE_PREFIX . 'role_accounts'), array('role_id'))
+            ->join(['r' => $this->_backend->getTablePrefix() . $this->_backend->getTableName()], 'role_accounts.role_id = r.id AND r.is_deleted = 0', [])
             ->where($this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_id') . ' = ?', $accountId) . ' AND ' 
                 . $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_type') . ' = ?', $type));
         
@@ -642,7 +639,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     {
         $seq = intval($_oldRole->seq);
         $_oldRole->seq = $seq + 1;
-        $this->_getRolesBackend()->update($_oldRole);
+        $this->_backend->update($_oldRole);
 
         $newRole = $this->get($_oldRole->getId());
         $this->_writeModLog($newRole, $_oldRole);
@@ -955,24 +952,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         }
         
         return $this->_db;
-    }
-    
-    /**
-     * create backend for roles table
-     * 
-     * @return Tinebase_Backend_Sql
-     */
-    protected function _getRolesBackend()
-    {
-        if (!$this->_rolesBackend) {
-            $this->_rolesBackend = new Tinebase_Backend_Sql(array(
-                'modelName' => 'Tinebase_Model_Role', 
-                'tableName' => 'roles',
-                Tinebase_Backend_Sql::MODLOG_ACTIVE => true,
-            ), $this->_getDb());
-        }
-        
-        return $this->_rolesBackend;
     }
 
     /**
