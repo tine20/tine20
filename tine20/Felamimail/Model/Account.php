@@ -50,8 +50,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
     /**
      * external email user ids (for example in dovecot/postfix sql)
      */
-    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
-    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
+    public const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    public const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
