@@ -159,6 +159,8 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                 const [, final] = contenttype.match(/final_type=(.+)$/);
                 iconCls = final ? Tine.Tinebase.common.getMimeIconCls(final) : 'mime-icon-file';
                 text = '<b>' + me.app.i18n._('This file has no contents. The Upload has failed or has not yet finished.') + '</b>';
+            } else if (!contenttype) { // how to get all previewable types?
+                text = '<b>' + me.app.i18n._('No preview available.') + '</b>';
             } else {
                 text = '<b>' + me.app.i18n._('No preview available yet - Please try again in a few minutes.') + '</b>';
             }

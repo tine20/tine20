@@ -839,7 +839,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Tinebase_Model_FullUser $user
      * @return bool
      */
-    protected function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
+    public function _validateSecondFactor(Tinebase_Model_AccessLog $accessLog, Tinebase_Model_FullUser $user): void
     {
         $areaLock = Tinebase_AreaLock::getInstance();
         $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
@@ -1078,6 +1078,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $r->addGroup('/Autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->post('/Autodiscover.xml', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicApiMSAutodiscoverXml', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+        });
+        $r->addGroup('/.well-known', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/webfinger', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Webfinger::class, 'handlePublicGet', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });

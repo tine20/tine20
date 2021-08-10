@@ -106,4 +106,29 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
     {
         return $this->_privatId;
     }
+
+    public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
+    {
+        $this->{self::FLD_ACCOUNT_ID} = $newUser->getId();
+        if (($newAes = $this->getAesKey()) && $newId = $this->getPrivatId()) {
+            $cc = Tinebase_Auth_CredentialCache::getInstance();
+            $adapter = explode('_', get_class($cc->getCacheAdapter()));
+            $adapter = end($adapter);
+            try {
+                $cc->setCacheAdapter('Shared');
+                $sharedCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($newId,
+                    $newAes, null, true /* save in DB */, Tinebase_DateTime::now()->addYear(100));
+
+                $this->{self::FLD_CC_ID} = $sharedCredentials->getId();
+
+                if ($oldUser->mfa_configs && ($oldCfg = $oldUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
+                        $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) && ($ccId = $oldCfg
+                        ->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{self::FLD_CC_ID})) {
+                    $cc->delete($ccId);
+                }
+            } finally {
+                $cc->setCacheAdapter($adapter);
+            }
+        }
+    }
 }

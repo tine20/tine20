@@ -1,0 +1,19 @@
+{
+  "name": "sso",
+  "version": "0.0.1",
+  "description": "Tine 2.0 SSO",
+  "main": "sso.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "saml2"
+  ],
+  "author": "Cornelius Weiß",
+  "license": "AGPL-3.0",
+  "tine20": {
+    "entryPoints": [
+      "login.js"
+    ]
+  }
+}

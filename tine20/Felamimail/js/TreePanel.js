@@ -652,16 +652,17 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var recordData = Ext.copyTo({}, folderData, Tine.Felamimail.Model.Folder.getFieldNames());
         var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
         
-        Tine.log.debug('Added new folder:' + newRecord.get('globalname'));
-
-        this.ctxNode.leaf = false;
-        this.ctxNode.expand();
-        this.ctxNode.appendChild(this.loader.createNode(folderData));
-
-        const parentRecord = this.folderStore.getById(this.ctxNode.id);
-        if (parentRecord) parentRecord.set('has_children', true);
-        this.folderStore.add([newRecord]);
-        this.initNewFolderNode(newRecord);
+        // if ctxNode was not expanded -> expand and everything is fine,
+        if (!this.ctxNode.isExpanded()) {
+            this.ctxNode.reload();
+        } else {
+            // otherwise so some magic
+            this.ctxNode.appendChild(this.loader.createNode(folderData));
+            const parentRecord = this.folderStore.getById(this.ctxNode.id);
+            if (parentRecord) parentRecord.set('has_children', true);
+            this.folderStore.add([newRecord]);
+            this.initNewFolderNode(newRecord);
+        }
     },
     
     /**
@@ -677,10 +678,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             // node is not yet rendered -> reload parent
             var parentId = newRecord.get('parent_path').split('/').pop(),
                 parentNode = this.getNodeById(parentId);
-            parentNode.reload(function() {
+
+            return parentNode.reload(function() {
                 this.initNewFolderNode(newRecord);
             }, this);
-            return;
         }
         
         appendedNode.attributes.path = newRecord.get('path');

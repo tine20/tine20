@@ -1682,7 +1682,10 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             case self::TYPE_DYNAMIC_RECORD:
                 if (isset($fieldDef[self::CONFIG][self::REF_MODEL_FIELD]) && !isset($this->_converters[$fieldKey])) {
                     $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_DynamicRecord(
-                        $fieldDef[self::CONFIG][self::REF_MODEL_FIELD])];
+                        $fieldDef[self::CONFIG][self::REF_MODEL_FIELD],
+                        isset($fieldDef[self::CONFIG][self::PERSISTENT]) ?
+                            (bool)$fieldDef[self::CONFIG][self::PERSISTENT] : false
+                    )];
                 }
                 break;
             case 'custom':

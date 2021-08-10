@@ -593,7 +593,7 @@ Ext.form.MessageTargets = {
         },
         clear: function(field){
             field.el.removeClass(field.invalidClass);
-            field.el.dom.qtip = '';
+            if (field?.dom?.dom) field.el.dom.qtip = '';
         }
     },
     'title' : {

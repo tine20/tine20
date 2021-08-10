@@ -361,7 +361,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     }
     
     /**
-     * interceptor before add
+     * interceptor before add/update
      * 
      * @param array $emailUserData
      */

@@ -109,6 +109,7 @@ class Tinebase_ModelConfiguration_Const {
     const OWNING_APP = 'owningApp';
 
     const PAGING = 'paging';
+    const PERSISTENT = 'persistent';
 
     const QUERY_FILTER = 'queryFilter';
 

@@ -413,8 +413,6 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             record = node ? new this.recordClass(window.lodash.get(node, 'attributes.nodeRecord.data')) : null,
             selection = record ? [record] : [];
 
-        grid.currentFolderNode = node;
-
         if (this.hasGrid && gridSelectionModel) {
             gridSelectionModel.clearSelections();
         }

@@ -108,7 +108,7 @@ describe('message', () => {
     });
 });
 
-describe('email note preference', () => {
+describe.skip('email note preference', () => {
     test('open Felamimail settings and set note=yes', async () => {
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toClick('.x-menu-item-text', {text: 'E-Mail'});

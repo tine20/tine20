@@ -271,7 +271,10 @@ class Tinebase_Acl_RolesTest extends TestCase
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role_2']->getId(), array());
         
         Tinebase_Acl_Roles::getInstance()->deleteRoles(array($this->objects['role']->getId(), $this->objects['role_2']->getId()));
-      
+
+        $this->assertSame("1", Tinebase_Core::getDb()->query('select count(*) from ' . SQL_TABLE_PREFIX . 'roles where id = "' .
+            $this->objects['role']->getId() .'"')->fetchColumn(0));
+
         $this->expectException('Tinebase_Exception_NotFound');
         Tinebase_Acl_Roles::getInstance()->getRoleById($this->objects['role']->getId());
     }

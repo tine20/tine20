@@ -8,29 +8,159 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use OTPHP\TOTP;
+use OTPHP\HOTP;
+use ParagonIE\ConstantTime\Base32;
+
 class Tinebase_Auth_MFATest extends TestCase
 {
+    protected $unsetSharedCredentialKey = false;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         Tinebase_Auth_MFA::destroyInstances();
+
+        if (empty(Tinebase_Config::getInstance()->{Tinebase_Auth_CredentialCache_Adapter_Shared::CONFIG_KEY})) {
+            Tinebase_Config::getInstance()->{Tinebase_Auth_CredentialCache_Adapter_Shared::CONFIG_KEY} = Tinebase_Record_Abstract::generateUID();
+            $this->unsetSharedCredentialKey = true;
+        }
     }
 
     protected function tearDown(): void
     {
+        if ($this->unsetSharedCredentialKey) {
+            Tinebase_Config::getInstance()->delete(Tinebase_Auth_CredentialCache_Adapter_Shared::CONFIG_KEY);
+        }
         parent::tearDown();
         
         Tinebase_Auth_MFA::destroyInstances();
         Tinebase_AreaLock::destroyInstance();
     }
 
+    public function testTOTP()
+    {
+        $secret = Base32::encodeUpperUnpadded(random_bytes(64));
+
+        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
+            Tinebase_Model_MFA_UserConfig::class, [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'TOTPunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                new Tinebase_Model_MFA_TOTPUserConfig([
+                    Tinebase_Model_MFA_TOTPUserConfig::FLD_SECRET => $secret,
+                ]),
+        ]]);
+
+        $this->_createAreaLockConfig([], [
+            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_HTOTPAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => []
+        ]);
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
+        $mfa = Tinebase_Auth_MFA::getInstance('unittest');
+        $totp = TOTP::create($secret);
+
+        $this->assertFalse($mfa->validate('shaaaaaaaaaalala', $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected');
+
+        $this->assertTrue($mfa->validate($totp->at(time()), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t succeed');
+
+        $this->assertFalse($mfa->validate($totp->at(time()-120), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected on out of time range');
+
+        $this->assertFalse($mfa->validate($totp->at(time()+120), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected on out of time range');
+    }
+
+    public function testHOTP()
+    {
+        $secret = Base32::encodeUpperUnpadded(random_bytes(64));
+
+        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
+            Tinebase_Model_MFA_UserConfig::class, [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'HOTPunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_HOTPUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                new Tinebase_Model_MFA_HOTPUserConfig([
+                    Tinebase_Model_MFA_HOTPUserConfig::FLD_COUNTER => 0,
+                    Tinebase_Model_MFA_HOTPUserConfig::FLD_SECRET => $secret,
+                ]),
+        ]]);
+
+        $this->_createAreaLockConfig([], [
+            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_HOTPUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_HOTPConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_HTOTPAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => []
+        ]);
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
+        $mfa = Tinebase_Auth_MFA::getInstance('unittest');
+        $hotp = HOTP::create($secret);
+
+        $this->assertFalse($mfa->validate('shaaaaaaaaaalala', $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected');
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertTrue($mfa->validate($hotp->at(0), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t succeed');
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertFalse($mfa->validate($hotp->at(0), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected on second call');
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertTrue($mfa->validate($hotp->at(1), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t succeed');
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertFalse($mfa->validate($hotp->at(1), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected on second call');
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertTrue($mfa->validate($hotp->at(5), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t succeed');
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertFalse($mfa->validate($hotp->at(15), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected on out of bound call');
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertFalse($mfa->validate($hotp->at(5), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected on out of bound call');
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertFalse($mfa->validate($hotp->at(4), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected on out of bound call');
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->getUserById($this->_originalTestUser->getId(),
+            Tinebase_Model_FullUser::class);
+        $this->assertTrue($mfa->validate($hotp->at(6), $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t succeed');
+    }
+
     public function testYubicoOTP()
     {
-        if (empty(Tinebase_Config::getInstance()->{Tinebase_Auth_CredentialCache_Adapter_Shared::CONFIG_KEY})) {
-            self::markTestSkipped('shared credential cache key CONFIG_KEY required for this test');
-        }
-
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
             Tinebase_Model_MFA_UserConfig::class, [[
             Tinebase_Model_MFA_UserConfig::FLD_ID => 'yubicoOTPunittest',

@@ -71,6 +71,18 @@ export default class UploadFileTask {
                 nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], _.get(args, 'overwrite', false));
                 Tine.Tinebase.uploadManager.removeVirtualNode(args.uploadId);
             } catch (e) {
+                if (e.data.code === 403) {
+                    window.postal.publish({
+                        channel: "recordchange",
+                        topic: 'Filemanager.Node.delete',
+                        data: args.nodeData
+                    });
+
+                    Tine.Tinebase.uploadManager.removeVirtualNode(args.uploadId);
+                    reject(e.message);
+                    throw e;
+                }
+                
                 if (e.message === 'file exists') {
                     const button = await new Promise((resolve) => {
                         Tine.widgets.dialog.FileListDialog.openWindow({
@@ -95,7 +107,9 @@ export default class UploadFileTask {
                     nodeData.contenttype = `vnd.adobe.partial-upload; final_type=${nodeData.contenttype}; progress=0`;
                     nodeData.status = 'pending';
                     args.overwrite = true;
-                } else {
+                } 
+                
+                if (e.message === 'Node not found') {
                     const type = `vnd.adobe.partial-upload; final_type=${args.nodeData.type}; progress=0`;
                     nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], _.get(args, 'overwrite', false));
                 }
@@ -106,10 +120,10 @@ export default class UploadFileTask {
                 topic: 'Filemanager.Node.update',
                 data: nodeData
             });
-            
             try {
                 upload.upload();
             } catch (e) {
+                reject('upload failed');
             }
         });
     }

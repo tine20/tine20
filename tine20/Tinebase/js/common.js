@@ -803,6 +803,16 @@ Tine.Tinebase.common = {
     },
 
     /**
+     * linkify text
+     *
+     * @param {String} text
+     * @param {Ext.Element|Function} cb
+     */
+    findEmail: function(text, cb, scope) {
+        return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+    },
+
+    /**
      * Confirm application restart
      *
      * @param Boolean closewindow

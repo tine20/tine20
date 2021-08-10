@@ -866,11 +866,6 @@ parameters:
 			path: tine20/Addressbook/Model/ListMemberFilter.php
 
 		-
-			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListRoleMemberFilter.php
-
-		-
 			message: "#^Access to an undefined property Tinebase_Model_Preference\\:\\:\\$value\\.$#"
 			count: 3
 			path: tine20/Addressbook/Preference.php
@@ -13849,26 +13844,6 @@ parameters:
 			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$name\\.$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/WebDAV/Container.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$type\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/WebDAV/Directory.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_TempFile\\:\\:\\$name\\.$#"
-			count: 2
-			path: tine20/Tinebase/Frontend/WebDAV/Directory.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_TempFile\\:\\:\\$path\\.$#"
-			count: 2
-			path: tine20/Tinebase/Frontend/WebDAV/Directory.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountId\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/WebDAV/Directory.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$is_quarantined\\.$#"

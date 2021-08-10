@@ -298,6 +298,6 @@ Tine.Felamimail.setTreeContextMenus = function() {
     });
     
     // context menu for unselectable folders (like public/shared namespace)
-    config.actions = ['add'];
+    config.actions = [addFolderAction];
     this.unselectableFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
 };

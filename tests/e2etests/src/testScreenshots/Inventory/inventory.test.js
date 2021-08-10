@@ -4,7 +4,6 @@ const lib = require('../../lib/browser');
 require('dotenv').config();
 
 beforeAll(async () => {
-    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Inventarisierung');
     await page.waitFor(1000);
     await page.screenshot({path: 'screenshots/Inventarisierung/1_inventar_uebersicht.png'});
@@ -25,11 +24,10 @@ describe('mainScreen', () => {
     })
 });
 
-describe('Edit Contact', () => {
+describe('Edit Inventory Item', () => {
     let newPage;
     test('open EditDialog', async () => {
-        await expect(page).toClick('button', {text: 'Inventar Gegenstand hinzufügen'});
-        //console.log('Klick Button');
+        await expect(page).toClick('button', {text: 'Inventargegenstand hinzufügen'});
         newPage = await lib.getNewWindow();
         await newPage.waitFor(5000); // @todo waitfor selector...
         await newPage.screenshot({path: 'screenshots/Inventarisierung/2_inventar_gegenstand_neu.png'});
@@ -37,7 +35,6 @@ describe('Edit Contact', () => {
         await newPage.waitFor(1000);
         await newPage.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-trigger-wrap-focus');
         await newPage.screenshot({path: 'screenshots/Inventarisierung/3_inventar_gegenstand_status.png'});
-        //console.log('Get Popup');
     });
 
     test('accounting', async () => {
@@ -45,17 +42,6 @@ describe('Edit Contact', () => {
         await newPage.screenshot({path: 'screenshots/Inventarisierung/4_inventar_gegenstand_buchhaltung.png'});
 
     })
-
-    /*   test('notification', async () => {
-           await expect(newPage).toClick('span', {text: 'Alarm', clickCount: 1});
-           await newPage.click('.new-row .x-form-trigger.x-form-arrow-trigger');
-           await newPage.waitFor(500);
-
-           /*let combolist = await newPage.$('.x-combo-list[visibility=visible]');
-           await combolist.hover('.x-combo-list-item', {text: '1 Tag davor'});
-           await newPage.waitFor(1000);
-           await newPage.screenshot({path: 'screenshots/Aufgaben/3_aufgaben_alarm.png'});
-       })  */
 });
 
 afterAll(async () => {

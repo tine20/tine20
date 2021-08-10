@@ -37,6 +37,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
     protected $_enclosure = '"';
     protected $_escape_char = '\\';
     protected $_charset = 'utf-8';
+    protected $_doCsvInjectionEscaping = true;
 
     /**
      * the constructor
@@ -66,6 +67,9 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
         }
         if (null !== $this->_config->charset) {
             $this->_charset = $this->_config->charset;
+        }
+        if ($this->_config->raw) {
+            $this->_doCsvInjectionEscaping = false;
         }
 
         $this->_fields = [];
@@ -138,7 +142,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      */
     protected function _writeValue($_value)
     {
-        $this->_currentRow[] = $_value;
+        $this->_currentRow[] = $this->_doCsvInjectionEscaping ? $this->csvInjectionEscaping($_value) : $_value;
     }
 
     protected function _startRow()
@@ -202,5 +206,22 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
             throw new Tinebase_Exception_Backend('could not copy csv stream to stdout');
         }
         fclose($this->_filehandle);
+    }
+
+    public function csvInjectionEscaping($_value)
+    {
+        if (strlen($_value) > 0) {
+            switch (ord($_value)) {
+                case 9:  // tab vertical
+                case 13: // carriage return
+                case 43: // +
+                case 45: // -
+                case 61: // =
+                case 64: // @
+                    $_value = '\'' . $_value;
+            }
+        }
+
+        return $_value;
     }
 }

@@ -202,8 +202,9 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 self::$_server->debugExceptions = true;
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " headers: " . print_r(self::$_server->httpRequest->getHeaders(),
-                        true));
+                $hdrs = self::$_server->httpRequest->getHeaders();
+                unset($hdrs['Authorization']);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " headers: " . print_r($hdrs, true));
                 $contentType = self::$_server->httpRequest->getHeader('Content-Type');
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $this->_request->getMethod());
 

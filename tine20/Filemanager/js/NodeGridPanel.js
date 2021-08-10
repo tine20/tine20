@@ -56,12 +56,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     evalGrants: true,
     // initialLoadAfterRender: false,
 
-    /**
-     * grid specific
-     * @private
-     */
-    currentFolderNode: null,
-
     dataSafeEnabled: false,
 
     /**
@@ -254,18 +248,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @returns {boolean}
      */
     onBeforeEdit: function(row) {
-        const record = row.record;
-
-        // TODO do we have a function to find out top level nodes?
-        if (record.id && record.get('path') && (
-            ['myUser', 'otherUsers', 'shared'].indexOf(record.get('id')) !== -1
-            || record.get('path').match(/^\/personal\/\w+$/)
-        )) {
-            // do not allow to edit user/shared top level nodes
-            return false;
-        }
-
-        return true;
+        return Tine.Filemanager.nodeActionsMgr.checkConstraints('edit', row.record);
     },
 
     /**
@@ -723,8 +706,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      * @param {Ext.Component} button
      * @param {Ext.EventObject} event
-     *
-     * @todo currentfolderNode
      */
     onLoadParentFolder: function(button, event) {
         let currentFolderNode = _.get(this.getFilteredContainers(),'0');
@@ -929,6 +910,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         const path = _.get(nodeData, 'data.path', nodeData);
+        
         this.filterToolbar.filterStore.each(function (filter) {
             var field = filter.get('field');
             if (field === 'path') {
@@ -985,16 +967,14 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param event
      */
     onFilesSelect: async function (fileSelector, event) {
-        let app = Tine.Tinebase.appMgr.get('Filemanager'),
-            grid = this,
-            targetNode = grid.currentFolderNode ? grid.currentFolderNode : _.get(this.getFilteredContainers(), '0'),
-            gridStore = grid.store,
-            rowIndex = false,
-            nodeRecord = null;
+        const targetNode = _.get(this.getFilteredContainers(), '0');
+        const gridStore = this.store;
+        let rowIndex = false;
+        let nodeRecord = null;
         this.targetFolderPath = targetNode.attributes ? targetNode.attributes.path : _.get(targetNode, 'path');
 
         if(event && event.getTarget()) {
-            rowIndex = grid.getView().findRowIndex(event.getTarget());
+            rowIndex = this.getView().findRowIndex(event.getTarget());
         }
         
         if(targetNode.attributes) {
@@ -1019,6 +999,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }));
         
         if(folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}])) {
+            const app = Tine.Tinebase.appMgr.get('Filemanager');
             Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
                     app.i18n._('It is not permitted to store files in this folder!')
