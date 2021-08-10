@@ -30,7 +30,7 @@ final class Tinebase_Auth_Webauthn
         (new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository())->saveCredentialSource($credentialSource);
     }
 
-    public static function webAuthnAuthenticate(?string $data = null): Tinebase_Model_FullUser
+    public static function webAuthnAuthenticate(Tinebase_Model_MFA_WebAuthnConfig $config, ?string $data = null): Tinebase_Model_FullUser
     {
         /** @var \Psr\Http\Message\ServerRequestInterface $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
@@ -38,7 +38,7 @@ final class Tinebase_Auth_Webauthn
         /** @var \Webauthn\PublicKeyCredentialSource $result */
         $result = self::_getServer()->loadAndCheckAssertionResponse(
             $data ?: $request->getBody()->getContents(),
-            self::getWebAuthnRequestOptions(),
+            self::getWebAuthnRequestOptions($config),
             null,
             $request
         );
@@ -46,7 +46,7 @@ final class Tinebase_Auth_Webauthn
         return Tinebase_User::getInstance()->getFullUserById($result->getUserHandle());
     }
 
-    public static function getWebAuthnCreationOptions(bool $createChallenge = false, ?Tinebase_Model_FullUser $user = null): \Webauthn\PublicKeyCredentialCreationOptions
+    public static function getWebAuthnCreationOptions(bool $createChallenge = false, ?Tinebase_Model_FullUser $user = null, ?Tinebase_Model_MFA_WebAuthnConfig $config = null): \Webauthn\PublicKeyCredentialCreationOptions
     {
         if ($createChallenge) {
             if (null === $user) {
@@ -57,6 +57,26 @@ final class Tinebase_Auth_Webauthn
                     $user->accountLoginName, $user->getId(), $user->accountDisplayName
                 )
             );
+            if ($config) {
+                $criteria = new \Webauthn\AuthenticatorSelectionCriteria();
+                if ($config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_AUTHENTICATOR_ATTACHMENT}) {
+                    $criteria->setAuthenticatorAttachment(
+                        $config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_AUTHENTICATOR_ATTACHMENT}
+                    );
+                }
+                if ($config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_RESIDENT_KEY_REQUIREMENT}) {
+                    $criteria->setRequireResidentKey(
+                        \Webauthn\AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_REQUIRED ===
+                        $config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_RESIDENT_KEY_REQUIREMENT}
+                    );
+                }
+                if ($config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_USER_VERIFICATION_REQUIREMENT}) {
+                    $criteria->setUserVerification(
+                        $config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_USER_VERIFICATION_REQUIREMENT}
+                    );
+                }
+                $credentialCreationOptions->setAuthenticatorSelection($criteria);
+            }
             Tinebase_Session::getSessionNamespace(__CLASS__)->regchallenge = json_encode($credentialCreationOptions->jsonSerialize());
         } else {
             if (!($challenge = Tinebase_Session::getSessionNamespace(__CLASS__)->regchallenge)) {
@@ -68,7 +88,7 @@ final class Tinebase_Auth_Webauthn
         return $credentialCreationOptions;
     }
 
-    public static function getWebAuthnRequestOptions(?string $accountId = null): \Webauthn\PublicKeyCredentialRequestOptions
+    public static function getWebAuthnRequestOptions(Tinebase_Model_MFA_WebAuthnConfig $config, ?string $accountId = null): \Webauthn\PublicKeyCredentialRequestOptions
     {
         if (null === $accountId) {
             if (!($challenge = Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge)) {
@@ -85,8 +105,7 @@ final class Tinebase_Auth_Webauthn
                 $credDescriptors[] = $val->getPublicKeyCredentialDescriptor();
             }
             $credentialRequestOptions = self::_getServer()->generatePublicKeyCredentialRequestOptions(
-                // TODO .... to be discussed, needs to be configurable etc.
-                \Webauthn\PublicKeyCredentialRequestOptions::USER_VERIFICATION_REQUIREMENT_PREFERRED,
+                $config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_USER_VERIFICATION_REQUIREMENT},
                 $credDescriptors
             );
 

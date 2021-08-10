@@ -19,6 +19,10 @@ class Tinebase_Model_MFA_WebAuthnConfig extends Tinebase_Auth_MFA_AbstractUserCo
 {
     public const MODEL_NAME_PART = 'MFA_WenAuthnConfig';
 
+    public const FLD_AUTHENTICATOR_ATTACHMENT = 'authenticator_attachment';
+    public const FLD_USER_VERIFICATION_REQUIREMENT = 'user_verification_requirement';
+    public const FLD_RESIDENT_KEY_REQUIREMENT = 'resident_key_requirement';
+
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -29,6 +33,15 @@ class Tinebase_Model_MFA_WebAuthnConfig extends Tinebase_Auth_MFA_AbstractUserCo
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
 
         self::FIELDS                        => [
+            self::FLD_AUTHENTICATOR_ATTACHMENT      => [
+                self::TYPE                              => self::TYPE_STRING,
+            ],
+            self::FLD_USER_VERIFICATION_REQUIREMENT => [
+                self::TYPE                              => self::TYPE_STRING,
+            ],
+            self::FLD_RESIDENT_KEY_REQUIREMENT      => [
+                self::TYPE                              => self::TYPE_STRING,
+            ],
         ]
     ];
 

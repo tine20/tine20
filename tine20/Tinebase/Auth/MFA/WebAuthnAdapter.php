@@ -18,10 +18,15 @@
 class Tinebase_Auth_MFA_WebAuthnAdapter implements Tinebase_Auth_MFA_AdapterInterface
 {
     protected $_mfaId;
+    /**
+     * @var Tinebase_Model_MFA_WebAuthnConfig
+     */
+    protected $_config;
 
     public function __construct(Tinebase_Record_Interface $_config, string $id)
     {
         $this->_mfaId = $id;
+        $this->_config = $_config;
     }
 
     public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
@@ -31,8 +36,11 @@ class Tinebase_Auth_MFA_WebAuthnAdapter implements Tinebase_Auth_MFA_AdapterInte
 
     public function validate($_data, Tinebase_Model_MFA_UserConfig $_userCfg): bool
     {
+        /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
+        $config = Tinebase_Auth_MFA::getInstance($_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+            ->getAdapter()->getConfig();
         try {
-            Tinebase_Auth_Webauthn::webAuthnAuthenticate($_data);
+            Tinebase_Auth_Webauthn::webAuthnAuthenticate($config, $_data);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' webauthn mfa validation failed');
@@ -40,5 +48,10 @@ class Tinebase_Auth_MFA_WebAuthnAdapter implements Tinebase_Auth_MFA_AdapterInte
         }
 
         return true;
+    }
+
+    public function getConfig(): Tinebase_Model_MFA_WebAuthnConfig
+    {
+        return $this->_config;
     }
 }

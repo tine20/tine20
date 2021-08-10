@@ -1525,9 +1525,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
-    public function getWebAuthnAuthenticateOptions(string $accountId)
+    public function getWebAuthnAuthenticateOptionsForMFA(string $accountId, string $mfaId)
     {
-        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($accountId)->jsonSerialize();
+        /** @var Tinebase_Model_MFA_UserConfig $userCfg */
+        $userCfg = Tinebase_User::getInstance()->getFullUserById($accountId)->mfa_configs->getById($mfaId);
+        /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
+        $config = Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+            ->getAdapter()->getConfig();
+
+        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, $accountId)->jsonSerialize();
     }
 
     public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null)
@@ -1541,10 +1547,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $user = Tinebase_Core::getUser();
         }
 
-        /** @var Tinebase_Auth_MFA_WebAuthnAdapter $webauthnAdapter *
-        $webauthnAdapter = Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter();*/
+        /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
+        $config = Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter()->getConfig();
 
-        return Tinebase_Auth_Webauthn::getWebAuthnCreationOptions(true, $user)->jsonSerialize();
+        return Tinebase_Auth_Webauthn::getWebAuthnCreationOptions(true, $user, $config)->jsonSerialize();
     }
 
     /**
