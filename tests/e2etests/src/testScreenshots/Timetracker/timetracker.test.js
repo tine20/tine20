@@ -40,7 +40,7 @@ describe('timetracker', () => {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Stundenzettel'});
         });
 
-        test('open EditDialog', async () => {
+        test.skip('open EditDialog', async () => {
             editDialog = await lib.getEditDialog('Stundenzettel');
             await editDialog.screenshot({path: 'screenshots/Zeiterfassung/4_zeiterfassung_stundenzettel_neu.png'});
             await expect(editDialog).toClick('button', {text: 'Abbrechen'});
