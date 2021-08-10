@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS `dovecot_users` (
     `last_login_unix` int(11) DEFAULT NULL,
     `instancename` varchar(40) DEFAULT NULL,
     PRIMARY KEY (`userid`,`domain`),
-    UNIQUE KEY `username` (`username`)
+    UNIQUE KEY `username` (`username`),
+    UNIQUE KEY `loginname` (`loginname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `dovecot_usage` (

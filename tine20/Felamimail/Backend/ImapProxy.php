@@ -15,6 +15,7 @@
  *
  * @package     Felamimail
  * @subpackage  Backend
+ * @method getFolderStatus($globalName)
  */
 class Felamimail_Backend_ImapProxy
 {
