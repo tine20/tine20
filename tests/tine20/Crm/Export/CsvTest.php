@@ -80,7 +80,7 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
             . '"TASK-summary","PRODUCT-name"', $export, 'headline wrong: ' . substr($export, 0, 360));
         $this->assertContains('"PHPUnit","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market') . '","' 
             . $defaultContainerId . '"', $export, 'data #1 wrong');
-        $this->assertContains('"Metaways Infosystems GmbH","Kneschke","Lars","Pickhuben 4","24xxx","Hamburg","DE","+49TELWORK","+49TELCELL","unittests@tine20.org","","","","","","","","","","","","","","","","","","","","","phpunit: crm test task",""', $export, 'relations wrong');
+        $this->assertContains('"Metaways Infosystems GmbH","Kneschke","Lars","Pickhuben 4","24xxx","Hamburg","DE","\'+49TELWORK","\'+49TELCELL","unittests@tine20.org","","","","","","","","","","","","","","","","","","","","","phpunit: crm test task",""', $export, 'relations wrong');
         
         $dateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat(NULL, NULL, NULL, 'date');
         $this->assertContains($dateString, $export, 'note date wrong');
