@@ -60,11 +60,17 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     
     // Produkte:
     // - shortcut intern (wird als kurzbez. in subproduktzuordnung übernommen, in pos nicht benötigt) - varchar 20
-    // - title - varchar
+    // - title - varchar -> NAME! the field is called name ... fix the FE code to deal with it
     // - description - text
     // - gruppierung (Gruppierung von Positionen z.B. A implementierung, B regelm., C zusatz) - varchar - autocomplete
+    // why? this is done once its added to a position no?
+
     // - anzahl
+    // part of the position? not the product?
+
     // - anzahl aus accounting (ja/nein)
+    // not sure, can we do when we do it?
+
     // - einheit - varchar
     // - verkaufspreis (pro einheit) 
     // - steuersatz - percentage

@@ -19,17 +19,25 @@
 class Sales_Model_Product extends Tinebase_Record_NewAbstract
 {
     public const FLD_ACCOUNTABLE = 'accountable';
-    public const FLD_CATEGORY = 'category';
+    public const FLD_CATEGORY = 'category'; // still needed? if no -> migration script
+    public const FLD_COSTCENTER = 'costcenter'; // -> record
     public const FLD_DESCRIPTION = 'description';
-    public const FLD_GTIN = 'gtin';
-    public const FLD_IS_ACTIVE = 'is_active';
-    public const FLD_LIFESPAN_END = 'lifespan_end';
-    public const FLD_LIFESPAN_START = 'lifespan_start';
-    public const FLD_MANUFACTURER = 'manufacturer';
+    public const FLD_GROUP = 'group'; // = FLD_CATEGORY ?
+    public const FLD_GTIN = 'gtin'; // still needed? if no -> migration script
+    public const FLD_IS_ACTIVE = 'is_active'; // still needed? if no -> migration script
+    public const FLD_IS_SALESPRODUCT = 'is_salesproduct'; // -> bool
+    public const FLD_LIFESPAN_END = 'lifespan_end'; // still needed? if no -> migration script
+    public const FLD_LIFESPAN_START = 'lifespan_start'; // still needed? if no -> migration script
+    public const FLD_MANUFACTURER = 'manufacturer'; // still needed? if no -> migration script
     public const FLD_NAME = 'name';
-    public const FLD_NUMBER = 'number';
-    public const FLD_PURCHASEPRICE = 'purchaseprice';
-    public const FLD_SALESPRICE = 'salesprice';
+    public const FLD_NUMBER = 'number'; // still needed? if no -> migration script
+    public const FLD_PURCHASEPRICE = 'purchaseprice'; // still needed? if no -> migration script
+    public const FLD_SALESPRICE = 'salesprice'; // still needed? if no -> migration script
+    public const FLD_SALESTAX = 'salestax'; // -> tax, default is default tax config? sales tax? isnt that called VAT?
+    public const FLD_SHORTCUT = 'shortcut'; // -> string
+    public const FLD_SUBPRODUCTS = 'subproducts'; // -> recordset of Sales_Model_SubProduct dependent records
+    public const FLD_UNFOLD_TYPE = 'unfold_type'; // -> keyfield (Bundle, Set, leer)
+    public const FLD_UNIT = 'unit'; // -> string or keyfield? ... schon keyfield oder eigenes model/table natürlich
 
     public const MODEL_NAME_PART = 'Product';
     public const TABLE_NAME = 'sales_products';
@@ -40,7 +48,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 7,
+        self::VERSION => 8,
         self::MODLOG_ACTIVE => true,
 
         self::APP_NAME => Sales_Config::APP_NAME,
@@ -68,6 +76,19 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::FLD_DESCRIPTION => [
                     self::COLUMNS               => [self::FLD_DESCRIPTION],
                     self::FLAGS                 => [self::TYPE_FULLTEXT],
+                ],
+            ],
+        ],
+
+        self::ASSOCIATIONS              => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                self::FLD_COSTCENTER        => [
+                    self::TARGET_ENTITY         => Sales_Model_CostCenter::class,
+                    self::FIELD_NAME            => self::FLD_COSTCENTER,
+                    self::JOIN_COLUMNS          => [[
+                        self::NAME                  => self::FLD_COSTCENTER,
+                        self::REFERENCED_COLUMN_NAME=> 'id',
+                    ]],
                 ],
             ],
         ],
@@ -181,6 +202,47 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 ],
                 self::DEFAULT_VAL => true,
             ],
+            self::FLD_SUBPRODUCTS => [
+                self::LABEL => 'Subproducts', // _('Subproducts')
+                self::TYPE => self::TYPE_RECORDS,
+                self::CONFIG => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    self::MODEL_NAME            => Sales_Model_SubProductMapping::MODEL_NAME_PART,
+                    self::REF_ID_FIELD          => Sales_Model_SubProductMapping::FLD_PARENT_ID,
+                    self::DEPENDENT_RECORDS     => true,
+                ],
+                self::RECURSIVE_RESOLVING => true,
+            ],
+            self::FLD_SHORTCUT => [
+                self::LABEL => 'Shortcut', // _('Shortcut')
+                self::TYPE => self::TYPE_STRING,
+                self::NULLABLE => true,
+            ],
+            self::FLD_IS_SALESPRODUCT => [
+                self::LABEL => 'Is Sales Product', // _('Is Sales Product')
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL => false,
+            ],
+            self::FLD_UNFOLD_TYPE => [
+                self::LABEL => 'Unfold Type', // _('Category')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NULLABLE => true,
+                self::NAME => Sales_Config::PRODUCT_UNFOLDTYPE,
+            ],
+            self::FLD_COSTCENTER => [
+                self::LABEL => 'Costcenter', // _('Costcenter')
+                self::TYPE => self::TYPE_RECORD,
+                self::CONFIG => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    self::MODEL_NAME            => Sales_Model_CostCenter::MODEL_NAME_PART,
+                ],
+                self::NULLABLE => true,
+            ],
+            self::FLD_SALESTAX => [
+                self::LABEL => 'Salestax or VAT anybody?', // _('Salestax')
+                self::TYPE => self::TYPE_FLOAT,
+                self::NULLABLE => true,
+            ]
         ]
     ];
 

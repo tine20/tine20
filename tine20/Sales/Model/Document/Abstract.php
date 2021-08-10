@@ -2,34 +2,45 @@
 /**
  * Tine 2.0
  *
- * @package     Tinebase
- * @subpackage  MFA
+ * @package     Sales
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 /**
- * MFA_UserConfig Model
+ * abstract Document Model
  *
- * @package     Tinebase
- * @subpackage  MFA
+ * @package     Sales
+ * @subpackage  Model
  */
-class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
+abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'AbstractDocument'; // als konkrete document_types gibt es Offer, Order, DeliveryNote, Invoice (keine Gutschrift!)
+    //const MODEL_NAME_PART = ''; // als konkrete document_types gibt es Offer, Order, DeliveryNote, Invoice (keine Gutschrift!)
 
     const FLD_ID = 'id';
     const FLD_DOCUMENT_CATEGORY = 'document_category'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
+
+    // TODO FIXME plural? we might have different document types refered to, record set issue!
     const FLD_REFERENCE_DOCUMENT = 'reference_document'; // virtual, link
+
     const FLD_NOTE = 'note';
+
+    // TODO FIXME denormalized.... as json in the document or as copy in the db?
     const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg
+    // just a reference to adb?
     const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern
+    // TODO FIXME denormalized.... as json in the document or as copy in the db?
     const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
+
+    // TODO was das?
     const FLD_CUSTOMER_REFERENCE = 'customer_reference'; // varchar 255
     
     const FLD_DOCUMENT_DATE = 'date'; // Belegdatum NICHT Buchungsdatum, das kommt noch unten
+
+    // TODO denormalized?
     const FLD_PAYMENT_TERMS_ID = 'payment_terms_id'; // Sales_Model_PaymentTerms
     
     const FLD_POSITIONS = 'positions'; // virtuell recordSet
@@ -95,29 +106,49 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Sales_Config::APP_NAME,
-        self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Document', // ngettext('Document', 'Documents', n)
         self::RECORDS_NAME                  => 'Documents',
         self::TITLE_PROPERTY                => self::FLD_DOCUMENT_NUMBER,
+        self::MODLOG_ACTIVE                 => true,
 
-        self::FIELDS                        => [
-            self::FLD_ID                        => [
-                self::TYPE                          => self::TYPE_STRING,
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED
+        self::ASSOCIATIONS              => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                self::FLD_CUSTOMER_ID         => [
+                    self::TARGET_ENTITY         => Sales_Model_Document_Customer::class,
+                    self::FIELD_NAME            => self::FLD_CUSTOMER_ID,
+                    self::JOIN_COLUMNS          => [[
+                        self::NAME                  => self::FLD_CUSTOMER_ID,
+                        self::REFERENCED_COLUMN_NAME=> 'id',
+                    ]],
                 ],
             ],
+        ],
+
+        self::FIELDS                        => [
             self::FLD_DOCUMENT_NUMBER => [
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING, // @TODO nummerkreise sollen zentral confbar sein!!!
                 self::LABEL                     => 'Document Number', //_('Document Number')
-                self::VALIDATORS                => [
+                self::CONFIG                    => [
+
+                ],
+                /*self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-                ]
+                ]*/
             ],
-
-            self::FLD_REFERENCE_DOCUMENT => [
+            self::FLD_CUSTOMER_ID       => [
+                self::TYPE                  => self::TYPE_RECORD,
+                self::CONFIG                => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    self::MODEL_NAME            => Sales_Model_Document_Customer::MODEL_NAME_PART,
+                ],
+                self::NULLABLE              => false, // only for offers this is nullable, by default its false
+                self::VALIDATORS            => [ // only for offers this is allow empty true, by default its false
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+            ],
+            /*self::FLD_REFERENCE_DOCUMENT => [
                 // self::TYPE                      => self::TYPE_VIRTUAL, // @TODO nummerkreise sollen zentral confbar sein!!!
                 self::LABEL                     => 'Reference Document', //_('Document Number')
                 self::TYPE                      => self::TYPE_RECORD,
@@ -142,10 +173,11 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
 //                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
 //                ],
 //            ],
+            */
             self::FLD_NOTE                      => [
-                self::TYPE                          => self::TYPE_STRING,
+                self::TYPE                          => self::TYPE_TEXT,
                 self::LABEL                         => 'Note', //_('Note')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true,],
+                self::NULLABLE                      => true,
             ],
         ]
     ];
@@ -156,12 +188,4 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
-
-    public function toFEArray(): array
-    {
-        $result = $this->toArray();
-//        $result[self::FLD_CONFIG] = $this->{self::FLD_CONFIG}->toFEArray();
-
-        return $result;
-    }
 }

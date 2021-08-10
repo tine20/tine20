@@ -98,6 +98,10 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DOCUMENT_CATEGORY = 'documentCategory';
+
+    const PRODUCT_UNFOLDTYPE = 'productUnfoldType';
+
+    const SUBPRODUCT_POSITION_FLAG = 'subProductPositionFlag';
     
     /**
      * Invoice Type
@@ -241,6 +245,38 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'DEFAULT'
             )
         ),
+        self::PRODUCT_UNFOLDTYPE => [
+            self::LABEL                 => 'Product Unfold Type', //_('Product Unfold Type')
+            self::DESCRIPTION           => 'Product Unfold Type', //_('Product Unfold Type')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'BUNDLE', 'value' => 'Bundle', 'system' => true], // _('Shared')
+                    ['id' => 'SET', 'value' => 'Set', 'system' => true], // _('Own')
+                ],
+            ],
+        ],
+        self::SUBPRODUCT_POSITION_FLAG => [
+            self::LABEL                 => 'SubProduct Position Flag', //_('SubProduct Position Flag')
+            self::DESCRIPTION           => 'SubProduct Position Flag', //_('SubProduct Position Flag')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'NONE', 'value' => 'None', 'system' => true], // _('None')
+                    ['id' => 'SHARED', 'value' => 'Shared', 'system' => true], // _('Shared')
+                    ['id' => 'OWN', 'value' => 'Own', 'system' => true], // _('Own')
+                ],
+                self::DEFAULT_STR => 'NONE',
+            ],
+        ],
         self::PRODUCT_NUMBER_GENERATION => array(
                                    //_('Product Number Creation')
             'label'                 => 'Product Number Creation',

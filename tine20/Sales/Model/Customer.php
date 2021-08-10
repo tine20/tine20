@@ -66,7 +66,9 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 // TODO number can't be part of query filter because it is an integer
                 // for mysql it is ok, but for pgsql we need a typecast...
                 //'queryFilter' => TRUE,
-                'type'        => 'integer'
+                'type'        => self::TYPE_BIGINT,
+                self::UNSIGNED => true,
+                self::DEFAULT_VAL => 0,
             ),
             'name' => array(
                 'label'       => 'Name', // _('Name')
@@ -81,19 +83,22 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'duplicateCheckGroup' => 'name',
                 'group'       => 'accounting',
                 'queryFilter' => TRUE,
+                self::NULLABLE => true,
             ),
             'url' => array(
                 'label'       => 'Web', // _('Web')
                 'type'        => 'text',
                 'group'       => 'misc',
-                'shy'         => TRUE
+                'shy'         => TRUE,
+                self::NULLABLE => true,
             ),
             'description' => array(
                 'label'       => 'Description', // _('Description')
                 'group'       => 'core',
                 'type'        => 'fulltext',
                 'queryFilter' => TRUE,
-                'shy'         => TRUE
+                'shy'         => TRUE,
+                self::NULLABLE => true,
             ),
             'cpextern_id'       => array(
                 'label'   => 'Contact Person (external)',    // _('Contact Person (external)')
@@ -106,6 +111,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 ),
                 'recursiveResolving' => true,
+                self::NULLABLE => true,
             ),
             'cpintern_id'    => array(
                 'label'      => 'Contact Person (internal)',    // _('Contact Person (internal)')
@@ -118,47 +124,57 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 ),
                 'recursiveResolving' => true,
+                self::NULLABLE => true,
             ),
             'vatid' => array (
                 'label'   => 'VAT ID', // _('VAT ID')
                 'type'    => 'text',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'credit_term' => array (
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',
                 'group'   => 'accounting',
-                'default' => 10,
-                'shy'     => TRUE
+                self::UNSIGNED => true,
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
-                'type'    => 'text',
-                'group'   => 'accounting'
+                'type'    => self::TYPE_STRING,
+                'group'   => 'accounting',
+                self::NULLABLE => true,
+                self::LENGTH => 4,
             ),
             'currency_trans_rate' => array (
                 'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')
                 'type'    => 'float',
                 'group'   => 'accounting',
                 'default' => 1,
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::NULLABLE => true,
+                self::UNSIGNED => true, // TODO FIXME doesnt work?!
             ),
             'iban' => array (
                 'label'   => 'IBAN',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'bic' => array (
                 'label'   => 'BIC',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'discount' => array (
                 'label'   => 'Discount (%)', // _('Discount (%)')
                 'type'    => 'float',
                 'group'   => 'accounting',
-                'default' => 0.0
+                self::NULLABLE => true,
+                self::UNSIGNED => true, // TODO FIXME doesnt work?!
             ),
             'delivery' => array (
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),

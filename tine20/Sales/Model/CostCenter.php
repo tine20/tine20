@@ -17,6 +17,8 @@
  */
 class Sales_Model_CostCenter extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'CostCenter';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *

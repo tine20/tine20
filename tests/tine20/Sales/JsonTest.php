@@ -16,7 +16,7 @@ class Sales_JsonTest extends TestCase
     /**
      * @var Sales_Frontend_Json
      */
-    protected $_instance = array();
+    protected $_instance = null;
 
     protected $_deleteContracts = array();
     /**
@@ -460,6 +460,34 @@ class Sales_JsonTest extends TestCase
         $savedProductNameChangedAgain = $this->_instance->saveProduct($savedProductNameChanged);
         
         $this->assertEquals('PHPUnit test product', $savedProductNameChangedAgain['name']);
+    }
+
+    public function testSubProducts()
+    {
+        $product = $this->_getProduct();
+        $subProduct1 = $this->_getProduct();
+        $subProduct1->name = 'sub1';
+        $savedSubProduct1 = $this->_instance->saveProduct($subProduct1->toArray());
+        $subMapping1 = new Sales_Model_SubProductMapping([
+            Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $savedSubProduct1,
+            Sales_Model_SubProductMapping::FLD_SHORTCUT => 'shoo'
+        ], true);
+        $subProduct2 = $this->_getProduct();
+        $subProduct2->name = 'sub2';
+        $savedSubProduct2 = $this->_instance->saveProduct($subProduct2->toArray());
+        $subMapping2 = new Sales_Model_SubProductMapping([
+            Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $savedSubProduct2,
+            Sales_Model_SubProductMapping::FLD_SHORTCUT => 'lorem'
+        ], true);
+
+        $product->{Sales_Model_Product::FLD_SUBPRODUCTS} = [
+            $subMapping1->toArray(),
+            $subMapping2->toArray(),
+        ];
+
+        $savedProduct = $this->_instance->saveProduct($product->toArray());
+        $this->assertArrayHasKey(Sales_Model_Product::FLD_SUBPRODUCTS, $savedProduct);
+        $this->assertCount(2, $savedProduct[Sales_Model_Product::FLD_SUBPRODUCTS]);
     }
     
     /**
