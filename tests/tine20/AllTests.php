@@ -38,6 +38,7 @@ class AllTests
             'Courses',
             'ActiveSync',
             'Filemanager',
+            'Projects',
             'HumanResources',
             'Inventory',
             'ExampleApplication',
