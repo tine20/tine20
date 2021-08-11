@@ -373,6 +373,11 @@ class Tinebase_ApplicationTest extends TestCase
                 Phone_Model_Call::class,
                 Phone_Model_MyPhone::class,
             ),
+            'Projects' => array(
+                Projects_Model_AttendeeRole::class,
+                Projects_Model_Project::class,
+                Projects_Model_Status::class,
+            ),
             'Sales' => array(
                 Sales_Model_Address::class,
                 Sales_Model_Config::class,
