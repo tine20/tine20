@@ -65,7 +65,19 @@ class Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository implements Publi
             ]));
         } else {
             $webauthnPublicKey->{Tinebase_Model_WebauthnPublicKey::FLD_DATA} = $publicKeyCredentialSource->jsonSerialize();
-            Tinebase_Controller_WebauthnPublicKey::getInstance()->update($webauthnPublicKey);
+            $unsetUser = false;
+            try {
+                if (!Tinebase_Core::getUser()) {
+                    $unsetUser = true;
+                    Tinebase_Core::setUser(Tinebase_User::getInstance()->getFullUserById(
+                        $publicKeyCredentialSource->getUserHandle()));
+                }
+                Tinebase_Controller_WebauthnPublicKey::getInstance()->update($webauthnPublicKey);
+            } finally {
+                if ($unsetUser) {
+                    Tinebase_Core::unsetUser();
+                }
+            }
         }
     }
 }

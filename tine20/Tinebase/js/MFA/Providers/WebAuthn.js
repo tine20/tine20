@@ -21,6 +21,7 @@ class WebAuthn extends Abstract {
         const rfc4648 = await import(/* webpackChunkName: "Tinebase/js/rfc4648" */ 'rfc4648');
         const publicKeyOptions = await Tine.Tinebase.getWebAuthnAuthenticateOptionsForMFA(this.username, this.mfaDevice.id);
         const accountid = publicKeyOptions.extensions.userHandle;
+        console.log('accountid', accountid)
         publicKeyOptions.challenge = rfc4648.base64url.parse(publicKeyOptions.challenge, { loose: true });
         for (let allowCredential of publicKeyOptions.allowCredentials) {
             allowCredential.id = rfc4648.base64url.parse(allowCredential.id, { loose: true });
@@ -39,7 +40,7 @@ class WebAuthn extends Abstract {
                     clientDataJSON: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.clientDataJSON)),
                     authenticatorData: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.authenticatorData)),
                     signature: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.signature)),
-                    userHandle: rfc4648.base64url.stringify(accountid)
+                    userHandle: rfc4648.base64url.stringify(Uint8Array.from(accountid, c => c.charCodeAt(0)))
                 }
             }
 
