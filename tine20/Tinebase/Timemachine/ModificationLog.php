@@ -1518,12 +1518,16 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                     $plain = "Error applying modlog: \n" . print_r($modification->toArray(), true);
                     $plain .= "\n\n" . $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString();
+                    $subject = 'replication client error';
+                    if (! empty(Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL})) {
+                        $subject .= ' (' . Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL} . ')';
+                    }
 
                     foreach ($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST} as $recipient) {
                         $recipients = array(new Addressbook_Model_Contact(array('email' => $recipient), true));
                         try {
                             Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients,
-                                'replication client error', $plain);
+                                $subject, $plain);
                         } catch (Exception $e) {
                             // skipping recipient
                             Tinebase_Exception::log($e);
