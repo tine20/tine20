@@ -21,7 +21,6 @@ class WebAuthn extends Abstract {
         const rfc4648 = await import(/* webpackChunkName: "Tinebase/js/rfc4648" */ 'rfc4648');
         const publicKeyOptions = await Tine.Tinebase.getWebAuthnAuthenticateOptionsForMFA(this.username, this.mfaDevice.id);
         const accountid = publicKeyOptions.extensions.userHandle;
-        console.log('accountid', accountid)
         publicKeyOptions.challenge = rfc4648.base64url.parse(publicKeyOptions.challenge, { loose: true });
         for (let allowCredential of publicKeyOptions.allowCredentials) {
             allowCredential.id = rfc4648.base64url.parse(allowCredential.id, { loose: true });
@@ -47,35 +46,22 @@ class WebAuthn extends Abstract {
             const unlockMethod = this.unlockMethod || Tine.Tinebase_AreaLock.unlock
             await unlockMethod(this.areaName, this.mfaDevice.id, JSON.stringify(publicKeyData));
         } catch (e) {
-            //@TODO!!!
-            debugger
+            console.error(e);
+            Ext.MessageBox.show({
+                icon: Ext.MessageBox.WARNING,
+                buttons: Ext.MessageBox.OKCANCEL,
+                title: i18n._('Error'),
+                msg: i18n._("FIDO2 WebAuthn authentication failed. Try again?"),
+                fn: (btn) => {
+                    if (btn === 'ok') {
+                        Ext.MessageBox.hide();
+                        return this.unlock();
+                    } else {
+                        throw new Error('USERABORT');
+                    }
+                }
+            });
         }
-        
-
-        
-        // let me = this
-        // return new Promise((resolve, reject) => {
-        //     let pwDlg = new Tine.Tinebase.widgets.dialog.PasswordDialog({
-        //         windowTitle: me.windowTitle,
-        //         questionText: me.questionText,
-        //         passwordFieldLabel: me.passwordFieldLabel,
-        //         allowEmptyPassword: false,
-        //         hasPwGen: false,
-        //         locked: !me.isOTP
-        //     })
-        //     pwDlg.openWindow()
-        //     pwDlg.on('apply', async (password) => {
-        //         try {
-        //             const unlockMethod = this.unlockMethod || Tine.Tinebase_AreaLock.unlock
-        //             resolve(await unlockMethod(me.areaName, me.mfaDevice.id, password))
-        //         } catch (e) {
-        //             reject(e)
-        //         }
-        //     })
-        //     pwDlg.on('cancel', () => {
-        //         reject(new Error('USERABORT'))
-        //     })
-        // })
     }
 }
 export default WebAuthn

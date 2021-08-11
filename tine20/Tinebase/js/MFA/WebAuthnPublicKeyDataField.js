@@ -78,9 +78,24 @@ const WebAuthnPublicKeyDataField = Ext.extend(Ext.form.FieldSet, {
             }
             
             this.publicKeyDataField.setValue(JSON.stringify(publicKeyData));
+            this.editDialog.record.set('id', Tine.Tinebase.data.Record.generateUID());
+            this.editDialog.onSaveAndClose();
         } catch (e) {
-            //@TODO!!!
-            debugger
+            console.error(e);
+            Ext.MessageBox.show({
+                icon: Ext.MessageBox.WARNING,
+                buttons: Ext.MessageBox.OKCANCEL,
+                title: i18n._('Error'),
+                msg: i18n._("FIDO2 WebAuthn registration failed. Try again?"),
+                fn: (btn) => {
+                    if (btn === 'ok') {
+                        Ext.MessageBox.hide();
+                        return this.register();
+                    } else {
+                        this.editDialog.window.close(true);
+                    }
+                }
+            });
         }
         
         return publicKeyOptions;
