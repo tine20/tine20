@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  * 
@@ -6,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -187,7 +188,12 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
 
                     // legacy! should be notfound exception .-/
                     } catch (Tinebase_Exception_Record_NotDefined $e) {
-                        $ids[] = Addressbook_Controller_List::getInstance()->get($attender['user_id'])->group_id;
+                        try {
+                            $ids[] = Addressbook_Controller_List::getInstance()->get($attender['user_id'])->group_id;
+                        } catch (Tinebase_Exception_NotFound $tenf) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__ . ' Group/List was not found: ' . $attender['user_id']);
+                        }
                     }
                     $gs->orWhere(
                         ($isExcept ? '' : $adapter->quoteInto($adapter->quoteIdentifier($dname . '.user_type') . ' = ?', $attender['user_type']) . ' AND ') .

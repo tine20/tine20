@@ -4956,11 +4956,6 @@ parameters:
 			path: tine20/Calendar/Model/Attender.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
-			count: 1
-			path: tine20/Calendar/Model/AttenderFilter.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$appName\\)\\: Unexpected token \"\\$appName\", expected type at offset 214$#"
 			count: 1
 			path: tine20/Calendar/Model/CalendarFilter.php
