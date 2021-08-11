@@ -1342,6 +1342,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $translation = Tinebase_Translation::getTranslation(preg_replace('/_.*/', '', static::class), $locale);
         return $translation->translate(preg_replace('/.*_/', '', static::class));
     }
+
     /**
      * returns the foreignId fields (used in Tinebase_Convert_Json)
      * @return array
@@ -1381,7 +1382,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                     /** @var Tinebase_Model_Converter_Interface $converter */
                     $this->_properties[$key] = $converter->convertToRecord($this, $key, $this->_properties[$key]);
                 } elseif ($converter instanceof Tinebase_Model_Converter_RunOnNullInterface) {
-                    $this->_properties[$key] = $converter->convertToRecord($this, $key, null);
+                    try {
+                        $this->_properties[$key] = $converter->convertToRecord($this, $key, null);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        Tinebase_Exception::log($tenf);
+                    }
                 }
             }
         }
