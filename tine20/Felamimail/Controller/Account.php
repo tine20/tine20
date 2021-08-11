@@ -1531,10 +1531,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * add system account with tine20 user credentials
      *
      * @param Tinebase_Model_FullUser $_account
-     * @param string $pwd
+     * @param string|null $pwd
      * @return Felamimail_Model_Account|null
      */
-    public function createSystemAccount(Tinebase_Model_FullUser $_account, string $pwd)
+    public function createSystemAccount(Tinebase_Model_FullUser $_account, string $pwd = null)
     {
         $email = $this->_getAccountEmail($_account);
 
@@ -1570,7 +1570,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * finally create the new system account
      *
      * @param Tinebase_Model_FullUser $_user
-     * @param string $pwd
+     * @param string|null $pwd
      * @return Felamimail_Model_Account|null
      * @throws Setup_Exception
      * @throws Tinebase_Exception_AccessDenied
@@ -1579,7 +1579,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _createSystemAccount(Tinebase_Model_FullUser $_user, string $pwd)
+    protected function _createSystemAccount(Tinebase_Model_FullUser $_user, string $pwd = null)
     {
         $systemAccount = new Felamimail_Model_Account([
             'type' => Felamimail_Model_Account::TYPE_SYSTEM,
