@@ -540,7 +540,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             'Tinebase.setLocale',
             'Tinebase.checkAuthToken',
             'Tinebase_AreaLock.unlock',
-            'Tinebase.getWebAuthnAuthenticateOptions'
+            'Tinebase.getWebAuthnAuthenticateOptionsForMFA'
         );
 
         // check json key for all methods but some exceptions

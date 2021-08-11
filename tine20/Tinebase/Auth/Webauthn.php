@@ -9,6 +9,9 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Webauthn\AuthenticationExtensions\AuthenticationExtension; 
+use Webauthn\AuthenticationExtensions\AuthenticationExtensionsClientInputs;
+
 /**
  * SecondFactor Auth Facade
  *
@@ -104,9 +107,12 @@ final class Tinebase_Auth_Webauthn
                 )) as $val) {
                 $credDescriptors[] = $val->getPublicKeyCredentialDescriptor();
             }
+            $clientInputs = new AuthenticationExtensionsClientInputs();
+            $clientInputs->add(new AuthenticationExtension('userHandle', $user->getId()));
             $credentialRequestOptions = self::_getServer()->generatePublicKeyCredentialRequestOptions(
                 $config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_USER_VERIFICATION_REQUIREMENT},
-                $credDescriptors
+                $credDescriptors,
+                $clientInputs
             );
 
             Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge = json_encode($credentialRequestOptions->jsonSerialize());

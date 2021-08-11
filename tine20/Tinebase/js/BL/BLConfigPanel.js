@@ -137,6 +137,8 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
                 mode: 'local',
                 record: Ext.encode(configRecord.data),
                 recordId: configRecord.getId(),
+                blConfigPanel: this,
+                configWrapper: configWrapper,
                 listeners: {
                     scope: this,
                     'update': function (updatedRecord) {

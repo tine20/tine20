@@ -8,7 +8,7 @@
 
 import Generic from './Generic'
 
-class Sms extends Generic {
+class HTOPTAuthenticator extends Generic {
     constructor (config) {
         super(config)
         this.isOTP = true
@@ -18,4 +18,4 @@ class Sms extends Generic {
     }
 }
 
-export default Sms
+export default HTOPTAuthenticator

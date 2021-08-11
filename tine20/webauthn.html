@@ -21,7 +21,7 @@
         }
 
         function register() {
-            fetch('http://localhost:4000/sso/webauthn/registeroptions').then(response => response.json())
+            fetch('/sso/webauthn/registeroptions').then(response => response.json())
                 .then(async (data) => {
                     userId = data.user.id;
                     console.log(userId)
@@ -57,7 +57,7 @@
                     }
 
                     console.log(cred)
-                    const response1 = await fetch('http://localhost:4000/sso/webauthn/register', {
+                    const response1 = await fetch('/sso/webauthn/register', {
                         method: 'POST',
                         body: JSON.stringify(cred)
                     })
@@ -65,7 +65,7 @@
                 })
         }
         function authenticate() {
-            fetch('http://localhost:4000/sso/webauthn/authchallenge/' + window.atob(userId)).then(response => response.json())
+            fetch('/sso/webauthn/authchallenge/' + window.atob(userId)).then(response => response.json())
             .then(async (options) => {
                 console.log(options)
                 if (options.allowCredentials.length === 0) {
@@ -108,7 +108,7 @@
                     };
                 }
 
-                const response = await fetch('http://localhost:4000/sso/webauthn/authenticate', {
+                const response = await fetch('/sso/webauthn/authenticate', {
                     method: 'POST',
                     body: JSON.stringify(credential)
                 })

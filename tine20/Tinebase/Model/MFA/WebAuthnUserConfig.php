@@ -32,14 +32,13 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'Time based OTP (TOTP)',
-        self::RECORDS_NAME                  => 'Time based OTPs (TOTP)', // ngettext('Time based OTP (TOTP)', 'Time based OTPs (TOTP)', n)
-        self::TITLE_PROPERTY                => 'Time based OTP (TOPT) is configured', // _('Time based OTP (TOPT) is configured')
+        self::RECORD_NAME                   => 'FIDO2 WebAuthn Device',
+        self::RECORDS_NAME                  => 'FIDO2 WebAuthn Devices', // ngettext('FIDO2 WebAuthn Device', 'FIDO2 WebAuthn Devices', n)
+        self::TITLE_PROPERTY                => 'FIDO2 WebAuthn Device is configured', // _('FIDO2 WebAuthn Device is configured')
 
         self::FIELDS                        => [
             self::FLD_PUBLIC_KEY_DATA           => [
                 self::TYPE                          => self::TYPE_STRING,
-                self::DISABLED                      => true,
             ],
         ]
     ];
