@@ -135,7 +135,7 @@ variables:
 
   CODENAME:
     description: "Codename for build"
-    value: "todo"
+    value: "Anton"
 
   REUSE_IMAGES:
     description: "Try to reuse source images" 
