@@ -127,7 +127,7 @@ Tine.Calendar.ResourceGridPanel.locationRenderer = function(data, cell, record) 
     if (Ext.isArray(data) && data.length > 0) {
         var index = 0;
 
-        while (index < data.length && data[index].type != 'STANDORT') {
+        while (index < data.length && data[index].type != 'SITE') {
             index++;
         }
         if (data[index]) {

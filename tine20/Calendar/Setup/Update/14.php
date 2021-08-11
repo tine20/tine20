@@ -16,6 +16,7 @@ class Calendar_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -33,14 +34,17 @@ class Calendar_Setup_Update_14 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update001',
             ],
-        ],
+            self::RELEASE014_UPDATE003 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update003',
+            ],
+        ]
     ];
 
     public function update000()
     {
         $this->addApplicationUpdate('Calendar', '14.0', self::RELEASE014_UPDATE000);
     }
-
 
     public function update001()
     {
@@ -79,5 +83,46 @@ class Calendar_Setup_Update_14 extends Setup_Update_Abstract
         Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES} = $attendeeKeyField;
         
         $this->addApplicationUpdate('Calendar', '14.2', self::RELEASE014_UPDATE002);
+    }
+
+    public function update003()
+    {
+        if (! $this->_backend->columnExists('adr_lon', 'cal_events')) {
+            $this->_backend->addCol('cal_events', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>adr_lon</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                    <default>null</default>
+                </field>'));
+        }
+
+        if (! $this->_backend->columnExists('adr_lan', 'cal_events')) {
+            $this->_backend->addCol('cal_events', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>adr_lan</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                    <default>null</default>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('cal_events') < 18) {
+            $this->setTableVersion('cal_events', 18);
+        }
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Tinebase_Model_Relation', [
+            ['field' => 'own_model', 'operator' => 'equals', 'value' => 'Calendar_Model_Resource'],
+            ['field' => 'related_model', 'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'],
+            ['field' => 'type', 'operator' => 'equals', 'value' => 'STANDORT'],
+        ]);
+        $oldRelations = Tinebase_Relations::getInstance()->search($filter);
+        
+        foreach ($oldRelations as $relation) {
+            $relation->type = 'SITE';
+            Tinebase_Relations::getInstance()->getBackend()->update($relation);
+        }
+
+        $this->addApplicationUpdate('Calendar', '14.3', self::RELEASE014_UPDATE003);
     }
 }

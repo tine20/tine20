@@ -55,14 +55,14 @@ class Calendar_Export_DocTest extends Calendar_TestCase
                 'related_model' => Addressbook_Model_Contact::class,
                 'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id' => $contact->getId(),
-                'type' => 'STANDORT'
+                'type' => 'SITE'
             ], true),
             new Tinebase_Model_Relation([
                 'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
                 'related_model' => Addressbook_Model_Contact::class,
                 'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id' => $this->_personas['sclever']->contact_id,
-                'type' => 'STANDORT'
+                'type' => 'SITE'
             ], true)
         ];
         Calendar_Controller_Resource::getInstance()->update($resource);
@@ -100,7 +100,7 @@ class Calendar_Export_DocTest extends Calendar_TestCase
                 'related_model' => Addressbook_Model_Contact::class,
                 'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id' => $this->_personas['sclever']->contact_id,
-                'type' => 'STANDORT'
+                'type' => 'SITE'
             ], true)
         ];
         Calendar_Controller_Resource::getInstance()->update($resource);
