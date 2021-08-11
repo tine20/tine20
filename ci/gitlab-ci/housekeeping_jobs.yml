@@ -44,19 +44,3 @@ docker_populate_cache:
     - if: $RUN_NO_TESTS == "true"
       when: never
     - when: on_success
-
-merge:
-  stage: housekeeping
-  needs: 
-    - docker_build_source
-  trigger:
-    include: '/ci/gitlab-ci/merge_pipeline.yml'
-    strategy: depend
-  rules:
-    - if: $AUTO_MERGE == "true"
-      when: on_success
-    - if: $AUTO_MERGE_BE == "true"
-      when: on_success
-    - if: $AUTO_MERGE_CUSTOM == "true"
-      when: on_success
-    - when: never
