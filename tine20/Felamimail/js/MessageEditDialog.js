@@ -595,17 +595,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initFrom: function () {
         if (!this.record.get('account_id')) {
             if (!this.accountId) {
-                var message = this.getMessageFromConfig(),
-                    availableAccounts = this.accountCombo.store,
-                    fromEmail = message ? message.get('from_email') : null,
-                    fromAccountIdx = availableAccounts.find('email', fromEmail),
-                    fromAccount = availableAccounts.getAt(fromAccountIdx),
-                    folderId = message ? message.get('folder_id') : null,
-                    folder = folderId ? Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(folderId) : null,
-                    accountId = folder ? folder.get('account_id') : null;
+                const message = this.getMessageFromConfig();
+                const availableAccounts = this.accountCombo.store;
+                const fromEmail = message ? message.get('from_email') : null;
+                const fromAccountIdx = availableAccounts.find('email', fromEmail);
+                const fromAccount = availableAccounts.getAt(fromAccountIdx);
+                const folderId = message ? message.get('folder_id') : null;
+                const folder = folderId ? Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(folderId) : null;
+                let accountId = folder ? folder.get('account_id') : null;
 
                 if (!accountId) {
-                    var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
+                    const activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
                     accountId = (activeAccount) ? activeAccount.id : null;
                 }
 
@@ -613,6 +613,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.from = fromAccount;
                 }
                 this.accountId = accountId;
+            }
+            
+            const currentAccountId = this.accountId;
+            const defaultAccountId = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+            const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.accountId);
+
+            if (!currentAccount.data?.grants[0]?.addGrant) {
+                this.accountId = defaultAccountId;
+                this.showReplacedMailSenderNotification(currentAccountId, defaultAccountId);
             }
             
             this.record.set('account_id', this.accountId);
@@ -1209,9 +1218,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.record.data.attachments.push(fileData);
         }, this);
 
-        var accountId = this.accountCombo.getValue(),
-            account = this.accountCombo.getStore().getById(accountId),
-            emailFrom = account.get('email');
+        const accountId = this.accountCombo.getValue();
+        const account = this.accountCombo.getStore().getById(accountId);
+        const emailFrom = account.get('email');
 
         this.record.set('from_email', emailFrom);
         this.record.set('from_name', account.get('from'));
@@ -1294,7 +1303,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         accountStore.each(function (account) {
             aliases = [account.get('email')];
-
             if (account.get('type') === 'system') {
                 // add identities / aliases to store (for systemaccounts)
                 var user = Tine.Tinebase.registry.get('currentAccount');
@@ -1323,7 +1331,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 let name = aliasAccount.get('from') ? aliasAccount.get('from') : aliasAccount.get('name');
                 aliasAccount.set('name', name + ' (' + aliases[i] + ')');
                 aliasAccount.set('original_id', account.id);
-                accountComboStore.add(aliasAccount);
+                
+                // only add to combo if the account has email send grant
+                if (aliasAccount.data.grants[0]?.addGrant) {
+                    accountComboStore.add(aliasAccount);
+                }
             }
         }, this);
 
@@ -1833,7 +1845,22 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getValidationErrorMessage: function () {
         return this.validationErrorMessage;
-    }
+    },
+
+    /**
+     * show notification for replaced mail sender
+     *
+     */
+    showReplacedMailSenderNotification: function(currentAccountId, newAccountId) {
+        const currentAccount = this.app.getAccountStore().getById(currentAccountId);
+        const newAccount = this.app.getAccountStore().getById(newAccountId);
+        
+        const title = this.app.i18n._('Attention');
+        const message = String.format(this.app.i18n._(
+            'The from-address for this mail got changed to {0} , as you don\'t have the send mail right for the account {1}.'), newAccount?.data?.email, currentAccount?.data?.email);
+        
+        Ext.ux.MessageBox.msg(title, message, 5);
+    },
 });
 
 /**

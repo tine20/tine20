@@ -1392,6 +1392,12 @@ msgstr "Massen-Mails werden nicht an die eingetragenen CC und/oder BCC Empfänge
 msgid "Cannot encrypt message. Public keys for the following recipients are missing: {0}"
 msgstr "Die Nachricht kann nicht verschlüsseltet werden. Die öffentliche Schlüssel für die folgenden Empfänger fehlen: {0}"
 
+msgid "Attention"
+msgstr "Achtung"
+
+msgid "The from-address for this mail got changed to {0} , as you don't have the send mail right for the account {1}."
+msgstr "Die Absender-Adresse für diese Mail wurde auf : {0} geändert, \n da sie für das Konto : {1} nicht das E-Mail Versenden Recht haben."
+
 #: Preference.php:70
 msgid "All inboxes"
 msgstr "Alle Posteingänge"
