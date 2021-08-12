@@ -30,7 +30,7 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
         var langMatches = String(this.type).match(/^code\/(.*)/);
         this.lang = langMatches ? langMatches[1]: undefined;
 
-        if (this.type == 'text/plain') {
+        if (this.type == 'text/plain' && this.renderer === Ext.ux.display.DisplayField.prototype.renderer) {
             this.htmlEncode = true;
             this.nl2br = true;
         } else if (this.lang) {
@@ -76,7 +76,7 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
         }
     },
 
-    setValue : function(value) {
+    setValue : function(value, record) {
         if (value == this.value) {
             return;
         }
@@ -92,7 +92,7 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.Container, {
             return;
         }
 
-        var v = this.renderer(value);
+        var v = this.renderer(value, {}, record);
 
         if(this.htmlEncode){
             v = Ext.util.Format.htmlEncode(v);
