@@ -1,9 +1,9 @@
 "send_pipeline_status":
   extends: .abstract_jobs.docker
-  stage: nodify
+  stage: notify
   script:
     - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/send_pipeline_status.sh
   rules:
-    - if: $NODIFY_ON_FAILURE == "true"
+    - if: $NOTIFY_ON_FAILURE == "true"
       when: on_failure
     - when: never
