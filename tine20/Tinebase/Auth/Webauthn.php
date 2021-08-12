@@ -128,11 +128,8 @@ final class Tinebase_Auth_Webauthn
             $server = new \Webauthn\Server(
                 new \Webauthn\PublicKeyCredentialRpEntity(
                     ltrim(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NO_PROTO), '/')),
-                new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository());
-
-            if (TINE20_BUILDTYPE === 'DEVELOPMENT') {
-                $server->setSecuredRelyingPartyId(['localhost']);
-            }
+                new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository()
+            );
         }
         return $server;
     }
