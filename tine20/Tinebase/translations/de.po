@@ -4062,10 +4062,6 @@ msgstr "Token vom Gerät {mfaDevice.device_name}"
 msgid "{{ code }} is your {{ app.branding.title }} security code."
 msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
 
-#: js/AreaLocks/PinProvider.es6.js:17 js/PasswordChangeDialog.js:34
-msgid "PIN"
-msgstr "PIN"
-
 #: js/LicenseScreen.js:35
 msgid "License"
 msgstr "Lizenz"
@@ -5043,9 +5039,6 @@ msgid "FIDO2 WebAuthn Device"
 msgid_plural "FIDO2 WebAuthn Devices"
 msgstr[0] "FIDO2 WebAuthn Gerät"
 msgstr[1] "FIDO2 WebAuthn Geräte"
-
-msgid "FIDO2 WebAuthn Device"
-msgstr "other"
 
 msgid "Configuring FIDO2 WebAuthn Device ..."
 msgstr "FIDO2 WebAuthn Gerät wird konfiguriert ..."
