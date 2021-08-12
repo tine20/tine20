@@ -3718,6 +3718,9 @@ msgstr "{0} (Kopie)"
 msgid "Add New {0}"
 msgstr "Neuen {0} hinzufügen"
 
+msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
+msgstr "{gender, select, male {Neuen {recordName} hinzufügen} female {Neue {recordName} hinzufügen} other {Neues {recordName} hinzufügen}}"
+
 #: js/widgets/dialog/EditDialog.js:955
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
@@ -4058,10 +4061,6 @@ msgstr "Token vom Gerät {mfaDevice.device_name}"
 
 msgid "{{ code }} is your {{ app.branding.title }} security code."
 msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
-
-#: js/AreaLocks/PinProvider.es6.js:17 js/PasswordChangeDialog.js:34
-msgid "PIN"
-msgstr "PIN"
 
 #: js/LicenseScreen.js:35
 msgid "License"
@@ -4927,7 +4926,12 @@ msgstr ""
 "Yubico OTP eingeben."
 
 msgid "Yubico OTP"
-msgstr "Yubico OTP"
+msgid_plural "Yubico OTPs"
+msgstr[0] "Yubico OTP"
+msgstr[1] "Yubico OTPs"
+
+msgid "GENDER_Yubico OTP"
+msgstr "male"
 
 msgid ""
 "This area is locked. To unlock it you need to provide your {mfaDevice."
@@ -4935,6 +4939,14 @@ msgid ""
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr "
 "{mfaDevice.device_name} Geheimnis eingeben."
+
+msgid "SMS"
+msgid_plural "SMSs"
+msgstr[0] "SMS"
+msgstr[1] "SMSe"
+
+msgid "GENDER_SMS"
+msgstr "female"
 
 msgid "SMS security code required"
 msgstr "SMS Sicherheitscode benötigt"
@@ -4989,6 +5001,9 @@ msgid_plural "Time based OTPs (TOTP)"
 msgstr[0] "Zeitbasierter OTP (TOTP)"
 msgstr[1] "Zeitbasierte OTPs (TOTP)"
 
+msgid "GENDER_Time based OTP (TOTP)"
+msgstr "male"
+
 msgid "Time based OTP (TOPT) is configured"
 msgstr "Der zeitbasierte OTP (TOTP) ist konfiguiert"
 
@@ -4996,6 +5011,9 @@ msgid "Counter based OTP (HOTP)"
 msgid_plural "Counter based OTPs (HOTP)"
 msgstr[0] "Zählerbasierter OTP (HOTP)"
 msgstr[1] "Zählerbasierte OTPs (HOTP)"
+
+msgid "GENDER_Counter based OTP (HOTP)"
+msgstr "male"
 
 msgid "for"
 msgstr "für"
@@ -5017,6 +5035,23 @@ msgstr "{mfaDevice.device_name} Authenticator-Code"
 msgid "Try again?"
 msgstr "Nochmal versuchen?"
 
+msgid "FIDO2 WebAuthn Device"
+msgid_plural "FIDO2 WebAuthn Devices"
+msgstr[0] "FIDO2 WebAuthn Gerät"
+msgstr[1] "FIDO2 WebAuthn Geräte"
+
+msgid "Configuring FIDO2 WebAuthn Device ..."
+msgstr "FIDO2 WebAuthn Gerät wird konfiguriert ..."
+
+msgid "FIDO2 WebAuthn Device is configured."
+msgstr "FIDO2 WebAuthn Gerät ist konfiguriert."
+
+msgid "FIDO2 WebAuthn registration failed. Try again?"
+msgstr "Registrieren des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es erneut versuchen?"
+
+msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr "Authentifikation des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es erneut versuchen?"
+
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr ""
 "{gender, select, male {alle von} female {alle von} other {alle von}}"
@@ -5035,6 +5070,14 @@ msgstr "Importiert Gemeindeschlüssel"
 
 msgid "Community Identification Number Import"
 msgstr "Gemeindeschlüssel Import"
+
+msgid "PIN"
+msgid_plural "PINs"
+msgstr[0] "PIN"
+msgstr[1] "PINs"
+
+msgid "GENDER_PIN"
+msgstr "female"
 
 msgid "New PIN"
 msgstr "Neue PIN"

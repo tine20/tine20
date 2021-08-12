@@ -32,7 +32,8 @@ class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Auth_MFA_AbstractUserCon
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'PIN',
+        self::RECORD_NAME                   => 'PIN', // gettext('GENDER_PIN')
+        self::RECORDS_NAME                   => 'PINs', // ngettext('PIN', 'PINs', n)
         self::TITLE_PROPERTY                => 'Static PIN for user: ●●●●●●', //_('{% true %}Static PIN for user: ●●●●●●')
         
         self::FIELDS                        => [

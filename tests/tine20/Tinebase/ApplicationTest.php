@@ -457,6 +457,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_MFA_TOTPConfig::class,
                 Tinebase_Model_MFA_TOTPUserConfig::class,
                 Tinebase_Model_MFA_UserConfig::class,
+                Tinebase_Model_MFA_WebAuthnConfig::class,
+                Tinebase_Model_MFA_WebAuthnUserConfig::class,
                 Tinebase_Model_MFA_YubicoOTPConfig::class,
                 Tinebase_Model_MFA_YubicoOTPUserConfig::class,
                 Tinebase_Model_ModificationLog::class,
@@ -488,6 +490,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_UpdateMultipleException::class,
                 Tinebase_Model_User::class,
                 Tinebase_Model_UserPassword::class,
+                Tinebase_Model_WebauthnPublicKey::class,
                 Tinebase_Model_WebDavLock::class,
             ),
             'Voipmanager' => array(

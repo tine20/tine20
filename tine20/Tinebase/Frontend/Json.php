@@ -44,6 +44,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_MFA_UserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_PinUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_SmsUserConfig::MODEL_NAME_PART,
+        Tinebase_Model_MFA_WebAuthnUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_YubicoOTPUserConfig::MODEL_NAME_PART,
         Tinebase_Model_CommunityIdentNr::MODEL_NAME_PART,
         Tinebase_Model_AuthToken::MODEL_NAME_PART,
@@ -1522,6 +1523,36 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $result;
+    }
+
+    public function getWebAuthnAuthenticateOptionsForMFA(string $accountLoginName, string $mfaId)
+    {
+        $account = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
+        
+        /** @var Tinebase_Model_MFA_UserConfig $userCfg */
+        $userCfg = $account->mfa_configs->getById($mfaId);
+        /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
+        $config = Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
+            ->getAdapter()->getConfig();
+
+        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, $account->getId())->jsonSerialize();
+    }
+
+    public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null)
+    {
+        if (null !== $accountId) {
+            if (!Tinebase_Core::getUser()->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
+                throw new Tinebase_Exception_AccessDenied('user has not right to register webauthn devices for other users');
+            }
+            $user = Tinebase_User::getInstance()->getFullUserById($accountId);
+        } else {
+            $user = Tinebase_Core::getUser();
+        }
+
+        /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
+        $config = Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter()->getConfig();
+
+        return Tinebase_Auth_Webauthn::getWebAuthnCreationOptions(true, $user, $config)->jsonSerialize();
     }
 
     /**

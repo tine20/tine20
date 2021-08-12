@@ -847,7 +847,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             app: this.app,
             height: 100,
             title: false,
-            account: this.record.getId(),
+            account: this.record,
             editDialog: this,
         });
         

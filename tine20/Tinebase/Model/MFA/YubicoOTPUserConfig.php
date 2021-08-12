@@ -38,7 +38,8 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'Yubico OTP',
+        self::RECORD_NAME                   => 'Yubico OTP', // gettext('GENDER_FIDO2 WebAuthn Device')
+        self::RECORDS_NAME                   => 'Yubico OTPs', // ngettext('Yubico OTP', 'Yubico OTPs', n)
         self::TITLE_PROPERTY                => 'Yubico OTP',
 
         self::FIELDS                        => [

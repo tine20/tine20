@@ -37,7 +37,7 @@ class Tinebase_Model_MFA_HOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'Counter based OTP (HOTP)',
+        self::RECORD_NAME                   => 'Counter based OTP (HOTP)', // gettext('GENDER_Counter based OTP (HOTP)')
         self::RECORDS_NAME                  => 'Counter based OTPs (HOTP)', // ngettext('Counter based OTP (HOTP)', 'Counter based OTPs (HOTP)', n)
         self::TITLE_PROPERTY                => 'Counter based OTP (HOPT) is configured', // _('Counter based OTP (HOTP) is configured')
 

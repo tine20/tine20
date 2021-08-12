@@ -29,7 +29,8 @@ class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Auth_MFA_AbstractUserCon
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'SMS',
+        self::RECORD_NAME                   => 'SMS', // gettext('GENDER_SMS')
+        self::RECORDS_NAME                   => 'SMSs', // ngettext('SMS', 'SMSs', n)
         self::TITLE_PROPERTY                => 'Security codes are send to: {{ cellphonenumber }}.', //_('Security codes are send to: {{ cellphonenumber }}.')
 
         self::FIELDS                        => [

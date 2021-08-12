@@ -1,3 +1,11 @@
+/*
+ * Tine 2.0
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
 Ext.ns('Tine.Tinebase');
 
 const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
@@ -5,6 +13,8 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
      * @cfg {String} type h|totp
      */
     type: 'totp',
+
+    height: 300,
     
     initComponent: function() {
         this.title = i18n._('Secret Key');
@@ -17,12 +27,11 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
             anchor: '100%',
             hideLabel: true,
             setValue: this.setValue.createDelegate(this)
-            // getValue: this.getValue.createDelegate(this)
         });
         this.qrField = new Ext.BoxComponent({
             width: 150,
             height: 150,
-            html: '<img style="width: 100%; height: 100%"/>'
+            html: '<canvas style="width: 100%; height: 100%"/><img src="favicon/180" style="display: none;">'
         });
         this.items = [
             this.explainText,
@@ -39,16 +48,17 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
             return c instanceof Tine.widgets.dialog.EditDialog
         });
     },
+    
     setValue: function(value, record) {
         const supr = Ext.form.TextField.prototype.setValue.createDelegate(this.secretField);
         
         if (!value && !record.id) {
             supr(i18n._('Generating secret key ...'));
             this.secretField.setDisabled(true);
-            import(/* webpackChunkName: "Tinebase/js/base32-encode" */ 'base32-encode').then((module) => {
+            import(/* webpackChunkName: "Tinebase/js/rfc4648" */ 'rfc4648').then((module) => {
                 const bytes = new Uint8Array(35);
                 window.crypto.getRandomValues(bytes);
-                supr(module.default(bytes, 'RFC3548'));
+                supr(module.base32.stringify(bytes));
                 this.secretField.setDisabled(false);
                 this.onValueChange();
             });
@@ -57,18 +67,17 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
             this.secretField.hide();
             this.qrField.hide();
         }
-        
-        // this.afterIsRendered().then(() => {
-        //     this.editDialog.window.setTitle('yes');
-        // });
-        
     },
 
     onValueChange: async function() {
         const secret = this.secretField.getValue();
         const type = this.type.toLowerCase();
-        const account = encodeURIComponent(JSON.parse(this.editDialog.record.json.account_id).accountLoginName);
+        const account = encodeURIComponent(this.editDialog.blConfigPanel.account.get('accountLoginName'));
         const issuer = encodeURIComponent(window.location.hostname);
+        const canvas = this.qrField.el.child('canvas').dom;
+        const favicon = this.qrField.el.child('img').dom;
+        const context = canvas.getContext("2d");
+        
 
         let uri = `otpauth://${type}/${issuer}:${account}?secret=${secret}&issuer=${issuer}`;
         // uri += "&algorithm=" + this.editDialog.record.get('algorithm');
@@ -77,17 +86,25 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
         if (type == "hotp")
             uri += "&counter=" + (this.editDialog.record.get('counter') || 0);
         // uri += "&lock=" + ???; // freeOTP only?
-        uri += "&image=" + encodeURIComponent(Tine.Tinebase.common.getUrl() + Tine.Tinebase.registry.get('installLogo')); // freeOTP only?;
+        uri += "&image=" + encodeURIComponent(Tine.Tinebase.common.getUrl() + Tine.Tinebase.registry.get('favicon/180')); // freeOTP only?;
         
         const QRCode = await import(/* webpackChunkName: "Tinebase/js/qrcode" */ 'qrcode');
-        const imgURL = await QRCode.toDataURL(uri);
-        this.qrField.el.child('img').dom.src = imgURL;
+        await QRCode.toCanvas(canvas, uri, {width: 200, errorCorrectionLevel: 'H'});
+        
+        context.beginPath();
+        context.arc(100, 100, 25, 0, 2 * Math.PI, false);
+        context.fillStyle = 'white';
+        context.fill();
+        context.drawImage(favicon, 80, 80, 40, 40);
+        favicon.addEventListener('load', e => {
+            context.drawImage(favicon, 80, 80, 40, 40);
+        });
+        
+        // this.qrField.el.child('img').dom.src = imgURL;
 
         const typeString = this.editDialog.record.constructor.getRecordName();
         this.editDialog.window.setTitle(`${typeString} ${i18n._('for')} ${account} : ${issuer}`);
     }
-
-
 });
 
 Ext.reg('mfa-htotp-secretfield', HTOTOPSecretField)
