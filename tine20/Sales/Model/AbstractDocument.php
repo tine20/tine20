@@ -17,11 +17,10 @@
  */
 class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'AbstractDocument';
+    const MODEL_NAME_PART = 'AbstractDocument'; // als konkrete document_types gibt es Offer, Order, DeliveryNote, Invoice (keine Gutschrift!)
 
     const FLD_ID = 'id';
-    const FLD_CONFIG = 'config';
-    const FLD_CONFIG_CLASS = 'config_class';
+    const FLD_DOCUMENT_GROUP = 'document_group'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
     const FLD_REFERENCE_DOCUMENT = 'reference_document'; // virtual, link
     const FLD_NOTE = 'note';
@@ -55,18 +54,40 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
     // <dokumentenart>_STATUS z.B. Rechnungsstatus (Ungebucht, Gebucht, Verschickt, Bezahlt)
     //   übergänge haben regeln (siehe SAAS mechanik)
     
+    // OFFER:
+    //  - OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
+
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
     //  - INVOICE_CONTACT_ID // abweichender Rechnungskontakt, CONTACT_ID wenn leer
+    //  - INVOICE_STATUS // // keyfield: offen, gebucht; berechnet sich automatisch aus den zug. Rechnungen
     //  - DELIVERY_RECIPIENT_ID // abweichende Lieferadresse, RECIPIENT_ID wenn leer
     //  - DELIVERY_CONTACT_ID // abweichender Lieferkontakt, CONTACT_ID wenn leer
+    //  - DELEVERY_STATUS // keyfield: offen, geliefert; brechnet sich automatisch aus den zug. Lieferungen
+    //  pro position:
+    //    - 1:n lieferpositionen (verknüpfung zu LS positionen)
+    //    - zu liefern (automatisch auf anzahl, kann aber geändert werden um anzahl für erzeugten LS zu bestimmen)
+    //    - geliefert (berechnet sich automatisch)
+    //    - 1:n rechnungspositionen (verknüpfung zu RG positionen)
+    //    - zu berechnen (s.o.)
+    //    - berechnet (s.o.)
+    //  - ORDER_STATUS // keyfield: eingegangen (order änderbar, nicht erledigt), angenommen (nicht mehr änderbar (AB ist raus), nicht erledigt), abgeschlossen(nicht mehr änderbar, erledigt) -> feld berechnet sich automatisch! (ggf. lassen wir das abschließen doch zu aber mit confirm)
+
+    // DELIVERY_NOTE
+    // - DELIVERY_STATUS // keyfield erstellt(Ungebucht, offen), geliefert(gebucht, abgeschlossen)
+    //    NOTE: man könnte einen ungebuchten Status als Packliste einführen z.B. Packliste(ungebucht, offen)
 
     // INVOICE: 
     //  - IS_REVERSED bool // storno
     //  - INVOICE_REPORTING enum (AUTO|MANU) // Rechnungslegung
-    //  - DOCUMENT_TYPE (jetziger TYPE) // Belegart (Rechnung/Storno)
-    //  - INVOICE_TYPE (Beitragsrechnung, ...) // Rechnungsart
+    //  - INVOICE_TYPE (jetziger TYPE) // Rechnungsart (Rechnung/Storno)
+    //  - INVOICE_STATUS: keyfield: proforma(Ungebucht, offen), gebucht(gebucht, geschlossen)
     //  obacht: bei storno rechnung wird der betrag (pro zeile) im vorzeichen umgekehrt
+
+    // Achtung: Hinter den status keyfields verbergen sich jeweils noch fachliche workflows die jeweils noch (dazu) konfiguiert werden können
+    //  -> staus übergänge definieren
+    //  -> Ungebucht/Gebucht merkmal (Gebucht ist nicht mehr änderbar) (siehe CRM status merkmale)
+    //  -> Offen/Abgeschlossen  merkmal (Abgeschlossen fällt aus der standar-filterung) (siehe CRM staus merkmale)
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
