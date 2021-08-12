@@ -36,7 +36,7 @@ class Tinebase_Model_MFA_TOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'Time based OTP (TOTP)',
+        self::RECORD_NAME                   => 'Time based OTP (TOTP)', // gettext('GENDER_Time based OTP (TOTP)')
         self::RECORDS_NAME                  => 'Time based OTPs (TOTP)', // ngettext('Time based OTP (TOTP)', 'Time based OTPs (TOTP)', n)
         self::TITLE_PROPERTY                => 'Time based OTP (TOPT) is configured', // _('Time based OTP (TOPT) is configured')
 

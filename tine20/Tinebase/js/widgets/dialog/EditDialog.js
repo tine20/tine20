@@ -985,7 +985,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.window.setTitle(String.format(i18n._('Copy {0}'), this.i18nRecordName));
         } else {
             if (! this.record.id) {
-                this.window.setTitle(String.format(i18n._('Add New {0}'), this.i18nRecordName));
+                this.window.setTitle(formatMessage('{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}', {
+                    gender: this.recordClass.getRecordGender(),
+                    recordName: this.i18nRecordName
+                }));
             } else {
                 this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
             }

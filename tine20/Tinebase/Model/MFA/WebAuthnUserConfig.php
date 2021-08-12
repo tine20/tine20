@@ -32,9 +32,9 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'FIDO2 WebAuthn Device',
+        self::RECORD_NAME                   => 'FIDO2 WebAuthn Device',  // gettext('GENDER_FIDO2 WebAuthn Device')
         self::RECORDS_NAME                  => 'FIDO2 WebAuthn Devices', // ngettext('FIDO2 WebAuthn Device', 'FIDO2 WebAuthn Devices', n)
-        self::TITLE_PROPERTY                => 'FIDO2 WebAuthn Device is configured', // _('FIDO2 WebAuthn Device is configured')
+        self::TITLE_PROPERTY                => 'FIDO2 WebAuthn Device is configured.', // _('FIDO2 WebAuthn Device is configured.')
 
         self::FIELDS                        => [
             self::FLD_PUBLIC_KEY_DATA           => [
