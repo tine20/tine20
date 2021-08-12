@@ -230,4 +230,51 @@ class Setup_Initialize
             }
         }
     }
+
+    /**
+     * expects $tags with the following structure:
+     *
+     * $tags = [
+     *  [
+     *      'name' => 'Mitglied',
+     *      'description' => 'gehört zu einem Mitglied',
+     *      'color' => '#339966'
+     *  ], [...]
+     * ]
+     *
+     * @param array $tags
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public static function createSharedTags(array $tags)
+    {
+        $controller = Tinebase_Tags::getInstance();
+
+        // TODO  needed?
+//        $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+//        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
+        foreach ($tags as $tag) {
+            $sharedTag = new Tinebase_Model_Tag(array(
+                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+                'name'  => $tag['name'],
+                'description' => $tag['description'],
+                'color' => $tag['color'],
+            ));
+
+            $savedSharedTag = $controller->createTag($sharedTag);
+            $controller->setContexts(array('any'), $savedSharedTag->getId());
+
+            $right = new Tinebase_Model_TagRight(array(
+                'tag_id'        => $savedSharedTag->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id'    => 0,
+                'view_right'    => true,
+                'use_right'     => true,
+            ));
+            $controller->setRights($right);
+        }
+    }
 }
