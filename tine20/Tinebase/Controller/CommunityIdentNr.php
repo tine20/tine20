@@ -69,7 +69,7 @@ class Tinebase_Controller_CommunityIdentNr extends Tinebase_Controller_Record_Ab
             foreach ($relatedCommunitys as $community) {
                 $population += $community->bevoelkerungGesamt;
             }
-            
+
             $_communityNumber->bevoelkerungGesamt = $population;
         }
         
