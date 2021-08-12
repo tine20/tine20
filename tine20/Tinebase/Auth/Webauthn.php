@@ -126,12 +126,13 @@ final class Tinebase_Auth_Webauthn
         static $server;
         if (null === $server) {
             $server = new \Webauthn\Server(
-            // TODO FIXME tine20 is probably not very good here, should be hostname or something ... url+path maybe even
-                new \Webauthn\PublicKeyCredentialRpEntity('tine20'),
+                new \Webauthn\PublicKeyCredentialRpEntity(
+                    ltrim(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NO_PROTO), '/')),
                 new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository());
 
-            // TODO FIXME remove this! just for testing during implemenation!
-            $server->setSecuredRelyingPartyId(['localhost']);
+            if (TINE20_BUILDTYPE === 'DEVELOPMENT') {
+                $server->setSecuredRelyingPartyId(['localhost']);
+            }
         }
         return $server;
     }

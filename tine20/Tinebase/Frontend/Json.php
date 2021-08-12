@@ -1527,15 +1527,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     public function getWebAuthnAuthenticateOptionsForMFA(string $accountLoginName, string $mfaId)
     {
-        $accountId = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName)->getId();
+        $account = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
         
         /** @var Tinebase_Model_MFA_UserConfig $userCfg */
-        $userCfg = Tinebase_User::getInstance()->getFullUserById($accountId)->mfa_configs->getById($mfaId);
+        $userCfg = $account->mfa_configs->getById($mfaId);
         /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
         $config = Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
             ->getAdapter()->getConfig();
 
-        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, $accountId)->jsonSerialize();
+        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, $account->getId())->jsonSerialize();
     }
 
     public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null)

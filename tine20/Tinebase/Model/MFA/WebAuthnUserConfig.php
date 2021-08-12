@@ -45,7 +45,9 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
 
     public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
     {
-        Tinebase_Auth_Webauthn::webAuthnRegister($this->{self::FLD_PUBLIC_KEY_DATA}, $newUser);
+        if ($this->{self::FLD_PUBLIC_KEY_DATA}) {
+            Tinebase_Auth_Webauthn::webAuthnRegister($this->{self::FLD_PUBLIC_KEY_DATA}, $newUser);
+        }
         $this->{self::FLD_PUBLIC_KEY_DATA} = null;
     }
 
