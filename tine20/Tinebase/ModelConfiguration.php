@@ -1222,10 +1222,14 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     : $this->_applicationName;
                 if (Tinebase_Application::getInstance()->isInstalled($keyFieldAppName)) {
                     $appConfig = Tinebase_Config::getAppConfig($keyFieldAppName);
-                    if (!isset($fieldDef['name']) || ($appConfig && !
-                                $appConfig->get($fieldDef['name']) instanceof Tinebase_Config_KeyField)) {
+                    if (!isset($fieldDef['name']) || ($appConfig && ! ($keyField =
+                                $appConfig->get($fieldDef['name'])) instanceof Tinebase_Config_KeyField)) {
                         throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
                             $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
+
+                        // yes array_key_exists, as you should be able to set default to null
+                    } elseif ($keyField && !array_key_exists(self::DEFAULT_VAL, $fieldDef) && is_scalar($keyField->default)) {
+                        $fieldDef[self::DEFAULT_VAL] = $keyField->default;
                     }
                 }
             } elseif ($fieldDef[self::TYPE] === 'virtual') {
