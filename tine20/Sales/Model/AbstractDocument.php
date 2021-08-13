@@ -146,17 +146,17 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
-            self::FLD_CONFIG                    => [
-                self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
-                self::LABEL                         => 'MFA Device Config', // _('MFA Device Config')
-                self::CONFIG                        => [
-                    self::REF_MODEL_FIELD               => self::FLD_CONFIG_CLASS,
-                ],
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-            ],
+//            self::FLD_CONFIG                    => [
+//                self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
+//                self::LABEL                         => 'MFA Device Config', // _('MFA Device Config')
+//                self::CONFIG                        => [
+//                    self::REF_MODEL_FIELD               => self::FLD_CONFIG_CLASS,
+//                ],
+//                self::VALIDATORS            => [
+//                    Zend_Filter_Input::ALLOW_EMPTY => false,
+//                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
+//                ],
+//            ],
             self::FLD_NOTE                      => [
                 self::TYPE                          => self::TYPE_STRING,
                 self::LABEL                         => 'Note', //_('Note')
@@ -175,7 +175,7 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
     public function toFEArray(): array
     {
         $result = $this->toArray();
-        $result[self::FLD_CONFIG] = $this->{self::FLD_CONFIG}->toFEArray();
+//        $result[self::FLD_CONFIG] = $this->{self::FLD_CONFIG}->toFEArray();
 
         return $result;
     }
