@@ -98,7 +98,7 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Document', // ngettext('Document', 'Documents', n)
         self::RECORDS_NAME                  => 'Documents',
-        self::TITLE_PROPERTY                => self::FLD_CONFIG,
+        self::TITLE_PROPERTY                => self::FLD_DOCUMENT_NUMBER,
 
         self::FIELDS                        => [
             self::FLD_ID                        => [
