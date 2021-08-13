@@ -162,13 +162,20 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             })]
         };
     },
-    
-    onAfterRecordLoad: function() {
+
+    onAfterRecordLoad: function () {
         Tine.Calendar.ResourceEditDialog.superclass.onAfterRecordLoad.apply(this, arguments);
 
         if (this.record.data && this.record.data.grants) {
             this.grantsGridPanel.getStore().loadData({results: this.record.data.grants});
         }
+        this.getForm().items.each(function (f) {
+            if (f.isFormField && f.requiredGrant !== undefined) {
+                var hasRequiredGrant = _.get(this.record, this.recordClass.getMeta('grantsPath') + '.resourceEditGrant');
+
+                f.setDisabled(!hasRequiredGrant);
+            }
+        }, this);
     },
     
     onRecordUpdate: function() {
