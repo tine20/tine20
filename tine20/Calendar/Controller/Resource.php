@@ -120,6 +120,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
                 }
             }
 
+
             // apply event grants
             if ($grant->{Calendar_Model_ResourceGrants::EVENTS_ADD}) {
                 $grant->{Tinebase_Model_Grants::GRANT_ADD} = true;
