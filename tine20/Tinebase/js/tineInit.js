@@ -198,8 +198,13 @@ Tine.Tinebase.tineInit = {
         Ext.getBody().on('click', function(e) {
             var target = e.getTarget('a', 1, true),
                 href = target ? target.getAttribute('href') : '';
-
-            if (target && href && href != '#') {
+            
+            // add menuitems for email links
+            if (target?.dom?.className === 'tinebase-email-link' || target?.dom?.href.includes('mailto:')) {
+                this.showEmailContextMenu(e);
+            }
+            
+            if (target && href && href !== '#') {
                 // open internal links in same window (use router)
                 if (window.isMainWindow === true) {
                     if (target.getAttribute('target') === '_blank') {
@@ -223,7 +228,7 @@ Tine.Tinebase.tineInit = {
                     }
                 }
             }
-
+            
             else {
                 let wavesEl = e.getTarget('.x-btn', 10, true)
                     || e.getTarget('.x-tree-node-el', 10, true);
@@ -326,6 +331,119 @@ Tine.Tinebase.tineInit = {
             mainCardPanel.layout.setActiveItem(activeItem);
             cb.call(scope||window, response);
         };
+    },
+    
+    async showEmailContextMenu(e) {
+        // disable default mailto link
+        e.preventDefault();
+        
+        // store click position, make sure menuItem diaplay around the link 
+        const position = e.getXY();
+        const target = e.getTarget('a', 1, true);
+        
+        // search Contact first
+        const targetClassName = target?.dom?.className;
+        const email = Tine.Tinebase.common.findEmail(targetClassName === 'tinebase-email-link' ? target?.id : target?.dom?.href);
+      
+        if (Tine.Addressbook) {
+            let contacts = await Tine.Addressbook.searchContacts([{
+                field: 'email', operator: 'in', value: email
+            }]);
+
+            contacts = contacts?.results;
+
+            this.contextMenu = new Ext.menu.Menu({
+                items: []
+            });
+
+            if (contacts.length) {
+                contacts.forEach((contact) => {
+                    contact = Tine.Tinebase.data.Record.setFromJson(contact, Tine.Addressbook.Model.Contact);
+                    const action_editContact = new Ext.Action({
+                        text: contact?.data?.n_fileas,
+                        handler: this.contactHandler.createDelegate(this, [target, contact]),
+                        iconCls: 'AddressbookIconCls',
+                        scope: this
+                    });
+
+                    this.contextMenu.addMenuItem(action_editContact);
+                });
+            }
+
+            this.action_addContact = new Ext.Action({
+                text: i18n._('Create Contact'),
+                handler: this.contactHandler.createDelegate(this, [target]),
+                iconCls: 'action_add',
+                scope: this,
+                hidden: contacts.length,
+            });
+
+            this.contextMenu.addMenuItem(this.action_addContact);
+        }
+        
+        this.action_copyEmailPlainText = new Ext.Action({
+            text: i18n._('Copy Email Address'),
+            handler: async function () {
+                await navigator.clipboard.writeText(email)
+                    .then(() => {
+                        // Success!
+                    })
+                    .catch(err => {
+                        console.log('Something went wrong', err);
+                    });
+            },
+            iconCls: 'action_editcopy',
+            scope: this
+        });
+
+        this.action_comeposeEmail = new Ext.Action({
+            text: i18n._('Compose Meessage To'),
+            handler: async function () {
+                let defaults = Tine.Felamimail.Model.Message.getDefaultData();
+                defaults.to = [email];
+                defaults.body = Tine.Felamimail.getSignature();
+                const record = new Tine.Felamimail.Model.Message(defaults, 0);
+                Tine.Felamimail.MessageEditDialog.openWindow({
+                    record: record
+                });
+            },
+            iconCls: 'action_composeEmail',
+            scope: this
+        });
+
+        this.contextMenu.addMenuItem(this.action_comeposeEmail);
+        this.contextMenu.addMenuItem(this.action_copyEmailPlainText);
+        this.contextMenu.showAt(position);
+    },
+    
+    contactHandler(target, record) {
+        // check if addressbook app is available
+        if (! Tine.Tinebase.common.hasRight('run', 'Addressbook')) {
+            return;
+        }
+        
+        Tine.Addressbook.ContactEditDialog.openWindow({
+            record: record,
+            listeners: {
+                scope: this,
+                'load': function(editdlg) {
+                    if (!record) {
+                        const linkified = target.dom?.className === 'linkified';
+                        const contactInfo = Ext.util.Format.htmlDecode(linkified ? target.dom.href : target.id);
+
+                        if (linkified) {
+                            editdlg.record.set('email', contactInfo.replace('mailto:', ''));
+                        } else {
+                            const parts = contactInfo.split(':');
+                            
+                            editdlg.record.set('email', parts[1]);
+                            editdlg.record.set('n_given', parts[2]);
+                            editdlg.record.set('n_family', parts[3]);
+                        }
+                    }
+                }
+            }
+        });
     },
 
     renderWindow: function () {

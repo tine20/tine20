@@ -171,5 +171,110 @@ class Setup_Initialize
             }
         }
     }
-    
+
+    /**
+     * create application customfields
+     *
+     * expects $customFields with the following structure:
+     *
+     * $customfields = [
+     *      [
+     *          'app' => 'Addressbook',
+     *          'model' => Addressbook_Model_Contact::class,
+     *          'cfields' => [
+     *              [
+     *                  'name' => 'community_ident_nr',
+     *                  'label' => 'Gemeindeschlüssel',
+     *                  'uiconfig' => [
+     *                      'order' => '',
+     *                      'group' => '',
+     *                      'tab' => ''
+     *                  ],
+     *                  'type' => 'string',
+     *              ]
+     *          ]
+     *      ],
+     *      [...]
+     * ]
+     *
+     * @param array $customfields
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    public static function createCustomFields(array $customfields)
+    {
+        foreach ($customfields as $appModel) {
+            $appId = Tinebase_Application::getInstance()->getApplicationByName($appModel['app'])->getId();
+
+            foreach ($appModel['cfields'] as $customfield) {
+                $cfc = array(
+                    'name' => $customfield['name'],
+                    'application_id' => $appId,
+                    'model' => $appModel['model'],
+                    'definition' => array(
+                        'uiconfig' => $customfield['uiconfig'],
+                        'label' => $customfield['label'],
+                        'type' => $customfield['type'],
+                    )
+                );
+
+                if ($customfield['type'] == 'record') {
+                    $cfc['definition']['recordConfig'] = $customfield['recordConfig'];
+                } elseif ($customfield['type'] == 'keyField') {
+                    $cfc['definition']['keyFieldConfig'] = $customfield['recordConfig'];
+                }
+
+                $cf = new Tinebase_Model_CustomField_Config($cfc);
+                Tinebase_CustomField::getInstance()->addCustomField($cf);
+            }
+        }
+    }
+
+    /**
+     * expects $tags with the following structure:
+     *
+     * $tags = [
+     *  [
+     *      'name' => 'Mitglied',
+     *      'description' => 'gehört zu einem Mitglied',
+     *      'color' => '#339966'
+     *  ], [...]
+     * ]
+     *
+     * @param array $tags
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public static function createSharedTags(array $tags)
+    {
+        $controller = Tinebase_Tags::getInstance();
+
+        // TODO  needed?
+//        $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+//        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
+        foreach ($tags as $tag) {
+            $sharedTag = new Tinebase_Model_Tag(array(
+                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+                'name'  => $tag['name'],
+                'description' => $tag['description'],
+                'color' => $tag['color'],
+            ));
+
+            $savedSharedTag = $controller->createTag($sharedTag);
+            $controller->setContexts(array('any'), $savedSharedTag->getId());
+
+            $right = new Tinebase_Model_TagRight(array(
+                'tag_id'        => $savedSharedTag->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id'    => 0,
+                'view_right'    => true,
+                'use_right'     => true,
+            ));
+            $controller->setRights($right);
+        }
+    }
 }

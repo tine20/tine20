@@ -19,6 +19,8 @@
  */
 class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
 {
+    const CASE_SENSITIVE = 'caseSensitive';
+
     /**
      * @var array list of allowed operators
      */
@@ -63,12 +65,12 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
         $_options = isset($_fieldOrData['options']) ? $_fieldOrData['options'] : $_options;
-        if (isset($_options['caseSensitive']) && $_options['caseSensitive']) {
+        if (isset($_options[self::CASE_SENSITIVE]) && $_options[self::CASE_SENSITIVE]) {
             $this->_caseSensitive = true;
         }
         if (isset($_options['binary']) && $_options['binary']) {
             $this->_binary = true;
-            if (!isset($_options['caseSensitive'])) {
+            if (!isset($_options[self::CASE_SENSITIVE])) {
                 $this->_caseSensitive = true;
             }
         }
@@ -85,40 +87,29 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             return;
         }
 
-        $db = Tinebase_Core::getDb();
-        $sqlCommand = Tinebase_Backend_Sql_Command::factory($db);
+        // TODO fixme move CS here
+        // if ($this->_caseSensitive) {}
+        // it seems as of mysql8 this might become an option
+        // 'sqlop' => ' LIKE _utf8mb4 ? COLLATE utf8mb4_unicode_cs? or something'
+        // https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html
 
-        if ($this->_caseSensitive) {
-            $this->_opSqlMap = array(
-                'equals'            => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '?'  ),
-                'contains'          => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '%?%'),
-                'notcontains'       => array('sqlop' => ' NOT ' .$sqlCommand->getCsLike() .' (?)',      'wildcards' => '%?%'),
-                'startswith'        => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '?%' ),
-                'endswith'          => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '%?' ),
-                'not'               => array('sqlop' => ' NOT ' .$sqlCommand->getCsLike() .' (?)',      'wildcards' => '?'  ),
-                'in'                => array('sqlop' => ' IN (?)',          'wildcards' => '?'  ),
-                'notin'             => array('sqlop' => ' NOT IN (?)',      'wildcards' => '?'  ),
-                'isnull'            => array('sqlop' => ' IS NULL',         'wildcards' => '?'  ),
-                'notnull'           => array('sqlop' => ' IS NOT NULL',     'wildcards' => '?'  ),
-                'group'             => array('sqlop' => ' NOT ' . $sqlCommand->getCsLike() . "  ''",    'wildcards' => '?'  ),
-                'equalsspecial'     => array('sqlop' => ' ' .$sqlCommand->getCsLike() .' (?)',          'wildcards' => '?'  ),
-            );
-        } else {
-            $this->_opSqlMap = array(
-                'equals'            => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?'  ),
-                'contains'          => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '%?%'),
-                'notcontains'       => array('sqlop' => ' NOT ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),      'wildcards' => '%?%'),
-                'startswith'        => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?%' ),
-                'endswith'          => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '%?' ),
-                'not'               => array('sqlop' => ' NOT ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),      'wildcards' => '?'  ),
-                'in'                => array('sqlop' => ' IN (?)',          'wildcards' => '?'  ),
-                'notin'             => array('sqlop' => ' NOT IN (?)',      'wildcards' => '?'  ),
-                'isnull'            => array('sqlop' => ' IS NULL',         'wildcards' => '?'  ),
-                'notnull'           => array('sqlop' => ' IS NOT NULL',     'wildcards' => '?'  ),
-                'group'             => array('sqlop' => ' NOT ' . $sqlCommand->getLike() . "  ''",    'wildcards' => '?'  ),
-                'equalsspecial'     => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?'  ),
-            );
-        }
+        // AND mysql 5.6 / 5.7 has a bug with unicode_utf8mb4_ci .... https://bugs.mysql.com/bug.php?id=81990
+        // so we add some magic 'escape "|"' to it, to be removed once mysql 5.7 can be dropped
+
+        $this->_opSqlMap = array(
+            'equals'            => array('sqlop' => ' LIKE (?) ESCAPE "|"',                         ),
+            'contains'          => array('sqlop' => ' LIKE (?) ESCAPE "|"',     'wildcards' => '%?%'),
+            'notcontains'       => array('sqlop' => ' NOT LIKE (?) ESCAPE "|"', 'wildcards' => '%?%'),
+            'startswith'        => array('sqlop' => ' LIKE (?) ESCAPE "|"',     'wildcards' => '?%' ),
+            'endswith'          => array('sqlop' => ' LIKE (?) ESCAPE "|"',     'wildcards' => '%?' ),
+            'not'               => array('sqlop' => ' NOT LIKE (?) ESCAPE "|"',                     ),
+            'in'                => array('sqlop' => ' IN (?)',                                      ),
+            'notin'             => array('sqlop' => ' NOT IN (?)',                                  ),
+            'isnull'            => array('sqlop' => ' IS NULL',                                     ),
+            'notnull'           => array('sqlop' => ' IS NOT NULL',                                 ),
+            'group'             => array('sqlop' => ' NOT LIKE \'\'',                               ),
+            'equalsspecial'     => array('sqlop' => ' LIKE (?) ESCAPE "|"',                         ),
+        );
     }
 
     /**
@@ -132,15 +123,17 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     {
         // quote field identifier, set action and replace wildcards
         $field = $this->_getQuotedFieldName($_backend);
-        if (($db = Tinebase_Core::getDb()) instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            if (!$this->_binary && $this->_caseSensitive) {
-                $field = 'BINARY ' . $field;
-            } elseif ($this->_binary && !$this->_caseSensitive) {
-                if ($db->getConfig()['charset'] === 'utf8') {
-                    $field .= ' COLLATE utf8_unicode_ci';
-                } else {
-                    $field .= ' COLLATE utf8mb4_unicode_ci';
-                }
+
+        // TODO fix me: this should be moved to the static part of the query, the search condition.
+        // TODO fix me: that might improve performance quiet a bit, remove this, do it in _setOpSqlMap
+        $db = Tinebase_Core::getDb();
+        if (!$this->_binary && $this->_caseSensitive) {
+            $field = 'BINARY ' . $field;
+        } elseif ($this->_binary && !$this->_caseSensitive) {
+            if ($db->getConfig()['charset'] === 'utf8') {
+                $field .= ' COLLATE utf8_unicode_ci';
+            } else {
+                $field .= ' COLLATE utf8mb4_unicode_ci';
             }
         }
         
@@ -185,17 +178,9 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
                 $value = preg_replace('/(\s+|\-)/', '%', $value);
             }  
         }
-        
-        if (! in_array($this->_operator, array('in', 'notin'))) {
-            if ($this->_caseSensitive) {
-                $where = Tinebase_Core::getDb()->quoteInto($field . ' ' . $action['sqlop'], $value);
-            } else {
-                $where = Tinebase_Core::getDb()->quoteInto(Tinebase_Backend_Sql_Command::factory($db)->prepareForILike($field) . ' ' . $action['sqlop'], $value);
-            }
-        } else {
-            $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
-        }
 
+        $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
+        
         if (in_array($this->_operator, array('not', 'notin', 'notcontains')) && $value !== '') {
             $where = "( $where OR $field IS NULL)";
         }

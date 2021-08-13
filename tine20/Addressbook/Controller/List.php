@@ -879,39 +879,78 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         /** @var Addressbook_Model_List $record */
         if (isset($record->memberroles)) {
-            // get migration
-            // TODO add generic helper fn for this?
-            $memberrolesToSet = (!$record->memberroles instanceof Tinebase_Record_RecordSet)
-                ? new Tinebase_Record_RecordSet(
-                    'Addressbook_Model_ListMemberRole',
-                    is_array($record->memberroles) ? $record->memberroles : [],
-                    /* $_bypassFilters */ true
-                ) : $record->memberroles;
-
-            foreach ($memberrolesToSet as $memberrole) {
-                foreach (array('contact_id', 'list_role_id', 'list_id') as $field) {
-                    if (isset($memberrole[$field]['id'])) {
-                        $memberrole[$field] = $memberrole[$field]['id'];
-                    }
-                }
-            }
-
-            $currentMemberroles = $this->getMemberRoles($record);
-            $diff = $currentMemberroles->diff($memberrolesToSet);
-            if (count($diff['added']) > 0) {
-                $diff['added']->list_id = $updatedRecord->getId();
-                foreach ($diff['added'] as $memberrole) {
-                    $this->getMemberRolesBackend()->create($memberrole);
-                }
-            }
-            if (count($diff['removed']) > 0) {
-                $this->getMemberRolesBackend()->delete($diff['removed']->getArrayOfIds());
-            }
+            $this->setMemberRoles($record, $updatedRecord->getId());
         }
 
-        $result = parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
+        return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
+    }
 
-        return $result;
+    /**
+     * set member roles for list
+     *
+     * @param Addressbook_Model_List $list
+     * @param string $listId
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * TODO add generic helper fn for migration handling?
+     */
+    public function setMemberRoles(Addressbook_Model_List $list, $listId = null)
+    {
+        $memberrolesToSet = (!$list->memberroles instanceof Tinebase_Record_RecordSet)
+            ? new Tinebase_Record_RecordSet(
+                'Addressbook_Model_ListMemberRole',
+                is_array($list->memberroles) ? $list->memberroles : [],
+                /* $_bypassFilters */ true
+            ) : $list->memberroles;
+
+        // sanitize ids and check constraints
+        $listConstraints = [];
+        foreach ($memberrolesToSet as $memberrole) {
+            foreach (array('contact_id', 'list_role_id', 'list_id') as $field) {
+                if (isset($memberrole[$field]['id'])) {
+                    $memberrole[$field] = $memberrole[$field]['id'];
+                }
+            }
+            $this->_checkMaxMemberConstraint($listConstraints, $memberrole['list_role_id']);
+        }
+
+        $currentMemberroles = $this->getMemberRoles($list);
+        $diff = $currentMemberroles->diff($memberrolesToSet);
+        if (count($diff['added']) > 0) {
+            $diff['added']->list_id = $listId ?? $list->getId();
+            foreach ($diff['added'] as $memberrole) {
+                $this->getMemberRolesBackend()->create($memberrole);
+            }
+        }
+        if (count($diff['removed']) > 0) {
+            $this->getMemberRolesBackend()->delete($diff['removed']->getArrayOfIds());
+        }
+    }
+
+    /**
+     * @param array $listConstraints
+     * @param string $listRoleId
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkMaxMemberConstraint(&$listConstraints, $listRoleId)
+    {
+        if (! isset($listConstraints[$listRoleId])) {
+            $listConstraints[$listRoleId] = [
+                'listRole' => Addressbook_Controller_ListRole::getInstance()->get($listRoleId),
+                'count' => 1,
+            ];
+        } else {
+            $listConstraints[$listRoleId]['count']++;
+        }
+
+        /** var Addressbook_Model_ListRole $listConstraints[$listRoleId]['listRole'] */
+        $maxMembers = $listConstraints[$listRoleId]['listRole']->{Addressbook_Model_ListRole::FLD_MAX_MEMBERS};
+        if ($maxMembers && $listConstraints[$listRoleId]['count'] > $maxMembers) {
+            $translate = Tinebase_Translation::getTranslation($this->_applicationName);
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Maximum number of role members reached'));
+        }
     }
 
     /**

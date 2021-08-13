@@ -171,7 +171,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         // TODO: resolve this in controller
         if (! empty($contract['products']) && is_array($contract['products'])) {
-            $cc = Sales_Controller_Product::getInstance()->search(new Sales_Model_ProductFilter(array()));
+            $cc = Sales_Controller_Product::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array()));
             for ($i = 0; $i < count($contract['products']); $i++) {
                 $costCenter = $cc->filter('id', $contract['products'][$i]['product_id'])->getFirstRecord();
                 if ($costCenter) {
@@ -249,60 +249,15 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, Sales_Controller_Contract::getInstance());
     }
 
-    /*************************** products functions *****************************/
+    /*************************** procuct aggregate functions *************************/
 
-    /**
-     * Search for records matching given arguments
-     *
-     * @param  array $filter
-     * @param  array $paging
-     * @return array
-     */
-    public function searchProducts($filter, $paging)
-    {
-        return $this->_search($filter, $paging, Sales_Controller_Product::getInstance(), 'Sales_Model_ProductFilter');
-    }
-    
     public function searchProductAggregates($filter, $paging)
     {
         return $this->_search($filter, $paging, Sales_Controller_ProductAggregate::getInstance(), 'Sales_Model_ProductAggregateFilter');
     }
     
-    /**
-     * Return a single record
-     *
-     * @param   string $id
-     * @return  array record data
-     */
-    public function getProduct($id)
-    {
-        return $this->_get($id, Sales_Controller_Product::getInstance());
-    }
+    /*************************** costcenter functions *****************************/
 
-    /**
-     * creates/updates a record
-     *
-     * @param  array $recordData
-     * @return array created/updated record
-     */
-    public function saveProduct($recordData)
-    {
-        return $this->_save($recordData, Sales_Controller_Product::getInstance(), 'Product');
-    }
-
-    /**
-     * deletes existing records
-     *
-     * @param  array $ids
-     * @return string
-     */
-    public function deleteProducts($ids)
-    {
-        return $this->_delete($ids, Sales_Controller_Product::getInstance());
-    }
-    
-    // costcenter methods
-    
     /**
      * Search for records matching given arguments
      *

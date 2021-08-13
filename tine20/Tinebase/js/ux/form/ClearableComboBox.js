@@ -45,7 +45,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         ts.each(function (t, all, index) {
             t.hide = function () {
                 this.dom.style.display = 'none';
-                triggerField.el.setWidth(triggerField.wrap.getWidth() - 21);
+                triggerField.el?.setWidth(triggerField.wrap.getWidth() - 21);
             };
             t.show = function () {
                 this.dom.style.display = '';

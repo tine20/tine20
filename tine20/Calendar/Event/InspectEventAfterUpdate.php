@@ -21,4 +21,5 @@ class Calendar_Event_InspectEventAfterUpdate extends Tinebase_Event_Observer_Abs
      * @var Calendar_Model_Event
      */
     public $observable;
+    public $oldEvent;
 }

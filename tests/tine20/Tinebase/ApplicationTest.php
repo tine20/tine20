@@ -168,7 +168,7 @@ class Tinebase_ApplicationTest extends TestCase
 
         $this->assertInstanceOf('Tinebase_Record_RecordSet', $applications);
         $this->assertGreaterThanOrEqual(2, count($applications));
-        $this->assertContains($application->id, $applications->id);
+        $this->assertNotContains($application->id, $applications->id, print_r($applications->toArray(), true));
 
         Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::DISABLED);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
@@ -176,15 +176,13 @@ class Tinebase_ApplicationTest extends TestCase
 
         $application2 = $this->testAddApplication();
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        $this->assertContains($application2->id, $applications->id);
+        $this->assertNotContains($application2->id, $applications->id);
 
         Tinebase_Application::getInstance()->deleteApplication($application2);
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         $this->assertNotContains($application2->id, $applications->id);
 
-        Tinebase_Application::getInstance()->setApplicationStatus($application, Tinebase_Application::ENABLED);
-        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        $this->assertContains($application->id, $applications->id);
+        $this->assertContains('Tinebase', $applications->name, print_r($applications->name, true));
     }
     
     /**
@@ -426,14 +424,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_AreaLockConfig::class,
                 Tinebase_Model_AreaLockState::class,
                 Tinebase_Model_AsyncJob::class,
-                Tinebase_Model_MFA_GenericSmsConfig::class,
-                Tinebase_Model_MFA_SmsUserConfig::class,
-                Tinebase_Model_MFA_PinConfig::class,
-                Tinebase_Model_MFA_PinUserConfig::class,
-                Tinebase_Model_MFA_Config::class,
-                Tinebase_Model_MFA_UserConfig::class,
-                Tinebase_Model_MFA_YubicoOTPConfig::class,
-                Tinebase_Model_MFA_YubicoOTPUserConfig::class,
                 Tinebase_Model_AuthToken::class,
                 Tinebase_Model_AuthTokenChannelConfig::class,
                 Tinebase_Model_BLConfig::class,
@@ -459,6 +449,20 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_ImportException::class,
                 Tinebase_Model_ImportExportDefinition::class,
                 Tinebase_Model_LogEntry::class,
+                Tinebase_Model_MFA_Config::class,
+                Tinebase_Model_MFA_GenericSmsConfig::class,
+                Tinebase_Model_MFA_HOTPConfig::class,
+                Tinebase_Model_MFA_HOTPUserConfig::class,
+                Tinebase_Model_MFA_PinConfig::class,
+                Tinebase_Model_MFA_PinUserConfig::class,
+                Tinebase_Model_MFA_SmsUserConfig::class,
+                Tinebase_Model_MFA_TOTPConfig::class,
+                Tinebase_Model_MFA_TOTPUserConfig::class,
+                Tinebase_Model_MFA_UserConfig::class,
+                Tinebase_Model_MFA_WebAuthnConfig::class,
+                Tinebase_Model_MFA_WebAuthnUserConfig::class,
+                Tinebase_Model_MFA_YubicoOTPConfig::class,
+                Tinebase_Model_MFA_YubicoOTPUserConfig::class,
                 Tinebase_Model_ModificationLog::class,
                 Tinebase_Model_Note::class,
                 Tinebase_Model_NoteType::class,
@@ -488,6 +492,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_UpdateMultipleException::class,
                 Tinebase_Model_User::class,
                 Tinebase_Model_UserPassword::class,
+                Tinebase_Model_WebauthnPublicKey::class,
                 Tinebase_Model_WebDavLock::class,
             ),
             'Voipmanager' => array(

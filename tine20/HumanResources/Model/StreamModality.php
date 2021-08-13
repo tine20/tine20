@@ -171,6 +171,14 @@ class HumanResources_Model_StreamModality extends Tinebase_Record_NewAbstract
         ],
     ];
 
+    public function setFromArray(array &$_data)
+    {
+        if (isset($_data[self::FLD_END])) {
+            unset($_data[self::FLD_END]);
+        }
+        parent::setFromArray($_data);
+    }
+
     public function __set($_name, $_value)
     {
         parent::__set($_name, $_value);

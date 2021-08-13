@@ -1022,7 +1022,7 @@ var menu = new Ext.menu.Menu({
     // private
     findRecord : function(prop, value){
         var record;
-        if(this.store.getCount() > 0){
+        if(this.store?.getCount() > 0){
             this.store.each(function(r){
                 if(r.data[prop] == value){
                     record = r;

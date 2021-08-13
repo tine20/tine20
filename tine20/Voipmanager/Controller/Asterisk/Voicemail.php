@@ -101,9 +101,9 @@ class Voipmanager_Controller_Asterisk_Voicemail extends Voipmanager_Controller_A
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Voipmanager_Exception_Validation
      */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE, $_updateDeleted = false)
     {
-        $result =  parent::update($_record, $_duplicateCheck);
+        $result =  parent::update($_record, $_duplicateCheck, $_updateDeleted);
         
         Zend_Registry::get('logger')->debug(__METHOD__ . '::' . __LINE__ . ' update voicemail configuration');
         

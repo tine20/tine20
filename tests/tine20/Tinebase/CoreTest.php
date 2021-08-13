@@ -119,6 +119,78 @@ class Tinebase_CoreTest extends TestCase
         $this->assertInstanceOf('Tinebase_Server_WebDAV', $server);
     }
 
+    public function testGetUrlPath()
+    {
+        $config = Tinebase_Config::getInstance();
+        $oldValue = $config->get(Tinebase_Config::TINE20_URL);
+        try {
+            $config->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test/uri');
+            static::assertEquals('/uri', Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH));
+        } finally {
+            $config->set(Tinebase_Config::TINE20_URL, $oldValue);
+        }
+    }
+
+    public function testGetUrlEmptyPath()
+    {
+        $config = Tinebase_Config::getInstance();
+        $oldValue = $config->get(Tinebase_Config::TINE20_URL);
+        try {
+            $config->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test');
+            static::assertEquals('/', Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH));
+        } finally {
+            $config->set(Tinebase_Config::TINE20_URL, $oldValue);
+        }
+    }
+
+    public function testGetUrlPathWithPort()
+    {
+        $config = Tinebase_Config::getInstance();
+        $oldValue = $config->get(Tinebase_Config::TINE20_URL);
+        try {
+            $config->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test:8000/uri');
+            static::assertEquals('/uri', Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH));
+        } finally {
+            $config->set(Tinebase_Config::TINE20_URL, $oldValue);
+        }
+    }
+
+    public function testGetUrlEmptyPathWithPort()
+    {
+        $config = Tinebase_Config::getInstance();
+        $oldValue = $config->get(Tinebase_Config::TINE20_URL);
+        try {
+            $config->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test:8000');
+            static::assertEquals('/', Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH));
+        } finally {
+            $config->set(Tinebase_Config::TINE20_URL, $oldValue);
+        }
+    }
+
+    public function testGetUrlPathWithFile()
+    {
+        $config = Tinebase_Config::getInstance();
+        $oldValue = $config->get(Tinebase_Config::TINE20_URL);
+        try {
+            $config->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test/uri/file.php');
+            static::assertEquals('/uri/file.php', Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH));
+        } finally {
+            $config->set(Tinebase_Config::TINE20_URL, $oldValue);
+        }
+    }
+
+    public function testGetUrlPathWithQuery()
+    {
+        $config = Tinebase_Config::getInstance();
+        $oldValue = $config->get(Tinebase_Config::TINE20_URL);
+        try {
+            $config->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test/uri/file.php?foo=bar#nonos');
+            static::assertEquals('/uri/file.php', Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH));
+        } finally {
+            $config->set(Tinebase_Config::TINE20_URL, $oldValue);
+        }
+    }
+
     public function testGetUrl()
     {
         $config = Tinebase_Config::getInstance();

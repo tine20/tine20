@@ -175,7 +175,7 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
         
         if ($setToActive) {
             // find all products that should be set to active
-            $filter = new Sales_Model_ProductFilter(array(array(
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array(array(
                 'field'    => 'is_active',
                 'operator' => 'equals',
                 'value'    => false
@@ -199,7 +199,7 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
             
         } else {
             // find all products that should be set to inactive
-            $filter = new Sales_Model_ProductFilter(array(array(
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array(array(
                 'field'    => 'is_active',
                 'operator' => 'equals',
                 'value'    => true

@@ -4,7 +4,6 @@ include:
   - local: '/ci/gitlab-ci/test_php_jobs.yml'
   - local: '/ci/gitlab-ci/test_js_jobs.yml'
   - local: '/ci/gitlab-ci/test_jobs.yml'
-  - local: '/ci/gitlab-ci/code_analysis.yml'
   - local: '/ci/gitlab-ci/merge_customapp.yml'
 
 stages:
@@ -21,9 +20,12 @@ variables:
   PHP_UNIT_ALL_TESTS_BUILT: "false"
   PHP_UNIT_SERVERTESTS: "false"
   PHP_UNIT_SETUP_TESTS: "false"
-  PHP_STAN_ANALYSES: "false"
+  PHP_STAN_ANALYSES: "true"
+  CODE_ANALYSIS_PARALLEL_LINT: "true"
+  CODE_ANALYSIS_PHPCS: "true"
   JS_E2E_TEST_SOURCE: "false"
   JS_E2E_TEST_FILTER: ""
+  PHPUNIT_FILTER: ${CUSTOMAPP_DIR}_
 
 workflow:
   rules:
@@ -35,7 +37,7 @@ workflow:
       when: never
     - when: always
 
-build:
+docker_build_source:
   stage: build
   trigger:
     project: tine20/tine20
@@ -44,3 +46,12 @@ build:
   variables:
     RUN_NO_TESTS: "true"
     IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
+
+docker_build_built:
+  stage: build
+  script:
+    - echo job is there for needs
+  rules:
+    - if: $NOT_TURE == "true"
+      when: on_success
+    - when: never

@@ -544,6 +544,16 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         this.resolveListMembers()
                     }
                 }
+            },{
+                text: this.app.i18n._('Use as event location'),
+                iconCls: 'action_export',
+                scope: this,
+                disabled: ! this.record.get('editGrant'),
+                handler: function() {
+                    const locationField = this.editDialog.getForm().findField('location');
+                    const attendeeName = this.renderAttenderName(attender?.data?.user_id,{noIcon: true}, attender);
+                    locationField.setValue(attendeeName);
+                }
             }, '-'];
 
             var felamimailApp = Tine.Tinebase.appMgr.get('Felamimail');

@@ -360,56 +360,9 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                 'hash_function'   => 1
              )
         );
-        
-        if (isset($_SERVER['REQUEST_URI'])) {
-            $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
 
-            // fallback to request uri
-            $baseUri = $_SERVER['REQUEST_URI'];
-
-            if ($request) {
-                if ($request->getHeaders()->has('X-FORWARDED-HOST')) {
-                    /************** Apache 2.4 with mod_proxy ****************
-                     * Apache set's X-FORWARDED-HOST and REFERER
-                     * 
-                     * ProxyPass /tine20 http://192.168.122.158/tine20
-                     * <Location /tine20>
-                     *      ProxyPassReverse http://192.168.122.158/tine20
-                     * </Location>
-                     * 
-                     * ProxyPass /192.168.122.158/tine20 http://192.168.122.158/tine20
-                     * <Location /192.168.122.158/tine20>
-                     *     ProxyPassReverse http://192.168.122.158/tine20
-                     * </Location>
-                     */
-                    if ($request->getHeaders()->has('REFERER')) {
-                        $refererUri = \Zend\Uri\UriFactory::factory($request->getHeaders()->get('REFERER')->getFieldValue());
-                        $baseUri = $refererUri->getPath();
-                    } else {
-                        $exploded = explode("/", $_SERVER['REQUEST_URI']);
-                        if (strtolower($exploded[1]) == strtolower($_SERVER['HTTP_HOST'])) {
-                             $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
-                        }
-                    }
-                    
-                } else {
-                    $baseUri = $request->getBasePath();
-                }
-            }
-
-            // strip of index.php
-            if (substr($baseUri, -9) === 'index.php') {
-                $baseUri = dirname($baseUri);
-            }
-            
-            // strip of trailing /
-            $baseUri = rtrim($baseUri, '/');
-            
-            // fix for windows server with backslash directory separator
-            $baseUri = str_replace(DIRECTORY_SEPARATOR, '/', $baseUri);
-            
-            $options['cookie_path'] = $baseUri;
-        }
+        $baseUri = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
+        $options['cookie_path'] = $baseUri;
         
         if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
             $options['cookie_secure'] = true;

@@ -48,6 +48,21 @@ variables:
   PHP_STAN_ANALYSES:
     description: "Enable php stan."
     value: "true"
+    
+  PHP_STAN_ANALYSES_STRICT:
+    value: "false"
+
+  CODE_ANALYSIS_PARALLEL_LINT:
+    value: "true"
+
+  CODE_ANALYSIS_PARALLEL_LINT_STRICT:
+    value: "false"
+
+  CODE_ANALYSIS_PHPCS:
+    value: "false"
+
+  CODE_ANALYSIS_PHPCS_STRICT:
+    value: "false"
 
   PHP_UNIT_ALL_TESTS_SOURCE:
     description: "Enable or disable php unit tests on source (with webpack) image."
@@ -59,7 +74,7 @@ variables:
 
   PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP:
     description: "Enable or disable run all test with ldap backend enabled. Does not effect or is evected by PHP_UNIT_ALL_TESTS_BUILT."
-    value: "false"
+    value: "never"
 
   PHP_UNIT_SERVERTESTS:
     description: "Enable or disable server tests."
@@ -123,12 +138,16 @@ variables:
 
   CODENAME:
     description: "Codename for build"
-    value: "todo"
+    value: "Lu"
 
   REUSE_IMAGES:
     description: "Try to reuse source images" 
     value: "true"
 
-  NODIFY_ON_FAILURE:
+  NOTIFY_ON_FAILURE:
     description: "send riot message if pipeline failes"
+    value: "false"
+
+  ZIP_PACKAGES:
+    description: "Build zip packages, wenn packaging. (Tar packages are always build)"
     value: "false"

@@ -111,6 +111,14 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
         let previewPanel = null;
         let previewPanelXtype = null;
 
+        // cope with attachments
+        if (this.record.constructor.hasField('attachments')) {
+            this.attachments = _.map(this.record.get('attachments'), (attachment)=> {
+                return new Tine.Tinebase.Model.Tree_Node(attachment);
+            });
+            this.record = this.attachments[0] || new Tine.Tinebase.Model.Tree_Node({name: ''});
+        }
+        
         this.window.setTitle(this.record.get('name'));
 
         if (this.cardPanelsByRecordId[this.record.id]) {
@@ -144,7 +152,7 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
         Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.cardPanel, previewPanel, true);
     },
-
+    
     /**
      * navigate previews
      *
@@ -159,6 +167,12 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
                 case e.UP:
                     this.sm.selectPrevious();
                     break;
+                case e.LEFT:
+                    return this.onNavigateAttachment(-1);
+                    break;
+                case e.RIGHT:
+                    return this.onNavigateAttachment(+1);
+                    break;
                 default:
                     break;
             }
@@ -170,6 +184,13 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
         }
     },
 
+    onNavigateAttachment(dir) {
+        if (this.attachments?.length > 1) {
+            this.record = this.attachments[((this.attachments.indexOf(this.record) || this.attachments.length) + dir)%this.attachments.length];
+            this.loadPreviewPanel();
+        }
+    },
+    
     /**
      * @private
      */

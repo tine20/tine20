@@ -17,6 +17,8 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE014_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE014_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE014_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE014_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -47,6 +49,14 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE014_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE014_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -197,13 +207,16 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
 
     public function update007()
     {
-        $this->_backend->addCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
-            '<field>
+        if (! $this->_backend->columnExists('container_id', 'importexport_definition')) {
+            $this->_backend->addCol('importexport_definition', new Setup_Backend_Schema_Field_Xml(
+                '<field>
                     <name>container_id</name>
                     <type>text</type>
                     <length>40</length>
                 </field>'));
+        }
 
+        $defaultContainer = null;
         if (Tinebase_Core::isReplica()) {
             $tries = 0;
             do {
@@ -216,6 +229,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
         } else {
             $defaultContainer = Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
         }
+        if (! $defaultContainer) {
+            throw new Setup_Exception('could not find default container');
+        }
+
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'importexport_definition SET container_id = "' .
             $defaultContainer->getId() . '"');
 
@@ -228,5 +245,20 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
                 </field>'));
 
         $this->addApplicationUpdate('Tinebase', '14.7', self::RELEASE014_UPDATE007);
+    }
+
+    public function update008()
+    {
+        $this->addApplicationUpdate('Tinebase', '14.8', self::RELEASE014_UPDATE008);
+    }
+
+    public function update009()
+    {
+        // update needs this - it waits for table metadata lock for a very long time otherwise ...
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Tinebase_Model_CommunityIdentNr::TABLE_NAME
+            . ' SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
+        Setup_SchemaTool::updateSchema([Tinebase_Model_CommunityIdentNr::class]);
+        $this->addApplicationUpdate('Tinebase', '14.9', self::RELEASE014_UPDATE009);
     }
 }

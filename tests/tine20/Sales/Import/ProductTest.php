@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Christian Feitl<c.feitl@metawas.de>
  */
 
@@ -19,10 +20,9 @@ class Sales_Import_ProductTest extends TestCase
     protected $_importContainer = null;
 
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
         self::clear('Sales', 'Product');
-
     }
 
     public function testImportDemoData()
@@ -34,7 +34,7 @@ class Sales_Import_ProductTest extends TestCase
             'file' => 'product.csv',
         ]);
         $importer->importDemodata();
-        $filter = Sales_Model_ProductFilter::getFilterForModel('Sales_Model_Product', [
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Sales_Model_Product', [
             ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = Sales_Controller_Product::getInstance()->search($filter);

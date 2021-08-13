@@ -155,7 +155,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         if (this.record.id == 0 && this.record.get('timeaccount_id') && this.record.get('timeaccount_id').is_billable) {
             this.getForm().findField('is_billable').setValue(this.record.get('timeaccount_id').is_billable);
         }
-        this.factor = this.getForm().findField('accounting_time_factor').getValue()
+        this.factor = this.getForm().findField('accounting_time_factor').getValue();
+        this.calculateAccountingTime();
         var focusFieldName = this.record.get('timeaccount_id') ? 'duration' : 'timeaccount_id',
             focusField = this.getForm().findField(focusFieldName);
 
@@ -203,25 +204,30 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     calculateAccountingTime: function() {
-        var factor = this.getForm().findField('accounting_time_factor').getValue(),
-            duration = this.getForm().findField('duration').getValue(),
-            accountingTime = Math.round(factor * duration);
-        if (factor != this.factor) {
-            this.factor = factor;
-            this.factorChanged = true;
+        if (!this.useMultiple) {
+            var factor = this.getForm().findField('accounting_time_factor').getValue(),
+                duration = this.getForm().findField('duration').getValue(),
+                accountingTime = Math.round(factor * duration);
+            if (factor != this.factor) {
+                this.factor = factor;
+                this.factorChanged = true;
+            }
+            this.getForm().findField('accounting_time').setValue(accountingTime);
         }
-        this.getForm().findField('accounting_time').setValue(accountingTime);
     },
 
     calculateFactor: function() {
-        var duration = this.getForm().findField('duration').getValue(),
-            accountingTime = this.getForm().findField('accounting_time').getValue(),
-            factor = accountingTime / duration;
-        if (factor != this.factor) {
-            this.factor = factor;
-            this.factorChanged = true;
+        if (!this.useMultiple) {
+            var duration = this.getForm().findField('duration').getValue(),
+                accountingTime = this.getForm().findField('accounting_time').getValue(),
+                factor = accountingTime / duration;
+            if (factor != this.factor) {
+                this.factor = factor;
+                this.factorChanged = true;
+            }
+            
+            this.getForm().findField('accounting_time_factor').setValue(factor);
         }
-        this.getForm().findField('accounting_time_factor').setValue(factor);
     },
     
     onCheckBillable: function(field, checked) {
@@ -414,6 +420,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             check: this.onCheckBillable
                                         }}),
                                     fieldManager('accounting_time_factor', {
+                                        disabled: this.useMultiple,
                                         columnWidth: .1,
                                         decimalSeparator: ',',
                                         fieldLabel: this.app.i18n._('Factor'),
@@ -422,6 +429,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             change: this.calculateAccountingTime
                                     }}),
                                     fieldManager('accounting_time', {
+                                        disabled: this.useMultiple,
                                         fieldLabel: this.app.i18n._('Accounting time'),
                                         listeners: {
                                             scope: this,
@@ -566,5 +574,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     initActions: function () {
         Tine.Timetracker.TimesheetEditDialog.superclass.initActions.call(this);
         this.action_export = null;
+    },
+
+    doCopyRecord: function() {
+        Tine.Timetracker.TimeaccountEditDialog.superclass.doCopyRecord.call(this);
+        const factor = this.record.data?.timeaccount_id?.accounting_time_factor;
+        this.record.set('accounting_time_factor', factor ?? 1);
     }
 });

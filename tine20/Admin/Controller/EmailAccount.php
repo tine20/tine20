@@ -141,14 +141,14 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      * @param   array $_additionalArguments
      * @return  Tinebase_Record_Interface
      */
-    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
+    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array(), $_updateDeleted = false)
     {
         $this->_checkRight('update');
 
-        $currentAccount = $this->get($_record->getId());
+        $currentAccount = $this->get($_record->getId(), null, true, $_updateDeleted);
 
         $raii = false;
-        if ($this->_sieveBackendSupportsMasterPassword($_record)) {
+        if ($this->sieveBackendSupportsMasterPassword($_record)) {
             $raii = $this->prepareAccountForSieveAdminAccess($_record->getId());
         }
 
@@ -156,7 +156,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $account = $this->_backend->update($_record);
         $this->_inspectAfterUpdate($account, $_record, $currentAccount);
 
-        if ($raii && $this->_sieveBackendSupportsMasterPassword($_record)) {
+        if ($raii && $this->sieveBackendSupportsMasterPassword($_record)) {
             $this->removeSieveAdminAccess();
             unset($raii);
         }
@@ -167,12 +167,16 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     /**
      * check if imap/sieve backend supports setting a sieve master password
      *
-     * @param $account
+     * @param Felamimail_Model_Account|null $account
      * @return bool
      */
-    protected function _sieveBackendSupportsMasterPassword($account)
+    public function sieveBackendSupportsMasterPassword(Felamimail_Model_Account $account = null): bool
     {
-        if (! in_array($account->type, [
+        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            return false;
+        }
+
+        if ($account && ! in_array($account->type, [
             Felamimail_Model_Account::TYPE_SYSTEM,
             Felamimail_Model_Account::TYPE_SHARED,
             Felamimail_Model_Account::TYPE_USER_INTERNAL,

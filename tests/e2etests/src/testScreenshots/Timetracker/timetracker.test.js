@@ -14,7 +14,7 @@ beforeAll(async () => {
 });
 
 describe('timeaccount', () => {
-    describe('Edit Contact', () => {
+    describe('Edit Timeaccount', () => {
         let editDialog;
         test('mainpage', async () => {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Zeitkonten'});
@@ -24,7 +24,7 @@ describe('timeaccount', () => {
             await editDialog.screenshot({path: 'screenshots/Zeiterfassung/2_zeiterfassung_zeitkonto_neu.png'});
         });
 
-        test('premissions', async () => {
+        test('permissions', async () => {
             await expect(editDialog).toClick('span', {text: 'Zugang'});
             await editDialog.waitForSelector('.x-grid3-viewport');
             await editDialog.screenshot({path: 'screenshots/Zeiterfassung/3_zeiterfassung_zeitkonto_rechte.png'});
@@ -34,13 +34,13 @@ describe('timeaccount', () => {
 });
 
 describe('timetracker', () => {
-    describe('Edit Contact', () => {
+    describe('Edit Timesheet', () => {
         let editDialog;
         test('mainpage', async () => {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Stundenzettel'});
         });
 
-        test('open EditDialog', async () => {
+        test.skip('open EditDialog', async () => {
             editDialog = await lib.getEditDialog('Stundenzettel');
             await editDialog.screenshot({path: 'screenshots/Zeiterfassung/4_zeiterfassung_stundenzettel_neu.png'});
             await expect(editDialog).toClick('button', {text: 'Abbrechen'});

@@ -3,6 +3,7 @@ set -e
 
 echo $0 init git submodules ...
 
+cd ${CI_BUILDS_DIR}/tine20/tine20
 git submodule init
 
 echo $0 copying ...
@@ -28,6 +29,7 @@ rsync -a -I --delete ${CI_BUILDS_DIR}/tine20/tine20/tests/ ${TINE20ROOT}/tests/;
 rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_BUILDS_DIR}/tine20/tine20/tine20/ ${TINE20ROOT}/tine20/;
 rm -r ${TINE20ROOT}/tine20/vendor/metaways || true
 cd ${TINE20ROOT}/tine20;
+php ${CI_BUILDS_DIR}/tine20/tine20/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local
 composer install --no-ansi --no-progress --no-suggest --no-scripts
 
 ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/install_custom_app.sh

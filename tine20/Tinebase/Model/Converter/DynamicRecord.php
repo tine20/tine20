@@ -21,14 +21,16 @@
 class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter_Interface
 {
     protected $_property;
+    protected $_persistent;
 
     /**
      * Tinebase_Model_Converter_DynamicRecord constructor.
      * @param $_property
      */
-    public function __construct($_property)
+    public function __construct($_property, $_persistent = false)
     {
         $this->_property = $_property;
+        $this->_persistent = $_persistent;
     }
 
     /**
@@ -38,6 +40,9 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
     public function convertToRecord($record, $key, $blob)
     {
         $model = $record->{$this->_property};
+        if ($this->_persistent) {
+            $blob = json_decode($blob, true);
+        }
         if (!empty($model) && is_array($blob) && strpos($model, '_Model_') && class_exists($model)) {
             $newRecord = new $model($blob);
             $newRecord->runConvertToRecord();
@@ -52,12 +57,18 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
      */
     public function convertToData($record, $key, $fieldValue)
     {
+        $result = null;
         if ($fieldValue instanceof Tinebase_Record_Interface) {
             $fieldValue->runConvertToData();
-            return $fieldValue->toArray();
+            $result = $fieldValue->toArray();
         } elseif (is_array($fieldValue)) {
-            return $fieldValue;
+            $result = $fieldValue;
         }
-        return null;
+
+        if ($this->_persistent) {
+            $result = json_encode($result);
+        }
+
+        return $result;
     }
 }

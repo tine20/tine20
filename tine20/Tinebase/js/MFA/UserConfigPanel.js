@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import './HTOTPSecretField';
+import './WebAuthnPublicKeyDataField'
+
 class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
     /**
      * 
@@ -26,7 +29,8 @@ class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
         
         // load dynamic list of possible mfa devices for user
         return new Promise((async (resolve) => {
-            const mfaDevices = await Tine.Admin.getPossibleMFAs(this.account);
+            const me = this;
+            const mfaDevices = await Tine.Admin.getPossibleMFAs(this.account.getId());
             const arr = _.map(mfaDevices, (record) => {
                 // we use mfa_config_id as id here as config_class is not unique!
                 return [record.mfa_config_id, deviceTypeRenderer(record.config_class, {}, record)];
@@ -38,7 +42,11 @@ class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
                 return {
                     id: Tine.Tinebase.data.Record.generateUID(),
                     config_class: _.find(mfaDevices, {mfa_config_id: this.store.getAt(this.selectedIndex).data.field1}).config_class,
-                    mfa_config_id: this.getValue()
+                    mfa_config_id: this.getValue()/*,
+                    config: {
+                        // this is a hack to transport the accountData to the UserConfigs UI (needed e.g. for h|totp, webauthn)
+                        account_id: JSON.stringify(me.editDialog.record.data)
+                    }*/
                 };
             };
         }));
@@ -60,7 +68,7 @@ const deviceTypeRenderer = (config_class, metadata, record) => {
     const providerName = recordClass.getRecordName();
     const mfaConfigId = _.get(record, 'data.mfa_config_id', _.get(record, 'mfa_config_id', providerName));
 
-    return mfaConfigId + (mfaConfigId !== providerName ? ` (${providerName})` : '');
+    return mfaConfigId + (mfaConfigId !== providerName ? ` (${i18n._hidden(providerName)})` : '');
 }
 
 Tine.widgets.grid.RendererManager.register('Tinebase', 'MFA_UserConfig', 'config_class', deviceTypeRenderer);

@@ -32,7 +32,8 @@ class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Auth_MFA_AbstractUserCon
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'PIN',
+        self::RECORD_NAME                   => 'PIN', // gettext('GENDER_PIN')
+        self::RECORDS_NAME                   => 'PINs', // ngettext('PIN', 'PINs', n)
         self::TITLE_PROPERTY                => 'Static PIN for user: ●●●●●●', //_('{% true %}Static PIN for user: ●●●●●●')
         
         self::FIELDS                        => [
@@ -80,5 +81,14 @@ class Tinebase_Model_MFA_PinUserConfig extends Tinebase_Auth_MFA_AbstractUserCon
     public function getHashedPin()
     {
         return $this->_hashedPin;
+    }
+
+    public function updateUserOldRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
+    {
+        if ($newCfg = $newUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
+                $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) {
+            $newCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{self::FLD_HASHED_PIN} =
+                $this->getHashedPin();
+        }
     }
 }

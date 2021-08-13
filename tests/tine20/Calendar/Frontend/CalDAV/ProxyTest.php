@@ -241,7 +241,7 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         $sclever->visibility = Tinebase_Model_FullUser::VISIBILITY_HIDDEN;
         Tinebase_User::getInstance()->setLastLoginFailure('sclever');
         Tinebase_User::getInstance()->setLastLoginFailure('sclever');
-        $updatedUser = Tinebase_User::getInstance()->updateUser($sclever);
+        $updatedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
         static::assertEquals($sclever->visibility, $updatedUser->visibility);
         static::assertEquals($sclever->accountStatus, $updatedUser->accountStatus);
 
@@ -302,7 +302,7 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         /** @var Tinebase_Model_FullUser $sclever */
         $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
         $sclever->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED;
-        $updatedUser = Tinebase_User::getInstance()->updateUser($sclever);
+        $updatedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
         static::assertEquals($sclever->accountStatus, $updatedUser->accountStatus);
 
         $body = '<?xml version="1.0" encoding="UTF-8"?>
@@ -363,7 +363,7 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
         $sclever->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_EXPIRED;
         $sclever->accountExpires = new Tinebase_DateTime('2000-01-01 00:00:00');
-        $updatedUser = Tinebase_User::getInstance()->updateUser($sclever);
+        $updatedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
         static::assertEquals($sclever->accountExpires, $updatedUser->accountExpires);
         static::assertEquals($sclever->accountStatus, $updatedUser->accountStatus);
 

@@ -44,7 +44,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         }
         Tinebase_Group::unsetInstance();
         foreach (Tinebase_Acl_Roles::getInstance()->getRoleMemberships($setupUser->accountId) as $rId) {
-            Tinebase_Acl_Roles::getInstance()->removeRoleMember($rId, $setupUser->accountId);
+            Tinebase_Acl_Roles::getInstance()->removeRoleMember($rId, ['id' => $setupUser->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP]);
         }
         Tinebase_Acl_Roles::unsetInstance();
 
@@ -480,6 +480,6 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         $state = json_decode($appCtrl->getApplicationState($exampleApp, Tinebase_Application::STATE_UPDATES), true);
         static::assertTrue(is_array($state) && isset($state[ExampleApplication_Setup_Update_0::RELEASE000_UPDATE001])
             && isset($state[ExampleApplication_Setup_Update_12::RELEASE012_UPDATE001]), print_r($state, true));
-        static::assertCount(5, $state, print_r($state, true));
+        static::assertCount(6, $state, print_r($state, true));
     }
 }

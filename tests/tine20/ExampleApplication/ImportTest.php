@@ -19,7 +19,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  */
 class ExampleApplication_ImportTest extends ImportTestCase
 {
-    protected $_modelName = 'ExampleApplication_Model_ExampleRecord';
+    protected $_modelName = ExampleApplication_Model_ExampleRecord::class;
     protected $_deleteImportFile = false;
 
     public function testGenericImportExport()

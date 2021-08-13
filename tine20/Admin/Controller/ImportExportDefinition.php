@@ -157,11 +157,11 @@ class Admin_Controller_ImportExportDefinition extends Tinebase_Controller_Record
      * @param   array $_additionalArguments
      * @return  Tinebase_Record_Interface
      */
-    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
+    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array(), $_updateDeleted = false)
     {
         $this->_checkRight('update');
 
-        $ImportExportDefinition = $this->_backend->update($_record);
+        $ImportExportDefinition = $this->_backend->update($_record, true, $_updateDeleted);
 
         return $ImportExportDefinition;
     }

@@ -17,6 +17,7 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.PickerFilter, {
     
     field: 'tag',
     defaultOperator: 'equals',
+    operators: ['equals', 'not', 'in', 'notin', 'contains'],
     
     /**
      * @private

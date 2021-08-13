@@ -467,6 +467,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 const mfaDevices = exception.mfaUserConfigs
                 return Tine.Tinebase.areaLocks.unlock(exception.area, {
                     mfaDevices,
+                    username: me.getLoginPanel().getForm().findField('username').getValue(),
                     USERABORTMethod() { Ext.MessageBox.hide(); },
                     unlockMethod(areaName, MFAUserConfigId, MFAPassword) {
                         me.onLoginPress({MFAUserConfigId, MFAPassword});

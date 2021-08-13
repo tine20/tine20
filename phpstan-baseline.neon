@@ -816,26 +816,6 @@ parameters:
 			path: tine20/Addressbook/Frontend/Cli.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$recordData\\)\\: Unexpected token \"\\$recordData\", expected type at offset 47$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$recordData\\)\\: Unexpected token \"\\$recordData\", expected type at offset 46$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_Model_Filter_FilterGroup\\)\\: Unexpected token \"\\\\n     \\*\", expected variable at offset 194$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/Json.php
-
-		-
-			message: "#^Cannot access property \\$image on Tinebase_Record_Interface\\|true\\.$#"
-			count: 2
-			path: tine20/Addressbook/Frontend/Json.php
-
-		-
 			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
 			count: 1
 			path: tine20/Addressbook/Frontend/WebDAV/Container.php
@@ -884,16 +864,6 @@ parameters:
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
 			count: 1
 			path: tine20/Addressbook/Model/ListMemberFilter.php
-
-		-
-			message: "#^Access to an undefined property Addressbook_Model_ListRole\\:\\:\\$name\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListRole.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListRoleMemberFilter.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_Preference\\:\\:\\$value\\.$#"
@@ -4849,11 +4819,6 @@ parameters:
 			message: "#^Cannot call method hasExternalOrganizer\\(\\) on Tinebase_Record_Interface\\|true\\.$#"
 			count: 1
 			path: tine20/Calendar/Model/Attender.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$contact_id\\.$#"
-			count: 1
-			path: tine20/Calendar/Model/AttenderFilter.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$appName\\)\\: Unexpected token \"\\$appName\", expected type at offset 214$#"
@@ -9706,36 +9671,6 @@ parameters:
 			path: tine20/Timetracker/Model/TimeaccountFilter.php
 
 		-
-			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime   start_date\\)\\: Unexpected token \"start_date\", expected variable at offset 107$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(integer             duration\\)\\: Unexpected token \"duration\", expected variable at offset 201$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string              start_time\\)\\: Unexpected token \"start_time\", expected variable at offset 154$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string              timeaccount_id\\)\\: Unexpected token \"timeaccount_id\", expected variable at offset 246$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^Access to an undefined property Timetracker_Model_Timesheet\\:\\:\\$start_date\\.$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
-			message: "#^Access to an undefined property Timetracker_Model_Timesheet\\:\\:\\$duration\\.$#"
-			count: 1
-			path: tine20/Timetracker/Model/Timesheet.php
-
-		-
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
 			count: 1
 			path: tine20/Timetracker/Model/TimesheetFilter.php
@@ -13904,26 +13839,6 @@ parameters:
 			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$name\\.$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/WebDAV/Container.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$type\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/WebDAV/Directory.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_TempFile\\:\\:\\$name\\.$#"
-			count: 2
-			path: tine20/Tinebase/Frontend/WebDAV/Directory.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_TempFile\\:\\:\\$path\\.$#"
-			count: 2
-			path: tine20/Tinebase/Frontend/WebDAV/Directory.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_FullUser\\:\\:\\$accountId\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/WebDAV/Directory.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_Model_Tree_Node\\:\\:\\$is_quarantined\\.$#"

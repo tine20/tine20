@@ -14,11 +14,11 @@
  * 
  * @package     Timetracker
  *
- * @property    integer             accounting_time
- * @property    integer             duration
- * @property    Tinebase_DateTime   start_date
- * @property    string              start_time
- * @property    string              timeaccount_id
+ * @property integer $accounting_time
+ * @property integer $duration
+ * @property Tinebase_DateTime $start_date
+ * @property string $start_time
+ * @property string $timeaccount_id
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
@@ -259,7 +259,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             ),
             'accounting_time_factor'    => array(
                 'label'                 => 'Projecttime Accounting factor', // _('Projecttime Accounting factor')
-                'inputFilters' => array('Zend_Filter_Empty' => 1),
+                'inputFilters'          => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'float',
                 'default'               => 1
             ),

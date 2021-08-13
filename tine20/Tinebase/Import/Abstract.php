@@ -265,6 +265,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     $recordToImport = $this->_createRecordToImport($processedRecordData);
                     if ($resolveStrategy !== 'discard') {
                         $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $processedRecordData);
+                        if (!$importedRecord) {
+                            continue 2;
+                        }
                         $this->_inspectAfterImport($importedRecord);
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -668,7 +671,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         // check if related record exists
         $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
-        $filterModel = $field['related_model'] . 'Filter';
         $operator = isset($field['operator']) ? $field['operator'] : 'equals';
         
         $filterValueToAdd = '';
@@ -688,7 +690,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             }
         }
         
-        $filter = new $filterModel(array(
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($field['related_model'], array(
                 array('field' => $field['filter'], 'operator' => $operator, 'value' => $value . $filterValueToAdd)
         ));
         $result = $controller->search($filter, null, /* $_getRelations */ true);
@@ -784,7 +786,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param Tinebase_Record_Interface $_record
      * @param string $_resolveStrategy
      * @param array $_recordData not needed here but in other import classes (i.a. Admin_Import_Csv)
-     * @return Tinebase_Record_Interface the imported record
+     * @return null|Tinebase_Record_Interface the imported record
      * @throws Tinebase_Exception_Record_Validation
      */
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())

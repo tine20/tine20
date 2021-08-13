@@ -19,28 +19,28 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
 {
-    const FLD_SATZ_ART = 'satzArt';
-    const FLD_TEXTKENNZEICHEN = 'textkenzeichen';
-    const FLD_ARS_LAND = 'arsLand';
-    const FLD_ARS_RB = 'arsRB';
-    const FLD_ARS_KREIS = 'arsKreis';
-    const FLD_ARS_VB = 'arsVB';
-    const FLD_ARS_GEM = 'arsGem';
-    const FLD_ARS_COMBINED = 'arsCombined';
-    const FLD_GEMEINDENAMEN = 'gemeindenamen';
-    const FLD_FLAECHE = 'flaeche';
-    const FLD_BEVOELKERUNG_GESAMT = 'bevoelkerungGesamt';
-    const FLD_BEVOELKERUNG_MAENNLICH = 'bevoelkerungMaennlich';
-    const FLD_BEVOELKERUNG_WEIBLICH = 'bevoelkerungWeiblich';
-    const FLD_BEVOELKERUNG_JE_KM = 'bevoelkerungJeKm';
-    const FLD_PLZ = 'plz';
-    const FLD_LAENGENGRAD = 'laengengrad';
-    const FLD_BREITENGRAD = 'breitengrad';
-    const FLD_REISEGEBIET = 'reisegebiet';
-    const FLD_GRAD_DER_VERSTAEDTERUNG = 'gradDerVerstaedterung';
-    
-    const MODEL_NAME_PART = 'CommunityIdentNr';
-    const TABLE_NAME = 'cinumber';
+    public const FLD_SATZ_ART = 'satzArt';
+    public const FLD_TEXTKENNZEICHEN = 'textkenzeichen';
+    public const FLD_ARS_LAND = 'arsLand';
+    public const FLD_ARS_RB = 'arsRB';
+    public const FLD_ARS_KREIS = 'arsKreis';
+    public const FLD_ARS_VB = 'arsVB';
+    public const FLD_ARS_GEM = 'arsGem';
+    public const FLD_ARS_COMBINED = 'arsCombined';
+    public const FLD_GEMEINDENAMEN = 'gemeindenamen';
+    public const FLD_FLAECHE = 'flaeche';
+    public const FLD_BEVOELKERUNG_GESAMT = 'bevoelkerungGesamt';
+    public const FLD_BEVOELKERUNG_MAENNLICH = 'bevoelkerungMaennlich';
+    public const FLD_BEVOELKERUNG_WEIBLICH = 'bevoelkerungWeiblich';
+    public const FLD_BEVOELKERUNG_JE_KM = 'bevoelkerungJeKm';
+    public const FLD_PLZ = 'plz';
+    public const FLD_LAENGENGRAD = 'laengengrad';
+    public const FLD_BREITENGRAD = 'breitengrad';
+    public const FLD_REISEGEBIET = 'reisegebiet';
+    public const FLD_GRAD_DER_VERSTAEDTERUNG = 'gradDerVerstaedterung';
+
+    public const MODEL_NAME_PART = 'CommunityIdentNr';
+    public const TABLE_NAME = 'cinumber';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -48,7 +48,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
@@ -59,7 +59,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
         self::RECORDS_NAME => 'Community Identification Numbers', // ngettext('Community Identification Number', 'Community Identification Numbers', n)
         self::TITLE_PROPERTY => self::FLD_ARS_COMBINED,
         
-        self::HAS_RELATIONS => false,
+        self::HAS_RELATIONS => true,
         self::HAS_ATTACHMENTS => true,
         self::HAS_NOTES => false,
         self::HAS_TAGS => true,
@@ -68,11 +68,13 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
         self::EXPOSE_JSON_API => true,
         self::CREATE_MODULE => false,
 
+        self::HAS_DELETED_TIME_UNIQUE => true,
+
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
             self::UNIQUE_CONSTRAINTS => [
                 self::FLD_ARS_COMBINED => [
-                    self::COLUMNS => [self::FLD_ARS_COMBINED]
+                    self::COLUMNS => [self::FLD_ARS_COMBINED, self::FLD_DELETED_TIME]
                 ],
             ],
         ],
@@ -151,14 +153,16 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_STRING,
                 self::LABEL => 'Amtlicher Regionalschlüssel', // _('Amtlicher Regionalschlüssel')
                 self::NULLABLE => false,
+                self::QUERY_FILTER => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                 ],
             ],
             self::FLD_GEMEINDENAMEN => [
                 self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 40,
+                self::LENGTH => 255,
                 self::LABEL => 'Gemeindename', // _('Gemeindename')
+                self::QUERY_FILTER => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
@@ -238,7 +242,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_REISEGEBIET => [
                 self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 4,
+                self::LENGTH => 10,
                 self::LABEL  => 'Reisegebiet', // _('Reisegebiet')
                 self::NULLABLE => true,
                 self::VALIDATORS => [

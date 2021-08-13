@@ -145,6 +145,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
+        if ($this->_originalTestUser instanceof Tinebase_Model_User) {
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+
         if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
             $this->_deleteUsers();
             $this->_deleteGroups();
@@ -157,10 +161,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
-
-        if ($this->_originalTestUser instanceof Tinebase_Model_User) {
-            Tinebase_Core::setUser($this->_originalTestUser);
-        }
 
         if ($this->_invalidateRolesCache) {
             Tinebase_Acl_Roles::getInstance()->resetClassCache();
@@ -733,7 +733,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         $newRecord = array();
 
-        if ($nameField) {
+        if ($nameField && ! isset($recordData[$nameField])) {
             $newRecord[$nameField] = 'my test ' . $modelName;
         }
 
@@ -753,7 +753,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), array_merge($newRecord, $recordData));
         if ($nameField) {
             self::assertTrue(isset($savedRecord[$nameField]), 'name field missing: ' . print_r($savedRecord, true));
-            self::assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
+            $nameValue = isset($recordData[$nameField]) ? $recordData[$nameField] : 'my test ' . $modelName;
+            self::assertEquals($nameValue, $savedRecord[$nameField], print_r($savedRecord, true));
             if (null !== $configuration && $configuration->modlogActive) {
                 self::assertTrue(isset($savedRecord['created_by']['accountId']), 'created_by not present: ' .
                     print_r($savedRecord, true));

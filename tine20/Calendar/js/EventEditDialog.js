@@ -402,6 +402,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         var organizerCombo;
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
+            editDialog: this,
             bbar: [{
                 xtype: 'label',
                 html: Tine.Tinebase.appMgr.get('Calendar').i18n._('Organizer') + "&nbsp;"
@@ -424,14 +425,29 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 var typeId = _.get(o.record, 'data.user_id.type'),
                     type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId);
 
-                if (type.get('is_location')) {
-                    this.getForm().findField('location').setValue(
-                        this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'), {noIcon: true})
-                    );
+                if (type?.get('is_location')) {
+                    const locationField = this.getForm().findField('location');
+                    if (! locationField.getValue()) {
+                        locationField.setValue(
+                            this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'), {noIcon: true})
+                        );
+                    }
                 }
             }
 
             this.checkStates();
+        }, this);
+
+        this.attendeeGridPanel.store.on('remove', function(store, record, idx) {
+            //remove location if location is location from deleted ressource
+            var typeId = _.get(record, 'data.user_id.type'),
+                type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId),
+                locationName = this.attendeeGridPanel.renderAttenderResourceName(record.get('user_id'), {noIcon: true}),
+                locationField = this.getForm().findField('location');
+
+            if (type.get('is_location') && locationName === locationField.getValue()) {
+                locationField.setValue('');
+            }
         }, this);
         
         this.on('render', function() {this.getForm().add(organizerCombo);}, this);

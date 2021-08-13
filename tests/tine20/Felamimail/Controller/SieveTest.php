@@ -106,10 +106,10 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $raii = new Tinebase_RAII(function() use($sclever) {
             $sclever->visibility = Tinebase_Model_User::VISIBILITY_DISPLAYED;
-            Tinebase_User::getInstance()->updateUser($sclever);
+            Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
         });
         $sclever->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
-        Tinebase_User::getInstance()->updateUser($sclever);
+        Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
 
         Addressbook_Controller_List::getInstance()->addListMember($mailinglist, [$sclever->contact_id]);
 

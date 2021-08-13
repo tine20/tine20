@@ -984,6 +984,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.deleteFilter(filterRecord);
         }, this);
         
+        // add a default query filter if missing
+        if (this.filterStore.find('field', 'query') < 0) {
+            this.addFilter(new this.record({field: 'query'}));
+        }
+        
         this.supressEvents = false;
         this.onFilterRowsChange();
     },

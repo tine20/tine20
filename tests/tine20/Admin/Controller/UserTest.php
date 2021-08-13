@@ -20,7 +20,7 @@ class Admin_Controller_UserTest extends TestCase
         parent::setUp();
     }
 
-    public function testAddUserWithAlreadyExistingEmailData()
+    public function testAddUserWithAlreadyExistingEmailData($mode = 'create')
     {
         $this->_skipWithoutEmailSystemAccountConfig();
         $this->_skipIfLDAPBackend();
@@ -34,18 +34,32 @@ class Admin_Controller_UserTest extends TestCase
         ));
         $pw = Tinebase_Record_Abstract::generateUID(12);
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
-
-        // delete user and add again
-        $backend = new Tinebase_User_Sql();
-        $backend->deleteUserInSqlBackend($user);
+        $this->_usernamesToDelete[] = $user->accountLoginName;
 
         try {
-            $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+            if ($mode === 'create') {
+                // remove user from tine20 table and add again
+                $backend = new Tinebase_User_Sql();
+                $backend->deleteUserInSqlBackend($user);
+                $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+            } else if ($mode === 'update') {
+                // try update with existing email account with the same address
+                $user->accountEmailAddress = Tinebase_Core::getUser()->accountEmailAddress;
+                $user->smtpUser = new Tinebase_Model_EmailUser(array(
+                    'emailAddress'     => $user->accountEmailAddress,
+                ));
+                $user = Admin_Controller_User::getInstance()->update($user);
+            }
             self::fail('should throw an exception: "email address already exists". user: ' . print_r($user->toArray(), true));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             $translate = Tinebase_Translation::getTranslation('Tinebase');
             self::assertEquals($translate->_('Email account already exists'), $tesg->getMessage());
         }
+    }
+
+    public function testUpdateUserWithAlreadyExistingEmailAddress()
+    {
+        $this->testAddUserWithAlreadyExistingEmailData('update');
     }
 
     public function testAddAccountWithMFAConfigs()
@@ -64,6 +78,20 @@ class Admin_Controller_UserTest extends TestCase
         $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $user->mfa_configs);
         $this->assertInstanceOf(Tinebase_Model_MFA_UserConfig::class, $user->mfa_configs->getFirstRecord());
     }
+
+    /** this test makes Admin_Frontend_Json_EmailAccountTest::testGetSetSieveRuleForSclever fail
+     * something doesnt properly get cleaned up in the email account area
+    public function testDeleteRenameLogin()
+    {
+        Admin_Controller_User::getInstance()->delete([$this->_personas['sclever']->getId()]);
+        /** @var Tinebase_Model_FullUser $jmcblack *
+        $jmcblack = clone $this->_personas['jmcblack'];
+        $jmcblack->accountLoginName = 'sclever';
+        Admin_Controller_User::getInstance()->update($jmcblack);
+        Admin_Controller_User::getInstance()->setAccountPassword($jmcblack, '1234qweRT!', '1234qweRT!');
+        $authResult = Tinebase_Auth::getInstance()->authenticate('sclever', '1234qweRT!');
+        $this->assertSame(Tinebase_Auth::SUCCESS, $authResult->getCode(), print_r($authResult->getMessages(), true));
+    }*/
 
     public function testAddAccountWithEmailUserXprops()
     {

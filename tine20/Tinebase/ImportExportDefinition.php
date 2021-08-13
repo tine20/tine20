@@ -227,7 +227,13 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $xmlConfig = (empty($_definition->plugin_options))
                 ? '<?xml version="1.0" encoding="UTF-8"?><config></config>'
                 : $_definition->plugin_options;
-            $config = new Zend_Config_Xml($xmlConfig, /* section = */ null, /* runtime mods allowed = */ true);
+            try {
+                $config = new Zend_Config_Xml($xmlConfig, /* section = */ null, /* runtime mods allowed = */ true);
+            } catch (Throwable $t) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Invalid XML: ' . $xmlConfig . ' Exception: ' . $t);
+                throw new Tinebase_Exception_InvalidArgument('XML config is invalid');
+            }
             $cache->save($config, $cacheId);
         } else {
             $config = $cache->load($cacheId);
@@ -271,7 +277,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $definition->setId($existing->getId());
             $definition->is_deleted = $existing->is_deleted;
-            $result = $this->update($definition);
+            // also update deleted
+            $result = $this->update($definition, true, true);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
             // does not exist

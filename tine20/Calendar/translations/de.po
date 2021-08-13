@@ -1214,6 +1214,9 @@ msgstr "Lade Gruppenmitglieder..."
 msgid "Remove Attender"
 msgstr "Teilnehmer/in entfernen"
 
+msgid "Use as event location"
+msgstr "Als Terminort übernehmen"
+
 #: js/AttendeeGridPanel.js:553
 msgid "Compose email"
 msgstr "E-Mail verfassen"
