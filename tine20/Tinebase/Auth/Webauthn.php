@@ -85,6 +85,7 @@ final class Tinebase_Auth_Webauthn
             if (!($challenge = Tinebase_Session::getSessionNamespace(__CLASS__)->regchallenge)) {
                 throw new Tinebase_Exception_Backend('no registration challenge found');
             }
+            Tinebase_Session::getSessionNamespace(__CLASS__)->regchallenge = null;
             $credentialCreationOptions = \Webauthn\PublicKeyCredentialCreationOptions::createFromString($challenge);
         }
 
@@ -97,6 +98,7 @@ final class Tinebase_Auth_Webauthn
             if (!($challenge = Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge)) {
                 throw new Tinebase_Exception_Backend('no authentication challenge found');
             }
+            Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge = null;
             $credentialRequestOptions = \Webauthn\PublicKeyCredentialRequestOptions::createFromString($challenge);
         } else {
             $user = Tinebase_User::getInstance()->getFullUserById($accountId);
