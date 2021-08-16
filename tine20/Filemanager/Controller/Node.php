@@ -1310,7 +1310,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $newNode = $this->_backend->copy($_source->statpath, $_destination->statpath);
                 break;
             case 'move':
-                $newNode = $this->_backend->rename($_source->statpath, $_destination->statpath);
+                try {
+                    $newNode = $this->_backend->rename($_source->statpath, $_destination->statpath);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                        throw new Tinebase_Exception_SystemGeneric('The destination already exists.');
+                    } else {
+                        throw $zdse;
+                    }
+                }
+
                 break;
         }
 
