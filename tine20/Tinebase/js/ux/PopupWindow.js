@@ -120,7 +120,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 
         this.stateful = true;
         this.stateId = 'ux.popupwindow-' + this.contentPanelConstructor;
-        this.on('resize', this.saveState, this, {delay:100});
 
         // window decoration and location bar count to window height
         this.height += 20;
@@ -178,6 +177,8 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
                 e.returnValue = '';
             }
         }, this));
+        
+        this.popup.addEventListener('resize', _.debounce(_.bind(this.saveState, this), 150));
     },
 
     /**
@@ -208,7 +209,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         return popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left +
             ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
     },
-
+    
     getState : function() {
         // NOTE: innerWidth/Height is the original dimension without scaling
         // NOTE: FF does auto scaling!
