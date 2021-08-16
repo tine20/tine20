@@ -119,12 +119,8 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         }
         
         if (empty($roleMemberships)) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $_accountId . ' has no role/group memberships.');
-            if (is_object(Tinebase_Core::getUser()) && Tinebase_Core::getUser()->getId() === $_accountId) {
-                // @todo throw exception in this case?
-                Tinebase_Session::destroyAndRemoveCookie();
-            }
-            
+            $message = 'User ' .  $_accountId . ' has no role/group memberships';
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $message);
             return false;
         }
         
