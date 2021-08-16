@@ -616,7 +616,8 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             'modlogActive' => true,
         ));
 
-        return $backend->search($filter);
+        return $this->getMultiple($backend->search($filter, null, Tinebase_Backend_Sql_Abstract::IDCOL),
+            Tinebase_Model_FullUser::class);
     }
 
     /**
