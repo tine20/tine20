@@ -16,21 +16,23 @@ then
   read -r VERSION2
 fi
 
-echo -e "#Features"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*feature\("
+echo -e "## Features"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*feature\(" | egrep -v "\(ci"
 
-echo -e "\n#Bugfixes"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*fix\("
+echo -e "\n## Bugfixes"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*fix\(" | egrep -v "\(ci"
 
-echo -e "\n#Refactoring"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*refactor\("
-
+echo -e "\n## Refactoring"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*refactor\(" | egrep -v "\(ci"
 
 # TODO allow to get all other changes with a param --full
 
 if [ "$3" = "--full" ]
 then
-  echo -e "\n#Other Changes"
+  echo -e "\n## Other Changes"
   git log $VERSION1...$VERSION2 --oneline | grep -v "Merge branch" \
-    | grep -v "Merge remote" | egrep -v " \"*feature\(" | egrep -v " \"*fix\(" | egrep -v " \"*refactor\("
+    | grep -v "Merge remote" | egrep -v " \"*feature\(" | egrep -v " \"*fix\(" | egrep -v " \"*refactor\(" | egrep -v "\(ci"
+
+  echo -e "\n## CI Changes"
+  git log $VERSION1...$VERSION2 --oneline | egrep "\(ci"
 fi
