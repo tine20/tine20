@@ -100,6 +100,8 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
     public static function destroyAndRemoveCookie()
     {
         if (self::sessionExists()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Destroying session');
             Zend_Session::destroy(true, true);
         }
     }
@@ -119,6 +121,8 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
      */
     public static function writeClose($readonly = true)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Closing session (readonly: ' . (integer) $readonly . ')');
         Zend_Session::writeClose($readonly);
     }
     
