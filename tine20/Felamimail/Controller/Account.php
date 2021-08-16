@@ -356,10 +356,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $translation->_('userInternal accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS'));
         }
         if (!$_record->email) {
-            throw new Tinebase_Exception_UnexpectedValue($translation->_('userInternal accounts need to have an email set'));
+            throw new Tinebase_Exception_SystemGeneric(
+                $translate->_('Internal user accounts need an email address')
+            );
         }
         if (!$_record->user_id) {
-            throw new Tinebase_Exception_UnexpectedValue($translation->_('userInternal accounts need to have an user_id set'));
+            throw new Tinebase_Exception_SystemGeneric(
+                $translate->_('Internal user accounts need to be assigned to a user')
+            );
         }
 
         $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
