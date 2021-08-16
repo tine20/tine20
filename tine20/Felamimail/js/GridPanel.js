@@ -1851,7 +1851,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                     
                     if ('ham' === option) {
-                        let subject = msg.get('subject').replace(/^SPAM\? \(.+\) \*\*\* /, '');
+                        let subject = msg.get('subject').replace(/SPAM\? \(.+\) \*\*\* /, '');
                         msg.set('subject', subject);
                         msg.set('is_spam_suspicions', false);
                         msg.commit();
@@ -1886,10 +1886,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             await Promise.allSettled(promises)
                 .then(() => {
-                    if ('spam' === option) {
-                        this.onAfterDelete(msgsIds);
-                    }
-                    
+                    this.onAfterDelete(msgsIds);
                     this.doRefresh();
             });
             
