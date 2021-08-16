@@ -43,7 +43,7 @@ class Tinebase_Convert_FullUser_Json extends Tinebase_Convert_Json
      */
     protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
-        if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
+        if (Tinebase_Application::getInstance()->isInstalled('Filemanager') && is_array($result) /* yep misuse leads to stuff like that*/) {
             $fileSystem = Tinebase_FileSystem::getInstance();
             $personalPath = $fileSystem->getApplicationBasePath(
                 'Filemanager',

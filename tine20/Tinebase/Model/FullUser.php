@@ -301,8 +301,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         
         if (! empty($password)) {
             $userPassword = $password;
-        } else if (! empty($options['password'])) {
+        } elseif (! empty($options['password'])) {
             $userPassword = $options['password'];
+        } elseif (! empty($options['passwordGenerator']) && is_callable($options['passwordGenerator'])) {
+            $userPassword = $options['passwordGenerator']($this);
         }
         
         $this->_addEmailUser($userPassword);

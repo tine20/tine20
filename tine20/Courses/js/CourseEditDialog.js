@@ -85,7 +85,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     groupId: this.record.data.group_id,
                     courseId: this.record.data.id
                 },
-                success: this.onMembersImport,
+                success: () => {
+                    this.loadRemoteRecord();
+                },
                 failure: function() {}
             });
             

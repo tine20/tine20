@@ -30,7 +30,36 @@ class Courses_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected $_help = array(
     );
-    
+
+    public function resetCoursesMembersPrimaryGroups()
+    {
+        $this->_checkAdminRight();
+
+        $groupCtrl = Tinebase_Group::getInstance();
+        $defaultGroup = $groupCtrl->getDefaultGroup();
+        $userCtrl = Tinebase_User::getInstance();
+
+        foreach (Courses_Controller_Course::getInstance()->getAll() as $course) {
+            try {
+                if (!$course->group_id || $groupCtrl->getGroupById($course->group_id)) {
+                    continue;
+                }
+            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                continue;
+            }
+
+            /** @var Tinebase_Model_FullUser $user */
+            foreach ($userCtrl->getMultiple($groupCtrl->getGroupMembers($course->group_id),
+                    Tinebase_Model_FullUser::class) as $user) {
+                if ($user->accountPrimaryGroup === $course->group_id) {
+                    $groupCtrl->addGroupMember($defaultGroup->getId(), $user->getId());
+                    $user->accountPrimaryGroup = $defaultGroup->getId();
+                    $userCtrl->updateUser($user);
+                }
+            }
+        }
+    }
+
     /**
      * set all courses to internet = FILTERED
      * 
