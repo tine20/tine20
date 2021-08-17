@@ -8,6 +8,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
+ *
+ * this ist 2019.11 (ONLY!)
  */
 class Felamimail_Setup_Update_12 extends Setup_Update_Abstract
 {
