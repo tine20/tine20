@@ -593,6 +593,21 @@ msgstr "Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einige
 msgid "No preview available."
 msgstr "Keine Vorschau verfügbar."
 
+msgid "File named {0} already exist in this location. Do you want to replace it with the current one?"
+msgstr "Eine Datei mit dem Namen {0} ist bereits vorhanden. Möchten Sie diese durch die aktuelle Datei ersetzen?"
+
+msgid "Replace"
+msgstr "Ersetzen"
+
+msgid "Stop"
+msgstr "Stopp"
+
+msgid "Skip"
+msgstr "Überspringen"
+
+msgid "Apply to All"
+msgstr "Auf Alle anwenden"
+
 #: js/FilePicker.js:455
 msgid "Checking ..."
 msgstr "Prüfe…"

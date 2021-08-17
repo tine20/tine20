@@ -22,7 +22,6 @@ async function upload(targetFolderPath, files) {
     // TODO: in the future we might have yes too all button , it marks the batchID with forceToWrite flag
     const batchID = Ext.id();
     files.forEach((file) => {file.batchID = batchID});
-
     await createTasks(targetFolderPath, files);
 }
 
