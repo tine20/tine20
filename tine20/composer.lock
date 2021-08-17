@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6e4b50e5264f2b6224a7013ae2a5f81a",
+    "content-hash": "7d325f912fa6887ba5d3cb4e627ddeaf",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -811,12 +811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f"
+                "reference": "c97bb9322386385a2cbfdd7aab705e3a47050581"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/2512f595e0f4c5235e99ef97603a8db902b3cc5f",
-                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/c97bb9322386385a2cbfdd7aab705e3a47050581",
+                "reference": "c97bb9322386385a2cbfdd7aab705e3a47050581",
                 "shasum": ""
             },
             "require": {
@@ -853,7 +853,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-10-01T00:19:10+00:00"
+            "time": "2021-07-26T14:16:49+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -905,10 +905,6 @@
                 "request",
                 "response"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-message-util/issues",
-                "source": "https://github.com/php-fig/http-message-util/tree/1.1.4"
-            },
             "time": "2020-02-05T20:36:27+00:00"
         },
         {
@@ -1155,17 +1151,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab"
+                "reference": "4f95102af87f86c43e8191ec6e90d9f35ed1ce5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/9f15504105640b03277d7174b62fbfc0f5e608ab",
-                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4f95102af87f86c43e8191ec6e90d9f35ed1ce5f",
+                "reference": "4f95102af87f86c43e8191ec6e90d9f35ed1ce5f",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
+                "paragonie/random_compat": ">=2",
                 "php": ">=5.4",
                 "phpseclib/phpseclib": "~2.0"
             },
@@ -1184,7 +1181,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-08-27T16:47:41+00:00"
+            "time": "2020-11-16T14:48:22+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
@@ -1233,14 +1230,6 @@
                 "escaper",
                 "laminas"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-escaper/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-escaper/issues",
-                "rss": "https://github.com/laminas/laminas-escaper/releases.atom",
-                "source": "https://github.com/laminas/laminas-escaper"
-            },
             "time": "2019-12-31T16:43:30+00:00"
         },
         {
@@ -1289,12 +1278,6 @@
                 "laminas",
                 "zf"
             ],
-            "support": {
-                "forum": "https://discourse.laminas.dev/",
-                "issues": "https://github.com/laminas/laminas-zendframework-bridge/issues",
-                "rss": "https://github.com/laminas/laminas-zendframework-bridge/releases.atom",
-                "source": "https://github.com/laminas/laminas-zendframework-bridge"
-            },
             "time": "2020-09-14T14:23:00+00:00"
         },
         {
@@ -1618,6 +1601,51 @@
                 "routing"
             ],
             "time": "2018-02-13T20:26:39+00:00"
+        },
+        {
+            "name": "paragonie/random_compat",
+            "version": "v9.99.100",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*|5.*",
+                "vimeo/psalm": "^1"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "keywords": [
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
+            ],
+            "time": "2020-10-15T08:29:30+00:00"
         },
         {
             "name": "pclzip/pclzip",
@@ -2222,10 +2250,6 @@
                 "response",
                 "server"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-server-handler/issues",
-                "source": "https://github.com/php-fig/http-server-handler/tree/master"
-            },
             "time": "2018-10-30T16:46:14+00:00"
         },
         {
@@ -2279,10 +2303,6 @@
                 "request",
                 "response"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-server-middleware/issues",
-                "source": "https://github.com/php-fig/http-server-middleware/tree/master"
-            },
             "time": "2018-10-30T17:12:04+00:00"
         },
         {
@@ -3360,11 +3380,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.6",
+            "version": "1.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "b4b1984b3b0d318954af10e29783fd9f57b52cac"
+                "reference": "fcf2431f91c9c44f10ef593844c885ce4272120b"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -3388,7 +3408,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2020-07-06T14:21:35+00:00"
+            "time": "2021-08-17T10:19:09+00:00"
         },
         {
             "name": "tine20/composerapploader",
@@ -3538,7 +3558,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:WebbyLab/php-validator-livr.git",
+                "url": "https://github.com/WebbyLab/php-validator-livr.git",
                 "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
             },
             "dist": {
@@ -4081,14 +4101,6 @@
                 "psr-7",
                 "zf"
             ],
-            "support": {
-                "docs": "https://docs.zendframework.com/zend-stratigility/",
-                "forum": "https://discourse.zendframework.com/c/questions/expressive",
-                "issues": "https://github.com/zendframework/zend-stratigility/issues",
-                "rss": "https://github.com/zendframework/zend-stratigility/releases.atom",
-                "slack": "https://zendframework-slack.herokuapp.com",
-                "source": "https://github.com/zendframework/zend-stratigility"
-            },
             "abandoned": "laminas/laminas-stratigility",
             "time": "2019-06-12T15:22:39+00:00"
         },
@@ -5902,6 +5914,5 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
