@@ -7,6 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
+ *
+ * this ist 2020.11 (ONLY!)
  */
 class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
 {
