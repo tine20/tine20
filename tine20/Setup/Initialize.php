@@ -238,7 +238,11 @@ class Setup_Initialize
      *  [
      *      'name' => 'Mitglied',
      *      'description' => 'gehört zu einem Mitglied',
-     *      'color' => '#339966'
+     *      'color' => '#339966',
+     *      'config' => [
+     *          'appName' => 'APP'
+     *          'configkey' => APP::CONFIG, //string - if given, tag id is saved in this config
+     *       ],
      *  ], [...]
      * ]
      *
@@ -258,8 +262,8 @@ class Setup_Initialize
 
         foreach ($tags as $tag) {
             $sharedTag = new Tinebase_Model_Tag(array(
-                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-                'name'  => $tag['name'],
+                'type' => Tinebase_Model_Tag::TYPE_SHARED,
+                'name' => $tag['name'],
                 'description' => $tag['description'],
                 'color' => $tag['color'],
             ));
@@ -268,13 +272,20 @@ class Setup_Initialize
             $controller->setContexts(array('any'), $savedSharedTag->getId());
 
             $right = new Tinebase_Model_TagRight(array(
-                'tag_id'        => $savedSharedTag->getId(),
-                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                'account_id'    => 0,
-                'view_right'    => true,
-                'use_right'     => true,
+                'tag_id' => $savedSharedTag->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'account_id' => 0,
+                'view_right' => true,
+                'use_right' => true,
             ));
             $controller->setRights($right);
+
+            if (isset($tag['config']) && isset($tag['config']['appName']) && isset($tag['config']['configkey'])) {
+                Tinebase_Config::getAppConfig($tag['config']['appName'])->set(
+                    $tag['config']['configkey'],
+                    $savedSharedTag->getId()
+                );
+            }
         }
     }
 }
