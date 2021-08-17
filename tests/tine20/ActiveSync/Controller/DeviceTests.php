@@ -29,6 +29,8 @@ class ActiveSync_Controller_DeviceTests extends TestCase
     {
         parent::setUp();
 
+        Syncroton_Registry::set(Syncroton_Registry::IS_UNITTEST, true);
+
         ########### define test device
         $testDevice = ActiveSync_Backend_DeviceTests::getTestDevice();
         
