@@ -218,7 +218,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         'emailGID'          => 'gid', 
         'emailLastLogin'    => 'last_login',
         'emailMailQuota'    => 'quota_bytes',
-        #'emailSieveQuota'   => 'quota_message',
+        'emailSieveQuota'   => 'quota_message',
     
         'emailMailSize'     => 'storage',
         'emailSieveSize'    => 'messages',
@@ -235,7 +235,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         'emailGID'          => 'USERTABLE',
         'emailLastLogin'    => 'USERTABLE',
         'emailMailQuota'    => 'USERTABLE',
-        #'emailSieveQuota'   => 'USERTABLE',
+        'emailSieveQuota'   => 'USERTABLE',
 
         'emailMailSize'     => 'QUOTATABLE',
         'emailSieveSize'    => 'QUOTATABLE',
@@ -443,11 +443,11 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
                         case 'emailGID':
                             $rawData[$property] = !empty($this->_config['gid']) ? $this->_config['gid'] : $value;
                             break;
+                        case 'emailSieveQuota':
                         case 'emailMailQuota':
                             $rawData[$property] = (empty($value) || $value < (1024 * 1024)) ? 0 :
                                 (int)($value / (1024 * 1024));
                             break;
-                            
                         default:
                             $rawData[$property] = $value;
                             break;

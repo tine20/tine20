@@ -197,6 +197,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $account['user_id'] = null;
         $updatedAccount = $this->_json->saveEmailAccount($account);
         self::assertEquals(Felamimail_Model_Account::DISPLAY_PLAIN, $updatedAccount['display_format']);
+        self::assertEquals($account['xprops']['emailUserIdImap'], $updatedAccount['email_imap_user']['emailUserId']);
 
         // we need to commit so imap user is in imap db
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
@@ -729,4 +730,44 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         self::assertFalse(isset($updatedUser->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP]),
             'email user xprops still set: ' . print_r($updatedUser->xprops(), true));
     }
+    
+    public function testResolveAccountEmailUsers()
+    {
+        $systemaccount = $this->_getTestUserFelamimailAccount();
+        if (! $systemaccount) {
+            self::markTestSkipped('no systemaccount configured');
+        }
+        $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
+
+        self::assertNotNull($systemaccountArray['xprops'],  'xprops should not be null');
+        self::assertArrayHasKey(Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP , $systemaccountArray['xprops'],  'imap email user id should be set');
+        self::assertArrayHasKey(Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP , $systemaccountArray['xprops'],  'smtp email user id should be set');
+        self::assertArrayHasKey('email_imap_user', $systemaccountArray,  'email_imap_user should be set');
+        self::assertArrayHasKey('email_smtp_user', $systemaccountArray,  'email_smtp_user should be set');
+    }
+
+
+    public function testUpdateAccountEmailUsers()
+    {
+        // change email address and check if email user is updated, too
+        $this->_testNeedsTransaction();
+  
+        $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
+        $quotaByte = 3000 * 1024 * 1024;
+
+        $sharedAccount->email_imap_user = [
+            'emailMailQuota' => $quotaByte,
+            'emailSieveQuota' => $quotaByte
+        ];
+
+        Admin_Controller_EmailAccount::getInstance()->updateAccountEmailUsers($sharedAccount);
+        
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $pseudoFullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($sharedAccount);
+        $userInBackend = $emailUserBackend->getRawUserById($pseudoFullUser);
+
+        self::assertEquals($quotaByte , $userInBackend['quota_bytes'] * 1024 * 1024, 'email was not updated');
+        self::assertEquals($quotaByte , $userInBackend['quota_message'] * 1024 * 1024, 'email was not updated');
+    }
+
 }

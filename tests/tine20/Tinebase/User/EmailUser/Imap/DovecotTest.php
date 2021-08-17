@@ -140,6 +140,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
             'emailUserId' => $user->getId(),
             'emailUsername' => $user->imapUser->emailUsername,
             'emailMailQuota' => 2097152000,
+            'emailSieveQuota'=> null,
             'emailUID' => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID' => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin' => null,

@@ -82,7 +82,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_EmailAccountId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $this->_checkRight('get');
-
+        
         return $this->_backend->get($_id);
     }
 
@@ -130,7 +130,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $this->_checkRight('create');
 
         $account = $this->_backend->create($_record);
-
+        $this->_inspectAfterCreate($account, $_record);
+        
         return $account;
     }
     
@@ -198,6 +199,18 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Felamimail_Model_Account $_createdRecord
+     * @param   Felamimail_Model_Account $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        $this->resolveAccountEmailUsers($_createdRecord);
+    }
+
+    /**
      * inspect update of one record
      *
      * @param   Tinebase_Record_Interface $_record      the update record
@@ -212,6 +225,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $user->accountEmailAddress = $_record->email;
             Admin_Controller_User::getInstance()->update($user);
         }
+        $this->updateAccountEmailUsers($_record);
     }
 
     /**
@@ -236,6 +250,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             // remove xprops from user
             Tinebase_EmailUser_XpropsFacade::setXprops($user, null, false);
             Admin_Controller_User::getInstance()->updateUserWithoutEmailPluginUpdate($user);
+        } else {
+            $this->resolveAccountEmailUsers($updatedRecord);
         }
     }
 
@@ -365,4 +381,53 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         return $this->_backend->getSystemAccount($user);
     }
+
+    public function updateAccountEmailUsers($account)
+    {
+        $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+        $newFullUser = clone($fullUser);
+
+        if (isset($account['email_imap_user'])) {
+            foreach ($account['email_imap_user'] as $key => $value) {
+                $newFullUser->imapUser[$key] = $value;
+            }
+            
+            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $emailUserBackend->updateUser($fullUser, $newFullUser);
+            
+            /*
+            foreach ($account['email_imap_user'] as $key => $value) {
+                $newFullUser->smtpUser[$key] = $value;
+            }
+            
+            $smtpUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+            $smtpUserBackend->updateUser($fullUser, $newFullUser);
+            */
+        }
+    }
+    /**
+     * @param $record
+     */
+    public function resolveAccountEmailUsers($_record)
+    {
+        // set emailUserId im xprops if not set
+        if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            return;
+        }
+
+        if (!isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
+            $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+            Tinebase_EmailUser_XpropsFacade::setXprops($_record,
+                $user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP], false);
+        }
+
+        $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
+
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $smtpUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+
+        $_record->email_imap_user = $emailUserBackend->getEmailuser($fullUser)->toArray();
+        $_record->email_smtp_user = $smtpUserBackend->getEmailuser($fullUser)->toArray();
+    }
+    
 }
