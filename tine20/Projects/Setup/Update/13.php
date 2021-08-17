@@ -7,6 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
+ *
+ * this ist 2020.11 (ONLY!)
  */
 class Projects_Setup_Update_13 extends Setup_Update_Abstract
 {
