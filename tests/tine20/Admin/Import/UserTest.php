@@ -54,7 +54,7 @@ class Admin_Import_UserTest extends TestCase
                 $queryResult = $stmt->fetch();
                 $stmt->closeCursor();
 
-                $this->assertTrue(isset($queryResult['pin']), 'no password in result: ' . print_r($queryResult, TRUE));
+                $this->assertTrue(isset($queryResult['password']), 'no password in result: ' . print_r($queryResult, TRUE));
                 $count++;
             }
         }

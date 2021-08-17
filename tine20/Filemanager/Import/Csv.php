@@ -152,6 +152,19 @@ class Filemanager_Import_Csv extends Tinebase_Import_Csv_Abstract
             
             return $tempfile;  
         } else {
+            return $this->_getFileFromUrl($filename);
+        }
+    }
+    
+    protected function _getFileFromUrl($filename)
+    {
+        $tempFileBackend = new Tinebase_TempFile();
+        $url = 'https://api.tine20.net/demodata/filemanager/' . $filename;
+        $file = fopen($url,'r');
+        if ($file) {
+            $tempfile = $tempFileBackend->createTempFileFromStream($file, $filename, '');
+            return $tempfile;
+        } else {
             return null;
         }
     }

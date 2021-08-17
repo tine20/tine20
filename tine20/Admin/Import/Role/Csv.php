@@ -88,6 +88,7 @@ class Admin_Import_Role_Csv extends Tinebase_Import_Csv_Abstract
         if (!extension_loaded('yaml')) {
             throw new Tinebase_Exception('yaml extension required');
         }
+        $roleRights = [];
 
         $importDir = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR
             . 'Admin' . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData' . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'Rights';
@@ -101,10 +102,9 @@ class Admin_Import_Role_Csv extends Tinebase_Import_Csv_Abstract
                     . ' Importing DemoData set from file ' . $path);
                 $setData = yaml_parse_file($path);
 
-                if ($setData[$rightsName]) {
+                if (array_key_exists($rightsName, $setData)) {
                     $set = $setData[$rightsName];
-
-                    $roleRights = [];
+                    
                     // resolve rights
                     foreach ($set as $data) {
                         if ($data == 'AllAdmin') {
@@ -118,7 +118,6 @@ class Admin_Import_Role_Csv extends Tinebase_Import_Csv_Abstract
                                     );
                                 }
                             }
-                            return $roleRights;
                         }
                         $data = explode('/', $data);
                         try {
@@ -137,8 +136,8 @@ class Admin_Import_Role_Csv extends Tinebase_Import_Csv_Abstract
                     }
                 }
             }
-            return $roleRights;
         }
+        return $roleRights;
     }
 
 
