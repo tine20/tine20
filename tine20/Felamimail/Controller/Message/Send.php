@@ -205,9 +205,16 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         try {
             $originalMessage = ($originalMessageId) ? $this->get($originalMessageId) : NULL;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Did not find original message (' . $originalMessageId . ')');
-            $originalMessage = NULL;
+            try {
+                // maybe original id was a tree node (sent from Filemanager)
+                $originalMessage = Felamimail_Controller_Message::getInstance()->getMessageFromNode($originalMessageId);
+                $partId = 1;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Did not find original message (' . $originalMessageId . ')');
+                $translation = Tinebase_Translation::getTranslation('Felamimail');
+                throw new Tinebase_Exception_NotFound($translation->_('Original message not found, email was moved or deleted'));
+            }
         }
         
         $_message->original_id      = $originalMessage;
