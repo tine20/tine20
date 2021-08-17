@@ -48,6 +48,8 @@ class ActiveSync_Command_SyncTests extends TestCase
 {
         parent::setUp();
 
+        Syncroton_Registry::set(Syncroton_Registry::IS_UNITTEST, true);
+
         Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
         Syncroton_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
         
