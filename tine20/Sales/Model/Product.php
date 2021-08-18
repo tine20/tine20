@@ -122,7 +122,8 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::LABEL => 'Category', // _('Category')
                 self::DEFAULT_VAL => 'DEFAULT',
-                self::NAME => Sales_Config::PRODUCT_CATEGORY
+                self::NAME => Sales_Config::PRODUCT_CATEGORY,
+                self::NULLABLE => true,
             ],
             self::FLD_MANUFACTURER => [
                 self::TYPE => self::TYPE_STRING,
