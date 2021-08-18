@@ -30,7 +30,7 @@ class Setup_Initialize
      * Call {@see _initialize} on an instance of the concrete Setup_Initialize class for the given {@param $_application}  
      * 
      * @param Tinebase_Model_Application $_application
-     * @param array | optional $_options
+     * @param array|null $_options
      * @return void
      */
     public static function initialize(Tinebase_Model_Application $_application, $_options = null)
@@ -80,10 +80,9 @@ class Setup_Initialize
      * Call {@see createInitialRights} on an instance of the concrete Setup_Initialize class for the given {@param $_application}
      * 
      * @param Tinebase_Model_Application $_application
-     * @param array | optional $_options
      * @return void
      */
-    public static function initializeApplicationRights(Tinebase_Model_Application $_application, $_options = null)
+    public static function initializeApplicationRights(Tinebase_Model_Application $_application)
     {
         $applicationName = $_application->name;
         $classname = "{$applicationName}_Setup_Initialize";
@@ -95,7 +94,7 @@ class Setup_Initialize
      * initialize application
      *
      * @param Tinebase_Model_Application $_application
-     * @param array | optional $_options
+     * @param array|null $_options
      * @return void
      */
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
@@ -129,7 +128,7 @@ class Setup_Initialize
     /**
      * create inital rights
      * 
-     * @param Tinebase_Application $application
+     * @param Tinebase_Model_Application $_application
      * @return void
      */
     public static function createInitialRights(Tinebase_Model_Application $_application)
@@ -256,10 +255,6 @@ class Setup_Initialize
     {
         $controller = Tinebase_Tags::getInstance();
 
-        // TODO  needed?
-//        $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-//        Tinebase_Core::set(Tinebase_Core::USER, $user);
-
         foreach ($tags as $tag) {
             $sharedTag = new Tinebase_Model_Tag(array(
                 'type' => Tinebase_Model_Tag::TYPE_SHARED,
@@ -280,11 +275,21 @@ class Setup_Initialize
             ));
             $controller->setRights($right);
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Created shared tag ' . $savedSharedTag->name);
+
             if (isset($tag['config']) && isset($tag['config']['appName']) && isset($tag['config']['configkey'])) {
-                Tinebase_Config::getAppConfig($tag['config']['appName'])->set(
-                    $tag['config']['configkey'],
-                    $savedSharedTag->getId()
-                );
+                $appConfig = Tinebase_Config::getAppConfig($tag['config']['appName']);
+                if ($appConfig) {
+                    $appConfig->
+                    set(
+                        $tag['config']['configkey'],
+                        $savedSharedTag->getId()
+                    );
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' No config found for ' . $tag['config']['appName']);
+                }
             }
         }
     }
