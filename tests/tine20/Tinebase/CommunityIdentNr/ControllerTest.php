@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
@@ -6,7 +7,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -38,20 +39,28 @@ class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
     /************ test functions follow **************/
 
     /**
-     * Calculate Population Aggregat of different Community Numbers
+     * Calculate Population aggregate of different Community Numbers
      *
      */
     public function testAggregatePopulation()
     {
-       $this->_createTestCommunityIdentNumbers(); 
-       $schleswigHolstein = $this->_communityIdentNrController->get(1);
-       $this->assertEquals(168991, $schleswigHolstein->bevoelkerungGesamt, 'Schleswig-Holstein = Kreis Flensburg + Stadt Flensburg + Stadt Neumünster');
+        $this->_createTestCommunityIdentNumbers();
+        $schleswigHolstein = $this->_communityIdentNrController->get(1);
+        $this->assertEquals(168991, $schleswigHolstein->bevoelkerungGesamt,
+            'Schleswig-Holstein = Kreis Flensburg + Stadt Flensburg + Stadt Neumünster');
 
         $kreisFlesburg = $this->_communityIdentNrController->get(2);
         $this->assertEquals(89504, $kreisFlesburg->bevoelkerungGesamt, 'Kreis Flensburg = Stadt Flensburg');
 
         $stadtNeumuenster = $this->_communityIdentNrController->get(4);
         $this->assertEquals(79487, $stadtNeumuenster->bevoelkerungGesamt, ('Stadt Neumünster = Stadt Neumünster'));
+
+        // check if json function also works
+        $feJson = new Tinebase_Frontend_Json();
+        $stadtNeumuensterArray = $stadtNeumuenster->toArray();
+        unset($stadtNeumuensterArray['bevoelkerungGesamt']);
+        $result = $feJson->aggregatePopulation($stadtNeumuensterArray);
+        $this->assertEquals(79487, $result['bevoelkerungGesamt'], ('Stadt Neumünster = Stadt Neumünster'));
     }
     
     

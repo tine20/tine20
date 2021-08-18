@@ -301,7 +301,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * must have the 'run' right set 
      * 
      * @param boolean $_anyRight is any right enough to geht app?
-     * @return array list of enabled applications for this user
+     * @return Tinebase_Record_RecordSet list of enabled applications for this user
      */
     public function getApplications($_anyRight = FALSE)
     {
