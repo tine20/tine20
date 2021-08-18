@@ -1511,7 +1511,11 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $project = $this->_getProjectData($contact);
 
         $projectJson = new Projects_Frontend_Json();
-        $newProject = $projectJson->saveProject($project);
+        try {
+            $newProject = $projectJson->saveProject($project);
+        } catch (Tinebase_Exception_AreaLocked $teal) {
+          $this->markTestSkipped('Projects is locked.');
+        }
 
         $this->_testProjectRelationFilter($contact, 'definedBy', $newProject);
         $this->_testProjectRelationFilter($contact, 'in', $newProject);
