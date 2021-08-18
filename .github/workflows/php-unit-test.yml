@@ -18,9 +18,13 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ubuntu-18.04]
+        operating-system: [ubuntu-20.04]
+        container: ["ubuntu:21.04", "debian:11"]
         php-versions: ['7.2', '7.4']
 
+    container:
+      image: ${{ matrix.container }}
+    
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     steps:
     - name: Checkout
