@@ -20,7 +20,7 @@ class GithubTests
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Github Action Smoke Testing');
 
         // addressbook
-        $suite->addTestSuite(Addressbook_JsonTest::class);
+        $suite->addTestSuite(Addressbook_Frontend_JsonTest::class);
         $suite->addTest(Addressbook_Frontend_AllTests::suite());
         $suite->addTest(Addressbook_Convert_Contact_VCard_AllTests::suite());
 
