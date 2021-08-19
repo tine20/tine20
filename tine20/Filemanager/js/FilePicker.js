@@ -508,6 +508,22 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                     return value;
                 }
             }
+        }, {
+            id: 'creation_time',
+            header: this.app.i18n._("Creation Time"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'creation_time',
+            renderer: Tine.Tinebase.common.dateTimeRenderer,
+            hidden: true
+        },{
+            id: 'last_modified_time',
+            header: this.app.i18n._("Last Modified Time"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'last_modified_time',
+            hidden: false,
+            renderer: Tine.Tinebase.common.dateTimeRenderer
         }];
 
         return new Ext.grid.ColumnModel({
