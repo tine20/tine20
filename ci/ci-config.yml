@@ -155,3 +155,7 @@ variables:
   COMPOSER_LOCK_REWRITE:
     description: "Rewrite composer lock to pull packages from cache."
     value: "true"
+<<<<<<< HEAD
+=======
+
+>>>>>>> php8 adoption
