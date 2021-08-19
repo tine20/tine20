@@ -450,7 +450,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - async_job
      * - temp_files
      * - timemachine_modlog
-     * 
+     *
      * if param date is given (date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * 
      * @param $_opts
@@ -1565,40 +1565,68 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             Tinebase_Config::IMAP,
             Tinebase_Config::SIEVE
         ];
-        
+
         $message = "\n";
-        
+
         foreach ($servers as $server) {
             $serverConfig = Tinebase_Config::getInstance()->{$server};
-            
+
             $host = isset($serverConfig->{'hostname'}) ? $serverConfig->{'hostname'} : $serverConfig->{'host'};
             $port = $serverConfig->{'port'};
-            
+
             $message .= $server . ' | host: '. $host . ' | port: ' . $port;
-            
+
             if (empty($host) || empty($port)) {
                 $message .= ' -> INVALID VALUE' . PHP_EOL;
                 $result = 2;
                 continue;
             }
-        
+
             $output = shell_exec('nc -d -N -w3 ' . $host . ' ' . $port . PHP_EOL);
-            
+
             if (!$output) {
                 echo 'COMMAND CANNOT BE EXECUTE' . PHP_EOL;
                 return 99;
             }
-            
+
             if (strpos($output, 'OK') || strstr($output, '220')) {
                 $message .= ' -> CONNECTION OK' . PHP_EOL;
             } else {
                 $message .= ' -> CONNECTION ERROR' . PHP_EOL;
                 $result = 1;
             }
-            
+
             $message .= PHP_EOL . $output . PHP_EOL;
         }
-        
+
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
+     * nagios monitoring for tine 2.0 sentry integration
+     *
+     * @return integer
+     */
+    public function monitoringCheckSentry()
+    {
+        $result = 0;
+        if (empty(Tinebase_Config::getInstance()->get(Tinebase_Config::SENTRY_URI))) {
+            $message = 'SENTRY INACTIVE';
+        } else {
+            $exception = new Exception('sentry test');
+
+            try {
+                $boolResult = Tinebase_Exception::sendExceptionToSentry($exception);
+                $message = $boolResult ? 'SENTRY OK' : 'SENTRY WARN';
+                $result = $boolResult ? 0 : 1;
+            } catch (Exception $e) {
+                $message = 'SENTRY FAIL: ' . $e->getMessage();
+                $result = 2;
+            }
+
+            $this->_logMonitoringResult($result, $message);
+        }
         echo $message . "\n";
         return $result;
     }

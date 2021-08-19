@@ -96,7 +96,7 @@ class Tinebase_Core
     const DB = 'dbAdapter';
 
     const DB_EXTERNAL = 'dbExt';
-    
+
     /**
      * constant for database adapter name
      * 
@@ -1127,7 +1127,7 @@ class Tinebase_Core
 
         return $db;
     }
-    
+
     /**
      * create db adapter and configure it for Tine 2.0
      * 
@@ -2405,12 +2405,12 @@ class Tinebase_Core
     /**
      * setup sentry Raven_Client
      *
-     * @return Raven_Client
+     * @return void
      */
     public static function setupSentry()
     {
         if (self::isRegistered('SENTRY')) {
-            return self::getSentry();
+            return;
         }
 
         $tinebaseConfig = Setup_Controller::getInstance()->isInstalled('Tinebase')
@@ -2418,7 +2418,7 @@ class Tinebase_Core
             : self::getConfig();
         $sentryServerUri = $tinebaseConfig->{Tinebase_Config::SENTRY_URI};
         if (! $sentryServerUri) {
-            return null;
+            return;
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
@@ -2427,32 +2427,18 @@ class Tinebase_Core
             self::setupBuildConstants();
         }
 
-        $config = [
-            'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
+        Sentry\init([
+            'dsn' => $sentryServerUri,
+            'max_breadcrumbs' => 50,
             'tags' => array(
                 'php_version' => phpversion(),
             ),
-        ];
-        $client = new Tinebase_Sentry_Raven_Client($sentryServerUri, $config);
-        $serializer = new Tinebase_Sentry_Raven_Serializer();
-        $client->setSerializer($serializer);
-        $error_handler = new Raven_ErrorHandler($client, false,
-            Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL});
-        $error_handler->registerExceptionHandler();
-        $error_handler->registerErrorHandler();
-        $error_handler->registerShutdownFunction();
-
-        self::set('SENTRY', $client);
-
-        return $client;
-    }
-
-    /**
-     * @return Raven_Client|null
-     */
-    public static function getSentry()
-    {
-        return Tinebase_Core::isRegistered('SENTRY') ? Tinebase_Core::get('SENTRY') : null;
+            'error_types' => Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL},
+        ]);
+        Sentry\configureScope(function (Sentry\State\Scope $scope): void {
+            $scope->setTag('php_version', phpversion());
+        });
+        self::set('SENTRY', true);
     }
 
     /**
