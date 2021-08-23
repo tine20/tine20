@@ -4,7 +4,6 @@ const lib = require('../../lib/browser');
 require('dotenv').config();
 
 beforeAll(async () => {
-    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Human Resources');
 });
 
@@ -26,7 +25,7 @@ describe('employee', () => {
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
         });
     
-        describe.skip('vacation (freetime)', () => {
+        describe('vacation (freetime)', () => {
             const testString = 'test vacation ' + Math.round(Math.random() * 10000000);
             test('vacation grid', async () => {
                 await expect(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Urlaub'});
@@ -46,7 +45,7 @@ describe('employee', () => {
                 });
 
                 test('type is resolved', async () => {
-                    if ('[V] Vacation' !== await freetimeEditDialog.evaluate(() => document.querySelector('input[name=type]').value)) {
+                    if ('[U] Urlaub' !== await freetimeEditDialog.evaluate(() => document.querySelector('input[name=type]').value)) {
                         return Promise.reject('type not resolved');
                     }
                 });
@@ -137,7 +136,7 @@ describe('employee', () => {
             });
         });
 
-        describe.skip('sickness (freetime)', () => {
+        describe('sickness (freetime)', () => {
             const testString = 'test sickness ' + Math.round(Math.random() * 10000000);
             test('sickness grid', async () => {
                 await expect(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Krankheit'});
@@ -151,7 +150,7 @@ describe('employee', () => {
                 });
 
                 test('type is resolved', async () => {
-                    if ('[S] Sickness' !== await freetimeEditDialog.evaluate(() => document.querySelector('input[name=type]').value)) {
+                    if ('[K] Krankheit' !== await freetimeEditDialog.evaluate(() => document.querySelector('input[name=type]').value)) {
                         return Promise.reject('type not resolved');
                     }
                 });
