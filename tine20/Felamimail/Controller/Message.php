@@ -1543,7 +1543,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         return preg_replace(
             // find header (also replaces multiline headers!)
-            '/(\n' . ucfirst($header) . ':) .*\n( .*\n)*/',
+            '/(' . ucfirst($header) . ':) .*\n( .*\n)*/',
             '${1} ' . mb_encode_mimeheader($newValue) . "\n",
             $mailAsString);
     }

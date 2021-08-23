@@ -1772,7 +1772,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                     
                     if ('ham' === option) {
-                        let subject = msg.get('subject').replace(/^SPAM\? \(.+\) \*\*\* /, '');
+                        let subject = msg.get('subject').replace(/SPAM\? \(.+\) \*\*\* /, '');
                         msg.set('subject', subject);
                         msg.set('is_spam_suspicions', false);
                         msg.commit();
@@ -1795,16 +1795,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     targetFolder.set('cache_status', 'pending');
                     targetFolder.commit();
                 }
+                
+                if (nextRecord) {
+                    sm.selectRecords([nextRecord]);
+                }
             }
             
-            if ('spam' === option && nextRecord) {
-                sm.selectRecords([nextRecord]);
+            if ('ham' === option ) {
+                sm.selectRecords(msgs.items, true);
             }
             
-            await Promise.allSettled(promises);
+            await Promise.allSettled(promises)
+                .then(() => {
+                    this.onAfterDelete(msgsIds);
+                    this.doRefresh();
+            });
             
-            this.onAfterDelete(msgsIds);
-            this.doRefresh();
         } catch (e) {
             this.doRefresh();
         }
@@ -1818,29 +1824,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (!this.app.featureEnabled('featureSpamSuspicionStrategy')) {
             return ;
         }
-
-        const sm = this.getGrid().getSelectionModel();
-        const msgs =  sm.getCount() > 0 ? sm.getSelectionsCollection() : null;
+        
         const folder = this.getCurrentFolderFromTree();
         const account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) : null;
 
         this.action_spam.show();
         this.action_ham.show();
 
-        if (folder && account && (
-            folder.get('globalname') === account.get('trash_folder')
-            || folder.get('localname').match(/junk/i)
-        )) {
+        if (!account) {
             this.action_spam.hide();
             this.action_ham.hide();
-        }
-
-        if (msgs) {
-            msgs.each(function (msg) {
-                if (!msg.get('is_spam_suspicions')) {
-                    this.action_ham.disable();
-                }
-            }, this);
         }
     }
 });
