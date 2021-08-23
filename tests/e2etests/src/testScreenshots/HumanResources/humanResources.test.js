@@ -43,11 +43,10 @@ describe('employee', () => {
     });
 
     test('contracts', async () => {
-        await expect(newPage).toClick('span', {text: 'Verträge'});
+        await expect(newPage).toClick('.x-tab-strip-text', {text: 'Verträge'});
         await newPage.waitForTimeout(1000);
         await newPage.screenshot({path: 'screenshots/HumanResources/9_humanresources_mitarbeiter_vertraege.png'});
-        await expect(newPage).toClick('button', {text: 'Vertrag hinzufügen'});
-        let popup = await lib.getNewWindow();
+        popup = await lib.getEditDialog('Vertrag hinzufügen', newPage);
         await popup.waitForTimeout(2000);
         await popup.screenshot({path: 'screenshots/HumanResources/10_humanresources_mitarbeiter_vertragsdialog.png'});
         await popup.close();
