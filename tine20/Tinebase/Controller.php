@@ -361,7 +361,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         Tinebase_Core::set(Tinebase_Core::USER, $_user);
         if (Tinebase_Core::isRegistered('SENTRY')) {
-            Sentry\configureScope(function (Sentry\State\Scope $scope): void {
+            Sentry\configureScope(function (Sentry\State\Scope $scope) use ($_user): void {
                 $scope->setTag('user', $_user->accountLoginName);
             });
         }
