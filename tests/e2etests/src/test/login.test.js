@@ -9,7 +9,7 @@ describe('login', () => {
         await expect(page).toClick('button', { text: 'Abmelden' });
         await expect(page).toClick('button', { text: 'Ja' });
 
-        await page.waitFor('.tb-login-big-label');
+        await page.waitForSelector('.tb-login-big-label');
 
     })
 });

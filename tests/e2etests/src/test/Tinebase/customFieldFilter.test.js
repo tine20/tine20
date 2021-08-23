@@ -15,7 +15,7 @@ describe.skip('Mainpage', () => {
         await editDialog.click('input[name=type]');
         await expect(editDialog).toClick('.x-combo-list-item', {text:'Schlüsselfeld',visible:true});
         await expect(editDialog).toClick('button', {text:'Datenspeicher konfigurieren'});
-        await editDialog.waitFor(3000);
+        await editDialog.waitForTimeout(3000);
         let input = await editDialog.$$('.x-form-text.x-form-field.x-form-empty-field')
         await input[0].type('keyField1Id');
         await input[1].type('keyField2Value');
@@ -24,7 +24,7 @@ describe.skip('Mainpage', () => {
         await editDialog.type('input[name=name]', 'testcustomField-keyField');
         await editDialog.type('input[name=label]', 'testcustomField-keyField');
         await expect(editDialog).toClick('button', {text: 'Ok'});
-        await page.waitFor(1000); //wait to create customField
+        await page.waitForTimeout(1000); //wait to create customField
         await lib.reloadRegistry(page);
         await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
         await page.waitForTimeout(1000);

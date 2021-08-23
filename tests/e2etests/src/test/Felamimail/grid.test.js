@@ -13,7 +13,7 @@ describe.skip('grid adopts to folder selected', () => {
         expect(page).toClick('.felamimail-node-sent .x-tree-node-anchor', {text:'Gesendet'});
 
         // TODO replace waitFor with a selector (use loading animation?)
-        await page.waitFor(5000); // wait for columns to be hidden/shown
+        await page.waitForTimeout(5000); // wait for columns to be hidden/shown
 
         // TODO make this work
         // await lib.checkDisplayOfElement(page, '.x-grid3-hd.x-grid3-cell.x-grid3-td-from_email', false);
@@ -45,7 +45,7 @@ describe.skip('grid adopts to folder selected', () => {
         expect(page).toClick('.felamimail-node-inbox .x-tree-node-anchor', {text:'Posteingang'});
 
         // TODO replace waitFor with a selector (use loading animation?)
-        await page.waitFor(5000); // wait for columns to be hidden/shown
+        await page.waitForTimeout(5000); // wait for columns to be hidden/shown
 
         let from_email_td_display = await page.evaluate(() => document.querySelector(
             '.x-grid3-hd.x-grid3-cell.x-grid3-td-from_email').style.display);
@@ -73,7 +73,7 @@ describe.skip('grid adopts to folder selected', () => {
     //     expect(page).toClick('.felamimail-node-drafts .x-tree-node-anchor', {text:'Entwürfe'});
     //
     //     // TODO replace waitFor with a selector (use loading animation?)
-    //     await page.waitFor(5000); // wait for columns to be hidden/shown
+    //     await page.waitForTimeout(5000); // wait for columns to be hidden/shown
     //
     //     // just for debugging
     //     await page.screenshot({path: 'screenshots/4_email/grid_test_drafts.png'});
