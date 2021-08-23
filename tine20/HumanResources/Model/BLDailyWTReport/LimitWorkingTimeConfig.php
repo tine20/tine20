@@ -78,6 +78,9 @@ class HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig extends Tineba
      */
     public function cmp(Tinebase_BL_ElementConfigInterface $_element)
     {
+        if ($_element instanceof self) {
+            return 0;
+        }
         return -1;
     }
 }

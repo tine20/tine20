@@ -1230,12 +1230,25 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if ($eventAttendees instanceof Tinebase_Record_RecordSet && $_sort) {
             $eventAttendees->sort(function(Calendar_Model_Attender $a1, Calendar_Model_Attender $a2) {
                 try {
-                    return $a1->getName() > $a2->getName();
+                    return strcmp($a1->getName(), $a2->getName());
+
+                    // ok time for some fun, enjoy:
+                    // if attender has no name, we sort him bigger (end of list)
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                             . ' ' . $teia->getMessage());
-                    return true;
+                    try {
+                        $a1->getName();
+                    } catch (Tinebase_Exception_InvalidArgument $teia) {
+                        try {
+                            $a2->getName();
+                        } catch (Tinebase_Exception_InvalidArgument $teia) {
+                            return 0;
+                        }
+                        return 1;
+                    }
+                    return -1;
                 }
             });
         }
