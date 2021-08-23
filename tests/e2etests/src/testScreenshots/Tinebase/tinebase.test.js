@@ -13,17 +13,18 @@ describe('mainScreen', () => {
     test('all apps', async () => {
         for (let i = 0; i < Apps.length; i++) {
             try {
-                await page.waitFor(500);
+                await page.waitForTimeout(500);
                 await expect(page).toClick('span', {text: 'Tine 2.0'});
-                await page.waitFor(500);
+                await page.waitForTimeout(500);
                 await expect(page).toClick('span', {text: Apps[i]});
             } catch (e) {
                 //console.log('Application ' + Apps[i] + ' don´t install');
             }
         }
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+        await page.waitForTimeout(500);
         await expect(page).toClick('span', {text: 'Adressbuch'});
-        await page.waitFor(5000);
+        await page.waitForTimeout(5000);
         await page.screenshot({path: 'screenshots/StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png'});
     })
 });
@@ -33,7 +34,7 @@ describe('usersettings', () => {
     let settings;
     test('open usersettings', async () => {
         await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
-        await page.waitFor(2000);
+        await page.waitForTimeout(2000);
         settings = await page.$$('.x-menu.x-menu-floating.x-layer .x-menu-item-icon.action_adminMode');
         await settings[1].hover();
         await page.screenshot({
@@ -44,7 +45,7 @@ describe('usersettings', () => {
     test('usersettings', async () => {
         await settings[1].click();
         newPage = await lib.getNewWindow();
-        await newPage.waitFor(2000);
+        await newPage.waitForTimeout(2000);
         await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png'});
     });
 
@@ -63,9 +64,9 @@ describe('usersettings', () => {
 
     test('admin mode', async () => {
         await expect(newPage).toClick('span', {text: 'Generelle Einstellungen'});
-        await newPage.waitFor(1000);
+        await newPage.waitForTimeout(1000);
         await newPage.click('.x-btn-image.action_adminMode');
-        await newPage.waitFor(2000);
+        await newPage.waitForTimeout(2000);
         await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus.png'});
         await expect(newPage).toClick('button', {text: 'Abbrechen'});
     });
@@ -77,6 +78,6 @@ afterAll(async () => {
 
 async function getSettingScreenshots(newPage, text, screenName) {
     await expect(newPage).toClick('span', {text: text});
-    await newPage.waitFor(1000);
+    await newPage.waitForTimeout(1000);
     await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/' + screenName + '.png'});
 }

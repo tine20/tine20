@@ -17,9 +17,9 @@ describe('message', () => {
         await inputFields[2].type(currentUser.accountEmailAddress);
         await popupWindow.waitForSelector('.search-item.x-combo-selected');
         await popupWindow.click('.search-item.x-combo-selected');
-        await popupWindow.waitFor(500); //wait for new mail line!
+        await popupWindow.waitForTimeout(500); //wait for new mail line!
         await popupWindow.click('input[name=subject]');
-        await popupWindow.waitFor(500); //musst wait for input!
+        await popupWindow.waitForTimeout(500); //musst wait for input!
         await expect(popupWindow).toFill('input[name=subject]', 'message with attachment');
 
         const fileToUpload = 'src/test/Felamimail/attachment.txt';
@@ -31,7 +31,7 @@ describe('message', () => {
         await inputUploadHandle.uploadFile(fileToUpload);
 
         await expect(popupWindow).toMatchElement('.x-grid3-cell-inner.x-grid3-col-name', {text:'attachment.txt'});
-        await popupWindow.waitFor(500); //musst wait for upload complete!
+        await popupWindow.waitForTimeout(500); //musst wait for upload complete!
         
         // send message
         await expect(popupWindow).toClick('button', {text: 'Senden'});
@@ -73,7 +73,7 @@ describe('message', () => {
         newMail.click({clickCount: 2});
         popupWindow = await lib.getNewWindow();
         //await popupWindow.waitForSelector('.ext-el-mask');
-        await popupWindow.waitFor(() => !document.querySelector('.ext-el-mask'));
+        await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
         await popupWindow.waitForSelector('.tinebase-download-link');
         attachement = await popupWindow.$$('.tinebase-download-link');
         await attachement[1].hover();
@@ -112,21 +112,21 @@ describe.skip('email note preference', () => {
     test('open Felamimail settings and set note=yes', async () => {
         await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toClick('.x-menu-item-text', {text: 'E-Mail'});
-        await page.waitFor(2000);
+        await page.waitForTimeout(2000);
         await lib.setPreference(page,'E-Mail', 'autoAttachNote', 'ja');
     });
     test('open compose dialog and check button pressed', async () => {
-        await page.waitFor(3000);
+        await page.waitForTimeout(3000);
         let popupWindow = await lib.getEditDialog('Verfassen');
         await popupWindow.waitForSelector('.x-btn.x-btn-text-icon.x-btn-pressed');
         await popupWindow.close();
     });
     test.skip('open Felamimail settings and set note=no', async () => {
-        await page.waitFor(2000);
+        await page.waitForTimeout(2000);
         await lib.setPreference(page,'E-Mail', 'autoAttachNote', 'nein');
     });
     test.skip('open editDialog and check button unpressed', async () => {
-        await page.waitFor(2000);
+        await page.waitForTimeout(2000);
         let popupWindow = await lib.getEditDialog('Verfassen');
         if (await popupWindow.$('.x-btn.x-btn-text-icon.x-btn-pressed') !== null) return Promise.reject('Error: The button is pressed');
         await popupWindow.close();

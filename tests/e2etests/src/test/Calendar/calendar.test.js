@@ -19,9 +19,9 @@ describe('ColorPicker', () => {
             console.log('tree also expand');
         }
 
-        await page.waitFor(1000); //wait to expand tree
+        await page.waitForTimeout(1000); //wait to expand tree
         await addTestCalendar(page,'Gemeinsame Kalender', shared);
-        await page.waitFor(1000);  //wait to expand tree
+        await page.waitForTimeout(1000);  //wait to expand tree
         await addTestCalendar(page,'Meine Kalender', privat);
     });
     test.skip('change color on private calendar', async () => {
@@ -67,26 +67,26 @@ describe.skip('changeViews', () => {
     // .tine-mainscreen-centerpanel-center
     test('day View', async () => {
         // NOTE: if we enter the tests here we need to wait till loadmask shows and hides
-        // await page.waitFor(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
-        // await page.waitFor(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        // await page.waitForTimeout(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        // await page.waitForTimeout(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
 
         await expect(page).toClick('button', {text: 'Tag'});
-        await page.waitFor(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
-        await page.waitFor(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitForFunction(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitForFunction(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
         
         await page.waitForSelector('.x-panel.cal-ms-panel:not(.x-hide-display) .cal-daysviewpanel-daysheader');
 
-        await page.waitFor(() => {
+        await page.waitForFunction(() => {
             return document.querySelector('.x-panel.cal-ms-panel:not(.x-hide-display) .cal-daysviewpanel-daysheader').childNodes.length === 1
         });
     });
     
     test('week View', async () => {
         await expect(page).toClick('button', {text: 'Woche'});
-        await page.waitFor(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
-        await page.waitFor(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitForFunction(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitForFunction(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
 
-        await page.waitFor(() => {
+        await page.waitForFunction(() => {
             return document.querySelector('.x-panel.cal-ms-panel:not(.x-hide-display) .cal-daysviewpanel-daysheader').childNodes.length === 7
         });
     });
@@ -97,9 +97,9 @@ describe.skip('changeViews', () => {
         await expect(page).toClick('button', {text: 'Sa'});
         await expect(page).toClick('.cal-wkperiod-config-menu button', {text: 'OK'});
 
-        await page.waitFor(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
-        await page.waitFor(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
-        await page.waitFor(() => {
+        await page.waitForFunction(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitForFunction(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
+        await page.waitForFunction(() => {
             return document.querySelector('.x-panel.cal-ms-panel:not(.x-hide-display) .cal-daysviewpanel-daysheader').childNodes.length === 5
         });
     });
@@ -114,7 +114,7 @@ async function addTestCalendar(page, root, calName) {
     await expect(page).toClick('span', {text:root, button:'right'});
     await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
     await expect(page).toClick('span', {text:'Kalender hinzufügen'});
-    await page.waitFor('.x-window.x-window-plain.x-window-dlg');
+    await page.waitForSelector('.x-window.x-window-plain.x-window-dlg');
     await page.type('.ext-mb-text', calName);
     await page.keyboard.press('Enter');
 }
