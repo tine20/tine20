@@ -64,6 +64,9 @@ class HumanResources_Model_BLDailyWTReport_PopulateReportConfig extends Tinebase
      */
     public function cmp(Tinebase_BL_ElementConfigInterface $_element)
     {
+        if ($_element instanceof self) {
+            return 0;
+        }
         return 1;
     }
 }

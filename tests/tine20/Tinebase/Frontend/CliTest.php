@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -61,7 +62,9 @@ class Tinebase_Frontend_CliTest extends TestCase
         if ($currentUser->accountLoginName !== $this->_testUser->accountLoginName) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
         }
-        
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SENTRY_URI, '');
+
         parent::tearDown();
     }
     
@@ -679,5 +682,33 @@ class Tinebase_Frontend_CliTest extends TestCase
 
         $this->assertStringContainsString(Tinebase_Core::getUser()->accountLoginName, $out, 'unittest login name should be found');
         $this->assertStringContainsString('Unit Test Client', $out, 'unittest should have a user agent');
+    }
+
+    public function testMonitoringCheckSentry()
+    {
+        self::markTestSkipped('FIXME - some composer ci problem');
+
+        Tinebase_Core::setLocale('en');
+        ob_start();
+        $result = $this->_cli->monitoringCheckSentry();
+        $out = ob_get_clean();
+        self::assertEquals(0, $result);
+        self::assertEquals("SENTRY INACTIVE\n", $out);
+
+        // set some dummy sentry url
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SENTRY_URI, 'https://88123ad22cee14899962a6b0edb04d08f@sentry.example.org/2');
+        ob_start();
+        $result = $this->_cli->monitoringCheckSentry();
+        $out = ob_get_clean();
+        self::assertEquals(1, $result);
+        self::assertEquals("SENTRY WARN\n", $out);
+
+        // activate sentry
+        Tinebase_Core::setupSentry();
+        ob_start();
+        $result = $this->_cli->monitoringCheckSentry();
+        $out = ob_get_clean();
+        self::assertEquals(0, $result);
+        self::assertStringContainsString("SENTRY OK", $out);
     }
 }

@@ -155,7 +155,7 @@ trait Calendar_Export_GenericTrait
     protected function _sortRecords(&$records)
     {
         $records->sort(function($r1, $r2) {
-            return $r1->dtstart > $r2->dtstart;
+            return $r1->dtstart->compare($r2->dtstart);
         });
     }
 

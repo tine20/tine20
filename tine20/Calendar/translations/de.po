@@ -173,7 +173,7 @@ msgstr "Beschreibung"
 #: js/ResourceEditDialog.js:109 js/EventEditDialog.js:139
 #: js/ResourcesGridPanel.js:87 Model/Event.php:432
 msgid "Location"
-msgstr "Ort"
+msgstr "Lokalität"
 
 #: js/Printer/EventRecord.js:34 js/GridView.js:218 js/EventDetailsPanel.js:179
 #: js/EventEditDialog.js:145 js/ContactEventsGridPanel.js:119
@@ -2483,6 +2483,9 @@ msgid_plural "Relations"
 msgstr[0] "Verknüpfung"
 msgstr[1] "Verknüpfungen"
 
+msgid "Site"
+msgstr "Standort"
+
 #~ msgid "We have send it to your E-Mail account again."
 #~ msgstr "Wir haben ihn erneut an Ihre E-Mail Adresse gesendet."
 
@@ -2548,9 +2551,6 @@ msgstr[1] "Verknüpfungen"
 
 #~ msgid "Search for records ..."
 #~ msgstr "Suche nach Einträgen ..."
-
-#~ msgid "Site"
-#~ msgstr "Standort"
 
 #~ msgid "Event Type"
 #~ msgstr "Terminart"

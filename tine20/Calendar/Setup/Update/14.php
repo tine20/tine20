@@ -15,12 +15,17 @@ class Calendar_Setup_Update_14 extends Setup_Update_Abstract
 {
     const RELEASE014_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE014_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE014_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -53,5 +58,26 @@ class Calendar_Setup_Update_14 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Calendar', '14.1', self::RELEASE014_UPDATE001);
+    }
+    
+    public function update002()
+    {
+        $attendeeKeyField = Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES};
+        
+        $req = $attendeeKeyField->records->find('id', 'REQ');
+        $req->system = true;
+        $req->order = $req->order ?: 0;
+        $req->color = $req->color ?: '#FF0000';
+
+        $opt = $attendeeKeyField->records->find('id', 'OPT');
+        $opt->system = true;
+        $opt->order = $opt->order ?: 1;
+        $opt->color = $opt->color ?: '#0000FF';
+
+        $attendeeKeyField->records->sort('order', 'ASC', 'asort', SORT_NUMERIC);
+
+        Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES} = $attendeeKeyField;
+        
+        $this->addApplicationUpdate('Calendar', '14.2', self::RELEASE014_UPDATE002);
     }
 }

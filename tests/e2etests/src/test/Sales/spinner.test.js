@@ -14,7 +14,7 @@ describe.skip('Mainpage', () => {
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name',{text: "Frische Fische Gmbh & Co. KG"});
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name',{text:'Frische Fische Gmbh & Co. KG', clickCount: 2});
         popupwindow = await lib.getNewWindow();
-        await popupwindow.waitFor(5000);
+        await popupwindow.waitForTimeout(5000);
     });
 
     test('check format of spinner', async () => {
@@ -37,7 +37,7 @@ describe.skip('Mainpage', () => {
         await expect(popupwindow).toFill('input[name=discount]', '25,8477');
         await expect(popupwindow).toClick('input[name=credit_term]');
         //wait to change value in inputSpinner
-        await popupwindow.waitFor(500);
+        await popupwindow.waitForTimeout(500);
 
         let value;
 

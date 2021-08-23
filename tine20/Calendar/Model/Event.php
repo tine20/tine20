@@ -315,7 +315,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (empty($exdates)) return;
 
         usort($exdates, function (Tinebase_DateTime $a, Tinebase_DateTime $b) {
-            return $a->isLater($b);
+            return $a->compare($b);
         });
 
         $this->exdate = $exdates;

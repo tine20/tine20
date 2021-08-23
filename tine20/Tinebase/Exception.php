@@ -158,25 +158,25 @@ class Tinebase_Exception extends Exception
 
     /**
      * @param Throwable $exception
+     * @return boolean
      */
     public static function sendExceptionToSentry(Throwable $exception)
     {
-        $sentryClient = Tinebase_Core::getSentry();
-        if (! $sentryClient) {
-            return;
+        if (! Tinebase_Core::isRegistered('SENTRY')) {
+            return false;
         }
 
         if ($exception instanceof Tinebase_Exception && ! $exception->logToSentry()) {
-            return;
+            return false;
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sending exception to Sentry');
-        $sentryClient->captureException($exception, array(
-            // TODO add more information? add it here or in \Tinebase_Core::setupSentry?
-            'extra' => array(
-                'tinebaseId' => Tinebase_Core::getTinebaseId(),
-            ),
-        ));
+        // TODO add more information? add it here or in \Tinebase_Core::setupSentry?
+        Sentry\configureScope(function (Sentry\State\Scope $scope): void {
+            $scope->setExtra('tinebaseId', Tinebase_Core::getTinebaseId());
+        });
+        Sentry\captureException($exception);
+        return true;
     }
 
     /**

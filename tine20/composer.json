@@ -95,13 +95,14 @@
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "^0.1.7",
+    "php-http/curl-client": "^2.1",
     "phpoffice/phpexcel": "1.8.*",
     "phpoffice/phpspreadsheet": "1.10.1pl3 as 1.10.1",
     "phpoffice/phpword": "v0.14.0 as v0.13.0",
     "psr/http-server-middleware": "^1.0",
     "sabre/dav": "1.8.*",
     "sabre/vobject": "3.5.3pl1 as 2.1.0",
-    "sentry/sentry": "^1.8",
+    "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.18.*",
     "spomky-labs/otphp": "^10.0",
     "symfony/config": "^4",
@@ -114,8 +115,9 @@
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "1.*",
-    "zendframework/zend-diactoros": "^1.6",
-    "zendframework/zend-http": "2.5.*",
+    "zendframework/zend-diactoros": "^2.2",
+    "zendframework/zend-http": "^2",
+    "zendframework/zend-httphandlerrunner": "^1.1",
     "zendframework/zend-stratigility": "^3.2",
     "zendframework/zendframework1": "1.12.20pl44 as 1.12.20"
   },
@@ -123,7 +125,7 @@
     "phing/phing": "2.16.*",
     "phpunit/phpunit": "^8.5",
     "tedivm/jshrink": "~1.0",
-    "zendframework/zend-psr7bridge": "^0.2"
+    "zendframework/zend-psr7bridge": "^1.2"
   },
   "autoload": {
     "files": [],

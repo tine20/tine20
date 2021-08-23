@@ -138,7 +138,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
      * Generate pw
      */
     onPWGen: function () {
-        var policyConfig = Tine.Tinebase.configManager.get('downloadPwPolicy');
+        var policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('downloadPwPolicy');
 
         config = {
             minLength: policyConfig ? policyConfig.pwPolicyMinLength : 12,

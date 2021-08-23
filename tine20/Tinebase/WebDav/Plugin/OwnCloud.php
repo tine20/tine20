@@ -161,7 +161,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
             return null;
         }
 
-        $useragentHeader = $request->getHeader('useragent');
+        $useragentHeader = $request->getHeader('user-agent');
 
         $useragent = $useragentHeader ? $useragentHeader->getFieldValue() : null;
 
