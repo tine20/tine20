@@ -32,7 +32,7 @@ describe('internal contacts', () => {
         await popupWindow.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-trigger-wrap-focus .x-form-trigger.x-form-arrow-trigger');
         await expect(popupWindow).toClick('.x-combo-list-item', {text: 'test'});
         await expect(popupWindow).toClick('button', {text: 'Ok'});
-        await page.waitFor(2000); // need wait to close editDialog
+        await page.waitForTimeout(2000); // need wait to close editDialog
         await expect(page).toClick('.x-grid3-col-accountLoginName', {text: 'sclever', clickCount: 2});
         popupWindow = await lib.getNewWindow();
         await popupWindow.waitForSelector('.ext-el-mask');
