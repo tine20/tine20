@@ -12,9 +12,10 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * FIXME Reflection error: OpenIDConnectServer\IdTokenResponse not found
  */
 
-class SSO_Facade_OpenIdConnect_IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
+class SSO_Facade_OpenIdConnect_IdTokenResponse // extends \OpenIDConnectServer\IdTokenResponse
 {
     protected $nonce = null;
 
@@ -25,12 +26,14 @@ class SSO_Facade_OpenIdConnect_IdTokenResponse extends \OpenIDConnectServer\IdTo
 
     protected function getBuilder(AccessTokenEntityInterface $accessToken, UserEntityInterface $userEntity)
     {
-        $builder = parent::getBuilder($accessToken, $userEntity)
-            ->issuedBy(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH));
-        if (null !== $this->nonce) {
-            $builder->withClaim('nonce', $this->nonce);
-        }
+        throw new Tinebase_Exception_NotImplemented('FIXME needs  \OpenIDConnectServer\IdTokenResponse');
 
-        return $builder;
+//        $builder = parent::getBuilder($accessToken, $userEntity)
+//            ->issuedBy(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH));
+//        if (null !== $this->nonce) {
+//            $builder->withClaim('nonce', $this->nonce);
+//        }
+//
+//        return $builder;
     }
 }

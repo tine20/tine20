@@ -9,9 +9,10 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ *  * FIXME Reflection error: lass OpenIDConnectServer\Repositories\IdentityProviderInterface not found.
  */
 
-class SSO_Facade_OpenIdConnect_IdentityRepository implements \OpenIDConnectServer\Repositories\IdentityProviderInterface
+class SSO_Facade_OpenIdConnect_IdentityRepository // implements \OpenIDConnectServer\Repositories\IdentityProviderInterface
 {
 
     public function getUserEntityByIdentifier($identifier)
