@@ -59,13 +59,6 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
         parent::_resolveRecords($_records);
-
-        // accounting time always round up to next 15 minutes
-        foreach ($_records as $record) {
-            if (!empty($record->accounting_time)) {
-                $record->accounting_time = (int)ceil($record->accounting_time / 15) * 15;
-            }
-        }
         
         $timeaccountIds = $_records->timeaccount_id;
         $this->_resolvedRecords['timeaccounts'] = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
