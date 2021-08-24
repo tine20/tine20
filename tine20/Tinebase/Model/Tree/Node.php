@@ -629,4 +629,9 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         }
         return 0;
     }
+
+    public function getContainerId(): ?string
+    {
+        return $this->parent_id;
+    }
 }

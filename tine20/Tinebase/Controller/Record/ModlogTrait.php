@@ -64,6 +64,22 @@ trait Tinebase_Controller_Record_ModlogTrait
             throw new Tinebase_Exception_InvalidArgument('record object expected');
         }
 
+        $bchub = Tinebase_BroadcastHub::getInstance();
+        if ($bchub->isActive()) {
+            if (null === $_newRecord) {
+                $verb = 'delete';
+                $cId = $notNullRecord->getContainerId();
+            } elseif (null === $_oldRecord) {
+                $verb = 'create';
+                $cId = $notNullRecord->getContainerId();
+            } else {
+                $verb = 'update';
+                $cId = $_oldRecord->getContainerId();
+            }
+            $id = $notNullRecord->getId();
+            $bchub->push($verb, get_class($notNullRecord), $id, $cId);
+        }
+
         if (! $notNullRecord->has('created_by') || $this->_omitModLog === TRUE) {
             return NULL;
         }

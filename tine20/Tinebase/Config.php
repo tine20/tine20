@@ -89,6 +89,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const BUILD_TYPE = 'buildtype';
 
+    const BROADCASTHUB = 'broadcasthub';
+    const BROADCASTHUB_ACTIVE = 'active';
+    const BROADCASTHUB_REDIS = 'redis';
+    const BROADCASTHUB_REDIS_HOST = 'host';
+    const BROADCASTHUB_REDIS_PORT = 'port';
+    const BROADCASTHUB_PUBSUBNAME = 'pubsubname';
+
     /**
      * CACHE
      *
@@ -1575,6 +1582,42 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::BROADCASTHUB  => [
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::CONTENT               => [
+                self::BROADCASTHUB_ACTIVE   => [
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::DEFAULT_STR           => false,
+                ],
+                self::BROADCASTHUB_PUBSUBNAME => [
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => 'broadcasthub',
+                ],
+                self::BROADCASTHUB_REDIS    => [
+                    self::TYPE                  => self::TYPE_OBJECT,
+                    self::CLASSNAME             => Tinebase_Config_Struct::class,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::CONTENT               => [
+                        self::BROADCASTHUB_REDIS_HOST   => [
+                            self::TYPE                      => self::TYPE_STRING,
+                            self::DEFAULT_STR               => 'localhost',
+                        ],
+                        self::BROADCASTHUB_REDIS_PORT   => [
+                            self::TYPE                      => self::TYPE_INT,
+                            self::DEFAULT_STR               => 6379,
+                        ]
+                    ],
+                    self::DEFAULT_STR           => [],
+                ]
+            ],
+            self::DEFAULT_STR           => [],
+        ],
         self::STATUS_INFO => array(
             //_('Status Info')
             'label'                 => 'Status Info',

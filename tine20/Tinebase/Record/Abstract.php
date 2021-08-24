@@ -347,7 +347,18 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         }
         return $this->_properties[$this->_identifier];
     }
-    
+
+    public function getContainerId(): ?string
+    {
+        $containerId = isset($this->_properties['container_id']) ? $this->_properties['container_id'] : null;
+        if (is_object($containerId)) {
+            $containerId = $containerId->getId();
+        } elseif (is_array($containerId)) {
+            $containerId = $containerId['id'];
+        }
+        return $containerId;
+    }
+
     /**
      * gets application the records belongs to
      * 
