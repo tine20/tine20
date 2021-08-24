@@ -204,11 +204,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     calculateAccountingTime: function() {
+        const roundValue = Tine.Tinebase.configManager.get('accountTimeRoundValue', 'Tinebase') || 15;
+        
         if (!this.useMultiple) {
-            var factor = this.getForm().findField('accounting_time_factor').getValue(),
-                duration = this.getForm().findField('duration').getValue(),
-                accountingTime = Math.round(factor * duration);
-            if (factor != this.factor) {
+            const factor = this.getForm().findField('accounting_time_factor').getValue();
+            const duration = this.getForm().findField('duration').getValue();
+            const accountingTime = Math.round(factor * duration / roundValue) * roundValue;
+            
+            if (factor !== this.factor) {
                 this.factor = factor;
                 this.factorChanged = true;
             }
@@ -251,7 +254,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     
     disableBillableFields: function(disable) {
         this.getForm().findField('accounting_time_factor').setDisabled(disable);
-        this.getForm().findField('accounting_time').setDisabled(disable);
     },
 
     disableClearedFields: function(disable) {
@@ -429,12 +431,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             change: this.calculateAccountingTime
                                     }}),
                                     fieldManager('accounting_time', {
-                                        disabled: this.useMultiple,
+                                        disabled: true,
                                         fieldLabel: this.app.i18n._('Accounting time'),
                                         listeners: {
-                                            scope: this,
-                                            blur: this.calculateFactor,
-                                            spin: this.calculateFactor
+                                            scope: this
                                         }}),
                                     fieldManager('need_for_clarification'),
                                 ], [
