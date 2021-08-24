@@ -181,7 +181,9 @@ msgstr "Zuletzt geändert von"
 #: Frontend/Download.php:213
 #, fuzzy
 msgid "Folder"
-msgstr "Ordner"
+msgid_plural "Folders"
+msgstr[0] "Ordner"
+msgstr[1] "Ordner"
 
 #: js/NodeGridPanel.js:335
 msgid "Total size of all available revisions"
@@ -218,6 +220,9 @@ msgstr "Datentresor schließen"
 #: js/NodeGridPanel.js:916 js/Model.js:577 js/NodeTreePanel.js:568
 msgid "Upload Failed"
 msgstr "Hochladen fehlgeschlagen"
+
+msgid "Upload File"
+msgstr "Datei hochladen"
 
 #: js/NodeGridPanel.js:917 js/NodeTreePanel.js:569
 msgid "It is not permitted to store files in this folder!"
@@ -532,7 +537,9 @@ msgstr "Datei bearbeiten"
 #: js/NodeEditDialog.js:61 Frontend/Download.php:239
 #, fuzzy
 msgid "File"
-msgstr "Datei"
+msgid_plural "Files"
+msgstr[0] "Datei"
+msgstr[1] "Dateien"
 
 #: js/NodeEditDialog.js:96
 msgid "Public Links"

@@ -215,6 +215,7 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
                                     ['mergeTheirs', String.format(i18n._('Merge {0}, prefer Second'), recordsName)]
                                 ]
                             });
+                            this.store.resolveStrategy = 'mergeMine';
                             this.actionCombo.setWidth(400);
                             this.onStoreLoad();
                 
