@@ -397,7 +397,7 @@ Tine.Tinebase.tineInit = {
         });
 
         this.action_comeposeEmail = new Ext.Action({
-            text: i18n._('Compose Meessage To'),
+            text: i18n._('Compose Message To'),
             handler: async function () {
                 let defaults = Tine.Felamimail.Model.Message.getDefaultData();
                 defaults.to = [email];
