@@ -5137,3 +5137,12 @@ msgstr ""
 
 msgid "Search for Community Identification Numbers ..."
 msgstr "Suche nach Gemeindeschlüsseln ..."
+
+msgid "Create Contact"
+msgstr "Kontakt erstellen"
+
+msgid "Copy Email Address"
+msgstr "E-Mail-Adresse kopieren"
+
+msgid "Compose Message To"
+msgstr "Nachricht verfassen"
