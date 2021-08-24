@@ -120,6 +120,8 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /usr/bin/php8 /usr/bin/php; fi
+RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /usr/sbin/php-fpm8 /usr/sbin/php-fpm; else ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm; fi
+RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /etc/php8 /etc/php; else ln -s /etc/php7 /etc/php; fi
 
 RUN addgroup -S -g 150 tine20 && \
     adduser -S -H -D -s /bin/ash -g "tine20 user" -G tine20 -u 150 tine20 && \
@@ -159,9 +161,9 @@ COPY etc/nginx/conf.d/ /etc/nginx/conf.d
 COPY etc/nginx/snippets /etc/nginx/snippets
 COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/
-COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/crond.ini /etc/supervisor.d/
+COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/
 COPY ci/dockerimage/scripts/* /usr/local/bin/
 
 WORKDIR ${TINE20ROOT}
