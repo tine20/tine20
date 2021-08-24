@@ -198,15 +198,18 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _resolveAssignedAccountables(&$assignedAccountables)
     {
-        $model = 'WebAccounting_Model_ProxmoxVM';
         $assignedAccountableIds = [];
         foreach ($assignedAccountables as $accountable) {
             $assignedAccountableIds[] = $accountable['id'];
         }
-        if (count($assignedAccountableIds) > 0) {
+        if (count($assignedAccountableIds) > 0
+            && Tinebase_Application::getInstance()->isInstalled('WebAccounting', true)
+            && class_exists('WebAccounting_Controller_ProxmoxVM')
+        ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' resolving accountables: '
                 . print_r($assignedAccountableIds, true));
+            $model = 'WebAccounting_Model_ProxmoxVM';
             $accountables = WebAccounting_Controller_ProxmoxVM::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
                     ['field' => 'id', 'operator' => 'in', 'value' => $assignedAccountableIds]
