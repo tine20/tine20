@@ -172,7 +172,9 @@ msgstr "Last Modified By"
 #: js/NodeGridPanel.js:311 js/NodeEditDialog.js:61 js/FilePicker.js:505
 #: Frontend/Download.php:213
 msgid "Folder"
-msgstr "Folder"
+msgid_plural "Folders"
+msgstr[0] "Folder"
+msgstr[1] "Folders"
 
 #: js/NodeGridPanel.js:335
 msgid "Total size of all available revisions"
@@ -209,6 +211,9 @@ msgstr "Close Data Safe"
 #: js/NodeGridPanel.js:916 js/Model.js:577 js/NodeTreePanel.js:568
 msgid "Upload Failed"
 msgstr "Upload Failed"
+
+msgid "Upload File"
+msgstr "Upload File"
 
 #: js/NodeGridPanel.js:917 js/NodeTreePanel.js:569
 msgid "It is not permitted to store files in this folder!"
@@ -522,7 +527,9 @@ msgstr "edit file"
 
 #: js/NodeEditDialog.js:61 Frontend/Download.php:239
 msgid "File"
-msgstr "File"
+msgid_plural "Files"
+msgstr[0] "File"
+msgstr[1] "Files"
 
 #: js/NodeEditDialog.js:96
 msgid "Public Links"
