@@ -327,6 +327,7 @@ class Tinebase_ApplicationTest extends TestCase
             'Felamimail' => array(
                 Felamimail_Model_Account::class,
                 Felamimail_Model_AccountGrants::class,
+                Felamimail_Model_AttachmentCache::class,
                 Felamimail_Model_Folder::class,
                 Felamimail_Model_Message::class,
                 Felamimail_Model_MessageFileLocation::class,
