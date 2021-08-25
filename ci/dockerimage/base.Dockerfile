@@ -48,7 +48,7 @@ RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/
                                   ${ALPINE_PHP_PACKAGE}-json \
                                   ${ALPINE_PHP_PACKAGE}-phar \
                                   | sha256sum >> /cachehash
-RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ]; then \
+RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ] && [ ${ALPINE_PHP_REPOSITORY_BRANCH} == v3.12 ]; then \
         apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community \
                                   php7-pecl-redis=4.3.0-r2 | sha256sum >> /cachehash; \
     else \
@@ -108,7 +108,7 @@ RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PH
                                   ${ALPINE_PHP_PACKAGE}-posix \
                                   ${ALPINE_PHP_PACKAGE}-json \
                                   ${ALPINE_PHP_PACKAGE}-phar
-RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ]; then \
+RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ] && [ ${ALPINE_PHP_REPOSITORY_BRANCH} == v3.12 ]; then \
         apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community php7-pecl-redis=4.3.0-r2; \
     else \
         apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
