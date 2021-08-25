@@ -94,8 +94,20 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_setNextNumber($_record);
-        
         self::validateCurrencyCode($_record->currency);
+    }
+
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param Tinebase_Record_Interface $_createdRecord
+     * @param Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, $_record)
+    {
+        // record finally have id here , create postal address needs record_id.
+        Sales_Controller_Address::getInstance()->resolvePostalAddress($_record);
     }
     
     /**
@@ -106,7 +118,7 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectDelete(array $_ids)
     {
-        $filter = new Sales_Model_AddressFilter(array());
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'in', 'value' => $_ids)));
         
         $addressController = Sales_Controller_Address::getInstance();
@@ -124,7 +136,7 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
     public function resolveVirtualFields($supplier)
     {
         $addressController = Sales_Controller_Address::getInstance();
-        $filter = new Sales_Model_AddressFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $supplier['id'])));
         
         $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
@@ -165,11 +177,28 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        Sales_Controller_Customer::getInstance()->handleExternAndInternId($_record);
+        Sales_Controller_Address::getInstance()->resolvePostalAddress($_record);
+
         self::validateCurrencyCode($_record->currency);
         
         if ($_record->number != $_oldRecord->number) {
             $this->_setNextNumber($_record, TRUE);
         }
+    }
+
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param Tinebase_Record_Interface $updatedRecord
+     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Record_Interface $currentRecord
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        Sales_Controller_Customer::getInstance()->handleExternAndInternId($record);
+        Sales_Controller_Address::getInstance()->resolvePostalAddress($record);
     }
     
     /**
