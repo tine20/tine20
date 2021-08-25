@@ -459,7 +459,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 locationName = this.attendeeGridPanel.renderAttenderResourceName(record.get('user_id'), {noIcon: true}),
                 locationField = this.getForm().findField('location');
 
-            if (type.get('is_location') && locationName === locationField.getValue()) {
+            if (type?.get('is_location') && locationName === locationField.getValue()) {
                 locationField.setValue('');
             }
         }, this);
