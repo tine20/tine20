@@ -83,6 +83,13 @@ Tine.Calendar.ResourceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._('Busy Type'),
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'freebusyTypes')
         }, {
+            id: 'site',
+            header: this.app.i18n._('Site'),
+            width: 150,
+            dataIndex: 'relations',
+            renderer: Tine.Calendar.ResourceGridPanel.siteRenderer,
+            sortable: false
+        }, {
             id: 'location',
             header: this.app.i18n._('Location'),
             width: 150,
@@ -114,6 +121,29 @@ Tine.Calendar.ResourceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 Ext.reg('calendar.resourcegridpanel', Tine.Calendar.ResourceGridPanel);
 
 /**
+ * render site relation
+ *
+ * @param data
+ * @param cell
+ * @param record
+ * @returns {*|String}
+ */
+Tine.Calendar.ResourceGridPanel.siteRenderer = function(data, cell, record) {
+    var _ = window.lodash;
+
+    if (Ext.isArray(data) && data.length > 0) {
+        var index = 0;
+
+        while (index < data.length && data[index].type != 'SITE') {
+            index++;
+        }
+        if (data[index]) {
+            return Ext.util.Format.htmlEncode(_.get(data[index], 'related_record.n_fileas', i18n._('No Access')));
+        }
+    }
+};
+
+/**
  * render location relation
  *
  * @param data
@@ -127,7 +157,7 @@ Tine.Calendar.ResourceGridPanel.locationRenderer = function(data, cell, record) 
     if (Ext.isArray(data) && data.length > 0) {
         var index = 0;
 
-        while (index < data.length && data[index].type != 'STANDORT') {
+        while (index < data.length && data[index].type != 'LOCATION') {
             index++;
         }
         if (data[index]) {

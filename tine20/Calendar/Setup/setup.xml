@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->
-    <version>14.2</version>
+    <version>14.3</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
@@ -92,6 +92,18 @@
                 <field>
                     <name>geo</name>
                     <type>float</type>
+                </field>
+                <field>
+                    <name>adr_lon</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                    <default>null</default>
+                </field>
+                <field>
+                    <name>adr_lat</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                    <default>null</default>
                 </field>
                 <field>
                     <name>location</name>
@@ -579,11 +591,6 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>is_location</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>
-                <field>
                     <name>type</name>
                     <type>text</type>
                     <length>32</length>
@@ -631,12 +638,6 @@
                     <name>email</name>
                     <field>
                         <name>email</name>
-                    </field>
-                </index>
-                <index>
-                    <name>is_location</name>
-                    <field>
-                        <name>is_location</name>
                     </field>
                 </index>
                 <index>
