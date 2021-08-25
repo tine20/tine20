@@ -1032,11 +1032,10 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         self::assertTrue(count($fullMessage->attachments) === 1, 'attachment not found: ' . print_r($fullMessage->toArray(), true));
 
         $id = get_class($fullMessage) . ':' . $fullMessage->getId() . ':' . $fullMessage->attachments[0]['partId'];
-        $cachedAttachment = Felamimail_Controller_AttachmentCache::getInstance()->get($id);
+        $cachedAttachment = $this->_json->getAttachmentCache($id);
 
-        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $cachedAttachment->attachments);
-        $this->assertSame(1, $cachedAttachment->attachments->count());
-        $this->assertStringContainsString($id . '/test.eml', $cachedAttachment->attachments->getFirstRecord()->path);
+        $this->assertCount(1, $cachedAttachment['attachments']);
+        $this->assertStringContainsString($id . '/test.eml', $cachedAttachment['attachments'][0]['path']);
     }
 
     public function testAttachmentCacheNode()
@@ -1049,12 +1048,10 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $fullMessage = Felamimail_Controller_Message::getInstance()->getMessageFromNode($result[0]['id']);
 
         $id = Filemanager_Model_Node::class . ':' . $result[0]['id'] . ':' . $fullMessage['attachments'][0]['partId'];
-        $cachedAttachment = Felamimail_Controller_AttachmentCache::getInstance()->get($id);
+        $cachedAttachment = $this->_json->getAttachmentCache($id);
 
-        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $cachedAttachment->attachments);
-        $this->assertSame(1, $cachedAttachment->attachments->count());
-        $this->assertStringContainsString($id . '/moz-screenshot-83.png',
-            $cachedAttachment->attachments->getFirstRecord()->path);
+        $this->assertCount(1, $cachedAttachment['attachments']);
+        $this->assertStringContainsString($id . '/moz-screenshot-83.png', $cachedAttachment['attachments'][0]['path']);
     }
 
     /**
