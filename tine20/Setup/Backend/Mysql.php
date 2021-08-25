@@ -528,6 +528,9 @@ host = {$config->host}
 port = {$port}
 user = {$config->username}
 password = {$config->password}
+
+[mysqldump]
+column-statistics=0
 EOT;
         file_put_contents($path, $mycnfData);
     }
