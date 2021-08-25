@@ -2832,7 +2832,7 @@ msgstr "Klartext/Versteckt"
 
 #: js/widgets/form/PasswordTriggerField.js:43
 msgid "Copy to Clipboard"
-msgstr "In die Zwischenablage kopieren"
+msgstr "In Zwischenablage kopieren"
 
 #: js/widgets/LangChooser.js:35 Preference.php:141
 msgid "Language"
@@ -5140,9 +5140,6 @@ msgstr "Suche nach Gemeindeschlüsseln ..."
 
 msgid "Create Contact"
 msgstr "Kontakt erstellen"
-
-msgid "Copy Email Address"
-msgstr "E-Mail-Adresse kopieren"
 
 msgid "Compose Message To"
 msgstr "Nachricht verfassen"

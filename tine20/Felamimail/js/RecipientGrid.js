@@ -149,7 +149,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {Number} row
      * @param {Event} e
      */
-    onCtxMenu: function(grid, row, e) {
+    onCtxMenu: async function (grid, row, e) {
+        const position = e.getXY();
         const targetInput = e.getTarget('input[type=text]', 1, true);
         if (targetInput) {
             // allow native context menu for input field
@@ -157,17 +158,21 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
 
         var activeRow = (row === null) ? ((this.activeEditor) ? this.activeEditor.row : 0) : row;
-        
+
         e.stopEvent();
         var selModel = grid.getSelectionModel();
         if (! selModel.isSelected(activeRow)) {
             selModel.selectRow(activeRow);
         }
-        
+
         var record = this.store.getAt(activeRow);
         if (record) {
-            this.action_remove.setDisabled(record.get('address') == '');
-            this.contextMenu.showAt(e.getXY());
+            if (record.get('address') !== '') {
+                this.action_remove.setDisabled(false);
+                this.contextMenu = await Tine.Tinebase.tineInit.getEmailContextMenu(targetInput, record.get('address'));
+                this.contextMenu.addMenuItem(this.action_remove);
+                this.contextMenu.showAt(position);
+            }
         }
     },
     
