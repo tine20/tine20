@@ -195,15 +195,25 @@ Tine.Tinebase.tineInit = {
             }
         }, this);
 
-        Ext.getBody().on('click', function(e) {
+        Ext.getBody().on('click', async function (e) {
+
             var target = e.getTarget('a', 1, true),
                 href = target ? target.getAttribute('href') : '';
-            
+            const position = e.getXY();
+
             // add menuitems for email links
             if (target?.dom?.className === 'tinebase-email-link' || target?.dom?.href.includes('mailto:')) {
-                this.showEmailContextMenu(e);
+                // disable default mailto link
+                e.preventDefault();
+
+                // search Contact first
+                const targetClassName = target?.dom?.className;
+                const email = Tine.Tinebase.common.findEmail(targetClassName === 'tinebase-email-link' ? target?.id : target?.dom?.href);
+
+                this.contextMenu = await this.getEmailContextMenu(target, email);
+                this.contextMenu.showAt(position);
             }
-            
+
             if (target && href && href !== '#') {
                 // open internal links in same window (use router)
                 if (window.isMainWindow === true) {
@@ -227,9 +237,7 @@ Tine.Tinebase.tineInit = {
                         window.close();
                     }
                 }
-            }
-            
-            else {
+            } else {
                 let wavesEl = e.getTarget('.x-btn', 10, true)
                     || e.getTarget('.x-tree-node-el', 10, true);
 
@@ -333,18 +341,8 @@ Tine.Tinebase.tineInit = {
         };
     },
     
-    async showEmailContextMenu(e) {
-        // disable default mailto link
-        e.preventDefault();
-        
-        // store click position, make sure menuItem diaplay around the link 
-        const position = e.getXY();
-        const target = e.getTarget('a', 1, true);
-        
-        // search Contact first
-        const targetClassName = target?.dom?.className;
-        const email = Tine.Tinebase.common.findEmail(targetClassName === 'tinebase-email-link' ? target?.id : target?.dom?.href);
-      
+    async getEmailContextMenu(target, email) {
+        // store click position, make sure menuItem diaplay around the link
         if (Tine.Addressbook) {
             let contacts = await Tine.Addressbook.searchContacts([{
                 field: 'email', operator: 'in', value: email
@@ -380,9 +378,9 @@ Tine.Tinebase.tineInit = {
 
             this.contextMenu.addMenuItem(this.action_addContact);
         }
-        
+
         this.action_copyEmailPlainText = new Ext.Action({
-            text: i18n._('Copy Email Address'),
+            text: i18n._('Copy to Clipboard'),
             handler: async function () {
                 await navigator.clipboard.writeText(email)
                     .then(() => {
@@ -392,7 +390,7 @@ Tine.Tinebase.tineInit = {
                         console.log('Something went wrong', err);
                     });
             },
-            iconCls: 'action_editcopy',
+            iconCls: 'action_copy',
             scope: this
         });
 
@@ -413,7 +411,8 @@ Tine.Tinebase.tineInit = {
 
         this.contextMenu.addMenuItem(this.action_comeposeEmail);
         this.contextMenu.addMenuItem(this.action_copyEmailPlainText);
-        this.contextMenu.showAt(position);
+
+        return this.contextMenu;
     },
     
     contactHandler(target, record) {
