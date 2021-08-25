@@ -543,7 +543,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(25, $account2013['possible_vacation_days']);
-        $this->assertEquals(25, $account2013['remaining_vacation_days']);
+        $this->assertEquals(25, $account2013['scheduled_remaining_vacation_days']);
         $this->assertEquals(250, $account2013['working_days']);
         
         // the extra freetimes added to the account2013 should not affect account 2014
@@ -570,8 +570,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $freetime = $this->_json->saveFreeTime($freetime);
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(25, $account2013['possible_vacation_days'], 'There should be 25 possible vacation days after all!');
-        $this->assertEquals(22, $account2013['remaining_vacation_days'], 'There should be 25 remaining vacation days after all!');
-        $this->assertEquals(3, $account2013['taken_vacation_days'], 'He took 3 vacation days');
+        $this->assertEquals(22, $account2013['scheduled_remaining_vacation_days'], 'There should be 25 remaining vacation days after all!');
+        $this->assertEquals(3, $account2013['scheduled_taken_vacation_days'], 'He took 3 vacation days');
         
         
         // test account filter for: employee_id and year
@@ -614,12 +614,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $account2013 = $json->getAccount($accountId2013);
         $this->assertEquals(25, $account2013['possible_vacation_days']);
-        $this->assertEquals(22, $account2013['remaining_vacation_days']);
+        $this->assertEquals(22, $account2013['scheduled_remaining_vacation_days']);
         
         // but possible vacation days of the 2014 account should be reduced by 3
         $account2014 = $json->getAccount($accountId2014);
         $this->assertEquals(15, $account2014['possible_vacation_days']);
-        $this->assertEquals(12, $account2014['remaining_vacation_days']);
+        $this->assertEquals(12, $account2014['scheduled_remaining_vacation_days']);
         $this->assertEquals(175, $account2014['working_days']);
         
         
@@ -1145,8 +1145,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $account = $this->_json->getAccount($account['id']);
         
         $this->assertEquals(28, $account['possible_vacation_days']);
-        $this->assertEquals(17, $account['remaining_vacation_days']);
-        $this->assertEquals(11, $account['taken_vacation_days']);
+        $this->assertEquals(17, $account['scheduled_remaining_vacation_days']);
+        $this->assertEquals(11, $account['scheduled_taken_vacation_days']);
         $this->assertEquals(14, $account['excused_sickness']);
         $this->assertEquals(1, $account['unexcused_sickness']);
     }

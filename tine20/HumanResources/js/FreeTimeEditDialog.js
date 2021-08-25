@@ -192,7 +192,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     onBeforeDateSelect: function(datePicker, dateValue) {
-        return !!this.form.findField('remaining_vacation_days').getValue();
+        return !!this.form.findField('scheduled_remaining_vacation_days').getValue();
     },
     
     onDateSelect: function(datePicker, dateValue) {
@@ -354,7 +354,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.remainingDaysField = new Ext.form.NumberField({
             fieldLabel: this.app.i18n._('Remaining'),
             columnWidth: 1/3,
-            name: 'remaining_vacation_days',
+            name: 'scheduled_remaining_vacation_days',
             readOnly: true,
             allowBlank: true,
             
@@ -367,7 +367,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 const originalDays = this.record.get('creation_time') ? +_.get(this.record, 'modified.days_count', currentDays) : 0;
                 remaining = remaining + originalDays - currentDays;
 
-                this.form.findField('remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');
+                this.form.findField('scheduled_remaining_vacation_days').setValue(year && feastAndFreeDays ? remaining : '');
             }
         });
         
