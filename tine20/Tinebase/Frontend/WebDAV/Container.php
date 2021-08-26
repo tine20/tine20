@@ -28,7 +28,9 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected $_model = 'File';
     
     protected $_suffix = null;
-    
+
+    protected $_path = null;
+
     /**
      * webdav file class
      * 
@@ -169,7 +171,14 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
         }
     }
-    
+
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws \Sabre\DAV\Exception\Forbidden
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
     public function getChild($name)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
@@ -261,7 +270,16 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         }
         
         $this->_getContainer()->name = $name;
-        Tinebase_FileSystem::getInstance()->update($this->_getContainer());
+        try {
+            Tinebase_FileSystem::getInstance()->update($this->_getContainer());
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Target already exists: ' . $name);
+            } else {
+                throw $zdse;
+            }
+        }
     }
     
     /**

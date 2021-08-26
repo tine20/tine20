@@ -9225,16 +9225,6 @@ parameters:
 			path: tine20/Tinebase/Frontend/Json/PersistentFilter.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Frontend_WebDAV_Container\\:\\:\\$_path\\.$#"
-			count: 18
-			path: tine20/Tinebase/Frontend/WebDAV/Container.php
-
-		-
-			message: "#^Call to an undefined method Sabre\\\\DAV\\\\INode\\:\\:put\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/WebDAV/Container.php
-
-		-
 			message: "#^Access to an undefined property Tinebase_Frontend_WebDAV_Record\\:\\:\\$_path\\.$#"
 			count: 4
 			path: tine20/Tinebase/Frontend/WebDAV/Record.php
