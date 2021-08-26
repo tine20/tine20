@@ -76,10 +76,10 @@ class Felamimail_Import_Eml
     }
 
     /**
-     * @param $_dir
+     * @param string $_dir
      * @return array
      */
-    protected function _dirToArray($_dir)
+    protected function _dirToArray(string $_dir)
     {
         $result = array();
         $cdir = scandir($_dir);
