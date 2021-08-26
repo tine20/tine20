@@ -252,8 +252,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }], [{
                                 name: 'currency',
                                 fieldLabel: this.app.i18n._('Currency'),
-                                value: currency,
-                                allowBlank: false
+                                value: currency
                             }, {
                                 name: 'currency_trans_rate',
                                 fieldLabel: this.app.i18n._('Currency Translation Rate'),
