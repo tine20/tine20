@@ -27,6 +27,7 @@ Tine.Tinebase.CommunityIdentNrGridPanel = Ext.extend(Tine.widgets.grid.GridPanel
     recordClass: Tine.Tinebase.Model.CommunityIdentNr,
     copyEditAction: false,
     multipleEdit: false,
+    moveAction: false,
     duplicateResolvable: false,
 
     /**
