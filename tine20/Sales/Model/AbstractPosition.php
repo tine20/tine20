@@ -35,8 +35,8 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     
     const FLD_PRODUCT_ID = 'product_id';  // optional, es gibt auch textonlypositionen
     
-    const FLD_TITLE = 'title'; // einzeiler/überschrift(fett) aus product ubernommen sind änderbar
-    const FLD_DESCRIPTION = 'description'; // aus product ubernommen sind idr. änderbar
+    const FLD_TITLE = 'title'; // einzeiler/überschrift(fett) aus product übernommen sind änderbar
+    const FLD_DESCRIPTION = 'description'; // aus product übernommen sind idr. änderbar
     const FLD_QUANTITY = 'quantity'; // Anzahl - aus produkt übernehmen, standard 1
     const FLD_USE_ACTUAL_QUANTITY  = 'use_actual_quantity'; // boolean, wenn true muss es eine verknüpfung mit n leistungsnachweisen (accountables) geben
     const FLD_UNIT = 'unit'; // Einheit - aus product übernehmen
@@ -75,7 +75,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     //    Bundle -> Hauptprodukt wird übernommen und hat den Gesamtpreis, subprodukte werden nicht als positionen übernommen (variablen beleg pos. werden trotzdem erzeugt!!)
     //              die subproduktzuordnung wird übernommen!
     //    Set -> jedes subprodukt wird mit preis einzeln übernommen, hauptprodukt wird ohne preis übernommen
-    //           gruppe aus hauptprodukut wird in jedes subprodukt übernommen
+    //           gruppe aus hauptprodukt wird in jedes subprodukt übernommen
     //           
     //    Zur Sicherheit: Bundles/Sets dürfen keine Bundles/Sets enthalten!
     // - subproduktzuordnung (eigene Tabelle)
@@ -92,7 +92,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     
     // in beschreibung des produktes. können variblen verwendet werden um auf die subprodukte zuzugreifen
     // {{ <shortcut>.<field> }} {{ <shortcut>.record.<productfield> }}
-    // BSP: VM mit {{ cpu.inclusive }} vcpus und {{ram.inclusive}} vram
+    // BSP: VM mit {{ cpu.inclusive }} vcpus und {{ ram.inclusive }} vram
     
     // Autrags belegposition die use_actual_quantity haben müssen verknüpfung zum konkreten leistungsnachweis (accountable)
     // im rahmen der leistungserfassung werden die tatsächlichen "Anzahl-Werte" ermittelt
