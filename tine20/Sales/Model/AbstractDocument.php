@@ -20,7 +20,7 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
     const MODEL_NAME_PART = 'AbstractDocument'; // als konkrete document_types gibt es Offer, Order, DeliveryNote, Invoice (keine Gutschrift!)
 
     const FLD_ID = 'id';
-    const FLD_DOCUMENT_GROUP = 'document_group'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
+    const FLD_DOCUMENT_CATEGORY = 'document_category'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
     const FLD_REFERENCE_DOCUMENT = 'reference_document'; // virtual, link
     const FLD_NOTE = 'note';

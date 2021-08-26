@@ -27,7 +27,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     
     const FLD_DOCUMENT_ID = 'document_id';
     const FLD_SORT = 'sort'; // automatisch in 10000er schritten, shy
-    const FLD_GROUP = 'group'; // gruppierte darstellung, automatische laufende nummern pro gruppe(nicht persistiert)
+    const FLD_GROUPING = 'grouping'; // gruppierte darstellung, automatische laufende nummern pro gruppe(nicht persistiert)
     
     const FLD_SUBPRODUCT_MAPPING = 'subproduct_mapping'; // "kreuztabelle" Sales_Model_SubproductMapping (nur für bundles nicht für set's?)
     
@@ -62,17 +62,17 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     // - shortcut intern (wird als kurzbez. in subproduktzuordnung übernommen, in pos nicht benötigt) - varchar 20
     // - title - varchar
     // - description - text
-    // - gruppe (Gruppierung von Positionen z.B. A implementierung, B regelm., C zusatz) - varchar - autocomplete
+    // - gruppierung (Gruppierung von Positionen z.B. A implementierung, B regelm., C zusatz) - varchar - autocomplete
     // - anzahl
     // - anzahl aus accounting (ja/nein)
     // - einheit - varchar
-    // - preis (pro einheit) 
+    // - verkaufspreis (pro einheit) 
     // - steuersatz - percentage
     // - kostenstelle
     // - kostenträger
     // - ist verkaufsprodukt (bool) [nur verkaufsprodukte können in positionen direkt gewählt werden]
     // - Entfaltungsmodus (unfold type) (Nur aktiv wenn subprodukte ansonsten leer)
-    //    Bundle -> Hauptprodukt wird übernommen und hat den Gesamtpreis, subprodukte werden nicht als positionen übernommen (variablen beleg pos. werden trotzdem erzeugt!!)
+    //    Bundle -> Hauptprodukt wird übernommen und hat den Gesamtpreis, subprodukte werden nicht als belegpositionen übernommen (variablen beleg pos. werden trotzdem erzeugt!! + schattenpositionen die nicht angedruckt werden)
     //              die subproduktzuordnung wird übernommen!
     //    Set -> jedes subprodukt wird mit preis einzeln übernommen, hauptprodukt wird ohne preis übernommen
     //           gruppe aus hauptprodukt wird in jedes subprodukt übernommen
