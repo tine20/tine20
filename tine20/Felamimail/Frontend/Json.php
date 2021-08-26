@@ -480,7 +480,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $this->_recordToJson($folder);
     }
-    
+
+    public function getAttachmentCache($id, $createPreviewInstantly = true)
+    {
+        $old = Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($createPreviewInstantly);
+        try {
+            return $this->_get($id, Felamimail_Controller_AttachmentCache::getInstance());
+        } finally {
+            Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($old);
+        }
+    }
+
     /**
      * send reading confirmation
      * 
