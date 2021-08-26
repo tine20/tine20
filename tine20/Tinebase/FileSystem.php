@@ -3912,12 +3912,20 @@ class Tinebase_FileSystem implements
 
             //sort it to handle user settings first, then group settings!
             //TODO write a test that tests this!
-            usort($notificationProps, function($a) {
+            usort($notificationProps, function($a, $b) {
                 if (is_array($a) && isset($a[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
                     $a[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
-                    return false;
+                    if (is_array($b) && isset($b[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
+                        $b[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                        return 0;
+                    }
+                    return -1;
                 }
-                return true;
+                if (is_array($b) && isset($b[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE]) &&
+                    $b[Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE] === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                    return 1;
+                }
+                return 0;
             });
 
             foreach ($notificationProps as $notificationProp) {

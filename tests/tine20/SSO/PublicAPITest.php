@@ -190,6 +190,7 @@ class SSO_PublicAPITest extends TestCase
                 ])
         );
 
+        Tinebase_Auth::getInstance()->setBackend();
         Tinebase_Core::unsetUser();
         $coreSession = Tinebase_Session::getSessionNamespace();
         if (isset($coreSession->currentAccount)) {

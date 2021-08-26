@@ -113,6 +113,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         ),
         'description'          => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'geo'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'adr_lon'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'adr_lat'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'location'             => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'organizer'            => array(Zend_Filter_Input::ALLOW_EMPTY => false,        ),
         'priority'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int'   ),
@@ -315,7 +317,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (empty($exdates)) return;
 
         usort($exdates, function (Tinebase_DateTime $a, Tinebase_DateTime $b) {
-            return $a->isLater($b);
+            return $a->compare($b);
         });
 
         $this->exdate = $exdates;
@@ -691,6 +693,14 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         if (empty($_data['geo'])) {
             $_data['geo'] = NULL;
+        }
+        
+        if (empty($_data['adr_lon'])) {
+            $_data['adr_lon'] = NULL;
+        }
+
+        if (empty($_data['adr_lat'])) {
+            $_data['adr_lat'] = NULL;
         }
         
         if (empty($_data['class'])) {

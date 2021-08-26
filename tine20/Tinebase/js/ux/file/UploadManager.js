@@ -23,7 +23,7 @@ Ext.ux.file.UploadManager = function(config) {
         storage: "inmemory",
         prefix: "/Tine.Tinebase.uploads",
         timeout: 1500,
-        limit: 50,
+        limit: 2000,
         principle: 'fifo',
     });
     
@@ -105,6 +105,11 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
          */
         adding: false,
 
+        /**
+         *  store the apply to all status og every batch uploads
+         */
+        applyToAll: [],
+
         onInitFs: function (fs)
         {
             fs.root.getFile('log.txt', {create: true, exclusive: true}, function(fileEntry) {
@@ -159,7 +164,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                     let tasks = await this.mainChannel.getAllTasks();
                     tasks = _.filter(tasks, {tag: 'inactive'});
 
-                    if (tasks) {
+                    if (tasks.length > 0) {
                         // move tasks to activeChannel if the dependencies task are completed
                         await _.reduce(tasks, (prev, task) => {
                             return prev.then(async () => {
@@ -170,9 +175,9 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                                 return Promise.resolve();
                             })
                         }, Promise.resolve());
-
-                        await this.addTaskToWorkerChannel();
                     }
+
+                    await this.addTaskToWorkerChannel();
                 });
             }
         },
@@ -386,5 +391,45 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
                 
                 this.adding = false;
             }
+        },
+
+        /**
+         * overwrite batch uploads
+         */
+        overwriteBatchUploads: async function (batchID) {
+            this.applyToAll[batchID] = 'replace';
+            
+            let allTasks = await this.mainChannel.getAllTasks();
+            let tasks = _.filter(allTasks, (task) => {
+                return task.args.batchID = batchID;
+            });
+            
+            await _.reduce(tasks, (prev, task) => {
+                return prev.then(async () => {
+                    task.args.overwrite = true;
+                    await this.mainChannel.storage.update(task._id, {args: task.args});
+                    return Promise.resolve();
+                })
+            }, Promise.resolve());
+        },
+
+        /**
+         * remove batch uploads
+         */
+        removeBatchUploads: async function (batchID) {
+            this.applyToAll[batchID] = 'stop';
+            
+            let allTasks = await this.mainChannel.getAllTasks();
+            let tasks = _.filter(allTasks, (task) => {
+                return task.args.batchID = batchID;
+            });
+
+            await _.reduce(tasks, (prev, task) => {
+                return prev.then(async () => {
+                    await this.mainChannel.storage.delete(task._id);
+                    Tine.Tinebase.uploadManager.removeVirtualNode(task.args.uploadId);
+                    return Promise.resolve();
+                })
+            }, Promise.resolve());
         }
 });

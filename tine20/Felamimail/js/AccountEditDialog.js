@@ -89,6 +89,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.grantsGrid.setValue(this.record.get('grants'));
         }
         
+        this.loadEmailQuotas();
         this.disableSieveTabs();
         this.disableFormFields();
     },
@@ -106,13 +107,15 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordUpdate.apply(this, arguments);
 
         this.record.set('grants', this.grantsGrid.getValue());
-
+        
+        this.updateEmailQuotas();
+        
         if (this.isSystemAccount()) {
             this.updateVacationRecord();
             this.updateRuleRecord();
         }
     },
-
+    
     disableFormFields: function() {
         // if account type == system disable most of the input fields
         this.getForm().items.each(function(item) {
@@ -179,6 +182,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     break;
                 case 'enabled':
                     item.setDisabled(! this.isSystemAccount());
+                    break;
+                case 'emailMailSize':
+                case 'emailSieveSize':
+                    item.setDisabled(true);
                     break;
                 default:
                     item.setDisabled(! this.asAdminModule && this.isSystemAccount());
@@ -462,7 +469,39 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         this.testConnection('IMAP', true, true);
                     },
                     disabled: true
-                })]]
+                }),
+                    {
+                        fieldLabel: 'Imap Quota',
+                        emptyText:'no quota set',
+                        name: 'emailMailQuota',
+                        xtype: 'extuxbytesfield',
+                        disabled: true,
+                        hidden: !this.asAdminModule
+                    },
+                    {
+                        fieldLabel: 'Current Mailbox size',
+                        name: 'emailMailSize',
+                        xtype: 'extuxbytesfield',
+                        disabled: true,
+                        hidden: !this.asAdminModule
+                    },
+                    {
+                        fieldLabel: 'Sieve Quota',
+                        emptyText: 'no quota set',
+                        name: 'emailSieveQuota',
+                        xtype: 'extuxbytesfield',
+                        disabled: true,
+                        hidden: !this.asAdminModule
+                    },
+                    {
+                        fieldLabel: 'Current Sieve size',
+                        name: 'emailSieveSize',
+                        xtype: 'extuxbytesfield',
+                        disabled: true,
+                        hidden: !this.asAdminModule
+                    }
+                ]
+                ]
             }, {
                 title: this.app.i18n._('SMTP'),
                 autoScroll: true,
@@ -1024,6 +1063,19 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
+     * load email quotas
+     * 
+     */
+    loadEmailQuotas: function () {
+        if (this.asAdminModule && this.record.data?.email_imap_user) {
+            this.getForm().findField('emailMailQuota').setValue(this.record.data.email_imap_user.emailMailQuota);
+            this.getForm().findField('emailMailSize').setValue(this.record.data.email_imap_user.emailMailSize);
+            this.getForm().findField('emailSieveQuota').setValue(this.record.data.email_imap_user.emailSieveQuota);
+            this.getForm().findField('emailSieveSize').setValue(this.record.data.email_imap_user.emailSieveSize);
+        }
+    },
+    
+    /**
      * update vacation record
      *
      */
@@ -1093,6 +1145,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, me),
             timeout: 150000 // 3 minutes
         });
+    },
+
+    /**
+     * update email quotas
+     * 
+     */
+    updateEmailQuotas: function () {
+        if (this.asAdminModule && this.record.data?.email_imap_user) {
+            this.record.data.email_imap_user.emailMailQuota = this.getForm().findField('emailMailQuota').getValue();
+            this.record.data.email_imap_user.emailSieveQuota = this.getForm().findField('emailSieveQuota').getValue();
+        }
     }
 });
 

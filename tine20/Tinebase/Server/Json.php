@@ -253,10 +253,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     protected function _addRequestsToSentryContext($requestData)
     {
         // TODO allow to configure this?
-        $sentryClient = Tinebase_Core::getSentry();
-        if ($sentryClient) {
+        if (Tinebase_Core::isRegistered('SENTRY')) {
             $requestData = $this->_stripPasswordsFromRequestData($requestData);
-            $sentryClient->extra_context($requestData);
+            Sentry\configureScope(function (Sentry\State\Scope $scope) use ($requestData): void {
+                $scope->setExtra('requestData', $requestData);
+            });
         }
     }
 

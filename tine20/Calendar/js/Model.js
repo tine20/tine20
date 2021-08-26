@@ -22,6 +22,8 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'class' },
     { name: 'description' },
     { name: 'geo' },
+    { name: 'adr_lon' },
+    { name: 'adr_lat' },
     { name: 'location' },
     { name: 'organizer' },
     { name: 'priority' },

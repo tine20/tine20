@@ -79,7 +79,7 @@ class Calendar_Import_Resource_Csv extends Tinebase_Import_Csv_Abstract
                             'related_model' => 'Addressbook_Model_Contact',
                             'related_backend' => Tasks_Backend_Factory::SQL,
                             'related_id' => $contract['id'],
-                            'type' => 'STANDORT'
+                            'type' => 'SITE'
                         ]];
                 }
             }

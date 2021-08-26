@@ -11,8 +11,8 @@
 
 use \Psr\Http\Message\RequestInterface;
 use \Zend\Diactoros\Response;
-use \Zend\Diactoros\Response\EmitterInterface;
-use \Zend\Diactoros\Response\SapiEmitter;
+use \Zend\HttpHandlerRunner\Emitter\EmitterInterface;
+use \Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 use \Zend\Stratigility\MiddlewarePipe;
 
 /**

@@ -1622,7 +1622,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _recordToJson($_record)
     {
-        $result = parent::_recordToJson($_record);
+        if ($_record instanceof Felamimail_Model_Account) {
+            $converter = new Admin_Convert_EmailAccount_Json(get_class($_record));
+            $result = $converter->fromTine20Model($_record);
+        } else {
+            $result = parent::_recordToJson($_record);
+        }
 
         if ($_record instanceof Tinebase_Model_Container) {
             $result['account_grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($_record['account_grants']->toArray());

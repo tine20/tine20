@@ -156,6 +156,12 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                }
             }, {
                 columnWidth: 0.455,
+                name: 'name',
+                fieldLabel: this.app.i18n._('Name')
+            }, {
+                name: 'email',
+                fieldLabel: this.app.i18n._('Email')
+            }], [{
                 name: 'street',
                 fieldLabel: this.app.i18n._('Street')
             }, {

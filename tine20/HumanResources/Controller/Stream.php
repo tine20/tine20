@@ -117,7 +117,7 @@ class HumanResources_Controller_Stream extends Tinebase_Controller_Record_Abstra
             }
 
             $stream->{HumanResources_Model_Stream::FLD_STREAM_MODALITIES}->sort(function($a, $b) {
-                return $b->{StreamModality::FLD_START}->isEarlier($a->{StreamModality::FLD_START});
+                return $a->{StreamModality::FLD_START}->compare($b->{StreamModality::FLD_START});
             });
             $prev = null;
             foreach ($stream->{HumanResources_Model_Stream::FLD_STREAM_MODALITIES} as $streamModality) {

@@ -57,7 +57,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
             "Content-Type: application/json\r\n" .
             "User-Agent: Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)\r\n"
         );
-        Tinebase_Core::set('request', $request);
+        Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
 
         $this->server->addPlugin($this->plugin);
     }

@@ -47,6 +47,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     protected $_revision = null;
 
     protected $_beforeCreateHook = [];
+    protected $_afterCreateHook = [];
     protected $_beforeUpdateHook = [];
     protected $_afterUpdateHook = [];
 
@@ -93,6 +94,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     public function registerBeforeCreateHook($key, $hook)
     {
         $this->_beforeCreateHook[$key] = $hook;
+    }
+
+    public function registerAfterCreateHook($key, $hook)
+    {
+        $this->_afterCreateHook[$key] = $hook;
     }
 
     public function registerBeforeUpdateHook($key, $hook)
@@ -208,7 +214,13 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             call_user_func($hook, $_record);
         }
 
-        return parent::create($_record);
+        $createdRecord = parent::create($_record);
+
+        foreach ($this->_afterCreateHook as $hook) {
+            call_user_func($hook, $createdRecord, $_record);
+        }
+
+        return $createdRecord;
     }
 
     /**

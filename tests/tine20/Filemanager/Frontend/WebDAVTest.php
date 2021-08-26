@@ -25,7 +25,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     protected $_oldLoginnameAsFoldername;
 
     protected function setUp(): void
-{
+    {
         parent::setUp();
 
         $this->_oldLoginnameAsFoldername = Tinebase_Config::getInstance()

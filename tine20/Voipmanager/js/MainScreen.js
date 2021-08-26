@@ -41,8 +41,6 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
             });
            
         }
-          
-        this[group + type + 'GridPanel'].store.load();
 
         return this[group + type + 'GridPanel'];
     },

@@ -14,8 +14,8 @@ name: resource event
 
 files:
   #$app,$model,$definition,$file
-  - Calendar/Resource/cal_import_resource_csv/*
-  - Calendar/Event/cal_import_event_csv/*
+  - Calendar/Resource/cal_import_resource_csv/resource.csv
+  - Calendar/Event/cal_import_event_csv/event.csv
 
 
 # this set could contain other sets:

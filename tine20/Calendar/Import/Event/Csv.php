@@ -183,7 +183,6 @@ class Calendar_Import_Event_Csv extends Tinebase_Import_Csv_Generic
                     'name' => $resource,
                     'description' => 'Import Csv resource',
                     'email' => $resource . '@' . $primaryDomain,
-                    'is_location' => TRUE,
                     'grants' => [
                         array_merge([
                             'account_id' => Tinebase_Core::getUser()->getId(),

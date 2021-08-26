@@ -106,14 +106,28 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'max_number_of_people'
                         }], [{
                             xtype: 'tinerelationpickercombo',
+                            fieldLabel: this.app.i18n._('Site'),
+                            editDialog: this,
+                            allowBlank: true,
+                            app: 'Addressbook',
+                            recordClass: Tine.Addressbook.Model.Contact,
+                            relationType: 'SITE',
+                            relationDegree: 'child',
+                            ref: '../../../../../site',
+                            listeners: {
+                                scope: this,
+                                select: this.onSiteSelect
+                            }
+                        }, {
+                            xtype: 'tinerelationpickercombo',
                             fieldLabel: this.app.i18n._('Location'),
                             editDialog: this,
                             allowBlank: true,
                             app: 'Addressbook',
                             recordClass: Tine.Addressbook.Model.Contact,
-                            relationType: 'STANDORT',
+                            relationType: 'LOCATION',
                             relationDegree: 'child',
-                            modelUnique: true,
+                            ref: '../../../../../location'
                         }, {
                             xtype: 'checkbox',
                             fieldLabel: this.app.i18n._('Suppress notification'),
@@ -162,13 +176,20 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             })]
         };
     },
-    
-    onAfterRecordLoad: function() {
+
+    onAfterRecordLoad: function () {
         Tine.Calendar.ResourceEditDialog.superclass.onAfterRecordLoad.apply(this, arguments);
 
         if (this.record.data && this.record.data.grants) {
             this.grantsGridPanel.getStore().loadData({results: this.record.data.grants});
         }
+        this.getForm().items.each(function (f) {
+            if (f.isFormField && f.requiredGrant !== undefined) {
+                var hasRequiredGrant = _.get(this.record, this.recordClass.getMeta('grantsPath') + '.resourceEditGrant');
+
+                f.setDisabled(!hasRequiredGrant);
+            }
+        }, this);
     },
     
     onRecordUpdate: function() {
@@ -182,6 +203,13 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('grants', grantsData);
         
         Tine.Calendar.ResourceEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+    },
+    
+    onSiteSelect: function(field, newValue) {
+        
+        if (!this.location.getValue()) {
+            this.location.setValue(newValue);
+        }
     }
     
 });

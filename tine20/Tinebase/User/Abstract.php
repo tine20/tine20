@@ -608,6 +608,18 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         return count($ids);
     }
 
+    public function search(Tinebase_Model_FullUserFilter $filter)
+    {
+        $backend = new Tinebase_Backend_Sql(array(
+            'modelName' => Tinebase_Model_FullUser::class,
+            'tableName' => 'accounts',
+            'modlogActive' => true,
+        ));
+
+        return $this->getMultiple($backend->search($filter, null, Tinebase_Backend_Sql_Abstract::IDCOL),
+            Tinebase_Model_FullUser::class);
+    }
+
     /**
      * returns active users
      *

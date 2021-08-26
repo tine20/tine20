@@ -522,7 +522,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             width: 100,
             sortable: true,
             dataIndex: 'last_modified_time',
-            hidden: true,
+            hidden: false,
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }];
 

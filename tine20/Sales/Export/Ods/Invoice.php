@@ -129,7 +129,7 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                         break;
                     case 'debitor':
                         if (! $addresses) {
-                            $filter = new Sales_Model_AddressFilter(array());
+                            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array());
                             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $addressIds)));
                             $addresses = Sales_Controller_Address::getInstance()->search($filter);
                         }

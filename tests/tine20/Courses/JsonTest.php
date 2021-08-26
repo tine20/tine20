@@ -4,7 +4,7 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -81,7 +81,9 @@ class Courses_JsonTest extends TestCase
      */
     protected function setUp(): void
     {
-        self::markTestSkipped('FIXME: some LDAP tests are broken since 9b068b772');
+        if (Tinebase_User::getInstance() instanceof Tinebase_User_Ldap) {
+            self::markTestSkipped('FIXME: some LDAP tests are broken since 9b068b772');
+        }
 
         parent::setUp();
         
@@ -129,7 +131,7 @@ class Courses_JsonTest extends TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         $this->_groupIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
         if ($this->_schemaConfigChanged) {
             Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, $this->_schemaConfig);
@@ -343,6 +345,9 @@ class Courses_JsonTest extends TestCase
         $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt', NULL, TRUE);
         $this->assertEquals(5, count($result['members']), 'import failed');
         $this->assertEquals(5, count(Tinebase_Group::getInstance()->getGroupMembers($this->_configGroups[Courses_Config::STUDENTS_GROUP])), 'imported users not added to students group');
+
+        // the created export should be attached as attachment
+        $this->assertCount(1, $result['attachments']);
     }
 
     /**

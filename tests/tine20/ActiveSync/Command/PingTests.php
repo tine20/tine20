@@ -59,7 +59,8 @@ class ActiveSync_Command_PingTests extends TestCase
     protected function setUp(): void
 {
         parent::setUp();
-        
+
+        Syncroton_Registry::set(Syncroton_Registry::IS_UNITTEST, true);
         // speed up tests
         Syncroton_Registry::set(Syncroton_Registry::PING_TIMEOUT, 1);
         Syncroton_Registry::set(Syncroton_Registry::QUIET_TIME, 1);

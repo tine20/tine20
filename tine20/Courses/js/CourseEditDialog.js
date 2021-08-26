@@ -85,7 +85,9 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     groupId: this.record.data.group_id,
                     courseId: this.record.data.id
                 },
-                success: this.onMembersImport,
+                success: () => {
+                    this.loadRemoteRecord();
+                },
                 failure: function() {}
             });
             
@@ -356,7 +358,8 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
             allowEmptyPassword: false,
             locked: false,
-            questionText: i18n._('Please enter the new Password.')
+            questionText: i18n._('Please enter the new Password.'),
+            policyConfig: Tine.Tinebase.configManager.get('userPwPolicy')
         });
         passwordDialog.openWindow();
 

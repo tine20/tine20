@@ -181,11 +181,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Search for roles
      *
-     * @param  array $_filter
-     * @param  array $_paging
+     * @param array $filter
+     * @param array $paging
      * @return array
      */
-    public function searchRoles($filter, $paging)
+    public function searchRoles(array $filter, array $paging)
     {
         $result = array(
             'results'     => array(),
@@ -216,12 +216,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param        $oldPassword
-     * @param        $newPassword
+     * @param string $oldPassword
+     * @param string $newPassword
      * @param string $pwType
      * @return array
      */
-    protected function _changePwOrPin($oldPassword, $newPassword, $pwType = 'password')
+    protected function _changePwOrPin(string $oldPassword, string $newPassword, string $pwType = 'password')
     {
         $response = array(
             'success'      => TRUE
@@ -320,10 +320,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param $commencement
-     * @param $termOfContractInMonths
-     * @param $automaticContractExtensionInMonths
-     * @param $cancellationPeriodInMonths
+     * @param string $commencement
+     * @param string $termOfContractInMonths
+     * @param string $automaticContractExtensionInMonths
+     * @param integer $cancellationPeriodInMonths
+     * @param Tinebase_DateTime $today
      * @return array
      */
     public function getTerminationDeadline(
@@ -575,11 +576,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  string $username the username
      * @param  string $password the password
-     * @param  string $MFAUserConfig config for mfa device to use
+     * @param  string $MFAUserConfigId config for mfa device to use
      * @param  string $MFAPassword otp from mfa device
      * @return array
      */
-    public function login($username, $password, string $MFAUserConfigId = null, $MFAPassword = null)
+    public function login(string $username, string $password, string $MFAUserConfigId = null, string $MFAPassword = null)
     {
         try {
             Tinebase_Core::startCoreSession();
@@ -615,10 +616,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param $oidcResponse
+     * @param string $oidcResponse
      * @return array
      */
-    public function openIDCLogin($oidcResponse)
+    public function openIDCLogin(string $oidcResponse)
     {
         Tinebase_Core::startCoreSession();
 
@@ -1297,7 +1298,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * gets the userProfile config
      *
-     * @return @array
+     * @return array
      */
     public function getUserProfileConfig()
     {
@@ -1491,14 +1492,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function autoComplete($appName, $modelName, $property, $startswith)
     {
         $recordClassName = $appName . '_Model_' . $modelName;
-        $controller      = Tinebase_Core::getApplicationInstance($appName, $modelName);
+
+        $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
+
+        if (! method_exists($controller, 'search')) {
+            throw new Tinebase_Exception_InvalidArgument('Controller needs search() method');
+        }
 
         if (! class_exists($recordClassName)) {
-            throw new Tinebase_Exception_InvalidArgument('A record class for the given appName and modelName does not exist!');
+            throw new Tinebase_Exception_InvalidArgument(
+                'A record class for the given appName and modelName does not exist!');
         }
         
         if (! $controller) {
-            throw new Tinebase_Exception_InvalidArgument('A controller for the given appName and modelName does not exist!');
+            throw new Tinebase_Exception_InvalidArgument(
+                'A controller for the given appName and modelName does not exist!');
         }
 
         /** @var Tinebase_Model_Filter_FilterGroup $filter */
@@ -1556,10 +1564,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * Toogles advanced search preference
+     * Toggles advanced search preference
      *
-     * @param $state
+     * @param string|integer $state
      * @return true
+     *
+     * @todo still needed?
      */
     public function toogleAdvancedSearch($state)
     {
@@ -1679,12 +1689,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns the replication modification logs
      *
-     * @param $sequence
+     * @param int $sequence
      * @param int $limit
      * @return array
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function getReplicationModificationLogs($sequence, $limit = 100)
+    public function getReplicationModificationLogs(int $sequence, int $limit = 100)
     {
         if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::REPLICATION)) {
             throw new Tinebase_Exception_AccessDenied('you do not have access to modlogs');
@@ -1702,13 +1712,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns the replication modification logs
      *
-     * @param $hash
+     * @param string $hash
      * @return array
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Backend
      * @throws Tinebase_Exception_NotFound
      */
-    public function getBlob($hash)
+    public function getBlob(string $hash)
     {
         if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::REPLICATION)) {
             throw new Tinebase_Exception_AccessDenied('you do not have access to blobs');
@@ -1775,5 +1785,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         return $this->_search($filter, $pagination, Tinebase_Record_Path::getInstance(),
             Tinebase_Model_PathFilter::class);
+    }
+
+    /**
+     * @param array $_communityNumber
+     * @return mixed
+     */
+    public function aggregatePopulation(array $_communityNumber)
+    {
+        $result = Tinebase_Controller_CommunityIdentNr::getInstance()->aggregatePopulation(new Tinebase_Model_CommunityIdentNr($_communityNumber));
+        return $result->toArray();
     }
 }

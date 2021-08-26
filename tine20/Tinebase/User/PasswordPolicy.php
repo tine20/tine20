@@ -18,6 +18,58 @@
  */
 class Tinebase_User_PasswordPolicy
 {
+    public static function generatePolicyConformPassword(array $policies = []): string
+    {
+        $chars = [];
+
+        if (!array_key_exists(Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH, $policies)) {
+            $policies[Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH] = Tinebase_Config::getInstance()
+                ->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH} ?: 6;
+        }
+
+        if (!array_key_exists(Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS, $policies)) {
+            $policies[Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS] = Tinebase_Config::getInstance()
+                ->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS};
+        }
+        static::_addChars($chars, 65, 90, (int)$policies[Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS]);
+
+        if (!array_key_exists(Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS, $policies)) {
+            $policies[Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS] = Tinebase_Config::getInstance()
+                ->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS};
+        }
+        static::_addChars($chars, 33, 46, (int)$policies[Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS]);
+
+        if (!array_key_exists(Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS, $policies)) {
+            $policies[Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS] = Tinebase_Config::getInstance()
+                ->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS};
+        }
+        static::_addChars($chars, 48, 57, (int)$policies[Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS]);
+
+        if (!array_key_exists(Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS, $policies)) {
+            $policies[Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS] = Tinebase_Config::getInstance()
+                ->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS};
+        }
+        $length = $policies[Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS]
+            + $policies[Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS]
+            + $policies[Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS]
+            + $policies[Tinebase_Config::PASSWORD_POLICY_MIN_NUMBERS];
+        if ($length < $policies[Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH]) {
+            $policies[Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS] +=
+                $policies[Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH] - $length;
+        }
+        static::_addChars($chars, 97, 122, (int)$policies[Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS]);
+
+        shuffle($chars);
+        return implode($chars);
+    }
+
+    protected static function _addChars(array &$array, int $min, int $max, int $count)
+    {
+        for ($i = 0; $i < $count; ++$i) {
+            $array[] = chr(random_int($min, $max));
+        }
+    }
+
     /**
      * ensure password policy
      *

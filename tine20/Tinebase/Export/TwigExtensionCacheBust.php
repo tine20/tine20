@@ -8,7 +8,7 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-class Tinebase_Export_TwigExtensionCacheBust implements Twig_ExtensionInterface
+class Tinebase_Export_TwigExtensionCacheBust implements Twig\Extension\ExtensionInterface
 {
     protected $_name;
 
@@ -24,7 +24,7 @@ class Tinebase_Export_TwigExtensionCacheBust implements Twig_ExtensionInterface
      *
      * @deprecated since 1.23 (to be removed in 2.0), implement Twig_Extension_InitRuntimeInterface instead
      */
-    public function initRuntime(Twig_Environment $environment)
+    public function initRuntime(Twig\Environment $environment)
     {
     }
 

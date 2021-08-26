@@ -23,7 +23,7 @@ module.exports = {
         let filename;
         while (!filename || filename.endsWith('.crdownload')) {
             filename = fs.readdirSync(downloadPath)[0];
-            await page.waitFor(500);
+            await page.waitForTimeout(500);
         }
         return filename;
     },
@@ -62,7 +62,7 @@ module.exports = {
         page.evaluate(() => Tine.Tinebase.common.reload({
             clearCache: true
         }));
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
         await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon', 20000);
     },
 
@@ -111,11 +111,11 @@ module.exports = {
         // change setting to YES
         await expect(preferencePopup).toMatchElement('input[name=' + preference + ']');
         await expect(preferencePopup).toFill('input[name=' + preference + ']', value);
-        await preferencePopup.waitFor(500);
+        await preferencePopup.waitForTimeout(500);
         await preferencePopup.keyboard.press('Enter');
-        await preferencePopup.waitFor(500);
+        await preferencePopup.waitForTimeout(500);
         await expect(preferencePopup).toClick('button', {text: 'Ok'});
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
 
         await this.reloadRegistry(page);
         await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
@@ -161,7 +161,7 @@ module.exports = {
             await page.click('input[name=locale]');
             await expect(page).toClick('.x-combo-list-item', {text: 'Deutsch [de]'});
             // wait for reload
-            await page.waitFor(500);
+            await page.waitForTimeout(500);
             await page.waitForSelector('input[name=locale]');
         }
 

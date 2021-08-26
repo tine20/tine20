@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -1157,7 +1158,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                          */
                         $url = $property->getValue();
                         $urlParts = parse_url($url);
-                        $host = $urlParts['host'];
+                        $host = $urlParts['host'] ?? null;
                         $name = pathinfo($urlParts['path'], PATHINFO_BASENAME);
 
                         // iCal 10.7 places URI before uploading

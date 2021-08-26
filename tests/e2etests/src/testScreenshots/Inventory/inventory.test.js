@@ -5,7 +5,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('Inventarisierung');
-    await page.waitFor(1000);
+    await page.waitForTimeout(1000);
     await page.screenshot({path: 'screenshots/Inventarisierung/1_inventar_uebersicht.png'});
 });
 
@@ -29,10 +29,10 @@ describe('Edit Inventory Item', () => {
     test('open EditDialog', async () => {
         await expect(page).toClick('button', {text: 'Inventargegenstand hinzufügen'});
         newPage = await lib.getNewWindow();
-        await newPage.waitFor(5000); // @todo waitfor selector...
+        await newPage.waitForTimeout(5000); // @todo waitfor selector...
         await newPage.screenshot({path: 'screenshots/Inventarisierung/2_inventar_gegenstand_neu.png'});
         await newPage.click('input[name=status]');
-        await newPage.waitFor(1000);
+        await newPage.waitForTimeout(1000);
         await newPage.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-trigger-wrap-focus');
         await newPage.screenshot({path: 'screenshots/Inventarisierung/3_inventar_gegenstand_status.png'});
     });

@@ -108,16 +108,13 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.tooltip = config.header;
             }
 
-            if(fieldDefinition.type == 'date') {
-                config.width = 90;
+            if(_.indexOf(['hexcolor', 'bool', 'boolean'], fieldDefinition.type) >= 0) {
+                config.width = config.width || 40;
             }
-
-            if(fieldDefinition.type == 'money') {
+            
+            if(_.indexOf(['data', 'datetime_separated_date', 'datetime_separated_time', 'datetime_separated_tz', 'money', 'integer', 'bool', 'boolean', 'float'], fieldDefinition.type) >= 0) {
                 config.align = 'right';
-            }
-
-            if(fieldDefinition.type == 'hexcolor') {
-                config.width = 40;
+                config.width = config.width || 90;
             }
 
             if(fieldDefinition.type == 'model') {

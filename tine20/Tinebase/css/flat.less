@@ -296,6 +296,21 @@ ul.x-tab-strip-top {
   }
 }
 
+.checkbox-footbar {
+  .x-form-check-wrap {
+    input {
+      top: 0px;
+    }
+    line-height: 19px !important;
+  }
+  vertical-align: middle;
+
+  .x-form-cb-label {
+    border-left: 18px solid transparent;
+    vertical-align: middle;
+  }
+}
+
 .x-btn-group-tc,
 .x-btn-group-tl,
 .x-btn-group-tr,
@@ -766,6 +781,9 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
 
 .x-grid3-hd .x-grid3-hd-inner {
   white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .x-grid3-header {

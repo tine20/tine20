@@ -8,6 +8,7 @@
  */
 
 import './FileLocationType/FilemanagerPluginFactory';
+import './DuplicateFileUploadDialog';
 
 Ext.ns('Tine.Filemanager');
 

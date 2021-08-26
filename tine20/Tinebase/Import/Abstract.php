@@ -49,6 +49,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         'postMappingHook'   => null,
         // if this is set, always resolve (one of:  mergeTheirs, mergeMine, keep
         'duplicateResolveStrategy' => null,
+        'passwordGenerator' => null,
     );
     
     /**

@@ -547,6 +547,15 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             'grants'    => [
                 self::TYPE => self::TYPE_VIRTUAL,
             ],
+            // data-transport for exports
+            'email_imap_user' => [
+                self::LABEL                 => 'Imap user',
+                self::TYPE                  => self::TYPE_VIRTUAL,
+            ],
+            'email_smtp_user' => [
+                self::LABEL                 => 'Smtp user',
+                self::TYPE                  => self::TYPE_VIRTUAL,
+            ],
         ]
     ];
 

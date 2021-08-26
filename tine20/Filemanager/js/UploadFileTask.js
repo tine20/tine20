@@ -7,8 +7,9 @@ export default class UploadFileTask {
         // If process rejected, current task will be removed from task pool in worker.
         return new Promise(async (resolve, reject) => {
             const upload = Tine.Tinebase.uploadManager.getUpload(args.uploadId);
+            
             let nodeData = [];
-
+            
             if (!upload) {
                 reject('upload is not found!');
             }
@@ -68,7 +69,7 @@ export default class UploadFileTask {
 
             try {
                 const type = `vnd.adobe.partial-upload; final_type=${args.nodeData.type}`;
-                nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], _.get(args, 'overwrite', false));
+                nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], args?.overwrite);
                 Tine.Tinebase.uploadManager.removeVirtualNode(args.uploadId);
             } catch (e) {
                 if (e.data.code === 403) {
@@ -84,22 +85,28 @@ export default class UploadFileTask {
                 }
                 
                 if (e.message === 'file exists') {
-                    const button = await new Promise((resolve) => {
-                        Tine.widgets.dialog.FileListDialog.openWindow({
-                            modal: true,
-                            allowCancel: false,
-                            height: 180,
-                            width: 300,
-                            title: 'Do you want to overwrite this file?',
-                            text: args.nodeData.name ,
-                            scope: this,
-                            handler: async function (button) {
-                                resolve(button);
-                            }
-                        });
-                    });
+                     const button = await new Promise((resolve) => {
+                         if (Tine.Tinebase.uploadManager.applyToAll[args.batchID]) {
+                             const button = Tine.Tinebase.uploadManager.applyToAll[args.batchID];
+                             resolve(button);
+                         } else {
+                             const window = Tine.Filemanager.DuplicateFileUploadDialog.openWindow({
+                                 uploadId: args.uploadId,
+                                 batchID: args.batchID,
+                                 fileName: args.nodeData.name,
+                                 fileType: 'file',
+                                 scope: this,
+                                 handler: async function (button) {
+                                     resolve(button);
+                                 }
+                             });
+                         }
+                     });
                     
-                    if (button === 'no') {
+                    if (button === 'stop' || button === 'skip') {
+                        Tine.Tinebase.uploadManager.removeVirtualNode(args.uploadId);
+                        Tine.Tinebase.uploadManager.unregisterUpload(args.uploadId);
+                        
                         return resolve(true);
                     }
                     
@@ -114,12 +121,13 @@ export default class UploadFileTask {
                     nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], _.get(args, 'overwrite', false));
                 }
             }
-            
+
             window.postal.publish({
                 channel: "recordchange",
                 topic: 'Filemanager.Node.update',
                 data: nodeData
             });
+            
             try {
                 upload.upload();
             } catch (e) {
