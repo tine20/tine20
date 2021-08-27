@@ -191,6 +191,11 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
 
     getTitle: function() {
         return this.get('summary') + (this.hasPoll() ? '\u00A0\uFFFD' : '');
+    },
+
+    isRescheduled: function (event) {
+        return this.get('dtstart').toString() !== event.get('dtstart').toString() ||
+            this.get('dtend').toString()!== event.get('dtend').toString();
     }
 });
 
