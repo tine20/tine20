@@ -271,14 +271,18 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * do search count request only when resultset is equal
      * to $pagination->limit or we are not on the first page
      *
-     * @param $filter
-     * @param $pagination
+     * @param Tinebase_Model_Filter_FilterGroup $filter
+     * @param Tinebase_Model_Pagination $pagination
      * @param Tinebase_Controller_SearchInterface $controller the record controller
-     * @param $totalCountMethod
+     * @param string $totalCountMethod
      * @param integer $resultCount
      * @return array
      */
-    protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
+    protected function _getSearchTotalCount(Tinebase_Model_Filter_FilterGroup $filter,
+                                            Tinebase_Model_Pagination $pagination,
+                                            Tinebase_Controller_SearchInterface $controller,
+                                            string $totalCountMethod,
+                                            int $resultCount)
     {
         if ($controller instanceof Tinebase_Controller_Abstract) {
             $this->_setRequestContext($controller);
