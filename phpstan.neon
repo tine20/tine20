@@ -3,6 +3,7 @@ includes:
 parameters:
     universalObjectCratesClasses:
       - Tinebase_Config_Abstract
+      - Tinebase_Config_Struct
       - Tinebase_Preference_Abstract
       - Tinebase_Record_Interface
       - Tinebase_Record_RecordSet

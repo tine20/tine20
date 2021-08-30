@@ -21,6 +21,7 @@
  * @method int getQueueSize()
  * @method int getDaemonStructSize()
  * @method int waitForJob()
+ * @method mixed send($message)
  * @method array receive(integer $jobId)
  * @method array getQueueKeys()
  * @method array getDaemonStructKeys()
