@@ -82,6 +82,8 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const INVOICE_TYPE = 'invoiceType';
+
+    const INVOICE_DISCOUNT_TYPE = 'invoiceDiscountType';
     
     const PAYMENT_METHODS = 'paymentMethods';
 
@@ -234,6 +236,21 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'INVOICE'
             )
         ),
+        self::INVOICE_DISCOUNT_TYPE => [
+            self::LABEL                 => 'Invoice Discount Type', //_('Invoice Discount Type')
+            self::DESCRIPTION           => 'Invoice Discount Type', //_('Invoice Discount Type')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'PERCENTAGE', 'value' => 'Percentage', 'system' => true], // _('Percentage')
+                    ['id' => 'SUM', 'value' => 'Sum', 'system' => true], // _('Sum')
+                ],
+            ],
+        ],
         self::DOCUMENT_CATEGORY => [
             self::LABEL                 => 'Document Category', //_('Document Category')
             self::DESCRIPTION           => 'Document Category', //_('Document Category')

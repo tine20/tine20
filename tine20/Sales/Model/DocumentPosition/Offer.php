@@ -10,15 +10,15 @@
  */
 
 /**
- * Order Document Model
+ * Order DocumentPosition Model
  *
  * @package     Sales
  * @subpackage  Model
  */
-class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
+class Sales_Model_DocumentPosition_Offer extends Sales_Model_DocumentPosition_Abstract
 {
-    public const MODEL_NAME_PART = 'Document_Order';
-    public const TABLE_NAME = 'sales_document_order';
+    public const MODEL_NAME_PART = 'DocumentPosition_Offer';
+    public const TABLE_NAME = 'sales_document_position_offer';
 
     /**
      * @param array $_definition
@@ -38,14 +38,11 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             ]*/
         ];
 
-        // order precursor documents are offers
-        $_definition[self::FIELDS][self::FLD_PRECURSOR_DOCUMENTS][self::CONFIG][self::MODEL_NAME] =
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_ID][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_Offer::MODEL_NAME_PART;
-        $_definition[self::FIELDS][self::FLD_PRECURSOR_DOCUMENTS][self::CONFIG][self::REF_ID_FIELD] =
-            Sales_Model_Document_Offer::FLD_ORDER_ID;
 
-        $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_DocumentPosition_Order::MODEL_NAME_PART;
+        // offers dont have precursor documents, that would be a crm lead or something in the future
+        unset($_definition[self::FIELDS][self::FLD_PRECURSOR_POSITION]);
     }
 
     /**
@@ -55,4 +52,3 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
      */
     protected static $_configurationObject = NULL;
 }
-

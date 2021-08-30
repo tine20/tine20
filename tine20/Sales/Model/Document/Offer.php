@@ -63,6 +63,9 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
             ],
             self::NULLABLE              => true,
         ];
+
+        $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
+            Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART;
     }
 
     /**

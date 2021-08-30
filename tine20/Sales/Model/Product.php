@@ -259,8 +259,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
             ],
             self::FLD_DEFAULT_SORT => [
                 self::LABEL => 'Default Sort', // _('Default Sort')
-                self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 255,
+                self::TYPE => self::TYPE_INTEGER,
                 self::NULLABLE => true,
             ]
         ]

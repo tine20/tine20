@@ -22,23 +22,16 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     const FLD_ID = 'id';
     const FLD_DOCUMENT_CATEGORY = 'document_category'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
-
     const FLD_PRECURSOR_DOCUMENTS = 'precursor_documents'; // virtual, link
-
     const FLD_NOTE = 'note';
-
     const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
-    // just a reference to adb?
-    const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern
+    const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
     // TODO FIXME denormalized.... as json in the document or as copy in the db?
     const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
 
     const FLD_CUSTOMER_REFERENCE = 'customer_reference'; // varchar 255
-    
     const FLD_DOCUMENT_DATE = 'date'; // Belegdatum NICHT Buchungsdatum, das kommt noch unten
-
     const FLD_PAYMENT_METHOD = 'payment_method'; // Sales_Model_PaymentMethod KeyField
-    
     const FLD_POSITIONS = 'positions'; // virtuell recordSet
     
     const FLD_NET_SUM = 'net_sum';
@@ -184,9 +177,104 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     // ? self::REF_ID_FIELD          => Sales_Model_SubProductMapping::FLD_PARENT_ID,
                 ],
             ],
+            self::FLD_CONTACT_ID => [
+                self::TYPE                  => self::TYPE_RECORD,
+                self::CONFIG                => [
+                    self::APP_NAME              => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_PART_NAME,
+                ],
+                self::NULLABLE              => true,
+            ],
+            self::FLD_RECIPIENT_ID => [
+                self::TYPE                  => self::TYPE_RECORD,
+                self::CONFIG                => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
+                ],
+                self::NULLABLE              => true,
+            ],
+            self::FLD_CUSTOMER_REFERENCE        => [
+                self::LABEL                         => 'Customer Reference', //_('Customer Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_PAYMENT_METHOD            => [
+                self::LABEL                         => 'Payment Method', //_('Payment Method')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::PAYMENT_METHODS,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_DOCUMENT_DATE             => [
+                self::LABEL                         => 'Document Date', //_('Document Date')
+                self::TYPE                          => self::TYPE_DATE,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_BOOKING_DATE              => [
+                self::LABEL                         => 'Booking Date', //_('Booking Date')
+                self::TYPE                          => self::TYPE_DATE,
+                self::NULLABLE                      => true,
+            ],
             self::FLD_NOTE                      => [
-                self::TYPE                          => self::TYPE_TEXT,
                 self::LABEL                         => 'Note', //_('Note')
+                self::TYPE                          => self::TYPE_TEXT,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_POSITIONS                 => [
+                // needs to be set by concret implementation
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    //self::MODEL_NAME                  => Sales_Model_DocumentPosition_Abstract::class,
+                    self::REF_ID_FIELD                  => Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID,
+                ],
+            ],
+            self::FLD_NET_SUM                   => [
+                self::LABEL                         => 'Net Sum', //_('Net Sum')
+                self::TYPE                          => self::TYPE_MONEY,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_INVOICE_DISCOUNT_TYPE     => [
+                self::LABEL                         => 'Invoice Discount Type', //_('Invoice Discount Type')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::INVOICE_DISCOUNT_TYPE,
+                self::NULLABLE                      => true,
+                self::DEFAULT_VAL                   => null, // means, no default => null
+            ],
+            self::FLD_INVOICE_DISCOUNT_PERCENTAGE => [
+                self::LABEL                         => 'Invoice Discount Percentage', //_('Invoice Discount Percentage')
+                self::TYPE                          => self::TYPE_FLOAT,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_INVOICE_DISCOUNT_SUM      => [
+                self::LABEL                         => 'Invoice Discount Sum', //_('Invoice Discount Sum')
+                self::TYPE                          => self::TYPE_FLOAT,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_SALES_TAX                 => [
+                self::LABEL                         => 'Sales Tax', //_('Sales Tax')
+                self::TYPE                          => self::TYPE_FLOAT,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_GROSS_SUM                 => [
+                self::LABEL                         => 'Gross Sum', //_('Gross Sum')
+                self::TYPE                          => self::TYPE_FLOAT,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_COST_CENTER_ID            => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_CostCenter::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_COST_BEARER_ID            => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_CostCenter::MODEL_NAME_PART,
+                ],
                 self::NULLABLE                      => true,
             ],
         ]

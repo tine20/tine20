@@ -23,7 +23,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     const FLD_SORT = 'sort'; // automatisch in 10000er schritten, shy
     const FLD_GROUPING = 'grouping'; // gruppierte darstellung, automatische laufende nummern pro gruppe(nicht persistiert)
     
-    const FLD_SUBPRODUCT_MAPPING = 'subproduct_mapping'; // "kreuztabelle" Sales_Model_SubproductMapping (nur für bundles nicht für set's?)
+    // guess this is not necessary const FLD_SUBPRODUCT_MAPPING = 'subproduct_mapping'; // "kreuztabelle" Sales_Model_SubproductMapping (nur für bundles nicht für set's?)
     
     const FLD_PRECURSOR_POSITION = 'precursor_position'; // z.B. angebotsposition bei auftragsposition (virtual, link?)
     
@@ -134,59 +134,69 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Sales_Config::APP_NAME,
-        self::MODEL_NAME                    => self::MODEL_NAME_PART,
+        //self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Second factor config for user', // ngettext('Second factor config for user', 'Second factor configs for user', n)
         self::RECORDS_NAME                  => 'Second factor configs for user',
-        self::TITLE_PROPERTY                => self::FLD_CONFIG,
+        self::MODLOG_ACTIVE                 => true,
 
         self::FIELDS                        => [
-            self::FLD_ID                        => [
-                self::TYPE                          => self::TYPE_STRING,
+            self::FLD_DOCUMENT_ID               => [
+                // needs to be set by concrete model
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    //self::MODEL_NAME                    => Sales_Model_Document_Abstract::MODEL_PART_NAME,
+                ],
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
-            self::FLD_MFA_CONFIG_ID         => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::DISABLED                  => TRUE,
-                self::VALIDATORS                => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-            ],
-            self::FLD_CONFIG_CLASS           => [
-                self::TYPE                      => self::TYPE_MODEL,
-                self::LABEL                     => 'MFA Device Type', //_('MFA Device Type')
-                self::CONFIG                    => [
-                    // not used in client, @see \Admin_Frontend_Json::getPossibleMFAs
-                    // needs to implement Tinebase_Auth_MFA_UserConfigInterface
-                    self::AVAILABLE_MODELS              => [
-                        Tinebase_Model_MFA_SmsUserConfig::class,
-                        Tinebase_Model_MFA_PinUserConfig::class,
-                        Tinebase_Model_MFA_YubicoOTPUserConfig::class,
-                    ],
-                ],
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-            ],
-            self::FLD_CONFIG                    => [
-                self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
-                self::LABEL                         => 'MFA Device Config', // _('MFA Device Config')
-                self::CONFIG                        => [
-                    self::REF_MODEL_FIELD               => self::FLD_CONFIG_CLASS,
-                ],
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-            ],
-            self::FLD_NOTE                      => [
+            self::FLD_GROUPING                  => [
+                self::LABEL                         => 'Grouping', // _('Grouping')
                 self::TYPE                          => self::TYPE_STRING,
-                self::LABEL                         => 'Note', //_('Note')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true,],
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_SORT                      => [
+                self::LABEL                         => 'Sort', // _('Sort')
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_PRECURSOR_POSITION        => [
+                // needs to be set by concrete implementation
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    //self::MODEL_NAME                  => Sales_Model_DocumentPosition_Abstract::MODEL_NAME_PART,
+                ],
+            ],
+            self::FLD_PRODUCT_ID                => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Product::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_TITLE                     => [
+                self::LABEL                         => 'Title', // _('Title')
+                self::TYPE                          => self::TYPE_STRING,
+                self::QUERY_FILTER                  => true,
+                self::LENGTH                        => 255,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED
+                ]
+            ],
+            self::FLD_DESCRIPTION               => [
+                self::LABEL                         => 'Description', // _('Description')
+                self::TYPE                          => self::TYPE_FULLTEXT,
+                self::QUERY_FILTER                  => true,
+                self::NULLABLE                      => true,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ]
             ],
         ]
     ];
@@ -197,12 +207,4 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
-
-    public function toFEArray(): array
-    {
-        $result = $this->toArray();
-        $result[self::FLD_CONFIG] = $this->{self::FLD_CONFIG}->toFEArray();
-
-        return $result;
-    }
 }
