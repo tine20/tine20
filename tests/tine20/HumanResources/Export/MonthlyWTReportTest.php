@@ -21,6 +21,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
     {
         $dailWTRT = new HumanResources_Controller_DailyWTReportTests();
         $employee = $dailWTRT->testCalculateReportsForEmployeeTimesheetsWithStartAndEnd();
+        HumanResources_Controller_Account::getInstance()->createMissingAccounts(2018);
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
             ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employee->getId()]
@@ -58,6 +59,7 @@ class HumanResources_Export_MonthlyWTReportTest extends HumanResources_TestCase
     {
         $dailWTRT = new HumanResources_Controller_DailyWTReportTests();
         $employee = $dailWTRT->testCalculateReportsForEmployeeTimesheetsWithStartAndEnd();
+        HumanResources_Controller_Account::getInstance()->createMissingAccounts(2018);
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
             ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employee->getId()]

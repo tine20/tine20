@@ -55,24 +55,24 @@ describe('employee', () => {
                 });
                 
                 test('dates can be selected', async () => {
-                    let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=remaining_vacation_days]').value);
+                    let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value);
 
                     await expect(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
                     await expect(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(4) > a > em > span');
                     await freetimeEditDialog.waitForTimeout(50);
                     
-                    if (remainingDays-2 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=remaining_vacation_days]').value)) {
+                    if (remainingDays-2 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value)) {
                         throw new Error('remaining days do not decrease');
                     }
                 });
 
                 test('dates can be deselected', async () => {
-                    let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=remaining_vacation_days]').value);
+                    let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value);
 
                     await expect(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
                     await freetimeEditDialog.waitForTimeout(50);
                     
-                    if (remainingDays+1 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=remaining_vacation_days]').value)) {
+                    if (remainingDays+1 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value)) {
                         throw new Error('remaining days do not increase');
                     }
                 });
