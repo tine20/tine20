@@ -376,7 +376,7 @@ Tine.Filemanager.nodeActions.Delete = {
 
                         await Tine.Filemanager.deleteNodes(_.map(nodes, 'data.path'));
                     } catch (e) {
-                        Tine.Tinebase.ExceptionHandler.handleRequestException(e);
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(e.data);
                     }
                 }
 
