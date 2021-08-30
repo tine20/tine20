@@ -235,9 +235,10 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                         this.iMIPclause.setText(this.app.i18n._("This is an event invitation for someone else."));
                         break;
                     } else if (existingEvent && myAttenderstatus !== 'NEEDS-ACTION'
-                        && event.get('external_seq') <= existingEvent.get('external_seq')) {
+                        && (event.get('external_seq') <= existingEvent.get('external_seq')
+                        || event.get('seq') <= existingEvent.get('seq'))) {
                         this.iMIPclause.setText(this.app.i18n._("You have already replied to this event invitation."));
-                    } else if (existingEvent) {
+                    } else if (existingEvent && existingEvent.isRescheduled(event)) {
                         this.iMIPclause.setText(this.app.i18n._('The event got rescheduled. Set your response to:'));
                     } else {
                         this.iMIPclause.setText(this.app.i18n._('You received an event invitation. Set your response to:'));
