@@ -531,7 +531,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         /* vacation computation -> shoud be extra call!*/
         $account = $_accountId ? $aController->get($_accountId) : $aController->getByEmployeeYear($_employeeId, $_year);
-        $remainingVacation = HumanResources_Controller_Account::getInstance()->resolveVacation($account)['remaining_vacation_days'];
+        $remainingVacation = HumanResources_Controller_Account::getInstance()->resolveVacation($account)['scheduled_remaining_vacation_days'];
         /* end vacation computation */
         
         $maxDate = clone $minDate;
