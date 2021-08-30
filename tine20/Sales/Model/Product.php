@@ -19,25 +19,26 @@
 class Sales_Model_Product extends Tinebase_Record_NewAbstract
 {
     public const FLD_ACCOUNTABLE = 'accountable';
-    public const FLD_CATEGORY = 'category'; // still needed? if no -> migration script
-    public const FLD_COSTCENTER = 'costcenter'; // -> record
+    public const FLD_CATEGORY = 'category';
+    public const FLD_COSTCENTER = 'costcenter';
     public const FLD_DESCRIPTION = 'description';
-    public const FLD_GROUP = 'group'; // = FLD_CATEGORY ?
-    public const FLD_GTIN = 'gtin'; // still needed? if no -> migration script
-    public const FLD_IS_ACTIVE = 'is_active'; // still needed? if no -> migration script
-    public const FLD_IS_SALESPRODUCT = 'is_salesproduct'; // -> bool
-    public const FLD_LIFESPAN_END = 'lifespan_end'; // still needed? if no -> migration script
-    public const FLD_LIFESPAN_START = 'lifespan_start'; // still needed? if no -> migration script
-    public const FLD_MANUFACTURER = 'manufacturer'; // still needed? if no -> migration script
+    public const FLD_DEFAULT_GROUPING = 'default_grouping';
+    public const FLD_DEFAULT_SORT = 'default_sort';
+    public const FLD_GTIN = 'gtin';
+    public const FLD_IS_ACTIVE = 'is_active';
+    public const FLD_IS_SALESPRODUCT = 'is_salesproduct';
+    public const FLD_LIFESPAN_END = 'lifespan_end';
+    public const FLD_LIFESPAN_START = 'lifespan_start';
+    public const FLD_MANUFACTURER = 'manufacturer';
     public const FLD_NAME = 'name';
-    public const FLD_NUMBER = 'number'; // still needed? if no -> migration script
-    public const FLD_PURCHASEPRICE = 'purchaseprice'; // still needed? if no -> migration script
-    public const FLD_SALESPRICE = 'salesprice'; // still needed? if no -> migration script
-    public const FLD_SALESTAX = 'salestax'; // -> tax, default is default tax config? sales tax? isnt that called VAT?
-    public const FLD_SHORTCUT = 'shortcut'; // -> string
+    public const FLD_NUMBER = 'number';
+    public const FLD_PURCHASEPRICE = 'purchaseprice';
+    public const FLD_SALESPRICE = 'salesprice';
+    public const FLD_SALESTAX = 'salestax';
+    public const FLD_SHORTCUT = 'shortcut';
     public const FLD_SUBPRODUCTS = 'subproducts'; // -> recordset of Sales_Model_SubProduct dependent records
     public const FLD_UNFOLD_TYPE = 'unfold_type'; // -> keyfield (Bundle, Set, leer)
-    public const FLD_UNIT = 'unit'; // -> string or keyfield? ... schon keyfield oder eigenes model/table natürlich
+    public const FLD_UNIT = 'unit'; // -> keyfield
 
     public const MODEL_NAME_PART = 'Product';
     public const TABLE_NAME = 'sales_products';
@@ -216,6 +217,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
             self::FLD_SHORTCUT => [
                 self::LABEL => 'Shortcut', // _('Shortcut')
                 self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 20,
                 self::NULLABLE => true,
             ],
             self::FLD_IS_SALESPRODUCT => [
@@ -241,6 +243,24 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
             self::FLD_SALESTAX => [
                 self::LABEL => 'Salestax or VAT anybody?', // _('Salestax')
                 self::TYPE => self::TYPE_FLOAT,
+                self::NULLABLE => true,
+            ],
+            self::FLD_UNIT => [
+                self::LABEL => 'Unit', // _('Unit')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NULLABLE => true,
+                self::NAME => Sales_Config::PRODUCT_UNFOLDTYPE,
+            ],
+            self::FLD_DEFAULT_GROUPING => [
+                self::LABEL => 'Default Grouping', // _('Default Grouping')
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+            ],
+            self::FLD_DEFAULT_SORT => [
+                self::LABEL => 'Default Sort', // _('Default Sort')
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
                 self::NULLABLE => true,
             ]
         ]

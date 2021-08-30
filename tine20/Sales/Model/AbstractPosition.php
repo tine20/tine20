@@ -17,13 +17,7 @@
  */
 class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'AbstractPosition';
-
-    const FLD_ID = 'id';
-    const FLD_CONFIG = 'config';
-    const FLD_CONFIG_CLASS = 'config_class';
-    const FLD_MFA_CONFIG_ID = 'mfa_config_id';
-    const FLD_NOTE = 'note';
+    //const MODEL_NAME_PART = 'AbstractPosition';
     
     const FLD_DOCUMENT_ID = 'document_id';
     const FLD_SORT = 'sort'; // automatisch in 10000er schritten, shy
@@ -31,7 +25,7 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     
     const FLD_SUBPRODUCT_MAPPING = 'subproduct_mapping'; // "kreuztabelle" Sales_Model_SubproductMapping (nur für bundles nicht für set's?)
     
-    const FLD_REFERENCE_POSITION = 'reference_position'; // z.B. angebotsposition bei auftragsposition (virtual, link?)
+    const FLD_PRECURSOR_POSITION = 'precursor_position'; // z.B. angebotsposition bei auftragsposition (virtual, link?)
     
     const FLD_PRODUCT_ID = 'product_id';  // optional, es gibt auch textonlypositionen
     

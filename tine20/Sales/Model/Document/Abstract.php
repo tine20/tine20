@@ -23,25 +23,21 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     const FLD_DOCUMENT_CATEGORY = 'document_category'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
 
-    // TODO FIXME plural? we might have different document types refered to, record set issue!
-    const FLD_REFERENCE_DOCUMENT = 'reference_document'; // virtual, link
+    const FLD_PRECURSOR_DOCUMENTS = 'precursor_documents'; // virtual, link
 
     const FLD_NOTE = 'note';
 
-    // TODO FIXME denormalized.... as json in the document or as copy in the db?
-    const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg
+    const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
     // just a reference to adb?
     const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern
     // TODO FIXME denormalized.... as json in the document or as copy in the db?
     const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
 
-    // TODO was das?
     const FLD_CUSTOMER_REFERENCE = 'customer_reference'; // varchar 255
     
     const FLD_DOCUMENT_DATE = 'date'; // Belegdatum NICHT Buchungsdatum, das kommt noch unten
 
-    // TODO denormalized?
-    const FLD_PAYMENT_TERMS_ID = 'payment_terms_id'; // Sales_Model_PaymentTerms
+    const FLD_PAYMENT_METHOD = 'payment_method'; // Sales_Model_PaymentMethod KeyField
     
     const FLD_POSITIONS = 'positions'; // virtuell recordSet
     
@@ -55,7 +51,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     const FLD_GROSS_SUM = 'gross_sum';
     
     const FLD_COST_CENTER_ID = 'cost_center_id';
-    const FLD_COST_BEARER_ID = 'cost_bearer_id';
+    const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
 
     const FLD_BOOKING_DATE = 'booking_date'; // ggf. nur bei Rechnung ud. Storno
     
