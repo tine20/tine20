@@ -53,6 +53,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Offer',
         'Address',
         'ProductAggregate',
+        'Boilerplate'
     );
     
     /**

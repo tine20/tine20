@@ -91,6 +91,13 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const PRODUCT_CATEGORY = 'productCategory';
+
+    /**
+     * Document Category
+     *
+     * @var string
+     */
+    const DOCUMENT_CATEGORY = 'documentCategory';
     
     /**
      * Invoice Type
@@ -300,6 +307,20 @@ class Sales_Config extends Tinebase_Config_Abstract
                     array('id' => 'ASSETS', 'value' => 'Assets', 'system' => true), // _('Assets')
                 ),
                 'default' => 'BANK TRANSFER'
+            )
+        ),
+        self::DOCUMENT_CATEGORY => array(
+            //_('Document Category')
+            'label'                 => 'Document Category',
+            //_('Possible Document Categories.')
+            'description'           => 'Possible Document Categories.',
+            'type'                  => 'keyFieldConfig',
+            'clientRegistryInclude' => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'DEFAULT', 'value' => 'Default', 'system' => true) // _('Default')
+                ),
+                'default' => 'DEFAULT'
             )
         ),
         self::INVOICE_CLEARED => array(

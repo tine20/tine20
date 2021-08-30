@@ -399,6 +399,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_ProductCategory::class,
                 Sales_Model_PurchaseInvoice::class,
                 Sales_Model_Supplier::class,
+                Sales_Model_Boilerplate::class
             ),
             'SimpleFAQ' => array(
                 SimpleFAQ_Model_Config::class,
