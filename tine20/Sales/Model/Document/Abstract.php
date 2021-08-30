@@ -170,6 +170,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 //                ],
 //            ],
             */
+            self::FLD_DOCUMENT_CATEGORY => [
+                self::LABEL                 => 'Category', // _('Category')
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Sales_Config::DOCUMENT_CATEGORY,
+            ],
+            self::FLD_PRECURSOR_DOCUMENTS => [
+                // needs to be set by concret implementation
+                self::TYPE => self::TYPE_RECORDS,
+                self::CONFIG => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    //self::MODEL_NAME            => Sales_Model_SubProductMapping::MODEL_NAME_PART,
+                    // ? self::REF_ID_FIELD          => Sales_Model_SubProductMapping::FLD_PARENT_ID,
+                ],
+            ],
             self::FLD_NOTE                      => [
                 self::TYPE                          => self::TYPE_TEXT,
                 self::LABEL                         => 'Note', //_('Note')

@@ -84,7 +84,9 @@ class Sales_Config extends Tinebase_Config_Abstract
     const INVOICE_TYPE = 'invoiceType';
     
     const PAYMENT_METHODS = 'paymentMethods';
-    
+
+    const DOCUMENT_CATEGORY = 'documentCategory';
+
     /**
      * Product Category
      * 
@@ -232,6 +234,21 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'INVOICE'
             )
         ),
+        self::DOCUMENT_CATEGORY => [
+            self::LABEL                 => 'Document Category', //_('Document Category')
+            self::DESCRIPTION           => 'Document Category', //_('Document Category')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'STANDARD', 'value' => 'Standard', 'system' => true], // _('Standard')
+                ],
+                self::DEFAULT_STR           => 'STANDARD',
+            ],
+        ],
         self::PRODUCT_CATEGORY => array(
                                    //_('Product Category')
             'label'                 => 'Product Category',

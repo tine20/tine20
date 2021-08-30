@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  MFA
  */
-class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
+class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 {
     //const MODEL_NAME_PART = 'AbstractPosition';
     

@@ -109,6 +109,7 @@ class Tinebase_ModelConfiguration_Const {
     const LABEL = 'label';
     const LENGTH = 'length';
 
+    const MAPPED_BY = 'mappedBy';
     const MODEL_NAME = 'modelName';
     const MODLOG_ACTIVE = 'modlogActive';
 

@@ -25,7 +25,7 @@ class Sales_Document_JsonTest extends TestCase
         $this->_instance = new Sales_Frontend_Json();
     }
 
-    public function testOfferDocumentCustomerCopy()
+    public function testOfferDocumentCustomerCopy($noAsserts = false)
     {
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
 
@@ -37,6 +37,10 @@ class Sales_Document_JsonTest extends TestCase
         ]);
 
         $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+        if ($noAsserts) {
+            return $document;
+        }
+
         $customerCopy = Sales_Controller_Document_Customer::getInstance()->get($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -49,6 +53,21 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertSame($customer->name, $customerCopy->name);
         $this->assertNotSame($customer->delivery->getId(), $customerCopy->delivery->getId());
         $this->assertSame($customer->delivery->name, $customerCopy->delivery->name);
+
+        return $document;
+    }
+
+    public function testOrderDocument()
+    {
+        $offer = $this->testOfferDocumentCustomerCopy(true);
+
+        $order = new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $offer[Sales_Model_Document_Offer::FLD_CUSTOMER_ID],
+            Sales_Model_Document_Order::FLD_PRECURSOR_DOCUMENTS => [
+                $offer
+            ]
+        ]);
+        $this->_instance->saveDocument_Order($order->toArray(true));
     }
 
     protected function _createCustomer(): Sales_Model_Customer

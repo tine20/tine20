@@ -20,6 +20,8 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
     public const MODEL_NAME_PART = 'Document_Offer';
     public const TABLE_NAME = 'sales_document_offer';
 
+    public const FLD_ORDER_ID = 'order_id';
+
     /**
      * @param array $_definition
      */
@@ -37,8 +39,30 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
                 ],
             ]*/
         ];
+
+        $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_MANY] = [
+            self::FLD_ORDER_ID      => [
+                self::TARGET_ENTITY     => Sales_Model_Document_Order::class,
+                self::FIELD_NAME        => self::FLD_ORDER_ID,
+                self::MAPPED_BY         => Sales_Model_Document_Order::FLD_ID,
+            ]
+        ];
+
+        // on offers customers are optionsl
         $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::NULLABLE] = true;
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
+
+        // offers dont have precursor documents, that would be a crm lead or something in the future
+        unset($_definition[self::FIELDS][self::FLD_PRECURSOR_DOCUMENTS]);
+
+        $_definition[self::FIELDS][self::FLD_ORDER_ID] = [
+            self::TYPE                  => self::TYPE_RECORD,
+            self::CONFIG                => [
+                self::APP_NAME              => Sales_Config::APP_NAME,
+                self::MODEL_NAME            => Sales_Model_Document_Order::MODEL_NAME_PART,
+            ],
+            self::NULLABLE              => true,
+        ];
     }
 
     /**
