@@ -135,4 +135,24 @@ class Sales_Controller extends Tinebase_Controller_Abstract
         
         return $this->getConfig();
     }
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = parent::getCoreDataForApplication();
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'cs_boilerplate',
+            'application_id' => $application,
+            'model' => 'Sales_Model_Boilerplate',
+            'label' => 'Boilerplate' // _('Boilerplate')
+        )));
+
+        return $result;
+    }
 }
