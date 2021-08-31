@@ -13,8 +13,15 @@
 class Felamimail_Setup_Update_14 extends Setup_Update_Abstract
 {
     const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
+        self::PRIO_NORMAL_APP_STRUCTURE=> [
+            self::RELEASE014_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE   => [
             self::RELEASE014_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
@@ -28,5 +35,12 @@ class Felamimail_Setup_Update_14 extends Setup_Update_Abstract
         // remove obsolete Felamimail_Model_Message containers that have been created by accident (see \ActiveSync_Frontend_Abstract::createFolder)
         $this->_db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'container WHERE model = "Felamimail_Model_Message"');
         $this->addApplicationUpdate('Felamimail', '14.1', self::RELEASE014_UPDATE001);
+    }
+
+    public function update002()
+    {
+        Setup_SchemaTool::updateSchema([Felamimail_Model_AttachmentCache::class]);
+
+        $this->addApplicationUpdate('Felamimail', '14.2', self::RELEASE014_UPDATE002);
     }
 }

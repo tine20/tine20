@@ -7135,11 +7135,6 @@ parameters:
 			path: tine20/Tinebase/Cache/PerRequest.php
 
 		-
-			message: "#^Access to an undefined static property static\\(Tinebase_Config_Abstract\\)\\:\\:\\$_properties\\.$#"
-			count: 1
-			path: tine20/Tinebase/Config/Abstract.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$cachedConfigData\\)\\: Unexpected token \"\\$cachedConfigData\", expected type at offset 91$#"
 			count: 1
 			path: tine20/Tinebase/Config/Abstract.php
@@ -9186,11 +9181,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$pagination\\)\\: Unexpected token \"\\$pagination\", expected type at offset 168$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Json/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$totalCountMethod\\)\\: Unexpected token \"\\$totalCountMethod\", expected type at offset 278$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/Json/Abstract.php
 

@@ -99,8 +99,8 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                             labelAlign: 'top',
                             items: [[
                                 {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/3 },
-                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'remaining_vacation_days', columnWidth: 1/3 },
-                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'taken_vacation_days', columnWidth: 1/3 }
+                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'scheduled_remaining_vacation_days', columnWidth: 1/3 },
+                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'scheduled_taken_vacation_days', columnWidth: 1/3 }
                             ]]
                         }]
                     }, {

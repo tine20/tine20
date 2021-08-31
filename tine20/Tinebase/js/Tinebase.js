@@ -24,6 +24,7 @@ require('./../../Tinebase/Tinebase.jsb2');
 require('./CommunityIdentNr/explainer');
 require('./CommunityIdentNr/picker');
 require('./CommunityIdentNr/grid');
+require('./CommunityIdentNr/editDialog');
 
 
 // UI style >= 2019

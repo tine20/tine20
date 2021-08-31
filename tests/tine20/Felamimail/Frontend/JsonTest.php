@@ -1006,6 +1006,54 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         return $this->_searchForMessageBySubject($subject, $this->_testFolderName);
     }
 
+    public function testAttachmentCache()
+    {
+        $result = $this->_createTestNode(
+            'test.eml',
+            dirname(__FILE__) . '/../files/multipart_related.eml'
+        );
+        $subject = 'file attachment test';
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
+        $messageToSend['attachments'] = array(
+            array(
+                // @todo use constants?
+                'type' => 'file',
+                'attachment_type' => 'attachment',
+                'path' => $result[0]['path'],
+                'name' => $result[0]['name'],
+                'id' => $result[0]['id'],
+            )
+        );
+        $this->_json->saveMessage($messageToSend);
+        $forwardMessage = $this->_searchForMessageBySubject($subject);
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+
+        $fullMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($forwardMessage['id']);
+        self::assertTrue(count($fullMessage->attachments) === 1, 'attachment not found: ' . print_r($fullMessage->toArray(), true));
+
+        $id = get_class($fullMessage) . ':' . $fullMessage->getId() . ':' . $fullMessage->attachments[0]['partId'];
+        $cachedAttachment = $this->_json->getAttachmentCache($id);
+
+        $this->assertCount(1, $cachedAttachment['attachments']);
+        $this->assertStringContainsString($id . '/test.eml', $cachedAttachment['attachments'][0]['path']);
+    }
+
+    public function testAttachmentCacheNode()
+    {
+        $result = $this->_createTestNode(
+            'test.eml',
+            dirname(__FILE__) . '/../files/multipart_related.eml'
+        );
+
+        $fullMessage = Felamimail_Controller_Message::getInstance()->getMessageFromNode($result[0]['id']);
+
+        $id = Filemanager_Model_Node::class . ':' . $result[0]['id'] . ':' . $fullMessage['attachments'][0]['partId'];
+        $cachedAttachment = $this->_json->getAttachmentCache($id);
+
+        $this->assertCount(1, $cachedAttachment['attachments']);
+        $this->assertStringContainsString($id . '/moz-screenshot-83.png', $cachedAttachment['attachments'][0]['path']);
+    }
+
     /**
      * forward message test (eml attachment from Filemanager)
      */

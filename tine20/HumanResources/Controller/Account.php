@@ -190,14 +190,17 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
      * resolve vacation properties of given account
      * 
      * @param HumanResources_Model_Account $account
+     * @param DateTime $actualUntil | vacation days are computed as taken vacation until this date, null means now 
      * @return array with property => value
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function resolveVacation($account)
+    public function resolveVacation($account, DateTime $actualUntil=null)
     {
         if (!$account) throw new HumanResources_Exception_NoAccount();
         $accountPeriod = $account->getAccountPeriod();
         $contracts = $account->contracts ?: $this->_contractController->getValidContracts($accountPeriod, $account->employee_id);
+        
+        $actualUntil = $actualUntil ?: Tinebase_DateTime::now();
         
         // find out vacation days by contract(s) and interval
         $possibleVacationDays = round($this->_contractController->calculateVacationDays($contracts, $accountPeriod['from'], $accountPeriod['until']), 0);
@@ -209,20 +212,28 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
 
         $freeTimes = $freetimeController->search($filter);
         
-        $acceptedVacationTimes  = $freeTimes->filter('type', 'vacation')->filter('status', '/(ACCEPTED|REQUESTED|IN-PROCESS)/', true);
+        $acceptedVacationTimes  = $freeTimes->filter('type', 'vacation')->filter('status', '/(?! DECLINED)/', true);
 
         $freedayController = HumanResources_Controller_FreeDay::getInstance();
         $filter = new HumanResources_Model_FreeDayFilter(array(), 'AND');
 
         $acceptedVacationFilter = clone $filter;
         $acceptedVacationFilter->addFilter(new Tinebase_Model_Filter_Id(array('field' => 'freetime_id', 'operator' => 'in', 'value' => $acceptedVacationTimes->id)));
-        $acceptedVacationDays = $freedayController->search($acceptedVacationFilter);
+        $scheduledTakenVacationDays = $freedayController->search($acceptedVacationFilter);
         
+        $actualTakenVacationDays = $scheduledTakenVacationDays->filter(function($freeday) use ($actualUntil) {
+            //@TODO: convert date
+            return $actualUntil ? $freeday->date < $actualUntil : true;
+        });
+
         return [
-            'vacation_expiary_date'   => HumanResources_Config::getInstance()->getVacationExpirationDate($account->year),
-            'possible_vacation_days'  => intval($possibleVacationDays),
-            'remaining_vacation_days' => intval(floor($possibleVacationDays)) - $acceptedVacationDays->count()/* - $rebookedVacationDays->count()*/,
-            'taken_vacation_days'     => $acceptedVacationDays->count(),
+            'vacation_expiary_date'             => HumanResources_Config::getInstance()->getVacationExpirationDate($account->year),
+            'possible_vacation_days'            => intval($possibleVacationDays),
+            'scheduled_taken_vacation_days'     => $scheduledTakenVacationDays->count(),
+            'scheduled_remaining_vacation_days' => intval(floor($possibleVacationDays)) - $scheduledTakenVacationDays->count(),
+            'actual_until'                      => $actualUntil,
+            'actual_taken_vacation_days'        => $actualTakenVacationDays->count(),
+            'actual_remaining_vacation_days'    => intval(floor($possibleVacationDays)) - $actualTakenVacationDays->count()
         ];
     }
     

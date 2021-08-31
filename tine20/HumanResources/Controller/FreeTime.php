@@ -57,22 +57,24 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
      * returns remaining vacation days for given employee (mixed accounts)
      * 
      * @param string|HumanResources_Model_Employee $employeeId
+     * @param DateTime $actualUntil | vacation days are computed as taken vacation until this date, null means forever/scheduled
      * @return int
      */
-    public function getRemainingVacationDays($employeeId)
+    public function getRemainingVacationDays($employeeId, DateTime $actualUntil = null)
     {
         $accountController = HumanResources_Controller_Account::getInstance();
-        $currentAccount = $accountController->getByEmployeeYear($employeeId);
-        $currentVacations = $accountController->resolveVacation($currentAccount);
+        $currentAccount = $accountController->getByEmployeeYear($employeeId, ($actualUntil ?: Tinebase_DateTime::now())->format('Y'));
+        $actualUntil = $actualUntil ?: Tinebase_DateTime::now()->addYear(100);
+        $currentVacations = $accountController->resolveVacation($currentAccount, $actualUntil);
         $remainingPreviousVacationDays = 0;
         $previousAccount = $accountController->getByEmployeeYear($employeeId, $currentAccount->year-1);
         
         if ($previousAccount) {
-            $previousVacations = $accountController->resolveVacation($previousAccount);
+            $previousVacations = $accountController->resolveVacation($previousAccount, $actualUntil);
             $remainingPreviousVacationDays = ($previousVacations['vacation_expiary_date']
-                > Tinebase_DateTime::now() ? $previousVacations['remaining_vacation_days'] : 0);
+                > Tinebase_DateTime::now() ? $previousVacations['actual_remaining_vacation_days'] : 0);
         }
-        return $currentVacations['remaining_vacation_days'] + $remainingPreviousVacationDays;
+        return $currentVacations['actual_remaining_vacation_days'] + $remainingPreviousVacationDays;
     }
 
     /**

@@ -1,10 +1,9 @@
 includes:
     - phpstan-baseline.neon
 parameters:
-#    ignoreErrors:
-#      - '/Reflection error:/'
     universalObjectCratesClasses:
-      - Tinebase_Config
+      - Tinebase_Config_Abstract
+      - Tinebase_Config_Struct
       - Tinebase_Preference_Abstract
       - Tinebase_Record_Interface
       - Tinebase_Record_RecordSet

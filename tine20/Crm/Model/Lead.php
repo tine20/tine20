@@ -137,7 +137,9 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
             ],
             'turnover'            => [
                 self::TYPE                  => self::TYPE_FLOAT,
+                self::NULLABLE              => true,
                 self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+                self::INPUT_FILTERS          => [Zend_Filter_Empty::class => null],
             ],
             'probableTurnover'            => [
                 self::TYPE                  => self::TYPE_INTEGER,

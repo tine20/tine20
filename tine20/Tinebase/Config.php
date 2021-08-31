@@ -2189,7 +2189,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom title for branding.')
             'description'           => 'Custom title for branding.',
             'type'                  => 'string',
-            'default'               => "Tine 2.0 ®",
+            'default'               => "tine ®",
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
@@ -2292,7 +2292,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Background color of mask icon (safari pinned tab).')
             'description'           => 'Background color of mask icon (safari pinned tab).',
             'type'                  => 'string',
-            'default'               => '#9b7f14',
+            'default'               => '#0082ca',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,

@@ -32,6 +32,7 @@ class HumanResources_AllTests
         $suite->addTestSuite(HumanResources_ModelConfigurationTest::class);
         $suite->addTestSuite(HumanResources_Model_BLDailyWTReport_ConfigTest::class);
         $suite->addTestSuite(HumanResources_Model_WorkingTimeSchemeTest::class);
+        $suite->addTestSuite(HumanResources_Controller_FreeTimeTests::class);
         return $suite;
     }
 }

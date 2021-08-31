@@ -15,26 +15,6 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 {
     protected $_ts;
 
-    /** @var HumanResources_Model_Employee */
-    protected $employee;
-
-    protected function _createBasicData()
-    {
-        // create employee & contract
-        // @todo generalize?
-        $this->employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
-        $this->employee->dfcom_id = '36118993923739652';
-
-        $contractController = HumanResources_Controller_Contract::getInstance();
-        $employeeController = HumanResources_Controller_Employee::getInstance();
-        $this->employee = $employeeController->create($this->employee, false);
-        $contract = $this->_getContract(new Tinebase_DateTime('2018-07-01 00:00:00'));
-        $contract->employee_id = $this->employee->getId();
-        //  @todo add more contract properties ?
-        $contract = $contractController->create($contract);
-        $this->employee->contracts = new Tinebase_Record_RecordSet(HumanResources_Model_Contract::class, [$contract]);
-    }
-
     public function testCalculateAllReports()
     {
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
