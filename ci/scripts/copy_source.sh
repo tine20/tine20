@@ -30,7 +30,7 @@ rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --e
 rm -r ${TINE20ROOT}/tine20/vendor/metaways || true
 cd ${TINE20ROOT}/tine20;
 php ${CI_BUILDS_DIR}/tine20/tine20/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local
-composer install --no-ansi --no-progress --no-suggest --no-scripts
+composer install --no-ansi --no-progress --no-suggest
 
 ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/install_custom_app.sh
 
