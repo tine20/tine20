@@ -249,7 +249,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Unit', // _('Unit')
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::NULLABLE => true,
-                self::NAME => Sales_Config::PRODUCT_UNFOLDTYPE,
+                self::NAME => Sales_Config::PRODUCT_UNIT,
             ],
             self::FLD_DEFAULT_GROUPING => [
                 self::LABEL => 'Default Grouping', // _('Default Grouping')

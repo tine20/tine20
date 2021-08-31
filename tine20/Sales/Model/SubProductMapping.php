@@ -23,7 +23,7 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
     public const FLD_SHORTCUT = 'shortcut';
     public const FLD_PARENT_ID = 'parent_id';
     public const FLD_PRODUCT_ID = 'product_id';
-    public const FLD_AMOUNT = 'amount';
+    public const FLD_QUANTITY = 'quantity';
     public const FLD_POSITION_FLAG = 'position_flag';
 
 
@@ -133,6 +133,14 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
                 self::DEFAULT_VAL => 'NONE',
                 self::NAME => Sales_Config::SUBPRODUCT_POSITION_FLAG,
             ],
+            self::FLD_QUANTITY              => [
+                self::LABEL                     => 'Amount', // _('Amount')
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                ]
+            ]
         ]
     ];
 

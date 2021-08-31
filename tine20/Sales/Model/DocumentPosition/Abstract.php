@@ -198,6 +198,22 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                 ]
             ],
+            self::FLD_QUANTITY                  => [
+                self::LABEL                         => 'Amount', // _('Amount')
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_UNIT                      => [
+                self::LABEL                         => 'Unit', // _('Unit')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NULLABLE                      => true,
+                self::NAME                          => Sales_Config::PRODUCT_UNIT,
+            ],
+            self::FLD_USE_ACTUAL_QUANTITY       => [
+                self::LABEL                         => 'Use Actual Quantity', // _('Use Actual Quantity')
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::NULLABLE                      => true,
+            ],
         ]
     ];
 

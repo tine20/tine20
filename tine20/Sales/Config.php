@@ -87,8 +87,6 @@ class Sales_Config extends Tinebase_Config_Abstract
     
     const PAYMENT_METHODS = 'paymentMethods';
 
-    const DOCUMENT_CATEGORY = 'documentCategory';
-
     /**
      * Product Category
      * 
