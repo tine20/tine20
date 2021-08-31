@@ -731,6 +731,9 @@ msgstr "Anonyme Download Links verwalten"
 msgid "Allow viewing, adding and deleting download links"
 msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
 
+msgid "Folder with this name already exists!"
+msgstr "Ordner mit dem Namen ist bereits vorhanden!"
+
 #~ msgid "Default behavior when double-clicking on a Row"
 #~ msgstr "Standardverhalten beim Doppelklicken auf eine Zeile"
 

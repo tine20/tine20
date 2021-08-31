@@ -178,15 +178,21 @@ Tine.Filemanager.nodeActions.CreateFolder = {
             }));
             
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
-                return new Promise((resolve, reject) => {
-                    Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`, {
-                        success: resolve,
-                        failure: reject
+                return await Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`)
+                    .catch((e) => {
+                        window.postal.publish({
+                            channel: "recordchange",
+                            topic: 'Filemanager.Node.delete',
+                            data: localRecord
+                        });
+                        
+                        if (e.message === "file exists") {
+                            Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Folder with this name already exists!'));
+                        }
                     });
-                })
             });
         } else {
-            Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), function (btn, text) {
+            Ext.MessageBox.prompt(app.i18n._('New Folder'), app.i18n._('Please enter the name of the new folder:'), async function (btn, text) {
                 if (currentFolderNode && btn === 'ok') {
                     if (!text) {
                         Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), String.format(app.i18n._('You have to supply a {0} name!'), nodeName));
@@ -194,7 +200,12 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                     }
 
                     const filename = `${currentPath}${text}/`;
-                    Tine.Filemanager.nodeBackend.createFolder(filename);
+                    await Tine.Filemanager.nodeBackend.createFolder(filename)
+                        .catch((e) => {
+                            if (e.message === "file exists") {
+                                Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Folder with this name already exists!'));
+                            }
+                        });
                 }
             }, this);
         }
@@ -229,7 +240,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
  */
 Tine.Filemanager.nodeActions.Edit = {
     app: 'Filemanager',
-    requiredGrant: 'readGrant',
+    requiredGrant: 'editGrant',
     allowMultiple: false,
     text: 'Edit Properties', // _('Edit Properties')
     iconCls: 'action_edit_file',

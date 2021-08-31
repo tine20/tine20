@@ -83,7 +83,6 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
     onOwnGrantsCheck: function(cb, checked) {
         this.grantsGrid.setReadOnly(!checked);
-        this.pinProtectionCheckbox.setReadOnly(!checked);
     },
 
     onRecordLoad: function(editDialog, record, ticketFn) {
@@ -97,10 +96,12 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
                 path.match(/^\/personal(\/[^/]+){0,2}\/$/) ||
                 path.match(/^\/shared(\/[^/]+){0,1}\/$/);
         
+        const pinProtectionReadOnly = record.get('type') !== 'folder' ||!record.data?.account_grants?.adminGrant;
+        
         this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
         this.hasOwnGrantsCheckbox.setReadOnly(ownGrantsReadOnly);
         this.pinProtectionCheckbox.setValue(record.get('pin_protected_node') ? true : false);
-        this.pinProtectionCheckbox.setReadOnly(ownGrantsReadOnly);
+        this.pinProtectionCheckbox.setReadOnly(pinProtectionReadOnly);
 
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData({results: record.data.grants});
