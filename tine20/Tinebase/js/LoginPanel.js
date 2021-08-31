@@ -248,7 +248,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }, {
                     html: '<ul>' +
                     '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(i18n._('{0} Homepage'), Tine.title) + '</a></li>' +
-                    '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(i18n._('{0} Forum'), Tine.title) + '</a></li>' +
                     '</ul><br/>'
                 }, {
                     cls: 'tb-login-big-label',
