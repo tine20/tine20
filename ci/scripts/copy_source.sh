@@ -29,7 +29,10 @@ rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/ ${TI
 rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/ ${TINE20ROOT}/tine20/;
 rm -r ${TINE20ROOT}/tine20/vendor/metaways || true
 cd ${TINE20ROOT}/tine20;
-php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local
+
+if test "COMPOSER_LOCK_REWRITE" == "true"; then
+    php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/packaging/composer/composerLockRewrite.php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/composer.lock satis.default.svc.cluster.local;
+fi
 composer install --no-ansi --no-progress --no-suggest --no-scripts
 
 ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/install_custom_app.sh
