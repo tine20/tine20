@@ -3,7 +3,7 @@ set -e
 
 branch=$1
 
-cd ${CI_BUILDS_DIR}/tine20/tine20
+cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
 if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then
 	exit 1
 fi

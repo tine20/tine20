@@ -70,7 +70,10 @@ COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.js
 COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
 COPY scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php 
 
-RUN php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local
+
+RUN if [ "COMPOSER_LOCK_REWRITE" == "true" ]; then \
+        php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local; \
+    fi
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
 RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
 
@@ -84,7 +87,9 @@ COPY tine20 ${TINE20ROOT}/tine20/
 COPY tests ${TINE20ROOT}/tests/
 COPY scripts ${TINE20ROOT}/scripts/
 
-RUN php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local
+RUN if [ "COMPOSER_LOCK_REWRITE" == "true" ]; then \
+        php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local; \
+    fi
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest --no-scripts
 
 COPY --from=icon-set-provider ${TINE20ROOT}/tine20/images/icon-set/ ${TINE20ROOT}/tine20/images/icon-set

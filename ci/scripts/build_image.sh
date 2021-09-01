@@ -23,5 +23,5 @@ export RELEASE=$(echo "${VERSION}" | sed sI-I~Ig)
 export REVISION=0
 export CODENAME="${CODENAME}"
 
-cd ${CI_BUILDS_DIR}/tine20/tine20
+cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
 ./ci/dockerimage/make.sh -u -p -i "${IMAGE}" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" "${TARGET}"
