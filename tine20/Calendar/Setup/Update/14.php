@@ -120,7 +120,11 @@ class Calendar_Setup_Update_14 extends Setup_Update_Abstract
         
         foreach ($oldRelations as $relation) {
             $relation->type = 'SITE';
-            Tinebase_Relations::getInstance()->getBackend()->update($relation);
+            try {
+                Tinebase_Relations::getInstance()->getBackend()->update($relation);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
         }
 
         $this->addApplicationUpdate('Calendar', '14.3', self::RELEASE014_UPDATE003);
