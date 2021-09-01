@@ -151,3 +151,7 @@ variables:
   ZIP_PACKAGES:
     description: "Build zip packages, wenn packaging. (Tar packages are always build)"
     value: "false"
+
+  COMPOSER_LOCK_REWRITE:
+    description: "Rewrite composer lock to pull packages from cache."
+    value: "true"

@@ -17,9 +17,9 @@ docker_build_source:
   stage: build1
   script:
     - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
-    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/reuse_or_build_image.sh base $REUSE_IMAGES
-    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/reuse_or_build_image.sh source $REUSE_IMAGES
-    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/reuse_or_build_image.sh test-source $REUSE_IMAGES
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh base $REUSE_IMAGES
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh source $REUSE_IMAGES
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh test-source $REUSE_IMAGES
   timeout: 60m
   interruptible: true
   rules:
@@ -57,9 +57,9 @@ docker_build_built:
   extends: .abstract_jobs.docker
   stage: build2
   script:
-    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/build_image.sh build
-    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/build_image.sh built
-    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/build_image.sh test-built
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh build
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
   rules:
     - if: *TESTS_NEEDING_BUILT_IMAGE
       when: on_success
@@ -75,7 +75,7 @@ docker_build_dev:
   extends: .abstract_jobs.docker
   stage: build2
   script:
-    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/build_image.sh dev
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh dev
   rules:
     - if: *DEPLOYS_NEEDING_DEV_IMAGE
       when: on_success
@@ -88,7 +88,7 @@ docker_build_packages:
   stage: build3
   script:
     - apk add bash util-linux tar
-    - ${CI_BUILDS_DIR}/tine20/tine20/ci/scripts/packaging.sh
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/packaging.sh
   rules:
     - if: $CI_COMMIT_TAG
       when: on_success
