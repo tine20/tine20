@@ -19,13 +19,11 @@ class Sales_Setup_Update_14 extends Setup_Update_Abstract
     protected const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
-        self::PRIO_NORMAL_APP_UPDATE => [
+        self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE014_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
-            ]
-        ],
-        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            ],
             self::RELEASE014_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
