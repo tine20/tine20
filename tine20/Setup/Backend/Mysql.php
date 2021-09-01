@@ -520,7 +520,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */
     protected function _createMyConf($path, $config)
     {
-        $port = $config->port ? $config->port : 3306;
+        $port = $config->port ?: 3306;
 
         $mycnfData = <<<EOT
 [client]
@@ -528,10 +528,16 @@ host = {$config->host}
 port = {$port}
 user = {$config->username}
 password = {$config->password}
-
-[mysqldump]
-column-statistics=0
 EOT;
+
+        // check mysqldump version
+        $version = exec('mysqldump --version');
+        // TODO find out about version 9+
+        if (preg_match('/Ver 8/', $version)) {
+            $mycnfData .= '[mysqldump]
+column-statistics=0';
+        }
+
         file_put_contents($path, $mycnfData);
     }
 
