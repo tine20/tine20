@@ -178,6 +178,57 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         foreach($products as $product) {
             $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
+
+        $products = [
+            [
+                'name' => 'vCPU',
+                'description' => 'vCPU',
+                'price' => 9.99,
+            ], [
+                'name' => 'RAM in GB',
+                'description' => 'RAM in GB',
+                'price' => 9.99,
+            ]
+        ];
+
+        $default = array(
+            'manufacturer' => 'Hosting Giant Ltd',
+            'category' => 'Hosting'
+        );
+
+        $subProductIds = [];
+
+        foreach($products as $key => $product) {
+            $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)))->getId();
+        }
+
+        $products = [
+            [
+                'name' => self::$_en ? 'VM small' : 'VM klein',
+                'description' => self::$_en ? 'small, general purpose VM with 2 vCPUs and 8GB RAM' : 'kleine, general purpose VM mit 2 vCPUs und 8GB RAM',
+                'price' => 9.99,
+                Sales_Model_Product::FLD_SUBPRODUCTS => [
+                    [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[0],
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 2,
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => 'vcpu'
+                    ], [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[1],
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 8,
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => 'ram'
+                    ]
+                ]
+            ]
+        ];
+
+        $default = array(
+            'manufacturer' => 'Hosting Giant Ltd',
+            'category' => 'Hosting'
+        );
+
+        foreach($products as $product) {
+            $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
+        }
     }
 
     /**

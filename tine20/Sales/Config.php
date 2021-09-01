@@ -101,6 +101,8 @@ class Sales_Config extends Tinebase_Config_Abstract
      */
     const DOCUMENT_CATEGORY = 'documentCategory';
 
+    const DOCUMENT_POSITION_TYPE = 'documentPositionType';
+
     const PRODUCT_UNFOLDTYPE = 'productUnfoldType';
 
     const PRODUCT_UNIT = 'productUnit';
@@ -249,6 +251,21 @@ class Sales_Config extends Tinebase_Config_Abstract
                 ],
             ],
         ],
+        self::DOCUMENT_POSITION_TYPE => [
+            self::LABEL                 => 'Document Position Type', //_('Document Position Type')
+            self::DESCRIPTION           => 'Document Position Type', //_('Document Position Type')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'STANDARD', 'value' => 'Standard', 'system' => true], // _('Standard')
+                ],
+                self::DEFAULT_STR           => 'STANDARD',
+            ],
+        ],
         self::DOCUMENT_CATEGORY => [
             self::LABEL                 => 'Document Category', //_('Document Category')
             self::DESCRIPTION           => 'Document Category', //_('Document Category')
@@ -391,20 +408,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                     array('id' => 'ASSETS', 'value' => 'Assets', 'system' => true), // _('Assets')
                 ),
                 'default' => 'BANK TRANSFER'
-            )
-        ),
-        self::DOCUMENT_CATEGORY => array(
-            //_('Document Category')
-            'label'                 => 'Document Category',
-            //_('Possible Document Categories.')
-            'description'           => 'Possible Document Categories.',
-            'type'                  => 'keyFieldConfig',
-            'clientRegistryInclude' => TRUE,
-            'default'               => array(
-                'records' => array(
-                    array('id' => 'DEFAULT', 'value' => 'Default', 'system' => true) // _('Default')
-                ),
-                'default' => 'DEFAULT'
             )
         ),
         self::INVOICE_CLEARED => array(

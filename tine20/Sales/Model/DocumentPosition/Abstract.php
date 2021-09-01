@@ -20,6 +20,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     //const MODEL_NAME_PART = 'AbstractPosition';
     
     const FLD_DOCUMENT_ID = 'document_id';
+    const FLD_PARENT_ID = 'parent_id';
+    const FLD_TYPE = 'type';
     const FLD_SORT = 'sort'; // automatisch in 10000er schritten, shy
     const FLD_GROUPING = 'grouping'; // gruppierte darstellung, automatische laufende nummern pro gruppe(nicht persistiert)
     
@@ -48,7 +50,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     const FLD_COST_CENTER_ID = 'payment_cost_center_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat und ob user überschreiben kann
     const FLD_COST_BEARER_ID = 'payment_cost_bearer_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat, und ob user überschreiben kann
 
-    const FLD_XPROPS = 'xprops'; // z.B. entfaltungsart von Bundle od. Set merken
+    //const FLD_XPROPS = 'xprops'; // z.B. entfaltungsart von Bundle od. Set merken
     
 
     
@@ -138,6 +140,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::RECORD_NAME                   => 'Second factor config for user', // ngettext('Second factor config for user', 'Second factor configs for user', n)
         self::RECORDS_NAME                  => 'Second factor configs for user',
         self::MODLOG_ACTIVE                 => true,
+        self::HAS_XPROPS                    => true,
 
         self::FIELDS                        => [
             self::FLD_DOCUMENT_ID               => [
@@ -151,6 +154,20 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+            ],
+            self::FLD_PARENT_ID                 => [
+                // needs to be set by concrete model (but will actually be done here in abstract static inherit hook)
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    //self::MODEL_NAME                    => Sales_Model_DocumentPosition_Abstract::MODEL_PART_NAME,
+                ],
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_TYPE                      => [
+                self::LABEL                         => 'Type', // _('Type')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DOCUMENT_POSITION_TYPE,
             ],
             self::FLD_GROUPING                  => [
                 self::LABEL                         => 'Grouping', // _('Grouping')
@@ -214,6 +231,65 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_BOOLEAN,
                 self::NULLABLE                      => true,
             ],
+            self::FLD_UNIT_PRICE                => [
+                self::LABEL                         => 'Unit price', // _('Unit price')
+                self::TYPE                          => self::TYPE_MONEY,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_NET_PRICE                 => [
+                self::LABEL                         => 'Net price', // _('Net price')
+                self::TYPE                          => self::TYPE_MONEY,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_POSITION_DISCOUNT_TYPE    => [
+                self::LABEL                         => 'Position Discount Type', // _('Position Discount Type')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NULLABLE                      => true,
+                self::NAME                          => Sales_Config::INVOICE_DISCOUNT_TYPE,
+            ],
+            self::FLD_POSITION_DISCOUNT_SUM     => [
+                self::LABEL                         => 'Position Discount Sum', // _('Position Discount Sum')
+                self::TYPE                          => self::TYPE_MONEY,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_POSITION_DISCOUNT_PERCENTAGE => [
+                self::LABEL                         => 'Position Discount Percentage', // _('Position Discount Percentage')
+                self::TYPE                          => self::TYPE_FLOAT,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_TAX_RATE                  => [
+                self::LABEL                         => 'Tax Rate', // _('Tax Rate')
+                self::TYPE                          => self::TYPE_FLOAT,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_SALES_TAX                 => [
+                self::LABEL                         => 'Sales Rate', // _('Sales Rate')
+                self::TYPE                          => self::TYPE_FLOAT,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_GROSS_PRICE               => [
+                self::LABEL                         => 'Gross Price', // _('Gross Price')
+                self::TYPE                          => self::TYPE_MONEY,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_COST_BEARER_ID            => [
+                self::LABEL                         => 'Cost Bearer', // _('Cost Bearer')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_CostCenter::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_COST_CENTER_ID            => [
+                self::LABEL                         => 'Costcenter', // _('Costcenter')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_CostCenter::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+            ],
         ]
     ];
 
@@ -223,4 +299,15 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    /**
+     * @param array $_definition
+     */
+    public static function inheritModelConfigHook(array &$_definition)
+    {
+        parent::inheritModelConfigHook($_definition);
+
+        /** btw we use self because its more efficient than static ... that static there is thus for a reason */
+        $_definition[self::FIELDS][self::FLD_PARENT_ID][self::CONFIG][self::MODEL_NAME] = static::MODEL_NAME_PART;
+    }
 }

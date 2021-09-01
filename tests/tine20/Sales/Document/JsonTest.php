@@ -22,13 +22,13 @@ class Sales_Document_JsonTest extends TestCase
     {
         parent::setUp();
 
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
         $this->_instance = new Sales_Frontend_Json();
     }
 
     public function testOfferDocumentCustomerCopy($noAsserts = false)
     {
-        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
-
         $customer = $this->_createCustomer();
         $customerData = $customer->toArray();
         unset($customerData['delivery'][0]['id']);
@@ -57,6 +57,29 @@ class Sales_Document_JsonTest extends TestCase
         return $document;
     }
 
+    public function testOfferDocumentPosition()
+    {
+        $subProduct = $this->_createProduct();
+        $product = $this->_createProduct([
+            Sales_Model_Product::FLD_SUBPRODUCTS => [(new Sales_Model_SubProductMapping([
+                Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProduct,
+                Sales_Model_SubProductMapping::FLD_SHORTCUT => 'lorem',
+                Sales_Model_SubProductMapping::FLD_QUANTITY => 1,
+            ], true))->toArray()]
+        ]);
+
+        $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_POSITIONS => [
+                [
+                    Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
+                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray()
+                ]
+            ],
+        ]);
+
+        $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+    }
+
     public function testOrderDocument()
     {
         $offer = $this->testOfferDocumentCustomerCopy(true);
@@ -68,6 +91,14 @@ class Sales_Document_JsonTest extends TestCase
             ]
         ]);
         $this->_instance->saveDocument_Order($order->toArray(true));
+    }
+
+    protected function _createProduct(array $data = []): Sales_Model_Product
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(array_merge([
+            Sales_Model_Product::FLD_NAME => Tinebase_Record_Abstract::generateUID(),
+        ], $data)));
     }
 
     protected function _createCustomer(): Sales_Model_Customer
