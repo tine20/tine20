@@ -251,7 +251,7 @@ class Setup_Initialize
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    public static function createSharedTags(array $tags)
+    public static function createSharedTags(array $tags, $usable = true)
     {
         $controller = Tinebase_Tags::getInstance();
 
@@ -271,7 +271,7 @@ class Setup_Initialize
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                 'account_id' => 0,
                 'view_right' => true,
-                'use_right' => true,
+                'use_right' => $usable,
             ));
             $controller->setRights($right);
 
