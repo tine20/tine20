@@ -619,7 +619,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             const defaultAccountId = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
             const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.accountId);
 
-            if (!currentAccount.data?.grants[0]?.addGrant) {
+            if (!currentAccount.data?.account_grants?.addGrant) {
                 this.accountId = defaultAccountId;
                 this.showReplacedMailSenderNotification(currentAccountId, defaultAccountId);
             }
@@ -1333,7 +1333,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 aliasAccount.set('original_id', account.id);
                 
                 // only add to combo if the account has email send grant
-                if (aliasAccount.data.grants[0]?.addGrant) {
+                if (aliasAccount.data?.account_grants?.addGrant) {
                     accountComboStore.add(aliasAccount);
                 }
             }
