@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Tine 2.0
  *
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  *
  * @todo        this should implement Tinebase_Backend_Sql_Interface or use standard sql backend + refactor this
@@ -113,6 +114,7 @@ class Tinebase_Tags
     */
     public function searchTagsByForeignFilter($_filter)
     {
+        /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = Tinebase_Core::getApplicationInstance($_filter->getApplicationName(), $_filter->getModelName());
         $recordIds = $controller->search($_filter, NULL, FALSE, TRUE);
         
@@ -173,26 +175,25 @@ class Tinebase_Tags
      * Return a single record
      *
      * @param string|Tinebase_Model_Tag $_id
-     * @param $_getDeleted boolean get deleted records
-     * @return Tinebase_Model_FullTag
+     * @param boolean $_getDeleted get deleted records
+     * @return Tinebase_Model_Tag
      *
      * @todo support $_getDeleted
      */
     public function get($_id, $_getDeleted = FALSE)
     {
-        $fullTag = $this->getFullTagById($_id);
-        return $fullTag;
+        return $this->getTagById($_id);
     }
     
     /**
      * get full tag by id
      * 
      * @param string|Tinebase_Model_Tag $id
-     * @param string $ignoreAcl
+     * @param boolean $ignoreAcl
      * @throws Tinebase_Exception_NotFound
-     * @return Tinebase_Model_FullTag
+     * @return Tinebase_Model_Tag
      */
-    public function getFullTagById($id, $ignoreAcl = false)
+    public function getTagById($id, $ignoreAcl = false)
     {
         $tagId = ($id instanceof Tinebase_Model_Tag) ? $id->getId() : $id;
         
@@ -201,8 +202,8 @@ class Tinebase_Tags
         if (count($tags) == 0) {
             throw new Tinebase_Exception_NotFound("Tag $id not found or insufficient rights.");
         }
-        
-        return new Tinebase_Model_FullTag($tags[0]->toArray(), true);
+
+        return new Tinebase_Model_Tag($tags[0]->toArray(), true);
     }
     
     /**
@@ -295,7 +296,7 @@ class Tinebase_Tags
     /**
      * Creates a single tag
      *
-     * @param   Tinebase_Model_Tag
+     * @param   Tinebase_Model_Tag $_tag
      * @param   boolean $_ignoreACL
      * @return  Tinebase_Model_Tag
      * @throws  Tinebase_Exception_AccessDenied
@@ -303,10 +304,6 @@ class Tinebase_Tags
      */
     public function createTag(Tinebase_Model_Tag $_tag, $_ignoreACL = FALSE)
     {
-        if ($_tag instanceof Tinebase_Model_FullTag) {
-            $_tag = new Tinebase_Model_Tag($_tag->toArray(), TRUE);
-        }
-
         if (! is_object(Tinebase_Core::getUser())) {
             throw new Tinebase_Exception_NotFound('no valid user object for tag creation');
         }
@@ -321,10 +318,14 @@ class Tinebase_Tags
         if ($_tag->has('rights')) {
             $oldRights = $_tag->rights;
             unset($_tag->rights);
+        } else {
+            $oldRights = [];
         }
         if ($_tag->has('contexts')) {
             $oldContexts = $_tag->contexts;
             unset($_tag->contexts);
+        } else {
+            $oldContexts = [];
         }
 
         switch ($_tag->type) {
@@ -355,7 +356,6 @@ class Tinebase_Tags
                 break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('No such tag type.');
-                break;
         }
         if ($_tag->has('rights')) {
             $_tag->rights = $oldRights;
@@ -387,16 +387,12 @@ class Tinebase_Tags
     /**
      * updates a single tag
      *
-     * @param   Tinebase_Model_Tag
+     * @param   Tinebase_Model_Tag $_tag
      * @return  Tinebase_Model_Tag
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function updateTag(Tinebase_Model_Tag $_tag)
     {
-        if ($_tag instanceof Tinebase_Model_FullTag) {
-            $_tag = new Tinebase_Model_Tag($_tag->toArray(), TRUE);
-        }
-
         $currentAccountId = Tinebase_Core::getUser()->getId();
         $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
         ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
@@ -435,6 +431,10 @@ class Tinebase_Tags
      */
     public function update(Tinebase_Record_Interface $_record)
     {
+        if ($_record->system_tag) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to update system tags');
+        }
+        
         return $this->updateTag($_record);
     }
 
@@ -450,6 +450,12 @@ class Tinebase_Tags
         $tags = $this->getTagsById($ids, Tinebase_Model_TagRight::VIEW_RIGHT, $ignoreAcl);
         if (count($tags) != count((array)$ids)) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to delete the tag(s).');
+        }
+
+        foreach ($tags as $tag) {
+            if ($tag->system_tag) {
+                throw new Tinebase_Exception_AccessDenied('You are not allowed to delete system tags');
+            }
         }
 
         $currentAccountId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() :
@@ -576,12 +582,15 @@ class Tinebase_Tags
     {
         $tagsToSet = $this->_createTagsOnTheFly($_record[$_tagsProperty]);
         $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Model_TagRight::USE_RIGHT);
-        
+
         $appId = $this->_getApplicationForModel(get_class($_record))->getId();
         if (! $this->_userHasPersonalTagRight($appId)) {
             $tagsToSet = $tagsToSet->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
             $currentTags = $currentTags->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
         }
+
+        // prevent removal of system tags
+        $currentTags = $currentTags->filter('system_tag', false);
 
         $tagIdsToSet = $tagsToSet->getArrayOfIds();
         $currentTagIds = $currentTags->getArrayOfIds();
@@ -594,14 +603,7 @@ class Tinebase_Tags
         
         $recordId = $_record->getId();
         foreach ($toAttach as $tagId) {
-            $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
-                'tag_id'         => $tagId,
-                'application_id' => $appId,
-                'record_id'      => $recordId,
-            // backend property not supported by record yet
-                'record_backend_id' => ' '
-            ));
-            $this->_addOccurrence($tagId, 1);
+           $this->_attachTag($tagId, $recordId, $appId);
         }
         foreach ($toDetach as $tagId) {
             $this->_db->delete(SQL_TABLE_PREFIX . 'tagging', array(
@@ -614,7 +616,42 @@ class Tinebase_Tags
     }
 
     /**
-     * @param $modelName
+     * @param string $tagId
+     * @param string $recordId
+     * @param string $appId
+     * @throws Zend_Db_Adapter_Exception
+     */
+    protected function _attachTag(string $tagId, string $recordId, string $appId)
+    {
+        $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
+            'tag_id'         => $tagId,
+            'application_id' => $appId,
+            'record_id'      => $recordId,
+            // backend property not supported by record yet
+            'record_backend_id' => ' '
+        ));
+        $this->_addOccurrence($tagId, 1);
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Model_Tag $tag
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function addSystemTag(Tinebase_Record_Interface $record, Tinebase_Model_Tag $tag)
+    {
+        if (!$tag->system_tag) {
+            throw new Tinebase_Exception_InvalidArgument('no system tag');
+        }
+        if (!$tag->getId()) {
+            throw new Tinebase_Exception_InvalidArgument('system tag must be created first');
+        }
+        $appId = $this->_getApplicationForModel(get_class($record))->getId();
+        $this->_attachTag($tag->getId(), $record->getId(), $appId);
+    }
+
+    /**
+     * @param string $modelName
      * @return Tinebase_Model_Application
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
@@ -654,6 +691,7 @@ class Tinebase_Tags
         $tagId = $tag->getId();
 
         $appId = $this->_getApplicationForModel($_filter->getModelName())->getId();
+        /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = Tinebase_Core::getApplicationInstance($_filter->getModelName());
 
         // only get records user has update rights to
@@ -731,6 +769,7 @@ class Tinebase_Tags
     {
         $app = $this->_getApplicationForModel($_filter->getModelName());
         $appId = $app->getId();
+        /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = Tinebase_Core::getApplicationInstance($app->name, $_filter->getModelName());
         
         // only get records user has update rights to
@@ -809,7 +848,7 @@ class Tinebase_Tags
      * user has use rights for.
      * Always respects the current acl of the current user!
      *
-     * @param   array|Tinebase_Record_RecordSet set of string|array|Tinebase_Model_Tag with existing and non-existing tags
+     * @param   array|Tinebase_Record_RecordSet $_mixedTags set of string|array|Tinebase_Model_Tag with existing and non-existing tags
      * @return  Tinebase_Record_RecordSet       set of all tags
      * @throws  Tinebase_Exception_UnexpectedValue
      */
@@ -822,7 +861,6 @@ class Tinebase_Tags
         foreach ($_mixedTags as $tag) {
             if (is_string($tag)) {
                 $tagIds[] = $tag;
-                continue;
             } else {
                 if (is_array($tag)) {
                     if (! isset($tag['name']) || empty($tag['name'])) {
@@ -942,7 +980,7 @@ class Tinebase_Tags
     /**
      * Sets all given tag rights
      *
-     * @param Tinebase_Record_RecordSet|Tinebase_Model_TagRight
+     * @param Tinebase_Record_RecordSet|Tinebase_Model_TagRight $_rights
      * @return void
      * @throws Tinebase_Exception_Record_Validation
      */
@@ -1137,7 +1175,8 @@ class Tinebase_Tags
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Found ' . count($queryResult) . ' duplicate tag names.');
-        
+
+        /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = Tinebase_Core::getApplicationInstance($model);
         if ($ignoreAcl) {
             $containerChecks = $controller->doContainerACLChecks(FALSE);

@@ -22,6 +22,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE014_UPDATE009 = __CLASS__ . '::update009';
     const RELEASE014_UPDATE010 = __CLASS__ . '::update010';
+    const RELEASE014_UPDATE011 = __CLASS__ . '::update011';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -64,6 +65,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE010          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update010',
+            ],
+            self::RELEASE014_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -277,5 +282,21 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
         }
         Tinebase_Scheduler_Task::addAlarmTask(Tinebase_Scheduler::getInstance());
         $this->addApplicationUpdate('Tinebase', '14.10', self::RELEASE014_UPDATE010);
+    }
+
+    public function update011()
+    {
+        if ($this->getTableVersion('tags') < 10) {
+            $this->_backend->addCol('tags', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>system_tag</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
+                </field>'));
+            $this->setTableVersion('tags', 10);
+        };
+
+        $this->addApplicationUpdate('Tinebase', '14.11', self::RELEASE014_UPDATE010);
     }
 }

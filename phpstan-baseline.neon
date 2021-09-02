@@ -12825,68 +12825,8 @@ parameters:
 			path: tine20/Tinebase/State.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:checkFilterACL\\(\\)\\.$#"
-			count: 2
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:concurrencyManagementAndModlogMultiple\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:doContainerACLChecks\\(\\)\\.$#"
-			count: 2
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:search\\(\\)\\.$#"
-			count: 4
-			path: tine20/Tinebase/Tags.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 24
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Default value of the parameter \\#2 \\$ignoreAcl \\(false\\) of method Tinebase_Tags\\:\\:getFullTagById\\(\\) is incompatible with type string\\.$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_getDeleted boolean get deleted records\\)\\: Unexpected token \"\\$_getDeleted\", expected type at offset 100$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$modelName\\)\\: Unexpected token \"\\$modelName\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_Model_Tag\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 73$#"
-			count: 2
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_Record_RecordSet\\|Tinebase_Model_TagRight\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 107$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(array\\|Tinebase_Record_RecordSet set of string\\|array\\|Tinebase_Model_Tag with existing and non\\-existing tags\\)\\: Unexpected token \"set\", expected variable at offset 236$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Variable \\$oldContexts might not be defined\\.$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Variable \\$oldRights might not be defined\\.$#"
-			count: 1
 			path: tine20/Tinebase/Tags.php
 
 		-

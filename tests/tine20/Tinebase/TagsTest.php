@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -56,18 +57,18 @@ class Tinebase_TagsTest extends TestCase
     /**
      * create shared tag
      * 
-     * @param string $name
-     * @param array $context
+     * @param array $tagData
+     * @param array|null $context
      * @return Tinebase_Model_Tag
      */
-    protected function _createSharedTag($name = NULL, $context = NULL)
+    protected function _createSharedTag(array $tagData = [], array $context = null)
     {
-        $sharedTag = new Tinebase_Model_Tag(array(
+        $sharedTag = new Tinebase_Model_Tag(array_merge([
             'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-            'name'  => $name ? $name : 'tagSingle::shared',
+            'name'  => 'tagSingle::shared',
             'description' => 'this is a shared tag',
             'color' => '#009B31',
-        ));
+        ], $tagData));
         $savedSharedTag = $this->_instance->createTag($sharedTag);
 
         $right = new Tinebase_Model_TagRight(array(
@@ -79,7 +80,7 @@ class Tinebase_TagsTest extends TestCase
         ));
         $this->_instance->setRights($right);
         
-        $this->_instance->setContexts($context ? $context : array('any'), $savedSharedTag);
+        $this->_instance->setContexts($context ?: array('any'), $savedSharedTag);
         
         $this->assertEquals($sharedTag->name, $savedSharedTag->name);
 
@@ -152,6 +153,22 @@ class Tinebase_TagsTest extends TestCase
         foreach ($contacts as $contact) {
             $this->assertEquals(1, count($contact->tags), 'Tag not found in contact ' . $contact->n_fn);
         }
+    }
+    
+    public function testAttachSystemTagToRecord()
+    {
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'org_name' => Tinebase_Record_Abstract::generateUID(10)
+        ]));
+
+        $tag = $this->_createSharedTag(['system_tag' => true]);
+        $contact->tags = [$tag];
+
+        $this->_instance->addSystemTag($contact, $tag);
+
+        $this->assertEquals(1, count($contact->tags), 'Tag not found in contact ' . $contact->n_fn);
+
+        Addressbook_Controller_Contact::getInstance()->delete([$contact->getId()]);
     }
 
     /**
@@ -312,12 +329,12 @@ class Tinebase_TagsTest extends TestCase
         $ids = $this->_instance->searchTags($filter)->getId();
         $this->_instance->deleteTags($ids);
         
-        $t1 = $this->_createSharedTag('tag1');
-        $t2 = $this->_createSharedTag('tag2');
+        $t1 = $this->_createSharedTag(['name' => 'tag1']);
+        $t2 = $this->_createSharedTag(['name' => 'tag2']);
         
         // this tag should not occur, search is in the addressbook application
         $crmAppId = Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId();
-        $t3 = $this->_createSharedTag('tag3', array($crmAppId));
+        $t3 = $this->_createSharedTag(['name' => 'tag3'], array($crmAppId));
         
         $filter = new Tinebase_Model_TagFilter(array('application' => 'Addressbook'));
         

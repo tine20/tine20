@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>14.10</version>
+    <version>14.11</version>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
         <table>
@@ -1173,7 +1173,7 @@
 
         <table>
             <name>tags</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1210,6 +1210,12 @@
                     <type>text</type>
                     <length>7</length>
                     <default>NULL</default>
+                </field>
+                <field>
+                    <name>system_tag</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>occurrence</name>
