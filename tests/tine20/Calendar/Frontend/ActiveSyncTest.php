@@ -922,12 +922,10 @@ Zeile 3</AirSyncBase:Data>
         $event->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord(Calendar_Model_Event::class, $event);
         $this->assertSame(1, $event->alarms->count());
 
-
-        /** only as of 2020.11
         $syncrotonEvent->startTime->add(new DateInterval('PT1H'));
         $this->expectException(Syncroton_Exception_Status_MeetingResponse::class);
         $this->expectExceptionMessage('event instance not found');
-        $this->testMeetingResponse($syncrotonFolder, $serverId, $syncrotonEvent); */
+        $this->testMeetingResponse($syncrotonFolder, $serverId, $syncrotonEvent);
     }
     
     public function testMeetingResponseWithExistingInstanceId()
