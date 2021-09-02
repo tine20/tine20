@@ -2430,14 +2430,14 @@ class Tinebase_Core
         Sentry\init([
             'dsn' => $sentryServerUri,
             'max_breadcrumbs' => 50,
+            'error_types' => Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL},
+            'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
             'tags' => array(
                 'php_version' => phpversion(),
+                'tine_url' => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL) ?: 'unknown',
+                // TODO add more tags?
             ),
-            'error_types' => Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL},
         ]);
-        Sentry\configureScope(function (Sentry\State\Scope $scope): void {
-            $scope->setTag('php_version', phpversion());
-        });
         self::set('SENTRY', true);
     }
 
