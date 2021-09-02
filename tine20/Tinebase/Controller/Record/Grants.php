@@ -325,6 +325,12 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             . ' Get grants for ' . count($recordset). ' records.');
         
         $this->_grantsBackend->getGrantsForRecords($recordset, $this->_aclIdProperty);
+
+        if ($recordset->count() > 0 && $recordset->getFirstRecord()->has('account_grants')) {
+            foreach ($recordset as $record) {
+                $record->account_grants = $this->getGrantsOfAccount(Tinebase_Core::getUser(), $record, false);
+            }
+        }
     }
 
     /**
@@ -336,13 +342,13 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * 
      * @todo force refetch from db or add user param to _getGrants()?
      */
-    public function getGrantsOfAccount($user, $record)
+    public function getGrantsOfAccount($user, $record, $reloadEmptyGrants = true)
     {
         if ($user === null) {
             $user = Tinebase_Core::getUser();
         }
 
-        if (empty($record->grants)) {
+        if ($reloadEmptyGrants && empty($record->grants)) {
             $this->_getGrants($record);
         }
 
