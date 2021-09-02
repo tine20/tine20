@@ -225,12 +225,17 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         $method = 'attenderStatusUpdate';
         
         if ($response->instanceId instanceof DateTime) {
-            $instance = $event->exdate->filter('recurid', $event->uid . '-' . $response->instanceId->format(Tinebase_Record_Abstract::ISO8601LONG))->getFirstRecord();
+            $recurId = $event->uid . '-' . $response->instanceId->format(Tinebase_Record_Abstract::ISO8601LONG);
+            $instance = $event->exdate->filter('recurid', $recurId)->getFirstRecord();
             if (! $instance) {
                 $exceptions = $event->exdate;
                 $event->exdate = $exceptions->getOriginalDtStart();
-                
+
+                /** @var Calendar_Model_Event $instance */
                 $instance = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, new Tinebase_DateTime($response->instanceId));
+                if (!$instance || !$instance->setRecurId($event->getId()) || $instance->recurid !== $recurId) {
+                    throw new Syncroton_Exception_Status_MeetingResponse("event instance not found", Syncroton_Exception_Status_MeetingResponse::MEETING_ERROR);
+                }
             }
             
             $method = 'attenderStatusCreateRecurException';
