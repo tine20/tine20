@@ -36,6 +36,20 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 throw new Tinebase_Exception_UnexpectedValue(Sales_Model_Document_Abstract::FLD_CUSTOMER_ID .
                     ' is not instance of ' . Sales_Model_Document_Customer::class);
             }
+            if ($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->delivery) {
+                foreach ($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->delivery as $address) {
+                    if (!$address->{Sales_Model_Document_Abstract::FLD_ORIGINAL_ID}) {
+                        $address->{Sales_Model_Document_Abstract::FLD_ORIGINAL_ID} = $address->getId();
+                    }
+                    $address->setId(null);
+                }
+            }
+            if (!$_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}
+                    ->{Sales_Model_Document_Abstract::FLD_ORIGINAL_ID}) {
+                $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}
+                    ->{Sales_Model_Document_Abstract::FLD_ORIGINAL_ID} =
+                    $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->getId();
+            }
             $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->setId(null);
             $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} = Sales_Controller_Document_Customer::getInstance()
                 ->create($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID})->getId();

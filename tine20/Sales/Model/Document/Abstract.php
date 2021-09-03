@@ -99,6 +99,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::RECORDS_NAME                  => 'Documents',
         self::TITLE_PROPERTY                => self::FLD_DOCUMENT_NUMBER,
         self::MODLOG_ACTIVE                 => true,
+        self::EXPOSE_JSON_API               => true,
 
         self::ASSOCIATIONS              => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [

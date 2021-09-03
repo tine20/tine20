@@ -141,6 +141,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::RECORDS_NAME                  => 'Second factor configs for user',
         self::MODLOG_ACTIVE                 => true,
         self::HAS_XPROPS                    => true,
+        self::EXPOSE_JSON_API               => true,
 
         self::FIELDS                        => [
             self::FLD_DOCUMENT_ID               => [

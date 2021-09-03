@@ -31,7 +31,6 @@ class Sales_Document_JsonTest extends TestCase
     {
         $customer = $this->_createCustomer();
         $customerData = $customer->toArray();
-        unset($customerData['delivery'][0]['id']);
         $document = new Sales_Model_Document_Offer([
             Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData
         ]);
@@ -90,7 +89,7 @@ class Sales_Document_JsonTest extends TestCase
                 $offer
             ]
         ]);
-        $this->_instance->saveDocument_Order($order->toArray(true));
+        $this->_instance->saveDocument_Order($order->toArray());
     }
 
     protected function _createProduct(array $data = []): Sales_Model_Product

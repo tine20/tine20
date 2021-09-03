@@ -30,8 +30,19 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
         $_definition[self::VERSION] = 1;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
+        $_definition[self::EXPOSE_JSON_API] = true;
+
         $_definition[self::FIELDS]['delivery'][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_Address::MODEL_NAME_PART;
+
+        $_definition[self::DENORMALIZATION_OF] = Sales_Model_Customer::class;
+        $_definition[self::FIELDS][self::FLD_ORIGINAL_ID] = [
+            self::TYPE                  => self::TYPE_RECORD,
+            self::CONFIG                => [
+                self::APP_NAME              => Sales_Config::APP_NAME,
+                self::MODEL_NAME            => Sales_Model_Customer::MODEL_NAME_PART,
+            ],
+        ];
     }
 
     /**

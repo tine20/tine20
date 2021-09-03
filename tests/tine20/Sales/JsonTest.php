@@ -440,6 +440,14 @@ class Sales_JsonTest extends TestCase
         $this->assertTrue(is_array($data['defaultContractContainer']['account_grants']));
     }
 
+    public function testSMD()
+    {
+        unset($_REQUEST['method']);
+        $smd = Tinebase_Frontend_Http::getServiceMap();
+        $this->assertArrayHasKey('services', $smd);
+        $this->assertArrayHasKey('Sales.getDocument_Offer', $smd['services']);
+    }
+
     /**
      * testNoteConcurrencyManagement
      * 

@@ -48,6 +48,7 @@ class Tinebase_ModelConfiguration_Const {
     const DEFAULT_SORT_INFO = 'defaultSortInfo';
     const DEFAULT_VAL = 'default';
     const DEGREE = 'degree';
+    const DENORMALIZATION_OF = 'denormalizationOf';
     const DEPENDENT_RECORDS = 'dependentRecords';
     /**
      * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
@@ -82,6 +83,7 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
     const FLD_DELETED_TIME = 'deleted_time';
+    const FLD_ORIGINAL_ID = 'original_id';
     const FUNCTION = 'function';
 
     const HAS_ATTACHMENTS = 'hasAttachments';

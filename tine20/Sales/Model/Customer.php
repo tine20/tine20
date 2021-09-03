@@ -20,6 +20,8 @@
 
 class Sales_Model_Customer extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'Customer';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -49,7 +51,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         
         'titleProperty'     => 'fulltext',
         'appName'           => 'Sales',
-        'modelName'         => 'Customer',
+        'modelName'         => self::MODEL_NAME_PART,
         
         'fieldGroups'       => array(
             'core'       => 'Core Data',     // _('Core Data')
