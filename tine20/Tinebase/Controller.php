@@ -366,6 +366,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                     'id' => $_user->getId(),
                     'email' => $_user->accountEmailAddress,
                     'login' => $_user->accountLoginName,
+                    'locale' => Tinebase_Core::getLocale()->toString(),
                 ]);
             });
         }

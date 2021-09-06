@@ -251,7 +251,7 @@ class Tinebase_Core
         $request = self::getRequest();
 
         // we need to initialize sentry at the very beginning to catch ALL errors
-        $ravenClient = self::setupSentry();
+        self::setupSentry();
         
         // check transaction header
         if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
@@ -259,8 +259,10 @@ class Tinebase_Core
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Client transaction $transactionId");
             Tinebase_Log_Formatter::setTransactionId(substr($transactionId, 0, 5));
-            if ($ravenClient) {
-                $ravenClient->tags['transaction_id'] = $transactionId;
+            if (Tinebase_Core::isRegistered('SENTRY')) {
+                Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($transactionId): void {
+                    $scope->setContext('transaction_id', $transactionId);
+                });
             }
         }
 
@@ -2435,7 +2437,7 @@ class Tinebase_Core
             'tags' => array(
                 'php_version' => phpversion(),
                 'tine_url' => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL) ?: 'unknown',
-                // TODO add more tags?
+                'request_id' => Tinebase_Log_Formatter::getRequestId(),
             ),
         ]);
         self::set('SENTRY', true);

@@ -9880,26 +9880,6 @@ parameters:
 			path: tine20/Tinebase/Log.php
 
 		-
-			message: "#^Method Tinebase_Log_Formatter\\:\\:reset\\(\\) should return string but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Tinebase/Log/Formatter.php
-
-		-
-			message: "#^Method Tinebase_Log_Formatter\\:\\:resetUsername\\(\\) should return string but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Tinebase/Log/Formatter.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$logPrio\\)\\: Unexpected token \"\\$logPrio\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Tinebase/Log/Formatter.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$output\\)\\: Unexpected token \"\\$output\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Tinebase/Log/Formatter.php
-
-		-
 			message: "#^Access to an undefined property Zend_Mail_Message\\:\\:\\$contentType\\.$#"
 			count: 1
 			path: tine20/Tinebase/Mail.php
