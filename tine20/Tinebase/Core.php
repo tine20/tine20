@@ -2202,9 +2202,17 @@ class Tinebase_Core
      * @param string $submodule
      * @return string
      */
-    public static function getTineUserAgent($submodule = '')
+    public static function getTineUserAgent(string $submodule = '')
     {
-        return 'Tine 2.0 ' . $submodule . ' (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+        $userAgent = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
+        if (! empty($submodule)) {
+            $userAgent .= ' ' . $submodule;
+        }
+        if (defined('TINE20_CODENAME') && defined('TINE20_PACKAGESTRING') ) {
+            $userAgent .= ' (Version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+        }
+
+        return $userAgent;
     }
 
     /**

@@ -2130,7 +2130,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         break;
                     }
 
-                    $dtstartJ = $oldDtstart->format('j');
+                    $dtstartJ = (int) $oldDtstart->format('j');
                     // check old dtstart matches bydayPrefix, if not we abort
                     if ($bydayPrefix === -1) {
                         if ($oldDtstart->format('t') - $dtstartJ > 6) {
@@ -2212,7 +2212,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         break;
                     }
 
-                    $dtstartJ = $oldDtstart->format('j');
+                    $dtstartJ = (int) $oldDtstart->format('j');
                     // check old dtstart matches bydayPrefix, if not we abort
                     if ($bydayPrefix === -1) {
                         if ($oldDtstart->format('t') - $dtstartJ > 6) {
@@ -2751,7 +2751,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 ! Calendar_Controller_Alarm::hasUpdates($_event, $event)
             ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                    Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
                 return $updatedAttender;
             }
             
@@ -3129,7 +3129,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
             } catch (Exception $e) {
-                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " could not update attendee");
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " could not update attendee");
             }
         }
         
