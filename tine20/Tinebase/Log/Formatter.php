@@ -115,7 +115,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         parent::__construct($format);
         
         if (!self::$_requestId || self::$_requestId === '-') {
-            self::$_requestId = Tinebase_Record_Abstract::generateUID($this->_requestIdLength);
+            $this->setRequestId();
         }
         
         if (self::$_starttime === NULL) {
@@ -141,6 +141,17 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
                 self::$_colorize = $config->logger->colorize;
             }
         }
+    }
+
+    /**
+     * @param string|null $requestId
+     */
+    public function setRequestId(string $requestId = null)
+    {
+        if (! $requestId) {
+            $requestId = Tinebase_Record_Abstract::generateUID($this->_requestIdLength);
+        }
+        self::$_requestId = $requestId;
     }
     
     /**
@@ -219,11 +230,11 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     }
 
     /**
-     * @param $output
+     * @param string $output
      * @param array $event
      * @return string
      */
-    protected function _getFormattedOutput($output, array $event)
+    protected function _getFormattedOutput(string $output, array $event): string
     {
         if (self::$_colorize) {
             $color = $this->_getColorByPrio($event['priority']);
@@ -234,10 +245,10 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     }
 
     /**
-     * @param $logPrio
+     * @param integer $logPrio
      * @return string
      */
-    protected function _getColorByPrio($logPrio)
+    protected function _getColorByPrio($logPrio): string
     {
         switch ($logPrio) {
             case 0:
@@ -277,9 +288,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         if (self::$_username === NULL) {
             $user = Tinebase_Core::getUser();
             self::$_username = ($user && is_object($user))
-                ? (isset($user->accountLoginName)
-                    ? $user->accountLoginName
-                    : (isset($user->accountDisplayName) ? $user->accountDisplayName : NULL)) 
+                ? ($user->accountLoginName ?? ($user->accountDisplayName ?? NULL))
                 : NULL;
         }
 
@@ -295,8 +304,6 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
 
     /**
      * reset current username
-     *
-     * @return string
      */
     public static function resetUsername()
     {
@@ -305,8 +312,6 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
 
     /**
      * reset username and options
-     *
-     * @return string
      */
     public static function reset()
     {
