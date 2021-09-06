@@ -1288,16 +1288,6 @@ parameters:
 			path: tine20/Calendar/Controller/Event.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:DEBUG\\(\\)\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/Event.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:NOTICE\\(\\)\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/Event.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:doFreeBusyCleanup\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Controller/Event.php
@@ -1319,11 +1309,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getOriginalDtStart\\(\\)\\.$#"
-			count: 3
-			path: tine20/Calendar/Controller/Event.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:setId\\(\\)\\.$#"
 			count: 3
 			path: tine20/Calendar/Controller/Event.php
 
