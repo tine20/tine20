@@ -991,7 +991,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var active = !this.record.get('massMailingFlag');
 
         this.record.set('massMailingFlag', active);
-
+        this.recipientGrid.disableRecipientsCombo(active);
+        
         if (active) {
             this.massMailingInfoText.show();
             this.doLayout();
@@ -1791,10 +1792,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             if (all.length == 0) {
                 reject(me.app.i18n._('No recipients set.'));
-            }
-
-            if (me.record.get('massMailingFlag') && (cc.length > 0 || bcc.length > 0)) {
-                reject(me.app.i18n._('Mass mailing is not allowed for CC or BCC recipients. Please remove them.'));
             }
 
             if (me.button_toggleEncrypt.pressed && me.mailvelopeEditor) {

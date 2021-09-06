@@ -121,6 +121,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     viewConfig: {
         markDirty: false
     },
+
+    allowTypeSelect: true,
     
     /**
      * @private
@@ -260,6 +262,27 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         });
         
+        this.RecipientTypeCombo = new Ext.form.ComboBox({
+            typeAhead     : false,
+            triggerAction : 'all',
+            lazyRender    : true,
+            editable      : false,
+            mode          : 'local',
+            value         : null,
+            forceSelection: true,
+            lazyInit      : false,
+            store         : [
+                ['to',  app.i18n._('To:')],
+                ['cc',  app.i18n._('Cc:')],
+                ['bcc', app.i18n._('Bcc:')]
+            ],
+            listeners: {
+                focus: function(combo) {
+                    combo.onTriggerClick();
+                }
+            }
+        });
+        
         this.cm = new Ext.grid.ColumnModel([
             {
                 resizable: true,
@@ -288,26 +311,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     
                     return '<div qtip="' + qtip +'">' + result + '</div>';
                 },
-                editor: new Ext.form.ComboBox({
-                    typeAhead     : false,
-                    triggerAction : 'all',
-                    lazyRender    : true,
-                    editable      : false,
-                    mode          : 'local',
-                    value         : null,
-                    forceSelection: true,
-                    lazyInit      : false,
-                    store         : [
-                        ['to',  app.i18n._('To:')],
-                        ['cc',  app.i18n._('Cc:')],
-                        ['bcc', app.i18n._('Bcc:')]
-                    ],
-                    listeners: {
-                        focus: function(combo) {
-                            combo.onTriggerClick();
-                        }
-                    }
-                })
+                editor: this.RecipientTypeCombo
             },{
                 resizable: true,
                 menuDisabled: true,
@@ -416,6 +420,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} col
      */
     startEditing: function(row, col) {
+        if (!this.allowTypeSelect && col === 0) {
+            return;
+        }
+        
         if (! this.composeDlg || ! this.composeDlg.saving) {
             Tine.Felamimail.RecipientGrid.superclass.startEditing.apply(this, arguments);
         }
@@ -614,6 +622,18 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.store.add(new Ext.data.Record({type: type, 'address': recipients[i]}));
             }
         }
+    },
+    
+    disableRecipientsCombo(disable) {
+        if (this.store && disable) {
+            _.map(this.store.data.items, (record, index) => {
+                record.data.type = 'to';
+                this.store.removeAt(index);
+                this.store.insert(index,record);
+            })
+        }
+        
+        this.allowTypeSelect = !disable;
     }
 });
 
