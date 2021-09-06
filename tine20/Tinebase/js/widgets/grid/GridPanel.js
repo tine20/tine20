@@ -1181,8 +1181,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             ed.un('canceledit', onCancelEdit);
             
             this.pagingToolbar.refresh.disable();
-            localRecord.data.path = `${localRecord.get('path')}${localRecord.get('name')}/`;
-
             this.store.remove(localRecord);
             this.store.addSorted(localRecord);
             this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
