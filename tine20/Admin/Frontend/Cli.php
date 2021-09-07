@@ -555,4 +555,46 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "Enabled auto-move notification script for " . $enabled . " email accounts\n";
         return 0;
     }
+
+    /**
+     * update notificationScript for all system accounts
+     *
+     * usage: method=Admin.updateNotificationScripts [-d]
+     * @param $opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function updateNotificationScripts($opts)
+    {
+        $backend = Admin_Controller_EmailAccount::getInstance();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            ['field' => 'sieve_notification_email', 'operator' => 'not', 'value' => NULL],
+            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
+        ]);
+        $mailAccounts = $backend->search($filter);
+
+        if (count($mailAccounts) === 0) {
+            return 0;
+        }
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+        echo "Found " . count($mailAccounts) . " system email accounts to update\n";
+
+        $updated = 0;
+        foreach ($mailAccounts as $record) {
+            if (!$opts->d && $backend->sieveBackendSupportsMasterPassword($record)) {
+                $raii = $backend->prepareAccountForSieveAdminAccess($record->getId());
+                Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($record);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
+                $backend->removeSieveAdminAccess();
+                unset($raii);
+            }
+            $updated++;
+        }
+        echo "Updated notification script for " . $updated . " email accounts\n";
+        return 0;
+    }
 }
