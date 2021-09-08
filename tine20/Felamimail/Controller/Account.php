@@ -1081,17 +1081,22 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             return;
         }
 
-        if ($updatedRecord->sieve_notification_email != $currentRecord->sieve_notification_email) {
-            Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($updatedRecord->getId(),
-                $updatedRecord->sieve_notification_email);
-        }
+        try {
+            if ($updatedRecord->sieve_notification_email != $currentRecord->sieve_notification_email) {
+                Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($updatedRecord->getId(),
+                    $updatedRecord->sieve_notification_email);
+            }
 
-        if ($updatedRecord->sieve_notification_move !==
-            $currentRecord->sieve_notification_move
-            || $updatedRecord->sieve_notification_move_folder !==
-            $currentRecord->sieve_notification_move_folder
-        ) {
-            Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
+            if ($updatedRecord->sieve_notification_move !==
+                $currentRecord->sieve_notification_move
+                || $updatedRecord->sieve_notification_move_folder !==
+                $currentRecord->sieve_notification_move_folder
+            ) {
+                Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
+            }
+        } catch (Felamimail_Exception_SievePutScriptFail $fespsf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . ' Could not put sieve script: ' . $fespsf->getMessage());
         }
     }
 
