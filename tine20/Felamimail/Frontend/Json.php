@@ -511,10 +511,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * search accounts
      * 
-     * @param  array $filter
+     * @param array $filter
+     * @param array $paging
      * @return array
      */
-    public function searchAccounts($filter)
+    public function searchAccounts(array $filter, array $paging = [])
     {
         $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
         // add signatures and remove ADB list type from result set
