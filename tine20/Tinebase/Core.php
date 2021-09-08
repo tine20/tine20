@@ -261,7 +261,7 @@ class Tinebase_Core
             Tinebase_Log_Formatter::setTransactionId(substr($transactionId, 0, 5));
             if (Tinebase_Core::isRegistered('SENTRY')) {
                 Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($transactionId): void {
-                    $scope->setContext('transaction_id', $transactionId);
+                    $scope->setTag('transaction_id', $transactionId);
                 });
             }
         }
