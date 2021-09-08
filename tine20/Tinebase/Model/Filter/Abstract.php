@@ -123,6 +123,20 @@ abstract class Tinebase_Model_Filter_Abstract
             $this->setLabel($data['label']);
         }
     }
+
+    public function __sleep()
+    {
+        $vars = get_object_vars($this);
+        unset($vars['_db']);
+        unset($vars['_dbCommand']);
+        return array_keys($vars);
+    }
+
+    public function __wakup()
+    {
+        $this->_db = Tinebase_Core::getDb();
+        $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
+    }
     
     /**
      * returns the id of the filter
