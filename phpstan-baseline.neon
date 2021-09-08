@@ -1103,31 +1103,6 @@ parameters:
 			path: tine20/Admin/Controller/User.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_opts\\)\\: Unexpected token \"\\$_opts\", expected type at offset 106$#"
-			count: 1
-			path: tine20/Admin/Frontend/Cli.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$filename\\)\\: Unexpected token \"\\$filename\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Admin/Frontend/Cli.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$opts\\)\\: Unexpected token \"\\$opts\", expected type at offset 207$#"
-			count: 1
-			path: tine20/Admin/Frontend/Cli.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$opts\\)\\: Unexpected token \"\\$opts\", expected type at offset 88$#"
-			count: 1
-			path: tine20/Admin/Frontend/Cli.php
-
-		-
-			message: "#^Undefined variable\\: \\$csv$#"
-			count: 1
-			path: tine20/Admin/Frontend/Cli.php
-
-		-
 			message: "#^Call to method toArray\\(\\) on an unknown class Tinebase_RecordSet_Application\\.$#"
 			count: 2
 			path: tine20/Admin/Frontend/Json.php
@@ -7691,11 +7666,6 @@ parameters:
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Core.php
-
-		-
-			message: "#^Constant TINE20_BUILDTYPE not found\\.$#"
 			count: 1
 			path: tine20/Tinebase/Core.php
 

@@ -42,9 +42,9 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * create system groups for addressbook lists that don't have a system group
      *
-     * @param $_opts
+     * @param Zend_Console_Getopt $_opts
      */
-    public function createSystemGroupsForAddressbookLists($_opts)
+    public function createSystemGroupsForAddressbookLists(Zend_Console_Getopt $_opts)
     {
         $_filter = new Addressbook_Model_ListFilter();
 
@@ -253,9 +253,9 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * usage: method=Admin.synchronizeGroupAndListMembers [-d]
      *
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      */
-    public function synchronizeGroupAndListMembers($opts)
+    public function synchronizeGroupAndListMembers(Zend_Console_Getopt $opts)
     {
         $this->_checkAdminRight();
 
@@ -347,13 +347,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * @param $filename
+     * @param string $filename
      * @return false|string
      */
-    protected function _checkSanitizeFilename($filename)
+    protected function _checkSanitizeFilename(string $filename)
     {
         if (!file_exists($filename)) {
-            $filename = getcwd() . DIRECTORY_SEPARATOR . $csv;
+            $filename = getcwd() . DIRECTORY_SEPARATOR . 'csv';
             if (!file_exists($filename)) {
                 echo "file not found: " . $filename . "\n";
                 return false;
@@ -507,10 +507,10 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * usage: method=Admin.enableAutoMoveNotificationsinSystemEmailAccounts [-d] -- [folder=Benachrichtigungen]
      *
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @return int
      */
-    public function enableAutoMoveNotificationsinSystemEmailAccounts($opts)
+    public function enableAutoMoveNotificationsinSystemEmailAccounts(Zend_Console_Getopt $opts)
     {
         $systemAccounts = Admin_Controller_EmailAccount::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
@@ -560,12 +560,12 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * update notificationScript for all system accounts
      *
      * usage: method=Admin.updateNotificationScripts [-d]
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @return int
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_Validation
      */
-    public function updateNotificationScripts($opts)
+    public function updateNotificationScripts(Zend_Console_Getopt $opts)
     {
         $backend = Admin_Controller_EmailAccount::getInstance();
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
