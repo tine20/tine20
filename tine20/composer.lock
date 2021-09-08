@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "015e8109da8c890849acf62e1f042f26",
+    "content-hash": "e91b6e62d3bb4a9058dde2661dde8bb6",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -4230,11 +4230,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl44",
+            "version": "1.12.20pl49",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "5deb9609a417ed06f999985a9d5c0adb742a54a3"
+                "reference": "3234beef3594b68b7963920e883bc52eb5a4caca"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -4251,7 +4251,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2021-03-29T10:26:36+00:00"
+            "time": "2021-09-08T08:24:12+00:00"
         }
     ],
     "packages-dev": [
@@ -5848,40 +5848,40 @@
     ],
     "aliases": [
         {
-            "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0",
+            "package": "doctrine/dbal",
             "version": "2.5.13.0-patch6",
-            "package": "doctrine/dbal"
+            "alias": "v2.5.13",
+            "alias_normalized": "2.5.13.0"
         },
         {
-            "alias": "v2.5.14",
-            "alias_normalized": "2.5.14.0",
+            "package": "doctrine/orm",
             "version": "2.5.14.0-patch1",
-            "package": "doctrine/orm"
+            "alias": "v2.5.14",
+            "alias_normalized": "2.5.14.0"
         },
         {
-            "alias": "1.10.1",
-            "alias_normalized": "1.10.1.0",
+            "package": "phpoffice/phpspreadsheet",
             "version": "1.10.1.0-patch3",
-            "package": "phpoffice/phpspreadsheet"
+            "alias": "1.10.1",
+            "alias_normalized": "1.10.1.0"
         },
         {
-            "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0",
+            "package": "phpoffice/phpword",
             "version": "0.14.0.0",
-            "package": "phpoffice/phpword"
+            "alias": "v0.13.0",
+            "alias_normalized": "0.13.0.0"
         },
         {
-            "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
+            "package": "sabre/vobject",
             "version": "3.5.3.0-patch1",
-            "package": "sabre/vobject"
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0"
         },
         {
+            "package": "zendframework/zendframework1",
+            "version": "1.12.20.0-patch49",
             "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch44",
-            "package": "zendframework/zendframework1"
+            "alias_normalized": "1.12.20.0"
         }
     ],
     "minimum-stability": "stable",
@@ -5914,5 +5914,6 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    }
+    },
+    "plugin-api-version": "2.0.0"
 }
