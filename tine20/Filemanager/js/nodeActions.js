@@ -173,8 +173,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                     addGrant: true,
                     editGrant: true,
                     deleteGrant: true
-                },
-                path: `${currentPath}`
+                }
             }));
             
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
@@ -384,7 +383,6 @@ Tine.Filemanager.nodeActions.Delete = {
                                 data: record.data
                             });
                         });
-
                         await Tine.Filemanager.deleteNodes(_.map(nodes, 'data.path'));
                     } catch (e) {
                         Tine.Tinebase.ExceptionHandler.handleRequestException(e.data);
