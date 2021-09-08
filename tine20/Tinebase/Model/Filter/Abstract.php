@@ -63,6 +63,16 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_dbCommand;
 
     /**
+     * @var Zend_Db_Adapter_Abstract|null
+     */
+    protected $_db;
+
+    /**
+     * @var array
+     */
+    protected $_opSqlMap;
+
+    /**
      * filter is implicit, this is returned in toArray
      * - this is only needed to detect acl filters that have been added by a controller
      * 
@@ -241,7 +251,7 @@ abstract class Tinebase_Model_Filter_Abstract
      *
      * @param string $_operator
      * @param array $_allowedParams
-     * @param array &$_operatorParams
+     * @param array $_operatorParams
      * @return string
      */
     protected function _parseOperator($_operator, array $_allowedParams, &$_operatorParams)
@@ -347,7 +357,6 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * set implicit
      *
-     * @param  boolean optional
      * @return boolean
      */
     public function isImplicit()
