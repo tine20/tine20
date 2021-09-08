@@ -132,7 +132,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
             }
         }
         // remove from redis
-        $this->_redis->lRemove($this->_daemonStructName ,     $jobId, 0);
+        $this->_redis->lRem($this->_daemonStructName ,     $jobId, 0);
         $this->_redis->delete ($this->_dataStructName . ":" . $jobId);
     }
     
@@ -242,7 +242,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $this->_redis->multi()
             ->hIncrBy($this->_dataStructName . ":" . $jobId, 'retry' , 1)
             ->hSet($this->_dataStructName . ':' . $jobId, 'time', time())
-            ->lRemove($this->_daemonStructName , $jobId)
+            ->lRem($this->_daemonStructName , $jobId)
             ->lPush  ($this->_queueStructName,   $jobId)
             ->exec();
     }
