@@ -172,10 +172,30 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $this->_skipWithoutEmailSystemAccountConfig();
 
         $accountData = $this->_getUserArrayWithPw();
-        unset($accountData['accountEmailAddress']);
+        $emailUser = array (
+            'emailMailQuota' => 0,
+            'emailMailSize' => 0,
+            'emailSieveQuota' => 0,
+            'emailSieveSize' => 0,
+            'emailLastLogin' => '',
+            'emailForwardOnly' => false,
+            'emailAddress' => '',
+            'emailUsername' => '',
+            'emailAliases' => [],
+            'emailForwards' => []
+        );
+        $accountData['emailUser'] = $emailUser;
+        $accountData['accountEmailAddress'] = '';
         $account = $this->_json->saveUser($accountData);
 
         self::assertEmpty($account['accountEmailAddress']);
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $account['accountId']]
+        ]);
+        $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+        self::assertCount(0, $emailAccounts,'empty mail account created: ' . print_r($emailAccounts->toArray(), true));
+
         // assert no email account has been created
         self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user found!');
         self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user found!');
