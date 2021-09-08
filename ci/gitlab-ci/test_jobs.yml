@@ -1,4 +1,5 @@
 "check php version":
+  extends: .abstract_jobs.copy_source
   stage: test
   variables:
     ARG_IMAGE: test-source
@@ -6,8 +7,8 @@
     - docker_build_source
   script:
     - echo "PHP version shoud be ${PHP_VERSION}."
-    - echo "PHP version is $(php -r 'echo PHP_VERSION;')"
-    - "[[ $(php -r 'echo PHP_VERSION;') == $PHP_VERSION.* ]]"
+    - php -r "echo 'PHP version is'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;"
+    - php -r "if (version_compare(PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION, '${PHP_VERSION}', '!=')) exit(1);"
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never

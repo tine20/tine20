@@ -192,12 +192,12 @@ function make_image() {
     case "${php_version}" in
         7.3)
             alpine_php_repository_branch=v3.12
-            alpine_php_repository_repository=main
+            alpine_php_repository_repository=community
             alpine_php_package=php7
             ;;
         7.4)
-            alpine_php_repository_branch=edge
-            alpine_php_repository_repository=main
+            alpine_php_repository_branch=v3.14
+            alpine_php_repository_repository=community
             alpine_php_package=php7
             ;;
         8.0)

@@ -229,7 +229,7 @@
     - *abstract_jobs-dovecot_service
     - *abstract_jobs-tine_as_service
   image:
-    name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.3
+    name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.4
   before_script:
     - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; fi
     - printf "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}\nCUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}\nCUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}\nCUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" > /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_as_service.env

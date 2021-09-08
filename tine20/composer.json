@@ -119,7 +119,7 @@
     "zendframework/zend-http": "^2",
     "zendframework/zend-httphandlerrunner": "^1.1",
     "zendframework/zend-stratigility": "^3.2",
-    "zendframework/zendframework1": "1.12.20pl44 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl49 as 1.12.20"
   },
   "require-dev": {
     "phing/phing": "2.16.*",
