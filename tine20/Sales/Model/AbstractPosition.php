@@ -97,8 +97,14 @@ class Sales_Model_AbstractPosition extends Tinebase_Record_NewAbstract
     // Autrags belegposition die use_actual_quantity haben müssen verknüpfung zum konkreten leistungsnachweis (accountable)
     // im rahmen der leistungserfassung werden die tatsächlichen "Anzahl-Werte" ermittelt
 
-    // @TODO: wie findet beleg zum template
-    //        kann abhängen von gruppe und status (ggf. status noch in textbausteine aufnehmen)
+
+    // Belegdruck:
+    //  - im Hintergrund word export + pdf konvertierung
+    //  - im UI nicht export btn sondern spezial btn mit eigener API (speichert, generiert syncron, liefert ganzen record zurück, ...)
+    //    - vermutlich zwei buttons: drucken (proforma solang ungebucht, buchen und drucken)
+    //  - pro documenttype ein template und eine export-definition (namenskonvention) (btn parametrisiert den export)
+    //  - erst mal keine separaten templates pro kategorie, wenn wir das brauchen z.B. definition entsprechend benamen (namenskonvention)
+
     // @TODO: Vertäge - wie passt das rein? Klammer / auch im Standard? Muss es den geben?
     // @TODO: Preisstaffeln
     
