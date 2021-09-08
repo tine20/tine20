@@ -152,10 +152,7 @@
   "scripts": {
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
     "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
-    "build": "./vendor/bin/phing",
-    "post-install-cmd": [
-      "git submodule update --init"
-    ]
+    "build": "./vendor/bin/phing"
   },
   "support": {
     "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
