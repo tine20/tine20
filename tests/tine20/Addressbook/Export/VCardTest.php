@@ -26,6 +26,9 @@ class Addressbook_Export_VCardTest extends TestCase
         }
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testExportPersonalContainer()
     {
         $this->_testNeedsTransaction();
@@ -72,6 +75,9 @@ class Addressbook_Export_VCardTest extends TestCase
         return implode(',', $output);
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testExportIntoFile()
     {
         $this->_testNeedsTransaction();
@@ -87,6 +93,9 @@ class Addressbook_Export_VCardTest extends TestCase
         self::assertStringContainsString('END:VCARD', $result);
     }
 
+    /**
+     * @group nodockerci
+     */
     public function testExportAllAddressbooks()
     {
         $this->_testNeedsTransaction();

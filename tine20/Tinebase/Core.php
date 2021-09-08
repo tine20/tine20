@@ -549,8 +549,10 @@ class Tinebase_Core
 
         // be aware of race condition between is_file and include_once => somebody may have deleted the file
         // yes it does get deleted! => check result of include_once
-        if (TINE20_BUILDTYPE !== 'DEVELOPMENT' && is_file($cacheFile) && true === @include_once($cacheFile) &&
-                class_exists('Tine20Container')) {
+        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE !== 'DEVELOPMENT' &&
+            is_file($cacheFile) && true === @include_once($cacheFile) &&
+            class_exists('Tine20Container'))
+        {
             /** @noinspection PhpUndefinedClassInspection */
             $container = new Tine20Container();
         } else {
@@ -2433,7 +2435,7 @@ class Tinebase_Core
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
 
-        if (! defined('TINE20_CODENAME')) {
+        if (! defined('TINE20_CODENAME') || ! defined('TINE20_PACKAGESTRING')) {
             self::setupBuildConstants();
         }
 
@@ -2442,7 +2444,9 @@ class Tinebase_Core
             'max_breadcrumbs' => 50,
             'error_types' => Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL},
             'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
-            'environment' => TINE20_BUILDTYPE === 'DEVELOPMENT' ? 'development' : 'production',
+            'environment' => defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT'
+                ? 'development'
+                : 'production',
             'tags' => [
                 'php_version' => phpversion(),
                 'tine_url' => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL) ?: 'unknown',
