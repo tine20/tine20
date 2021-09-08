@@ -8,12 +8,13 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
-use \Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\DBAL\Schema\Comparator;
-use Doctrine\Common\Persistence\Mapping\StaticReflectionService;
-use \Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
+use Doctrine\Persistence\Mapping\StaticReflectionService;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * helper around docrine2/dbal schema tools
@@ -101,8 +102,7 @@ class Setup_SchemaTool
         // TODO we could use the tine20 redis cache here if configured (see \Doctrine\ORM\Tools\Setup::createConfiguration)
         // but as createConfiguration() tries to setup a redis cache if redis extension is available, we need to
         // setup a manual ArrayCache for the moment
-        $cache = new \Doctrine\Common\Cache\ArrayCache();
-        $config = Setup::createConfiguration(/* isDevMode = */ false, /* $proxyDir = */ null, $cache);
+        $config = Setup::createConfiguration(/* isDevMode = */ false, /* $proxyDir = */ null, DoctrineProvider::wrap(new ArrayAdapter()));
         return $config;
     }
 

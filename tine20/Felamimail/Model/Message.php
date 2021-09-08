@@ -197,7 +197,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      */
     public static function createFromMime($_mimeContent)
     {
-        $message = \ZBateson\MailMimeParser\Message::from($_mimeContent);
+        $message = \ZBateson\MailMimeParser\Message::from($_mimeContent, false);
 
         $data = [];
         foreach (['date' => 'sent'] as $headerKey => $property) {

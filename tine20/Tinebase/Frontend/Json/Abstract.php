@@ -795,6 +795,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
             // resolve custom fields by default
             $modelController->resolveCustomfields(true);
+            if (!isset($args[0])) {
+                $args[0] = '';
+            }
             switch ($apiMethod) {
                 case 'get':
                     return $this->_get($args[0], $modelController);
@@ -804,6 +807,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                     break;
                 case 'search':
                     $filterName = $this->_applicationName . '_Model_' . $model . 'Filter';
+                    if (!isset($args[1])) {
+                        $args[1] = '';
+                    }
                     return $this->_search($args[0], $args[1], $modelController, $filterName, /* $_getRelations */ true);
                     break;
                 case 'delete':
@@ -812,6 +818,15 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 case 'import':
                     // model controller is not needed - but we fetch it for checking if model exists and user has run right
                     // $tempFileId, $definitionId, $importOptions, $clientRecordData
+                    if (!isset($args[1])) {
+                        $args[1] = '';
+                    }
+                    if (!isset($args[2])) {
+                        $args[2] = [];
+                    }
+                    if (!isset($args[3])) {
+                        $args[3] = [];
+                    }
                     return $this->_import($args[0], $args[1], $args[2], $args[3]);
                     break;
             }

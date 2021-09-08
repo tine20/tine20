@@ -509,20 +509,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function _getContentXML($filename)
     {
-        $zipHandler = zip_open($filename);
-        
-        do {
-            $entry = zip_read($zipHandler);
-        } while ($entry && zip_entry_name($entry) != "content.xml");
-        
-        // open entry
-        zip_entry_open($zipHandler, $entry, "r");
+        $zipHandler = new ZipArchive();
+        $zipHandler->open($filename);
         
         // read entry
-        $entryContent = zip_entry_read($entry, zip_entry_filesize($entry));
+        $entryContent = $zipHandler->getFromName('content.xml');
+        $zipHandler->close();
         
         $xml = simplexml_load_string($entryContent);
-        zip_close($zipHandler);
         
         return $xml;
     }
