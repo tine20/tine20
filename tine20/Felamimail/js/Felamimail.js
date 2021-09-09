@@ -180,6 +180,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         };
 
         /**
+         * returns draftsfolder id
+         */
+        Tine.Felamimail.Model.Account.prototype.getDraftFolderId = function() {
+            return this.getSpecialFolderId('drafts_folder');
+        };
+
+        /**
          * returns special folder id
          *
          * @param {String} nameProperty
