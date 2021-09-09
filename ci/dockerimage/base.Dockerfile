@@ -26,6 +26,7 @@ RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/
                                   ${ALPINE_PHP_PACKAGE}-pdo_mysql \
                                   ${ALPINE_PHP_PACKAGE}-soap \
                                   ${ALPINE_PHP_PACKAGE}-sockets \
+                                  ${ALPINE_PHP_PACKAGE}-sodium \
                                   ${ALPINE_PHP_PACKAGE}-zip \
                                   ${ALPINE_PHP_PACKAGE}-xsl \
                                   ${ALPINE_PHP_PACKAGE}-intl \
@@ -87,6 +88,7 @@ RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PH
                                   ${ALPINE_PHP_PACKAGE}-pdo_mysql \
                                   ${ALPINE_PHP_PACKAGE}-soap \
                                   ${ALPINE_PHP_PACKAGE}-sockets \
+                                  ${ALPINE_PHP_PACKAGE}-sodium \
                                   ${ALPINE_PHP_PACKAGE}-zip \
                                   ${ALPINE_PHP_PACKAGE}-xsl \
                                   ${ALPINE_PHP_PACKAGE}-intl \
