@@ -586,7 +586,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach ($mailAccounts as $record) {
             if (!$opts->d && $backend->sieveBackendSupportsMasterPassword($record)) {
                 $raii = $backend->prepareAccountForSieveAdminAccess($record->getId());
-                Felamimail_Controller_Account::getInstance()->autoCreateMoveNotifications($record);
+                Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($record->getId(),
+                    $record->sieve_notification_email);
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
                 $backend->removeSieveAdminAccess();
