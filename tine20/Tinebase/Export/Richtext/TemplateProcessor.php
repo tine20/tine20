@@ -625,7 +625,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
      * @return string|null
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function cloneBlock($blockname, $clones = 1, $replace = true)
+    public function cloneBlock($blockname, $clones = 1, $replace = true, $indexVariables = false, $variableReplacements = null)
     {
         throw new Tinebase_Exception_NotImplemented('do not use this function! ' . __METHOD__);
     }
