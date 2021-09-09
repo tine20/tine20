@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e91b6e62d3bb4a9058dde2661dde8bb6",
+    "content-hash": "ad117ce4a8175469216a1ca5ba704e61",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1741,17 +1741,11 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2",
+            "version": "1.8.2pl1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PHPOffice/PHPExcel.git",
-                "reference": "1441011fb7ecdd8cc689878f54f8b58a6805f870"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/1441011fb7ecdd8cc689878f54f8b58a6805f870",
-                "reference": "1441011fb7ecdd8cc689878f54f8b58a6805f870",
-                "shasum": ""
+                "url": "https://github.com/tine20/PHPExcel.git",
+                "reference": "6bf8ac8ab6db112739d19db6e06b0da6758af80a"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -1768,7 +1762,6 @@
                     "PHPExcel": "Classes/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL-2.1"
             ],
@@ -1778,29 +1771,28 @@
                     "homepage": "http://blog.maartenballiauw.be"
                 },
                 {
-                    "name": "Erik Tilt"
+                    "name": "Mark Baker",
+                    "homepage": "http://markbakeruk.net"
                 },
                 {
                     "name": "Franck Lefevre",
                     "homepage": "http://rootslabs.net"
                 },
                 {
-                    "name": "Mark Baker",
-                    "homepage": "http://markbakeruk.net"
+                    "name": "Erik Tilt"
                 }
             ],
             "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
             "homepage": "https://github.com/PHPOffice/PHPExcel",
             "keywords": [
+                "Excel",
                 "OpenXML",
-                "excel",
-                "php",
+                "PHP",
                 "spreadsheet",
                 "xls",
                 "xlsx"
             ],
-            "abandoned": "phpoffice/phpspreadsheet",
-            "time": "2018-11-22T23:07:24+00:00"
+            "time": "2021-09-09T08:33:48+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -5858,6 +5850,12 @@
             "version": "2.5.14.0-patch1",
             "alias": "v2.5.14",
             "alias_normalized": "2.5.14.0"
+        },
+        {
+            "package": "phpoffice/phpexcel",
+            "version": "1.8.2.0-patch1",
+            "alias": "1.8.2",
+            "alias_normalized": "1.8.2.0"
         },
         {
             "package": "phpoffice/phpspreadsheet",
