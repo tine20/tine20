@@ -6750,7 +6750,7 @@ parameters:
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
-			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:lGet\\(\\)\\.$#"
+			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:lindex\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
@@ -6765,7 +6765,7 @@ parameters:
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
-			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:lRemove\\(\\)\\.$#"
+			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:lRem\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
@@ -10400,27 +10400,7 @@ parameters:
 			path: tine20/Tinebase/Model/EmailUser/Forward.php
 
 		-
-			message: "#^Access to an undefined property Tinebase_Model_Filter_Abstract\\:\\:\\$_db\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_Filter_Abstract\\:\\:\\$_opSqlMap\\.$#"
-			count: 2
-			path: tine20/Tinebase/Model/Filter/Abstract.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:search\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(array &\\$_operatorParams\\)\\: Unexpected token \"&\", expected variable at offset 499$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(boolean optional\\)\\: Unexpected token \"optional\", expected variable at offset 54$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/Abstract.php
 
