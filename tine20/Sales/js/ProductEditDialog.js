@@ -33,21 +33,22 @@ Ext.namespace('Tine.Sales');
 Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 800,
     windowHeight: 600,
-    displayNotes: true,
+    // displayNotes: true,
     
-    onRecordLoad: function() {
-        Tine.Sales.ProductEditDialog.superclass.onRecordLoad.call(this);
-        
-        if (! this.copyRecord && ! this.record.id) {
-            this.window.setTitle(this.app.i18n._('Add New Product'));
-        }
-    },
+    // onRecordLoad: function() {
+    //     Tine.Sales.ProductEditDialog.superclass.onRecordLoad.call(this);
+    //    
+    //     if (! this.copyRecord && ! this.record.id) {
+    //         this.window.setTitle(this.app.i18n._('Add New Product'));
+    //     }
+    // },
+    
     /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
      */
-    getFormItems: function() {
+    getFormItems2: function() {
         return {
             xtype: 'tabpanel',
             plain:true,

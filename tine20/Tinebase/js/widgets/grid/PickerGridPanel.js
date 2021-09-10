@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,19 +12,19 @@ Ext.ns('Tine.widgets.grid');
 
 /**
  * Picker GridPanel
- * 
+ *
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.PickerGridPanel
  * @extends     Ext.grid.GridPanel
- * 
+ *
  * <p>Picker GridPanel</p>
  * <p><pre>
  * </pre></p>
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  * @param       {Object} config
  * @constructor
  * Create a new Tine.widgets.grid.PickerGridPanel
@@ -52,63 +52,69 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * enable top toolbar (with search combo)
      */
     enableTbar: true,
-    
+
     /**
      * store to hold records
-     * 
+     *
      * @type Ext.data.Store
      * @property store
      */
     store: null,
-    
+
     /**
      * record class
      * @cfg {Tine.Tinebase.data.Record} recordClass
      */
     recordClass: null,
-    
+
     /**
      * defaults for new records of this.recordClass
      * @cfg {Object} recordClass
      */
     recordDefaults: null,
-    
+
+    /**
+     * refIdField for new dependend records
+     * @cfg {String} refIdField
+     */
+    refIdField: null,
+
     /**
      * record class
      * @cfg {Tine.Tinebase.data.Record} recordClass
      */
     searchRecordClass: null,
-    
+
     /**
      * search combo config
      * @cfg {} searchComboConfig
      */
     searchComboConfig: null,
-    
+
     /**
      * is the row selected after adding?
      * @type Boolean
      */
     selectRowAfterAdd: true,
-    
+
     /**
      * is the row highlighted after adding?
      * @type Boolean
      */
     highlightRowAfterAdd: false,
-    
+
     /**
      * @type Ext.Menu
      * @property contextMenu
      */
     contextMenu: null,
-    
+
     /**
      * @cfg {Array} contextMenuItems
      * additional items for contextMenu
      */
     contextMenuItems: null,
-    
+
     /**
      * @cfg {Array} Array of column's config objects where the config options are in
      */
@@ -124,7 +130,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * allow to create new records (local mode only atm.!)
      */
     allowCreateNew: false,
-    
+
     /**
      * config spec for additionalFilters - passed to RecordPicker
      *
@@ -135,8 +141,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     additionalFilterSpec: null,
 
-    cls: 'x-wdgt-pickergrid',
+    parentEditDialog: null,
 
+    cls: 'x-wdgt-pickergrid',
     /**
      * @private
      */
@@ -151,15 +158,15 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         this.searchComboConfig = this.searchComboConfig || {};
         this.searchComboConfig.additionalFilterSpec = this.additionalFilterSpec;
-        
+
         this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
-        this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || _('Record') : _('Record'));
-        
+        this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || i18n._('Record') : i18n._('Record'));
+
         if (String(this.labelField).match(/{/)) {
             this.labelField = this.labelField.match(/(?:{{\s*)(\w+)/)[1];
         }
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
-        
+
         this.initStore();
         this.initGrid();
         this.initActionsAndToolbars();
@@ -167,10 +174,18 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.on('afterrender', this.onAfterRender, this);
         this.on('rowdblclick', this.onRowDblClick, this);
 
+        if (! this.editDialogConfig?.mode) {
+            this.editDialogConfig = this.editDialogConfig || {};
+            this.editDialogConfig.mode = (!this.refIdField || !this.recordClass.getModelConfiguration().fields[this.refIdField]?.config?.dependentRecords) ? 'remote' : 'local';
+        }
         Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
     },
 
     onAfterRender: function() {
+        this.parentEditDialog = this.findParentBy(function (c) {
+            return c instanceof Tine.widgets.dialog.EditDialog
+        });
+
         this.setReadOnly(this.readOnly);
     },
 
@@ -205,7 +220,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initStore: function() {
-        
+
         if (!this.store) {
             this.store = new Ext.data.SimpleStore({
                 sortInfo: this.defaultSortInfo || {
@@ -215,7 +230,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 fields: this.recordClass
             });
         }
-        
+
         // focus+select new record
         this.store.on('add', this.focusAndSelect, this);
         this.store.on('beforeload', this.showLoadMask, this);
@@ -249,8 +264,20 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             handler: this.onCreate,
             iconCls: 'action_add'
         });
-        
-        this.actionRemove = new Ext.Action({
+
+        this.actionEdit = new Ext.Action({
+            text: String.format(i18n._('Edit {0}'), this.recordName),
+            hidden: !this.recordClass || !(this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass)),
+            scope: this,
+            handler: () => {
+                const record = this.selModel.getSelected();
+                const row = this.store.indexOf(record);
+                this.onRowDblClick(this, row, )
+            },
+            iconCls: 'action_edit'
+        });
+
+        this.actionRemove = this.deleteAction = new Ext.Action({
             text: String.format(i18n._('Remove {0}'), this.recordName),
             disabled: true,
             scope: this,
@@ -266,6 +293,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         this.actionUpdater.addActions([
             this.actionCreate,
+            this.actionEdit,
             this.actionRemove
         ]);
 
@@ -273,15 +301,15 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.actionUpdater.updateActions(sm);
         }, this);
 
-        var contextItems = [this.actionCreate, this.actionRemove];
+        var contextItems = [this.actionCreate, this.actionEdit, this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
                 key:   'Tinebase-MainContextMenu'
             }],
-            items: contextItems.concat(this.contextMenuItems)
+            items: contextItems.concat(this.contextMenuItems || [])
         });
-        
+
         // removes temporarily added items
         this.contextMenu.on('hide', function() {
             if(this.contextMenu.hasOwnProperty('tempItems') && this.contextMenu.tempItems.length) {
@@ -291,13 +319,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
             this.contextMenu.tempItems = [];
         }, this);
-        
+
         if (this.enableBbar) {
             this.bbar = new Ext.Toolbar({
                 items: [
                     this.actionCreate,
+                    this.actionEdit,
                     this.actionRemove
-                ].concat(this.contextMenuItems)
+                ].concat(this.contextMenuItems || [])
             });
         }
 
@@ -305,7 +334,11 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.initTbar();
         }
     },
-    
+
+    actionRemoveUpdater: function(action, grants, records) {
+        action.setDisabled(this.readOnly || !records.length);
+    },
+
     /**
      * init top toolbar
      */
@@ -320,27 +353,27 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         });
     },
-    
+
     onTbarResize: function(tbar) {
         if (tbar.items.getCount() == 1) {
             var combo = tbar.items.get(0),
                 gridWidth = this.getGridEl().getWidth(),
                 offsetWidth = combo.getEl() ? combo.getEl().getLeft() - this.getGridEl().getLeft() : 0;
-            
+
             if (tbar.items.getCount() == 1) {
                 tbar.items.get(0).setWidth(gridWidth - offsetWidth);
             }
         }
     },
-    
+
     /**
      * init grid (column/selection model, ctx menu, ...)
      */
     initGrid: function() {
         this.colModel = this.getColumnModel();
-        
+
         this.selModel = new Ext.grid.RowSelectionModel({multiSelect:true});
-        
+
         // remove non-plugin config columns
         var nonPluginColumns = [];
         for (var i=0; i < this.configColumns.length; i++) {
@@ -353,13 +386,13 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         this.plugins = this.configColumns;
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}))
-    
-        // on selectionchange handler
-        this.selModel.on('selectionchange', function(sm) {
-            var rowCount = sm.getCount();
-            this.actionRemove.setDisabled(this.readOnly || rowCount == 0);
-        }, this);
-        
+
+        // // on selectionchange handler
+        // this.selModel.on('selectionchange', function(sm) {
+        //     var rowCount = sm.getCount();
+        //     this.actionRemove.setDisabled(this.readOnly || rowCount == 0);
+        // }, this);
+
         // on rowcontextmenu handler
         this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
 
@@ -368,7 +401,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             forceFit: true
         };
     },
-    
+
     /**
      * take columns property if defined, otherwise create columns from record class propery
      * @return {}
@@ -410,7 +443,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         return this.colModel;
     },
-    
+
     /**
      * that's the context menu handler
      * @param {} grid
@@ -419,17 +452,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onRowContextMenu: function(grid, row, e) {
         e.stopEvent();
-        
+
         this.fireEvent('beforecontextmenu', grid, row, e);
-        
+
         var selModel = grid.getSelectionModel();
         if(!selModel.isSelected(row)) {
             selModel.selectRow(row);
         }
-        
+
         this.contextMenu.showAt(e.getXY());
     },
-    
+
     /**
      * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox|this.searchComboClass}
      */
@@ -450,10 +483,10 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         return this.searchCombo;
     },
-    
+
     /**
      * Is called when a record gets selected in the picker combo
-     * 
+     *
      * @param {Ext.form.ComboBox} picker
      * @param {Record} recordToAdd
      */
@@ -462,20 +495,20 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (! recordToAdd) {
            return;
         }
-        
-        var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.recordDefaults || {}), recordToAdd.id);
-        
+
+        var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
+
         // check if already in
         if (! this.store.getById(record.id)) {
             this.store.add([record]);
             this.fireEvent('add', this, [record]);
         }
-        
+
         picker.reset();
     },
 
     onCreate: function() {
-        const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.recordDefaults || {}), this.recordClass);
+        const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
         const editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
 
         editDialogClass.openWindow(_.assign({
@@ -489,10 +522,19 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }, this.editDialogConfig || {}));
     },
-    
+
+    getRecordDefaults: function() {
+        const defaults = {...this.recordDefaults || {} };
+        if (this.refIdField) {
+            defaults[this.refIdField] = this.parentEditDialog.record.getId();
+        }
+
+        return defaults;
+    },
+
     /**
      * remove handler
-     * 
+     *
      * @param {} button
      * @param {} event
      */
@@ -502,7 +544,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.store.remove(selectedRows[i]);
         }
     },
-    
+
     /**
      * key down handler
      * @private
@@ -510,7 +552,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onKeyDown: function(e){
         // no keys for quickadds etc.
         if (e.getTarget('input') || e.getTarget('textarea')) return;
-        
+
         switch (e.getKey()) {
             case e.A:
                 // select all records
@@ -582,8 +624,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getName: Ext.form.Field.prototype.getName,
     validate: function() { return true; },
 
-    // NOTE: picker picks independed records - so lets support to open them w.o. restirctions
-    // NO: it might also pick / create /edit depended records - how to detect this?
+    // NOTE: shared with Tine.widgets.grid.QuickaddGridPanel
     onRowDblClick: function(grid, row, col) {
         var me = this,
             editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(me.recordClass),

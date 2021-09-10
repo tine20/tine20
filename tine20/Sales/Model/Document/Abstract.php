@@ -33,27 +33,33 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     const FLD_DOCUMENT_DATE = 'date'; // Belegdatum NICHT Buchungsdatum, das kommt noch unten
     const FLD_PAYMENT_METHOD = 'payment_method'; // Sales_Model_PaymentMethod KeyField
     const FLD_POSITIONS = 'positions'; // virtuell recordSet
-    
-    const FLD_NET_SUM = 'net_sum';
-    
+
+
+
+    const FLD_POSITIONS_NET_SUM = 'positions_net_sum';
+    const FLD_POSITIONS_DISCOUNT_SUM = 'positions_discount_sum';
+
     const FLD_INVOICE_DISCOUNT_TYPE = 'invoice_discount_type'; // PERCENTAGE|SUM
     const FLD_INVOICE_DISCOUNT_PERCENTAGE = 'invoice_discount_percentage'; // automatische Berechnung je nach tupe
     const FLD_INVOICE_DISCOUNT_SUM = 'invoice_discount_sum'; // automatische Berechnung je nach type
-    
+
+    const FLD_NET_SUM = 'net_sum';
+
     const FLD_SALES_TAX = 'sales_tax';
+    const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
     const FLD_GROSS_SUM = 'gross_sum';
-    
+
     const FLD_COST_CENTER_ID = 'cost_center_id';
     const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
 
     const FLD_BOOKING_DATE = 'booking_date'; // ggf. nur bei Rechnung ud. Storno
-    
+
     // jedes dokument bekommt noch:
     // <dokumentenart>_TYPE z.B Rechnungsart (Beitragsrechnung, Service, ...) keyfield mit metadaten wie z.B. template, textbausteine etc.
     //   vermutlich nicht änderbar?
     // <dokumentenart>_STATUS z.B. Rechnungsstatus (Ungebucht, Gebucht, Verschickt, Bezahlt)
     //   übergänge haben regeln (siehe SAAS mechanik)
-    
+
     // OFFER:
     //  - OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
 
@@ -77,7 +83,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     // - DELIVERY_STATUS // keyfield erstellt(Ungebucht, offen), geliefert(gebucht, abgeschlossen)
     //    NOTE: man könnte einen ungebuchten Status als Packliste einführen z.B. Packliste(ungebucht, offen)
 
-    // INVOICE: 
+    // INVOICE:
     //  - IS_REVERSED bool // storno
     //  - INVOICE_REPORTING enum (AUTO|MANU) // Rechnungslegung
     //  - INVOICE_TYPE (jetziger TYPE) // Rechnungsart (Rechnung/Storno)
@@ -96,7 +102,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     protected static $_modelConfiguration = [
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::RECORD_NAME                   => 'Document', // ngettext('Document', 'Documents', n)
-        self::RECORDS_NAME                  => 'Documents',
+        self::RECORDS_NAME                  => 'Documents', // gettext('GENDER_Document')
         self::TITLE_PROPERTY                => self::FLD_DOCUMENT_NUMBER,
         self::MODLOG_ACTIVE                 => true,
         self::EXPOSE_JSON_API               => true,
@@ -115,6 +121,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS                        => [
+            self::FLD_DOCUMENT_CATEGORY => [
+                self::LABEL                 => 'Category', // _('Category')
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Sales_Config::DOCUMENT_CATEGORY,
+            ],
             self::FLD_DOCUMENT_NUMBER => [
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING, // @TODO nummerkreise sollen zentral confbar sein!!!
                 self::LABEL                     => 'Document Number', //_('Document Number')
@@ -126,8 +137,23 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ]*/
             ],
+            self::FLD_DOCUMENT_DATE             => [
+                self::LABEL                         => 'Document Date', //_('Document Date')
+                self::TYPE                          => self::TYPE_DATE,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_PRECURSOR_DOCUMENTS => [
+                // needs to be set by concret implementation
+                self::TYPE => self::TYPE_RECORDS,
+                self::CONFIG => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    //self::MODEL_NAME            => Sales_Model_SubProductMapping::MODEL_NAME_PART,
+                    // ? self::REF_ID_FIELD          => Sales_Model_SubProductMapping::FLD_PARENT_ID,
+                ],
+            ],
             self::FLD_CUSTOMER_ID       => [
                 self::TYPE                  => self::TYPE_RECORD,
+                self::LABEL                 => 'Customer', // _('Customer')
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Customer::MODEL_NAME_PART,
@@ -169,28 +195,22 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_KEY_FIELD,
                 self::NAME                  => Sales_Config::DOCUMENT_CATEGORY,
             ],
-            self::FLD_PRECURSOR_DOCUMENTS => [
-                // needs to be set by concret implementation
-                self::TYPE => self::TYPE_RECORDS,
-                self::CONFIG => [
-                    self::APP_NAME              => Sales_Config::APP_NAME,
-                    //self::MODEL_NAME            => Sales_Model_SubProductMapping::MODEL_NAME_PART,
-                    // ? self::REF_ID_FIELD          => Sales_Model_SubProductMapping::FLD_PARENT_ID,
-                ],
-            ],
-            self::FLD_CONTACT_ID => [
-                self::TYPE                  => self::TYPE_RECORD,
-                self::CONFIG                => [
-                    self::APP_NAME              => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_PART_NAME,
-                ],
-                self::NULLABLE              => true,
-            ],
             self::FLD_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
+                self::LABEL                 => 'Recipient', //_('Recipient')
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
+                    self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING
+                ],
+                self::NULLABLE              => true,
+            ],
+            self::FLD_CONTACT_ID => [
+                self::TYPE                  => self::TYPE_RECORD,
+                self::LABEL                 => 'Reference Person', //_('Reference Person')
+                self::CONFIG                => [
+                    self::APP_NAME              => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_PART_NAME,
                 ],
                 self::NULLABLE              => true,
             ],
@@ -206,19 +226,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::NAME                          => Sales_Config::PAYMENT_METHODS,
                 self::NULLABLE                      => true,
             ],
-            self::FLD_DOCUMENT_DATE             => [
-                self::LABEL                         => 'Document Date', //_('Document Date')
-                self::TYPE                          => self::TYPE_DATE,
-                self::NULLABLE                      => true,
-            ],
             self::FLD_BOOKING_DATE              => [
                 self::LABEL                         => 'Booking Date', //_('Booking Date')
                 self::TYPE                          => self::TYPE_DATE,
-                self::NULLABLE                      => true,
-            ],
-            self::FLD_NOTE                      => [
-                self::LABEL                         => 'Note', //_('Note')
-                self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
             ],
             self::FLD_POSITIONS                 => [
@@ -231,39 +241,82 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::DEPENDENT_RECORDS             => true,
                 ],
             ],
-            self::FLD_NET_SUM                   => [
-                self::LABEL                         => 'Net Sum', //_('Net Sum')
+            self::FLD_POSITIONS_NET_SUM                   => [
+                self::LABEL                         => 'Positions Net Sum', //_('Positions Net Sum')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
+
+            self::FLD_POSITIONS_DISCOUNT_SUM   => [
+                self::LABEL                         => 'Positions Discount Sum', //_('Positions Discount Sum')
+                self::TYPE                          => self::TYPE_MONEY,
+                self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+
             self::FLD_INVOICE_DISCOUNT_TYPE     => [
                 self::LABEL                         => 'Invoice Discount Type', //_('Invoice Discount Type')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::INVOICE_DISCOUNT_TYPE,
                 self::NULLABLE                      => true,
-                self::DEFAULT_VAL                   => null, // means, no default => null
+                self::DEFAULT_VAL                   => 'SUM'
             ],
             self::FLD_INVOICE_DISCOUNT_PERCENTAGE => [
                 self::LABEL                         => 'Invoice Discount Percentage', //_('Invoice Discount Percentage')
                 self::TYPE                          => self::TYPE_FLOAT,
+                self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_PERCENT,
                 self::NULLABLE                      => true,
             ],
             self::FLD_INVOICE_DISCOUNT_SUM      => [
                 self::LABEL                         => 'Invoice Discount Sum', //_('Invoice Discount Sum')
                 self::TYPE                          => self::TYPE_FLOAT,
+                self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DISCOUNT,
                 self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    'price_field'   => self::FLD_POSITIONS_NET_SUM,
+                    'net_field'     => self::FLD_NET_SUM
+                ],
+            ],
+            self::FLD_NET_SUM                   => [
+                self::LABEL                         => 'Net Sum', //_('Net Sum')
+                self::TYPE                          => self::TYPE_MONEY,
+                self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_SALES_TAX                 => [
                 self::LABEL                         => 'Sales Tax', //_('Sales Tax')
-                self::TYPE                          => self::TYPE_FLOAT,
+                self::TYPE                          => self::TYPE_MONEY,
                 self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_SALES_TAX_BY_RATE         => [
+                self::LABEL                         => 'Sales Tax by Rate', //_('Sales Tax by Rate')
+                self::TYPE                          => self::TYPE_JSON,
+                self::NULLABLE                      => true,
+                self::DISABLED                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_GROSS_SUM                 => [
                 self::LABEL                         => 'Gross Sum', //_('Gross Sum')
-                self::TYPE                          => self::TYPE_FLOAT,
+                self::TYPE                          => self::TYPE_MONEY,
                 self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_COST_CENTER_ID            => [
+                self::LABEL                         => 'Cost Center', //_('Cost Center')
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
@@ -272,11 +325,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::NULLABLE                      => true,
             ],
             self::FLD_COST_BEARER_ID            => [
+                self::LABEL                         => 'Cost Bearer', //_('Cost Bearer')
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_CostCenter::MODEL_NAME_PART,
                 ],
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_NOTE                      => [
+                self::LABEL                         => 'Note', //_('Note')
+                self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
             ],
         ]

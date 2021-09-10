@@ -207,6 +207,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
      * @param {String} id
      */
     setId: function(id) {
+        this.id = id;
         return this.set(this.idProperty ? this.idProperty : 'id', id);
     },
 

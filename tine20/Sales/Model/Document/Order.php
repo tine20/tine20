@@ -27,6 +27,10 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
     {
         parent::inheritModelConfigHook($_definition);
 
+        $_definition[self::CREATE_MODULE] = true;
+        $_definition[self::RECORD_NAME] = 'Order'; // gettext('GENDER_Order')
+        $_definition[self::RECORDS_NAME] = 'Orders'; // ngettext('Order', 'Orders', n)
+        
         $_definition[self::VERSION] = 1;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [

@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -9,28 +9,44 @@ Ext.ns('Tine.widgets.grid');
 
 /**
  * quickadd grid panel
- * 
+ *
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.QuickaddGridPanel
  * @extends     Ext.ux.grid.QuickaddGridPanel
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  * @param       {Object} config
  * @constructor
  * Create a new Tine.widgets.grid.QuickaddGridPanel
  */
 Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
+
     /**
      * @cfg {Tine.Tinebase.data.Record} recordClass
      */
     recordClass: null,
+
     /**
+     * @cfg {Class} editDialogClass (optional)
+     * editDialogClass having a static openWindow method
+     */
+    editDialogClass: null,
+
+    /**
+     * @cfg {Object} editDialogConfig (optional)
+     */
+    editDialogConfig: null,
+
+    /**
+     * editDialog which contains this gird
+     * NOTE: don't confuse with editdialogC(onfig|lass) which is for editdialog of this.recordClass!!!
      * @cfg {Tine.Tinebase.widgets.Dialog.EditDialog} editDialog
      */
     editDialog: null,
+
     /**
      * @cfg {String} parentRecordField
      */
@@ -42,6 +58,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * use this (single) field as data instead of whole data object
      */
     dataField: null,
+
     /**
      * @cfg {Bool} useBBar
      */
@@ -62,20 +79,31 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @private
      */
     initComponent: function() {
-        var _ = window.lodash,
-            me = this,
-            parent = me.findParentBy(function(c){return !!c.record})
-                || me.findParentBy(function(c) {return c.editDialog});
+        Ext.copyTo(this, Tine.widgets.grid.PickerGridPanel.prototype, [
+            'initActionsAndToolbars',
+            'onRowContextMenu',
+            'onCreate',
+            'getRecordDefaults',
+            'onRemove',
+            'actionRemoveUpdater',
+            'onRowDblClick'
+        ]);
 
         this.modelConfig = this.modelConfig ||
             _.get(this, 'recordClass.getModelConfiguration') ? this.recordClass.getModelConfiguration() : null;
-        
+
+        this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || i18n._('Record') : i18n._('Record'));
+
         this.defaultSortInfo = this.defaultSortInfo || {};
 
         this.initGrid();
-        this.initActions();
+
+        this.enableBbar = Ext.isBoolean(this.enableBbar) ? this.enableBbar : this.useBBar;
+        this.initActionsAndToolbars();
 
         this.on('rowcontextmenu', this.onRowContextMenu, this);
+        this.on('rowdblclick', this.onRowDblClick, this);
+
         if (! this.store) {
             // create basic store
             this.store = new Ext.data.Store({
@@ -89,16 +117,19 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             });
         }
 
-        if (me.parentRecordField && !this.editDialog) {
-            me.editDialog = _.get(parent, 'editDialog');
+        const parent = this.findParentBy(function(c){return !!c.record})
+            || this.findParentBy(function(c) {return c.editDialog});
+
+        if (this.parentRecordField && !this.editDialog) {
+            this.editDialog = _.get(parent, 'editDialog');
         }
-        if (me.editDialog && me.parentRecordField) {
-            me.editDialog.on('load', me.onRecordLoad, me);
-            me.editDialog.on('recordUpdate', me.onRecordUpdate, me);
+        if (this.editDialog && this.parentRecordField) {
+            this.editDialog.on('load', this.onRecordLoad, this);
+            this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
         }
 
         Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
-        
+
         this.on('newentry', this.onNewentry, this);
     },
 
@@ -108,36 +139,15 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     initGrid: function() {
         this.plugins = this.plugins || [];
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-        
-        this.sm = new Ext.grid.RowSelectionModel();
-        this.sm.on('selectionchange', function(sm) {
-            var rowCount = sm.getCount();
-            this.deleteAction.setDisabled(rowCount == 0);
-        }, this);
-        
+
+        this.selModel = new Ext.grid.RowSelectionModel();
+
         this.cm = (! this.cm) ? this.getColumnModel() : this.cm;
     },
-    
-    /**
-     * @private
-     */
-    initActions: function() {
-        this.deleteAction = new Ext.Action({
-            text: i18n._('Remove'),
-            iconCls: 'actionDelete',
-            handler : this.onDelete,
-            scope: this,
-            disabled: true
-        });
-        
-        if (this.useBBar) {
-            this.bbar = [this.deleteAction];
-        }
-    },
-    
+
     /**
      * get column model
-     * 
+     *
      * @return {Ext.grid.ColumnModel}
      */
     getColumnModel: function() {
@@ -176,21 +186,19 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 columns: this.columns || []
             });
         }
-
         return this.colModel;
     },
-    
+
     /**
      * new entry event -> add new record to store
-     * 
+     *
      * @param {Object} recordData
      * @return {Boolean}
      */
     onNewentry: function(recordData) {
-        var _ = window.lodash,
-            defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
-                this.recordClass.getDefaultData() : {},
-            newRecord = new this.recordClass(defaultData, Ext.id());
+        const defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
+                this.recordClass.getDefaultData() : {};
+        const newRecord = new this.recordClass(defaultData, Ext.id());
 
         _.each(recordData, function(val, key) {
             if (val) {
@@ -208,7 +216,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
 
         return true;
     },
-    
+
     /**
      * delete event
      */
@@ -218,71 +226,26 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             this.store.remove(selectedRows[i]);
         }
     },
-    
-    onRowContextMenu: function(grid, row, e) {
-        e.stopEvent();
-        var selModel = grid.getSelectionModel();
-        if(!selModel.isSelected(row)) {
-            // disable preview update if config option is set to false
-            this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
-            selModel.selectRow(row);
-        }
 
-        this.getContextMenu().showAt(e.getXY());
-        // reset preview update
-        this.updateOnSelectionChange = true;
-    },
-    
-    /**
-     * creates and returns the context  menu
-     * @return {Ext.menu.Menu}
-     */
-    getContextMenu: function() {
-        if (! this.contextMenu) {
-            var items = [this.deleteAction];
-
-            // lookup additional items
-            items = items.concat(this.getContextMenuItems());
-
-            this.contextMenu = new Ext.menu.Menu({
-                plugins: [{
-                    ptype: 'ux.itemregistry',
-                    key:   'Tinebase-MainContextMenu'
-                }],
-                items: items
-            });
-        }
-
-        if (this.readOnly) {
-            this.deleteAction.setDisabled(true);
-        }
-
-        return this.contextMenu;
-    },
-
-    getContextMenuItems: function() {
-        return [];
-    },
-    
     /**
      * get next available id
      * @return {Number}
      */
     getNextId: function() {
         var newid = this.store.getCount() + 1;
-        
+
         while (this.store.getById(newid)) {
             newid++;
         }
-        
+
         return newid;
     },
 
     /**
      * get values from store (as array)
-     * 
+     *
      * @param {Array}
-     * 
+     *
      * TODO improve this
      */
     setStoreFromArray: function(data) {
@@ -299,10 +262,10 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             this.store.insert(0, new this.recordClass(recordData));
         }
     },
-    
+
     /**
      * get values from store (as array)
-     * 
+     *
      * @return {Array}
      */
     getFromStoreAsArray: function(deleteAutoIds) {

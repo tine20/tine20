@@ -194,9 +194,9 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'label' => 'Sales Tax', // _('Sales Tax')
                 'type'  => 'float',
                 'specialType' => 'percent',
-                'defaultConfig' => [
-                    'appName' => 'Tinebase',
-                    'config' => Tinebase_Config::SALES_TAX
+                self::DEFAULT_VAL_CONFIG => [
+                    self::APP_NAME  => Tinebase_Config::APP_NAME,
+                    self::CONFIG => Tinebase_Config::SALES_TAX
                 ],
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,

@@ -107,7 +107,7 @@ class Sales_Config extends Tinebase_Config_Abstract
 
     const PRODUCT_UNIT = 'productUnit';
 
-    const SUBPRODUCT_POSITION_FLAG = 'subProductPositionFlag';
+    const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
     
     /**
      * Invoice Type
@@ -261,9 +261,14 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => 'STANDARD', 'value' => 'Standard', 'system' => true], // _('Standard')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT, 'value' => 'Product', 'system' => true], // _('Product')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_TEXT, 'value' => 'Text', 'system' => true], // _('Text')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_HEADING, 'value' => 'Heading', 'system' => true], // _('Heading')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_PAGEBREAK, 'value' => 'Page Break', 'system' => true], // _('Page Break')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_ALTERNATIVE, 'value' => 'Alternative', 'system' => true], // _('Alternative')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_OPTIONAL, 'value' => 'Optional', 'system' => true], // _('Optional')
                 ],
-                self::DEFAULT_STR           => 'STANDARD',
+                self::DEFAULT_STR           => Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT,
             ],
         ],
         self::DOCUMENT_CATEGORY => [
@@ -306,8 +311,8 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => 'BUNDLE', 'value' => 'Bundle', 'system' => true], // _('Shared')
-                    ['id' => 'SET', 'value' => 'Set', 'system' => true], // _('Own')
+                    ['id' => Sales_Model_Product::UNFOLD_TYPE_BUNDLE, 'value' => 'Bundle', 'system' => true], // _('Shared')
+                    ['id' => Sales_Model_Product::UNFOLD_TYPE_SET, 'value' => 'Set', 'system' => true], // _('Own')
                 ],
             ],
         ],
@@ -321,13 +326,13 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => 'PIECE', 'value' => 'Piece', 'system' => true], // _('Piece')
+                    ['id' => Sales_Model_Product::UNIT_PIECE, 'value' => 'Piece', 'system' => true], // _('Piece')
                 ],
             ],
         ],
-        self::SUBPRODUCT_POSITION_FLAG => [
-            self::LABEL                 => 'SubProduct Position Flag', //_('SubProduct Position Flag')
-            self::DESCRIPTION           => 'SubProduct Position Flag', //_('SubProduct Position Flag')
+        self::VARIABLE_POSITION_FLAG => [
+            self::LABEL                 => 'Sub-Product Variable Position Flag', //_('Sub-Product Variable Position Flag')
+            self::DESCRIPTION           => 'Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document.', //_('Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document.')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             /*self::OPTIONS               => [
                 self::RECORD_MODEL          => ....

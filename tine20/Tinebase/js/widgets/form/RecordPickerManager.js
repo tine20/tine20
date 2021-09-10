@@ -42,14 +42,24 @@ Tine.widgets.form.RecordPickerManager = function() {
                     return new items[key](config);
                 }
             } else {    // not registered, create default
-                var pickerClass = config.allowMultiple ?
+                const pickerClass = config.allowMultiple ?
                         Tine.Tinebase.widgets.form.RecordsPickerCombo :
-                        Tine.Tinebase.widgets.form.RecordPickerComboBox,
-                    defaultconfig = {
+                        Tine.Tinebase.widgets.form.RecordPickerComboBox;
+                const modelConfig = Tine.Tinebase.data.RecordMgr.get(appName, modelName)?.getModelConfiguration();
+
+                // denormalizationOf means we get denormalization data, but select/pick fresh records
+                modelName = modelConfig?.denormalizationOf || modelName;
+                    
+                const defaultconfig = {
                     recordClass: Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                     recordProxy: Tine[appName][modelName.toLowerCase() + 'Backend'],
                     loadingText: i18n._('Searching...')
                 };
+
+                // var recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
+                //     modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
+                //     fieldDefinition = _.get(modelConfig, 'fields.' + fieldName, {});
+                
                 Ext.apply(defaultconfig, config);
 
                 return new pickerClass(defaultconfig);

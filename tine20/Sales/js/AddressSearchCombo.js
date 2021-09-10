@@ -32,13 +32,35 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
     itemSelector: 'div.search-item',
     minListWidth: 200,
     sortBy: 'locality',
+    disabled: true,
     
     //private
     initComponent: function(){
         this.recordClass = Tine.Sales.Model.Address;
         this.recordProxy = Tine.Sales.addressBackend;
         this.initTemplate();
+
         Tine.Sales.AddressSearchCombo.superclass.initComponent.call(this);
+    },
+
+    checkState: function(editDialog, record) {
+        const customer_id = this.editDialog.record.get('customer_id');
+        this.setDisabled(!customer_id);
+        if (! customer_id) {
+            this.clearValue();
+        } else {
+            const mc = editDialog?.recordClass?.getModelConfiguration();
+            const type = _.get(mc, `fields${this.fieldName}.config.type`, 'billing');
+            this.lastQuery = null;            
+            this.additionalFilters = [
+                {field: 'customer_id', operator: 'equals', value: customer_id}
+            ];
+            if (type === 'postal') {
+                this.additionalFilters.push({field: 'type', operator: 'equals', value: type });
+            } else {
+                this.additionalFilters.push({field: 'type', operator: 'not', value: type === 'billing' ? 'delivery' : 'billing' });
+            }
+        }
     },
     
     /**
@@ -64,3 +86,4 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
 });
 
 Tine.widgets.form.RecordPickerManager.register('Sales', 'Address', Tine.Sales.AddressSearchCombo);
+Tine.widgets.form.RecordPickerManager.register('Sales', 'Document_Address', Tine.Sales.AddressSearchCombo);

@@ -29,6 +29,10 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
     {
         parent::inheritModelConfigHook($_definition);
 
+        $_definition[self::CREATE_MODULE] = true;
+        $_definition[self::RECORD_NAME] = 'Offer'; // gettext('GENDER_Offer')
+        $_definition[self::RECORDS_NAME] = 'Offers'; // ngettext('Offer', 'Offers', n)
+        
         $_definition[self::VERSION] = 1;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
@@ -48,7 +52,7 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
             ]
         ];
 
-        // on offers customers are optionsl
+        // on offers customers are optional
         $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::NULLABLE] = true;
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
 
@@ -57,6 +61,7 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
 
         $_definition[self::FIELDS][self::FLD_ORDER_ID] = [
             self::TYPE                  => self::TYPE_RECORD,
+            self::DISABLED              => true,
             self::CONFIG                => [
                 self::APP_NAME              => Sales_Config::APP_NAME,
                 self::MODEL_NAME            => Sales_Model_Document_Order::MODEL_NAME_PART,

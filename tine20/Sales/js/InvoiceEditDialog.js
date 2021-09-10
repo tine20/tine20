@@ -309,30 +309,6 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.customerPicker.setValue(foundCustomer);
             this.customerPicker.combo.fireEvent('select');
             
-            if (this.addressPicker.disabled) {
-                this.addressPicker.enable();
-                
-                if (record.get('billing_address_id')) {
-                    var billingAddress = record.get('billing_address_id');
-                    if (! billingAddress.data) {
-                        billingAddress = new Tine.Sales.Model.Address(billingAddress);
-                    }
-                    billingAddress.set('customer', foundCustomer);
-                    this.addressPicker.setValue(billingAddress);
-                    this.onAddressLoad(this.addressPicker, billingAddress);
-                }
-            } else {
-                this.addressPicker.reset();
-            }
-            this.addressPicker.lastQuery = null;
-            
-            this.addressPicker.additionalFilters = [
-                {field: 'type', operator: 'not', value: 'delivery'},
-                {field: 'customer_id', operator: 'AND', value: [
-                    {field: ':id', operator: 'in', value: [foundCustomer.id]}
-                ]}
-            ];
-            
             this.getForm().findField('credit_term').setValue(foundCustomer.credit_term);
 
         } else {

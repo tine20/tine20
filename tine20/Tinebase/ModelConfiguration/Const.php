@@ -47,6 +47,10 @@ class Tinebase_ModelConfiguration_Const {
      */
     const DEFAULT_SORT_INFO = 'defaultSortInfo';
     const DEFAULT_VAL = 'default';
+    /**
+     * config for default value
+     */
+    const DEFAULT_VAL_CONFIG = 'defaultValConfig';
     const DEGREE = 'degree';
     const DENORMALIZATION_OF = 'denormalizationOf';
     const DEPENDENT_RECORDS = 'dependentRecords';
@@ -151,8 +155,10 @@ class Tinebase_ModelConfiguration_Const {
     const SHY = 'shy';
     const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
     const SPECIAL_TYPE = 'specialType';
+    const SPECIAL_TYPE_DISCOUNT = 'discount';
     const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
     const SPECIAL_TYPE_PASSWORD = 'password';
+    const SPECIAL_TYPE_PERCENT = 'percent';
     const STORAGE = 'storage';
     const SUPPORTED_FORMATS = 'supportedFormats';
     const SYSTEM = 'system';

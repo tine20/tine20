@@ -76,7 +76,7 @@ Tine.widgets.form.RecordForm.getFieldDefinitions = function(recordClass) {
 
     return _.reduce(fieldNames, function(fieldDefinitions, fieldName) {
         var fieldDefinition = modelConfig.fields[fieldName];
-        if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && ! fieldDefinition.shy) {
+        if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0) {
             fieldDefinitions.push(fieldDefinition);
         }
         return fieldDefinitions;

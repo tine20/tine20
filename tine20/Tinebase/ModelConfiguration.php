@@ -801,7 +801,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms',
         'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
-        'group', 'multipleEdit', 'multipleEditRequiredRight', 'copyNoAppendTitle'
+        'group', 'multipleEdit', 'multipleEditRequiredRight', 'copyNoAppendTitle', 'denormalizationOf'
     );
 
     /**
@@ -1135,6 +1135,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 self::LENGTH => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_TEXT,
                 self::NULLABLE => true,
                 self::DEFAULT_VAL => null,
+                self::DISABLED => true,
                 'validators' => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => [],
@@ -1272,9 +1273,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
 
             // set default value
-            if (isset($fieldDef['defaultConfig'])) {
-                $config = Tinebase_Config::getAppConfig($fieldDef['defaultConfig']['appName']);
-                $fieldDef['default'] = $config->get($fieldDef['defaultConfig']['config']);
+            if (isset($fieldDef['defaultValConfig'])) {
+                $config = Tinebase_Config::getAppConfig($fieldDef['defaultValConfig']['appName']);
+                $fieldDef['default'] = $config->get($fieldDef['defaultValConfig']['config']);
             }
             // TODO: implement complex default values (maybe use defaultConfig for this?)
             if (isset($fieldDef['default'])) {

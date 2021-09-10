@@ -49,7 +49,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
 
         'exposeHttpApi'     => true,
         
-        'titleProperty'     => 'fulltext',
+        'titleProperty'     => 'name',
         'appName'           => 'Sales',
         'modelName'         => self::MODEL_NAME_PART,
         

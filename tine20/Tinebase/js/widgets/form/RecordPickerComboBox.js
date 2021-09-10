@@ -121,7 +121,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
-        this.displayField = this.recordClass.getMeta('titleProperty');
+        this.displayField = this.displayField || this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
         this.disableClearer = ! this.allowBlank;
 

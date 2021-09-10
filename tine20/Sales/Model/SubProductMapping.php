@@ -20,11 +20,12 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'SubProductMapping';
     public const TABLE_NAME = 'sales_subproductmapping';
 
+    public const FLD_SORTING = 'sorting';
     public const FLD_SHORTCUT = 'shortcut';
     public const FLD_PARENT_ID = 'parent_id';
     public const FLD_PRODUCT_ID = 'product_id';
     public const FLD_QUANTITY = 'quantity';
-    public const FLD_POSITION_FLAG = 'position_flag';
+    public const FLD_VARIABLE_POSITION_FLAG = 'variable_position_flag';
 
 
     /**
@@ -39,9 +40,9 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
 
-        self::RECORD_NAME               => 'SubProduct',
-        self::RECORDS_NAME              => 'SubProducts', // ngettext('SubProduct', 'SubProducts', n)
-        //self::TITLE_PROPERTY => self::FLD_NAME,
+        self::RECORD_NAME               => 'Subproduct', // gettext('GENDER_Subproduct')
+        self::RECORDS_NAME              => 'Subproducts', // ngettext('Subproduct', 'Subproducts', n)
+        self::TITLE_PROPERTY            => self::FLD_SHORTCUT,
 
         self::HAS_DELETED_TIME_UNIQUE   => true,
         //self::HAS_ATTACHMENTS => true,
@@ -97,10 +98,12 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
 
         self::FIELDS                    => [
             self::FLD_PRODUCT_ID            => [
+                self::LABEL                     => 'Product', // _('Product')
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Product::MODEL_NAME_PART,
+                    'additionalFilters'         => [['field' => Sales_Model_Product::FLD_UNFOLD_TYPE, 'operator' => 'equals', 'value' => null]]
                 ],
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
@@ -109,6 +112,7 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
             ],
             self::FLD_PARENT_ID             => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::DISABLED                  => true,
                 self::CONFIG => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Product::MODEL_NAME_PART,
@@ -122,24 +126,32 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
                 self::LABEL                     => 'Shortcut', // _('Shortcut')
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 25,
-                self::VALIDATORS                => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
-                ]
+                self::NULLABLE                  => true,
+//                self::VALIDATORS                => [
+//                    Zend_Filter_Input::ALLOW_EMPTY  => true,
+//                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+//                ]
             ],
-            self::FLD_POSITION_FLAG         => [
-                self::LABEL => 'SubProduct Position Flag', // _('SubProduct Position Flag')
+            self::FLD_VARIABLE_POSITION_FLAG         => [
+                self::LABEL => 'Variable Position Flag', // _('Variable Position Flag')
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::DEFAULT_VAL => 'NONE',
-                self::NAME => Sales_Config::SUBPRODUCT_POSITION_FLAG,
+                self::NAME => Sales_Config::VARIABLE_POSITION_FLAG,
             ],
             self::FLD_QUANTITY              => [
                 self::LABEL                     => 'Amount', // _('Amount')
                 self::TYPE                      => self::TYPE_INTEGER,
+                self::DEFAULT_VAL               => 1,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ]
+            ],
+            self::FLD_SORTING => [
+                self::LABEL                     => 'Sorting', // _('Sorting')
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DEFAULT_VAL               => 10000,
+                self::NULLABLE                  => true,
             ]
         ]
     ];
