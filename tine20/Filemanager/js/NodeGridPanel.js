@@ -198,6 +198,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return;
         }
 
+        const existingRecord = this.getRecordByData(record.data || record);
         record = this.createRecord(JSON.stringify(record), mode);
 
         Tine.log.debug('Tine.Filemanager.NodeGridPanel::onUpdateRecord() -> record:');
@@ -205,31 +206,29 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         if (record && Ext.isFunction(record.copy)) {
             const store = this.getStore();
+            let isSelected = false;
             
-            if (this.isInCurrentGrid(record.get('path'))) {
-                const idx = store.findExact('id', record.get('id')) > -1 ?
-                    store.findExact('id', record.get('id')) :
-                    store.findExact('name', record.get('name'));
-                const isSelected = this.getGrid().getSelectionModel().isSelected(idx);
-                
-                if (idx > -1) {
-                    store.removeAt(idx);
-                    store.insert(idx, [record]);
-                } else {
-                    store.add([record]);
-                }
-                
-                // sort new/edited record
-                store.remoteSort = false;
-                store.sort(
-                    _.get(store, 'sortInfo.field', this.recordClass.getMeta('titleField')),
-                    _.get(store, 'sortInfo.direction', 'ASC')
-                );
-                store.remoteSort = this.storeRemoteSort;
-                
-                if (isSelected) {
-                    this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
-                }
+            if (existingRecord) {
+                const idx = store.indexOf(existingRecord);
+                isSelected = this.getGrid().getSelectionModel().isSelected(idx);
+                store.removeAt(idx);
+                store.insert(idx, [record]);
+            } else if (this.isInCurrentGrid(record.get('path'))) {
+                store.add([record]);
+            } else {
+                return;
+            }
+            
+            // sort new/edited record
+            store.remoteSort = false;
+            store.sort(
+                _.get(store, 'sortInfo.field', this.recordClass.getMeta('titleField')),
+                _.get(store, 'sortInfo.direction', 'ASC')
+            );
+            store.remoteSort = this.storeRemoteSort;
+            
+            if (isSelected) {
+                this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
             }
         }
     },
