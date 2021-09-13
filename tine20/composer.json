@@ -117,7 +117,7 @@
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "2.*",
-    "zendframework/zendframework1": "1.12.20pl50 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl51 as 1.12.20"
   },
   "require-dev": {
     "laminas/laminas-psr7bridge": "^1",
