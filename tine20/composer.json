@@ -93,7 +93,7 @@
     "metaways/timezoneconvert": "1.*",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
-    "phpoffice/phpexcel": "1.8.2pl1 as 1.8.2",
+    "phpoffice/phpexcel": "1.8.2pl2 as 1.8.2",
     "phpoffice/phpspreadsheet": "1.10.1pl3 as 1.10.1",
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
