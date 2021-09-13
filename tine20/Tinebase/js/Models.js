@@ -155,6 +155,7 @@ Tine.Tinebase.Model.Tag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.m
     {name: 'type'       },
     {name: 'description'},
     {name: 'color'      },
+    {name: 'system_tag' },
     {name: 'occurrence' },
     {name: 'rights'     },
     {name: 'contexts'   },
