@@ -99,7 +99,11 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
         try {
             Filemanager_Controller_Node::getInstance()->resolveGrants(new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [$node]));
             $convert = new Tinebase_Convert_Tree_Node_Json(Tinebase_Model_Tree_Node::class);
+            $nodePath = $node->path;
             $result['value'] = $convert->fromTine20Model($node);
+            if (!$_valueToJson) {
+                $result['value']['path'] = $nodePath;
+            }
         } catch (Exception $e) {
             $result['value'] = $node->toArray();
         }

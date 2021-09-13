@@ -439,7 +439,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever'
+            'value'    => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/sclever/'
         ), array(
             'field'    => 'creation_time', 
             'operator' => 'within', 
@@ -447,7 +447,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ));
         $result = $this->_searchHelper($filter, $this->_getOtherUserContainer()->name, true);
 
-        $expectedPath = $filter[0]['value'] . '/' . $this->_getOtherUserContainer()->name;
+        $expectedPath = $filter[0]['value'] . $this->_getOtherUserContainer()->name;
         $node = $this->_getNodeByNameFromResult($this->_getOtherUserContainer()->name, $result);
         self::assertNotNull($node);
         self::assertEquals($expectedPath . '/', $node['path'], 'node path mismatch');
