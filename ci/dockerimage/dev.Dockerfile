@@ -41,7 +41,7 @@ RUN if [ ${ALPINE_PHP_PACKAGE} == php8 ]; then \
         php /composer-setup.php; \
         php -r "unlink('/composer-setup.php');"; \
         ln -s /usr/share/composer.phar /usr/bin/composer; \
-      fi
+      fi \
     else \
         apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community composer; \
     fi
