@@ -14,6 +14,10 @@
  */
 class Calendar_Export_VCalendarTest extends Calendar_TestCase
 {
+    /**
+     * @throws Tinebase_Exception_NotFound
+     * @group nodockerci
+     */
     public function testExportPersonalContainer()
     {
         $this->_testNeedsTransaction();
@@ -48,6 +52,11 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         return implode(',', $output);
     }
 
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_Validation
+     * @group nodockerci
+     */
     public function testExportRecurEvent()
     {
         $this->_testNeedsTransaction();
@@ -61,6 +70,14 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertStringContainsString('RRULE:FREQ=DAILY', $result);
     }
 
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_ConcurrencyConflict
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
+     * @group nodockerci
+     */
     public function testExportRecurEventWithException()
     {
         $this->_testNeedsTransaction();
@@ -82,6 +99,13 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertStringContainsString('RECURRENCE-ID', $result);
     }
 
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @group nodockerci
+     */
     public function testExportEventWithAlarm()
     {
         $this->_testNeedsTransaction();
@@ -100,6 +124,12 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertStringContainsString('VALARM', $result);
     }
 
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Duplicate
+     * @throws Tinebase_Exception_Record_Validation
+     * @group nodockerci
+     */
     public function testExportEventWithAttachment()
     {
         $this->_testNeedsTransaction();
@@ -117,6 +147,10 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertStringContainsString('APPLE-FILENAME=test.txt;FMTTYPE=text/plain:dGVzdCBmaWxlIGNvbn', $result);
     }
 
+    /**
+     * @throws Tinebase_Exception_NotFound
+     * @group nodockerci
+     */
     public function testExportIntoFile()
     {
         $this->_testNeedsTransaction();
@@ -139,6 +173,10 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertStringContainsString('END:VCALENDAR', $result);
     }
 
+    /**
+     * @throws Tinebase_Exception_NotFound
+     * @group nodockerci
+     */
     public function testExportAllCalendars()
     {
         $this->_testNeedsTransaction();

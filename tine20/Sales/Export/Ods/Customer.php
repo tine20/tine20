@@ -131,7 +131,7 @@ class Sales_Export_Ods_Customer extends Sales_Export_Ods_Abstract
             }
         }
 
-        $filter = new Sales_Model_AddressFilter(array());
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'customer_id', 'operator' => 'in', 'value' => $customerIds)
         ));

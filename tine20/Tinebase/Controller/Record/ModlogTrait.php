@@ -41,7 +41,7 @@ trait Tinebase_Controller_Record_ModlogTrait
      */
     protected function _getBackendType()
     {
-        $type = (method_exists( $this->_backend, 'getType')) ? $this->_backend->getType() : 'Sql';
+        $type = $this->_backend && method_exists($this->_backend, 'getType') ? $this->_backend->getType() : 'Sql';
         return $type;
     }
 

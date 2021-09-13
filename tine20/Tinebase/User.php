@@ -267,7 +267,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 break;
             
             case self::TYPO3:
-                $result = new Tinebase_User_Typo3($options);
+                $result = new Tinebase_User_Typo3();
                 
                 break;
                 

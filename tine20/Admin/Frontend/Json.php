@@ -366,7 +366,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $account->sambaSAM = new Tinebase_Model_SAMUser($recordData['sambaSAM']);
             }
             
-            if (isset($recordData['emailUser'])) {
+            if (isset($recordData['emailUser']) && ! empty($recordData['accountEmailAddress'])) {
                 $account->emailUser = new Tinebase_Model_EmailUser($recordData['emailUser']);
                 $account->imapUser  = new Tinebase_Model_EmailUser($recordData['emailUser']);
                 $account->smtpUser  = new Tinebase_Model_EmailUser($recordData['emailUser']);

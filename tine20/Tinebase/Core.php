@@ -251,7 +251,7 @@ class Tinebase_Core
         $request = self::getRequest();
 
         // we need to initialize sentry at the very beginning to catch ALL errors
-        $ravenClient = self::setupSentry();
+        self::setupSentry();
         
         // check transaction header
         if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
@@ -259,8 +259,10 @@ class Tinebase_Core
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Client transaction $transactionId");
             Tinebase_Log_Formatter::setTransactionId(substr($transactionId, 0, 5));
-            if ($ravenClient) {
-                $ravenClient->tags['transaction_id'] = $transactionId;
+            if (Tinebase_Core::isRegistered('SENTRY')) {
+                Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($transactionId): void {
+                    $scope->setTag('transaction_id', $transactionId);
+                });
             }
         }
 
@@ -547,8 +549,10 @@ class Tinebase_Core
 
         // be aware of race condition between is_file and include_once => somebody may have deleted the file
         // yes it does get deleted! => check result of include_once
-        if (TINE20_BUILDTYPE !== 'DEVELOPMENT' && is_file($cacheFile) && true === @include_once($cacheFile) &&
-                class_exists('Tine20Container')) {
+        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE !== 'DEVELOPMENT' &&
+            is_file($cacheFile) && true === @include_once($cacheFile) &&
+            class_exists('Tine20Container'))
+        {
             /** @noinspection PhpUndefinedClassInspection */
             $container = new Tine20Container();
         } else {
@@ -2200,9 +2204,17 @@ class Tinebase_Core
      * @param string $submodule
      * @return string
      */
-    public static function getTineUserAgent($submodule = '')
+    public static function getTineUserAgent(string $submodule = '')
     {
-        return 'Tine 2.0 ' . $submodule . ' (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+        $userAgent = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
+        if (! empty($submodule)) {
+            $userAgent .= ' ' . $submodule;
+        }
+        if (defined('TINE20_CODENAME') && defined('TINE20_PACKAGESTRING') ) {
+            $userAgent .= ' (Version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+        }
+
+        return $userAgent;
     }
 
     /**
@@ -2423,21 +2435,24 @@ class Tinebase_Core
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
 
-        if (! defined('TINE20_CODENAME')) {
+        if (! defined('TINE20_CODENAME') || ! defined('TINE20_PACKAGESTRING')) {
             self::setupBuildConstants();
         }
 
         Sentry\init([
             'dsn' => $sentryServerUri,
             'max_breadcrumbs' => 50,
-            'tags' => array(
-                'php_version' => phpversion(),
-            ),
             'error_types' => Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL},
+            'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
+            'environment' => defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT'
+                ? 'development'
+                : 'production',
+            'tags' => [
+                'php_version' => phpversion(),
+                'tine_url' => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL) ?: 'unknown',
+                'request_id' => Tinebase_Log_Formatter::getRequestId(),
+            ],
         ]);
-        Sentry\configureScope(function (Sentry\State\Scope $scope): void {
-            $scope->setTag('php_version', phpversion());
-        });
         self::set('SENTRY', true);
     }
 

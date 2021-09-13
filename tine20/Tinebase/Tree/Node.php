@@ -51,6 +51,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     protected $_beforeUpdateHook = [];
     protected $_afterUpdateHook = [];
 
+    protected $_doSynchronousPreviewCreation = false;
+
     /**
      * NOTE: returns fake tree controller
      *       needed by Tinebase_Core::getApplicationInstance('Tinebase_Model_Tree_Node')
@@ -109,6 +111,15 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     public function registerAfterUpdateHook($key, $hook)
     {
         $this->_afterUpdateHook[$key] = $hook;
+    }
+
+    public function doSynchronousPreviewCreation(?bool $synchronously = null): bool
+    {
+        $result = $this->_doSynchronousPreviewCreation;
+        if (null !== $synchronously) {
+            $this->_doSynchronousPreviewCreation = $synchronously;
+        }
+        return $result;
     }
 
     /**
@@ -365,8 +376,12 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             return;
         }
 
-        Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction(
-            'Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
+        if ($this->_doSynchronousPreviewCreation) {
+            Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_newRecord);
+        } else {
+            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction(
+                'Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
+        }
     }
 
     /**

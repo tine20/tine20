@@ -159,7 +159,6 @@ class Tasks_JsonTest extends TestCase
         $request = new Zend_Controller_Request_Http();
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
-        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
         
         $task = new Tinebase_Scheduler_Task();
         $task->setMonths("Jan-Dec");

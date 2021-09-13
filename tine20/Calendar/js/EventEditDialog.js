@@ -432,6 +432,20 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             this.attendeeGridPanel.renderAttenderResourceName(o.record.get('user_id'), {noIcon: true})
                         );
                     }
+
+                    var relations = _.get(o.record, 'data.user_id.relations'),
+                        locationId = relations ? _.findIndex(relations, function(k) { return k.type == 'LOCATION'; }) : -1,
+                        locationContact = locationId >= 0 ? relations[locationId].related_record : null;
+                    
+                    if (locationContact) {
+                        if (locationContact.preferred_address == 0) {
+                            this.record.set('adr_lon', locationContact.adr_one_lon);
+                            this.record.set('adr_lat', locationContact.adr_one_lat);
+                        } else {
+                            this.record.set('adr_lon', locationContact.adr_two_lon);
+                            this.record.set('adr_lat', locationContact.adr_two_lat);
+                        }
+                    }
                 }
             }
 
@@ -445,7 +459,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 locationName = this.attendeeGridPanel.renderAttenderResourceName(record.get('user_id'), {noIcon: true}),
                 locationField = this.getForm().findField('location');
 
-            if (type.get('is_location') && locationName === locationField.getValue()) {
+            if (type?.get('is_location') && locationName === locationField.getValue()) {
                 locationField.setValue('');
             }
         }, this);

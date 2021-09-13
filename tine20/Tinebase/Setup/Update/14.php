@@ -21,6 +21,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE014_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE014_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE014_UPDATE010 = __CLASS__ . '::update010';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -59,6 +60,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE009          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
+            ],
+            self::RELEASE014_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -262,5 +267,15 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             . ' SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
         Setup_SchemaTool::updateSchema([Tinebase_Model_CommunityIdentNr::class]);
         $this->addApplicationUpdate('Tinebase', '14.9', self::RELEASE014_UPDATE009);
+    }
+
+    /** recreate alarm task for php8 */
+    public function update010()
+    {
+        if (Tinebase_Scheduler::getInstance()->hasTask('Tinebase_Alarm')) {
+            Tinebase_Scheduler::getInstance()->removeTask('Tinebase_Alarm');
+        }
+        Tinebase_Scheduler_Task::addAlarmTask(Tinebase_Scheduler::getInstance());
+        $this->addApplicationUpdate('Tinebase', '14.10', self::RELEASE014_UPDATE010);
     }
 }

@@ -18,7 +18,7 @@
  * @subpackage  Twig
  */
 /** @noinspection PhpDeprecationInspection */
-class Tinebase_Twig_CallBackLoader implements Twig_LoaderInterface, Twig_SourceContextLoaderInterface, Twig_ExistsLoaderInterface
+class Tinebase_Twig_CallBackLoader implements Twig\Loader\LoaderInterface, Twig\Loader\SourceContextLoaderInterface, Twig\Loader\ExistsLoaderInterface
 {
     /**
      * @var int|null

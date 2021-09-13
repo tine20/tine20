@@ -22,27 +22,11 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/paulmhh/PHPWord"
-    },
-    {
-      "type": "git",
       "url": "https://github.com/tine20/composerapploader.git"
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/dbal.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine20/doctrine2.git"
-    },
-    {
-      "type": "git",
       "url": "https://github.com/tine20/OpenDocument.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine20/PhpSpreadsheet.git"
     },
     {
       "type": "git",
@@ -62,11 +46,23 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine20/dav.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine20/zendframework1.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/PHPExcel.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/PhpSpreadsheet.git"
     }
   ],
   "require": {
-    "php": "7.1 - 7.4",
+    "php": "7.4 - 8.0",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
@@ -84,29 +80,35 @@
     "ext-zip": "*",
     "benmorel/gsm-charset-converter": "^0.2.0",
     "composer/semver": "*",
-    "doctrine/dbal": "v2.5.13pl6 as v2.5.13",
-    "doctrine/orm": "2.5.14pl1 as v2.5.14",
-    "ezyang/htmlpurifier": "dev-master",
+    "doctrine/dbal": "^2",
+    "doctrine/orm": "^2",
+    "ezyang/htmlpurifier": "^4",
     "firebase/php-jwt": "^5",
     "giggsey/libphonenumber-for-php": "^8",
     "jumbojett/openid-connect-php": "dev-master",
+    "laminas/laminas-http": "^2.14",
+    "laminas/laminas-httphandlerrunner": "^2",
+    "laminas/laminas-stdlib": "^3.5",
+    "laminas/laminas-stratigility": "^3.2",
     "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "^0.1.7",
     "php-http/curl-client": "^2.1",
-    "phpoffice/phpexcel": "1.8.*",
-    "phpoffice/phpspreadsheet": "1.10.1pl3 as 1.10.1",
-    "phpoffice/phpword": "v0.14.0 as v0.13.0",
+    "phpoffice/phpexcel": "1.8.2pl1 as 1.8.2",
+    "phpoffice/phpspreadsheet": "1.18.0pl1 as 1.18.0",
+    "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
-    "sabre/dav": "1.8.*",
+    "sabre/dav": "1.8.12pl1 as 1.8.12",
     "sabre/vobject": "3.5.3pl1 as 2.1.0",
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.18.*",
     "spomky-labs/otphp": "^10.0",
+    "symfony/cache": "^5.3",
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
+    "symfony/http-client": "^4",
     "syncroton/syncroton": "1.4.8",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
@@ -114,18 +116,14 @@
     "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
-    "zbateson/mail-mime-parser": "1.*",
-    "zendframework/zend-diactoros": "^2.2",
-    "zendframework/zend-http": "^2",
-    "zendframework/zend-httphandlerrunner": "^1.1",
-    "zendframework/zend-stratigility": "^3.2",
-    "zendframework/zendframework1": "1.12.20pl44 as 1.12.20"
+    "zbateson/mail-mime-parser": "2.*",
+    "zendframework/zendframework1": "1.12.20pl50 as 1.12.20"
   },
   "require-dev": {
+    "laminas/laminas-psr7bridge": "^1",
     "phing/phing": "2.16.*",
     "phpunit/phpunit": "^8.5",
-    "tedivm/jshrink": "~1.0",
-    "zendframework/zend-psr7bridge": "^1.2"
+    "tedivm/jshrink": "~1.0"
   },
   "autoload": {
     "files": [],
@@ -150,18 +148,15 @@
   "config": {
     "secure-http": false,
     "platform": {
-      "php": "7.2.5",
-      "ext-filter": "7.2"
+      "php": "7.4",
+      "ext-filter": "7.4"
     },
     "sort-packages": true
   },
   "scripts": {
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
     "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
-    "build": "./vendor/bin/phing",
-    "post-install-cmd": [
-      "git submodule update --init"
-    ]
+    "build": "./vendor/bin/phing"
   },
   "support": {
     "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",

@@ -254,6 +254,10 @@ class Tinebase_Frontend_Cli_Abstract
                 $set = isset($data['set']) ? $data['set'] : null;
                 $this->_createImportDemoDataFromSet($set);
                 break;
+            case "eml":
+                $import = new Felamimail_Import_Eml();
+                $import->importEmlEmail();
+                break;
             case "all":
             case "":
             default:

@@ -2130,7 +2130,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         break;
                     }
 
-                    $dtstartJ = $oldDtstart->format('j');
+                    $dtstartJ = (int) $oldDtstart->format('j');
                     // check old dtstart matches bydayPrefix, if not we abort
                     if ($bydayPrefix === -1) {
                         if ($oldDtstart->format('t') - $dtstartJ > 6) {
@@ -2212,7 +2212,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         break;
                     }
 
-                    $dtstartJ = $oldDtstart->format('j');
+                    $dtstartJ = (int) $oldDtstart->format('j');
                     // check old dtstart matches bydayPrefix, if not we abort
                     if ($bydayPrefix === -1) {
                         if ($oldDtstart->format('t') - $dtstartJ > 6) {
@@ -2669,13 +2669,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $attendee = $baseEvent->attendee;
                 unset($baseEvent->attendee);
                 
-                $eventInstance = $this->createRecurException($baseEvent, FALSE, $_allFollowing);
+                $eventInstance = $this->createRecurException($baseEvent, false, $_allFollowing);
                 $eventInstance->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+                if ($baseEvent->alarms instanceof Tinebase_Record_RecordSet) {
+                    $eventInstance->alarms = clone $baseEvent->alarms;
+                    $eventInstance->alarms->setId(null);
+                }
                 $this->doContainerACLChecks($doContainerAclChecks);
                 $this->sendNotifications($sendNotifications);
                 
                 foreach ($attendee as $attender) {
-                    $attender->setId(NULL);
+                    $attender->setId(null);
                     $attender->cal_event_id = $eventInstance->getId();
                     
                     $attender = $this->_backend->createAttendee($attender);
@@ -2688,8 +2692,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $exceptionAttender->status = $_attender->status;
             $exceptionAttender->transp = $_attender->transp;
-            $eventInstance->alarms     = clone $_recurInstance->alarms;
-            $eventInstance->alarms->setId(NULL);
             
             $updatedAttender = $this->attenderStatusUpdate($eventInstance, $exceptionAttender, $exceptionAttender->status_authkey);
             
@@ -2749,7 +2751,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 ! Calendar_Controller_Alarm::hasUpdates($_event, $event)
             ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                    Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
                 return $updatedAttender;
             }
             
@@ -3127,7 +3129,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
             } catch (Exception $e) {
-                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " could not update attendee");
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " could not update attendee");
             }
         }
         

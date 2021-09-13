@@ -480,7 +480,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $this->_recordToJson($folder);
     }
-    
+
+    public function getAttachmentCache($id, $createPreviewInstantly = true)
+    {
+        $old = Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($createPreviewInstantly);
+        try {
+            return $this->_get($id, Felamimail_Controller_AttachmentCache::getInstance());
+        } finally {
+            Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation($old);
+        }
+    }
+
     /**
      * send reading confirmation
      * 
@@ -501,10 +511,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * search accounts
      * 
-     * @param  array $filter
+     * @param array $filter
+     * @param array $paging
      * @return array
      */
-    public function searchAccounts($filter)
+    public function searchAccounts(array $filter, array $paging = [])
     {
         $accounts = $this->_search($filter, '', Felamimail_Controller_Account::getInstance(), 'Felamimail_Model_AccountFilter');
         // add signatures and remove ADB list type from result set

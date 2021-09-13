@@ -271,14 +271,18 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * do search count request only when resultset is equal
      * to $pagination->limit or we are not on the first page
      *
-     * @param $filter
-     * @param $pagination
+     * @param Tinebase_Model_Filter_FilterGroup $filter
+     * @param Tinebase_Model_Pagination $pagination
      * @param Tinebase_Controller_SearchInterface $controller the record controller
-     * @param $totalCountMethod
+     * @param string $totalCountMethod
      * @param integer $resultCount
      * @return array
      */
-    protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
+    protected function _getSearchTotalCount(Tinebase_Model_Filter_FilterGroup $filter,
+                                            Tinebase_Model_Pagination $pagination,
+                                            Tinebase_Controller_SearchInterface $controller,
+                                            string $totalCountMethod,
+                                            int $resultCount)
     {
         if ($controller instanceof Tinebase_Controller_Abstract) {
             $this->_setRequestContext($controller);
@@ -791,6 +795,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
             // resolve custom fields by default
             $modelController->resolveCustomfields(true);
+            if (!isset($args[0])) {
+                $args[0] = '';
+            }
             switch ($apiMethod) {
                 case 'get':
                     return $this->_get($args[0], $modelController);
@@ -800,6 +807,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                     break;
                 case 'search':
                     $filterName = $this->_applicationName . '_Model_' . $model . 'Filter';
+                    if (!isset($args[1])) {
+                        $args[1] = '';
+                    }
                     return $this->_search($args[0], $args[1], $modelController, $filterName, /* $_getRelations */ true);
                     break;
                 case 'delete':
@@ -808,6 +818,15 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 case 'import':
                     // model controller is not needed - but we fetch it for checking if model exists and user has run right
                     // $tempFileId, $definitionId, $importOptions, $clientRecordData
+                    if (!isset($args[1])) {
+                        $args[1] = '';
+                    }
+                    if (!isset($args[2])) {
+                        $args[2] = [];
+                    }
+                    if (!isset($args[3])) {
+                        $args[3] = [];
+                    }
                     return $this->_import($args[0], $args[1], $args[2], $args[3]);
                     break;
             }

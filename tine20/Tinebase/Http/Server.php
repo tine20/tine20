@@ -335,10 +335,9 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      * -> moved here from Zend_Server_Abstract because it is marked as deprecated there
      * 
      * @param  string $string value
-     * @param  string $key
      * @return string Lower cased string
      */
-    public static function lowerCase(&$value, &$key)
+    public static function lowerCase(&$value)
     {
         return $value = strtolower($value);
     }    

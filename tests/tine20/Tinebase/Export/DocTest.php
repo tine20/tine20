@@ -101,8 +101,10 @@ class Tinebase_Export_DocTest extends TestCase
         $export->save($tmpFile);
 
         try {
-            static::assertEquals(filesize(dirname(__DIR__) . '/files/export/twigFunctions_result.docx'),
-                filesize($tmpFile));
+            $docXml = file_get_contents('zip://' . $tmpFile . '#word/document.xml');
+            static::assertStringContainsString('testName', $docXml);
+            static::assertStringContainsString('moreTest', $docXml);
+            static::assertStringContainsString('Jan 2, 2000', $docXml);
         } finally {
             unlink($tmpFile);
         }

@@ -252,8 +252,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }], [{
                                 name: 'currency',
                                 fieldLabel: this.app.i18n._('Currency'),
-                                value: currency,
-                                allowBlank: false
+                                value: currency
                             }, {
                                 name: 'currency_trans_rate',
                                 fieldLabel: this.app.i18n._('Currency Translation Rate'),
@@ -301,6 +300,14 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [
                             [{
+                                name: 'adr_name',
+                                fieldLabel: this.app.i18n._('Name'),
+                                columnWidth: 47/100
+                            }, {
+                                name: 'adr_email',
+                                fieldLabel: this.app.i18n._('Email'),
+                                columnWidth: 47/100
+                            }, {
                                 name: 'adr_street',
                                 fieldLabel: this.app.i18n._('Street'),
                                 columnWidth: 47/100

@@ -93,7 +93,6 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_setNextNumber($_record);
-        $this->_resolvePostalAddress($_record);
         self::validateCurrencyCode($_record->currency);
     }
 
@@ -107,12 +106,13 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _inspectAfterCreate($_createdRecord, $_record)
     {
         // record finally have id here , create postal address needs record_id.
-        $this->_resolvePostalAddress($_record);
-        $this->_handleAddresses($_record);
+        Sales_Controller_Address::getInstance()->resolvePostalAddress($_record);
+        $this->_resolveBillingAddress($_record);
     }
 
     /**
@@ -124,7 +124,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     public function resolveVirtualFields($customer)
     {
         $addressController = Sales_Controller_Address::getInstance();
-        $filter = new Sales_Model_AddressFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $customer['id'])));
 
         $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
@@ -166,7 +166,6 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $this->handleExternAndInternId($_record);
-        $this->_resolvePostalAddress($_record);
         
         self::validateCurrencyCode($_record->currency);
 
@@ -191,7 +190,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
         $this->handleExternAndInternId($record);
-        $this->_handleAddresses($record);
+        Sales_Controller_Address::getInstance()->resolvePostalAddress($record);
     }
 
     /**d
@@ -225,7 +224,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      * @return  Tinebase_Record_Interface
      *
      */
-    protected function handleExternAndInternId($_record) {
+    public function handleExternAndInternId($_record) {
         //its only for the occasion after resolveVirtualFields
         foreach (array('cpextern_id', 'cpintern_id') as $prop) {
             if (isset($_record[$prop]) && is_array($_record[$prop])) {
@@ -235,37 +234,10 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
         
         return $_record;
     }
-    
-    /**
-     * handle address
-     * save properties in record
-     * @param Tinebase_Record_Interface $_record the record
-     * @return  Tinebase_Record_Interface
-     *
-     */
-    protected function _resolvePostalAddress($_record) {
-        $postalAddress = [];
-        
-        foreach( $_record as $field => $value) {
-            if (strpos($field, 'adr_') !== FALSE && ! empty($value)) {
-                $postalAddress[substr($field, 4)] = $value;
-            }
-        }
-        //its only for the occasion after resolveVirtualFields
-        if (!isset($postalAddress['seq']) && isset($_record['postal_id']) && isset($_record['postal_id']['seq'])) {
-            $postalAddress['seq'] = $_record['postal_id']['seq'];
-        }
-
-        $postalAddress['customer_id'] = isset($_record['id']) ? $_record['id'] : $_record['name'];
-        $postalAddress['type'] = 'postal';
-
-        $_record['postal_id'] = $postalAddress;
-        return $_record;
-    }
 
     /**
      * create postal address record after creat customer
-     * 
+     *
      * - create billing address adter postal address created
      * - billing address equal to postal address
      *
@@ -275,46 +247,24 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_NotFound
      */
-    protected function _handleAddresses($_record)
+    protected function _resolveBillingAddress($_record)
     {
-        $filter = new Sales_Model_AddressFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $_record['id'])));
 
         $postalAddressRecord = Sales_Controller_Address::getInstance()->search($filter)->getFirstRecord();
 
         // create if none has been found
-        if (! $postalAddressRecord) {
-            $postalAddressRecord = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($_record['postal_id']));
-            //create billing address once the postal address created
-            if ($postalAddressRecord) {
-                $billingAddress = [
-                    'customer_id' => $postalAddressRecord['customer_id'],
-                    'type' => 'billing',
-                    'prefix1' => $postalAddressRecord['prefix1'],
-                    'prefix2' => $postalAddressRecord['prefix2'],
-                    'street' => $postalAddressRecord['street'],
-                    'pobox' => $postalAddressRecord['pobox'],
-                    'postalcode' => $postalAddressRecord['postalcode'],
-                    'locality' => $postalAddressRecord['locality'],
-                    'region' => $postalAddressRecord['region'],
-                    'countryname' => $postalAddressRecord['countryname'],
-                    'custom1' => Tinebase_Record_Abstract::generateUID(5),
-                ];
-
-                Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
-            }
+        if ($postalAddressRecord) {
+            $billingAddress = $postalAddressRecord->getData();
+            unset($billingAddress['id']);
+            $billingAddress['type'] = 'billing';
             
-        } else {
-            // update if it has changed
-            $postalAddress = $_record['postal_id'];
-            $postalAddress['id'] = $postalAddressRecord->getId();
-            $postalAddressRecordToUpdate = new Sales_Model_Address($postalAddress);
-            $diff = $postalAddressRecord->diff($postalAddressRecordToUpdate);
-            if (! empty($diff)) {
-                $postalAddressRecord = Sales_Controller_Address::getInstance()->update($postalAddressRecordToUpdate);
-            }
+            Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
         }
     }
+    
     
 }

@@ -158,7 +158,13 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @var array
      */
     protected static $_serverPlugins = array();
-    
+
+    /**
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Config/Definition::$_properties
+     */
+    protected static $_properties = [];
+
     /**
      * get config object for application
      * 

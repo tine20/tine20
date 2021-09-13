@@ -2189,7 +2189,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom title for branding.')
             'description'           => 'Custom title for branding.',
             'type'                  => 'string',
-            'default'               => "Tine 2.0 ®",
+            'default'               => "tine ®",
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
@@ -2222,7 +2222,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom weburl for branding.')
             'description'           => 'Custom weburl for branding.',
             'type'                  => 'string',
-            'default'               => 'https://github.com/tine20/tine20',
+            'default'               => 'https://github.com/tine-groupware/tine',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
@@ -2244,7 +2244,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom url for the shop.')
             'description'           => 'Custom url for the shop.',
             'type'                  => 'string',
-            'default'               => 'https://www.tine20.com/partner/',
+            'default'               => 'https://www.tine-groupware.de',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
@@ -2292,7 +2292,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Background color of mask icon (safari pinned tab).')
             'description'           => 'Background color of mask icon (safari pinned tab).',
             'type'                  => 'string',
-            'default'               => '#9b7f14',
+            'default'               => '#0082ca',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,

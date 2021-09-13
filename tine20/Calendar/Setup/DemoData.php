@@ -173,7 +173,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'name'                 => static::$_de ? 'Besprechnungsraum Mars (1.OG)' : 'Meeting Room Mars (first floor)',
             'description'          => static::$_de ? 'Bis zu 10 Personen' : 'Up to 10 people',
             'email'                => 'mars@tin20.com',
-            'is_location'          => TRUE,
             'grants'               => [[
                 'account_id'      => Tinebase_Core::getUser()->getId(),
                 'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
@@ -189,7 +188,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'name'                 => static::$_de ? 'Besprechnungsraum Venus (2.OG)' : 'Meeting Room Venus (second floor)',
             'description'          => static::$_de ? 'Bis zu 14 Personen' : 'Up to 14 people',
             'email'                => 'venus@tin20.com',
-            'is_location'          => TRUE,
             'grants'               => [[
                 'account_id'      => Tinebase_Core::getUser()->getId(),
                 'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,

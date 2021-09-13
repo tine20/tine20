@@ -104,10 +104,11 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
         $context['monthlyWTR'] = $this->_monthlyWTR;
         $context['weekSummary'] = $this->_weekSummary;
         
-        // NOTE: we can't compute historic remaining vacations e.g. if you export a wtr from a few month ago
-        //       you'll see the current vacations and not the vacations which where left there
-        $context['currentRemainingVacationDays'] = HumanResources_Controller_FreeTime::getInstance()
+        $context['scheduledRemainingVacationDays'] = HumanResources_Controller_FreeTime::getInstance()
             ->getRemainingVacationDays($this->_monthlyWTR->employee_id);
+
+        $context['actualRemainingVacationDays'] = HumanResources_Controller_FreeTime::getInstance()
+            ->getRemainingVacationDays($this->_monthlyWTR->employee_id, $this->_monthlyWTR->getPeriod()['until']);
 
         $context['takenVactionsCurrentPeriod'] = HumanResources_Controller_FreeTime::getInstance()
             ->getTakenVacationDays($this->_monthlyWTR->employee_id, $this->_monthlyWTR->getPeriod());
