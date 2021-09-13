@@ -536,7 +536,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initGeneric: function() {
         if (this.modelConfig) {
-            
+
             Tine.log.debug('init generic gridpanel with config:');
             Tine.log.debug(this.modelConfig);
 
@@ -553,9 +553,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.copyEditAction = true;
             }
         }
-        
+
         // init generic columnModel
-        _.assign(this.gridConfig, this.initGenericColumnModel());
+        if (!Ext.isFunction(this.getColumnModel)) {
+            _.assign(this.gridConfig, this.initGenericColumnModel());
+        }
     },
     
     /**

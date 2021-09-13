@@ -26,6 +26,8 @@
  */
 class Addressbook_Model_List extends Tinebase_Record_Abstract
 {
+    const MODEL_NAME_PART = 'List';
+    
     /**
      * list type: list (user defined lists)
      * 

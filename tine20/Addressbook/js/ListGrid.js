@@ -32,7 +32,7 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * record class
      * @cfg {Tine.Addressbook.Model.List} recordClass
      */
-    recordClass: Tine.Addressbook.Model.List,
+    recordClass: 'Addressbook.List',
     
     /**
      * grid specific
@@ -72,6 +72,9 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Addressbook.ListGridPanel.superclass.initComponent.call(this);
     },
+
+    // prevent default from modelConfig
+    initGenericColumnModel: Ext.emptyFn,
     
     /**
      * returns column model
