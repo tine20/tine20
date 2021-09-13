@@ -130,7 +130,7 @@ variables:
 
   PHP_VERSION:
     description: "Php version to use."
-    value: "8.0"
+    value: "7.4"
  
   BUILD_PACKAGES:
     description: "Build source packages"
