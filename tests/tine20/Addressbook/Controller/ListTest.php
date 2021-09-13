@@ -460,7 +460,7 @@ class Addressbook_Controller_ListTest extends TestCase
             Addressbook_Controller_List::getInstance()->update($updatedList);
             $this->fail('should not be possible to set name of system group');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            $this->assertEquals('You are not allowed to MANAGE_ACCOUNTS in application Admin !', $tead->getMessage());
+            $this->assertEquals('This is a system group. To edit this group you need the Admin.ManageAccounts right.', $tead->getMessage());
         }
     }
 

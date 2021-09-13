@@ -64,6 +64,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'name',
         'description',
         'email',
+        'account_only'
     );
 
     /**
