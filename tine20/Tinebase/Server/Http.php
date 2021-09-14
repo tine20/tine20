@@ -163,9 +163,9 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         return $config && $config->exposeHttpApi;
     }
 
-    protected static function _getCommonApiMethods($simpleModelName)
+    public static function getCommonApiMethods($simpleModelName)
     {
-        $commonApiMethods = array(
+        return array(
             'export' => array(
                 'params' => array(
                     new Zend_Server_Method_Parameter(array(
@@ -181,8 +181,6 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 'plural' => true,
             ),
         );
-
-        return $commonApiMethods;
     }
 
     protected static function _getFrontend($application)
