@@ -325,20 +325,24 @@ class Tinebase_TagsTest extends TestCase
     public function testSearchTagsForApplication()
     {
         $this->_createSharedTag();
-        $filter = new Tinebase_Model_TagFilter(array());
-        $ids = $this->_instance->searchTags($filter)->getId();
-        $this->_instance->deleteTags($ids);
+        $filter = new Tinebase_Model_TagFilter([
+            'application' => 'Addressbook'
+        ]);
+        $tags = $this->_instance->searchTags($filter);
+        $tags = $tags->filter('system_tag', false);
+        $this->_instance->deleteTags($tags->getArrayOfIds());
         
-        $t1 = $this->_createSharedTag(['name' => 'tag1']);
-        $t2 = $this->_createSharedTag(['name' => 'tag2']);
+        $this->_createSharedTag(['name' => 'tag1']);
+        $this->_createSharedTag(['name' => 'tag2']);
         
         // this tag should not occur, search is in the addressbook application
         $crmAppId = Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId();
-        $t3 = $this->_createSharedTag(['name' => 'tag3'], array($crmAppId));
+        $this->_createSharedTag(['name' => 'tag3'], array($crmAppId));
         
         $filter = new Tinebase_Model_TagFilter(array('application' => 'Addressbook'));
         
         $tags = $this->_instance->searchTags($filter);
+        $tags = $tags->filter('system_tag', false);
         $this->assertEquals(2, $tags->count());
     }
 }
