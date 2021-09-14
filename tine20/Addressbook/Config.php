@@ -59,6 +59,8 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      */
     const CONTACT_ADDRESS_PARSE_RULES_FILE = 'parseRulesFile';
 
+    const LIBPOSTAL_REST_URL = 'libpostalRestUrl';
+
     /**
      * FEATURE_CONTACT_EVENT_LIST
      *
@@ -278,6 +280,12 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 ),
             )
         ),
+        self::LIBPOSTAL_REST_URL => [
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => false,
+            self::SETBYADMINMODULE          => false,
+            self::SETBYSETUPMODULE          => false,
+        ],
         self::CONTACT_ADDRESS_PARSE_RULES_FILE => array(
         //_('Parsing rules for addresses')
             'label'                 => 'Parsing rules for addresses',
