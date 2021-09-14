@@ -16,38 +16,21 @@
  * @package     Addressbook
  * @subpackage  Model
  */
-class Addressbook_Model_ListRoleMemberFilter extends Tinebase_Model_Filter_Abstract 
+class Addressbook_Model_ListRoleMemberFilter extends Tinebase_Model_Filter_ForeignId
 {
     /**
-     * @var array list of allowed operators
-     */
-    protected $_operators = [
-        'equals',
-        'in',
-        'definedBy',
-    ];
-
-    /**
-     * sets operator
+     * set options
      *
-     * @param string $_operator
-     * @throws Tinebase_Exception_UnexpectedValue
+     * @param array $_options
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function setOperator($_operator)
+    protected function _setOptions(array $_options)
     {
-        if (strpos($_operator, 'definedBy') !== false) {
-            $_operator = $this->_parseOperator($_operator, [
-                'setOperator' => [
-                    'oneOf' => true,
-                    'allOf' => true,
-                ],
-                'condition' => [
-                    'and' => true,
-                    'or' => true,
-                ]
-            ], $operatorParams);
-        }
-        parent::setOperator($_operator);
+        $_options['tablename'] = Tinebase_Record_Abstract::generateUID(30);
+        $_options['field'] = 'list_role_id';
+        $_options['controller'] = Addressbook_Controller_ListRole::class;
+        $_options['filtergroup'] = Addressbook_Model_ListRoleFilter::class;
+        parent::_setOptions($_options);
     }
 
     /**
@@ -58,32 +41,14 @@ class Addressbook_Model_ListRoleMemberFilter extends Tinebase_Model_Filter_Abstr
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $correlationName = Tinebase_Record_Abstract::generateUID(30);
+        $correlationName = $this->_options['tablename'];
         $db = $_backend->getAdapter();
         $_select->joinLeft(
-            /* table  */ array($correlationName => $_backend->getTablePrefix() . 'adb_list_m_role'),
+            /* table  */ [$correlationName => $_backend->getTablePrefix() . 'adb_list_m_role'],
             /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
-            /* select */ array()
+            /* select */ []
         );
-        if (empty($this->_value)) {
-            $_select->where($db->quoteIdentifier($correlationName . '.list_role_id') . ' IS NULL');
-        } else {
-            $_select->where($db->quoteIdentifier($correlationName . '.list_role_id') . ' IN (?)', (array)$this->_value);
-        }
-    }
-    
-    /**
-     * returns array with the filter settings of this filter group
-     *
-     * @param  bool $_valueToJson resolve value for json api?
-     * @return array
-     */
-    public function toArray($_valueToJson = false)
-    {
-        if (is_string($this->_value)) {
-            $this->_value = Addressbook_Controller_ListRole::getInstance()->get($this->_value)->toArray();
-        }
-        
-        return parent::toArray($_valueToJson);
+
+        parent::appendFilterSql($_select, $_backend);
     }
 }

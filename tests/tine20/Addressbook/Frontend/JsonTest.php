@@ -1455,6 +1455,14 @@ class Addressbook_Frontend_JsonTest extends TestCase
         return $klaus;
     }
 
+    public function testListRoleIdFilter()
+    {
+        $this->_uit->searchContacts([
+            ['field' => 'list_role_id', 'operator' => 'definedBy?condition=and&setOperator=oneOf', 'value' =>
+                [["field"=>":id","operator" =>"in","value"=>[]]]],
+        ], []);
+    }
+
     /**
      * testImportKeepBothWithTag
      *
