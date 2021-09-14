@@ -174,9 +174,14 @@ class Setup_Frontend_Cli
         
         if ($_opts->install === true) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                // nothing to do
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Already installed ... nothing to do.');
                 return 0;
             }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Installing ...');
+
             $applications = $controller->getInstallableApplications();
             $applications = array_keys($applications);
         } else {
