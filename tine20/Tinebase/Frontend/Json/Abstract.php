@@ -783,8 +783,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * magic method for json api
      *
      * @param string $method
-     * @param array  $args
-     * @return mixed
+     * @param array $args
+     * @return array|string[]|void
      */
     public function __call($method, array $args)
     {
@@ -795,26 +795,24 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
             // resolve custom fields by default
             $modelController->resolveCustomfields(true);
-            if (!isset($args[0])) {
-                $args[0] = '';
-            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
+                __METHOD__ . '::' . __LINE__ . ' Calling ' . $apiMethod . ' with controller '
+                . get_class($modelController) . ' args: ' . print_r($args, true));
+
             switch ($apiMethod) {
                 case 'get':
                     return $this->_get($args[0], $modelController);
-                    break;
                 case 'save':
                     return $this->_save($args[0], $modelController, $model);
-                    break;
                 case 'search':
                     $filterName = $this->_applicationName . '_Model_' . $model . 'Filter';
                     if (!isset($args[1])) {
                         $args[1] = '';
                     }
                     return $this->_search($args[0], $args[1], $modelController, $filterName, /* $_getRelations */ true);
-                    break;
                 case 'delete':
                     return $this->_delete($args[0], $modelController);
-                    break;
                 case 'import':
                     // model controller is not needed - but we fetch it for checking if model exists and user has run right
                     // $tempFileId, $definitionId, $importOptions, $clientRecordData
@@ -828,7 +826,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                         $args[3] = [];
                     }
                     return $this->_import($args[0], $args[1], $args[2], $args[3]);
-                    break;
             }
         }
     }

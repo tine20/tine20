@@ -172,7 +172,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                 $config = $model::getConfiguration();
                 if ($frontend::exposeApi($config)) {
                     $simpleModelName = Tinebase_Record_Abstract::getSimpleModelName($application, $model);
-                    $commonApiMethods = $frontend::_getCommonApiMethods($application, $simpleModelName);
+                    $commonApiMethods = $frontend::getCommonApiMethods($simpleModelName);
 
                     foreach ($commonApiMethods as $name => $method) {
                         $key = $application->name . '.' . $name . $simpleModelName . ($method['plural'] ? 's' : '');

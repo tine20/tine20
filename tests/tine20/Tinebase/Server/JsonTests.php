@@ -146,6 +146,44 @@ class Tinebase_Server_JsonTests extends TestCase
      */
     public function testHandleRequestForDynamicAPI()
     {
+        $this->_handleRequest('Inventory.searchInventoryItems', [
+            'filter' => [],
+            'paging' => [],
+        ]);
+
+        // TODO add get/delete/save
+        $resultString = $this->_handleRequest('Inventory.saveInventoryItem', [
+            'recordData' => [
+                'name' => Tinebase_Record_Abstract::generateUID()
+            ],
+        ]);
+        $result = Tinebase_Helper::jsonDecode($resultString);
+        self::assertArrayHasKey('id', $result['result']);
+        $id = $result['result']['id'];
+
+        $resultString = $this->_handleRequest('Inventory.getInventoryItem', [
+            'id' => $id
+        ]);
+        $result = Tinebase_Helper::jsonDecode($resultString);
+        self::assertArrayHasKey('id', $result['result']);
+
+        $resultString = $this->_handleRequest('Inventory.deleteInventoryItems', [
+            'ids' => [$id]
+        ]);
+        $result = Tinebase_Helper::jsonDecode($resultString);
+        self::assertArrayHasKey('status', $result['result']);
+        self::assertEquals('success', $result['result']['status']);
+    }
+
+    /**
+     * @param string $method
+     * @param array $params
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Session_Exception
+     * @return string
+     */
+    protected function _handleRequest(string $method, array $params)
+    {
         // handle jsonkey check
         $jsonkey = 'myawsomejsonkey';
         $_SERVER['HTTP_X_TINE20_JSONKEY'] = $jsonkey;
@@ -154,24 +192,23 @@ class Tinebase_Server_JsonTests extends TestCase
 
         $server = new Tinebase_Server_Json();
         $request = Tinebase_Http_Request::fromString(
-'POST /index.php?requestType=JSON HTTP/1.1' . "\r\n"
-. 'Host: localhost' . "\r\n"
-. 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
-. 'Content-Type: application/json' . "\r\n"
-. 'X-Tine20-Transactionid: 18da265bc0eb66a36081bfd42689c1675ed68bab' . "\r\n"
-. 'X-Requested-With: XMLHttpRequest' . "\r\n"
-. 'Accept: */*' . "\r\n"
-. 'Referer: http://tine20.vagrant/' . "\r\n"
-. 'Accept-Encoding: gzip, deflate' . "\r\n"
-. 'Accept-Language: en-US,en;q=0.8,de-DE;q=0.6,de;q=0.4' . "\r\n"
-. "\r\n"
-. '{"jsonrpc":"2.0","method":"Inventory.searchInventoryItems","params":{"filter":[], "paging":{}},"id":6}' . "\r\n"
+            'POST /index.php?requestType=JSON HTTP/1.1' . "\r\n"
+            . 'Host: localhost' . "\r\n"
+            . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
+            . 'Content-Type: application/json' . "\r\n"
+            . 'X-Tine20-Transactionid: 18da265bc0eb66a36081bfd42689c1675ed68bab' . "\r\n"
+            . 'X-Requested-With: XMLHttpRequest' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . 'Referer: http://tine20.vagrant/' . "\r\n"
+            . 'Accept-Encoding: gzip, deflate' . "\r\n"
+            . 'Accept-Language: en-US,en;q=0.8,de-DE;q=0.6,de;q=0.4' . "\r\n"
+            . "\r\n"
+            . '{"jsonrpc":"2.0","method":"' . $method . '","params":' . json_encode($params) . ',"id":6}' . "\r\n"
         );
         ob_start();
         $server->handle($request);
         $out = ob_get_clean();
         //echo $out;
-
         $this->assertTrue(! empty($out), 'request should not be empty');
         $this->assertStringNotContainsString('Not Authorised', $out);
         $this->assertStringNotContainsString('Method not found', $out);
@@ -179,5 +216,7 @@ class Tinebase_Server_JsonTests extends TestCase
         $this->assertStringNotContainsString('"error"', $out);
         $this->assertStringNotContainsString('PHP Fatal error', $out);
         $this->assertStringContainsString('"result"', $out);
+
+        return $out;
     }
 }
