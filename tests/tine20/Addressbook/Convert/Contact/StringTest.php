@@ -21,6 +21,8 @@ class Addressbook_Convert_Contact_StringTest extends \PHPUnit\Framework\TestCase
 Mustermannstr. 3
 34456 Musterstadt',
         'structured' => array(
+            'n_given' => 'Max',
+            'n_family' => 'Mustermann',
             'adr_one_postalcode' => '34456',
             'adr_one_locality'   => 'Musterstadt',
         )), array(
@@ -29,6 +31,8 @@ Mustermannstr. 3
 Mustermann Straße 3
 34456 Musterstadt',
         'structured' => array(
+            'n_given' => 'Max',
+            'n_family' => 'Mustermann',
             'adr_one_postalcode' => '34456',
             'adr_one_locality'   => 'Musterstadt',
             'adr_one_street'     => 'Mustermann Straße 3',
@@ -38,20 +42,19 @@ Mustermann Straße 3
 Mustermann Straße 3a
 34456 Musterstadt',
         'structured' => array(
+            'n_given' => 'Max',
+            'n_family' => 'Mustermann',
             'adr_one_postalcode' => '34456',
             'adr_one_locality'   => 'Musterstadt',
             'adr_one_street'     => 'Mustermann Straße 3a',
         )),
     );
 
-    public function testParseSignature0()
+    public function testParseSignature()
     {
-        $this->_testParseSignatures($this->_testData[0]);
-    }
-
-    public function testParseSignature1()
-    {
-        $this->_testParseSignatures($this->_testData[1]);
+        foreach ($this->_testData as $data) {
+            $this->_testParseSignatures($data);
+        }
     }
 
     protected function _testParseSignatures($testData)
@@ -63,6 +66,11 @@ Mustermann Straße 3a
 
         foreach($testData['structured'] as $key => $value) {
             $this->assertEquals($value, $contact->{$key}, $key . ' mismatch. contact: ' . print_r($contact->toArray(), true));
+        }
+        if (isset($testData['unrecognized'])) {
+            $this->assertSame($testData['unrecognized'], $unrecognizedTokens);
+        } else {
+            $this->assertEmpty($unrecognizedTokens, print_r($unrecognizedTokens, true));
         }
     }
 }
