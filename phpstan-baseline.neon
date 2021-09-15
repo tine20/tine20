@@ -6455,56 +6455,6 @@ parameters:
 			path: tine20/Tasks/Frontend/WebDAV/Container.php
 
 		-
-			message: "#^Call to method fromTine20Model\\(\\) on an unknown class Tasks_Convert_Task_VCalendar\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Call to method toTine20Model\\(\\) on an unknown class Tasks_Convert_Task_VCalendar\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$recordBeforeUpdate with type Calendar_Model_Event is incompatible with native type Tasks_Model_Task\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$task with type Calendar_Model_Event is incompatible with native type Tasks_Model_Task\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Parameter \\$_task of method Tasks_Frontend_WebDAV_Task\\:\\:__construct\\(\\) has invalid typehint type Tasks_Model_Event\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Parameter \\$vobjectData of method Tasks_Frontend_WebDAV_Task\\:\\:create\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Property Tasks_Frontend_WebDAV_Task\\:\\:\\$_converter has unknown class Tasks_Convert_Task_VCalendar as its type\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Property Tasks_Frontend_WebDAV_Task\\:\\:\\$_task has unknown class Tasks_Model_Event as its type\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Return typehint of method Tasks_Frontend_WebDAV_Task\\:\\:get\\(\\) has invalid type stream\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Return typehint of method Tasks_Frontend_WebDAV_Task\\:\\:getLastModified\\(\\) has invalid type time\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(Zend_Db_Select\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 103$#"
 			count: 1
 			path: tine20/Tasks/Model/Pagination.php

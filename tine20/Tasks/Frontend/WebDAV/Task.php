@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,7 +27,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     protected $_container;
     
     /**
-     * @var Tasks_Model_Event
+     * @var Tasks_Model_Task
      */
     protected $_task;
     
@@ -38,14 +39,15 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     protected $_vevent;
     
     /**
-     * @var Tasks_Convert_Task_VCalendar
+     * @var Tasks_Convert_Task_VCalendar_Abstract
      */
     protected $_converter;
     
     /**
      * Constructor 
-     * 
-     * @param  string|Tasks_Model_Event  $_task  the id of a event or the event itself 
+     *
+     * @param Tinebase_Model_Container $_container
+     * @param string|Tasks_Model_Task  $_task  the id of a event or the event itself
      */
     public function __construct(Tinebase_Model_Container $_container, $_task = null) 
     {
@@ -67,8 +69,10 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     /**
      * this function creates a Tasks_Model_Task and stores it in the database
      * 
-     * @param  Tinebase_Model_Container  $container
-     * @param  stream|string             $vobjectData
+     * @param  Tinebase_Model_Container $container
+     * @param  string $name
+     * @param  resource|string $vobjectData
+     * @param  string $onlyCurrentUserOrganizer
      */
     public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = 'unused')
     {
@@ -178,35 +182,22 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         sleep(5);
         
         // (re) fetch task as tree move does not refresh src node before delete
-        $task = Tasks_Controller_Task::getInstance()->get($this->_task);
+        try {
+            $task = Tasks_Controller_Task::getInstance()->get($this->_task);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new \Sabre\DAV\Exception\NotFound('Object not found');
+        }
         
         // allow delete only if deleted in origin calendar
         if ($task->container_id == $this->_container->getId()) {
-            //if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {
-                Tasks_Controller_Task::getInstance()->delete($task->getId());
-            //}
+            Tasks_Controller_Task::getInstance()->delete($task->getId());
         }
-        
-        // implicitly DECLINE event 
-        //else {
-            //$attendee = $task->attendee instanceof Tinebase_Record_RecordSet ? 
-            //    $task->attendee->filter('displaycontainer_id', $this->_container->getId())->getFirstRecord() :
-            //    NULL;
-            
-            // NOTE: don't allow organizer to instantly delete after update, otherwise we can't handle move @see{Calendar_Frontend_WebDAV_EventTest::testMoveOriginPersonalToShared}
-        //    if ($attendee && $attendee->user_id != $task->organizer || Tinebase_DateTime::now()->subSecond(10) > $task->last_modified_time) {
-        //        $attendee->status = Calendar_Model_Attender::STATUS_DECLINED;
-       //         
-       //         self::enforceEventParameters($task);
-       //         $this->_task = Calendar_Controller_MSEventFacade::getInstance()->update($task);
-         //   } 
-       // }
     }
     
     /**
      * Returns the VCard-formatted object 
      * 
-     * @return stream
+     * @return resource
      */
     public function get() 
     {
@@ -331,7 +322,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     /**
      * Returns the last modification date as a unix timestamp
      *
-     * @return time
+     * @return string
      */
     public function getLastModified() 
     {
@@ -461,8 +452,8 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
      * we don't reset the alarms in the vcalendar parser already, because this it is a limitation
      * of our current calendar implementation to not allow user specific alarms
      * 
-     * @param Calendar_Model_Event $task
-     * @param Calendar_Model_Event $recordBeforeUpdate
+     * @param Tasks_Model_Task $task
+     * @param Tasks_Model_Task $recordBeforeUpdate
      */
     protected function _resetAlarms(Tasks_Model_Task $task, Tasks_Model_Task $recordBeforeUpdate)
     {
