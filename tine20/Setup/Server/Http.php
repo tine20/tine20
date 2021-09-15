@@ -44,7 +44,7 @@ class Setup_Server_Http implements Tinebase_Server_Interface
         }
 
         $response = $server->handle($_REQUEST);
-        if ($response instanceof \Zend\Diactoros\Response) {
+        if ($response instanceof \Laminas\Diactoros\Response) {
             $emitter = new \Zend\HttpHandlerRunner\Emitter\SapiEmitter();
             $emitter->emit($response);
         }

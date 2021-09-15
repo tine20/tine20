@@ -107,7 +107,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             self::_checkAreaLock($this->_method);
             
             $response = $server->handle($_REQUEST);
-            if ($response instanceof \Zend\Diactoros\Response) {
+            if ($response instanceof \Laminas\Diactoros\Response) {
                 $emitter = new \Zend\HttpHandlerRunner\Emitter\SapiEmitter();
                 $emitter->emit($response);
             }

@@ -1096,7 +1096,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
 
     /**
-     * @return \Zend\Diactoros\Response
+     * @return \Laminas\Diactoros\Response
      * @throws Tinebase_Exception_AccessDenied
      *
      * @todo replace with "healthCheck"?
@@ -1104,7 +1104,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function getStatus($apiKey = null)
     {
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_INFO) || ! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_API_KEY)) {
-            return new \Zend\Diactoros\Response\EmptyResponse();
+            return new \Laminas\Diactoros\Response\EmptyResponse();
         }
         
         if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_API_KEY, false)) {
@@ -1116,7 +1116,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $data = [
             'actionqueue' => Tinebase_ActionQueue::getStatus(),
         ];
-        $response = new \Zend\Diactoros\Response\JsonResponse($data);
+        $response = new \Laminas\Diactoros\Response\JsonResponse($data);
         return $response;
     }
 
@@ -1127,7 +1127,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * - checks: config, db, temp dir, files dir
      * - client ip address needs to be in Tinebase_Config::ALLOWEDHEALTHCHECKIPS
      *
-     * @return \Zend\Diactoros\Response
+     * @return \Laminas\Diactoros\Response
      *
      * @todo add cache check (see \Tinebase_Frontend_Cli::monitoringCheckCache + add $this->checkCache())
      * @todo use api key instead of client whitelist?
@@ -1139,7 +1139,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' client ip not allowed: '
                     . $clientIp);
-            return new \Zend\Diactoros\Response('php://memory', 404);
+            return new \Laminas\Diactoros\Response('php://memory', 404);
         }
 
         $status = 'pass';
@@ -1188,7 +1188,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'status' => $status,
             'problems' => $problems,
         ];
-        return new \Zend\Diactoros\Response\JsonResponse($data, $code);
+        return new \Laminas\Diactoros\Response\JsonResponse($data, $code);
     }
 
     /**
@@ -1221,7 +1221,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * @param int|string $size
      * @param string $ext
-     * @return \Zend\Diactoros\Response
+     * @return \Laminas\Diactoros\Response
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Cache_Exception
@@ -1233,7 +1233,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if ($size == 'svg' || $ext == 'svg') {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG);
 
-            $response = new \Zend\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(Tinebase_Helper::getFileOrUriContents($config));
 
             return $response
@@ -1290,7 +1290,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Tinebase_Core::getCache()->save($imageBlob, $cacheId);
         }
 
-        $response = new \Zend\Diactoros\Response();
+        $response = new \Laminas\Diactoros\Response();
         $response->getBody()->write($imageBlob);
 
         return $response
@@ -1326,7 +1326,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Tinebase_Core::getCache()->save($imageBlob, $cacheId);
         }
 
-        $response = new \Zend\Diactoros\Response();
+        $response = new \Laminas\Diactoros\Response();
         $response->getBody()->write($imageBlob);
         
         return $response
@@ -1619,7 +1619,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception_AccessDenied('this feature is not activated');
         }
 
-        /** @var \Zend\Diactoros\Request $request */
+        /** @var \Laminas\Diactoros\Request $request */
         $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
         $body = Tinebase_Helper::mbConvertTo((string)$request->getBody());
         if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
@@ -1627,7 +1627,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $reqXml = simplexml_load_string($body);
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . '/views/autodiscover');
-        $response = new \Zend\Diactoros\Response();
+        $response = new \Laminas\Diactoros\Response();
         $response = $response->withHeader('Content-Type', 'text/xml');
 
         if (!$reqXml || empty($reqXml->Request) || empty($reqXml->Request->AcceptableResponseSchema)) {

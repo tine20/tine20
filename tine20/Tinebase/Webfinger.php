@@ -5,11 +5,11 @@ class Tinebase_Webfinger
     /**
      * Tinebase_Expressive_RoutHandler function
      *
-     * @return \Zend\Diactoros\Response
+     * @return \Laminas\Diactoros\Response
      */
-    public static function handlePublicGet(): \Zend\Diactoros\Response
+    public static function handlePublicGet(): \Laminas\Diactoros\Response
     {
-        /** @var \Zend\Diactoros\ServerRequest $request */
+        /** @var \Laminas\Diactoros\ServerRequest $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
         $params = $request->getQueryParams();
         if (!isset($params['resource']) || !isset($params['rel'])) {
@@ -18,7 +18,7 @@ class Tinebase_Webfinger
         $resource = $params['resource'];
         $rel = $params['rel'];
 
-        $response = new \Zend\Diactoros\Response('php://memory', 200, [
+        $response = new \Laminas\Diactoros\Response('php://memory', 200, [
             'Access-Control-Allow-Origin' => '*',
             'Content-Type' => 'application/jrd+json'
         ]);
@@ -40,8 +40,8 @@ class Tinebase_Webfinger
         return $response;
     }
     
-    protected static function badRequest(): \Zend\Diactoros\Response
+    protected static function badRequest(): \Laminas\Diactoros\Response
     {
-        return new \Zend\Diactoros\Response('php://memory', 400);
+        return new \Laminas\Diactoros\Response('php://memory', 400);
     }
 }
