@@ -269,7 +269,7 @@ function createSpecialArchives()
     echo "building Tine 2.0 allinone archive... "
     mkdir /root/allinone
 
-    for ARCHIVENAME in activesync calendar coredata tinebase crm felamimail filemanager sales tasks timetracker; do
+    for ARCHIVENAME in activesync calendar coredata tinebase crm felamimail filemanager sales sso tasks timetracker; do
         if [ -e "${TINE20PACKAGES}/source/${RELEASE}/tine20-${ARCHIVENAME}_${RELEASE}.tar.bz2" ]; then
             (cd /root/allinone; tar xjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-${ARCHIVENAME}_${RELEASE}.tar.bz2)
         fi
