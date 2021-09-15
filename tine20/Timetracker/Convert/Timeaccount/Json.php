@@ -66,16 +66,24 @@ class Timetracker_Convert_Timeaccount_Json extends Tinebase_Convert_Json
         $this->_resolveGrants($records);
     }
 
-
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     */
     protected function _resolveGrants(Tinebase_Record_RecordSet $_records)
     {
-        // TODO do we need this?
-        // Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
-
         $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
         foreach ($_records as $timeaccount) {
             $timeaccountGrantsArray = $timeaccount->account_grants;
-            $modifyGrant = $manageAllRight || $timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::GRANT_ADMIN];
+            if (! $timeaccountGrantsArray) {
+                // grants missing - TODO re-fetch them?
+                // Timetracker_Controller_Timeaccount::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::get('currentAccount'));
+                $timeaccountGrantsArray = [];
+                $modifyGrant = $manageAllRight;
+            } else {
+                $modifyGrant = $manageAllRight || $timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::GRANT_ADMIN];
+            }
 
             $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_READ]   = true;
             $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_EDIT]   = $modifyGrant;
