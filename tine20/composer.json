@@ -90,6 +90,7 @@
     "firebase/php-jwt": "^5",
     "giggsey/libphonenumber-for-php": "^8",
     "jumbojett/openid-connect-php": "dev-master",
+    "laminas/laminas-diactoros": "^2.7",
     "laminas/laminas-http": "^2.14",
     "laminas/laminas-httphandlerrunner": "^2",
     "laminas/laminas-stdlib": "^3.5",
