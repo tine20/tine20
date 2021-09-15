@@ -297,7 +297,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         Tinebase_Event::fireEvent($event);
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
-        $container = $this->create($_container);
+        try {
+            /** @var Tinebase_Model_Container $container */
+            $container = $this->create($_container);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $zdse);
+                $translation = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric($translation->_('The container already exists'));
+            } else {
+                throw $zdse;
+            }
+        }
         Tinebase_Notes::getInstance()->addSystemNote($container, Tinebase_Core::getUser());
         $this->setGrants($container->getId(), $event->grants, TRUE, FALSE);
 
