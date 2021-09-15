@@ -34,7 +34,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * the version string
      * 
-     * @var string
+     * @var string|null $_version
      */
     protected $_version;
 
@@ -46,7 +46,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     protected $_emptyArray;
     
     /**
-     * @param  string  $_version  the version of the client
+     * @param  string|null $_version  the version of the client
      */
     public function __construct($_version = null)
     {
