@@ -26,7 +26,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     windowNamePrefix: 'ListEditWindow_',
     appName: 'Addressbook',
-    recordClass: Tine.Addressbook.Model.List,
+    recordClass: 'Addressbook.List',
     showContainerSelector: true,
     multipleEdit: true,
     displayNotes: true,
@@ -55,6 +55,12 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             frame: true,
             layout: 'border',
             items: [{
+                region: 'north',
+                items: new Ext.form.Label({
+                    text: '.',
+                    ref: '../../../sysGroupNote',
+                })
+            },{
                 region: 'center',
                 layout: 'border',
                 items: [{
@@ -85,7 +91,6 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 vtype: 'email',
                                 maxLength: 255,
                                 allowBlank: true,
-                                disabled: this.record.get('type') === 'group'
                             }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
                                 columnWidth: 0.75,
                                 fieldLabel: this.app.i18n._('List type'),
@@ -161,11 +166,11 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Tine.Tinebase.registry.get('manageSmtpEmailUser') &&
             this.app.featureEnabled('featureMailinglist'))
         {
-            var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
+            this.mailingListPanel = new Tine.Addressbook.MailinglistPanel({
                 app: this.app,
                 editDialog: this,
             });
-            tabpanelItems.push(mailingListPanel);
+            tabpanelItems.push(this.mailingListPanel);
         }
 
         return {
@@ -213,6 +218,24 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.memberGridPanel.searchCombo.userOnly = true;
             }
         }
+    },
+    checkStates: function() {
+        if (this.loadRequest) {
+            return _.delay(_.bind(this.checkStates, this), 250);
+        }
+        this.supr().checkStates.call(this);
+        
+        const hasEditGrant = !this.record.id || this.form.findField('container_id')?.selectedContainer?.account_grants?.editGrant;
+        const isSysGroup = this.record.get('type') === 'group';
+        const allowEditSysFields = hasEditGrant && 
+            (!isSysGroup || Tine.Tinebase.common.hasRight('manage_accounts', 'Admin'));
+        
+        this.sysGroupNote.setText(isSysGroup ?
+            this.app.i18n._("This is a system group. To edit this group you need the Admin.ManageAccounts right.") : '');
+        
+        ['name', 'description', 'email', 'account_only'].forEach((fieldName) => {this.getForm().findField(fieldName).setReadOnly(!allowEditSysFields)});
+        this.memberGridPanel.setReadOnly(!allowEditSysFields);
+        this.mailingListPanel?.setReadOnly(!allowEditSysFields);
     }
 });
 

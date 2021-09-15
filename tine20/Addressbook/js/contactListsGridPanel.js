@@ -18,7 +18,7 @@ Ext.ns('Tine.Addressbook');
  */
 Tine.Addressbook.contactListsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
-    recordClass: Tine.Addressbook.Model.List,
+    recordClass: 'Addressbook.List',
     usePagingToolbar: false,
 
     gridConfig: {
