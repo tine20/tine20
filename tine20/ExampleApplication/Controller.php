@@ -82,11 +82,11 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
 
     /**
      * @param string $parameter
-     * @return \Zend\Diactoros\Response
+     * @return \Laminas\Diactoros\Response
      */
     public function publicTestRoute($parameter = 'a')
     {
-        $response = new \Zend\Diactoros\Response();
+        $response = new \Laminas\Diactoros\Response();
         $body = $response->getBody();
 
         if ($parameter !== 'a')
@@ -98,11 +98,11 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
     }
 
     /**
-     * @return \Zend\Diactoros\Response
+     * @return \Laminas\Diactoros\Response
      */
     public function authTestRoute()
     {
-        $response = new \Zend\Diactoros\Response();
+        $response = new \Laminas\Diactoros\Response();
         $body = $response->getBody();
 
         $body->write(self::authTestRouteOutput);

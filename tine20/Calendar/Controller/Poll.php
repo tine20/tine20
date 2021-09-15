@@ -650,7 +650,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 return strcmp($a['name'], $b['name']);
             });
 
-            $response = new \Zend\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(json_encode(array_merge($poll->toArray(), [
                 'event_summary'     => $event->summary,
                 'event_organizer'   => $event->resolveOrganizer()->n_fn,
@@ -671,10 +671,10 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             ])));
 
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Zend\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Zend\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } finally {
             $assertAclUsage();
@@ -755,14 +755,14 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             // @TODO: queue some sort of notification for organizer?
 
-            $response = new \Zend\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(json_encode($returnAttendees->toArray()));
 
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Zend\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Zend\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } finally {
             $assertAclUsage();
@@ -814,12 +814,12 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             // @TODO: queue some sort of notification
 
-            $response = new \Zend\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response();
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Zend\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Zend\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } finally {
             $assertAclUsage();
@@ -860,11 +860,11 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             // TODO what to send now? - we don't have a generic poll notification yet
 //            Calendar_Controller_EventNotifications::getInstance()->sendNotificationToAttender($currentAttendee)
 
-            $response = new \Zend\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response();
         } catch (Tinebase_Exception_NotFound $tenf) {
-            return new \Zend\Diactoros\Response('php://memory', 404);
+            return new \Laminas\Diactoros\Response('php://memory', 404);
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            return new \Zend\Diactoros\Response('php://memory', 401);
+            return new \Laminas\Diactoros\Response('php://memory', 401);
         } finally {
             $assertAclUsage();
         }
@@ -875,7 +875,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
     public function publicApiGetAGB()
     {
-        $response = new \Zend\Diactoros\Response();
+        $response = new \Laminas\Diactoros\Response();
         $response->getBody()->write(Calendar_Config::getInstance()->get(Calendar_Config::POLL_GTC));
         return $response;
     }

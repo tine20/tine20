@@ -14,7 +14,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      *
      * @param string|array  $entryPoint
      * @param string        $template
-     * @return \Zend\Diactoros\Response
+     * @return \Laminas\Diactoros\Response
      */
     public static function getClientHTML($entryPoint, $template='Tinebase/views/singlePageApplication.html.twig', $context = [])
     {
@@ -48,7 +48,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             'jsFiles' => $entryPoints,
         ];
 
-        return new \Zend\Diactoros\Response\HtmlResponse($textTemplate->render($context), 200, self::getHeaders());
+        return new \Laminas\Diactoros\Response\HtmlResponse($textTemplate->render($context), 200, self::getHeaders());
     }
 
     /**

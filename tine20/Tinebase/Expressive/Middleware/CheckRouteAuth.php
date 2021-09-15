@@ -13,7 +13,7 @@ use \Psr\Http\Server\RequestHandlerInterface;
 use \Psr\Http\Server\MiddlewareInterface;
 use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
-use \Zend\Diactoros\Response;
+use \Laminas\Diactoros\Response;
 
 /**
  * expressive route auth middleware, reads matched route for auth requirements and checks them

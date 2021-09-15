@@ -101,7 +101,7 @@ class SSO_PublicAPITest extends TestCase
         $_GET['SAMLRequest'] = $msgStr;
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest([], [], 'https://unittest/shalala?SAMLRequest=' .
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?SAMLRequest=' .
                 urlencode($msgStr), 'GET'))
                 ->withQueryParams([
                     'SAMLRequest' => $msgStr,
@@ -129,7 +129,7 @@ class SSO_PublicAPITest extends TestCase
         ]));
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
                 '&client_id=' . urlencode($relyingParty->getId()) .
                 '&state=af0ifjsldkj' .
@@ -171,7 +171,7 @@ class SSO_PublicAPITest extends TestCase
         ]));
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
                 '&client_id=' . urlencode($relyingParty->getId()) .
                 '&state=af0ifjsldkj' .
@@ -214,7 +214,7 @@ class SSO_PublicAPITest extends TestCase
         ]));
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
                 '&client_id=' . urlencode($relyingParty->getId()) .
                 '&state=af0ifjsldkj' .
