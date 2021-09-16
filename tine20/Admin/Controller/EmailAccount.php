@@ -385,7 +385,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         return $this->_backend->getSystemAccount($user);
     }
 
-    public function updateAccountEmailUsers($account)
+    /**
+     * @param Felamimail_Model_Account $account
+     */
+    public function updateAccountEmailUsers(Felamimail_Model_Account $account)
     {
         $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
         $newFullUser = clone($fullUser);
@@ -397,29 +400,25 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             
             $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
             $emailUserBackend->updateUser($fullUser, $newFullUser);
-            
-            /*
-            foreach ($account['email_imap_user'] as $key => $value) {
-                $newFullUser->smtpUser[$key] = $value;
-            }
-            
-            $smtpUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-            $smtpUserBackend->updateUser($fullUser, $newFullUser);
-            */
         }
     }
     /**
-     * @param $record
+     * set emailUserId im xprops if not set
+     *
+     * @param Felamimail_Model_Account $_record
      */
-    public function resolveAccountEmailUsers($_record)
+    public function resolveAccountEmailUsers(Felamimail_Model_Account $_record)
     {
-        // set emailUserId im xprops if not set
         if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             return;
         }
 
         if (!isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
             $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+            if (!isset($user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP])) {
+                // still no XPROP_EMAIL_USERID_IMAP ...
+                return;
+            }
             Tinebase_EmailUser_XpropsFacade::setXprops($_record,
                 $user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP], false);
         }
@@ -432,5 +431,4 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $_record->email_imap_user = $emailUserBackend->getEmailuser($fullUser)->toArray();
         $_record->email_smtp_user = $smtpUserBackend->getEmailuser($fullUser)->toArray();
     }
-    
 }
