@@ -10,7 +10,7 @@
  */
 
 use \Psr\Http\Message\RequestInterface;
-use \Zend\Diactoros\Response;
+use \Laminas\Diactoros\Response;
 use \Zend\HttpHandlerRunner\Emitter\EmitterInterface;
 use \Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 use \Zend\Stratigility\MiddlewarePipe;
@@ -28,7 +28,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
     /**
      * the request
      *
-     * @var \Zend\Diactoros\Request
+     * @var \Laminas\Diactoros\Request
      */
     protected $_request = NULL;
 

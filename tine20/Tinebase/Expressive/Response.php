@@ -9,7 +9,7 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-use \Zend\Diactoros\Response;
+use \Laminas\Diactoros\Response;
 
 /**
  * Tinebase Expressive Response class, the result object is stored here and awaits processing

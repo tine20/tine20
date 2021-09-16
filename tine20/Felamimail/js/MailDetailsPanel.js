@@ -455,11 +455,12 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 }, [])
                             }]
                         }, {
-                            xtype: 'menuseparator'
+                            xtype: 'menuseparator',
+                            hidden: !Tine.Tinebase.configManager.get('downloadsAllowed')
                         }, {
                             text: this.app.i18n._('Download'),
                             iconCls: 'action_download',
-                            // hidden: user has no download rights!
+                            hidden: !Tine.Tinebase.configManager.get('downloadsAllowed'),
                             handler: () => {
                                 this.attachmentAnnimation(target, async () => {
                                     return Ext.ux.file.Download.start({

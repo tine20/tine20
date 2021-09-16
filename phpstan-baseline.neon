@@ -386,11 +386,6 @@ parameters:
 			path: tine20/Addressbook/Convert/Contact/VCard/Evolution.php
 
 		-
-			message: "#^Method Addressbook_Convert_Contact_VCard_Factory\\:\\:factory\\(\\) should return Addressbook_Convert_Contact_VCard_Abstract but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Addressbook/Convert/Contact/VCard/Factory.php
-
-		-
 			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
 			count: 5
 			path: tine20/Addressbook/Convert/Contact/VCard/IOS.php
@@ -6453,56 +6448,6 @@ parameters:
 			message: "#^Call to an undefined method Tinebase_Controller_Record_Interface\\:\\:search\\(\\)\\.$#"
 			count: 3
 			path: tine20/Tasks/Frontend/WebDAV/Container.php
-
-		-
-			message: "#^Call to method fromTine20Model\\(\\) on an unknown class Tasks_Convert_Task_VCalendar\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Call to method toTine20Model\\(\\) on an unknown class Tasks_Convert_Task_VCalendar\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$recordBeforeUpdate with type Calendar_Model_Event is incompatible with native type Tasks_Model_Task\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$task with type Calendar_Model_Event is incompatible with native type Tasks_Model_Task\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Parameter \\$_task of method Tasks_Frontend_WebDAV_Task\\:\\:__construct\\(\\) has invalid typehint type Tasks_Model_Event\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Parameter \\$vobjectData of method Tasks_Frontend_WebDAV_Task\\:\\:create\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Property Tasks_Frontend_WebDAV_Task\\:\\:\\$_converter has unknown class Tasks_Convert_Task_VCalendar as its type\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Property Tasks_Frontend_WebDAV_Task\\:\\:\\$_task has unknown class Tasks_Model_Event as its type\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Return typehint of method Tasks_Frontend_WebDAV_Task\\:\\:get\\(\\) has invalid type stream\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
-
-		-
-			message: "#^Return typehint of method Tasks_Frontend_WebDAV_Task\\:\\:getLastModified\\(\\) has invalid type time\\.$#"
-			count: 1
-			path: tine20/Tasks/Frontend/WebDAV/Task.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(Zend_Db_Select\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 103$#"
@@ -12825,68 +12770,8 @@ parameters:
 			path: tine20/Tinebase/State.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:checkFilterACL\\(\\)\\.$#"
-			count: 2
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:concurrencyManagementAndModlogMultiple\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:doContainerACLChecks\\(\\)\\.$#"
-			count: 2
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:search\\(\\)\\.$#"
-			count: 4
-			path: tine20/Tinebase/Tags.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 24
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Default value of the parameter \\#2 \\$ignoreAcl \\(false\\) of method Tinebase_Tags\\:\\:getFullTagById\\(\\) is incompatible with type string\\.$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_getDeleted boolean get deleted records\\)\\: Unexpected token \"\\$_getDeleted\", expected type at offset 100$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$modelName\\)\\: Unexpected token \"\\$modelName\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_Model_Tag\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 73$#"
-			count: 2
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_Record_RecordSet\\|Tinebase_Model_TagRight\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 107$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(array\\|Tinebase_Record_RecordSet set of string\\|array\\|Tinebase_Model_Tag with existing and non\\-existing tags\\)\\: Unexpected token \"set\", expected variable at offset 236$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Variable \\$oldContexts might not be defined\\.$#"
-			count: 1
-			path: tine20/Tinebase/Tags.php
-
-		-
-			message: "#^Variable \\$oldRights might not be defined\\.$#"
-			count: 1
 			path: tine20/Tinebase/Tags.php
 
 		-

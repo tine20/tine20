@@ -534,8 +534,8 @@ EOT;
         $version = exec('mysqldump --version');
         // TODO find out about version 9+
         if (preg_match('/Ver 8/', $version)) {
-            $mycnfData .= '[mysqldump]
-column-statistics=0';
+            $mycnfData .= "\n[mysqldump]
+column-statistics=0\n";
         }
 
         file_put_contents($path, $mycnfData);

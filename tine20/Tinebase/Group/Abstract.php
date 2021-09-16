@@ -228,6 +228,9 @@ abstract class Tinebase_Group_Abstract
             // create group on the fly
             $group = new Tinebase_Model_Group(array(
                 'name'    => $defaultGroupName,
+                'account_only' => true,
+                'visibility' => in_array($defaultGroupName, ['Anonymous', 'Replicators']) ? 
+                    Tinebase_Model_Group::VISIBILITY_HIDDEN : Tinebase_Model_Group::VISIBILITY_DISPLAYED,
             ));
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
                 // in this case it is ok to create the list without members

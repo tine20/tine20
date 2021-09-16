@@ -5143,3 +5143,9 @@ msgstr "Kontakt erstellen"
 
 msgid "Compose Message To"
 msgstr "Nachricht verfassen"
+
+msgid "You are not allowed to update system tags"
+msgstr "Sie sind nicht berechtigt System Tags zu aktualisieren"
+
+msgid "You are not allowed to delete system tags"
+msgstr "Sie sind nicht berechtigt System Tags zu löschen"

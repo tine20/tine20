@@ -50,6 +50,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine20/dbal.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine20/zendframework1.git"
     },
     {
@@ -80,12 +84,13 @@
     "ext-zip": "*",
     "benmorel/gsm-charset-converter": "^0.2.0",
     "composer/semver": "*",
-    "doctrine/dbal": "^2",
+    "doctrine/dbal": "2.13.3pl1 as 2.13.3",
     "doctrine/orm": "^2",
     "ezyang/htmlpurifier": "^4",
     "firebase/php-jwt": "^5",
     "giggsey/libphonenumber-for-php": "^8",
     "jumbojett/openid-connect-php": "dev-master",
+    "laminas/laminas-diactoros": "^2.7",
     "laminas/laminas-http": "^2.14",
     "laminas/laminas-httphandlerrunner": "^2",
     "laminas/laminas-stdlib": "^3.5",
@@ -96,7 +101,7 @@
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "^0.1.7",
     "php-http/curl-client": "^2.1",
-    "phpoffice/phpexcel": "1.8.2pl1 as 1.8.2",
+    "phpoffice/phpexcel": "1.8.2pl2 as 1.8.2",
     "phpoffice/phpspreadsheet": "1.18.0pl1 as 1.18.0",
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
@@ -117,7 +122,7 @@
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "2.*",
-    "zendframework/zendframework1": "1.12.20pl50 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20pl53 as 1.12.20"
   },
   "require-dev": {
     "laminas/laminas-psr7bridge": "^1",

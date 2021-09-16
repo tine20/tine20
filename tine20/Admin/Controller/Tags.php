@@ -30,7 +30,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
         $this->_backend = Tinebase_Tags::getInstance();
         $this->_doContainerACLChecks = false;
         $this->_omitModLog = true;
-        $this->_modelName = 'Tinebase_Model_FullTag';
+        $this->_modelName = 'Tinebase_Model_Tag';
     }
 
     /**
@@ -105,12 +105,12 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
-        $fullTag = Tinebase_Tags::getInstance()->getFullTagById($_id, /* ignoreAcl = */ true);
+        $tag = Tinebase_Tags::getInstance()->getTagById($_id, /* ignoreAcl = */ true);
         
-        $fullTag->rights =  Tinebase_Tags::getInstance()->getRights($_id);
-        $fullTag->contexts = Tinebase_Tags::getInstance()->getContexts($_id);
+        $tag->rights =  Tinebase_Tags::getInstance()->getRights($_id);
+        $tag->contexts = Tinebase_Tags::getInstance()->getContexts($_id);
         
-        return $fullTag;
+        return $tag;
     }  
 
     /**
@@ -155,12 +155,12 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     /**
      * set tag rights
      * 
-     * @param Tinebase_Model_FullTag $_tag
+     * @param Tinebase_Model_Tag $_tag
      * @param string $_tagId
      * @param boolean $_purgeRights
      * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _setTagRights(Tinebase_Model_FullTag $_tag, $_tagId, $_purgeRights = FALSE)
+    protected function _setTagRights(Tinebase_Model_Tag $_tag, $_tagId, $_purgeRights = FALSE)
     {
         if ($_purgeRights) {
             Tinebase_Tags::getInstance()->purgeRights($_tagId);

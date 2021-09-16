@@ -15,8 +15,9 @@
  * @package     Tinebase
  * @subpackage  Tags
  *
- * @property string     $id
- * @property string     $name
+ * @property string $id
+ * @property string $name
+ * @property boolean $system_tag
  */
 class Tinebase_Model_Tag extends Tinebase_Record_Abstract
 {
@@ -106,6 +107,11 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
                     ['regex', '/^#[0-9a-fA-F]{6}$/'],
                 ],
             ],
+            'system_tag'                    => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL               => 0,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
             'occurrence'                    => [
                 'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -119,6 +125,10 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'rights'                        => [
+                //'type'                          => '!?',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'contexts'                      => [
                 //'type'                          => '!?',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],

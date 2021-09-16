@@ -55,19 +55,6 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
             )
         );
 
-        /*if (isset($filters['comp-filters']) && isset($filters['comp-filters'][0]['time-range'])) {
-            if (isset($filters['comp-filters'][0]['time-range']['start'])) {
-                $filterArray[] = array(
-                    'field' => 'period', 
-                    'operator' => 'within', 
-                    'value' => array(
-                        'from'  => $filters['comp-filters'][0]['time-range']['start'],
-                        'until' => $filters['comp-filters'][0]['time-range']['end']
-                    )
-                );
-            }
-        }*/
-        
         $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
         $filter = new $filterClass($filterArray);
 

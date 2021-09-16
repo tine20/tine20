@@ -227,7 +227,9 @@ Tine.Admin.Tags.Main = {
                     return '<div style="margin-top:1px;width: 8px; height: 8px; background-color:' + color + '; border-radius:5px;border: 1px solid black;" title="' + record.get('name') + ' (' +  i18n._('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
                 }},
                 { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 200 },
-                { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500}
+                { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500},
+                { id: 'system_tag', header: this.translation.gettext('System Tag'), dataIndex: 'system_tag', width: 40, renderer: Tine.Tinebase.common.booleanRenderer}
+
             ]
         });
         
