@@ -265,7 +265,9 @@ class Tinebase_FileSystem_Previews
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' timed out');
                 }
 
+                // TODO do this in one update call?
                 $this->_fsController->updatePreviewErrorCount($node->hash, $node->preview_error_count + 1);
+                $this->_fsController->updatePreviewCount($node->hash, 0);
 
                 return false;
             }
@@ -275,7 +277,10 @@ class Tinebase_FileSystem_Previews
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' preview creation for file ' . $node->getId() . ' failed');
             }
 
+            // TODO do this in one update call?
             $this->_fsController->updatePreviewStatus($node->hash, $exception->getHttpStatus());
+            $this->_fsController->updatePreviewErrorCount($node->hash, $node->preview_error_count + 1);
+            $this->_fsController->updatePreviewCount($node->hash, 0);
 
             return false;
 
