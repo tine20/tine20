@@ -22,10 +22,13 @@ class Zend_Ldap_ConvertTest extends TestCase
         return $this->_uit;
     }
 
+    /**
+     * @group nogitlabci
+     *
+     * @throws Exception
+     */
     public function testHex32ToAsc()
     {
-        $this->markTestSkipped('some gitlab issue, locally works on php7.4');
-        
         $result = $this->_getUit()->hex32ToAsc('\\4D');
         $this->assertTrue('M' === $result, print_r($result, true) . ' is no string value "M"');
     }
