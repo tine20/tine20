@@ -251,7 +251,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
 
         $data['attachments'] = [];
         foreach ($message->getAllAttachmentParts() as $id => $attachment) {
-            /** @var ZBateson\MailMimeParser\Message\Part\MessagePart $attachment */
             /** @var GuzzleHttp\Psr7\Stream $partStream */
             $partStream = $attachment->getStream();
             $contentStream = $attachment->getContentStream();

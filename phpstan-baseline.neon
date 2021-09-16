@@ -11,11 +11,6 @@ parameters:
 			path: tine20/ActiveSync/Controller.php
 
 		-
-			message: "#^Access to an undefined property ActiveSync_Config\\:\\:\\$lastPingMonitoringNotificationToUser\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Controller/Device.php
-
-		-
 			message: "#^Parameter \\$_class of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid typehint type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Controller/Device.php
@@ -249,11 +244,6 @@ parameters:
 			message: "#^Return typehint of method Addressbook_Backend_Ldap\\:\\:getMultiple\\(\\) has invalid type Tinebase_RecordSet\\.$#"
 			count: 1
 			path: tine20/Addressbook/Backend/Ldap.php
-
-		-
-			message: "#^Binary operation \"\\.\" between 'uid\\=' and array results in an error\\.$#"
-			count: 1
-			path: tine20/Addressbook/Backend/Sync/Ldap.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the accountd object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
@@ -848,11 +838,6 @@ parameters:
 			path: tine20/Admin/Controller/EmailAccount.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$record\\)\\: Unexpected token \"\\$record\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Admin/Controller/EmailAccount.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(array array of record identifiers\\)\\: Unexpected token \"array\", expected variable at offset 147$#"
 			count: 1
 			path: tine20/Admin/Controller/EmailAccount.php
@@ -1229,12 +1214,12 @@ parameters:
 
 		-
 			message: "#^Binary operation \"\\-\" between string and int results in an error\\.$#"
-			count: 4
+			count: 2
 			path: tine20/Calendar/Controller/Event.php
 
 		-
 			message: "#^Binary operation \"\\-\" between string and string results in an error\\.$#"
-			count: 4
+			count: 2
 			path: tine20/Calendar/Controller/Event.php
 
 		-
@@ -2878,11 +2863,6 @@ parameters:
 			path: tine20/CoreData/Controller.php
 
 		-
-			message: "#^Access to an undefined property Courses_Config\\:\\:\\$samba\\.$#"
-			count: 3
-			path: tine20/Courses/Controller/Course.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:removeGroupMemberFromSqlBackend\\(\\)\\.$#"
 			count: 1
 			path: tine20/Courses/Controller/Course.php
@@ -4202,6 +4182,21 @@ parameters:
 			path: tine20/Felamimail/Model/Message.php
 
 		-
+			message: "#^Call to an undefined method ZBateson\\\\MailMimeParser\\\\Header\\\\IHeader\\:\\:getAddresses\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Call to an undefined method ZBateson\\\\MailMimeParser\\\\Header\\\\IHeader\\:\\:getDateTime\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
+			message: "#^Call to an undefined method ZBateson\\\\MailMimeParser\\\\Header\\\\IHeader\\:\\:getPersonName\\(\\)\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Message.php
+
+		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$mail\\)\\: Unexpected token \"\\$mail\", expected type at offset 149$#"
 			count: 1
 			path: tine20/Felamimail/Model/Message.php
@@ -5192,16 +5187,6 @@ parameters:
 			path: tine20/Projects/Controller.php
 
 		-
-			message: "#^Access to an undefined property SSO_Config\\:\\:\\$oauth2\\.$#"
-			count: 6
-			path: tine20/SSO/Controller.php
-
-		-
-			message: "#^Access to an undefined property SSO_Config\\:\\:\\$saml2\\.$#"
-			count: 4
-			path: tine20/SSO/Controller.php
-
-		-
 			message: "#^Method SSO_Controller\\:\\:addFastRoutes\\(\\) should return null but return statement is missing\\.$#"
 			count: 1
 			path: tine20/SSO/Controller.php
@@ -5230,11 +5215,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(array &\\$state Information about the current logout operation\\.\\)\\: Unexpected token \"&\", expected variable at offset 559$#"
 			count: 1
 			path: tine20/SSO/Facade/SAML/AuthSource.php
-
-		-
-			message: "#^Access to an undefined property SSO_Config\\:\\:\\$saml2\\.$#"
-			count: 1
-			path: tine20/SSO/Facade/SAML/MetaDataStorage.php
 
 		-
 			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$data\\.$#"
@@ -6250,6 +6230,16 @@ parameters:
 			path: tine20/Setup/Server/Cli.php
 
 		-
+			message: "#^Call to method emit\\(\\) on an unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter\\.$#"
+			count: 1
+			path: tine20/Setup/Server/Http.php
+
+		-
+			message: "#^Instantiated class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter not found\\.$#"
+			count: 1
+			path: tine20/Setup/Server/Http.php
+
+		-
 			message: "#^Parameter \\$body of method Setup_Server_Http\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
 			count: 1
 			path: tine20/Setup/Server/Http.php
@@ -6695,11 +6685,6 @@ parameters:
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
-			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:lindex\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
-
-		-
 			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:lLen\\(\\)\\.$#"
 			count: 2
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
@@ -6711,6 +6696,11 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:lRem\\(\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
+
+		-
+			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:lindex\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
@@ -7220,11 +7210,6 @@ parameters:
 			path: tine20/Tinebase/Controller.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$request with type Zend\\\\Http\\\\Request is not subtype of native type Zend\\\\Http\\\\PhpEnvironment\\\\Request\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$user$#"
 			count: 1
 			path: tine20/Tinebase/Controller.php
@@ -7605,11 +7590,6 @@ parameters:
 			path: tine20/Tinebase/Core.php
 
 		-
-			message: "#^Cannot access property \\$tags on void\\.$#"
-			count: 1
-			path: tine20/Tinebase/Core.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 1
 			path: tine20/Tinebase/Core.php
@@ -7648,16 +7628,6 @@ parameters:
 			message: "#^Result of function clearstatcache \\(void\\) is used\\.$#"
 			count: 1
 			path: tine20/Tinebase/Core.php
-
-		-
-			message: "#^Result of static method Tinebase_Core\\:\\:setupSentry\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/Tinebase/Core.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\:\\:\\$label\\.$#"
-			count: 1
-			path: tine20/Tinebase/CustomField.php
 
 		-
 			message: "#^Access to an undefined property Tinebase_CustomField\\:\\:\\$_modelName\\.$#"
@@ -8370,11 +8340,6 @@ parameters:
 			path: tine20/Tinebase/Export/VObject.php
 
 		-
-			message: "#^Binary operation \"\\.\" between 'merged cells\\: ' and array results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Xls.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$from\\)\\: Unexpected token \"\\$from\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/Export/Xls.php
@@ -8413,11 +8378,6 @@ parameters:
 			message: "#^Variable \\$routeHandler in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: tine20/Tinebase/Expressive/Middleware/RoutePipeInject.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\:\\:\\$includeRevision\\.$#"
-			count: 1
-			path: tine20/Tinebase/FileSystem.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:get\\(\\)\\.$#"
@@ -8613,21 +8573,6 @@ parameters:
 			message: "#^Variable \\$tempPath might not be defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/FileSystem/Previews.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\:\\:\\$includeRevision\\.$#"
-			count: 1
-			path: tine20/Tinebase/FileSystem/Quota.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\:\\:\\$totalByUserInMB\\.$#"
-			count: 1
-			path: tine20/Tinebase/FileSystem/Quota.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\:\\:\\$totalInMB\\.$#"
-			count: 1
-			path: tine20/Tinebase/FileSystem/Quota.php
 
 		-
 			message: "#^Variable \\$record might not be defined\\.$#"
@@ -9071,16 +9016,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Convert_Interface\\:\\:fromTine20RecordSet\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Json/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$filter\\)\\: Unexpected token \"\\$filter\", expected type at offset 146$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Json/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$pagination\\)\\: Unexpected token \"\\$pagination\", expected type at offset 168$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/Json/Abstract.php
 
@@ -9743,26 +9678,6 @@ parameters:
 			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:rawCommand\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Lock/Redis.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\|Zend_Config\\:\\:\\$additionalWriters\\.$#"
-			count: 1
-			path: tine20/Tinebase/Log.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\|Zend_Config\\:\\:\\$database\\.$#"
-			count: 1
-			path: tine20/Tinebase/Log.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\|Zend_Config\\:\\:\\$formatter\\.$#"
-			count: 1
-			path: tine20/Tinebase/Log.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Config_Struct\\|Zend_Config\\:\\:\\$priority\\.$#"
-			count: 2
-			path: tine20/Tinebase/Log.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -10453,11 +10368,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$condition\\)\\: Unexpected token \"\\$condition\", expected type at offset 113$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/Query.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Model_Filter_RecordAttachment\\:\\:\\$_db\\.$#"
-			count: 2
-			path: tine20/Tinebase/Model/Filter/RecordAttachment.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -11850,32 +11760,32 @@ parameters:
 			path: tine20/Tinebase/Record/Diff.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\Common\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:addInheritedFieldMapping\\(\\)\\.$#"
+			message: "#^Call to an undefined method Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:addInheritedFieldMapping\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\Common\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapField\\(\\)\\.$#"
+			message: "#^Call to an undefined method Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapField\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\Common\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapManyToMany\\(\\)\\.$#"
+			message: "#^Call to an undefined method Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapManyToMany\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\Common\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapManyToOne\\(\\)\\.$#"
+			message: "#^Call to an undefined method Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapManyToOne\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\Common\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapOneToMany\\(\\)\\.$#"
+			message: "#^Call to an undefined method Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapOneToMany\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
 
 		-
-			message: "#^Call to an undefined method Doctrine\\\\Common\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapOneToOne\\(\\)\\.$#"
+			message: "#^Call to an undefined method Doctrine\\\\Persistence\\\\Mapping\\\\ClassMetadata\\:\\:mapOneToOne\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
 
@@ -12255,12 +12165,57 @@ parameters:
 			path: tine20/Tinebase/Server/Expressive.php
 
 		-
+			message: "#^Call to method emit\\(\\) on an unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Expressive.php
+
+		-
+			message: "#^Call to method emit\\(\\) on an unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Expressive.php
+
+		-
+			message: "#^Instantiated class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter not found\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Expressive.php
+
+		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$requestFromGlobals$#"
 			count: 1
 			path: tine20/Tinebase/Server/Expressive.php
 
 		-
+			message: "#^Parameter \\$emitter of method Tinebase_Server_Expressive\\:\\:__construct\\(\\) has invalid typehint type Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface\\.$#"
+			count: 2
+			path: tine20/Tinebase/Server/Expressive.php
+
+		-
+			message: "#^Parameter \\$emitter of method Tinebase_Server_Expressive\\:\\:setEmitter\\(\\) has invalid typehint type Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface\\.$#"
+			count: 2
+			path: tine20/Tinebase/Server/Expressive.php
+
+		-
+			message: "#^Property Tinebase_Server_Expressive\\:\\:\\$_emitter has unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface as its type\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Expressive.php
+
+		-
+			message: "#^Return typehint of method Tinebase_Server_Expressive\\:\\:setEmitter\\(\\) has invalid type Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Expressive.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Http.php
+
+		-
+			message: "#^Call to method emit\\(\\) on an unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Http.php
+
+		-
+			message: "#^Instantiated class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter not found\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/Http.php
 
