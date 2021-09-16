@@ -796,7 +796,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             // resolve custom fields by default
             $modelController->resolveCustomfields(true);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Calling ' . $apiMethod . ' with controller '
                 . get_class($modelController) . ' args: ' . print_r($args, true));
 

@@ -203,11 +203,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
     /**
      * @param Tinebase_Model_FullUser $user
-     * @param \Zend\Http\Request $request
+     * @param \Laminas\Http\PhpEnvironment\Request $request
      * @param string|null $clientIdString
      * @throws Tinebase_Exception_MaintenanceMode
      */
-    public function loginUser(Tinebase_Model_FullUser $user, \Zend\Http\PhpEnvironment\Request $request, $clientIdString = null)
+    public function loginUser(Tinebase_Model_FullUser $user, \Laminas\Http\PhpEnvironment\Request $request, $clientIdString = null)
     {
         $loginName = $user->accountLoginName;
         $authResult = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $loginName);
