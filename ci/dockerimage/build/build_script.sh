@@ -121,7 +121,7 @@ function cleanupFiles() {
     for FILE in `ls ${TINE20ROOT}/tine20`; do
         # tine20 app needs translations OR Setup dir
         if [ ! -d "${TINE20ROOT}/tine20/$FILE/translations" ] && [ ! -d "${TINE20ROOT}/tine20/$FILE/Setup" ]; then
-            local FILES="images|library|vendor|docs|fonts|CREDITS|LICENSE|PRIVACY|README|RELEASENOTES|init_plugins.php|favicon.ico"
+            local FILES="images|library|vendor|docs|fonts|CREDITS|LICENSE|PRIVACY|RELEASENOTES|init_plugins.php|favicon.ico"
             local FILES="$FILES|config.inc.php.dist|index.php|langHelper.php|setup.php|tine20.php|bootstrap.php|worker.php|status.php"
 
             if ! [[ "$FILE" =~ $(echo ^\($FILES\)$) ]]; then
@@ -236,7 +236,7 @@ function createArchives()
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase CoreData images library vendor docs fonts"
                     local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
-                    local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES init_plugins.php favicon.ico"
+                    local FILES="$FILES CREDITS LICENSE PRIVACY RELEASENOTES init_plugins.php favicon.ico"
 
                     # allow to pass files to build as a global var
                     if [ -n "$ADDITIONALRELEASEFILES" ]; then
