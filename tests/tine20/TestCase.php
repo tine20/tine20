@@ -230,15 +230,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function _setMailDomainIfEmpty($domain = 'example.org')
     {
+        if (empty($this->_smtpConfig)) {
+            $this->_smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP,
+                new Tinebase_Config_Struct(array()));
+        }
         // if mailing is not installed, as with pgsql
         if (empty($this->_smtpConfig->primarydomain)) {
             if (! $this->_originalSmtpConfig) {
                 $this->_originalSmtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP,
                     new Tinebase_Config_Struct(array()));
             }
-            $updatedConfig = clone($this->_originalSmtpConfig);
-            $updatedConfig->primarydomain = $domain;
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $updatedConfig);
+            $this->_smtpConfig = clone($this->_originalSmtpConfig);
+            $this->_smtpConfig->primarydomain = $domain;
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_smtpConfig);
         }
     }
 
