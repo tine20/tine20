@@ -81,10 +81,30 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql imp
      * @var string
      */
     protected $_subconfigKey = 'dovecotcombined';
-    
+
+    /**
+     * interceptor before update
+     *
+     * @param array{loginname:string, domain:string, userid:string} $emailUserData
+     */
+    protected function _beforeUpdate(&$emailUserData)
+    {
+        $this->_beforeAddOrUpdate($emailUserData);
+    }
+
     /**
      * interceptor before add
      * 
+     * @param array $emailUserData
+     */
+    protected function _beforeAdd(&$emailUserData)
+    {
+        $this->_beforeAddOrUpdate($emailUserData);
+    }
+
+    /**
+     * interceptor before add
+     *
      * @param array $emailUserData
      */
     protected function _beforeAddOrUpdate(&$emailUserData)
@@ -93,10 +113,10 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql imp
         $select = $this->_db->select()
             ->from(array('domains'), array('name'))
             ->where($this->_db->quoteIdentifier('domains.name') . ' = ?', $this->_config['domain']);
-        
+
         $stmt = $this->_db->query($select);
         $domains = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
-        
+
         // did we find all domains in domains table?
         if (count($domains) < 1) {
             $this->_db->insert('domains', array(
@@ -106,7 +126,7 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql imp
                 'active'   => 1
             ));
         }
-        
+
         $emailUserData['last_modified'] = Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG);
     }
     
