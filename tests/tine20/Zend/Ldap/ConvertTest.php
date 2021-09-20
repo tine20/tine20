@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -23,8 +24,6 @@ class Zend_Ldap_ConvertTest extends TestCase
     }
 
     /**
-     * @group nogitlabci
-     *
      * @throws Exception
      */
     public function testHex32ToAsc()
