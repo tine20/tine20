@@ -1554,6 +1554,11 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      */
     public static function defaultApply(Tinebase_Model_ModificationLog $_modification, $_controller)
     {
+        $oldValue = $_controller->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function() use($_controller, $oldValue) {
+            $_controller->doContainerACLChecks($oldValue);
+        });
+
         switch ($_modification->change_type) {
             case Tinebase_Timemachine_ModificationLog::CREATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
@@ -1576,6 +1581,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             default:
                 throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
         }
+
+        unset($raii);
     }
 
     /**
