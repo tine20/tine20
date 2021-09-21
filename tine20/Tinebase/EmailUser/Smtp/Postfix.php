@@ -211,6 +211,26 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     }
 
     /**
+     * interceptor before update
+     *
+     * @param array{loginname:string, domain:string, userid:string} $emailUserData
+     */
+    protected function _beforeUpdate(&$emailUserData)
+    {
+        $this->_beforeAddOrUpdate($emailUserData);
+    }
+
+    /**
+     * interceptor before add
+     *
+     * @param array $emailUserData
+     */
+    protected function _beforeAdd(&$emailUserData)
+    {
+        $this->_beforeAddOrUpdate($emailUserData);
+    }
+
+    /**
     * interceptor before add
     *
     * @param array $emailUserData
