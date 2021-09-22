@@ -96,5 +96,14 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
             'lastName' => [$user->accountLastName],
             'email' => [$user->accountEmailAddress],
         ];
+        if (isset($state['SPMetadata'][SSO_Model_Saml2RPConfig::FLD_ATTRIBUTE_MAPPING])) {
+            foreach ($state['SPMetadata'][SSO_Model_Saml2RPConfig::FLD_ATTRIBUTE_MAPPING] as $key => $value) {
+                if (!$value) {
+                    unset($state['Attributes'][$key]);
+                } else {
+                    $state['Attributes'][$key] = [$user->{$value}];
+                }
+            }
+        }
     }
 }

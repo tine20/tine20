@@ -399,7 +399,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         $metaArray = [
             'metadata-set'          => 'saml20-idp-remote',
             'entityid'              => $idpentityid,
-            'NameIDFormat'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            'NameIDFormat'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             'SingleSignOnService'   => [[
                 'Binding'  => Constants::BINDING_HTTP_REDIRECT,
                 'Location' => $serverUrl . '/sso/saml2/redirect/signon',

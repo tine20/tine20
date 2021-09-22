@@ -26,6 +26,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
     public const FLD_ASSERTION_CONSUMER_SERVICE_BINDING = 'AssertionConsumerServiceBinding';
     public const FLD_ENTITYID = 'entityid';
     public const FLD_SINGLE_LOGOUT_SERVICE_LOCATION = 'singleLogoutServiceLocation';
+    public const FLD_ATTRIBUTE_MAPPING = 'attributeMapping';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -90,6 +91,9 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
                 ],
                 self::LABEL                 => 'Logout Service Location', // _('Logout Service Location')
             ],
+            self::FLD_ATTRIBUTE_MAPPING   => [
+                self::TYPE                  => self::TYPE_JSON,
+            ],
         ]
     ];
 
@@ -109,6 +113,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
                 'eduPersonPrincipalName' => 'string',
             ],
             'ForceAuthn' => true,
+            self::FLD_ATTRIBUTE_MAPPING => $this->{self::FLD_ATTRIBUTE_MAPPING},
         ];
     }
 }
