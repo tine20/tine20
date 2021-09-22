@@ -1615,7 +1615,7 @@ class Tinebase_FileSystem implements
                     $node = $this->stat('/' . implode('/', $currentPath));
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                        __LINE__ . ' Creating directory ' . $pathPart);
+                        __LINE__ . ' Creating directory "' . $pathPart . '"');
 
                     $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
                     $this->_addStatCache($currentPath, $node);
@@ -1798,8 +1798,6 @@ class Tinebase_FileSystem implements
 
                 $parentNode = $node;
             }
-
-
 
             if (null !== $revision) {
                 try {

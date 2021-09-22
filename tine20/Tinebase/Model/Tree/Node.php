@@ -166,6 +166,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'type'                          => 'string',
                 'validators'                    => ['presence' => 'required'],
                 self::QUERY_FILTER              => true,
+                'inputFilters'                  => ['Zend_Filter_StringTrim' => NULL],
             ],
             'quota'                         => [
                 'type'                          => self::TYPE_BIGINT,
