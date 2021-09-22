@@ -182,7 +182,8 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::FILTER_DEFINITION     => [
                     self::FILTER                => Tinebase_Model_Filter_Text::class,
                     self::OPTIONS               => ['binary' => true]
-                ]
+                ],
+                self::INPUT_FILTERS         => [Zend_Filter_StringTrim::class => NULL],
             ],
             'islink'                        => [
                 'type'                          => self::TYPE_BOOLEAN,

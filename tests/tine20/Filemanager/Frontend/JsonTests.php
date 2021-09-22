@@ -1057,8 +1057,23 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ));
         $result = $this->_getUit()->searchNodes($filter, array('sort' => 'creation_time'));
         $this->assertEquals(2, $result['totalcount']);
-        
+
         return $dirpaths;
+    }
+
+    public function testCreateFolderWithLeadingAndTrailingSpaces()
+    {
+        $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
+
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($sharedContainerNode['path']);
+
+        $dirpaths = array(
+            $sharedContainerNode['path'] . '/ dir With Space ',
+        );
+        $result = $this->_getUit()->createNodes($dirpaths, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
+
+        $this->assertEquals(1, count($result));
+        $this->assertEquals('dir With Space', $result[0]['name']);
     }
 
     /**
