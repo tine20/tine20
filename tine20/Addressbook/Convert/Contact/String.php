@@ -32,18 +32,18 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
     protected $_config = null;
 
     protected $libpostalMapping = [
-        'house' => 'adr_one_street2', // venue name e.g. "Brooklyn Academy of Music", and building names e.g. "Empire State Building"
+        //'house' => 'unrecognized', // venue name e.g. "Brooklyn Academy of Music", and building names e.g. "Empire State Building"
         //'category' => 'adr_one_street2', // for category queries like "restaurants", etc.
         //'near' => 'adr_one_street2', // phrases like "in", "near", etc. used after a category phrase to help with parsing queries like "restaurants in Brooklyn"
         'house_number' => 'adr_one_street',//: usually refers to the external (street-facing) building number. In some countries this may be a compount, hyphenated number which also includes an apartment number, or a block number (a la Japan), but libpostal will just call it the house_number for simplicity.
         'road' => 'adr_one_street', //: street name(s)
-        'unit' => 'adr_one_street2', // an apartment, unit, office, lot, or other secondary unit designator
-        'level' => 'adr_one_street2', // expressions indicating a floor number e.g. "3rd Floor", "Ground Floor", etc.
-        'staircase' => 'adr_one_street2', //: numbered/lettered staircase
-        'entrance' => 'adr_one_street2', //numbered/lettered entrance
-        'po_box' => 'adr_one_street2', //: post office box: typically found in non-physical (mail-only) addresses
+        //'unit' => 'unrecognized', // an apartment, unit, office, lot, or other secondary unit designator
+        //'level' => 'unrecognized', // expressions indicating a floor number e.g. "3rd Floor", "Ground Floor", etc.
+        //'staircase' => 'unrecognized', //: numbered/lettered staircase
+        //'entrance' => 'unrecognized', //numbered/lettered entrance
+        //'po_box' => 'unrecognized', //: post office box: typically found in non-physical (mail-only) addresses
         'postcode' => 'adr_one_postalcode', //: postal codes used for mail sorting
-        'suburb' => 'adr_one_street2', //: usually an unofficial neighborhood name like "Harlem", "South Bronx", or "Crown Heights"
+        //'suburb' => 'unrecognized', //: usually an unofficial neighborhood name like "Harlem", "South Bronx", or "Crown Heights"
         'city_district' => 'adr_one_region',//: these are usually boroughs or districts within a city that serve some official purpose e.g. "Brooklyn" or "Hackney" or "Bratislava IV"
         'city' => 'adr_one_locality', //,: any human settlement including cities, towns, villages, hamlets, localities, etc.
         'island' => 'adr_one_region', //: named islands e.g. "Maui"
@@ -106,21 +106,12 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
             $client->setRawData(json_encode(['query' => $_blob]));
             $response = $client->request();
             if (200 === $response->getStatus()) {
-
-                $result = [];
                 foreach (json_decode($response->getBody(), true) as $labelValue) {
                     if (!isset($this->libpostalMapping[$labelValue['label']])) continue;
 
-                    $value = $this->matchValueToOriginalData($labelValue['value'], $_blob);
-                    if (!isset($result[$this->libpostalMapping[$labelValue['label']]])) {
-                        $result[$this->libpostalMapping[$labelValue['label']]] = $value;
-                    } else {
-                        $result[$this->libpostalMapping[$labelValue['label']]] .= ' ' . $value;
-                    }
-                }
-
-                foreach ($result as $property => $value) {
-                    $_record->{$property} = $value;
+                    $value = trim($this->matchValueToOriginalData($labelValue['value'], $_blob));
+                    $key = $this->libpostalMapping[$labelValue['label']];
+                    $_record->{$key} = ($_record->{$key} ? $_record->{$key} . ' ' : '') . $value;
                 }
             }
         } else {
@@ -199,11 +190,11 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
     protected function findTelephone(&$blob, $record)
     {
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
-        if (preg_match_all('/((tel|fax|mob|work|home)[^\d+]*?)(\(?\s*[+0][()\d\s.\-]{7,100})/iu', $blob, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all('#((tel|fax|mob|work|home|phone)[^\d+]*?)(\(?\s*[+0][()\d\s.\-/]{7,100})#iu', $blob, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $match[3] = trim($match[3]);
                 if ($phoneUtil->isViablePhoneNumber($match[3])) {
-                    if (stripos($match[0], 'tel') === 0) {
+                    if (stripos($match[0], 'tel') === 0 || stripos($match[0], 'phone') === 0) {
                         $record->tel_work = ($record->tel_work ? $record->tel_work . ' ' : '') . $match[3];
                     } elseif (stripos($match[0], 'fax') === 0) {
                         $record->tel_fax = ($record->tel_fax ? $record->tel_fax . ' ' : '') . $match[3];
@@ -218,7 +209,7 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
                 }
             }
         }
-        if (preg_match_all('/\(?\s*[+0][()\d\s.\-]{7,100}/ium', $blob, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all('#\(?\s*[+0][()\d\s.\-/]{7,100}#ium', $blob, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $match[0] = trim($match[0]);
                 if ($phoneUtil->isViablePhoneNumber($match[0])) {
