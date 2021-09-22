@@ -986,6 +986,24 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
+     * is form valid?
+     *
+     * @return {Boolean}
+     */
+    isValid: function() {
+        var result = Tine.Admin.Groups.EditDialog.superclass.isValid.call(this);
+        var from = this.getForm().findField('from').getValue();
+        if (from.includes(',')) {
+            this.getForm().markInvalid([{
+                id: 'from',
+                msg: this.app.i18n._("User Name (From) cannot contain a comma.")
+            }]);
+            return false;
+        }
+        return result;
+    },
+
+    /**
      * load vacation record
      *
      */
