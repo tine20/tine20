@@ -502,11 +502,13 @@ class SSO_Controller extends Tinebase_Controller_Event
         $idp = \SimpleSAML\IdP::getById('saml2:tine20');
         $simpleSampleIsReallyGreat = new ReflectionProperty(\SimpleSAML\IdP::class, 'authSource');
         $simpleSampleIsReallyGreat->setAccessible(true);
-        $simpleSampleIsReallyGreat2 = new ReflectionProperty(\SimpleSAML\Auth\Simple::class, 'authSource');
-        $simpleSampleIsReallyGreat2->setAccessible(true);
-        $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsReallyGreat2->getValue($simpleSampleIsReallyGreat
-            ->getValue($idp)));
-        $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
+        if ($simpleSampleIsReallyGreat->getValue($idp) instanceof \SimpleSAML\Auth\Simple) {
+            $simpleSampleIsReallyGreat2 = new ReflectionProperty(\SimpleSAML\Auth\Simple::class, 'authSource');
+            $simpleSampleIsReallyGreat2->setAccessible(true);
+            $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsReallyGreat2->getValue($simpleSampleIsReallyGreat
+                ->getValue($idp)));
+            $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
+        }
 
         try {
             \SimpleSAML\Module\saml\IdP\SAML2::receiveAuthnRequest($idp);
@@ -574,6 +576,13 @@ class SSO_Controller extends Tinebase_Controller_Event
     
     protected static function getLoginPage($request)
     {
+        $binding = Binding::getCurrentBinding();
+        $samlRequest = $binding->receive();
+        $rp = SSO_Controller_RelyingParty::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            SSO_Model_RelyingParty::class, [
+                ['field' => 'name', 'operator' => 'equals', 'value' => $samlRequest->getIssuer()->getValue()]
+            ]))->getFirstRecord();
+
         $data = $request->getQueryParams();
         $data['SAMLRequest'] = base64_encode(gzinflate(base64_decode($data['SAMLRequest'])));
 
@@ -585,7 +594,14 @@ class SSO_Controller extends Tinebase_Controller_Event
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
             'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
             'lang' => $locale,
-            'initialData' => json_encode(['sso' => $data])
+            'initialData' => json_encode([
+                'sso' => $data,
+                'relyingParty' => [
+                    SSO_Model_RelyingParty::FLD_LABEL => $rp->{SSO_Model_RelyingParty::FLD_LABEL},
+                    SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION},
+                    SSO_Model_RelyingParty::FLD_LOGO => $rp->{SSO_Model_RelyingParty::FLD_LOGO},
+                ],
+            ])
         ]);
     }
     

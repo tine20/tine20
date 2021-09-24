@@ -70,6 +70,9 @@ class SSO_PublicAPITest extends TestCase
     {
         SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'https://localhost:8443/auth/saml2/sp/metadata.php',
+            SSO_Model_RelyingParty::FLD_LABEL => 'moodle',
+            SSO_Model_RelyingParty::FLD_DESCRIPTION => 'desc',
+            SSO_Model_RelyingParty::FLD_LOGO => 'logo',
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_Saml2RPConfig::class,
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_Saml2RPConfig([
                 SSO_Model_Saml2RPConfig::FLD_NAME => 'moodle',
@@ -83,10 +86,28 @@ class SSO_PublicAPITest extends TestCase
 
     }
 
-    public function testSaml2RedirectRequestAlreadyLoggedIn()
+    public function testSaml2LoginPage()
     {
         $this->_createSAML2Config();
 
+        $this->createSAMLRequest();
+        Tinebase_Core::unsetUser();
+        Tinebase_Session::getSessionNamespace()->unsetAll();
+
+        $response = SSO_Controller::publicSaml2RedirectRequest();
+        $response->getBody()->rewind();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $response = $response->getBody()->getContents();
+        $this->assertStringContainsString('window.initialData={"sso":{"SAMLRequest', $response);
+        $this->assertStringContainsString('},"relyingParty":{', $response);
+        $this->assertStringContainsString('"label":"moodle"', $response);
+        $this->assertStringContainsString('"description":"desc"', $response);
+        $this->assertStringContainsString('"logo":"logo"', $response);
+    }
+
+    protected function createSAMLRequest()
+    {
         $authNRequest = new \SAML2\AuthnRequest();
         ($issuer = new \SAML2\XML\saml\Issuer())->setValue('https://localhost:8443/auth/saml2/sp/metadata.php');
         $authNRequest->setIssuer($issuer);
@@ -106,6 +127,13 @@ class SSO_PublicAPITest extends TestCase
                     'SAMLRequest' => $msgStr,
                 ])
         );
+    }
+
+    public function testSaml2RedirectRequestAlreadyLoggedIn()
+    {
+        $this->_createSAML2Config();
+
+        $this->createSAMLRequest();
 
         $response = SSO_Controller::publicSaml2RedirectRequest();
         $response->getBody()->rewind();
