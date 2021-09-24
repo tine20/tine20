@@ -181,7 +181,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                 return new Promise((resolve, reject) => {
                     Tine.Filemanager.fileRecordBackend.createFolder(currentPath + '/' + localRecord.get('name'), {
                         success: resolve,
-                        failure: reject
+                        beforeFailure: reject
                     });
                 })
             });

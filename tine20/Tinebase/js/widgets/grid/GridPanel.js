@@ -1160,10 +1160,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.store.addSorted(localRecord);
             this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
             
-            const remoteRecord = await proxyFn(localRecord);
-            this.store.remove(localRecord);
-            this.store.addSorted(remoteRecord);
-            this.grid.getSelectionModel().selectRow(this.store.indexOf(remoteRecord));
+            try {
+                const remoteRecord = await proxyFn(localRecord);
+                this.store.remove(localRecord);
+                this.store.addSorted(remoteRecord);
+                this.grid.getSelectionModel().selectRow(this.store.indexOf(remoteRecord));
+            } catch (e) {
+                this.store.remove(localRecord);
+                this.bufferedLoadGridData({
+                    removeStrategy: 'keepBuffered',
+                });
+            }
+
             this.pagingToolbar.refresh.enable();
         }
         this.grid.on('afteredit', onAfterEdit, this, {single: true, buffer: 100});
