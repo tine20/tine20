@@ -99,12 +99,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         $dbCommand = Tinebase_Backend_Sql_Command::factory($db);
          
         // append query to select object
-        foreach ((array)$this->_opSqlMap[$operator]['sqlop'] as $num => $operator) {
+        foreach ((array)$this->_opSqlMap[$operator]['sqlop'] as $num => $op) {
             if ((isset($value[$num]) || array_key_exists($num, $value))) {
-                if (get_parent_class($this) === 'Tinebase_Model_Filter_Date' || in_array($operator, array('isnull', 'notnull'))) {
-                    $_select->where($field . $operator, $value[$num]);
-                } else {
-                    $_select->where($dbCommand->setDate($field). $operator, new Zend_Db_Expr($dbCommand->setDateValue($value[$num])));
+                if (($value[$num] && get_parent_class($this) === Tinebase_Model_Filter_Date::class) || in_array($operator, ['isnull', 'notnull'])) {
+                    $_select->where($field . $op, $value[$num]);
+                } elseif($value[$num]) {
+                    $_select->where($dbCommand->setDate($field). $op, $value[$num]);
                 }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -112,12 +112,14 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             }
         }
 
-        if (isset($this->_options[self::BEFORE_OR_IS_NULL]) && $this->_options[self::BEFORE_OR_IS_NULL] &&
-                strpos($this->_operator, 'before') === 0) {
-            $_select->orWhere($field . ' IS NULL');
-        } elseif (isset($this->_options[self::AFTER_OR_IS_NULL]) && $this->_options[self::AFTER_OR_IS_NULL] &&
-                strpos($this->_operator, 'after') === 0) {
-            $_select->orWhere($field . ' IS NULL');
+        if (isset($value[0]) && $value[0]) {
+            if (isset($this->_options[self::BEFORE_OR_IS_NULL]) && $this->_options[self::BEFORE_OR_IS_NULL] &&
+                    strpos($this->_operator, 'before') === 0) {
+                $_select->orWhere($field . ' IS NULL');
+            } elseif (isset($this->_options[self::AFTER_OR_IS_NULL]) && $this->_options[self::AFTER_OR_IS_NULL] &&
+                    strpos($this->_operator, 'after') === 0) {
+                $_select->orWhere($field . ' IS NULL');
+            }
         }
     }
 
