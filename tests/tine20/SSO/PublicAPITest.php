@@ -86,8 +86,16 @@ class SSO_PublicAPITest extends TestCase
 
     }
 
+    /**
+     * @throws Tinebase_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group nojenkins
+     */
     public function testSaml2LoginPage()
     {
+        self::markTestSkipped('FIXME: You need to run webpack-dev-server in dev mode!');
+
         $this->_createSAML2Config();
 
         $this->createSAMLRequest();
