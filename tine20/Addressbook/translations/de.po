@@ -724,7 +724,7 @@ msgid "List type"
 msgstr "Listen Typ"
 
 msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr "Dies ist eine Systemgruppe. Um Änderungen vorzunehmen benötigen sie das Recht Benutzerkonten Verwalten"
+msgstr "Dies ist eine Systemgruppe. Um Änderungen vorzunehmen, benötigen Sie das Recht 'Benutzerkonten verwalten'"
 
 #: Setup/Initialize.php:126 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
