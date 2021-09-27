@@ -19,7 +19,12 @@ Ext.ns('Tine.Filemanager');
  * @constructor
  */
 Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
-
+    /**
+     * @cfg {Array} additionalFields
+     * additional fields for the quota form
+     */
+    additionalFields: null,
+    
     layout: 'fit',
     border: false,
     requiredGrant: 'adminGrant',
@@ -30,7 +35,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
 
         this.editDialog.on('load', this.onRecordLoad, this);
         this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
-
+        
         var _ = window.lodash,
             fsConfig = Tine.Tinebase.configManager.get('quota'),
             showQuotaUi = _.get(fsConfig, 'showUI', true),
@@ -107,7 +112,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             title: this.app.i18n._('Usage by User'),
             // baseCls: 'ux-arrowcollapse'
         });
-
+        
         this.quotaPanel = {
             layout: 'form',
             frame: true,
@@ -116,11 +121,13 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             items: [{
                 xtype: 'columnform',
                 items: [
-                    [this.effetiveUsageField, this.hasOwnQuotaCheckbox, this.quotaField],
+                    [this.effetiveUsageField, this.hasOwnQuotaCheckbox, this.quotaField]
+                        .concat(this.additionalFields ? this.additionalFields : []),
                     [this.hasOwnQuotaDescription]
                 ]
             }]
         };
+        
         this.items = [{
             layout: 'vbox',
             align: 'stretch',
@@ -137,7 +144,6 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
 
     afterRender: function() {
         this.supr().afterRender.call(this);
-
         var editDialog = this.findParentBy(function(c){return !!c.record}),
             record = editDialog ? editDialog.record : {};
 
@@ -169,13 +175,14 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             effectiveUsage = _.get(record, 'data.effectiveAndLocalQuota.effectiveUsage'),
             quota = +record.get('quota'),
             hasOwnQuota = !!quota;
-
-        this.hasOwnQuotaCheckbox.setDisabled(! lodash.get(record, 'data.account_grants.adminGrant', false)
-            || record.get('type') != 'folder');
-
+        
+        const quotaManageRight = !_.get(record, 'data.account_grants.adminGrant', false)
+            || record.get('type') !== 'folder';
+        this.hasOwnQuotaCheckbox.setDisabled(quotaManageRight);
+        debugger
         this.hasOwnQuotaCheckbox.setValue(hasOwnQuota);
-        this.quotaField.setDisabled(! hasOwnQuota);
-
+        this.quotaField.setDisabled(! hasOwnQuota || quotaManageRight);
+        
         this.effetiveUsageField.setValue(Tine.widgets.grid.QuotaRenderer(effectiveUsage, effectiveQuota, true));
     },
 

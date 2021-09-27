@@ -1424,6 +1424,21 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
 
+    /**
+     * save quotas
+     * @param string $application
+     * @param array $additionalData
+     * @return false[]|mixed|Tinebase_Config_Struct|Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend_Database_LockTimeout
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function saveQuota(string $application, $recordData = null, array $additionalData = [])
+    {
+        return Admin_Controller_Quota::getInstance()->updateQuota($application, $recordData, $additionalData);
+    }
+
     public function searchQuotaNodes($filter = null)
     {
         if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::VIEW_QUOTA_USAGE)) {
@@ -1466,7 +1481,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filterArray = $filter->toArray();
             if (null !== $pathArray) {
                 $filterArray[] = $pathArray;
-        }
+            }
             $filter = new Tinebase_Model_Tree_Node_Filter($filterArray, '', array('ignoreAcl' => true));
 
             $pathFilters = $filter->getFilter('path', true);
@@ -1507,9 +1522,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $emailNode->name = 'Emails';
                     $emailNode->path = $virtualPath;
                     $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                    $emailNode->quota = $imapUsageQuota['mailQuota'];
+                    $emailNode->quota = $imapUsageQuota['mailQuota'] * 1024 * 1024;
                     $emailNode->size = $imapUsageQuota['mailSize'];
                     $emailNode->revision_size = $emailNode->size;
+                    $emailNode->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
                     $records->addRecord($emailNode);
                 }
             } elseif ($isFelamimailInstalled && '/' === $path) {
@@ -1522,8 +1538,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $imapUsageQuota = $imapBackend->getTotalUsageQuota();
                     $node = $records->filter('name',
                         Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId())->getFirstRecord();
-                    $node->quota += $imapUsageQuota['mailQuota'];
+                    $node->quota += $imapUsageQuota['mailQuota']  * 1024 * 1024;;
                     $node->size += $imapUsageQuota['mailSize'];
+                    $node->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
                 }
             }
 
@@ -1573,20 +1590,29 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $node = new Tinebase_Model_Tree_Node(array(), true);
                 $node->parent_id = $parent_id;
                 $node->name = $domain;
-                $node->quota = $usageQuota['mailQuota'];
+                $node->quota = $usageQuota['mailQuota'] * 1024 * 1024;
                 $node->size = $usageQuota['mailSize'];
                 $node->revision_size = $usageQuota['mailSize'];
                 $node->setId(md5($domain));
                 $node->type = Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
+                $node->xprops('customfields')['emailQuotas'] = $usageQuota;
+                $node->xprops('customfields')['domain'] = $domain;
                 $result->addRecord($node);
             }
         } elseif (count($pathParts = explode('/', $path)) === 1) {
             $parent_id = md5($pathParts[0]);
             $accountIds = [];
             $nodeIds = [];
-
+            $accounts = Admin_Controller_EmailAccount::getInstance()->search();
+            foreach ($accounts as $account) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' account node data: '
+                    . print_r($account, true));
+            }
+            
+            $emailUsers = $imapBackend->getAllEmailUsers($pathParts[0]);
             /** @var Tinebase_Model_EmailUser $emailUser */
-            foreach ($imapBackend->getAllEmailUsers($pathParts[0]) as $emailUser) {
+            foreach ($emailUsers as $emailUser) {
                 $node = new Tinebase_Model_Tree_Node(array(), true);
                 $node->parent_id = $parent_id;
                 $node->name = $emailUser->emailUsername;
@@ -1595,12 +1621,23 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $node->revision_size = $emailUser->emailMailSize;
                 $node->setId($emailUser->emailUserId);
                 $node->type = Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
+                $node->xprops('customfields')['emailUser'] = $emailUser->toArray();
+                $node->xprops('customfields')['isPersonalNode'] = true;
                 $result->addRecord($node);
                 list($accountId) = explode('@', $emailUser->emailUsername);
                 $nodeIds[$accountId] = $emailUser->emailUserId;
                 $accountIds[] = $accountId;
-            }
 
+                foreach ($accounts as $account) {
+                    if ($account instanceof Felamimail_Model_Account && !empty($account->xprops)) {
+                        if (isset($account->xprops['emailUserIdImap']) && $emailUser->emailUserId === $account->xprops['emailUserIdImap']) {
+                            $node->name = $account->email;
+                            $node->xprops('customfields')['emailAccountId'] = $account['id'];
+                        }
+                    }
+                }
+            }
+            
             /** @var Tinebase_Model_User $user */
             foreach (Tinebase_User::getInstance()->getMultiple($accountIds) as $user) {
                 if (isset($nodeIds[$user->accountId])) {
@@ -1611,7 +1648,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         return $result;
     }
-
+    
     /****************************** common ******************************/
     
     /**
@@ -1668,6 +1705,56 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     if ($idx !== FALSE) {
                         $record->application_id = $applications[$idx];
                     }
+                }
+                break;
+            case Tinebase_Model_Tree_Node::class:
+                // check if we filtered for /personal and expand accountid's
+                if ($_filter) {
+                    $filter = $_filter->getFilter('path', true);
+                    $path = $filter[0]->getValue();
+                    $filemanager_id = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
+                    
+                    foreach ($_records as $record) {
+                        if (!empty($record->name)) {
+                            try {
+                                if (!$record instanceof Tinebase_Model_Tree_Node) {
+                                    break;
+                                }
+                                
+                                // generic effective quota infos
+                                if (strpos($path, $filemanager_id )) {
+                                    if ($quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($record)) {
+                                        $record->xprops('customfields')['effectiveAndLocalQuota'] = $quotas;
+                                    }
+                                }
+                                
+                                // user personalFSQuota quota under /Filemanager/folders/personal
+                                if ($path === '/' . $filemanager_id . '/folders/personal') {
+                                    try {
+                                        $userData = Admin_Controller_User::getInstance()->get($record->name)->toArray();
+                                        $record->quota = $userData['xprops']['personalFSQuota'];
+                                        $record->xprops('customfields')['isPersonalNode'] = true;
+                                        $record->xprops('customfields')['accountLoginName'] = $userData['accountLoginName'];
+                                        $record->xprops('customfields')['accountId'] = $record->name;
+                                        $record->name = $userData['accountDisplayName'];
+                                    } catch (Tinebase_Exception_NotFound $e) {
+                                        $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
+                                        $record->name = $userData['accountDisplayName'];
+                                    }
+                                }
+
+                                // total quota for /Filemanager
+                                if ($record->name === $filemanager_id || $path === '/' . $filemanager_id) {
+                                    $record->quota = Tinebase_FileSystem_Quota::getRootQuotaBytes();
+                                }
+                            } catch (Tinebase_Exception_NotFound $e) {
+                                $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
+                                $record->name = $userData['accountDisplayName'];
+                            }
+                        }
+                    }
+                    
+                    // check if there is helper function
                 }
                 break;
         }
