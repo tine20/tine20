@@ -222,6 +222,11 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        // if user of email account changes and if migration checkbox is checked, it needs to be unchecked
+        if ($_record->user_id !== $_oldRecord->user_id && $_record->type === Felamimail_Model_Account::TYPE_USER) {
+            $_record->migration_approved = false;
+        }
+        
         if ($_record->email !== $_oldRecord->email && $_record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             // change user email address
             $user = Admin_Controller_User::getInstance()->get($_record->user_id);

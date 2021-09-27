@@ -180,7 +180,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 403:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Insufficient Rights'),
-                    msg: i18n._('Sorry, you are not permitted to perform this action'),
+                    msg: exception.message ? Tine[exception.appName].i18n._(exception.message) : i18n._('Sorry, you are not permitted to perform this action'),
                     icon: Ext.MessageBox.ERROR
                 }));
                 break;

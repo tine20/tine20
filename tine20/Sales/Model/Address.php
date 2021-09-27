@@ -40,7 +40,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
     public const FLD_FULLTEXT = 'fulltext';
     
     public const MODEL_NAME_PART = 'Address';
-    public const TABLE_NAME = 'sales_address';
+    public const TABLE_NAME = 'sales_addresses';
                         
     
     /**
@@ -66,6 +66,10 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
         'resolveRelated'  => TRUE,
         'defaultFilter'   => 'query',
         'resolveVFGlobally' => TRUE,
+
+        self::TABLE => [
+            self::NAME => self::TABLE_NAME,
+        ],
 
         self::FIELDS          => [
             self::FLD_CUSTOMER_ID       => [

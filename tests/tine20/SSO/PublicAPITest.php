@@ -70,6 +70,9 @@ class SSO_PublicAPITest extends TestCase
     {
         SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'https://localhost:8443/auth/saml2/sp/metadata.php',
+            SSO_Model_RelyingParty::FLD_LABEL => 'moodle',
+            SSO_Model_RelyingParty::FLD_DESCRIPTION => 'desc',
+            SSO_Model_RelyingParty::FLD_LOGO => 'logo',
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_Saml2RPConfig::class,
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_Saml2RPConfig([
                 SSO_Model_Saml2RPConfig::FLD_NAME => 'moodle',
@@ -77,17 +80,42 @@ class SSO_PublicAPITest extends TestCase
                 SSO_Model_Saml2RPConfig::FLD_ASSERTION_CONSUMER_SERVICE_BINDING => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
                 SSO_Model_Saml2RPConfig::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION => 'https://localhost:8443/auth/saml2/sp/saml2-acs.php/localhost',
                 SSO_Model_Saml2RPConfig::FLD_SINGLE_LOGOUT_SERVICE_LOCATION => 'https://localhost:8443/auth/saml2/sp/saml2-logout.php/localhost',
+                SSO_Model_Saml2RPConfig::FLD_ATTRIBUTE_MAPPING => ['uid' => 'accountEmailAddress'],
             ]),
         ]));
 
     }
 
-    public function testSaml2RedirectRequestAlreadyLoggedIn()
+    /**
+     * @throws Tinebase_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group nojenkins
+     */
+    public function testSaml2LoginPage()
     {
-        $this->markTestSkipped('fails on gitlab, locally it works');
-        
+        self::markTestSkipped('FIXME: You need to run webpack-dev-server in dev mode!');
+
         $this->_createSAML2Config();
 
+        $this->createSAMLRequest();
+        Tinebase_Core::unsetUser();
+        Tinebase_Session::getSessionNamespace()->unsetAll();
+
+        $response = SSO_Controller::publicSaml2RedirectRequest();
+        $response->getBody()->rewind();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $response = $response->getBody()->getContents();
+        $this->assertStringContainsString('window.initialData={"sso":{"SAMLRequest', $response);
+        $this->assertStringContainsString('},"relyingParty":{', $response);
+        $this->assertStringContainsString('"label":"moodle"', $response);
+        $this->assertStringContainsString('"description":"desc"', $response);
+        $this->assertStringContainsString('"logo":"logo"', $response);
+    }
+
+    protected function createSAMLRequest()
+    {
         $authNRequest = new \SAML2\AuthnRequest();
         ($issuer = new \SAML2\XML\saml\Issuer())->setValue('https://localhost:8443/auth/saml2/sp/metadata.php');
         $authNRequest->setIssuer($issuer);
@@ -107,13 +135,23 @@ class SSO_PublicAPITest extends TestCase
                     'SAMLRequest' => $msgStr,
                 ])
         );
+    }
+
+    public function testSaml2RedirectRequestAlreadyLoggedIn()
+    {
+        $this->_createSAML2Config();
+
+        $this->createSAMLRequest();
 
         $response = SSO_Controller::publicSaml2RedirectRequest();
         $response->getBody()->rewind();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('<input type="hidden" name="SAMLResponse"', $response->getBody()->getContents());
-
+        $response = $response->getBody()->getContents();
+        $this->assertSame(1, preg_match('/\<input\s+type="hidden"\s+name="SAMLResponse"\s+value="([^"]+)"/', $response, $matches));
+        $this->assertNotFalse($xml = base64_decode($matches[1]));
+        $this->assertStringContainsString('Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">' .
+            Tinebase_Core::getUser()->accountEmailAddress . '</saml:NameID>', $xml);
     }
 
     public function testOAuthGetLoginMask()

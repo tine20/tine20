@@ -7,3 +7,8 @@
  */
 
 // sso app entry point for tine20 fat-client
+Ext.ns('Tine.SSO');
+
+Tine.SSO.Application = Ext.extend(Tine.Tinebase.Application, {
+    hasMainScreen: false
+});

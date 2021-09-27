@@ -342,7 +342,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             }
             
             $insertData = $emailUserData;
-            $this->_beforeAddOrUpdate($insertData);
+            $this->_beforeAdd($insertData);
 
             $insertData = array_intersect_key($insertData, $this->getSchema());
             $this->_db->insert($this->_userTable, $insertData);
@@ -359,17 +359,25 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             throw $zdse;
         }
     }
-    
+
     /**
-     * interceptor before add/update
-     * 
-     * @param array $emailUserData
+     * interceptor before add
+     *
+     * @param array{loginname:string, domain:string, userid:string} $emailUserData
      */
-    protected function _beforeAddOrUpdate(&$emailUserData)
+    protected function _beforeAdd(&$emailUserData)
     {
-        
     }
-    
+
+    /**
+     * interceptor before update
+     *
+     * @param array{loginname:string, domain:string, userid:string} $emailUserData
+     */
+    protected function _beforeUpdate(&$emailUserData)
+    {
+    }
+
     /**
      * interceptor after add
      * 
@@ -429,33 +437,43 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
             . ' Updating ' . $this->_userTable . ' user ' . $emailUserData[$this->_propertyMapping['emailUsername']]);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($emailUserData, TRUE));
-        
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $emailUserData[$this->_propertyMapping['emailUserId']])
-        );
-        $this->_appendClientIdOrDomain($where);
-        
-        try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
-            $updateData = $emailUserData;
-            
-            $this->_beforeAddOrUpdate($updateData);
 
-            $updateData = array_intersect_key($updateData, $this->getSchema());
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+
+        $updateData = $emailUserData;
+
+        $this->_beforeUpdate($updateData);
+
+        $id = $updateData['oldUserId'] ?? $emailUserData[$this->_propertyMapping['emailUserId']];
+        $where = [
+            $this->_db->quoteInto(
+                $this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $id
+            )
+        ];
+        $this->_appendClientIdOrDomain($where);
+
+        $updateData = array_intersect_key($updateData, $this->getSchema());
+        try {
             $this->_db->update($this->_userTable, $updateData, $where);
-            
-            $this->_afterAddOrUpdate($emailUserData);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-            $this->inspectGetUserByProperty($_updatedUser);
-            
         } catch (Zend_Db_Statement_Exception $zdse) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user');
-            throw $zdse;
+            if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user');
+                Tinebase_TransactionManager::getInstance()->rollBack();
+
+                throw $zdse;
+            } else {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Duplicate: '
+                    . $zdse);
+                $translate = Tinebase_Translation::getTranslation('Tinebase');
+                throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+            }
         }
+
+        $this->_afterAddOrUpdate($emailUserData);
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+        $this->inspectGetUserByProperty($_updatedUser);
     }
     
     /**

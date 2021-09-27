@@ -1146,6 +1146,10 @@ msgstr "E-Mail Adresse"
 msgid "User Name (From)"
 msgstr "E-Mail Absender"
 
+#: js/AccountEditDialog.js:318
+msgid "User Name (From) cannot contain a comma."
+msgstr "E-Mail Absender darf kein Komma enthalten"
+
 #: js/AccountEditDialog.js:324
 msgid "Signature position"
 msgstr "Signaturposition"

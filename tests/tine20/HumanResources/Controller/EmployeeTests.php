@@ -39,7 +39,8 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
         $employee2 = $employeeController->create($employee2);
 
         $filter = new HumanResources_Model_EmployeeFilter(array(
-            array('field' => 'n_given', 'operator' => 'equals', 'value' => 'Paul')
+            array('field' => 'n_given', 'operator' => 'equals', 'value' => 'Paul'),
+            ['field' => 'last_modified_time', 'operator' => 'after', 'value' => ''] // this line should be ignored by the filter
         ));
         $result = $employeeController->search($filter);
 

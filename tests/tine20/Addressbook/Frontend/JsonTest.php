@@ -2469,7 +2469,7 @@ Steuernummer 33/111/32212";
             $this->_uit->saveList($list);
             self::fail('jsmith should not be able to update the record');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::assertStringContainsString('ACCOUNTS', $tead->getMessage());
+            self::assertStringContainsString('Admin.ManageAccounts', $tead->getMessage());
         }
     }
 

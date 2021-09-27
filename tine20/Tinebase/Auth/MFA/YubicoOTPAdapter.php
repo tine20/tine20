@@ -39,6 +39,7 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
         /** @var Tinebase_Model_MFA_YubicoOTPUserConfig $yubicoOTPCfg */
         $yubicoOTPCfg = $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG};
 
+        $_data = strtolower($_data);
         if (!preg_match("/^([cbdefghijklnrtuv]{0,16})([cbdefghijklnrtuv]{32})$/", $_data, $matches)) {
             return false;
         }
