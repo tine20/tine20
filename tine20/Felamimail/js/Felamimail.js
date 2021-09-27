@@ -661,7 +661,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                         this.setTitleWithUnreadcount(record.get('cache_unreadcount'));
                     }
                 }
-                
                 if (record.isModified('quota_usage') || record.isModified('quota_limit')) {
                     this.onUpdateFolderQuota(record);
                 }

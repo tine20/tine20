@@ -13,6 +13,7 @@
 Ext.ns('Tine.Admin');
 
 require('./LogEntries');
+require('./QuotaEditDialog');
 
 Tine.Admin.init = function () {
     var registeredItems = [];

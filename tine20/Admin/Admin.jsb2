@@ -124,7 +124,7 @@
           "path": "js/config/"
         },
         {
-          "text": "QuotaUsage.js",
+          "text": "QuotaManagement.js",
           "path": "js/"
         }
       ]

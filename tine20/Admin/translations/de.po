@@ -987,8 +987,20 @@ msgid "Total size of all available revisions"
 msgstr "Gesamtgröße aller verfügbaren Revisionen"
 
 #: js/QuotaUsage.js:107
-msgid "Quota Usage"
-msgstr "Kontingents-Nutzung"
+msgid "Quota Management"
+msgstr "Kontingents-Verwaltung"
+
+msgid "Edit Quota"
+msgstr "Kontingent bearbeiten"
+
+msgid "Edit {0} Quota"
+msgstr "{0} Kontingent bearbeiten"
+
+msgid "Manage total Filesystem Quota"
+msgstr "Gesamte Dateimanager Quota verwalten"
+
+msgid "Total quota"
+msgstr "Gesamte Quota"
 
 #: js/TagEditDialog.js:38
 msgid "Updating Tag"
@@ -1286,6 +1298,15 @@ msgstr "Quota Nutzung ansehen."
 #: Acl/Rights.php:335 Acl/Rights.php:336
 msgid "view ImportExportDefinitions"
 msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr "Datensatz muss gesetzt sein!"
+
+msgid "Account E-Mail needs to be set!"
+msgstr "Konto E-Mail muss gesetzt sein!"
+
+msgid "E-Mail account not found."
+msgstr "E-Mail-Konto nicht gefunden."
 
 #~ msgid "enable application"
 #~ msgstr "Anwendung aktivieren"

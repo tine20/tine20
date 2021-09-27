@@ -55,6 +55,18 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_SHARED_TAGS = 'manage_shared_tags';
+
+    /**
+     * the right to manage shared filesystem quotas
+     * @staticvar string
+     */
+    const MANAGE_SHARED_FILESYSTEM_QUOTAS = 'manage_shared_filesystem_quotas';
+
+    /**
+     * the right to manage shared email quotas
+     * @staticvar string
+     */
+    const MANAGE_SHARED_EMAIL_QUOTAS = 'manage_shared_email_quotas';
    
     /**
      * the right to manage roles
@@ -213,6 +225,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_EMAILACCOUNTS,
             self::MANAGE_APPS,
             self::MANAGE_SHARED_TAGS,
+            self::MANAGE_SHARED_FILESYSTEM_QUOTAS,
+            self::MANAGE_SHARED_EMAIL_QUOTAS,
             self::MANAGE_ROLES,
             self::MANAGE_COMPUTERS,
             self::MANAGE_CONTAINERS,
@@ -271,6 +285,14 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('Manage shared tags'),
                 'description'   => $translate->_('Add, delete and edit shared tags.'),
             ),
+            self::MANAGE_SHARED_FILESYSTEM_QUOTAS    => [
+                'text'          => $translate->_('Manage shared admin quotas'),
+                'description'   => $translate->_('Add, delete and edit shared admin quotas.'),
+            ],
+            self::MANAGE_SHARED_EMAIL_QUOTAS    => [
+                'text'          => $translate->_('Manage shared email quotas'),
+                'description'   => $translate->_('Add, delete and edit shared email quotas.'),
+            ],
             self::MANAGE_COMPUTERS => array(
                 'text'          => $translate->_('Manage computers'),
                 'description'   => $translate->_('Add, delete and edit (samba) computers.'),

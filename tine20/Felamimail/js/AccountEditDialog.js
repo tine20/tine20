@@ -187,6 +187,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'emailSieveSize':
                     item.setDisabled(true);
                     break;
+                case 'emailMailQuota':
+                case 'emailSieveQuota':
+                    item.setDisabled(! this.record.data?.email_imap_user);
+                    break;
                 default:
                     item.setDisabled(! this.asAdminModule && this.isSystemAccount());
             }
@@ -1085,12 +1089,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      */
     loadEmailQuotas: function () {
-        if (this.asAdminModule && this.record.data?.email_imap_user) {
-            this.getForm().findField('emailMailQuota').setValue(this.record.data.email_imap_user.emailMailQuota);
-            this.getForm().findField('emailMailSize').setValue(this.record.data.email_imap_user.emailMailSize);
-            this.getForm().findField('emailSieveQuota').setValue(this.record.data.email_imap_user.emailSieveQuota);
-            this.getForm().findField('emailSieveSize').setValue(this.record.data.email_imap_user.emailSieveSize);
-        }
+        if (this.asAdminModule ) {
+            if (this.record.data?.email_imap_user) {
+                this.getForm().findField('emailMailQuota').setValue(this.record.data.email_imap_user.emailMailQuota);
+                this.getForm().findField('emailMailSize').setValue(this.record.data.email_imap_user.emailMailSize);
+                this.getForm().findField('emailSieveQuota').setValue(this.record.data.email_imap_user.emailSieveQuota);
+                this.getForm().findField('emailSieveSize').setValue(this.record.data.email_imap_user.emailSieveSize);
+            }
+        } 
     },
     
     /**
@@ -1170,9 +1176,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      */
     updateEmailQuotas: function () {
-        if (this.asAdminModule && this.record.data?.email_imap_user) {
-            this.record.data.email_imap_user.emailMailQuota = this.getForm().findField('emailMailQuota').getValue();
-            this.record.data.email_imap_user.emailSieveQuota = this.getForm().findField('emailSieveQuota').getValue();
+        if (this.asAdminModule) {
+            if (this.record.data?.email_imap_user) {
+                this.record.data.email_imap_user.emailMailQuota = this.getForm().findField('emailMailQuota').getValue();
+                this.record.data.email_imap_user.emailSieveQuota = this.getForm().findField('emailSieveQuota').getValue();
+            }
         }
     }
 });
