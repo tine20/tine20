@@ -371,7 +371,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         }
         $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($record);
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $imapLoginname = $imapEmailBackend->getLoginName($user->getId(), null, $account->email);
+        $imapLoginname = $imapEmailBackend->getLoginName($user->getId(), $account->email, $account->email);
         return $imapLoginname . '*' . $this->_masterUser;
     }
 
