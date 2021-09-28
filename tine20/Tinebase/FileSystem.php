@@ -4410,8 +4410,9 @@ class Tinebase_FileSystem implements
                     // _('email soft quota notification')
                     $translatedSubject = $translate->_('email ' . ($softAlert ? 'soft ' : '') . 'quota notification');
 
+                    $identifier = $emailUser->emailAddress ?? $emailUser->emailLoginname ?? $emailUser->emailUsername;
                     Tinebase_Notification::getInstance()->send($user, array($user->contact_id), $translatedSubject,
-                        $emailUser->emailUsername . ' exceeded email ' . ($softAlert ? 'soft ' : '') . 'quota');
+                        $identifier . ' exceeded email ' . ($softAlert ? 'soft ' : '') . 'quota');
                 }
             }
 
