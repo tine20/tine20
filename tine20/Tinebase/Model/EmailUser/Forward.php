@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Model
  *
- * @property string email
+ * @property string $email
  */
 class Tinebase_Model_EmailUser_Forward extends Tinebase_Record_NewAbstract
 {
