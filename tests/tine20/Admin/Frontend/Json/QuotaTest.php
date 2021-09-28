@@ -110,7 +110,8 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
             $this->_json->saveQuota($application, null, $additionalData);
             self::fail('should throw Tinebase_Exception_UnexpectedValue');
         } catch (Tinebase_Exception_UnexpectedValue $e) {
-            self::assertEquals('Record data needs to be set!', $e->getMessage());
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            self::assertEquals($translate->_('Record data needs to be set!'), $e->getMessage());
         }
 
         try {
@@ -168,7 +169,8 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
             $this->_json->saveQuota($application, $account, $additionalData);
             self::fail('should throw Tinebase_Exception_UnexpectedValue');
         } catch (Tinebase_Exception_UnexpectedValue $e) {
-            self::assertEquals("Account E-Mail needs to be set!", $e->getMessage());
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            self::assertEquals($translate->_("Account E-Mail needs to be set!"), $e->getMessage());
         }
 
         try {
@@ -177,7 +179,8 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
             $this->_json->saveQuota($application, $account, $additionalData);
             self::fail('should throw Tinebase_Exception_UnexpectedValue');
         } catch (Tinebase_Exception_UnexpectedValue $e) {
-            self::assertEquals("E-Mail account not found.", $e->getMessage());
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            self::assertEquals($translate->_("E-Mail account not found."), $e->getMessage());
         }
 
         // save without account manage right
