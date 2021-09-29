@@ -34,14 +34,13 @@ ARG ALPINE_PHP_PACKAGE=php7
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 RUN apk add --no-cache nodejs npm git
 
-RUN if [ ${ALPINE_PHP_PACKAGE} == php8 ]; then \
-      if [ ! -f "/usr/bin/composer" ]; then \
-        php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');"; \
-        php -r "if (hash_file('sha384', '/composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"; \
-        php /composer-setup.php; \
-        php -r "unlink('/composer-setup.php');"; \
-        ln -s /usr/share/composer.phar /usr/bin/composer; \
-      fi \
+RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then \
+      php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');"; \
+      php -r "if (hash_file('sha384', '/composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"; \
+      php /composer-setup.php; \
+      php -r "unlink('/composer-setup.php');"; \
+      rm -f /usr/bin/composer; \
+      ln -s /usr/share/composer.phar /usr/bin/composer; \
     else \
         apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community composer; \
     fi
