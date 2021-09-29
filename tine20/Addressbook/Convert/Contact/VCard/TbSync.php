@@ -103,9 +103,9 @@ class Addressbook_Convert_Contact_VCard_TbSync extends Addressbook_Convert_Conta
         // initialize vcard object
         $card = $this->_fromTine20ModelRequiredFields($_record);
 
-        $card->add('TEL', $_record->tel_work, array('TYPE' => 'WORK'));
+        $card->add('TEL', $_record->tel_work, array('TYPE' => array('VOICE', 'WORK')));
 
-        $card->add('TEL', $_record->tel_home, array('TYPE' => 'HOME'));
+        $card->add('TEL', $_record->tel_home, array('TYPE' => array('VOICE', 'HOME')));
 
         $card->add('TEL', $_record->tel_cell, array('TYPE' => array('CELL', 'WORK')));
 
