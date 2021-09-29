@@ -23,7 +23,7 @@ class Tinebase_BroadcastHub
         return $this->_isActive;
     }
 
-    public function push(string $verb, string $model, string $recordId, ?string $containerId): bool
+    public function push(string $verb, string $model, string $recordId, ?string $containerId): int
     {
         return $this->_getRedis()->publish($this->_pubSubName, json_encode([
             'verb'          => $verb,
