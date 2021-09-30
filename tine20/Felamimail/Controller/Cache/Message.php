@@ -764,6 +764,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _fetchAndAddMessages(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
     {
+        /** @var Felamimail_Backend_Imap $_imap */
         $messageSequenceStart = $this->_imapMessageSequence + 1;
         
         // add new messages
@@ -811,9 +812,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _addMessagesToCacheAndIncreaseCounters($_messages, $_folder)
     {
-        foreach ($_messages as $uid => $message) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                .  " Add message $uid to cache");
+        foreach ($_messages as $message) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                .  " Add message " . $message['uid'] . " to cache");
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 .  ' ' . print_r($message, TRUE));
 
@@ -1418,6 +1419,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' messageUid/folder ' . $messageUid . ' / ' . $folderId);
 
+        /** @var Felamimail_Backend_Imap $imap */
         $imap = Felamimail_Backend_ImapFactory::factory($accountId);
         
         if ($folderId !== null) {

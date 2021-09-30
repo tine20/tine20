@@ -353,6 +353,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      */
     protected function _setStructure($structure)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' structure: ' . print_r($structure, true));
         if (! empty($structure['partId'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Don\'t cache structure of subparts');
