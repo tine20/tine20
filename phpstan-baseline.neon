@@ -266,11 +266,6 @@ parameters:
 			path: tine20/Addressbook/Controller/Contact.php
 
 		-
-			message: "#^Comparison operation \"\\!\\=\" between array\\|int and 1 results in an error\\.$#"
-			count: 2
-			path: tine20/Addressbook/Controller/Contact.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_value\\)\\: Unexpected token \"\\$_value\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Addressbook/Controller/Contact.php
@@ -464,11 +459,6 @@ parameters:
 			message: "#^Return typehint of method Addressbook_Frontend_CardDAV_AllContacts\\:\\:getChildren\\(\\) has invalid type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Addressbook/Frontend/CardDAV/AllContacts.php
-
-		-
-			message: "#^Comparison operation \"\\!\\=\" between array\\|int and 1 results in an error\\.$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/Cli.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -3339,7 +3329,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:getSummary\\(\\)\\.$#"
-			count: 3
+			count: 1
 			path: tine20/Felamimail/Controller/Cache/Message.php
 
 		-
@@ -3354,11 +3344,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:resolveMessageUid\\(\\)\\.$#"
-			count: 1
-			path: tine20/Felamimail/Controller/Cache/Message.php
-
-		-
-			message: "#^Call to an undefined method Felamimail_Backend_ImapProxy\\:\\:selectFolder\\(\\)\\.$#"
 			count: 1
 			path: tine20/Felamimail/Controller/Cache/Message.php
 
@@ -4198,11 +4183,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$mail\\)\\: Unexpected token \"\\$mail\", expected type at offset 149$#"
-			count: 1
-			path: tine20/Felamimail/Model/Message.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(string _name of property\\)\\: Unexpected token \"_name\", expected variable at offset 71$#"
 			count: 1
 			path: tine20/Felamimail/Model/Message.php
 
@@ -7018,6 +6998,16 @@ parameters:
 			message: "#^Unsafe usage of new static\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Backend/Sql/SelectHook.php
+
+		-
+			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:connect\\(\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/BroadcastHub.php
+
+		-
+			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:publish\\(\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/BroadcastHub.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$class\\)\\: Unexpected token \"\\$class\", expected type at offset 175$#"
@@ -13081,21 +13071,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_User_Plugin_Abstract\\:\\:\\$_subconfigKey\\.$#"
-			count: 1
-			path: tine20/Tinebase/User/Plugin/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$accountEmailAddress\\)\\: Unexpected token \"\\$accountEmailAddress\", expected type at offset 75$#"
-			count: 1
-			path: tine20/Tinebase/User/Plugin/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$accountId\\)\\: Unexpected token \"\\$accountId\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Tinebase/User/Plugin/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$accountLoginName\\)\\: Unexpected token \"\\$accountLoginName\", expected type at offset 43$#"
 			count: 1
 			path: tine20/Tinebase/User/Plugin/Abstract.php
 
