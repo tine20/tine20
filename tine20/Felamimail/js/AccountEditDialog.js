@@ -112,7 +112,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         if (this.isSystemAccount()) {
             this.updateVacationRecord();
-            this.updateRuleRecord();
         }
     },
     
@@ -924,7 +923,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 icon: Ext.MessageBox.WARNING
             });
         } else {
-            Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+            if (this.isSystemAccount()) {
+                await this.updateVacationRecord();
+                await this.saveVacationRecord();
+                await this.saveRuleRecord();
+            }
+            Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
         }
     },
 
@@ -995,7 +999,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Boolean}
      */
     isValid: function() {
-        var result = Tine.Admin.Groups.EditDialog.superclass.isValid.call(this);
+        var result = Tine.Felamimail.AccountEditDialog.superclass.isValid.call(this);
         var from = this.getForm().findField('from').getValue();
         if (from.includes(',')) {
             this.getForm().markInvalid([{
@@ -1104,69 +1108,66 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      *
      */
     updateVacationRecord: async function() {
-        let me = this;
-        
-        if (!me.record.id || 
-            !me.vacationRecord || 
-            !me.vacationPanel) {
-            return;
-        }
+        if (this.record.id && this.vacationRecord && this.vacationPanel) {
+            let form = this.getForm();
+            const contactIds = [];
 
-        let form = me.getForm();
-        let contactIds = [];
-        
-        form.updateRecord(me.vacationRecord);
-        
-        Ext.each(['contact_id1', 'contact_id2'], function (field) {
-            if (form.findField(field) && form.findField(field).getValue() !== '') {
-                contactIds.push(form.findField(field).getValue());
-            }
-        }, this);
-        
-        let template = form.findField('template_id').getValue();
+            form.updateRecord(this.vacationRecord);
 
-        me.vacationRecord.set('contact_ids', contactIds);
-        me.vacationRecord.set('template_id', template);
-        
-        if (template !== '') {
-            try {
-                let response = await Tine.Felamimail.getVacationMessage(me.vacationRecord.data);
-                me.vacationPanel.reasonEditor.setValue(response.message);
-            } catch (e) {
-                Tine.Felamimail.handleRequestException(e);
+            Ext.each(['contact_id1', 'contact_id2'], function (field) {
+                if (form.findField(field) && form.findField(field).getValue() !== '') {
+                    contactIds.push(form.findField(field).getValue());
+                }
+            }, this);
+
+            let template = form.findField('template_id').getValue();
+
+            this.vacationRecord.set('contact_ids', contactIds);
+            this.vacationRecord.set('template_id', template);
+
+            if (template !== '') {
+                try {
+                    const response = await Tine.Felamimail.getVacationMessage(this.vacationRecord.data);
+                    this.vacationPanel.reasonEditor.setValue(response.message);
+                } catch (e) {
+                    Tine.Felamimail.handleRequestException(e);
+                }
             }
         }
-
-        await me.vacationRecordProxy.saveRecord(me.vacationRecord);
     },
 
     /**
      * update rule record
      *
      */
-    updateRuleRecord: async function () {
-        let me = this;
-        
-        if (!me.ruleRecordProxy || 
-            !me.record.id ||
-            me.rulesGridPanel.store.getCount() === 0
-        ) {
+    saveVacationRecord: async function () {
+        if (this.record.id && this.vacationRecord && this.vacationPanel) {
+            await this.vacationRecordProxy.saveRecord(this.vacationRecord);
+        }
+    },
+
+    /**
+     * update rule record
+     *
+     */
+    saveRuleRecord: async function () {
+        if (!this.ruleRecordProxy || !this.record.id) {
             return;
         }
 
         let rules = [];
-        me.rulesGridPanel.store.each(function (record) {
+        this.rulesGridPanel.store.each(function (record) {
             rules.push(record.data);
         });
 
-        await me.ruleRecordProxy.saveRules(me.record.id, rules, {
-            scope: me,
+        await this.ruleRecordProxy.saveRules(this.record.id, rules, {
+            scope: this,
             success: function (record) {
-                me.purgeListeners();
+                this.purgeListeners();
             },
             failure: Tine.Felamimail.handleRequestException.createSequence(function () {
-                me.hideLoadMask();
-            }, me),
+                this.hideLoadMask();
+            }, this),
             timeout: 150000 // 3 minutes
         });
     },
