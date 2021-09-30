@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  *
@@ -10,12 +11,7 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Tinebase_Group
+ * Test class for Felamimail_Controller_Message
  */
 class Felamimail_Controller_MessageTest extends Felamimail_TestCase
 {
@@ -1813,5 +1809,15 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         self::assertEquals($completeCachedMessage->flags, $rewrittenMessageFromCache->flags,
             'flags mismatch: ' . print_r($rewrittenMessageFromCache->toArray(), true));
 
+    }
+
+    public function testNonMultipartStructure()
+    {
+        $cachedMessage = $this->messageTestHelper('non_multipart.eml');
+        $message = $this->_getController()->getCompleteMessage($cachedMessage, null, Zend_Mime::TYPE_TEXT);
+
+        $this->assertStringContainsString('111111', $message->body);
+        $this->assertEquals('text/html', $message->structure['contentType'], print_r($message->structure, true));
+        $this->assertEquals(1, print_r($message->structure['partId'], true));
     }
 }

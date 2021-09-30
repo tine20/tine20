@@ -1,0 +1,20 @@
+Return-Path: <info@somemail.com>
+Received: from mail1.somemail.com ([127.0.0.1])
+	by localhost (mail1.somemail.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v71GBLEcEudf for <info@domain.de>;
+	Tue,  7 Feb 2017 18:13:39 +0000 (UTC)
+Received: from localhost (unknown [181.122.199.184])
+	by mail1.somemail.com (Postfix) with ESMTPA id C5A7B82A43
+	for <info@domain.de>; Tue,  7 Feb 2017 18:13:38 +0000 (UTC)
+To: info@domain.de
+From: Gelbes Branchenbuch <info@somemail.com>
+Date: Tue, 07 Feb 2017 18:12:28 +0000
+Message-Id: <1486491148-d777f4e4d090c3d7ea13816f80cb8131Gelbes Branchenbuch
+ <info@somemail.com>>
+X-Tine20TestMessage: non_multipart.eml
+Subject: Notification
+MIME-Version: 1.0
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+<b>Code:&nbsp;</b>111111
