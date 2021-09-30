@@ -193,7 +193,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             ),
             'memberroles'       => array(
                 'label'             => null, // TODO fill this?
-                'type'              => 'string',
+                'type'              => 'virtual',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'paths'             => array(

@@ -212,7 +212,6 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * onRecordLoad
      */
     resolveMemberData: function (editDialog, record, ticketFn) {
-        this.memberGridPanel.record = this.record;
         if (this.record.id) {
             if (this.record.get('account_only') === true) {
                 this.memberGridPanel.searchCombo.userOnly = true;
