@@ -10,7 +10,6 @@ parameters:
       - Zend_Config_Xml
       - Zend_Console_Getopt
       - Zend_Translate
-      - Zend_RedisProxy
     reportUnmatchedIgnoredErrors: false
     level: 2
     excludePaths:
