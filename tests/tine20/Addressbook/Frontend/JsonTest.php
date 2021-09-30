@@ -2309,6 +2309,7 @@ Steuernummer 33/111/32212";
         );
 
         $list = $this->_uit->saveList($list);
+        self::assertCount(2, $list['memberroles']);
 
         // empty member / role
         $list['members'] = [];
@@ -2325,9 +2326,9 @@ Steuernummer 33/111/32212";
         static::assertEquals(4, $notes['totalcount']);
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         foreach (array(
-                     array('members ( 0: ali PHPUNIT 1: ali PHPUNIT -> )', 'memberroles (2 ' . $translate->_('removed') . ': my test name: ali PHPUNIT, my test name 2: ali PHPUNIT)'),
-                     array('members ( 0: ali PHPUNIT ->  0: ali PHPUNIT 1: ali PHPUNIT)', 'memberroles (1 ' . $translate->_('added') . ': my test name 2: ali PHPUNIT)'),
-                     array('members ( ->  0: ali PHPUNIT)', 'memberroles (1 ' . $translate->_('added') . ': my test name: ali PHPUNIT)'),
+                     array('members ( 0: ali PHPUNIT 1: ali PHPUNIT -> )'),
+                     array('members ( 0: ali PHPUNIT ->  0: ali PHPUNIT 1: ali PHPUNIT)'),
+                     array('members ( ->  0: ali PHPUNIT)'),
                  ) as $expectedStrings) {
             $found = false;
             foreach ($notes['results'] as $note) {
