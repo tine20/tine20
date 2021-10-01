@@ -1749,6 +1749,20 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * inspect delete of one record (after delete)
+     *
+     * @param   Tinebase_Record_Interface $record          the just deleted record
+     * @return  void
+     */
+    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
+    {
+        $bchub = Tinebase_BroadcastHub::getInstance();
+        if ($bchub->isActive()) {
+            $bchub->push('delete', get_class($record), $record->getId(), $record->has('container_id') ? $record->container_id : null);
+        }
+    }
+
+    /**
      * inspect update of one record (after setReleatedData)
      *
      * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
@@ -2097,6 +2111,7 @@ abstract class Tinebase_Controller_Record_Abstract
             foreach ($records as $record) {
                 $this->_getRelatedData($record);
                 $this->_deleteRecord($record);
+                $this->_inspectAfterDelete($record);
             }
 
             if (true === $this->_isRecordPathFeatureEnabled()) {
