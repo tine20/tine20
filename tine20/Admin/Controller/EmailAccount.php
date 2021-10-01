@@ -433,7 +433,12 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
         foreach ($_records as $_record) {
             if (!isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
-                $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+                try {
+                    $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    continue;
+                }
+                
                 if (!isset($user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP])) {
                     // still no XPROP_EMAIL_USERID_IMAP ...
                     continue;
