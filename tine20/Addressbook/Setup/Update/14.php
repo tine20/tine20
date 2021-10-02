@@ -23,7 +23,7 @@ class Addressbook_Setup_Update_14 extends Setup_Update_Abstract
             ],
             self::RELEASE014_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update001',
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
