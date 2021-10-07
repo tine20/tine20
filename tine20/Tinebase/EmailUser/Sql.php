@@ -575,15 +575,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
     }
 
     /**
-     * @param $_user 
+     * @param Tinebase_Model_FullUser $_user
      * @return Tinebase_Model_EmailUser of Tinebase_Model_EmailUser
      */
-    public function getEmailUser($_user)
+    public function getEmailUser(Tinebase_Model_FullUser $_user): ?Tinebase_Model_EmailUser
     {
-        if (! $_user instanceof Tinebase_Model_FullUser) {
-            return null;
-        }
-
         $rawUser = (array)$this->getRawUserById($_user);
 
         // convert data to Tinebase_Model_EmailUser
