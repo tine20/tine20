@@ -187,7 +187,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         getExtraContextActions: () => {
                             return [
                                 {
-                                    text: this.app.i18n._('Select color'),
+                                    text: i18n._('Color'),
                                     iconCls: 'action_changecolor',
                                     scope: this,
                                     menu: new Ext.menu.ColorMenu({
@@ -200,10 +200,21 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                                 colorPalette.resumeEvents()
                                             },
                                             select: function (p, color) {
+                                                let oldColor = p.scope.record.get('color');
                                                 p.scope.record.set('color', color)
-                                                p.scope.find('name', 'jpegphoto')[0].el.applyStyles({
+                                                let elem = p.scope.find('name', 'jpegphoto')[0].el;
+                                                elem.applyStyles({
                                                     border: '2px solid #'+color
                                                 });
+
+                                                if (!oldColor) {
+                                                    let w = parseInt(elem.getStyle('width')),
+                                                        h = parseInt(elem.getStyle('height'));
+                                                    elem.applyStyles({
+                                                        width: (w-2)+'px',
+                                                        height: (h-2)+'px'
+                                                    });
+                                                }
                                             },
                                             scope: this
                                         }
