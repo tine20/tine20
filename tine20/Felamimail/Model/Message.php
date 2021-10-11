@@ -279,7 +279,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
     /**
      * gets record related properties
      * 
-     * @param string _name of property
+     * @param string $_name of property
      * @throws Tinebase_Exception_UnexpectedValue
      * @return mixed value of property
      */
@@ -301,48 +301,71 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      */
     protected function _fetchStructure()
     {
-        $cacheId = $this->_getStructureCacheId();
+        if ($structureFromCache = $this->_getStructureFromCache()) {
+            return $structureFromCache;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' Getting message structure from IMAP server.');
+
+        $result = array();
+        if ($this->_structureFetchCount < 5) {
+            try {
+                $this->_structureFetchCount++;
+                $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id, $this->folder_id);
+                $result = $summary['structure'];
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                // imap server might have gone away
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' IMAP protocol error during summary fetching: ' . $zmpe->getMessage());
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' Message structure fetching failed (5 times) ... message might be broken on IMAP server');
+            $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id, $this->folder_id);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' broken summary: ' . print_r($summary, true));
+        }
+        $this->_setStructure($result);
+        return $result;
+    }
+
+    /**
+     * @return array|null
+     */
+    protected function _getStructureFromCache()
+    {
         $cache = Tinebase_Core::getCache();
+        $cacheId = $this->_getStructureCacheId();
         if ($cache->test($cacheId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
                 __METHOD__ . '::' . __LINE__ . ' Getting message structure from cache: ' . $cacheId);
-            $result = $cache->load($cacheId);
+            return $cache->load($cacheId);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                __METHOD__ . '::' . __LINE__ . ' Getting message structure from IMAP server.');
-
-            $result = array();
-            if ($this->_structureFetchCount < 5) {
-                try {
-                    $this->_structureFetchCount++;
-                    $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id, $this->folder_id);
-                    $result = $summary['structure'];
-                } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                    // imap server might have gone away
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' IMAP protocol error during summary fetching: ' . $zmpe->getMessage());
-                }
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                    __METHOD__ . '::' . __LINE__ . ' Message structure fetching failed (5 times) ... message might be broken on IMAP server');
-                $summary = Felamimail_Controller_Cache_Message::getInstance()->getMessageSummary($this->messageuid, $this->account_id, $this->folder_id);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' broken summary: ' . print_r($summary, true));
+            // maybe we find the structure of part 1 (non-multipart message)
+            $cacheId = $this->_getStructureCacheId([
+                'partId' => 1,
+            ]);
+            if ($cache->test($cacheId)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                    __METHOD__ . '::' . __LINE__ . ' Getting message structure from cache: ' . $cacheId);
+                return $cache->load($cacheId);
             }
-            $this->_setStructure($result);
         }
-        
-        return $result;
+
+        return null;
     }
-    
+
     /**
      * get cache id for structure
-     * 
+     *
+     * @param array $structure
      * @return string
      */
-    protected function _getStructureCacheId()
+    protected function _getStructureCacheId($structure = [])
     {
-        return 'messageStructure' . $this->folder_id . $this->messageuid;
+        $partId = ! empty($structure['partId']) ? $structure['partId'] : 0;
+        return 'messageStructure' . $this->folder_id . '_' . $this->messageuid . '_' . $partId;
     }
     
     /**
@@ -352,13 +375,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      */
     protected function _setStructure($structure)
     {
-        if (! empty($structure['partId'])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' Don\'t cache structure of subparts');
-            return;
-        }
-        
-        $cacheId = $this->_getStructureCacheId();
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' structure: ' . print_r($structure, true));
+
+        $cacheId = $this->_getStructureCacheId($structure);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Caching message structure: ' . $cacheId);
         Tinebase_Core::getCache()->save($structure, $cacheId, array('messageStructure'), 86400); // 24 hours

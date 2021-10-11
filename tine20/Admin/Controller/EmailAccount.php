@@ -103,6 +103,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $result = $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         // we need to unset the accounts grants to make the admin grid actions work for all accounts
         $result->account_grants = null;
+        $this->resolveAccountEmailUsers($result);
+
         return $result;
     }
 
@@ -210,6 +212,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
+        $this->updateAccountEmailUsers($_record);
         $this->resolveAccountEmailUsers($_createdRecord);
     }
 
@@ -368,7 +371,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         }
         $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($record);
         $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $imapLoginname = $imapEmailBackend->getLoginName($user->getId(), null, $account->email);
+        $imapLoginname = $imapEmailBackend->getLoginName($user->getId(), $account->email, $account->email);
         return $imapLoginname . '*' . $this->_masterUser;
     }
 
@@ -395,6 +398,13 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     public function updateAccountEmailUsers(Felamimail_Model_Account $account)
     {
+        $this->checkRight('MANAGE_ACCOUNTS');
+
+        // set emailUserId im xprops if not set
+        if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            return;
+        }
+
         $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
         $newFullUser = clone($fullUser);
 
@@ -407,33 +417,43 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $emailUserBackend->updateUser($fullUser, $newFullUser);
         }
     }
+
     /**
      * set emailUserId im xprops if not set
      *
-     * @param Felamimail_Model_Account $_record
+     * @param Tinebase_Record_RecordSet|Felamimail_Model_Account $_records
      */
-    public function resolveAccountEmailUsers(Felamimail_Model_Account $_record)
+    public function resolveAccountEmailUsers($_records)
     {
         if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             return;
         }
 
-        if (!isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
-            $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
-            if (!isset($user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP])) {
-                // still no XPROP_EMAIL_USERID_IMAP ...
-                return;
+        $_records = $_records instanceof Tinebase_Record_RecordSet ? $_records : [$_records];
+
+        foreach ($_records as $_record) {
+            if (!isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
+                try {
+                    $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+                } catch (Tinebase_Exception_NotFound $e) {
+                    continue;
+                }
+                
+                if (!isset($user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP])) {
+                    // still no XPROP_EMAIL_USERID_IMAP ...
+                    continue;
+                }
+                Tinebase_EmailUser_XpropsFacade::setXprops($_record,
+                    $user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP], false);
             }
-            Tinebase_EmailUser_XpropsFacade::setXprops($_record,
-                $user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP], false);
+
+            $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
+
+            $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $smtpUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+
+            $_record->email_imap_user = $emailUserBackend->getEmailuser($fullUser)->toArray();
+            $_record->email_smtp_user = $smtpUserBackend->getEmailuser($fullUser)->toArray();
         }
-
-        $fullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($_record);
-
-        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-        $smtpUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-
-        $_record->email_imap_user = $emailUserBackend->getEmailuser($fullUser)->toArray();
-        $_record->email_smtp_user = $smtpUserBackend->getEmailuser($fullUser)->toArray();
     }
 }

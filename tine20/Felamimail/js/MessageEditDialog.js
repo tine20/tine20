@@ -686,7 +686,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.subjectField.focus.defer(50, this.subjectField);
             }
         }
-
+        
         this.checkStates();
     },
 
@@ -699,15 +699,19 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     saveAsDraft: function() {
         let me = this;
-
+        
         me.record.set('messageuid', me.draftUid);
         me.record.commit();
-
+        
         me.action_saveAsDraft.setIconClass('x-btn-wait');
 
         return me.saveAsDraftPromise = retryAllRejectedPromises([() => {
             return Tine.Felamimail.saveDraft(me.record.data)
                 .then((savedDraft) => {
+                    if (!me.draftUid) {
+                        this.updateFolderCount('drafts_folder', 1);
+                    }
+                    
                     me.draftUid = savedDraft.messageuid;
                 })
                 .finally(() => {
@@ -719,8 +723,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
 
-    deleteDraft: function(draftUid) {
-        return Tine.Felamimail.deleteDraft(draftUid, this.record.get('account_id'));
+    deleteDraft: async function (draftUid) {
+        return await Tine.Felamimail.deleteDraft(draftUid, this.record.get('account_id'));
     },
 
     onBeforeCancel: function() {
@@ -736,8 +740,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.showLoadMask()
                         .then(() => {
                             return btn === 'yes' ?
-                                this.deleteDraft(this.draftUid) :
-                                this.saveAsDraft();
+                                this.deleteDraft(this.draftUid)
+                                    .then(() => {
+                                        this.updateFolderCount('drafts_folder', -1);
+                                    })
+                                : this.saveAsDraft();
                         })
                         .then(_.bind(this.window.close, this.window, true))
 
@@ -968,6 +975,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         .then(() => {
                             if (this.draftUid) {
                                 return this.deleteDraft(this.draftUid)
+                            } else {
+                                this.updateFolderCount(folderField, 1);
                             }
                         })
                         .then(_.bind(this.window.close, this.window, this));
@@ -981,6 +990,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
 
+    updateFolderCount: function (folderName, count) {
+        const account = this.app.getActiveAccount();
+        const targetFolderId = account ? account.getSpecialFolderId(folderName) : null;
+        const targetFolder = targetFolderId ? this.app.getFolderStore().getById(targetFolderId) : null;
+
+        targetFolder.set('cache_unreadcount', targetFolder.get('cache_unreadcount') + count);
+        targetFolder.set('cache_totalcount', targetFolder.get('cache_totalcount') + count);
+        targetFolder.set('cache_status', 'pending');
+        targetFolder.commit();
+    },
+
     /**
      * toggle mass mailing
      *
@@ -991,7 +1011,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var active = !this.record.get('massMailingFlag');
 
         this.record.set('massMailingFlag', active);
-
+        this.recipientGrid.disableRecipientsCombo(active);
+        
         if (active) {
             this.massMailingInfoText.show();
             this.doLayout();
@@ -1791,10 +1812,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             if (all.length == 0) {
                 reject(me.app.i18n._('No recipients set.'));
-            }
-
-            if (me.record.get('massMailingFlag') && (cc.length > 0 || bcc.length > 0)) {
-                reject(me.app.i18n._('Mass mailing is not allowed for CC or BCC recipients. Please remove them.'));
             }
 
             if (me.button_toggleEncrypt.pressed && me.mailvelopeEditor) {

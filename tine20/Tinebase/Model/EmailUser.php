@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  * 
@@ -19,24 +20,25 @@
  * @package     Tinebase
  * @subpackage  LDAP
  *
- * @property string emailUID
- * @property string emailGID
- * @property string emailMailQuota
- * @property string emailMailSize
- * @property string emailSieveQuota
- * @property string emailSieveSize
- * @property string emailUserId
- * @property string emailLastLogin
- * @property string emailPassword
- * @property string emailForwardOnly
- * @property Tinebase_Record_RecordSet emailAliases (Tinebase_Model_EmailUser_Alias)
- * @property Tinebase_Record_RecordSet emailForwards (Tinebase_Model_EmailUser_Forward)
- * @property string emailAddress
- * @property string emailUsername
- * @property string emailHost
- * @property string emailPort
- * @property string emailSecure
- * @property string emailAuth
+ * @property string $emailUID
+ * @property string $emailGID
+ * @property string $emailMailQuota
+ * @property string $emailMailSize
+ * @property string $emailSieveQuota
+ * @property string $emailSieveSize
+ * @property string $emailUserId
+ * @property string $emailLastLogin
+ * @property string $emailPassword
+ * @property string $emailForwardOnly
+ * @property Tinebase_Record_RecordSet $emailAliases (Tinebase_Model_EmailUser_Alias)
+ * @property Tinebase_Record_RecordSet $emailForwards (Tinebase_Model_EmailUser_Forward)
+ * @property string $emailAddress
+ * @property string $emailLoginname
+ * @property string $emailUsername
+ * @property string $emailHost
+ * @property string $emailPort
+ * @property string $emailSecure
+ * @property string $emailAuth
  */
 class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract 
 {
@@ -68,6 +70,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
         'emailForwardOnly'  => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'emailAliases'      => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         'emailAddress'      => array('allowEmpty' => true),
+        'emailLoginname'    => array('allowEmpty' => true),
     // dbmail username (tine username + dbmail domain)
         'emailUsername'     => array('allowEmpty' => true),
         'emailHost'         => array('allowEmpty' => true),

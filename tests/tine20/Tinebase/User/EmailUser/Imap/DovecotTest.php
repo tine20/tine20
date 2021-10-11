@@ -103,6 +103,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
             'emailUID' => '1000',
             'emailGID' => '1000',
             'emailAddress' => $user->accountLoginName . '@' . TestServer::getPrimaryMailDomain(),
+            'emailLoginname' => $user->accountEmailAddress
         ));
 
         $this->_backend->inspectAddUser($user, $emailUser);
@@ -148,7 +149,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
             'emailSieveSize' => null,
             'emailPort' => $this->_config['port'],
             'emailSecure' => $this->_config['ssl'],
-            'emailHost' => $this->_config['host']
+            'emailHost' => $this->_config['host'],
+            'emailLoginname' => $user->accountEmailAddress
         ), $additionalExpectations), $user->imapUser->toArray());
     }
 

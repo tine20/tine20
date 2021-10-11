@@ -89,6 +89,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const BUILD_TYPE = 'buildtype';
 
+    const BROADCASTHUB = 'broadcasthub';
+    const BROADCASTHUB_ACTIVE = 'active';
+    const BROADCASTHUB_REDIS = 'redis';
+    const BROADCASTHUB_REDIS_HOST = 'host';
+    const BROADCASTHUB_REDIS_PORT = 'port';
+    const BROADCASTHUB_PUBSUBNAME = 'pubsubname';
+
     /**
      * CACHE
      *
@@ -762,6 +769,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
+    const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
 
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_ACTIVE = 'active';
@@ -822,7 +830,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const COMMUNITYIDENTNR_DUP_FIELDS = 'communityIdentNrDupFields';
-
+    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -1575,6 +1583,42 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::BROADCASTHUB  => [
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::CONTENT               => [
+                self::BROADCASTHUB_ACTIVE   => [
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::DEFAULT_STR           => false,
+                ],
+                self::BROADCASTHUB_PUBSUBNAME => [
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => 'broadcasthub',
+                ],
+                self::BROADCASTHUB_REDIS    => [
+                    self::TYPE                  => self::TYPE_OBJECT,
+                    self::CLASSNAME             => Tinebase_Config_Struct::class,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::CONTENT               => [
+                        self::BROADCASTHUB_REDIS_HOST   => [
+                            self::TYPE                      => self::TYPE_STRING,
+                            self::DEFAULT_STR               => 'localhost',
+                        ],
+                        self::BROADCASTHUB_REDIS_PORT   => [
+                            self::TYPE                      => self::TYPE_INT,
+                            self::DEFAULT_STR               => 6379,
+                        ]
+                    ],
+                    self::DEFAULT_STR           => [],
+                ]
+            ],
+            self::DEFAULT_STR           => [],
+        ],
         self::STATUS_INFO => array(
             //_('Status Info')
             'label'                 => 'Status Info',
@@ -2596,6 +2640,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::SETBYADMINMODULE      => true,
                     self::SETBYSETUPMODULE      => true,
                 ],
+                self::FILESYSTEM_SHOW_CURRENT_USAGE => [
+                    //_('Filesystem show current usage')
+                    self::LABEL                 => 'Filesystem show current usage',
+                    //_('Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values.')
+                    self::DESCRIPTION           => 'Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values.',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE      => TRUE,
+                    self::SETBYSETUPMODULE      => FALSE,
+                    self::DEFAULT_STR           => ['size', 'revision_size']
+                ]
             ),
             'default'               => array(),
         ),
@@ -2862,7 +2917,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'contents'              => 'array',
             'clientRegistryInclude' => TRUE,
             'default'               => array('arsCombined'),
-        ),
+        )
     );
 
     /**

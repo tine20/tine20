@@ -332,6 +332,17 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         return $this->__get(static::$_configurationObject->getIdProperty());
     }
 
+    public function getContainerId(): ?string
+    {
+        $containerId = $this->__get(static::$_configurationObject->getContainerProperty());
+        if (is_object($containerId)) {
+            $containerId = $containerId->getId();
+        } elseif (is_array($containerId)) {
+            $containerId = $containerId['id'];
+        }
+        return $containerId;
+    }
+
     /**
      * gets application the records belongs to
      *

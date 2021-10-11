@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Abstract record controller for Tine 2.0 applications
  *
@@ -6,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -349,7 +350,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action for right/acl check
-     * @return int|array
+     * @return int
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {

@@ -180,6 +180,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         };
 
         /**
+         * returns draftsfolder id
+         */
+        Tine.Felamimail.Model.Account.prototype.getDraftFolderId = function() {
+            return this.getSpecialFolderId('drafts_folder');
+        };
+
+        /**
          * returns special folder id
          *
          * @param {String} nameProperty
@@ -661,7 +668,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                         this.setTitleWithUnreadcount(record.get('cache_unreadcount'));
                     }
                 }
-                
                 if (record.isModified('quota_usage') || record.isModified('quota_limit')) {
                     this.onUpdateFolderQuota(record);
                 }
