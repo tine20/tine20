@@ -64,6 +64,20 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER_CLASS_NAME = 'filterClassName';
     const FILTER_DEFINITION = 'filterDefinition';
     const FILTER_GROUP = 'filtergroup';
+    /**
+     * holds additional filters for the record
+     *
+     * @todo document the differences between FILTER, FILTER_DEFINITION + FILTER_MODEL
+     *
+     * example:
+     *      self::FILTER_MODEL => [
+                'contact'        => ['filter' => 'Tinebase_Model_Filter_Relation', 'options' => [
+                    'related_model'     => 'Addressbook_Model_Contact',
+                    'filtergroup'    => 'Addressbook_Model_ContactFilter'
+                ]],
+            ],
+     */
+    const FILTER_MODEL = 'filterModel';
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
     const FLD_DELETED_TIME = 'deleted_time';
