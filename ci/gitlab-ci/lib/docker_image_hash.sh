@@ -56,10 +56,30 @@ _base_image_hash() {
     echo $fh $TINE20ROOT $PHP_VERSION | sha256sum | head -c 32;
 }
 
+_dependency_image_hash() {
+    cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
+    local fh=$(file_hashes ci/dockerimage/dependency.Dockerfile tine20/library tine20/composer.json tine20/composer.lock tine20/Tinebase/js/package.json tine20/Tinebase/js/npm-shrinkwrap.json scripts/packaging/composer/composerLockRewrite.php);
+
+    echo $fh $TINE20ROOT $(_base_image_hash) | sha256sum | head -c 32;
+}
+
+_test_dependency_image_hash() {
+    cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
+    local fh=$(file_hashes ci/dockerimage/test-dependency.Dockerfile ci/dockerimage/supervisor.d/webpack.ini etc phpstan.neon phpstan-baseline.neon);
+
+    echo $fh $TINE20ROOT $(_dependency_image_hash) | sha256sum | head -c 32;
+}
+
 docker_image_hash() {
     case $1 in
         base)
             _base_image_hash;
+            ;;
+        dependency)
+            _dependency_image_hash;
+            ;;
+        test-dependency)
+            _test_dependency_image_hash;
             ;;
     esac
 }

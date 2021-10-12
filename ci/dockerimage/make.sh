@@ -7,12 +7,13 @@ function build_image() {
     local target=$1
     local image=$2
     local base_image=$3
-    local source_image=$4
-    local build_image=$5
-    local built_image=$6
-    local alpine_php_repository_branch=$7
-    local alpine_php_repository_repository=$8
-    local alpine_php_package=$9
+    local dependency_image=$4
+    local source_image=$5
+    local build_image=$6
+    local built_image=$7
+    local alpine_php_repository_branch=$8
+    local alpine_php_repository_repository=$9
+    local alpine_php_package=${10}
 
     echo "$0: building target ${target} as ${image} ..."
 
@@ -27,6 +28,7 @@ function build_image() {
 
     # image locations
     cmd+=" --build-arg BASE_IMAGE=${base_image}"
+    cmd+=" --build-arg DEPENDENCY_IMAGE=${dependency_image}"
     cmd+=" --build-arg SOURCE_IMAGE=${source_image}"
     cmd+=" --build-arg BUILD_IMAGE=${build_image}"
     cmd+=" --build-arg BUILT_IMAGE=${built_image}"
@@ -63,12 +65,13 @@ function build_image_and_dependencies() {
     local target=$1
     local image=$2
     local base_image=$3
-    local source_image=$4
-    local build_image=$5
-    local built_image=$6
-    local alpine_php_repository_branch=$7
-    local alpine_php_repository_repository=$8
-    local alpine_php_package=$9
+    local dependency_image=$4
+    local source_image=$5
+    local build_image=$6
+    local built_image=$7
+    local alpine_php_repository_branch=$8
+    local alpine_php_repository_repository=$9
+    local alpine_php_package=${10}
 
     echo $@
 
@@ -77,7 +80,7 @@ function build_image_and_dependencies() {
     echo "$0: building ${target} image as ${image} ..."
 
     if [ 'base' == "${target}" ]; then
-        build_image "${target}" "${image}" '' '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+        build_image "${target}" "${image}" '' '' '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
     else
         if [[ -z "${base_image}" ]]; then
             echo "$0: base_image not provided ..."
@@ -85,60 +88,73 @@ function build_image_and_dependencies() {
             base_image=base:tmp-$(uuidgen)
             tmp_images+=(${base_image})
 
-            build_image "base" "${base_image}" '' '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+            build_image "base" "${base_image}" '' '' '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
         fi
 
-        if [ 'source' == "${target}" ] || [ 'dev' == "${target}" ]; then
-            build_image "${target}" "${image}" "${base_image}" '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+        if [ 'dependency' == "${target}" ] || [ 'dev' == "${target}" ]; then
+            build_image "${target}" "${image}" "${base_image}" '' '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
         else
-            if [[ -z "${source_image}" ]]; then
-                echo "$0: source_image not provided ..."
+            if [[ -z "${dependency_image}" ]]; then
+                echo "$0: dependency_image not provided ..."
 
-                source_image=source:tmp-$(uuidgen)
-                tmp_images+=(${source_image})
+                dependency_image=dependency:tmp-$(uuidgen)
+                tmp_images+=(${dependency_image})
 
-                build_image "source" "${source_image}" "${base_image}" '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+                build_image "dependency" "${dependency_image}" "${base_image}" '' '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
             fi
 
-            if [ 'build' == "${target}" ] || [ 'test-source' == "${target}" ]; then
-                build_image "${target}" "${image}" "${base_image}" "${source_image}" '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+            if [ 'source' == "${target}" ] || [ 'test-dependency' == "${target}" ]; then
+                build_image "${target}" "${image}" "${base_image}" "${dependency_image}" '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
             else
-                if [[ -z "${build_image}" ]]; then
-                    echo "$0: build_image not provided ..."
+                if [[ -z "${source_image}" ]]; then
+                    echo "$0: source_image not provided ..."
 
-                    build_image=build:tmp-$(uuidgen)
-                    tmp_images+=(${build_image})
+                    source_image=source:tmp-$(uuidgen)
+                    tmp_images+=(${source_image})
 
-                    build_image "build" "${build_image}" "${base_image}" "${source_image}" '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+                    build_image "source" "${source_image}" "${base_image}" "${dependency_image}" '' '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
                 fi
 
-                if [ 'built' == "${target}" ]; then
-                    if [ 'built' != "${target}" ]; then
-                        echo "$0: unknown target image -- ${target}"
-                        echo "$0: building built target/image instead"
-                    fi
-
-                    build_image "${target}" "${image}" "${base_image}" "${source_image}" "${build_image}" '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+                if [ 'build' == "${target}" ] || [ 'test-source' == "${target}" ]; then
+                    build_image "${target}" "${image}" "${base_image}" "${dependency_image}" "${source_image}" '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
                 else
-                    if [[ -z "${built_image}" ]]; then
-                        echo "$0: built_image not provided ..."
+                    if [[ -z "${build_image}" ]]; then
+                        echo "$0: build_image not provided ..."
 
-                        built_image=built:tmp-$(uuidgen)
-                        tmp_images+=(${built_image})
+                        build_image=build:tmp-$(uuidgen)
+                        tmp_images+=(${build_image})
 
-                        build_image "built" "${built_image}" "${base_image}" "${source_image}" "${build_image}" '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+                        build_image "build" "${build_image}" "${base_image}" "${dependency_image}" "${source_image}" '' '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
                     fi
 
-                    if [ 'test-built' == "${target}" ] || [ 'packaging' == "${target}" ]; then
-                        build_image "${target}" "${image}" "${base_image}" "${source_image}" "${build_image}" "${built_image}" "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+                    if [ 'built' == "${target}" ]; then
+                        if [ 'built' != "${target}" ]; then
+                            echo "$0: unknown target image -- ${target}"
+                            echo "$0: building built target/image instead"
+                        fi
+
+                        build_image "${target}" "${image}" "${base_image}" "${dependency_image}" "${source_image}" "${build_image}" '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
                     else
-                        echo "$0: unknown target image -- ${target}"
-			echo "$0: building built target/image instead"
-			for tmp_image in "${tmp_images[@]}"; do
-			    echo "$0: deleting tmp image: ${tmp_image}"
-			    docker image rm "${tmp_image}"
-			done
-			exit 1;
+                        if [[ -z "${built_image}" ]]; then
+                            echo "$0: built_image not provided ..."
+
+                            built_image=built:tmp-$(uuidgen)
+                            tmp_images+=(${built_image})
+
+                            build_image "built" "${built_image}" "${base_image}" "${dependency_image}" "${source_image}" "${build_image}" '' "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+                        fi
+
+                        if [ 'test-built' == "${target}" ] || [ 'packaging' == "${target}" ]; then
+                            build_image "${target}" "${image}" "${base_image}" "${dependency_image}" "${source_image}" "${build_image}" "${built_image}" "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+                        else
+                            echo "$0: unknown target image -- ${target}"
+                echo "$0: building built target/image instead"
+                for tmp_image in "${tmp_images[@]}"; do
+                    echo "$0: deleting tmp image: ${tmp_image}"
+                    docker image rm "${tmp_image}"
+                done
+                exit 1;
+                        fi
                     fi
                 fi
             fi
@@ -180,10 +196,11 @@ function make_image() {
     local target=$1
     local image=${2:-${image:-"${registry}${name:-${target}}:${tag}"}}
     local base_image=$3
-    local source_image=$4
-    local build_image=$5
-    local built_image=$6
-    local php_version=$7
+    local dependency_image=$4
+    local source_image=$5
+    local build_image=$6
+    local built_image=$7
+    local php_version=$8
 
     local alpine_php_repository_branch=
     local alpine_php_repository_repository=
@@ -211,7 +228,7 @@ function make_image() {
             ;;
     esac
 
-    build_image_and_dependencies "${target}" "${image}" "${base_image}" "${source_image}" "${build_image}" "${built_image}" "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
+    build_image_and_dependencies "${target}" "${image}" "${base_image}" "${dependency_image}" "${source_image}" "${build_image}" "${built_image}" "${alpine_php_repository_branch}" "${alpine_php_repository_repository}" "${alpine_php_package}"
 
     local old_image=${cache_form[0]}
     if [ -n "${old_image}" ] && [ 'true' == "${use_old_image}" ]; then
@@ -237,7 +254,7 @@ function make_packages() {
         packaging_image=packaging:tmp-$(uuidgen)
         tmp_images+=(${packaging_image})
 
-    	make_image 'packaging' "${packaging_image}" "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}"
+    	make_image 'packaging' "${packaging_image}" "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}"
     fi
 
     echo "$0: using ${packaging_image} as packages source"
@@ -272,6 +289,8 @@ function help() {
     echo 'tasks:'
     echo '  base'
     echo '  dev'
+    echo '  dependency'
+    echo '  test-dependency'
     echo '  source'
     echo '  test-source'
     echo '  build'
@@ -293,6 +312,7 @@ function help() {
     echo '  DOCKER_ADDITIONAL_BUILD_ARGS: add args to docker build'
     echo '  PHP_VERSION: set php version; default is 7.3'
     echo '  BASE_IMAGE: set base image'
+    echo ' "DEPENDENCY_IMAGE: set dependency image'
     echo '  SOURCE_IMAGE: set source image'
     echo '  BUILD_IMAGE: set build image'
     echo '  BUILT_IMAGE: set built image'
@@ -338,14 +358,16 @@ done
 shift $(($OPTIND - 1))
 
 case ${1} in
-    base) make_image 'base' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    dev) make_image 'dev' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    source) make_image 'source' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    test-source) make_image 'test-source' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    build) make_image 'build' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    built) make_image 'built' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    test-built) make_image 'test-built' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    packaging) make_image 'packaging' '' "${BASE_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    base) make_image 'base' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    dev) make_image 'dev' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    dependency) make_image 'dependency' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    test-dependency) make_image 'test-source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    source) make_image 'source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    test-source) make_image 'test-source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    build) make_image 'build' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    built) make_image 'built' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    test-built) make_image 'test-built' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    packaging) make_image 'packaging' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     packages) make_packages "${PACKAGING_IMAGE}" "${output_path}";; 
     '')
         help

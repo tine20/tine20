@@ -31,8 +31,9 @@ docker_registry_rename_remote() {
 }
 
 docker_registry_use_hash_image_as_commit_image () {
-    target=$1;
-    hash=$2;
+    source=$1;
+    target=$2;
+    hash=$3;
 
-    docker_registry_rename_remote $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY $target $hash ${target}-commit ${IMAGE_TAG};
+    docker_registry_rename_remote $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY $source $hash ${target}-commit ${IMAGE_TAG};
 }
