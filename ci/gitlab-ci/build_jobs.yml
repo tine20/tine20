@@ -6,6 +6,21 @@
 # Gitlab currently dose not support needs in the same stage.
 # Therefore we need multiple build stages.
 
+include:
+  - local: '/ci/gitlab-ci/lib.yml'
+
+docker_build_base:
+  extends: .abstract_jobs.docker
+  stage: build0
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - apk add git
+    - !reference [.lib, script]
+    - git_repo_clone
+    - docker_build_image base $(docker_image_hash base)
+  timeout: 60m
+  interruptible: true
 
 # Build docker image using caching.
 # Reuses image if no build needs a current image (test overwrite the source code anyways).
@@ -17,7 +32,8 @@ docker_build_source:
   stage: build1
   script:
     - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh base $REUSE_IMAGES
+    - !reference [.lib, script]
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh source $REUSE_IMAGES
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh test-source $REUSE_IMAGES
   timeout: 60m
@@ -57,6 +73,8 @@ docker_build_built:
   extends: .abstract_jobs.docker
   stage: build2
   script:
+    - !reference [.lib, script]
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh build
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
@@ -75,6 +93,8 @@ docker_build_dev:
   extends: .abstract_jobs.docker
   stage: build2
   script:
+    - !reference [.lib, script]
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh dev
   rules:
     - if: *DEPLOYS_NEEDING_DEV_IMAGE
