@@ -45,6 +45,7 @@ docker_build_source:
     strategy: depend
   variables:
     RUN_NO_TESTS: "true"
+    AUTO_MERGE: "never"
     IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
 
 docker_build_built:
