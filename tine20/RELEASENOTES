@@ -2,102 +2,91 @@
 TINE 2.0 RELEASENOTES
 =====================
                     
-  Release:     Amon (2020.11)
-  Last change: 2021-02-16
+  Release:     Lu (2021.11)
+  Last change: 2021-10-12
 
 # GENERAL CHANGES (Administrative)
 
-## MFA / SecondFactor Pin refactoring
+## SSO
 
-moving the current second factor pin into the new MFA facility, it is required to configure a MFA with the provider
-Tinebase_Auth_MFA_PinAdapter
-in order for the update script to be able to copy the hashes of the old pins into the new MFA data structure.
-If the update script is being run without configuring such an MFA, all accounts pins will be permanently lost
-(except for any preexisting database backups of course)
+Single-Sign-On Support / WebAuthn
 
-We refactored the login and added support for multiple MFA providers (SMS, yubico, ...). The old "captcha" has been removed.
+- TODO add more infos
 
-see 41610e5 feature(Tinebase): mfa UI
-see 0c6fcb3 feature(Tinebase): introduce MTA and refactor area lock
+## MFA
 
-## Disable Browser Password Safe
+Further improvements... H|TOTP, Yubico MFA ... MFA UI in user edit dialog
 
-A new config option has been added to disable the Browser Password Safe (for example for the login screen).
+- TODO add more infos
 
-see cf14e3c feature(Tinebase): prevent browser password safe in ux.passwordField
+## Sentry
 
-## MySQL 8 Support
+Update to current Sentry PHP SDK 3.3.2 with improved logging and more information in issues.
 
-But be careful, MySQL 8.0.20 has a major bug (see https://bugs.mysql.com/bug.php?id=99398 for more information) and should not be used!
-We mitigated the bug before, but removed that because it created other issues (see commit 77abad0).
+## PHP 8.0 Support
 
-## PHP 7.4 Support
+Support PHP < 7.4 has been dropped.
 
-Support PHP < 7.2 has been dropped.
+## Monitoring E-Mail Integration
 
-## Clear Cache (CLI)
-
-The Tinebase.clearCache function has been removed - please use this command now:
-
-    $ setup.php --clear_cache [-v]
+Added monitoring checks for IMAP/SMTP/Sieve integration.
 
 # GENERAL CHANGES (User Interface)
 
-## Minor Layout Changes
+## Rebranding
 
-- Toolbar background color
-- Application Tabs background colors
-
-## Inline Editor
-
-For example for XML in Import/Export-Definitions Editor.
-
-## Filemanager Folder Relations
+Tine 2.0 -> Tine
 
 # Admin
 
-## Import/Export-Definitions Editor
+## Adminisitration of E-Mail-Accounts
 
-## DB-Logger
+- Sieve settings for all (system) accounts
+- Improved shared accounts management
 
 # Adressbook
 
-## VCARD Exports
+## Improve group memberships and roles management
 
-# Crm
+- Only have one grid for members and roles
+- Allow to define maximum members in a role
 
-## Notification-Features
-
-More configuration for Notifications.
+## Added language field to contacts
 
 # Calendar
 
-## Notification-Features
+## Add secondary colors for events (by attender status, tags, ...)
 
-Configuration for Muting Notifications.
-
-## Customizable Calendar Colors
-
-## Configuration for Week View Days
-
-- define visible week days
-
-## VCALENDAR/ICS Exports
-
-- Multiple Calendars at once
-- Save Export in Filemanager (File Location)
-- ICS Report export contains ALL events of a calendar
+## Add ressource colors
 
 # Felamimail
 
-## Multiple Signatures
+## "Mark as SPAM"-Features
 
-## Auto-Save as Draft
+- Configurable via BL-Pipelines
 
-## Show Total Message Count Of Draft Folder
+## Import eml into Felamimail via UI
 
-# Human Resources
+## ActiveSync: support for FolderCreate command added
 
-## FreeTime Planning
+## Improve E-Mail-Editor
 
+- Added strike-through formatting
+- Added code-block formatting
+- Standard font configurable per user
 
+## Keyboard-Shortcuts (similar to Thunderbird)
+
+## Test-Button for checking IMAP/SMTP settings
+
+# Filemanager
+
+## Upload Folder
+
+# ActiveSync / WebDAV
+
+## Support for OpenSync on Android
+
+## Support EMClient 7
+
+- emClient 8 might still be unsupported: https://github.com/tine20/tine20/issues/7202
