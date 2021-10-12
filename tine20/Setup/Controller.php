@@ -151,15 +151,55 @@ class Setup_Controller
         
         $extCheck = new Setup_ExtCheck(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'essentials.xml');
         $extResult = $extCheck->getData();
+        
+        $optionalBinaries = $this->checkoptionalBinaries();
 
         $result = array(
             'success' => ($envCheck['success'] && $databaseCheck['success'] && $extResult['success']),
-            'results' => array_merge($envCheck['result'], $databaseCheck['result'], $extResult['result']),
+            'results' => array_merge($envCheck['result'], $databaseCheck['result'], $extResult['result'], $optionalBinaries['result']),
+            'resultOptionalBinaries' => $optionalBinaries,
         );
 
         $result['totalcount'] = count($result['results']);
         
         return $result;
+    }
+
+    /**
+     * check which optional binaries are available
+     * 
+     * @return array
+     */
+    public function checkOptionalBinaries()
+    {
+        
+        $result = array(
+            'result' => array(),
+            'success' => false
+        );
+        
+        $tnef = Tinebase_Core::systemCommandExists('tnef') ? 'tnef ' : '' ;
+        $ytnef = Tinebase_Core::systemCommandExists('ytnef') ? 'ytnef ' : '' ;
+        $tika = Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}->{Tinebase_Config::FULLTEXT_TIKAJAR}? 'tika' : '';
+
+        if ( (empty($tnef) && empty($ytnef)) || empty($tika)) {
+            $result['result'] = array(
+                'key' => 'OptionalBinaries',
+                'value' => FALSE,
+                'message' => 'The following optional binaries are missing: ' .
+                (empty($tnef) && empty($ytnef) ? "tnef or ytnef" : "") . " " .
+                (empty($tika) ? "tika" : "")  
+            );
+            return $result;
+        }
+        
+        $result['result'] = array(
+            'key' => 'OptionalBinaries',
+            'value' => TRUE,
+            'message' => 'The following optional binaries are available: ' . 
+            $tnef . $ytnef . $tika
+        );
+        return $result;    
     }
     
     /**
