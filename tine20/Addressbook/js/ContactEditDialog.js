@@ -187,7 +187,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         getExtraContextActions: () => {
                             return [
                                 {
-                                    text: i18n._('Select color'),
+                                    text: this.app.i18n._('Select color'),
                                     iconCls: 'action_changecolor',
                                     scope: this,
                                     menu: new Ext.menu.ColorMenu({
