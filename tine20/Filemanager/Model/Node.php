@@ -64,7 +64,11 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
             'name'              => 'tree_nodes',
         ],
 
-        'filterModel'       => [],
+        'filterModel'       => [
+            'isIndexed'         => [
+                'filter'            => Tinebase_Model_Tree_Node_IsIndexedFilter::class,
+            ],
+        ],
 
         'fields'            => [
             'parent_id'                     => [
