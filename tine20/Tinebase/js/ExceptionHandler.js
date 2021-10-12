@@ -166,13 +166,14 @@ Tine.Tinebase.ExceptionHandler = function() {
             // not authorised
             case 401:
                 Tine.Tinebase.tineInit.isReloading = true;
-                Tine.Tinebase.tineInit.clearRegistry();
-                if (! window.isMainWindow) {
-                    Ext.ux.PopupWindow.close();
-                    return;
-                }
-                Tine.Tinebase.common.reload({
-                    clearCache: true
+                Tine.Tinebase.tineInit.clearRegistry().then(() => {
+                    if (! window.isMainWindow) {
+                        Ext.ux.PopupWindow.close();
+                        return;
+                    }
+                    Tine.Tinebase.common.reload({
+                        clearCache: true
+                    });
                 });
                 break;
             
