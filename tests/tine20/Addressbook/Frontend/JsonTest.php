@@ -170,43 +170,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
-
-        /*
-        $contactsById = [];
-        foreach ($contacts['results'] as $data) {
-            $contactsById[$data['id']] = $data;
-        }
-        $records = Addressbook_Controller_Contact::getInstance()->getMultiple(array_keys($contactsById));
-
-        Addressbook_Frontend_Json::resolveImages($records);
-        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
-            $pathController = Tinebase_Record_Path::getInstance();
-            foreach ($records as $record) {
-                $record->paths = $pathController->getPathsForRecord($record);
-                $pathController->cutTailAfterRecord($record, $record->paths);
-            }
-        }
-        $converter = new Tinebase_Convert_Json();
-        $data = [];
-        foreach ($converter->fromTine20RecordSet($records) as $a) {
-
-            // fix legacy bugs
-            if (array_key_exists('cat_id', $a)) {
-                unset($a['cat_id']);
-            }
-            if (array_key_exists('label', $a)) {
-                unset($a['label']);
-            }
-            if (array_key_exists('private', $a)) {
-                unset($a['private']);
-            }
-            $data[$a['id']] = $a;
-        }
-
-        $id = $contacts['results'][0]['id'];
-        static::assertEquals($data[$id], $contactsById[$id]);
-        static::assertEquals($data, $contactsById);
-        */
     }
 
     /**
