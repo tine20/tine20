@@ -55,6 +55,8 @@ merge:
     include: '/ci/gitlab-ci/merge_pipeline.yml'
     strategy: depend
   rules:
+    - if: $AUTO_MERGE == "never"
+      when: never
     - if: $CI_COMMIT_REF_NAME == "2019.11" || $CI_COMMIT_REF_NAME == "2020.11" || $CI_COMMIT_REF_NAME == "2021.11"
       variables:
         AUTO_MERGE_VAR: "true"
