@@ -1426,7 +1426,7 @@ msgstr "IMAP-Fehler (Empfangsserver)"
 
 #: js/Felamimail.js:1046
 msgid "No connection to IMAP server."
-msgstr "Keine Verbindung zum Empfangsserver-Server (IMAP)."
+msgstr "Keine Verbindung zum Empfangsserver (IMAP)."
 
 #: js/Felamimail.js:1063
 msgid "IMAP Credentials Error"
