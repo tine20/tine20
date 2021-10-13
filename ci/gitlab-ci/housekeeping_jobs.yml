@@ -31,7 +31,8 @@ docker_populate_cache:
   extends: .abstract_jobs.docker
   stage: housekeeping
   script:
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh base || true
+    - !reference [.lib, script]
+    - docker_layer_cache_populat_with_hash_image base $(docker_image_hash base) || true
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh source || true
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh test-source || true
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh build || true

@@ -6,20 +6,44 @@
 # Gitlab currently dose not support needs in the same stage.
 # Therefore we need multiple build stages.
 
+include:
+  - local: '/ci/gitlab-ci/lib.yml'
 
-# Build docker image using caching.
-# Reuses image if no build needs a current image (test overwrite the source code anyways).
-# If REUSE_IMAGES is true, use copy of an old image if available. Reuse image uses, either an
-# old image form the current branch, if it is available. Or an old image from MAJOR_COMMIT_REF_NAME 
-# branch.
+docker_build_base:
+  extends: .abstract_jobs.docker
+  stage: build0
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - apk add git
+    - !reference [.lib, script]
+    - git_repo_clone
+    - docker_build_image base $(docker_image_hash base)
+  timeout: 60m
+  interruptible: true
+
+# docker build source or dependecy image
 docker_build_source:
   extends: .abstract_jobs.docker
   stage: build1
+  variables:
+    GIT_STRATEGY: none
   script:
-    - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh base $REUSE_IMAGES
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh source $REUSE_IMAGES
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh test-source $REUSE_IMAGES
+    - apk add git
+    - !reference [.lib, script]
+    - git_repo_clone
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
+    - docker_build_image dependency $(docker_image_hash dependency)
+    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)";
+    - |
+      if [ "${REUSE_IMAGES}" == true ]; then
+        docker_build_image test-dependency $(docker_image_hash test-dependency)
+        docker_registry_use_hash_image_as_commit_image test-dependency test-source $(docker_image_hash test-dependency)
+      else
+        cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
+        ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh source false
+        ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh test-source false
+      fi
   timeout: 60m
   interruptible: true
   rules:
@@ -38,25 +62,19 @@ docker_build_source:
       variables:
         REUSE_IMAGES: "false"
       when: on_success
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes:
-        # do not reuse image if the docker image changed
-        - ci/dockerimage/**/*
-        - etc/**/*
-      variables:
-        REUSE_IMAGES: "false"
-      when: on_success
     # do not reuse image for tag pipelines
     - if: $CI_COMMIT_TAG
       variables:
         REUSE_IMAGES: "false"
       when: on_success
     - when: on_success
-      
+
 docker_build_built:
   extends: .abstract_jobs.docker
   stage: build2
   script:
+    - !reference [.lib, script]
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh build
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
@@ -75,6 +93,8 @@ docker_build_dev:
   extends: .abstract_jobs.docker
   stage: build2
   script:
+    - !reference [.lib, script]
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh dev
   rules:
     - if: *DEPLOYS_NEEDING_DEV_IMAGE
