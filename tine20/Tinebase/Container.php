@@ -742,14 +742,24 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $containerName = sprintf($translation->_("%s's personal container"), $account->accountFullName);
         }
 
-        $container = $this->addContainer(new Tinebase_Model_Container(array(
-            'name'              => $containerName,
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $account->getId(),
-            'backend'           => 'Sql',
-            'model'             => $recordClass,
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
-        )));
+        try {
+            $container = $this->addContainer(new Tinebase_Model_Container(array(
+                'name' => $containerName,
+                'type' => Tinebase_Model_Container::TYPE_PERSONAL,
+                'owner_id' => $account->getId(),
+                'backend' => 'Sql',
+                'model' => $recordClass,
+                'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
+            )));
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                throw $zdse;
+            } else {
+                // try again with uuid in name
+                $container = $this->createDefaultContainer($recordClass, $applicationName, $account,
+                    $containerName . ' ' . Tinebase_Record_Abstract::generateUID(6));
+            }
+        }
 
         return $container;
     }
