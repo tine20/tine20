@@ -1732,7 +1732,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                                 if ($path === '/' . $filemanager_id . '/folders/personal') {
                                     try {
                                         $userData = Admin_Controller_User::getInstance()->get($record->name)->toArray();
-                                        $record->quota = $userData['xprops']['personalFSQuota'];
+                                        $record->quota = $userData['xprops']['personalFSQuota'] ?? 0;
                                         $record->xprops('customfields')['isPersonalNode'] = true;
                                         $record->xprops('customfields')['accountLoginName'] = $userData['accountLoginName'];
                                         $record->xprops('customfields')['accountId'] = $record->name;
