@@ -1,18 +1,14 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_User
@@ -38,7 +34,7 @@ class Tinebase_User_SqlTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::SQL) {
             $this->markTestSkipped('SQL backend not enabled');
         }
@@ -49,7 +45,7 @@ class Tinebase_User_SqlTest extends TestCase
     }
 
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
 
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
@@ -195,7 +191,6 @@ class Tinebase_User_SqlTest extends TestCase
     }
     
     /**
-     * try to enable an account
      *
      */
     public function testUserIsEnabledAgain()
@@ -308,14 +303,12 @@ class Tinebase_User_SqlTest extends TestCase
         unset($this->objects['users']['addedUser']);
         
         $this->expectException('Tinebase_Exception_NotFound');
-        
+
         $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
     }
 
     /**
      * test if deleted users data is removed
-     *
-     * @see TODO add mantis issue
      *
      * TODO add test cases for keepOrganizerEvents and $_keepAsContact and $_keepAsContact
      */
@@ -323,7 +316,7 @@ class Tinebase_User_SqlTest extends TestCase
     {
         // configure removal of data
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
-            '_deletePersonalContainers' => true,
+            Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER => true,
         )));
 
         // we need a valid group and a contact for this test
