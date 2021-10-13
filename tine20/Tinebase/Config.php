@@ -605,8 +605,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const ACCOUNT_DELETION_EVENTCONFIGURATION = 'accountDeletionEventConfiguration';
-    
+    public const ACCOUNT_DELETION_EVENTCONFIGURATION = 'accountDeletionEventConfiguration';
+    public const ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER = '_deletePersonalContainers';
+    public const ACCOUNT_DELETION_KEEP_AS_CONTACT = '_keepAsContact';
+    public const ACCOUNT_DELETION_KEEP_ORGANIZER_EVENTS = '_keepOrganizerEvents';
+    public const ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER = '_keepAttendeeEvents';
+
     /**
      * roleChangeAllowed
      *
@@ -848,13 +852,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ],
         /**
-         * possible values:
-         *
-         * $_deletePersonalContainers => delete personal containers
-         * $_keepAsContact => keep "account" as contact in the addressbook
-         * $_keepOrganizerEvents => keep accounts organizer events as external events in the calendar
-         * $_keepAsContact => keep accounts calender event attendee as external attendee
-         *
          * TODO add more options (like move to another container)
          */
         self::ACCOUNT_DELETION_EVENTCONFIGURATION => array(
@@ -867,6 +864,36 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
+            self::CONTENT               => [
+                self::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER  => [
+                    //_('Delete personal containers')
+                    self::LABEL                         => 'Delete personal containers',
+                    self::DESCRIPTION                   => 'Delete personal containers',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+                self::ACCOUNT_DELETION_KEEP_AS_CONTACT  => [
+                    //_('Keep "account" as contact in the Addressbook')
+                    self::LABEL                         => 'Keep "account" as contact in the Addressbook',
+                    self::DESCRIPTION                   => 'Keep "account" as contact in the Addressbook',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+                self::ACCOUNT_DELETION_KEEP_ORGANIZER_EVENTS  => [
+                    //_('Keep accounts organizer events as external events in the Calendar')
+                    self::LABEL                         => 'Keep accounts organizer events as external events in the Calendar',
+                    self::DESCRIPTION                   => 'Keep accounts organizer events as external events in the Calendar',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+                self::ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER  => [
+                    //_('Keep accounts Calendar event attendee as external attendee')
+                    self::LABEL                         => 'Keep accounts Calendar event attendee as external attender',
+                    self::DESCRIPTION                   => 'Keep accounts Calendar event attendee as external attender',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+            ],
         ),
         /**
          * lock certain areas of tine20 (apps, login, data safe, ...) with additional auth (pin, privacy idea, ...)
