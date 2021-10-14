@@ -60,7 +60,7 @@ class Tinebase_TagsTest extends TestCase
      * @param array $context
      * @return Tinebase_Model_Tag
      */
-    protected function _createSharedTag($name = NULL, $context = NULL)
+    protected function _createSharedTag($name = NULL, $context = NULL, $user = 'current')
     {
         $sharedTag = new Tinebase_Model_Tag(array(
             'type'  => Tinebase_Model_Tag::TYPE_SHARED,
@@ -73,7 +73,9 @@ class Tinebase_TagsTest extends TestCase
         $right = new Tinebase_Model_TagRight(array(
             'tag_id'        => $savedSharedTag->getId(),
             'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'account_id'    => $user !== 'current' ?
+                Tinebase_FullUser::getInstance()->getFullUserByLoginName($user) :
+                Tinebase_Core::getUser()->getId() ,
             'view_right'    => true,
             'use_right'     => true,
         ));
@@ -311,17 +313,24 @@ class Tinebase_TagsTest extends TestCase
         $filter = new Tinebase_Model_TagFilter(array());
         $ids = $this->_instance->searchTags($filter)->getId();
         $this->_instance->deleteTags($ids);
-        
+
         $t1 = $this->_createSharedTag('tag1');
         $t2 = $this->_createSharedTag('tag2');
-        
+
         // this tag should not occur, search is in the addressbook application
         $crmAppId = Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId();
         $t3 = $this->_createSharedTag('tag3', array($crmAppId));
-        
+
         $filter = new Tinebase_Model_TagFilter(array('application' => 'Addressbook'));
-        
+
         $tags = $this->_instance->searchTags($filter);
         $this->assertEquals(2, $tags->count());
+    }
+
+    public function testUpdateTagWithoutRights() {
+        $sharedTag = $this->_createSharedTag('test', null, 'sclever');
+        $sharedTag['name'] = 'testUpdate';
+        $updatedTag = Tinebase_Tags::getInstance()->update($sharedTag);
+        $this->assertEquals('testUpdate', $updatedTag['name']);
     }
 }
