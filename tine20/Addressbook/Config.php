@@ -302,7 +302,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 //_('List types available.')
                 'description'           => 'List types available.',
                 'type'                  => 'keyFieldConfig',
-                'clientRegistryInclude' => TRUE,
+                'clientRegistryInclude' => true,
                 'setByAdminModule'      => true,
                 'default'               => array(
                     'records' => array(
