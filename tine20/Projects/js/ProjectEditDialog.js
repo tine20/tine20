@@ -1,9 +1,9 @@
-/*
+/**
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Projects');
 
@@ -29,8 +29,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'ProjectEditWindow_',
     appName: 'Projects',
-    recordClass: Tine.Projects.Model.Project,
-    recordProxy: Tine.Projects.recordBackend,
+    modelName: 'Project',
     evalGrants: true,
     showContainerSelector: true,
     hideRelationsPanel: false,

@@ -59,6 +59,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
 
         self::EXPOSE_HTTP_API => true,
         self::EXPOSE_JSON_API => true,
+        self::CREATE_MODULE => true,
 
         self::DEFAULT_SORT_INFO => ['field' => 'number', 'direction' => 'DESC'],
 
