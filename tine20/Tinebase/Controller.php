@@ -344,12 +344,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function initUser(Tinebase_Model_FullUser $_user, $fixCookieHeader = true)
     {
-        Tinebase_Core::set(Tinebase_Core::USER, $_user);
-        $ravenClient = Tinebase_Core::getSentry();
-        if ($ravenClient) {
-            $ravenClient->tags['user'] = $_user->accountLoginName;
-        }
-        
+        Tinebase_Core::setUser($_user);
+
         if (Tinebase_Session_Abstract::getSessionEnabled()) {
             $this->_initUserSession($fixCookieHeader);
         }
