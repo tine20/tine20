@@ -206,4 +206,21 @@ class Addressbook_Import_VCardTest extends \PHPUnit\Framework\TestCase
             self::assertNotEmpty($importedContact->email, 'email empty: ' . print_r($importedContact->toArray(), true));
         }
     }
+
+    /**
+     * test import data without N property
+     *
+     */
+    public function testImportWithoutNProperty()
+    {
+        $this->_filename = dirname(__FILE__) . '/files/without_N_property.vcf';
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_import_vcard');
+        $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => FALSE));
+
+        $result = $this->_instance->importFile($this->_filename);
+
+        $importedContact = $result['results']->getFirstRecord();
+        $this->assertTrue($importedContact !== NULL);
+        $this->assertEquals('Hans Müller', $importedContact->n_fn, print_r($importedContact, TRUE));
+    }
 }
