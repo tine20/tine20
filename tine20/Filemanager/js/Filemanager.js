@@ -95,9 +95,6 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     }
 });
 
-// special wording for contents filter
-Tine.widgets.grid.FilterRegistry.register('Filemanager', 'Node', {label : 'File Contents', field : 'content', operators : [ 'wordstartswith' ]},);
-
 // remove content filters if indexing is not enabled
 Tine.Tinebase.appMgr.isInitialised('Filemanager').then(() => {
     if (! Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {

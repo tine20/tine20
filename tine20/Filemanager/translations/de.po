@@ -752,8 +752,8 @@ msgstr "Ordner mit dem Namen ist bereits vorhanden!"
 #~ msgid "Content Type"
 #~ msgstr "Inhaltstyp"
 
-#~ msgid "File Contents"
-#~ msgstr "Dateiinhalt"
+msgid "File Contents"
+msgstr "Dateiinhalt"
 
 #~ msgid "Contenttype"
 #~ msgstr "Inhalts Typ"
