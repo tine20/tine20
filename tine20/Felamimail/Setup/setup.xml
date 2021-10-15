@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>14.2</version>
+    <version>14.4</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -55,6 +55,18 @@
                     <name>organization</name>
                     <type>text</type>
                     <length>255</length>
+                </field>
+                <field>
+                    <name>visibility</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>hidden</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contact_id</name>
+                    <type>text</type>
+                    <length>40</length>
                 </field>
                 <field>
                     <name>port</name>

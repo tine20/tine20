@@ -87,6 +87,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     const CONTACTTYPE_USER = 'user';
 
     /**
+     * contact type: email_account
+     *
+     * @var string
+     */
+    const CONTACTTYPE_EMAIL_ACCOUNT = 'email_account';
+
+    /**
      * small contact photo size
      *
      * @var integer
@@ -801,7 +808,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => self::CONTACTTYPE_CONTACT,
-                    ['InArray', [self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT]]
+                    ['InArray', [self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT, self::CONTACTTYPE_EMAIL_ACCOUNT]]
                 ],
                 self::DEFAULT_VAL                  => 'contact', // TODO check if this works!=?!?
 

@@ -54,6 +54,20 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
     public const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     /**
+     * hidden from addressbook
+     *
+     * @var string
+     */
+    const VISIBILITY_HIDDEN    = 'hidden';
+
+    /**
+     * visible in addressbook
+     *
+     * @var string
+     */
+    const VISIBILITY_DISPLAYED = 'displayed';
+
+    /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
@@ -559,6 +573,26 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LABEL                 => 'Smtp user',
                 self::TYPE                  => self::TYPE_VIRTUAL,
             ],
+            'visibility' => [
+                self::TYPE =>               self::TYPE_STRING,
+                self::SYSTEM => true,
+                self::VALIDATORS => [
+                    Zend_Validate_InArray::class => [
+                        self::VISIBILITY_HIDDEN,
+                        self::VISIBILITY_DISPLAYED,
+                    ],
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_HIDDEN
+                ]
+            ],
+            'contact_id'                    => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_PART_NAME,
+                ],
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ]
         ]
     ];
 

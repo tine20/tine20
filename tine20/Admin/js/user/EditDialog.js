@@ -850,6 +850,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             account: this.record,
             editDialog: this,
         });
+    
+        this.saveInaddressbookFields = this.getSaveInAddessbookFields(this);
+        this.saveInaddressbookFields.push({
+            hideLabel: true,
+            xtype: 'checkbox',
+            boxLabel: this.app.i18n.gettext('Password Must Change'),
+            hidden: this.ldapBackend,
+            ctCls: 'admin-checkbox',
+            fieldClass: 'admin-checkbox-box',
+            name: 'password_must_change'
+        });
         
         var config = {
             xtype: 'tabpanel',
@@ -1017,61 +1028,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'accountExpires',
                         tabIndex: 9,
                         emptyText: this.app.i18n.gettext('never')
-                    }], [{
-                        xtype: 'combo',
-                        fieldLabel: this.app.i18n.gettext('Visibility'),
-                        name: 'visibility',
-                        mode: 'local',
-                        tabIndex: 10,
-                        triggerAction: 'all',
-                        allowBlank: false,
-                        editable: false,
-                        store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]],
-                        listeners: {
-                            scope: this,
-                            select: function (combo, record) {
-                                // disable container_id combo if hidden
-                                var addressbookContainerCombo = this.getForm().findField('container_id');
-                                addressbookContainerCombo.setDisabled(record.data.field1 === 'hidden');
-                                if (addressbookContainerCombo.getValue() === '') {
-                                    addressbookContainerCombo.setValue(null);
-                                }
-                            }
-                        }
-                    }, {
-                        xtype: 'tinerecordpickercombobox',
-                        fieldLabel: this.app.i18n.gettext('Saved in Addressbook'),
-                        name: 'container_id',
-                        blurOnSelect: true,
-                        tabIndex: 11,
-                        allowBlank: false,
-                        forceSelection: true,
-                        listWidth: 250,
-                        recordClass: Tine.Tinebase.Model.Container,
-                        disabled: this.record.get('visibility') === 'hidden',
-                        recordProxy: Tine.Admin.sharedAddressbookBackend,
-                        listeners: {
-                            specialkey: function(combo, e) {
-                                if (e.getKey() == e.TAB && ! e.shiftKey) {
-                                    // move cursor to first input field (skip display fields)
-                                    // @see 0008226: when tabbing in user edit dialog, wrong tab content is displayed
-                                    e.preventDefault();
-                                    e.stopEvent();
-                                    this.getForm().findField('accountFirstName').focus();
-                                }
-                            },
-                            scope: this
-                        }
-                    },
-                     {
-                            hideLabel: true,
-                            xtype: 'checkbox',
-                            boxLabel: this.app.i18n.gettext('Password Must Change'),
-                            hidden: this.ldapBackend,
-                            ctCls: 'admin-checkbox',
-                            fieldClass: 'admin-checkbox-box',
-                            name: 'password_must_change'
-                    }]]
+                    }], this.saveInaddressbookFields
+                    ]
                 }, {
                     xtype: 'fieldset',
                     title: this.app.i18n.gettext('Information'),
@@ -1159,6 +1117,60 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     validateLoginName: function (value) {
         return value.match(/^[a-z\d._-]+$/i) !== null;
+    },
+    
+    getSaveInAddessbookFields(scope, hidden) {
+        this.app = Tine.Tinebase.appMgr.get('Admin');
+        
+        return [{
+            xtype: 'combo',
+            fieldLabel: this.app.i18n.gettext('Visibility'),
+            name: 'visibility',
+            mode: 'local',
+            tabIndex: 10,
+            triggerAction: 'all',
+            allowBlank: false,
+            editable: false,
+            hidden: hidden ?? false,
+            value: 'hidden',
+            store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]],
+            listeners: {
+                scope: scope,
+                select: function (combo, record) {
+                    // disable container_id combo if hidden
+                    var addressbookContainerCombo = scope.getForm().findField('container_id');
+                    addressbookContainerCombo.setDisabled(record.data.field1 === 'hidden');
+                    if (addressbookContainerCombo.getValue() === '') {
+                        addressbookContainerCombo.setValue(null);
+                    }
+                }
+            }
+        }, {
+            xtype: 'tinerecordpickercombobox',
+            fieldLabel: this.app.i18n.gettext('Saved in Addressbook'),
+            name: 'container_id',
+            blurOnSelect: true,
+            tabIndex: 11,
+            allowBlank: false,
+            forceSelection: true,
+            listWidth: 250,
+            recordClass: Tine.Tinebase.Model.Container,
+            disabled: scope.record.get('visibility') === 'hidden',
+            hidden: hidden ?? false,
+            recordProxy: Tine.Admin.sharedAddressbookBackend,
+            listeners: {
+                specialkey: function(combo, e) {
+                    if (e.getKey() == e.TAB && ! e.shiftKey) {
+                        // move cursor to first input field (skip display fields)
+                        // @see 0008226: when tabbing in user edit dialog, wrong tab content is displayed
+                        e.preventDefault();
+                        e.stopEvent();
+                        scope.getForm().findField('accountFirstName').focus();
+                    }
+                },
+                scope: scope
+            }
+        }];
     }
 });
 

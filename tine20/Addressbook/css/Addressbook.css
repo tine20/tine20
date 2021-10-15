@@ -23,6 +23,10 @@
     background-image:url(../../images/icon-set/icon_user.svg) !important;
 }
 
+.renderer_typeEmailAccountIcon {
+    background-image:url(../../images/icon-set/icon_email.svg) !important;
+}
+
 .renderer_typeGroupIcon, .AddressbookList{
     background-image:url(../../images/icon-set/icon_group_full.svg) !important;
 }
