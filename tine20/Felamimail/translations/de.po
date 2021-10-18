@@ -1426,7 +1426,7 @@ msgstr "IMAP-Fehler (Empfangsserver)"
 
 #: js/Felamimail.js:1046
 msgid "No connection to IMAP server."
-msgstr "Keine Verbindung zum Empfangsserver (IMAP)."
+msgstr "Keine Verbindung zum Empfangsserver-Server (IMAP)."
 
 #: js/Felamimail.js:1063
 msgid "IMAP Credentials Error"
@@ -2017,3 +2017,19 @@ msgstr "Nur passwortgeschützter Download Link erlaubt"
 
 msgid "Folder with this name already exists!"
 msgstr "Ordner mit dem Namen ist bereits vorhanden!"
+
+#: Acl/Rights.php:106
+msgid "Manage personal email accounts"
+msgstr "Persönliche Konten verwalten"
+
+#: Acl/Rights.php:107
+msgid "Edit and delete personal email accounts"
+msgstr "Bearbeiten und Löschen von persönlichen Konten"
+
+#: Acl/Rights.php:110
+msgid "Add personal email accounts"
+msgstr "Persönliche Konten hinzufügen"
+
+#: Acl/Rights.php:111
+msgid "Create new personal email accounts"
+msgstr "Neue persönliche Konten hinzufügen"
