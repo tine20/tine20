@@ -2665,7 +2665,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onDeleteFailure: function(ids, exception) {
         this.refreshAfterDelete(ids);
         this.loadGridData();
-        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+        Tine.Tinebase.ExceptionHandler.handleRequestException(exception, function() {
+            this.refreshAfterDelete(ids);
+            this.onAfterDelete(ids);
+        }, this);
     },
 
     /**

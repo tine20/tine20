@@ -27,10 +27,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         if ($this->_testUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
         }
-        
+
         parent::tearDown();
     }
-    
+
     /**
      * try to add a Timeaccount
      *
@@ -154,14 +154,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
     /**
      * try to get a Timeaccount with a TA filter
-     * 
+     *
      * @see 0007946: error when searching for single timeaccount
      */
     public function testSearchTimeaccountsWithTAFilter()
     {
         $timeaccount = $this->_getTimeaccount();
         $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
-        
+
         $searchFilter = '[{
             "field": "id",
             "id": "ext-record-869",
@@ -331,10 +331,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->expectException('Tinebase_Exception_NotFound');
         Timetracker_Controller_Timeaccount::getInstance()->get($timeaccountData['id']);
     }
-    
+
     /**
      * save TA with grants
-     * 
+     *
      * @return array
      */
     protected function _saveTimeaccountWithGrants($grants = NULL)
@@ -362,7 +362,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->toString('Y-m-d') .
             ' 00:00:00',  $timesheetData['start_date']);
 
-        // cleanup
+        // cleanup, if the timeaccount is still in use,  need to set confirm request context for delete method
+        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
 
         // check if everything got deleted
@@ -379,7 +380,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $value1 = 'abcd';
         $value2 = 'efgh';
         $cf = $this->_getCustomField();
-        
+
         // create two timesheets with customfields
         $this->_addTsWithCf($cf, $value1);
         $this->_addTsWithCf($cf, $value2);
@@ -542,7 +543,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'], 'account is not resolved');
         $this->assertEquals($timesheet['timeaccount_id'], $timesheetData['timeaccount_id']['id'], 'timeaccount is not resolved');
 
-        // cleanup
+        // cleanup, if the timeaccount is still in use,  need to set confirm request context for delete method
+        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
 
@@ -570,7 +572,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['account_id']['accountId'], 'account is not resolved');
         $this->assertEquals($timesheetData['timeaccount_id'], $timesheetUpdated['timeaccount_id']['id'], 'timeaccount is not resolved');
 
-        // cleanup
+        // cleanup, if the timeaccount is still in use,  need to set confirm request context for delete method
+        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']);
     }
 
@@ -591,7 +594,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // checks
         $this->assertEquals(0, count($timesheets));
 
-        // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
 
@@ -734,7 +736,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'operator' => 'equals',
             'value' => FALSE
         )), $this->_getPaging('is_billable_combined'));
-        
+
         $this->assertGreaterThanOrEqual(1, count($search['results']));
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
         $this->assertEquals(0, $search['results'][0]['is_cleared_combined'], 'is_cleared_combined mismatch');
@@ -758,7 +760,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         )), $this->_getPaging());
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
     }
-    
+
     /**
      * testSearchTimesheetsSumBillable
      */
@@ -786,7 +788,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(60, $search['totalsum'], 'totalsum mismatch ' . print_r($search, true));
         $this->assertEquals(15, $search['totalsumbillable'], 'totalsumbillable mismatch ' . print_r($search, true));
     }
-    
+
     /**
      * try to save and search persistent filter
      *
@@ -957,10 +959,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $search = $this->_json->searchTimesheets($filterData, array());
         $this->assertEquals(1, $search['totalcount']);
     }
-    
+
     /**
      * get ts filter array by user
-     * 
+     *
      * @param string $userId
      * @return array
      */
@@ -972,10 +974,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             . ',"id":"ext-comp-1076","label":"Stundenzettel"}]}]'
         );
     }
-    
+
     /**
     * try to search timesheets with or filter + acl filtering (should find only 1 ts)
-    * 
+    *
     * @see 0005684: fix timesheet acl filtering
     */
     public function testSearchTimesheetsWithOrAndAclFilter()
@@ -985,42 +987,42 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'start_date' => Tinebase_DateTime::now()->subWeek(2)->toString('Y-m-d')
         ));
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        
+
         Timetracker_ControllerTest::removeManageAllRight();
         $this->testSearchTimesheetsWithOrFilter();
     }
 
     /**
     * try to search timesheets of another user with account filter + acl filtering (should find 1 ts)
-    * 
+    *
     * @see 0006244: user filter does not work
     */
     public function testSearchTimesheetsOfAnotherUser()
     {
         $taData = $this->_saveTimeaccountWithGrants();
         $scleverId = Tinebase_User::getInstance()->getFullUserByLoginName('sclever')->getId();
-        
+
         // add ts for sclever
         $timesheet = $this->_getTimesheet(array(
             'account_id'     => $scleverId,
             'timeaccount_id' => $taData['id'],
         ));
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-    
+
         Timetracker_ControllerTest::removeManageAllRight();
-        
+
         $filterData = $this->_getTSFilterDataByUser($scleverId);
         $search = $this->_json->searchTimesheets($filterData, array());
-        
+
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals($scleverId, $search['results'][0]['account_id']['accountId']);
     }
-    
+
     /**
      * testUpdateMultipleTimesheets
-     * 
+     *
      * @group longrunning
-     * 
+     *
      * @see 0005878: multi update timeout and strange behaviour (server)
      */
     public function testUpdateMultipleTimesheets()
@@ -1039,7 +1041,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
+
         // update multi with filter
         $filterArray = $this->_getTimesheetDateFilter();
         $filterArray[] = array(
@@ -1049,14 +1051,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         );
         $tinebaseJson = new Tinebase_Frontend_Json();
         $result = $tinebaseJson->updateMultipleRecords('Timetracker', 'Timesheet', array(array('name' => 'is_cleared', 'value' => 1)), $filterArray);
-        
+
         // check if all got updated
         $this->assertEquals($result['totalcount'], 123);
         $this->assertEquals($result['failcount'], 0);
         $this->assertEquals(1, $result['results'][0]['is_cleared'], print_r($result['results'][0], TRUE));
         $this->assertEquals(1, $result['results'][122]['is_cleared'], print_r($result['results'][122], TRUE));
     }
-    
+
     /**
      * test if relation record gets deleted on both sides on deleting the relation on one side
      */
@@ -1065,15 +1067,33 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $ta = $this->_createTimeaccountWithContract();
         $feTa = new Timetracker_Frontend_Json();
         $feCo = new Sales_Frontend_Json();
-        
+
         $jsonTa = $feTa->getTimeaccount($ta->getId());
 
         $this->assertEquals(1, count($jsonTa['relations']));
 
         $feTa->deleteTimeaccounts(array($ta->getId()));
-        
+
         $jsonCo = $feCo->getContract($jsonTa['relations'][0]['related_id']);
         $this->assertEquals(0, count($jsonCo['relations']));
+    }
+
+    /**
+     * test if relation record gets deleted on both sides on deleting the relation on one side
+     */
+    public function testDeleteInUseTimeaccount()
+    {
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+
+        try {
+            Timetracker_Controller_Timeaccount::getInstance()->setRequestContext([]);
+            $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+            self::fail('should throw Tinebase_Exception_Confirmation');
+        } catch (Tinebase_Exception_Confirmation $e) {
+            $translate = Tinebase_Translation::getTranslation('Timetracker');
+            self::assertEquals($translate->_('Timeaccounts are still in use! Are you sure you want to delete them?'), $e->getMessage());
+        }
     }
 
     /**
@@ -1123,25 +1143,25 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         self::assertEquals('TIME_ACCOUNT', $ta['relations'][0]['type']);
         self::assertTrue(is_array($ta['relations'][0]['related_record']));
     }
-    
+
     /**
      * this test assures that relations, the user doesn't have the right to manage, won't be resolved anyway
      */
     public function testResolvingRelations()
     {
         $this->markTestSkipped('0010492: fix failing invoices and timetracker tests');
-        
+
         $ta = $this->_getTimeaccount()->toArray();
         $ta['grants'] = $this->_getGrants(TRUE);
-        
+
         $contractController = Sales_Controller_Contract::getInstance();
         $contactController  = Addressbook_Controller_Contact::getInstance();
         $taController       = Timetracker_Controller_Timeaccount::getInstance();
-        
+
         // fetch user group
         $group   = Tinebase_Group::getInstance()->getDefaultGroup();
         $groupId = $group->getId();
-        
+
         // create new user
         $user = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'testuser',
@@ -1152,27 +1172,27 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'accountFullName'       => 'Test User',
             'accountEmailAddress'   => 'unittestx8@' . TestServer::getPrimaryMailDomain(),
         ));
-        
+
         $user = Admin_Controller_User::getInstance()->create($user, 'pw', 'pw');
-        
+
         // add tt-ta admin right to user role to allow user to update (manage) timeaccounts
         // user has no right to see sales contracts
         $fe = new Admin_Frontend_Json();
         $userRoles = $fe->getRoles('user', array(), array(), 0, 1);
         $userRole = $fe->getRole($userRoles['results'][0]['id']);
-        
+
         $roleRights = $fe->getRoleRights($userRole['id']);
         $roleMembers = $fe->getRoleMembers($userRole['id']);
         $roleMembers['results'][] = array('name' => 'testuser', 'type' => 'user', 'id' => $user->accountId);
-        
+
         $app = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
-        
+
         $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS);
         $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Tinebase_Acl_Rights::ADMIN);
-        
+
         $app = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Tinebase_Acl_Rights::ADMIN);
-        
+
         $fe->saveRole($userRole, $roleMembers['results'], $roleRights['results']);
 
         $container = new Tinebase_Model_Container(
@@ -1200,20 +1220,20 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             Tinebase_Model_Grants::GRANT_EDIT      => true,
             Tinebase_Model_Grants::GRANT_DELETE    => true,
         )));
-        
+
         $container = Tinebase_Container::getInstance()->addContainer($container, $grants, true);
-        
+
         // create timeaccount
         $ta = $this->_json->saveTimeaccount($ta);
-        
+
         $contact  = $contactController->create(new Addressbook_Model_Contact(array('container_id' => $container->getId(), 'n_given' => 'Test', 'n_family' => 'Unit')));
         $contract = $contractController->create(new Sales_Model_Contract(array('number' => '123', 'title' => 'UnitTest')));
-        
+
         Tinebase_Relations::getInstance()->setRelations('Timetracker_Model_Timeaccount', 'Sql', $ta['id'], array(
             array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'related_degree' => 'sibling'),
             array('related_backend' => 'Sql', 'type' => 'TIME_ACCOUNT', 'related_model' => 'Sales_Model_Contract', 'related_id' => $contract->getId(), 'related_degree' => 'sibling'),
         ));
-        
+
         // add 2 relations
         $ta = $this->_json->getTimeaccount($ta['id']);
         $this->assertEquals(2, count($ta['relations']));
@@ -1221,80 +1241,80 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // switch to other user
         $this->_testUser = Tinebase_Core::getUser();
         Tinebase_Core::set(Tinebase_Core::USER, $user);
-        
+
         // get sure the user doesn't get relations not having the right for
         $ta = $this->_json->getTimeaccount($ta['id']);
         $this->assertEquals(1, count($ta['relations']), 'user should exactly get one related contact: ' . print_r($ta['relations'], true));
-        
+
         // save timeaccount with reduced relations
         $ta = $this->_json->saveTimeaccount($ta);
-        
+
         // switch user back
         Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
-        
+
         // get sure all relations will be returned
         $ta = $this->_json->getTimeaccount($ta['id']);
         $this->assertEquals(2, count($ta['relations']));
     }
-    
+
     /**
-     * on saving 
+     * on saving
      */
     public function testUpdateTimeaccountWithRelatedContact()
     {
         $this->_getTimeaccount(array(), TRUE);
         $ta = $this->_lastCreatedRecord;
-        
+
         $contactController  = Addressbook_Controller_Contact::getInstance();
-        
+
         $bday = new Tinebase_DateTime();
         $bday->setDate(2013, 12, 24);
         $bday->setTime(0,0,0);
-        
+
         $contact  = $contactController->create(new Addressbook_Model_Contact(array('n_given' => 'Test', 'n_family' => 'Unit', 'bday' => $bday)));
         $bday = $contact['bday'];
-        
+
         Tinebase_Relations::getInstance()->setRelations('Timetracker_Model_Timeaccount', 'Sql', $ta['id'], array(
             array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'related_degree' => 'sibling'),
         ));
-        
+
         // update a few times, bday of contract should not change
         $tajson = $this->_json->getTimeaccount($ta['id']);
         $this->_json->saveTimeaccount($tajson);
         $tajson = $this->_json->getTimeaccount($ta['id']);
         $this->_json->saveTimeaccount($tajson);
         $this->_json->getTimeaccount($ta['id']);
-        
+
         $ajson = new Addressbook_Frontend_Json();
         $contactJson = $ajson->getContact($contact->getId());
-        
+
         $this->assertEquals($bday->setTimezone(Tinebase_Core::getUserTimezone())->toString(), $contactJson['bday']);
     }
 
     /**
      * here we search for all timeaccounts, which are related to an contract with a special
      * internal contact assigned
-     * 
+     *
      * @see: 0009752: create contract - internal/external contact person filter
      */
     public function testTimeaccountContractInternalContactFilter()
     {
         $this->markTestSkipped('0010492: fix failing invoices and timetracker tests');
-        
+
         $this->_getTimeaccount(array('title' => 'to find'), true);
-        
+
         $taController = Timetracker_Controller_Timeaccount::getInstance();
         $taToFind = $taController->get($this->_lastCreatedRecord['id']);
-        
+
         $this->_getTimeaccount(array('title' => 'not to find'), true);
-        
+
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Green')));
-        
+
         $contractController = Sales_Controller_Contract::getInstance();
-        
+
         $contract = new Sales_Model_Contract(array('title' => 'xtestunit', 'description' => 'nothing'));
         $contract = $contractController->create($contract);
-        
+
         $contract->relations = array(new Tinebase_Model_Relation(array(
                 'own_backend' => 'Sql',
                 'own_id' => $contract->getId(),
@@ -1305,10 +1325,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
                 'related_backend' => 'Sql',
                 'related_id' => $contact->getId(),
                 'type' => 'RESPONSIBLE'
-        ))); 
-        
+        )));
+
         $contract = $contractController->update($contract);
-        
+
         $taToFind->relations = array(
             new Tinebase_Model_Relation(array(
                 'own_backend' => 'Sql',
@@ -1322,61 +1342,61 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
                 'type' => 'CONTRACT'
             ))
         );
-        
-        
+
+
         $taToFind = $taController->update($taToFind);
-        
+
         // build request with direct id
         $req = Zend_Json::decode('{"params":{"filter":[{"condition":"OR","filters":[{"condition":"AND","filters":
             [{"field":"contract","operator":"AND","value":[{"field":"contact_external","operator":"AND","value":
                 [{"field":":id","operator":"equals","value":"' . $contact->getId() . '"}],"id":"ext-record-266"},
                  {"field":":id","operator":"AND"}],"id":"ext-record-181"}],"id":"ext-comp-1350","label":"Zeitkonten"}]}],
             "paging":{"sort":"creation_time","dir":"DESC","start":0,"limit":50}}}');
-        
+
         $filter = $req['params']['filter'];
         $paging = $req['params']['paging'];
-        
+
         $result = $this->_json->searchTimeaccounts($filter, $paging);
-        
+
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals($taToFind->getId(), $result['results'][0]['id']);
-        
+
         // build request with query=Green
         $req = Zend_Json::decode('{"jsonrpc":"2.0","method":"Timetracker.searchTimeaccounts","params":{"filter":[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"contract","operator":"AND","value":[{"field":"foreignRecord","operator":"AND","value":{"appName":"Addressbook","modelName":"Contact","linkType":"relation","filters":[{"field":"query","operator":"contains","value":"Green","id":"ext-record-546"}]},"id":"ext-record-480"},{"field":":id","operator":"AND"}],"id":"ext-record-181"}],"id":"ext-comp-1350","label":"Zeitkonten"}]}],"paging":{"sort":"creation_time","dir":"DESC","start":0,"limit":50}},"id":62}');
-        
+
         $filter = $req['params']['filter'];
         $paging = $req['params']['paging'];
-        
+
         $result = $this->_json->searchTimeaccounts($filter, $paging);
-        
+
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals($taToFind->getId(), $result['results'][0]['id']);
     }
-    
+
     /**
      * test if a user, who has no manage_invoices - right, is able tosave a timeaccount having an invoice linked
      */
     public function testUpdateInvoiceLinkedTimeaccount()
     {
         $this->markTestSkipped('0010492: fix failing invoices and timetracker tests');
-        
+
         $ta = $this->_getTimeaccount(array('title' => 'to find'), true);
         $cc = Sales_Controller_CostCenter::getInstance()->create(new Sales_Model_CostCenter(array('number' => 1, 'title' => 'test')));
-        
+
         $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(array(
             'number' => 100,
             'name' => 'test',
             'description' => 'unittest',
             'credit_term' => 1
         )));
-        
+
         $address = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address(array(
             'street' => 'teststreet',
             'locality' => 'testcity',
             'customer_id' => $customer->id,
             'postalcode' => 12345
         )));
-        
+
         $invoice = Sales_Controller_Invoice::getInstance()->create(new Sales_Model_Invoice(array(
             'description' => 'test',
             'address_id' => $address->id,
@@ -1387,19 +1407,19 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'end_date' => Tinebase_DateTime::now()->addMonth(1),
             'costcenter_id' => $cc->id
         )));
-        
+
         Tinebase_Relations::getInstance()->setRelations('Sales_Model_Invoice', 'Sql', $invoice->id, array(array(
             'related_id' => $ta->id,
             'related_model' => 'Timetracker_Model_Timeaccount',
             'related_degree' => 'sibling',
             'type' => 'INVOICE'
         )));
-        
-        // fetch user group 
+
+        // fetch user group
         $group   = Tinebase_Group::getInstance()->getDefaultGroup();
         $groupId = $group->getId();
-        
-        // create new user 
+
+        // create new user
         $user = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'testuser',
             'accountPrimaryGroup'   => $groupId,
@@ -1409,7 +1429,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'accountFullName'       => 'Test User',
             'accountEmailAddress'   => 'unittestx8@' . TestServer::getPrimaryMailDomain(),
         ));
-        
+
         $user = Admin_Controller_User::getInstance()->create($user, 'pw', 'pw');
 
         // add tt-ta admin right to user role to allow user to update (manage) timeaccounts
@@ -1417,33 +1437,33 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $fe = new Admin_Frontend_Json();
         $userRoles = $fe->getRoles('user', array(), array(), 0, 1);
         $userRole = $fe->getRole($userRoles['results'][0]['id']);
-        
+
         $roleRights = $fe->getRoleRights($userRole['id']);
         $roleMembers = $fe->getRoleMembers($userRole['id']);
         $roleMembers['results'][] = array('name' => 'testuser', 'type' => 'user', 'id' => $user->accountId);
-        
+
         $app = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
-        
+
         $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS);
         $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Tinebase_Acl_Rights::ADMIN);
         $fe->saveRole($userRole, $roleMembers['results'], $roleRights['results']);
-        
+
         // switch to other user
         $this->_testUser = Tinebase_Core::getUser();
         Tinebase_Core::set(Tinebase_Core::USER, $user);
-        
+
         $ta = $this->_json->getTimeaccount($ta->id);
         $this->assertTrue(empty($ta['relations']), 'relations are not empty: ' . print_r($ta['relations'], true));
-        
+
         // this must be possible
         $ta = $this->_json->saveTimeaccount($ta);
-        
+
         Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
-        
+
         $ta = $this->_json->getTimeaccount($ta['id']);
         $this->assertTrue(count($ta['relations']) == 1);
     }
-    
+
     /**
      * try to add a Timesheet
      */
@@ -1461,7 +1481,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $tsData = $this->_json->getTimesheet($tsData['id']);
         $this->assertSame(NULL,  $tsData['invoice_id']);
     }
-    
+
     /**
      * try to update a Timesheet with a closed TimeAccount
      */
@@ -1470,12 +1490,12 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timeaccountData = $this->_saveTimeaccountWithGrants();
         $timeaccountData['is_open'] = 0;
         $timeaccount = $this->_json->saveTimeaccount($timeaccountData);
-        
+
         $timesheet = $this->_getTimesheet(array(
              'timeaccount_id'    => $timeaccount['id'],
         ));
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray(), array('skipClosedCheck' => true));
-        
+
         // update Timesheet
         $timesheetData['description'] = "blubbblubb";
         $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
@@ -1487,7 +1507,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             $this->assertEquals('This Timeaccount is already closed!', $tect->getMessage());
         }
     }
-    
+
     public function testUnitField()
     {
         $timeaccount = $this->_getTimeaccount();
