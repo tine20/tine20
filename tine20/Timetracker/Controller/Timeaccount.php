@@ -79,6 +79,48 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     }
 
     /**
+     * inspects delete action
+     *
+     * @param array $_ids
+     * @return array records to actually delete
+     */
+    protected function _inspectDelete(array $_ids): array
+    {
+        $inUseIds = [];
+
+        foreach ($_ids as $id) {
+            $timeSheets = Timetracker_Controller_Timesheet::getInstance()->getTimesheetsByTimeaccountId($id);
+            if ($timeSheets->count() > 0) {
+                array_push($inUseIds, $id);
+            }
+        }
+
+        $timeAccounts = Timetracker_Controller_Timeaccount::getInstance()->getMultiple($inUseIds);
+
+        if ($timeAccounts->count() > 0) {
+            $context = $this->getRequestContext();
+
+            if (! array_key_exists('confirm', $context['clientData']) && ! array_key_exists('confirm', $context)) {
+                $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                $exception = new Tinebase_Exception_Confirmation(
+                    $translation->_('Timeaccounts are still in use! Are you sure you want to delete them?'));
+
+                $timeAccountTitles = null;
+
+                foreach ($timeAccounts as $timeaccount) {
+                    $timeAccountTitles .= '<br />' . $timeaccount->number . ', ' . $timeaccount->title;
+                }
+
+                // todo: show more info about in used time accounts ?
+                //$exception->setInfo($timeAccountTitles);
+                throw $exception;
+            }
+        }
+
+        return parent::_inspectDelete($_ids);
+    }
+
+    /**
      * check timeaccount rights
      * 
      * @param string $_action {get|create|update|delete}

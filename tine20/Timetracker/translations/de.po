@@ -609,3 +609,6 @@ msgstr "Arbeitszeit"
 
 msgid "Project time"
 msgstr "Projektzeit"
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr "Zeitkonten sind noch in Benutzung!, Sind Sie sicher, dass Sie sie löschen möchten?"
