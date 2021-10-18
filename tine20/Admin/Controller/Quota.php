@@ -44,9 +44,10 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
         // for totalQuota set config
         if ($application === 'Tinebase') {
             // check allow total quota management config first
+            $this->validateQuota($application, $recordData, $additionalData);
             $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
             $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = $additionalData['totalInMB'] / 1024 / 1024;
-            return $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB};
+            return [Tinebase_Config::QUOTA_TOTALINMB => $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}];
         }
         
         $translate = Tinebase_Translation::getTranslation('Admin');
@@ -73,6 +74,8 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
                     ]);
 
                     if ($account = Admin_Controller_EmailAccount::getInstance()->search($filter)->getFirstRecord()) {
+                        $this->validateQuota($application, $recordData, $additionalData);
+                        
                         $account->email_imap_user = [
                             'emailMailQuota'  => !empty($additionalData['emailMailQuota']) ? $additionalData['emailMailQuota'] : null,
                             'emailSieveQuota' => !empty($additionalData['emailSieveQuota']) ? $additionalData['emailSieveQuota'] : null,
@@ -108,10 +111,27 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
         }
 
         // for filesystem load node & save node with ignoreACL
+        $this->validateQuota($application, $recordData, $additionalData);
         $node = Tinebase_FileSystem::getInstance()->get($recordData['id']);
         $node->quota = $recordData['quota'];
         Tinebase_FileSystem::getInstance()->update($node);
 
         return Tinebase_FileSystem::getInstance()->get($recordData['id']);
+    }
+
+    public function validateQuota(string $application, $recordData, array $additionalData) {
+
+        $context = $this->getRequestContext();
+        // for totalQuota set config
+        if (array_key_exists('confirm', $context['clientData']) || array_key_exists('confirm', $context)) {
+            return;
+        }
+
+        $event = new Admin_Event_UpdateQuota();
+        $event->recordData = $recordData;
+        $event->application = $application;
+        $event->additionalData = $additionalData;
+
+        Tinebase_Event::fireEvent($event);
     }
 }

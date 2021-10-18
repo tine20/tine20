@@ -1436,6 +1436,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveQuota(string $application, $recordData = null, array $additionalData = [])
     {
+        parent::_setRequestContext(Admin_Controller_Quota::getInstance());
         return Admin_Controller_Quota::getInstance()->updateQuota($application, $recordData, $additionalData);
     }
 
