@@ -91,7 +91,9 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
         $this->_records = $this->_monthlyWTR->dailywtreports;
         $this->_records->sort('date');
         foreach ($this->_records as $dailyWTR) {
-            $this->_monthlyWTR->working_times->merge($dailyWTR->working_times);
+            if($dailyWTR->working_times instanceof Tinebase_Record_RecordSet) {
+                $this->_monthlyWTR->working_times->merge($dailyWTR->working_times);
+            }
         }
     }
 
@@ -141,7 +143,9 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
             $weekSummary->working_time_total = $weekSummary->working_time_total + $dailyWTR->working_time_total;
             $weekSummary->working_time_target = $weekSummary->working_time_target + $dailyWTR->working_time_target;
             $weekSummary->working_time_target_correction = $weekSummary->working_time_target_correction + $dailyWTR->working_time_target_correction;
-            $weekSummary->working_times->merge($dailyWTR->working_times);
+            if ($dailyWTR->working_times instanceof Tinebase_Record_RecordSet) {
+                $weekSummary->working_times->merge($dailyWTR->working_times);
+            }
         }
 
         $this->_weekSummary = $weekSummary;
