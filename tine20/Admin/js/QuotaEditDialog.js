@@ -84,7 +84,7 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             if (this.customizeFields?.isPersonalNode) {
                 additionalData['isPersonalNode'] = this.customizeFields?.isPersonalNode;
                 additionalData['accountId'] = this.customizeFields?.accountId;
-            } 
+            }
             
             this.node.attributes.quota = this.getForm().findField('quota').getValue();
         }
@@ -97,7 +97,7 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         
         await Tine.Admin.saveQuota(this.appName, this.node.attributes, additionalData)
             .then((result) => {
-                // expand child node to the deepest 
+                // expand child node to the deepest
                 this.node.parentNode.reload();
                 this.window.close();
             });
@@ -142,7 +142,7 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                     disabled: ! this.hasRequiredRight
                 }], [{
                     fieldLabel: this.translation.gettext('Current Mailbox size'),
-                    value: emailUser.get('emailMailSize'),
+                    value: emailUser.get('emailMailSize') ?? 0,
                     xtype: 'extuxbytesfield',
                     disabled: true
                 }], [{
@@ -154,7 +154,7 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                     disabled: ! this.hasRequiredRight
                 }], [{
                     fieldLabel: this.translation.gettext('Current Sieve size'),
-                    value: emailUser.get('emailSieveSize'),
+                    value: emailUser.get('emailSieveSize') ?? 0,
                     xtype: 'extuxbytesfield',
                     disabled: true
                 }]]

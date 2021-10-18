@@ -90,7 +90,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                     })
                 });
             }
-            if (showCurrentFSUsageConfig.includes('revision_size') 
+            if (showCurrentFSUsageConfig.includes('revision_size')
                 && Tine.Tinebase.configManager.get('filesystem.modLogActive', 'Tinebase')) {
                 this.columns.push({
                     id: 'revision_size',
@@ -181,8 +181,10 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
     /**
      * onclick handler for edit action
      */
-    async quotaEditDialogHandler(node, _event) {
+    async quotaEditDialogHandler(_event) {
         // search current folder record based on its parent path
+        const node = this.getSelectionModel().getSelectedNode();
+        
         if (this.isNodeEditable(node)) {
             Tine.Admin.QuotaEditDialog.openWindow({
                 windowTitle: String.format(this.translation.gettext('Edit {0} Quota'),
@@ -201,7 +203,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
         const appName = node.attributes.appName;
         const translateApp = path.split('/').filter(Boolean)?.[0];
         let isEditable = false;
-         
+        
         let disabledNodes = [
             `/${translateApp}`,
             `/${translateApp}/folders`,
