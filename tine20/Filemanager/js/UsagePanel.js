@@ -179,7 +179,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
         const quotaManageRight = !_.get(record, 'data.account_grants.adminGrant', false)
             || record.get('type') !== 'folder';
         this.hasOwnQuotaCheckbox.setDisabled(quotaManageRight);
-        debugger
+        
         this.hasOwnQuotaCheckbox.setValue(hasOwnQuota);
         this.quotaField.setDisabled(! hasOwnQuota || quotaManageRight);
         

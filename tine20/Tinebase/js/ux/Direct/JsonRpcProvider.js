@@ -54,20 +54,66 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
     
     // private
     doCall : function(c, m, args) {
+        const me = this;
         var promise = new Promise(function(fulfill, reject) {
+            const paramArray = {};
+            const method = `${c}.${m.name}`;
+            _.each(_.map(m.parameters, 'name'), (paramName, i) => {
+                paramArray[paramName] = args[i];
+            })
+            
             var cb = args[m.len];
+            
             if (! Ext.isFunction(cb)) {
                 cb = Ext.emptyFn;
                 args.push(cb);
                 args.push(window);
-
             }
 
             args[m.len] = cb.createSequence(function(result, e) {
-                if (e.status == 'failure') {
+                if (e.status === 'failure') {
                     reject(e);
-                } else if (e.type == 'exception') {
-                    reject (e.error);
+                } else if (e.type === 'exception') {
+                    const errorData = e.error.data;
+                    
+                    //check for status code 650 (generic confirm)
+                    if (errorData.code === 650) {
+                        Ext.Msg.confirm(
+                            errorData.title,
+                            errorData.message,
+                            async (button) => {
+                                if (button === 'no') {
+                                    reject(e);
+                                }
+                                if (button === 'yes') {
+                                    const request = {
+                                        params : paramArray,
+                                        method: method
+                                    }
+                                    
+                                    paramArray['method'] = method;
+                                    
+                                    Ext.Ajax.request({
+                                        headers: {
+                                            'X-TINE20-REQUEST-CONTEXT-CONFIRM' : true
+                                        },
+                                        params: paramArray,
+                                        success : function(_result, _request) {
+                                            fulfill(_result);
+                                        },
+                                        failure: function(exception) {
+                                            if (! exception.code && exception.responseText) {
+                                                // we need to decode the exception first
+                                                const response = Ext.util.JSON.decode(exception.responseText);
+                                                exception = response.data;
+                                                exception.request = Ext.util.JSON.encode(request);
+                                            }
+                                            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                                        }
+                                    });
+                                }
+                            });
+                    }
                 } else {
                     fulfill(result);
                 }
