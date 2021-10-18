@@ -395,7 +395,7 @@ class Tinebase_Tags
     {
         $currentAccountId = Tinebase_Core::getUser()->getId();
         $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
-        ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
+            ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
 
         if ( ($_tag->type == Tinebase_Model_Tag::TYPE_PERSONAL && $_tag->owner == $currentAccountId) ||
         ($_tag->type == Tinebase_Model_Tag::TYPE_SHARED && $manageSharedTagsRight) ) {
@@ -540,7 +540,6 @@ class Tinebase_Tags
         $appId = $this->_getApplicationForModel($_records->getRecordClassName())->getId();
 
         $select = $this->_getSelect($recordIds, $appId);
-        $select->group(array('tagging.tag_id', 'tagging.record_id'));
         Tinebase_Model_TagRight::applyAclSql($select, $_right, $this->_db->quoteIdentifier('tagging.tag_id'));
 
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
@@ -1124,7 +1123,8 @@ class Tinebase_Tags
             ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), $this->_db->quoteIdentifier('tagging.tag_id') . ' = ' . $this->_db->quoteIdentifier('tags.id'))
             ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId)
             ->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', $recordIds)
-            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
+            ->group(['tagging.record_id', 'tagging.tag_id']);
         
         $this->_filterSharedOnly($select, $_applicationId);
         

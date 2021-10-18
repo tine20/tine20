@@ -102,17 +102,19 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
         }
         
         $currentAccountId = Tinebase_Core::getUser()->getId();
+        $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
+            ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         $currentGroupIds = Tinebase_Group::getInstance()->getGroupMemberships($currentAccountId);
         $groupCondition = ( !empty($currentGroupIds) ) ? ' OR (' . $db->quoteInto($db->quoteIdentifier('acl.account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) .
             ' AND ' . $db->quoteInto($db->quoteIdentifier('acl.account_id') . ' IN (?)', $currentGroupIds) . ' )' : '';
         
-        $where = $db->quoteInto($db->quoteIdentifier('acl.account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) . ' OR (' .
+        $where = '((' . $db->quoteInto($db->quoteIdentifier('acl.account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) . ' OR (' .
             $db->quoteInto($db->quoteIdentifier('acl.account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) . ' AND ' .
             $db->quoteInto($db->quoteIdentifier('acl.account_id')   . ' = ?', $currentAccountId) . ' ) ' .
-            $groupCondition;
+            $groupCondition . ') AND ' . $db->quoteInto($db->quoteIdentifier('acl.account_right') . ' = ?', $_right) .
+            ')' . ($manageSharedTagsRight ? $db->quoteInto(' OR tags.type = ?', Tinebase_Model_Tag::TYPE_SHARED) : '');
         
         $_select->join(array('acl' => SQL_TABLE_PREFIX . 'tags_acl'), $_idProperty . ' = '. $db->quoteIdentifier('acl.tag_id'), array() )
-            ->where($where)
-            ->where($db->quoteIdentifier('acl.account_right') . ' = ?', $_right);
+            ->where($where);
     }
 }
