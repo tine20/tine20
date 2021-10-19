@@ -102,7 +102,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * the constructor
      *
-     * @param  array $options Options used in connecting, binding, etc.
+     * @param array $_options Options used in connecting, binding, etc.
      */
     public function __construct(array $_options = array())
     {
@@ -149,7 +149,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * @param $classname
+     * @param string $classname
      * @return Tinebase_User_Plugin_SqlInterface
      */
     public function getSqlPlugin($classname)
@@ -529,8 +529,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * @param        $_userId
-     * @param        $_password
+     * @param string $_userId
+     * @param string $_password
      * @param string $_property
      * @param boolean $_encrypt
      * @param boolean|null $_mustChange user needs to change pw next time
@@ -667,7 +667,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
         );
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . ' ' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
             . ' ' . $_status . ' user with id ' . $accountId);
 
         $result = $accountsTable->update($accountData, $where);
@@ -773,7 +773,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * update contact data(first name, last name, ...) of user
      * 
-     * @param Addressbook_Model_Contact $contact
+     * @param Addressbook_Model_Contact $_contact
+     * @return integer
      */
     public function updateContact(Addressbook_Model_Contact $_contact)
     {
@@ -879,10 +880,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * @param $plugin
-     * @param $user
-     * @param $newUserProperties
-     * @param $method (add|update|inspectGetUserByProperty|delete)
+     * @param mixed $plugin
+     * @param mixed $user
+     * @param mixed $newUserProperties
+     * @param string $method (add|update|inspectGetUserByProperty|delete)
      *
      * TODO support different imap/smtp xprops
      */
@@ -906,10 +907,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * @param $plugin
-     * @param $user
-     * @param $newUserProperties
-     * @param $method (inspectAddUser|inspectUpdateUser|inspectGetUserByProperty|inspectDeleteUser)
+     * @param mixed $plugin
+     * @param mixed $user
+     * @param mixed $newUserProperties
+     * @param string $method (inspectAddUser|inspectUpdateUser|inspectGetUserByProperty|inspectDeleteUser)
      */
     protected function _inspectEmailPluginCRUD($plugin, $user, $newUserProperties, $method)
     {
@@ -971,7 +972,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      *
      * @param Tinebase_Model_FullUser $_user
      * @return Tinebase_Model_FullUser
-     * @throws 
      */
     public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {
@@ -1154,7 +1154,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = array(
             'id'                => $_user->accountId,
             'login_name'        => $_user->accountLoginName,
-            'expires_at'        => ($_user->accountExpires instanceof DateTime ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
+            'expires_at'        => ($_user->accountExpires instanceof Tinebase_DateTime ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
             'primary_group_id'  => $_user->accountPrimaryGroup,
             'home_dir'          => $_user->accountHomeDirectory,
             'login_shell'       => $_user->accountLoginShell,
