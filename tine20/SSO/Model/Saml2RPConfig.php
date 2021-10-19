@@ -44,6 +44,8 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract
         self::CREATE_MODULE => false,
         self::APP_NAME => SSO_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
+        self::RECORD_NAME => 'SAML2 Relying Party Config',
+        self::RECORDS_NAME => 'SAML2 Relying Party Configs', // ngettext('SAML2 Relying Party Config', 'SAML2 Relying Party Configs', n)
 
         self::FIELDS => [
             self::FLD_NAME              => [

@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - SSO\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Deutsch\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: \n"
+
+#: Model/RelyingParty.php:47
+msgid "Relying Party"
+msgid_plural "Relying Parties"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/RelyingParty.php:74 Model/Saml2RPConfig.php:58
+msgid "Name"
+msgstr "Name"
+
+#: Model/RelyingParty.php:80
+msgid "Label"
+msgstr "Bezeichnung"
+
+#: Model/RelyingParty.php:85
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Model/RelyingParty.php:91
+msgid "Logo"
+msgstr "Logo"
+
+#: Model/Token.php:48
+msgid "OAuth2 Access Token"
+msgid_plural "OAuth2 Access Tokens"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Token.php:72
+msgid "Token"
+msgstr ""
+
+#: Model/Token.php:81
+msgid "Type"
+msgstr ""
+
+#: Model/Token.php:86
+msgid "Data"
+msgstr ""
+
+#: Model/OAuthOIdRPConfig.php:52
+msgid "Redirect URLs"
+msgstr "Weiterleitungs URLs"
+
+#: Model/OAuthOIdRPConfig.php:61
+msgid "Secret"
+msgstr "Geheimnis"
+
+#: Model/Saml2RPConfig.php:48
+msgid "SAML2 Relying Party Config"
+msgid_plural "SAML2 Relying Party Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Saml2RPConfig.php:67
+msgid "Entity ID"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:76
+msgid "Consumer Service Binding"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:85
+msgid "Consumer Service Location"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:94
+msgid "Logout Service Location"
+msgstr ""
+
+#: Config.php:37 Config.php:39
+msgid "Oauth2"
+msgstr ""
+
+#: Config.php:57 Config.php:59
+msgid "SAML2"
+msgstr ""
+
+#: js/AdminPanel.js:26
+msgid "Relying Parties"
+msgstr ""
+
+#: js/login.js:26
+msgid "SSO"
+msgstr ""
+
+#: js/login.js:29
+#, python-brace-format
+msgid "After successful login you will be redirected to {0}"
+msgstr "Nach der erfolgreichen Anmeldung werden sie zu {0} weitergeleitet"
+
