@@ -180,7 +180,10 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
         $this->assertGreaterThan(0, $accessLogs['totalcount']);
         $testLogEntry = $accessLogs['results'][0];
-        $this->assertEquals($user->accountDisplayName, $testLogEntry['account_id']['accountDisplayName']);
+        $expectedDisplayName = Tinebase_User::getInstance()->isHardDeleteEnabled()
+            ? Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName
+            : $user->accountDisplayName;
+        $this->assertEquals($expectedDisplayName, $testLogEntry['account_id']['accountDisplayName']);
         $this->assertEquals($clienttype, $testLogEntry['clienttype']);
         
         $this->_json->deleteAccessLogs(array($testLogEntry['id']));

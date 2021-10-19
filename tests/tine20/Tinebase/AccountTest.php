@@ -241,9 +241,15 @@ class Tinebase_AccountTest extends TestCase
 
         Tinebase_User::getInstance()->deleteUser($account);
 
+        if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->expectException('Tinebase_Exception_NotFound');
+        }
+
         $account = Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
-        $this->assertEquals(true, $account->is_deleted);
-        $this->assertEquals(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $account->accountStatus);
+        if (! Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->assertEquals(true, $account->is_deleted);
+            $this->assertEquals(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $account->accountStatus);
+        }
     }
 
     /**
@@ -258,9 +264,15 @@ class Tinebase_AccountTest extends TestCase
 
         Tinebase_User::getInstance()->deleteUsers($todelete);
 
+        if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->expectException('Tinebase_Exception_NotFound');
+        }
+
         $account = Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
-        $this->assertEquals(true, $account->is_deleted);
-        $this->assertEquals(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $account->accountStatus);
+        if (! Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->assertEquals(true, $account->is_deleted);
+            $this->assertEquals(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $account->accountStatus);
+        }
     }
 
     /**

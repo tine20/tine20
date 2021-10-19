@@ -324,8 +324,14 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $userArray = $this->_createTestUser();
         Admin_Controller_User::getInstance()->delete($userArray['accountId']);
 
+        if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->expectException('Tinebase_Exception_NotFound');
+        }
+
         $account = Tinebase_User::getInstance()->getUserById($userArray['accountId']);
-        $this->assertTrue((bool)$account->is_deleted);
+        if (! Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->assertTrue((bool)$account->is_deleted);
+        }
     }
 
     /**

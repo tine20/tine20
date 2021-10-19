@@ -138,9 +138,10 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
             } catch (Tinebase_Exception_NotFound $tenf) {}
         }
 
-        $this->_groupLDAP->deleteGroups($this->objects['groups']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Deleting users: ' . print_r($this->objects['users']->toArray(), true));
+        try {
+            $this->_groupLDAP->deleteGroups($this->objects['groups']);
+        } catch (Tinebase_Exception_Backend $teb) {
+        }
     }
     
     /**

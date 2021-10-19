@@ -224,7 +224,13 @@ class Tinebase_ControllerTest extends TestCase
             foreach ($aclTables as $table) {
                 $row = $db->select()->from(SQL_TABLE_PREFIX . $table, new Zend_Db_Expr('count(*)'))->query()->
                     fetch(Zend_Db::FETCH_NUM);
-                static::assertEquals($newCounts[$table], $row[0], 'number of acl changed in table: ' . $table);
+                if (in_array($table, ['tree_node_acl', 'container_acl']) && Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+                    // hard deleting a user also removes acl records
+                    static::assertLessThan($newCounts[$table], $row[0], $table . ' acls did not decrease');
+                } else {
+                    static::assertEquals($counts[$table], $row[0],
+                        'number of acl not back to normal in table: ' . $table);
+                }
             }
         } finally {
             Tinebase_PersistentFilter::getInstance()->purgeRecords($oldPurgeValue);
