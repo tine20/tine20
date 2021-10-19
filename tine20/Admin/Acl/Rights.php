@@ -172,6 +172,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     const VIEW_IMPORTEXPORTDEFINITIONS = 'view_importexportdefinitions';
 
+    const MANAGE_SSO = 'manage_sso';
+
     /**
      * holds the instance of the singleton
      *
@@ -232,6 +234,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CONTAINERS,
             self::MANAGE_CUSTOMFIELDS,
             self::MANAGE_IMPORTEXPORTDEFINITIONS,
+            self::MANAGE_SSO,
             self::VIEW_ACCESS_LOG,
             self::VIEW_ACCOUNTS,
             self::VIEW_EMAILACCOUNTS,
