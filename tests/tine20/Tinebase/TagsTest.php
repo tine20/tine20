@@ -348,8 +348,9 @@ class Tinebase_TagsTest extends TestCase
         $this->assertEquals(2, $tags->count());
     }
 
-    public function testUpdateTagWithoutRights() {
-        $sharedTag = $this->_createSharedTag('test', null, 'sclever');
+    public function testUpdateTagWithoutRights()
+    {
+        $sharedTag = $this->_createSharedTag(['name' => 'test'], null, 'sclever');
         $sharedTag['name'] = 'testUpdate';
         $updatedTag = Tinebase_Tags::getInstance()->update($sharedTag);
         $this->assertEquals('testUpdate', $updatedTag['name']);
