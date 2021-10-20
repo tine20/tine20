@@ -845,7 +845,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
             if (true === $createNewValue) {
                 $_record->{$fieldDef['fieldName']} = $numberable->getNext();
-                if (null !== $_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']})) {
+                if (null !== $_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']}) && $_oldRecord->{$fieldDef['fieldName']} != $_record->{$fieldDef['fieldName']}) {
                     $freeOldValue = true;
                 }
             }
