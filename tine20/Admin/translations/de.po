@@ -1308,6 +1308,9 @@ msgstr "Konto E-Mail muss gesetzt sein!"
 msgid "E-Mail account not found."
 msgstr "E-Mail-Konto nicht gefunden."
 
+msgid "It is not allowed to manage total Quota."
+msgstr "Es ist nicht erlaubt, die Gesamte Quota zu verwalten."
+
 #~ msgid "enable application"
 #~ msgstr "Anwendung aktivieren"
 

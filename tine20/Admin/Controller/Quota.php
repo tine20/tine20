@@ -42,15 +42,21 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
     public function updateQuota(string $application, $recordData = null, array $additionalData = [])
     {
         // for totalQuota set config
+        $translate = Tinebase_Translation::getTranslation('Admin');
+        
         if ($application === 'Tinebase') {
             // check allow total quota management config first
+            if (!Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET}) {
+                throw new Tinebase_Exception_AccessDenied(
+                    $translate->_('It is not allowed to manage total Quota.'));
+            }
+
             $this->validateQuota($application, $recordData, $additionalData);
+            
             $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
             $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = $additionalData['totalInMB'] / 1024 / 1024;
             return [Tinebase_Config::QUOTA_TOTALINMB => $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}];
         }
-        
-        $translate = Tinebase_Translation::getTranslation('Admin');
         
         if (!$recordData) {
             throw new Tinebase_Exception_UnexpectedValue($translate->_('Record data needs to be set!'));
@@ -119,8 +125,8 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
         return Tinebase_FileSystem::getInstance()->get($recordData['id']);
     }
 
-    public function validateQuota(string $application, $recordData, array $additionalData) {
-
+    public function validateQuota(string $application, $recordData, array $additionalData)
+    {
         $context = $this->getRequestContext();
         // for totalQuota set config
         if (array_key_exists('confirm', $context['clientData']) || array_key_exists('confirm', $context)) {
