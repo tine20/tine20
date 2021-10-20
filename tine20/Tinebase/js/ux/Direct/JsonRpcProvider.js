@@ -78,12 +78,16 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
                     
                     //check for status code 650 (generic confirm)
                     if (errorData.code === 650) {
+                        if (errorData.info) {
+                            errorData.message += '<br />' + errorData.info;
+                        }
+                        
                         Ext.Msg.confirm(
                             errorData.title,
                             errorData.message,
                             async (button) => {
                                 if (button === 'no') {
-                                    reject(e);
+                                    fulfill(e);
                                 }
                                 if (button === 'yes') {
                                     const request = {
@@ -99,7 +103,8 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
                                         },
                                         params: paramArray,
                                         success : function(_result, _request) {
-                                            fulfill(_result);
+                                            const response = Ext.util.JSON.decode(_result.responseText);
+                                            fulfill(response);
                                         },
                                         failure: function(exception) {
                                             if (! exception.code && exception.responseText) {
@@ -113,6 +118,8 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
                                     });
                                 }
                             });
+                    } else {
+                        reject (e.error);
                     }
                 } else {
                     fulfill(result);
