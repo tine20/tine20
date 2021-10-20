@@ -238,7 +238,9 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
            listeners: {
                apply: async (quota) => {
                    await Tine.Admin.saveQuota('Tinebase', null, {totalInMB: quota}).then((result) => {
-                       Tine.Tinebase.common.confirmApplicationRestart(true);
+                       if (result.totalInMB) {
+                           Tine.Tinebase.common.confirmApplicationRestart(true);
+                       }
                    });
                }
            },

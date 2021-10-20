@@ -637,29 +637,35 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * create login response
      *
      * @param string $username
      * @return array
      */
     protected function _getLoginSuccessResponse($username)
     {
-            $response = array(
-                'success'        => true,
-                'account'        => Tinebase_Core::getUser()->getPublicUser()->toArray(),
-                'sessionId'      => Tinebase_Core::getSessionId(),
-                'jsonKey'        => Tinebase_Core::get('jsonKey'),
-                'welcomeMessage' => "Welcome to Tine 2.0!"
-            );
-             
+        $response = array(
+            'success' => true,
+            'account' => Tinebase_Core::getUser()->getPublicUser()->toArray(),
+            'sessionId' => Tinebase_Core::getSessionId(),
+            'jsonKey' => Tinebase_Core::get('jsonKey'),
+            'welcomeMessage' => "Welcome to Tine 2.0!"
+        );
+
+        if (!headers_sent()) {
             if (Tinebase_Config::getInstance()->get(Tinebase_Config::REUSEUSERNAME_SAVEUSERNAME, 0)) {
                 // save in cookie (expires in 2 weeks)
-                setcookie('TINE20LASTUSERID', $username, time()+60*60*24*14);
+                setcookie('TINE20LASTUSERID', $username, time() + 60 * 60 * 24 * 14);
             } else {
                 setcookie('TINE20LASTUSERID', '', 0);
             }
 
             $this->_setCredentialCacheCookie();
-            
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Could not set cookies - headers already sent');
+        }
+
         return $response;
     }
     
@@ -688,7 +694,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         if (!Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
-            
             return false;
         }
         

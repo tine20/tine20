@@ -68,6 +68,11 @@ class Tinebase_Event
                 );
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
                     . __LINE__ . ' ' . $e->getTraceAsString());
+                
+                if ($e instanceof Tinebase_Exception_Confirmation) {
+                    throw $e;
+                }
+                
                 return false;
             }
         }

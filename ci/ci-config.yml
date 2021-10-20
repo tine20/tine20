@@ -48,9 +48,9 @@ variables:
   PHP_STAN_ANALYSES:
     description: "Enable php stan."
     value: "true"
-    
+  
   PHP_STAN_ANALYSES_STRICT:
-    value: "false"
+    value: "true"
 
   CODE_ANALYSIS_PARALLEL_LINT:
     value: "true"
