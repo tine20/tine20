@@ -44,6 +44,6 @@ class SSO_Controller_RelyingParty extends Tinebase_Controller_Record_Abstract
             !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO)) {
             return false;
         }
-        return parent::_checkRight($_action);
+        parent::_checkRight($_action);
     }
 }
