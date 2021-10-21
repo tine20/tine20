@@ -80,7 +80,7 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
                     ]);
 
                     if ($account = Admin_Controller_EmailAccount::getInstance()->search($filter)->getFirstRecord()) {
-                        $this->validateQuota($application, $recordData, $additionalData);
+                        $this->validateQuota($application, $account, $additionalData);
                         
                         $account->email_imap_user = [
                             'emailMailQuota'  => !empty($additionalData['emailMailQuota']) ? $additionalData['emailMailQuota'] : null,
@@ -105,6 +105,8 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
 
         if ($application === 'Filemanager') {
             if ($isPersonalNode) {
+                $this->validateQuota($application, $recordData, $additionalData);
+                
                 $user = Admin_Controller_User::getInstance()->get($additionalData['accountId']);
                 $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] = $recordData['quota'];
                 Admin_Controller_User::getInstance()->update($user);
@@ -117,7 +119,6 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
         }
 
         // for filesystem load node & save node with ignoreACL
-        $this->validateQuota($application, $recordData, $additionalData);
         $node = Tinebase_FileSystem::getInstance()->get($recordData['id']);
         $node->quota = $recordData['quota'];
         Tinebase_FileSystem::getInstance()->update($node);
