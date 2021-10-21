@@ -49,7 +49,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
 
         self::CONTAINER_PROPERTY => 'container_id',
         self::CONTAINER_NAME     => 'Project list',
-        self::CONTAINERS_NAME    => 'Project lists', // ngettext('Projects list', 'Projects lists', n)
+        self::CONTAINERS_NAME    => 'Project lists', // ngettext('Project list', 'Project lists', n)
 
         self::HAS_ATTACHMENTS => true,
         self::HAS_CUSTOM_FIELDS => true,

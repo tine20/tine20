@@ -150,7 +150,37 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     keyFieldName: 'projectStatus',
                                     fieldLabel: this.app.i18n._('Status'),
                                     name: 'status'
-                                })]
+                                })],
+                                [
+                                    {
+                                        columnWidth: .5,
+                                        fieldLabel: this.app.i18n._('Start'),
+                                        xtype: 'extuxclearabledatefield',
+                                        name: 'start'
+                                    },
+                                    {
+                                        columnWidth: .5,
+                                        fieldLabel: this.app.i18n._('End'),
+                                        xtype: 'extuxclearabledatefield',
+                                        name: 'end'
+                                    }
+                                ],
+                                [
+                                    new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                        columnWidth: .5,
+                                        fieldLabel: this.app.i18n._('Scope'),
+                                        app: 'Projects',
+                                        keyFieldName: 'projectScope',
+                                        name: 'scope'
+                                    }),
+                                    new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                        columnWidth: .5,
+                                        fieldLabel: this.app.i18n._('Type'),
+                                        app: 'Projects',
+                                        keyFieldName: 'projectType',
+                                        name: 'type'
+                                    }) 
+                                ]
                             ]
                         }]
                     }, {
