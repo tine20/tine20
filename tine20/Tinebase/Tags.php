@@ -588,8 +588,9 @@ class Tinebase_Tags
             $currentTags = $currentTags->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
         }
 
-        // prevent removal of system tags
+        // prevent add/removal of system tags here
         $currentTags = $currentTags->filter('system_tag', false);
+        $tagsToSet = $tagsToSet->filter('system_tag', false);
 
         $tagIdsToSet = $tagsToSet->getArrayOfIds();
         $currentTagIds = $currentTags->getArrayOfIds();
