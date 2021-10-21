@@ -116,36 +116,20 @@ class Sales_Model_AbstractDocument extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ]
             ],
+
             self::FLD_REFERENCE_DOCUMENT => [
-                self::TYPE                      => self::TYPE_VIRTUAL, // @TODO nummerkreise sollen zentral confbar sein!!!
+                // self::TYPE                      => self::TYPE_VIRTUAL, // @TODO nummerkreise sollen zentral confbar sein!!!
                 self::LABEL                     => 'Reference Document', //_('Document Number')
-                self::VALIDATORS                => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::CONFIG                    => [
+                    self::AVAILABLE_MODELS              => [
+                    ],
+                ],
+                self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
-                self::CONFIG => [
-                    self::TYPE => self::TYPE_RELATION
-                ],
-
             ],
-            
-//            self::FLD_REFERENCE_DOCUMENT => [
-//                self::TYPE                      => self::TYPE_RECORD,
-//                self::LABEL                     => 'MFA Device Type', //_('MFA Device Type')
-//                self::CONFIG                    => [
-//                    // not used in client, @see \Admin_Frontend_Json::getPossibleMFAs
-//                    // needs to implement Tinebase_Auth_MFA_UserConfigInterface
-//                    self::AVAILABLE_MODELS              => [
-//                        Tinebase_Model_MFA_SmsUserConfig::class,
-//                        Tinebase_Model_MFA_PinUserConfig::class,
-//                        Tinebase_Model_MFA_YubicoOTPUserConfig::class,
-//                    ],
-//                ],
-//                self::VALIDATORS            => [
-//                    Zend_Filter_Input::ALLOW_EMPTY => false,
-//                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-//                ],
-//            ],
 
 //            self::FLD_CONFIG                    => [
 //                self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
