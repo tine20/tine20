@@ -91,7 +91,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
                 self::LABEL                 => 'Logo', // _('Logo')
             ],
             self::FLD_CONFIG_CLASS      => [
-                self::TYPE                  => self::TYPE_MODEL,
+                self::TYPE                  => self::TYPE_STRING,
                 self::CONFIG                    => [
                     self::AVAILABLE_MODELS              => [
                         SSO_Model_OAuthOIdRPConfig::class,

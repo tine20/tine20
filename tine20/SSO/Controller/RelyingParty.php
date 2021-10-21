@@ -40,7 +40,7 @@ class SSO_Controller_RelyingParty extends Tinebase_Controller_Record_Abstract
 
     protected function _checkRight($_action)
     {
-        if (in_array($_action, ['update', 'delete']) &&
+        if (in_array($_action, ['create', 'update', 'delete']) &&
             !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO)) {
             return false;
         }
