@@ -21,7 +21,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var int
      */
-    const TINEBASE_VERSION = 14;
+    const TINEBASE_VERSION = 15;
 
     /**
      * access log rotation in days
@@ -88,6 +88,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @const string
      */
     const BUILD_TYPE = 'buildtype';
+
+    const BROADCASTHUB = 'broadcasthub';
+    const BROADCASTHUB_ACTIVE = 'active';
+    const BROADCASTHUB_REDIS = 'redis';
+    const BROADCASTHUB_REDIS_HOST = 'host';
+    const BROADCASTHUB_REDIS_PORT = 'port';
+    const BROADCASTHUB_PUBSUBNAME = 'pubsubname';
 
     /**
      * CACHE
@@ -598,8 +605,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const ACCOUNT_DELETION_EVENTCONFIGURATION = 'accountDeletionEventConfiguration';
-    
+    public const ACCOUNT_DELETION_EVENTCONFIGURATION = 'accountDeletionEventConfiguration';
+    public const ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER = '_deletePersonalContainers';
+    public const ACCOUNT_DELETION_KEEP_AS_CONTACT = '_keepAsContact';
+    public const ACCOUNT_DELETION_KEEP_ORGANIZER_EVENTS = '_keepOrganizerEvents';
+    public const ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER = '_keepAttendeeEvents';
+
     /**
      * roleChangeAllowed
      *
@@ -762,6 +773,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
+    const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
 
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_ACTIVE = 'active';
@@ -822,7 +834,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const COMMUNITYIDENTNR_DUP_FIELDS = 'communityIdentNrDupFields';
-
+    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -840,13 +852,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ],
         /**
-         * possible values:
-         *
-         * $_deletePersonalContainers => delete personal containers
-         * $_keepAsContact => keep "account" as contact in the addressbook
-         * $_keepOrganizerEvents => keep accounts organizer events as external events in the calendar
-         * $_keepAsContact => keep accounts calender event attendee as external attendee
-         *
          * TODO add more options (like move to another container)
          */
         self::ACCOUNT_DELETION_EVENTCONFIGURATION => array(
@@ -859,6 +864,36 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
+            self::CONTENT               => [
+                self::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER  => [
+                    //_('Delete personal containers')
+                    self::LABEL                         => 'Delete personal containers',
+                    self::DESCRIPTION                   => 'Delete personal containers',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+                self::ACCOUNT_DELETION_KEEP_AS_CONTACT  => [
+                    //_('Keep "account" as contact in the Addressbook')
+                    self::LABEL                         => 'Keep "account" as contact in the Addressbook',
+                    self::DESCRIPTION                   => 'Keep "account" as contact in the Addressbook',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+                self::ACCOUNT_DELETION_KEEP_ORGANIZER_EVENTS  => [
+                    //_('Keep accounts organizer events as external events in the Calendar')
+                    self::LABEL                         => 'Keep accounts organizer events as external events in the Calendar',
+                    self::DESCRIPTION                   => 'Keep accounts organizer events as external events in the Calendar',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+                self::ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER  => [
+                    //_('Keep accounts Calendar event attendee as external attendee')
+                    self::LABEL                         => 'Keep accounts Calendar event attendee as external attender',
+                    self::DESCRIPTION                   => 'Keep accounts Calendar event attendee as external attender',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+            ],
         ),
         /**
          * lock certain areas of tine20 (apps, login, data safe, ...) with additional auth (pin, privacy idea, ...)
@@ -1575,6 +1610,42 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::BROADCASTHUB  => [
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::CONTENT               => [
+                self::BROADCASTHUB_ACTIVE   => [
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::DEFAULT_STR           => false,
+                ],
+                self::BROADCASTHUB_PUBSUBNAME => [
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => 'broadcasthub',
+                ],
+                self::BROADCASTHUB_REDIS    => [
+                    self::TYPE                  => self::TYPE_OBJECT,
+                    self::CLASSNAME             => Tinebase_Config_Struct::class,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::CONTENT               => [
+                        self::BROADCASTHUB_REDIS_HOST   => [
+                            self::TYPE                      => self::TYPE_STRING,
+                            self::DEFAULT_STR               => 'localhost',
+                        ],
+                        self::BROADCASTHUB_REDIS_PORT   => [
+                            self::TYPE                      => self::TYPE_INT,
+                            self::DEFAULT_STR               => 6379,
+                        ]
+                    ],
+                    self::DEFAULT_STR           => [],
+                ]
+            ],
+            self::DEFAULT_STR           => [],
+        ],
         self::STATUS_INFO => array(
             //_('Status Info')
             'label'                 => 'Status Info',
@@ -2222,7 +2293,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom weburl for branding.')
             'description'           => 'Custom weburl for branding.',
             'type'                  => 'string',
-            'default'               => 'https://github.com/tine20/tine20',
+            'default'               => 'https://github.com/tine-groupware/tine',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
@@ -2244,7 +2315,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom url for the shop.')
             'description'           => 'Custom url for the shop.',
             'type'                  => 'string',
-            'default'               => 'https://www.tine20.com/partner/',
+            'default'               => 'https://www.tine-groupware.de',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
@@ -2596,6 +2667,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::SETBYADMINMODULE      => true,
                     self::SETBYSETUPMODULE      => true,
                 ],
+                self::FILESYSTEM_SHOW_CURRENT_USAGE => [
+                    //_('Filesystem show current usage')
+                    self::LABEL                 => 'Filesystem show current usage',
+                    //_('Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values.')
+                    self::DESCRIPTION           => 'Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values.',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE      => TRUE,
+                    self::SETBYSETUPMODULE      => FALSE,
+                    self::DEFAULT_STR           => ['size', 'revision_size']
+                ]
             ),
             'default'               => array(),
         ),
@@ -2862,7 +2944,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'contents'              => 'array',
             'clientRegistryInclude' => TRUE,
             'default'               => array('arsCombined'),
-        ),
+        )
     );
 
     /**

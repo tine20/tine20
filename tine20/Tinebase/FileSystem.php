@@ -1610,7 +1610,7 @@ class Tinebase_FileSystem implements
                     $node = $this->stat('/' . implode('/', $currentPath));
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                        __LINE__ . ' Creating directory ' . $pathPart);
+                        __LINE__ . ' Creating directory "' . $pathPart . '"');
 
                     $node = $this->_createDirectoryTreeNode($parentNode, $pathPart);
                     $this->_addStatCache($currentPath, $node);
@@ -1793,8 +1793,6 @@ class Tinebase_FileSystem implements
 
                 $parentNode = $node;
             }
-
-
 
             if (null !== $revision) {
                 try {
@@ -4412,8 +4410,9 @@ class Tinebase_FileSystem implements
                     // _('email soft quota notification')
                     $translatedSubject = $translate->_('email ' . ($softAlert ? 'soft ' : '') . 'quota notification');
 
+                    $identifier = $emailUser->emailAddress ?? $emailUser->emailLoginname ?? $emailUser->emailUsername;
                     Tinebase_Notification::getInstance()->send($user, array($user->contact_id), $translatedSubject,
-                        $emailUser->emailUsername . ' exceeded email ' . ($softAlert ? 'soft ' : '') . 'quota');
+                        $identifier . ' exceeded email ' . ($softAlert ? 'soft ' : '') . 'quota');
                 }
             }
 

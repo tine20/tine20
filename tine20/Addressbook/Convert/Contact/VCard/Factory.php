@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -50,9 +51,6 @@ class Addressbook_Convert_Contact_VCard_Factory
     static public function factory($_backend, $_version = null)
     {
         switch ($_backend) {
-            case self::CLIENT_GENERIC:
-                return new Addressbook_Convert_Contact_VCard_Generic($_version);
-                
             case self::CLIENT_IOS:
                 return new Addressbook_Convert_Contact_VCard_IOS($_version);
                 
@@ -94,6 +92,9 @@ class Addressbook_Convert_Contact_VCard_Factory
 
             case self::CLIENT_TBSYNC:
                 return new Addressbook_Convert_Contact_VCard_TbSync($_version);
+
+            default:
+                return new Addressbook_Convert_Contact_VCard_Generic($_version);
 	    }
     }
     
@@ -111,76 +112,65 @@ class Addressbook_Convert_Contact_VCard_Factory
         // MacOS X
         if (preg_match(Addressbook_Convert_Contact_VCard_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_MACOSX;
-            $version = $matches['version'];
-        
+
         // Thunderbird with Sogo Connector
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_Sogo::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_SOGO;
-            $version = $matches['version'];
-        
+
         // iOS addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_IOS::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_IOS;
-            $version = $matches['version'];
-        
+
         // KDE addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_KDE::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_KDE;
-            $version = isset($matches['version']) ? $matches['version'] : '0.0' ;
-        
+
         // Akonadi DAV addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_Akonadi::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_AKONADI;
-            $version = $matches['version'];
-            
+
         // eM Client addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_EMCLIENT;
-            $version = $matches['version'];
-        
+
         // Outlook WebDAV Collaborator
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_WebDAVCollaborator::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_COLLABORATOR;
-            $version = $matches['version'];
 
         // DavDROID
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_DavDroid::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_DAVDROID;
-            $version = $matches['version'];
 
         // DMFS CardDAVSync
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_CardDAVSync::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_CARDDAVSYNC;
-            $version = $matches['version'];
 
         // Evolution 
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_Evolution::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_EVOLUTION;
-            $version = $matches['version'];
-        
+
         // CalDAVSynchronizer
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_CalDAVSynchronizer::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
-            $version = $matches['version'];
 
         // CardBook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_CardBook::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_CARDBOOK;
-            $version = $matches['version'];
 
         // TbSync
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_TbSync::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = self::CLIENT_TBSYNC;
-            $version = $matches['version'];
 
         // generic client
         } else {
             $backend = self::CLIENT_GENERIC;
-            $version = null;
         }
+
+        $version = $matches['version'] ?? null;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_userAgent ->  backend: $backend version: $version");
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " $_userAgent ->  backend: $backend version: $version");
         
         self::$_parsedUserAgentCache[$_userAgent] = array($backend, $version);
         

@@ -43,7 +43,11 @@ class Tinebase_Convert_Tree_Node_Json extends Tinebase_Convert_Json
     {
         $groups = array();
         $users =  array();
+        $app = Tinebase_Application::getInstance()->getApplicationByName(Filemanager_Config::APP_NAME);
         foreach ($_records as $record) {
+            $record->path = rtrim(Tinebase_Model_Tree_Node_Path::removeAppIdFromPath('' . $record->path, $app), '/') .
+                (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $record->type ? '/' : '');
+
             if (!empty($record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION))) {
                 foreach ($record->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION) as $val) {
                     if (Tinebase_Acl_Rights::ACCOUNT_TYPE_USER ===

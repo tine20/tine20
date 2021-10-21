@@ -442,7 +442,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_EmailUser_Alias::class,
                 Tinebase_Model_EmailUser_Forward::class,
                 Tinebase_Model_FilterSyncToken::class,
-                Tinebase_Model_FullTag::class,
                 Tinebase_Model_FullUser::class,
                 Tinebase_Model_Grants::class,
                 Tinebase_Model_Group::class,
@@ -574,6 +573,8 @@ class Tinebase_ApplicationTest extends TestCase
 
     public function testInstallApplicationWithId()
     {
+        $this->_testNeedsTransaction();
+
         Setup_Core::set(Setup_Core::CHECKDB, true);
         Setup_Controller::destroyInstance();
         try {
@@ -587,8 +588,6 @@ class Tinebase_ApplicationTest extends TestCase
                 throw $t;
             }
         }
-
-        $this->_testNeedsTransaction();
 
         $appId = Tinebase_Record_Abstract::generateUID();
         Setup_Controller::getInstance()->installApplications([$appId => 'ExampleApplication'],

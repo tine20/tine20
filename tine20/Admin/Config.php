@@ -54,20 +54,54 @@ class Admin_Config extends Tinebase_Config_Abstract
     const DEFAULT_PASSWORD_MUST_CHANGE = 'defaultPasswordMustChange';
 
     /**
+     * ALLOW_TOTAL_QUOTA_MANAGEMENT
+     * @var boolean
+     */
+    const QUOTA_ALLOW_TOTALINMB_MANAGEMNET = 'quotaAllowTotalInMBManagement';
+
+    /**
+     * QUOTA_APPS_TO_SHOW
+     * @var array
+     */
+    const APPS_TO_SHOW = 'appsToShow';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::APPS_TO_SHOW => [
+            //_('Apps to show')
+            self::LABEL                 => 'Apps to show',
+            //_('Applications to show in quota, defaults null means all apps')
+            self::DESCRIPTION           => 'Applications to show in quota management, default value null means all apps',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => null,
+        ],
+        self::QUOTA_ALLOW_TOTALINMB_MANAGEMNET => [
+            //_('Allow total quota in MB management')
+            self::LABEL                 => 'Allow total quota in MB management',
+            //_('Allow total quota in MB management')
+            self::DESCRIPTION           => 'Allow total quota in MB management',
+            self::TYPE                  => self::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => true,
+        ],
         self::DEFAULT_PASSWORD_MUST_CHANGE => [
             //_('Default password must change for new user settings')
-            'label'                 => 'Default password must change for new user settings',
+            self::LABEL                 => 'Default password must change for new user settings',
             //_('Default password must change for new user settings')
-            'description'           => 'Default password must change for new user settings',
-            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => false,
-            'default'               => false
+            self::DESCRIPTION           => 'Default password must change for new user settings',
+            self::TYPE                  => self::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => true,
         ],
         self::DEFAULT_IMAP_USER_SETTINGS => array(
                                    //_('Default IMAP user settings')

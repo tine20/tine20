@@ -1146,6 +1146,10 @@ msgstr "E-Mail Adresse"
 msgid "User Name (From)"
 msgstr "E-Mail Absender"
 
+#: js/AccountEditDialog.js:318
+msgid "User Name (From) cannot contain a comma."
+msgstr "E-Mail Absender darf kein Komma enthalten"
+
 #: js/AccountEditDialog.js:324
 msgid "Signature position"
 msgstr "Signaturposition"
@@ -1945,12 +1949,6 @@ msgstr "Besten Dank."
 msgid "Your %1$s Team"
 msgstr "Ihr %1$s Team"
 
-msgid ""
-"Mass mailing is not allowed for CC or BCC recipients. Please remove them."
-msgstr ""
-"Massen-Mails werden nicht an die eingetragenen CC und/oder BCC Empfänger "
-"geschickt. Bitte entfernen Sie diese."
-
 msgid "Internal user accounts need an email address"
 msgstr "Interne Benutzerkonten brauchen eine E-Mail-Adresse"
 
@@ -2019,3 +2017,19 @@ msgstr "Nur passwortgeschützter Download Link erlaubt"
 
 msgid "Folder with this name already exists!"
 msgstr "Ordner mit dem Namen ist bereits vorhanden!"
+
+#: Acl/Rights.php:106
+msgid "Manage personal email accounts"
+msgstr "Persönliche Konten verwalten"
+
+#: Acl/Rights.php:107
+msgid "Edit and delete personal email accounts"
+msgstr "Bearbeiten und Löschen von persönlichen Konten"
+
+#: Acl/Rights.php:110
+msgid "Add personal email accounts"
+msgstr "Persönliche Konten hinzufügen"
+
+#: Acl/Rights.php:111
+msgid "Create new personal email accounts"
+msgstr "Neue persönliche Konten hinzufügen"

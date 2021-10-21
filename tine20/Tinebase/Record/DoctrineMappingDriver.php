@@ -9,9 +9,9 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\Common\Persistence\Mapping\MappingException;
+use Doctrine\Persistence\Mapping\MappingException;
 use Tinebase_ModelConfiguration_Const as MCC;
 
 /**
@@ -21,7 +21,7 @@ use Tinebase_ModelConfiguration_Const as MCC;
  * @subpackage  Record
  */
 class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_Const
-    implements Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
+    implements Doctrine\Persistence\Mapping\Driver\MappingDriver
 {
     /**
      * @var array modelConfigType => Doctrine2Type

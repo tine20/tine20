@@ -99,6 +99,8 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return string
      */
     public function getIdProperty();
+
+    public function getContainerId(): ?string;
     
     /**
      * gets application the records belongs to

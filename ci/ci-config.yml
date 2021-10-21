@@ -48,9 +48,9 @@ variables:
   PHP_STAN_ANALYSES:
     description: "Enable php stan."
     value: "true"
-    
+  
   PHP_STAN_ANALYSES_STRICT:
-    value: "false"
+    value: "true"
 
   CODE_ANALYSIS_PARALLEL_LINT:
     value: "true"
@@ -126,11 +126,11 @@ variables:
 
   CHECK_PHP_VERSION:
     description: "Test if the image was build with the correct php version."
-    value: "false"
+    value: "true"
 
   PHP_VERSION:
     description: "Php version to use."
-    value: "7.3"
+    value: "7.4"
  
   BUILD_PACKAGES:
     description: "Build source packages"
@@ -151,3 +151,7 @@ variables:
   ZIP_PACKAGES:
     description: "Build zip packages, wenn packaging. (Tar packages are always build)"
     value: "false"
+
+  COMPOSER_LOCK_REWRITE:
+    description: "Rewrite composer lock to pull packages from cache."
+    value: "true"

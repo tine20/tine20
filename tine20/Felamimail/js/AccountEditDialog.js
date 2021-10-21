@@ -1,13 +1,13 @@
 /*
  * Tine 2.0
- * 
+ *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
 Ext.namespace('Tine.Felamimail');
 
 require('./SignatureGridPanel');
@@ -16,22 +16,22 @@ require('./sieve/VacationPanel');
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.AccountEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
- * 
+ *
  * <p>Account Edit Dialog</p>
  * <p>
  * </p>
- * 
+ *
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * 
+ *
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Felamimail.AccountEditDialog
- * 
+ *
  */
 Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
+
     /**
      * @private
      */
@@ -60,6 +60,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 idProperty: 'id'
             });
         }
+
+        this.hasEditAccountRight = Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail');
         
         Tine.Felamimail.AccountEditDialog.superclass.initComponent.call(this);
     },
@@ -71,10 +73,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     updateToolbars: function() {
 
     },
-    
+
     /**
      * executed after record got updated from proxy
-     * 
+     *
      * -> only allow to change some of the fields if it is a system account
      */
     onRecordLoad: function() {
@@ -88,7 +90,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.grantsGrid.setValue(this.record.get('grants'));
         }
-        
+
         this.loadEmailQuotas();
         this.disableSieveTabs();
         this.disableFormFields();
@@ -106,20 +108,23 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function(callback, scope) {
         Tine.Felamimail.AccountEditDialog.superclass.onRecordUpdate.apply(this, arguments);
 
+        if (this.record.data?.type === 'shared') {
+            this.action_saveAndClose.setDisabled(! this.record.data?.account_grants?.editGrant);
+        }
+
         this.record.set('grants', this.grantsGrid.getValue());
-        
+
         this.updateEmailQuotas();
-        
+
         if (this.isSystemAccount()) {
             this.updateVacationRecord();
-            this.updateRuleRecord();
         }
     },
-    
+
     disableFormFields: function() {
         // if account type == system disable most of the input fields
         this.getForm().items.each(function(item) {
-            var disabled = false;
+            let disabled = false;
             // only enable some fields
             switch (item.name) {
                 case 'user_id':
@@ -130,8 +135,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(disabled);
                     break;
                 case 'signatures':
-                case 'from':
                 case 'signature_position':
+                case 'from':
                 case 'display_format':
                 case 'compose_format':
                 case 'preserve_format':
@@ -142,6 +147,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'drafts_folder':
                 case 'templates_folder':
                     // fields can be edited in any mode
+                    item.setDisabled(false);
                     break;
                 case 'type':
                     item.setDisabled(! this.asAdminModule);
@@ -150,7 +156,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.disablePasswordField(item);
                     break;
                 case 'user':
-                    disabled = !(
+                    disabled = ! this.hasEditAccountRight || !(
                         !this.record.get('type')
                         || this.record.get('type') === 'userInternal'
                         || this.record.get('type') === 'user'
@@ -159,7 +165,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     break;
                 case 'smtp_user':
                 case 'smtp_password':
-                    item.setDisabled(this.isSystemAccount() || (this.asAdminModule && this.record.get('type') === 'user'));
+                    item.setDisabled(! this.hasEditAccountRight || this.isSystemAccount() || (this.asAdminModule && this.record.get('type') === 'user'));
                     break;
                 case 'host':
                 case 'port':
@@ -172,23 +178,25 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'sieve_port':
                 case 'sieve_ssl':
                     // always disabled for system accounts
-                    item.setDisabled(this.isSystemAccount());
+                    item.setDisabled(this.isSystemAccount() || ! this.hasEditAccountRight);
                     break;
                 case 'sieve_notification_email':
                 case 'sieve_notification_move':
                 case 'sieve_notification_move_folder':
-                    // always disabled for non-system accounts
-                    item.setDisabled(! this.isSystemAccount());
-                    break;
                 case 'enabled':
+                    // always disabled for non-system accounts
                     item.setDisabled(! this.isSystemAccount());
                     break;
                 case 'emailMailSize':
                 case 'emailSieveSize':
                     item.setDisabled(true);
                     break;
+                case 'emailMailQuota':
+                case 'emailSieveQuota':
+                    item.setDisabled(! this.record.data?.email_imap_user || ! this.hasEditAccountRight);
+                    break;
                 default:
-                    item.setDisabled(! this.asAdminModule && this.isSystemAccount());
+                    item.setDisabled(! this.asAdminModule && (this.isSystemAccount() || ! this.hasEditAccountRight));
             }
         }, this);
 
@@ -216,7 +224,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             );
         }
     },
-    
+
     disableSieveTabs() {
         if (this.asAdminModule && !Tine.Admin.registry.get('masterSieveAccess')) {
             this.vacationPanel.setDisabled(true);
@@ -232,14 +240,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     isSystemAccount: function() {
         return this.record.get('type') === 'system' || this.record.get('type') === 'shared' || this.record.get('type') === 'userInternal' || this.record.get('type') === 'adblist';
     },
-    
+
     isExternalUserAccount: function () {
         return this.record.get('type') === 'user';
     },
-    
+
     /**
      * returns dialog
-     * 
+     *
      * NOTE: when this method gets called, all initalisation is done.
      * @private
      */
@@ -268,14 +276,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             initialLoadAfterRender: false,
             disabled: !this.isSystemAccount()
         });
-        
+
         this.vacationPanel = new Tine.Felamimail.sieve.VacationPanel({
             title: i18n._('Vacation'),
             account: this.record,
             editDialog: this,
             disabled: !this.isSystemAccount()
         });
-        
+
         var commonFormDefaults = {
             xtype: 'textfield',
             anchor: '100%',
@@ -283,7 +291,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             maxLength: 256,
             columnWidth: 1
         };
-        
+
         return {
             xtype: 'tabpanel',
             name: 'accountEditPanel',
@@ -750,7 +758,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     app: this.appName,
                     record_id: this.record.id,
                     record_model: this.modelName
-            }), 
+            }),
                 this.rulesGridPanel,
                 this.vacationPanel,
                 this.grantsGrid
@@ -806,10 +814,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         combo.setValue(this.record.get('type'));
         Ext.MessageBox.alert(this.app.i18n._('Account type change not possible'), errorText);
     },
-    
+
     /**
      * generic request exception handler
-     * 
+     *
      * @param {Object} exception
      */
     onRequestFailed: function(exception) {
@@ -886,11 +894,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * generic apply changes handler
      */
     onApplyChanges: async function(closeWindow) {
-
         let result = true;
         let errorMessage = '';
         const password = this.getForm().findField('password').getValue();
-        
+
         //only test connection for external user account
         if (this.isExternalUserAccount() && '' !== password) {
             await (_.reduce(['IMAP', 'SMTP'], (pre, server) => {
@@ -903,7 +910,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 })
             }, Promise.resolve()));
         }
-        
+
         if(!result) {
             Ext.MessageBox.show({
                 title: this.app.i18n._('Warning'),
@@ -920,7 +927,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 icon: Ext.MessageBox.WARNING
             });
         } else {
-            Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this,closeWindow);
+            if (this.isSystemAccount()) {
+                await this.updateVacationRecord();
+                await this.saveVacationRecord();
+                await this.saveRuleRecord();
+            }
+            Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
         }
     },
 
@@ -955,7 +967,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             val = this.getForm().findField(key).getValue();
             fields[server][key] = val ? val : '';
         }, this);
-        
+
         try {
             //show load mask
             if (!this['connectLoadMask' + server]) {
@@ -963,9 +975,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     msg: String.format(this.app.i18n._('Connecting to {0} server...'), server)
                 });
             }
-            
+
             this['connectLoadMask' + server].show();
-            
+
             //test connection
             await Tine.Felamimail[server === 'SMTP' ? 'testSmtpSettings' : 'testIMapSettings'](this.record.id, fields[server], forceConnect);
         } catch (e) {
@@ -973,7 +985,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return Promise.reject(new Error(message));
         } finally {
             this['connectLoadMask' + server].hide();
-            
+
             if (showDialog) {
                 Ext.MessageBox.alert(
                     this.app.formatMessage('{server} Connection Status',{server : server}),
@@ -981,8 +993,26 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 ).setIcon(result ? Ext.MessageBox.INFO : Ext.MessageBox.WARNING);
             }
         }
-        
+
         return message;
+    },
+
+    /**
+     * is form valid?
+     *
+     * @return {Boolean}
+     */
+    isValid: function() {
+        var result = Tine.Felamimail.AccountEditDialog.superclass.isValid.call(this);
+        var from = this.getForm().findField('from').getValue();
+        if (from.includes(',')) {
+            this.getForm().markInvalid([{
+                id: 'from',
+                msg: this.app.i18n._("User Name (From) cannot contain a comma.")
+            }]);
+            return false;
+        }
+        return result;
     },
 
     /**
@@ -1025,7 +1055,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
 
-    
+
     /*
      * load rule record
      *
@@ -1064,104 +1094,105 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
      * load email quotas
-     * 
+     *
      */
     loadEmailQuotas: function () {
-        if (this.asAdminModule && this.record.data?.email_imap_user) {
-            this.getForm().findField('emailMailQuota').setValue(this.record.data.email_imap_user.emailMailQuota);
-            this.getForm().findField('emailMailSize').setValue(this.record.data.email_imap_user.emailMailSize);
-            this.getForm().findField('emailSieveQuota').setValue(this.record.data.email_imap_user.emailSieveQuota);
-            this.getForm().findField('emailSieveSize').setValue(this.record.data.email_imap_user.emailSieveSize);
+        if (this.asAdminModule ) {
+            if (this.record.data?.email_imap_user) {
+                this.getForm().findField('emailMailQuota').setValue(this.record.data.email_imap_user.emailMailQuota);
+                this.getForm().findField('emailMailSize').setValue(this.record.data.email_imap_user.emailMailSize);
+                this.getForm().findField('emailSieveQuota').setValue(this.record.data.email_imap_user.emailSieveQuota);
+                this.getForm().findField('emailSieveSize').setValue(this.record.data.email_imap_user.emailSieveSize);
+            }
         }
     },
-    
+
     /**
      * update vacation record
      *
      */
     updateVacationRecord: async function() {
-        let me = this;
-        
-        if (!me.record.id || 
-            !me.vacationRecord || 
-            !me.vacationPanel) {
-            return;
-        }
+        if (this.record.id && this.vacationRecord && this.vacationPanel) {
+            let form = this.getForm();
+            const contactIds = [];
 
-        let form = me.getForm();
-        let contactIds = [];
-        
-        form.updateRecord(me.vacationRecord);
-        
-        Ext.each(['contact_id1', 'contact_id2'], function (field) {
-            if (form.findField(field) && form.findField(field).getValue() !== '') {
-                contactIds.push(form.findField(field).getValue());
-            }
-        }, this);
-        
-        let template = form.findField('template_id').getValue();
+            form.updateRecord(this.vacationRecord);
 
-        me.vacationRecord.set('contact_ids', contactIds);
-        me.vacationRecord.set('template_id', template);
-        
-        if (template !== '') {
-            try {
-                let response = await Tine.Felamimail.getVacationMessage(me.vacationRecord.data);
-                me.vacationPanel.reasonEditor.setValue(response.message);
-            } catch (e) {
-                Tine.Felamimail.handleRequestException(e);
+            Ext.each(['contact_id1', 'contact_id2'], function (field) {
+                if (form.findField(field) && form.findField(field).getValue() !== '') {
+                    contactIds.push(form.findField(field).getValue());
+                }
+            }, this);
+
+            let template = form.findField('template_id').getValue();
+
+            this.vacationRecord.set('contact_ids', contactIds);
+            this.vacationRecord.set('template_id', template);
+
+            if (template !== '') {
+                try {
+                    const response = await Tine.Felamimail.getVacationMessage(this.vacationRecord.data);
+                    this.vacationPanel.reasonEditor.setValue(response.message);
+                } catch (e) {
+                    Tine.Felamimail.handleRequestException(e);
+                }
             }
         }
-
-        await me.vacationRecordProxy.saveRecord(me.vacationRecord);
     },
 
     /**
      * update rule record
      *
      */
-    updateRuleRecord: async function () {
-        let me = this;
-        
-        if (!me.ruleRecordProxy || 
-            !me.record.id ||
-            me.rulesGridPanel.store.getCount() === 0
-        ) {
+    saveVacationRecord: async function () {
+        if (this.record.id && this.vacationRecord && this.vacationPanel) {
+            await this.vacationRecordProxy.saveRecord(this.vacationRecord);
+        }
+    },
+
+    /**
+     * update rule record
+     *
+     */
+    saveRuleRecord: async function () {
+        if (!this.ruleRecordProxy || !this.record.id) {
             return;
         }
 
         let rules = [];
-        me.rulesGridPanel.store.each(function (record) {
+        this.rulesGridPanel.store.each(function (record) {
             rules.push(record.data);
         });
 
-        await me.ruleRecordProxy.saveRules(me.record.id, rules, {
-            scope: me,
+        await this.ruleRecordProxy.saveRules(this.record.id, rules, {
+            scope: this,
             success: function (record) {
-                me.purgeListeners();
+                this.purgeListeners();
             },
             failure: Tine.Felamimail.handleRequestException.createSequence(function () {
-                me.hideLoadMask();
-            }, me),
+                this.hideLoadMask();
+            }, this),
             timeout: 150000 // 3 minutes
         });
     },
 
     /**
      * update email quotas
-     * 
+     *
      */
     updateEmailQuotas: function () {
-        if (this.asAdminModule && this.record.data?.email_imap_user) {
-            this.record.data.email_imap_user.emailMailQuota = this.getForm().findField('emailMailQuota').getValue();
-            this.record.data.email_imap_user.emailSieveQuota = this.getForm().findField('emailSieveQuota').getValue();
+        if (this.asAdminModule) {
+            if (this.record.data?.email_imap_user) {
+                this.record.data.email_imap_user.emailMailQuota = this.getForm().findField('emailMailQuota').getValue();
+                this.record.data.email_imap_user.emailSieveQuota = this.getForm().findField('emailSieveQuota').getValue();
+            }
         }
     }
 });
 
 /**
  * Felamimail Account Edit Popup
- * 
+ *
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */

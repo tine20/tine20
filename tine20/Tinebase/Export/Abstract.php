@@ -1691,7 +1691,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         /** @var Tinebase_Model_ImportExportDefinition $definition */
         $definition = Tinebase_ImportExportDefinition::getInstance()->get($definitionId);
 
-        /** @var \Zend\Diactoros\Request $request */
+        /** @var \Laminas\Diactoros\Request $request */
         $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
 
         $filter = null;
@@ -1707,7 +1707,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $export = new $exportClass($filter, null, ['definitionId' => $definitionId]);
 
         $export->generateToStream(($stream = fopen('php://memory', 'w+')));
-        $response = new \Zend\Diactoros\Response($stream, 200, [
+        $response = new \Laminas\Diactoros\Response($stream, 200, [
             'Pragma' => 'public',
             'Cache-Control' => 'max-age=0',
             'Content-Disposition' => $export->getContentDispositionHeaderValue(),

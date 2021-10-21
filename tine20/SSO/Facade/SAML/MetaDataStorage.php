@@ -43,6 +43,8 @@ class SSO_Facade_SAML_MetaDataStorage extends \SimpleSAML\Metadata\MetaDataStora
                 // this is the IDP config
                 $saml2Config = SSO_Config::getInstance()->{SSO_Config::SAML2};
                 return [
+                    'NameIDFormat' => \SAML2\Constants::NAMEID_PERSISTENT,
+                    'simplesaml.nameidattribute' => 'uid',
                     'auth' => 'tine20',
                     'entityid' => $saml2Config->{SSO_Config::SAML2_ENTITYID},
                     'privatekey' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['privatekey'],

@@ -536,7 +536,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initGeneric: function() {
         if (this.modelConfig) {
-            
+
             Tine.log.debug('init generic gridpanel with config:');
             Tine.log.debug(this.modelConfig);
 
@@ -553,9 +553,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.copyEditAction = true;
             }
         }
-        
+
         // init generic columnModel
-        _.assign(this.gridConfig, this.initGenericColumnModel());
+        if (!Ext.isFunction(this.getColumnModel)) {
+            _.assign(this.gridConfig, this.initGenericColumnModel());
+        }
     },
     
     /**
@@ -1181,19 +1183,26 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             ed.un('canceledit', onCancelEdit);
             
             this.pagingToolbar.refresh.disable();
-            localRecord.data.path = `${localRecord.get('path')}${localRecord.get('name')}/`;
-
             this.store.remove(localRecord);
             this.store.addSorted(localRecord);
             this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
-            
-            const remoteRecord = await proxyFn(localRecord);
-            
-            window.postal.publish({
-                channel: "recordchange",
-                topic: 'Filemanager.Node.update',
-                data: remoteRecord.data
-            });
+            await proxyFn(localRecord)
+                .then((result) => {
+                    if (result?.data) {
+                        window.postal.publish({
+                            channel: "recordchange",
+                            topic: 'Filemanager.Node.update',
+                            data: result.data
+                        });
+                    }
+                })
+                .catch((e) => {
+                    window.postal.publish({
+                        channel: "recordchange",
+                        topic: 'Filemanager.Node.delete',
+                        data: localRecord.data
+                    });
+                });
             
             this.pagingToolbar.refresh.enable();
         }
@@ -2656,7 +2665,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onDeleteFailure: function(ids, exception) {
         this.refreshAfterDelete(ids);
         this.loadGridData();
-        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+        Tine.Tinebase.ExceptionHandler.handleRequestException(exception, function() {
+            this.refreshAfterDelete(ids);
+            this.onAfterDelete(ids);
+        }, this);
     },
 
     /**

@@ -574,7 +574,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
                 // the addressbook is registered as a plugin and will take care of the create
                 // see \Addressbook_Controller_Contact::inspectUpdateUser
-                $userBackend->addPluginUser($syncedUser, $user);
+                try {
+                    $userBackend->addPluginUser($syncedUser, $user);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    $transactionId = null;
+                    return null;
+                }
 
                 $contactId = $syncedUser->contact_id;
                 if (!empty($contactId) && $visibility != $syncedUser->visibility) {

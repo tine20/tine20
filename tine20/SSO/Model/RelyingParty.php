@@ -22,9 +22,12 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
     public const MODEL_NAME_PART = 'RelyingParty';
     public const TABLE_NAME = 'sso_relying_party';
 
-    public const FLD_NAME = 'name';
     public const FLD_CONFIG = 'config';
     public const FLD_CONFIG_CLASS = 'config_class';
+    public const FLD_DESCRIPTION = 'description';
+    public const FLD_LABEL = 'label';
+    public const FLD_LOGO = 'logo';
+    public const FLD_NAME = 'name';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -39,7 +42,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::RECORD_NAME => 'Relying Party',
         self::RECORDS_NAME => 'Relying Parties', // ngettext('Relying Party', 'Relying Parties', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -69,6 +72,23 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
                 self::LABEL                 => 'Name', // _('Name')
+            ],
+            self::FLD_LABEL             => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Label', // _('Label')
+            ],
+            self::FLD_DESCRIPTION       => [
+                self::TYPE                  => self::TYPE_TEXT,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Description', // _('Description')
+            ],
+            self::FLD_LOGO              => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Logo', // _('Logo')
             ],
             self::FLD_CONFIG_CLASS      => [
                 self::TYPE                  => self::TYPE_STRING,

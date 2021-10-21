@@ -81,10 +81,6 @@ class Courses_JsonTest extends TestCase
      */
     protected function setUp(): void
     {
-        if (Tinebase_User::getInstance() instanceof Tinebase_User_Ldap) {
-            self::markTestSkipped('FIXME: some LDAP tests are broken since 9b068b772');
-        }
-
         parent::setUp();
         
         $this->_json = new Courses_Frontend_Json();

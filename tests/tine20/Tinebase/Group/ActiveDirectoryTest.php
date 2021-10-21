@@ -71,10 +71,6 @@ class Tinebase_Group_ActiveDirectoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getTinebaseLdapStub()
     {
-        if (PHP_VERSION_ID >= 70400) {
-            self::markTestSkipped('FIXME not working with php7.4 (Function ReflectionType::__toString() is deprecated)');
-        }
-
         $stub = $this->getMockBuilder('Tinebase_Ldap')
                      ->disableOriginalConstructor()
                      ->getMock();

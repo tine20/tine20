@@ -1,0 +1,9 @@
+BEGIN:VCARD
+VERSION:2.1
+FN:Hans Müller
+ORG:Mein Schiff
+ADR;WORK;POSTAL:;;;Nürnberg;;90329;Deutschland
+URL;WORK:http://www.meinschiff.de
+EMAIL;PREF;INTERNET:hans@schiff.de
+REV:20120412T110335Z
+END:VCARD

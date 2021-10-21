@@ -170,43 +170,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
-
-        /*
-        $contactsById = [];
-        foreach ($contacts['results'] as $data) {
-            $contactsById[$data['id']] = $data;
-        }
-        $records = Addressbook_Controller_Contact::getInstance()->getMultiple(array_keys($contactsById));
-
-        Addressbook_Frontend_Json::resolveImages($records);
-        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
-            $pathController = Tinebase_Record_Path::getInstance();
-            foreach ($records as $record) {
-                $record->paths = $pathController->getPathsForRecord($record);
-                $pathController->cutTailAfterRecord($record, $record->paths);
-            }
-        }
-        $converter = new Tinebase_Convert_Json();
-        $data = [];
-        foreach ($converter->fromTine20RecordSet($records) as $a) {
-
-            // fix legacy bugs
-            if (array_key_exists('cat_id', $a)) {
-                unset($a['cat_id']);
-            }
-            if (array_key_exists('label', $a)) {
-                unset($a['label']);
-            }
-            if (array_key_exists('private', $a)) {
-                unset($a['private']);
-            }
-            $data[$a['id']] = $a;
-        }
-
-        $id = $contacts['results'][0]['id'];
-        static::assertEquals($data[$id], $contactsById[$id]);
-        static::assertEquals($data, $contactsById);
-        */
     }
 
     /**
@@ -1455,6 +1418,14 @@ class Addressbook_Frontend_JsonTest extends TestCase
         return $klaus;
     }
 
+    public function testListRoleIdFilter()
+    {
+        $this->_uit->searchContacts([
+            ['field' => 'list_role_id', 'operator' => 'definedBy?condition=and&setOperator=oneOf', 'value' =>
+                [["field"=>":id","operator" =>"in","value"=>[]]]],
+        ], []);
+    }
+
     /**
      * testImportKeepBothWithTag
      *
@@ -2067,7 +2038,7 @@ Fax: +49 (0)40 343244-222";
         $this->assertTrue((isset($result['contact']) || array_key_exists('contact', $result)));
         $this->assertTrue(is_array($result['contact']));
         $this->assertTrue((isset($result['unrecognizedTokens']) || array_key_exists('unrecognizedTokens', $result)));
-        $this->assertTrue(count($result['unrecognizedTokens']) > 10 && count($result['unrecognizedTokens']) < 13,
+        $this->assertTrue(count($result['unrecognizedTokens']) === 8,
             'unrecognizedTokens number mismatch: ' . count($result['unrecognizedTokens']));
         $this->assertEquals('p.schuele@metaways.de', $result['contact']['email']);
         $this->assertEquals('Pickhuben 2', $result['contact']['adr_one_street']);
@@ -2301,6 +2272,7 @@ Steuernummer 33/111/32212";
         );
 
         $list = $this->_uit->saveList($list);
+        self::assertCount(2, $list['memberroles']);
 
         // empty member / role
         $list['members'] = [];
@@ -2317,9 +2289,9 @@ Steuernummer 33/111/32212";
         static::assertEquals(4, $notes['totalcount']);
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         foreach (array(
-                     array('members ( 0: ali PHPUNIT 1: ali PHPUNIT -> )', 'memberroles (2 ' . $translate->_('removed') . ': my test name: ali PHPUNIT, my test name 2: ali PHPUNIT)'),
-                     array('members ( 0: ali PHPUNIT ->  0: ali PHPUNIT 1: ali PHPUNIT)', 'memberroles (1 ' . $translate->_('added') . ': my test name 2: ali PHPUNIT)'),
-                     array('members ( ->  0: ali PHPUNIT)', 'memberroles (1 ' . $translate->_('added') . ': my test name: ali PHPUNIT)'),
+                     array('members ( 0: ali PHPUNIT 1: ali PHPUNIT -> )'),
+                     array('members ( 0: ali PHPUNIT ->  0: ali PHPUNIT 1: ali PHPUNIT)'),
+                     array('members ( ->  0: ali PHPUNIT)'),
                  ) as $expectedStrings) {
             $found = false;
             foreach ($notes['results'] as $note) {
@@ -2461,7 +2433,7 @@ Steuernummer 33/111/32212";
             $this->_uit->saveList($list);
             self::fail('jsmith should not be able to update the record');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            self::assertStringContainsString('ACCOUNTS', $tead->getMessage());
+            self::assertStringContainsString('Admin.ManageAccounts', $tead->getMessage());
         }
     }
 

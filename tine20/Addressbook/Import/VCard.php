@@ -122,7 +122,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         $card = new VCard();
 
         while ($card->parse($_resource)) {
-            if ($card->getProperty('N')) {
+            if ($card->getProperty('N') || $card->getProperty('FN')) {
                 return $card;
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No N property: ' . print_r($card, TRUE));
@@ -299,9 +299,11 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
 
         if ($_card->getProperty('N')) {
             $components = $_card->getProperty('N')->getComponents();
+        } else {
+            $components = array_reverse(explode(' ',$_data['n_fn']));
         }
         $_data['n_family'] = (isset($components[0])) ? $components[0] : '';
-        $_data['n_given']  = (isset($components[1])) ? $components[1] : '';
+        $_data['n_given'] = (isset($components[1])) ? $components[1] : '';
         $_data['n_middle'] = (isset($components[2])) ? $components[2] : '';
         $_data['n_prefix'] = (isset($components[3])) ? $components[3] : '';
         $_data['n_suffix'] = (isset($components[4])) ? $components[4] : '';

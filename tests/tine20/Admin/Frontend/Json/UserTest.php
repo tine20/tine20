@@ -146,8 +146,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      */
     public function testSaveAccountWithExistingName()
     {
-        self::markTestSkipped('FIXME: LDAP tests are broken since 9b068b772');
-
         $accountData = $this->_createTestUser()->toArray();
         unset($accountData['accountId']);
 
@@ -171,15 +169,33 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     public function testSaveAccountWithoutEmail()
     {
-        self::markTestSkipped('FIXME: LDAP tests are broken since 9b068b772');
-
         $this->_skipWithoutEmailSystemAccountConfig();
 
         $accountData = $this->_getUserArrayWithPw();
-        unset($accountData['accountEmailAddress']);
+        $emailUser = array (
+            'emailMailQuota' => 0,
+            'emailMailSize' => 0,
+            'emailSieveQuota' => 0,
+            'emailSieveSize' => 0,
+            'emailLastLogin' => '',
+            'emailForwardOnly' => false,
+            'emailAddress' => '',
+            'emailUsername' => '',
+            'emailAliases' => [],
+            'emailForwards' => []
+        );
+        $accountData['emailUser'] = $emailUser;
+        $accountData['accountEmailAddress'] = '';
         $account = $this->_json->saveUser($accountData);
 
         self::assertEmpty($account['accountEmailAddress']);
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $account['accountId']]
+        ]);
+        $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+        self::assertCount(0, $emailAccounts,'empty mail account created: ' . print_r($emailAccounts->toArray(), true));
+
         // assert no email account has been created
         self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user found!');
         self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user found!');
@@ -190,8 +206,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      */
     public function testSaveHiddenAccount()
     {
-        self::markTestSkipped('FIXME: LDAP tests are broken since 9b068b772');
-
         $accountData = $this->_getUserArrayWithPw();
         $accountData['visibility'] = Tinebase_Model_User::VISIBILITY_HIDDEN;
         $accountData['container_id'] = 0;
@@ -282,8 +296,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      */
     public function testUpdateUserRemovedPrimaryGroup()
     {
-        self::markTestSkipped('FIXME: some LDAP tests are broken since 9b068b772');
-
         $this->_createGroup();
 
         $accountData = $this->_getUserArrayWithPw();
@@ -304,8 +316,14 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $userArray = $this->_createTestUser();
         Admin_Controller_User::getInstance()->delete($userArray['accountId']);
 
+        if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->expectException('Tinebase_Exception_NotFound');
+        }
+
         $account = Tinebase_User::getInstance()->getUserById($userArray['accountId']);
-        $this->assertTrue((bool)$account->is_deleted);
+        if (! Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->assertTrue((bool)$account->is_deleted);
+        }
     }
 
     /**

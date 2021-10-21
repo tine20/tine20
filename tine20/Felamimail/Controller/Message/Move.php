@@ -77,14 +77,16 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         if ($_messages instanceof Tinebase_Model_Filter_FilterGroup) {
             $iterator = new Tinebase_Record_Iterator(array(
                 'iteratable' => $this,
-                'controller' => $this, 
-                'filter'     => $_messages,
-                'function'   => 'processMoveIteration',
+                'controller' => $this,
+                'filter' => $_messages,
+                'function' => 'processMoveIteration',
             ));
             $iterateResult = $iterator->iterate($targetFolder, $keepOriginalMessages, $checkCopyPreventionConfig);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Moved/copied ' . $iterateResult['totalcount'] . ' message(s).');
+
+            if ($iterateResult && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Moved/copied ' . $iterateResult['totalcount'] . ' message(s).');
+            }
             
             $result = (! empty($iterateResult['results'])) ? array_pop($iterateResult['results']) : new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         } else {

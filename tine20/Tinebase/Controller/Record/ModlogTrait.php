@@ -41,7 +41,7 @@ trait Tinebase_Controller_Record_ModlogTrait
      */
     protected function _getBackendType()
     {
-        $type = (method_exists( $this->_backend, 'getType')) ? $this->_backend->getType() : 'Sql';
+        $type = $this->_backend && method_exists($this->_backend, 'getType') ? $this->_backend->getType() : 'Sql';
         return $type;
     }
 
@@ -62,6 +62,22 @@ trait Tinebase_Controller_Record_ModlogTrait
         }
         if (! is_object($notNullRecord)) {
             throw new Tinebase_Exception_InvalidArgument('record object expected');
+        }
+
+        $bchub = Tinebase_BroadcastHub::getInstance();
+        if ($bchub->isActive()) {
+            if (null === $_newRecord) {
+                $verb = 'delete';
+                $cId = $notNullRecord->getContainerId();
+            } elseif (null === $_oldRecord) {
+                $verb = 'create';
+                $cId = $notNullRecord->getContainerId();
+            } else {
+                $verb = 'update';
+                $cId = $_oldRecord->getContainerId();
+            }
+            $id = $notNullRecord->getId();
+            $bchub->push($verb, get_class($notNullRecord), $id, $cId);
         }
 
         if (! $notNullRecord->has('created_by') || $this->_omitModLog === TRUE) {

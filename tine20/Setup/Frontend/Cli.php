@@ -174,9 +174,14 @@ class Setup_Frontend_Cli
         
         if ($_opts->install === true) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                // nothing to do
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Already installed ... nothing to do.');
                 return 0;
             }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Installing ...');
+
             $applications = $controller->getInstallableApplications();
             $applications = array_keys($applications);
         } else {
@@ -826,6 +831,7 @@ class Setup_Frontend_Cli
         $results = Setup_Controller::getInstance()->checkRequirements();
         if ($results['success']) {
           echo "OK - All requirements are met\n";
+          echo $results['resultOptionalBinaries']['result']['message'] . "\n";
         } else {
           echo "ERRORS - The following requirements are not met: \n";
           foreach ($results['results'] as $result) {
@@ -833,6 +839,7 @@ class Setup_Frontend_Cli
               echo "- " . strip_tags($result['message']) . "\n";
             }
           }
+          echo $results['resultOptionalBinaries']['result']['message'] . "\n";
         }
     }
     

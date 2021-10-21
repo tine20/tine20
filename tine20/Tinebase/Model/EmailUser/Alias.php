@@ -16,8 +16,8 @@
  * @package     Tinebase
  * @subpackage  Model
  *
- * @property string email
- * @property boolean dispatch_address
+ * @property string $email
+ * @property boolean $dispatch_address
  */
 class Tinebase_Model_EmailUser_Alias extends Tinebase_Record_NewAbstract
 {

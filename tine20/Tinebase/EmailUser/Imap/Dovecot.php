@@ -295,13 +295,37 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     }
 
     /**
-     * interceptor before add/update
+     * interceptor before update
      *
      * @param array{loginname:string, domain:string, userid:string} $emailUserData
      */
-    protected function _beforeAddOrUpdate(&$emailUserData)
+    protected function _beforeUpdate(&$emailUserData)
+    {
+        $result = $this->_getExistingUser($emailUserData);
+        if (count($result) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                . __LINE__ . ' Found old record - Switching from USERID ' . print_r($result, true) . ' to ' . $emailUserData['userid']);
+            $emailUserData['oldUserId'] = $result[0];
+        }
+    }
+
+    /**
+     * interceptor before add
+     *
+     * @param array{loginname:string, domain:string, userid:string} $emailUserData
+     */
+    protected function _beforeAdd(&$emailUserData)
     {
         // prevent duplicate loginname
+        $result = $this->_getExistingUser($emailUserData);
+        if (count($result) > 0) {
+            $translate = Tinebase_Translation::getTranslation('Tinebase');
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+        }
+    }
+
+    protected function _getExistingUser($emailUserData)
+    {
         $select = $this->_getSelect();
         $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'loginname') . " = ?",
             $emailUserData['loginname']);
@@ -309,11 +333,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'userid') . " != ?",
                 $emailUserData['userid']);
         }
-        $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
-        if (count($result) > 0) {
-            $translate = Tinebase_Translation::getTranslation('Tinebase');
-            throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
-        }
+        return $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
     }
 
     /**

@@ -78,7 +78,7 @@ describe('employee', () => {
                 });
                 
                 test('vacation is saved', async () => {
-                    await expect(freetimeEditDialog).toClick('button', {text: 'Ok'});
+                    await expect(freetimeEditDialog).toClick('.x-toolbar-right-row button', {text: 'Ok'});
 
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
@@ -101,8 +101,8 @@ describe('employee', () => {
                     
                     await expect(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
                     await expect(freetimeEditDialog).toFill('textarea[name=description]', testString + ' update');
-                    
-                    await expect(freetimeEditDialog).toClick('button', {text: 'Ok'});
+
+                    await expect(freetimeEditDialog).toClick('.x-toolbar-right-row button', {text: 'Ok'});
 
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
@@ -169,7 +169,7 @@ describe('employee', () => {
                 });
                 
                 test('sickness is saved', async () => {
-                    await expect(freetimeEditDialog).toClick('button', {text: 'Ok'});
+                    await expect(freetimeEditDialog).toClick('.x-toolbar-right-row button', {text: 'Ok'});
                     
                     // wait for loading starts and ends
                     await expect(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled');

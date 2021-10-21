@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Tine 2.0
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -369,7 +370,7 @@ class Tinebase_Helper
     {
         $file_headers = @get_headers($url);
         
-        if ($file_headers[0] == 'HTTP/1.1 404 Not Found') {
+        if (! $file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
             $exists = false;
         } else {
             $exists = true;

@@ -152,9 +152,13 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'options'           => [
                     'idProperty'        => 'object_id',
                 ],
+                'label' => 'File Contents', // _('File Contents')
+                'jsConfig' => ['operators' => ['wordstartswith']]
             ],
             'isIndexed'         => [
-                'filter'            => Tinebase_Model_Tree_Node_IsIndexedFilter::class,
+                'label' => 'Indexed',    // _('Indexed')
+                'filter' => Tinebase_Model_Tree_Node_IsIndexedFilter::class,
+                'jsConfig' => ['valueType' => 'bool']
             ],
         ],
 
@@ -182,7 +186,8 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::FILTER_DEFINITION     => [
                     self::FILTER                => Tinebase_Model_Filter_Text::class,
                     self::OPTIONS               => ['binary' => true]
-                ]
+                ],
+                self::INPUT_FILTERS         => [Zend_Filter_StringTrim::class => NULL],
             ],
             'islink'                        => [
                 'type'                          => self::TYPE_BOOLEAN,
@@ -628,5 +633,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             }
         }
         return 0;
+    }
+
+    public function getContainerId(): ?string
+    {
+        return $this->parent_id;
     }
 }

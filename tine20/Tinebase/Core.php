@@ -251,7 +251,7 @@ class Tinebase_Core
         $request = self::getRequest();
 
         // we need to initialize sentry at the very beginning to catch ALL errors
-        $ravenClient = self::setupSentry();
+        self::setupSentry();
         
         // check transaction header
         if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
@@ -259,8 +259,10 @@ class Tinebase_Core
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Client transaction $transactionId");
             Tinebase_Log_Formatter::setTransactionId(substr($transactionId, 0, 5));
-            if ($ravenClient) {
-                $ravenClient->tags['transaction_id'] = $transactionId;
+            if (Tinebase_Core::isRegistered('SENTRY')) {
+                Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($transactionId): void {
+                    $scope->setTag('transaction_id', $transactionId);
+                });
             }
         }
 
@@ -547,8 +549,10 @@ class Tinebase_Core
 
         // be aware of race condition between is_file and include_once => somebody may have deleted the file
         // yes it does get deleted! => check result of include_once
-        if (TINE20_BUILDTYPE !== 'DEVELOPMENT' && is_file($cacheFile) && true === @include_once($cacheFile) &&
-                class_exists('Tine20Container')) {
+        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE !== 'DEVELOPMENT' &&
+            is_file($cacheFile) && true === @include_once($cacheFile) &&
+            class_exists('Tine20Container'))
+        {
             /** @noinspection PhpUndefinedClassInspection */
             $container = new Tine20Container();
         } else {
@@ -573,7 +577,7 @@ class Tinebase_Core
         $container = new ContainerBuilder();
 
         $container->register(RequestInterface::class)
-            ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals')
+            ->setFactory('\Laminas\Diactoros\ServerRequestFactory::fromGlobals')
             ->setPublic(true);
 
         try {
@@ -1535,30 +1539,18 @@ class Tinebase_Core
      *
      * @param string $index
      * @param mixed $value
+     * @param bool $returnCurrent
+     * @return null|mixed
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function set($index, $value, $returnCurrent=false)
+    public static function set($index, $value, $returnCurrent = false)
     {
-        if ($index === self::USER) {
-            if ($value === null) {
-                throw new Tinebase_Exception_InvalidArgument('Invalid user object!');
-            }
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                if ($value instanceof Tinebase_Model_FullUser) {
-                    $userString =  $value->accountLoginName;
-                } else if ($value instanceof Tinebase_Model_User) {
-                    $userString = $value->accountDisplayName;
-                } else {
-                    $userString = var_export($value, true);
-                }
-                
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $userString);
-                Tinebase_Log_Formatter::resetUsername();
-            }
-        }
-
         $retVal = $returnCurrent ? self::get($index) : null;
-        Zend_Registry::set($index, $value);
+        if ($index === self::USER) {
+            self::setUser($value);
+        } else {
+            Zend_Registry::set($index, $value);
+        }
         return $retVal;
     }
 
@@ -1718,11 +1710,40 @@ class Tinebase_Core
     /**
      * set current user account
      *
-     * @param Tinebase_Model_FullUser $user the user account record
+     * @param mixed $user the user account record / string
+     * @return mixed
      */
     public static function setUser($user)
     {
-        return self::set(self::USER, $user, true);
+        if ($user === null) {
+            throw new Tinebase_Exception_InvalidArgument('Invalid user object!');
+        }
+
+        if ($user instanceof Tinebase_Model_FullUser) {
+            $userString =  $user->accountLoginName;
+        } else if ($user instanceof Tinebase_Model_User) {
+            $userString = $user->accountDisplayName;
+        } else {
+            $userString = var_export($user, true);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $userString);
+            Tinebase_Log_Formatter::resetUsername();
+        }
+
+        if (Tinebase_Core::isRegistered('SENTRY')) {
+            Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($user, $userString): void {
+                $scope->setUser([
+                    'id' => $user instanceof Tinebase_Model_User ? $user->getId() : '',
+                    'email' => $user instanceof Tinebase_Model_User ? $user->accountEmailAddress : '',
+                    'user' => $userString,
+                ]);
+            });
+        }
+
+        Zend_Registry::set(self::USER, $user);
+        return $user;
     }
 
     /**
@@ -2200,9 +2221,17 @@ class Tinebase_Core
      * @param string $submodule
      * @return string
      */
-    public static function getTineUserAgent($submodule = '')
+    public static function getTineUserAgent(string $submodule = '')
     {
-        return 'Tine 2.0 ' . $submodule . ' (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+        $userAgent = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
+        if (! empty($submodule)) {
+            $userAgent .= ' ' . $submodule;
+        }
+        if (defined('TINE20_CODENAME') && defined('TINE20_PACKAGESTRING') ) {
+            $userAgent .= ' (Version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+        }
+
+        return $userAgent;
     }
 
     /**
@@ -2423,21 +2452,24 @@ class Tinebase_Core
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Registering Sentry Error Handler');
 
-        if (! defined('TINE20_CODENAME')) {
+        if (! defined('TINE20_CODENAME') || ! defined('TINE20_PACKAGESTRING')) {
             self::setupBuildConstants();
         }
 
         Sentry\init([
             'dsn' => $sentryServerUri,
             'max_breadcrumbs' => 50,
-            'tags' => array(
-                'php_version' => phpversion(),
-            ),
             'error_types' => Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL},
+            'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
+            'environment' => defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT'
+                ? 'development'
+                : 'production',
+            'tags' => [
+                'php_version' => phpversion(),
+                'tine_url' => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL) ?: 'unknown',
+                'request_id' => Tinebase_Log_Formatter::getRequestId(),
+            ],
         ]);
-        Sentry\configureScope(function (Sentry\State\Scope $scope): void {
-            $scope->setTag('php_version', phpversion());
-        });
         self::set('SENTRY', true);
     }
 

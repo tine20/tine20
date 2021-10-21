@@ -73,6 +73,7 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
 
     getRoute(path) {
         this.path = path = path || this.path || Tine.Tinebase.container.getMyFileNodePath();
+        this.path.replace('showNode/','')
 
         const encodedPath = _.map(Tine.Filemanager.Model.Node.sanitize(path).split('/'), Ext.ux.util.urlCoder.encodeURIComponent).join('/');
         return `Filemanager${encodedPath}`;
@@ -93,9 +94,6 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
         Tine.Filemanager.downloadFile(node);
     }
 });
-
-// special wording for contents filter
-Tine.widgets.grid.FilterRegistry.register('Filemanager', 'Node', {label : 'File Contents', field : 'content', operators : [ 'wordstartswith' ]},);
 
 // remove content filters if indexing is not enabled
 Tine.Tinebase.appMgr.isInitialised('Filemanager').then(() => {

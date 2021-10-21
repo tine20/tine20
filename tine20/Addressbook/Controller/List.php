@@ -526,8 +526,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             foreach (Addressbook_Model_List::getManageAccountFields() as $field) {
                 $group->{$field} = $_record->{$field};
             }
-
-            $groupController->update($group, false);
+            try {
+                $groupController->update($group, false);
+            }catch (Tinebase_Exception_AccessDenied $e) {
+                    throw new Addressbook_Exception_AccessDenied('This is a system group. To edit this group you need the Admin.ManageAccounts right.');
+            }
         }
     }
 

@@ -1547,6 +1547,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         return $this->_idProperty;
     }
 
+    public function getContainerProperty()
+    {
+        return $this->_containerProperty;
+    }
+
     public function getTable()
     {
         return $this->_table;

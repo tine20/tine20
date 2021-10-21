@@ -147,50 +147,6 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         ]);
     },
 
-    // NOTE: Ext doc seems to be wrong on arguments here
-    onContextMenu: function(e, target) {
-        e.stopEvent();
-        var row = this.getView().findRowIndex(target);
-        var contact = this.store.getAt(row);
-        if (contact) {
-            // don't delete 'add' row
-            if (! contact.get('id')) {
-                return;
-            }
-
-            // select row
-            this.getSelectionModel().selectRow(row);
-
-            Tine.log.debug('onContextMenu - contact:');
-            Tine.log.debug(contact);
-
-            var items = [{
-                text: this.app.i18n._('Remove Member'),
-                iconCls: 'action_delete',
-                scope: this,
-                //disabled: ! this.record.get('editGrant'),
-                handler: function() {
-                    this.store.removeAt(row);
-                }
-            }, '-'];
-
-            this.ctxMenu = new Ext.menu.Menu({
-                items: items,
-                plugins: [{
-                    ptype: 'ux.itemregistry',
-                    key:   'Tinebase-MainContextMenu'
-                }],
-                listeners: {
-                    scope: this,
-                    hide: function() {
-                        this.getSelectionModel().clearSelections();
-                    }
-                }
-            });
-            this.ctxMenu.showAt(e.getXY());
-        }
-    },
-
     /**
      *list member role render
      *

@@ -26,6 +26,8 @@
  */
 class Addressbook_Model_List extends Tinebase_Record_Abstract
 {
+    const MODEL_NAME_PART = 'List';
+    
     /**
      * list type: list (user defined lists)
      * 
@@ -64,6 +66,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'name',
         'description',
         'email',
+        'account_only'
     );
 
     /**
@@ -190,7 +193,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             ),
             'memberroles'       => array(
                 'label'             => null, // TODO fill this?
-                'type'              => 'string',
+                'type'              => 'virtual',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'paths'             => array(

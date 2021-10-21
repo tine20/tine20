@@ -261,6 +261,7 @@ class Setup_Initialize
                 'name' => $tag['name'],
                 'description' => $tag['description'],
                 'color' => $tag['color'],
+                'system_tag' => $tag['system_tag'] ?? false
             ));
 
             $savedSharedTag = $controller->createTag($sharedTag);
@@ -271,7 +272,7 @@ class Setup_Initialize
                 'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                 'account_id' => 0,
                 'view_right' => true,
-                'use_right' => true,
+                'use_right' => !$tag['system_tag'],
             ));
             $controller->setRights($right);
 

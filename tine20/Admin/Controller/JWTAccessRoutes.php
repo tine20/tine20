@@ -76,7 +76,7 @@ class Admin_Controller_JWTAccessRoutes extends Tinebase_Controller_Record_Abstra
                 // just check the JWT is valid, then set user and be done
                 try {
                     JWT::decode($token, $jwtRoutes->{Admin_Model_JWTAccessRoutes::FLD_KEY},
-                        array_keys([JWT::$supported_algs]));
+                        array_keys(JWT::$supported_algs));
                 } catch (SignatureInvalidException $e) {
                     // only if we could not apply this key to check the signature it makes sense to try the next one
                     // all other exceptions are not recoverable

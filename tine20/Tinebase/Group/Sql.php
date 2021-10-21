@@ -393,8 +393,17 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 'group_id'      => $groupId,
                 'account_id'    => $accountId
             );
-        
-            $this->groupMembersTable->insert($data);
+
+            try {
+                $this->groupMembersTable->insert($data);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' Membership already exists');
+                } else {
+                    throw $zdse;
+                }
+            }
             
             $this->_clearCache(array(
                 'getGroupMembers'     => $groupId,

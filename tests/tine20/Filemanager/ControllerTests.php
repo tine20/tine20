@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -16,9 +17,8 @@
  */
 class Filemanager_ControllerTests extends TestCase
 {
-
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
 
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
@@ -54,7 +54,7 @@ class Filemanager_ControllerTests extends TestCase
     public function testDeletePersonalContainer()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
-            '_deletePersonalContainers' => true,
+            Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER => true,
         )));
 
         $user = $this->testCreatePersonalContainer();

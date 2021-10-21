@@ -591,9 +591,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         return $config && $config->exposeJsonApi;
     }
 
-    protected static function _getCommonApiMethods($simpleModelName)
+    public static function getCommonApiMethods($simpleModelName)
     {
-        $commonJsonApiMethods = array(
+        return array(
             'get' => array(
                 'params' => array(
                     new Zend_Server_Method_Parameter(array(
@@ -674,8 +674,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 'plural' => true,
             ),
         );
-
-        return $commonJsonApiMethods;
     }
 
     protected static function _getFrontend($application)

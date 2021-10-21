@@ -207,10 +207,10 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     }
 
     /**
-     * @param $accountId
-     * @param $accountLoginName
-     * @param $accountEmailAddress
-     * @param null $alternativeLoginName
+     * @param string $accountId
+     * @param string $accountLoginName
+     * @param string $accountEmailAddress
+     * @param string|null $alternativeLoginName
      * @return string|null
      */
     public function getLoginName($accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName = null)

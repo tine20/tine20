@@ -159,7 +159,6 @@ class Tasks_JsonTest extends TestCase
         $request = new Zend_Controller_Request_Http();
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
-        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
         
         $task = new Tinebase_Scheduler_Task();
         $task->setMonths("Jan-Dec");
@@ -317,11 +316,14 @@ class Tasks_JsonTest extends TestCase
 
         $organizerArray = $tasks['results'][0]['organizer'];
         $this->assertTrue(is_array($organizerArray), 'organizer not resolved: ' . print_r($tasks['results'][0], TRUE));
-        $this->assertEquals($organizer->accountDisplayName, $organizerArray['accountDisplayName']);
+        $expectedDisplayName = Tinebase_User::getInstance()->isHardDeleteEnabled()
+            ? Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName
+            : $organizer->accountDisplayName;
+        $this->assertEquals($expectedDisplayName, $organizerArray['accountDisplayName']);
 
         // test get single task - organizer is deleted
         $task = $this->_backend->getTask($taskId);
-        $this->assertEquals($organizer->accountDisplayName, $task['organizer']['accountDisplayName']);
+        $this->assertEquals($expectedDisplayName, $task['organizer']['accountDisplayName']);
     }
     
     /**

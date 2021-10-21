@@ -72,7 +72,7 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     public static function serviceNotEnabled(): \Psr\Http\Message\ResponseInterface
     {
-        return new \Zend\Diactoros\Response('php://memory', 403);
+        return new \Laminas\Diactoros\Response('php://memory', 403);
     }
 
     public static function publicCerts(): \Psr\Http\Message\ResponseInterface
@@ -93,7 +93,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                 ]
             ]
         ];
-        $response = (new \Zend\Diactoros\Response())
+        $response = (new \Laminas\Diactoros\Response())
             // the jwks_uri SHOULD include a Cache-Control header in the response that contains a max-age directive
             ->withHeader('cache-control', 'public, max-age=20683, must-revalidate, no-transform');
         $response->getBody()->write(json_encode($keys));
@@ -131,7 +131,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         } catch (Zend_Session_Exception $zse) {
             // expire session cookie for client
             Tinebase_Session::expireSessionCookie();
-            return new \Zend\Diactoros\Response($body = 'php://memory', $status = 500);
+            return new \Laminas\Diactoros\Response($body = 'php://memory', $status = 500);
         }
 
         if (isset($request->getParsedBody()['username']) && isset($request->getParsedBody()['password'])) {
@@ -187,7 +187,7 @@ class SSO_Controller extends Tinebase_Controller_Event
 
                     if ($areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
                         // render mfa mask
-                        $response = new \Zend\Diactoros\Response();
+                        $response = new \Laminas\Diactoros\Response();
                         $response->getBody()->write('mfa mask');
                         return $response;
                     }
@@ -196,11 +196,11 @@ class SSO_Controller extends Tinebase_Controller_Event
 
             $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($user));
             $authRequest->setAuthorizationApproved(true);
-            return $server->completeAuthorizationRequest($authRequest, new \Zend\Diactoros\Response());
+            return $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
         }
 
         // render login mask
-        $response = new \Zend\Diactoros\Response();
+        $response = new \Laminas\Diactoros\Response();
         $response->getBody()->write('<html>
 <body>
 <form method="post">');
@@ -230,7 +230,7 @@ class SSO_Controller extends Tinebase_Controller_Event
 
         return $server->respondToAccessTokenRequest(
             Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class),
-            new \Zend\Diactoros\Response()
+            new \Laminas\Diactoros\Response()
         );
     }
 
@@ -240,7 +240,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             return self::serviceNotEnabled();
         }
 
-        $response = new \Zend\Diactoros\Response('php://memory', 200, ['Content-Type' => 'application/json']);
+        $response = new \Laminas\Diactoros\Response('php://memory', 200, ['Content-Type' => 'application/json']);
 
         $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
 
@@ -399,7 +399,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         $metaArray = [
             'metadata-set'          => 'saml20-idp-remote',
             'entityid'              => $idpentityid,
-            'NameIDFormat'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            'NameIDFormat'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             'SingleSignOnService'   => [[
                 'Binding'  => Constants::BINDING_HTTP_REDIRECT,
                 'Location' => $serverUrl . '/sso/saml2/redirect/signon',
@@ -420,7 +420,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         // sign the metadata if enabled
         $metaxml = \SimpleSAML\Metadata\Signer::sign($metaxml, [], 'SAML 2 IdP');
 
-        $response = new \Zend\Diactoros\Response('php://memory', 200,
+        $response = new \Laminas\Diactoros\Response('php://memory', 200,
             ['Content-Type' => 'application/samlmetadata+xml']);
         $response->getBody()->write($metaxml);
 
@@ -438,7 +438,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         } catch (Zend_Session_Exception $zse) {
             // expire session cookie for client
             Tinebase_Session::expireSessionCookie();
-            return new \Zend\Diactoros\Response($body = 'php://memory', $status = 500);
+            return new \Laminas\Diactoros\Response($body = 'php://memory', $status = 500);
         }
 
         static::initSAMLServer();
@@ -470,7 +470,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         if ($message instanceof \SAML2\LogoutRequest) {
             \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6));
 
-            $response = new \Zend\Diactoros\Response('php://memory', 302, [
+            $response = new \Laminas\Diactoros\Response('php://memory', 302, [
                 'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
             ]);
             return $response;
@@ -494,7 +494,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         } catch (Zend_Session_Exception $zse) {
             // expire session cookie for client
             Tinebase_Session::expireSessionCookie();
-            return new \Zend\Diactoros\Response($body = 'php://memory', $status = 500);
+            return new \Laminas\Diactoros\Response($body = 'php://memory', $status = 500);
         }
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
 
@@ -502,11 +502,13 @@ class SSO_Controller extends Tinebase_Controller_Event
         $idp = \SimpleSAML\IdP::getById('saml2:tine20');
         $simpleSampleIsReallyGreat = new ReflectionProperty(\SimpleSAML\IdP::class, 'authSource');
         $simpleSampleIsReallyGreat->setAccessible(true);
-        $simpleSampleIsReallyGreat2 = new ReflectionProperty(\SimpleSAML\Auth\Simple::class, 'authSource');
-        $simpleSampleIsReallyGreat2->setAccessible(true);
-        $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsReallyGreat2->getValue($simpleSampleIsReallyGreat
-            ->getValue($idp)));
-        $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
+        if ($simpleSampleIsReallyGreat->getValue($idp) instanceof \SimpleSAML\Auth\Simple) {
+            $simpleSampleIsReallyGreat2 = new ReflectionProperty(\SimpleSAML\Auth\Simple::class, 'authSource');
+            $simpleSampleIsReallyGreat2->setAccessible(true);
+            $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsReallyGreat2->getValue($simpleSampleIsReallyGreat
+                ->getValue($idp)));
+            $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
+        }
 
         try {
             \SimpleSAML\Module\saml\IdP\SAML2::receiveAuthnRequest($idp);
@@ -515,7 +517,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         } catch (SSO_Facade_SAML_MFAMaskException $e) {
             if ($request->getParsedBody() && array_key_exists('username', $request->getParsedBody())) {
                 // render MFA mask
-                $response = (new \Zend\Diactoros\Response())->withHeader('content-type', 'application/json');
+                $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
                 $response->getBody()->write(json_encode([
                     'jsonrpc' => '2.0',
                     'id' => 'fakeid',
@@ -532,7 +534,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         } catch (SSO_Facade_SAML_LoginMaskException $e) {
             if ($request->getParsedBody() && array_key_exists('username', $request->getParsedBody())) {
                 // this is our js client trying to login
-                $response = (new \Zend\Diactoros\Response())->withHeader('content-type', 'application/json');
+                $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
                 $response->getBody()->write(json_encode([
                     'jsonrpc' => '2.0',
                     'id' => 'fakeid',
@@ -542,7 +544,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                 $response = self::getLoginPage($request);
             }
         } catch (SSO_Facade_SAML_RedirectException $e) {
-            $response = new \Zend\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write('<html>
 <body>
 <p class="pulsate">'.Tinebase_Translation::getTranslation()->translate('redirecting ...').'</p>
@@ -574,6 +576,13 @@ class SSO_Controller extends Tinebase_Controller_Event
     
     protected static function getLoginPage($request)
     {
+        $binding = Binding::getCurrentBinding();
+        $samlRequest = $binding->receive();
+        $rp = SSO_Controller_RelyingParty::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            SSO_Model_RelyingParty::class, [
+                ['field' => 'name', 'operator' => 'equals', 'value' => $samlRequest->getIssuer()->getValue()]
+            ]))->getFirstRecord();
+
         $data = $request->getQueryParams();
         $data['SAMLRequest'] = base64_encode(gzinflate(base64_decode($data['SAMLRequest'])));
 
@@ -585,7 +594,14 @@ class SSO_Controller extends Tinebase_Controller_Event
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
             'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
             'lang' => $locale,
-            'initialData' => json_encode(['sso' => $data])
+            'initialData' => json_encode([
+                'sso' => $data,
+                'relyingParty' => [
+                    SSO_Model_RelyingParty::FLD_LABEL => $rp->{SSO_Model_RelyingParty::FLD_LABEL},
+                    SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION},
+                    SSO_Model_RelyingParty::FLD_LOGO => $rp->{SSO_Model_RelyingParty::FLD_LOGO},
+                ],
+            ])
         ]);
     }
     

@@ -460,10 +460,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         // sometimes ctype_digit($from) is false even if we got a single message, maybe mailserver dependend
         $singleMessage = ($to === null && ctype_digit($from) || isset($summary['UID']));
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' to: ' . print_r($to, true) . ' from: ' . print_r($from, true)
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' from: ' . print_r($from, true) . ' to: ' . print_r($to, true)
             . ' ctype_digit(from): ' . (int) ctype_digit($from)
-            . ' single message: ' . (int) $singleMessage);
+            . ' single message: ' . (int) $singleMessage
+            . ' useUid: ' . (int) $useUid);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' IMAP response: ' . print_r($summary, true));
 
         // fetch returns a different structure when fetching one or multiple messages
         if ($singleMessage) {

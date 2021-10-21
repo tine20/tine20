@@ -24,6 +24,7 @@ variables:
   IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
 
 stages:
+  - build0
   - build1
   - build2
   - test

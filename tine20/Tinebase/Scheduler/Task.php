@@ -240,9 +240,6 @@ class Tinebase_Scheduler_Task
         $task = self::_getPreparedTask('Tinebase_Alarm', self::TASK_TYPE_MINUTELY, [[
             self::CONTROLLER    => 'Tinebase_Alarm',
             self::METHOD_NAME   => 'sendPendingAlarms',
-            self::ARGS          => [
-                'eventName' => 'Tinebase_Event_Async_Minutely'
-            ],
         ]]);
         $_scheduler->create($task);
         

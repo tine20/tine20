@@ -825,11 +825,17 @@ Zeile 3</AirSyncBase:Data>
         $this->assertNotEquals('do not update', $event->summary);
     }
     
-    public function testMeetingResponse()
+    public function testMeetingResponse($syncrotonFolder = null, $serverId = null, $event = null, $instanceId = null)
     {
-        $syncrotonFolder = $this->testCreateFolder();
-        
-        list($serverId, $event) = $this->testCreateEntry($syncrotonFolder);
+        if (null === $syncrotonFolder) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+        if (null === $serverId) {
+            list($serverId, $event) = $this->testCreateEntry($syncrotonFolder);
+        }
+        if (null === $instanceId) {
+            $instanceId = $event->startTime;
+        }
         
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         
@@ -837,7 +843,9 @@ Zeile 3</AirSyncBase:Data>
         
         $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $syncrotonFolder->serverId . '</CollectionId>', $XMLMeetingResponse);
         $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
-        $XMLMeetingResponse = str_replace('<InstanceId>20121125T130000Z</InstanceId>', '', $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<InstanceId>20121125T130000Z</InstanceId>', '<InstanceId>' . $instanceId . '</InstanceId>', $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<UserResponse>2</UserResponse>', '<UserResponse>1</UserResponse>', $XMLMeetingResponse);
+
         
         $xml = new SimpleXMLElement($XMLMeetingResponse);
         
@@ -845,10 +853,79 @@ Zeile 3</AirSyncBase:Data>
         
         $eventId = $controller->setAttendeeStatus($meetingResponse);
         
-        $event = Calendar_Controller_Event::getInstance()->get($serverId);
-        $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
+        $tevent = Calendar_Controller_Event::getInstance()->get($serverId);
+        $ownAttendee = Calendar_Model_Attender::getOwnAttender($tevent->attendee);
         
-        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $ownAttendee->status);
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status);
+
+        return [$syncrotonFolder, $serverId, $event];
+    }
+
+    public function testMeetingResponseTwice()
+    {
+        list($syncrotonFolder, $serverId, $syncrotonEvent) = $this->testMeetingResponse();
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $this->assertSame(1, $event->alarms->count());
+        $event = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        $this->assertSame(2, $event->count());
+        $event->sort(function($a, $b) { return $a->dtstart->compare($b->dtstart); });
+        $event = $event->getFirstRecord();
+        $event->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord(Calendar_Model_Event::class, $event);
+        $this->assertSame(1, $event->alarms->count());
+
+        $this->testMeetingResponse($syncrotonFolder, $serverId, $syncrotonEvent);
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $event = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        $this->assertSame(2, $event->count());
+        $event->sort(function($a, $b) { return $a->dtstart->compare($b->dtstart); });
+        $event = $event->getFirstRecord();
+        $event->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord(Calendar_Model_Event::class, $event);
+        $this->assertSame(1, $event->alarms->count());
+
+        $syncrotonEvent->startTime->add(new DateInterval('P2D'));
+        $this->testMeetingResponse($syncrotonFolder, $serverId, $syncrotonEvent);
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $event = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        $this->assertSame(2, $event->count());
+        $event->sort(function($a, $b) { return $a->dtstart->compare($b->dtstart); });
+        $event = $event->getLastRecord();
+        $event->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord(Calendar_Model_Event::class, $event);
+        $this->assertSame(1, $event->alarms->count());
+
+        $syncrotonEvent->startTime->add(new DateInterval('P1D'));
+        $this->testMeetingResponse($syncrotonFolder, $serverId, $syncrotonEvent);
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $event = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        $this->assertSame(3, $event->count());
+        $event->sort(function($a, $b) { return $a->dtstart->compare($b->dtstart); });
+        $event = $event->getLastRecord();
+        $event->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord(Calendar_Model_Event::class, $event);
+        $this->assertSame(1, $event->alarms->count());
+
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $event->alarms->addRecord(new Tinebase_Model_Alarm([
+            'minutes_before' => 30
+        ], true));
+        Calendar_Controller_Event::getInstance()->update($event);
+
+        $syncrotonEvent->startTime->add(new DateInterval('P1D'));
+        $this->testMeetingResponse($syncrotonFolder, $serverId, $syncrotonEvent);
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $events = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
+        $this->assertSame(4, $events->count());
+        $events->sort(function($a, $b) { return $a->dtstart->compare($b->dtstart); });
+        $event = $events->getLastRecord();
+        $event->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord(Calendar_Model_Event::class, $event);
+        $this->assertSame(2, $event->alarms->count());
+
+        $event = $events->getFirstRecord();
+        $event->alarms = Tinebase_Alarm::getInstance()->getAlarmsOfRecord(Calendar_Model_Event::class, $event);
+        $this->assertSame(1, $event->alarms->count());
+
+        $syncrotonEvent->startTime->add(new DateInterval('PT1H'));
+        $this->expectException(Syncroton_Exception_Status_MeetingResponse::class);
+        $this->expectExceptionMessage('event instance not found');
+        $this->testMeetingResponse($syncrotonFolder, $serverId, $syncrotonEvent);
     }
     
     public function testMeetingResponseWithExistingInstanceId()

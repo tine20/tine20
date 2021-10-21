@@ -230,15 +230,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function _setMailDomainIfEmpty($domain = 'example.org')
     {
+        if (empty($this->_smtpConfig)) {
+            $this->_smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP,
+                new Tinebase_Config_Struct(array()));
+        }
         // if mailing is not installed, as with pgsql
         if (empty($this->_smtpConfig->primarydomain)) {
             if (! $this->_originalSmtpConfig) {
                 $this->_originalSmtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP,
                     new Tinebase_Config_Struct(array()));
             }
-            $updatedConfig = clone($this->_originalSmtpConfig);
-            $updatedConfig->primarydomain = $domain;
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $updatedConfig);
+            $this->_smtpConfig = clone($this->_originalSmtpConfig);
+            $this->_smtpConfig->primarydomain = $domain;
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_smtpConfig);
         }
     }
 
@@ -509,20 +513,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     protected function _getContentXML($filename)
     {
-        $zipHandler = zip_open($filename);
-        
-        do {
-            $entry = zip_read($zipHandler);
-        } while ($entry && zip_entry_name($entry) != "content.xml");
-        
-        // open entry
-        zip_entry_open($zipHandler, $entry, "r");
+        $zipHandler = new ZipArchive();
+        $zipHandler->open($filename);
         
         // read entry
-        $entryContent = zip_entry_read($entry, zip_entry_filesize($entry));
+        $entryContent = $zipHandler->getFromName('content.xml');
+        $zipHandler->close();
         
         $xml = simplexml_load_string($entryContent);
-        zip_close($zipHandler);
         
         return $xml;
     }
