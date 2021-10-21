@@ -54,7 +54,7 @@ trait Tinebase_Export_DocumentPdfTrait
     public function write($_target = null)
     {
         $tempfile = Tinebase_TempFile::getTempPath() . '.' . $this->_getOldFormat();
-        parent::save($tempfile);
+        parent::write($tempfile);
 
         $this->_parentFile = $tempfile;
 
