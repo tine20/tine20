@@ -297,6 +297,6 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             $this->setTableVersion('tags', 10);
         };
 
-        $this->addApplicationUpdate('Tinebase', '14.11', self::RELEASE014_UPDATE010);
+        $this->addApplicationUpdate('Tinebase', '14.11', self::RELEASE014_UPDATE011);
     }
 }
