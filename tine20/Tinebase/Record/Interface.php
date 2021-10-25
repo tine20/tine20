@@ -79,6 +79,8 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      */
     public static function modelConfigHook(array &$_definition);
 
+    public static function resolveRelationId(string $id, $record = null);
+
     /**
      * sets identifier of record
      * 
