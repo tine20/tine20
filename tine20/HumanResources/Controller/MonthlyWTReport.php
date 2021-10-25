@@ -85,6 +85,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         $rs = new Tinebase_Record_RecordSet(HumanResources_Model_MonthlyWTReport::class, [$_monthlyWTR]);
         Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($rs,
             HumanResources_Model_MonthlyWTReport::getConfiguration());
+        $currentRecord = clone $_monthlyWTR;
 
         $isTime = 0;
         $shouldTime = 0;
@@ -100,9 +101,17 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
             $_monthlyWTR->working_time_actual - $_monthlyWTR->working_time_target +
             $_monthlyWTR->working_time_correction;
 
-        $current = $this->_backend->update($_monthlyWTR);
-        if (null !== ($_nextMonthlyWTR = $this->getNextMonthlyWTR($current))) {
-            $this->recalculateReport($_nextMonthlyWTR, $current);
+        if (!$currentRecord->diff($_monthlyWTR)->isEmpty()) {
+            Tinebase_Timemachine_ModificationLog::getInstance()
+                ->setRecordMetaData($_monthlyWTR, self::ACTION_UPDATE, $currentRecord);
+            $currentMods = $this->_writeModLog($_monthlyWTR, $currentRecord);
+            $this->_setSystemNotes($_monthlyWTR, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+
+            $_monthlyWTR = $this->_backend->update($_monthlyWTR);
+        }
+
+        if (null !== ($_nextMonthlyWTR = $this->getNextMonthlyWTR($_monthlyWTR))) {
+            $this->recalculateReport($_nextMonthlyWTR, $_monthlyWTR);
         }
 
         $transaction->commit();
