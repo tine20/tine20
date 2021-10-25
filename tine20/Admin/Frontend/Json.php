@@ -1128,45 +1128,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $additionalArguments = ((isset($recordData['note']) || array_key_exists('note', $recordData))) ? array(array('note' => $recordData['note'])) : array();
         return $this->_save($recordData, Admin_Controller_Container::getInstance(), 'Tinebase_Model_Container', 'id', $additionalArguments);
     }
-    
+
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array  $ids
      * @return array
      */
     public function deleteContainers($ids)
     {
         return $this->_delete($ids, Admin_Controller_Container::getInstance());
-    }    
-
-    /****************************** SSO **************************************/
-
-    public function getRelyingParty($id)
-    {
-        if ( !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO) ) {
-            throw new Tinebase_Exception_AccessDenied('no manage sso right');
-        }
-
-        return $this->_get($id, SSO_Controller_RelyingParty::getInstance());
-    }
-
-    public function saveRelyingParty($record)
-    {
-        if ( !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO) ) {
-            throw new Tinebase_Exception_AccessDenied('no manage sso right');
-        }
-
-        return $this->_save($record, SSO_Controller_RelyingParty::getInstance(), SSO_Model_RelyingParty::class);
-    }
-
-    public function searchRelyingPartys($filter, $paging)
-    {
-        if ( !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO) ) {
-            throw new Tinebase_Exception_AccessDenied('no manage sso right');
-        }
-
-        return $this->_search($filter, $paging, SSO_Controller_RelyingParty::getInstance(), SSO_Model_RelyingParty::class);
     }
 
     /****************************** Customfield ******************************/

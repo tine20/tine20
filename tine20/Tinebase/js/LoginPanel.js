@@ -72,7 +72,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 getForm: function() {return this.items.get(0).getForm();},
                 layout: 'vbox',
                 width: 320,
-                height: 300,
+                height: 450,
                 layoutConfig: {
                     align: 'stretch'
                 },
@@ -82,12 +82,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                         frame: true,
                         labelWidth: 90,
                         cls: 'tb-login-panel',
-                        items: [/*{
-                        xtype: 'container',
-                        cls: 'tb-login-lobobox',
-                        border: false,
-                        html: '<div class="tb-login-headsup-box">'+ this.headsUpText + '</div><a target="_blank" href="' + Tine.websiteUrl + '" border="0"><img src="' + logo + '" /></a>'
-                    },*/ {
+                        items: [{
                             xtype: 'label',
                             cls: 'tb-login-big-label',
                             text: i18n._('Login')
@@ -181,6 +176,15 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                         cls: 'tb-login-lobobox',
                         border: false,
                         html: '<div class="tb-login-headsup-box">'+ this.headsUpText + '</div><a target="_blank" href="' + Tine.websiteUrl + '" border="0"><img src="' + logo + '" /></a>'
+                    }, {
+                        xtype: 'container',
+                        style: 'height: 5px;'
+                    }, {
+                        xtype: 'container',
+                        hidden: !this.infoText,
+                        cls: 'tb-login-infotext',
+                        border: false,
+                        html: this.infoText
                     }
                 ]
             });
