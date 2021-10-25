@@ -1,4 +1,5 @@
 <?php
+
 /**
  * class to hold Project data
  * 
@@ -6,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -16,78 +17,116 @@
  * @package     Projects
  * @subpackage  Model
  */
-class Projects_Model_Project extends Tinebase_Record_Abstract
+class Projects_Model_Project extends Tinebase_Record_NewAbstract
 {
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Projects';
-    
-    /**
-     * if foreign Id fields should be resolved on search and get from json
-     * should have this format: 
-     *     array('Calendar_Model_Contact' => 'contact_id', ...)
-     * or for more fields:
-     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
-     * (e.g. resolves contact_id with the corresponding Model)
-     * 
-     * @var array
-     */
-    protected static $_resolveForeignIdFields = array(
-        'Tinebase_Model_User' => array('created_by', 'last_modified_by')
-    );    
+    public const FLD_DESCRIPTION = 'description';
+    public const FLD_NUMBER = 'number';
+    public const FLD_STATUS = 'status';
+    public const FLD_TITLE = 'title';
+
+    public const MODEL_NAME_PART = 'Project';
+    public const TABLE_NAME = 'projects_project';
 
     /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-    // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked Projects_Model_Project records) and other metadata
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),    
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        
-        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
+    protected static $_modelConfiguration = [
+        self::VERSION => 5,
+        self::MODLOG_ACTIVE => true,
+
+        self::APP_NAME => Projects_Config::APP_NAME,
+        self::MODEL_NAME => self::MODEL_NAME_PART,
+
+        self::RECORD_NAME => 'Project',
+        self::RECORDS_NAME => 'Projects', // ngettext('Project', 'Projects', n)
+        self::TITLE_PROPERTY => self::FLD_TITLE,
+
+        self::CONTAINER_PROPERTY => 'container_id',
+        self::CONTAINER_NAME     => 'Project list',
+        self::CONTAINERS_NAME    => 'Project lists', // ngettext('Projects list', 'Projects lists', n)
+
+        self::HAS_ATTACHMENTS => true,
+        self::HAS_CUSTOM_FIELDS => true,
+        self::HAS_NOTES => true,
+        self::HAS_RELATIONS => true,
+        self::HAS_TAGS => true,
+
+        self::EXPOSE_HTTP_API => true,
+        self::EXPOSE_JSON_API => true,
+
+        self::DEFAULT_SORT_INFO => ['field' => 'number', 'direction' => 'DESC'],
+
+        self::TABLE => [
+            self::NAME => self::TABLE_NAME,
+            self::INDEXES       => [
+                self::FLD_DESCRIPTION => [
+                    self::COLUMNS               => [self::FLD_DESCRIPTION],
+                    self::FLAGS                 => [self::TYPE_FULLTEXT],
+                ],
+            ],
+        ],
+
+        self::FILTER_MODEL => [
+            // relation filters
+            'contact'        => [
+                'filter' => 'Tinebase_Model_Filter_Relation', 'options' => [
+                    'related_model'     => 'Addressbook_Model_Contact',
+                    'filtergroup'    => 'Addressbook_Model_ContactFilter'
+                ]
+            ],
+        ],
+
+        self::FIELDS => [
+            self::FLD_NUMBER => [
+                self::TYPE => self::TYPE_STRING,
+                self::QUERY_FILTER => true,
+                self::LABEL => 'Number', // _('Number')
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ]
+            ],
+            self::FLD_TITLE => [
+                self::TYPE => self::TYPE_STRING,
+                self::QUERY_FILTER => true,
+                self::LABEL => 'Name', // _('Name')
+                self::LENGTH => 255,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ]
+            ],
+            self::FLD_DESCRIPTION => [
+                self::TYPE => self::TYPE_FULLTEXT,
+                self::QUERY_FILTER => true,
+                self::LABEL => 'Description', // _('Description')
+                self::NULLABLE => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ]
+            ],
+            self::FLD_STATUS => [
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::LABEL => 'Status', // _('Status')
+                self::NAME => Projects_Config::PROJECT_STATUS,
+                self::LENGTH => 40,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::DEFAULT_VALUE => 'IN-PROCESS',
+                ]
+            ],
+        ]
+    ];
 
     /**
-     * name of fields containing datetime or an array of datetime information
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var array list of datetime fields
-     */    
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time'
-    );
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
     
     /**
      * @see Tinebase_Record_Abstract

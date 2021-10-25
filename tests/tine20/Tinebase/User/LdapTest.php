@@ -28,7 +28,7 @@ class Tinebase_User_LdapTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-    {
+{
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
             $this->markTestSkipped('LDAP backend not enabled');
         }
@@ -232,8 +232,6 @@ class Tinebase_User_LdapTest extends TestCase
      */
     public function testDeleteUser()
     {
-        self::markTestSkipped('FIXME: some LDAP tests are broken since 9b068b772');
-
         $user = $this->testAddUser();
         
         $this->_backend->deleteUser($user);
@@ -363,8 +361,6 @@ class Tinebase_User_LdapTest extends TestCase
      */
     public function testSyncDeleted()
     {
-        self::markTestSkipped('FIXME: some LDAP tests are broken since 9b068b772');
-
         $user = $this->testAddUser();
 
         // delete user in ldap

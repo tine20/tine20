@@ -1266,3 +1266,6 @@ msgstr "Export Ziel"
 
 msgid "Language"
 msgstr "Sprache"
+
+msgid "Select color"
+msgstr "Farbe wählen"

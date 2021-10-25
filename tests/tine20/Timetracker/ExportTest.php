@@ -45,6 +45,8 @@ class Timetracker_ExportTest extends Timetracker_AbstractTest
         
         // cleanup / delete file
         unlink($result);
+        // cleanup, if the timeaccount is still in use,  need to set confirm request context for delete method
+        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
     

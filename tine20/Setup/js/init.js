@@ -31,14 +31,16 @@ Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createIntercep
 /**
  * init registry
  */
-Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(function () {
-    Tine.Tinebase.tineInit.clearRegistry();
-    Tine.Tinebase.tineInit.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
-    Tine.Tinebase.tineInit.jsonKeyCookieId = 'TINE20SETUPJSONKEY';
-    Tine.Tinebase.tineInit.stateful = false;
-    
-    return true;
-});
+(() => {
+    const orig = Tine.Tinebase.tineInit.initRegistry;
+    Tine.Tinebase.tineInit.initRegistry = async (forceReload, cb, scope) => {
+        await Tine.Tinebase.tineInit.clearRegistry();
+        Tine.Tinebase.tineInit.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
+        Tine.Tinebase.tineInit.jsonKeyCookieId = 'TINE20SETUPJSONKEY';
+        Tine.Tinebase.tineInit.stateful = false;
+        return await orig.call(Tine.Tinebase.tineInit, forceReload, cb, scope);
+    }
+})();
 
 Tine.Tinebase.tineInit.onRegistryLoad = Tine.Tinebase.tineInit.onRegistryLoad.createInterceptor(function () {
     // fake a setup user
@@ -74,8 +76,8 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
             loginMethod: 'Setup.login',
             headsUpText: window.i18n._('Setup'),
             scope: this,
-            onLogin: function (response) {
-                Tine.Tinebase.tineInit.initRegistry(true, function() {
+            onLogin: async function (response) {
+                await Tine.Tinebase.tineInit.initRegistry(true, function () {
                     Ext.MessageBox.hide();
                     Tine.Tinebase.tineInit.renderWindow();
                 });

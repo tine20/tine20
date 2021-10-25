@@ -528,7 +528,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return {
             requiredGrant: 'addGrant',
             actionType: 'add',
-            text: allowFolder ? this.app.i18n._('Upload Folder ') : this.app.i18n._('Upload File'),
+            text: allowFolder ? this.app.i18n._('Upload Folder') : this.app.i18n._('Upload File'),
             handler: this.onFilesSelect,
             disabled: true,
             scope: this,

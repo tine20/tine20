@@ -1,10 +1,11 @@
 <?php
+
 /**
  * @package     Projects
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -16,18 +17,23 @@
 class Projects_Config extends Tinebase_Config_Abstract
 {
     /**
+     * @var string
+     */
+    public const APP_NAME = 'Projects';
+
+    /**
      * Projects Status
      * 
      * @var string
      */
-    const PROJECT_STATUS = 'projectStatus';
+    public const PROJECT_STATUS = 'projectStatus';
     
     /**
      * Project attendee role
      * 
      * @var string
      */
-    const PROJECT_ATTENDEE_ROLE = 'projectAttendeeRole';
+    public const PROJECT_ATTENDEE_ROLE = 'projectAttendeeRole';
     
     /**
      * (non-PHPdoc)

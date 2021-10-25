@@ -1,0 +1,113 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - SSO\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Model/RelyingParty.php:47
+msgid "Relying Party"
+msgid_plural "Relying Parties"
+msgstr[0] "Relying Party"
+msgstr[1] "Relying Parties"
+
+#: Model/RelyingParty.php:74 Model/Saml2RPConfig.php:58
+msgid "Name"
+msgstr "Name"
+
+#: Model/RelyingParty.php:80
+msgid "Label"
+msgstr "Label"
+
+#: Model/RelyingParty.php:85
+msgid "Description"
+msgstr "Description"
+
+#: Model/RelyingParty.php:91
+msgid "Logo"
+msgstr "Logo"
+
+#: Model/Token.php:48
+msgid "OAuth2 Access Token"
+msgid_plural "OAuth2 Access Tokens"
+msgstr[0] "OAuth2 Access Token"
+msgstr[1] "OAuth2 Access Tokens"
+
+#: Model/Token.php:72
+msgid "Token"
+msgstr "Token"
+
+#: Model/Token.php:81
+msgid "Type"
+msgstr "Type"
+
+#: Model/Token.php:86
+msgid "Data"
+msgstr "Data"
+
+#: Model/OAuthOIdRPConfig.php:52
+msgid "Redirect URLs"
+msgstr "Redirect URLs"
+
+#: Model/OAuthOIdRPConfig.php:61
+msgid "Secret"
+msgstr "Secret"
+
+#: Model/Saml2RPConfig.php:48
+msgid "SAML2 Relying Party Config"
+msgid_plural "SAML2 Relying Party Configs"
+msgstr[0] "SAML2 Relying Party Config"
+msgstr[1] "SAML2 Relying Party Configs"
+
+#: Model/Saml2RPConfig.php:67
+msgid "Entity ID"
+msgstr "Entity ID"
+
+#: Model/Saml2RPConfig.php:76
+msgid "Consumer Service Binding"
+msgstr "Consumer Service Binding"
+
+#: Model/Saml2RPConfig.php:85
+msgid "Consumer Service Location"
+msgstr "Consumer Service Location"
+
+#: Model/Saml2RPConfig.php:94
+msgid "Logout Service Location"
+msgstr "Logout Service Location"
+
+#: Config.php:37 Config.php:39
+msgid "Oauth2"
+msgstr "Oauth2"
+
+#: Config.php:57 Config.php:59
+msgid "SAML2"
+msgstr "SAML2"
+
+#: js/AdminPanel.js:26
+msgid "Relying Parties"
+msgstr "Relying Parties"
+
+#: js/login.js:26
+msgid "SSO"
+msgstr "SSO"
+
+#: js/login.js:29
+#, python-brace-format
+msgid "After successful login you will be redirected to {0}"
+msgstr "After successful login you will be redirected to {0}"
+
+#: js/login.js:57
+msgid "Login failure"
+msgstr "Login failure"
+
+#: js/login.js:58
+msgid "Your username and/or your password are wrong!"
+msgstr "Your username and/or your password are wrong!"

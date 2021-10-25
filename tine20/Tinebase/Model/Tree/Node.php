@@ -152,9 +152,13 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'options'           => [
                     'idProperty'        => 'object_id',
                 ],
+                'label' => 'File Contents', // _('File Contents')
+                'jsConfig' => ['operators' => ['wordstartswith']]
             ],
             'isIndexed'         => [
-                'filter'            => Tinebase_Model_Tree_Node_IsIndexedFilter::class,
+                'label' => 'Indexed',    // _('Indexed')
+                'filter' => Tinebase_Model_Tree_Node_IsIndexedFilter::class,
+                'jsConfig' => ['valueType' => 'bool']
             ],
         ],
 

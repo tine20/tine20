@@ -78,7 +78,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
         text: this.app.i18n._('Edit Account'),
         iconCls: 'FelamimailIconCls',
         scope: this,
-        disabled: ! Tine.Tinebase.common.hasRight('manage_accounts', 'Felamimail'),
+        disabled: false,
         handler: function() {
             var record = this.accountStore.getById(this.ctxNode.attributes.account_id);
             var popupWindow = Tine.Felamimail.AccountEditDialog.openWindow({

@@ -359,18 +359,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function initUser(Tinebase_Model_FullUser $_user, $fixCookieHeader = true)
     {
-        Tinebase_Core::set(Tinebase_Core::USER, $_user);
-        if (Tinebase_Core::isRegistered('SENTRY')) {
-            Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($_user): void {
-                $scope->setUser([
-                    'id' => $_user->getId(),
-                    'email' => $_user->accountEmailAddress,
-                    'login' => $_user->accountLoginName,
-                    'locale' => Tinebase_Core::getLocale()->toString(),
-                ]);
-            });
-        }
-        
+        Tinebase_Core::setUser($_user);
+
         if (Tinebase_Session_Abstract::getSessionEnabled()) {
             $this->_initUserSession($fixCookieHeader);
         }

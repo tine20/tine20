@@ -44,6 +44,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_DYNAMIC_RECORD        => 'text',
         MCC::TYPE_CONTAINER             => 'string',
         MCC::TYPE_RECORD                => 'string',
+        MCC::TYPE_MODEL                 => 'string',
         MCC::TYPE_KEY_FIELD             => 'string',
         MCC::TYPE_USER                  => 'string',
         MCC::TYPE_BOOLEAN               => 'boolean',

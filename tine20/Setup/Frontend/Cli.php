@@ -831,6 +831,7 @@ class Setup_Frontend_Cli
         $results = Setup_Controller::getInstance()->checkRequirements();
         if ($results['success']) {
           echo "OK - All requirements are met\n";
+          echo $results['resultOptionalBinaries']['result']['message'] . "\n";
         } else {
           echo "ERRORS - The following requirements are not met: \n";
           foreach ($results['results'] as $result) {
@@ -838,6 +839,7 @@ class Setup_Frontend_Cli
               echo "- " . strip_tags($result['message']) . "\n";
             }
           }
+          echo $results['resultOptionalBinaries']['result']['message'] . "\n";
         }
     }
     

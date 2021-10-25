@@ -81,10 +81,10 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         $app = 'Tinebase';
         $additionalData['totalInMB'] = 1234 * 1024 * 1024;
         $result = $this->_json->saveQuota($app, null, $additionalData);
-        static::assertEquals($result,  1234 , true);
 
         $totalQuotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->{Tinebase_Config::QUOTA_TOTALINMB};
-        static::assertEquals($result, $totalQuotaConfig , true);
+        static::assertEquals($result[Tinebase_Config::QUOTA_TOTALINMB], $totalQuotaConfig , true);
+        static::assertEquals($totalQuotaConfig,  1234 , true);
     }
 
     /**

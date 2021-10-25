@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -218,5 +219,30 @@ class Tinebase_Server_JsonTests extends TestCase
         $this->assertStringContainsString('"result"', $out);
 
         return $out;
+    }
+
+    /**
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Json_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group ServerTests
+     */
+    public function testLogin()
+    {
+        if (Tinebase_User::getInstance() instanceof Tinebase_User_Ldap) {
+            // disconnect ldap auth backend first to make new ldap->bind work
+            Tinebase_Auth::getInstance()->getBackend()->getLdap()->disconnect();
+        }
+
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $resultString = $this->_handleRequest('Tinebase.login', [
+            'username' => $credentials['username'],
+            'password' => $credentials['password'],
+        ]);
+
+        $result = Tinebase_Helper::jsonDecode($resultString);
+        self::assertArrayHasKey('success', $result['result']);
+        self::assertEquals(true, $result['result']['success'], print_r($result, true));
     }
 }

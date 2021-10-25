@@ -1128,18 +1128,18 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $additionalArguments = ((isset($recordData['note']) || array_key_exists('note', $recordData))) ? array(array('note' => $recordData['note'])) : array();
         return $this->_save($recordData, Admin_Controller_Container::getInstance(), 'Tinebase_Model_Container', 'id', $additionalArguments);
     }
-    
+
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array  $ids
      * @return array
      */
     public function deleteContainers($ids)
     {
         return $this->_delete($ids, Admin_Controller_Container::getInstance());
-    }    
-    
+    }
+
     /****************************** Customfield ******************************/
 
     /**
@@ -1436,6 +1436,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveQuota(string $application, $recordData = null, array $additionalData = [])
     {
+        parent::_setRequestContext(Admin_Controller_Quota::getInstance());
         return Admin_Controller_Quota::getInstance()->updateQuota($application, $recordData, $additionalData);
     }
 
@@ -1732,7 +1733,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                                 if ($path === '/' . $filemanager_id . '/folders/personal') {
                                     try {
                                         $userData = Admin_Controller_User::getInstance()->get($record->name)->toArray();
-                                        $record->quota = $userData['xprops']['personalFSQuota'];
+                                        $record->quota = $userData['xprops']['personalFSQuota'] ?? 0;
                                         $record->xprops('customfields')['isPersonalNode'] = true;
                                         $record->xprops('customfields')['accountLoginName'] = $userData['accountLoginName'];
                                         $record->xprops('customfields')['accountId'] = $record->name;

@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
@@ -11,7 +11,7 @@
 
 /**
  * class for Felamimail initialization
- * 
+ *
  * @package     Setup
  */
 
@@ -26,20 +26,20 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
         Tinebase_Acl_Rights::RUN,
         Felamimail_Acl_Rights::MANAGE_ACCOUNTS,
     );
-    
+
     /**
      * init favorites
      */
     protected function _initializeFavorites()
     {
         $pfe = Tinebase_PersistentFilter::getInstance();
-        
+
         $commonValues = array(
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId(),
             'model'             => 'Felamimail_Model_MessageFilter',
         );
-        
+
         $myInboxPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Felamimail_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => 'All inboxes of my email accounts', // _("All inboxes of my email accounts")
@@ -47,7 +47,7 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
                 array('field' => 'path'    , 'operator' => 'in', 'value' => Felamimail_Model_MessageFilter::PATH_ALLINBOXES),
             )
         ))));
-        
+
         $myUnseenPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => 'All unread mail', // _("All unread mail")
             'description'       => 'All unread mail of my email accounts', // _("All unread mail of my email accounts")
@@ -72,7 +72,7 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
             )
         ))));
     }
-    
+
     /**
      * init application folders
      */
@@ -95,7 +95,7 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
                 'Felamimail',
                 Tinebase_FileSystem::FOLDER_TYPE_SHARED
             );
-            
+
             $node = Tinebase_FileSystem::getInstance()->createAclNode($basePath . '/Vacation Templates');
 
             if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basePath . '/Vacation Templates/vacation_template_test.tpl', 'w'))) {
@@ -120,7 +120,7 @@ vacation_template_test
                     . ' Could not create vacation_template_test.tpl file');
                 return;
             }
-            
+
             Felamimail_Config::getInstance()->set(Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID, $node->getId());
         } catch (Tinebase_Exception_Backend $teb) {
             Tinebase_Exception::log($teb);

@@ -758,7 +758,14 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @param array $_accountIds
      */
     abstract public function deleteUsers(array $_accountIds);
-    
+
+    /**
+     * returns true if user backend does hard delete
+     *
+     * @return boolean
+     */
+    abstract public function isHardDeleteEnabled();
+
     /**
      * Get multiple users
      *

@@ -42,14 +42,21 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
     public function updateQuota(string $application, $recordData = null, array $additionalData = [])
     {
         // for totalQuota set config
+        $translate = Tinebase_Translation::getTranslation('Admin');
+        
         if ($application === 'Tinebase') {
             // check allow total quota management config first
+            if (!Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET}) {
+                throw new Tinebase_Exception_AccessDenied(
+                    $translate->_('It is not allowed to manage total Quota.'));
+            }
+
+            $this->validateQuota($application, $recordData, $additionalData);
+            
             $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
             $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = $additionalData['totalInMB'] / 1024 / 1024;
-            return $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB};
+            return [Tinebase_Config::QUOTA_TOTALINMB => $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}];
         }
-        
-        $translate = Tinebase_Translation::getTranslation('Admin');
         
         if (!$recordData) {
             throw new Tinebase_Exception_UnexpectedValue($translate->_('Record data needs to be set!'));
@@ -73,6 +80,8 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
                     ]);
 
                     if ($account = Admin_Controller_EmailAccount::getInstance()->search($filter)->getFirstRecord()) {
+                        $this->validateQuota($application, $account, $additionalData);
+                        
                         $account->email_imap_user = [
                             'emailMailQuota'  => !empty($additionalData['emailMailQuota']) ? $additionalData['emailMailQuota'] : null,
                             'emailSieveQuota' => !empty($additionalData['emailSieveQuota']) ? $additionalData['emailSieveQuota'] : null,
@@ -96,6 +105,8 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
 
         if ($application === 'Filemanager') {
             if ($isPersonalNode) {
+                $this->validateQuota($application, $recordData, $additionalData);
+                
                 $user = Admin_Controller_User::getInstance()->get($additionalData['accountId']);
                 $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] = $recordData['quota'];
                 Admin_Controller_User::getInstance()->update($user);
@@ -113,5 +124,21 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
         Tinebase_FileSystem::getInstance()->update($node);
 
         return Tinebase_FileSystem::getInstance()->get($recordData['id']);
+    }
+
+    public function validateQuota(string $application, $recordData, array $additionalData)
+    {
+        $context = $this->getRequestContext();
+        // for totalQuota set config
+        if (array_key_exists('confirm', $context['clientData']) || array_key_exists('confirm', $context)) {
+            return;
+        }
+
+        $event = new Admin_Event_UpdateQuota();
+        $event->recordData = $recordData;
+        $event->application = $application;
+        $event->additionalData = $additionalData;
+
+        Tinebase_Event::fireEvent($event);
     }
 }
