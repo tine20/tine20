@@ -366,7 +366,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
         }
     }
-    
+
     /**
      * create user
      *

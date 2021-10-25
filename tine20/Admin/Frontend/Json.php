@@ -336,6 +336,20 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveUser($recordData)
     {
+        parent::_setRequestContext(Admin_Controller_User::getInstance());
+
+        $account = new Tinebase_Model_FullUser();
+        $context = Admin_Controller_User::getInstance()->getRequestContext();
+        
+        // for totalQuota set config
+        if ($account->getId() === NULL && !array_key_exists('confirm', $context['clientData']) && !array_key_exists('confirm', $context)) {
+            // confirmation for saas app
+            $event = new Admin_Event_BeforeAddAccount(array(
+                'account' => $recordData,
+            ));
+            Tinebase_Event::fireEvent($event);
+        }
+        
         $password = (isset($recordData['accountPassword'])) ? $recordData['accountPassword'] : '';
         if (! empty($password)) {
             Tinebase_Core::getLogger()->addReplacement($password);
@@ -354,8 +368,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 return $group['id'];
             }, $recordData['groups']['results']);
         }
-
-        $account = new Tinebase_Model_FullUser();
         
         // always re-evaluate fullname
         unset($recordData['accountFullName']);
