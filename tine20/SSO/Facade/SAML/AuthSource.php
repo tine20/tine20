@@ -105,5 +105,10 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
                 }
             }
         }
+
+        if (!isset($state['PersistentAuthData'])) {
+            $state['PersistentAuthData'] = [];
+        }
+        $state['PersistentAuthData'][] = 'SPMetadata';
     }
 }

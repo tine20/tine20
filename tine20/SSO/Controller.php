@@ -10,6 +10,7 @@
  *
  */
 
+use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
@@ -460,6 +461,8 @@ class SSO_Controller extends Tinebase_Controller_Event
         } else {
             $spEntityId = $issuer;
         }
+        // @phpstan-ignore-next-line
+        \SimpleSAML\Session::getSessionFromRequest()->setSPEntityId($spEntityId);
 
         $metadata = MetaDataStorageHandler::getMetadataHandler();
         $idpMetadata = $idp->getConfig();
@@ -468,8 +471,53 @@ class SSO_Controller extends Tinebase_Controller_Event
         \SimpleSAML\Module\saml\Message::validateMessage($spMetadata, $idpMetadata, $message);
 
         if ($message instanceof \SAML2\LogoutRequest) {
-            \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6));
+            // @phpstan-ignore-next-line
+            $logoutRequests = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6));
 
+            if (SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_TINELOGOUT}) {
+                (new Tinebase_Frontend_Json)->logout();
+            }
+
+            if (is_array($logoutRequests) && !empty($logoutRequests)) {
+                // render logout redirect page
+                $redirect = new \SAML2\HTTPRedirect();
+                $urls = [];
+                foreach ($logoutRequests as $request) {
+                    try {
+                        $redirect->send($request);
+                    } catch (SSO_Facade_SAML_RedirectException $e) {
+                        $urls[] = $e->redirectUrl;
+                    }
+                }
+
+                $response = new \Laminas\Diactoros\Response();
+                $response->getBody()->write('<html>
+<body>
+<p class="pulsate">'.Tinebase_Translation::getTranslation()->translate('redirecting ...').'</p>');
+                foreach ($urls as $url) {
+                    //$response->getBody()->write($url);
+                }
+                // after the urls above, do final redirect to destination:
+                // $spMetadata->getValue('SingleLogoutService')['Location']
+                $response->getBody()->write('
+    <input type="submit" value="continue" style="display: none;"/>
+    <script type="text/javascript">window.onload = function() { document.getElementsByTagName("form")[0].submit() };</script>
+    <style>
+        .pulsate {
+            animation: pulsate 1s ease-out;
+            animation-iteration-count: infinite; 
+        }
+        @keyframes pulsate {
+            0% { opacity: 0.5; }
+            50% { opacity: 1.0; }
+            100% { opacity: 0.5; }
+        }
+</style>
+</form>
+</html>');
+                return $response;
+
+            }
             $response = new \Laminas\Diactoros\Response('php://memory', 302, [
                 'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
             ]);
@@ -508,6 +556,19 @@ class SSO_Controller extends Tinebase_Controller_Event
             $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsReallyGreat2->getValue($simpleSampleIsReallyGreat
                 ->getValue($idp)));
             $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
+
+            $binding = Binding::getCurrentBinding();
+            $authnRequest = $binding->receive();
+
+            if ($authnRequest instanceof AuthnRequest && ($issuer = $authnRequest->getIssuer()) instanceof Issuer &&
+                    null !== ($spEntityId = $issuer->getValue())) {
+                // @phpstan-ignore-next-line
+                \SimpleSAML\Session::getSessionFromRequest()->setSPEntityId($spEntityId);
+            } else {
+                throw new Tinebase_Exception('can\'t resolve request issuer');
+            }
+        } else {
+            throw new Tinebase_Exception('simple samle auth source config failure');
         }
 
         try {

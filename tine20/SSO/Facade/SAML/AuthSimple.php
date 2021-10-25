@@ -32,7 +32,6 @@ class SSO_Facade_SAML_AuthSimple
     /** @var \SimpleSAML\Session */
     protected $session;
 
-
     /**
      * Create an instance with the specified authsource.
      *
@@ -55,7 +54,6 @@ class SSO_Facade_SAML_AuthSimple
         }
         $this->session = $session;
     }
-
 
     /**
      * Retrieve the implementing authentication source.
