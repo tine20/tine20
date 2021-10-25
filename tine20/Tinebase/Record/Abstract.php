@@ -1410,6 +1410,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         }
     }
 
+    public static function resolveRelationId(string $id, $record = null)
+    {
+        return $id;
+    }
+
     public static function getSimpleModelName($application, $model)
     {
         $appName = is_string($application) ? $application : $application->name;

@@ -1127,6 +1127,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         }
     }
 
+    public static function resolveRelationId(string $id, $record = null)
+    {
+        return $id;
+    }
+
     /**
      * @param Tinebase_Record_RecordSet $_recordSet
      * @param Tinebase_Record_RecordSetDiff $_recordSetDiff
