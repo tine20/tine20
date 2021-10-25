@@ -868,6 +868,23 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         return $this->summary;
     }
 
+    public static function resolveRelationId(string $id, $record = null)
+    {
+        if (strpos($id, 'fakeid') === 0) {
+            if (is_array($record)) {
+                $record = new Calendar_Model_Event(null, true);
+                $record->setFromJsonInUsersTimezone($record);
+            }
+            if (!$record instanceof Calendar_Model_Event) {
+                $record = Calendar_Controller_Event::getInstance()->get($id);
+            }
+            $record = Calendar_Controller_Event::getInstance()->createRecurException($record);
+            return $record->getId();
+        }
+
+        return $id;
+    }
+
     // TODO remove the runConvert methods when migration to Modelconfig!
     public function runConvertToRecord()
     {
