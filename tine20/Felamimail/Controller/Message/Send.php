@@ -719,7 +719,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _addReplyHeaders(Felamimail_Model_Message $message)
     {
-        $originalHeaders = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message->original_id);
+        try {
+            $originalHeaders = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message->original_id);
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Message not available for reply headers / maybe it is a filed message ... (' .  $teia->getMessage() . ')');
+            return;
+        }
         if (!isset($originalHeaders['message-id'])) {
             // no message-id -> skip this
             return;
