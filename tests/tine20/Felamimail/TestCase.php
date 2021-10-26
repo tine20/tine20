@@ -367,7 +367,7 @@ abstract class Felamimail_TestCase extends TestCase
         $_messageToSend = null,
         $_attachments = 0)
     {
-        $messageToSend = $_messageToSend ? $_messageToSend : $this->_getMessageData($_emailFrom, $_subject);
+        $messageToSend = $_messageToSend ?: $this->_getMessageData($_emailFrom, $_subject);
         $messageToSend['headers'] = array_merge($messageToSend['headers'], $additionalHeaders);
 
         $tempFiles = [];

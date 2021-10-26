@@ -1228,7 +1228,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      * @param string $locationType one of: 'node', 'path', 'suggestion'
      * @return array
      *
-     * @todo split up funtion
+     * @todo split up function
      */
     public function testFileMessagesAsNode($locationType = 'path')
     {
@@ -1345,6 +1345,39 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
         // file it again
         $this->testFileMessagesAsNode();
+    }
+
+    public function testFileMessageAsNodeAndReplyToIt()
+    {
+        $appName = 'Filemanager';
+        $user = Tinebase_Core::getUser();
+        $personalFilemanagerContainer = $this->_getPersonalContainerNode($appName, $user);
+        $message = $this->_sendMessage(
+            'INBOX',
+            /* $addtionalHeaders */
+            array(),
+            /* $_emailFrom */
+            '',
+            /*$_subject */
+            'test\test' // is converted to 'test_test'
+        );
+        $filter = array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+        ));
+        $path = $this->_getPersonalFilemanagerPath($personalFilemanagerContainer);
+        $location = $this->_getTestLocation('path', $personalFilemanagerContainer, $path);
+        $this->_json->fileMessages($filter, [$location]);
+        $nodes = $this->_getTestNodes($path);
+        $emlNode = $nodes->getFirstRecord();
+
+        # print_r($emlNode->toArray());
+
+        $messageToSend = $this->_getMessageData();
+        $messageToSend['original_id'] = $emlNode->getId();
+        $messageToSend['flags'] = '\\Answered';
+        $this->_json->saveMessage($messageToSend);
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+        return $this->_assertMessageInFolder('INBOX', $messageToSend['subject']);
     }
 
     public function testFileAttachment()
