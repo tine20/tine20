@@ -18,7 +18,9 @@ ARG ALPINE_PHP_PACKAGE=php7
 ARG CACHE_BUST=0
 
 RUN apk add --no-cache --simulate nodejs npm git | sha256sum >> /cachehash
-RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_VERSION}/${ALPINE_PHP_REPOSITORY_REPOSITROY} ${ALPINE_PHP_PACKAGE}-pecl-xdebug \
+RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_VERSION}//main \
+                                  --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-xdebug \
                                   | sha256sum >> /cachehash
 RUN if [ ${ALPINE_PHP_PACKAGE} != php8 ]; then \
         apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
@@ -46,4 +48,6 @@ RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then \
     fi
 
 
-RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} ${ALPINE_PHP_PACKAGE}-pecl-xdebug
+RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
+                       --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
+                       ${ALPINE_PHP_PACKAGE}-pecl-xdebug
