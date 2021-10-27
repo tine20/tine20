@@ -776,12 +776,14 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         if (Tinebase_Core::get(Tinebase_Core::SHAREDCACHE)) {
             if (isset($appFilter)) {
-                list($key, $value) = each($appFilter);
-                $appName = $key === 'name' ? $value : Tinebase_Application::getInstance()->getApplicationById($value)->name;
+                foreach ($appFilter as $key => $value) {
+                    $appName = $key === 'name' ? $value : Tinebase_Application::getInstance()->getApplicationById($value)->name;
+                    Tinebase_Core::getCache()->remove('cachedAppConfig_' . $appName);
+                }
             } else {
                 $appName = $this->_appName;
+                Tinebase_Core::getCache()->remove('cachedAppConfig_' . $appName);
             }
-            Tinebase_Core::getCache()->remove('cachedAppConfig_' . $appName);
         }
 
         Tinebase_Cache_PerRequest::getInstance()->reset('Tinebase_Config_Abstract');

@@ -336,6 +336,20 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveUser($recordData)
     {
+        parent::_setRequestContext(Admin_Controller_User::getInstance());
+
+        $account = new Tinebase_Model_FullUser();
+        $context = Admin_Controller_User::getInstance()->getRequestContext();
+        
+        // for totalQuota set config
+        if ($account->getId() === NULL && !array_key_exists('confirm', $context['clientData']) && !array_key_exists('confirm', $context)) {
+            // confirmation for saas app
+            $event = new Admin_Event_BeforeAddAccount(array(
+                'account' => $recordData,
+            ));
+            Tinebase_Event::fireEvent($event);
+        }
+        
         $password = (isset($recordData['accountPassword'])) ? $recordData['accountPassword'] : '';
         if (! empty($password)) {
             Tinebase_Core::getLogger()->addReplacement($password);
@@ -354,8 +368,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 return $group['id'];
             }, $recordData['groups']['results']);
         }
-
-        $account = new Tinebase_Model_FullUser();
         
         // always re-evaluate fullname
         unset($recordData['accountFullName']);
@@ -1128,45 +1140,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $additionalArguments = ((isset($recordData['note']) || array_key_exists('note', $recordData))) ? array(array('note' => $recordData['note'])) : array();
         return $this->_save($recordData, Admin_Controller_Container::getInstance(), 'Tinebase_Model_Container', 'id', $additionalArguments);
     }
-    
+
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array  $ids
      * @return array
      */
     public function deleteContainers($ids)
     {
         return $this->_delete($ids, Admin_Controller_Container::getInstance());
-    }    
-
-    /****************************** SSO **************************************/
-
-    public function getRelyingParty($id)
-    {
-        if ( !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO) ) {
-            throw new Tinebase_Exception_AccessDenied('no manage sso right');
-        }
-
-        return $this->_get($id, SSO_Controller_RelyingParty::getInstance());
-    }
-
-    public function saveRelyingParty($record)
-    {
-        if ( !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO) ) {
-            throw new Tinebase_Exception_AccessDenied('no manage sso right');
-        }
-
-        return $this->_save($record, SSO_Controller_RelyingParty::getInstance(), SSO_Model_RelyingParty::class);
-    }
-
-    public function searchRelyingPartys($filter, $paging)
-    {
-        if ( !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO) ) {
-            throw new Tinebase_Exception_AccessDenied('no manage sso right');
-        }
-
-        return $this->_search($filter, $paging, SSO_Controller_RelyingParty::getInstance(), SSO_Model_RelyingParty::class);
     }
 
     /****************************** Customfield ******************************/

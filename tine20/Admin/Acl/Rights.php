@@ -172,6 +172,9 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     const VIEW_IMPORTEXPORTDEFINITIONS = 'view_importexportdefinitions';
 
+    /**
+     * the right to manage sso rps
+     */
     const MANAGE_SSO = 'manage_sso';
 
     /**
@@ -360,11 +363,15 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('view ImportExportDefinitions'),
                 'description'   => $translate->_('view ImportExportDefinitions'),
             ),
+            self::MANAGE_SSO => [
+                'text'          => $translate->_('Manage SSO'),
+                'description'   => $translate->_('Manage relying parties for single sign on '),
+            ]
         );
-        
+
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
         unset($rightDescriptions[self::USE_PERSONAL_TAGS]);
-        
+
         return $rightDescriptions;
     }
 }

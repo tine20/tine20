@@ -16,7 +16,8 @@ ARG ALPINE_PHP_REPOSITORY_REPOSITORY=main
 ARG ALPINE_PHP_PACKAGE=php7
 ARG CACHE_BUST=0
 RUN apk add --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd | sha256sum >> /cachehash
-RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+RUN apk add --no-cache --simulate --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
+                                  --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
                                   ${ALPINE_PHP_PACKAGE} \
                                   ${ALPINE_PHP_PACKAGE}-fpm \
                                   ${ALPINE_PHP_PACKAGE}-bcmath \
@@ -53,7 +54,8 @@ RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ] && [ ${ALPINE_PHP_REPOSITORY_BRANCH} ==
         apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community \
                                   php7-pecl-redis=4.3.0-r2 | sha256sum >> /cachehash; \
     else \
-        apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+        apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
+                                  --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
                                   ${ALPINE_PHP_PACKAGE}-pecl-redis | sha256sum >> /cachehash; \
     fi
 RUN apk add --no-cache --simulate --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv \
@@ -78,7 +80,8 @@ RUN mkdir /usr/local/lib/container
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 RUN apk add --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd
-RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
+                                  --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
                                   ${ALPINE_PHP_PACKAGE} \
                                   ${ALPINE_PHP_PACKAGE}-fpm \
                                   ${ALPINE_PHP_PACKAGE}-bcmath \
@@ -113,7 +116,8 @@ RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/${ALPINE_PH
 RUN if [ ${ALPINE_PHP_PACKAGE} == php7 ] && [ ${ALPINE_PHP_REPOSITORY_BRANCH} == v3.12 ]; then \
         apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.10/community php7-pecl-redis=4.3.0-r2; \
     else \
-        apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/${ALPINE_PHP_REPOSITORY_REPOSITORY} \
+        apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/main \
+                                  --repository http://nl.alpinelinux.org/alpine/${ALPINE_PHP_REPOSITORY_BRANCH}/community \
                                   ${ALPINE_PHP_PACKAGE}-pecl-redis; \
     fi
 RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli

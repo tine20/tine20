@@ -66,6 +66,13 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         ));
 
     }
+
+    protected function resolveRelationId($_relation)
+    {
+        $_relation->related_id = ($_relation->related_model)::resolveRelationId($_relation->related_id, $_relation->related_record);
+        $_relation->own_id = ($_relation->own_model)::resolveRelationId($_relation->own_id);
+
+    }
     
     /**
      * adds a new relation
@@ -77,6 +84,8 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function addRelation($_relation)
     {
+        $this->resolveRelationId($_relation);
+
         if (!($relId = $_relation->getId())) {
             $relId = $_relation->generateUID();
             $_relation->setId($relId);
@@ -117,6 +126,8 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function updateRelation($_relation)
     {
+        $this->resolveRelationId($_relation);
+
         $id = $_relation->getId();
         
         $data = $_relation->toArray();

@@ -232,10 +232,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $cacheId = Tinebase_Helper::convertCacheId('getCustomFieldsForApplication' . $cfIndex);
         $result = $cache->load($cacheId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Before - MEMORY: ' . memory_get_usage(TRUE)/1024/1024 . ' MBytes');
-        
-        if (! $result) {
+        if (false === $result) {
             $filterValues = array(array(
                 'field'     => 'application_id', 
                 'operator'  => 'equals', 
@@ -268,16 +265,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Got ' . count($result) . ' uncached custom fields for app id ' . $applicationId . ' (cacheid: ' . $cacheId . ')');
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && (count($result) > 0)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . print_r($result->toArray(), TRUE));
             
             $cache->save($result, $cacheId, array('customfields'));
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Got ' . count($result) . ' cached custom fields for app id ' . $applicationId . ' (cacheid: ' . $cacheId . ')');
         }
         
         $this->_cfByApplicationCache[$cfIndex] = $result;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' After - MEMORY: ' . memory_get_usage(TRUE)/1024/1024 . ' MBytes');
         
         return $result;
     }

@@ -64,7 +64,8 @@ Tine.HumanResources.DailyWTReportGridPanel = Ext.extend(Tine.widgets.grid.GridPa
         btn.setDisabled(true);
         me.pagingToolbar.refresh.disable();
 
-        Tine.HumanResources[apiName]().finally(function() {
+        const force = Ext.EventObject.hasModifier();
+        Tine.HumanResources[apiName](force).finally(function() {
             btn.setDisabled(false);
             me.loadGridData();
         });

@@ -227,11 +227,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
     }
 
-    public function recalculateEmployeesWTReports(string $employeeId)
+    public function recalculateEmployeesWTReports(string $employeeId, bool $force = false)
     {
         /** @noinspection PhpParamsInspection */
         HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee(
-            HumanResources_Controller_Employee::getInstance()->get($employeeId)
+            HumanResources_Controller_Employee::getInstance()->get($employeeId), null, null, $force
         );
 
         return true;
@@ -242,10 +242,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @return void
      */
-    public function calculateAllDailyWTReports()
+    public function calculateAllDailyWTReports(bool $force = false)
     {
         // NOTE: this method calcs daily & monthly
-        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports();
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports($force);
     }
 
     /**
@@ -253,10 +253,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @return void
      */
-    public function calculateAllMonthlyWTReports()
+    public function calculateAllMonthlyWTReports(bool $force = false)
     {
         // NOTE: this method calcs daily & monthly
-        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports();
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports($force);
     }
 
     /**
