@@ -89,9 +89,25 @@ variables:
     description: "Run test with nogitlabci group (test know to not work in gitlab)."
     value: "false"
 
-  PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL:
-    description: "Whether to run source test in parallel or not."
-    value: "true"
+  PHP_UNIT_ALL_TESTS_SOURCE_TYPE:
+    description: "How to run the tests: parallel, matrix or sequential"
+    value: "parallel"
+
+  PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP_TYPE:
+    description: "How to run the tests: parallel or sequential"
+    value: "sequential"
+
+  PHP_UNIT_NOGITLABCI_TESTS_BUILT_TYPE:
+    description: "How to run the tests: parallel or sequential"
+    value: "sequential"
+
+  PHP_UNIT_ALL_TESTS_BUILT_TYPE:
+    description: "How to run the tests: parallel or sequential"
+    value: "sequential"
+
+  PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE_TYPE:
+    description: "How to run the tests: parallel or sequential"
+    value: "sequential"
 
   PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE:
     description: "Whether to run a source test with the postfixmultiinstance backend."
