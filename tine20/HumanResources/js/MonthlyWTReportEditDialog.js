@@ -13,7 +13,7 @@ Tine.HumanResources.MonthlyWTReportEditDialog = Ext.extend(Tine.widgets.dialog.E
         Tine.HumanResources.MonthlyWTReportEditDialog.superclass.initComponent.apply(this, arguments);
 
         // auto recalc after a daily report got changed
-        this.getForm().findField('dailywtreports').on('update', this.onApplyChanges.createDelegate(this, [false]));
+        this.getForm().findField('dailywtreports').on('update', this.recalculateReport.createDelegate(this));
 
         // ok btn was not pressed - so let's not autosave it!
         // this.getForm().findField('working_time_correction').on('change', this.onApplyChanges.createDelegate(this, [false]));
@@ -24,7 +24,7 @@ Tine.HumanResources.MonthlyWTReportEditDialog = Ext.extend(Tine.widgets.dialog.E
 
         this.action_calculateEmployeeReports = new Ext.Action({
             text: this.app.i18n._('Recalculate'),
-            handler: this.onApplyChanges.createDelegate(this, [false]),
+            handler: this.recalculateReport.createDelegate(this),
             iconCls: 'x-tbar-loading',
             scope: this
         });
@@ -34,6 +34,16 @@ Tine.HumanResources.MonthlyWTReportEditDialog = Ext.extend(Tine.widgets.dialog.E
 
 
         Tine.HumanResources.MonthlyWTReportEditDialog.superclass.initButtons.apply(this, arguments);
+    },
+
+    recalculateReport: function() {
+        const force = Ext.EventObject.hasModifier();
+        const employeeId = this.record.get('employee_id');
+
+        this.on('update', () => {
+            Tine.HumanResources.recalculateEmployeesWTReports(employeeId, force)
+        }, this, { single: true });
+        this.onApplyChanges(false);
     }
 });
 

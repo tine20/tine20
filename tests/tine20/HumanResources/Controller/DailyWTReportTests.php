@@ -27,8 +27,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         static::assertSame(true, HumanResources_Controller_DailyWTReport::getInstance()->calculateAllReports());
 
-        $days = (int)Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST)->format('t');
-        $days += (int)Tinebase_DateTime::now()->format('j');
+        $days = Tinebase_DateTime::now()->diff($this->employee->contracts->getFirstRecord()->start_date, true)->days;
 
         $reportResult = HumanResources_Controller_DailyWTReport::getInstance()->lastReportCalculationResult;
         static::assertCount(1, $reportResult, 'expect reports being generated for one employee');
