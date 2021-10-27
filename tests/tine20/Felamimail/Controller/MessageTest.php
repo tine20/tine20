@@ -1699,10 +1699,16 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
     
         $this->assertEquals(2, count($message->attachments), print_r($message->attachments, true));
-        
-        $this->assertEquals('bookmark.htm', $message->attachments[0]['filename']);
-        $this->assertEquals('zappa_av1.jpg', $message->attachments[1]['filename']);
-        
+
+        $bookmarkAttachments = array_filter($message->attachments, function ($attachment) {
+            if ($attachment['filename'] === 'bookmark.htm') {
+                return true;
+            }
+        });
+        self::assertCount(1, $bookmarkAttachments, 'did not get bookmark.htm: '
+            . print_r($message->attachments, true)
+        );
+
         $path = Tinebase_Core::getTempDir() . '/winmail/' . $message->getId() . '/';
         $content = file_get_contents($path . 'bookmark.htm');
         

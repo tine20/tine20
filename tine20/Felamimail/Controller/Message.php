@@ -1063,7 +1063,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Got winmail.dat attachment (contentType=' . $part['contentType'] . '). Trying to extract files ...');
 
-                    if (preg_match('/^application\/.{0,4}ms-tnef$/', $part['contentType']) || $part['contentType'] == 'text/plain') {
+                    if (preg_match('/^application\/.{0,4}ms-tnef$/', $part['contentType'])
+                        || $part['contentType'] === 'text/plain'
+                        || $part['contentType'] === 'application/octet-stream'
+                    ) {
                         $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
 
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1076,6 +1079,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                                 . ' Skipping empty winmail.dat attachment.');
                             continue;
                         }
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Unsupported winmail.dat content-type. Skipping ...');
                     }
                 }
 
@@ -1180,7 +1186,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        asort($files);
+        ksort($files);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Winmail contents:  ' . print_r($files, true));
+
         return $files;
     }
 
