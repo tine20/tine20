@@ -185,6 +185,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         // init some member vars
         $this->_monthlyWTR = [];
         $this->_employee = $employee;
+        // since startDate / endDate are somewhat flexible, better not cache to much, they may differ for different employees
+        $this->_feastDays = [];
 
         // first we get all data. We do this in a transaction to get a proper snapshot
         $dataReadTransaction = new Tinebase_TransactionManager_Handle();
