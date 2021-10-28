@@ -20,15 +20,21 @@ Ext.ns('Tine.Projects');
 Tine.Projects.AddToProjectPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel, {
     // private
     appName : 'Projects',
-    recordClass: Tine.Projects.Model.Project,
     callingApp: 'Addressbook',
     callingModel: 'Contact',
-    
+
+    /**
+     * initializes the component
+     */
+    initComponent: function() {
+        this.recordClass = Tine.Projects.Model.Project;
+        Tine.Projects.AddToProjectPanel.superclass.initComponent.call(this);
+    },
+
     /**
      * @see Tine.widgets.dialog.AddToRecordPanel::isValid()
      */
     isValid: function() {
-        
         var valid = true;
         if(this.searchBox.getValue() == '') {
             this.searchBox.markInvalid(this.app.i18n._('Please choose the Project to add the contacts to'));

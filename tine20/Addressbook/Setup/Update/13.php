@@ -90,6 +90,7 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
         $userController = Tinebase_User::getInstance();
         $users = $userController->getUsers();
         foreach ($users as $user) {
+            // set Grant for personal Container
             $personalContainers = $containerController->getPersonalContainer(
                 $user,
                 Addressbook_Model_List::class,
@@ -107,7 +108,27 @@ class Addressbook_Setup_Update_13 extends Setup_Update_Abstract
 
                 $containerController->setGrants($personalContainer, $allgrants, TRUE);
             }
+
+            $sharedContainers = $containerController->getSharedContainer(
+                $user,
+                Addressbook_Model_List::class,
+                $user, Tinebase_Model_Grants::GRANT_READ,
+                true
+            );
+
+            //shared Container
+            foreach ($sharedContainers as $sharedContainer) {
+                $allgrants = $containerController->getGrantsOfContainer($sharedContainer, true);
+
+                foreach ($allgrants as $grant) {
+                    $grant->privateDataGrant = true;
+                }
+
+                $containerController->setGrants($sharedContainer, $allgrants, TRUE);
+            }
+
         }
+
         $this->addApplicationUpdate('Addressbook', '13.2', self::RELEASE013_UPDATE002);
     }
 

@@ -20,9 +20,13 @@
 class Projects_Model_Project extends Tinebase_Record_NewAbstract
 {
     public const FLD_DESCRIPTION = 'description';
+    public const FLD_END = 'end';
     public const FLD_NUMBER = 'number';
+    public const FLD_SCOPE = 'scope';
+    public const FLD_START = 'start';
     public const FLD_STATUS = 'status';
     public const FLD_TITLE = 'title';
+    public const FLD_TYPE = 'type';
 
     public const MODEL_NAME_PART = 'Project';
     public const TABLE_NAME = 'projects_project';
@@ -33,7 +37,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 5,
+        self::VERSION => 6,
         self::MODLOG_ACTIVE => true,
 
         self::APP_NAME => Projects_Config::APP_NAME,
@@ -45,7 +49,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
 
         self::CONTAINER_PROPERTY => 'container_id',
         self::CONTAINER_NAME     => 'Project list',
-        self::CONTAINERS_NAME    => 'Project lists', // ngettext('Projects list', 'Projects lists', n)
+        self::CONTAINERS_NAME    => 'Project lists', // ngettext('Project list', 'Project lists', n)
 
         self::HAS_ATTACHMENTS => true,
         self::HAS_CUSTOM_FIELDS => true,
@@ -55,6 +59,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
 
         self::EXPOSE_HTTP_API => true,
         self::EXPOSE_JSON_API => true,
+        self::CREATE_MODULE => true,
 
         self::DEFAULT_SORT_INFO => ['field' => 'number', 'direction' => 'DESC'],
 
@@ -70,10 +75,10 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
 
         self::FILTER_MODEL => [
             // relation filters
-            'contact'        => [
+            'contact' => [
                 'filter' => 'Tinebase_Model_Filter_Relation', 'options' => [
-                    'related_model'     => 'Addressbook_Model_Contact',
-                    'filtergroup'    => 'Addressbook_Model_ContactFilter'
+                    'related_model' => 'Addressbook_Model_Contact',
+                    'filtergroup' => 'Addressbook_Model_ContactFilter'
                 ]
             ],
         ],
@@ -118,6 +123,42 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::DEFAULT_VALUE => 'IN-PROCESS',
                 ]
             ],
+            self::FLD_START => [
+                self::TYPE => self::TYPE_DATE,
+                self::LABEL => 'Start', // _('Start')
+                self::NULLABLE => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ]
+            ],
+            self::FLD_END => [
+                self::TYPE => self::TYPE_DATE,
+                self::LABEL => 'End', // _('End')
+                self::NULLABLE => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ]
+            ],
+            self::FLD_SCOPE => [
+                self::LABEL => 'Scope', // _('Scope')
+                self::NULLABLE => true,
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::LENGTH => 64,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+                self::NAME => Projects_Config::PROJECT_SCOPE,
+            ],
+            self::FLD_TYPE => [
+                self::LABEL => 'Type', // _('Type')
+                self::NULLABLE => true,
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::LENGTH => 128,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+                self::NAME => Projects_Config::PROJECT_TYPE,
+            ],
         ]
     ];
 
@@ -135,7 +176,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact',
             'keyfieldConfig' => array('from' => 'own', 'name' => 'projectAttendeeRole'),
             'default' => array('type' => 'COWORKER', 'related_degree' => 'sibling')
-            )
-        );
+        )
+    );
 }
 
