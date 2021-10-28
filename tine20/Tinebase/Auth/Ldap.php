@@ -17,6 +17,8 @@
  */
 class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth_Interface
 {
+    protected $resolveIdentityFromEmailToLogin = false;
+
     /**
      * Constructor
      *
@@ -59,6 +61,13 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
      */
     public function setIdentity($_identity)
     {
+        if ($this->resolveIdentityFromEmailToLogin) {
+            if ($loginName = Tinebase_Core::getDb()->query(Tinebase_Core::getDb()
+                    ->quoteInto('SELECT login_name FROM ' . SQL_TABLE_PREFIX . 'accounts WHERE email = ?', $_identity))
+                    ->fetchColumn()) {
+                $_identity = $loginName;
+            }
+        }
         parent::setUsername($_identity);
         return $this;
     }
@@ -80,7 +89,7 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
      */
     public function supportsAuthByEmail()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -88,6 +97,7 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
      */
     public function getAuthByEmailBackend()
     {
-        throw new Tinebase_Exception_NotImplemented('do not call ' . __METHOD__);
+        $this->resolveIdentityFromEmailToLogin = true;
+        return $this;
     }
 }
