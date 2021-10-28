@@ -16,6 +16,7 @@ class Sales_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -32,6 +33,10 @@ class Sales_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE014_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -51,5 +56,17 @@ class Sales_Setup_Update_14 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([Sales_Model_Boilerplate::class]);
         $this->addApplicationUpdate('Sales', '14.2', self::RELEASE014_UPDATE002);
+    }
+
+    public function update003()
+    {
+        // update needs this - it waits for table metadata lock for a very long time otherwise ...
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME
+            . ' SET purchaseprice = 0 WHERE purchaseprice IS NULL');
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME
+            . ' SET salesprice = 0 WHERE salesprice IS NULL');
+        Setup_SchemaTool::updateSchema([Sales_Model_Product::class]);
+        $this->addApplicationUpdate('Sales', '14.3', self::RELEASE014_UPDATE003);
     }
 }
