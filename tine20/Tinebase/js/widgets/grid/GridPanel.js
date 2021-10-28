@@ -1939,6 +1939,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     key:   'Tinebase-MainContextMenu'
                 }]
             });
+
+            this.actionUpdater.addActions(this.contextMenu.items);
         }
 
         return this.contextMenu;
