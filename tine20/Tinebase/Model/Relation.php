@@ -114,26 +114,28 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
 
         'filterModel'       => [],
 
-        'fields'            => [
-            'own_model'                     => [
-                'type'                          => 'string',
-                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+        'fields' => [
+            'own_model' => [
+                'type' => 'string',
+                'validators' => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
             ],
-            'own_backend'                   => [
-                'type'                          => 'string',
-                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            'own_backend' => [
+                'type' => 'string',
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false],
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => self::DEFAULT_RECORD_BACKEND],
+                self::DEFAULT_VAL => self::DEFAULT_RECORD_BACKEND,
             ],
-            'own_id'                        => [
-                'type'                          => 'string',
-                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => true],
+            'own_id' => [
+                'type' => 'string',
+                'validators' => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             // NOTE: we use tree structure terms here, but relations do not represent a real tree
             // if this is set to PARENT, "own" record is child of "related" record
             // if this is set to CHILD, "own" record is parent of "related" record
             // if this is set to SIBLINGS, there is no parent/child relation
-            'related_degree'                => [
-                'type'                          => 'string',
-                'validators'                    => [
+            'related_degree' => [
+                'type' => 'string',
+                'validators' => [
                     'presence' => 'required',
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     'inArray' => [
@@ -143,31 +145,33 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
                     ]
                 ],
             ],
-            'related_model'                 => [
-                'type'                          => 'string',
-                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            'related_model' => [
+                'type' => 'string',
+                'validators' => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
             ],
-            'related_backend'               => [
-                'type'                          => 'string',
-                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            'related_backend' => [
+                'type' => 'string',
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false],
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => self::DEFAULT_RECORD_BACKEND],
+                self::DEFAULT_VAL => self::DEFAULT_RECORD_BACKEND,
             ],
-            'related_id'                    => [
-                'type'                          => 'string',
-                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
+            'related_id' => [
+                'type' => 'string',
+                'validators' => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => false],
             ],
-            'type'                          => [
-                'type'                          => 'string',
-                'validators'                    => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => true],
+            'type' => [
+                'type' => 'string',
+                'validators' => ['presence' => 'required', Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             // freeform field for manual relations
-            'remark'                        => [
-                'type'                          => 'string',
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            'remark' => [
+                'type' => 'string',
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             // "virtual" column - gives the reason why the related_record is not set
-            'record_removed_reason'         => [
-                'type'                          => 'string',
-                'validators'                    => [
+            'record_removed_reason' => [
+                'type' => 'string',
+                'validators' => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     'inArray' => [
                         self::REMOVED_BY_AREA_LOCK,
@@ -176,9 +180,9 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
                     ]
                 ],
             ],
-            'related_record'                => [
+            'related_record' => [
                 //'type'                          => 'record',
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
         ],
     ];

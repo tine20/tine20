@@ -60,8 +60,10 @@ Ext.namespace('Tine.Tasks');
      */
     initComponent: function() {
         
-        if(!this.record) {
+        if (!this.record) {
             this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
+        } else if (Ext.isString(this.record)) {
+            this.record = Tine.Tinebase.data.Record.setFromJson(Ext.decode(this.record), this.recordClass);
         }
         
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
