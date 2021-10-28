@@ -531,7 +531,17 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         foreach(static::$_modelStore as $id => $record) {
             if (isset(static::$_newIds[$id])) {
-                parent::create($record);
+                try {
+                    parent::create($record);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (! Tinebase_Exception::isDbDuplicate($zdse)) {
+                        throw $zdse;
+                    } else {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Ignore duplicates: '
+                            . $zdse->getMessage());
+                    }
+                }
+
             } else {
                 parent::update($record);
             }
