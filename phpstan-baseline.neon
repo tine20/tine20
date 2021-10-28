@@ -6570,6 +6570,11 @@ parameters:
 			path: tine20/Tinebase/Auth/Factory.php
 
 		-
+			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			count: 1
+			path: tine20/Tinebase/Auth/Ldap.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:updateUserInSqlBackend\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Auth/MFA/HTOTPAdapter.php
