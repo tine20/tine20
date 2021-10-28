@@ -1343,36 +1343,6 @@ parameters:
 			path: tine20/Calendar/Controller/Event.php
 
 		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$attendeeAccountId\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/EventNotifications.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$event\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/EventNotifications.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$timezone\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/EventNotifications.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$translate\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/EventNotifications.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$updater\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/EventNotifications.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$updates\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/EventNotifications.php
-
-		-
 			message: "#^Access to property \\$accountEmailAddress on an unknown class Tinebase_Model_FullAccount\\.$#"
 			count: 1
 			path: tine20/Calendar/Controller/EventNotifications.php
@@ -2898,136 +2868,6 @@ parameters:
 			path: tine20/Crm/Controller.php
 
 		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$ScheduledEnd\\.$#"
-			count: 2
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$container\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$customer\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_customer\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_end\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_folder\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_probability\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_scheduledEnd\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_source\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_start\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_state\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_tags\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_turnover\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_type\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_updatedBy\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_updatedFieldMsg\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_updatedFields\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lead\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$leadEnd\\.$#"
-			count: 2
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$leadSource\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$leadState\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$leadType\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$start\\.$#"
-			count: 2
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$tags\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$updater\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$updates\\.$#"
-			count: 1
-			path: tine20/Crm/Controller/Lead.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getGroupCountForField\\(\\)\\.$#"
 			count: 3
 			path: tine20/Crm/Controller/Lead.php
@@ -3096,16 +2936,6 @@ parameters:
 			message: "#^Result of method Tinebase_Controller_Abstract\\:\\:saveConfigSettings\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: tine20/Crm/Frontend/Json.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$importedLeads\\.$#"
-			count: 1
-			path: tine20/Crm/Import/Csv.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$lang_importedLeads\\.$#"
-			count: 1
-			path: tine20/Crm/Import/Csv.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getUserByPropertyFromSqlBackend\\(\\)\\.$#"
@@ -3256,11 +3086,6 @@ parameters:
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
 			count: 1
 			path: tine20/Felamimail/Controller.php
-
-		-
-			message: "#^Undefined variable\\: \\$translate$#"
-			count: 2
-			path: tine20/Felamimail/Controller/Account.php
 
 		-
 			message: "#^Access to an undefined property Felamimail_Controller_Cache_Folder\\:\\:\\$_delimiter\\.$#"
@@ -4462,16 +4287,6 @@ parameters:
 			path: tine20/Filemanager/Frontend/Cli.php
 
 		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$logoPath\\.$#"
-			count: 1
-			path: tine20/Filemanager/Frontend/Download.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$path\\.$#"
-			count: 1
-			path: tine20/Filemanager/Frontend/Download.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$id\\)\\: Unexpected token \"\\$id\", expected type at offset 90$#"
 			count: 1
 			path: tine20/Filemanager/Frontend/Http.php
@@ -5037,11 +4852,6 @@ parameters:
 			path: tine20/HumanResources/Setup/DemoData.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:runConvertToRecord\\(\\)\\.$#"
-			count: 1
-			path: tine20/HumanResources/Setup/Initialize.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 4
 			path: tine20/HumanResources/Setup/Update/12.php
@@ -5117,16 +4927,6 @@ parameters:
 			path: tine20/Phone/Controller/Call.php
 
 		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$jsExecute\\.$#"
-			count: 1
-			path: tine20/Phone/Frontend/Http.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$title\\.$#"
-			count: 1
-			path: tine20/Phone/Frontend/Http.php
-
-		-
 			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$phoneIsAuthenticated\\.$#"
 			count: 1
 			path: tine20/Phone/Frontend/Snom.php
@@ -5150,11 +4950,6 @@ parameters:
 			message: "#^Undefined variable\\: \\$zdse$#"
 			count: 1
 			path: tine20/Phone/Frontend/Snom.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Phone/Setup/Update/12.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -5617,6 +5412,11 @@ parameters:
 			path: tine20/Sales/Setup/DemoData.php
 
 		-
+			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			count: 2
+			path: tine20/Sales/Setup/Update/14.php
+
+		-
 			message: "#^Call to an undefined static method Sales_Setup_Update_Release12\\:\\:createDefaultFavoritesForContracts\\(\\)\\.$#"
 			count: 1
 			path: tine20/Sales/Setup/Update/Release12.php
@@ -5629,11 +5429,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Setup_Backend_Schema_Table_Abstract\\:\\:\\$requirements\\.$#"
 			count: 1
-			path: tine20/Setup/Backend/Abstract.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
 			path: tine20/Setup/Backend/Abstract.php
 
 		-
@@ -5693,26 +5488,6 @@ parameters:
 
 		-
 			message: "#^Binary operation \"\\.\" between '\\(`' and array results in an error\\.$#"
-			count: 1
-			path: tine20/Setup/Backend/Mysql.php
-
-		-
-			message: "#^Call to method closeCursor\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 3
-			path: tine20/Setup/Backend/Mysql.php
-
-		-
-			message: "#^Call to method fetch\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Setup/Backend/Mysql.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
-			path: tine20/Setup/Backend/Mysql.php
-
-		-
-			message: "#^Call to method fetchObject\\(\\) on an unknown class PDO_Statement\\.$#"
 			count: 1
 			path: tine20/Setup/Backend/Mysql.php
 
@@ -6115,11 +5890,6 @@ parameters:
 			path: tine20/Setup/Frontend/Cli.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Setup/Frontend/Cli.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 4
 			path: tine20/Setup/Frontend/Cli.php
@@ -6252,11 +6022,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:updateUserInSqlBackend\\(\\)\\.$#"
 			count: 1
-			path: tine20/Setup/Update/Abstract.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
 			path: tine20/Setup/Update/Abstract.php
 
 		-
@@ -6710,11 +6475,6 @@ parameters:
 			path: tine20/Tinebase/ActionQueue/Worker.php
 
 		-
-			message: "#^Call to method fetchColumn\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/Application.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 9
 			path: tine20/Tinebase/Application.php
@@ -6885,21 +6645,6 @@ parameters:
 			path: tine20/Tinebase/Backend/Sql/Abstract.php
 
 		-
-			message: "#^Call to method closeCursor\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
-			path: tine20/Tinebase/Backend/Sql/Abstract.php
-
-		-
-			message: "#^Call to method fetch\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
-			path: tine20/Tinebase/Backend/Sql/Abstract.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
-			path: tine20/Tinebase/Backend/Sql/Abstract.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 1
 			path: tine20/Tinebase/Backend/Sql/Abstract.php
@@ -6973,11 +6718,6 @@ parameters:
 			message: "#^Access to an undefined static property Tinebase_Backend_Sql_Factory_Abstract\\:\\:\\$_db\\.$#"
 			count: 1
 			path: tine20/Tinebase/Backend/Sql/Factory/Abstract.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
-			path: tine20/Tinebase/Backend/Sql/Grants.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -7142,36 +6882,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Zend_Session_Namespace\\:\\:\\$userAccountChanged\\.$#"
 			count: 2
-			path: tine20/Tinebase/Controller.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$account\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$email\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$protocols\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$schema\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$serverName\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$url\\.$#"
-			count: 1
 			path: tine20/Tinebase/Controller.php
 
 		-
@@ -7790,11 +7500,6 @@ parameters:
 			path: tine20/Tinebase/EmailUser/Imap/Dbmail.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
-			path: tine20/Tinebase/EmailUser/Imap/Dovecot.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_data$#"
 			count: 1
 			path: tine20/Tinebase/EmailUser/Imap/DovecotCombined.php
@@ -7875,11 +7580,6 @@ parameters:
 			path: tine20/Tinebase/EmailUser/Smtp/PostfixCombined.php
 
 		-
-			message: "#^Call to method fetch\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/EmailUser/Smtp/PostfixMultiInstance.php
-
-		-
 			message: "#^Constructor of class Tinebase_EmailUser_Smtp_Standard has an unused parameter \\$_options\\.$#"
 			count: 1
 			path: tine20/Tinebase/EmailUser/Smtp/Standard.php
@@ -7892,11 +7592,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getUserByPropertyFromSqlBackend\\(\\)\\.$#"
 			count: 1
-			path: tine20/Tinebase/EmailUser/Sql.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 3
 			path: tine20/Tinebase/EmailUser/Sql.php
 
 		-
@@ -8610,16 +8305,6 @@ parameters:
 			path: tine20/Tinebase/FilterSyncToken/Backend/Sql.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/FilterSyncToken/Backend/Sql.php
-
-		-
-			message: "#^Call to method fetchColumn\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/FilterSyncToken/Backend/Sql.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_filterSyncToken\\)\\: Unexpected token \"\\$_filterSyncToken\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/FilterSyncToken/Backend/Sql.php
@@ -8783,31 +8468,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(Tinebase_Model_Filter_FilterGroup\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 153$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/Cli/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$loginName\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Http.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$openIdConsumer\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Http.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$openIdIdentity\\.$#"
-			count: 2
-			path: tine20/Tinebase/Frontend/Http.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$openIdUrl\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Http.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$username\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Http.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Auth_Interface\\:\\:providerAuthRequest\\(\\)\\.$#"
@@ -9205,11 +8865,6 @@ parameters:
 			path: tine20/Tinebase/Group/Sql.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 8
-			path: tine20/Tinebase/Group/Sql.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 21
 			path: tine20/Tinebase/Group/Sql.php
@@ -9243,11 +8898,6 @@ parameters:
 			message: "#^Return typehint of method Tinebase_Group_Sql\\:\\:removeGroupMember\\(\\) has invalid type unknown\\.$#"
 			count: 1
 			path: tine20/Tinebase/Group/Sql.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
-			path: tine20/Tinebase/Group/Typo3.php
 
 		-
 			message: "#^Class Tinebase_Exception_AccessDenied constructor invoked with 0 parameters, 1\\-2 required\\.$#"
@@ -9985,11 +9635,6 @@ parameters:
 			path: tine20/Tinebase/Model/Converter/JsonRecordSet.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:runConvertToRecord\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Converter/JsonRecordSet.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$blob\\)\\: Unexpected token \"\\$blob\", expected type at offset 66$#"
 			count: 1
 			path: tine20/Tinebase/Model/Converter/JsonRecordSet.php
@@ -10188,11 +9833,6 @@ parameters:
 			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/Date.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/ExternalFullText.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -11430,11 +11070,6 @@ parameters:
 			path: tine20/Tinebase/Notes.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/Numberable/Backend/Sql/Abstract.php
-
-		-
 			message: "#^Method Zend_OpenId_Provider_Storage\\:\\:checkUser\\(\\) invoked with 3 parameters, 2 required\\.$#"
 			count: 1
 			path: tine20/Tinebase/OpenId/Provider.php
@@ -12485,11 +12120,6 @@ parameters:
 			path: tine20/Tinebase/Setup/Update/14.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 9
-			path: tine20/Tinebase/Setup/Update/Release10.php
-
-		-
 			message: "#^Call to method update_11\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
 			count: 1
 			path: tine20/Tinebase/Setup/Update/Release10.php
@@ -12903,16 +12533,6 @@ parameters:
 			message: "#^Variable \\$record in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: tine20/Tinebase/Tree.php
-
-		-
-			message: "#^Call to method fetch\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/Tree/FileObject.php
-
-		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 1
-			path: tine20/Tinebase/Tree/FileObject.php
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
@@ -13430,11 +13050,6 @@ parameters:
 			path: tine20/Tinebase/views/userInfoPage.php
 
 		-
-			message: "#^Call to method fetchAll\\(\\) on an unknown class PDO_Statement\\.$#"
-			count: 2
-			path: tine20/Voipmanager/Backend/Snom/Phone.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(string\\| \\$_accountId\\)\\: Unexpected token \"\\$_accountId\", expected type at offset 111$#"
 			count: 1
 			path: tine20/Voipmanager/Backend/Snom/Phone.php
@@ -13543,16 +13158,6 @@ parameters:
 			message: "#^Return typehint of method Voipmanager_Frontend_Asterisk_CallForward\\:\\:_getRedirect\\(\\) has invalid type Voipmanager_Model_Asterisk_Redirect\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Frontend/Asterisk/CallForward.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$jsExecute\\.$#"
-			count: 9
-			path: tine20/Voipmanager/Frontend/Http.php
-
-		-
-			message: "#^Access to an undefined property Zend_View\\:\\:\\$title\\.$#"
-			count: 9
-			path: tine20/Voipmanager/Frontend/Http.php
 
 		-
 			message:
