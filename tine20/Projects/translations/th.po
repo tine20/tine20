@@ -18,69 +18,7 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "โครงการ"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "ค้นหาคำถามที่ถามบ่อย"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "ป้ายกำกับ"
-
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:146
-msgid "Number"
-msgstr "ลำดับ"
-
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:141
-msgid "Title"
-msgstr "คำนำหน้าชื่อ"
-
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:152
-msgid "Status"
-msgstr "สถานะ"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:116 js/ProjectEditDialog.js:129
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "โครงการ"
-
-#: js/Model.js:39
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "รายชื่อโครงการ"
-
-#: js/Model.js:42
-msgid "Project lists"
-msgstr "รายชื่อโครงการ"
-
-#: js/Model.js:73
-msgid "Quick Search"
-msgstr "ค้นหาอย่างรวดเร็ว"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:187
-msgid "Description"
-msgstr "การอธิบาย"
-
-#: js/Model.js:87
-msgid "Last Modified Time"
-msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
-
-#: js/Model.js:88
-msgid "Last Modified By"
-msgstr "ปรับปรุงครั้งล่าสุด โดย"
-
-#: js/Model.js:89
-msgid "Creation Time"
-msgstr "เวลาที่สร้างขึ้น"
-
-#: js/Model.js:90
-msgid "Created By"
-msgstr "สร้าง โดย"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:90
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:89
 msgid "Attendee"
 msgstr "ผู้เข้าร่วม"
 
@@ -88,32 +26,70 @@ msgstr "ผู้เข้าร่วม"
 msgid "Attendee Role"
 msgstr "หน้าที่ผู้เข้าร่วม"
 
-#: js/AddToProjectPanel.js:34
+#: js/AddToProjectPanel.js:40
 msgid "Please choose the Project to add the contacts to"
 msgstr "กรุณาเลือกโครงการเพื่อเพิ่มการติดต่อ"
 
-#: js/AddToProjectPanel.js:38
+#: js/AddToProjectPanel.js:44
 msgid "Please select the attenders' role"
 msgstr "กรุณาเลือกหน้าที่ของผู้เข้าร่วม"
 
-#: js/AddToProjectPanel.js:79
+#: js/AddToProjectPanel.js:85
 msgid "Select Project"
 msgstr "เลือกโครงการ"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:91
+#: js/AddToProjectPanel.js:87 js/ProjectEditDialog.js:90
 msgid "Role"
 msgstr "หน้าที่"
 
-#: js/AddToProjectPanel.js:82
+#: js/AddToProjectPanel.js:88
 msgid "Select Role"
 msgstr "เลือก หน้าที่"
 
-#: js/AddToProjectPanel.js:102
+#: js/AddToProjectPanel.js:108
 #, python-brace-format
 msgid "Adding {0} Participants to project"
 msgstr "กำลังเพิ่มผู้เข้าร่วม {0} คน ในโครงการ"
 
-#: js/ProjectEditDialog.js:201
+#: js/ProjectEditDialog.js:115 js/ProjectEditDialog.js:128 Config.php:117
+#: Model/Project.php:47
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "โครงการ"
+
+#: js/ProjectEditDialog.js:140
+msgid "Title"
+msgstr "คำนำหน้าชื่อ"
+
+#: js/ProjectEditDialog.js:145 Model/Project.php:90
+msgid "Number"
+msgstr "ลำดับ"
+
+#: js/ProjectEditDialog.js:151 Model/Project.php:118
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/ProjectEditDialog.js:157 Model/Project.php:128
+msgid "Start"
+msgstr ""
+
+#: js/ProjectEditDialog.js:163 Model/Project.php:136
+msgid "End"
+msgstr ""
+
+#: js/ProjectEditDialog.js:171 Model/Project.php:143
+msgid "Scope"
+msgstr ""
+
+#: js/ProjectEditDialog.js:178 Model/Project.php:153
+msgid "Type"
+msgstr ""
+
+#: js/ProjectEditDialog.js:216 Model/Project.php:110
+msgid "Description"
+msgstr "การอธิบาย"
+
+#: js/ProjectEditDialog.js:230
 msgid "Enter description"
 msgstr "ใส่ คำอธิบาย"
 
@@ -129,50 +105,91 @@ msgstr "ค่าที่ชอบหลัก"
 msgid "The default favorite which is loaded on Projects startup"
 msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิด โครงการ"
 
-#: Config.php:38
-msgid "Available Project Status"
-msgstr ""
-
-#: Config.php:40
-msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
-msgstr ""
-
-#: Config.php:47
-msgid "On hold"
-msgstr "กำลังดำเนินการอยู่"
-
-#: Config.php:48
-msgid "Completed"
-msgstr "เสร็จสิ้นแล้ว"
-
-#: Config.php:49
-msgid "Cancelled"
-msgstr "ยกเลิกแล้ว"
-
-#: Config.php:50
-msgid "In process"
-msgstr "มีความคืบหน้า"
-
-#: Config.php:56
+#: Config.php:58
 msgid "Available Project Attendee Role"
 msgstr ""
 
-#: Config.php:58
-msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+#: Config.php:60
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:65
+#: Config.php:67
 msgid "Coworker"
 msgstr "ผู้ร่วมงาน"
 
-#: Config.php:66
+#: Config.php:68
 msgid "Responsible"
 msgstr "รับผิดชอบ"
+
+#: Config.php:74
+msgid "Available Project Scopes"
+msgstr ""
+
+#: Config.php:82
+msgid "Internal"
+msgstr ""
+
+#: Config.php:83
+msgid "External"
+msgstr ""
+
+#: Config.php:88
+msgid "Available Project Status"
+msgstr ""
+
+#: Config.php:90
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or synchronisation."
+msgstr ""
+
+#: Config.php:97
+msgid "On hold"
+msgstr "กำลังดำเนินการอยู่"
+
+#: Config.php:98
+msgid "Completed"
+msgstr "เสร็จสิ้นแล้ว"
+
+#: Config.php:99
+msgid "Cancelled"
+msgstr "ยกเลิกแล้ว"
+
+#: Config.php:100
+msgid "In process"
+msgstr "มีความคืบหน้า"
+
+#: Config.php:106
+msgid "Available Project Types"
+msgstr ""
+
+#: Config.php:114
+msgid "Campaign"
+msgstr ""
+
+#: Config.php:115
+msgid "Activity"
+msgstr ""
+
+#: Config.php:116
+msgid "Contract"
+msgstr ""
 
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
 msgstr "จำนวน %s ของโครงการส่วนบุคคล"
+
+#: Model/Project.php:52
+msgid "Projects list"
+msgid_plural "Projects lists"
+msgstr[0] ""
+
+#: Model/Project.php:100
+msgid "Name"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Projects"
+msgstr "โครงการ"
 
 #: Setup/Initialize.php:36
 msgid "All my open projects"
@@ -201,6 +218,34 @@ msgstr "จัดการ โคงการร่วมที่ใช้บ�
 #: Acl/Rights.php:91
 msgid "Create new shared project favorites"
 msgstr "สร้าง โครงการร่วมใหม่ที่ใช้บ่อย"
+
+#~ msgid "Search FAQ"
+#~ msgstr "ค้นหาคำถามที่ถามบ่อย"
+
+#~ msgid "Tags"
+#~ msgstr "ป้ายกำกับ"
+
+#~ msgid "Project list"
+#~ msgid_plural "Project lists"
+#~ msgstr[0] "รายชื่อโครงการ"
+
+#~ msgid "Project lists"
+#~ msgstr "รายชื่อโครงการ"
+
+#~ msgid "Quick Search"
+#~ msgstr "ค้นหาอย่างรวดเร็ว"
+
+#~ msgid "Last Modified Time"
+#~ msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
+
+#~ msgid "Last Modified By"
+#~ msgstr "ปรับปรุงครั้งล่าสุด โดย"
+
+#~ msgid "Creation Time"
+#~ msgstr "เวลาที่สร้างขึ้น"
+
+#~ msgid "Created By"
+#~ msgstr "สร้าง โดย"
 
 #~ msgid "Project Status Available"
 #~ msgstr "สถานะของโครงการ ว่าง"
