@@ -435,7 +435,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
 
     /**
      * @param \FastRoute\RouteCollector $r
-     * @return null
+     * @return null|void
      */
     public static function addFastRoutes(/** @noinspection PhpUnusedParameterInspection */\FastRoute\RouteCollector $r)
     {
