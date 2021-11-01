@@ -111,7 +111,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         'accountFirstName'      => $member->n_given ? $member->n_given : '',
                         'accountEmailAddress'   => $member->email,
                     ), true);
-                    $user->accountLoginName = Tinebase_User::getInstance()->generateUserName($user);
 
                     echo 'Creating user ' . $user->accountLoginName . "...\n";
                     $user = $admUserController->create($user, $pwd, $pwd);

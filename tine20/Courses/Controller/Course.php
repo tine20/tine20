@@ -494,8 +494,13 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         foreach ($_members as $userId) {
             $userId = (is_array($userId)) ? $userId['id'] : $userId;
             $user = $tinebaseUser->getFullUserById($userId);
-            
-            if ($this->_config->get(Courses_Config::STUDENT_LOGINNAME_PREFIX, FALSE) && ($position = strrpos($user->accountLoginName, '-')) !== false) {
+
+            if (Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG}->{Tinebase_Config::ACCOUNT_TWIG_LOGIN}) {
+                Tinebase_Model_User::setTwigContext(['course' => $course]);
+                $user->accountLoginName = $user->applyAccountTwig('accountLoginName', Tinebase_Config::getInstance()
+                    ->{Tinebase_Config::ACCOUNT_TWIG}->{Tinebase_Config::ACCOUNT_TWIG_LOGIN});
+                $user->accountLoginName = $user->shortenUsername();
+            } elseif ($this->_config->get(Courses_Config::STUDENT_LOGINNAME_PREFIX, FALSE) && ($position = strrpos($user->accountLoginName, '-')) !== false) {
                 $user->accountLoginName = $courseName . '-' . substr($user->accountLoginName, $position + 1);
                 
                 //short User name
@@ -572,6 +577,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
 
         /** @var Courses_Model_Course $course */
         $course = $this->get($courseId);
+        Tinebase_Model_User::setTwigContext(['course' => $course]);
         // check if group exists, too
         $this->_groupController->get($course->group_id);
         

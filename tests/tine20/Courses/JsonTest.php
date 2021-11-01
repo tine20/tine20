@@ -82,6 +82,8 @@ class Courses_JsonTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         
         $this->_json = new Courses_Frontend_Json();
         
@@ -131,6 +133,9 @@ class Courses_JsonTest extends TestCase
      */
     protected function tearDown(): void
     {
+        $this->_deleteUsers();
+        $this->_usernamesToDelete = [];
+
         $this->_groupIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
         if ($this->_schemaConfigChanged) {
             Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, $this->_schemaConfig);
@@ -295,7 +300,38 @@ class Courses_JsonTest extends TestCase
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
         $result = $this->_importHelper(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv', $definition);
 
+        foreach ($result['members'] as $member) {
+            $this->_usernamesToDelete[] = $member['data'];
+        }
         $this->assertEquals(4, count($result['members']), print_r($result, TRUE));
+
+        return $result;
+    }
+
+    /**
+     * test for import of members (1) with Twig
+     *
+     * @group longrunning
+     */
+    public function testImportMembersIntoCourseWithTwig()
+    {
+        // set twig config
+        $twigConf = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
+        $twigConf->{Tinebase_Config::ACCOUNT_TWIG_DISPLAYNAME} = '{{ account.accountFirstName[0:1]|upper }}{{ account.accountLastName|lower }}';
+        //$twigConf->{Tinebase_Config::ACCOUNT_TWIG_FULLNAME} = '{{ account.accountFirstName[0:1]|lower }}{{ account.accountLastName|upper }}';
+
+        /** propper test...
+         * $tmpFile = Tinebase_TempFile::getInstance()->createTempFile(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv');
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse($course);
+        $result = Courses_Controller_Course::getInstance()->importMembers($tmpFile->getId(), $courseData['id']);*/
+        $result = $this->testImportMembersIntoCourse1();
+
+        foreach ($result['members'] as $member) {
+            if (strpos($member['data'], 'eacher-mycourse') || 'hmoster' === $member['data']) continue;
+            $this->assertSame(ucfirst($member['data']), $member['name']);
+            $this->assertSame(lcfirst($member['name']), $member['data']);
+        }
     }
 
     /**
