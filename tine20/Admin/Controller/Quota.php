@@ -38,6 +38,7 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Backend_Database_LockTimeout
      * @throws Tinebase_Exception_NotFound
+     * @throws Exception
      */
     public function updateQuota(string $application, $recordData = null, array $additionalData = [])
     {
@@ -126,14 +127,11 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
         return Tinebase_FileSystem::getInstance()->get($recordData['id']);
     }
 
+    /**
+     * @throws Exception
+     */
     public function validateQuota(string $application, $recordData, array $additionalData)
     {
-        $context = $this->getRequestContext();
-        // for totalQuota set config
-        if (array_key_exists('confirm', $context['clientData']) || array_key_exists('confirm', $context)) {
-            return;
-        }
-
         $event = new Admin_Event_UpdateQuota();
         $event->recordData = $recordData;
         $event->application = $application;
