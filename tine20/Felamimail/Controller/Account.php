@@ -170,6 +170,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $this->addSystemAccountConfigValues($record);
         }
 
+        if ($_getRelatedData) {
+            $expander = new Tinebase_Record_Expander(Felamimail_Model_Account::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    'signatures' => []
+                ],
+            ]);
+
+            $expander->expand(new Tinebase_Record_RecordSet(Felamimail_Model_Account::class, [$record]));
+        }
+
         return $record;
     }
 

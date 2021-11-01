@@ -65,4 +65,25 @@ class Felamimail_Convert_Account_Json extends Tinebase_Convert_Json
             $record['signature'] = $record['signatures'][0]['signature'];
         }
     }
+
+    /**
+     * resolves child records after converting the record set to an array
+     *
+     * @param array $result
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     *
+     * @return array
+     */
+    protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
+    {
+        if (isset($result['signatures']) && is_array($result['signatures'])) {
+            foreach ($result['signatures'] as &$signature) {
+                $signature['created_by'] = $signature['created_by']['accountId'] ?? $signature['created_by'];
+                $signature['last_modified_by'] = $signature['last_modified_by']['accountId'] ?? $signature['last_modified_by'];
+            }
+        }
+        
+        return parent::_resolveAfterToArray($result, $modelConfiguration, $multiple);
+    }
 }
