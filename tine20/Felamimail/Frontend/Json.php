@@ -364,7 +364,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Session::writeClose(true);
         
         // as long as we get array of ids or filter data from the client, we need to do this legacy handling (1 dimensional -> ids / 2 dimensional -> filter data)
-        if (! empty($filterData) && is_array($filterData[0])) {
+        if (! empty($filterData) && is_array($filterData) && is_array($filterData[0])) {
             $filter = new Felamimail_Model_MessageFilter(array());
             $filter->setFromArrayInUsersTimezone($filterData);
         } else {
