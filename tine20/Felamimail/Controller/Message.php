@@ -1035,8 +1035,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $attachments = array();
         foreach ($structure['parts'] as $part) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' ' . print_r($part, TRUE));
+            if (! $part) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Skipping empty part');
+                continue;
+            }
 
             if ($part['type'] == 'multipart') {
                 $attachments = $attachments + $this->getAttachments($message, $part['partId']);
