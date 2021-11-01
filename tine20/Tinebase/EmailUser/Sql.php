@@ -145,6 +145,24 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         $this->_db->delete($this->_userTable, $where);
     }
+
+
+    /**
+     * delete all email users
+     *
+     */
+    public function deleteAllEmailUsers()
+    {
+        $where = $this->_appendClientIdOrDomain();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($where, TRUE));
+
+        $rowCount = $this->_db->delete($this->_userTable, $where);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' delete : ' . $rowCount . ' rows');
+    }
     
     /**
      * append domain if set or domain IS NULL

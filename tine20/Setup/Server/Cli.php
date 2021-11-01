@@ -47,6 +47,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'update-s'                  => 'Update applications [All] or comma separated list - supports verbose mode (-v)',
                 'update_needed'             => 'returns "Update required" and return code 1 if update is required',
                 'uninstall-s'               => 'Uninstall application [All] or comma separated list',
+                    'removemailaccounts'    => 'Only usable with uninstall. Removes all mail accounts belonging to this installation',
                 'install_dump'              => 'Install Tine from a backup
                          Examples:
                            setup.php --install_dump -- db=1 files=1 backupDir=/backup/tine20 keepTinebaseID=1
