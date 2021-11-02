@@ -228,7 +228,7 @@ class Tinebase_Application
     /**
      * get enabled or disabled applications
      *
-     * @param  string  $state  can be Tinebase_Application::ENABLED or Tinebase_Application::DISABLED
+     * @param  string $state can be Tinebase_Application::ENABLED or Tinebase_Application::DISABLED
      * @return Tinebase_Record_RecordSet list of applications
      * @throws Tinebase_Exception_InvalidArgument
      */
@@ -238,6 +238,9 @@ class Tinebase_Application
             throw new Tinebase_Exception_InvalidArgument('$status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
 
+        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+            return new Tinebase_Record_RecordSet(Tinebase_Model_Application::class);
+        }
         $result = $this->getApplications(null, /* sort = */ 'order')->filter('status', $state);
 
         if ($state === Tinebase_Application::ENABLED) {
