@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Tine 2.0
  * 
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        extend Tinebase_Application_Backend_Sql and replace some functions
@@ -1215,30 +1216,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * fire user delete event (possible async from the action queue)
-     *
-     * @param  string $_userId the user(id) to delete
-     * @throws Exception
-     */
-    public function fireDeleteUserEvent(string $_userId)
-    {
-        $user = $this->getFullUserById($_userId);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' fireing delete user event for: ' . $user->accountLoginName);
-
-        $raii = Tinebase_RAII::getTransactionManagerRAII();
-
-        $event = new Tinebase_Event_User_DeleteAccount(
-            Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct())->toArray()
-        );
-        $event->account = $user;
-        Tinebase_Event::fireEvent($event);
-
-        $raii->release();
-    }
-
-    /**
      * delete a user (delayed; its marked deleted, disabled, hidden and stripped from groups and roles immediately. Full delete and event are fired "async" via actionQueue)
      *
      * @param  mixed  $_userId
@@ -1259,7 +1236,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         try {
             if ($this->isHardDeleteEnabled()) {
-                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_User.fireDeleteUserEvent', $user->getId());
+                Tinebase_User::getInstance()->fireDeleteUserEvent($user->getId());
                 $this->_hardDelete($user);
             } else {
                 $this->_softDelete($user);
