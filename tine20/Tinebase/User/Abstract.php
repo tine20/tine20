@@ -858,4 +858,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 
         $raii->release();
     }
+
+    abstract public function getUsersCount($_filter = null);
 }

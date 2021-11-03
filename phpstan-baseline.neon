@@ -12116,7 +12116,7 @@ parameters:
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 13
+			count: 14
 			path: tine20/Tinebase/Setup/Update/13.php
 
 		-
