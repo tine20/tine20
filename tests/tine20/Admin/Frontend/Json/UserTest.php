@@ -301,19 +301,33 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $accountData = $this->_getUserArrayWithPw();
         $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup')->getId();
 
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_Group::getInstance()->delete(array($accountData['accountPrimaryGroup']));
 
         $savedAccount = $this->_json->saveUser($accountData);
 
         $this->assertEquals(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $savedAccount['accountPrimaryGroup']['id']);
     }
-
+    
     /**
-     * try to delete accounts
+     * try to delete accounts with confirmation
      */
-    public function testDeleteAccounts()
+    public function testDeleteAccountsWithConfirmation()
     {
-        $userArray = $this->_createTestUser();
+        try {
+            Admin_Controller_User::getInstance()->setRequestContext([]);
+            $userArray = $this->_createTestUser();
+            Admin_Controller_User::getInstance()->delete($userArray['accountId']);
+            self::fail('should throw Tinebase_Exception_Confirmation');
+        } catch (Tinebase_Exception_Confirmation $e) {
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            $translation = $translate->_('Delete user will trigger the [V] events, do you still want to execute this action?');
+
+            self::assertEquals($translation, $e->getMessage());
+        }
+
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete($userArray['accountId']);
 
         if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
@@ -326,6 +340,27 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         }
     }
 
+    /**
+     * try to delete accounts
+     */
+    public function testDeleteAccounts()
+    {
+        $userArray = $this->_createTestUser();
+
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
+        Admin_Controller_User::getInstance()->delete($userArray['accountId']);
+
+        if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->expectException('Tinebase_Exception_NotFound');
+        }
+
+        $account = Tinebase_User::getInstance()->getUserById($userArray['accountId']);
+        if (! Tinebase_User::getInstance()->isHardDeleteEnabled()) {
+            $this->assertTrue((bool)$account->is_deleted);
+        }
+    }
+    
     /**
      * try to set account state
      */

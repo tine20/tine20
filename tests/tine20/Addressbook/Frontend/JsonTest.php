@@ -129,6 +129,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
         }
 
         if ($this->_groupIdsToDelete) {
+            // user deletion need the confirmation header
+            Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
             Admin_Controller_Group::getInstance()->delete($this->_groupIdsToDelete);
         }
 

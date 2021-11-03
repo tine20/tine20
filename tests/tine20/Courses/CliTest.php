@@ -119,6 +119,9 @@ class Courses_CliTest extends \PHPUnit\Framework\TestCase
      */
     public function testResetCoursesInternetAccess()
     {
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
+            
         $this->assertEquals('OFF', $this->_course['internet']);
         
         ob_start();

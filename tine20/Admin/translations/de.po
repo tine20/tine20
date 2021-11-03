@@ -1311,6 +1311,9 @@ msgstr "E-Mail-Konto nicht gefunden."
 msgid "It is not allowed to manage total Quota."
 msgstr "Es ist nicht erlaubt, die Gesamte Quota zu verwalten."
 
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr "Das Löschen des Benutzers wird die mit [V] markierten Aktionen auslösen, wollen Sie das Löschen durchführen?"
+
 #~ msgid "enable application"
 #~ msgstr "Anwendung aktivieren"
 

@@ -511,35 +511,36 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $user->accountPrimaryGroup = $defaultUserGroup->getId();
         }
     }
-    
+
     /**
      * delete accounts
      *
-     * @param   mixed $_accountIds  array of account ids
+     * @param mixed $_accountIds array of account ids
      * @return  array with success flag
      * @throws  Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Confirmation
      */
     public function delete($_accountIds)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         $groupsController = Admin_Controller_Group::getInstance();
-        
+
         foreach ((array)$_accountIds as $accountId) {
             if ($accountId === Tinebase_Core::getUser()->getId()) {
                 $message = 'You are not allowed to delete yourself!';
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $message);
                 throw new Tinebase_Exception_AccessDenied($message);
             }
-            
+        }
+        
+        $this->_checkAccountDeletionConfig($_accountIds);
+        
+        foreach ((array)$_accountIds as $accountId) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
             
             $oldUser = $this->get($accountId);
-
-            $eventBefore = new Admin_Event_BeforeDeleteAccount();
-            $eventBefore->account = $oldUser;
-            Tinebase_Event::fireEvent($eventBefore);
-
+            
             $memberships = $groupsController->getGroupMemberships($accountId);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
             
@@ -604,5 +605,54 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_EmailUser_XpropsFacade::setXprops($user, $user->getId());
             Tinebase_User::getInstance()->updateUserInSqlBackend($user);
         }
+    }
+    
+    protected function _checkAccountDeletionConfig($_accountIds)
+    {
+        $context = $this->getRequestContext();
+
+        if ($context && is_array($context) && 
+            (array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
+            || array_key_exists('confirm', $context))) {
+            return;
+        }
+
+        $userData = '<br />';
+
+        foreach ((array)$_accountIds as $accountId) {
+            $oldUser = $this->get($accountId)->getTitle();
+            $userData .= "$oldUser <br />";
+        }
+
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+        $configs = Tinebase_Config::getInstance()->getDefinition(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION);
+        
+        $exception = new Tinebase_Exception_Confirmation(
+            $translation->_('Delete user will trigger the [V] events, do you still want to execute this action?'));
+        
+        foreach ($configs['content'] as $key => $content) {
+            switch ($key) {
+                case Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER:
+                case Tinebase_Config::ACCOUNT_DELETION_KEEP_AS_CONTACT:
+                case Tinebase_Config::ACCOUNT_DELETION_KEEP_ORGANIZER_EVENTS:
+                case Tinebase_Config::ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER:
+                case Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS:
+                case Tinebase_Config::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS:
+                    $label = $content['label'];
+                    $enable = Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION)->{$key};
+                    $enable =  $enable === true ? '[V]' : '[ ]';
+                $userData .= "<br /> $enable $label";
+                    break;
+                case Tinebase_Config::ACCOUNT_DELETION_ADDITIONAL_TEXT:
+                    $text = Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION)->{$key};
+                    $userData .= "<br /> $text <br />";
+                    break;
+                default;
+                    break;
+            }
+        }
+        
+        $exception->setInfo($userData);
+        throw $exception;
     }
 }

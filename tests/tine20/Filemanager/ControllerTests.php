@@ -54,10 +54,12 @@ class Filemanager_ControllerTests extends TestCase
     public function testDeletePersonalContainer()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
-            Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER => true,
+            Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS => true,
         )));
 
         $user = $this->testCreatePersonalContainer();
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete(array($user->getId()));
 
         // check if personal folder exists

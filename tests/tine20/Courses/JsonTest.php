@@ -118,6 +118,9 @@ class Courses_JsonTest extends TestCase
         $this->_schemaConfig = Courses_Config::getInstance()->get(Courses_Config::STUDENTS_USERNAME_SCHEMA);
         $this->_usernameLengthConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
         $this->_defaultDepartmentConfig = Courses_Config::getInstance()->get(Courses_Config::DEFAULT_DEPARTMENT);
+
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
     }
 
     /**
