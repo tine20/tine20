@@ -1500,30 +1500,18 @@ class Tinebase_Core
      *
      * @param string $index
      * @param mixed $value
+     * @param bool $returnCurrent
+     * @return null|mixed
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function set($index, $value, $returnCurrent=false)
+    public static function set($index, $value, $returnCurrent = false)
     {
-        if ($index === self::USER) {
-            if ($value === null) {
-                throw new Tinebase_Exception_InvalidArgument('Invalid user object!');
-            }
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                if ($value instanceof Tinebase_Model_FullUser) {
-                    $userString =  $value->accountLoginName;
-                } else if ($value instanceof Tinebase_Model_User) {
-                    $userString = $value->accountDisplayName;
-                } else {
-                    $userString = var_export($value, true);
-                }
-                
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $userString);
-                Tinebase_Log_Formatter::resetUsername();
-            }
-        }
-
         $retVal = $returnCurrent ? self::get($index) : null;
-        Zend_Registry::set($index, $value);
+        if ($index === self::USER) {
+            self::setUser($value);
+        } else {
+            Zend_Registry::set($index, $value);
+        }
         return $retVal;
     }
 
@@ -1683,11 +1671,35 @@ class Tinebase_Core
     /**
      * set current user account
      *
-     * @param Tinebase_Model_FullUser $user the user account record
+     * @param mixed $user the user account record / string
      */
     public static function setUser($user)
     {
-        return self::set(self::USER, $user, true);
+        if ($user === null) {
+            throw new Tinebase_Exception_InvalidArgument('Invalid user object!');
+        }
+
+        if ($user instanceof Tinebase_Model_FullUser) {
+            $userString =  $user->accountLoginName;
+        } else if ($user instanceof Tinebase_Model_User) {
+            $userString = $user->accountDisplayName;
+        } else {
+            $userString = var_export($user, true);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting user ' . $userString);
+            Tinebase_Log_Formatter::resetUsername();
+        }
+
+        $ravenClient = Tinebase_Core::getSentry();
+        if ($ravenClient) {
+            $ravenClient->tags['user'] = $user->accountLoginName;
+        }
+
+        Tinebase_ModelConfiguration::resetAllCreatedModels();
+        
+        Zend_Registry::set(self::USER, $user);
     }
 
     /**
