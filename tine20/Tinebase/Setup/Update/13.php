@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Tine 2.0
  *
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2019-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  * this ist 2020.11 (ONLY!)
@@ -21,6 +22,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE013_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE013_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE013_UPDATE010 = __CLASS__ . '::update010';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -63,6 +65,10 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE009          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
+            ],
+            self::RELEASE013_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
             ],
         ]
     ];
@@ -195,7 +201,6 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
 
     public function update008()
     {
-
         $this->_db->update(SQL_TABLE_PREFIX . 'importexport_definition', ['deleted_time' => '1970-01-01 00:00:00'],
             'deleted_time IS NULL');
 
@@ -242,5 +247,21 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX .
             'container SET deleted_time = NOW() WHERE is_deleted = 1 and deleted_time = "1970-01-01 00:00:00"');
         $this->addApplicationUpdate('Tinebase', '13.8', self::RELEASE013_UPDATE009);
+    }
+
+    /**
+     * remove leading and trailing spaces from tree_nodes.name
+     */
+    public function update010()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        try {
+            $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX .
+                'tree_nodes SET name = TRIM(name) WHERE is_deleted = 0 and (name like " %" or name like "% ")');
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not trim node names: ' . $e);
+        }
+        $this->addApplicationUpdate('Tinebase', '13.9', self::RELEASE013_UPDATE010);
     }
 }
