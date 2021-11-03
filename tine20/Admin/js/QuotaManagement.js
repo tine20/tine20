@@ -196,13 +196,19 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
    },
     
     isNodeEditable(node) {
+        let isEditable = false;
+    
+        if (!node) {
+            return isEditable;
+        }
+        
         const applicationId = node.attributes.virtualPath.split('/').filter(Boolean)?.[0];
         node.attributes.appName = Tine.Tinebase.appMgr.getById(applicationId).appName;
 
         const path = node.attributes.path;
         const appName = node.attributes.appName;
         const translateApp = path.split('/').filter(Boolean)?.[0];
-        let isEditable = false;
+
         
         let disabledNodes = [
             `/${translateApp}`,
