@@ -1718,45 +1718,45 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $filemanager_id = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
                     
                     foreach ($_records as $record) {
-                        if (!empty($record->name)) {
-                            try {
-                                if (!$record instanceof Tinebase_Model_Tree_Node) {
-                                    break;
+                        if (empty($record->name) || !$record instanceof Tinebase_Model_Tree_Node) {
+                            $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
+                            $record->name = $userData['accountLoginName'];
+                            
+                            continue;
+                        }
+                        
+                        try {
+                            // generic effective quota infos
+                            if (strpos($path, $filemanager_id )) {
+                                if ($quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($record)) {
+                                    $record->xprops('customfields')['effectiveAndLocalQuota'] = $quotas;
                                 }
-                                
-                                // generic effective quota infos
-                                if (strpos($path, $filemanager_id )) {
-                                    if ($quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($record)) {
-                                        $record->xprops('customfields')['effectiveAndLocalQuota'] = $quotas;
-                                    }
-                                }
-                                
-                                // user personalFSQuota quota under /Filemanager/folders/personal
-                                if ($path === '/' . $filemanager_id . '/folders/personal') {
-                                    try {
-                                        $userData = Admin_Controller_User::getInstance()->get($record->name)->toArray();
-                                        $record->quota = $userData['xprops']['personalFSQuota'] ?? 0;
-                                        $record->xprops('customfields')['isPersonalNode'] = true;
-                                        $record->xprops('customfields')['accountLoginName'] = $userData['accountLoginName'];
-                                        $record->xprops('customfields')['accountId'] = $record->name;
-                                        $record->name = $userData['accountDisplayName'];
-                                    } catch (Tinebase_Exception_NotFound $e) {
-                                        $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
-                                        $record->name = $userData['accountDisplayName'];
-                                    }
-                                }
-
-                                // total quota for /Filemanager
-                                if ($record->name === $filemanager_id || $path === '/' . $filemanager_id) {
-                                    $record->quota = Tinebase_FileSystem_Quota::getRootQuotaBytes();
-                                }
-                            } catch (Tinebase_Exception_NotFound $e) {
-                                $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
+                            }
+                            
+                            // user personalFSQuota quota under /Filemanager/folders/personal
+                            if ($path === '/' . $filemanager_id . '/folders/personal') {
+                                $userData = Admin_Controller_User::getInstance()->get($record->name)->toArray();
+                                $record->quota = $userData['xprops']['personalFSQuota'] ?? 0;
+                                $record->xprops('customfields')['isPersonalNode'] = true;
+                                $record->xprops('customfields')['accountLoginName'] = $userData['accountLoginName'];
+                                $record->xprops('customfields')['accountId'] = $record->name;
                                 $record->name = $userData['accountDisplayName'];
                             }
+    
+                            // total quota for /Filemanager
+                            if ($record->name === $filemanager_id || $path === '/' . $filemanager_id) {
+                                $record->quota = Tinebase_FileSystem_Quota::getRootQuotaBytes();
+                            } 
+                        } catch (Tinebase_Exception_NotFound $e) {
+                            $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
+                            $record->name = $userData['accountLoginName'];
                         }
                     }
-                    
+
+                    // only return exist users
+                    $_records = $_records->filter(function($record) {
+                        return $record->name !== 'unknown';
+                    });
                     // check if there is helper function
                 }
                 break;
