@@ -1746,6 +1746,8 @@ class Tinebase_Core
             });
         }
 
+        Tinebase_ModelConfiguration::resetAllCreatedModels();
+
         Zend_Registry::set(self::USER, $user);
         return $user;
     }
