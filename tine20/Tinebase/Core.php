@@ -1697,6 +1697,8 @@ class Tinebase_Core
             $ravenClient->tags['user'] = $user->accountLoginName;
         }
 
+        Tinebase_ModelConfiguration::resetAllCreatedModels();
+        
         Zend_Registry::set(self::USER, $user);
     }
 
