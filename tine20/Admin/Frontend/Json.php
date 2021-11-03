@@ -336,6 +336,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveUser($recordData)
     {
+        parent::_setRequestContext(Admin_Controller_User::getInstance());
+        
         $password = (isset($recordData['accountPassword'])) ? $recordData['accountPassword'] : '';
         if (! empty($password)) {
             Tinebase_Core::getLogger()->addReplacement($password);
@@ -354,12 +356,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 return $group['id'];
             }, $recordData['groups']['results']);
         }
-
-        $account = new Tinebase_Model_FullUser();
         
         // always re-evaluate fullname
         unset($recordData['accountFullName']);
-        
+
+        $account = new Tinebase_Model_FullUser();
+
         try {
             $account->setFromJsonInUsersTimezone($recordData);
             if (isset($recordData['sambaSAM'])) {

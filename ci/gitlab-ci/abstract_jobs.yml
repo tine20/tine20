@@ -264,6 +264,10 @@
     when: always
     reports:
       junit: ${CI_PROJECT_DIR}/junit.xml
+    paths:
+      - ${CI_PROJECT_DIR}/tine20.log
+      - ${CI_PROJECT_DIR}/phpunit-report.xml
+    expire_in: 7 day
 
 .abstract_jobs.copy_source:
   extends: .abstract_jobs.php_unit

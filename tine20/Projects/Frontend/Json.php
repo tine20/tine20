@@ -19,6 +19,10 @@
  */
 class Projects_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
+    protected $_configuredModels = [
+        Projects_Model_Project::MODEL_NAME_PART,
+    ];
+
     protected $_relatableModels = array('Projects_Model_Project');
 
     /**

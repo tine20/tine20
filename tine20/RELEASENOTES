@@ -3,21 +3,23 @@ TINE 2.0 RELEASENOTES
 =====================
                     
   Release:     Lu (2021.11)
-  Last change: 2021-10-12
+  Last change: 2021-10-25
 
 # GENERAL CHANGES (Administrative)
 
-## SSO
+## Single-Sign-On Support
 
-Single-Sign-On Support / WebAuthn
+Tine can now act as SSO Identity Provider with support of the following protcols:
+- openID
+- openIDConnect
+- SAML 2.0
 
-- TODO add more infos
+If Tine is configured accordingly, users of other apps can be authenticated by logging in on a central instance (Tine
+ as Identity Provider).
 
 ## MFA
 
-Further improvements... H|TOTP, Yubico MFA ... MFA UI in user edit dialog
-
-- TODO add more infos
+Added support for H|TOTP and Yubico MFA. A new MFA UI has been added to the user edit dialog.
 
 ## Sentry
 

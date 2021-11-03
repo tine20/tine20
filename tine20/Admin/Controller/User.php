@@ -366,7 +366,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
         }
     }
-    
+
     /**
      * create user
      *
@@ -382,6 +382,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         // avoid forging accountId, gets created in backend
         unset($_user->accountId);
+        
+        $event = new Admin_Event_BeforeAddAccount([
+            'account' => $_user,
+        ]);
+        Tinebase_Event::fireEvent($event);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);

@@ -100,6 +100,32 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
     }
 
+    public function testRelationToFakeId()
+    {
+        $event = $this->_getEvent();
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+
+        $persistentEvent = $this->_controller->create($event);
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent,
+            new Tinebase_Record_RecordSet(Calendar_Model_Event::class), Tinebase_DateTime::now());
+        $this->assertStringStartsWith('fakeid', $nextOccurance->getId());
+
+        $contact = $this->_getPersonasContacts('sclever');
+        $contact->relations = [
+            [
+                'related_id' => $nextOccurance->getId(),
+                'related_model' => Calendar_Model_Event::class,
+                'related_degree' => 'unittest',
+                'type' => 'unittest',
+            ]
+        ];
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        /** @var Calendar_Model_Event $relatedEvent */
+        $relatedEvent = $contact->relations->find('related_model', Calendar_Model_Event::class);
+        $this->assertNotNull($relatedEvent);
+        $this->assertSame($event->getId(), $relatedEvent->related_record->base_event_id);
+    }
+
     public function testGetRecurInstance()
     {
         // create event and invite admin group

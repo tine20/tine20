@@ -1,45 +1,81 @@
-"php unit: all tests source":
+# todo if gitlab version >= 14.3 use gitlab "!reference [.>abstractjob<, rules]" to reduce rules copying
+
+.php-unit-all-test-source:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
+  needs:
+    - docker_build_source
+  stage: test
+  timeout: 2h
+  interruptible: true
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
+      when: on_success
+    - when: never
+"php unit - all tests - source - sequential":
+  extends: .php-unit-all-test-source
+  variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
-  needs:
-    - docker_build_source
-  stage: test
-  timeout: 45m
-  interruptible: true
   rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "sequential"
+      when: never
     - if: $RUN_NO_TESTS == "true"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
-      when: never
-    - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "true"
       when: never
     - if: $RUN_ALL_TESTS == "true"
       when: on_success
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
       when: on_success
     - when: never
-
-"php unit: all tests source, parallel":
-  extends: .abstract_jobs.php_unit
-  variables:
-    ARG_IMAGE: test-source
-    ARG_COPY_SOURCE: "true"
-  stage: test
-  needs:
-    - docker_build_source
+"php unit - all tests - source - parallel":
+  extends: .php-unit-all-test-source
   timeout: 45m
   parallel: 5
-  interruptible: true
   rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "parallel"
+      when: never
     - if: $RUN_NO_TESTS == "true"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
       when: never
-    - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "false"
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "true"
+      when: on_success
+    - when: never
+"php unit - all tests - source - matrix":
+  extends: .php-unit-all-test-source
+  variables:
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  timeout: 45m
+  parallel:
+    matrix:
+      - PROVIDER:
+          - "mariadb:10.4"
+          - "mariadb:10.3"
+          - "mariadb:10.2"
+          - "mariadb:10.1"
+          - "mariadb:10.0"
+          - "mysql:8.0"
+          - "mysql:5.7"
+          - "mysql:5.6"
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
       when: never
     - if: $RUN_ALL_TESTS == "true"
       when: on_success
@@ -47,41 +83,12 @@
       when: on_success
     - when: never
 
-"php unit: servertests source":
-  extends: .abstract_jobs.php_unit
-  variables:
-    ARG_IMAGE: test-source
-    ARG_COPY_SOURCE: "true"
-    ARG_TEST: AllServerTests
-  stage: test
-  needs:
-    - docker_build_source
-  timeout: 30m
-  interruptible: true
-  rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
-    - if: $PHP_UNIT_SERVERTESTS == "never"
-      when: never
-    - if: $RUN_ALL_TESTS == "true"
-      when: on_success
-    - if: $PHP_UNIT_SERVERTESTS == "true"
-      when: on_success
-    - when: never
 
-"php unit: tests with postfixmultiinstance":
-  extends: .abstract_jobs.php_unit
+.php-unit-all-tests-source-postfixmultiinstance:
+  extends: .php-unit-all-test-source
   variables:
-    ARG_IMAGE: test-source
-    ARG_COPY_SOURCE: "true"
     ARG_POSTFIX_INIT_SQL_PATH: /config/sql/postfixmultiinstance_tables.sql
     TINE20_EMAIL_SMTP: "active:true,backend:postfixmultiinstance,hostname:postfix,port:25,ssl:none,auth:none,name:postfix,primarydomain:mail.test,instanceName:tine.test,postfixmultiinstance_host:db,postfixmultiinstance_dbname:postfix,postfixmultiinstance_username:tine20,postfixmultiinstance_password:tine20pw"
-  stage: test
-  needs:
-    - docker_build_source
-  timeout: 45m
-  interruptible: true
-  parallel: 5
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
@@ -92,18 +99,46 @@
     - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE == "true"
       when: on_success
     - when: never
-
-"php unit: setup tests source":
-  extends: .abstract_jobs.php_unit
+"php unit - all tests - source - postfixmultiinstance - sequential":
+  extends: .php-unit-all-tests-source-postfixmultiinstance
   variables:
-    ARG_IMAGE: test-source
-    ARG_COPY_SOURCE: "true"
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  rules:
+    - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE_TYPE != "sequential"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE == "true"
+      when: on_success
+    - when: never
+"php unit - all test - source - postfixmultiinstance - parallel":
+  extends: .php-unit-all-tests-source-postfixmultiinstance
+  timeout: 45m
+  parallel: 5
+  rules:
+    - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE_TYPE != "parallel"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE == "true"
+      when: on_success
+    - when: never
+
+
+"php unit - setup tests - source":
+  extends: .php-unit-all-test-source
+  variables:
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
-  stage: test
-  needs:
-    - docker_build_source
   timeout: 90m
-  interruptible: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
@@ -118,16 +153,30 @@
         - tine20/Setup/**/*
     - when: never
 
-"php unit: all tests built":
-  extends: .abstract_jobs.php_unit
+
+"php unit - servertests - source":
+  extends: .php-unit-all-test-source
+  variables:
+    ARG_TEST: AllServerTests
+  timeout: 30m
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_SERVERTESTS == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_SERVERTESTS == "true"
+      when: on_success
+    - when: never
+
+
+.php-unit-all-test-built:
+  extends: .php-unit-all-test-source
   variables:
     ARG_IMAGE: test-built
-  stage: test
   needs:
     - docker_build_built
-  parallel: 5
-  timeout: 45m
-  interruptible: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
@@ -138,20 +187,46 @@
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       when: on_success
     - when: never
-
-"php unit: nogitlabci tests built":
-  extends: .abstract_jobs.php_unit
+"php unit - all tests - built - sequential":
+  extends: .php-unit-all-test-built
   variables:
-    ARG_IMAGE: test-built
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_TYPE != "sequential"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
+      when: on_success
+    - when: never
+"php unit - all test - built - parallel":
+  extends: .php-unit-all-test-built
+  timeout: 45m
+  parallel: 5
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_TYPE != "parallel"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
+      when: on_success
+    - when: never
+
+
+.php-unit-nogitlabci-test-built:
+  extends: .php-unit-all-test-built
+  variables:
     ARG_EXCLUDE_GROUP: ""
     ARG_GROUP: "nogitlabci"
-  stage: test
-  needs:
-    - docker_build_built
-  parallel: 5
-  allow_failure: true
-  timeout: 30m
-  interruptible: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
@@ -162,18 +237,84 @@
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
       when: on_success
     - when: never
+"php unit - nogitlabci tests - built - sequential":
+  extends: .php-unit-nogitlabci-test-built
+  variables:
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  rules:
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT_TYPE != "sequential"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
+      when: on_success
+    - when: never
+"php unit - nogitlabci test - built - parallel":
+  extends: .php-unit-nogitlabci-test-built
+  timeout: 30m
+  parallel: 5
+  rules:
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT_TYPE != "parallel"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
+      when: on_success
+    - when: never
 
-"php unit: all tests built with ldap":
+
+.php-unit-all-test-ldap-built:
   extends: .abstract_jobs.php_unit_ldap
   variables:
     ARG_IMAGE: test-built
   stage: test
   needs:
     - docker_build_built
-  parallel: 5
-  timeout: 30m
+  timeout: 2h
   interruptible: true
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
+      when: on_success
+    - when: never
+"php unit - all tests - built - ldap - sequential":
+  extends: .php-unit-all-test-ldap-built
+  variables:
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP_TYPE != "sequential"
+      when: never
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "never"
+      when: never
+    - if: $RUN_ALL_TESTS == "true"
+      when: on_success
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true"
+      when: on_success
+    - when: never
+"php unit - all test - built - ldap - parallel":
+  extends: .php-unit-all-test-ldap-built
+  timeout: 45m
+  parallel: 5
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP_TYPE != "parallel"
+      when: never
     - if: $RUN_NO_TESTS == "true"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "never"

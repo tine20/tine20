@@ -835,4 +835,27 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             $message
         );
     }
+
+    /**
+     * fire user delete event (possible async from the action queue)
+     *
+     * @param  string $_userId the user(id) to delete
+     */
+    public function fireDeleteUserEvent(string $_userId)
+    {
+        $user = $this->getFullUserById($_userId);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Firing delete user event for: ' . $user->accountLoginName);
+
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
+
+        $event = new Tinebase_Event_User_DeleteAccount(
+            Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct())->toArray()
+        );
+        $event->account = $user;
+        Tinebase_Event::fireEvent($event);
+
+        $raii->release();
+    }
 }

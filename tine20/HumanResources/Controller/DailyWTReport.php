@@ -101,9 +101,10 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
      * All employees that have employment_end IS NULL or emplyoment_end AFTER now() - 2 months will be included
      * in the calculation. Only days during which the employees have a valid contract will create a DailyWTReport
      *
+     * @param bool $force
      * @return boolean
      */
-    public function calculateAllReports()
+    public function calculateAllReports($force = false)
     {
         if (! HumanResources_Config::getInstance()->featureEnabled(
             HumanResources_Config::FEATURE_CALCULATE_DAILY_REPORTS) &&
@@ -128,7 +129,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 'filter' => $filter,
                 'function' => 'calculateReportsForEmployees',
             ));
-            $iterator->iterate();
+            $iterator->iterate($force);
         } finally {
             Tinebase_Core::releaseMultiServerLock(__METHOD__);
         }
@@ -138,13 +139,14 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
     /**
      * @param Tinebase_Record_RecordSet $_records
+     * @param bool $force
      * @return array
      */
-    public function calculateReportsForEmployees(Tinebase_Record_RecordSet $_records)
+    public function calculateReportsForEmployees(Tinebase_Record_RecordSet $_records, $force = false)
     {
         $result = [];
         foreach ($_records as $employee) {
-            $result[$employee->getId()] = $this->calculateReportsForEmployee($employee);
+            $result[$employee->getId()] = $this->calculateReportsForEmployee($employee, null, null, $force);
         }
 
         $this->lastReportCalculationResult = $result;
@@ -161,6 +163,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
      * @param HumanResources_Model_Employee $employee
      * @param null|Tinebase_DateTime $startDate
      * @param null|Tinebase_DateTime $endDate
+     * @param bool $force
      * @return array
      *
      * @todo use an result object as return value?
@@ -168,7 +171,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     public function calculateReportsForEmployee(
         HumanResources_Model_Employee $employee,
         Tinebase_DateTime $startDate = null,
-        Tinebase_DateTime $endDate = null
+        Tinebase_DateTime $endDate = null,
+        bool $force = false
     ) {
         // we should never run in FE context, so we reset the RC and use RAII to restate it
         $oldRC = $this->_requestContext;
@@ -181,20 +185,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         // init some member vars
         $this->_monthlyWTR = [];
         $this->_employee = $employee;
-        $this->_startDate = $startDate ?: $this->_getStartDate();
-        $this->_endDate = $endDate ?: $this->_getEndDate();
-        $this->_reportResult = [
-            'created' => 0,
-            'updated' => 0,
-            'errors' => 0,
-        ];;
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . ' Calculating Daily Reports for ' . $employee->getTitle()
-            . ' (From: ' . $this->_startDate->toString()
-            . ' Until: ' . $this->_endDate->toString() . ')'
-        );
-
+        // since startDate / endDate are somewhat flexible, better not cache to much, they may differ for different employees
+        $this->_feastDays = [];
 
         // first we get all data. We do this in a transaction to get a proper snapshot
         $dataReadTransaction = new Tinebase_TransactionManager_Handle();
@@ -213,6 +205,20 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             ],
         ]);
         $expander->expand($rs);
+
+        $this->_startDate = $startDate ?: $this->_getStartDate($force);
+        $this->_endDate = $endDate ?: $this->_getEndDate();
+        $this->_reportResult = [
+            'created' => 0,
+            'updated' => 0,
+            'errors' => 0,
+        ];;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Calculating Daily Reports for ' . $employee->getTitle()
+            . ' (From: ' . $this->_startDate->toString()
+            . ' Until: ' . $this->_endDate->toString() . ')'
+        );
 
         $existingReports = $this->_getEmployeesReports();
         $timeSheets = $this->_getEmployeesTimesheets();
@@ -438,9 +444,10 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     }
 
     /**
+     * @param bool $force
      * @return Tinebase_DateTime
      */
-    protected function _getStartDate()
+    protected function _getStartDate($force)
     {
         $lastClearedReport = HumanResources_Controller_MonthlyWTReport::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
@@ -459,6 +466,10 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             $start_date = clone $this->_employee->contracts->getFirstRecord()->start_date;
         } else {
             return Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST);
+        }
+
+        if ($force) {
+            return $start_date;
         }
 
         $lastReport = HumanResources_Controller_MonthlyWTReport::getInstance()->search(
@@ -503,10 +514,40 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                             'dir'   => 'ASC',
                             'limit' => 1
                         ]))->getFirstRecord()) && $firstTS->start_date->isLater($start_date)) {
-                    $start_date = $firstTS->start_date;
+                    $chgDataDate = $firstTS->start_date;
                 } else {
-                    $start_date = Tinebase_DateTime::now()->setTime(0, 0, 0);
+                    $chgDataDate = new Tinebase_DateTime($lastReport->month . '-01 00:00:00');
                 }
+
+                // check FreeTime
+                $filterData = [
+                    ['field' => 'account_id', 'operator' => 'equals', 'value' => $this->_employee->account_id],
+                    ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $start_date->format('Y-m-d')],
+                    ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $this->_getEndDate()->format('Y-m-d')],
+                ];
+                // fetch all freetimes of an employee that changed after last calculation and that lastday_date after time of interest
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    HumanResources_Model_FreeTime::class,
+                    $filterData
+                );
+                $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    HumanResources_Model_FreeTime::class,
+                    [
+                        ['field' => 'last_modified_time', 'operator' => 'after_or_equals', 'value' => $time],
+                        ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $time],
+                    ],
+                    'OR'
+                ));
+
+                if (($firstFT = HumanResources_Controller_FreeTime::getInstance()->search($filter, new Tinebase_Model_Pagination([
+                            'sort'  => 'firstday_date',
+                            'dir'   => 'ASC',
+                            'limit' => 1
+                        ]))->getFirstRecord()) && $firstFT->firstday_date->isEarlier($chgDataDate)) {
+                    $chgDataDate = $firstFT->firstday_date;
+                }
+
+                $start_date = $chgDataDate;
             }
         }
 

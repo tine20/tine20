@@ -1,6 +1,12 @@
-cd $CI_BUILDS_DIR/${CI_PROJECT_NAMESPACE}/tine20/tine20
+#! /bin/bash
+source ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/merge_helper.sh
 
-if ! $CI_BUILDS_DIR/tine20/buildscripts/githelpers/merge/auto_merge.sh; then
-    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "Auto merge failed in $CI_JOB_URL."
-    exit 1
-fi
+cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20
+
+git config merge.pofile.name "merge po-files driver"
+git config merge.pofile.driver "./scripts/git/merge-po-files %A %O %B"
+git config merge.pofile.recursive "binary"
+
+merge_upwards 2019.11 2020.11
+merge_upwards 2020.11 2021.11
+merge_upwards 2021.11 2022.11

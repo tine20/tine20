@@ -14,71 +14,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Projects.js:24 Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projects"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Search FAQ"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Tags"
-
-#: js/ProjectGridPanel.js:121 js/Model.js:75 js/ProjectEditDialog.js:146
-msgid "Number"
-msgstr "Number"
-
-#: js/ProjectGridPanel.js:128 js/Model.js:74 js/ProjectEditDialog.js:141
-msgid "Title"
-msgstr "Title"
-
-#: js/ProjectGridPanel.js:134 js/Model.js:78 js/ProjectEditDialog.js:152
-msgid "Status"
-msgstr "Status"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:116 js/ProjectEditDialog.js:129
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Project"
-msgstr[1] "Projects"
-
-#: js/Model.js:39
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "Project list"
-msgstr[1] "Project lists"
-
-#: js/Model.js:42
-msgid "Project lists"
-msgstr "Project lists"
-
-#: js/Model.js:73
-msgid "Quick Search"
-msgstr "Quick Search"
-
-#: js/Model.js:76 js/ProjectEditDialog.js:187
-msgid "Description"
-msgstr "Description"
-
-#: js/Model.js:87
-msgid "Last Modified Time"
-msgstr "Last Modified Time"
-
-#: js/Model.js:88
-msgid "Last Modified By"
-msgstr "Last Modified By"
-
-#: js/Model.js:89
-msgid "Creation Time"
-msgstr "Creation Time"
-
-#: js/Model.js:90
-msgid "Created By"
-msgstr "Created By"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:90
+#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:89
 msgid "Attendee"
 msgstr "Attendee"
 
@@ -86,32 +22,71 @@ msgstr "Attendee"
 msgid "Attendee Role"
 msgstr "Attendee Role"
 
-#: js/AddToProjectPanel.js:34
+#: js/AddToProjectPanel.js:40
 msgid "Please choose the Project to add the contacts to"
 msgstr "Please choose the Project to add the contacts to"
 
-#: js/AddToProjectPanel.js:38
+#: js/AddToProjectPanel.js:44
 msgid "Please select the attenders' role"
 msgstr "Please select the attenders' role"
 
-#: js/AddToProjectPanel.js:79
+#: js/AddToProjectPanel.js:85
 msgid "Select Project"
 msgstr "Select Project"
 
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:91
+#: js/AddToProjectPanel.js:87 js/ProjectEditDialog.js:90
 msgid "Role"
 msgstr "Role"
 
-#: js/AddToProjectPanel.js:82
+#: js/AddToProjectPanel.js:88
 msgid "Select Role"
 msgstr "Select Role"
 
-#: js/AddToProjectPanel.js:102
+#: js/AddToProjectPanel.js:108
 #, python-brace-format
 msgid "Adding {0} Participants to project"
 msgstr "Adding {0} Participants to project"
 
-#: js/ProjectEditDialog.js:201
+#: js/ProjectEditDialog.js:115 js/ProjectEditDialog.js:128 Config.php:117
+#: Model/Project.php:47
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Project"
+msgstr[1] "Projects"
+
+#: js/ProjectEditDialog.js:140
+msgid "Title"
+msgstr "Title"
+
+#: js/ProjectEditDialog.js:145 Model/Project.php:90
+msgid "Number"
+msgstr "Number"
+
+#: js/ProjectEditDialog.js:151 Model/Project.php:118
+msgid "Status"
+msgstr "Status"
+
+#: js/ProjectEditDialog.js:157 Model/Project.php:128
+msgid "Start"
+msgstr "Start"
+
+#: js/ProjectEditDialog.js:163 Model/Project.php:136
+msgid "End"
+msgstr "End"
+
+#: js/ProjectEditDialog.js:171 Model/Project.php:143
+msgid "Scope"
+msgstr "Scope"
+
+#: js/ProjectEditDialog.js:178 Model/Project.php:153
+msgid "Type"
+msgstr "Type"
+
+#: js/ProjectEditDialog.js:216 Model/Project.php:110
+msgid "Description"
+msgstr "Description"
+
+#: js/ProjectEditDialog.js:230
 msgid "Enter description"
 msgstr "Enter description"
 
@@ -127,50 +102,92 @@ msgstr "Default Favorite"
 msgid "The default favorite which is loaded on Projects startup"
 msgstr "The default favorite which is loaded on Projects startup"
 
-#: Config.php:38
-msgid "Available Project Status"
-msgstr "Available Project Status"
-
-#: Config.php:40
-msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
-msgstr "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
-
-#: Config.php:47
-msgid "On hold"
-msgstr "On hold"
-
-#: Config.php:48
-msgid "Completed"
-msgstr "Completed"
-
-#: Config.php:49
-msgid "Cancelled"
-msgstr "Cancelled"
-
-#: Config.php:50
-msgid "In process"
-msgstr "In process"
-
-#: Config.php:56
+#: Config.php:58
 msgid "Available Project Attendee Role"
 msgstr "Available Project Attendee Role"
 
-#: Config.php:58
-msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
-msgstr "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
+#: Config.php:60
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or synchronisation."
+msgstr "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or synchronisation."
 
-#: Config.php:65
+#: Config.php:67
 msgid "Coworker"
 msgstr "Coworker"
 
-#: Config.php:66
+#: Config.php:68
 msgid "Responsible"
 msgstr "Responsible"
+
+#: Config.php:74
+msgid "Available Project Scopes"
+msgstr "Available Project Scopes"
+
+#: Config.php:82
+msgid "Internal"
+msgstr "Internal"
+
+#: Config.php:83
+msgid "External"
+msgstr "External"
+
+#: Config.php:88
+msgid "Available Project Status"
+msgstr "Available Project Status"
+
+#: Config.php:90
+msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or synchronisation."
+msgstr "Possible Project status. Please note that additional project status might impact other Projects systems on export or synchronisation."
+
+#: Config.php:97
+msgid "On hold"
+msgstr "On hold"
+
+#: Config.php:98
+msgid "Completed"
+msgstr "Completed"
+
+#: Config.php:99
+msgid "Cancelled"
+msgstr "Cancelled"
+
+#: Config.php:100
+msgid "In process"
+msgstr "In process"
+
+#: Config.php:106
+msgid "Available Project Types"
+msgstr "Available Project Types"
+
+#: Config.php:114
+msgid "Campaign"
+msgstr "Campaign"
+
+#: Config.php:115
+msgid "Activity"
+msgstr "Activity"
+
+#: Config.php:116
+msgid "Contract"
+msgstr "Contract"
 
 #: Controller.php:79
 #, python-format
 msgid "%s's personal Projects"
 msgstr "%s's personal Projects"
+
+#: Model/Project.php:52
+msgid "Projects list"
+msgid_plural "Projects lists"
+msgstr[0] "Projects list"
+msgstr[1] "Projects lists"
+
+#: Model/Project.php:100
+msgid "Name"
+msgstr "Name"
+
+#: Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projects"
 
 #: Setup/Initialize.php:36
 msgid "All my open projects"

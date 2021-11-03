@@ -170,10 +170,20 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         $this->assertStringStartsWith('<!DOCTYPE NETSCAPE-Bookmark-file-1>', $content);
 
         self::assertEquals(2, count($syncrotonModelEmail->attachments), print_r($syncrotonModelEmail->attachments, true));
-        $this->assertEquals($dataSize, $syncrotonModelEmail->attachments[0]->estimatedDataSize);
+
+        $bookmarkAttachments = array_filter( $syncrotonModelEmail->attachments, function (Syncroton_Model_EmailAttachment $attachment) {
+            if ($attachment->displayName === 'bookmark.htm') {
+                return true;
+            }
+        });
+        self::assertCount(1, $bookmarkAttachments, 'did not get bookmark.htm: '
+            . print_r($syncrotonModelEmail->attachments, true)
+        );
+        $bookmarkAttachment = array_pop($bookmarkAttachments);
+        $this->assertEquals($dataSize, $bookmarkAttachment->estimatedDataSize, print_r($bookmarkAttachments, true));
 
         // try to get file by reference
-        $syncrotonFileReference = $controller->getFileReference($syncrotonModelEmail->attachments[0]->fileReference);
+        $syncrotonFileReference = $controller->getFileReference($bookmarkAttachment->fileReference);
         $this->assertEquals('text/html', $syncrotonFileReference->contentType);
         $this->assertEquals($dataSize, strlen(stream_get_contents($syncrotonFileReference->data)));
     }

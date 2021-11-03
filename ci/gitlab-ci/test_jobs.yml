@@ -33,9 +33,8 @@ phpstan:
     - docker_build_source
   script:
     - cd $TINE20ROOT
-    - composer require phpstan/phpstan
     - if test "${CI_PROJECT_NAME}" == "tine20"; then dir=tine20; else dir=tine20/$CUSTOMAPP_DIR; fi
-    - php -d memory_limit=2G $TINE20ROOT/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=gitlab --no-progress -vvv $dir | tee ${CI_PROJECT_DIR}/code-quality-report.json
+    - php -d memory_limit=2G $TINE20ROOT/tine20/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=gitlab --no-progress -vvv $dir | tee ${CI_PROJECT_DIR}/code-quality-report.json
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/code-quality-report.json
