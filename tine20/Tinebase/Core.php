@@ -1148,9 +1148,13 @@ class Tinebase_Core
         }
 
         if ($dbBackend === NULL) {
+            if (!isset($dbConfigArray['adapter'])) {
+                $dbConfigArray['adapter'] = self::PDO_MYSQL;
+            }
             $constName = 'self::' . strtoupper($dbConfigArray['adapter']);
             if (empty($dbConfigArray['adapter']) || ! defined($constName)) {
-                self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Wrong/no db adapter configured (' . $dbConfigArray['adapter'] . '). Using default: ' . self::PDO_MYSQL);
+                self::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Wrong db adapter configured (' . $dbConfigArray['adapter'] . '). Using default: ' . self::PDO_MYSQL);
                 $dbBackend = self::PDO_MYSQL;
                 $dbConfigArray['adapter'] = self::PDO_MYSQL;
             } else {
