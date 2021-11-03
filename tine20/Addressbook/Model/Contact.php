@@ -907,14 +907,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     }
 
     /**
-     * returns prefered email address of given contact
+     * returns preferred email address of given contact
      * 
      * @return string
      */
     public function getPreferredEmailAddress()
     {
         // prefer work mail over private mail till we have prefs for this
-        return $this->email ? $this->email : $this->email_home;
+        return $this->email ?: $this->email_home;
     }
     
     /**

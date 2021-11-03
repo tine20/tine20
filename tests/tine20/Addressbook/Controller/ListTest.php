@@ -1,13 +1,12 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
- * @todo implement search test
  */
 
 /**
@@ -374,16 +373,20 @@ class Addressbook_Controller_ListTest extends TestCase
     public function testListSieveRule()
     {
         $list = $this->testAddList();
-        $list->members = array($this->objects['contact2']);
+        $emailHomeContact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'email_home' => 'someaddress@home.me',
+            'n_fn' => 'another contact'
+        ]));
+        $list->members = [$this->objects['contact2'], $emailHomeContact];
         $list->email = 'foo@bar.de';
 
         $list = $this->_instance->update($list);
 
         $list = $this->_instance->addListMember($list, $this->objects['contact1']);
 
-        Felamimail_Sieve_AdbList::createFromList($list);
-
-        // TODO fixme, finish this test
+        $sieveRule = Felamimail_Sieve_AdbList::createFromList($list);
+        self::assertStringContainsString($this->objects['contact2']->email, $sieveRule);
+        self::assertStringContainsString($emailHomeContact->email_home, $sieveRule);
     }
 
     public function testSearchForListMembersOfEmptyList()

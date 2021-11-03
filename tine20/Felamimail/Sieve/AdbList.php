@@ -94,11 +94,19 @@ class Felamimail_Sieve_AdbList
             Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldAcl);
         });
 
-        $sieveRule->_receiverList = array_filter(array_keys(Addressbook_Controller_Contact::getInstance()->search(
+        $receivers = Addressbook_Controller_Contact::getInstance()->search(
             new Addressbook_Model_ContactFilter([
                 ['field' => 'id', 'operator' => 'in', 'value' => $_list->members],
                 ['field' => 'showDisabled', 'operator' => 'equals', 'value' => false],
-            ]), null, false, ['email'])));
+            ]));
+        $sieveRule->_receiverList = [];
+        foreach ($receivers as $receiver) {
+            /** @var Addressbook_Model_Contact $receiver */
+            $email = $receiver->getPreferredEmailAddress();
+            if ($email) {
+                $sieveRule->_receiverList[] = $email;
+            }
+        }
 
         // for unused variable check
         unset($raii);
