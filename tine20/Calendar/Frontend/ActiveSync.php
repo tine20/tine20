@@ -524,12 +524,17 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
     protected function _getResponseType(Calendar_Model_Event $_event)
     {
         $organizer = $_event->resolveOrganizer();
-        // if the organizer is null we put ourself as organizer, so it is the same as if we would be the organizer
+        // if the organizer is null we put ourselves as organizer, so it is the same as if we would be the organizer
         if (null === $organizer || Tinebase_Core::getUser()->getId() === $organizer->account_id) {
             return 1;
         } else {
             if (null === ($ownAttendee = Calendar_Model_Attender::getOwnAttender($_event->attendee))) {
                 return 0;
+            }
+            if (empty($ownAttendee->status)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . " Own attendee status empty - set to ACCEPTED");
+                $ownAttendee->status = Calendar_Model_Attender::STATUS_ACCEPTED;
             }
             switch ($ownAttendee->status) {
                 case Calendar_Model_Attender::STATUS_TENTATIVE:
@@ -584,7 +589,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
     /**
      * convert string of days (TU,TH) to bitmask used by ActiveSync
      *  
-     * @param $_days
+     * @param string $_days
      * @return int
      */
     protected function _convertDayToBitMask($_days)
