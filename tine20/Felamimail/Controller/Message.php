@@ -317,22 +317,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        // PGP MIME Version 1
-        if (isset($_message->structure['contentType']) && $_message->structure['contentType'] == 'multipart/encrypted'
-            && isset($_message->structure['parts'][1]['subType'])
-            && $_message->structure['parts'][1]['subType'] == 'pgp-encrypted') {
-            $identification = $this->getMessagePart($_message, 1)->getContent();
-
-            if (strpos($identification, 'Version: 1') !== FALSE) {
-                $amored = $this->getMessagePart($_message, 2)->getContent();
-
-                $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
-                    'id' => $_message->getId() . '_2',
-                    'contentType' => 'application/pgp-encrypted',
-                    'preparedData' => $amored,
-                )));
-            }
-        }
+        $this->_processPGPMimeVersion1Part($_message, $preparedParts);
 
         // PGP INLINE
         if (strpos($_message->body, '-----BEGIN PGP MESSAGE-----') !== false) {
@@ -347,6 +332,33 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         $_message->preparedParts = $preparedParts;
+    }
+
+    protected function _processPGPMimeVersion1Part($message, $preparedParts)
+    {
+        try {
+            $structure = $message->structure;
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Error while fetching structure, could not process PGP part: ' . $zmpe);
+            $structure = null;
+        }
+        if (isset($structure['contentType']) && $structure['contentType'] == 'multipart/encrypted'
+            && isset($structure['parts'][1]['subType'])
+            && $structure['parts'][1]['subType'] == 'pgp-encrypted')
+        {
+            $identification = $this->getMessagePart($message, 1)->getContent();
+
+            if (strpos($identification, 'Version: 1') !== FALSE) {
+                $amored = $this->getMessagePart($message, 2)->getContent();
+
+                $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
+                    'id' => $message->getId() . '_2',
+                    'contentType' => 'application/pgp-encrypted',
+                    'preparedData' => $amored,
+                )));
+            }
+        }
     }
 
     /**
