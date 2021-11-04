@@ -102,6 +102,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
             $_monthlyWTR->working_time_correction;
 
         if (!$currentRecord->diff($_monthlyWTR)->isEmpty()) {
+            $_monthlyWTR->{HumanResources_Model_MonthlyWTReport::FLDS_LAST_CALCULATION} = Tinebase_DateTime::now();
             Tinebase_Timemachine_ModificationLog::getInstance()
                 ->setRecordMetaData($_monthlyWTR, self::ACTION_UPDATE, $currentRecord);
             $currentMods = $this->_writeModLog($_monthlyWTR, $currentRecord);
