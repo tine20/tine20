@@ -42,10 +42,13 @@ class Felamimail_Sieve_AdbList
                 $result .= 'if address :is :all "from" ["' . join('","', $this->_receiverList) . '"] {' . PHP_EOL;
             } else {
                 // only internal email addresses are allowed to mail!
-                if (empty($internalDomains = Tinebase_EmailUser::getAllowedDomains())) {
-                    throw new Tinebase_Exception_UnexpectedValue('allowed domains list is empty');
+                $internalDomains = Tinebase_EmailUser::getAllowedDomains();
+                if (! empty($internalDomains)) {
+                    $result .= 'if address :is :domain "from" ["' . join('","', $internalDomains) . '"] {' . PHP_EOL;
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                        __LINE__ . ' Allowed domains list is empty ... skipping domain check in sieve script.');
                 }
-                $result .= 'if address :is :domain "from" ["' . join('","', $internalDomains) . '"] {' . PHP_EOL;
             }
 
             $this->_addRecieverList($result);
