@@ -482,7 +482,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 'limit' => 1
             ]))->getFirstRecord();
         if ($lastReport) {
-            $time = ($lastReport->last_modified_time ?: $lastReport->creation_time)->getCLone()->subMinute(5);
+            $time = ($lastReport->{HumanResources_Model_MonthlyWTReport::FLDS_LAST_CALCULATION} ?: $lastReport->creation_time)->getCLone()->subMinute(5);
             if ($this->_employee->contracts->filter(function(HumanResources_Model_Contract $c) use($time) {
                         if ($c->last_modified_time && $c->last_modified_time->isLater($time)) return true;
                         return false;
@@ -521,7 +521,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
                 // check FreeTime
                 $filterData = [
-                    ['field' => 'account_id', 'operator' => 'equals', 'value' => $this->_employee->account_id],
+                    ['field' => 'employee_id', 'operator' => 'equals', 'value' => $this->_employee->getId()],
                     ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $start_date->format('Y-m-d')],
                     ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $this->_getEndDate()->format('Y-m-d')],
                 ];
