@@ -1424,6 +1424,13 @@ class Addressbook_Frontend_JsonTest extends TestCase
             ['field' => 'list_role_id', 'operator' => 'definedBy?condition=and&setOperator=oneOf', 'value' =>
                 [["field"=>":id","operator" =>"in","value"=>[]]]],
         ], []);
+
+        $listRoleArray = $this->testListRolesApi();
+        $result = $this->_uit->searchContacts([
+            ['field' => 'list_role_id', 'operator' => 'definedBy?condition=and&setOperator=oneOf', 'value' =>
+                [["field"=>":id","operator" =>"equals","value"=>$listRoleArray['id']]]],
+        ], []);
+        self::assertEquals(0, $result['totalcount']);
     }
 
     /**
@@ -2466,10 +2473,12 @@ Steuernummer 33/111/32212";
 
     /**
      * @see 0011578: add list roles to CoreData + Addressbook
+     *
+     * @return array
      */
     public function testListRolesApi()
     {
-        $this->_testSimpleRecordApi('ListRole');
+        return $this->_testSimpleRecordApi('ListRole');
     }
 
     /**
