@@ -242,6 +242,43 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/shared');
     }
 
+    public function testPutWithUrlencode()
+    {
+        $this->_skipIfLDAPBackend('FIXME: auth has a problem with LDAP backend');
+
+        $credentials = TestServer::getInstance()->getTestCredentials();
+
+        Tinebase_FileSystem::getInstance()->createAclNode('Filemanager/folders/shared/unittestdirectory');
+
+        $request = Tinebase_Http_Request::fromString(<<<EOS
+PUT /webdav/Filemanager/shared/unittestdirectory/aTestFile%25.test HTTP/1.1\r
+Host: localhost\r
+Content-Length: 8\r
+ Content-Type: application/octet-stream" \r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+\r
+abcdefgh
+EOS
+        );
+
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
+
+        ob_start();
+        $server = new Tinebase_Server_WebDAV();
+        $server->handle($request);
+        ob_end_clean();
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        static::assertSame('abcdefgh', file_get_contents(
+            'tine20://Filemanager/folders/shared/unittestdirectory/aTestFile%.test'));
+    }
+
     /**
      * test (UN)LOCK functionality of WebDAV
      * @group ServerTests
