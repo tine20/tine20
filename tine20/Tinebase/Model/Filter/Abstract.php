@@ -548,7 +548,7 @@ abstract class Tinebase_Model_Filter_Abstract
                 $didEscapeBS = false;
                 $firstIteration = false;
 
-                $result .= str_replace('*', '%', str_replace(['%', '|'], ['|%', '||'], $part));
+                $result .= str_replace('*', '%', str_replace(['|', '%'], ['||', '|%'], $part));
             }
             if ($wasBackSlash) {
                 $result .= '\\';
