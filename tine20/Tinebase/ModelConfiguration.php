@@ -961,6 +961,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     protected $_jsonExpander;
 
+    protected static $createdModels = [];
+
     /**
      * the constructor (must be called by the singleton pattern)
      *
@@ -1222,6 +1224,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     : $this->_applicationName;
                 if (Tinebase_Application::getInstance()->isInstalled($keyFieldAppName)) {
                     $appConfig = Tinebase_Config::getAppConfig($keyFieldAppName);
+                    $keyField = null;
                     if (!isset($fieldDef['name']) || ($appConfig && ! ($keyField =
                                 $appConfig->get($fieldDef['name'])) instanceof Tinebase_Config_KeyField)) {
                         throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
@@ -1366,6 +1369,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             ];
         }
         $this->_fieldKeys = array_keys($this->_fields);
+
+        self::$createdModels[] = $recordClass;
     }
 
     /**
@@ -2151,5 +2156,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public static function resetAvailableApps()
     {
         self::$_availableApplications = ['Tinebase' => true];
+    }
+
+    public static function resetAllCreatedModels()
+    {
+        /** @var Tinebase_Record_Interface $model */
+        foreach (self::$createdModels as $model)
+        {
+            $model::resetConfiguration();
+        }
+        self::$createdModels = [];
     }
 }

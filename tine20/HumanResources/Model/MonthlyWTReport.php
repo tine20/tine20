@@ -34,6 +34,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
     const FLDS_EMPLOYEE_ID                      = 'employee_id';
     const FLDS_DAILY_WT_REPORTS                 = 'dailywtreports';
     const FLDS_IS_CLEARED                       = 'is_cleared';
+    const FLDS_LAST_CALCULATION                 = 'last_calc';
     const FLDS_WORKING_TIME_ACTUAL              = 'working_time_actual';
     const FLDS_WORKING_TIME_TARGET              = 'working_time_target';
     const FLDS_WORKING_TIME_CORRECTION          = 'working_time_correction';
@@ -53,7 +54,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::RECORD_NAME               => 'Monthly Working Time Report',
         self::RECORDS_NAME              => 'Monthly Working Time Reports', // ngettext('Monthly Working Time Report', 'Monthly Working Time Reports', n)
         self::TITLE_PROPERTY            => self::FLDS_MONTH,
@@ -141,6 +142,13 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                     self::MODEL_NAME                    => HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
                     self::REF_ID_FIELD                  => HumanResources_Model_DailyWTReport::FLDS_MONTHLYWTREPORT,
                 ]
+            ],
+            self::FLDS_LAST_CALCULATION         => [
+                self::TYPE                          => self::TYPE_DATETIME,
+                self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             self::FLDS_WORKING_TIME_BALANCE_PREVIOUS => [
                 self::TYPE                          => self::TYPE_INTEGER,
