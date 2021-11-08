@@ -12,6 +12,7 @@ Ext.namespace('Tine.Felamimail');
 
 require('./SignatureGridPanel');
 require('./sieve/VacationPanel');
+import waitFor from "util/waitFor.es6";
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.AccountEditDialog
@@ -671,7 +672,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     checkState: function() {
                         this.setDisabled(! me.isSystemAccount());
                     }
-                }
+                }, this.sieveExploreScriptButton = new Ext.Button({
+                    text: this.app.i18n._('Explore Sieve script'),
+                    handler: async () => {
+                        await this.showSieveScriptWindow();
+                    },
+                    disabled: false
+                })
                 ]]
             }, {
                 title: this.app.i18n._('Other Settings'),
@@ -837,14 +844,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Tine.Felamimail.handleRequestException(exception);
         }
     },
-
+    
     showPasswordDialog: function(apply) {
         var me = this,
             dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
                 windowTitle: this.app.i18n._('E-Mail account needs a password')
             });
         dialog.openWindow();
-
+        
         // password entered
         dialog.on('apply', function (password) {
             me.getForm().findField('password').setValue(password);
@@ -852,6 +859,76 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 me.onApplyChanges(true);
             }
         });
+    },
+    
+    /**
+     * Show window for script reading
+     */
+    showSieveScriptWindow: async function () {
+        const script = await Tine.Admin.getSieveScript(this.record.data.id);
+        const windowTitle = this.app.i18n._('Explore Sieve script');
+        
+        const dialog = new Tine.Tinebase.dialog.Dialog({
+            items: [{
+                cls: 'x-ux-display-background-border',
+                xtype: 'ux.displaytextarea',
+                type: 'code/folding/mixed',
+                value: script,
+                listeners: {
+                    render: async (cmp) => {
+                        // wait ace editor 
+                        await waitFor(() => {
+                           return cmp.el.child('.ace_content');
+                        });
+
+                        cmp.el.setStyle({'overflow': null});
+                    }
+                },
+            }],
+            
+            initComponent: function() {
+                this.fbar = [
+                    '->',
+                    {
+                        text: i18n._('Ok'),
+                        minWidth: 70,
+                        ref: '../buttonApply',
+                        scope: this,
+                        handler: this.onButtonApply,
+                        iconCls: 'action_saveAndClose'
+                    }
+                ];
+                Tine.Tinebase.dialog.Dialog.superclass.initComponent.call(this);
+            },
+            
+            /**
+             * Creates a new pop up dialog/window (acc. configuration)
+             *
+             * @returns {null}
+             * TODO can we put this in the Tine.Tinebase.dialog.Dialog?
+             */
+            openWindow: function (config) {
+                if (this.window) {
+                    return this.window;
+                }
+                
+                config = config || {};
+                this.window = Tine.WindowFactory.getWindow(Ext.apply({
+                    resizable:false,
+                    title: windowTitle,
+                    closeAction: 'close',
+                    modal: true,
+                    width: 550 ,
+                    height: 400,
+                    items: [this],
+                    fbar: ['->']
+                }, config));
+            
+                return this.window;
+            },
+        });
+    
+        dialog.openWindow();
     },
 
     getGrantsColumns: function() {
