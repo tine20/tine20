@@ -1321,12 +1321,25 @@ class Tinebase_FileSystem implements
                     }
 
                     $node = $this->stat($_path, $_revision);
-                    $hashFile = $this->getRealPathForHash($node->hash);
-                    if (! file_exists($hashFile)) {
-                        return false;
+                    if (0 === (int)$node->size) {
+                        $handle = fopen('php://memory', 'r');
+                    } else {
+                        if (!$node->hash) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
+                                '::' . __LINE__ . ' no hash for node ' . $node->getId() . ' ' . $_path);
+                            $rollBack = false;
+                            return false;
+                        }
+                        $hashFile = $this->getRealPathForHash($node->hash);
+                        if (!is_file($hashFile) || !is_readable($hashFile)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
+                                '::' . __LINE__ . ' hash file ' . $hashFile . ' is not a file or not readable');
+                            $rollBack = false;
+                            return false;
+                        }
+                        $handle = fopen($hashFile, $_mode);
                     }
-                    $handle = fopen($hashFile, $_mode);
-
+                    
                     break;
 
                 // Open for writing only; place the file pointer at the beginning of the file and truncate the
