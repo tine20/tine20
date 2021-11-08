@@ -723,6 +723,20 @@ class Setup_Controller
 
         try {
             Tinebase_Model_Role::setIsReplicable(false);
+
+            $toDelete = [];
+            foreach ($roleController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Tinebase_Model_Role::class, [
+                        ['field' => 'name', 'operator' => 'startswith', 'value' => 'superUser']
+                    ])) as $role) {
+                if (strlen($role->name) === strlen('superUser') + 40) {
+                    $toDelete[] = $role->getId();
+                }
+            }
+            if (!emptY($toDelete)) {
+                $roleController->delete($toDelete);
+            }
+
             $this->_superUserRoleName = 'superUser' . Tinebase_Record_Abstract::generateUID();
             $superUserRole = new Tinebase_Model_Role(array(
                 'name' => $this->_superUserRoleName
