@@ -1827,6 +1827,25 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * get sieve rules for account
+     *
+     * @param  string $accountId
+     * @return string
+     */
+    public function getSieveScript($accountId)
+    {
+        $raii = Admin_Controller_EmailAccount::getInstance()->prepareAccountForSieveAdminAccess($accountId);
+        try {
+            $result = Felamimail_Controller_Sieve::getInstance()->getSieveScript($accountId);
+        } finally {
+            Admin_Controller_EmailAccount::getInstance()->removeSieveAdminAccess();
+        }
+//for unused variable check
+        unset($raii);
+        return $result->getSieve();
+    }
+
+    /**
      * set sieve rules for account
      *
      * @param   array $accountId

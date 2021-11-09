@@ -48,11 +48,15 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
                 $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                 ($row = $stmt->fetch()) &&
                 $row[0] == 1) {
+            $stmt->closeCursor();
             static::$mysqlLockId = $this->_lockId;
             $this->_isLocked = true;
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 .' Aquired lock: ' . $this->_lockId);
             return true;
+        }
+        if ($stmt) {
+            $stmt->closeCursor();
         }
         // TODO we could also log the lock user - "select is_used_lock($this->_lockId);"
         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -75,6 +79,8 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
         }
 
         $db = Tinebase_Core::getDb();
+
+        // ATTENTION use $stmt->closeCursor if you want to add logging (db logger......) below
         if (($stmt = $db->query('SELECT RELEASE_LOCK("' . $this->_lockId . '")')) &&
                 $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                 ($row = $stmt->fetch()) &&
