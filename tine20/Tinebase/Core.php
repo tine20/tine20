@@ -305,7 +305,9 @@ class Tinebase_Core
      */
     public static function isHttpsRequest()
     {
-        return (! empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF');
+        return (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') ||
+            (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+            || (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on');
     }
     
     /**

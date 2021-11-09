@@ -32,7 +32,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
     public function setCache(Tinebase_Model_CredentialCache $_cache)
     {
         $cacheId = $_cache->getCacheId();
-        setcookie(self::COOKIE_KEY, base64_encode(Zend_Json::encode($cacheId)));
+        setcookie(self::COOKIE_KEY, base64_encode(Zend_Json::encode($cacheId)), '', '', Tinebase_Core::isHttpsRequest());
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Set credential cache cookie.');
     }
@@ -68,8 +68,14 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
      */
     public function resetCache()
     {
-        setcookie(self::COOKIE_KEY, '', time() - 3600);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Reset credential cache cookie.');
+        if (headers_sent()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' Could not set cookie - headers already sent');
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Reset credential cache cookie.');
+            setcookie(self::COOKIE_KEY, '', time() - 3600, '', '', Tinebase_Core::isHttpsRequest());
+        }
     }
     
     /**
