@@ -667,6 +667,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             'metadata.sign.certificate' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['certificate'],
             'certificate' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['certificate'],
             'enable.saml20-idp' => true,
+            'logging.level' => -1,
         ], 'tine20'));
         \SimpleSAML\Configuration::setPreLoadedConfig(new \SimpleSAML\Configuration([
             'tine20' => [SSO_Facade_SAML_AuthSourceFactory::class]

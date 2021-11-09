@@ -94,8 +94,6 @@ class SSO_PublicAPITest extends TestCase
      */
     public function testSaml2LoginPage()
     {
-        self::markTestSkipped('FIXME: You need to run webpack-dev-server in dev mode!');
-
         $this->_createSAML2Config();
 
         $this->createSAMLRequest();
