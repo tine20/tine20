@@ -74,7 +74,11 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Reset credential cache cookie.');
+<<<<<<< HEAD
+            setcookie(self::COOKIE_KEY, '', time() - 3600);
+=======
             setcookie(self::COOKIE_KEY, '', time() - 3600, '', '', Tinebase_Core::isHttpsRequest());
+>>>>>>> 2020.11
         }
     }
     
