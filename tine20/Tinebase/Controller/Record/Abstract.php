@@ -2017,7 +2017,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * inspects delete action
      *
      * @param array $_ids
-     * @return RecordSet|string[] records to actually delete
+     * @return Tinebase_Record_RecordSet|array<string> records to actually delete
      */
     protected function _inspectDelete(array $_ids)
     {
