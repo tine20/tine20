@@ -144,6 +144,8 @@ class Filemanager_ControllerTests extends TestCase
             $node->{Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION} = array();
             $node = $fileManager->update($node);
             static::assertEquals(0, count($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // FIXME some test running before this might have removed the $personalFolderPath . '/' . $personalFolderName folder
         } finally {
             Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
         }
@@ -160,8 +162,12 @@ class Filemanager_ControllerTests extends TestCase
         $personalFolderPath .= sprintf($translation->_("/%s's personal files"), Tinebase_Core::getUser()->accountFullName);
         $fileManager = Filemanager_Controller_Node::getInstance();
 
-        $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
-        $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
+        try {
+            $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+            $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // FIXME some test running before this might have removed the $personalFolderPath folder
+        }
     }
 
     public function testCreateSharedTopLevelFolder()
