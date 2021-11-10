@@ -15,7 +15,11 @@
  *
  * @package     Felamimail
  * @subpackage  Backend
+ * @method addFlags($id, $flags)
+ * @method appendMessage($message, $folder = null, $flags = null)
  * @method getFolderStatus($globalName)
+ * @method getRawContent($id, $part = 'TEXT', $peek = false)
+ * @method selectFolder($globalName, $params=[])
  */
 class Felamimail_Backend_ImapProxy
 {
