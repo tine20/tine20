@@ -182,6 +182,9 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      */
     protected function _authenticate($_username, $_password, \Zend\Http\Request $request)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ActiveSync Authentication untransformed username: ' . $_username);
+
         $pos = strrchr($_username, '\\');
         
         if($pos !== false) {
