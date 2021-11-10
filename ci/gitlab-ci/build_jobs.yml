@@ -6,9 +6,6 @@
 # Gitlab currently dose not support needs in the same stage.
 # Therefore we need multiple build stages.
 
-include:
-  - local: '/ci/gitlab-ci/lib.yml'
-
 docker_build_base:
   extends: .abstract_jobs.docker
   stage: build0
