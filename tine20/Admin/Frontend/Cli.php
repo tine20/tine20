@@ -584,13 +584,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $updated = 0;
         foreach ($mailAccounts as $record) {
-            if (!$opts->d && $backend->sieveBackendSupportsMasterPassword($record)) {
-                $raii = $backend->prepareAccountForSieveAdminAccess($record->getId());
+            if (!$opts->d && Tinebase_EmailUser::sieveBackendSupportsMasterPassword($record)) {
+                $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($record->getId());
                 Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($record->getId(),
                     $record->sieve_notification_email);
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
-                $backend->removeSieveAdminAccess();
+                Tinebase_EmailUser::removeSieveAdminAccess();
                 unset($raii);
             }
             $updated++;
