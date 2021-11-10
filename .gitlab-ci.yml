@@ -19,6 +19,8 @@ include:
     # housekeeping jobs, jobs needed for the ci to work correctly
   - local: '/ci/gitlab-ci/housekeeping_jobs.yml'
   - local: '/ci/gitlab-ci/nodification_jobs.yml'
+  - local: '/ci/gitlab-ci/merge_jobs.yml'
+  - local: '/ci/gitlab-ci/lib.yml'
 
 variables:
   IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
@@ -33,6 +35,10 @@ stages:
   - housekeeping
   - housekeeping-cleanup
   - notify
+  - merge1
+  - merge2
+  - merge3
+  - merge4
 
 workflow:
   rules:
