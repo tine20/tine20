@@ -1,0 +1,46 @@
+.abstract.merge:
+  variables:
+    GIT_STRATEGY: none
+    MERGENONINTERACTIVE: "true" # "false" is also true! Runs not interactive if the variable exists.
+    pushOptSkipCi: "true" # "false" is also true! Runs not interactive if the variable exists.
+  image: ${UTIL_REGISTRY}/docker:19.03.1-r2 # dose not need docker. But the docker image should already exist on the runners.
+  needs: []
+  before_script:
+    - apk add git
+    - !reference [.lib, script]
+    - cp $DOCKER_GIT_CONFIG ~/.gitconfig
+    - git_repo_clone
+    - git config --global user.email "gitlabci@metaways.de"
+    - git config --global user.name "gitlabci"
+    - cd ${CI_BUILDS_DIR}
+    - git clone https://gitlab.metaways.net/tine20/tine20.git merge
+    - cd ${CI_BUILDS_DIR}/merge
+    - git config merge.pofile.name "merge po-files driver"
+    - git config merge.pofile.driver "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge-po-files %A %O %B"
+    - git config merge.pofile.recursive "binary"
+    - git remote add customers https://gitlab.metaways.net/tine20/tine20.git
+    - cd ${CI_BUILDS_DIR}/merge/tine20
+    
+.abstract.merge_on_source_image:
+  extends: .abstract.merge
+  image: ${REGISTRY}/test-source-commit:${IMAGE_TAG}
+  needs: 
+    - docker_build_source
+
+merge:
+  stage: merge1
+  extends: .abstract.merge
+  script:
+    - merge_merge_upwards 2019.11 2020.11
+    - merge_merge_upwards 2020.11 2021.11
+    - merge_merge_upwards 2021.11 2022.11
+  rules:
+    - if: $AUTO_MERGE == "never"
+      when: never
+    - if: $CI_COMMIT_REF_NAME == "2019.11" || $CI_COMMIT_REF_NAME == "2020.11" || $CI_COMMIT_REF_NAME == "2021.11"
+      variables:
+        AUTO_MERGE_VAR: "true"
+      when: on_success
+    - if: $AUTO_MERGE == "true"
+      when: on_success
+    - when: never
