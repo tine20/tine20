@@ -125,7 +125,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $flags = ($_flags !== null) ? (array)$_flags : null;
 
         $imapBackend = $this->_getBackendAndSelectFolder(NULL, $folder);
-        $imapBackend->appendMessage($message, $folder->globalname, $flags);
+        try {
+            $imapBackend->appendMessage($message, $folder->globalname, $flags);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            if ($zmse->getMessage() === 'cannot create message, please check if the folder exists and your flags') {
+                throw new Tinebase_Exception_NotFound('Folder ' . $folder->globalname . ' not found');
+            } else {
+                throw $zmse;
+            }
+        }
     }
 
     /**
