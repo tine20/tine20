@@ -192,7 +192,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
             if (!$_smtpSettings['id']) {
                 $row = $this->_getSelect()->where('userid = ?', $_smtpSettings['userid'])->query()
                     ->fetch(Zend_Db::FETCH_ASSOC);
-                $_smtpSettings['id'] = $row['id'];
+                $_smtpSettings['id'] = $row ? $row['id'] : null;
             }
         }
 

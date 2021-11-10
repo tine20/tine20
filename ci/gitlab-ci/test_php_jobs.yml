@@ -237,6 +237,7 @@
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
       when: on_success
     - when: never
+  allow_failure: true
 "php unit - nogitlabci tests - built - sequential":
   extends: .php-unit-nogitlabci-test-built
   variables:

@@ -178,37 +178,18 @@ class Addressbook_Controller_ListTest extends TestCase
     {
         $this->_skipIfXpropsUserIdDeactivated();
 
-        $this->_testNeedsTransaction();
-
-        if (empty(Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
-            Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
-        }
-        $domain = TestServer::getPrimaryMailDomain();
+        $list = $this->_createAdbMailingList();
+        $account = $this->_searchMailinglistAccount($list);
         $accountCtrl = Felamimail_Controller_Account::getInstance();
-        
-        $this->objects['initialList']->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
-        $this->objects['initialList']->email = 'testlist' . Tinebase_Record_Abstract::generateUID(8) .  '@' . $domain;
-
-        $list = $this->testAddList();
-        $this->_listsToDelete[] = $list;
-        $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Felamimail_Model_Account::class, [
-            ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
-            ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
-        ]))->getFirstRecord();
-        static::assertNotNull($account, 'could not get account');
-        static::assertSame($list->email, $account->name);
-
-        self::assertNotEmpty($account->xprops()[Addressbook_Model_List::XPROP_EMAIL_USERID_IMAP], 'xprops not set in list');
 
         // assert email user
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
         $userInBackend = $emailUserBackend->getRawUserById($emailUser);
         self::assertEquals($this->objects['initialList']->email, $userInBackend['loginname'], print_r($userInBackend, true));
-
+        
         // test change email
-        $list->email = 'shoo' . Tinebase_Record_Abstract::generateUID(8) .  '@' . $domain;
+        $list->email = 'shoo' . Tinebase_Record_Abstract::generateUID(8) .  '@' . TestServer::getPrimaryMailDomain();
         $this->_instance->update($list);
 
         $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
@@ -237,6 +218,37 @@ class Addressbook_Controller_ListTest extends TestCase
         self::assertFalse($userInBackend, print_r($userInBackend, true));
 
         return $list;
+    }
+
+    protected function _createAdbMailingList(): Addressbook_Model_List
+    {
+        $this->_testNeedsTransaction();
+
+        if (empty(Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY} = '...';
+        }
+
+        $this->objects['initialList']->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = 1;
+        $this->objects['initialList']->email = 'testlist' . Tinebase_Record_Abstract::generateUID(8) .  '@' . TestServer::getPrimaryMailDomain();
+
+        $list = $this->testAddList();
+        $this->_listsToDelete[] = $list;
+        return $list;
+    }
+
+    protected function _searchMailinglistAccount(Addressbook_Model_List $list): Felamimail_Model_Account
+    {
+        $accountCtrl = Felamimail_Controller_Account::getInstance();
+        $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
+            ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
+        ]))->getFirstRecord();
+        static::assertNotNull($account, 'could not get account');
+        static::assertSame($list->email, $account->name);
+
+        self::assertNotEmpty($account->xprops()[Addressbook_Model_List::XPROP_EMAIL_USERID_IMAP], 'xprops not set in list');
+        return $account;
     }
 
     public function testChangeListEmailToAlreadyUsed()
@@ -387,6 +399,30 @@ class Addressbook_Controller_ListTest extends TestCase
         $sieveRule = Felamimail_Sieve_AdbList::createFromList($list);
         self::assertStringContainsString($this->objects['contact2']->email, $sieveRule);
         self::assertStringContainsString($emailHomeContact->email_home, $sieveRule);
+    }
+
+    public function testListUpdateSieveMasterPW()
+    {
+        $this->_skipIfXpropsUserIdDeactivated();
+
+        $list = $this->_createAdbMailingList();
+        $account = $this->_searchMailinglistAccount($list);
+
+        Felamimail_Backend_SieveFactory::reset();
+
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
+        $emailUserBackend->inspectSetPassword($emailUser->getId(), 'somepw');
+
+        // update list (sieve script should be updatable via sieve master pw)
+        $list->members = [$this->_personas['sclever']->contact_id];
+
+        $updatedList = $this->_instance->update($list);
+        self::assertFalse(Felamimail_Sieve_AdbList::$adbListSieveAuthFailure, 'auth failure while trying to put sieve script');
+
+        $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($updatedList)->getSieve();
+        self::assertStringContainsString('reject "Your email has been rejected"', $script);
+        self::assertStringContainsString($this->_personas['sclever']->accountEmailAddress, $script);
     }
 
     public function testSearchForListMembersOfEmptyList()

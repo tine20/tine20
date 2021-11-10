@@ -10,6 +10,7 @@ stages:
   before_script:
     - apk add git
     - cp $DOCKER_GIT_CONFIG ~/.gitconfig
+    - cp $CI_BUILDS_DIR/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/repairMerge.php $CI_BUILDS_DIR/
     - git clone --branch gitlab https://gitlab.metaways.net/tine20/buildscripts.git $CI_BUILDS_DIR/tine20/buildscripts
     - git config --global user.email "gitlabci@metaways.de"
     - git config --global user.name "gitlabci"

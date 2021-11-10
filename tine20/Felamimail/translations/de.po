@@ -2033,3 +2033,6 @@ msgstr "Persönliche Konten hinzufügen"
 #: Acl/Rights.php:111
 msgid "Create new personal email accounts"
 msgstr "Neue persönliche Konten hinzufügen"
+
+msgid "Explore Sieve script"
+msgstr "Sieve-Skript anzeigen"
