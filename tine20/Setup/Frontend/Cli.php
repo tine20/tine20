@@ -529,9 +529,28 @@ class Setup_Frontend_Cli
             }
         }
         
+        if (in_array('Tinebase', $applications->name) && $_opts->removemailaccounts) {
+            $this->_removemailaccounts();
+        }
+        
         $uninstallCount = $controller->uninstallApplications($applications->name);
         
         echo "Successfully uninstalled " . $uninstallCount . " applications.\n";
+    }
+
+    protected function _removemailaccounts()
+    {
+        if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
+            echo "Deleting SMTP mailaccounts...\n";
+            $smtpBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+            $smtpBackend->deleteAllEmailUsers();
+        }
+
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            echo "Deleting IMAP mailaccounts...\n";
+            $imapBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $imapBackend->deleteAllEmailUsers();
+        }
     }
     
     /**

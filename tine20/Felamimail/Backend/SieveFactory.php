@@ -48,4 +48,15 @@ class Felamimail_Backend_SieveFactory
         
         return self::$_backends[$accountId];
     }
+
+    /**
+     * reset the factory backends
+     */
+    static public function reset()
+    {
+        foreach (self::$_backends as $backend) {
+            unset($backend);
+        }
+        self::$_backends = [];
+    }
 }

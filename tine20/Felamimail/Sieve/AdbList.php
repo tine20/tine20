@@ -23,6 +23,7 @@ class Felamimail_Sieve_AdbList
     protected $_keepCopy = false;
     protected $_forwardOnlySystem = false;
     protected $_receiverList = [];
+    public static $adbListSieveAuthFailure = false;
 
     public function __toString()
     {
@@ -153,16 +154,28 @@ class Felamimail_Sieve_AdbList
             throw new Tinebase_Exception_NotFound('account of list ' . $list->getId() . ' not found');
         }
 
+        if ($account instanceof Felamimail_Model_Account && Tinebase_EmailUser::sieveBackendSupportsMasterPassword($account)) {
+            $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($account->getId());
+        }
+
         $sieveRule = static::createFromList($list)->__toString();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
             __LINE__ . ' add sieve script: ' . $sieveRule);
 
-        Felamimail_Controller_Sieve::getInstance()->setAdbListScript($account,
-            Felamimail_Model_Sieve_ScriptPart::createFromString(
-                Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $list->getId(), $sieveRule));
+        try {
+            Felamimail_Controller_Sieve::getInstance()->setAdbListScript($account,
+                Felamimail_Model_Sieve_ScriptPart::createFromString(
+                    Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $list->getId(), $sieveRule));
+        } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                __LINE__ . ' ' . $fesic);
+            self::$adbListSieveAuthFailure = true;
+            throw $fesic;
+        }
 
         // for unused variable check only
+        Tinebase_EmailUser::removeSieveAdminAccess();
         unset($raii);
 
         return true;
@@ -171,8 +184,11 @@ class Felamimail_Sieve_AdbList
     static public function getSieveScriptForAdbList(Addressbook_Model_List $list)
     {
         $account = Felamimail_Controller_Account::getInstance()->getAccountForList($list);
+        
         if ($account) {
-            return Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+            $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+       
+            return $script;
         } else {
             return null;
         }
