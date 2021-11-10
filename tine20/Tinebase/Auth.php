@@ -247,12 +247,27 @@ class Tinebase_Auth
 
         if ($result->getCode() !== self::SUCCESS && Tinebase_Config::getInstance()
                 ->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} && $this->_backend->supportsAuthByEmail()) {
-            $backend = $this->_backend->getAuthByEmailBackend();
-            $backend->setIdentity($_username);
-            $backend->setCredential($_password);
-            $tmpResult = Zend_Auth::getInstance()->authenticate($backend);
-            if ($tmpResult->getCode() === self::SUCCESS) {
-                return $tmpResult;
+            if (strpos($_username, '@') === false) {
+                foreach (Tinebase_User::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        Tinebase_Model_FullUser::class, [
+                            ['field' => 'accountEmailAddress', 'operator' => 'startswith', 'value' => $_username . '@']
+                        ])) as $user) {
+                    try {
+                        $this->_backend->setIdentity($user->accountLoginName);
+                    } catch (Zend_Auth_Adapter_Exception $zaae) {}
+                    $tmpResult = Zend_Auth::getInstance()->authenticate($this->_backend);
+                    if ($tmpResult->getCode() === self::SUCCESS) {
+                        return $tmpResult;
+                    }
+                }
+            } else {
+                $backend = $this->_backend->getAuthByEmailBackend();
+                $backend->setIdentity($_username);
+                $backend->setCredential($_password);
+                $tmpResult = Zend_Auth::getInstance()->authenticate($backend);
+                if ($tmpResult->getCode() === self::SUCCESS) {
+                    return $tmpResult;
+                }
             }
         }
         
