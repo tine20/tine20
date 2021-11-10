@@ -59,6 +59,14 @@ class Admin_Config extends Tinebase_Config_Abstract
      */
     const QUOTA_ALLOW_TOTALINMB_MANAGEMNET = 'quotaAllowTotalInMBManagement';
 
+
+    /**
+     * FEATURE_PREVENT_APPS_DISABLE
+     *
+     * @var string
+     */
+    const FEATURE_PREVENT_APPS_DISABLE = 'featurePreventAppsDisable';
+
     /**
      * QUOTA_APPS_TO_SHOW
      * @var array
@@ -139,6 +147,12 @@ class Admin_Config extends Tinebase_Config_Abstract
                     //_('Force retype of new password in user edit dialog')
                     'description' => 'Force retype of new password in user edit dialog',
                 ),
+                self::FEATURE_PREVENT_APPS_DISABLE => [
+                    //_('Prevent applications disable in front end')
+                    self::LABEL              => 'Prevent applications disable',
+                    //_('Prevent applications disable in front end')
+                    self::DESCRIPTION        => 'Prevent applications disable in front end',
+                ],
             ),
             'default' => array(
                 self::FEATURE_PREVENT_SPECIAL_CHAR_LOGINNAME => false,
