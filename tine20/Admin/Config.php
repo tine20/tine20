@@ -74,6 +74,12 @@ class Admin_Config extends Tinebase_Config_Abstract
     const APPS_TO_SHOW = 'appsToShow';
 
     /**
+     * MODULES_TO_SHOW
+     * @var array
+     */
+    const MODULES_TO_SHOW = 'modulesToShow';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -83,6 +89,19 @@ class Admin_Config extends Tinebase_Config_Abstract
             self::LABEL                 => 'Apps to show',
             //_('Applications to show in quota, defaults null means all apps')
             self::DESCRIPTION           => 'Applications to show in quota management, default value null means all apps',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => null,
+        ],
+        self::MODULES_TO_SHOW => [
+            //_('Modules to show')
+            self::LABEL                 => 'Modules to show',
+            //_('Modules to show in admin app, default value null means all modules.
+            // Module name is the same as dataPanelType in Admin/js/Admin.js')
+            self::DESCRIPTION           => 'Modules to show in admin app, default value null means all modules. 
+                                            Module name is the same as dataPanelType in Admin/js/Admin.js',
             self::TYPE                  => self::TYPE_ARRAY,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,

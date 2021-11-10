@@ -23,7 +23,6 @@ Tine.Admin.init = function () {
      * builds the admin applications tree
      */
     var getInitialTree = function (translation) {
-        
         var _ = window.lodash,
             tree = [{
             text: translation.ngettext('User', 'Users', 50),
@@ -37,8 +36,9 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: 'accounts',
-            viewRight: 'accounts'
-        }, {
+            viewRight: 'accounts',
+            hidden: !Tine.Admin.showModule('accounts')
+    }, {
             text: translation.gettext('Groups'),
             cls: 'treemain',
             iconCls: 'tinebase-accounttype-group',
@@ -50,7 +50,8 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: 'groups', 
-            viewRight: 'accounts'
+            viewRight: 'accounts',
+            hidden: !Tine.Admin.showModule('groups')
         }, {
             text: translation.gettext('Roles'),
             cls: "treemain",
@@ -62,7 +63,8 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "roles",
-            viewRight: 'roles'
+            viewRight: 'roles',
+            hidden: !Tine.Admin.showModule('roles')
         }, {
             text: translation.gettext('Applications'),
             cls: "treemain",
@@ -75,7 +77,8 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "applications",
-            viewRight: 'apps'
+            viewRight: 'apps',
+            hidden: !Tine.Admin.showModule('applications')
         }, {
             text: translation.gettext('Containers'),
             cls: "treemain",
@@ -87,7 +90,8 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "containers",
-            viewRight: 'containers'
+            viewRight: 'containers',
+            hidden: !Tine.Admin.showModule('containers')
         }, {
             text: translation.gettext('Shared Tags'),
             cls: "treemain",
@@ -100,7 +104,8 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "sharedtags",
-            viewRight: 'shared_tags'
+            viewRight: 'shared_tags',
+            hidden: !Tine.Admin.showModule('sharedtags')
         }, {
             text: translation.gettext('Customfields'),
             cls: "treemain",
@@ -112,7 +117,8 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "customfields",
-            viewRight: 'customfields'
+            viewRight: 'customfields',
+            hidden: !Tine.Admin.showModule('customfields')
         }, {
             text: translation.gettext('Computers'),
             cls: 'treemain',
@@ -125,7 +131,7 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: 'computers',
-            hidden: ! Tine.Admin.registry.get('manageSAM'),
+            hidden: ! Tine.Admin.registry.get('manageSAM') || !Tine.Admin.showModule('computers'),
             viewRight: 'computers'
         }, {
             text: translation.gettext('Access Log'),
@@ -139,7 +145,8 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "accesslog",
-            viewRight: 'access_log'
+            viewRight: 'access_log',
+            hidden: !Tine.Admin.showModule('accesslog')
         }, {
             text: translation.gettext('Log'),
             cls: "treemain",
@@ -152,6 +159,7 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "logentries",
+            hidden: !Tine.Admin.showModule('logentries')
         },{
             text: translation.gettext('Server Information'),
             cls: "treemain",
@@ -163,7 +171,8 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "serverinfo",
-            viewRight: 'serverinfo'
+            viewRight: 'serverinfo',
+            hidden: !Tine.Admin.showModule('serverinfo')
         }];
         
         // TODO use hooking mechanism below
@@ -179,13 +188,13 @@ Tine.Admin.init = function () {
                 children: [],
                 leaf: null,
                 expanded: true,
-                dataPanelType: "devices"
+                dataPanelType: "devices",
+                hidden: !Tine.Admin.showModule('devices')
             });
         }
-
+        
         // TODO use hooking mechanism
-        if (Tine.Tinebase.appMgr.get('Felamimail')
-            && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')
+        if (Tine.Tinebase.appMgr.get('Felamimail') && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')
         ) {
             tree.push({
                 text: translation.gettext('E-mail Accounts'),
@@ -199,7 +208,8 @@ Tine.Admin.init = function () {
                 leaf: null,
                 expanded: true,
                 dataPanelType: "emailaccounts",
-                viewRight: 'emailaccounts'
+                viewRight: 'emailaccounts',
+                hidden: !Tine.Admin.showModule('emailaccounts')
             });
         }
 
@@ -218,6 +228,7 @@ Tine.Admin.init = function () {
                 leaf: null,
                 expanded: true,
                 dataPanelType: "importexportdefinitions",
+                hidden: !Tine.Admin.showModule('importexportdefinitions')
             });
         }
         
@@ -445,7 +456,14 @@ Tine.Admin.init = function () {
 
         return treePanel;
     };
+    
+    const showModule = function (moduleName) {
+        const modulesToShow = Tine.Tinebase.configManager.get('modulesToShow', 'Admin');
+        const isModuleIncluded = modulesToShow ? modulesToShow.includes(moduleName) : true;
+        return isModuleIncluded;
+    };
 
     Tine.Admin.registerItem = registerItem;
     Tine.Admin.getPanel = getAdminTree;
+    Tine.Admin.showModule = showModule;
 }();
