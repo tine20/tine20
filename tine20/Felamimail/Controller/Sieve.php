@@ -465,7 +465,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $this->_setSieveBackendAndAuthenticate($_accountId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Activate vacation SIEVE script ' . $this->_scriptName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Activate SIEVE script ' . $this->_scriptName);
         $this->_backend->setActive($this->_scriptName);
     }
     
