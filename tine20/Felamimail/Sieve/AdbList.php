@@ -156,6 +156,9 @@ class Felamimail_Sieve_AdbList
 
         if ($account instanceof Felamimail_Model_Account && Tinebase_EmailUser::sieveBackendSupportsMasterPassword($account)) {
             $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($account->getId());
+            $sieveAdminAccessActivated = true;
+        } else {
+            $sieveAdminAccessActivated = false;
         }
 
         $sieveRule = static::createFromList($list)->__toString();
@@ -174,8 +177,9 @@ class Felamimail_Sieve_AdbList
             throw $fesic;
         }
 
-        // for unused variable check only
-        Tinebase_EmailUser::removeSieveAdminAccess();
+        if ($sieveAdminAccessActivated) {
+            Tinebase_EmailUser::removeSieveAdminAccess();
+        }
         unset($raii);
 
         return true;
