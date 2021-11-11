@@ -20,6 +20,8 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
     public const MODEL_NAME_PART = 'Document_Customer';
     public const TABLE_NAME = 'sales_document_customer';
 
+    public const FLD_DOCUMENT_ID = 'document_id';
+
     /**
      * @param array $_definition
      */
@@ -34,9 +36,20 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
 
         $_definition[self::FIELDS]['delivery'][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_Address::MODEL_NAME_PART;
+        //unset($_definition[self::FIELDS]['delivery'][self::CONFIG][self::DEPENDENT_RECORDS]);
+        $_definition[self::FIELDS]['billing'][self::CONFIG][self::MODEL_NAME] =
+            Sales_Model_Document_Address::MODEL_NAME_PART;
+        //unset($_definition[self::FIELDS]['billing'][self::CONFIG][self::DEPENDENT_RECORDS]);
 
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Customer::class;
         $_definition[self::FIELDS][self::FLD_ORIGINAL_ID] = [
+            self::TYPE                  => self::TYPE_RECORD,
+            self::CONFIG                => [
+                self::APP_NAME              => Sales_Config::APP_NAME,
+                self::MODEL_NAME            => Sales_Model_Customer::MODEL_NAME_PART,
+            ],
+        ];
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
             self::TYPE                  => self::TYPE_RECORD,
             self::CONFIG                => [
                 self::APP_NAME              => Sales_Config::APP_NAME,

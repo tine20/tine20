@@ -157,6 +157,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Customer::MODEL_NAME_PART,
+                    self::REF_ID_FIELD          => Sales_Model_Document_Customer::FLD_DOCUMENT_ID,
                 ],
                 self::NULLABLE              => false, // only for offers this is nullable, by default its false
                 self::VALIDATORS            => [ // only for offers this is allow empty true, by default its false
@@ -164,43 +165,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
-            /*self::FLD_REFERENCE_DOCUMENT => [
-                // self::TYPE                      => self::TYPE_VIRTUAL, // @TODO nummerkreise sollen zentral confbar sein!!!
-                self::LABEL                     => 'Reference Document', //_('Document Number')
-                self::TYPE                      => self::TYPE_RECORD,
-                self::CONFIG                    => [
-                    self::AVAILABLE_MODELS              => [
-                    ],
-                ],
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-            ],
-
-//            self::FLD_CONFIG                    => [
-//                self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
-//                self::LABEL                         => 'MFA Device Config', // _('MFA Device Config')
-//                self::CONFIG                        => [
-//                    self::REF_MODEL_FIELD               => self::FLD_CONFIG_CLASS,
-//                ],
-//                self::VALIDATORS            => [
-//                    Zend_Filter_Input::ALLOW_EMPTY => false,
-//                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-//                ],
-//            ],
-            */
-            self::FLD_DOCUMENT_CATEGORY => [
-                self::LABEL                 => 'Category', // _('Category')
-                self::TYPE                  => self::TYPE_KEY_FIELD,
-                self::NAME                  => Sales_Config::DOCUMENT_CATEGORY,
-            ],
             self::FLD_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Recipient', //_('Recipient')
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
+                    self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING
                 ],
                 self::NULLABLE              => true,

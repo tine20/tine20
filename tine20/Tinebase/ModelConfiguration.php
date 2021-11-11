@@ -96,6 +96,7 @@
  * @property array      $copyOmitFields Collection of copy omit properties for frontend
  * @property array      $keyfieldFields
  * @property array      $jsonExpander
+ * @property array      $denormalizedFields
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -294,6 +295,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var boolean
      */
     protected $_modlogActive = NULL;
+
+    protected $_denormalizationOf = null;
 
     /**
      * If this is true, multiple edit of records of this model is possible.
@@ -572,6 +575,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
      */
     protected $_recordFields  = NULL;
+
+    protected $_denormalizedFields = null;
 
     /**
      * if this is set to true, related data will be fetched on fetching dependent records by frontend json
@@ -962,6 +967,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_jsonExpander;
 
     protected static $createdModels = [];
+
+    protected static $deNormalizationCache = [];
 
     /**
      * the constructor (must be called by the singleton pattern)
@@ -1648,7 +1655,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 break;
             case 'user':
                 $fieldDef['config'] = array(
-                    'refIdField'              => 'id',
                     'length'                  => 40,
                     'appName'                 => 'Tinebase',
                     'modelName'               => 'User',
@@ -1677,6 +1683,28 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     }
                     $fieldDef[self::CONFIG][self::RECORD_CLASS_NAME] = $this->_getPhpClassName($fieldDef[self::CONFIG]);
                 }
+                // resolve self or circular references
+                static::$deNormalizationCache[$this->_appName . '_Model_' . $this->_modelName] = $this->_denormalizationOf ?: false;
+                $deNormOf = null;
+                if (isset($fieldDef[self::CONFIG][self::IS_PARENT]) && $fieldDef[self::CONFIG][self::IS_PARENT]) {
+                    unset($fieldDef[self::CONFIG][self::DENORMALIZATION_OF]);
+                } elseif (isset(static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]])) {
+                    if (static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]]) {
+                        $deNormOf = $fieldDef[self::CONFIG][self::DENORMALIZATION_OF] = static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]];
+                    } else {
+                        unset($fieldDef[self::CONFIG][self::DENORMALIZATION_OF]);
+                    }
+                } elseif (($mc = $fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]::getConfiguration()) && $deNormOf = $mc->denormalizationOf) {
+                    $fieldDef[self::CONFIG][self::DENORMALIZATION_OF] = $deNormOf;
+                    static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]] = $deNormOf;
+                } else {
+                    unset($fieldDef[self::CONFIG][self::DENORMALIZATION_OF]);
+                    static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]] = false;
+                }
+                if ($deNormOf) {
+                    $fieldDef[self::CONFIG][self::DEPENDENT_RECORDS] = true;
+                    $fieldDef[self::DOCTRINE_IGNORE] = true;
+                }
                 $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
                 $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
                 $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
@@ -1692,6 +1720,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                             !isset($this->_converters[$fieldKey])) {
                         $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_JsonRecordSet()];
                     }
+                }
+                if ($deNormOf) {
+                    $this->_denormalizedFields[$fieldKey] = $fieldDef;
                 }
                 break;
             case self::TYPE_DYNAMIC_RECORD:
@@ -2175,5 +2206,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             $model::resetConfiguration();
         }
         self::$createdModels = [];
+        self::$deNormalizationCache = [];
     }
 }

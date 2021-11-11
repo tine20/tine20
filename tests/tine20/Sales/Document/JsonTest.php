@@ -56,6 +56,65 @@ class Sales_Document_JsonTest extends TestCase
         return $document;
     }
 
+    public function testOfferDocumentUpdate()
+    {
+        $document = Sales_Controller_Document_Offer::getInstance()->get($this->testOfferDocumentCustomerCopy(true)['id']);
+
+        $docExpander = new Tinebase_Record_Expander(Sales_Model_Document_Offer::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Document_Offer::FLD_CUSTOMER_ID => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'delivery' => [],
+                    ]
+                ]
+            ]
+        ]);
+        $docExpander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Offer::class, [$document]));
+
+        $deliveryAddress = $document->{Sales_Model_Document_Offer::FLD_CUSTOMER_ID}->delivery->getFirstRecord();
+        $oldDeliveryAddress = clone $deliveryAddress;
+        $deliveryAddress->name = 'other name';
+
+        $documentUpdated = $this->_instance->saveDocument_Offer($document->toArray(true));
+
+        $customer = $document->{Sales_Model_Document_Offer::FLD_CUSTOMER_ID};
+        $customerUpdated = Sales_Controller_Document_Customer::getInstance()->get($documentUpdated[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
+        $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'delivery' => [],
+            ]
+        ]);
+        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Customer::class, [$customerUpdated]));
+
+        $this->assertSame($customer->getId(), $customerUpdated->getId());
+        $this->assertSame($customer->delivery->getId(), $customerUpdated->delivery->getId());
+        $this->assertSame($oldDeliveryAddress->getId(), $customerUpdated->delivery->getFirstRecord()->getId());
+        $this->assertNotSame($oldDeliveryAddress->name, $customerUpdated->delivery->getFirstRecord()->name);
+        $this->assertSame('other name', $customer->delivery->getFirstRecord()->name);
+
+        $secondCustomer = $this->_createCustomer();
+        $document = Sales_Controller_Document_Offer::getInstance()->get($documentUpdated['id']);
+        $docExpander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Offer::class, [$document]));
+
+        $document->{Sales_Model_Document_Offer::FLD_CUSTOMER_ID}->delivery->getFirstRecord()->name = 'shoo';
+        $document->{Sales_Model_Document_Offer::FLD_CUSTOMER_ID}->delivery->addRecord(new Sales_Model_Document_Address($secondCustomer->delivery->getFirstRecord()->toArray()));
+
+        $documentUpdated = $this->_instance->saveDocument_Offer($document->toArray(true));
+        $customerUpdated = Sales_Controller_Document_Customer::getInstance()->get($documentUpdated[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
+        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Customer::class, [$customerUpdated]));
+
+        $this->assertSame(2, $customerUpdated->delivery->count());
+        foreach ($customerUpdated->delivery as $address) {
+            if ('shoo' === $address->name) {
+                $this->assertSame($oldDeliveryAddress->getId(), $address->getId());
+            } else {
+                $this->assertNotSame($oldDeliveryAddress->getId(), $address->getId());
+                $this->assertNotSame($secondCustomer->delivery->getFirstRecord()->getId(), $address->getId());
+                $this->assertSame($secondCustomer->delivery->getFirstRecord()->name, $address->name);
+            }
+        }
+    }
+
     public function testOfferDocumentPosition()
     {
         $subProduct = $this->_createProduct();

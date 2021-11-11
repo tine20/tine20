@@ -927,7 +927,73 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_inspectDenormalization($_record);
+    }
 
+    /**
+     * @param Tinebase_Record_Interface $newRecord
+     * @param Tinebase_Record_Interface|null $currentRecord
+     * @return void
+     */
+    protected function _inspectDenormalization(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $currentRecord = null)
+    {
+        if (null === ($mc = $newRecord::getConfiguration()) || !$mc->denormalizedFields) {
+            return;
+        }
+
+        if (null !== $currentRecord) {
+            $expander = new Tinebase_Record_Expander(get_class($currentRecord), [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => array_fill_keys(array_keys($mc->denormalizedFields), [])
+            ]);
+            $expander->expand(new Tinebase_Record_RecordSet(get_class($currentRecord), [$currentRecord]));
+        }
+
+        foreach ($mc->denormalizedFields as $property => $definition) {
+            if (TMCC::TYPE_RECORD === $definition[TMCC::TYPE]) {
+                if (null === $currentRecord) {
+                    if (null !== $newRecord->{$property}) {
+                        $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
+                    }
+                } else {
+                    if ($newRecord->{$property} instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
+                        if (null === $currentRecord->{$property} || $currentRecord->{$property}->getId() !== $newRecord->{$property}->getId()) {
+                            $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
+                        }
+                    }
+                }
+            } elseif (TMCC::TYPE_RECORDS === $definition[TMCC::TYPE]) {
+                if (null === $currentRecord) {
+                    if (null !== $newRecord->{$property}) {
+                        foreach($newRecord->{$property} as $rec) {
+                            $this->_newDenormalizedRecord($rec, $definition);
+                        }
+                    }
+                } else {
+                    if ($newRecord->{$property} instanceof Tinebase_Record_RecordSet) {
+                        /** @var Tinebase_Record_RecordSetDiff $diff */
+                        $diff = $currentRecord->{$property}->diff($newRecord->{$property});
+                        foreach ($diff->added as $addedRecord) {
+                            $this->_newDenormalizedRecord($addedRecord, $definition);
+                        }
+                    }
+                }
+            } else {
+                throw new Tinebase_Exception_Record_DefinitionFailure('property ' . $property . ' needs to be of type record[s]');
+            }
+        }
+    }
+
+    protected function _newDenormalizedRecord(Tinebase_Record_Interface $record, array $definition)
+    {
+        if (!$record instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
+            throw new Tinebase_Exception_UnexpectedValue('is not instance of ' .
+                $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
+        }
+        if (!$record->getId()) {
+            throw new Tinebase_Exception_UnexpectedValue('needs to have an id set');
+        }
+        $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
+        $record->setId(null);
     }
 
     /**
@@ -1593,6 +1659,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        $this->_inspectDenormalization($_record, $_oldRecord);
     }
 
     /**

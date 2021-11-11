@@ -20,6 +20,8 @@ class Sales_Model_Document_Address extends Sales_Model_Address
     public const MODEL_NAME_PART = 'Document_Address';
     public const TABLE_NAME = 'sales_document_address';
 
+    public const FLD_DOCUMENT_ID = 'document_id';
+
     /**
      * @param array $_definition
      */
@@ -39,6 +41,15 @@ class Sales_Model_Document_Address extends Sales_Model_Address
                 self::MODEL_NAME            => Sales_Model_Address::MODEL_NAME_PART,
             ],
         ];
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
+            self::TYPE                  => self::TYPE_RECORD,
+            self::NULLABLE              => true,
+            self::CONFIG                => [
+                self::APP_NAME              => Sales_Config::APP_NAME,
+                self::MODEL_NAME            => Sales_Model_Customer::MODEL_NAME_PART,
+            ],
+        ];
+        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::CONFIG][self::MODEL_NAME] = Sales_Model_Document_Customer::MODEL_NAME_PART;
     }
 
     /**

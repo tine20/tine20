@@ -108,6 +108,7 @@ class Tinebase_ModelConfiguration_Const {
     const INDEXES = 'indexes';
     const INPUT_FILTERS = 'inputFilters';
     const IS_DEPENDENT = 'isDependent';
+    const IS_PARENT = 'isParent';
     const IS_VIRTUAL = 'isVirtual';
 
     const JOIN_COLUMNS = 'joinColumns';

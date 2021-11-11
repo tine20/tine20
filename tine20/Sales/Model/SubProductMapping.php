@@ -126,7 +126,6 @@ class Sales_Model_SubProductMapping extends Tinebase_Record_NewAbstract
                 self::LABEL                     => 'Shortcut', // _('Shortcut')
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 25,
-                self::NULLABLE                  => true,
 //                self::VALIDATORS                => [
 //                    Zend_Filter_Input::ALLOW_EMPTY  => true,
 //                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
