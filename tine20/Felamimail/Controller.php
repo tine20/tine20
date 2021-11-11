@@ -83,8 +83,13 @@ class Felamimail_Controller extends Tinebase_Controller_Event
         switch (get_class($_eventObject)) {
             case Tinebase_Event_User_ChangeCredentialCache::class:
                 /** @var Tinebase_Event_User_ChangeCredentialCache $_eventObject */
-                Felamimail_Controller_Account::getInstance()
-                    ->updateCredentialsOfAllUserAccounts($_eventObject->oldCredentialCache);
+                if ($_eventObject->oldCredentialCache) {
+                    Felamimail_Controller_Account::getInstance()
+                        ->updateCredentialsOfAllUserAccounts($_eventObject->oldCredentialCache);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()
+                        ->warn(__METHOD__ . '::' . __LINE__ . ' Did not get a valid oldCredentialCache');
+                }
                 break;
             case Admin_Event_AddAccount::class:
                 /** @var Tinebase_Event_User_CreatedAccount $_eventObject */
