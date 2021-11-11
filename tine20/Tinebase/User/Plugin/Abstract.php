@@ -183,6 +183,16 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         }
     }
 
+    /**
+     * delete all email users
+     *
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function deleteAllEmailUsers()
+    {
+        throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
+    }
+
     public static function disconnectDbConnections()
     {
         /** @var Zend_Db_Adapter_Abstract $con */

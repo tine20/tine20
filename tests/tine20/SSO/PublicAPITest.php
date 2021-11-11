@@ -100,7 +100,15 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::unsetUser();
         Tinebase_Session::getSessionNamespace()->unsetAll();
 
-        $response = SSO_Controller::publicSaml2RedirectRequest();
+        try {
+            $response = SSO_Controller::publicSaml2RedirectRequest();
+        } catch (Exception $e) {
+            if (preg_match('/You need to run webpack-dev-server in dev mode/', $e->getMessage())) {
+                self::markTestSkipped('only working with frontend available');
+            } else {
+                throw $e;
+            }
+        }
         $response->getBody()->rewind();
 
         $this->assertSame(200, $response->getStatusCode());
