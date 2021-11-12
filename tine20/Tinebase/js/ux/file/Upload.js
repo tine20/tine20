@@ -652,6 +652,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     getProgress: function () {
         return this.uploadProgress;
     },
+    
+    getTotalUploadByte() {
+        this.totalUploadByte = this.fileSize * this.uploadProgress / 100 ;
+        return this.totalUploadByte;
+    },
 
     /**
      * slices the given file

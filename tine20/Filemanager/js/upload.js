@@ -37,6 +37,7 @@ async function upload(targetFolderPath, files) {
 async function createTasks(targetFolderPath, files) {
     // try to generate the id here which is used for grid update
     const taskIDs = [];
+    let fileTasks = [];
     
     try {
         files = resolvePaths(targetFolderPath, files);
@@ -57,11 +58,14 @@ async function createTasks(targetFolderPath, files) {
                 }
 
                 const filesUpload = getFilesToUpload(files, folder);
-                await createUploadFileTasks(filesUpload, taskIDs, existFileList);
+                const tasks = await createUploadFileTasks(filesUpload, taskIDs, existFileList);
+                fileTasks = _.concat(fileTasks, tasks);
                 
                 return Promise.resolve();
             })
         }, Promise.resolve());
+        
+        await Tine.Tinebase.uploadManager.queueUploads(fileTasks);
         
         return taskIDs;
     } catch (e) {
@@ -105,6 +109,7 @@ async function createFolderTask(targetFolderPath, folder, taskIDs, existFileList
         tag: 'folder',
         label: uploadId,
         dependencies: getTaskDependencies(taskIDs, folder),
+        status: nodeData.status,
         args: _.assign({
             uploadId,
             nodeData,
@@ -129,9 +134,9 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
     const tasks = [];
     
     await _.reduce(filesToUpload, async (prev, file) => {
-        const fileObject = _.get(file, 'fileObject');
-        const uploadId = _.get(file, 'uploadId');
-        const folder = _.get(file, 'fullPath').replace(_.get(file, 'name'), '');
+        const fileObject = file.fileObject;
+        const uploadId = file.uploadId;
+        const folder = file.fullPath.replace(file.name, '');
         const [existNode] = _.filter(existFileList, {path: uploadId});
 
         const nodeData = Tine.Filemanager.Model.Node.getDefaultData({
@@ -139,30 +144,35 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
             type: 'file',
             status: 'pending',
             path: `${uploadId}`,
+            size: _.get(file, 'size'),
             progress: 0,
             contenttype: `vnd.adobe.partial-upload; final_type=${_.get(file, 'type')}`,
             id: Tine.Tinebase.data.Record.generateUID()
         });
+    
+        nodeData.last_upload_time = nodeData.creation_time;
         
-        if (!existNode) {
-            window.postal.publish({
-                channel: "recordchange",
-                topic: 'Filemanager.Node.create',
-                data: nodeData
-            });
-        }
+        // monitor UI needs every file node , grid panel will filter itself
+        window.postal.publish({
+            channel: "recordchange",
+            topic: 'Filemanager.Node.create',
+            data: nodeData
+        });
+        
 
         const task = {
             handler: "FilemanagerUploadFileTask",
             tag: 'file',
             label: uploadId,
             dependencies: getTaskDependencies(taskIDs, folder),
+            status: nodeData.status,
             args: _.assign({
                 batchID: file.batchID,
                 overwrite: false,
                 uploadId, 
                 fileObject,
                 nodeData,
+                fileSize: fileObject.size,
                 existNodeId: existNode ? existNode.id : nodeData.id,
             })
         };
@@ -170,8 +180,8 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
         tasks.push(task);
         return Promise.resolve();
     }, Promise.resolve());
-
-    await Tine.Tinebase.uploadManager.queueUploads(tasks);
+    
+    return tasks;
 }
 
 /**
@@ -182,6 +192,7 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
  */
 function resolvePaths(targetFolderPath, files) {
     return _.map(files, (fo) => {
+        fo.fullPath.replace(/(\/ | \/)/, '/');
         fo.fullPath = ! _.startsWith(fo.fullPath, '/') ? `/${fo.fullPath}` : fo.fullPath;
         return _.set(fo, 'uploadId', `${targetFolderPath}${fo.fullPath.slice(1)}`);
     })
