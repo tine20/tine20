@@ -647,13 +647,21 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     $tmp = array(&$resultSet);
                 }
                 foreach($tmp as &$rS) {
+                    if ('relations' === $field['type']) {
+                        $rS[$field['key']] = [];
+                    }
                     $fc = $field['config'];
                     if (isset($rS['relations']) && (is_array($rS['relations'])
                             || $rS['relations'] instanceof Tinebase_Record_RecordSet)) {
                         foreach ($rS['relations'] as $relation) {
                             if ($relation['type'] === $fc['type'] && $relation['related_model'] === $fc['appName'] .
                                     '_Model_' . $fc['modelName'] && isset($relation['related_record'])) {
-                                $rS[$field['key']] = $relation['related_record'];
+                                if ('relations' === $field['type']) {
+                                    $rS[$field['key']][] = $relation['related_record'];
+                                } else {
+                                    $rS[$field['key']] = $relation['related_record'];
+                                    break;
+                                }
                             }
                         }
                     }

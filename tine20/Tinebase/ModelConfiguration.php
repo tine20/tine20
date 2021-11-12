@@ -1964,9 +1964,17 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
         foreach ($_records as $record) {
             $fc = $_field['config']['config'];
+            if (self::TYPE_RELATIONS === $_field['config'][self::TYPE]) {
+                $record[$_field['key']] = new Tinebase_Record_RecordSet($fc['appName'] . '_Model_' . $fc['modelName']);
+            }
             foreach ($record->relations as $relation) {
                 if (($relation[self::TYPE] == $fc[self::TYPE]) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
-                    $record[$_field['key']] = $relation['related_record'];
+                    if (self::TYPE_RELATIONS === $_field['config'][self::TYPE]) {
+                        $record[$_field['key']]->addRecord($relation['related_record']);
+                    } else {
+                        $record[$_field['key']] = $relation['related_record'];
+                        break;
+                    }
                 }
             }
         }
