@@ -737,6 +737,15 @@ msgstr "Ordner mit dem Namen ist bereits vorhanden!"
 msgid "Upload Folder"
 msgstr "Ordner Hochladen"
 
+msgid "Stop and Clear All Uploads"
+msgstr "Alle Uploads stoppen und löschen"
+
+msgid "Uploads Monitor"
+msgstr "Uploads Fortschritt"
+
+msgid "Total Uploads : "
+msgstr "Gesamt-Uploads : "
+
 #~ msgid "Default behavior when double-clicking on a Row"
 #~ msgstr "Standardverhalten beim Doppelklicken auf eine Zeile"
 

@@ -172,9 +172,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onRecordChanges: function(data, e) {
         const existingRecord = this.getRecordByData(data);
 
-        if (e.topic.match(/\.create/) || e.topic.match(/\.update/)) {
+        if (!existingRecord && e.topic.match(/\.create/)) {
             this.onUpdateGridPanel(data);
-        }else if (existingRecord && e.topic.match(/\.delete/)) {
+        } else if (e.topic.match(/\.update/)) {
+            this.onUpdateGridPanel(data);
+        } else if (existingRecord && e.topic.match(/\.delete/)) {
             this.store.remove(existingRecord);
         } else {
             if (this.isInCurrentGrid(_.get(data, 'path'))) {
@@ -193,8 +195,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {String|Tine.Tinebase.data.Record} record
      * @param {String} mode
      */
-    onUpdateGridPanel: function(record, mode) {
-        if (! this.rendered) {
+    onUpdateGridPanel: function (record, mode) {
+        if (!this.rendered) {
+            return;
+        }
+    
+        if (record.status === 'failed') {
             return;
         }
 
@@ -207,7 +213,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (record && Ext.isFunction(record.copy)) {
             const store = this.getStore();
             let isSelected = false;
-            
+
             if (existingRecord) {
                 const idx = store.indexOf(existingRecord);
                 isSelected = this.getGrid().getSelectionModel().isSelected(idx);
@@ -218,7 +224,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             } else {
                 return;
             }
-            
+
             // sort new/edited record
             store.remoteSort = false;
             store.sort(
@@ -226,7 +232,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 _.get(store, 'sortInfo.direction', 'ASC')
             );
             store.remoteSort = this.storeRemoteSort;
-            
+
             if (isSelected) {
                 this.getGrid().getSelectionModel().selectRow(store.indexOfId(record.id), true);
             }
@@ -963,7 +969,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const gridStore = this.store;
         let rowIndex = false;
         let nodeRecord = null;
-        this.targetFolderPath = targetNode.attributes ? targetNode.attributes.path : _.get(targetNode, 'path');
+        this.targetFolderPath = targetNode?.attributes ? targetNode.attributes.path : _.get(targetNode, 'path');
 
         if(event && event.getTarget()) {
             rowIndex = this.getView().findRowIndex(event.getTarget());

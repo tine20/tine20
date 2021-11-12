@@ -147,7 +147,7 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
     handleApplyAll: async function (button) {
         if (this.applyToAll || button === 'stop') {
             if (button === 'skip' || button === 'stop') {
-                await Tine.Tinebase.uploadManager.removeBatchUploads(this.batchID);
+                await Tine.Tinebase.uploadManager.stopBatchUploads(this.batchID);
             }
 
             if (button === 'replace') {
