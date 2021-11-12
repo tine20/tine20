@@ -37,6 +37,8 @@ var lodash = require('lodash');
 var director = require('director');
 
 require('./ux/util/screenshot');
+require('./ux/file/UploadManagerUI');
+require ('./UploadmanagerStatusButton');
 
 module.exports = {
     director: director,

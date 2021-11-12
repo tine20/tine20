@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @package     Tine
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -114,13 +114,13 @@ Tine.Tinebase.tineInit = {
      * @cfg {String} requestUrl
      */
     requestUrl: 'index.php',
-    
+
     /**
      * prefix for localStorage keys
      * @type String
      */
     lsPrefix: Tine.Tinebase.common.getUrl('path') + 'Tine',
-    
+
     onPreferenceChangeRegistered: false,
 
     initCustomJS: function() {
@@ -153,7 +153,7 @@ Tine.Tinebase.tineInit = {
                     centerPanel = app ? app.getMainScreen().getCenterPanel() : null,
                     grid = centerPanel && Ext.isFunction(centerPanel.getGrid) ? centerPanel.getGrid() : null,
                     sm = grid ? grid.getSelectionModel() : null;
-                
+
                 if (grid) {
                     if (e.getKey() === e.ESC && sm) {
                         sm.selectFirstRow();
@@ -164,7 +164,7 @@ Tine.Tinebase.tineInit = {
                 }
             }
         });
-        
+
         // disable generic drops
         Ext.getBody().on('dragover', function (e) {
             e.stopPropagation();
@@ -281,7 +281,7 @@ Tine.Tinebase.tineInit = {
             Tine.log.debug( "ID: " + postal.instanceId() + " " + JSON.stringify( e, null, 4 ) );
         } );
     },
-    
+
     initDebugConsole: function () {
         var map = new Ext.KeyMap(Ext.getDoc(), [{
             key: [122], // F11
@@ -293,7 +293,7 @@ Tine.Tinebase.tineInit = {
     /**
      * Each window has exactly one viewport containing a card layout in its lifetime
      * The default card is a splash screen.
-     * 
+     *
      * default wait panel (picture only no string!)
      */
     initBootSplash: function () {
@@ -343,7 +343,7 @@ Tine.Tinebase.tineInit = {
             cb.call(scope||window, response);
         };
     },
-    
+
     async getEmailContextMenu(target, email) {
         // store click position, make sure menuItem diaplay around the link
         if (Tine.Addressbook) {
@@ -417,13 +417,13 @@ Tine.Tinebase.tineInit = {
 
         return this.contextMenu;
     },
-    
+
     contactHandler(target, record) {
         // check if addressbook app is available
         if (! Tine.Tinebase.common.hasRight('run', 'Addressbook')) {
             return;
         }
-        
+
         Tine.Addressbook.ContactEditDialog.openWindow({
             record: record,
             listeners: {
@@ -437,7 +437,7 @@ Tine.Tinebase.tineInit = {
                             editdlg.record.set('email', contactInfo.replace('mailto:', ''));
                         } else {
                             const parts = contactInfo.split(':');
-                            
+
                             editdlg.record.set('email', parts[1]);
                             editdlg.record.set('n_given', parts[2]);
                             editdlg.record.set('n_family', parts[3]);
@@ -496,7 +496,7 @@ Tine.Tinebase.tineInit = {
                     Tine.Tinebase.tineInit.renderWindow();
                 });
             });
-            
+
             return;
         } else {
             var sessionLifeTime = Tine.Tinebase.registry.get('sessionLifeTime') || 86400,
@@ -548,11 +548,11 @@ Tine.Tinebase.tineInit = {
     initAjax: function () {
         Ext.Ajax.url = Tine.Tinebase.tineInit.requestUrl;
         Ext.Ajax.method = 'POST';
-        
+
         Ext.Ajax.defaultHeaders = {
             'X-Tine20-Request-Type' : 'JSON'
         };
-        
+
         Ext.Ajax.transactions = {};
 
         Tine.Tinebase.tineInit.jsonKeyCookieProvider = new Ext.ux.util.Cookie({
@@ -561,12 +561,12 @@ Tine.Tinebase.tineInit = {
 
         /**
          * inspect all requests done via the ajax singleton
-         * 
+         *
          * - send custom headers
-         * - send json key 
+         * - send json key
          * - implicitly transform non jsonrpc requests
-         * 
-         * NOTE: implicitly transformed reqeusts get their callback fn's proxied 
+         *
+         * NOTE: implicitly transformed reqeusts get their callback fn's proxied
          *       through generic response inspectors as defined below
          */
         Ext.Ajax.on('beforerequest', function (connection, options) {
@@ -594,13 +594,13 @@ Tine.Tinebase.tineInit = {
             }
 
             options.url = Ext.urlAppend((options.url ? options.url : Tine.Tinebase.tineInit.requestUrl),  'transactionid=' + options.headers['X-Tine20-TransactionId']);
-            
+
             // convert non Ext.Direct request to jsonrpc
             // - convert params
             // - convert error handling
             if (options.params && !options.isUpload) {
                 var params = {};
-                
+
                 var def = Tine.Tinebase.registry.get('serviceMap') ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
                 if (def) {
                     // sort parms according to def
@@ -615,26 +615,26 @@ Tine.Tinebase.tineInit = {
                         }
                     }
                 }
-                
+
                 options.jsonData = Ext.encode({
                     jsonrpc: '2.0',
                     method: options.params.method,
                     params: params,
                     id: ++Ext.Direct.TID
                 });
-                
+
                 options.cbs = {};
                 options.cbs.success  = options.success  || null;
                 options.cbs.failure  = options.failure  || null;
                 options.cbs.callback = options.callback || null;
-                
+
                 options.isImplicitJsonRpc = true;
                 delete options.params;
                 delete options.success;
                 delete options.failure;
                 delete options.callback;
             }
-            
+
             Ext.Ajax.transactions[options.headers['X-Tine20-TransactionId']] = {
                 date: new Date(),
                 json: options.jsonData
@@ -642,25 +642,25 @@ Tine.Tinebase.tineInit = {
         });
 
 
-        
+
         /**
          * inspect completed responses => staus code == 200
-         * 
+         *
          * - detect resoponse errors (e.g. html from xdebug) and convert to exceptional states
          * - implicitly transform requests from JSONRPC
-         * 
+         *
          *  NOTE: All programatically catchable exceptions lead to successfull requests
-         *        with the jsonprc protocol. For implicitly converted jsonprc requests we 
-         *        transform error states here and route them to the error methods defined 
+         *        with the jsonprc protocol. For implicitly converted jsonprc requests we
+         *        transform error states here and route them to the error methods defined
          *        in the request options
-         *        
+         *
          *  NOTE: Illegal json data responses are mapped to error code 530
          *        Empty resonses (Ext.Decode can't deal with them) are maped to 540
          *        Memory exhausted to 550
          */
         Ext.Ajax.on('requestcomplete', function (connection, response, options) {
             delete Ext.Ajax.transactions[options.headers['X-Tine20-TransactionId']];
-            
+
             // detect resoponse errors (e.g. html from xdebug) and convert into error response
             if (! options.isUpload && ! response.responseText.match(/^([{\[])|(<\?xml)+/)) {
                 var exception = {
@@ -670,15 +670,15 @@ Tine.Tinebase.tineInit = {
                     request: options.jsonData,
                     response: response.responseText
                 };
-                
-                // Fatal error: Allowed memory size of n bytes exhausted (tried to allocate m bytes) 
+
+                // Fatal error: Allowed memory size of n bytes exhausted (tried to allocate m bytes)
                 if (response.responseText.match(/^Fatal error: Allowed memory size of /m)) {
                     Ext.apply(exception, {
                         code: 550,
                         message: response.responseText
                     });
                 }
-                
+
                 // encapsulate as jsonrpc response
                 var requestOptions = Ext.decode(options.jsonData);
                 response.responseText = Ext.encode({
@@ -691,13 +691,13 @@ Tine.Tinebase.tineInit = {
                     }
                 });
             }
-            
+
             // strip jsonrpc fragments for non Ext.Direct requests
             if (options.isImplicitJsonRpc) {
                 var jsonrpc = Ext.decode(response.responseText);
                 if (jsonrpc.result) {
                     response.responseText = Ext.encode(jsonrpc.result);
-                    
+
                     if (options.cbs.success) {
                         options.cbs.success.call(options.scope, response, options);
                     }
@@ -705,31 +705,31 @@ Tine.Tinebase.tineInit = {
                         options.cbs.callback.call(options.scope, options, true, response);
                     }
                 } else {
-                    
+
                     response.responseText = Ext.encode(jsonrpc.error);
-                    
+
                     if (options.cbs.failure) {
                         options.cbs.failure.call(options.scope, response, options);
                     } else if (options.cbs.callback) {
                         options.cbs.callback.call(options.scope, options, false, response);
                     } else {
                         var responseData = Ext.decode(response.responseText);
-                            
+
                         exception = responseData.data ? responseData.data : responseData;
                         exception.request = options.jsonData;
                         exception.response = response.responseText;
-                        
+
                         Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                     }
                 }
             }
         });
-        
+
         /**
          * inspect request exceptions
          *  - convert to jsonrpc compatiple exceptional states
          *  - call generic exception handler if no handler is defined in request options
-         *  
+         *
          * NOTE: Request exceptions are exceptional state from web-server:
          *       -> status codes != 200 : This kind of exceptions are not part of the jsonrpc protocol
          *       -> timeouts: status code 520
@@ -739,7 +739,7 @@ Tine.Tinebase.tineInit = {
             // map connection errors to errorcode 510 and timeouts to 520
             var errorCode = response.status > 0 ? response.status :
                             (response.status === 0 ? 510 : 520);
-                            
+
             // convert into error response
             if (! options.isUpload) {
                 var exception = {
@@ -751,7 +751,7 @@ Tine.Tinebase.tineInit = {
                     openTransactions: Ext.Ajax.transactions,
                     response: response.responseText
                 };
-                
+
                 // encapsulate as jsonrpc response
                 var requestOptions = _.isString(options.jsonData) ? Ext.decode(options.jsonData) : options.jsonData;
                 response.responseText = Ext.encode({
@@ -764,25 +764,25 @@ Tine.Tinebase.tineInit = {
                     }
                 });
             }
-            
+
             // NOTE: Tine.data.RecordProxy is implicitRPC atm.
             if (options.isImplicitJsonRpc) {
                 var jsonrpc = Ext.decode(response.responseText);
-                
+
                 response.responseText = Ext.encode(jsonrpc.error);
-                    
+
                 if (options.cbs.failure) {
                     options.cbs.failure.call(options.scope, response, options);
                 } else if (options.cbs.callback) {
                     options.cbs.callback.call(options.scope, options, false, response);
                 } else {
                     var responseData = Ext.decode(response.responseText);
-                    
+
                     exception = responseData.data ? responseData.data : responseData;
-                    
+
                     Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 }
-                
+
             } else if (! options.failure && ! options.callback) {
                 Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
             }
@@ -892,7 +892,7 @@ Tine.Tinebase.tineInit = {
      * apply registry data
      */
     onRegistryLoad: function() {
-        if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered 
+        if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered
             && Tine.Tinebase.registry.get('preferences')
             && Tine.Tinebase.registry.get('currentAccount')
         ) {
@@ -1051,7 +1051,7 @@ Tine.Tinebase.tineInit = {
         if (Tine.Tinebase.tineInit.isReloading) {
             return;
         }
-        
+
         switch (key) {
             case 'windowtype':
             case 'confirmLogout':
@@ -1065,7 +1065,7 @@ Tine.Tinebase.tineInit = {
                 break;
         }
     },
-    
+
     /**
      * initialise window and windowMgr (only popup atm.)
      */
@@ -1174,13 +1174,13 @@ Tine.Tinebase.tineInit = {
             }
         }
     },
-    
+
     /**
      * add provider to Ext.Direct based on Tine servicemap
      */
     initExtDirect: function () {
         var sam = Tine.Tinebase.registry.get('serviceMap');
-        
+
         Ext.Direct.addProvider(Ext.apply(sam, {
             'type'     : 'jsonrpcprovider',
             'namespace': 'Tine',
@@ -1199,15 +1199,19 @@ Tine.Tinebase.tineInit = {
             Tine.Tinebase.appMgr = new Tine.Tinebase.AppManager();
         }
     },
-    
+
     /**
      * initialise upload manager
      */
     initUploadMgr: function () {
-        Tine.Tinebase.uploadManager = new Ext.ux.file.UploadManager();
-        Tine.Tinebase.uploadManager.InitChannels();
+        if (! window.isMainWindow) {
+            Tine.Tinebase.uploadManager = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.uploadManager;
+        } else {
+            Tine.Tinebase.uploadManager = new Ext.ux.file.UploadManager();
+            Tine.Tinebase.uploadManager.InitChannels();
+        }
     },
-    
+
     /**
      * config locales
      */

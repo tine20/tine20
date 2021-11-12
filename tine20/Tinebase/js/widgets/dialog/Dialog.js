@@ -63,8 +63,8 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
         if (! this.appName && this.app) {
             this.appName = this.app.name;
         }
-
-        this.fbar = ['->', {
+        
+        this.fbar = this.fbar ?? ['->', {
             text: this.cancelButtonText ? this.app.i18n._hidden(this.cancelButtonText) : i18n._('Cancel'),
             minWidth: 70,
             ref: '../buttonCancel',
