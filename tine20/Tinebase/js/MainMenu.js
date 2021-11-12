@@ -148,6 +148,12 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         return this.userActions;
     },
     
+    getActionByPos(registerItemPosition) {
+        return _.filter(this.items.items, (item) => {
+            return item?.registerdItemPos === registerItemPosition;
+        });
+    },
+    
     /**
      * initialize actions
      * @private

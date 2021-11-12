@@ -28,6 +28,10 @@ class UploadChannel extends Channel {
         await  _.reduce(tasks, (prev, task) => {
             return prev.then(async () => {
                 const taskId = await this.add(task);
+                const uploadId = task.args.uploadId;
+                Tine.Tinebase.uploadManager.tasks[uploadId] = [];
+                Tine.Tinebase.uploadManager.tasks[uploadId] = task;
+                Tine.Tinebase.uploadManager.tasks[uploadId]._id = taskId;
                 return taskIDs.push(taskId);
             });
         }, Promise.resolve());
