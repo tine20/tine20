@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tinebase Csv Export class
  *
@@ -6,9 +7,8 @@
  * @subpackage    Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * @todo        use export definitions
  */
 
 /**
@@ -113,11 +113,11 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
     {
         $string = "";
         $writeDelimiter = false;
-        foreach($dataArray as $dataElement) {
+        foreach ($dataArray as $dataElement) {
             if ($writeDelimiter) {
                 $string .= $delimiter;
             }
-            if (!$this->_config->raw && strlen($dataElement) > 0) {
+            if (!$this->_config->raw && is_string($dataElement) && strlen($dataElement) > 0) {
                 switch (ord($dataElement)) {
                     case 9:  // tab vertical
                     case 13: // carriage return
@@ -144,7 +144,8 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
      */
     public function generate()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Generating new csv export of ' . $this->_modelName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Generating new csv export of ' . $this->_modelName);
         
         $filename = $this->_getFilename();
         $this->_filehandle = ($this->_toStdout) ? STDOUT : fopen($filename, 'w');
