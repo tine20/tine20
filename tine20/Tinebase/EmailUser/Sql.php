@@ -453,8 +453,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Updating ' . $this->_userTable . ' user ' . $emailUserData[$this->_propertyMapping['emailUsername']]);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r($emailUserData, TRUE));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' emailUserData :  ' . print_r($emailUserData, true));
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
 

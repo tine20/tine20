@@ -31,7 +31,8 @@
  * @property  string    sieve_notification_move_folder
  * @property  string    sieve_hostname
  * @property  string    migration_approved
- * TODO add aliases + forwards
+ * @property  Tinebase_Model_EmailUser email_imap_user
+ * @property  Tinebase_Model_EmailUser email_smtp_user
  * @property  Tinebase_Record_RecordSet aliases (Tinebase_Model_EmailUser_Alias)
  * @property  Tinebase_Record_RecordSet forwards (Tinebase_Model_EmailUser_Forward)
  *
