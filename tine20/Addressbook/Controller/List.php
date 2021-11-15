@@ -641,7 +641,12 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             }
 
             Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
-                Felamimail_Sieve_AdbList::setScriptForList($list);
+                try {
+                    Felamimail_Sieve_AdbList::setScriptForList($list);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                }
             }, [$updatedRecord]);
 
         } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
