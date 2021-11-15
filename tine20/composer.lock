@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b00c73f5614994a9a0b24abf8bf19d3a",
+    "content-hash": "31a70dcbc743ddc9d99320d53ea130a2",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -10670,24 +10670,24 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.42.4pl1",
+            "version": "1.44.5pl1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/Twig.git",
-                "reference": "d4e31ae03aa6b3a0649e467cfd8518c8447add82"
+                "reference": "fbfdb0a092a37919712bce884f7e73bd2133a63e"
             },
             "require": {
-                "php": ">=5.5.0",
+                "php": ">=7.2.5",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "require-dev": {
                 "psr/container": "^1.0",
-                "symfony/phpunit-bridge": "^4.4|^5.0"
+                "symfony/phpunit-bridge": "^4.4.9|^5.0.9"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.42-dev"
+                    "dev-master": "1.44-dev"
                 }
             },
             "autoload": {
