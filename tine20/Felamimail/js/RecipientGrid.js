@@ -171,7 +171,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (record) {
             if (record.get('address') !== '') {
                 this.action_remove.setDisabled(false);
-                this.contextMenu = await Tine.Tinebase.tineInit.getEmailContextMenu(targetInput, record.get('address'));
+                const email = Tine.Tinebase.common.findEmail(record.get('address'));
+                this.contextMenu = await Tine.Tinebase.tineInit.getEmailContextMenu(targetInput, email);
                 this.contextMenu.addMenuItem(this.action_remove);
                 this.contextMenu.showAt(position);
             }
