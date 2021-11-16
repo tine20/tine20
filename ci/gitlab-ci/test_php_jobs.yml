@@ -62,14 +62,13 @@
   parallel:
     matrix:
       - PROVIDER:
+          - "mariadb:10.6"
+          - "mariadb:10.5"
           - "mariadb:10.4"
           - "mariadb:10.3"
           - "mariadb:10.2"
-          - "mariadb:10.1"
-          - "mariadb:10.0"
           - "mysql:8.0"
           - "mysql:5.7"
-          - "mysql:5.6"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix"
       when: never
