@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/tine20/tine20.svg?branch=master)](https://travis-ci.org/tine20/tine20)
 ![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftine20%2FTine-2.0-Open-Source-Groupware-and-CRM.svg?type=shield)
 
-# Tine 2.0 - Community Edition
+# tine - Community Edition
 
-Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](https://www.tine20.com/en.html).
+Welcome to the tine Community Edition, the base of our popular [tine Business Edition](https://www.tine20.com/en.html).
 
 ## Official Community resources
 * [Tine2.0 Contributors Guide](https://github.com/tine20/tine20/blob/master/CONTRIBUTING.md)
@@ -20,18 +20,18 @@ Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Bus
 
 ## Free Software without compromise
 In contrast to the so called "open core" approach, where only a subset of the software is released as open source, 
-you'll find the complete sourcecode of all standard Tine 2.0 applications and features here. Like RHEL is the stable 
+you'll find the complete sourcecode of all standard tine applications and features here. Like RHEL is the stable
 extract of Fedora, our Business Edition is a approved subset of stable code combined with a long term business support.
 
-Everything you need to build and run Tine 2.0 is released as free software. See the LICENSE file for more details. 
+Everything you need to build and run tine is released as free software. See the LICENSE file for more details.
 Unlike others, our community edition is no baitfish for closed source plugins or add ons.
 
 ## Home of Innovation
 Together with our great community of open source addicted developers and testers, we build new features, try out
-exciting concepts and drive innovation within the Tine 2.0 Community Edition. As a user you become a member of this 
+exciting concepts and drive innovation within the tine Community Edition. As a user you become a member of this
 community and we expect you to support innovation by creating code, reporting bugs or improving the documentation.
 
-With the Tine 2.0 Community Edition you are always provided with the latest additions. For the sake of innovation we 
+With the tine Community Edition you are always provided with the latest additions. For the sake of innovation we
 don't fix bugs or supply security updates for old versions.
 
 ## Support
@@ -50,17 +50,17 @@ appropriate for you, please go with the business edition.
 
 ## Business Edition
 For all those who are not willing or able to be part of the community as an active contributor, and for organisations
-who prefer stability and support over innovation we created our [Tine 2.0 Business Edition](http://www.tine20.com).
+who prefer stability and support over innovation we created our [tine Business Edition](http://www.tine20.com).
 
 Once a year we take a subset of well proven and stable applications and features from our community edition and build
 a new major release of our business edition.
 
-Each [Tine 2.0 Business Edition](https://www.tine20.com/en.html) is maintained with security patches and bug fixes for at least two 
+Each [tine Business Edition](https://www.tine20.com/en.html) is maintained with security patches and bug fixes for at least two
 years. Our [partners](https://www.tine20.com/en/contact.html/) offer a wide range of commercial support for different business needs.
 
 ## Quickstart with Docker Compose
 
-Head over to dockerhub to give Tine 2.0 a try on your favorite Docker host:
+Head over to dockerhub to give tine a try on your favorite Docker host:
 https://hub.docker.com/r/tine20/tine20
 
 ## Reporting security issues
@@ -68,19 +68,19 @@ If you found any security relevant issue you can mail us [security@tine20.com](m
 
 ## Server Requirements
 * Webserver like [Apache](https://httpd.apache.org/), [Ngnix](https://www.nginx.com/), …
-* [MySQL](http://www.mysql.com/) 5.6 - 8.0 or [MariaDB](https://mariadb.org) 10.0 - 10.4
+* [MySQL](http://www.mysql.com/) 5.7 - 8.0 or [MariaDB](https://mariadb.org) 10.2 - 10.6
 * [PHP](http://www.php.net/) 7.4 - 8.0
   + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring, intl, yaml
   + Optional Extensions: redis, ldap, bcmath (for ActiveDirectory)
 
 ## Licenses, Copyrights and Trademarks 
-Tine 2.0 - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.
+tine - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.
 
 In short this means: Any customisations, changes or additions you do to the code needs to be made available under the 
 AGPLv3 as well. If this is not appropriate for you, please contact us directly. As we hold the complete copyright for 
-all Tine 2.0 specific source code it's possible to offer it with different license options.
+all tine specific source code it's possible to offer it with different license options.
 
-The name "Tine 2.0" is our registered trademark. This is for your and our safety. We can use the name and logo without
+The name "tine" is our registered trademark. This is for your and our safety. We can use the name and logo without
 legal fraught from other parties.
 
 see [Tine2.0 LICENSE file](https://github.com/tine20/tine20/blob/master/LICENSE.md)
