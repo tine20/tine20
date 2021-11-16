@@ -38,6 +38,8 @@ class Sales_Model_DocumentPosition_Order extends Sales_Model_DocumentPosition_Ab
             ]*/
         ];
 
+        $_definition[self::FIELDS][self::FLD_PARENT_ID][self::CONFIG][self::MODEL_NAME] = self::MODEL_NAME_PART;
+
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_Offer::MODEL_NAME_PART;
 

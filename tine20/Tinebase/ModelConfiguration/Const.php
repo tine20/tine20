@@ -121,6 +121,7 @@ class Tinebase_ModelConfiguration_Const {
     const MODLOG_ACTIVE = 'modlogActive';
 
     const NAME = 'name';
+    const NORESOLVE = 'noResolve';
     const NULLABLE = 'nullable';
 
     const OMIT_MOD_LOG = 'modlogOmit';

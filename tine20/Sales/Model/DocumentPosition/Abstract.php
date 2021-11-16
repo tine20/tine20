@@ -365,16 +365,4 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
-
-    /**
-     * @param array $_definition
-     */
-    public static function inheritModelConfigHook(array &$_definition)
-    {
-        parent::inheritModelConfigHook($_definition);
-
-        /** btw we use self because its more efficient than static ... that static there is thus for a reason */
-        /** @phpstan-ignore-next-line */
-        $_definition[self::FIELDS][self::FLD_PARENT_ID][self::CONFIG][self::MODEL_NAME] = static::MODEL_NAME_PART;
-    }
 }

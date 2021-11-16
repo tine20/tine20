@@ -951,7 +951,7 @@ abstract class Tinebase_Controller_Record_Abstract
         foreach ($mc->denormalizedFields as $property => $definition) {
             if (TMCC::TYPE_RECORD === $definition[TMCC::TYPE]) {
                 if (null === $currentRecord) {
-                    if (null !== $newRecord->{$property}) {
+                    if (!empty($newRecord->{$property})) {
                         $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
                     }
                 } else {
@@ -963,7 +963,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             } elseif (TMCC::TYPE_RECORDS === $definition[TMCC::TYPE]) {
                 if (null === $currentRecord) {
-                    if (null !== $newRecord->{$property}) {
+                    if (!empty($newRecord->{$property})) {
                         foreach($newRecord->{$property} as $rec) {
                             $this->_newDenormalizedRecord($rec, $definition);
                         }

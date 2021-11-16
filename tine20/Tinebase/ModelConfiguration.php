@@ -1181,6 +1181,17 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             $this->_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
         }
 
+        if ($this->_denormalizationOf) {
+            list($app, $model) = explode('_Model_', $this->_denormalizationOf);
+            $this->_fields[self::FLD_ORIGINAL_ID] = [
+                self::TYPE                  => self::TYPE_RECORD,
+                self::CONFIG                => [
+                    self::APP_NAME              => $app,
+                    self::MODEL_NAME            => $model,
+                ],
+            ];
+        }
+
         foreach ($hooks as $hook) {
             if (is_callable($hook)) {
                 call_user_func_array($hook, [&$this->_fields]);
