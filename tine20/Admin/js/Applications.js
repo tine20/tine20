@@ -18,12 +18,14 @@ Tine.Admin.Applications.Main = {
     init: function() {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
+        this.app = Tine.Tinebase.appMgr.get('Admin');
 
         this._action_enable = new Ext.Action({
             text: this.translation.gettext('Enable Application'),
             disabled: true,
             handler: this._enableDisableButtonHandler.createDelegate(this, ['enabled']),
             scope: this,
+            hidden: this.app.featureEnabled('featurePreventAppsDisable'),
             iconCls: 'action_enable'
         });
 
@@ -32,6 +34,7 @@ Tine.Admin.Applications.Main = {
             disabled: true,
             handler: this._enableDisableButtonHandler.createDelegate(this, ['disabled']),
             scope: this,
+            hidden: this.app.featureEnabled('featurePreventAppsDisable'),
             iconCls: 'action_disable'
         });
 
