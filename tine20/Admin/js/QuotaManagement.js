@@ -46,6 +46,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 
                 _.map(response.responseData, async (nodeData) => {
                     let app = Tine.Tinebase.appMgr.getById(nodeData.name);
+                    nodeData.appName = app.appName;
                     nodeData.i18n_name = app ? app.getTitle() : nodeData.name;
                     nodeData.path = `${attr.path === '/' ? '' : attr.path}/${nodeData.i18n_name}`;
                     nodeData.virtualPath = `${attr.virtualPath === '/' ? '' : attr.virtualPath}/${nodeData.name}`;
@@ -54,7 +55,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 return Ext.ux.tree.TreeGridLoader.prototype.processResponse.apply(this, arguments);
             },
             createNode: function(attr) {
-                if (!appsToShow || appsToShow.includes(attr.i18n_name)) {
+                if (!appsToShow || appsToShow.includes(attr.appName)) {
                     return Ext.ux.tree.TreeGridLoader.prototype.createNode.apply(this, arguments);
                 }
             }
@@ -304,5 +305,7 @@ Tine.Admin.registerItem({
     pos: 750,
     viewRight: 'view_quota_usage',
     panel: Tine.Admin.QuotaManagement,
+    id: 'quotamanagement',
     dataPanelType: "quotamanagement",
+    hidden: !Tine.Admin.showModule('quotamanagement')
 });
