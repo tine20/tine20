@@ -480,7 +480,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             . ' Sync options: ' . print_r($options, true));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
+            __METHOD__ . '::' . __LINE__ . " Sync user data for: " . $username);
 
         if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
             $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
@@ -619,6 +619,35 @@ class Tinebase_User implements Tinebase_Controller_Interface
     {
         $currentUser = Tinebase_User::getInstance()->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
 
+        if (self::_recordNeedsAnUpdate($currentUser, $user, $options)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Record needs an update');
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
+            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
+        } else {
+            $syncedUser = $currentUser;
+        }
+        if (! empty($user->container_id)) {
+            $syncedUser->container_id = $user->container_id;
+        }
+
+        // Addressbook is registered as plugin and will take care of the update
+        Tinebase_User::getInstance()->updatePluginUser($syncedUser, $user);
+
+        return $syncedUser;
+    }
+
+    /**
+     * @param Tinebase_Model_FullUser $currentUser
+     * @param Tinebase_Model_FullUser $user
+     * @param array $options
+     * @return bool
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected static function _recordNeedsAnUpdate(Tinebase_Model_FullUser $currentUser, Tinebase_Model_FullUser $user, array $options)
+    {
         $fieldsToSync = ['accountLoginName', 'accountLastPasswordChange', 'accountExpires', 'accountPrimaryGroup',
             'accountDisplayName', 'accountLastName', 'accountFirstName', 'accountFullName', 'accountEmailAddress',
             'accountHomeDirectory', 'accountLoginShell', 'visibility'];
@@ -633,6 +662,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $recordNeedsUpdate = false;
         foreach ($fieldsToSync as $field) {
             if ($currentUser->{$field} !== $user->{$field} && (! empty($user->{$field}) || ! in_array($field, $nonEmptyFields))) {
+                // ldap might not have time information on datetime fields, so we ignore these, if the date matches
+                if ($user->{$field} instanceof Tinebase_DateTime && $user->{$field}->format('H:i:s') === '00:00:00'
+                    && $user->{$field}->format('Y-m-d') === $currentUser->{$field}->format('Y-m-d')
+                ) {
+                    continue;
+                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Diff found in field ' . $field  . ' current: ' . $currentUser->{$field} . ' new: ' . $user->{$field});
                 $currentUser->{$field} = $user->{$field};
                 $recordNeedsUpdate = true;
             }
@@ -648,20 +685,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $recordNeedsUpdate = false;
         }
 
-        if ($recordNeedsUpdate) {
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
-            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
-        } else {
-            $syncedUser = $currentUser;
-        }
-        if (! empty($user->container_id)) {
-            $syncedUser->container_id = $user->container_id;
-        }
-
-        // Addressbook is registered as plugin and will take care of the update
-        Tinebase_User::getInstance()->updatePluginUser($syncedUser, $user);
-
-        return $syncedUser;
+        return $recordNeedsUpdate;
     }
     
     /**
