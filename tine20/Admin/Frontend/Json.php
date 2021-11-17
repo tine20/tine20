@@ -1439,6 +1439,13 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return Admin_Controller_Quota::getInstance()->updateQuota($application, $recordData, $additionalData);
     }
 
+    /**
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
     public function searchQuotaNodes($filter = null)
     {
         if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::VIEW_QUOTA_USAGE)) {
@@ -1466,7 +1473,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 unset($filter[$key]);
             }
         }
-
+        
         if ($isFelamimailInstalled && strpos($path, $virtualPath) === 0) {
             $records = $this->_getVirtualEmailQuotaNodes(str_replace($virtualPath, '', $path));
             $filterArray = $filter;
@@ -1501,57 +1508,81 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $path = '/';
             }
 
-            $filter->removeFilter('type');
-            $filter->addFilter($filter->createFilter(array(
-                'field' => 'type',
-                'operator' => 'equals',
-                'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-            )));
+            if ($path === '') {
+                $records = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, []);
+                
+                if (Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET}) {
+                    $totalQuotaInMB = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->{Tinebase_Config::QUOTA_TOTALINMB};
+                    try {
+                        $imapBackend = Tinebase_EmailUser::getInstance();
+                        $imapUsageQuota = $imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot ? $imapBackend->getTotalUsageQuota() : null;
+                        $totalEmailQuotaUsage = $imapUsageQuota['mailSize'] * 1024 * 1024;
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $totalEmailQuotaUsage = 0;
+                    }
 
-            $records = Tinebase_FileSystem::getInstance()->search($filter);
-            if ($isFelamimailInstalled && $path === $emailPath) {
-                $imapBackend = null;
-                try {
-                    $imapBackend = Tinebase_EmailUser::getInstance();
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $node = new Tinebase_Model_Tree_Node([], true);
+                    $node->name = 'Total Quota';
+                    $node->quota = $totalQuotaInMB * 1024 * 1024;
+                    $node->size = Tinebase_FileSystem_Quota::getRootUsedBytes() + $totalEmailQuotaUsage;
+                    $node->revision_size = $node->size;
+                    $node->setId(md5($node->name));
+                    $node->type = Tinebase_Model_Tree_FileObject::TYPE_FOLDER;
+                    $records->addRecord($node);
                 }
-                if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
-                    /** @var Tinebase_Model_Tree_Node $emailNode */
-                    $emailNode = clone $records->getFirstRecord();
-                    $emailNode->setId(trim($emailPath, '/'));
-                    $emailNode->name = 'Emails';
-                    $emailNode->path = $virtualPath;
-                    $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                    $emailNode->quota = $imapUsageQuota['mailQuota'] * 1024 * 1024;
-                    $emailNode->size = $imapUsageQuota['mailSize'];
-                    $emailNode->revision_size = $emailNode->size;
-                    $emailNode->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
-                    $records->addRecord($emailNode);
+            } else {
+                $filter->removeFilter('type');
+                $filter->addFilter($filter->createFilter(array(
+                    'field' => 'type',
+                    'operator' => 'equals',
+                    'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
+                )));
+
+                $records = Tinebase_FileSystem::getInstance()->search($filter);
+                if ($isFelamimailInstalled && $path === $emailPath) {
+                    $imapBackend = null;
+                    try {
+                        $imapBackend = Tinebase_EmailUser::getInstance();
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    }
+                    if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+                        /** @var Tinebase_Model_Tree_Node $emailNode */
+                        $emailNode = clone $records->getFirstRecord();
+                        $emailNode->setId(trim($emailPath, '/'));
+                        $emailNode->name = 'Emails';
+                        $emailNode->path = $virtualPath;
+                        $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+                        $emailNode->quota = $imapUsageQuota['mailQuota'] * 1024 * 1024;
+                        $emailNode->size = $imapUsageQuota['mailSize'];
+                        $emailNode->revision_size = $emailNode->size;
+                        $emailNode->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
+                        $records->addRecord($emailNode);
+                    }
+                } elseif ($isFelamimailInstalled && '/' === $path) {
+                    $imapBackend = null;
+                    try {
+                        $imapBackend = Tinebase_EmailUser::getInstance();
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    }
+                    if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+                        $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+                        $node = $records->filter('name',
+                            Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId())->getFirstRecord();
+                        $node->quota += $imapUsageQuota['mailQuota']  * 1024 * 1024;
+                        $node->size += $imapUsageQuota['mailSize'];
+                        $node->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
+                    }
                 }
-            } elseif ($isFelamimailInstalled && '/' === $path) {
-                $imapBackend = null;
-                try {
-                    $imapBackend = Tinebase_EmailUser::getInstance();
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                }
-                if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
-                    $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                    $node = $records->filter('name',
-                        Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId())->getFirstRecord();
-                    $node->quota += $imapUsageQuota['mailQuota']  * 1024 * 1024;;
-                    $node->size += $imapUsageQuota['mailSize'];
-                    $node->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
-                }
+
+                $filterArray = $filter->toArray();
+                array_walk($filterArray, function (&$val) use ($path) {
+                    if ('path' === $val['field']) {
+                        $val['value'] = $path;
+                    }
+                });
             }
-
+            
             $result = $this->_multipleRecordsToJson($records, $filter);
-
-            $filterArray = $filter->toArray();
-            array_walk($filterArray, function (&$val) use ($path) {
-                if ('path' === $val['field']) {
-                    $val['value'] = $path;
-                }
-            });
         }
 
         return array(
@@ -1713,7 +1744,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $filter = $_filter->getFilter('path', true);
                     $path = $filter[0]->getValue();
                     $filemanager_id = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
-                    
+             
                     foreach ($_records as $record) {
                         if (empty($record->name) || !$record instanceof Tinebase_Model_Tree_Node) {
                             $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
@@ -1731,7 +1762,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                             }
                             
                             // user personalFSQuota quota under /Filemanager/folders/personal
-                            if ($path === '/' . $filemanager_id . '/folders/personal') {
+                            if ($path === "/$filemanager_id/folders/personal") {
                                 $userData = Admin_Controller_User::getInstance()->get($record->name)->toArray();
                                 $record->quota = $userData['xprops']['personalFSQuota'] ?? 0;
                                 $record->xprops('customfields')['isPersonalNode'] = true;
@@ -1741,8 +1772,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                             }
     
                             // total quota for /Filemanager
-                            if ($record->name === $filemanager_id || $path === '/' . $filemanager_id) {
+                            if ($record->name === $filemanager_id || $path === "/$filemanager_id") {
                                 $record->quota = Tinebase_FileSystem_Quota::getRootQuotaBytes();
+                                $record->size = Tinebase_FileSystem_Quota::getRootUsedBytes();
                             } 
                         } catch (Tinebase_Exception_NotFound $e) {
                             $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();

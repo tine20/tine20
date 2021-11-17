@@ -19,16 +19,26 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
         this.app = Tine.Tinebase.appMgr.get('Admin');
         const appsToShow = Tine.Tinebase.configManager.get('appsToShow', 'Admin');
         const showCurrentFSUsageConfig = Tine.Tinebase.configManager.get('filesystem.showCurrentUsage', 'Tinebase');
+        this.allowManageTotalQuota = Tine.Tinebase.configManager.get('quotaAllowTotalInMBManagement', 'Admin');
+        this.topNode = this.allowManageTotalQuota ? '/Total Quota' : '';
         
         this.loader = {
             directFn: Tine.Admin.searchQuotaNodes,
             getParams : function(node, callback, scope) {
                 let path = node.getPath('name').replace(comp.getRootNode().getPath(), '/').replace(/\/+/, '/');
+                
+                if (comp.allowManageTotalQuota) {
+                    if (path === '/') {
+                        path = '';
+                    }
+                }
+                
+                path = path.replace(comp.topNode, '/').replace(/\/+/, '/');
                 const filter = [
                     {field: 'path', operator: 'equals', value: path}
                 ];
 
-                if (path === '/' && comp.buttonRefreshData) {
+                if (path === '' && comp.buttonRefreshData) {
                     comp.buttonRefreshData.disable();
                 }
 
@@ -38,18 +48,26 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 if (comp.buttonRefreshData) {
                     comp.buttonRefreshData.enable();
                 }
-                response.responseData = response.responseText.results;
+                response.responseData = response.responseText?.results;
 
                 const attr = node.attributes;
+                // path is the nodePath get from BE
+                // virtual path is the same as current treenode structure
                 attr.path = node.getPath('i18n_name').replace(comp.getRootNode().getPath(), '/').replace(/\/+/, '/');
                 attr.virtualPath = node.getPath('name').replace(comp.getRootNode().getPath(), '/').replace(/\/+/, '/');
                 
                 _.map(response.responseData, async (nodeData) => {
-                    let app = Tine.Tinebase.appMgr.getById(nodeData.name);
+                    nodeData.virtualPath = `${attr.path === '/' ? '' : attr.virtualPath}/${nodeData.name}`;
+                    nodeData.virtualPath = nodeData.virtualPath.replace(comp.topNode,'');
+                    
+                    const applicationId = nodeData.virtualPath.split('/').filter(Boolean)?.[0];
+                    const app = Tine.Tinebase.appMgr.getById(applicationId) ?? null;
                     nodeData.appName = app ? app.appName : '';
-                    nodeData.i18n_name = app ? app.getTitle() : nodeData.name;
+                    nodeData.translateAppName = app ? app.getTitle() : '';
+                    
+                    const isAppNode = nodeData.virtualPath.split('/').length === 2;
+                    nodeData.i18n_name = isAppNode ? app.getTitle() : nodeData.name;
                     nodeData.path = `${attr.path === '/' ? '' : attr.path}/${nodeData.i18n_name}`;
-                    nodeData.virtualPath = `${attr.virtualPath === '/' ? '' : attr.virtualPath}/${nodeData.name}`;
                 });
                 
                 return Ext.ux.tree.TreeGridLoader.prototype.processResponse.apply(this, arguments);
@@ -58,7 +76,13 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 if (!appsToShow || appsToShow.includes(attr.appName)) {
                     return Ext.ux.tree.TreeGridLoader.prototype.createNode.apply(this, arguments);
                 }
-            }
+            },
+            handleFailure : function(response){
+                Ext.ux.tree.TreeGridLoader.prototype.handleFailure.apply(this, arguments);
+                if (comp.buttonRefreshData) {
+                    comp.buttonRefreshData.enable();
+                }
+            },
         };
 
         this.columns = [{
@@ -120,7 +144,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
         
         this.supr().initComponent.apply(this, arguments);
     },
-
+    
     /**
      * require reload when node is collapsed
      */
@@ -128,7 +152,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
         node.removeAll();
         node.loaded = false;
     },
-
+    
     onButtonRefreshData: function() {
         this.getRootNode().reload();
         this._action_editQuota.setDisabled(true);
@@ -149,10 +173,10 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
 
 
         this._action_manageFileSystemTotalQuota = new Ext.Action({
-            text:  this.translation.gettext('Manage total Filesystem Quota'),
-            handler: this.fileSystemTotalQuotaEditDialogHandler,
+            text:  this.translation.gettext('Manage Total Quota'),
+            handler: this.totalQuotaEditDialogHandler,
             scope: this,
-            iconCls: 'action_settings'
+            iconCls: 'action_settings',
         });
 
         return new Ext.Toolbar({
@@ -165,13 +189,13 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                     Ext.apply(new Ext.Button(this._action_editQuota), {
                         scale: 'medium',
                         rowspan: 2,
-                        iconAlign: 'top'
+                        iconAlign: 'top',
+                        hidden: this.allowManageTotalQuota
                     }),
                     Ext.apply(new Ext.Button(this._action_manageFileSystemTotalQuota), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top',
-                        hidden: !Tine.Tinebase.configManager.get('quotaAllowTotalInMBManagement', 'Admin')
                     })
                 ]
             }
@@ -184,14 +208,17 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
      */
     async quotaEditDialogHandler(_event) {
         // search current folder record based on its parent path
-        const node = this.getSelectionModel().getSelectedNode();
+        if (this.allowManageTotalQuota) {
+            return;
+        }
         
+        const node = this.getSelectionModel().getSelectedNode();
         if (this.isNodeEditable(node)) {
             Tine.Admin.QuotaEditDialog.openWindow({
-                windowTitle: String.format(this.translation.gettext('Edit {0} Quota'),
-                    Tine.Tinebase.appMgr.get(node.attributes.appName).getTitle()),
+                windowTitle: node.attributes.translateAppName ?? this.topNode,
                 node: node,
                 customizeFields: node.attributes.customfields,
+                appName: node.attributes.appName
             });
         }
    },
@@ -203,34 +230,35 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
             return isEditable;
         }
         
-        const applicationId = node.attributes.virtualPath.split('/').filter(Boolean)?.[0];
-        node.attributes.appName = Tine.Tinebase.appMgr.getById(applicationId).appName;
-
-        const path = node.attributes.path;
-        const appName = node.attributes.appName;
-        const translateApp = path.split('/').filter(Boolean)?.[0];
-
-        
         let disabledNodes = [
-            `/${translateApp}`,
-            `/${translateApp}/folders`,
-            `/${translateApp}/folders/personal`
-        ]
-
-        if (appName === 'Felamimail') {
-            disabledNodes.push(`/${translateApp}/Emails`);
-
-            if (node.attributes?.customfields?.domain) {
-                disabledNodes.push(`/${translateApp}/Emails/${node.attributes.customfields.domain}`);
+            `${this.topNode}`
+        ];
+        
+        if (node.attributes.appName !== '') {
+            const appName = node.attributes.appName;
+            const translateApp = node.attributes.translateAppName;
+            
+            disabledNodes = disabledNodes.concat([
+                `${this.topNode}/${translateApp}`,
+                `${this.topNode}/${translateApp}/folders`,
+                `${this.topNode}/${translateApp}/folders/personal`
+            ]);
+            
+            if (appName === 'Felamimail') {
+                disabledNodes.push(`${this.topNode}/${translateApp}/Emails`);
+        
+                if (node.attributes?.customfields?.domain) {
+                    disabledNodes.push(`${this.topNode}/${translateApp}/Emails/${node.attributes.customfields.domain}`);
+                }
             }
-        }
-
-        isEditable = !disabledNodes.includes(path);
+        } 
+       
+        isEditable = !disabledNodes.includes(node.attributes.path);
         
         return isEditable;
     },
 
-   fileSystemTotalQuotaEditDialogHandler(node, _event) {
+   totalQuotaEditDialogHandler(node, _event) {
        const quotaConfig = Tine.Tinebase.configManager.get('quota');
        
        const quotaEditField =  Ext.ComponentMgr.create({
@@ -258,7 +286,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                items: [quotaEditField]
            }],
           
-           windowTitle: this.translation.gettext('Manage total Filesystem Quota'),
+           windowTitle: this.translation.gettext('Manage Total Quota'),
            contractDialog: this,
            /**
             * Creates a new pop up dialog/window (acc. configuration)

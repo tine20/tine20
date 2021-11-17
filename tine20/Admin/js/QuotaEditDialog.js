@@ -30,7 +30,6 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
      */
     initComponent() {
         // check manage personal/shared quota right
-        this.appName = this.node.attributes.appName;
         this.translation = new Locale.Gettext();
         this.window.setTitle(this.windowTitle);
         
@@ -46,11 +45,14 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                 this.hasRequiredRight = Tine.Tinebase.common.hasRight('manage_accounts', 'Admin');
             }
             
-            if (path.includes(`/folders/shared`)) {
-                if (this.appName === 'Felamimail') {
+            if (this.appName === 'Felamimail') {
+                if (path.includes(`/folders/shared`)) {
                     this.hasRequiredRight = Tine.Tinebase.common.hasRight('manage_shared_email_quotas', 'Admin');
                 }
-                if (this.appName === 'Filemanager') {
+            }
+    
+            if (this.appName === 'Filemanager') {
+                if (path.includes(`/folders/shared`)) {
                     this.hasRequiredRight = Tine.Tinebase.common.hasRight('manage_shared_filesystem_quotas', 'Admin');
                 }
             }
@@ -98,6 +100,10 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         await Tine.Admin.saveQuota(this.appName, this.node.attributes, additionalData)
             .then((result) => {
                 // expand child node to the deepest
+                this.node.parentNode.reload();
+                this.window.close();
+            })
+            .catch((e) => {
                 this.node.parentNode.reload();
                 this.window.close();
             });
@@ -165,7 +171,7 @@ Tine.Admin.QuotaEditDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     getFileSystemTabItems() {
         this.translation.textdomain('Filemanager');
         const showQuotaUi = Tine.Tinebase.configManager.get('quota')?.showUI || true;
-
+        debugger
         //if (Tine.Tinebase.registry.get('manageImapEmailUser')) {
         this.pathField = [{
             fieldLabel: this.translation.gettext('path'),

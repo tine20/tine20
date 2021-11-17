@@ -117,10 +117,10 @@ class Admin_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
-            self::DEFAULT_STR           => true,
+            self::DEFAULT_STR           => false,
         ],
         self::DEFAULT_PASSWORD_MUST_CHANGE => [
-            //_('Default password must change for new user settings')
+            //_('Default password must changtestSaveQuotaTotalInMBe for new user settings')
             self::LABEL                 => 'Default password must change for new user settings',
             //_('Default password must change for new user settings')
             self::DESCRIPTION           => 'Default password must change for new user settings',

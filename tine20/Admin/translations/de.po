@@ -996,8 +996,8 @@ msgstr "Kontingent bearbeiten"
 msgid "Edit {0} Quota"
 msgstr "{0} Kontingent bearbeiten"
 
-msgid "Manage total Filesystem Quota"
-msgstr "Gesamte Dateimanager Quota verwalten"
+msgid "Manage Total Quota"
+msgstr "Gesamte Quota verwalten"
 
 msgid "Total quota"
 msgstr "Gesamte Quota"
