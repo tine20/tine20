@@ -439,7 +439,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         // hide password from shell via my.cnf
         $mycnf = $backupDir . '/my.cnf';
-        $this->_createMyConf($mycnf, $this->_config->database);
+        $this->createMyConf($mycnf, $this->_config->database);
 
         $ignoreTables = '';
         if (count($option['structTables']) > 0) {
@@ -499,7 +499,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         // hide password from shell via my.cnf
         $mycnf = $backupDir . '/my.cnf';
-        $this->_createMyConf($mycnf, $this->_config->database);
+        $this->createMyConf($mycnf, $this->_config->database);
 
         $cmd = "bzcat $mysqlBackupFile"
              . " | mysql --defaults-extra-file=$mycnf -f "
@@ -515,11 +515,12 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      * create my.cnf
      *
-     * @param $path
-     * @param $config
+     * @param string $path
+     * @param Zend_Config|null $config
      */
-    protected function _createMyConf($path, $config)
+    public function createMyConf(string $path, Zend_Config $config = null)
     {
+        $config = $config ?? $this->_config->database;
         $port = $config->port ?: 3306;
 
         $mycnfData = <<<EOT
