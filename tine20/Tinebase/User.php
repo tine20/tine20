@@ -678,8 +678,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
         foreach ($fieldsToSync as $field) {
             if ($currentUser->{$field} !== $user->{$field} && (! empty($user->{$field}) || ! in_array($field, $nonEmptyFields))) {
                 // ldap might not have time information on datetime fields, so we ignore these, if the date matches
-                if ($user->{$field} instanceof Tinebase_DateTime && $user->{$field}->format('H:i:s') === '00:00:00'
-                    && $user->{$field}->format('Y-m-d') === $currentUser->{$field}->format('Y-m-d')
+                if ($user->{$field} instanceof Tinebase_DateTime && $currentUser->{$field} instanceof Tinebase_DateTime
+                    && $user->{$field}->hasSameDate($currentUser->{$field})
                 ) {
                     continue;
                 }
