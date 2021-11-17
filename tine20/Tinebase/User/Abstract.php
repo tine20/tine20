@@ -17,6 +17,10 @@
  *
  * @package     Tinebase
  * @subpackage  User
+ *
+ * @method modlogActive($setTo = null)
+ * @method updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
+ * @method updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
  */
 abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 {
@@ -786,9 +790,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * send welcome / password update mail to a user
      *
-     * @param $user
-     * @param $newPw
-     * @param null $email
+     * @param Tinebase_Model_FullUser $user
+     * @param string $newPw
+     * @param string|null $email
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
@@ -860,4 +864,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     }
 
     abstract public function getUsersCount($_filter = null);
+
+    abstract public function addUserInSqlBackend(Tinebase_Model_FullUser $_user);
+    abstract public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user);
 }
