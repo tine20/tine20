@@ -226,7 +226,9 @@ Tine.widgets.form.FieldManager = function() {
                         }
                         field.fieldLabel = fieldDefinition.fieldLabel ? field.fieldLabel :
                             Tine.Tinebase.data.RecordMgr.get(fieldDefinition.config.appName, fieldDefinition.config.modelName)?.getRecordName();
-                        if (category === 'editDialog' && fieldDefinition.config.dependentRecords) {
+
+                        // @TODO: denormalizationOf should have an edit plugin
+                        if (category === 'editDialog' && fieldDefinition.config.dependentRecords && !fieldDefinition.config.denormalizationOf) {
                             field.xtype = 'tw-recordEditField';
                             field.appName = fieldDefinition.config.appName;
                             field.modelName = fieldDefinition.config.modelName;

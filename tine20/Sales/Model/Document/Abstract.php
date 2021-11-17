@@ -183,6 +183,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING
                 ],
                 self::NULLABLE              => true,
+                self::INPUT_FILTERS         => [Zend_Filter_Null::class],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::DEFAULT_VALUE    => null,
+                ],
             ],
             self::FLD_CONTACT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,

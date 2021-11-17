@@ -27,6 +27,19 @@ class Sales_Document_JsonTest extends TestCase
         $this->_instance = new Sales_Frontend_Json();
     }
 
+    public function testOfferDocumentWithoutRecipient()
+    {
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+        $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => '',
+        ]);
+        $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+
+        $this->assertFalse(isset($document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]));
+    }
+
     public function testOfferDocumentCustomerCopy($noAsserts = false)
     {
         $customer = $this->_createCustomer();

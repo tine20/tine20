@@ -192,15 +192,19 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 Sales_Model_Product::FLD_SUBPRODUCTS => [
                     [
                         Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[0],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '5ared',
                         Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
                     ], [
                         Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[1],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '5ablue',
                         Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
                     ], [
                         Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[2],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '6red',
                         Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
                     ], [
                         Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[3],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '6blue',
                         Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
                     ]
                 ]
