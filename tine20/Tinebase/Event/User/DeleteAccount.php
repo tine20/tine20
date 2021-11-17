@@ -32,6 +32,20 @@ class Tinebase_Event_User_DeleteAccount extends Tinebase_Event_Abstract
     protected $_deletePersonalContainers = false;
 
     /**
+     * delete personal folders
+     *
+     * @var boolean
+     */
+    protected $_deletePersonalFolders = false;
+
+    /**
+     * delete email accounts
+     *
+     * @var boolean
+     */
+    protected $_deleteEmailAccounts = false;
+
+    /**
      * keep "account" as contact in the addressbook (which addressbook?)
      *
      * @var boolean
@@ -55,6 +69,16 @@ class Tinebase_Event_User_DeleteAccount extends Tinebase_Event_Abstract
     public function deletePersonalContainers()
     {
         return $this->_deletePersonalContainers;
+    }
+
+    public function deletePersonalFolders()
+    {
+        return $this->_deletePersonalFolders;
+    }
+
+    public function deleteEmailAccounts()
+    {
+        return $this->_deleteEmailAccounts;
     }
 
     public function keepAsContact()
