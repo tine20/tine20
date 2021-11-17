@@ -109,12 +109,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         self::ASSOCIATIONS              => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
-                self::FLD_CUSTOMER_ID         => [
-                    self::TARGET_ENTITY         => Sales_Model_Document_Customer::class,
-                    self::FIELD_NAME            => self::FLD_CUSTOMER_ID,
-                    self::JOIN_COLUMNS          => [[
-                        self::NAME                  => self::FLD_CUSTOMER_ID,
-                        self::REFERENCED_COLUMN_NAME=> 'id',
+                self::FLD_CUSTOMER_ID           => [
+                    self::TARGET_ENTITY             => Sales_Model_Document_Customer::class,
+                    self::FIELD_NAME                => self::FLD_CUSTOMER_ID,
+                    self::JOIN_COLUMNS              => [[
+                        self::NAME                      => self::FLD_CUSTOMER_ID,
+                        self::REFERENCED_COLUMN_NAME    => Sales_Model_Document_Customer::ID,
+                    ]],
+                ],
+                self::FLD_RECIPIENT_ID          => [
+                    self::TARGET_ENTITY             => Sales_Model_Document_Address::class,
+                    self::FIELD_NAME                => self::FLD_RECIPIENT_ID,
+                    self::JOIN_COLUMNS              => [[
+                        self::NAME                      => self::FLD_RECIPIENT_ID,
+                        self::REFERENCED_COLUMN_NAME    => Sales_Model_Document_Address::ID,
                     ]],
                 ],
             ],
@@ -179,6 +187,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_CONTACT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Reference Person', //_('Reference Person')
+                // TODO add resolve deleted flag? guess that would be nice
                 self::CONFIG                => [
                     self::APP_NAME              => Addressbook_Config::APP_NAME,
                     self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_PART_NAME,

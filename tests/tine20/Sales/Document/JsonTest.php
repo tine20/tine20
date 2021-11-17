@@ -32,7 +32,8 @@ class Sales_Document_JsonTest extends TestCase
         $customer = $this->_createCustomer();
         $customerData = $customer->toArray();
         $document = new Sales_Model_Document_Offer([
-            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData
+            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customerData['delivery'][0],
         ]);
 
         $document = $this->_instance->saveDocument_Offer($document->toArray(true));
@@ -44,14 +45,23 @@ class Sales_Document_JsonTest extends TestCase
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'delivery' => [],
+                'billing'  => [],
             ]
         ]);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Customer::class, [$customerCopy]));
 
         $this->assertNotSame($customer->getId(), $customerCopy->getId());
         $this->assertSame($customer->name, $customerCopy->name);
+        $this->assertSame(1, $customerCopy->delivery->count());
+        $this->assertSame(1, $customerCopy->billing->count());
         $this->assertNotSame($customer->delivery->getId(), $customerCopy->delivery->getId());
         $this->assertSame($customer->delivery->name, $customerCopy->delivery->name);
+        $this->assertNotSame($customer->billing->getId(), $customerCopy->billing->getId());
+        $this->assertSame($customer->billing->name, $customerCopy->billing->name);
+        $this->assertSame($customer->adr_name, $customerCopy->adr_name);
+
+        $this->assertNotSame(Sales_Model_Document_Offer::FLD_RECIPIENT_ID, $customerCopy->delivery->getFirstRecord()->getId());
+        $this->assertNotSame(Sales_Model_Document_Offer::FLD_RECIPIENT_ID, $customer->delivery->getFirstRecord()->getId());
 
         return $document;
     }
@@ -168,14 +178,20 @@ class Sales_Document_JsonTest extends TestCase
             'cpextern_id' => $this->_personas['sclever']->contact_id,
             'bic' => 'SOMEBIC',
             'delivery' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
-                'name' => 'some addess for ' . $name,
+                'name' => 'some delivery address for ' . $name,
                 'type' => 'delivery'
             ]]),
+            'billing' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
+                'name' => 'some billing address for ' . $name,
+                'type' => 'billing'
+            ]]),
+            'adr_name' => 'some postal address for ' . $name,
         ]));
 
         $expander = new Tinebase_Record_Expander(Sales_Model_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'delivery' => [],
+                'billing' => [],
             ]
         ]);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Customer::class, [$customer]));

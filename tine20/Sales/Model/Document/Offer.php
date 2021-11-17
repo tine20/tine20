@@ -38,18 +38,22 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,
             /*self::INDEXES                   => [
-                self::FLD_PRODUCT_ID            => [
-                    self::COLUMNS                   => [self::FLD_PRODUCT_ID],
+                self::FLD_...            => [
+                    self::COLUMNS                   => [self::FLD_...],
                 ],
             ]*/
         ];
 
-        $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_MANY] = [
-            self::FLD_ORDER_ID      => [
-                self::TARGET_ENTITY     => Sales_Model_Document_Order::class,
-                self::FIELD_NAME        => self::FLD_ORDER_ID,
-                self::MAPPED_BY         => Sales_Model_Document_Order::FLD_ID,
-            ]
+        if (!isset($_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
+            $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE] = [];
+        }
+        $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE][self::FLD_ORDER_ID] = [
+            self::TARGET_ENTITY             => Sales_Model_Document_Order::class,
+            self::FIELD_NAME                => self::FLD_ORDER_ID,
+            self::JOIN_COLUMNS              => [[
+                self::NAME                      => self::FLD_ORDER_ID,
+                self::REFERENCED_COLUMN_NAME    => Sales_Model_Document_Order::ID,
+            ]],
         ];
 
         // on offers customers are optional
@@ -57,6 +61,7 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
 
         // offers dont have precursor documents, that would be a crm lead or something in the future
+        // TODO for the FE, maybe we make this a virtual field? not present in DB, always of value null?
         unset($_definition[self::FIELDS][self::FLD_PRECURSOR_DOCUMENTS]);
 
         $_definition[self::FIELDS][self::FLD_ORDER_ID] = [
