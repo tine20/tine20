@@ -150,6 +150,9 @@ class Admin_Controller_UserTest extends TestCase
             . print_r($userInBackend, true));
 
         // delete user + check if email user is deleted
+        
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete([$user->getId()]);
         $userInBackend = $emailUserBackend->getRawUserById($xpropsUser);
         self::assertFalse($userInBackend, 'email user should be deleted: '

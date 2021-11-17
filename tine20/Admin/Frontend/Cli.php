@@ -203,6 +203,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts);
         if (!isset($args['accountName'])) exit('accountName required');
 
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete([Tinebase_User::getInstance()
             ->getUserByLoginName($args['accountName'])->getId()]);
 

@@ -107,19 +107,36 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                         $_eventObject->account, $_eventObject->oldAccount);
                 }
                 break;
-            case Admin_Event_BeforeDeleteAccount::class:
-                /** @var Admin_Event_BeforeDeleteAccount $_eventObject */
-                if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
-                    ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
+            case Tinebase_Event_User_DeleteAccount::class:
+                /** @var Tinebase_Event_User_DeleteAccount $_eventObject */
+                if ($_eventObject->deleteEmailAccounts()) {
                     try {
-                        $systemAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($_eventObject->account);
-                        if ($systemAccount) {
-                            Admin_Controller_EmailAccount::getInstance()->delete($systemAccount->getId());
+                        $accountTypes = [  
+                            Felamimail_Model_Account::TYPE_USER,
+                            Felamimail_Model_Account::TYPE_USER_INTERNAL
+                        ];
+
+                        if (Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}
+                            ->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}) {
+                            array_push($accountTypes, Felamimail_Model_Account::TYPE_SYSTEM);
                         }
+                        
+                        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                            ['field' => 'user_id', 'operator' => 'equals', 'value' => $_eventObject->account['accountId']],
+                            ['field' => 'type', 'operator' => 'in', 'value' => $accountTypes]
+                        ]);
+
+                        $emailAccountIds = Admin_Controller_EmailAccount::getInstance()->search($filter)->getId();
+                        
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()
+                            ->debug(__METHOD__ . '::' . __LINE__ . ' User accounts to delete: ' . print_r($emailAccountIds, true));
+
+                        Admin_Controller_EmailAccount::getInstance()->delete($emailAccountIds);
                     } catch (Tinebase_Exception_AccessDenied $tead) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()
-                            ->warn(__METHOD__ . '::' . __LINE__ . ' Could not delete system account: ' . $tead->getMessage());
+                            ->warn(__METHOD__ . '::' . __LINE__ . ' Could not delete accounts: ' . $tead->getMessage());
                     }
+                    break;
                 }
                 break;
         }
