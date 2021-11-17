@@ -57,7 +57,6 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         ];
 
         // on offers customers are optional
-        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::NULLABLE] = true;
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
 
         // offers dont have precursor documents, that would be a crm lead or something in the future

@@ -54,6 +54,11 @@ class Sales_Document_JsonTest extends TestCase
             return $document;
         }
 
+        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID], 'customer_id is not an array');
+        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['billing'], 'customer_id.billing is not an array');
+        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['delivery'], 'customer_id.delivery is not an array');
+        $this->assertIsString($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['delivery'][0]['id'], 'customer_id.delivery.0.id is not set');
+
         $customerCopy = Sales_Controller_Document_Customer::getInstance()->get($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -81,8 +86,34 @@ class Sales_Document_JsonTest extends TestCase
 
     public function testOfferDocumentUpdate()
     {
-        $document = Sales_Controller_Document_Offer::getInstance()->get($this->testOfferDocumentCustomerCopy(true)['id']);
+        $document = $this->testOfferDocumentCustomerCopy(true);
 
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+        $document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID] = $customerData;
+        $document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID] = '';
+
+        $updatedDocument = $this->_instance->saveDocument_Offer($document);
+
+        $this->assertNotSame($updatedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['id'],
+            $document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['id']);
+        $this->assertNotSame($updatedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['delivery'][0]['id'],
+            $document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['delivery'][0]['id']);
+        $this->assertNotSame($updatedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0]['id'],
+            $document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0]['id']);
+        $this->assertEmpty($updatedDocument[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]);
+
+        $updated2Document = $updatedDocument;
+        $updated2Document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'] = null;
+        $updated2Document = $this->_instance->saveDocument_Offer($updated2Document);
+        $this->assertSame($updatedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0]['id'],
+            $updated2Document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0]['id']);
+
+        $updated2Document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'] = [];
+        $updated2Document = $this->_instance->saveDocument_Offer($updated2Document);
+        $this->assertEmpty($updated2Document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing']);
+
+        $document = Sales_Controller_Document_Offer::getInstance()->get($document['id']);
         $docExpander = new Tinebase_Record_Expander(Sales_Model_Document_Offer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 Sales_Model_Document_Offer::FLD_CUSTOMER_ID => [

@@ -107,25 +107,16 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE                 => true,
         self::EXPOSE_JSON_API               => true,
 
-        self::ASSOCIATIONS              => [
-            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
-                self::FLD_CUSTOMER_ID           => [
-                    self::TARGET_ENTITY             => Sales_Model_Document_Customer::class,
-                    self::FIELD_NAME                => self::FLD_CUSTOMER_ID,
-                    self::JOIN_COLUMNS              => [[
-                        self::NAME                      => self::FLD_CUSTOMER_ID,
-                        self::REFERENCED_COLUMN_NAME    => Sales_Model_Document_Customer::ID,
-                    ]],
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_CUSTOMER_ID => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'delivery' => [],
+                        'billing'  => [],
+                    ],
                 ],
-                self::FLD_RECIPIENT_ID          => [
-                    self::TARGET_ENTITY             => Sales_Model_Document_Address::class,
-                    self::FIELD_NAME                => self::FLD_RECIPIENT_ID,
-                    self::JOIN_COLUMNS              => [[
-                        self::NAME                      => self::FLD_RECIPIENT_ID,
-                        self::REFERENCED_COLUMN_NAME    => Sales_Model_Document_Address::ID,
-                    ]],
-                ],
-            ],
+                self::FLD_RECIPIENT_ID => [],
+            ]
         ],
 
         self::FIELDS                        => [
@@ -167,7 +158,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Sales_Model_Document_Customer::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Customer::FLD_DOCUMENT_ID,
                 ],
-                self::NULLABLE              => false, // only for offers this is nullable, by default its false
                 self::VALIDATORS            => [ // only for offers this is allow empty true, by default its false
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
@@ -181,12 +171,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING
-                ],
-                self::NULLABLE              => true,
-                self::INPUT_FILTERS         => [Zend_Filter_Null::class],
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => true,
-                    Zend_Filter_Input::DEFAULT_VALUE    => null,
                 ],
             ],
             self::FLD_CONTACT_ID => [

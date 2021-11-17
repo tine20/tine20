@@ -112,6 +112,7 @@ class Tinebase_ModelConfiguration_Const {
     const IS_VIRTUAL = 'isVirtual';
 
     const JOIN_COLUMNS = 'joinColumns';
+    const JSON_EXPANDER = 'jsonExpander';
 
     const LABEL = 'label';
     const LENGTH = 'length';

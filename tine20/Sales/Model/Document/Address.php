@@ -34,13 +34,7 @@ class Sales_Model_Document_Address extends Sales_Model_Address
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
         $_definition[self::EXPOSE_JSON_API] = true;
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Address::class;
-        $_definition[self::FIELDS][self::FLD_ORIGINAL_ID] = [
-            self::TYPE                  => self::TYPE_RECORD,
-            self::CONFIG                => [
-                self::APP_NAME              => Sales_Config::APP_NAME,
-                self::MODEL_NAME            => Sales_Model_Address::MODEL_NAME_PART,
-            ],
-        ];
+
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
             self::TYPE                  => self::TYPE_RECORD,
             self::NULLABLE              => true,

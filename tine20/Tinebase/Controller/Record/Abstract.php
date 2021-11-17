@@ -992,6 +992,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (!$record->getId()) {
             throw new Tinebase_Exception_UnexpectedValue('needs to have an id set');
         }
+        // TODO FIXME MAY NOT BE CHANGED!!! during updates
         $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
         $record->setId(null);
     }

@@ -41,14 +41,24 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
             Sales_Model_Document_Address::MODEL_NAME_PART;
         //unset($_definition[self::FIELDS]['billing'][self::CONFIG][self::DEPENDENT_RECORDS]);
 
+        if (!isset($_definition[self::ASSOCIATIONS])) {
+            $_definition[self::ASSOCIATIONS] = [];
+        }
+        if (!isset($_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
+            $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE] = [];
+        }
+        /* sadly not possible
+         * $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE][self::FLD_DOCUMENT_ID] =
+            [
+                self::TARGET_ENTITY             => Sales_Model_Document_Offer::class,
+                self::FIELD_NAME                => self::FLD_DOCUMENT_ID,
+                self::JOIN_COLUMNS              => [[
+                    self::NAME                      => self::FLD_DOCUMENT_ID,
+                    self::REFERENCED_COLUMN_NAME    => Sales_Model_Document_Offer::ID,
+                ]],
+            ];*/
+
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Customer::class;
-        $_definition[self::FIELDS][self::FLD_ORIGINAL_ID] = [
-            self::TYPE                  => self::TYPE_RECORD,
-            self::CONFIG                => [
-                self::APP_NAME              => Sales_Config::APP_NAME,
-                self::MODEL_NAME            => Sales_Model_Customer::MODEL_NAME_PART,
-            ],
-        ];
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
             self::TYPE                  => self::TYPE_RECORD,
             self::NORESOLVE             => true,

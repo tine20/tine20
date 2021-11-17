@@ -1185,6 +1185,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             list($app, $model) = explode('_Model_', $this->_denormalizationOf);
             $this->_fields[self::FLD_ORIGINAL_ID] = [
                 self::TYPE                  => self::TYPE_RECORD,
+                self::NORESOLVE             => true,
                 self::CONFIG                => [
                     self::APP_NAME              => $app,
                     self::MODEL_NAME            => $model,
