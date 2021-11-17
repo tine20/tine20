@@ -46,7 +46,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 
                 _.map(response.responseData, async (nodeData) => {
                     let app = Tine.Tinebase.appMgr.getById(nodeData.name);
-                    nodeData.appName = app.appName;
+                    nodeData.appName = app ? app.appName : '';
                     nodeData.i18n_name = app ? app.getTitle() : nodeData.name;
                     nodeData.path = `${attr.path === '/' ? '' : attr.path}/${nodeData.i18n_name}`;
                     nodeData.virtualPath = `${attr.virtualPath === '/' ? '' : attr.virtualPath}/${nodeData.name}`;
