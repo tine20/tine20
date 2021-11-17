@@ -822,4 +822,33 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
 
         return str_replace($search, $replace, $this->_config['emailHome']);
     }
+
+
+    /**
+     * backup user to a dump file
+     *
+     * @param array $option
+     */
+    public function backup($option)
+    {
+        $backupDir = $option['backupDir'];
+
+        // hide password from shell via my.cnf
+        $domain = $this->_config['domain'];
+        $mycnf = $backupDir . '/my.cnf';
+
+        $mysqlBackEnd = new Setup_Backend_Mysql();
+        $mysqlBackEnd->createMyConf($mycnf);
+
+        //create the dump via mysqldump with --where to select the data we want to export
+        $cmd = "mysqldump --defaults-extra-file=$mycnf "
+            ."--single-transaction --max_allowed_packet=512M "
+            ."--opt --no-tablespaces "
+            . escapeshellarg($this->_config['dbname']) . ' '
+            . escapeshellarg($this->_userTable)
+            .' --where="' . "domain='$domain'" . '"'
+            ." | bzip2 > $backupDir/tine20_dovecot.sql.bz2";
+
+        exec($cmd);
+    }
 }

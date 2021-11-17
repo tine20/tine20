@@ -5279,7 +5279,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Config\\:\\:\\$database\\.$#"
-			count: 10
+			count: 11
 			path: tine20/Setup/Backend/Mysql.php
 
 		-
