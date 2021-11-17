@@ -788,5 +788,16 @@ class Tinebase_DateTime extends DateTime
         $date->hasTime(false);
         return $date;
     }
-}
 
+    /**
+     * @param Tinebase_DateTime $date
+     * @return bool
+     */
+    public function hasSameDate(Tinebase_DateTime $date): bool
+    {
+        return (
+            $this->format('H:i:s') === '00:00:00'
+            && $this->format('Y-m-d') === $date->format('Y-m-d')
+        );
+    }
+}
