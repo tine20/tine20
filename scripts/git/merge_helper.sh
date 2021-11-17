@@ -27,6 +27,12 @@ MergeUpwards () {
         git pull $remote $dstBranch
     fi
 
+    # exit if branches are alredy merged, otherwise the composer.lock file from the previus merge request would rewritten.
+    if [ $(git merge-base $srcBranch $dstBranch) =  $(git rev-parse $srcBranch) ]; then
+        echo "$dstBranch is all ready up to date"
+        return
+    fi
+
     git merge --no-edit --rerere-autoupdate $srcBranch
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
