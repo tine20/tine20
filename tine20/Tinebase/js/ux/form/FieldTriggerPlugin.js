@@ -9,7 +9,9 @@ import '../../../css/ux/form/FieldTriggerPlugin.css'
 
 class FieldTriggerPlugin {
     triggerClass = 'x-form-trigger'
-    
+    visible = true
+    qtip = null
+
     #trigger
     
     constructor(config) {
@@ -24,10 +26,28 @@ class FieldTriggerPlugin {
             field.el.parent('.x-grid-editor')
         this.#trigger = wrap.createChild(this.triggerConfig ||
             {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin " + this.triggerClass})
+        this.setVisible(this.visible)
+        if (this.qtip) {
+            this.setQtip(this.qtip)
+        }
 
         field.mon(this.#trigger, 'click', this.onTriggerClick, this, {preventDefault:true});
         this.#trigger.addClassOnOver('x-form-trigger-over');
         this.#trigger.addClassOnClick('x-form-trigger-click');
+    }
+
+    setVisible(visible) {
+        this.visible = visible
+        if (this.#trigger) {
+            this.#trigger.setVisible(visible);
+        }
+    }
+
+    setQtip(qtip) {
+        this.qtip = qtip
+        if (this.#trigger) {
+            this.#trigger.set({ 'ext:qtip': Tine.Tinebase.common.doubleEncode(qtip) });
+        }
     }
 }
 export default FieldTriggerPlugin

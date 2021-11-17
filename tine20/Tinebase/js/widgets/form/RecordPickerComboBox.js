@@ -10,7 +10,8 @@
 
 Ext.ns('Tine.Tinebase.widgets.form');
 
-import{expandFilter} from 'util/filterSpec';
+import { expandFilter } from 'util/filterSpec';
+import RecordEditFieldTriggerPlugin from './RecordEditFieldTriggerPlugin';
 
 /**
  * @namespace   Tine.Tinebase.widgets.form
@@ -139,6 +140,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.denormalizationRecordClass = this.recordClass;
             this.recordClass = Tine.Tinebase.data.RecordMgr.get(modelConfig.denormalizationOf);
             this.recordProxy =  Tine[this.recordClass.getMeta('appName')][this.recordClass.getMeta('modelName').toLowerCase() + 'Backend'];
+            this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin({
+                allowCreateNew: false,
+                preserveJsonProps: 'original_id',
+                qtip: window.i18n._('Edit copy')
+            }))
         }
 
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
@@ -370,22 +376,18 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         return this;
     },
 
+    clearValue: function () {
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.clearValue.apply(this, arguments);
+        this.selectedRecord = null;
+    },
+
     getValue: function() {
         let value = Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.getValue.apply(this, arguments);
 
-        if (this.denormalizationRecordClass) {
-            // NOTE: just sending an id means: existing denormalized record is unchanged
-
-            if (this.selectedRecord && !this.selectedRecord.json.original_id) {
-                // record got picked freshly -> send data to create denormalized record
-                value = { ...this.selectedRecord.data };
-                value.original_id = value[this.valueField];
-            }
-            if (this.selectedRecord && this.selectedRecord.get(this.valueField) && this.selectedRecord.json.original_id && this.selectedRecord.dirty) {
-                // existing denormalized record got changed -> send data
-                value = { ...this.selectedRecord.data };
-                value.original_id = this.selectedRecord.json.original_id;
-            }
+        if (this.denormalizationRecordClass && this.selectedRecord) {
+            // NOTE: denormalized records are depended records, so we need to send all data (or empty string to delete)
+            value = { ...this.selectedRecord.data };
+            value.original_id = this.selectedRecord.json.original_id || value[this.valueField];
         }
 
         return value;
