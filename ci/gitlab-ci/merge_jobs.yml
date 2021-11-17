@@ -6,8 +6,7 @@
   image: ${UTIL_REGISTRY}/docker:19.03.1-r2 # dose not need docker. But the docker image should already exist on the runners.
   needs: []
   before_script:
-    - apk add git composer
-    - composer global require balbuf/composer-git-merge-driver
+    - apk add git
     - !reference [.lib, script]
     - cp $DOCKER_GIT_CONFIG ~/.gitconfig
     - git_repo_clone
@@ -19,9 +18,6 @@
     - git config merge.pofile.name "merge po-files driver"
     - git config merge.pofile.driver "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge-po-files %A %O %B"
     - git config merge.pofile.recursive "binary"
-    - git config merge.composer_json.name "composer merge driver" 
-    - git config merge.composer_json.driver "~/.composer/vendor/bin/composer-git-merge-driver %O %A %B %L %P"
-    - git config merge.composer_json.recursive binary
     - git remote add customers https://gitlab.metaways.net/tine20/tine20.git
     - cd ${CI_BUILDS_DIR}/merge/tine20
     
