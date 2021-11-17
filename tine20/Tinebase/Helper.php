@@ -522,15 +522,31 @@ class Tinebase_Helper
     public static function convertDomainToPunycode($domain)
     {
         $domain = self::convertDomain($domain, 'idn_to_ascii');
-        return $domain ? $domain : "";
+        return $domain ?: "";
     }
 
+    /**
+     * @param string $domain
+     * @param string $converterFunction
+     * @return false|mixed|string
+     */
     public static function convertDomain($domain, $converterFunction)
     {
         if (strpos($domain, '@') !== false) {
             list($emailpart, $domainpart) = explode('@', $domain);
-            return call_user_func_array($converterFunction, [$emailpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46])
-                . '@' . call_user_func_array($converterFunction, [$domainpart, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46]);
+            $convertedMailPart = call_user_func_array($converterFunction, [
+                $emailpart,
+                IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46
+            ]);
+            if (empty($convertedMailPart)) {
+                // the converter failed (for example when the string contains ".-") - we just use the original value
+                $convertedMailPart = $emailpart;
+            }
+            $convertedDomainPart = call_user_func_array($converterFunction, [
+                $domainpart,
+                IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46
+            ]);
+            return $convertedMailPart . '@' . $convertedDomainPart;
         } else {
             return call_user_func_array($converterFunction, [$domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46]);
         }
