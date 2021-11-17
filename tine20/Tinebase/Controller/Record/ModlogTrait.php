@@ -100,7 +100,7 @@ trait Tinebase_Controller_Record_ModlogTrait
      * @return bool
      * @throws Tinebase_Exception_NotFound
      */
-    public function modlogActive($setTo = NULL)
+    public function modlogActive($setTo = null)
     {
         if (! $this->_backend) {
             $currValue = ! $this->_omitModLog;
