@@ -1,3 +1,4 @@
 *.po merge=pofile
 *.pot merge=pofile
-/tine20/composer.lock -merge
+/tine20/composer.json merge=composer_json
+/tine20/composer.lock merge=composer_json
