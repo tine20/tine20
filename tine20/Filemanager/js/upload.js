@@ -173,7 +173,7 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
                 fileObject,
                 nodeData,
                 fileSize: fileObject.size,
-                existNodeId: existNode ? existNode.id : nodeData.id,
+                existNode: existNode ? existNode : null,
             })
         };
         

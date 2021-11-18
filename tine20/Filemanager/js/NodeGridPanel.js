@@ -200,7 +200,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return;
         }
     
-        if (record.status === 'failed') {
+        if (record.status === 'failed' || record.status === 'cancelled') {
+            this.bufferedLoadGridData({
+                removeStrategy: 'keepBuffered'
+            });
+            
             return;
         }
 

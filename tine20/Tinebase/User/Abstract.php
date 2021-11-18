@@ -20,7 +20,6 @@
  *
  * @method modlogActive($setTo = null)
  * @method updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
- * @method updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
  */
 abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 {
