@@ -32,7 +32,12 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_serverTimezone;
-    
+
+    // TODO javascript FE is not ready for this
+//    protected $_configuredModels = [
+//        Tasks_Model_Task::MODEL_NAME_PART,
+//    ];
+
     /**
      * the constructor
      *

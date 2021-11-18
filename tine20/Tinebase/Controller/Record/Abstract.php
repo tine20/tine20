@@ -1449,7 +1449,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $toAdd = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
             foreach ($record->{$virtualField} as $item) {
                 if (is_array($item)) {
-                    $item = $item['id'];
+                    $item = $item['id'] ?? null;
                 }
                 if (null === ($existingRel = $existingRelations->find('related_id', $item))) {
                     $relationsModified = true;

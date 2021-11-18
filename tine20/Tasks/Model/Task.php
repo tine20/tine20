@@ -17,9 +17,9 @@
  */
 class Tasks_Model_Task extends Tinebase_Record_Abstract
 {
-    const CLASS_PUBLIC         = 'PUBLIC';
-    const CLASS_PRIVATE        = 'PRIVATE';
-    //const CLASS_CONFIDENTIAL   = 'CONFIDENTIAL';
+    public const MODEL_NAME_PART = 'Task';
+    public const CLASS_PUBLIC         = 'PUBLIC';
+    public const CLASS_PRIVATE        = 'PRIVATE';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -93,7 +93,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'type'              => 'string',
                 'validators'        => array(
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL*/)),
+                    array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE)),
                 ),
             ),
             'description'       => array(

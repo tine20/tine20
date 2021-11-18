@@ -81,6 +81,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+        // TODO replace with field manager version (see tasks)
         this.contactLinkPanel = new Tine.widgets.grid.LinkGridPanel({
             app: this.app,
             editDialog: this,
@@ -99,7 +100,94 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             },
             relationTypesKeyfieldName: 'projectAttendeeRole'
         });
-        
+
+        const tasksApp = Tine.Tinebase.appMgr.get('Tasks');
+        this.tasksLinkPanel = Tine.widgets.form.FieldManager.get(
+            this.appName,
+            this.modelName,
+            'tasks',
+            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+            {
+                allowCreateNew: true,
+                // TODO allow to auto-create this (but we need to switch Tasks frontend to MC / appstarter first)
+                // columns: [
+                //     'summary',
+                //     'due',
+                //     'priority',
+                //     'percent',
+                //     'status',
+                // ]
+                columns: [
+                    {
+                        id: 'summary',
+                        header: tasksApp.i18n._("Summary"),
+                        width: 130,
+                        dataIndex: 'summary',
+                        quickaddField: new Ext.form.TextField({
+                            emptyText: tasksApp.i18n._('Add a task...')
+                        })
+                    }, {
+                        id: 'due',
+                        header: tasksApp.i18n._("Due Date"),
+                        width: 100,
+                        dataIndex: 'due',
+                        renderer: Tine.Tinebase.common.dateRenderer,
+                        editor: new Ext.ux.form.ClearableDateField({
+                            //format : 'd.m.Y'
+                        }),
+                        quickaddField: new Ext.ux.form.ClearableDateField({
+                            //value: new Date(),
+                            //format : "d.m.Y"
+                        })
+                    }, {
+                        id: 'priority',
+                        header: tasksApp.i18n._("Priority"),
+                        width: 70,
+                        dataIndex: 'priority',
+                        renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskPriority'),
+                        editor: {
+                            xtype: 'widget-keyfieldcombo',
+                            app: 'Tasks',
+                            keyFieldName: 'taskPriority'
+                        },
+                        quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Tasks',
+                            keyFieldName: 'taskPriority'
+                        })
+                    }, {
+                        id: 'percent',
+                        header: tasksApp.i18n._("Percent"),
+                        width: 70,
+                        dataIndex: 'percent',
+                        renderer: Ext.ux.PercentRenderer,
+                        editor: new Ext.ux.PercentCombo({
+                            autoExpand: true,
+                            blurOnSelect: true
+                        }),
+                        quickaddField: new Ext.ux.PercentCombo({
+                            autoExpand: true
+                        })
+                    }, {
+                        id: 'status',
+                        header: tasksApp.i18n._("Status"),
+                        width: 100,
+                        dataIndex: 'status',
+                        renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
+                        editor: {
+                            xtype: 'widget-keyfieldcombo',
+                            app: 'Tasks',
+                            keyFieldName: 'taskStatus'
+                        },
+                        quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Tasks',
+                            keyFieldName: 'taskStatus',
+                            value: 'NEEDS-ACTION'
+                        })
+                    }
+                ]
+            }
+        )
+
         return {
             xtype: 'tabpanel',
             plain:true,
@@ -193,6 +281,16 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [
                             this.contactLinkPanel
                         ]
+                    }, {
+                        xtype: 'tabpanel',
+                        deferredRender: false,
+                        activeTab: 0,
+                        border: false,
+                        height: 200,
+                        form: true,
+                        items: [
+                            this.tasksLinkPanel
+                        ]
                     }]
                 }, {
                     // activities and tags
@@ -252,7 +350,7 @@ Tine.Projects.ProjectEditDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
-        height: 470,
+        height: 800,
         name: Tine.Projects.ProjectEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Projects.ProjectEditDialog',
         contentPanelConstructorConfig: config
