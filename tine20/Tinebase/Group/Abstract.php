@@ -16,8 +16,9 @@
  *
  * @package     Tinebase
  * @subpackage  Group
+ *
+ * @method modlogActive($setTo = null)
  */
- 
 abstract class Tinebase_Group_Abstract
 {
     /**

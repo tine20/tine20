@@ -66,6 +66,9 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         if ($this->_oldConfig) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_oldConfig);
         }
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
+        )));
     }
 
     /**
@@ -484,8 +487,15 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
     public function testDeleteUserDeletesAccounts()
     {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
+            Tinebase_Config::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS => true,
+        )));
+        
         $accountArray = $this->testCreateNewUserAccountWithINBOX();
         Tinebase_Core::setUser($this->_originalTestUser);
+
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete($accountArray['user_id']['accountId']);
         $accountBackend = new Felamimail_Backend_Account();
         try {

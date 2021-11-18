@@ -346,7 +346,7 @@ Tine.Tinebase.tineInit = {
 
     async getEmailContextMenu(target, email) {
         // store click position, make sure menuItem diaplay around the link
-        if (Tine.Addressbook) {
+        if (Tine.Addressbook && email) {
             let contacts = await Tine.Addressbook.searchContacts([{
                 field: 'email', operator: 'in', value: email
             }]);
@@ -362,7 +362,7 @@ Tine.Tinebase.tineInit = {
                     contact = Tine.Tinebase.data.Record.setFromJson(contact, Tine.Addressbook.Model.Contact);
                     const action_editContact = new Ext.Action({
                         text: contact?.data?.n_fileas,
-                        handler: this.contactHandler.createDelegate(this, [target, contact]),
+                        handler: this.contactHandler.createDelegate(this, [target, contact, email]),
                         iconCls: 'AddressbookIconCls',
                         scope: this
                     });
@@ -373,7 +373,7 @@ Tine.Tinebase.tineInit = {
 
             this.action_addContact = new Ext.Action({
                 text: i18n._('Create Contact'),
-                handler: this.contactHandler.createDelegate(this, [target]),
+                handler: this.contactHandler.createDelegate(this, [target, null, email]),
                 iconCls: 'action_add',
                 scope: this,
                 hidden: contacts.length,
@@ -418,20 +418,24 @@ Tine.Tinebase.tineInit = {
         return this.contextMenu;
     },
 
-    contactHandler(target, record) {
+    contactHandler(target, record, email) {
         // check if addressbook app is available
         if (! Tine.Tinebase.common.hasRight('run', 'Addressbook')) {
             return;
         }
-
+        
+        email = email.length ? email[0] : Ext.isString(email) ? email : '';
+        
         Tine.Addressbook.ContactEditDialog.openWindow({
-            record: record,
+            record: record ?? new Tine.Addressbook.Model.Contact({
+                email: email
+            }),
             listeners: {
                 scope: this,
                 'load': function(editdlg) {
-                    if (!record) {
-                        const linkified = target.dom?.className === 'linkified';
-                        const contactInfo = Ext.util.Format.htmlDecode(linkified ? target.dom.href : target.id);
+                    if (!record && target) {
+                        const linkified = target?.dom?.className === 'linkified';
+                        const contactInfo = Ext.util.Format.htmlDecode(linkified ? target?.dom?.href : target.id);
 
                         if (linkified) {
                             editdlg.record.set('email', contactInfo.replace('mailto:', ''));
@@ -442,6 +446,9 @@ Tine.Tinebase.tineInit = {
                             editdlg.record.set('n_given', parts[2]);
                             editdlg.record.set('n_family', parts[3]);
                         }
+                    }
+                    if (email) {
+                        editdlg.record.set('email', email);
                     }
                 }
             }

@@ -82,6 +82,9 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
      */
     public function testDeleteGroup()
     {
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
+        
         $group = $this->_createGroup();
         // delete group with json.php function
         $group = Tinebase_Group::getInstance()->getGroupByName($group['name']);
@@ -170,10 +173,15 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
      */
     public function testGetAccessLogsWithDeletedUser()
     {
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
+        
         $clienttype = 'Unittest';
         $user = $this->_createTestUser();
         $this->_addAccessLog($user, $clienttype);
-        
+
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete($user['accountId']);
         $accessLogs = $this->_json->searchAccessLogs($this->_getAccessLogFilter($user['accountLoginName'], $clienttype), array());
 
