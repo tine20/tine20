@@ -97,20 +97,15 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     }
 
     /**
-     * inspect creation of one record (after create)
+     * inspect creation of one record (after setReleatedData)
      *
-     * @param Tinebase_Record_Interface $_createdRecord
-     * @param Tinebase_Record_Interface $_record
+     * @param   Tinebase_Record_Interface $createedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
      * @return  void
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_Validation
-     * @throws Tinebase_Exception_NotFound
      */
-    protected function _inspectAfterCreate($_createdRecord, $_record)
+    protected function _inspectAfterSetRelatedDataCreate($_createdRecord, $_record)
     {
-        $this->_resolveBillingAddress($_record);
+        $this->_resolveBillingAddress($_createdRecord);
     }
 
     /**
