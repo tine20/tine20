@@ -203,6 +203,7 @@ Tine.widgets.form.FieldManager = function() {
 
                         if (fieldType === 'relations') {
                             _.assign(field, {
+                                title: i18n._(fieldDefinition.label),
                                 xtype: 'tinerelationpickergridpanel',
                                 isFormField: true,
                                 fieldName: fieldDefinition.fieldName,

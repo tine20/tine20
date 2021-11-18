@@ -25,6 +25,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
     public const FLD_SCOPE = 'scope';
     public const FLD_START = 'start';
     public const FLD_STATUS = 'status';
+    public const FLD_TASKS = 'tasks';
     public const FLD_TITLE = 'title';
     public const FLD_TYPE = 'type';
 
@@ -74,7 +75,6 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
         ],
 
         self::FILTER_MODEL => [
-            // relation filters
             'contact' => [
                 'filter' => 'Tinebase_Model_Filter_Relation', 'options' => [
                     'related_model' => 'Addressbook_Model_Contact',
@@ -159,6 +159,19 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
                 ],
                 self::NAME => Projects_Config::PROJECT_TYPE,
             ],
+            self::FLD_TASKS => [
+                self::LABEL => 'Tasks', // _('Tasks')
+                self::TYPE => self::TYPE_VIRTUAL,
+                self::CONFIG => [
+                    self::TYPE => self::TYPE_RELATIONS,
+                    self::LABEL => 'Tasks',
+                    self::CONFIG => [
+                        self::TYPE => 'TASK',
+                        self::APP_NAME => 'Tasks',
+                        self::MODEL_NAME => 'Task',
+                    ],
+                ],
+            ],
         ]
     ];
 
@@ -172,11 +185,30 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
     /**
      * @see Tinebase_Record_Abstract
      */
-    protected static $_relatableConfig = array(
-        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact',
-            'keyfieldConfig' => array('from' => 'own', 'name' => 'projectAttendeeRole'),
-            'default' => array('type' => 'COWORKER', 'related_degree' => 'sibling')
-        )
-    );
+    protected static $_relatableConfig = [
+        [
+            'relatedApp' => 'Addressbook',
+            'relatedModel' => 'Contact',
+            'keyfieldConfig' => [
+                'from' => 'own',
+                'name' => 'projectAttendeeRole'
+            ],
+            'default' => [
+                'type' => 'COWORKER',
+                'related_degree' => 'sibling'
+            ]
+        ], [
+            'relatedApp' => 'Tasks',
+            'relatedModel' => 'Task',
+            'config' => [[
+                'type' => 'TASK',
+                'degree' => 'sibling',
+                'text' => 'Task',
+                // FIXME a project may have many tasks, but a task may have one project, no more
+                //'max' => '0:1' // _('Task')
+                'max' => '0:0' // _('Task')
+            ]],
+        ]
+    ];
 }
 

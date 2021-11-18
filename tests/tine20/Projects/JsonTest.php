@@ -1,18 +1,14 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Projects
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
@@ -22,14 +18,7 @@ class Projects_JsonTest extends TestCase
     /**
      * @var Projects_Frontend_Json
      */
-    protected $_json = array();
-    
-    /**
-     * test department
-     * 
-     * @var Tinebase_Model_Department
-     */
-    protected $_department = NULL;
+    protected Projects_Frontend_Json $_json;
     
     /**
      * Sets up the fixture.
@@ -385,5 +374,32 @@ class Projects_JsonTest extends TestCase
         $this->_addRecordAttachment($project);
         $newproject2 = $this->_json->saveProject($project->toArray());
         self::assertEquals(1, count($newproject2['attachments']));
+    }
+
+    public function testProjectTasks()
+    {
+        $task = Tasks_Controller_Task::getInstance()->create(new Tasks_Model_Task([
+            'status' => 'NEEDS-ACTION',
+            'summary' => 'sfvsdv',
+        ]));
+        $projectData = $this->_getProjectData();
+        $projectData[Projects_Model_Project::FLD_TASKS] = [
+            $task->toArray()
+        ];
+        $savedProjectData = $this->_json->saveProject($projectData);
+
+        self::assertIsArray($savedProjectData[Projects_Model_Project::FLD_TASKS], print_r($savedProjectData, true));
+        self::assertCount(1, $savedProjectData[Projects_Model_Project::FLD_TASKS], print_r($savedProjectData, true));
+
+        $filter = [[
+            'field' => 'tasks',
+            'operator' => 'definedBy',
+            'value' => [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'sfvsdv']
+            ],
+        ]];
+
+        $searchResult = $this->_json->searchProjects($filter, []);
+        self::assertEquals(1, $searchResult['totalcount']);
     }
 }

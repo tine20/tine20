@@ -203,6 +203,7 @@ Tine.widgets.grid.RendererManager = function() {
                     renderer = Tine.widgets.grid.jsonRenderer;
                     break;
                 case 'relation':
+                case 'relations':
                     let cc = fieldDefinition.config;
 
                     if (cc && cc.type && cc.appName && cc.modelName) {

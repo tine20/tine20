@@ -24,6 +24,8 @@ Ext.ns('Tine.widgets.grid');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.widgets.grid.LinkGridPanel
+ *
+ * @deprecated use tinerelationpickergridpanel
  */
 Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     
