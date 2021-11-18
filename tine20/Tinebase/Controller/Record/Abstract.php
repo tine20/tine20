@@ -995,10 +995,7 @@ abstract class Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_UnexpectedValue('is not instance of ' .
                 $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
         }
-        if (!$record->getId()) {
-            throw new Tinebase_Exception_UnexpectedValue('needs to have an id set');
-        }
-        // TODO FIXME MAY NOT BE CHANGED!!! during updates
+        // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
         $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
         $record->setId(null);
     }

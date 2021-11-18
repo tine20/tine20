@@ -130,6 +130,7 @@ class Sales_Document_JsonTest extends TestCase
                 Sales_Model_Document_Offer::FLD_CUSTOMER_ID => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         'delivery' => [],
+                        'postal' => [],
                     ]
                 ]
             ]
@@ -147,6 +148,7 @@ class Sales_Document_JsonTest extends TestCase
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'delivery' => [],
+                'postal' => [],
             ]
         ]);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Customer::class, [$customerUpdated]));
@@ -163,6 +165,10 @@ class Sales_Document_JsonTest extends TestCase
 
         $document->{Sales_Model_Document_Offer::FLD_CUSTOMER_ID}->delivery->getFirstRecord()->name = 'shoo';
         $document->{Sales_Model_Document_Offer::FLD_CUSTOMER_ID}->delivery->addRecord(new Sales_Model_Document_Address($secondCustomer->delivery->getFirstRecord()->toArray()));
+        $document->{Sales_Model_Document_Offer::FLD_CUSTOMER_ID}->postal = [
+            'name' => 'new postal adr',
+            'seq' => $document->{Sales_Model_Document_Offer::FLD_CUSTOMER_ID}->postal->seq,
+        ];
 
         $documentUpdated = $this->_instance->saveDocument_Offer($document->toArray(true));
         $customerUpdated = Sales_Controller_Document_Customer::getInstance()->get($documentUpdated[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
@@ -178,6 +184,8 @@ class Sales_Document_JsonTest extends TestCase
                 $this->assertSame($secondCustomer->delivery->getFirstRecord()->name, $address->name);
             }
         }
+        $this->assertSame($customer->postal->getId(), $customerUpdated->postal->getId());
+        $this->assertSame('new postal adr', $customerUpdated->postal->name);
     }
 
     public function testOfferDocumentPosition()
