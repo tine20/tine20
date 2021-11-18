@@ -138,7 +138,12 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         
         return this;
     },
-    
+
+    getValue: function () {
+        let value = Ext.ux.form.NumberField.superclass.getValue.call(this);
+        return value === '' ? null : value;
+    },
+
     // private, overwrites Ext.form.NumberField.parseValue
     parseValue : function(value){
         if (!value) {

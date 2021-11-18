@@ -58,7 +58,15 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        
+
+        const postalAdr = this.record.get('postal') || {};
+        Object.keys(postalAdr).forEach((fieldName) => {
+            const field = form.findField(fieldName);
+            if (field) {
+                field.setValue(postalAdr[fieldName], this.record);
+            }
+        });
+
         Tine.Sales.CustomerEditDialog.superclass.onRecordLoad.call(this);
         
         if (this.copyRecord) {
@@ -73,7 +81,27 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
     },
-    
+
+    /**
+     * executed when record gets updated from form
+     */
+    onRecordUpdate: function(callback, scope) {
+        var form = this.getForm();
+
+        const postalAdr = this.record.get('postal') || {};
+        Object.keys(this.recordClass.getModelConfiguration().fields).forEach((fieldName) => {
+            if (fieldName.match(/^adr_/)) {
+                const field = form.findField(fieldName);
+                if (field) {
+                    postalAdr[fieldName] = field.getValue()
+                }
+            }
+        });
+        this.record.set('postal', postalAdr)
+
+        Tine.Sales.CustomerEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+    },
+
     /**
      * duplicate(s) found exception handler
      * 

@@ -69,7 +69,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 //'queryFilter' => TRUE,
                 'type'        => self::TYPE_BIGINT,
                 self::UNSIGNED => true,
-                self::DEFAULT_VAL => 0,
+//                self::DEFAULT_VAL => 0, // -> no default to autopick number
             ),
             'name' => array(
                 'label'       => 'Name', // _('Name')
