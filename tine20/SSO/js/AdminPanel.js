@@ -24,7 +24,8 @@ Tine.SSO.AdminPanel = Ext.extend(Ext.TabPanel, {
         this.items = [
             new Tine.SSO.RelyingPartyGridPanel({
                 title: this.app.i18n._('Relying Parties'),
-                disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO')
+                disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
+                ownActionToolbar: true
             }),
             new Tine.Admin.config.GridPanel({
                 configApp: this.app
