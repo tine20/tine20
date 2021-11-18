@@ -258,15 +258,28 @@ Tine.widgets.form.FieldManager = function() {
                         field = picker;
                     }
                     break;
+                case 'model':
+                    const availableModels = _.get(fieldDefinition, 'config.availableModels', []);
+                    if (availableModels.length) {
+                        field.xtype = 'combo';
+                        field.forceSelection = true;
+                        field.typeAhead = true;
+                        field.store = _.reduce(availableModels, function(arr, classname) {
+                            var recordClass = Tine.Tinebase.data.RecordMgr.get(classname);
+                            if (recordClass) {
+                                arr.push([classname, recordClass.getRecordName()]);
+                            }
+                            return arr;
+                        }, []);
+                    }
+                    break
                 case 'dynamicRecord':
                     // NOTE: this editor depends and the className _data_ and therefore can't be assigned statically
                     //       as the editor api (get/setValue) does not know about the record the value comes from
                     //       it's not possible to auto create a editor here
-                    // return null;
-                    const classNameField = fieldDefinition.config.refModelField;
                     field.xtype = 'tw-recordEditField';
                     field.appName = fieldDefinition.config.appName;
-                    field.modelName = classNameField;
+                    field.modelName = fieldDefinition.config.refModelField;
                     field.fieldName = fieldDefinition.fieldName;
                     break
                 case 'keyfield':

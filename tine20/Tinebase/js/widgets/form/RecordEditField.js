@@ -26,22 +26,35 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         Tine.Tinebase.widgets.form.RecordEditField.superclass.initComponent.call(this);
     },
 
-    setValue : function(v, owningRecord){
-        this.recordData = _.get(v, 'data', v);
-        
-        // if the field is a dynamicReccord, get classname and adopt thi.recordClass
-        const owningRecordClass = _.get(owningRecord, 'constructor');
+    assertRecordClass: function(owningRecord) {
+        if (! owningRecord) return;
+
+        // if the field is a dynamicReccord, get classname and adopt this.recordClass
+        this.owningRecord = owningRecord;
+        const owningRecordClass = _.get(this.owningRecord, 'constructor');
         const owningRecordFieldDefinitions = _.get(owningRecordClass, 'getFieldDefinitions') ? owningRecordClass.getFieldDefinitions() : null;
         const ownFieldDefinition = _.get(_.find(owningRecordFieldDefinitions, {name: this.fieldName}), 'fieldDefinition');
         const classNameField = _.get(ownFieldDefinition, 'config.refModelField');
-        const className = _.get(owningRecord, 'data.'+classNameField);
+        const className = _.get(this.owningRecord, 'data.'+classNameField);
         this.recordClass = className ? Tine.Tinebase.data.RecordMgr.get(className) || this.recordClass : this.recordClass;
+    },
+    setValue : function(v, owningRecord){
+        this.recordData = _.get(v, 'data', v);
+        this.assertRecordClass(owningRecord);
 
         let valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
-        Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, valueRecord ? valueRecord.getTitle() : '');
+        Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, valueRecord ? valueRecord.getTitle() || '...' : '');
+    },
+    checkState: function(editDialog, owningRecord) {
+        this.assertRecordClass(owningRecord);
     },
 
     onTriggerClick: function () {
+        this.assertRecordClass(this.owningRecord);
+        if (! this.recordClass) {
+            alert('select model');
+            return;
+        }
         let me = this;
         let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
 
