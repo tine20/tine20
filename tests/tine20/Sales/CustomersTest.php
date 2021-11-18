@@ -126,14 +126,16 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
             'curreny_trans_rate' => 7.034,
             'discount'    => 12.5,
         
-            'adr_prefix1' => 'no prefix 1',
-            'adr_prefix2' => 'no prefix 2',
-            'adr_street' => 'Mao st. 2000',
-            'adr_postalcode' => '1',
-            'adr_locality' => 'Shanghai',
-            'adr_region' => 'Shanghai',
-            'adr_countryname' => 'China',
-            'adr_pobox'   => '7777777',
+            'postal' => [
+                'prefix1' => 'no prefix 1',
+                'prefix2' => 'no prefix 2',
+                'street' => 'Mao st. 2000',
+                'postalcode' => '1',
+                'locality' => 'Shanghai',
+                'region' => 'Shanghai',
+                'countryname' => 'China',
+                'pobox'   => '7777777',
+            ],
         
             'billing' => array(array(
                 // setting id here (id is needed in fe store)

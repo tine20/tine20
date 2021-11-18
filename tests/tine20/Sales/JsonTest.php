@@ -510,26 +510,27 @@ class Sales_JsonTest extends TestCase
             'name'      => Tinebase_Record_Abstract::generateUID(),
         ));
         
-        $customer['adr_type'] = 'postal';
-        $customer['adr_prefix1'] = 'test';
+        $customer['postal']['prefix1'] = 'test';
         $customer = $this->_instance->saveCustomer($customer);
+        $this->assertEquals(1, $customer['postal']['seq']);
         
-        $customer['adr_prefix1'] = 'test test';
+        $customer['postal']['prefix1'] = 'test test';
         // js client does not send adr_seq
-        unset($customer['adr_seq']);
+        unset($customer['postal']['seq']);
         $updatedCustomer = $this->_instance->saveCustomer($customer);
-        $this->assertEquals('test test', $updatedCustomer['postal_id']['prefix1']);
-        $this->assertEquals(3, $updatedCustomer['postal_id']['seq']);
-        $this->assertEquals(3, $updatedCustomer['adr_seq']);
+        $this->assertEquals('test test', $updatedCustomer['postal']['prefix1']);
+        $this->assertEquals(2, $updatedCustomer['postal']['seq']);
     }
 
     public function testSaveCustomerAndCreateInvoiceAddress()
     {
         $customer = $this->_instance->saveCustomer(array(
             'name'      => Tinebase_Record_Abstract::generateUID(),
-            'adr_street' => '11212stree',
-            'adr_postalcode' => '1111',
-            'adr_locality' => '1dscscsd',
+            'postal' => [
+                'street' => '11212stree',
+                'postalcode' => '1111',
+                'locality' => '1dscscsd',
+            ]
         ));
 
         // assert invoice address (same as postal address)

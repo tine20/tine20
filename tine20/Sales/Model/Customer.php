@@ -45,7 +45,6 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-        'resolveVFGlobally' => TRUE,
 
         'exposeHttpApi'     => true,
         
