@@ -332,8 +332,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             }
 
             // value is the current id
-            else if (Ext.isPrimitive(value) && value == this.getValue()) {
-                return this.setValue(this.selectedRecord);
+            else if (Ext.isPrimitive(value)) {
+                if (value == this.getValue()) {
+                    return this.setValue(this.selectedRecord);
+                } else {
+                    this.recordProxy.promiseLoadRecord(value).then((record) => { this.setValue(record) })
+                }
             }
         }
 
