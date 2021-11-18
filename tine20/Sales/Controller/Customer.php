@@ -99,7 +99,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     /**
      * inspect creation of one record (after setReleatedData)
      *
-     * @param   Tinebase_Record_Interface $createedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $createdRecord    the just updated record
      * @param   Tinebase_Record_Interface $record           the update record
      * @return  void
      */
