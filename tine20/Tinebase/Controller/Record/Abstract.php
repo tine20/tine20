@@ -958,6 +958,8 @@ abstract class Tinebase_Controller_Record_Abstract
                     if ($newRecord->{$property} instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
                         if (null === $currentRecord->{$property} || $currentRecord->{$property}->getId() !== $newRecord->{$property}->getId()) {
                             $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
+                        } else {
+                            $newRecord->{$property}->{TMCC::FLD_ORIGINAL_ID} = $currentRecord->{$property}->{TMCC::FLD_ORIGINAL_ID};
                         }
                     }
                 }
@@ -974,6 +976,10 @@ abstract class Tinebase_Controller_Record_Abstract
                         $diff = $currentRecord->{$property}->diff($newRecord->{$property});
                         foreach ($diff->added as $addedRecord) {
                             $this->_newDenormalizedRecord($addedRecord, $definition);
+                        }
+                        foreach ($diff->modified as $diff) {
+                            $newRecord->{$property}->getById($diff->getId())->{TMCC::FLD_ORIGINAL_ID} =
+                                $currentRecord->{$property}->getById($diff->getId())->{TMCC::FLD_ORIGINAL_ID};
                         }
                     }
                 }

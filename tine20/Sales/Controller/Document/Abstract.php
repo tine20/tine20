@@ -28,53 +28,32 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        if (!empty($_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID})) {
+            $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}
+                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
+        }
         parent::_inspectBeforeCreate($_record);
 
-        // this maybe null for offers! model validation will take care of that, we just deal with what we get or not get
-       /* if (null !== $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}) {
-            if (!$_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} instanceof Sales_Model_Document_Customer) {
-                throw new Tinebase_Exception_UnexpectedValue(Sales_Model_Document_Abstract::FLD_CUSTOMER_ID .
-                    ' is not instance of ' . Sales_Model_Document_Customer::class);
-            }
-            if ($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->delivery) {
-                foreach ($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->delivery as $address) {
-                    if (!$address->{Sales_Model_Document_Abstract::FLD_ORIGINAL_ID}) {
-                        $address->{Sales_Model_Document_Abstract::FLD_ORIGINAL_ID} = $address->getId();
-                    }
-                    $address->setId(null);
-                }
-            }
-            if (!$_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}
-                    ->{Sales_Model_Document_Abstract::FLD_ORIGINAL_ID}) {
-                $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}
-                    ->{Sales_Model_Document_Abstract::FLD_ORIGINAL_ID} =
-                    $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->getId();
-            }
-            $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->setId(null);
-            $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} = Sales_Controller_Document_Customer::getInstance()
-                ->create($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID})->getId();
-        }*/
+
     }
 
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        parent::_inspectBeforeUpdate($_record, $_oldRecord);
-
-       /* if ($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} instanceof Sales_Model_Document_Customer) {
-            if (!$_oldRecord->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}) {
-                $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} = Sales_Controller_Document_Customer::getInstance()
-                    ->create($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID})->getId();
-            } elseif ($_oldRecord->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} !== $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->getId()) {
-                Sales_Controller_Document_Customer::getInstance()->delete($_oldRecord->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID});
-                $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} = Sales_Controller_Document_Customer::getInstance()
-                    ->create($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID})->getId();
-            } else {
-                Sales_Controller_Document_Customer::getInstance()
-                    ->update($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID});
+        if (!empty($_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID})) {
+            $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}
+                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
+            if ($address = Sales_Controller_Document_Address::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Address::class, [
+                        ['field' => 'id', 'operator' => 'equals', 'value' => $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->getId()],
+                        ['field' => 'document_id', 'operator' => 'equals', 'value' => null],
+                        ['field' => 'customer_id', 'operator' => 'not', 'value' => null],
+                    ]))->getFirstRecord()) {
+                $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->setId($address->{Sales_Model_Address::FLD_ORIGINAL_ID});
+                $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_ORIGINAL_ID} = null;
             }
-        } elseif (null === $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} && $_oldRecord->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}) {
-            Sales_Controller_Document_Customer::getInstance()->delete($_oldRecord->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID});
-        }*/
+        }
+
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 
 }

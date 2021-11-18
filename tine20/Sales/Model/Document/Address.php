@@ -43,6 +43,8 @@ class Sales_Model_Document_Address extends Sales_Model_Address
                 self::MODEL_NAME            => Sales_Model_Customer::MODEL_NAME_PART,
             ],
         ];
+        unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
+        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::NULLABLE] = true;
         $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::CONFIG][self::MODEL_NAME] = Sales_Model_Document_Customer::MODEL_NAME_PART;
     }
 

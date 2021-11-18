@@ -82,8 +82,8 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertSame($customer->billing->name, $customerCopy->billing->name);
         $this->assertSame($customer->postal->name, $customerCopy->postal->name);
 
-        $this->assertNotSame(Sales_Model_Document_Offer::FLD_RECIPIENT_ID, $customerCopy->delivery->getFirstRecord()->getId());
-        $this->assertNotSame(Sales_Model_Document_Offer::FLD_RECIPIENT_ID, $customer->delivery->getFirstRecord()->getId());
+        $this->assertNotSame($document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]['id'], $customerCopy->delivery->getFirstRecord()->getId());
+        $this->assertNotSame($document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]['id'], $customer->delivery->getFirstRecord()->getId());
 
         return $document;
     }
@@ -108,10 +108,17 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertEmpty($updatedDocument[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]);
 
         $updated2Document = $updatedDocument;
+        $updated2Document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID] =
+            $updatedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0];
         $updated2Document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'] = null;
         $updated2Document = $this->_instance->saveDocument_Offer($updated2Document);
         $this->assertSame($updatedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0]['id'],
             $updated2Document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0]['id']);
+        $this->assertNotSame($updatedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0]['id'],
+            $updated2Document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]['id']);
+        $this->assertSame($updatedDocument[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'][0]['original_id'],
+            $updated2Document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]['original_id']);
+        $this->assertNull($updated2Document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]['customer_id']);
 
         $updated2Document[Sales_Model_Document_Offer::FLD_CUSTOMER_ID]['billing'] = [];
         $updated2Document = $this->_instance->saveDocument_Offer($updated2Document);
