@@ -41,6 +41,8 @@ class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_Abstract
         self::CREATE_MODULE => false,
         self::APP_NAME => SSO_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
+        self::RECORD_NAME => 'OAuth2 Relying Party Config',
+        self::RECORDS_NAME => 'OAuth2 Relying Party Configs', // ngettext('OAuth2 Relying Party Config', 'OAuth2 Relying Party Configs', n)
 
         self::FIELDS => [
             self::FLD_REDIRECT_URLS     => [
