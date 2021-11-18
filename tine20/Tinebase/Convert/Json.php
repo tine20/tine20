@@ -547,7 +547,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             /** @noinspection PhpUndefinedMethodInspection */
             $controller = $config['controllerClassName']::getInstance();
             $filterName = $config['filterClassName'];
-            
+
+            if (! isset($config['refIdField'])) {
+                throw new Tinebase_Exception_UnexpectedValue('refIdField not found in config');
+            }
+
             $filterArray = array(
                 array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)
             );
