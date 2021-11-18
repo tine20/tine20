@@ -88,6 +88,7 @@ class Tinebase_ModelConfiguration_Const {
     const FLAGS = 'flags';
     const FLD_DELETED_TIME = 'deleted_time';
     const FLD_ORIGINAL_ID = 'original_id';
+    const FORCE_VALUES = 'forceValues';
     const FUNCTION = 'function';
 
     const HAS_ATTACHMENTS = 'hasAttachments';

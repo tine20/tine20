@@ -110,47 +110,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectAfterCreate($_createdRecord, $_record)
     {
-        // record finally have id here , create postal address needs record_id.
-        Sales_Controller_Address::getInstance()->resolvePostalAddress($_record);
         $this->_resolveBillingAddress($_record);
-    }
-
-    /**
-     * resolves all virtual fields for the customer
-     *
-     * @param array $customer
-     * @return array with property => value
-     */
-    public function resolveVirtualFields($customer)
-    {
-        $addressController = Sales_Controller_Address::getInstance();
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $customer['id'])));
-
-        $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
-        
-        if ($postalAddressRecord) {
-            $customer['postal_id'] = $postalAddressRecord->toArray();
-            foreach ($postalAddressRecord as $field => $value) {
-                $customer[('adr_' . $field)] = $value;
-            }
-        }
-        
-        return $customer;
-    }
-
-    /**
-     * @param array $resultSet
-     *
-     * @return array
-     */
-    public function resolveMultipleVirtualFields($resultSet)
-    {
-        foreach ($resultSet as &$result) {
-            $result = $this->resolveVirtualFields($result);
-        }
-
-        return $resultSet;
     }
 
     /**
@@ -190,7 +150,6 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
         $this->handleExternAndInternId($record);
-        Sales_Controller_Address::getInstance()->resolvePostalAddress($record);
     }
 
     /**d
@@ -268,6 +227,4 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
             Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
         }
     }
-    
-    
 }

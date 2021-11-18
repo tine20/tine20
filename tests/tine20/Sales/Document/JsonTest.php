@@ -57,14 +57,17 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID], 'customer_id is not an array');
         $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['billing'], 'customer_id.billing is not an array');
         $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['delivery'], 'customer_id.delivery is not an array');
+        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal'], 'customer_id.postal is not an array');
         $this->assertIsString($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['delivery'][0]['id'], 'customer_id.delivery.0.id is not set');
-        $this->assertStringStartsWith($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['adr_street'], 'teststreet for ');
+        $this->assertIsString($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['id'], 'customer_id.postal.id is not set');
+        $this->assertStringStartsWith('teststreet for ', $document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['street']);
 
         $customerCopy = Sales_Controller_Document_Customer::getInstance()->get($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'delivery' => [],
                 'billing'  => [],
+                'postal'   => [],
             ]
         ]);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Customer::class, [$customerCopy]));
@@ -77,7 +80,7 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertSame($customer->delivery->name, $customerCopy->delivery->name);
         $this->assertNotSame($customer->billing->getId(), $customerCopy->billing->getId());
         $this->assertSame($customer->billing->name, $customerCopy->billing->name);
-        $this->assertSame($customer->adr_name, $customerCopy->adr_name);
+        $this->assertSame($customer->postal->name, $customerCopy->postal->name);
 
         $this->assertNotSame(Sales_Model_Document_Offer::FLD_RECIPIENT_ID, $customerCopy->delivery->getFirstRecord()->getId());
         $this->assertNotSame(Sales_Model_Document_Offer::FLD_RECIPIENT_ID, $customer->delivery->getFirstRecord()->getId());
@@ -230,14 +233,17 @@ class Sales_Document_JsonTest extends TestCase
                 'name' => 'some billing address for ' . $name,
                 'type' => 'billing'
             ]]),
-            'adr_name' => 'some postal address for ' . $name,
-            'adr_street' => 'teststreet for ' . $name,
+            'postal' => new Sales_Model_Address([
+                'name' => 'some postal address for ' . $name,
+                'street' => 'teststreet for ' . $name,
+            ]),
         ]));
 
         $expander = new Tinebase_Record_Expander(Sales_Model_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'delivery' => [],
                 'billing' => [],
+                'postal' => [],
             ]
         ]);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Customer::class, [$customer]));

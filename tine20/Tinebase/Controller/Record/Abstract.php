@@ -2706,6 +2706,11 @@ abstract class Tinebase_Controller_Record_Abstract
                 $_record->{$_property}->setId(Tinebase_Record_Abstract::generateUID());
             }
             $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_createdRecord->getId();
+            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                    $_record->{$_property}->{$prop} = $val;
+                }
+            }
 
             $_createdRecord->{$_property} = $controller->create($_record->{$_property});
         }
@@ -2747,9 +2752,18 @@ abstract class Tinebase_Controller_Record_Abstract
         /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
         $controller = $ccn::getInstance();
         $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
-        $existingDepRec = $controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName, [
-            ['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]
-        ]))->getFirstRecord();
+        $filter = [['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]];
+        if (isset($_fieldConfig[TMCC::ADD_FILTERS])) {
+            $filter = array_merge($filter, $_fieldConfig[TMCC::ADD_FILTERS]);
+        }
+        $existingDepRec = ($exRecs = $controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            $recordClassName,$filter)))->getFirstRecord();
+        if ($exRecs->count() > 1) {
+            $exRecs->removeRecord($existingDepRec);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                ' found more than one dependent record, deleting: ' . $exRecs->getArrayOfIds());
+            $controller->delete($exRecs->getArrayOfIds());
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($_record->{$_property}, TRUE));
@@ -2766,6 +2780,11 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->{$_property} instanceof $recordClassName) {
 
             $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_record->getId();
+            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                    $_record->{$_property}->{$prop} = $val;
+                }
+            }
 
             if ($existingDepRec) {
                 $_record->{$_property}->setId($existingDepRec->getId());
@@ -2828,7 +2847,12 @@ abstract class Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating ' . $_record->{$_property}->count() . ' dependent records on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
             }
-            
+
+            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                    $_record->{$_property}->{$prop} = $val;
+                }
+            }
             foreach ($_record->{$_property} as $record) {
                 $record->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
                 if (! $record->getId() || strlen($record->getId()) != 40) {
@@ -2897,6 +2921,11 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         if (! empty($_record->{$_property}) && $_record->{$_property} && $_record->{$_property}->count() > 0) {
+            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                    $_record->{$_property}->{$prop} = $val;
+                }
+            }
 
             /** @var Tinebase_Record_Interface $record */
             foreach ($_record->{$_property} as $record) {
@@ -2908,6 +2937,9 @@ abstract class Tinebase_Controller_Record_Abstract
                     try {
 
                         $prevRecord = $controller->get($record->getId());
+                        if ($prevRecord->{$_fieldConfig['refIdField']} !== $prevRecord->{$_fieldConfig['refIdField']}) {
+                            throw new Tinebase_Exception_UnexpectedValue('refId mismatch');
+                        }
 
                         if (!empty($prevRecord->diff($record)->diff)) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {

@@ -113,6 +113,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         'delivery' => [],
                         'billing'  => [],
+                        'postal'   => [],
                     ],
                 ],
                 self::FLD_RECIPIENT_ID => [],

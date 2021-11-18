@@ -40,6 +40,8 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
         $_definition[self::FIELDS]['billing'][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_Address::MODEL_NAME_PART;
         //unset($_definition[self::FIELDS]['billing'][self::CONFIG][self::DEPENDENT_RECORDS]);
+        $_definition[self::FIELDS]['postal'][self::CONFIG][self::MODEL_NAME] =
+            Sales_Model_Document_Address::MODEL_NAME_PART;
 
         if (!isset($_definition[self::ASSOCIATIONS])) {
             $_definition[self::ASSOCIATIONS] = [];

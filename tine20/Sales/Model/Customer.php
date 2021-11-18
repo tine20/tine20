@@ -188,7 +188,10 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'refIdField'       => 'customer_id',
                     'addFilters'       => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'delivery')),
                     'paging'           => array('sort' => 'locality', 'dir' => 'ASC'),
-                    'dependentRecords' => TRUE
+                    'dependentRecords' => TRUE,
+                    self::FORCE_VALUES      => [
+                        'type'                  => 'delivery',
+                    ],
                 ),
             ),
             'billing' => array(
@@ -203,99 +206,27 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'refIdField'       => 'customer_id',
                     'addFilters'       => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'billing')),
                     'paging'           => array('sort' => 'locality', 'dir' => 'ASC'),
-                    'dependentRecords' => TRUE
+                    'dependentRecords' => TRUE,
+                    self::FORCE_VALUES      => [
+                        'type'                  => 'billing',
+                    ],
                 ),
             ),
-            
-            // the postal address
-            'postal_id' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => NULL,
-                )
-            ),
-            'adr_name' => [
-                'config' => [
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Name', //_('Name')
-                    'shy'           => TRUE
-                ],
-                'type'   => 'virtual',
+            'postal' => [
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL],
+                self::TYPE              => self::TYPE_RECORD,
+                self::DOCTRINE_IGNORE   => true,
+                self::CONFIG            => [
+                    self::APP_NAME          => Sales_Config::APP_NAME,
+                    self::MODEL_NAME        => Sales_Model_Address::MODEL_NAME_PART,
+                    self::ADD_FILTERS       =>[['field' => 'type', 'operator' => 'equals', 'value' => 'postal']],
+                    self::REF_ID_FIELD      => 'customer_id',
+                    self::DEPENDENT_RECORDS => true,
+                    self::FORCE_VALUES      => [
+                        'type'                  => 'postal',
+                    ],
+                ]
             ],
-            'adr_email' => [
-                'config' => [
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Email', //_('Name')
-                    'shy'           => TRUE
-                ],
-                'type'   => 'virtual',
-            ],
-            'adr_prefix1' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Prefix', //_('Prefix')
-                    'shy'           => TRUE
-                ),
-                'type'   => 'virtual',
-            ),
-            'adr_prefix2' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Additional Prefix', //_('Additional Prefix')
-                    'shy'           => TRUE
-                ),
-                'type'   => 'virtual',
-            ),
-            'adr_street' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Street', //_('Street')
-                    'shy'           => TRUE
-                ),
-                'type' => 'virtual',
-            ),
-            'adr_postalcode' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Postalcode', //_('Postalcode')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_locality' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Locality', //_('Locality')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_region' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Region', //_('Region')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_countryname' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Country', //_('Country')
-                    'shy'           => TRUE,
-                    'default'       => 'DE'
-                ),
-            ),
-            'adr_pobox' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Postbox', //_('Postbox')
-                    'shy'           => TRUE
-                ),           
-            ),
             'fulltext' => array(
                 'type'   => 'virtual',
                 'config' => array(
