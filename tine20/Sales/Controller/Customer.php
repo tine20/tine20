@@ -100,12 +100,13 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      * inspect creation of one record (after setReleatedData)
      *
      * @param   Tinebase_Record_Interface $createedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $record           the update record
      * @return  void
      */
-    protected function _inspectAfterSetRelatedDataCreate($_createdRecord, $_record)
+    protected function _inspectAfterSetRelatedDataCreate($createdRecord, $record)
     {
-        $this->_resolveBillingAddress($_createdRecord);
+        parent::_inspectAfterSetRelatedDataCreate($createdRecord, $record);
+        $this->_resolveBillingAddress($createdRecord);
     }
 
     /**

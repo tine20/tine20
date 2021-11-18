@@ -30,6 +30,7 @@ class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Pr
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
         $dataFound = new Tinebase_Record_RecordSet($this->_model);
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
         $ctrl = Tinebase_Core::getApplicationInstance($this->_model, '', true);
         $filter = [['field' => $this->_mccCfg[MCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => null]];
         if (isset($this->_mccCfg[MCC::ADD_FILTERS])) {
