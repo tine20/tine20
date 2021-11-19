@@ -54,6 +54,8 @@ class Sales_Document_JsonTest extends TestCase
             return $document;
         }
 
+        $this->assertSame($customerData['number'] . ' - ' . $customerData['name'], $customerData['fulltext']);
+
         $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID], 'customer_id is not an array');
         $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['billing'], 'customer_id.billing is not an array');
         $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['delivery'], 'customer_id.delivery is not an array');
@@ -61,6 +63,8 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertIsString($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['delivery'][0]['id'], 'customer_id.delivery.0.id is not set');
         $this->assertIsString($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['id'], 'customer_id.postal.id is not set');
         $this->assertStringStartsWith('teststreet for ', $document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['street']);
+        $this->assertSame($customerData['number'] . ' - ' . $customerData['name'],
+            $document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['fulltext']);
 
         $customerCopy = Sales_Controller_Document_Customer::getInstance()->get($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [

@@ -54,4 +54,11 @@ class Sales_Model_Document_Address extends Sales_Model_Address
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function setFromArray(array &$_data)
+    {
+        $_data = Sales_Controller_Address::getInstance()->resolveVirtualFields($_data);
+
+        parent::setFromArray($_data);
+    }
 }
