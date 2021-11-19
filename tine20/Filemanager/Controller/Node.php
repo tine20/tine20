@@ -1434,7 +1434,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $this->_backend->checkPathACL($source, 'get', FALSE);
         
         $destinationParentPathRecord = $destination->getParent();
-        $destinationNodeName = NULL;
         
         $this->_backend->checkPathACL($destinationParentPathRecord, 'update');
         // TODO do we need this if??
@@ -1464,13 +1463,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Rename Folder ' . $source->statpath . ' -> ' . $destination->statpath);
 
-        $this->_backend->rename($source->statpath, $destination->statpath);
+        $movedNode = $this->_backend->rename($source->statpath, $destination->statpath);
 
-        $movedNode = $this->_backend->stat($destination->statpath);
-        if ($destinationNodeName !== NULL) {
-            $movedNode->name = $destinationNodeName;
-        }
-        
         return $movedNode;
     }
 

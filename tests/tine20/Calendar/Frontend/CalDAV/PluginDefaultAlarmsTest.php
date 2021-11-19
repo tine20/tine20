@@ -35,7 +35,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest extends TestCase
 {
         parent::setUp();
         
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
         
         $this->plugin = new Calendar_Frontend_CalDAV_PluginDefaultAlarms();
         

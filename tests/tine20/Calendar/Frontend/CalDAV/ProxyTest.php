@@ -61,7 +61,7 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         // clear container caches (brute force)
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
         $this->server->debugExceptions = true;
         $this->server->addPlugin(new \Sabre\CalDAV\Plugin());
         $this->server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
