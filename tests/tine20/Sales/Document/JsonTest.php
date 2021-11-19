@@ -65,6 +65,8 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertStringStartsWith('teststreet for ', $document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['street']);
         $this->assertSame($customerData['number'] . ' - ' . $customerData['name'],
             $document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['fulltext']);
+        $this->assertArrayHasKey('fulltext', $document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]);
+        $this->assertStringContainsString('delivery', $document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]['fulltext']);
 
         $customerCopy = Sales_Controller_Document_Customer::getInstance()->get($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
@@ -255,6 +257,7 @@ class Sales_Document_JsonTest extends TestCase
             'postal' => new Sales_Model_Address([
                 'name' => 'some postal address for ' . $name,
                 'street' => 'teststreet for ' . $name,
+                'type' => 'postal'
             ]),
         ]));
 

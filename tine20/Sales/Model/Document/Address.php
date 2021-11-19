@@ -55,10 +55,10 @@ class Sales_Model_Document_Address extends Sales_Model_Address
      */
     protected static $_configurationObject = NULL;
 
-    public function setFromArray(array &$_data)
+    public function hydrateFromBackend(array &$data)
     {
-        $_data = Sales_Controller_Address::getInstance()->resolveVirtualFields($_data);
+        $data = Sales_Controller_Address::getInstance()->resolveVirtualFields($data);
 
-        parent::setFromArray($_data);
+        parent::hydrateFromBackend($data);
     }
 }
