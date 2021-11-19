@@ -16,7 +16,8 @@
  * 
  * @todo extend Tinebase_Frontend_WebDAV_Record? or maybe add a common ancestor
  */
-abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\DAV\IProperties
+abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\DAV\IProperties,
+    Tinebase_Frontend_WebDAV_IRenamable
 {
     protected $_path;
     
@@ -99,9 +100,22 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
         }
         
         list($dirname, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
-        
-        Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name);
-    }    
+
+        if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name))) {
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+        }
+        $this->_node = $result;
+        $this->_path = $result->path;
+    }
+
+    public function rename(string $newPath)
+    {
+        if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $newPath))) {
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+        }
+        $this->_node = $result;
+        $this->_path = $result->path;
+    }
     
     /**
      * return container for given path

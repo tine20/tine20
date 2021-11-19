@@ -115,4 +115,13 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
 
         return $children;
     }
+
+    public function getPath()
+    {
+        $this->_pathParts = $this->_getPathParts();
+        return Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+            $this->_pathParts[0],
+            isset($this->_pathParts[1]) ? $this->_pathParts[1] : null
+        ) . (count($this->_pathParts) > 2 ? '/' . implode('/', array_slice($this->_pathParts, 2)) : '' ) . '/';
+    }
 }
