@@ -8,7 +8,7 @@
 
 # checkout/push/pull
 MergeUpwards () {
-    MYBASEPATH=${CI_BUILDS_DIR:-$(dirname $0)}
+    MYBASEPATH=$(dirname $0)
     srcBranch=$1
     dstBranch=$2
     remote=$3
