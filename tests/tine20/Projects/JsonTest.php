@@ -18,8 +18,8 @@ class Projects_JsonTest extends TestCase
     /**
      * @var Projects_Frontend_Json
      */
-    protected Projects_Frontend_Json $_json;
-    
+    protected $_json;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -27,7 +27,7 @@ class Projects_JsonTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
         $this->_json = new Projects_Frontend_Json();
     }
