@@ -373,16 +373,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchCustomers($filter, $paging)
     {
         $result = $this->_search($filter, $paging, Sales_Controller_Customer::getInstance(), 'Sales_Model_CustomerFilter');
-        
-        for ($i = 0; $i < count($result['results']); $i++) {
-            if (isset($result['results'][$i]['postal_id'])) {
-                $result['results'][$i]['postal_id'] = Sales_Controller_Address::getInstance()->resolveVirtualFields($result['results'][$i]['postal_id']);
-            }
-            if (! empty($result['results'][$i]['billing'])) {
-                $result['results'][$i]['billing'] = Sales_Controller_Address::getInstance()->resolveMultipleVirtualFields($result['results'][$i]['billing']);
-            }
-        }
-        
         return $result;
     }
     

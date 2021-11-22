@@ -184,4 +184,11 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
             ],
         ]
     ];
+
+    public function hydrateFromBackend(array &$data)
+    {
+        $data = Sales_Controller_Address::getInstance()->resolveVirtualFields($data);
+
+        parent::hydrateFromBackend($data);
+    }
 }

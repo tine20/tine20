@@ -59,7 +59,17 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         ),
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
-        
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'delivery'      => [],
+                'billing'       => [],
+                'postal'        => [],
+                'cpextern_id'   => [],
+                'cpintern_id'   => [],
+            ],
+        ],
+
         'fields'            => array(
             'number' => array(
                 'label'       => 'Customer Number', //_('Customer Number')
