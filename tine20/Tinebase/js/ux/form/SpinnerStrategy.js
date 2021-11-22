@@ -80,6 +80,8 @@ Ext.extend(Ext.ux.form.Spinner.NumberStrategy, Ext.ux.form.Spinner.Strategy, {
         field.getValue = Ext.ux.form.NumberField.prototype.getValue;
         field.fixPrecision = Ext.ux.form.NumberField.prototype.fixPrecision;
         field.beforeBlur = Ext.ux.form.NumberField.prototype.beforeBlur;
+        field.minText = Ext.ux.form.NumberField.prototype.minText;
+        field.maxText = Ext.ux.form.NumberField.prototype.maxText;
         field.decimalSeparator =  Ext.ux.form.NumberField.prototype.decimalSeparator;
         field.thousandSeparator =  Ext.ux.form.NumberField.prototype.thousandSeparator;
         field.useThousandSeparator =  field.useThousandSeparator === undefined ? Ext.ux.form.NumberField.prototype.useThousandSeparator : field.useThousandSeparator;

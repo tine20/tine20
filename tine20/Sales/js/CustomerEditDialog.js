@@ -58,7 +58,16 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        
+
+        const form = this.getForm();
+        const postalAdr = this.record.get('postal') || {};
+        Object.keys(postalAdr).forEach((fieldName) => {
+            const field = form.findField(`adr_${fieldName}`);
+            if (field) {
+                field.setValue(postalAdr[fieldName], this.record);
+            }
+        });
+
         Tine.Sales.CustomerEditDialog.superclass.onRecordLoad.call(this);
         
         if (this.copyRecord) {
@@ -73,7 +82,24 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
     },
-    
+
+    /**
+     * executed when record gets updated from form
+     */
+    onRecordUpdate: function(callback, scope) {
+        var form = this.getForm();
+
+        const postalAdr = this.record.get('postal') || {};
+        form.items.items.forEach((field) => {
+            if (field?.name?.match(/^adr_/)) {
+                postalAdr[field.name.replace(/^adr_/, '')] = field.getValue()
+            }
+        });
+        this.record.set('postal', postalAdr)
+
+        Tine.Sales.CustomerEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+    },
+
     /**
      * duplicate(s) found exception handler
      * 
@@ -122,7 +148,8 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.clipboardButton = new Ext.Button({
            columnWidth: 5/100,
-           iconCls: 'clipboard',
+           iconCls: 'clipboard form-item-button',
+
            tooltip: Ext.util.Format.htmlEncode(this.app.i18n._('Copy address to the clipboard')),
            fieldLabel: '&nbsp;',
            lazyLoading: false,
@@ -130,7 +157,8 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 click: function() {
                     this.onRecordUpdate();
-                    Tine.Sales.addToClipboard(this.record);
+
+                    Tine.Sales.addToClipboard(Tine.Tinebase.data.Record.setFromJson(this.record.get('postal'), Tine.Sales.Model.Address), this.record.get('name'));
                 }
            }
         });

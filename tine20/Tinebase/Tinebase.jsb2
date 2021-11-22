@@ -226,6 +226,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "DiscountField.js",
+          "path": "js/widgets/form/"
+        },
+        {
           "text": "BytesField.js",
           "path": "js/ux/form/"
         },

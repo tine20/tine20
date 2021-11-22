@@ -184,9 +184,10 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
             $postalAddressRecord = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($_record['postal_id']));
         } else {
             // update if it has changed
+            $recordData = $_record->toArray();
             foreach ($postalAddressRecord as $field => $value) {
-                if (array_key_exists("adr_$field", $_record->toArray())) {
-                    $postalAddressRecord[$field] = $_record["adr_$field"];
+                if (array_key_exists("adr_$field", $recordData)) {
+                    $postalAddressRecord[$field] = $recordData["adr_$field"];
                 }
             }
 

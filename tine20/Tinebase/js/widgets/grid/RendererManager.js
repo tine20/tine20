@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,7 +15,7 @@ require('./jsonRenderer');
  * central renderer manager
  * - get renderer for a given field
  * - register renderer for a given field
- * 
+ *
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.RendererManager
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -23,34 +23,34 @@ require('./jsonRenderer');
  */
 Tine.widgets.grid.RendererManager = function() {
     var renderers = {};
-    
+
     return {
         /**
          * const for category gridPanel
          */
         CATEGORY_GRIDPANEL: 'gridPanel',
-        
+
         /**
          * const for category displayPanel
          */
         CATEGORY_DISPLAYPANEL: 'displayPanel',
-        
+
         /**
          * default renderer - quote content
          */
         defaultRenderer: function(value) {
             return value ? Ext.util.Format.htmlEncode(value) : '';
         },
-        
+
         /**
          * get renderer of well known field names
-         * 
+         *
          * @param {String} fieldName
          * @return Function/null
          */
         getByFieldname: function(fieldName) {
             var renderer = null;
-            
+
             if (fieldName == 'tags') {
                 renderer = Tine.Tinebase.common.tagsRenderer;
             } else if (fieldName == 'notes') {
@@ -68,7 +68,7 @@ Tine.widgets.grid.RendererManager = function() {
             } else if (fieldName == 'color') {
                 renderer = Tine.Tinebase.common.colorRenderer;
             }
-            
+
             return renderer;
         },
 
@@ -86,7 +86,7 @@ Tine.widgets.grid.RendererManager = function() {
                 var renderer = null,
                     recordClass = Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                     field = recordClass ? recordClass.getField(fieldName) : null,
-                    fieldDefinition = _.get(field, 'fieldDefinition', field),
+                    fieldDefinition = Object.assign({}, field, _.get(field, 'fieldDefinition', {}), _.get(field, 'fieldDefinition.conifg', {}), _.get(field, 'fieldDefinition.uiconfig', {})),
                     fieldType = fieldDefinition ? fieldDefinition.type : 'auto';
             }
             switch (fieldType) {
@@ -94,12 +94,12 @@ Tine.widgets.grid.RendererManager = function() {
                     if (Tine.Tinebase.common.hasRight('view', fieldDefinition.config.appName, fieldDefinition.config.modelName.toLowerCase())) {
                         renderer = function (value, row, record) {
                             var foreignRecordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
-                            
+
                             if (foreignRecordClass) {
                                 const record = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
                                 const titleProperty = foreignRecordClass.getMeta('titleProperty');
                                 value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
-                                
+
                                 if (!!+_.get(record, 'data.is_deleted')) {
                                     value = '<span style="text-decoration: line-through;">' + value + '</span>';
                                 }
@@ -132,9 +132,23 @@ Tine.widgets.grid.RendererManager = function() {
                                 break;
                             case 'percent':
                                 renderer = function (value, cell, record) {
-                                    return Tine.Tinebase.common.percentRenderer(value, fieldDefinition.type);
+                                    return Tine.Tinebase.common.percentRenderer(value, fieldDefinition.type, fieldDefinition.nullable);
                                 };
                                 break;
+                            case 'discount':
+                                if (fieldDefinition.singleField) {
+                                    renderer = function (value, cell, record) {
+                                        return !value ? '' : record.get(fieldName.replace(/_sum$/, '_type')) === 'PERCENTAGE' ?
+                                            Tine.Tinebase.common.percentRenderer(value, 'float') :
+                                            Ext.util.Format.money(value);
+                                    }
+                                } else {
+                                    renderer = function (value, cell, record) {
+                                        return !value ? '' : Ext.util.Format.money(value);
+                                    }
+                                }
+                                break;
+
                             case 'durationSec':
                                 renderer = function (value, cell, record) {
                                     return Ext.ux.form.DurationSpinner.durationRenderer(value, {
@@ -182,16 +196,9 @@ Tine.widgets.grid.RendererManager = function() {
                     renderer = Tine.Tinebase.common.booleanRenderer;
                     break;
                 case 'money':
-                    if (fieldDefinition.hasOwnProperty('specialType')) {
-                        if (fieldDefinition.specialType === 'zeroMoney') {
-                            // if this option is set, zero values are hidden in the grid
-                            renderer = function (value) {
-                                return Ext.util.Format.money(value, {zeroMoney: true});
-                            }
-                            break;
-                        }
-                    }
-                    renderer = Ext.util.Format.money;
+                    renderer = function (value, cell, record) {
+                        return Ext.util.Format.money(value, {zeroMoney: fieldDefinition?.specialType === 'zeroMoney'}, fieldDefinition.nullable);
+                    };
                     break;
                 case 'attachments':
                     renderer = Tine.widgets.grid.attachmentRenderer;
@@ -243,7 +250,7 @@ Tine.widgets.grid.RendererManager = function() {
 
         /**
          * returns renderer for given field
-         * 
+         *
          * @param {String/Tine.Tinebase.Application} appName
          * @param {Record/String} modelName
          * @param {String} fieldName
@@ -255,10 +262,10 @@ Tine.widgets.grid.RendererManager = function() {
                 modelName = this.getModelName(modelName),
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
                 genericKey = this.getKey([appName, modelName, fieldName]);
-            
+
             // check for registered renderer
             var renderer = renderers[categoryKey] ? renderers[categoryKey] : renderers[genericKey];
-            
+
             // check for common names
             if (! renderer) {
                 renderer = this.getByFieldname(fieldName);
@@ -274,15 +281,12 @@ Tine.widgets.grid.RendererManager = function() {
                 renderer = Tine.widgets.customfields.Renderer.get(appName, cfConfig);
             }
 
-
-
-
             return renderer ? renderer : this.defaultRenderer;
         },
-        
+
         /**
          * register renderer for given field
-         * 
+         *
          * @param {String/Tine.Tinebase.Application} appName
          * @param {Record/String} modelName
          * @param {String} fieldName
@@ -295,13 +299,13 @@ Tine.widgets.grid.RendererManager = function() {
                 modelName = this.getModelName(modelName),
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
                 genericKey = this.getKey([appName, modelName, fieldName]);
-                
+
             renderers[category ? categoryKey : genericKey] = scope ? renderer.createDelegate(scope) : renderer;
         },
-        
+
         /**
          * check if a renderer is explicitly registered
-         * 
+         *
          * @param {String/Tine.Tinebase.Application} appName
          * @param {Record/String} modelName
          * @param {String} fieldName
@@ -313,34 +317,34 @@ Tine.widgets.grid.RendererManager = function() {
                 modelName = this.getModelName(modelName),
                 categoryKey = this.getKey([appName, modelName, fieldName, category]),
                 genericKey = this.getKey([appName, modelName, fieldName]);
-                
+
             // check for registered renderer
             return (renderers[categoryKey] ? renderers[categoryKey] : renderers[genericKey]) ? true : false;
         },
-        
+
         /**
          * returns the modelName by modelName or record
-         * 
+         *
          * @param {Record/String} modelName
          * @return {String}
          */
         getModelName: function(modelName) {
             return Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName;
         },
-        
+
         /**
          * returns the modelName by appName or application instance
-         * 
+         *
          * @param {String/Tine.Tinebase.Application} appName
          * @return {String}
          */
         getAppName: function(appName) {
             return Ext.isString(appName) ? appName : appName.appName;
         },
-        
+
         /**
          * returns a key by joining the array values
-         * 
+         *
          * @param {Array} params
          * @return {String}
          */

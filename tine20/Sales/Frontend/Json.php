@@ -45,7 +45,14 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = array(
-        'Product',
+        Sales_Model_Document_Address::MODEL_NAME_PART,
+        Sales_Model_Document_Customer::MODEL_NAME_PART,
+        Sales_Model_Product::MODEL_NAME_PART,
+        Sales_Model_SubProductMapping::MODEL_NAME_PART,
+        Sales_Model_Document_Offer::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
+        Sales_Model_Document_Order::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
         'Contract',
         'Division',
         'CostCenter',

@@ -43,12 +43,11 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $customer = $this->_uit->getCustomer($this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId());
         
-        $this->assertTrue(is_array($customer['postal_id']));
-        $this->assertEquals($customer['adr_id'], $customer['postal_id']['id']);
-        
+        $this->assertTrue(is_array($customer['postal']));
+
         //we create a billing address as postal address
         $this->assertTrue(is_array($customer['billing']));
-        $this->assertEquals(2, count($customer['billing']));
+        $this->assertEquals(1, count($customer['billing']));
         
         $this->assertTrue(is_array($customer['delivery']));
         $this->assertEquals(1, count($customer['delivery']));

@@ -515,8 +515,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (! $modelConfiguration || (! $_records->count())) {
             return;
         }
-        
-        if (! ($resolveFields = $modelConfiguration->recordsFields)) {
+
+        $resolveFields = array_filter((array)$modelConfiguration->recordFields, function($val) {
+            return isset($val[MCC::CONFIG][MCC::REF_ID_FIELD]);
+        });
+
+        if (! ($resolveFields = array_merge($resolveFields, (array)$modelConfiguration->recordsFields))) {
             return;
         }
         
@@ -605,7 +609,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 /** @var Tinebase_Record_Interface $record */
                 foreach ($_records as $record) {
                     $filtered = $foreignRecords->filter($config['refIdField'], $record->getId());
-                    $record->{$fieldKey} = $filtered;
+                    $record->{$fieldKey} = MCC::TYPE_RECORDS === $c[MCC::TYPE] ? $filtered : $filtered->getFirstRecord();
                 }
                 
             } else {

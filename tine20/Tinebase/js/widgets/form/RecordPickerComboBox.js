@@ -1,6 +1,6 @@
-/* 
+/*
  * Tine 2.0
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,16 +10,17 @@
 
 Ext.ns('Tine.Tinebase.widgets.form');
 
-import{expandFilter} from 'util/filterSpec';
+import { expandFilter } from 'util/filterSpec';
+import RecordEditFieldTriggerPlugin from './RecordEditFieldTriggerPlugin';
 
 /**
  * @namespace   Tine.Tinebase.widgets.form
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @class       Tine.Tinebase.widgets.form.RecordPickerComboBox
  * @extends     Ext.form.ComboBox
- * 
+ *
  * <p>Abstract base class for recordPickers like account/group pickers </p>
- * 
+ *
  * Usage:
  * <pre><code>
 var resourcePicker = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
@@ -33,70 +34,70 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      * blur this combo when record got selected, useful to be used in editor grids (defaults to false)
      */
     blurOnSelect: false,
-    
+
     /**
      * @cfg {Tine.Tinebase.data.Record} recordClass
-     * model of record to be picked (required) 
+     * model of record to be picked (required)
      */
     recordClass: null,
-    
+
     /**
      * @cfg {Tine.Tinebase.data.RecordProxy} recordProxy
-     * record backend 
+     * record backend
      */
     recordProxy: null,
-    
+
     /**
      * @property app
      * @type Tine.Tinebase.Application
      */
     app: null,
-    
+
     /**
      * @type Tine.Tinebase.data.Record selectedRecord
-     * @property selectedRecord 
+     * @property selectedRecord
      * The last record which was selected
      */
     selectedRecord: null,
-    
+
     /**
      * sort by field
-     * 
-     * @type String 
+     *
+     * @type String
      */
     sortBy: null,
-    
+
     /**
      * sort direction
-     * 
-     * @type String 
+     *
+     * @type String
      */
     sortDir: 'ASC',
-    
+
     /**
      * @type string
      * @property lastStoreTransactionId
      */
     lastStoreTransactionId: null,
-    
+
     /**
      * if set to false, it is not possible to add the same record handled in this.editDialog
      * this.editDialog must also be set
-     * 
+     *
      * @cfg {Boolean} allowLinkingItself
      */
     allowLinkingItself: null,
-    
+
     /**
      * the editDialog, the form is nested in. Just needed if this.allowLinkingItself is set to false
-     * 
+     *
      * @type Tine.widgets.dialog.EditDialog editDialog
      */
     editDialog: null,
-    
+
     /**
      * always use additional filter
-     * 
+     *
      * @type {Array}
      */
     additionalFilters: null,
@@ -111,6 +112,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     additionalFilterSpec: null,
 
+    /**
+     * in case field is a denormalizationOf an other record
+     *
+     * @type {Tine.Tinebase.data.Record} denormalizationRecordClass
+     */
+    denormalizationRecordClass: null,
+
     triggerAction: 'all',
     pageSize: 50,
     forceSelection: true,
@@ -118,10 +126,29 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
     // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
     minWidth: 180,
-    
+
     initComponent: function () {
+        // allow to initialize with string
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+        this.recordProxy = this.recordProxy || new Tine.Tinebase.data.RecordProxy({
+            recordClass: this.recordClass
+        });
+
+        const modelConfig = this.recordClass.getModelConfiguration();
+        if (modelConfig?.denormalizationOf) {
+            // denormalizationOf means we get denormalization data, but select/pick fresh records
+            this.denormalizationRecordClass = this.recordClass;
+            this.recordClass = Tine.Tinebase.data.RecordMgr.get(modelConfig.denormalizationOf);
+            this.recordProxy =  Tine[this.recordClass.getMeta('appName')][this.recordClass.getMeta('modelName').toLowerCase() + 'Backend'];
+            this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin({
+                allowCreateNew: false,
+                preserveJsonProps: 'original_id',
+                qtip: window.i18n._('Edit copy')
+            }))
+        }
+
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
-        this.displayField = this.recordClass.getMeta('titleProperty');
+        this.displayField = this.displayField || this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
         this.disableClearer = ! this.allowBlank;
 
@@ -139,7 +166,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             root: this.root,
             recordClass: this.recordClass
         });
-        
+
         this.on('beforequery', this.onBeforeQuery, this);
         this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
         this.initTemplate();
@@ -148,7 +175,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
-    
+
     /**
      * respect record.getTitle method
      */
@@ -158,7 +185,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 getTitle: (function(id) {
                     var record = this.getStore().getById(id),
                         title = record ? record.getTitle() : ' ';
-                    
+
                     return Ext.util.Format.htmlEncode(title);
                 }).createDelegate(this)
             });
@@ -177,7 +204,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
     /**
      * prepare paging and sort
-     * 
+     *
      * @param {Ext.data.Store} store
      * @param {Object} options
      */
@@ -191,10 +218,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             dir: this.sortDir
         });
     },
-    
+
     /**
      * onStoreBeforeLoadRecords
-     * 
+     *
      * @param {Object} o
      * @param {Object} options
      * @param {Boolean} success
@@ -206,10 +233,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             return false;
         }
     },
-    
+
     /**
      * use beforequery to set query filter
-     * 
+     *
      * @param {Object} qevent
      */
     onBeforeQuery: function (qevent) {
@@ -236,27 +263,27 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
     /**
      * relay contextmenu events
-     * 
+     *
      * @param {Ext.Container} ct
      * @param {Number} position
      * @private
      */
     onRender : function(ct, position){
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onRender.call(this, ct, position);
-        
+
         var c = this.getEl();
- 
+
         this.mon(c, {
             scope: this,
             contextmenu: Ext.emptyFn
         });
- 
+
         this.relayEvents(c, ['contextmenu']);
     },
-    
+
     /**
      * store a copy of the selected record
-     * 
+     *
      * @param {Tine.Tinebase.data.Record} record
      * @param {Number} index
      */
@@ -264,13 +291,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.selectedRecord = record;
         return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onSelect.call(this, record, index);
     },
-    
+
     /**
      * on keypressed("enter") event to add record
-     * 
+     *
      * @param {Tine.Addressbook.SearchCombo} combo
      * @param {Event} event
-     */ 
+     */
     onSpecialkey: function (combo, event) {
         if (event.getKey() === event.ENTER) {
             var id = combo.getValue();
@@ -278,15 +305,15 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.onSelect(record);
         }
     },
-    
+
     /**
      * set value and prefill store if needed
-     * 
+     *
      * @param {mixed} value
      */
     setValue: function (value) {
         if (value) {
-            
+
             // value is a record
             if (typeof(value.get) === 'function') {
                 if (this.store.indexOf(value) < 0) {
@@ -294,7 +321,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 }
                 value = value.get(this.valueField);
             }
-            
+
             // value is a js object
             else if (Ext.isObject(value)) {
                 var record = this.recordProxy ? this.recordProxy.recordReader({responseText: Ext.encode(value)}) : new this.recordClass(value)
@@ -303,17 +330,21 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 }
                 value = value[this.valueField] || '';
             }
-            
+
             // value is the current id
-            else if (Ext.isPrimitive(value) && value == this.getValue()) {
-                return this.setValue(this.selectedRecord);
+            else if (Ext.isPrimitive(value)) {
+                if (value == this.getValue()) {
+                    return this.setValue(this.selectedRecord);
+                } else {
+                    this.recordProxy.promiseLoadRecord(value).then((record) => { this.setValue(record) })
+                }
             }
         }
-        
+
         var r = (value !== "") ? this.findRecord(this.valueField, /* id = */ value) : null,
             text = value,
             description = '';
-        
+
         if (r){
             text = (typeof r.getComboBoxTitle === "function") ? r.getComboBoxTitle() : r.getTitle();
             description = r.get('description') || description;
@@ -325,12 +356,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                         title: i18n._('Failure'),
                         msg: i18n._('You tried to link a record with itself. This is not allowed!'),
                         buttons: Ext.MessageBox.OK,
-                        icon: Ext.MessageBox.ERROR  
+                        icon: Ext.MessageBox.ERROR
                     });
                     return;
                 }
             }
-            
+
         } else if (Ext.isDefined(this.valueNotFoundText)){
             text = this.valueNotFoundText;
         }
@@ -339,14 +370,31 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.hiddenField.value = Ext.value(value, '');
         }
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, text);
-        
+
         var el = this.getEl();
         if (el) {
             el.set({qtip: Tine.Tinebase.common.doubleEncode(description)});
         }
-        
+
         this.value = value;
         return this;
-    }
+    },
+
+    clearValue: function () {
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.clearValue.apply(this, arguments);
+        this.selectedRecord = null;
+    },
+
+    getValue: function() {
+        let value = Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.getValue.apply(this, arguments);
+
+        if (this.denormalizationRecordClass && this.selectedRecord) {
+            // NOTE: denormalized records are depended records, so we need to send all data (or empty string to delete)
+            value = { ...this.selectedRecord.data };
+            value.original_id = this.selectedRecord.json.original_id || value[this.valueField];
+        }
+
+        return value;
+    },
 });
 Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);

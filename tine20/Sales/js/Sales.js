@@ -1,20 +1,24 @@
 /*
  * Tine 2.0
- * 
+ *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
 Ext.namespace('Tine.Sales');
+
+import './Model/DocumentPosition';
+import './PositionGridPanel';
+import './Document/OfferEditDialog'
 
 /**
  * address renderer, not a default renderer
- * 
+ *
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * 
+ *
  * @constructor
  * Constructs mainscreen of the Sales application
  */
@@ -31,6 +35,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         {modelName: 'CostCenter', requiredRight: 'manage_costcenters', singularContainerMode: true},
         {modelName: 'Division', requiredRight: 'manage_divisions', singularContainerMode: true},
         {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
+        {modelName: 'Document_Offer', requiredRight: 'manage_offers', singularContainerMode: true},
         {modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true}
     ]
 });
@@ -41,62 +46,62 @@ Tine.Sales.renderedSumsPerMonth = {};
 Tine.Sales.addToClipboard = function(record, companyName) {
     // this is called either from the edit dialog or from the grid, so we have different record types
     var fieldPrefix = record.data.hasOwnProperty('bic') ? 'adr_' : '';
-    
+
     companyName = companyName ? companyName : (record.get('name') ? record.get('name') : '');
 
     var lines = companyName + "\n";
-    
+
         lines += (record.get((fieldPrefix + 'prefix1')) ? record.get((fieldPrefix + 'prefix1')) + "\n" : '');
         lines += (record.get((fieldPrefix + 'prefix2')) ? record.get((fieldPrefix + 'prefix2')) + "\n" : '');
         lines += (record.get(fieldPrefix + 'pobox') ? record.get(fieldPrefix + 'pobox') + "\n" : (record.get(fieldPrefix + 'street') ? record.get(fieldPrefix + 'street') + "\n" : ''));
         lines += (record.get((fieldPrefix + 'postalcode')) ? (record.get((fieldPrefix + 'postalcode')) + ' ') : '') + (record.get((fieldPrefix + 'locality')) ? record.get((fieldPrefix + 'locality')) : '');
-        
+
         if (record.get('countryname')) {
             lines += "\n" + record.get('countryname');
         }
-    
+
     var app = Tine.Tinebase.appMgr.get('Sales');
-    
+
     Tine.Sales.CopyAddressDialog.openWindow({winTitle: app.i18n._('Copy address to the clipboard'), app: app, content: lines});
 };
 
 /** @param {Tine.Tinebase.data.Record} record
  * @param {String} companyName
- * 
+ *
  * @return {String}
  */
 Tine.Sales.renderAddress = function(record, companyName) {
     // this is called either from the edit dialog or from the grid, so we have different record types
     var fieldPrefix = record.data.hasOwnProperty('bic') ? 'adr_' : '';
-    
+
     companyName = companyName ? companyName : (record.get('name') ? record.get('name') : '');
 
     var lines = companyName + "\n";
-    
+
     lines += (record.get((fieldPrefix + 'prefix1')) ? record.get((fieldPrefix + 'prefix1')) + "\n" : '');
     lines += (record.get((fieldPrefix + 'prefix2')) ? record.get((fieldPrefix + 'prefix2')) + "\n" : '');
     lines += (record.get((fieldPrefix + 'pobox')) ? (record.get(fieldPrefix + 'pobox') + "\n") : ((record.get(fieldPrefix + 'street') ? record.get(fieldPrefix + 'street') + "\n" : '')));
     lines += (record.get((fieldPrefix + 'postalcode')) ? (record.get((fieldPrefix + 'postalcode')) + ' ') : '') + (record.get((fieldPrefix + 'locality')) ? record.get((fieldPrefix + 'locality')) : '');
-    
+
     if (record.get('countryname')) {
         lines += "\n" + record.get('countryname');
     }
-    
+
     return lines;
 };
 
 /**
  * opens the Copy Address Dialog and adds the rendered address
- * 
+ *
  * @param {Tine.Tinebase.data.Record} record
  * @param {String} companyName
  */
 Tine.Sales.addToClipboard = function(record, companyName) {
     var app = Tine.Tinebase.appMgr.get('Sales');
-    
+
     Tine.Sales.CopyAddressDialog.openWindow({
-        winTitle: 'Copy address to the clipboard', 
-        app: app, 
+        winTitle: 'Copy address to the clipboard',
+        app: app,
         content: Tine.Sales.renderAddress(record, companyName)
     });
 };
@@ -107,7 +112,7 @@ Tine.Sales.renderAddressAsLine = function(values) {
     if (values.customer_id && values.customer_id.hasOwnProperty('name')) {
         ret += '<b>' + Ext.util.Format.htmlEncode(values.customer_id.name) + '</b> - ';
     }
-    
+
     ret += Ext.util.Format.htmlEncode((values.postbox ? values.postbox : values.street));
     ret += ', ';
     ret += Ext.util.Format.htmlEncode(values.postalcode);
@@ -115,13 +120,13 @@ Tine.Sales.renderAddressAsLine = function(values) {
     ret += Ext.util.Format.htmlEncode(values.locality);
     ret += ' (';
     ret += app.i18n._(values.type)
-    
+
     if (values.type == 'billing') {
         ret += ' - ' + Ext.util.Format.htmlEncode(values.custom1);
     }
-    
+
     ret += ')';
-    
+
     return ret;
 };
 
@@ -132,7 +137,7 @@ Tine.widgets.grid.RendererManager.register('Sales', 'Invoice', 'address_id', Tin
 
 /**
  * renders the model of the invoice position
- * 
+ *
  * @param {String} value
  * @param {Object} row
  * @param {Tine.Tinebase.data.Record} rec
@@ -144,7 +149,7 @@ Tine.Sales.renderInvoicePositionModel = function(value, row, rec) {
     }
     var split = value.split('_Model_');
     var model = Tine[split[0]].Model[split[1]];
-    
+
     return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName') + model.getMeta('modelName') + '">&nbsp;</span>' + model.getRecordName() + ' (' + model.getAppName() + ')';
 };
 
@@ -158,11 +163,11 @@ Tine.widgets.grid.RendererManager.register('Sales', 'InvoicePosition', 'model', 
  */
 Tine.Sales.InvoicePositionQuantityRendererRegistry = function() {
     var renderers = {};
-    
+
     return {
         /**
          * return renderer
-         * 
+         *
          * @param {String} phpModelName
          * @return {Function}
          */
@@ -177,10 +182,10 @@ Tine.Sales.InvoicePositionQuantityRendererRegistry = function() {
                 }
             }
         },
-        
+
         /**
          * register renderer
-         * 
+         *
          * @param {String} phpModelName
          * @param {Function} func
          */
@@ -188,10 +193,10 @@ Tine.Sales.InvoicePositionQuantityRendererRegistry = function() {
             var unit = unit.replace(/\s/, '');
             renderers[phpModelName+unit] = func;
         },
-        
+
         /**
          * check if a renderer is explicitly registered
-         * 
+         *
          * @param {String} phpModelName
          * @return {Boolean}
          */
@@ -204,23 +209,23 @@ Tine.Sales.InvoicePositionQuantityRendererRegistry = function() {
 
 /**
  * renders the unit of the invoice position
- * 
+ *
  * @param {String} value
  * @param {Object} row
  * @param {Tine.Tinebase.data.Record} rec
  * @return {String}
  */
 Tine.Sales.renderInvoicePositionUnit = function(value, row, rec) {
-    
+
     if (! value) {
         return '';
     }
-    
+
     var model = rec.get('model');
     var split = model.split('_Model_');
-    
+
     var app = Tine.Tinebase.appMgr.get(split[0]);
-    
+
     return app.i18n._(value);
 };
 /**
@@ -258,7 +263,7 @@ Tine.Sales.renderCostCenter = function(value, row, rec) {
     if (Ext.isObject(value)) {
         return value.number + ' - ' + value.remark;
     }
-    
+
     return '';
 };
 
@@ -269,11 +274,11 @@ Tine.widgets.grid.RendererManager.register('Sales', 'Invoice', 'costcenter_id', 
  */
 Tine.Sales.AccountableRegistry = function() {
     var accountables = {};
-    
+
     return {
         /**
          * return all accountables as array
-         * 
+         *
          * @return {Array}
          */
         getArray: function() {
@@ -281,13 +286,13 @@ Tine.Sales.AccountableRegistry = function() {
             Ext.iterate(accountables, function(key, value) {
                 ar.push(value);
             });
-            
+
             return ar;
         },
-        
+
         /**
          * register accountable
-         * 
+         *
          * @param {String} appName
          * @param {String} modelName
          */
@@ -297,10 +302,10 @@ Tine.Sales.AccountableRegistry = function() {
                 accountables[key] = {appName: appName, modelName: modelName};
             }
         },
-        
+
         /**
          * check if a renderer is explicitly registered
-         * 
+         *
          * @param {String} appName
          * @param {String} modelName
          * @return {Boolean}
@@ -322,7 +327,7 @@ Tine.Sales.renderAccountable = function(values) {
     var split = values.split('_Model_');
     var ret = '';
     var app = Tine.Tinebase.appMgr.get(split[0]);
-    
+
     return app ? app.i18n._(split[0] + split[1]) : null;
 };
 

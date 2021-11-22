@@ -37,7 +37,7 @@ Tine.widgets.form.FieldManager = function() {
         specialTypeMap: {
             password : 'tw-passwordTriggerField'
         },
-        
+
         /**
          * get form field of well known field names
          *
@@ -49,7 +49,7 @@ Tine.widgets.form.FieldManager = function() {
 
             return field;
         },
-        
+
         /**
          * get form field by data type
          *
@@ -65,25 +65,27 @@ Tine.widgets.form.FieldManager = function() {
                 modelConfig = recordClass ? recordClass.getModelConfiguration() : null,
                 fieldDefinition = _.get(modelConfig, 'fields.' + fieldName, {});
 
-            // have self contained fieldDefinition 
+            // have self contained fieldDefinition
             fieldDefinition.appName = appName;
             fieldDefinition.fieldName = fieldName;
-            
+
             if (_.get(fieldDefinition, 'disabled')) {
                 return null;
             }
-            
+
             return this.getByFieldDefinition(fieldDefinition, category, config);
         },
 
         getByFieldDefinition: function(fieldDefinition, category, config) {
             category = category || Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG;
             config = config || {};
-            
+
             var field = {},
                 fieldType = fieldDefinition.type || 'textfield',
                 app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || fieldDefinition.appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
+
+            Object.assign(field, fieldDefinition, fieldDefinition.config || {},  fieldDefinition.uiconfig || {});
 
             if (fieldType === 'virtual' && fieldDefinition.config) {
                 fieldType = fieldDefinition.config.type || 'textfield';
@@ -151,7 +153,7 @@ Tine.widgets.form.FieldManager = function() {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'seconds';
                     }
-                    
+
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'minutes') {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'minutes';
@@ -172,6 +174,10 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'percent') {
                         field.xtype = 'extuxnumberfield';
                         field.suffix = ' %';
+                    }
+
+                    if (fieldDefinition.specialType && fieldDefinition.specialType === 'discount') {
+                        field.xtype = 'discountfield';
                     }
 
                     if (fieldDefinition.max) {
@@ -218,11 +224,14 @@ Tine.widgets.form.FieldManager = function() {
                         if (fieldDefinition.config.additionalFilterSpec) {
                             field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
                         }
-                        if (category === 'editDialog' && fieldDefinition.config.dependentRecords) {
+                        field.fieldLabel = fieldDefinition.fieldLabel ? field.fieldLabel :
+                            Tine.Tinebase.data.RecordMgr.get(fieldDefinition.config.appName, fieldDefinition.config.modelName)?.getRecordName();
+
+                        // @TODO: denormalizationOf should have an edit plugin
+                        if (category === 'editDialog' && fieldDefinition.config.dependentRecords && !fieldDefinition.config.denormalizationOf) {
                             field.xtype = 'tw-recordEditField';
                             field.appName = fieldDefinition.config.appName;
                             field.modelName = fieldDefinition.config.modelName;
-                            field.fieldName = fieldDefinition.fieldName;
                             break;
                         }
                         var picker = Tine.widgets.form.RecordPickerManager.get(
@@ -236,20 +245,24 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'records':
                     if (category === 'editDialog') {
+                        field.xtype = 'wdgt.pickergrid';
+                        if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
+                            // @TODO use different widget here (e.g. quickadd gird)
+                            field.enableTbar = false;
+                            field.allowCreateNew = true;
+                            field.refIdField = _.get(fieldDefinition, 'config.refIdField', undefined);
+                            _.set(field, 'editDialogConfig.mode', 'local');
+                        }
                         if (fieldDefinition.config.additionalFilterSpec) {
                             field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
                         }
-                        field.xtype = 'wdgt.pickergrid';
+                        field.fieldLabel = fieldDefinition.fieldLabel ? field.fieldLabel :
+                            Tine.Tinebase.data.RecordMgr.get(fieldDefinition.config.appName, fieldDefinition.config.modelName)?.getRecordsName();
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
-                        field.allowCreateNew = _.get(fieldDefinition, 'config.dependentRecords', false);
-                        field.enableTbar = !_.get(fieldDefinition, 'config.dependentRecords', false);
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
                         field.hideHeaders = true;
-                        field.height = 80 /* 4 records */ + field.enableTbar * 26  +  26 /* 2 toolbars */
-                        if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
-                            _.set(field, 'editDialogConfig.mode', 'local');
-                        }
+                        field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */
                     } else {
                         var picker = Tine.widgets.form.RecordsPickerManager.get(
                             fieldDefinition.config.appName,
@@ -397,6 +410,7 @@ Tine.widgets.form.FieldManager = function() {
                 genericKey = this.getKey([appName, modelName, fieldName]);
 
             field.name = fieldName;
+            field.fieldName = fieldName;
             fields[category ? categoryKey : genericKey] = field;
         },
 

@@ -152,7 +152,11 @@ Tine.Tinebase.common = {
      * 
      * @return {String} The formatted number.
      */
-    percentRenderer: function(v, type) {
+    percentRenderer: function(v, type, nullable) {
+        if (['', null, undefined].indexOf(v) >= 0 && nullable) {
+            return '';
+        }
+        
         if (! Ext.isNumber(v)) {
             v = 0;
         }
