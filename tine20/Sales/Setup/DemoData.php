@@ -22,31 +22,31 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * @var Sales_Setup_DemoData
      */
     private static $_instance = NULL;
-    
+
     /**
      * The contract controller
-     * 
+     *
      * @var Sales_Controller_Contract
      */
     protected $_contractController = NULL;
-    
+
     /**
      * required apps
-     * 
+     *
      * @var array
      */
     protected static $_requiredApplications = array('Admin', 'Addressbook');
-    
+
     /**
      * The product controller
-     * 
+     *
      * @var Sales_Controller_Product
      */
     protected $_productController  = NULL;
-    
+
     /**
      * the application name to work on
-     * 
+     *
      * @var string
      */
     protected $_appName = 'Sales';
@@ -55,7 +55,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * @var array
      */
     protected $_models = array('product', 'customer', 'contract', 'invoice', 'orderconfirmation', 'offer');
-    
+
     /**
      * the constructor
      *
@@ -64,7 +64,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $this->_productController     = Sales_Controller_Product::getInstance();
         $this->_contractController    = Sales_Controller_Contract::getInstance();
-        
+
         $this->_loadCostCentersAndDivisions();
     }
 
@@ -92,24 +92,24 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             self::$_instance = null;
         }
     }
-    
+
     /**
      * this is required for other applications needing demo data of this application
      * if this returns true, this demodata has been run already
-     * 
+     *
      * @return boolean
      */
     public static function hasBeenRun()
     {
         $c = Sales_Controller_Contract::getInstance();
-        
+
         $f = new Sales_Model_ContractFilter(array(
             array('field' => 'description', 'operator' => 'equals', 'value' => 'Created by Tine 2.0 DemoData'),
         ), 'AND');
-        
-        return ($c->search($f)->count() > 10) ? true : false;
+
+        return ($c->search($f)->count() > 1) ? true : false;
     }
-    
+
     /**
      * creates the products - no containers, just "shared"
      */
@@ -119,62 +119,185 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array(
                 'name' => '10 Port 100 MBit Ethernet Switch',
                 'description' => '10 Port Fast Ethernet Switch, RJ45',
-                'price' => 28.13,
+                'salesprice' => 28.13,
             ),
             array(
                 'name' => '28 Port 100 MBit Ethernet Switch PoE',
                 'description' => '28 Port Fast Ethernet Switch, PoE, RJ45',
-                'price' => 1029.99,
+                'salesprice' => 1029.99,
             ),
             array(
                 'name' => '10 Port Gigabit Ethernet Switch',
                 'description' => '10 Port 1 Gigabit Switch, RJ45',
-                'price' => 78.87,
+                'salesprice' => 78.87,
             ),
             array(
                 'name' => '28 Port Gigabit Ethernet Switch PoE',
                 'description' => '28 Port 1 Gigabit Ethernet Switch PoE',
-                'price' => 3496.45,
+                'salesprice' => 3496.45,
             )
         );
-        
+
         $default = array(
             'manufacturer' => 'SwitchCo',
             'category' => self::$_en ? 'LAN Equipment' : 'Netzwerkausrüstung'
         );
-        
+
         foreach($products as $product) {
             $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
-        
+
         $products = array(
             array(
                 'name' => self::$_en ? '10m Cat. 5a red' : '10m Kat. 5a rot',
                 'description' => self::$_en ? '10m Cat. 5a red cable up to 100MBit.' : '10m Kat. 5a rotes Kabel. Erlaubt Übertragungsraten von bis zu 100MBit.',
-                'price' => 5.99,
+                'salesprice' => 5.99,
             ),
             array(
                 'name' => self::$_en ? '10m Cat. 5a blue' : '10m Kat. 5a blau',
                 'description' => self::$_en ? '10m Cat. 5a blue cable up to 100MBit.' : '10m Kat. 5a blaues Kabel. Erlaubt Übertragungsraten von bis zu 100MBit.',
-                'price' => 5.99,
+                'salesprice' => 5.99,
             ),
             array(
                 'name' => self::$_en ? '10m Cat. 6 red' : '10m Kat. 6 rot',
                 'description' => self::$_en ? '10m Cat. 6 red cable up to 1000MBit.' : '10m Kat. 5a rotes Kabel. Erlaubt Übertragungsraten von bis zu 1000MBit.',
-                'price' => 9.99,
+                'salesprice' => 9.99,
             ),
             array(
                 'name' => self::$_en ? '10m Cat. 6 blue' : '10m Kat. 6 blau',
                 'description' => self::$_en ? '10m Cat. 6 blue cable up to 1000MBit.' : '10m Kat. 5a blaues Kabel. Erlaubt Übertragungsraten von bis zu 1000MBit.',
-                'price' => 9.99,
+                'salesprice' => 9.99,
             ),
         );
-        
+
         $default = array(
             'manufacturer' => self::$_en ? 'Salad Cabels' : 'Salat Kabel & Co.',
             'category' => self::$_en ? 'LAN Equipment' : 'Netzwerkausrüstung'
         );
-        
+
+        $subProductIds = [];
+
+        foreach($products as $key => $product) {
+            $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
+        }
+
+        $products = [
+            [
+                Sales_Model_Product::FLD_SHORTCUT => 'cable-set',
+                Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
+                'name' => self::$_en ? 'Cable-set' : 'Kabelsatz',
+                'description' => self::$_en ? 'colorful networkcable set' : 'Farbiges Netzwerkkabelset',
+                'salesprice' => 38.99,
+                Sales_Model_Product::FLD_UNFOLD_TYPE => Sales_Model_Product::UNFOLD_TYPE_SET,
+                Sales_Model_Product::FLD_SUBPRODUCTS => [
+                    [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[0],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '5ared',
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
+                    ], [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[1],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '5ablue',
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
+                    ], [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[2],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '6red',
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
+                    ], [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[3],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '6blue',
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
+                    ]
+                ]
+            ]
+        ];
+
+        foreach($products as $product) {
+            $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
+        }
+
+        $products = [
+            [
+                'name' => 'vCPU',
+                Sales_Model_Product::FLD_DEFAULT_GROUPING => 'Dynamic costs',
+                Sales_Model_Product::FLD_SHORTCUT => 'vcpu',
+                Sales_Model_Product::FLD_IS_SALESPRODUCT => false,
+                'description' => 'vCPU',
+                'salesprice' => 9.99,
+            ], [
+                'name' => 'RAM in GB',
+                Sales_Model_Product::FLD_DEFAULT_GROUPING => 'Dynamic costs',
+                Sales_Model_Product::FLD_SHORTCUT => 'vram',
+                Sales_Model_Product::FLD_IS_SALESPRODUCT => false,
+                'description' => 'RAM in GB',
+                'salesprice' => 9.99,
+            ]
+        ];
+
+        $default = array(
+            'manufacturer' => 'Hosting Giant Ltd',
+            'category' => 'Hosting'
+        );
+
+        $subProductIds = [];
+
+        foreach($products as $key => $product) {
+            $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)))->getId();
+        }
+
+        $products = [
+            [
+                Sales_Model_Product::FLD_SHORTCUT => 'vm-small',
+                Sales_Model_Product::FLD_DEFAULT_GROUPING => 'Periocical costs',
+                Sales_Model_Product::FLD_DEFAULT_SORTING => 50000,
+                Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
+                'name' => self::$_en ? 'VM small' : 'VM klein',
+                'description' => self::$_en ? 'small, general purpose VM with {vcpu.quantity} vCPUs and {vram.quantity}GB RAM' : 'kleine, general purpose VM mit {vcpu.quantity} vCPUs und {vram.quantity}GB RAM',
+                'salesprice' => 9.99,
+                Sales_Model_Product::FLD_UNFOLD_TYPE => Sales_Model_Product::UNFOLD_TYPE_BUNDLE,
+                Sales_Model_Product::FLD_SUBPRODUCTS => [
+                    [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[0],
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 2,
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => 'vcpu',
+                        Sales_Model_SubProductMapping::FLD_VARIABLE_POSITION_FLAG => 'SHARED',
+
+                    ], [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[1],
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 4,
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => 'vram',
+                        Sales_Model_SubProductMapping::FLD_VARIABLE_POSITION_FLAG => 'SHARED',
+                    ]
+                ]
+            ], [
+                Sales_Model_Product::FLD_SHORTCUT => 'vm-middle',
+                Sales_Model_Product::FLD_DEFAULT_GROUPING => 'Periocical costs',
+                Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
+                'name' => self::$_en ? 'VM middle' : 'VM mittel',
+                'description' => self::$_en ? 'middle, general purpose VM with {vcpu.quantity} vCPUs and {vram.quantity}GB RAM' : 'mittlere, general purpose VM mit {vcpu.quantity} vCPUs und {vram.quantity}GB RAM',
+                'salesprice' => 19.99,
+                Sales_Model_Product::FLD_UNFOLD_TYPE => Sales_Model_Product::UNFOLD_TYPE_BUNDLE,
+                Sales_Model_Product::FLD_SUBPRODUCTS => [
+                    [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[0],
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 4,
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => 'vcpu',
+                        Sales_Model_SubProductMapping::FLD_VARIABLE_POSITION_FLAG => 'SHARED',
+
+                    ], [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[1],
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 8,
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => 'vram',
+                        Sales_Model_SubProductMapping::FLD_VARIABLE_POSITION_FLAG => 'SHARED',
+                    ]
+                ]
+            ]
+        ];
+
+        $default = array(
+            'manufacturer' => 'Hosting Giant Ltd',
+            'category' => 'Hosting'
+        );
+
         foreach($products as $product) {
             $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
@@ -189,20 +312,20 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         // @todo: use shared addresses only
         $filter = new Addressbook_Model_ContactFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_CONTACT)));
         $addresses = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
-        
+
         $customers = array(
             array(
                 'name' => 'ELKO Elektronik und Söhne',
                 'url' => 'www.elko-elektronik.de',
                 'discount' => 0,
                 'name_shorthand' => 'ELKO'
-            ), 
+            ),
             array(
                 'name' => 'Reifenlieferant Gebrüder Platt',
                 'url' => 'www.platt-reifen.de',
                 'discount' => 0,
                 'name_shorthand' => 'PLATT'
-            ), 
+            ),
             array(
                 'name' => 'Frische Fische Gmbh & Co. KG',
                 'url' => 'www.frische-fische-hamburg.de',
@@ -210,14 +333,14 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'name_shorthand' => 'FrischeFische'
             ),
         );
-        
+
         $i=0;
-        
+
         $customerController = Sales_Controller_Customer::getInstance();
         $addressController = Sales_Controller_Address::getInstance();
-        
+
         $customerRecords = new Tinebase_Record_RecordSet('Sales_Model_Customer');
-        
+
         foreach ($customers as $customer) {
             $contactExtern = $addresses->getByIndex($i);
             if ($contactExtern) {
@@ -240,10 +363,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 echo 'Skipping creating customer ' . $customer['name'] . ' - exists already.' . PHP_EOL;
             }
         }
-        
+
         $pagination = new Tinebase_Model_Pagination(array('limit' => 16, 'sort' => 'id', 'dir' => 'DESC'));
         $addresses = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
-        
+
         $i=0;
         foreach($customerRecords as $customer) {
             foreach(array('postal', 'billing', 'delivery', 'billing', 'delivery') as $type) {
@@ -260,9 +383,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'countryname' => $caddress->adr_two_countryname,
                     'custom1'     => ($type == 'billing') ? Tinebase_Record_Abstract::generateUID(5) : NULL
                 ));
-                
+
                 $addressController->create($address);
-                
+
                 $i++;
             }
             // the last customer gets plus one delivery address
@@ -279,10 +402,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'countryname' => $caddress->adr_two_countryname,
                 'custom1'     => NULL
             ));
-            
+
             $addressController->create($address);
         }
-        
+
         if (static::$_createFullData) {
             $i=0;
             while ($i < 200) {
@@ -291,45 +414,45 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             }
         }
     }
-    
+
     /**
      * creates the invoices - no containers, just "shared"
      */
     protected function _createSharedInvoices()
     {
         $sic = Sales_Controller_Invoice::getInstance();
-        
+
         $now = new Tinebase_DateTime();
         $now->setTimezone(Tinebase_Core::getUserTimezone());
         $now->setDate($now->format('Y'), $now->format('m'), 1);
         $now->setTime(3,0,0);
-        
+
         $date = clone $this->_referenceDate;
-        
+
         while ($date < $now) {
             $sic->createAutoInvoices($date);
             $date->addMonth(1);
         }
     }
-    
+
     /**
      * creates the contracts - no containers, just "shared"
      */
     protected function _createSharedContracts()
     {
         $cNumber = 1;
-        
+
         $container = $this->_contractController->getSharedContractsContainer();
         $cid = $container->getId();
         $ccs = array($this->_developmentCostCenter, $this->_marketingCostCenter);
-        
+
         $i = 0;
-        
+
         $this->_setReferenceDate();
-        
+
         $customers = Sales_Controller_Customer::getInstance()->getAll();
         $addresses = Sales_Controller_Address::getInstance()->getAll();
-        
+
         $customersCount = $customers->count();
         $ccIndex = 0;
 
@@ -337,22 +460,22 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $timeaccoountProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product([
             'name' => 'Timetracker Product',
             'description' => 'this is a generic timetracker used in demo data',
-            'price' => 100,
+            'salesprice' => 100,
             'accountable' => 'TimetrackerTimeaccount'
         ]));
 
         while ($i < $customersCount) {
             $costcenter = $ccs[$i%2];
             $i++;
-            
+
             $customer = $customers->getByIndex($ccIndex);
-            
+
             $address = $addresses->filter('customer_id', $customer->getId())->filter('type', 'billing')->getFirstRecord();
             $addressId = $address ? $address->getId() : NULL;
-            
+
             $title = self::$_de ? ('Vertrag für KST ' . $costcenter->number . ' - ' . $costcenter->remark) : ('Contract for costcenter ' . $costcenter->number . ' - ' . $costcenter->remark) . ' ' . Tinebase_Record_Abstract::generateUID(3);
             $ccid = $costcenter->getId();
-            
+
             $contract = new Sales_Model_Contract(array(
                 'number'       => $cNumber,
                 'title'        => $title,
@@ -387,7 +510,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'type'                   => 'TIME_ACCOUNT'
                 );
             }
-            
+
 
             for($ts = 0; $ts < 6; $ts++) {
                 $timesheet = new Timetracker_Model_Timesheet();
@@ -400,7 +523,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $timesheet->accounting_time = 30;
                 Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
             }
-            
+
             $relations = array(
                 array(
                     'own_model'              => 'Sales_Model_Contract',
@@ -422,19 +545,19 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'related_id'             => $customer->getId(),
                     'type'                   => 'CUSTOMER'
                 ),
-                
+
             );
-            
+
             if ($timeaccountRelation) {
                 $relations[] = $timeaccountRelation;
             }
-            
+
             $genericProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(
                 self::$_de
-                    ? 
-                    array('name' => 'Generisches Produkt', 'description' => 'ein generisches produkt aus den demo daten', 'price' => 100)
+                    ?
+                    array('name' => 'Generisches Produkt', 'description' => 'ein generisches produkt aus den demo daten', 'salesprice' => 100)
                     :
-                    array('name' => 'Generic Product', 'description' => 'this is a generic product used in demo data', 'price' => 100)
+                    array('name' => 'Generic Product', 'description' => 'this is a generic product used in demo data', 'salesprice' => 100)
             ));
 
             $contract->products = [
@@ -447,9 +570,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'quantity' => 1
                 ]
             ];
-            
+
             $contract->relations = $relations;
-            
+
             $this->_contractController->create($contract);
             $cNumber++;
             $ccIndex++;
@@ -458,18 +581,18 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             }
         }
     }
-    
+
     /**
      * creates some order confirmations
      */
     protected function _createSharedOrderconfirmations()
     {
         $i = 1;
-        
+
         $this->_setReferenceDate();
-        
+
         $contracts = Sales_Controller_Contract::getInstance()->getAll('number');
-        
+
         // create for each contract a order confirmation
         foreach($contracts as $contract) {
             $relations = array(array(
@@ -482,27 +605,27 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'related_id'             => $contract->getId(),
                 'type'                   => 'CONTRACT'
             ));
-            
+
             $oc = Sales_Controller_OrderConfirmation::getInstance()->create(new Sales_Model_OrderConfirmation(array(
                 'number' => $i,
                 'title'  => self::$_de ? ('Auftragsbestätigung für Vertrag ' . $contract->title) : ('Order Confirmation for Contract' . $contract->title),
                 'description' => 'Created by Tine 2.0 DemoData',
                 'relations' => $relations
             )));
-            
+
             $i++;
         }
     }
-    
+
     /**
      * creates some offers
      */
     protected function _createSharedOffers()
     {
         $i = 0;
-        
+
         $this->_setReferenceDate();
-        
+
         $customers          = Sales_Controller_Customer::getInstance()->getAll('number');
         $orderconfirmations = Sales_Controller_OrderConfirmation::getInstance()->getAll('number');
 
@@ -543,9 +666,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createProduct($data)
     {
-        
+
     }
-    
+
     /**
      * create some costcenters
      *
@@ -559,11 +682,11 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
         : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
         ;
-        
+
         $be = new Sales_Backend_CostCenter();
         $be->setModlogActive(FALSE);
         $allCC = $be->getAll();
-        
+
         $id = 1;
         foreach($ccs as $title) {
             $cc = new Sales_Model_CostCenter(
@@ -581,19 +704,19 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $cc->is_deleted = 0;
                 $this->_costCenters->addRecord($be->update($cc));
             }
-    
+
             $id++;
         }
-    
+
         $divisionsArray = (static::$_de)
         ? array('Management', 'EDV', 'Marketing', 'Public Relations', 'Produktion', 'Verwaltung')
         : array('Management', 'IT', 'Marketing', 'Public Relations', 'Production', 'Administration')
         ;
-    
+
         foreach($divisionsArray as $divisionName) {
             Sales_Controller_Division::getInstance()->create(new Sales_Model_Division(array('title' => $divisionName)));
         }
-        
+
         $this->_loadCostCentersAndDivisions();
     }
 }

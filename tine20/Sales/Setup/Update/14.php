@@ -13,19 +13,17 @@
  */
 class Sales_Setup_Update_14 extends Setup_Update_Abstract
 {
-    const RELEASE014_UPDATE000 = __CLASS__ . '::update000';
-    const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
-    const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
-    const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
+    protected const RELEASE014_UPDATE000 = __CLASS__ . '::update000';
+    protected const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
+    protected const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE014_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
-            ]
-        ],
-        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            ],
             self::RELEASE014_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
@@ -48,7 +46,8 @@ class Sales_Setup_Update_14 extends Setup_Update_Abstract
 
     public function update001()
     {
-        Setup_SchemaTool::updateSchema([Sales_Model_Address::class]);
+        Setup_SchemaTool::updateSchema([Sales_Model_Address::class, Sales_Model_Product::class]);
+
         $this->addApplicationUpdate('Sales', '14.1', self::RELEASE014_UPDATE001);
     }
 

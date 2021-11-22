@@ -27,7 +27,8 @@ class Tinebase_ModelConfiguration_Const {
      * additional boxLabel for checkboxes
      */
     const BOX_LABEL = 'boxLabel';
-    
+
+    const CASCADE = 'CASCADE';
     const CONFIG = 'config';
     const CONTROLLER = 'controller';
     const CONTROLLER_CLASS_NAME = 'controllerClassName';
@@ -46,7 +47,12 @@ class Tinebase_ModelConfiguration_Const {
      */
     const DEFAULT_SORT_INFO = 'defaultSortInfo';
     const DEFAULT_VAL = 'default';
+    /**
+     * config for default value
+     */
+    const DEFAULT_VAL_CONFIG = 'defaultValConfig';
     const DEGREE = 'degree';
+    const DENORMALIZATION_OF = 'denormalizationOf';
     const DEPENDENT_RECORDS = 'dependentRecords';
     /**
      * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
@@ -81,6 +87,8 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
     const FLD_DELETED_TIME = 'deleted_time';
+    const FLD_ORIGINAL_ID = 'original_id';
+    const FORCE_VALUES = 'forceValues';
     const FUNCTION = 'function';
 
     const HAS_ATTACHMENTS = 'hasAttachments';
@@ -101,17 +109,21 @@ class Tinebase_ModelConfiguration_Const {
     const INDEXES = 'indexes';
     const INPUT_FILTERS = 'inputFilters';
     const IS_DEPENDENT = 'isDependent';
+    const IS_PARENT = 'isParent';
     const IS_VIRTUAL = 'isVirtual';
 
     const JOIN_COLUMNS = 'joinColumns';
+    const JSON_EXPANDER = 'jsonExpander';
 
     const LABEL = 'label';
     const LENGTH = 'length';
 
+    const MAPPED_BY = 'mappedBy';
     const MODEL_NAME = 'modelName';
     const MODLOG_ACTIVE = 'modlogActive';
 
     const NAME = 'name';
+    const NORESOLVE = 'noResolve';
     const NULLABLE = 'nullable';
 
     const OMIT_MOD_LOG = 'modlogOmit';
@@ -137,6 +149,7 @@ class Tinebase_ModelConfiguration_Const {
     const RECORD_CLASS_NAME = 'recordClassName';
     const RECORD_NAME = 'recordName';
     const RECORDS_NAME = 'recordsName';
+    const RECURSIVE_RESOLVING = 'recursiveResolving';
     const RESOLVE_DELETED = 'resolveDeleted';
     const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
@@ -146,8 +159,10 @@ class Tinebase_ModelConfiguration_Const {
     const SHY = 'shy';
     const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
     const SPECIAL_TYPE = 'specialType';
+    const SPECIAL_TYPE_DISCOUNT = 'discount';
     const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
     const SPECIAL_TYPE_PASSWORD = 'password';
+    const SPECIAL_TYPE_PERCENT = 'percent';
     const STORAGE = 'storage';
     const SUPPORTED_FORMATS = 'supportedFormats';
     const SYSTEM = 'system';

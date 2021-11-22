@@ -38,6 +38,13 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      * @type {String}
      */
     prefix: null,
+
+    /**
+     * @cfg {Boolean} nullable
+     */
+    nullable: false,
+
+    style: 'text-align: right',
     
     initComponent: function() {
         if (this.useThousandSeparator) {
@@ -46,13 +53,11 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         
         Ext.ux.form.NumberField.superclass.initComponent.call(this);
         
-        this.on('focus', this.emptyField, this);
+        this.on('focus', this.selectText, this);
     },
-    
-    emptyField: function() {
-        if (this.getValue() == '0') {
-            this.setRawValue("");
-        }
+
+    selectText: function() {
+        this.el.dom.select();
     },
     
     /**
@@ -65,11 +70,15 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      */
     setValue: function(v) {
         // If empty string!
-        if (v == "") {
+        if (['', null, undefined].indexOf(v) >= 0 && !this.nullable) {
             v = "0";
         }
 
         Ext.ux.form.NumberField.superclass.setValue.call(this, v);
+
+        if (['', null, undefined].indexOf(v) >= 0 && this.nullable) {
+            return this;
+        }
         
         var split = String(this.getValue()).split('.');
 
@@ -129,7 +138,12 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         
         return this;
     },
-    
+
+    getValue: function () {
+        let value = Ext.ux.form.NumberField.superclass.getValue.call(this);
+        return value === '' ? null : value;
+    },
+
     // private, overwrites Ext.form.NumberField.parseValue
     parseValue : function(value){
         if (!value) {

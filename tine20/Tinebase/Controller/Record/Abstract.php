@@ -927,7 +927,77 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_inspectDenormalization($_record);
+    }
 
+    /**
+     * @param Tinebase_Record_Interface $newRecord
+     * @param Tinebase_Record_Interface|null $currentRecord
+     * @return void
+     */
+    protected function _inspectDenormalization(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $currentRecord = null)
+    {
+        if (null === ($mc = $newRecord::getConfiguration()) || !$mc->denormalizedFields) {
+            return;
+        }
+
+        if (null !== $currentRecord) {
+            $expander = new Tinebase_Record_Expander(get_class($currentRecord), [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => array_fill_keys(array_keys($mc->denormalizedFields), [])
+            ]);
+            $expander->expand(new Tinebase_Record_RecordSet(get_class($currentRecord), [$currentRecord]));
+        }
+
+        foreach ($mc->denormalizedFields as $property => $definition) {
+            if (TMCC::TYPE_RECORD === $definition[TMCC::TYPE]) {
+                if (null === $currentRecord) {
+                    if (!empty($newRecord->{$property})) {
+                        $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
+                    }
+                } else {
+                    if ($newRecord->{$property} instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
+                        if (null === $currentRecord->{$property} || $currentRecord->{$property}->getId() !== $newRecord->{$property}->getId()) {
+                            $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
+                        } else {
+                            $newRecord->{$property}->{TMCC::FLD_ORIGINAL_ID} = $currentRecord->{$property}->{TMCC::FLD_ORIGINAL_ID};
+                        }
+                    }
+                }
+            } elseif (TMCC::TYPE_RECORDS === $definition[TMCC::TYPE]) {
+                if (null === $currentRecord) {
+                    if (!empty($newRecord->{$property})) {
+                        foreach($newRecord->{$property} as $rec) {
+                            $this->_newDenormalizedRecord($rec, $definition);
+                        }
+                    }
+                } else {
+                    if ($newRecord->{$property} instanceof Tinebase_Record_RecordSet) {
+                        /** @var Tinebase_Record_RecordSetDiff $diff */
+                        $diff = $currentRecord->{$property}->diff($newRecord->{$property});
+                        foreach ($diff->added as $addedRecord) {
+                            $this->_newDenormalizedRecord($addedRecord, $definition);
+                        }
+                        foreach ($diff->modified as $diff) {
+                            $newRecord->{$property}->getById($diff->getId())->{TMCC::FLD_ORIGINAL_ID} =
+                                $currentRecord->{$property}->getById($diff->getId())->{TMCC::FLD_ORIGINAL_ID};
+                        }
+                    }
+                }
+            } else {
+                throw new Tinebase_Exception_Record_DefinitionFailure('property ' . $property . ' needs to be of type record[s]');
+            }
+        }
+    }
+
+    protected function _newDenormalizedRecord(Tinebase_Record_Interface $record, array $definition)
+    {
+        if (!$record instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
+            throw new Tinebase_Exception_UnexpectedValue('is not instance of ' .
+                $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
+        }
+        // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
+        $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
+        $record->setId(null);
     }
 
     /**
@@ -1593,6 +1663,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        $this->_inspectDenormalization($_record, $_oldRecord);
     }
 
     /**
@@ -2637,6 +2709,11 @@ abstract class Tinebase_Controller_Record_Abstract
                 $_record->{$_property}->setId(Tinebase_Record_Abstract::generateUID());
             }
             $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_createdRecord->getId();
+            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                    $_record->{$_property}->{$prop} = $val;
+                }
+            }
 
             $_createdRecord->{$_property} = $controller->create($_record->{$_property});
         }
@@ -2678,9 +2755,18 @@ abstract class Tinebase_Controller_Record_Abstract
         /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
         $controller = $ccn::getInstance();
         $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
-        $existingDepRec = $controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName, [
-            ['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]
-        ]))->getFirstRecord();
+        $filter = [['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]];
+        if (isset($_fieldConfig[TMCC::ADD_FILTERS])) {
+            $filter = array_merge($filter, $_fieldConfig[TMCC::ADD_FILTERS]);
+        }
+        $existingDepRec = ($exRecs = $controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            $recordClassName,$filter)))->getFirstRecord();
+        if ($exRecs->count() > 1) {
+            $exRecs->removeRecord($existingDepRec);
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                ' found more than one dependent record, deleting: ' . $exRecs->getArrayOfIds());
+            $controller->delete($exRecs->getArrayOfIds());
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($_record->{$_property}, TRUE));
@@ -2697,6 +2783,11 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->{$_property} instanceof $recordClassName) {
 
             $_record->{$_property}->{$_fieldConfig[TMCC::REF_ID_FIELD]} = $_record->getId();
+            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                    $_record->{$_property}->{$prop} = $val;
+                }
+            }
 
             if ($existingDepRec) {
                 $_record->{$_property}->setId($existingDepRec->getId());
@@ -2759,7 +2850,12 @@ abstract class Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Creating ' . $_record->{$_property}->count() . ' dependent records on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
             }
-            
+
+            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                    $_record->{$_property}->{$prop} = $val;
+                }
+            }
             foreach ($_record->{$_property} as $record) {
                 $record->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
                 if (! $record->getId() || strlen($record->getId()) != 40) {
@@ -2828,6 +2924,11 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         if (! empty($_record->{$_property}) && $_record->{$_property} && $_record->{$_property}->count() > 0) {
+            if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                    $_record->{$_property}->{$prop} = $val;
+                }
+            }
 
             /** @var Tinebase_Record_Interface $record */
             foreach ($_record->{$_property} as $record) {
@@ -2839,6 +2940,9 @@ abstract class Tinebase_Controller_Record_Abstract
                     try {
 
                         $prevRecord = $controller->get($record->getId());
+                        if ($prevRecord->{$_fieldConfig['refIdField']} !== $prevRecord->{$_fieldConfig['refIdField']}) {
+                            throw new Tinebase_Exception_UnexpectedValue('refId mismatch');
+                        }
 
                         if (!empty($prevRecord->diff($record)->diff)) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {

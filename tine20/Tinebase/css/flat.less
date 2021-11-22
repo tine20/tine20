@@ -361,7 +361,7 @@ span.x-tab-strip-text.tine-favicon {
     .x-item-disabled {
       opacity: 0.5;
     }
-    
+
     .x-btn-group .x-toolbar {
       border-bottom: 0px !important;
     }
@@ -575,6 +575,10 @@ span.x-tab-strip-text.tine-favicon {
 /* FORM */
 .x-form-text, textarea.x-form-field {
   background-image: none;
+}
+
+.x-form-field.x-form-num-field {
+  text-align: right;
 }
 
 .tw-editdialog {
@@ -852,6 +856,18 @@ a.x-grid3-hd-btn:hover {
 .x-grid3-row-selected {
   background-color: @selectionColor !important;
   border-color: @selectionColor;
+}
+
+.x-gird-drag-sort-above {
+  border-top: 2px solid black !important;
+  background-image: none !important;
+  background-color: transparent !important;
+}
+
+.x-gird-drag-sort-below {
+  border-bottom: 2px solid black !important;
+  background-image: none !important;
+  background-color: transparent !important;
 }
 
 /* DATEPICKER */

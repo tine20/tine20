@@ -82,9 +82,11 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const INVOICE_TYPE = 'invoiceType';
+
+    const INVOICE_DISCOUNT_TYPE = 'invoiceDiscountType';
     
     const PAYMENT_METHODS = 'paymentMethods';
-    
+
     /**
      * Product Category
      * 
@@ -98,6 +100,14 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DOCUMENT_CATEGORY = 'documentCategory';
+
+    const DOCUMENT_POSITION_TYPE = 'documentPositionType';
+
+    const PRODUCT_UNFOLDTYPE = 'productUnfoldType';
+
+    const PRODUCT_UNIT = 'productUnit';
+
+    const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
     
     /**
      * Invoice Type
@@ -226,6 +236,56 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'INVOICE'
             )
         ),
+        self::INVOICE_DISCOUNT_TYPE => [
+            self::LABEL                 => 'Invoice Discount Type', //_('Invoice Discount Type')
+            self::DESCRIPTION           => 'Invoice Discount Type', //_('Invoice Discount Type')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'PERCENTAGE', 'value' => 'Percentage', 'system' => true], // _('Percentage')
+                    ['id' => 'SUM', 'value' => 'Sum', 'system' => true], // _('Sum')
+                ],
+            ],
+        ],
+        self::DOCUMENT_POSITION_TYPE => [
+            self::LABEL                 => 'Document Position Type', //_('Document Position Type')
+            self::DESCRIPTION           => 'Document Position Type', //_('Document Position Type')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT, 'value' => 'Product', 'system' => true], // _('Product')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_TEXT, 'value' => 'Text', 'system' => true], // _('Text')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_HEADING, 'value' => 'Heading', 'system' => true], // _('Heading')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_PAGEBREAK, 'value' => 'Page Break', 'system' => true], // _('Page Break')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_ALTERNATIVE, 'value' => 'Alternative', 'system' => true], // _('Alternative')
+                    ['id' => Sales_Model_DocumentPosition_Abstract::POS_TYPE_OPTIONAL, 'value' => 'Optional', 'system' => true], // _('Optional')
+                ],
+                self::DEFAULT_STR           => Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT,
+            ],
+        ],
+        self::DOCUMENT_CATEGORY => [
+            self::LABEL                 => 'Document Category', //_('Document Category')
+            self::DESCRIPTION           => 'Document Category', //_('Document Category')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'STANDARD', 'value' => 'Standard', 'system' => true], // _('Standard')
+                ],
+                self::DEFAULT_STR           => 'STANDARD',
+            ],
+        ],
         self::PRODUCT_CATEGORY => array(
                                    //_('Product Category')
             'label'                 => 'Product Category',
@@ -241,6 +301,52 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'DEFAULT'
             )
         ),
+        self::PRODUCT_UNFOLDTYPE => [
+            self::LABEL                 => 'Product Unfold Type', //_('Product Unfold Type')
+            self::DESCRIPTION           => 'Product Unfold Type', //_('Product Unfold Type')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => Sales_Model_Product::UNFOLD_TYPE_BUNDLE, 'value' => 'Bundle', 'system' => true], // _('Shared')
+                    ['id' => Sales_Model_Product::UNFOLD_TYPE_SET, 'value' => 'Set', 'system' => true], // _('Own')
+                ],
+            ],
+        ],
+        self::PRODUCT_UNIT => [
+            self::LABEL                 => 'Product Unit', //_('Product Unit')
+            self::DESCRIPTION           => 'Product Unit', //_('Product Unit')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => Sales_Model_Product::UNIT_PIECE, 'value' => 'Piece', 'system' => true], // _('Piece')
+                ],
+            ],
+        ],
+        self::VARIABLE_POSITION_FLAG => [
+            self::LABEL                 => 'Sub-Product Variable Position Flag', //_('Sub-Product Variable Position Flag')
+            self::DESCRIPTION           => 'Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document.', //_('Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document.')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            /*self::OPTIONS               => [
+                self::RECORD_MODEL          => ....
+            ],*/
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'NONE', 'value' => 'None', 'system' => true], // _('None')
+                    ['id' => 'SHARED', 'value' => 'Shared', 'system' => true], // _('Shared')
+                    ['id' => 'OWN', 'value' => 'Own', 'system' => true], // _('Own')
+                ],
+                self::DEFAULT_STR => 'NONE',
+            ],
+        ],
         self::PRODUCT_NUMBER_GENERATION => array(
                                    //_('Product Number Creation')
             'label'                 => 'Product Number Creation',
@@ -307,20 +413,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                     array('id' => 'ASSETS', 'value' => 'Assets', 'system' => true), // _('Assets')
                 ),
                 'default' => 'BANK TRANSFER'
-            )
-        ),
-        self::DOCUMENT_CATEGORY => array(
-            //_('Document Category')
-            'label'                 => 'Document Category',
-            //_('Possible Document Categories.')
-            'description'           => 'Possible Document Categories.',
-            'type'                  => 'keyFieldConfig',
-            'clientRegistryInclude' => TRUE,
-            'default'               => array(
-                'records' => array(
-                    array('id' => 'DEFAULT', 'value' => 'Default', 'system' => true) // _('Default')
-                ),
-                'default' => 'DEFAULT'
             )
         ),
         self::INVOICE_CLEARED => array(

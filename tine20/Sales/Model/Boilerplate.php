@@ -88,23 +88,23 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
             ],
             self::FLD_FROM => [
                 self::TYPE => self::TYPE_DATE,
-                self::SHY => true,
                 self::LABEL => 'From', // _('From')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
-                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                // filter config BEFORE_OR_IS_NULL
             ],
             self::FLD_UNTIL => [
                 self::TYPE => self::TYPE_DATE,
-                self::SHY => true,
                 self::LABEL => 'Until', // _('Until')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
-                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                // filter config AFTER_OR_IS_NULL
             ],
             self::FLD_DOCUMENT_CATEGORY => [
                 self::TYPE => self::TYPE_KEY_FIELD,
@@ -126,6 +126,8 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                     'idProperty'  => 'id'
                 )
             ],
+
+            // denormalize like products, customer, address, etc.
             self::FLD_DOCUMENT => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 40,
