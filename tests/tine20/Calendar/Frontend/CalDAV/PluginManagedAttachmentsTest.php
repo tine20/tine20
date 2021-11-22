@@ -42,7 +42,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->originalHostname = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
         $_SERVER['HTTP_HOST'] = $this->hostname;
         
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
         
         $this->plugin = new Calendar_Frontend_CalDAV_PluginManagedAttachments();
         
