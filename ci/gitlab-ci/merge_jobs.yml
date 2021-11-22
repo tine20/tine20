@@ -3,7 +3,7 @@
     GIT_STRATEGY: none
     MERGENONINTERACTIVE: "true" # "false" is also true! Runs not interactive if the variable exists.
     pushOptSkipCi: "true" # "false" is also true! Runs not interactive if the variable exists.
-  image: ${UTIL_REGISTRY}/docker:19.03.1-r2 # dose not need docker. But the docker image should already exist on the runners.
+  image: php:7.4-alpine
   needs: []
   before_script:
     - apk add git
