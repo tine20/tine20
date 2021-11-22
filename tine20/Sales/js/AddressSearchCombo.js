@@ -32,19 +32,33 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
     sortBy: 'locality',
     recordClass: 'Sales.Model.Document_Address',
 
-
     checkState: function(editDialog, record) {
-        let customer_id = editDialog.record.get('customer_id') || editDialog.record.get('customer');
-        if (customer_id?.original_id) {
-            // handle denormalisationOf
-            customer_id = customer_id.original_id
+        const mc = editDialog?.recordClass?.getModelConfiguration();
+        const type = _.get(mc, `fields${this.fieldName}.config.type`, 'billing');
+
+        const customerField = editDialog.getForm().findField('customer_id') || editDialog.getForm().findField('customer')
+        const customer = customerField?.selectedRecord;
+        const customer_id = customer?.json?.original_id || customer?.id;
+
+        if (this.customer_id && this.customer_id !== customer_id) {
+            // handle customer changes
+            this.clearValue();
         }
+        if (customer_id && !this.selectedRecord) {
+            const typeRecords = customer?.data[type];
+            const typeRecord = Ext.isArray(typeRecords) && typeRecords.length ? typeRecords[0] : customer?.data?.postal;
+            if (typeRecord) {
+                const address = Tine.Tinebase.data.Record.setFromJson(typeRecord, this.recordClass);
+                this.setValue(address);
+                this.fireEvent('select')
+            }
+        }
+        this.customer_id = customer_id;
+
         this.setDisabled(!customer_id);
         if (! customer_id) {
             this.clearValue();
         } else {
-            const mc = editDialog?.recordClass?.getModelConfiguration();
-            const type = _.get(mc, `fields${this.fieldName}.config.type`, 'billing');
             this.lastQuery = null;
             this.additionalFilters = [
                 {field: 'customer_id', operator: 'equals', value: customer_id}
