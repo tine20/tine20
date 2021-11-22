@@ -224,81 +224,8 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         Tine.Sales.ContractEditDialog.superclass.onRecordLoad.call(this);
-        
-        if (this.record.id) {
-            var relations = this.record.get('relations'), foundCustomer = false;
-            
-            if (Ext.isArray(relations)) {
-                for (var index = 0; index < relations.length; index++) {
-                    if (relations[index].related_model == 'Sales_Model_Customer') {
-                        if (relations[index].type == 'CUSTOMER') {
-                            foundCustomer = relations[index].related_record;
-                        }
-                    }
-                }
-            }
-            
-            if (foundCustomer) {
-                this.addressPicker.enable();
-                var ba = this.record.get('billing_address_id');
-                
-                if (ba && ba.hasOwnProperty('locality')) {
-                    var record = new Tine.Sales.Model.Address(ba);
-                }
-             
-                this.setAddressPickerFilter();
-            }
-        }
     },
-    
-    /**
-     * sets the filter used for the addresspicker by the selected customer
-     */
-    setAddressPickerFilter: function() {
-        this.addressPicker.additionalFilters = [
-            {field: 'type', operator: 'not', value: 'delivery'},
-            {field: 'customer_id', operator: 'AND', value: [
-                {field: ':id', operator: 'in', value: [this.customerPicker.getValue()] }
-            ]}
-        ];
-    },
-    
-    /**
-     * loads the full-featured record, if a contract gets selected
-     * 
-     * @param {Tine.widgets.relation.PickerCombo} combo
-     * @param {Tine.Sales.Model.Contract} record
-     * @param {Number} index
-     */
-    onCustomerLoad: function(combo, record, index) {
-        if (this.addressPicker.disabled) {
-            this.addressPicker.enable();
-        } else {
-            this.addressPicker.reset();
-        }
-        
-        this.addressPicker.lastQuery = null;
-        this.setAddressPickerFilter();
-        this.loadAddress(record);
-    },
-    
-    /**
-     * loads the first billing address or the postal 
-     * address into the addresspicker on loading a customer
-     * 
-     * @param {Tine.Sales.Model.Customer} record
-     */
-    loadAddress: function(record) {
-        var billingAddresses = record.get('billing');
-        if (Ext.isArray(billingAddresses) && billingAddresses.length > 0) {
-            var address = new Tine.Sales.Model.Address(billingAddresses[0]);
-        } else {
-            var address = new Tine.Sales.Model.Address(record.get('postal_id'));
-        }
-        
-        this.addressPicker.setValue(address.data);
-    },
-    
+
     /**
      * returns dialog
      * 
@@ -326,6 +253,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             name: 'title',
             allowBlank: false
         }], [{
+            name: 'customer',
             columnWidth: 1,
             editDialog: this,
             xtype: 'tinerelationpickercombo',
@@ -335,10 +263,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             relationType: 'CUSTOMER',
             relationDegree: 'sibling',
             modelUnique: true,
-            listeners: {
-                scope: this,
-                select: this.onCustomerLoad
-            },
             ref: '../../../../../customerPicker',
             fieldLabel: this.app.i18n._('Customer')
         }], [ Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {
