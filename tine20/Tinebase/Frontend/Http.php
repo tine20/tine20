@@ -582,7 +582,34 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         Tinebase_ImageHelper::crop($image, $left, $top, $widht, $height);
         
     }
-    
+
+    public function getBlob($hash)
+    {
+        $this->checkAuth();
+
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::REPLICATION)) {
+            header('HTTP/1.0 403 Forbidden');
+            exit;
+        }
+
+        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
+        $path = $fileObject->getFilesystemPath();
+
+        if (is_file($path)) {
+            if (!($fh = fopen($path, 'rb'))) {
+                throw new Tinebase_Exception_Backend('could not open blob file: ' . $hash);
+            }
+            //header('Content-Length: ' . filesize($path));
+            ob_end_flush();
+            ob_implicit_flush(true);
+            fpassthru($fh);
+            fclose($fh);
+            flush();
+        } else {
+            header('HTTP/1.0 404 Not Found');
+        }
+    }
+
     /**
      * download file attachment
      * 

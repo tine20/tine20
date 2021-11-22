@@ -1715,43 +1715,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * returns the replication modification logs
-     *
-     * @param string $hash
-     * @return array
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_Backend
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function getBlob(string $hash)
-    {
-        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::REPLICATION)) {
-            throw new Tinebase_Exception_AccessDenied('you do not have access to blobs');
-        }
-
-        $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
-        $path = $fileObject->getFilesystemPath();
-
-        if (is_file($path)) {
-            if (!($fh = fopen($path, 'r'))) {
-                throw new Tinebase_Exception_Backend('could not open blob file: ' . $hash);
-            }
-            if (!stream_filter_append($fh, 'convert.base64-encode', STREAM_FILTER_READ)) {
-                throw new Tinebase_Exception_Backend('could not append stream filter');
-            }
-            $data = stream_get_contents($fh);
-            fclose($fh);
-        } else {
-            throw new Tinebase_Exception_NotFound('could not find blob: ' . $hash);
-        }
-
-        return array(
-            'success' => true,
-            'data'    => $data
-        );
-    }
-
-    /**
      * @return array
      */
     public function reportPresence()
