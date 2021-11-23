@@ -234,11 +234,12 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
 
             // create new folder
             $folder = new Felamimail_Model_Folder(array(
-                'localname'     => $foldername,
-                'globalname'    => $globalname,
-                'account_id'    => $account->getId(),
-                'parent'        => $_parentFolder
+                'localname' => $foldername,
+                'globalname' => $globalname,
+                'account_id' => $account->getId(),
+                'parent' => $_parentFolder,
             ));
+            $folder->supports_condstore = $this->supportsCondStore($folder, $account, $imap);
             
             $folder = $this->_backend->create($folder);
             
@@ -272,7 +273,50 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         return $folder;
     }
-    
+
+    /**
+     * check if folder support condstore: try to exmime folder on imap server if supports_condstore is null
+     *
+     * @param string|Felamimail_Model_Folder $folder
+     * @param Felamimail_Model_Account|null $_account
+     * @param Felamimail_Backend_ImapProxy|null $imap
+     * @return boolean
+     */
+    public function supportsCondStore($folder, Felamimail_Model_Account $account = null, $imap = null)
+    {
+        if (is_string($folder) || $folder->supports_condstore === null) {
+            $folderName = is_string($folder) ? $folder : $folder->globalname;
+
+            if (! $imap) {
+                if (!$account) {
+                    if ($folder instanceof Felamimail_Model_Folder) {
+                        $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+                    } else {
+                        throw new Felamimail_Exception('no valid account found for folder');
+                    }
+                }
+                $imap = Felamimail_Backend_ImapFactory::factory($account);
+            }
+
+            try {
+                $folderData = $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
+
+                $result = isset($folderData['highestmodseq']) || array_key_exists('highestmodseq', $folderData);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Folder ' . $folderName . ' supports condstore: ' . intval($result));
+
+                return $result;
+
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . " Could not examine folder $folderName. Skipping it.");
+                return null;
+            }
+        }
+
+        return $folder->supports_condstore;
+    }
+
     /**
      * prepare foldername given by user (remove some bad chars)
      * 
@@ -294,6 +338,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      */
     public function update(Felamimail_Model_Folder $_folder)
     {
+        $_folder->supports_condstore = $this->supportsCondStore($_folder);
         return $this->_backend->update($_folder);
     }
     
