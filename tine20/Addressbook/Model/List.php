@@ -95,8 +95,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
 
         'containerProperty' => 'container_id',
 
-        'containerName'     => 'Lists',
-        'containersName'    => 'Lists',
+        'containerName'     => 'List', // gettext('GENDER_List')
+        'containersName'    => 'Lists', // ngettext('List', 'Lists', n)
         'containerUsesFilter' => true, // TODO true?
 
         'titleProperty'     => 'name',//array('%s - %s', array('number', 'title')),
