@@ -252,7 +252,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 if (this.fireEvent('newentry', data)){
                     var quickAddField = this.colModel.getColumnById(this.quickaddMandatory).quickaddField;
                     if (quickAddField.resetOnNew !== false) {
-                        quickAddField.clearValue();
+                        quickAddField[quickAddField.clearValue ? 'clearValue' : 'setValue']('');
                         if (this.validate) {
                             quickAddField.clearInvalid();
                         }
@@ -389,7 +389,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (col.quickaddField && col.quickaddField.rendered) {
                 var wrap = this.getQuickAddWrap(col);
 
-                // wrap.appendChild(col.quickaddField.wrap ? col.quickaddField.wrap : col.quickaddField.el);
+                wrap.appendChild(col.quickaddField.wrap ? col.quickaddField.wrap : col.quickaddField.el);
             }
         }, this);
     },
