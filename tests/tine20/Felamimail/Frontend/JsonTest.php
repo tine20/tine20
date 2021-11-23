@@ -942,7 +942,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             self::fail('copy should not be possible');
         } catch (Exception $e) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            self::assertEquals($translation->_('It is not allowed to copy e-mails in the same account.'), $e->getMessage());
+            self::assertEquals($translation->_('It is not allowed to copy e-mails in the same account.'), $e->getMessage(), $e);
         }
 
         Felamimail_Config::getInstance()->set(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT, false);
