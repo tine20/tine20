@@ -96,8 +96,17 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         /** @var Tinebase_Model_ImportExportDefinition $definition */
         foreach ($result as $definition) {
             if ($definition->plugin_options) {
-                $config = Tinebase_ImportExportDefinition::getInstance()->
-                    getOptionsAsZendConfigXml($definition, array());
+                try {
+                    $config = Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml(
+                        $definition, array()
+                    );
+                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Removing export definition because'
+                        . ' exception was thrown: ' . $teia->getMessage());
+                    $toRemove[] = $definition;
+                }
                 if (!empty($config->template)) {
                     if (strpos($config->template, 'tine20://') === false) {
                         continue;
