@@ -41,7 +41,7 @@
   extends: .abstract_jobs.docker
   stage: deploy
   script:
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_dockerhub.sh build tine20
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_dockerhub.sh build tine
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_dockerhub.sh dev dev
   rules:
     - if: $RUN_NO_TESTS == "true"
