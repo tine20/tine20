@@ -312,4 +312,9 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
 
         return $response;
     }
+
+    public function getPath()
+    {
+        return $this->_path;
+    }
 }

@@ -8,6 +8,8 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
+require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
+
 /**
  * Test class for Filemanager_Frontend_Tree
  * 
@@ -15,6 +17,18 @@
  */
 class Filemanager_Frontend_WebDAVTest extends TestCase
 {
+    /**
+     *
+     * @var Sabre\DAV\Server
+     */
+    protected $server;
+
+    /**
+     *
+     * @var Sabre\HTTP\ResponseMock
+     */
+    protected $response;
+
     /**
      * Tree
      *
@@ -30,6 +44,14 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         $this->_oldLoginnameAsFoldername = Tinebase_Config::getInstance()
             ->{Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME};
+
+        // avoid cache issues
+        $this->_webdavTree = null;
+        $this->server = new Sabre\DAV\Server($this->_getWebDAVTree());
+        $this->server->debugExceptions = true;
+
+        $this->response = new Sabre\HTTP\ResponseMock();
+        $this->server->httpResponse = $this->response;
     }
 
     /**
@@ -240,6 +262,71 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/shared');
+    }
+
+    public function testMove($destination = null)
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->createAclNode(($oldPath = 'Filemanager/folders/shared/unittestdirectory'));
+        $fs->createAclNode(($newPath = 'Filemanager/folders/shared/unittestdirectory1'));
+        $this->assertNotFalse(
+            file_put_contents('tine20://Filemanager/folders/shared/unittestdirectory/aTestFile.test', 'unittesting'));
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD'    => 'MOVE',
+            'REQUEST_URI'       => '/webdav/Filemanager/shared/unittestdirectory/aTestFile.test',
+            'HTTP_DESTINATION'  => $destination ?: '/webdav/Filemanager/shared/unittestdirectory1/aTestFile.test',
+        ));
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        if ($destination) return;
+
+        $this->assertFalse($fs->isFile($oldPath . '/aTestFile.test'));
+        $this->assertTrue($fs->isFile($newPath . '/aTestFile.test'));
+        $fs->clearStatCache();
+        $this->assertFalse($fs->isFile($oldPath . '/aTestFile.test'));
+        $this->assertTrue($fs->isFile($newPath . '/aTestFile.test'));
+
+        $this->assertSame('unittesting',
+            file_get_contents('tine20://Filemanager/folders/shared/unittestdirectory1/aTestFile.test'));
+    }
+
+    public function testMove1()
+    {
+        $this->testMove('/webdav/Filemanager/shared/unittestdirectory1/');
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $oldPath = 'Filemanager/folders/shared/unittestdirectory/aTestFile.test';
+        $newPath = 'Filemanager/folders/shared/unittestdirectory1';
+
+        $this->assertFalse($fs->isFile($oldPath));
+        $this->assertTrue($fs->isFile($newPath));
+        $fs->clearStatCache();
+        $this->assertFalse($fs->isFile($oldPath));
+        $this->assertTrue($fs->isFile($newPath));
+
+        $this->assertSame('unittesting',
+            file_get_contents('tine20://Filemanager/folders/shared/unittestdirectory1'));
+    }
+
+    public function testMove2()
+    {
+        $this->testMove('/webdav/Filemanager/shared/unittestdirectory1');
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $oldPath = 'Filemanager/folders/shared/unittestdirectory/aTestFile.test';
+        $newPath = 'Filemanager/folders/shared/unittestdirectory1';
+
+        $this->assertFalse($fs->isFile($oldPath));
+        $this->assertTrue($fs->isFile($newPath));
+        $fs->clearStatCache();
+        $this->assertFalse($fs->isFile($oldPath));
+        $this->assertTrue($fs->isFile($newPath));
+
+        $this->assertSame('unittesting',
+            file_get_contents('tine20://Filemanager/folders/shared/unittestdirectory1'));
     }
 
     public function testPutWithUrlencode()
@@ -824,7 +911,7 @@ EOS
     protected function _getWebDAVTree()
     {
         if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
-            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+            $this->_webdavTree = new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root());
         }
         
         return $this->_webdavTree;

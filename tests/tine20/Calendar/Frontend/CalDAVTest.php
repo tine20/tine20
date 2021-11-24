@@ -285,7 +285,7 @@ END:VCALENDAR&#13;
         ));
         $request->setBody($body);
 
-        $server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
         $server->addPlugin(new \Sabre\CalDAV\Plugin());
         $server->httpRequest = $request;
         $server->exec();
@@ -355,7 +355,7 @@ END:VCALENDAR&#13;
 
 
 
-        $server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
         $server->addPlugin(new \Sabre\CalDAV\Plugin());
         $server->httpRequest = $request;
         $response = new Sabre\HTTP\ResponseMock();
