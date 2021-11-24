@@ -58,3 +58,6 @@ curl \
 	--header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
 	-XPUT --data "${VERSION}" \
 	"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
+
+
+${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "Packag build for ${VERSION} finished."
