@@ -63,6 +63,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
         self::TITLE_PROPERTY => self::FLD_FULLTEXT,
         self::APP_NAME => Sales_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
+        self::EXPOSE_JSON_API => true,
         'resolveRelated'  => TRUE,
         'defaultFilter'   => 'query',
         'resolveVFGlobally' => TRUE,
