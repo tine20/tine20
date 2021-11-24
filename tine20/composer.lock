@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12f2b4ee296037f5e9005d0f5160a775",
+    "content-hash": "0eb8758bfebdec461a3b760dfcaf88f7",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -3289,11 +3289,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.8",
+            "version": "1.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "a342ea8ade7cb20af20f92a019cde57c5f6af28e"
+                "reference": "efde8a27ff092910d0e935a7465cef8391c29fd2"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -3317,7 +3317,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2021-08-17T12:56:50+00:00"
+            "time": "2021-11-19T15:16:17+00:00"
         },
         {
             "name": "tine20/composerapploader",
