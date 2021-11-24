@@ -235,6 +235,10 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.store.on('add', this.focusAndSelect, this);
         this.store.on('beforeload', this.showLoadMask, this);
         this.store.on('load', this.hideLoadMask, this);
+
+        this.store.on('add', this.onStoreChange, this);
+        this.store.on('update', this.onStoreChange, this);
+        this.store.on('remove', this.onStoreChange, this);
     },
 
     focusAndSelect: function(store, records, index) {
@@ -615,6 +619,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         });
 
         return data;
+    },
+
+    onStoreChange: function() {
+        const currentValue = this.getValue();
+        this.fireEvent('change', this, currentValue, this.currentValue);
+        this.currentValue = currentValue;
     },
 
     /* needed for isFormField cycle */
