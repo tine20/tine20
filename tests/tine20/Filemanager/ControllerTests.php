@@ -74,8 +74,6 @@ class Filemanager_ControllerTests extends TestCase
      */
     public function testNotificationUpdateForReadOnly()
     {
-        Tinebase_Core::setLocale('en');
-        
         $oldUser = Tinebase_Core::getUser();
         /** @var Tinebase_Model_FullUser $sclever */
         $sclever = $this->_personas['sclever'];
@@ -108,8 +106,8 @@ class Filemanager_ControllerTests extends TestCase
             $node = $fileManager->get($node->getId());
             $node->grants = $fileSystem->getGrantsOfContainer($node);
             $node->grants->addRecord(new Tinebase_Model_Grants(array(
-                'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                'account_id'        => $sclever->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id' => $sclever->getId(),
                 Tinebase_Model_Grants::GRANT_READ => true,
             )));
             $node = $fileManager->update($node);
@@ -121,11 +119,11 @@ class Filemanager_ControllerTests extends TestCase
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => $sclever->getId(),
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
-            ),array(
+            ), array(
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => '1233',
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
-            ),array(
+            ), array(
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => $sclever->getId(),
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
@@ -146,8 +144,6 @@ class Filemanager_ControllerTests extends TestCase
             $node->{Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION} = array();
             $node = $fileManager->update($node);
             static::assertEquals(0, count($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)));
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // FIXME some test running before this might have removed the $personalFolderPath . '/' . $personalFolderName folder
         } finally {
             Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
         }
@@ -164,12 +160,8 @@ class Filemanager_ControllerTests extends TestCase
         $personalFolderPath .= sprintf($translation->_("/%s's personal files"), Tinebase_Core::getUser()->accountFullName);
         $fileManager = Filemanager_Controller_Node::getInstance();
 
-        try {
-            $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
-            $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // FIXME some test running before this might have removed the $personalFolderPath folder
-        }
+        $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
     }
 
     public function testCreateSharedTopLevelFolder()
