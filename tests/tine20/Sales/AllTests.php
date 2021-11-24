@@ -37,6 +37,7 @@ class Sales_AllTests
         $suite->addTestSuite('Sales_OrderConfirmationControllerTests');
         $suite->addTestSuite('Sales_OfferControllerTests');
         $suite->addTestSuite('Sales_Import_AllTests');
+        $suite->addTestSuite(Sales_BoilerplateControllerTest::class);
         
         return $suite;
     }

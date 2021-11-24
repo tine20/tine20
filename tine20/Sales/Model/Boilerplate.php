@@ -29,7 +29,6 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
     public const FLD_UNTIL = 'until';
     public const FLD_DOCUMENT_CATEGORY = 'documentCategory';
     public const FLD_CUSTOMER = 'customer';
-    public const FLD_DOCUMENT = 'document';
     public const FLD_BOILERPLATE = 'boilerplate';
 
     public const MODEL_NAME_PART = 'Boilerplate';
@@ -68,7 +67,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
         self::FIELDS => [
             self::FLD_MODEL => [
                 self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 40,
+                self::LENGTH => 255,
                 self::QUERY_FILTER => true,
                 self::LABEL => 'Model', // _('Model')
                 self::VALIDATORS => [
@@ -94,7 +93,12 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
-                // filter config BEFORE_OR_IS_NULL
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Date::class,
+                    self::OPTIONS                   => [
+                        Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
+                    ]
+                ],
             ],
             self::FLD_UNTIL => [
                 self::TYPE => self::TYPE_DATE,
@@ -104,12 +108,16 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
-                // filter config AFTER_OR_IS_NULL
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Date::class,
+                    self::OPTIONS                   => [
+                        Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
+                    ]
+                ],
             ],
             self::FLD_DOCUMENT_CATEGORY => [
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::LABEL => 'Document Category', // _('Document Category')
-                self::DEFAULT_VAL => 'DEFAULT',
                 self::NAME => Sales_Config::DOCUMENT_CATEGORY,
                 self::NULLABLE => true,
             ],
@@ -125,17 +133,6 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                     'modelName'   => 'Customer',
                     'idProperty'  => 'id'
                 )
-            ],
-
-            // denormalize like products, customer, address, etc.
-            self::FLD_DOCUMENT => [
-                self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 40,
-                self::QUERY_FILTER => true,
-                self::LABEL => 'Document', // _('Document')
-                self::NULLABLE => true,
-                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_BOILERPLATE        => [
                 self::LABEL             => 'Boilerplate', //_('Boilerplate')
