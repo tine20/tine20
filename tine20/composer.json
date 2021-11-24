@@ -114,7 +114,7 @@
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
     "symfony/http-client": "^4",
-    "syncroton/syncroton": "1.4.10",
+    "syncroton/syncroton": "1.4.11",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
     "twig/twig": "v1.44.5pl1",
