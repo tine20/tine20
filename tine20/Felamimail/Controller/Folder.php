@@ -278,7 +278,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * check if folder support condstore: try to exmime folder on imap server if supports_condstore is null
      *
      * @param string|Felamimail_Model_Folder $folder
-     * @param Felamimail_Model_Account|null $_account
+     * @param Felamimail_Model_Account|null $account
      * @param Felamimail_Backend_ImapProxy|null $imap
      * @return boolean
      */
@@ -413,7 +413,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     /**
      * delete folder in cache
      * 
-     * @param string|Felamimail_Model_Account $_account
+     * @param string|Felamimail_Model_Account $_accountId
      * @param Felamimail_Model_Folder $_folder
      */
     protected function _deleteFolderInCache($_accountId, $_folder)
