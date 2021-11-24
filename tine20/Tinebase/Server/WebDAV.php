@@ -195,8 +195,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     . ' PID: ' . getmypid() . ')'
                 );
             }
-            self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Filemanager_Frontend_WebDAV('',
-                [Filemanager_Frontend_WebDAV::FM_REAL_WEBDAV_ROOT => new Tinebase_WebDav_Root()])));
+            self::$_server = new \Sabre\DAV\Server(new Filemanager_Frontend_WebDAV('',
+                [Filemanager_Frontend_WebDAV::FM_REAL_WEBDAV_ROOT => new Tinebase_WebDav_Root()]));
             \Sabre\DAV\Server::$exposeVersion = false;
             self::$_server->httpResponse = new Tinebase_WebDav_HTTP_LogResponse();
 

@@ -47,7 +47,7 @@ abstract class Tinebase_WebDav_Plugin_AbstractBaseTest extends TestCase
 {
         parent::setUp();
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
         $this->server->debugExceptions = true;
 
         $this->response = new Sabre\HTTP\ResponseMock();

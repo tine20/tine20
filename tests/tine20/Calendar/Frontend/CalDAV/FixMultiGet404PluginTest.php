@@ -48,7 +48,7 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
 
         parent::setUp();
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
 
         $this->plugin = new Calendar_Frontend_CalDAV_FixMultiGet404Plugin();
 

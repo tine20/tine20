@@ -1570,9 +1570,6 @@ class Tinebase_FileSystem implements
 
             $this->clearStatCache($oldPath);
 
-            $newPath = $this->getPathOfNode($node, true);
-            $node->path = $newPath;
-
             $this->_addStatCache($newPath, $node);
 
             return $node;
