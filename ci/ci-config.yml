@@ -1,44 +1,17 @@
-# This file sets the defaults for all ci variables.
-# It can and should be used to configure differences between branches.
-# It can also be used for feature branches e.g. if not all test are needed or another db should be used.
 # overwritten by: ci-config.yml < variables in gitlab-ci.yml < gitlab project variables < per pipeline variables
-
 variables:
   MAJOR_COMMIT_REF_NAME:
     description: "The major commit ref name is mainly used for ci caching. Non feature branches should be there own major. The major of feature branches should be the branch the will be merged into."
     value: "2020.11"
 
-  RUN_CI_PIPELINE:
-    description: "Main toggle for gitlab ci. If false the ci will do nothing. This results in a failed pipeline."
-    value: "true"
+  # General
+  # "Docker hub tag for this build."
+  DOCKERHUB_TAG: "dev"
 
-  NO_PUSH:
-    description: "Do not push any images. Commit images will still be pushed. Becouse they are needed for ci caching."
-    value: "false"
+  # "Install one custom app via composer: vendor"
+  CUSTOM_APP_VENDOR: "metaways"
 
-  PUSH_TO_DOCKERHUB:
-    description: "Push the built result to docker hub. Should be only set to true by schedules. Force builds all images."
-    value: "false"
-
-  PUSH_BUILT_IMAGE_TO_GITLAB:
-    description: "Push the built image to gitlab. Force builds source and built image."
-    value: "false"
-
-  PUSH_DEV_IMAGE_TO_GITLAB:
-    description: "Push the dev image to gitlab. Force builds all images."
-    value: "false"
-
-  DOCKERHUB_TAG:
-    description: "Docker hub tag for this build."
-    value: "dev"
-
-  CUSTOM_APP_VENDOR:
-    description: "Install one custom app via composer: vendor"
-    value: "metaways"
-
-  CUSTOM_APP_VERSION:
-    description: "Install one custom app via composer: version"
-    value: "dev-master"
+  # "Install one custom "dev-master"
 
   # install one custom app via composer: name
   # CUSTOM_APP_NAME default should be nothing
@@ -46,129 +19,66 @@ variables:
   # install one custom app via composer: git url
   # CUSTOM_APP_GIT_URL default should be nothing
 
-  PHP_STAN_ANALYSES:
-    description: "Enable php stan."
-    value: "true"
-    
-  PHP_STAN_ANALYSES_STRICT:
-    value: "false"
+  # "Select e2e test to run. - npm test $JS_E2E_TEST_FILTER"
+  JS_E2E_TEST_FILTER: ""
 
-  CODE_ANALYSIS_PARALLEL_LINT:
-    value: "true"
+  # "Database image used by tests."
+  DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.4.1"
 
-  CODE_ANALYSIS_PARALLEL_LINT_STRICT:
-    value: "false"
+  # "Rdis image to use druing tests."
+  REDIS_IMAGE: "${UTIL_REGISTRY}/redis:5.0.5"
 
-  CODE_ANALYSIS_PHPCS:
-    value: "false"
-
-  CODE_ANALYSIS_PHPCS_STRICT:
-    value: "false"
-
-  PHP_UNIT_ALL_TESTS_SOURCE:
-    description: "Enable or disable php unit tests on source (with webpack) image."
-    value: "true"
-
-  PHP_UNIT_ALL_TESTS_BUILT:
-    description: "Enable or disable php unit test on built (with built js, and clean files) image."
-    value: "false"
-
-  PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP:
-    description: "Enable or disable run all test with ldap backend enabled. Does not effect or is evected by PHP_UNIT_ALL_TESTS_BUILT."
-    value: "never"
-
-  PHP_UNIT_SERVERTESTS:
-    description: "Enable or disable server tests."
-    value: "true"
-
-  PHP_UNIT_SETUP_TESTS:
-    description: "Enable or disable php unit setup tests."
-    value: "false"
-
-  PHP_UNIT_NOGITLABCI_TESTS_BUILT:
-    description: "Run test with nogitlabci group (test know to not work in gitlab)."
-    value: "false"
-
-  PHP_UNIT_ALL_TESTS_SOURCE_TYPE:
-    description: "How to run the tests: parallel, matrix or sequential"
-    value: "parallel"
-
-  PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP_TYPE:
-    description: "How to run the tests: parallel or sequential"
-    value: "sequential"
-
-  PHP_UNIT_NOGITLABCI_TESTS_BUILT_TYPE:
-    description: "How to run the tests: parallel or sequential"
-    value: "sequential"
-
-  PHP_UNIT_ALL_TESTS_BUILT_TYPE:
-    description: "How to run the tests: parallel or sequential"
-    value: "sequential"
-
-  PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE_TYPE:
-    description: "How to run the tests: parallel or sequential"
-    value: "sequential"
-
-  PHP_UNIT_TESTS_POSTFIXMULTIINSTANCE:
-    description: "Whether to run a source test with the postfixmultiinstance backend."
-    value: "false"
-
-  JS_E2E_TEST_SOURCE:
-    description: "Whether to run e2e test on source image"
-    value: "true"
-
-  JS_E2E_TEST_FILTER:
-    description: "Select e2e test to run. - npm test $JS_E2E_TEST_FILTER"
-    value: ""
-
-  DATABASE_IMAGE:
-    description: "Database image used by tests."
-    value: "${UTIL_REGISTRY}/mariadb:10.4.1"
-
-  REDIS_IMAGE:
-    description: "Rdis image to use druing tests."
-    value: "${UTIL_REGISTRY}/redis:5.0.5"
-
-  PHPUNIT_FILTER:
-    description: "Add a php unit filter to all php unit test jobs e.g. CashBook. This is used for customapp tests."
-    value: ""
-
-  TEST_WITH_HEALTH_CHECK:
-    description: "test if tine20 /health api dose not return a 500"
-    value: "false"
+  # "Add a php unit filter to all php unit test jobs e.g. CashBook. This is used for customapp tests."
+  PHPUNIT_FILTER: ""
   
-  RUN_ALL_TESTS:
-    description: "Run all tests."
-    value: "false"
+  # "Php version to use."
+  PHP_VERSION: "7.4"
 
-  CHECK_PHP_VERSION:
-    description: "Test if the image was build with the correct php version."
-    value: "true"
+  # "Codename for build"
+  CODENAME: "Amon"
 
-  PHP_VERSION:
-    description: "Php version to use."
-    value: "7.4"
- 
-  BUILD_PACKAGES:
-    description: "Build source packages"
-    value: "true"
+  # "Try to reuse source images" 
+  REUSE_IMAGES: "true"
 
-  CODENAME:
-    description: "Codename for build"
-    value: "Amon"
+  # "Build zip packages, wenn packaging. (Tar packages are always build)"
+  ZIP_PACKAGES: "false"
 
-  REUSE_IMAGES:
-    description: "Try to reuse source images" 
-    value: "true"
+  # "Rewrite composer lock to pull packages from cache."
+  COMPOSER_LOCK_REWRITE: "true"
 
-  NOTIFY_ON_FAILURE:
-    description: "send riot message if pipeline failes"
-    value: "false"
+  # Test Jobs
+  # Variable are swiched on with the string "true" and off with the string "false".
+  # No test job must run if RUN_NO_TESTS is true.
+  #
+  # Every test job has an variable (uppercase(name)) which determents if it should run. These Should not be set in the ci config or project variables. 
+  # They should strictly be used for pipeline triggert manualy or by api. Or for customising schedules.
+  # For these vars applies true = always run, false = never run and "" = if some other rule matches
+  #
+  # Test Jobs also have variables uppercase(name)_MERGE_REQUEST and uppercase(name)_SCHEDULE which determit if it is run during the corospoding pipelines. 
+  # They should only be set in the project variables, to temporaraly enable disable Jobs. If the job config should be changed permanantly the rules if should 
+  # be switched: eg: $VAR == "false" => $VAR != "true"
+  # For these vars applies true = run on eg. mr, false = dont run for eg. mr and "" = use default
+  #
+  # eg:
+  # PHP_UNIT_ALL_TESTS_LDAP_BUILD: "false" # default is ""
+  # PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST: "true" # default is "false"
+  # PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE: "false" # default is "true"
 
-  ZIP_PACKAGES:
-    description: "Build zip packages, wenn packaging. (Tar packages are always build)"
-    value: "false"
+  PHPCS_ANALYSIS_STRICT: "true"
+  PARALLEL_LINT_ANALYSIS_STRICT: "false"
+  PHP_STAN_ANALYSES_STRICT: "false"
+  PHP_UNIT_ALL_TESTS_SOURCE_TYPE: "parallel" #parallel, sequential, matrix
+  PHP_UNIT_TESTS_SOURCE_POSTFIXMULTIINSTANCE_TYPE: "parallel" #parallel, sequential
+  PHP_UNIT_ALL_TESTS_BUILT_TYPE: "parallel" #parallel, sequential
+  PHP_UNIT_NOGITLABCI_TESTS_BUILT_TYPE: "parallel" #parallel, sequential
+  PHP_UNIT_ALL_TESTS_LDAP_BUILD_TYPE: "parallel" #parallel, sequential
 
-  COMPOSER_LOCK_REWRITE:
-    description: "Rewrite composer lock to pull packages from cache."
-    value: "true"
+  # Deploy
+  #
+  # DEPLOY_BUILD_IMAGE_TO_GITLAB:
+  #DEPLOY_BUILD_IMAGE_TO_GITLAB_SCHEDULE: "false"
+
+  # DEPLOY_DEV_IMAGE_TO_GITLAB:
+  #DEPLOY_DEV_IMAGE_TO_GITLAB_SCHEDULE: "false"
+
+  # DEPLOY_IMAGES_TO_DOCKERHUB:

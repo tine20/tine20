@@ -1,4 +1,4 @@
-"check php version":
+check-php-version:
   extends: .abstract_jobs.copy_source
   stage: test
   variables:
@@ -19,11 +19,21 @@
     - if: $CHECK_PHP_VERSION == "true"
       when: on_success
     - when: never
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $CHECK_PHP_VERSION == "false"
+      when: never
+    - if: $CHECK_PHP_VERSION == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CHECK_PHP_VERSION_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /test-with-health-check/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $CHECK_PHP_VERSION_SCHEDULE != "false"
+    - if: $CI_COMMIT_TAG
   allow_failure: true
   timeout: 20m # time run: 4m
   interruptible: true
 
-phpstan:
+phpstan-analysis:
   extends: .abstract_jobs.copy_source
   stage: test
   variables:
@@ -42,28 +52,31 @@ phpstan:
     paths:
       - ${CI_PROJECT_DIR}/code-quality-report.json
     expire_in: 1 days
+  allow_failure: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
-    - if: $PHP_STAN_ANALYSES == "never"
+    - if: $PHPSTAN_ANALYSES == "false"
       when: never
-    - if: $RUN_ALL_TESTS == "true" && $PHP_STAN_ANALYSES_STRICT == "true"
+    - if: $PHPSTAN_ANALYSES == "true" && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
-      when: on_success
-    - if: $RUN_ALL_TESTS == "true"
-      allow_failure: true
-      when: on_success
-    - if: $PHP_STAN_ANALYSES == "true" && $PHP_STAN_ANALYSES_STRICT == "true"
+    - if: $PHPSTAN_ANALYSES == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPSTAN_ANALYSES_MERGE_REQUEST != "false" && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
-      when: on_success
-    - if: $PHP_STAN_ANALYSES == "true"
-      allow_failure: true
-      when: on_success
-    - when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPSTAN_ANALYSES_MERGE_REQUEST != "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/ && $PHPSTAN_ANALYSES_STRICT == "true"
+      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHPSTAN_ANALYSES_SCHEDULE != "false" && $PHPSTAN_ANALYSES_STRICT == "true"
+      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHPSTAN_ANALYSES_SCHEDULE != "false"
+    - if: $CI_COMMIT_TAG && $PHPSTAN_ANALYSES_STRICT == "true"
+      allow_failure: false
+    - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: true
 
-parallel-lint:
+parallel-lint-analysis:
   stage: test
   image: composer
   needs: []
@@ -75,26 +88,31 @@ parallel-lint:
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/parallel-lint-report.json
+  allow_failure: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
-    - if: $CODE_ANALYSIS_PARALLEL_LINT == "never"
+    - if: $PARALLEL_LINT_ANALYSIS == "false"
       when: never
-    - if: $RUN_ALL_TESTS == "true" && $CODE_ANALYSIS_PARALLEL_LINT_STRICT == "false"
-      allow_failure: true
-      when: on_success
-    - if: $RUN_ALL_TESTS == "true"
-      when: on_success
-    - if: $CODE_ANALYSIS_PARALLEL_LINT == "true" && $CODE_ANALYSIS_PARALLEL_LINT_STRICT == "false"
-      allow_failure: true
-      when: on_success
-    - if: $CODE_ANALYSIS_PARALLEL_LINT == "true"
-      when: on_success
-    - when: never
+    - if: $PARALLEL_LINT_ANALYSIS == "true" && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
+      allow_failure: false
+    - if: $PARALLEL_LINT_ANALYSIS == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PARALLEL_LINT_ANALYSIS_MERGE_REQUEST != "false" && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
+      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PARALLEL_LINT_ANALYSIS_MERGE_REQUEST != "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /parallel-lint-analysis/ && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
+      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /parallel-lint-analysis/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PARALLEL_LINT_ANALYSIS_SCHEDULE != "false" && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
+      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PARALLEL_LINT_ANALYSIS_SCHEDULE != "false"
+    - if: $CI_COMMIT_TAG && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
+      allow_failure: false
+    - if: $CI_COMMIT_TAG    
   timeout: 20m
   interruptible: true
 
-phpcs:
+phpcs-analysis:
   stage: test
   image: composer
   needs: []
@@ -110,28 +128,31 @@ phpcs:
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/phpcs-report.json
+  allow_failure: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
-    - if: $CODE_ANALYSIS_PHPCS == "never"
+    - if: $PHPCS_ANALYSIS == "false"
       when: never
-    - if: $RUN_ALL_TESTS == "true" && $CODE_ANALYSIS_PHPCS_STRICT == "true"
+    - if: $PHPCS_ANALYSIS == "true" && $PHPCS_ANALYSIS_STRICT == "true"
       allow_failure: false
-      when: on_success
-    - if: $RUN_ALL_TESTS == "true"
-      allow_failure: true
-      when: on_success
-    - if: $CODE_ANALYSIS_PHPCS == "true" && $CODE_ANALYSIS_PHPCS_STRICT == "true"
+    - if: $PHPCS_ANALYSIS == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPCS_ANALYSIS_MERGE_REQUEST == "true" && $PHPCS_ANALYSIS_STRICT == "true"
       allow_failure: false
-      when: on_success
-    - if: $CODE_ANALYSIS_PHPCS == "true"
-      allow_failure: true
-      when: on_success
-    - when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPCS_ANALYSIS_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpcs-analysis/ && $PHPCS_ANALYSIS_STRICT == "true"
+      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpcs-analysis/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHPCS_ANALYSIS_SCHEDULE != "false" && $PHPCS_ANALYSIS_STRICT == "true"
+      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHPCS_ANALYSIS_SCHEDULE != "false"
+    - if: $CI_COMMIT_TAG && $PHPCS_ANALYSIS_STRICT == "true"
+      allow_failure: false
+    - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: true
 
-"test with health check":
+test-with-health-check:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-built
@@ -141,10 +162,12 @@ phpcs:
     - sleep 120s
     - curl -v --fail http://127.0.0.1:80/health
   rules:
-    - if: $TEST_WITH_HEALTH_CHECK == "never"
+    - if: $RUN_NO_TESTS == "true"
       when: never
-    - if: $RUN_ALL_TESTS == "true"
-      when: on_success
+    - if: $TEST_WITH_HEALTH_CHECK == "false"
+      when: never
     - if: $TEST_WITH_HEALTH_CHECK == "true"
-      when: on_success
-    - when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $TEST_WITH_HEALTH_CHECK_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /test-with-health-check/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $TEST_WITH_HEALTH_CHECK_SCHEDULE != "false"
+    - if: $CI_COMMIT_TAG
