@@ -75,12 +75,10 @@ class Filemanager_ControllerTests extends TestCase
         /** @var Tinebase_Model_FullUser $sclever */
         $sclever = $this->_personas['sclever'];
         try {
-            $personalFolderPath = $this->_getPersonalPath($oldUser);
-            $translation = Tinebase_Translation::getTranslation('Tinebase');
             $fileSystem = Tinebase_FileSystem::getInstance();
             $fileManager = Filemanager_Controller_Node::getInstance();
-            $personalFolderName = sprintf($translation->_("%s's personal files"), $oldUser->accountFullName);
-            $node = $fileSystem->stat($personalFolderPath . '/' . $personalFolderName);
+
+            $node = Filemanager_Controller::getInstance()->createPersonalFolder($oldUser)->getFirstRecord();
 
             // try a failing update
             Tinebase_Core::set(Tinebase_Core::USER, $sclever);
@@ -150,8 +148,8 @@ class Filemanager_ControllerTests extends TestCase
     {
         // check if personal folder exists
         $personalFolderPath = $this->_getPersonalPath(Tinebase_Core::getUser());
-        $translation = Tinebase_Translation::getTranslation('Tinebase');
-        $personalFolderPath .= sprintf($translation->_("/%s's personal files"), Tinebase_Core::getUser()->accountFullName);
+        $node = Filemanager_Controller::getInstance()->createPersonalFolder(Tinebase_Core::getUser())->getFirstRecord();
+        $personalFolderPath .= '/' . $node->name;
         $fileManager = Filemanager_Controller_Node::getInstance();
 
         $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
