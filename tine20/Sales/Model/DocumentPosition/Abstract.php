@@ -153,6 +153,16 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::HAS_XPROPS                    => true,
         self::EXPOSE_JSON_API               => true,
 
+        self::JSON_EXPANDER                 => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_PRODUCT_ID                        => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Product::FLD_SUBPRODUCTS        => [],
+                    ],
+                ],
+            ],
+        ],
+
         self::FIELDS                        => [
             self::FLD_DOCUMENT_ID               => [
                 // needs to be set by concrete model
