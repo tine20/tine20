@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2020-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -71,7 +71,7 @@ Tine.widgets.relation.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridP
         this.editDialog.relationsPanel.store.on('remove', this.onRelationStoreRemove, this);
 
         // question: are related record updates persistent before dlg is saved?
-        // changes are reflected imideatily
+        // changes are reflected immediately
         // new record are created after record save // this might be hard to implement?
     },
 

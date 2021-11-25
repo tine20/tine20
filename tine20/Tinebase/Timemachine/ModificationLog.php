@@ -1297,23 +1297,23 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         // check if we are a replication slave
         if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
-            return true;
+            return;
         }
 
         $fileObject = new Tinebase_Model_Tree_FileObject(array('hash' => $hash), true);
         $path = $fileObject->getFilesystemPath();
         if (is_file($path)) {
             if (Tinebase_FileSystem::getInstance()->checkHashFile($hash)) {
-                return true;
+                return;
             }
             if (!unlink($path)) {
                 throw new Tinebase_Exception_Backend('could not unlink file: ' . $path);
             }
         }
 
-        $tine20Service = new Zend_Service_Tine20($tine20Url, new Zend_Http_Client(null, [
+        $tine20Service = new Zend_Service_Tine20($tine20Url, ($httpClient = new Zend_Http_Client(null, [
             'timeout' => 25
-        ]));
+        ])));
 
         $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
         if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
@@ -1321,39 +1321,61 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         }
         unset($authResponse);
 
-        $tinebaseProxy = $tine20Service->getProxy('Tinebase');
-        /** @noinspection PhpUndefinedMethodInspection */
-        $response = $tinebaseProxy->getBlob($hash);
-        if (!is_array($response) || !isset($response['success']) || true !== $response['success'] ||
-                !isset($response['data'])) {
-            throw new Tinebase_Exception_Backend('could not fetch blob from master successfully: ' . $hash);
-        }
-
         if (!is_dir(dirname($path))) {
             mkdir(dirname($path));
-        }
-        // no warning desired, we throw ourselves only if required below => @fopen
-        if (!($fh = @fopen($path, 'x'))) {
+        } else {
+            clearstatcache(true, $path);
             if (is_file($path) && Tinebase_FileSystem::getInstance()->checkHashFile($hash)) {
-                return true;
+                return;
             }
-            throw new Tinebase_Exception_Backend('could not create file: ' . $path);
         }
-        $success = false;
+
+        $httpClient->resetParameters();
+        $httpClient->setStream($path);
+        $httpClient->setParameterGet('method', 'Tinebase.getBlob');
+        $httpClient->setParameterGet('hash', $hash);
+
         try {
-            if (!stream_filter_append($fh, 'convert.base64-decode', STREAM_FILTER_WRITE)) {
-                throw new Tinebase_Exception_Backend('could not append stream filter');
+            $response = $httpClient->request(Zend_Http_Client::GET);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Tinebase.getBlob returned status code ' . $response->getStatus() . $response->getHeadersAsString());
+
+            if (200 === (int)$response->getStatus()) {
+                if ($response->getHeader('Content-encoding')) {
+                    switch ($response->getHeader('Content-encoding')) {
+                        case 'gzip':
+                        case 'deflate': // not sure if deflate works here?
+                            // this will close the stream underlying the response aka our hash file
+                            unset($response);
+                            $tmpFile = Tinebase_TempFile::getTempPath();
+                            $fh = null;
+                            unlink($tmpFile) && rename($path, $tmpFile) && ($fh = gzopen($tmpFile, 'rb')) &&
+                                file_put_contents($path, $fh);
+                            $fh && @fclose($fh);
+                            @unlink($tmpFile);
+                        default;
+                    }
+                }
             }
-            if (false === fwrite($fh, $response['data'])) {
-                throw new Tinebase_Exception_Backend('fetched blob from master could not written to disk: ' . $hash);
-            }
-            $success = true;
+
+            // this will close the stream underlying the response aka our hash file
+            unset($response);
         } finally {
-            fclose($fh);
-            if (!$success) {
-                unlink($path);
+            clearstatcache(true, $path);
+            if (is_file($path)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' filesize ' . filesize($path) . ' for hash ' . $hash);
+                if (Tinebase_FileSystem::getInstance()->checkHashFile($hash)) {
+                    return;
+                } else {
+                    unlink($path);
+                    $msg = 'checkHashFile failed';
+                }
+            } else {
+                $msg = 'file not created';
             }
         }
+        throw new Tinebase_Exception_Backend($msg);
     }
 
     /**

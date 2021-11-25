@@ -160,6 +160,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 filter = {filtertype: fc};
                 break;
             case 'relation':
+            case 'relations':
                 _.assign(filter, {
                     filtertype: 'foreignrecord',
                     valueType: 'relation',

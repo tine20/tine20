@@ -6,6 +6,10 @@
     background-size: 18px 18px !important;
 }
 
+.x-form-item .x-btn-icon .x-btn-small .x-btn-image {
+    background-size: cover !important
+}
+
 .x-html-editor-tb .x-edit-bold, .x-menu-item img.x-edit-bold {
     background: url(../../../../images/icon-set/icon_email_bold.svg) !important;
 }

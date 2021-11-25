@@ -32,7 +32,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
     public function setCache(Tinebase_Model_CredentialCache $_cache)
     {
         $cacheId = $_cache->getCacheId();
-        setcookie(self::COOKIE_KEY, base64_encode(Zend_Json::encode($cacheId)), '', '', Tinebase_Core::isHttpsRequest());
+        setcookie(self::COOKIE_KEY, base64_encode(Zend_Json::encode($cacheId)), 0, '', '', Tinebase_Core::isHttpsRequest());
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Set credential cache cookie.');
     }

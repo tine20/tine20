@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @license http://www.gnu.org/licenses/agpl.html AGPL Version 3 @author
  * Alexander Stintzing <a.stintzing@metaways.de> @copyright Copyright (c) 2013
  * Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,51 +11,51 @@ Ext.ns('Tine.Sales');
  * @namespace Tine.Sales
  * @class Tine.Sales.InvoiceEditDialog
  * @extends Tine.widgets.dialog.EditDialog
- * 
+ *
  * <p>
  * Invoice Compose Dialog
  * </p>
  * <p>
  * </p>
- * 
+ *
  * @license http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author Alexander Stintzing <a.stintzing@metaways.de>
- * 
+ *
  * @param {Object}
  *            config
  * @constructor Create a new Tine.Sales.InvoiceEditDialog
  */
 Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
+
     /**
      * @private
      */
     tbarItems: null,
     evalGrants: false,
-    
+
     /**
      * autoset
-     * 
+     *
      * @type combo
      */
     addressPicker: null,
-    
+
     /**
      * autoset
-     * 
+     *
      * @type combo
      */
     customerPicker: null,
-    
+
     /**
      * autoset
-     * 
+     *
      * @type combo
      */
     contractPicker: null,
-    
+
     createReversal: false,
-    
+
     windowWidth: 800,
     windowHeight: 700,
 
@@ -74,7 +74,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @type array
      */
     positionTypes: ['total', 'inclusive', 'exceeding'], // _('total') _('inclusive') _('exceeding')
-    
+
     initComponent: function() {
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get('Sales');
@@ -99,7 +99,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             },
             iconCls: 'action_next'
         });
-        
+
         this.tbarItems = this.tbarItems || [];
         this.tbarItems.push(this.createTimesheetAction);
 
@@ -121,10 +121,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             me.hideLoadMask();
         });
     },
-    
+
     /**
      * executed after record got updated from proxy
-     * 
+     *
      * @private
      */
     onRecordLoad: function() {
@@ -133,14 +133,14 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        
+
         if (this.record.get('sales_tax') == null) {
             this.record.set('sales_tax', Tine.Tinebase.configManager.get('salesTax'));
         }
-        
+
         if (this.createReversal) {
             var originalRecord = this.recordProxy.recordReader({responseText: Ext.encode(this.record.data)}); ;
-            
+
             this.record.set('cleared', 'TO_CLEAR');
             this.record.set('number', null);
             this.record.set('date', null);
@@ -159,7 +159,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     newRelations.push(relation);
                 }
             });
-            
+
             newRelations.push({
                 related_degree:  'sibling',
                 own_backend:     'Sql',
@@ -170,10 +170,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 own_model:       'Sales_Model_Invoice',
                 type:            'REVERSAL'
             });
-            
+
             this.record.set('relations', newRelations);
         }
-        
+
         // this will start preparing the gridpanels for the invoice positions
         if (this.positionsPanels) {
             Ext.each(this.positionTypes, function(type) {
@@ -188,7 +188,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.positionsPanels[type].invoiceId = this.record.get('id');
             }, this);
         }
-        
+
         Tine.Sales.InvoiceEditDialog.superclass.onRecordLoad.call(this);
 
         if (this.createReversal) {
@@ -212,14 +212,14 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 form.findField(ar[index]).setReadOnly(1);
             }
         }
-        
+
         if (this.record.get('cleared') == 'CLEARED') {
             var ar = ['credit_term', 'costcenter_id', 'cleared', 'type'];
             for (var index = 0; index < ar.length; index++) {
                 form.findField(ar[index]).setReadOnly(1);
             }
         }
-        
+
         this.onAddressLoad();
         if (this.positionsPanels) {
             Ext.each(this.positionTypes, function(type) {
@@ -229,7 +229,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
         }
     },
-    
+
     /**
      * loads the address to the plaintext field
      */
@@ -253,10 +253,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
     },
-    
+
     /**
      * loads the full-featured record, if a contract gets selected
-     * 
+     *
      * @param {Tine.widgets.relation.PickerCombo}
      *            combo
      * @param {Tine.Sales.Model.Contract}
@@ -268,16 +268,16 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // here we fetch the record again to have the related customer, where we
         // can find the address for
         var proxy = Tine.Sales.contractBackend;
-        
+
         proxy.loadRecord(record, {
             scope: this,
             success: this.onAfterContractLoad,
             failure: Tine.Tinebase.ExceptionHandler.handleRequestException
         });
     },
-    
+
     /**
-     * 
+     *
      * @param {Tine.Sales.Model.Contract}
      *            record
      */
@@ -285,7 +285,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var record = record ? record : this.record;
         var relations = record.get('relations'), foundCostCenter = false;
         var foundCustomer = customer ? customer : null;
-        
+
         if (Ext.isArray(relations)) {
             for (var index = 0; index < relations.length; index++) {
                 if (foundCostCenter && foundCustomer) {
@@ -308,10 +308,8 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (foundCustomer) {
             this.customerPicker.setValue(foundCustomer);
             this.customerPicker.combo.fireEvent('select');
-            
+
             if (this.addressPicker.disabled) {
-                this.addressPicker.enable();
-                
                 if (record.get('billing_address_id')) {
                     var billingAddress = record.get('billing_address_id');
                     if (! billingAddress.data) {
@@ -324,26 +322,18 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             } else {
                 this.addressPicker.reset();
             }
-            this.addressPicker.lastQuery = null;
-            
-            this.addressPicker.additionalFilters = [
-                {field: 'type', operator: 'not', value: 'delivery'},
-                {field: 'customer_id', operator: 'AND', value: [
-                    {field: ':id', operator: 'in', value: [foundCustomer.id]}
-                ]}
-            ];
-            
+
             this.getForm().findField('credit_term').setValue(foundCustomer.credit_term);
 
         } else {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,
-                title: this.app.i18n._('No customer assigned'), 
+                title: this.app.i18n._('No customer assigned'),
                 msg: this.app.i18n._("The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog.")
             });
         }
-        
+
         if (foundCostCenter) {
             this.getForm().findField('costcenter_id').setValue(foundCostCenter);
         } else {
@@ -351,13 +341,13 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 Ext.MessageBox.show({
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.WARNING,
-                    title: this.app.i18n._('No cost center assigned'), 
+                    title: this.app.i18n._('No cost center assigned'),
                     msg: this.app.i18n._("The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog.")
                 });
             }
         }
     },
-    
+
     /**
      * calculates price gross by price net and tax
      */
@@ -437,9 +427,9 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
      * returns dialog
-     * 
+     *
      * NOTE: when this method gets called, all initalisation is done.
-     * 
+     *
      * @return {Object}
      * @private
      */
@@ -450,7 +440,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             labelSeparator: '',
             columnWidth: .5
         };
-        
+
         if (this.record.get('is_auto') == 1) {
             this.positionsPanels = [];
             Ext.each(this.positionTypes, function(type) {
@@ -460,7 +450,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 });
             }, this);
         }
-        
+
         this.priceNetField = new Ext.ux.form.MoneyField({
             xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Price Net'),
@@ -495,7 +485,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 blur: this.onUpdatePriceGross.createDelegate(this)
             }
         });
-        
+
         this.salesTaxField = Ext.create({
             xtype: 'uxspinner',
             decimalPrecision: 2,
@@ -517,7 +507,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 blur: this.calcGross.createDelegate(this)
             }
         });
-        
+
         this.inventoryChange = new Ext.ux.form.MoneyField({
             xtype: 'extuxmoneyfield',
             fieldLabel: this.app.i18n._('Inventory Change'),
@@ -528,7 +518,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 blur: this.calcGross.createDelegate(this)
             }
         });
-        
+
         var items = [{
             title: this.app.i18n._('Invoice'),
             autoScroll: true,
@@ -706,19 +696,19 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 ]
             }]
         }];
-        
+
         if (this.positionsPanels) {
             Ext.each(this.positionTypes, function(type) {
                 items.push(this.positionsPanels[type]);
             }, this);
         }
-        
+
         items.push(new Tine.widgets.activities.ActivitiesTabPanel({
             app: this.appName,
             record_id: this.record.id,
             record_model: 'Sales_Model_Invoice'
         }));
-        
+
         return {
             xtype: 'tabpanel',
             defaults: {

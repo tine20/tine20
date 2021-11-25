@@ -23,6 +23,14 @@ class Tinebase_EmailUser_XpropsFacade
     const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
     const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
+    /**
+     * @param Tinebase_Record_Abstract $record
+     * @param array $propertyConfig
+     * @param bool $setUserId
+     * @return Tinebase_Model_FullUser
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
     public static function getEmailUserFromRecord($record, $propertyConfig = [], $setUserId = true)
     {
         $emailUserProperties = [
@@ -36,16 +44,39 @@ class Tinebase_EmailUser_XpropsFacade
                 : ($record->has($property) ? $record->{$property} : null);
         }
 
-        $user = new Tinebase_Model_FullUser([
-            'accountLoginName' => $emailUserProperties['email'],
-            'accountEmailAddress' => $emailUserProperties['email'],
-        ], true);
+        if ($record instanceof Felamimail_Model_Account) {
+            $user = new Tinebase_Model_FullUser([
+                'accountLoginName' => $record->email_imap_user['emailUsername'] ?? $emailUserProperties['email'],
+                'accountEmailAddress' => $emailUserProperties['email'],
+            ], true);
 
-        $emailData = $emailUserProperties['password'] ? [
-            'emailPassword' => $emailUserProperties['password']
-        ] : [];
-        $user->imapUser = new Tinebase_Model_EmailUser($emailData);
-        $user->smtpUser = new Tinebase_Model_EmailUser($emailData);
+            if (! $record->email_imap_user) {
+                $record->email_imap_user = [];
+            }
+            $user->imapUser = $record->email_imap_user instanceof Tinebase_Model_EmailUser
+                ? $record->email_imap_user
+                : new Tinebase_Model_EmailUser($record->email_imap_user);
+
+            if (! $record->email_smtp_user) {
+                $record->email_smtp_user = [];
+            }
+            $user->smtpUser = $record->email_smtp_user instanceof Tinebase_Model_EmailUser
+                ? $record->email_imap_user
+                : new Tinebase_Model_EmailUser($record->email_smtp_user);
+
+        } else {
+            $user = new Tinebase_Model_FullUser([
+                'accountLoginName' => $emailUserProperties['email'],
+                'accountEmailAddress' => $emailUserProperties['email'],
+            ], true);
+
+            $user->imapUser = new Tinebase_Model_EmailUser([]);
+            $user->smtpUser = new Tinebase_Model_EmailUser([]);
+        }
+
+        if ($emailUserProperties['password']) {
+            $user->imapUser->emailPassword = $emailUserProperties['password'];
+        }
 
         if ($setUserId) {
             if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {

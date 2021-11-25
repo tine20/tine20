@@ -126,6 +126,8 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
     protected function _checkDenyList()
     {
         $denyList = ActiveSync_Config::getInstance()->get(ActiveSync_Config::USER_AGENT_DENY_LIST);
+        // NOTE: Outlook app destroys your privacy. it mirrors all content on ms servers. if you like to use it, use exchange/m365 as well!
+        $denyList[] = '/Outlook-iOS-Android.*/';
         foreach ($denyList as $deny) {
             if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' User agent blocked: ' . $_SERVER['HTTP_USER_AGENT']);

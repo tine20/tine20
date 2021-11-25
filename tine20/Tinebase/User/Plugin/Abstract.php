@@ -184,6 +184,16 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     }
 
     /**
+     * backup user to a dump file
+     *
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function backup($option)
+    {
+        throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
+    }
+
+    /**
      * delete all email users
      *
      * @throws Tinebase_Exception_NotImplemented

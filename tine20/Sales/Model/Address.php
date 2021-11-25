@@ -39,6 +39,10 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
     public const FLD_TYPE = 'type';
     public const FLD_FULLTEXT = 'fulltext';
     
+    public const TYPE_POSTAL = 'postal';
+    public const TYPE_BILLING = 'billing';
+    public const TYPE_DELIVERY = 'delivery';
+    
     public const MODEL_NAME_PART = 'Address';
     public const TABLE_NAME = 'sales_addresses';
                         
@@ -63,6 +67,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
         self::TITLE_PROPERTY => self::FLD_FULLTEXT,
         self::APP_NAME => Sales_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
+        self::EXPOSE_JSON_API => true,
         'resolveRelated'  => TRUE,
         'defaultFilter'   => 'query',
         'resolveVFGlobally' => TRUE,
@@ -179,4 +184,11 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
             ],
         ]
     ];
+
+    public function hydrateFromBackend(array &$data)
+    {
+        $data = Sales_Controller_Address::getInstance()->resolveVirtualFields($data);
+
+        parent::hydrateFromBackend($data);
+    }
 }

@@ -54,10 +54,12 @@ class Filemanager_ControllerTests extends TestCase
     public function testDeletePersonalContainer()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
-            Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER => true,
+            Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS => true,
         )));
 
         $user = $this->testCreatePersonalContainer();
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete(array($user->getId()));
 
         // check if personal folder exists
@@ -72,18 +74,14 @@ class Filemanager_ControllerTests extends TestCase
      */
     public function testNotificationUpdateForReadOnly()
     {
-        Tinebase_Core::setLocale('en');
-        
         $oldUser = Tinebase_Core::getUser();
         /** @var Tinebase_Model_FullUser $sclever */
         $sclever = $this->_personas['sclever'];
         try {
-            $personalFolderPath = $this->_getPersonalPath($oldUser);
-            $translation = Tinebase_Translation::getTranslation('Tinebase');
             $fileSystem = Tinebase_FileSystem::getInstance();
             $fileManager = Filemanager_Controller_Node::getInstance();
-            $personalFolderName = sprintf($translation->_("%s's personal files"), $oldUser->accountFullName);
-            $node = $fileSystem->stat($personalFolderPath . '/' . $personalFolderName);
+
+            $node = Filemanager_Controller::getInstance()->createPersonalFolder($oldUser)->getFirstRecord();
 
             // try a failing update
             Tinebase_Core::set(Tinebase_Core::USER, $sclever);
@@ -106,8 +104,8 @@ class Filemanager_ControllerTests extends TestCase
             $node = $fileManager->get($node->getId());
             $node->grants = $fileSystem->getGrantsOfContainer($node);
             $node->grants->addRecord(new Tinebase_Model_Grants(array(
-                'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                'account_id'        => $sclever->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id' => $sclever->getId(),
                 Tinebase_Model_Grants::GRANT_READ => true,
             )));
             $node = $fileManager->update($node);
@@ -119,11 +117,11 @@ class Filemanager_ControllerTests extends TestCase
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => $sclever->getId(),
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
-            ),array(
+            ), array(
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => '1233',
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
-            ),array(
+            ), array(
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_ID => $sclever->getId(),
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACCOUNT_TYPE => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
                 Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION_ACTIVE => true,
@@ -144,8 +142,6 @@ class Filemanager_ControllerTests extends TestCase
             $node->{Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION} = array();
             $node = $fileManager->update($node);
             static::assertEquals(0, count($node->xprops(Tinebase_Model_Tree_Node::XPROPS_NOTIFICATION)));
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // FIXME some test running before this might have removed the $personalFolderPath . '/' . $personalFolderName folder
         } finally {
             Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
         }
@@ -158,16 +154,12 @@ class Filemanager_ControllerTests extends TestCase
     {
         // check if personal folder exists
         $personalFolderPath = $this->_getPersonalPath(Tinebase_Core::getUser());
-        $translation = Tinebase_Translation::getTranslation('Tinebase');
-        $personalFolderPath .= sprintf($translation->_("/%s's personal files"), Tinebase_Core::getUser()->accountFullName);
+        $node = Filemanager_Controller::getInstance()->createPersonalFolder(Tinebase_Core::getUser())->getFirstRecord();
+        $personalFolderPath .= '/' . $node->name;
         $fileManager = Filemanager_Controller_Node::getInstance();
 
-        try {
-            $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
-            $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // FIXME some test running before this might have removed the $personalFolderPath folder
-        }
+        $fileManager->createNodes($personalFolderPath . '/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $fileManager->moveNodes(array($personalFolderPath . '/test'), array($personalFolderPath . '/Test'));
     }
 
     public function testCreateSharedTopLevelFolder()

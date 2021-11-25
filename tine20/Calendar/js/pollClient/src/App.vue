@@ -68,8 +68,12 @@
                 </tr>
                 <tr v-if="activeAttendee.user_id === null && poll.locked == '0' && poll.closed !== '1'" class="row-active">
                   <td class="table-info name-field">
-                    <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, ĺast name')" class="form-control name-field" />
-                    <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('E-Mail address')" class="form-control email-field" />
+                    <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, ĺast name')"
+                           class="form-control name-field" v-bind:class="{highlight: this.highlightName}"
+                           @input="highlightName = false" required />
+                    <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('E-Mail address')"
+                           class="form-control email-field" v-bind:class="{highlight: this.highlightEmail}"
+                           @input="highlightEmail = false" required />
                   </td>
                   <td v-for="date in poll.alternative_dates" :key="date.id" class="status-cell icon-cell editable"
                     v-if="typeof activeAttendee[date.id] !== 'undefined'"
@@ -198,7 +202,9 @@ export default {
       showCalendarModal: false,
       calendarUrl: '',
       usePersonalLink: false,
-      publicUrl: ''
+      publicUrl: '',
+      highlightName: false,
+      highlightEmail: false
     }
   },
 
@@ -262,6 +268,20 @@ export default {
 
       let payload = { status: [] }
       if (this.activeAttendee.id === null || this.newAccountContact) {
+        let incomplete = false
+        if (this.activeAttendee.name === '') {
+          this.highlightName = true
+          incomplete = true
+        }
+        if (this.activeAttendee.email === '') {
+          this.highlightEmail = true
+          incomplete = true
+        }
+        if (incomplete) {
+          this.transferingPoll = false
+          return
+        }
+
         action = 'put'
         needUpdate = true
 
@@ -532,6 +552,7 @@ export default {
 
         this.wrongLogin = false
         this.askTineLogin = false
+        this.forceNewAttendee = false
 
         // replace with onApplyChanges()
         this.loadPoll()
@@ -688,6 +709,10 @@ input.name-field {
 input.email-field {
   border-radius: 0px;
   padding: 2px 5px 2px 5px;
+}
+
+input.highlight {
+  box-shadow: inset 0 0 8px #ff0000;
 }
 
 .footer {

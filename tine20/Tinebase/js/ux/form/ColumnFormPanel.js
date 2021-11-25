@@ -80,6 +80,11 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
                     beforeadd: this.onBeforeAddFromItem
                 }
             };
+            // autoWidth
+            const tcw = _.sum(_.map(initialRowConfig, 'columnWidth')) || 0;
+            const nw = _.filter(initialRowConfig, c => { return !c.columnWidth });
+            nw.forEach(c => {c.columnWidth = (1-tcw)/nw.length});
+
             // each row consits n column objects
             for (var n=0,m=initialRowConfig.length; n<m; n++) {
                 var column = initialRowConfig[n],

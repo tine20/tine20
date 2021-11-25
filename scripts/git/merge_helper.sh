@@ -8,7 +8,7 @@
 
 # checkout/push/pull
 MergeUpwards () {
-    MYBASEPATH=${CI_BUILDS_DIR:-$(dirname $0)}
+    MYBASEPATH=$(dirname $0)
     srcBranch=$1
     dstBranch=$2
     remote=$3
@@ -25,6 +25,12 @@ MergeUpwards () {
         git pull $remote $remoteDstBranch
     else
         git pull $remote $dstBranch
+    fi
+
+    # exit if branches are alredy merged, otherwise the composer.lock file from the previus merge request would rewritten.
+    if [ $(git merge-base $srcBranch $dstBranch) =  $(git rev-parse $srcBranch) ]; then
+        echo "$dstBranch is all ready up to date"
+        return
     fi
 
     git merge --no-edit --rerere-autoupdate $srcBranch

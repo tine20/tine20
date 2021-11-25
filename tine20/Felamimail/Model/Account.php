@@ -15,25 +15,26 @@
 /**
  * class to hold Account data
  * 
- * @property  string    trash_folder
- * @property  string    sent_folder
- * @property  string    drafts_folder
- * @property  string    templates_folder
- * @property  string    sieve_vacation_active
- * @property  string    display_format
- * @property  string    delimiter
- * @property  string    type
- * @property  string    signature_position
- * @property  string    email
- * @property  string    user_id
- * @property  string    sieve_notification_email
- * @property  boolean   sieve_notification_move
- * @property  string    sieve_notification_move_folder
- * @property  string    sieve_hostname
- * @property  string    migration_approved
- * TODO add aliases + forwards
- * @property  Tinebase_Record_RecordSet aliases (Tinebase_Model_EmailUser_Alias)
- * @property  Tinebase_Record_RecordSet forwards (Tinebase_Model_EmailUser_Forward)
+ * @property  string $trash_folder
+ * @property  string $sent_folder
+ * @property  string $drafts_folder
+ * @property  string $templates_folder
+ * @property  string $sieve_vacation_active
+ * @property  string $display_format
+ * @property  string $delimiter
+ * @property  string $type
+ * @property  string $signature_position
+ * @property  string $email
+ * @property  string $user_id
+ * @property  string $sieve_notification_email
+ * @property  boolean $sieve_notification_move
+ * @property  string $sieve_notification_move_folder
+ * @property  string $sieve_hostname
+ * @property  string $migration_approved
+ * @property  Tinebase_Model_EmailUser $email_imap_user
+ * @property  Tinebase_Model_EmailUser $email_smtp_user
+ * @property  Tinebase_Record_RecordSet $aliases (Tinebase_Model_EmailUser_Alias)
+ * @property  Tinebase_Record_RecordSet $forwards (Tinebase_Model_EmailUser_Forward)
  *
  * @package   Felamimail
  * @subpackage    Model
@@ -702,6 +703,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             $credentialsField   = 'credentials_id';
         }
 
+        $credentials = new Tinebase_Model_CredentialCache();
         if (! $this->{$userField} || (! $this->{$passwordField} && ! $_onlyUsername)) {
 
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
@@ -838,7 +840,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
     /**
      * returns TRUE if account has capability (i.e. QUOTA, CONDSTORE, ...)
      * 
-     * @param $_capability
+     * @param string $_capability
      * @return boolean
      */
     public function hasCapability($_capability)

@@ -20,6 +20,8 @@
 
 class Sales_Model_Customer extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'Customer';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -43,13 +45,12 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-        'resolveVFGlobally' => TRUE,
 
         'exposeHttpApi'     => true,
         
-        'titleProperty'     => 'fulltext',
+        'titleProperty'     => 'name',
         'appName'           => 'Sales',
-        'modelName'         => 'Customer',
+        'modelName'         => self::MODEL_NAME_PART,
         
         'fieldGroups'       => array(
             'core'       => 'Core Data',     // _('Core Data')
@@ -58,7 +59,17 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         ),
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
-        
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'delivery'      => [],
+                'billing'       => [],
+                'postal'        => [],
+                'cpextern_id'   => [],
+                'cpintern_id'   => [],
+            ],
+        ],
+
         'fields'            => array(
             'number' => array(
                 'label'       => 'Customer Number', //_('Customer Number')
@@ -66,7 +77,9 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 // TODO number can't be part of query filter because it is an integer
                 // for mysql it is ok, but for pgsql we need a typecast...
                 //'queryFilter' => TRUE,
-                'type'        => 'integer'
+                'type'        => self::TYPE_BIGINT,
+                self::UNSIGNED => true,
+//                self::DEFAULT_VAL => 0, // -> no default to autopick number
             ),
             'name' => array(
                 'label'       => 'Name', // _('Name')
@@ -81,19 +94,22 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'duplicateCheckGroup' => 'name',
                 'group'       => 'accounting',
                 'queryFilter' => TRUE,
+                self::NULLABLE => true,
             ),
             'url' => array(
                 'label'       => 'Web', // _('Web')
                 'type'        => 'text',
                 'group'       => 'misc',
-                'shy'         => TRUE
+                'shy'         => TRUE,
+                self::NULLABLE => true,
             ),
             'description' => array(
                 'label'       => 'Description', // _('Description')
                 'group'       => 'core',
                 'type'        => 'fulltext',
                 'queryFilter' => TRUE,
-                'shy'         => TRUE
+                'shy'         => TRUE,
+                self::NULLABLE => true,
             ),
             'cpextern_id'       => array(
                 'label'   => 'Contact Person (external)',    // _('Contact Person (external)')
@@ -106,6 +122,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 ),
                 'recursiveResolving' => true,
+                self::NULLABLE => true,
             ),
             'cpintern_id'    => array(
                 'label'      => 'Contact Person (internal)',    // _('Contact Person (internal)')
@@ -118,47 +135,57 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 ),
                 'recursiveResolving' => true,
+                self::NULLABLE => true,
             ),
             'vatid' => array (
                 'label'   => 'VAT ID', // _('VAT ID')
                 'type'    => 'text',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'credit_term' => array (
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',
                 'group'   => 'accounting',
-                'default' => 10,
-                'shy'     => TRUE
+                self::UNSIGNED => true,
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
-                'type'    => 'text',
-                'group'   => 'accounting'
+                'type'    => self::TYPE_STRING,
+                'group'   => 'accounting',
+                self::NULLABLE => true,
+                self::LENGTH => 4,
             ),
             'currency_trans_rate' => array (
                 'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')
                 'type'    => 'float',
                 'group'   => 'accounting',
                 'default' => 1,
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::NULLABLE => true,
+                self::UNSIGNED => true, // TODO FIXME doesnt work?!
             ),
             'iban' => array (
                 'label'   => 'IBAN',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'bic' => array (
                 'label'   => 'BIC',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'discount' => array (
                 'label'   => 'Discount (%)', // _('Discount (%)')
                 'type'    => 'float',
                 'group'   => 'accounting',
-                'default' => 0.0
+                self::NULLABLE => true,
+                self::UNSIGNED => true, // TODO FIXME doesnt work?!
             ),
             'delivery' => array (
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -170,7 +197,10 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'refIdField'       => 'customer_id',
                     'addFilters'       => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'delivery')),
                     'paging'           => array('sort' => 'locality', 'dir' => 'ASC'),
-                    'dependentRecords' => TRUE
+                    'dependentRecords' => TRUE,
+                    self::FORCE_VALUES      => [
+                        'type'                  => 'delivery',
+                    ],
                 ),
             ),
             'billing' => array(
@@ -185,99 +215,27 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                     'refIdField'       => 'customer_id',
                     'addFilters'       => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'billing')),
                     'paging'           => array('sort' => 'locality', 'dir' => 'ASC'),
-                    'dependentRecords' => TRUE
+                    'dependentRecords' => TRUE,
+                    self::FORCE_VALUES      => [
+                        'type'                  => 'billing',
+                    ],
                 ),
             ),
-            
-            // the postal address
-            'postal_id' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => NULL,
-                )
-            ),
-            'adr_name' => [
-                'config' => [
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Name', //_('Name')
-                    'shy'           => TRUE
-                ],
-                'type'   => 'virtual',
+            'postal' => [
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL],
+                self::TYPE              => self::TYPE_RECORD,
+                self::DOCTRINE_IGNORE   => true,
+                self::CONFIG            => [
+                    self::APP_NAME          => Sales_Config::APP_NAME,
+                    self::MODEL_NAME        => Sales_Model_Address::MODEL_NAME_PART,
+                    self::ADD_FILTERS       =>[['field' => 'type', 'operator' => 'equals', 'value' => 'postal']],
+                    self::REF_ID_FIELD      => 'customer_id',
+                    self::DEPENDENT_RECORDS => true,
+                    self::FORCE_VALUES      => [
+                        'type'                  => 'postal',
+                    ],
+                ]
             ],
-            'adr_email' => [
-                'config' => [
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Email', //_('Name')
-                    'shy'           => TRUE
-                ],
-                'type'   => 'virtual',
-            ],
-            'adr_prefix1' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Prefix', //_('Prefix')
-                    'shy'           => TRUE
-                ),
-                'type'   => 'virtual',
-            ),
-            'adr_prefix2' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Additional Prefix', //_('Additional Prefix')
-                    'shy'           => TRUE
-                ),
-                'type'   => 'virtual',
-            ),
-            'adr_street' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Street', //_('Street')
-                    'shy'           => TRUE
-                ),
-                'type' => 'virtual',
-            ),
-            'adr_postalcode' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Postalcode', //_('Postalcode')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_locality' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Locality', //_('Locality')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_region' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Region', //_('Region')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_countryname' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Country', //_('Country')
-                    'shy'           => TRUE,
-                    'default'       => 'DE'
-                ),
-            ),
-            'adr_pobox' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Postbox', //_('Postbox')
-                    'shy'           => TRUE
-                ),           
-            ),
             'fulltext' => array(
                 'type'   => 'virtual',
                 'config' => array(

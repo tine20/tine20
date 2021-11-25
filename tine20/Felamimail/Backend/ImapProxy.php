@@ -20,6 +20,7 @@
  * @method getFolderStatus($globalName)
  * @method getRawContent($id, $part = 'TEXT', $peek = false)
  * @method selectFolder($globalName, $params=[])
+ * @method examineFolder($globalName)
  */
 class Felamimail_Backend_ImapProxy
 {

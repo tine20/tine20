@@ -72,7 +72,7 @@ Tine.widgets.grid.ColumnManager = function() {
             }
             
             if (fieldDefinition.type === 'virtual') {
-                fieldDefinition = fieldDefinition.config || {};;
+                fieldDefinition = fieldDefinition.config || {};
             }
 
             // don't show multiple record fields

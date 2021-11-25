@@ -1,12 +1,12 @@
 /*
  * Tine 2.0
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
 Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
@@ -16,14 +16,12 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
  */
 Ext.ux.form.MoneyField = Ext.extend(Ext.ux.form.NumberField, {
 
-    style: 'text-align: right',
-
    initComponent: function() {
         this.suffix = ' ' + Tine.Tinebase.registry.get('currencySymbol');
         this.decimalPrecision = 2;
         this.decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
 
-        this.supr().initComponent.apply(this, arguments);
+       Ext.ux.form.MoneyField.superclass.initComponent.apply(this, arguments);
     }
 });
 

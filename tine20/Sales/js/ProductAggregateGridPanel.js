@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,13 +13,13 @@ require('./ProductAggregateLayerCombo');
  * @namespace   Tine.Sales
  * @class       Tine.Sales.ProductAggregateGridPanel
  * @extends     Tine.widgets.grid.PickerGridPanel
- * 
+ *
  * <p>Product aggregate grid panel</p>
  * <p></p>
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * 
+ *
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Sales.ProductAggregateGridPanel
@@ -45,25 +45,25 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
      * public
      */
     app: null,
-    
+
     /**
      * the calling editDialog
      * Tine.Sales.ContractEditDialog
      */
     editDialog: null,
-    
+
     /**
      * initializes the component
      */
     initComponent: function() {
         this.title = this.i18nTitle = this.app.i18n.ngettext('Product', 'Products', 2),
-        
+
         Tine.Sales.ProductAggregateGridPanel.superclass.initComponent.call(this);
         this.store.sortInfo = this.defaultSortInfo;
 
         this.on('afteredit', this.onAfterEdit, this);
         this.editDialog.on('load', this.loadRecord, this);
-        
+
         // custom sort for product_id
         this.store.sortData = (function(f, direction) {
             if (f !== 'product_id') {
@@ -73,26 +73,26 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 var fn = function(r1, r2) {
                     var v1 = r1.data.product_id.description,
                         v2 = r2.data.product_id.description;
-                    
+
                     return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
                 };
-                
+
                 this.store.data.sort(direction, fn);
             }
         }).createDelegate(this);
-        
+
         this.store.sort();
-        
+
         this.on('beforeedit', this.onBeforeRowEdit, this);
-        
+
         // sync record on these events
         this.store.on('update', this.syncStoreToRecord.createDelegate(this));
         this.store.on('add', this.syncStoreToRecord.createDelegate(this));
         this.store.on('remove', this.syncStoreToRecord.createDelegate(this));
     },
-    
+
     /**
-     * 
+     *
      * @param {} store
      * @param {} record
      * @param {} operation
@@ -107,21 +107,21 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 items.push(item.data);
             });
             this.editDialog.record.set('products', items);
-            
+
             this.updateTitle(items.length);
         }
     },
-    
+
     /**
      * updates the title of the tab by adding the number of containing records in braces
-     * 
+     *
      * @param {Number} count
      */
     updateTitle: function(count) {
         count = Ext.isNumber(count) ? count : this.store.getCount();
         this.setTitle(this.i18nTitle + ' (' + count + ')');
     },
-    
+
     /**
      * loads the existing ProductAggregates into the store
      */
@@ -133,7 +133,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             }, this);
         }
     },
-    
+
     /**
      * new entry event -> add new record to store
      * @see Tine.widgets.grid.QuickaddGridPanel
@@ -144,18 +144,18 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         recordData.contract_id = this.editDialog.record.get('id');
         var relatedRecord = this.productQuickadd.store.getById(this.productQuickadd.getValue());
         recordData.product_id = relatedRecord.data;
-        Tine.Sales.ProductAggregateGridPanel.superclass.onNewentry.call(this, recordData);  
+        Tine.Sales.ProductAggregateGridPanel.superclass.onNewentry.call(this, recordData);
     },
-    
+
     /**
      * returns column model
-     * 
+     *
      * @return Ext.grid.ColumnModel
      * @private
      */
     getColumnModel: function() {
         this.productEditor = Tine.widgets.form.RecordPickerManager.get('Sales', 'Product', { allowBlank: true});
-        
+
         this.quantityEditor = new Ext.ux.form.Spinner({
             fieldLabel: this.app.i18n._('Quantity'),
             name: 'quantity',
@@ -179,7 +179,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             }),
             allowDecimals: false
         });
-        
+
         this.productQuickadd = Tine.widgets.form.RecordPickerManager.get('Sales', 'Product', {allowBlank: true});
         this.quantityQuickadd = new Ext.ux.form.Spinner({
             fieldLabel: this.app.i18n._('Quantity'),
@@ -205,7 +205,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             }),
             allowDecimals: false
         });
-        
+
         var cmp = {
             name: 'billing_point',
             fieldLabel: this.app.i18n._('Billing Point'),
@@ -216,10 +216,10 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 [  'end', this.app.i18n._('end') ]
             ]
         };
-        
+
         this.billingPointEditor = new Ext.form.ComboBox(cmp);
         this.billingPointQuickadd = new Ext.form.ComboBox(cmp);
-        
+
         var columns = [
             {id: 'product_id', dataIndex: 'product_id', type: Tine.Sales.Model.ProductAggregate, header: this.app.i18n._('Product'),
                  quickaddField: this.productQuickadd, renderer: this.renderProductAggregate,
@@ -243,7 +243,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 sortable: true,
                 width: 160,
                 editable: true
-            }, 
+            },
             columns: columns
        });
     },
@@ -270,10 +270,10 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         // let result = '<div ext:qtip="' + qtipText + '">' + attributes + '</div>';
         return result.join('/',);
     },
-    
+
     /**
      * renders the billing point
-     * 
+     *
      * @param {String} value
      * @return {String}
      */
@@ -284,12 +284,12 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             return this.app.i18n._('begin');
         }
     },
-    
+
     renderQuantity: function(value, cell, record) {
         if (this.hasQuantity(record)) {
             return value;
         }
-        
+
         return '';
     },
 
@@ -312,12 +312,12 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             || ac == 'WebAccounting_Model_ProxmoxVM'
         );
     },
-    
+
     /**
      * is called on after edit to set related records
      * @param {} o
      */
-    onAfterEdit: function(o) {  
+    onAfterEdit: function(o) {
         switch (o.field) {
             case 'quantity':
                 o.record.set('quantity', o.value);
@@ -341,7 +341,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             default: // do nothing
         }
     },
-    
+
     /**
      * creates the special editors
      * @param {} o
@@ -357,13 +357,13 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
 
         return true;
     },
-    
+
     /**
      * renders the cost center
      * @param {Object} value
      * @param {Object} row
      * @param {Tine.Tinebase.data.Record} record
-     * 
+     *
      * return {String}
      */
     renderProductAggregate: function(value, row, record) {
@@ -373,8 +373,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
     /**
      * @private
      */
-    initActions: function() {
-        Tine.Sales.ProductAggregateGridPanel.superclass.initActions.call(this);
+    initActionsAndToolbars: function() {
+        Tine.Sales.ProductAggregateGridPanel.superclass.initActionsAndToolbars.call(this);
 
         // TODO prevent multiselect and change of records without defined attributes
         this.editAttributesAction = new Ext.Action({
@@ -383,6 +383,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             handler : this.onEditAttributes,
             scope: this
         });
+
+        this.contextMenuItems = [this.editAttributesAction];
     },
 
     /**
@@ -557,9 +559,5 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
     onAttributesWindowClose: function () {
         this.attributesWindow.purgeListeners();
         this.attributesWindow.close();
-    },
-
-    getContextMenuItems: function() {
-        return [this.editAttributesAction];
     }
 });

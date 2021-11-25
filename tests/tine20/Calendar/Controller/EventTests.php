@@ -1082,6 +1082,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(1, count($user), 'added user is not attender of event, but should be. user: ' . print_r($newUser->toArray(), TRUE));
         
         // cleanup user
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete($newUser->getId());
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             Tinebase_ActionQueue::getInstance()->processQueue(10000);
@@ -1151,6 +1153,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(1, count($user), 'added user is not attender of new event, but should be');
         
         // cleanup user
+        // user deletion need the confirmation header
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete($newUser->getId());
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             Tinebase_ActionQueue::getInstance()->processQueue(10000);

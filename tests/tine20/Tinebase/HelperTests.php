@@ -84,5 +84,12 @@ class Tinebase_HelperTests extends \PHPUnit\Framework\TestCase
 
         $input = 'nörgler.com';
         self::assertEquals('xn--nrgler-wxa.com', Tinebase_Helper::convertDomainToPunycode($input));
+
+        $input = 'H.-H.einer@nopel.opel';
+        $punyCodedAddress = Tinebase_Helper::convertDomainToPunycode($input);
+        if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $punyCodedAddress)) {
+            self::fail('address is not invalid: ' . $punyCodedAddress);
+        }
+        self::assertEquals('H.-H.einer@nopel.opel', $punyCodedAddress);
     }
 }

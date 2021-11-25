@@ -607,9 +607,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     public const ACCOUNT_DELETION_EVENTCONFIGURATION = 'accountDeletionEventConfiguration';
     public const ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER = '_deletePersonalContainers';
+    public const ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS = '_deletePersonalFolders';
+    public const ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS = '_deleteEmailAccounts';
     public const ACCOUNT_DELETION_KEEP_AS_CONTACT = '_keepAsContact';
     public const ACCOUNT_DELETION_KEEP_ORGANIZER_EVENTS = '_keepOrganizerEvents';
     public const ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER = '_keepAttendeeEvents';
+    public const ACCOUNT_DELETION_ADDITIONAL_TEXT = 'additionalText';
 
     /**
      * roleChangeAllowed
@@ -872,10 +875,24 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => false,
                 ],
+                self::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS  => [
+                    //_('Delete file folders and files')
+                    self::LABEL                         => 'Delete file folders and files',
+                    self::DESCRIPTION                   => 'Delete file folders and files in filesystem',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
+                self::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS  => [
+                    //_('Delete Email accounts')
+                    self::LABEL                         => 'Delete Email accounts',
+                    self::DESCRIPTION                   => 'Delete Email accounts',
+                    self::TYPE                          => self::TYPE_BOOL,
+                    self::DEFAULT_STR                   => false,
+                ],
                 self::ACCOUNT_DELETION_KEEP_AS_CONTACT  => [
-                    //_('Keep "account" as contact in the Addressbook')
-                    self::LABEL                         => 'Keep "account" as contact in the Addressbook',
-                    self::DESCRIPTION                   => 'Keep "account" as contact in the Addressbook',
+                    //_('Keep account as contact in the Addressbook')
+                    self::LABEL                         => 'Keep account as contact in the Addressbook',
+                    self::DESCRIPTION                   => 'Keep account as contact in the Addressbook',
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => false,
                 ],
@@ -892,6 +909,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION                   => 'Keep accounts Calendar event attendee as external attender',
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => false,
+                ],
+                self::ACCOUNT_DELETION_ADDITIONAL_TEXT  => [
+                    //_('Additional text')
+                    self::LABEL                         => 'Additional text',
+                    self::DESCRIPTION                   => 'Additional text shows in confirmation dialog',
+                    self::TYPE                          => self::TYPE_STRING,
+                    self::DEFAULT_STR                   => '',
                 ],
             ],
         ),

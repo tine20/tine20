@@ -57,8 +57,12 @@ class Tinebase_Record_Expander_Factory
                 }
             case MCC::TYPE_RECORD:
                 if (isset($fieldDef[MCC::CONFIG][MCC::DEPENDENT_RECORDS]) && $fieldDef[MCC::CONFIG][MCC::DEPENDENT_RECORDS]) {
+                    $_definition['fieldDefConfig'] = $fieldDef[MCC::CONFIG];
+                    return new Tinebase_Record_Expander_RefIdProperty($propModel, $_property, $_definition,
+                        $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD, true);
+                    /*
                     return new Tinebase_Record_Expander_DependentRecordProperty($fieldDef, $propModel, $_property, $_definition,
-                        $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
+                        $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);*/
                 }
                 return new Tinebase_Record_Expander_RecordProperty($propModel, $_property, $_definition, $_rootExpander,
                      $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);

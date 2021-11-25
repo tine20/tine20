@@ -405,6 +405,10 @@ class Addressbook_Controller_ListTest extends TestCase
     {
         $this->_skipIfXpropsUserIdDeactivated();
 
+        if (! Tinebase_EmailUser::sieveBackendSupportsMasterPassword()) {
+            self::markTestSkipped('test is only working with sieve master pw support');
+        }
+
         $list = $this->_createAdbMailingList();
         $account = $this->_searchMailinglistAccount($list);
 

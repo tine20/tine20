@@ -515,8 +515,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (! $modelConfiguration || (! $_records->count())) {
             return;
         }
-        
-        if (! ($resolveFields = $modelConfiguration->recordsFields)) {
+
+        $resolveFields = array_filter((array)$modelConfiguration->recordFields, function($val) {
+            return isset($val[MCC::CONFIG][MCC::REF_ID_FIELD]);
+        });
+
+        if (! ($resolveFields = array_merge($resolveFields, (array)$modelConfiguration->recordsFields))) {
             return;
         }
         
@@ -547,7 +551,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             /** @noinspection PhpUndefinedMethodInspection */
             $controller = $config['controllerClassName']::getInstance();
             $filterName = $config['filterClassName'];
-            
+
+            if (! isset($config['refIdField'])) {
+                throw new Tinebase_Exception_UnexpectedValue('refIdField not found in config');
+            }
+
             $filterArray = array(
                 array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)
             );
@@ -601,7 +609,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 /** @var Tinebase_Record_Interface $record */
                 foreach ($_records as $record) {
                     $filtered = $foreignRecords->filter($config['refIdField'], $record->getId());
-                    $record->{$fieldKey} = $filtered;
+                    $record->{$fieldKey} = MCC::TYPE_RECORDS === $c[MCC::TYPE] ? $filtered : $filtered->getFirstRecord();
                 }
                 
             } else {
@@ -647,13 +655,21 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     $tmp = array(&$resultSet);
                 }
                 foreach($tmp as &$rS) {
+                    if ('relations' === $field['type']) {
+                        $rS[$field['key']] = [];
+                    }
                     $fc = $field['config'];
                     if (isset($rS['relations']) && (is_array($rS['relations'])
                             || $rS['relations'] instanceof Tinebase_Record_RecordSet)) {
                         foreach ($rS['relations'] as $relation) {
                             if ($relation['type'] === $fc['type'] && $relation['related_model'] === $fc['appName'] .
                                     '_Model_' . $fc['modelName'] && isset($relation['related_record'])) {
-                                $rS[$field['key']] = $relation['related_record'];
+                                if ('relations' === $field['type']) {
+                                    $rS[$field['key']][] = $relation['related_record'];
+                                } else {
+                                    $rS[$field['key']] = $relation['related_record'];
+                                    break;
+                                }
                             }
                         }
                     }

@@ -433,6 +433,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteUsers($ids)
     {
+        parent::_setRequestContext(Admin_Controller_User::getInstance());
         Admin_Controller_User::getInstance()->delete($ids);
         
         $result = array(

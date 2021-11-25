@@ -45,7 +45,14 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = array(
-        'Product',
+        Sales_Model_Document_Address::MODEL_NAME_PART,
+        Sales_Model_Document_Customer::MODEL_NAME_PART,
+        Sales_Model_Product::MODEL_NAME_PART,
+        Sales_Model_SubProductMapping::MODEL_NAME_PART,
+        Sales_Model_Document_Offer::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
+        Sales_Model_Document_Order::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
         'Contract',
         'Division',
         'CostCenter',
@@ -366,16 +373,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchCustomers($filter, $paging)
     {
         $result = $this->_search($filter, $paging, Sales_Controller_Customer::getInstance(), 'Sales_Model_CustomerFilter');
-        
-        for ($i = 0; $i < count($result['results']); $i++) {
-            if (isset($result['results'][$i]['postal_id'])) {
-                $result['results'][$i]['postal_id'] = Sales_Controller_Address::getInstance()->resolveVirtualFields($result['results'][$i]['postal_id']);
-            }
-            if (! empty($result['results'][$i]['billing'])) {
-                $result['results'][$i]['billing'] = Sales_Controller_Address::getInstance()->resolveMultipleVirtualFields($result['results'][$i]['billing']);
-            }
-        }
-        
         return $result;
     }
     

@@ -761,4 +761,43 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         $this->_createDefaultDestinations($rawUser);
         return $rawUser;
     }
+    
+    /**
+     * backup user to a dump file
+     *
+     */
+    public function backup($option)
+    {
+        $backupDir = $option['backupDir'];
+
+        Zend_Db_Table_Abstract::setDefaultAdapter($this->_db);
+        Setup_Core::set(Setup_Core::DB, $this->_db);
+        
+        //smtp_users
+        $clientId = $this->_clientId;
+        $mycnf = $backupDir . '/my.cnf';
+        
+        $mysqlBackEnd = new Setup_Backend_Mysql();
+        $mysqlBackEnd->createMyConf($mycnf);
+        
+        $cmd = "mysqldump --defaults-extra-file=$mycnf "
+            ."--single-transaction --max_allowed_packet=512M "
+            ."--opt --no-tablespaces "
+            . escapeshellarg($this->_config['dbname']) . ' '
+            . escapeshellarg($this->_userTable)
+            .' --where="' . "client_idnr='$clientId'" . '"'
+            ." | bzip2 > $backupDir/tine20_postfix_users.sql.bz2";
+
+        exec($cmd);
+
+        //smtp_destinations (select all rows belonging to users that belong to our installation)
+        $cmd = "mysqldump --defaults-extra-file=$mycnf "
+            ."--single-transaction --max_allowed_packet=512M "
+            ."--opt --no-tablespaces "
+            . escapeshellarg($this->_config['dbname']) . ' '
+            . escapeshellarg($this->_destinationTable)
+            ." | bzip2 > $backupDir/tine20_postfix_destination.sql.bz2";
+
+        exec($cmd);
+    }
 }

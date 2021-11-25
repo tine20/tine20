@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -199,7 +200,7 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
             $existingIds = $roleController->getMultiple($accountIds['role'])->getArrayOfIds();
             $deletedIds = array_diff($accountIds['role'], $existingIds);
             if (!empty($deletedIds)) {
-                $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $this->_db->quoteIdentifier('account_type') .
+                $deleted = $this->_db->delete(SQL_TABLE_PREFIX . $this->_tableName, $this->_db->quoteIdentifier('account_type') .
                     ' = \'role\' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' IN (?)',
                         $deletedIds));
                 unset($deletedIds);

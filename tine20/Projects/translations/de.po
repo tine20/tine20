@@ -230,6 +230,9 @@ msgstr "Gemeinsame Projekt-Favoriten verwalten"
 msgid "Create new shared project favorites"
 msgstr "Neuen gemeinsamen Projekt-Favoriten anlegen"
 
+msgid "Tasks"
+msgstr "Aufgaben"
+
 #~ msgid "Search FAQ"
 #~ msgstr "FAQ durchsuchen"
 

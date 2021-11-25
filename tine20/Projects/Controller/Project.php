@@ -38,5 +38,6 @@ class Projects_Controller_Project extends Tinebase_Controller_Record_Abstract
 
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = true;
+        $this->_handleVirtualRelationProperties = true;
     }
 }

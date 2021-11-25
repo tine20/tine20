@@ -695,8 +695,8 @@ msgstr ""
 #: js/Model.js:270
 msgid "List"
 msgid_plural "Lists"
-msgstr[0] "Gruppe"
-msgstr[1] "Gruppen"
+msgstr[0] "Gruppenliste"
+msgstr[1] "Gruppenlisten"
 
 #: Model/List.php:119
 msgid "Percent"
