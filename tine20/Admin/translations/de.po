@@ -1314,6 +1314,24 @@ msgstr "Es ist nicht erlaubt, die Gesamte Quota zu verwalten."
 msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
 msgstr "Das Löschen des Benutzers wird die mit [V] markierten Aktionen auslösen, wollen Sie das Löschen durchführen?"
 
+msgid "Delete personal containers"
+msgstr "Persönliche Ordner löschen"
+
+msgid "Keep account as contact in the Addressbook"
+msgstr "Als Kontakt im Adressbuch behalten"
+
+msgid "Keep accounts organizer events as external events in the Calendar"
+msgstr "Organisator-Termine der Benutzer:in als externe Termine im Kalender behalten"
+
+msgid "Keep accounts Calendar event attendee as external attender"
+msgstr "Termine der Benutzer:in als externe Termine im Kalender behalten"
+
+msgid "Delete file folders and files"
+msgstr "Dateiordner und Dateien löschen"
+
+msgid "Delete Email accounts"
+msgstr "E-Mail-Konten löschen"
+
 #~ msgid "enable application"
 #~ msgstr "Anwendung aktivieren"
 

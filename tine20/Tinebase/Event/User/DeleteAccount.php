@@ -46,7 +46,7 @@ class Tinebase_Event_User_DeleteAccount extends Tinebase_Event_Abstract
     protected $_deleteEmailAccounts = false;
 
     /**
-     * keep "account" as contact in the addressbook (which addressbook?)
+     * keep account as contact in the addressbook (which addressbook?)
      *
      * @var boolean
      */
