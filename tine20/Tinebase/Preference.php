@@ -237,7 +237,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 $preference->value      = 'auto';
                 break;
             case self::DEFAULT_APP:
-                $preference->value      = 'Addressbook';
+                $preference->value      = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_APP);
                 break;
             case self::WINDOW_TYPE:
                 $preference->value      = 'autodetect';
