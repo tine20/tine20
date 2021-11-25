@@ -13,12 +13,15 @@ if (!isset($argv[2])) {
     exit('usage: php ' . __FILE__ . ' branch1 branch2' . PHP_EOL);
 }
 
+require_once(dirname(dirname(__DIR__)) . '/tine20/vendor/autoload.php');
+
+
 $branchLow = $argv[1];//'origin/2019.11';
 $branchHigh = $argv[2];//'origin/2020.11';
 $descriptorspec = [
     0 => ['pipe', 'r'], // stdin
     1 => ['pipe', 'w'], // stdout
-    2 => ['pipe', 'r'], // stderr
+    2 => ['pipe', 'w'], // stderr
 ];
 
 $process = proc_open('git show ' . $branchLow . ':../tine20/composer.json | cat', $descriptorspec, $pipes);
@@ -80,9 +83,26 @@ $requireLow = array_filter($compJsonLow['require'], function($val, $key) {
 $requireHigh = array_filter($compJsonHigh['require'], function($val, $key) {
     return stripos($key, 'php') !== 0 && stripos($key, 'ext-') !== 0;
 }, ARRAY_FILTER_USE_BOTH);
-$requireOfInterest = array_filter($requireHigh, function($val, $key) use($requireLow) {
-    return isset($requireLow[$key]) && $val === $requireLow[$key];
+$errors = [];
+$requireOfInterest = array_filter($requireHigh, function($val, $key) use($requireLow, &$errors) {
+    if (isset($requireLow[$key])) {
+        $valLow = $requireLow[$key];
+        $valHigh = $val;
+        foreach ([&$valLow, &$valHigh] as &$spec) {
+            $spec = preg_replace('/ as .*$/', '', $spec);
+        }
+        if ($valHigh !== $valLow && !\Composer\Semver\Comparator::greaterThanOrEqualTo($valHigh, $valLow)) {
+            $errors[] = $key . ' ' . $val . ' on highBranch < ' . $requireLow[$key] . ' on lowBranch';
+            return false;
+        }
+        return $val === $requireLow[$key];
+    }
+    return false;
 }, ARRAY_FILTER_USE_BOTH);
+
+if ($errors) {
+    echo join(PHP_EOL, $errors) . PHP_EOL . PHP_EOL;
+}
 
 $packagesLow = [];
 foreach ($compLockLow['packages'] as $package) {
