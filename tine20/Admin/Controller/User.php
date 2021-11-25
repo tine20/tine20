@@ -638,7 +638,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 case Tinebase_Config::ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER:
                 case Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS:
                 case Tinebase_Config::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS:
-                    $label = $content['label'];
+                    $label = $translation->_($content['label']);
                     $enable = Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION)->{$key};
                     $enable =  $enable === true ? '[V]' : '[ ]';
                 $userData .= "<br /> $enable $label";
