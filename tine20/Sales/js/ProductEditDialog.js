@@ -4,196 +4,86 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.namespace('Tine.Sales');
 
-/**
- * Product edit dialog
- * 
- * @namespace   Tine.Sales
- * @class       Tine.Sales.ProductEditDialog
- * @extends     Tine.widgets.dialog.EditDialog
- * 
- * <p>Product Edit Dialog</p>
- * <p><pre>
- * TODO         make category a combobox + get data from settings
- * </pre></p>
- * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @param       {Object} config
- * @constructor
- * Create a new Tine.Sales.ProductGridPanel
- */
 Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 800,
     windowHeight: 600,
-    // displayNotes: true,
-    
-    // onRecordLoad: function() {
-    //     Tine.Sales.ProductEditDialog.superclass.onRecordLoad.call(this);
-    //    
-    //     if (! this.copyRecord && ! this.record.id) {
-    //         this.window.setTitle(this.app.i18n._('Add New Product'));
-    //     }
-    // },
-    
-    /**
-     * returns dialog
-     * 
-     * NOTE: when this method gets called, all initalisation is done.
-     */
-    getFormItems2: function() {
-        return {
-            xtype: 'tabpanel',
-            plain:true,
-            activeTab: 0,
-            border: false,
-            plugins: [{
-                ptype : 'ux.tabpanelkeyplugin'
-            }],
-            items:[
-                {
-                title: this.app.i18n.n_('Product', 'Products', 1),
-                autoScroll: true,
-                border: false,
-                frame: true,
-                layout: 'border',
-                items: [{
-                    region: 'center',
-                    xtype: 'columnform',
-                    labelAlign: 'top',
-                    formDefaults: {
-                        xtype:'textfield',
-                        anchor: '100%',
-                        labelSeparator: '',
-                        columnWidth: 1/3
-                    },
-                    items: [[{
-                        name: 'number',
-                        fieldLabel: this.app.i18n._('Product Number'),
-                        columnWidth: 1/3
-                    }, {
-                        name: 'gtin',
-                        fieldLabel: this.app.i18n._('GTIN'),
-                        columnWidth: 1/3
-                    }, new Tine.Tinebase.widgets.keyfield.ComboBox({
-                        app: 'Sales',
-                        keyFieldName: 'productCategory',
-                        fieldLabel: this.app.i18n._('Category'),
-                        name: 'category',
-                        columnWidth: 1/3
-                    })], [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Name'),
-                        name: 'name',
-                        allowBlank: false
-                    }], [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Manufacturer'),
-                        name: 'manufacturer'
-                    }], [{
-                        xtype: 'extuxmoneyfield',
-                        fieldLabel: this.app.i18n._('Purchaseprice'),
-                        name: 'purchaseprice',
-                        allowNegative: false,
-                        allowBlank: true
-                    }, {
-                        xtype: 'extuxmoneyfield',
-                        fieldLabel: this.app.i18n._('Salesprice'),
-                        name: 'salesprice',
-                        allowNegative: false,
-                        allowBlank: true
-                    }, this.getAccountableCombo()],
-                    [{
-                        columnWidth: 0.5,
-                        name: 'lifespan_start',
-                        xtype: 'datefield',
-                        fieldLabel: this.app.i18n._('Lifespan start')
-                    }, {
-                        columnWidth: 0.5,
-                        xtype: 'datefield',
-                        name: 'lifespan_end',
-                        fieldLabel: this.app.i18n._('Lifespan end')
-                    }], [{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Description'),
-                        emptyText: this.app.i18n._('Enter description...'),
-                        name: 'description',
-                        xtype: 'textarea',
-                        height: 150
-                    }]]
-                }, {
-                    // activities and tags
-                    layout: 'ux.multiaccordion',
-                    animate: true,
-                    region: 'east',
-                    width: 210,
-                    split: true,
-                    collapsible: true,
-                    collapseMode: 'mini',
-                    header: false,
-                    margins: '0 5 0 5',
-                    border: true,
-                    items: [
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Sales',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        })
-                    ]
-                }]
-            },
-            new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })
+
+    getRecordFormItems: function() {
+        const fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+            Tine.widgets.form.FieldManager, 'Sales', 'Product', _,
+            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+
+        const fields = this.fields = {};
+        _.each(Tine.widgets.form.RecordForm.getFieldDefinitions(this.recordClass), (fieldDefinition) => {
+            const fieldName = fieldDefinition.fieldName
+            const config = {};
+            switch (fieldName) {
+                case 'unfold_type':
+                    config.checkState = function() {
+                        const disabled = !(fields.subproducts.getValue() || []).length
+                        this.setDisabled(disabled);
+                        if (disabled) {
+                            this.clearValue();
+                        } else if (!this.getValue()) {
+                            this.setValue('SET');
+                        }
+                    }
+
+                    break;
+            }
+            this.fields[fieldName] =  Ext.create(fieldManager(fieldName, config));
+        });
+
+        return [{
+            region: 'center',
+            xtype: 'columnform',
+            items: [
+                [fields.number, fields.gtin, fields.category],
+                [fields.name, _.assign(fields.shortcut, {columnWidth: 1/3})],
+                // [fields.description],
+                [fields.manufacturer, _.assign(fields.purchaseprice, {columnWidth: 1/3})],
+                [fields.unit, fields.salesprice, fields.salestaxrate, fields.salestax],
+                [fields.subproducts],
+                [fields.unfold_type, fields.default_sorting, fields.default_grouping],
+                [fields.lifespan_start, fields.lifespan_end],
+                [fields.is_active, fields.is_salesproduct],
+                [fields.accountable, fields.costcenter]
             ]
-        };
-    },
-    
-    /**
-     * creates the accountable combo box
-     * 
-     * @return {Ext.form.ComboBox}
-     */
-    getAccountableCombo: function() {
-        if (! this.accountableCombo) {
-            var data = [];
-            var id = 0;
-
-            Ext.each(Tine.Sales.AccountableRegistry.getArray(), function(rel) {
-                
-                var app = Tine.Tinebase.appMgr.get(rel.appName);
-                var tr = app.i18n._(rel.appName + rel.modelName);
-                
-                data.push([rel.appName + '_Model_' + rel.modelName, tr]);
-                id++;
-            });
-
-            this.accountableCombo = new Ext.ux.form.ClearableComboBox({
-                store: new Ext.data.ArrayStore({
-                    fields: ['key', 'modelName'],
-                    data: data
-                }),
-                fieldLabel: this.app.i18n._('Accountable'),
-                allowBlank: false,
-                forceSelection: true,
-                value: 'Sales_Model_Product',
-                displayField: 'modelName',
-                valueField: 'key',
-                name: 'accountable',
-                columnWidth: 1/3,
-                mode: 'local'
-            });
-
-        }
-        return this.accountableCombo;
+        }];
     }
 });
+
+// @TODO worth an own file?
+Tine.widgets.form.FieldManager.register('Sales', 'Product', 'accountable', {
+    xtype: 'combo',
+    name: 'accountable',
+    allowBlank: false,
+    forceSelection: true,
+    value: 'Sales_Model_Product',
+    displayField: 'modelName',
+    valueField: 'key',
+    mode: 'local',
+    initComponent() {
+        var data = [];
+        var id = 0;
+
+        Ext.each(Tine.Sales.AccountableRegistry.getArray(), function(rel) {
+            const rc = Tine.Tinebase.data.RecordMgr.get(rel.appName, rel.modelName);
+            const label = rc.getAppName() + ' ' + rc.getRecordsName();
+
+            data.push([rc.getPhpClassName(), label]);
+            id++;
+        });
+        this.store = new Ext.data.ArrayStore({
+            fields: ['key', 'modelName'],
+            data: data
+        });
+        this.supr().initComponent.call(this)
+    }
+}, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
