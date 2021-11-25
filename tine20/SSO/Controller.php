@@ -490,39 +490,30 @@ class SSO_Controller extends Tinebase_Controller_Event
                     }
                 }
 
-                $response = new \Laminas\Diactoros\Response();
-                $response->getBody()->write('<html>
-<body>
-<p class="pulsate">'.Tinebase_Translation::getTranslation()->translate('redirecting ...').'</p>');
-                foreach ($urls as $url) {
-                    //$response->getBody()->write($url);
-                }
-                // after the urls above, do final redirect to destination:
-                // $spMetadata->getValue('SingleLogoutService')['Location']
-                $response->getBody()->write('
-    <input type="submit" value="continue" style="display: none;"/>
-    <script type="text/javascript">window.onload = function() { document.getElementsByTagName("form")[0].submit() };</script>
-    <style>
-        .pulsate {
-            animation: pulsate 1s ease-out;
-            animation-iteration-count: infinite; 
-        }
-        @keyframes pulsate {
-            0% { opacity: 0.5; }
-            50% { opacity: 1.0; }
-            100% { opacity: 0.5; }
-        }
-</style>
-</form>
-</html>');
-                return $response;
+                $locale = Tinebase_Core::getLocale();
 
+                $jsFiles = ['SSO/js/logout.js'];
+                $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
+
+                return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+                    'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+                    'lang' => $locale,
+                    'initialData' => json_encode([
+                        'logoutUrls' => $urls,
+                        'finalLocation' => $spMetadata->getValue('SingleLogoutService')['Location']
+                    ])
+                ]);
             }
             $response = new \Laminas\Diactoros\Response('php://memory', 302, [
                 'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
             ]);
             return $response;
 
+        } elseif ($message instanceof \SAML2\LogoutResponse) {
+            $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'text/html');
+            $response->getBody()->write('<html><body><script type="application/javascript"> window.logoutStatus='
+                . json_encode($message->getStatus()). '</script></body></html>');
+            return $response;
         } else {
             throw new \SimpleSAML\Error\BadRequest('Unknown message received on logout endpoint: ' . get_class($message));
         }
