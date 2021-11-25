@@ -106,6 +106,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const DBLOGGER = 'dblogger';
 
     /**
+     * DEFAULT_APP
+     *
+     * @var string
+     */
+    const DEFAULT_APP = 'defaultApp';
+
+    /**
      * DEFAULT_LOCALE
      *
      * @var string
@@ -993,6 +1000,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
             ]
         ],
+        self::DEFAULT_APP => array(
+            //_('Default application')
+            'label'                 => 'Default application',
+            //_('Default application for this installation.')
+            'description'           => 'Default application for this installation.',
+            'type'                  => 'string',
+            'default'               => 'Addressbook',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
         /**
          * for example: 'de'
          */
