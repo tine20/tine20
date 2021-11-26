@@ -69,12 +69,11 @@ class SSO_Facade_SAML_Session
                     if (is_object($dstCfg->getConfigItem('SingleLogoutService')) && !empty($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'))) {
                         $lr->setDestination($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'));
                         $nameId = new SAML2\XML\saml\NameID();
-                        $nameId->setValue('foo');
+                        $nameId->setValue(Tinebase_Core::getUser()->accountLoginName);
                         $lr->setNameId($nameId);
                         $requests[] = $lr;
                     }
 
-                    //(new \SAML2\SOAPClient())->send($request, \SimpleSAML\IdP::getById('saml2:tine20')->getConfig());
                 } catch (Exception $e) {
                     Tinebase_Exception::log($e);
                 }

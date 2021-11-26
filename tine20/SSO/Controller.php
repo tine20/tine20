@@ -31,6 +31,8 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     protected $_applicationName = SSO_Config::APP_NAME;
 
+    protected static $_logoutHandlerRecursion = false;
+
     public static function addFastRoutes(
         /** @noinspection PhpUnusedParameterInspection */
         \FastRoute\RouteCollector $r
@@ -428,6 +430,37 @@ class SSO_Controller extends Tinebase_Controller_Event
         return $response;
     }
 
+    public static function logoutHandler(): array
+    {
+        $result = [];
+
+        if (static::$_logoutHandlerRecursion) {
+            return $result;
+        }
+
+        if (SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::ENABLED}) {
+            static::initSAMLServer();
+            $idp = \SimpleSAML\IdP::getById('saml2:tine20');
+
+            // @phpstan-ignore-next-line
+            if ($logoutRequests = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6))) {
+                $redirect = new \SAML2\HTTPRedirect();
+                $urls = [];
+                foreach ($logoutRequests as $request) {
+                    try {
+                        $redirect->send($request);
+                    } catch (SSO_Facade_SAML_RedirectException $e) {
+                        $urls[] = $e->redirectUrl;
+                    }
+                }
+
+                $result['SAML2RedirectURLs'] = $urls;
+            }
+        }
+
+        return $result;
+    }
+
     public static function publicSaml2RedirectLogout(): \Psr\Http\Message\ResponseInterface
     {
         if (! SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::ENABLED}) {
@@ -475,7 +508,12 @@ class SSO_Controller extends Tinebase_Controller_Event
             $logoutRequests = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6));
 
             if (SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_TINELOGOUT}) {
-                (new Tinebase_Frontend_Json)->logout();
+                try {
+                    static::$_logoutHandlerRecursion = true;
+                    (new Tinebase_Frontend_Json)->logout();
+                } finally {
+                    static::$_logoutHandlerRecursion = false;
+                }
             }
 
             if (is_array($logoutRequests) && !empty($logoutRequests)) {
@@ -547,20 +585,21 @@ class SSO_Controller extends Tinebase_Controller_Event
             $newSimple = new SSO_Facade_SAML_AuthSimple($simpleSampleIsReallyGreat2->getValue($simpleSampleIsReallyGreat
                 ->getValue($idp)));
             $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
-
-            $binding = Binding::getCurrentBinding();
-            $authnRequest = $binding->receive();
-
-            if ($authnRequest instanceof AuthnRequest && ($issuer = $authnRequest->getIssuer()) instanceof Issuer &&
-                    null !== ($spEntityId = $issuer->getValue())) {
-                // @phpstan-ignore-next-line
-                \SimpleSAML\Session::getSessionFromRequest()->setSPEntityId($spEntityId);
-            } else {
-                throw new Tinebase_Exception('can\'t resolve request issuer');
-            }
-        } else {
-            throw new Tinebase_Exception('simple samle auth source config failure');
+        } elseif (! $simpleSampleIsReallyGreat->getValue($idp) instanceof SSO_Facade_SAML_AuthSimple) {
+            throw new Tinebase_Exception('simple samle auth source config failure ');
         }
+
+        $binding = Binding::getCurrentBinding();
+        $authnRequest = $binding->receive();
+
+        if ($authnRequest instanceof AuthnRequest && ($issuer = $authnRequest->getIssuer()) instanceof Issuer &&
+                null !== ($spEntityId = $issuer->getValue())) {
+            // @phpstan-ignore-next-line
+            \SimpleSAML\Session::getSessionFromRequest()->setSPEntityId($spEntityId);
+        } else {
+            throw new Tinebase_Exception('can\'t resolve request issuer');
+        }
+
 
         try {
             \SimpleSAML\Module\saml\IdP\SAML2::receiveAuthnRequest($idp);
