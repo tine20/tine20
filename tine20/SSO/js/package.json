@@ -14,7 +14,7 @@
   "tine20": {
     "entryPoints": [
       "login.js",
-      "logout.js"
+      "logoutClient.js"
     ]
   }
 }

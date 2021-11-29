@@ -312,28 +312,23 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      * logout user & redirect
      * @static
      */
-    _doLogout: function() {
+    _doLogout: async function() {
         Ext.MessageBox.wait(i18n._('Logging you out...'), i18n._('Please wait!'));
-        Ext.Ajax.request( {
-            params : {
-                method : Ext.isObject(Tine.Setup) ? 'Setup.logout' : 'Tinebase.logout'
-            },
-            callback : function(options, success, response) {
-                // clear the authenticated mod_ssl session
-                if (document.all == null) {
-                    if (window.crypto && Ext.isFunction(window.crypto.logout)) {
-                        window.crypto.logout();
-                    }
-                } else {
-                    document.execCommand('ClearAuthenticationCache');
-                }
+        const response = await Tine.Tinebase.logout();
+        // clear the authenticated mod_ssl session
+        if (window.crypto && Ext.isFunction(window.crypto.logout)) {
+            window.crypto.logout();
+        }
 
-                Tine.Tinebase.common.reload({
-                    clearCache: true,
-                    redirectAlways: Tine.Tinebase.configManager.get('redirectAlways'),
-                    redirectUrl: Tine.Tinebase.configManager.get('redirectUrl')
-                });
-            }
+        if (response.SAML2RedirectURLs) {
+            const { ssoLogout } = await import(/* webpackChunkName: "SSO/js/logout" */ 'SSO/js/logout');
+            await ssoLogout(response.SAML2RedirectURLs)
+        }
+
+        return await Tine.Tinebase.common.reload({
+            clearCache: true,
+            redirectAlways: Tine.Tinebase.configManager.get('redirectAlways'),
+            redirectUrl: Tine.Tinebase.configManager.get('redirectUrl')
         });
     }
 });

@@ -530,7 +530,7 @@ class SSO_Controller extends Tinebase_Controller_Event
 
                 $locale = Tinebase_Core::getLocale();
 
-                $jsFiles = ['SSO/js/logout.js'];
+                $jsFiles = ['SSO/js/logoutClient.js'];
                 $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
 
                 return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
