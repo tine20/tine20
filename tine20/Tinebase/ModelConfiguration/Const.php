@@ -145,6 +145,7 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE = 'type';
     const TYPE_ATTACHMENTS = 'attachments';
     const TYPE_BIGINT = 'bigint';
+    const TYPE_BLOB = 'blob';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_CONTAINER = 'container';
     const TYPE_DATETIME = 'datetime';

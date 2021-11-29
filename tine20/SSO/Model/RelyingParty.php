@@ -42,7 +42,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 2,
+        self::VERSION => 3,
         self::RECORD_NAME => 'Relying Party',
         self::RECORDS_NAME => 'Relying Parties', // ngettext('Relying Party', 'Relying Parties', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -85,8 +85,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
                 self::LABEL                 => 'Description', // _('Description')
             ],
             self::FLD_LOGO              => [
-                self::TYPE                  => self::TYPE_STRING,
-                self::LENGTH                => 255,
+                self::TYPE                  => self::TYPE_BLOB,
                 self::NULLABLE              => true,
                 self::LABEL                 => 'Logo', // _('Logo')
             ],
