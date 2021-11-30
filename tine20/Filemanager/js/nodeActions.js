@@ -299,7 +299,7 @@ Tine.Filemanager.nodeActions.Rename = {
     executor: function(record, text) {
         // @TODO validate filename
         const targetPath = Tine.Filemanager.Model.Node.dirname(record.get('path')) + text;
-        Tine.Filemanager.nodeBackend.copyNodes([record], targetPath, true);
+        Tine.Filemanager.nodeBackend.copyNodes([record], targetPath, true, false);
     }
 };
 
@@ -438,7 +438,7 @@ Tine.Filemanager.nodeActions.Move = {
         });
 
         filePickerDialog.on('apply', function(node) {
-            Tine.Filemanager.nodeBackend.copyNodes(records, node[0], true);
+            Tine.Filemanager.nodeBackend.copyNodes(records, node[0], true, true);
         });
 
         filePickerDialog.openWindow();
