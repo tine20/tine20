@@ -31,13 +31,21 @@ return array(
     ),
 
     'setupuser' => array(
+        {{if exists "/setupuser/username"}}
         'username' => '{{getv "/setupuser/username"}}',
+        {{end}}
+        {{if exists "/setupuser/password"}}
         'password' => '{{getv "/setupuser/password"}}',
+        {{end}}
     ),
 
     'login' => array(
+        {{if exists "/login/username"}}
         'username' => '{{getv "/login/username"}}',
+        {{end}}
+        {{if exists "/login/password"}}
         'password' => '{{getv "/login/password"}}',
+        {{end}}
     ),
 
     'fulltext' => array(
