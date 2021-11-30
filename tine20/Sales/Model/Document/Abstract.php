@@ -24,6 +24,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
     const FLD_PRECURSOR_DOCUMENTS = 'precursor_documents'; // virtual, link
     const FLD_NOTE = 'note';
+    const FLD_BOILERPLATES = 'boilerplates';
     const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
     const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
     // TODO FIXME denormalized.... as json in the document or as copy in the db?
@@ -151,6 +152,19 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     //self::MODEL_NAME            => Sales_Model_SubProductMapping::MODEL_NAME_PART,
                     // ? self::REF_ID_FIELD          => Sales_Model_SubProductMapping::FLD_PARENT_ID,
+                ],
+            ],
+            self::FLD_BOILERPLATES      => [
+                self::TYPE                  => self::TYPE_RECORDS,
+                self::LABEL                 => 'Boilerplates', // _('Boilerplates')
+                self::CONFIG                => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    self::MODEL_NAME            => Sales_Model_Document_Boilerplate::MODEL_NAME_PART,
+                    self::REF_ID_FIELD          => Sales_Model_Document_Boilerplate::FLD_DOCUMENT_ID,
+                ],
+                self::VALIDATORS            => [ // only for offers this is allow empty true, by default its false
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
             self::FLD_CUSTOMER_ID       => [

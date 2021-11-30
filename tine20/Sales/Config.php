@@ -101,6 +101,8 @@ class Sales_Config extends Tinebase_Config_Abstract
      */
     const DOCUMENT_CATEGORY = 'documentCategory';
 
+    const DOCUMENT_CATEGORY_DEFAULT = 'STANDARD';
+
     const DOCUMENT_POSITION_TYPE = 'documentPositionType';
 
     const PRODUCT_UNFOLDTYPE = 'productUnfoldType';
@@ -281,9 +283,9 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => 'STANDARD', 'value' => 'Standard', 'system' => true], // _('Standard')
+                    ['id' => self::DOCUMENT_CATEGORY_DEFAULT, 'value' => 'Standard', 'system' => true], // _('Standard')
                 ],
-                self::DEFAULT_STR           => 'STANDARD',
+                self::DEFAULT_STR           => self::DOCUMENT_CATEGORY_DEFAULT,
             ],
         ],
         self::PRODUCT_CATEGORY => array(
