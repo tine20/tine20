@@ -55,9 +55,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     const FLD_BOOKING_DATE = 'booking_date'; // ggf. nur bei Rechnung ud. Storno
 
-    // jedes dokument bekommt noch:
-    // <dokumentenart>_TYPE z.B Rechnungsart (Beitragsrechnung, Service, ...) keyfield mit metadaten wie z.B. template, textbausteine etc.
-    //   vermutlich nicht änderbar?
     // <dokumentenart>_STATUS z.B. Rechnungsstatus (Ungebucht, Gebucht, Verschickt, Bezahlt)
     //   übergänge haben regeln (siehe SAAS mechanik)
 
@@ -156,7 +153,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_BOILERPLATES      => [
                 self::TYPE                  => self::TYPE_RECORDS,
-                self::LABEL                 => 'Boilerplates', // _('Boilerplates')
+                self::DISABLED              => true,
+//                self::LABEL                 => 'Boilerplates', // _('Boilerplates')
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Boilerplate::MODEL_NAME_PART,

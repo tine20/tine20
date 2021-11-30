@@ -49,7 +49,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
 
         self::RECORD_NAME => self::MODEL_NAME_PART,
         self::RECORDS_NAME => 'Boilerplates', // ngettext('Boilerplate', 'Boilerplates', n)
-        self::TITLE_PROPERTY => self::FLD_NAME,
+        self::TITLE_PROPERTY => "{{ name }}{% if locally_changed %} (individuell){% elseif customer or from or until %} ( {% if customer %}customerspecific {% endif %}{% if from %}from {{ from |date('Y/m/d') }} {% endif %}{% if until %}until {{ until |date('Y/m/d') }}{% endif %}){% endif %}", //self::FLD_NAME,
 
         self::HAS_RELATIONS => false,
         self::HAS_ATTACHMENTS => false,
@@ -67,17 +67,20 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
 
         self::FIELDS => [
             self::FLD_MODEL => [
-                self::TYPE => self::TYPE_STRING,
+                self::TYPE => self::TYPE_MODEL,
                 self::LENGTH => 255,
                 self::QUERY_FILTER => true,
                 self::LABEL => 'Model', // _('Model')
+                self::CONFIG => [
+                    'availableModelsRegExp' => '/Sales_Model_Document_(?!(Customer|Address|Boilerplate))/',
+                ],
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
             self::FLD_NAME => [
-                self::TYPE => self::TYPE_STRING,
+                self::TYPE => self::TYPE_STRING_AUTOCOMPLETE,
                 self::LENGTH => 255,
                 self::QUERY_FILTER => true,
                 self::LABEL => 'Name', // _('Name')
