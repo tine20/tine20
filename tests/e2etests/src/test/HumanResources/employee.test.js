@@ -151,6 +151,9 @@ describe('employee', () => {
                 let freetimeEditDialog;
                 test('open dialog', async() => {
                     freetimeEditDialog = await lib.getEditDialog('Krankheitstage hinzufügen', employeeEditDialog);
+                    await freetimeEditDialog.waitForTimeout(50);
+                    await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div').textContent === 'Übertrage Freizeitanspruch...');
+                    await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading div'));
                     await expect(freetimeEditDialog).toFill('textarea[name=description]', testString);
                 });
 
