@@ -8,5 +8,8 @@ send-pipeline-status:
     - if: $SEND_PIPELINE_STATUS == "false"
       when: never
     - if: $SEND_PIPELINE_STATUS == "true"
+      when: on_failure
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /send-pipeline-status/
+      when: on_failure
     - if: $CI_PIPELINE_SOURCE == "schedule" && $SEND_PIPELINE_STATUS_SCHEDULE != "false"
+      when: on_failure
