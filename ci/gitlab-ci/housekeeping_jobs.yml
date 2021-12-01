@@ -1,4 +1,4 @@
-housekeeping_uninterruptible:
+housekeeping-uninterruptible:
   variables:
     KUBERNETES_CPU_REQUEST: 10m
     KUBERNETES_MEMORY_REQUEST: 100Mi
@@ -21,13 +21,11 @@ housekeeping_uninterruptible:
       echo "    - All jobs in the pipeline are set as interruptible.";
       echo "    - Any uninterruptible jobs have not started yet.";
   rules:
-    - if: $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
-      when: never
-    - when: on_success
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 # ============ stage: housekeeping ===========================
 
-docker_populate_cache:
+docker-populate-cache:
   extends: .abstract_jobs.docker
   stage: housekeeping
   script:
@@ -42,6 +40,6 @@ docker_populate_cache:
   allow_failure: true # a failure is a problem, but the pipeline should not fail
   interruptible: false
   rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
-    - when: on_success
+    # do not push cache if tests failed
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $RUN_NO_TESTS != "true"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_NO_TESTS != "true"

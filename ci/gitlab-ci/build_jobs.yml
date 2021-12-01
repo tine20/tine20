@@ -6,19 +6,6 @@
 # Gitlab currently dose not support needs in the same stage.
 # Therefore we need multiple build stages.
 
-docker_build_base:
-  extends: .abstract_jobs.docker
-  stage: build0
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - apk add git
-    - !reference [.lib, script]
-    - git_repo_clone
-    - docker_build_image base $(docker_image_hash base)
-  timeout: 60m
-  interruptible: true
-
 # docker build source or dependecy image
 docker_build_source:
   extends: .abstract_jobs.docker
@@ -29,10 +16,12 @@ docker_build_source:
     - apk add git
     - !reference [.lib, script]
     - git_repo_clone
+    - docker_build_image base $(docker_image_hash base)
     - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - docker_build_image dependency $(docker_image_hash dependency)
     - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)";
     - |
+      echo "${REUSE_IMAGES}"
       if [ "${REUSE_IMAGES}" == true ]; then
         docker_build_image test-dependency $(docker_image_hash test-dependency)
         docker_registry_use_hash_image_as_commit_image test-dependency test-source $(docker_image_hash test-dependency)
@@ -44,27 +33,86 @@ docker_build_source:
   timeout: 60m
   interruptible: true
   rules:
+    - if: $DOCKER_BUILD_SOURCE == "true"
+    # todo find a better solution
     # do not reuse image wenn building build image
-    - if: &TESTS_NEEDING_BUILT_IMAGE $RUN_ALL_TESTS == "true" || $PHP_UNIT_ALL_TESTS_BUILT == "true" || $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true" || $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "true" || $TEST_WITH_HEALTH_CHECK == "true"
+    # from php-unit-all-tests-built:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
       variables:
         REUSE_IMAGES: "false"
-      when: on_success
-    # do not reuse image wenn building build image
-    - if: &DEPLOYS_NEEDING_BUILT_IMAGE $PUSH_BUILT_IMAGE_TO_GITLAB == "true" || $PUSH_TO_DOCKERHUB == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
       variables:
         REUSE_IMAGES: "false"
-      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
+      variables:
+        REUSE_IMAGES: "false"
+    # from php-unit-nogitlabci-tests-built:
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_MERGE_REQUEST == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-nogitlabci-tests-built/
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_SCHEDULE != "false"
+      variables:
+        REUSE_IMAGES: "false"
+    # from php-unit-all-tests-ldap-built:
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
+      variables:
+        REUSE_IMAGES: "false"
+    # do not reuse image wenn building build image
+    # from deploy-built-image-to-gitlab:
+    - if: $DEPLOY_BUILD_IMAGE_TO_GITLAB == "true"
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab/
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_SCHEDULE != "false"
+      variables:
+        REUSE_IMAGES: "false"
+    # from deploy-images-to-dockerhub:
+    - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
+      variables:
+        REUSE_IMAGES: "false"
     # do not reuse image wenn building dev image
-    - if: &DEPLOYS_NEEDING_DEV_IMAGE $PUSH_DEV_IMAGE_TO_GITLAB == "true" || $PUSH_TO_DOCKERHUB == "true"
+    # from deploy-dev-image-to-gitlab:
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
       variables:
         REUSE_IMAGES: "false"
-      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
+      variables:
+        REUSE_IMAGES: "false"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_SCHEDULE != "false"
+      variables:
+        REUSE_IMAGES: "false"
+    # from deploy-images-to-dockerhub:
+    - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
+      variables:
+        REUSE_IMAGES: "false"
     # do not reuse image for tag pipelines
     - if: $CI_COMMIT_TAG
       variables:
         REUSE_IMAGES: "false"
-      when: on_success
-    - when: on_success
+    # 
+    # run for any merge request or schedule
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 docker_build_built:
   extends: .abstract_jobs.docker
@@ -76,13 +124,31 @@ docker_build_built:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
   rules:
-    - if: *TESTS_NEEDING_BUILT_IMAGE
-      when: on_success
-    - if: *DEPLOYS_NEEDING_BUILT_IMAGE
-      when: on_success
+    - if: $DOCKER_BUILD_BUILT == "false"
+      when: never
+    # todo: use !ref when our gitlab suppored it
     - if: $CI_COMMIT_TAG
-      when: on_success
-    - when: never
+    # from php-unit-all-tests-built:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
+    # from php-unit-nogitlabci-tests-built:
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-nogitlabci-tests-built/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_SCHEDULE != "false"
+    # from php-unit-all-tests-ldap-built:
+    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
+    # from deploy-built-image-to-gitlab:
+    - if: $DEPLOY_BUILD_IMAGE_TO_GITLAB == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_SCHEDULE != "false"
+    # from deploy-images-to-dockerhub:
+    - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
   timeout: 120m
   interruptible: true
 
@@ -94,10 +160,15 @@ docker_build_dev:
     - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh dev
   rules:
-    - if: *DEPLOYS_NEEDING_DEV_IMAGE
-      when: on_success
-    - when: never
-  timeout: 60m # time run: 28m
+    - if: $DOCKER_BUILD_DEV == "false"
+      when: never
+    # from deploy-dev-image-to-gitlab:
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_SCHEDULE != "false"
+    # from deploy-images-to-dockerhub:
+    - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
+  timeout: 60m
   interruptible: true
 
 docker_build_packages:

@@ -3,41 +3,41 @@
 # pushes built-commit as built to our gitlab registry.
 # They can be accessed essayer.
 # They are pushed on every change of a major branch.
-"docker push built image to gitlab":
+deploy-built-image-to-gitlab:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_gitlab.sh built
   rules:
-    - if: $RUN_NO_TESTS == "true"
+    - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB == "false"
       when: never
-    - if: $PUSH_BUILT_IMAGE_TO_GITLAB == "true"
-      when: on_success
-    - when: never
+    - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_SCHEDULE != "false"
   timeout: 20m
   interruptible: false
 
 # pushes dev-commit as dev to our gitlab registry.
 # They can be accessed essayer.
 # They are pushed on every change of a major branch.
-"docker push dev image to gitlab":
+deploy-dev-image-to-gitlab":
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_gitlab.sh dev
   rules:
-    - if: $RUN_NO_TESTS == "true"
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "false"
       when: never
-    - if: $PUSH_DEV_IMAGE_TO_GITLAB == "true"
-      when: on_success
-    - when: never
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_DEV_IMAGE_TO_GITLAB_SCHEDULE != "false"
   timeout: 20m
   interruptible: false
 
 # pushing built-commit as tine20/tine20 to dockerhub.
 # The tag is also overwritten and set to $DOCKERHUB_TAG
 # This job should only be triggered by a schedule or a manual pipeline trigger
-"docker push built and dev image to dockerhub":
+deploy-images-to-dockerhub:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
@@ -50,8 +50,6 @@
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
-    - if: $PUSH_TO_DOCKERHUB == "true"
-      when: on_success
-    - when: never
+    - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
   timeout: 20m
   interruptible: false
