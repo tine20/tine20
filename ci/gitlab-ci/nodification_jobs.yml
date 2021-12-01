@@ -1,9 +1,12 @@
-"send_pipeline_status":
+send-pipeline-status:
   extends: .abstract_jobs.docker
   stage: notify
   script:
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_pipeline_status.sh
+    - !reference [.lib, script]
+    - pipeline_status_send
   rules:
-    - if: $NOTIFY_ON_FAILURE == "true"
-      when: on_failure
-    - when: never
+    - if: $SEND_PIPELINE_STATUS == "false"
+      when: never
+    - if: $SEND_PIPELINE_STATUS == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /send-pipeline-status/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $SEND_PIPELINE_STATUS_SCHEDULE != "false"
