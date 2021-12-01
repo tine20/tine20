@@ -110,7 +110,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         /**
          *  store the apply to all status og every batch uploads
          */
-        applyToAll: [],
+        applyBatchAction: [],
 
         /**
          *  total Upload byte of all unfinished uploads
@@ -188,7 +188,6 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
             });
 
             channel.on("error", async (result) => {
-
             });
         }
     },
@@ -219,17 +218,19 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
     async updateTaskByArgs(args) {
         try {
             const uploadId = args.uploadId;
-            const hasTask = await this.mainChannel.has(this.tasks[uploadId]._id);
+            const hasTask = this.tasks[uploadId]._id ? await this.mainChannel.has(this.tasks[uploadId]._id) : false;
             
-            if (hasTask) {
-                args.nodeData.last_upload_time = new Date().toJSON();
-                let diff = {args: args};
-                diff.status = diff.args.nodeData.status;
-                
-                await this.mainChannel.storage.update(this.tasks[uploadId]._id, diff);
-                const task = await this.mainChannel.get(this.tasks[uploadId]._id);
-                return task[0];
+            if (!hasTask) {
+                return null;
             }
+            
+            args.nodeData.last_upload_time = new Date().toJSON();
+            let diff = {args: args};
+            diff.status = diff.args.nodeData.status;
+            
+            await this.mainChannel.storage.update(this.tasks[uploadId]._id, diff);
+            const task = await this.mainChannel.get(this.tasks[uploadId]._id);
+            return task[0];
         } catch (e) {
             return null;
         }
@@ -396,6 +397,9 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * @param id
      */
     unregisterUpload(id) {
+        if (this.uploads[id].status === 'uploading') {
+            this.uploads[id].setPaused(true);
+        }
         delete this.uploads[id];
     },
 
@@ -475,7 +479,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * set overwrite flog for the tasks that need to be overwritten
      */
     async overwriteBatchUploads(batchID) {
-        this.applyToAll[batchID] = 'replace';
+        this.applyBatchAction[batchID] = 'replace';
 
         let allTasks = await this.mainChannel.getAllTasks();
         let tasks = _.filter(allTasks, (task) => {
@@ -498,7 +502,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * TODO: do we have better solution ?
      */
     async stopBatchUploads(batchID) {
-        this.applyToAll[batchID] = 'stop';
+        this.applyBatchAction[batchID] = 'stop';
 
         // clean up WorkerChannels
         await _.reduce(this.workerChannels, (prev, channel) => {
@@ -515,9 +519,9 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         const promises = [];
         
         _.each(allTasks, (task) => {
-            if (task.args.batchID === batchID && task.status !== 'complete') {
+            if (task.args.batchID === batchID && task.args.nodeData.status !== 'complete') {
                 task.args.nodeData.status = 'cancelled';
-        
+    
                 window.postal.publish({
                     channel: "recordchange",
                     topic: 'Filemanager.Node.update',
@@ -541,20 +545,35 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * reset all tasks in main channel and worker channels
      */
     async resetUploadChannels() {
-        await this.mainChannel.stop();
-        await this.mainChannel.clear();
-        
+        // clean up WorkerChannels
         await _.reduce(this.workerChannels, (prev, channel) => {
             return prev.then(async () => {
-                await channel.stop();
+                await channel.forceStop();
                 await channel.clear();
                 await channel.start();
                 return Promise.resolve();
             })
         }, Promise.resolve());
+    
+        let allTasks = await this.mainChannel.getAllTasks();
         
-        this.uploads = {};
+        _.each(_.union(_.map(allTasks, 'args.batchID')), (batchID) => {
+            this.applyBatchAction[batchID] = 'stop';
+        })
+        
+
+        let tempNodes = _.filter(allTasks, (task) => {
+            Tine.Tinebase.uploadManager.removeVirtualNode(task.args.uploadId);
+            return task.args.existNode === null && task.args.nodeData.status === 'uploading';
+        });
+        
+        const tempNodeIds = _.map(tempNodes, 'args.nodeData.path');
+        if (tempNodeIds.length > 0) {
+            await Tine.Filemanager.deleteNodes(tempNodeIds);
+        }
+    
         this.adding = false;
+        await this.mainChannel.clear();
         await this.checkBatchUploadComplete();
     },
     
