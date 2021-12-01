@@ -54,7 +54,6 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
         xtype:'icontextfield',
         anchor: '100%',
         labelSeparator: '',
-        columnWidth: .333
     },
     
     layout: 'hfit',
@@ -81,9 +80,11 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
                 }
             };
             // autoWidth
-            const tcw = _.sum(_.map(initialRowConfig, 'columnWidth')) || 0;
-            const nw = _.filter(initialRowConfig, c => { return !c.columnWidth });
-            nw.forEach(c => {c.columnWidth = (1-tcw)/nw.length});
+            if (! this.formDefaults.columnWidth) {
+                const tcw = _.sum(_.map(initialRowConfig, 'columnWidth')) || 0;
+                const nw = _.filter(initialRowConfig, c => { return !c.columnWidth });
+                nw.forEach(c => {c.columnWidth = (1-tcw)/nw.length});
+            }
 
             // each row consits n column objects
             for (var n=0,m=initialRowConfig.length; n<m; n++) {
