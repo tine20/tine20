@@ -171,7 +171,7 @@ php-unit-servertests-source:
 .php-unit-all-tests-built:
   extends: .php-unit-all-tests-source
   variables:
-    ARG_IMAGE: tests-built
+    ARG_IMAGE: test-built
   needs:
     - docker_build_built
   rules:
