@@ -17,7 +17,7 @@ describe('MainScreen', () => {
 
 });
 
-describe('employee', () => {
+describe.skip('employee', () => {
     let newPage;
     test('open EditDialog', async () => {
         await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Mitarbeiter'});
@@ -98,7 +98,7 @@ describe('employee', () => {
     })
 });
 
-describe('employee accounts', () => {
+describe.skip('employee accounts', () => {
     let newPage;
     test('mainpage', async () => {
         await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Personalkonten'});
