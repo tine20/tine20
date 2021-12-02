@@ -1500,6 +1500,7 @@ class Tinebase_FileSystem implements
                 }
 
                 if (null === $node->acl_node || $newParent->acl_node !== $node->acl_node) {
+                    $oldAcl = $node->acl_node;
                     $node->acl_node = $newParent->acl_node;
                     if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
                         if (null === $node->acl_node) {
@@ -1512,7 +1513,7 @@ class Tinebase_FileSystem implements
                                     $node->acl_node = $node->getId();
                             }
                         }
-                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node, true, true);
+                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $node->acl_node, $oldAcl, true, true);
                     }
                 }
                 if ($node->pin_protected_node === $oldParent->pin_protected_node
