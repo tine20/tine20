@@ -280,7 +280,7 @@ php-unit-nogitlabci-tests-built-parallel:
 .php-unit-all-tests-ldap-built:
   extends: .abstract_jobs.php_unit_ldap
   variables:
-    ARG_IMAGE: tests-built
+    ARG_IMAGE: test-built
   stage: test
   needs:
     - docker_build_built
