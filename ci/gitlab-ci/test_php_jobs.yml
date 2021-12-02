@@ -91,16 +91,6 @@ php-unit-all-tests-source-matrix:
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
-    - if: $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE == "never"
-      when: never
-    - if: $RUN_ALL_TESTS == "true"
-      when: on_success
-    - if: $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE == "true"
-      when: on_success
-    - when: never
-  rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE  == "false"
       when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE  == "true"
