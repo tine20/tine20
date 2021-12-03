@@ -235,11 +235,6 @@ class Tinebase_Frontend_CliTest extends TestCase
             self::markTestSkipped('FIXME: this currently fails with enabled previews - might be some locking issue in the test setup');
         }
 
-        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
-                Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
-            $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend (full test suite run) task Tinebase_User/Group::syncUsers/Groups did not run successfully');
-        }
-
         Tinebase_Lock::clearLocks();
 
         $scheduler = Tinebase_Core::getScheduler();
