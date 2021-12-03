@@ -67,6 +67,13 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertNotSame($boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE},
             $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
         $this->assertSame('local stuff', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
+
+        $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0] =
+            $boilerplate = Sales_BoilerplateControllerTest::getBoilerplate()->toArray(false);
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertSame('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertSame($boilerplate[Sales_Model_Boilerplate::FLD_BOILERPLATE],
+            $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
     }
 
     public function testOfferDocumentWithoutRecipient()

@@ -930,6 +930,13 @@ abstract class Tinebase_Controller_Record_Abstract
         $this->_inspectDenormalization($_record);
     }
 
+    protected function _denormalizedDiff(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_otherRecord)
+    {
+        return $_record->diff($_otherRecord,
+            ['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by',
+                'deleted_time', 'is_deleted', TMCC::FLD_LOCALLY_CHANGED]);
+    }
+
     /**
      * @param Tinebase_Record_Interface $newRecord
      * @param Tinebase_Record_Interface|null $currentRecord
@@ -960,10 +967,13 @@ abstract class Tinebase_Controller_Record_Abstract
                             $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
                         } else {
                             $newRecord->{$property}->{TMCC::FLD_ORIGINAL_ID} = $currentRecord->{$property}->{TMCC::FLD_ORIGINAL_ID};
-                            if (!$currentRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} && !$newRecord->{$property}->diff($currentRecord->{$property}, ['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by', 'deleted_time', 'is_deleted'])->isEmpty()) {
-                                $newRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} = 1;
-                            } else {
-                                $newRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} = $currentRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED};
+                            if ($newRecord->{$property}->has(TMCC::FLD_LOCALLY_CHANGED)) {
+                                if (!$currentRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} &&
+                                    !$this->_denormalizedDiff($newRecord->{$property}, $currentRecord->{$property})->isEmpty()) {
+                                    $newRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} = 1;
+                                } else {
+                                    $newRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} = $currentRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED};
+                                }
                             }
                         }
                     }
@@ -986,10 +996,12 @@ abstract class Tinebase_Controller_Record_Abstract
                             $nr = $newRecord->{$property}->getById($diff->getId());
                             $cr = $currentRecord->{$property}->getById($diff->getId());
                             $nr->{TMCC::FLD_ORIGINAL_ID} = $cr->{TMCC::FLD_ORIGINAL_ID};
-                            if (!$cr->{TMCC::FLD_LOCALLY_CHANGED} && !$nr->diff($cr, ['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by', 'deleted_time', 'is_deleted'])->isEmpty()) {
-                                $nr->{TMCC::FLD_LOCALLY_CHANGED} = 1;
-                            } else {
-                                $nr->{TMCC::FLD_LOCALLY_CHANGED} = $cr->{TMCC::FLD_LOCALLY_CHANGED};
+                            if ($newRecord->{$property}->has(TMCC::FLD_LOCALLY_CHANGED)) {
+                                if (!$cr->{TMCC::FLD_LOCALLY_CHANGED} && !$this->_denormalizedDiff($nr, $cr)->isEmpty()) {
+                                    $nr->{TMCC::FLD_LOCALLY_CHANGED} = 1;
+                                } else {
+                                    $nr->{TMCC::FLD_LOCALLY_CHANGED} = $cr->{TMCC::FLD_LOCALLY_CHANGED};
+                                }
                             }
                         }
                     }
@@ -1006,8 +1018,24 @@ abstract class Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_UnexpectedValue('is not instance of ' .
                 $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
         }
-        // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
+        $originalRecord = null;
+        if ($record->getId()) {
+            $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
+            try {
+                $originalRecord = $ctrl->get($record->getId());
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $record->setId(null);
+            }
+        }
         $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
+        // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
+        if ((isset($record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) &&
+                $record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) && (!$record->getId() ||
+                ($originalRecord && !$this->_denormalizedDiff($record, $originalRecord)->isEmpty()))) {
+            $record->{TMCC::FLD_LOCALLY_CHANGED} = 1;
+        } else {
+            $record->{TMCC::FLD_LOCALLY_CHANGED} = 0;
+        }
         $record->setId(null);
     }
 

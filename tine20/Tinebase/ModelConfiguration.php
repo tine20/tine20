@@ -97,6 +97,7 @@
  * @property array      $keyfieldFields
  * @property array      $jsonExpander
  * @property array      $denormalizedFields
+ * @property array      $denormalizationConfig
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
