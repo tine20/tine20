@@ -346,9 +346,13 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             $this->_uninstallAllApplications();
         }
 
+        $tempPath = Tinebase_Core::getTempDir() . '/2018-08-27-17-04-11';
+        $this->assertTrue(is_dir($tempPath) || mkdir($tempPath));
+        $this->assertTrue(copy(dirname(__DIR__) . '/files/2018-08-27-17-04-11/tine20_mysql.sql.bz2', $tempPath . '/tine20_mysql.sql.bz2'));
+
         $oldTinebaseId = '624f5f466ad6306dac31ad81e06cc6ca25090bb3';
         $options = array(
-            'backupDir' => dirname(__DIR__) . '/files/2018-08-27-17-04-11',
+            'backupDir' => $tempPath,
             'db' => 1,
         );
         $result = $this->_uit->getInstance()->installFromDump($options);
