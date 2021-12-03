@@ -542,4 +542,39 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         fclose($stream);
         return 0;
     }
+
+    /**
+     *    -d (dry run)
+     *    e.g. php tine20.php --method=Addressbook.clearUserContactsWithoutUser -d
+     * @param $opts
+     * @return int
+     */
+    public function clearUserContactsWithoutUser($opts) {
+        $count = 0;
+        $backend = new Addressbook_Backend_Sql();
+
+        if ($opts->d) {
+            echo "Dry-run \n";;
+        }
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class,
+            [['field' => 'type', 'operator' => 'equals', 'value' => 'user']]);
+
+        $userContacts = Addressbook_Controller_Contact::getInstance()->search($filter);
+        foreach ($userContacts as $userContact) {
+            try {
+                Admin_Controller_User::getInstance()->get($userContact['account_id']);
+            }catch(Tinebase_Exception_NotFound $e) {
+                if ($opts->d) {
+                    echo "will remove contact: " . $userContact['n_fileas'] . " id: " . $userContact->getId() . "\n";
+                    continue;
+                }
+                $backend->delete($userContact->getId());
+                echo "remove contact: " . $userContact['n_fileas'] . "\n";
+                $count++;
+            }
+        }
+        echo "remove: " . $count . " contacts \n";
+        return 0;
+    }
 }
