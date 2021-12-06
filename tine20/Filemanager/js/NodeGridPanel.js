@@ -348,7 +348,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return false;
         }
         
-        const success = Tine.Filemanager.nodeBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey)) !== false;
+        const success = Tine.Filemanager.nodeBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey), true) !== false;
         if(success) {
             this.grid.getStore().remove(data.nodes);
         }

@@ -87,7 +87,7 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                         }
 
                         if (params.method == 'Filemanager.copyNodes' || params.method == 'Filemanager.moveNodes' ) {
-                            Tine.Filemanager.nodeBackend.copyNodes(null, null, null, params);
+                            Tine.Filemanager.nodeBackend.copyNodes(null, null, null, true, params);
                         } else if (params.method == 'Filemanager.createNodes' ) {
                             Tine.Filemanager.nodeBackend.createNodes(params, uploadKey, exception.addToGridStore);
                         }
