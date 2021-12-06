@@ -28,7 +28,7 @@ variables:
   PHPUNIT_FILTER: ${CUSTOMAPP_DIR}_
   # TODO activate when it's working for customapps
   #      see #3835[gitlab][ci] CI customapps e2etest ausführen lassen
-  $JS_E2E_TESTS_SOURCE: "false"
+  JS_E2E_TESTS_SOURCE: "false"
 
 workflow:
   rules:
