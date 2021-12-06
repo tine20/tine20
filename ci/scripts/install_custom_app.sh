@@ -6,7 +6,6 @@ echo $0 installing ...
 if [ "$CI_IS_CUSTOMAPP" = "true" ]; then
 	name=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
 
-  TINE20ROOT=/usr/share
 	cd ${TINE20ROOT}/tine20
 	echo $0: composer config "repositories.ci" git "${CI_REPOSITORY_URL}";
 	composer config "repositories.ci" git "${CI_REPOSITORY_URL}";
