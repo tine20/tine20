@@ -969,6 +969,25 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
     }
 
+    protected function treatMFA(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $oldUser = null)
+    {
+        if ($_user->mfa_configs) {
+            if (!$_user->mfa_configs->isValid()) {
+                throw new Tinebase_Exception_Backend('mfa configs are not valid: ' .
+                    print_r($_user->mfa_configs->getValidationErrors(), true));
+            }
+            if ($oldUser && $oldUser->mfa_configs) {
+                /** @var Tinebase_Model_MFA_UserConfig $userCfg */
+                foreach ($oldUser->mfa_configs as $userCfg) {
+                    $userCfg->updateUserOldRecordCallback($_user, $oldUser);
+                }
+            }
+            foreach ($_user->mfa_configs as $userCfg) {
+                $userCfg->updateUserNewRecordCallback($_user, $oldUser);
+            }
+        }
+    }
+
     /**
      * updates an user
      * 
@@ -993,21 +1012,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->visibility = 'hidden';
             $_user->contact_id = null;
         }
-        if ($_user->mfa_configs) {
-            if (!$_user->mfa_configs->isValid()) {
-                throw new Tinebase_Exception_Backend('mfa configs are not valid: ' .
-                    print_r($_user->mfa_configs->getValidationErrors(), true));
-            }
-            if ($oldUser->mfa_configs) {
-                /** @var Tinebase_Model_MFA_UserConfig $userCfg */
-                foreach ($oldUser->mfa_configs as $userCfg) {
-                    $userCfg->updateUserOldRecordCallback($_user, $oldUser);
-                }
-            }
-            foreach ($_user->mfa_configs as $userCfg) {
-                $userCfg->updateUserNewRecordCallback($_user, $oldUser);
-            }
-        }
+        $this->treatMFA($_user, $oldUser);
         $accountData = $this->_recordToRawData($_user);
         // don't update id
         unset($accountData['id']);
@@ -1125,6 +1130,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->visibility = Tinebase_Model_FullUser::VISIBILITY_HIDDEN;
             $_user->contact_id = null;
         }
+        $this->treatMFA($_user);
         
         $accountData = $this->_recordToRawData($_user);
         // persist status for new users!
