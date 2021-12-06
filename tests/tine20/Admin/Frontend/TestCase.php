@@ -4,7 +4,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -27,7 +27,7 @@ abstract class Admin_Frontend_TestCase extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
         
         $this->_json = new Admin_Frontend_Json();
@@ -39,7 +39,7 @@ abstract class Admin_Frontend_TestCase extends TestCase
     }
     
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
         Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false);
     }

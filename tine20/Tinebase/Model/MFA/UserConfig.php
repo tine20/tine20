@@ -114,7 +114,7 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
         }
     }
 
-    public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser)
+    public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, ?Tinebase_Model_FullUser $oldUser)
     {
         if (method_exists($this->{self::FLD_CONFIG}, __FUNCTION__)) {
             $this->{self::FLD_CONFIG}->updateUserNewRecordCallback($newUser, $oldUser, $this);
