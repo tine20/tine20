@@ -159,6 +159,36 @@ class Tinebase_Auth_MFATest extends TestCase
             'validate didn\'t succeed');
     }
 
+    public function testYubicoAtCreateUser()
+    {
+        $userTest = new Admin_Frontend_Json_UserTest();
+        $ref = new ReflectionProperty(Admin_Frontend_Json_UserTest::class, '_json');
+        $ref->setAccessible(true);
+        $ref->setValue($userTest, new Admin_Frontend_Json());
+        $userData = $userTest->_getUserArrayWithPw();
+        $userData['mfa_configs'] = [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'yubicoOTPunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_YubicoOTPUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                [
+                    Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_PUBLIC_ID => 'vvccccdhdtnh',
+                    Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_PRIVAT_ID => '1449e1c9cd4c',
+                    Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_AES_KEY => '9a9798f480da0193ab7be4e8abc952c2',
+                ],
+        ]];
+
+        $userData = (new Admin_Frontend_Json())->saveUser($userData);
+        $this->assertNotEmpty($userData['mfa_configs'][0][Tinebase_Model_MFA_UserConfig::FLD_CONFIG]
+            [Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_CC_ID]);
+        $this->assertSame('vvccccdhdtnh', $userData['mfa_configs'][0][Tinebase_Model_MFA_UserConfig::FLD_CONFIG]
+            [Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_PUBLIC_ID]);
+        $this->assertSame($userData['accountId'], $userData['mfa_configs'][0][Tinebase_Model_MFA_UserConfig::FLD_CONFIG]
+            [Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_ACCOUNT_ID]);
+        $this->assertCount(3, $userData['mfa_configs'][0][Tinebase_Model_MFA_UserConfig::FLD_CONFIG]);
+    }
+
     public function testYubicoOTP()
     {
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
