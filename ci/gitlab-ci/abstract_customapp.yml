@@ -47,6 +47,7 @@ docker_build_source:
     RUN_NO_TESTS: "true"
     AUTO_MERGE: "never"
     IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
+    DOCKER_BUILD_SOURCE: "true"
 
 docker_build_built:
   stage: build
