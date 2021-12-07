@@ -1191,7 +1191,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     if (result?.data) {
                         window.postal.publish({
                             channel: "recordchange",
-                            topic: 'Filemanager.Node.update',
+                            topic: 'Filemanager.Node.delete',
+                            data: localRecord.data
+                        });
+    
+                        window.postal.publish({
+                            channel: "recordchange",
+                            topic: (result.data.path === 'tempFile' ? 'Tinebase.TempFile' : 'Filemanager.Node') + '.create',
                             data: result.data
                         });
                     }
