@@ -286,6 +286,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating definition: ' . $definition->name);
             $definition->setId($existing->getId());
             $definition->is_deleted = $existing->is_deleted;
+            $definition->container_id = $existing->container_id;
             // also update deleted
             $result = $this->update($definition, true, true);
             
@@ -374,20 +375,25 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         }
     }
 
+    protected static $defaultContainer = null;
+
+    public static function resetDefaultContainer()
+    {
+        static::$defaultContainer = null;
+    }
+
     public static function getDefaultImportExportContainer(): Tinebase_Model_Container
     {
-        static $container = null;
-
-        if (null === $container) {
+        if (null === static::$defaultContainer) {
             if (!($containerId = Tinebase_Config::getInstance()->{Tinebase_Config::IMPORT_EXPORT_DEFAULT_CONTAINER})) {
-                $container = self::createDefaultImportExportContainer();
-                Tinebase_Config::getInstance()->{Tinebase_Config::IMPORT_EXPORT_DEFAULT_CONTAINER} = $container->getId();
+                static::$defaultContainer = self::createDefaultImportExportContainer();
+                Tinebase_Config::getInstance()->{Tinebase_Config::IMPORT_EXPORT_DEFAULT_CONTAINER} = static::$defaultContainer->getId();
             } else {
-                $container = Tinebase_Container::getInstance()->getContainerById($containerId);
+                static::$defaultContainer = Tinebase_Container::getInstance()->getContainerById($containerId);
             }
         }
 
-        return $container;
+        return static::$defaultContainer;
     }
 
     protected static function createDefaultImportExportContainer(): Tinebase_Model_Container
