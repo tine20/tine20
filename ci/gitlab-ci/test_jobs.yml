@@ -170,3 +170,27 @@ test-with-health-check:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /test-with-health-check/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $TEST_WITH_HEALTH_CHECK_SCHEDULE != "false"
     - if: $CI_COMMIT_TAG
+
+test-install-demodata:
+  extends: .abstract_jobs.php_unit
+  variables:
+    ARG_IMAGE: test-source
+  stage: test
+  timeout: 20m
+  script:
+    - |
+      if [ -z "$TINE_DEMODATASET" ]; then
+        su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}"
+      else
+        su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}" -- demodata=set set=$TINE_DEMODATASET
+      fi;
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $TEST_INSTALL_DEMODATA == "false"
+      when: never
+    - if: $TEST_INSTALL_DEMODATA == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $TEST_INSTALL_DEMODATA_MERGE_REQUEST == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /test-install-demodata/
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $TEST_INSTALL_DEMODATA_SCHEDULE != "false"
+    - if: $CI_COMMIT_TAG
