@@ -179,6 +179,7 @@ test-install-demodata:
   stage: test
   timeout: 20m
   script:
+    - test -f ${TINE20ROOT}/scripts/postInstallGitlab.sh && ${TINE20ROOT}/scripts/postInstallGitlab.sh
     - |
       if [ -z "$TINE_DEMODATASET" ]; then
         su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}"
