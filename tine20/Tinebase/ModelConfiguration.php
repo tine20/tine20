@@ -1319,7 +1319,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                         $reflect  = new ReflectionClass($if);
                         $this->_filters[$fieldKey][] = $reflect->newInstanceArgs($val);
                     } else {
-                        $this->_filters[$fieldKey][] = $if && !is_int($if) ? new $if($val) : new $val();
+                        if ($if && !is_int($if)) {
+                            $this->_filters[$fieldKey][] = new $if($val);
+                        } elseif (class_exists($val)) {
+                            $this->_filters[$fieldKey][] = new $val();
+                        }
                     }
                 }
             } elseif (isset($this->_inputFilterDefaultMapping[$fieldDef[self::TYPE]])) {
@@ -1671,10 +1675,16 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if (!isset($fieldDef[self::CONFIG][self::RECORD_CLASS_NAME])) {
                     if (! isset($fieldDef[self::CONFIG]['appName'])) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__
-                            . '::' . __LINE__ . ' appName missing in config for field ' . print_r($fieldDef, true));
+                            . '::' . __LINE__ . ' appName missing in config for field ' . $fieldKey . ' '
+                            . print_r($fieldDef, true));
                         break;
                     }
                     $fieldDef[self::CONFIG][self::RECORD_CLASS_NAME] = $this->_getPhpClassName($fieldDef[self::CONFIG]);
+                    if (!class_exists($fieldDef[self::CONFIG][self::RECORD_CLASS_NAME])) {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' record class does not exists '
+                            . $fieldKey . ' ' . print_r($fieldDef, true));
+                        break;
+                    }
                 }
                 $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
                 $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
