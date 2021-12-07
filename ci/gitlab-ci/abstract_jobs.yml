@@ -59,7 +59,11 @@
       tine20_install;
       echo "%%%% tine install ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
       echo "%%%% tine demodata ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
-      su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}"
+      if [ -z "$TINE_DEMODATASET" ]; then
+        su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}"
+      else
+        su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}" -- demodata=set set=$TINE_DEMODATASET
+      fi;
       echo "%%%% tine demodata ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
       touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID;
       echo "%%%% tine supervisord start" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
