@@ -39,13 +39,13 @@ class Filemanager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * give all folder from the root directory(default /shared)
      *
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @param string $parentNodels
      * @param array $paths
      * @return array
      * @throws Tinebase_Exception_NotFound
      */
-    public function csvExportFolderHelper($opts, $parentNode = '/shared', $paths = array())
+    public function csvExportFolderHelper(Zend_Console_Getopt $opts, $parentNode = '/shared', $paths = array())
     {
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Filemanager_Model_NodeFilter', [
             ['field' => 'path', 'operator' => 'equals', 'value' => $parentNode],
