@@ -218,7 +218,6 @@ Tine.Filemanager.nodeBackendMixin = {
             
             options.beforeSuccess = function(response) {
                 const folder = this.recordReader(response);
-                folder.data.path = name;
                 this.postMessage('create', folder.data);
                 return [folder];
             };
