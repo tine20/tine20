@@ -403,6 +403,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         Tinebase_Core::unsetUser();
         Tinebase_Cache_PerRequest::getInstance()->reset();
         Admin_Config::unsetInstance();
+        Tinebase_ImportExportDefinition::resetDefaultContainer();
     }
     
     /**
@@ -417,6 +418,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             throw new Setup_Exception('could not run test, Setup_Controller init failed');
         }
 
+        Tinebase_ImportExportDefinition::resetDefaultContainer();
         Tinebase_Core::unsetTinebaseId();
         Tinebase_Group::unsetInstance();
         Tinebase_Cache_PerRequest::getInstance()->reset();
