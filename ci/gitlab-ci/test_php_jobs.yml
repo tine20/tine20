@@ -139,6 +139,7 @@ php-unit-setup-tests-source:
   variables:
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
   timeout: 90m
+  allow_failure: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
