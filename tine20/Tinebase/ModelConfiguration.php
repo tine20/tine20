@@ -298,6 +298,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     protected $_denormalizationOf = null;
 
+    protected $_isMetadataModelFor = null;
+
     /**
      * If this is true, multiple edit of records of this model is possible.
      *
@@ -806,7 +808,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms',
         'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
-        'group', 'multipleEdit', 'multipleEditRequiredRight', 'copyNoAppendTitle', 'denormalizationOf'
+        'group', 'multipleEdit', 'multipleEditRequiredRight', 'copyNoAppendTitle', 'denormalizationOf', 'isMetadataModelFor'
     );
 
     /**

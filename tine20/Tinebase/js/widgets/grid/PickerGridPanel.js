@@ -85,6 +85,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     searchRecordClass: null,
 
+    isMetadataModelFor: null,
+    
     /**
      * search combo config
      * @cfg {} searchComboConfig
@@ -158,7 +160,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         this.searchComboConfig = this.searchComboConfig || {};
         this.searchComboConfig.additionalFilterSpec = this.additionalFilterSpec;
-
+        
         this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
         this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || i18n._('Record') : i18n._('Record'));
 
@@ -472,7 +474,13 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     getSearchCombo: function() {
         if (! this.searchCombo) {
-            var recordClass = (this.searchRecordClass !== null) ? this.searchRecordClass : this.recordClass,
+            if (this.isMetadataModelFor !== null) {
+                var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
+                    mappingRecordClass = mappingFieldDef.getRecordClass()
+                    this.searchRecordClass = mappingRecordClass;
+            }
+            
+            var recordClass = (this.searchRecordClass !== null) ? Tine.Tinebase.data.RecordMgr.get(this.searchRecordClass) : this.recordClass,
                 appName = recordClass.getMeta('appName');
                 //model = recordClass.getModel();
 
@@ -499,8 +507,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (! recordToAdd) {
            return;
         }
-
-        var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
+        
+        if (this.isMetadataModelFor !== null) {
+            var recordData = this.getRecordDefaults();
+            recordData[this.isMetadataModelFor] = recordToAdd;
+            var record = new this.recordClass(recordData);
+        } else {
+            var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
+        }
 
         // check if already in
         if (! this.store.getById(record.id)) {
