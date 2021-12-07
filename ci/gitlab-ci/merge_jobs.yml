@@ -20,6 +20,10 @@
     - git config merge.pofile.recursive "binary"
     - git remote add customers https://gitlab.metaways.net/tine20/tine20.git
     - cd ${CI_BUILDS_DIR}/merge/tine20
+  after_script:
+    # only trigger next merge if git working dir is clean, than the merge probably was successfull
+    - !reference [.lib, script]
+    - git status | grep "nothing to commit, working tree clean" && merge_trigger_next
     
 .abstract.merge_on_source_image:
   extends: .abstract.merge
