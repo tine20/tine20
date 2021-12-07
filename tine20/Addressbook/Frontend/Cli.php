@@ -456,7 +456,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
 
     /**
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * $opts -> container_id, fields and sprecialChar
      * e.x -- --method=Addressbook.removeSpecialChar container_id='1234' fields='n_given,n_family' specialChar='\\'
      * all Contacts with '\' in n_given and n_family remove '\'
@@ -464,7 +464,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function removeSpecialChar($opts)
+    public function removeSpecialChar(Zend_Console_Getopt $opts)
     {
         $args = $this->_parseArgs($opts);
         $filter = [];
@@ -500,12 +500,12 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * usage: method=Addressbook.importMailList csv=test.csv domain=secondarydomains
      *csv file = "listname","listEmailAdress"
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @return false
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function importMailList($opts)
+    public function importMailList(Zend_Console_Getopt $opts)
     {
         $args = $this->_parseArgs($opts);
         $csv = $args['csv'];
@@ -546,10 +546,10 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      *    -d (dry run)
      *    e.g. php tine20.php --method=Addressbook.clearUserContactsWithoutUser -d
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @return int
      */
-    public function clearUserContactsWithoutUser($opts) {
+    public function clearUserContactsWithoutUser(Zend_Console_Getopt $opts) {
         $count = 0;
         $backend = new Addressbook_Backend_Sql();
 
