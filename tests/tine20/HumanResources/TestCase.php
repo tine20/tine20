@@ -65,7 +65,7 @@ class HumanResources_TestCase extends TestCase
         // create employee & contract
         // @todo generalize?
         $this->employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
-        $this->employee->dfcom_id = '36118993923739652';
+        //$this->employee->dfcom_id = '36118993923739652';
 
         $contractController = HumanResources_Controller_Contract::getInstance();
         $employeeController = HumanResources_Controller_Employee::getInstance();
