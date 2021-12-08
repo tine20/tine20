@@ -565,6 +565,39 @@ class Sales_JsonTest extends TestCase
         $updatedAgainContractArray = $this->_instance->saveContract($updatedAgainContractArray);
         $this->assertEquals(500, count($updatedAgainContractArray['relations']));
     }
+
+    public function testApplicableBoilerplates()
+    {
+        $customer = $this->_instance->saveCustomer(array(
+            'name'      => Tinebase_Record_Abstract::generateUID(),
+        ));
+
+        $ctrl = Sales_Controller_Boilerplate::getInstance();
+
+        $boilerDefault = $ctrl->create(Sales_BoilerplateControllerTest::getBoilerplate());
+
+        $boilerDate = clone $boilerDefault;
+        $boilerDate->setId(null);
+        $boilerDate->{Sales_Model_Boilerplate::FLD_FROM} = Tinebase_DateTime::now()->addDay(1);
+        $boilerDate = $ctrl->create($boilerDate);
+
+        $boilerCustomer = clone $boilerDefault;
+        $boilerCustomer->setId(null);
+        $boilerCustomer->{Sales_Model_Boilerplate::FLD_CUSTOMER} = $customer['id'];
+        $boilerCustomer = $ctrl->create($boilerCustomer);
+
+        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($boilerDefault->getId(), $result['results'][0]['id']);
+
+        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class, null, $customer['id']);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($boilerCustomer->getId(), $result['results'][0]['id']);
+
+        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class, Tinebase_DateTime::now()->addDay(5));
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($boilerDate->getId(), $result['results'][0]['id']);
+    }
     
     /************ protected helper funcs *************/
 

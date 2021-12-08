@@ -1499,11 +1499,13 @@ class Tinebase_FileSystem implements
                     return false;
                 }
 
-                if (null === $node->acl_node || $newParent->acl_node !== $node->acl_node) {
+                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath);
+                $isPersonal = $pathRecord->isPersonalPath(Tinebase_Core::getUser());
+                if ($isPersonal || null === $node->acl_node || $newParent->acl_node !== $node->acl_node) {
+                    $oldAcl = $node->acl_node;
                     $node->acl_node = $newParent->acl_node;
                     if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-                        if (null === $node->acl_node) {
-                            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath);
+                        if (null === $node->acl_node || $isPersonal) {
                             switch ($pathRecord->containerType) {
                                 case self::FOLDER_TYPE_PERSONAL:
                                 case self::FOLDER_TYPE_SHARED:
@@ -1512,7 +1514,7 @@ class Tinebase_FileSystem implements
                                     $node->acl_node = $node->getId();
                             }
                         }
-                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $newParent->acl_node, $oldParent->acl_node, true, true);
+                        $this->_recursiveInheritPropertyUpdate($node, 'acl_node', $node->acl_node, $oldAcl, true, true);
                     }
                 }
                 if ($node->pin_protected_node === $oldParent->pin_protected_node

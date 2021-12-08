@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 # check if all mandatory vars are set
-mandatory_vars="TINE20_DATABASE_HOST TINE20_DATABASE_DBNAME TINE20_DATABASE_USERNAME TINE20_DATABASE_PASSWORD"
-mandatory_vars="$mandatory_vars TINE20_SETUPUSER_USERNAME TINE20_SETUPUSER_PASSWORD TINE20_LOGIN_USERNAME"
-mandatory_vars="$mandatory_vars TINE20_DATABASE_PASSWORD TINE20_CREDENTIALCACHESHAREDKEY"
+mandatory_vars="TINE20_DATABASE_HOST TINE20_DATABASE_DBNAME TINE20_DATABASE_USERNAME TINE20_DATABASE_PASSWORD TINE20_CREDENTIALCACHESHAREDKEY"
 
 test "$TINE20_CACHING_BACKEND" = Redis && mandatory_vars="$mandatory_vars TINE20_CACHING_REDIS_HOST"
 test "$TINE20_SESSION_BACKEND" = Redis && mandatory_vars="$mandatory_vars TINE20_SESSION_HOST"
@@ -19,6 +17,8 @@ if test "$TINE20_CHECK" != false; then
   test "$error" = true && exit 1
 fi
 
+set -e
+
 # generate config files
 /usr/sbin/confd -onetime -backend env
 
@@ -26,14 +26,16 @@ fi
 su tine20 -c "/usr/local/bin/tine20_await_db"
 
 if test "$TINE20_INSTALL" != false; then
-    # install tine20 if it is not installed
-    su tine20 -c "php /usr/share/tine20/setup.php --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} --is_installed || /usr/local/bin/tine20_install"
-
-    # update tine20 install if it is not up to date
-    su tine20 -c "php /usr/share/tine20/setup.php --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} --update"
+    # install tine20 if it is not installed or update it and 
+    if su tine20 -c "php /usr/share/tine20/setup.php --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} --is_installed"; then
+      # load config from env vars TINE20__<app>_<property>
+      su tine20 -c "php /usr/share/tine20/setup.php --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} --config_from_env"
+      su tine20 -c "php /usr/share/tine20/setup.php --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} --update"
+    else
+      /usr/local/bin/tine20_install
+      # load config from env vars TINE20__<app>_<property>
+      su tine20 -c "php /usr/share/tine20/setup.php --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} --config_from_env"
+    fi
 fi
-
-# load config from env vars TINE20__<app>_<property>
-su tine20 -c "php /usr/share/tine20/setup.php --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} --config_from_env"
 
 /usr/bin/supervisord -c /etc/supervisord.conf --nodaemon

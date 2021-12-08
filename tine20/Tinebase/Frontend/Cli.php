@@ -1810,7 +1810,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * repair acl of nodes (supports -d for dry run)
      *
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @return int
      * @throws ReflectionException
      * @throws Tinebase_Exception_InvalidArgument
@@ -1818,7 +1818,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @throws Tinebase_Exception_Record_Validation
      * @throws Zend_Db_Statement_Exception
      */
-    public function repairFileSystemAclNodes($opts)
+    public function repairFileSystemAclNodes(Zend_Console_Getopt $opts)
     {
         $this->_checkAdminRight();
 
@@ -2236,13 +2236,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * e.g. php tine20.php --method=Tinebase.duplicatePersonalContainerCheck app=Addressbook [-d]
      *
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_SystemContainer
      */
-    public function duplicatePersonalContainerCheck($opts)
+    public function duplicatePersonalContainerCheck(Zend_Console_Getopt $opts)
     {
         $this->_checkAdminRight();
         $args = $this->_parseArgs($opts, array('app'));

@@ -28,6 +28,41 @@
           fi;
       }
 
+      # lib/docker_hub.sh
+      docker_hub_deploy () {
+          set -e
+          name=$1
+          dockerhubname=$2
+          dockerhubtag=$3
+      
+          docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_TOKEN}" "docker.io"
+      
+          FROM_IMAGE="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+          DESTINATION_IMAGE="docker.io/tinegroupware/${dockerhubname}:${dockerhubtag}"
+      
+          docker pull "${FROM_IMAGE}"
+          docker tag "${FROM_IMAGE}" "${DESTINATION_IMAGE}"
+          docker push "${DESTINATION_IMAGE}"
+      }
+      
+      docker_hub_deploy_with_tag () {
+          # deploy to nightly if tag not set
+          if [ -z "$CI_COMMIT_TAG" ]; then
+              echo "deploying nightly"
+              docker_hub_deploy $1 $2 $3
+              return
+          fi
+      
+          # do not deploy if customer is not tine20.com
+          if [ "$(repo_get_customer_for_branch $MAJOR_COMMIT_REF_NAME)" != "tine20.com" ]; then
+              echo "nothing to deploy"
+              return
+          fi
+      
+          docker_hub_deploy $1 $2 $CI_COMMIT_TAG
+          docker_hub_deploy $1 $2 $(echo $CI_COMMIT_TAG | cut -d '.' -f 1)
+      }
+
       # lib/docker_image_hash.sh
       _longest_common_prefix() {
           declare -a names;
@@ -172,12 +207,84 @@
       # lib/merge.sh
       merge_merge_upwards () {
           if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" customers; then
-              ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh "$MATRIX_ROOM" "Auto merging $1 into $2 failed in $CI_PIPELINE_NAME $CI_JOB_URL."
+              ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh "$MATRIX_ROOM" "🔴 Auto merging $1 into $2 failed in $CI_PIPELINE_NAME $CI_JOB_URL."
               return 1
           fi
       }
       
       merge_update_custom_app () {
           ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh UpdateCustomApp "$1" "$2" || true
+      }
+      
+      merge_trigger_next () {
+          MERGE_MAP=${MERGE_MAP:-"{}"}
+          
+          if ! echo $MERGE_MAP | jq --arg ref $CI_COMMIT_REF_NAME -e '.[$ref]' > /dev/null; then
+              echo "nothing to trigger"
+              return
+          fi
+      
+          for i in $(echo $MERGE_MAP | jq -c --arg ref $CI_COMMIT_REF_NAME '.[$ref][]'); do
+              ref=$(echo $i | jq -r '.ref')
+              var=$(echo $i | jq -r '.var')
+      
+              echo "trigger $ref with $var:"
+      
+              curl -X POST -F token=$MERGE_TRIGGER_TOKEN \
+                  -F ref=$ref \
+                  -F "variables[$var]=true" \
+                  -F "variables[DOCKER_BUILD_SOURCE]=true" \
+                  -F "variables[SEND_PIPELINE_STATUS]=true" \
+                  "$CI_API_V4_URL/projects/$CI_PROJECT_ID/trigger/pipeline" > /dev/null
+          done
+      }
+
+      # lib/pipeline_status.sh
+      pipeline_status_send () {
+          errors=$(curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/test_report" | jq -c '.test_suites[] | select((.error_count>0) or .failed_count>0)| {name,error_count,failed_count}')
+      
+          ref=$(curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/" | jq -r .ref)
+      
+          message="pipeline $CI_PIPELINE_NAME #$CI_PIPELINE_ID for $ref failed with:"
+      
+          IFS=$'\n' 
+          for error in $errors; do
+              n=$(echo $error | jq -r '.name')
+              e=$(echo $error | jq -r '.error_count')
+              f=$(echo $error | jq -r '.failed_count')
+              message="$message"'\n'"+ $n  --  errors: $e failures: $f"
+          done
+      
+          message="$message"'\n'"$CI_PIPELINE_URL"
+      
+          echo "$message"
+      
+          ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "$message"
+      }
+
+      # lib/repo.sh
+      repo_get_customer_for_branch () {
+          branch=$1
+      
+          cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+          if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then
+              return 1
+          fi
+      
+          if ! echo "${branch}" | grep -q '/'; then
+              if ! echo "${branch}" | grep -Eq '20..\.11'; then
+                      return 1
+              fi
+      
+              echo tine20.org
+              return
+          else
+              if [ $(echo "${branch}" | awk -F"/" '{print NF-1}') != 1 ]; then
+                      return 1
+              fi
+      
+              echo "${branch}" | cut -d '/' -f1
+              return
+          fi
       }
 

@@ -34,6 +34,7 @@ merge:
     - merge_merge_upwards 2019.11 2020.11
     - merge_merge_upwards 2020.11 2021.11
     - merge_merge_upwards 2021.11 2022.11
+    - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
       when: never

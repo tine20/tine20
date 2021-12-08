@@ -318,8 +318,6 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * testMonitoringCheckCron
-     *
-     * @group nodockerci
      */
     public function testMonitoringCheckCron()
     {
@@ -337,7 +335,7 @@ class Tinebase_Frontend_CliTest extends TestCase
                 $this->assertEquals(0, $result);
             }
         } else {
-            $this->assertEquals("CRON FAIL: NO LAST JOB FOUND\n", $out);
+            $this->assertStringContainsString("CRON FAIL: NO LAST JOB FOUND\n", $out);
             $this->assertEquals(1, $result);
         }
     }

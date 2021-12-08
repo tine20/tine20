@@ -218,7 +218,6 @@ Tine.Filemanager.nodeBackendMixin = {
             
             options.beforeSuccess = function(response) {
                 const folder = this.recordReader(response);
-                folder.data.path = name;
                 this.postMessage('create', folder.data);
                 return [folder];
             };
@@ -242,11 +241,13 @@ Tine.Filemanager.nodeBackendMixin = {
      * copy/move folder/files to a folder
      *
      * @param items files/folders to copy
-     * @param targetPath
      *
+     * @param target
      * @param move
+     * @param showConfirmDialog
+     * @param params
      */
-    copyNodes : function(items, target, move, params) {
+    copyNodes : function(items, target, move, showConfirmDialog, params) {
         
         var message = '',
             app = Tine.Tinebase.appMgr.get(this.appName);
@@ -310,7 +311,7 @@ Tine.Filemanager.nodeBackendMixin = {
                     method: method
             };
             
-            if (move && withOwnGrants.length) {
+            if (move && withOwnGrants.length && showConfirmDialog) {
                 Ext.MessageBox.show({
                     icon: Ext.MessageBox.WARNING,
                     buttons: Ext.MessageBox.OKCANCEL,
@@ -318,7 +319,7 @@ Tine.Filemanager.nodeBackendMixin = {
                     msg: app.i18n._("You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."),
                     fn: function(btn) {
                         if (btn === 'ok') {
-                            Tine.Filemanager.nodeBackend.copyNodes(items, target, move, params);
+                            Tine.Filemanager.nodeBackend.copyNodes(items, target, move, false, params);
                         }
                     }
                 });

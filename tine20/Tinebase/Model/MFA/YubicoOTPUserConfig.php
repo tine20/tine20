@@ -108,7 +108,7 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
         return $this->_privatId;
     }
 
-    public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
+    public function updateUserNewRecordCallback(Tinebase_Model_FullUser $newUser, ?Tinebase_Model_FullUser $oldUser, Tinebase_Model_MFA_UserConfig $userCfg)
     {
         $this->{self::FLD_ACCOUNT_ID} = $newUser->getId();
         if (($newAes = $this->getAesKey()) && $newId = $this->getPrivatId()) {
@@ -122,7 +122,7 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
 
                 $this->{self::FLD_CC_ID} = $sharedCredentials->getId();
 
-                if ($oldUser->mfa_configs && ($oldCfg = $oldUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
+                if ($oldUser && $oldUser->mfa_configs && ($oldCfg = $oldUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
                         $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) && ($ccId = $oldCfg
                         ->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{self::FLD_CC_ID})) {
                     $cc->delete($ccId);

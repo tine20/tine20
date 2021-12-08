@@ -346,9 +346,13 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             $this->_uninstallAllApplications();
         }
 
-        $oldTinebaseId = '624f5f466ad6306dac31ad81e06cc6ca25090bb3';
+        $tempPath = Tinebase_Core::getTempDir() . '/2021-12-03-14-49-49';
+        $this->assertTrue(is_dir($tempPath) || mkdir($tempPath));
+        $this->assertTrue(copy(dirname(__DIR__) . '/files/2021-12-03-14-49-49/tine20_mysql.sql.bz2', $tempPath . '/tine20_mysql.sql.bz2'));
+
+        $oldTinebaseId = '819218c9cfa0941aac7eaa63147a3f63ced2d269';
         $options = array(
-            'backupDir' => dirname(__DIR__) . '/files/2018-08-27-17-04-11',
+            'backupDir' => $tempPath,
             'db' => 1,
         );
         $result = $this->_uit->getInstance()->installFromDump($options);
@@ -399,6 +403,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         Tinebase_Core::unsetUser();
         Tinebase_Cache_PerRequest::getInstance()->reset();
         Admin_Config::unsetInstance();
+        Tinebase_ImportExportDefinition::resetDefaultContainer();
     }
     
     /**
@@ -413,6 +418,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             throw new Setup_Exception('could not run test, Setup_Controller init failed');
         }
 
+        Tinebase_ImportExportDefinition::resetDefaultContainer();
         Tinebase_Core::unsetTinebaseId();
         Tinebase_Group::unsetInstance();
         Tinebase_Cache_PerRequest::getInstance()->reset();
@@ -442,28 +448,28 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         }
 
         $result = Setup_Controller::getInstance()->sortInstallableApplications($applications);
-        $expected = array (
-            0 => 'Tinebase',
-            1 => 'Admin',
-            2 => 'Addressbook',
-            3 => 'Calendar',
-            4 => 'CoreData',
-            5 => 'Felamimail',
-            6 => 'Sales',
-            7 => 'ExampleApplication',
-            8 => 'Inventory',
-            9 => 'Projects',
-            10 => 'Timetracker',
-            11 => 'ActiveSync',
-            12 => 'Filemanager',
-            13 => 'Phone',
-            14 => 'Crm',
-            15 => 'Tasks',
-            16 => 'Courses',
-            17 => 'Voipmanager',
-            18 => 'HumanResources',
-            19 => 'SimpleFAQ',
-        );
+        $expected = [
+            'Tinebase',
+            'Admin',
+            'Addressbook',
+            'Calendar',
+            'CoreData',
+            'Felamimail',
+            'Sales',
+            'ExampleApplication',
+            'Inventory',
+            'Timetracker',
+            'ActiveSync',
+            'Filemanager',
+            'Phone',
+            'Crm',
+            'Tasks',
+            'Courses',
+            'Voipmanager',
+            'HumanResources',
+            'Projects',
+            'SimpleFAQ',
+        ];
         self::assertEquals($expected, array_keys($result));
     }
 
@@ -478,8 +484,8 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         }*/
 
         $state = json_decode($appCtrl->getApplicationState($exampleApp, Tinebase_Application::STATE_UPDATES), true);
-        static::assertTrue(is_array($state) && isset($state[ExampleApplication_Setup_Update_0::RELEASE000_UPDATE001])
-            && isset($state[ExampleApplication_Setup_Update_12::RELEASE012_UPDATE001]), print_r($state, true));
-        static::assertCount(6, $state, print_r($state, true));
+        static::assertTrue(is_array($state) && isset($state[ExampleApplication_Setup_Update_12::RELEASE012_UPDATE001])
+            && isset($state[ExampleApplication_Setup_Update_13::RELEASE013_UPDATE001]), print_r($state, true));
+        static::assertCount(5, $state, print_r($state, true));
     }
 }

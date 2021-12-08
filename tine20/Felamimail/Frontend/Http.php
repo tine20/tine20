@@ -194,9 +194,10 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $partIndex = intval($partIndex[1]);
                 
                 $files = Felamimail_Controller_Message::getInstance()->extractWinMailDat($_messageId);
+                if (! isset($files[$partIndex])) {
+                    $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+                }
                 $file = $files[$partIndex];
-                
-                $part = NULL;
                 
                 $path = Tinebase_Core::getTempDir() . '/winmail/';
                 $path = $path . $_messageId . '/';

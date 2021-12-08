@@ -456,7 +456,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
 
     /**
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * $opts -> container_id, fields and sprecialChar
      * e.x -- --method=Addressbook.removeSpecialChar container_id='1234' fields='n_given,n_family' specialChar='\\'
      * all Contacts with '\' in n_given and n_family remove '\'
@@ -464,7 +464,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function removeSpecialChar($opts)
+    public function removeSpecialChar(Zend_Console_Getopt $opts)
     {
         $args = $this->_parseArgs($opts);
         $filter = [];
@@ -500,12 +500,12 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * usage: method=Addressbook.importMailList csv=test.csv domain=secondarydomains
      *csv file = "listname","listEmailAdress"
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @return false
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function importMailList($opts)
+    public function importMailList(Zend_Console_Getopt $opts)
     {
         $args = $this->_parseArgs($opts);
         $csv = $args['csv'];
@@ -540,6 +540,41 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             Addressbook_Controller_List::getInstance()->update($list);
         }
         fclose($stream);
+        return 0;
+    }
+
+    /**
+     *    -d (dry run)
+     *    e.g. php tine20.php --method=Addressbook.clearUserContactsWithoutUser -d
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function clearUserContactsWithoutUser(Zend_Console_Getopt $opts) {
+        $count = 0;
+        $backend = new Addressbook_Backend_Sql();
+
+        if ($opts->d) {
+            echo "Dry-run \n";;
+        }
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class,
+            [['field' => 'type', 'operator' => 'equals', 'value' => 'user']]);
+
+        $userContacts = Addressbook_Controller_Contact::getInstance()->search($filter);
+        foreach ($userContacts as $userContact) {
+            try {
+                Admin_Controller_User::getInstance()->get($userContact['account_id']);
+            }catch(Tinebase_Exception_NotFound $e) {
+                if ($opts->d) {
+                    echo "will remove contact: " . $userContact['n_fileas'] . " id: " . $userContact->getId() . "\n";
+                    continue;
+                }
+                $backend->delete($userContact->getId());
+                echo "remove contact: " . $userContact['n_fileas'] . "\n";
+                $count++;
+            }
+        }
+        echo "remove: " . $count . " contacts \n";
         return 0;
     }
 }

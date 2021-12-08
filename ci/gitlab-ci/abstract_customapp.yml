@@ -26,6 +26,9 @@ variables:
   JS_E2E_TEST_SOURCE: "false"
   JS_E2E_TEST_FILTER: ""
   PHPUNIT_FILTER: ${CUSTOMAPP_DIR}_
+  # TODO activate when it's working for customapps
+  #      see #3835[gitlab][ci] CI customapps e2etest ausführen lassen
+  JS_E2E_TESTS_SOURCE: "false"
 
 workflow:
   rules:
@@ -47,6 +50,7 @@ docker_build_source:
     RUN_NO_TESTS: "true"
     AUTO_MERGE: "never"
     IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
+    DOCKER_BUILD_SOURCE: "true"
 
 docker_build_built:
   stage: build

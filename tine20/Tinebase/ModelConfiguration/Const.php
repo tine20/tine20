@@ -109,6 +109,11 @@ class Tinebase_ModelConfiguration_Const {
     const INDEXES = 'indexes';
     const INPUT_FILTERS = 'inputFilters';
     const IS_DEPENDENT = 'isDependent';
+    /**
+     * flags a model as metadata model for the configured field in the own model
+     * this configured field is a record which gets additional information/metadata
+     */
+    const IS_METADATA_MODEL_FOR = 'isMetadataModelFor';
     const IS_PARENT = 'isParent';
     const IS_VIRTUAL = 'isVirtual';
 
@@ -174,6 +179,7 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE = 'type';
     const TYPE_ATTACHMENTS = 'attachments';
     const TYPE_BIGINT = 'bigint';
+    const TYPE_BLOB = 'blob';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_CONTAINER = 'container';
     const TYPE_DATETIME = 'datetime';

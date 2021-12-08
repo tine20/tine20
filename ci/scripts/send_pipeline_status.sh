@@ -5,7 +5,7 @@ errors=$(curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_P
 
 ref=$(curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/" | jq -r .ref)
 
-message="pipeline $CI_PIPELINE_NAME #$CI_PIPELINE_ID for $ref failed with:"
+message="🔴 pipeline $CI_PIPELINE_NAME #$CI_PIPELINE_ID for $ref failed with:"
 
 IFS=$'\n' 
 for error in $errors; do

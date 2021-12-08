@@ -47,6 +47,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_MODEL                 => 'string',
         MCC::TYPE_KEY_FIELD             => 'string',
         MCC::TYPE_USER                  => 'string',
+        MCC::TYPE_BLOB                  => 'blob',
         MCC::TYPE_BOOLEAN               => 'boolean',
         MCC::TYPE_MONEY                 => 'float',
         MCC::TYPE_HEX_COLOR             => 'string',

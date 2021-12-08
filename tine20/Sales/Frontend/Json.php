@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add functions again (__call interceptor doesn't work because of the reflection api)
  * @todo        check if we can add these functions to the reflection without implementing them here
@@ -793,6 +793,48 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deletePurchaseInvoices($ids)
     {
         return $this->_delete($ids, Sales_Controller_PurchaseInvoice::getInstance());
+    }
+
+    public function getApplicableBoilerplates(string $type, string $date = null, string $customerId = null, string $category = null)
+    {
+        $filter = [
+            ['field' => \Sales_Model_Boilerplate::FLD_MODEL, 'operator' => 'equals', 'value' => $type]
+        ];
+        
+        if (!$date) {
+            $date = Tinebase_DateTime::now();
+        }
+        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_FROM, 'operator' => 'before_or_equals', 'value' => $date];
+        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_UNTIL, 'operator' => 'after_or_equals', 'value' => $date];
+
+        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' =>
+            $category ?: Sales_Config::DOCUMENT_CATEGORY_DEFAULT];
+
+        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' =>
+            $customerId ?: null];
+
+        $result = new Tinebase_Record_RecordSet(Sales_Model_Boilerplate::class);
+
+        $names = [];
+        foreach (Sales_Controller_Boilerplate::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Boilerplate::class, $filter))
+                 as $boilerplate) {
+            if (isset($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}])) {
+                if ($boilerplate->{Sales_Model_Boilerplate::FLD_FROM} ||
+                        $boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL}) {
+                    $result->removeRecord($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}]);
+                } else {
+                    continue;
+                }
+            }
+            $names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}] = $boilerplate;
+            $result->addRecord($boilerplate);
+        }
+
+        return [
+            'totalcount' => $result->count(),
+            'results' => array_values($this->_multipleRecordsToJson($result)),
+        ];
     }
     
     /*************************** offer functions *****************************/

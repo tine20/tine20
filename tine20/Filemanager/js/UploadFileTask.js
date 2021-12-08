@@ -15,12 +15,23 @@ export default class UploadFileTask {
             const updateTask = async function (args) {
                 try {
                     const task = await Tine.Tinebase.uploadManager.updateTaskByArgs(args);
-            
-                    window.postal.publish({
-                        channel: "recordchange",
-                        topic: 'Filemanager.Node.update',
-                        data: task.args.nodeData
-                    });
+                    if (task) {
+                        window.postal.publish({
+                            channel: "recordchange",
+                            topic: 'Filemanager.Node.update',
+                            data: task.args.nodeData
+                        });
+                    } else {
+                        if (Tine.Tinebase.uploadManager.applyBatchAction[args.batchID] === 'stop') {
+                            args.nodeData.status = 'cancelled';
+                            window.postal.publish({
+                                channel: "recordchange",
+                                topic: 'Filemanager.Node.update',
+                                data: args.nodeData
+                            });
+                            return resolve(true);
+                        }
+                    }
                 } catch (e) {
                     Tine.Tinebase.uploadManager.unregisterUpload(args.uploadId);
                     reject('update task to storage failed');
@@ -59,7 +70,7 @@ export default class UploadFileTask {
             try {
                 const type = `vnd.adobe.partial-upload; final_type=${args.nodeData.type}`;
                 args.nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], args?.overwrite);
-                args.nodeData.status = 'pending';
+                args.nodeData.status = 'uploading';
                 args.nodeData.size = args?.fileSize;
 
                 Tine.Tinebase.uploadManager.removeVirtualNode(args.uploadId);
@@ -82,8 +93,8 @@ export default class UploadFileTask {
 
                 if (e.message === 'file exists') {
                      const button = await new Promise((resolve) => {
-                         if (Tine.Tinebase.uploadManager.applyToAll[args.batchID]) {
-                             const button = Tine.Tinebase.uploadManager.applyToAll[args.batchID];
+                         if (Tine.Tinebase.uploadManager.applyBatchAction[args.batchID]) {
+                             const button = Tine.Tinebase.uploadManager.applyBatchAction[args.batchID];
                              resolve(button);
                          } else {
                              Tine.Filemanager.DuplicateFileUploadDialog.openWindow({
@@ -109,7 +120,7 @@ export default class UploadFileTask {
 
                     args.nodeData = await Tine.Filemanager.getNode(_.get(e, 'data.existingnodesinfo[0].id'));
                     args.nodeData.contenttype = `vnd.adobe.partial-upload; final_type=${args.nodeData.contenttype}; progress=0`;
-                    args.nodeData.status = 'pending';
+                    args.nodeData.status = 'uploading';
                     args.overwrite = true;
                 }
 

@@ -58,7 +58,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         return $account;
     }
 
-    protected function _getUserArrayWithPw($pwdMustChange = false)
+    public function _getUserArrayWithPw($pwdMustChange = false)
     {
         $group = $this->_createGroup();
         $accountData = $this->_getUserData();

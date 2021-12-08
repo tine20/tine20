@@ -246,16 +246,6 @@ Tine.widgets.form.FieldManager = function() {
                 case 'records':
                     if (category === 'editDialog') {
                         field.xtype = 'wdgt.pickergrid';
-                        if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
-                            // @TODO use different widget here (e.g. quickadd gird)
-                            field.enableTbar = false;
-                            field.allowCreateNew = true;
-                            field.refIdField = _.get(fieldDefinition, 'config.refIdField', undefined);
-                            _.set(field, 'editDialogConfig.mode', 'local');
-                        }
-                        if (fieldDefinition.config.additionalFilterSpec) {
-                            field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
-                        }
                         field.fieldLabel = fieldDefinition.fieldLabel ? field.fieldLabel :
                             Tine.Tinebase.data.RecordMgr.get(fieldDefinition.config.appName, fieldDefinition.config.modelName)?.getRecordsName();
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
@@ -263,6 +253,20 @@ Tine.widgets.form.FieldManager = function() {
                         field.fieldName = fieldDefinition.fieldName;
                         field.hideHeaders = true;
                         field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */
+                        if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
+                            // @TODO use different widget here (e.g. quickadd gird)
+                            var modelConf = field.recordClass.getModelConfiguration();
+                            if (modelConf.isMetadataModelFor) {
+                                field.isMetadataModelFor = modelConf.isMetadataModelFor;
+                            }
+                            field.allowCreateNew = true;
+                            field.refIdField = _.get(fieldDefinition, 'config.refIdField', undefined);
+                            field.enableTbar = !!field.isMetadataModelFor;
+                            _.set(field, 'editDialogConfig.mode', 'local');
+                        }
+                        if (fieldDefinition.config.additionalFilterSpec) {
+                            field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
+                        }
                     } else {
                         var picker = Tine.widgets.form.RecordsPickerManager.get(
                             fieldDefinition.config.appName,

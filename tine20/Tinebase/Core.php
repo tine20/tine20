@@ -1725,9 +1725,11 @@ class Tinebase_Core
             throw new Tinebase_Exception_InvalidArgument('Invalid user object!');
         }
 
-        if ($user instanceof Tinebase_Model_FullUser) {
-            $userString =  $user->accountLoginName;
-        } else if ($user instanceof Tinebase_Model_User) {
+        if ($user instanceof Tinebase_Model_User) {
+            if (($oldUser = self::getUser()) && $oldUser instanceof Tinebase_Model_User &&
+                    $user->getId() === $oldUser->getId()) {
+                return $user;
+            }
             $userString = $user->accountDisplayName;
         } else {
             $userString = var_export($user, true);
