@@ -53,6 +53,10 @@ class Sales_Model_Document_Boilerplate extends Sales_Model_Boilerplate
             ];*/
 
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Boilerplate::class;
+        $_definition[self::DENORMALIZATION_CONFIG] = [
+            self::TRACK_CHANGES     => true,
+            self::CASCADE           => true,
+        ];
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
             self::TYPE                  => self::TYPE_RECORD,
             self::NORESOLVE             => true,
@@ -61,8 +65,6 @@ class Sales_Model_Document_Boilerplate extends Sales_Model_Boilerplate
                 self::MODEL_NAME            => Sales_Model_Document_Offer::MODEL_NAME_PART, // TODO not nice, it can be any document really...
             ],
         ];
-
-        // TODO FIXME add property "changesOnDocument" ... or make it a denormalized feature...
     }
 
     /**

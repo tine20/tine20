@@ -930,6 +930,13 @@ abstract class Tinebase_Controller_Record_Abstract
         $this->_inspectDenormalization($_record);
     }
 
+    protected function _denormalizedDiff(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_otherRecord)
+    {
+        return $_record->diff($_otherRecord,
+            ['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by',
+                'deleted_time', 'is_deleted', TMCC::FLD_LOCALLY_CHANGED]);
+    }
+
     /**
      * @param Tinebase_Record_Interface $newRecord
      * @param Tinebase_Record_Interface|null $currentRecord
@@ -960,6 +967,14 @@ abstract class Tinebase_Controller_Record_Abstract
                             $this->_newDenormalizedRecord($newRecord->{$property}, $definition);
                         } else {
                             $newRecord->{$property}->{TMCC::FLD_ORIGINAL_ID} = $currentRecord->{$property}->{TMCC::FLD_ORIGINAL_ID};
+                            if ($newRecord->{$property}->has(TMCC::FLD_LOCALLY_CHANGED)) {
+                                if (!$currentRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} &&
+                                    !$this->_denormalizedDiff($newRecord->{$property}, $currentRecord->{$property})->isEmpty()) {
+                                    $newRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} = 1;
+                                } else {
+                                    $newRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED} = $currentRecord->{$property}->{TMCC::FLD_LOCALLY_CHANGED};
+                                }
+                            }
                         }
                     }
                 }
@@ -978,8 +993,16 @@ abstract class Tinebase_Controller_Record_Abstract
                             $this->_newDenormalizedRecord($addedRecord, $definition);
                         }
                         foreach ($diff->modified as $diff) {
-                            $newRecord->{$property}->getById($diff->getId())->{TMCC::FLD_ORIGINAL_ID} =
-                                $currentRecord->{$property}->getById($diff->getId())->{TMCC::FLD_ORIGINAL_ID};
+                            $nr = $newRecord->{$property}->getById($diff->getId());
+                            $cr = $currentRecord->{$property}->getById($diff->getId());
+                            $nr->{TMCC::FLD_ORIGINAL_ID} = $cr->{TMCC::FLD_ORIGINAL_ID};
+                            if ($newRecord->{$property}->has(TMCC::FLD_LOCALLY_CHANGED)) {
+                                if (!$cr->{TMCC::FLD_LOCALLY_CHANGED} && !$this->_denormalizedDiff($nr, $cr)->isEmpty()) {
+                                    $nr->{TMCC::FLD_LOCALLY_CHANGED} = 1;
+                                } else {
+                                    $nr->{TMCC::FLD_LOCALLY_CHANGED} = $cr->{TMCC::FLD_LOCALLY_CHANGED};
+                                }
+                            }
                         }
                     }
                 }
@@ -995,8 +1018,24 @@ abstract class Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_UnexpectedValue('is not instance of ' .
                 $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]);
         }
-        // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
+        $originalRecord = null;
+        if ($record->getId()) {
+            $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
+            try {
+                $originalRecord = $ctrl->get($record->getId());
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $record->setId(null);
+            }
+        }
         $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
+        // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
+        if ((isset($record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) &&
+                $record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) && (!$record->getId() ||
+                ($originalRecord && !$this->_denormalizedDiff($record, $originalRecord)->isEmpty()))) {
+            $record->{TMCC::FLD_LOCALLY_CHANGED} = 1;
+        } else {
+            $record->{TMCC::FLD_LOCALLY_CHANGED} = 0;
+        }
         $record->setId(null);
     }
 
@@ -1655,8 +1694,14 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         if (null !== ($mc = $_record::getConfiguration())) {
             foreach ($mc->{Tinebase_ModelConfiguration_Const::CONTROLLER_HOOK_BEFORE_UPDATE} as $hook) {
+                if (count($hook) > 2) {
+                    $params = array_slice($hook, 2);
+                    $hook = array_slice($hook, 0, 2);
+                } else {
+                    $params = [];
+                }
                 if (is_callable($hook)) {
-                    call_user_func($hook, $_record, $_oldRecord);
+                    call_user_func_array($hook, array_merge($params, [$_record, $_oldRecord]));
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                         __METHOD__ . '::' . __LINE__ . ' hook is not callable: ' . print_r($hook, true));
@@ -3387,6 +3432,34 @@ HumanResources_CliTests.testSetContractsEndDate */
         ]);
         $record->notes->addRecord($note);
         Tinebase_Notes::getInstance()->setNotesOfRecord($record);
+    }
+
+    public static function cascadeDenormalization(string $targetModel, Tinebase_Record_Interface $_record)
+    {
+        /** @var Tinebase_Record_Interface $targetModel */
+        $mc = $targetModel::getConfiguration();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($targetModel, [
+            ['field' => TMCC::FLD_ORIGINAL_ID, 'operator' => 'equals', 'value' => $_record->getId()],
+        ]);
+        if (isset($mc->{TMCC::DENORMALIZATION_CONFIG}[TMCC::TRACK_CHANGES]) &&
+                $mc->{TMCC::DENORMALIZATION_CONFIG}[TMCC::TRACK_CHANGES]) {
+            $filter->addFilter(new Tinebase_Model_Filter_Bool(TMCC::FLD_LOCALLY_CHANGED, 'equals', false));
+        }
+
+        /** @var Tinebase_Record_Interface $toUpdate */
+        foreach (($ctrl = Tinebase_Core::getApplicationInstance($targetModel))->search($filter) as $toUpdate) {
+            $changed = false;
+            foreach ($_record::getConfiguration()->fields as $key => $cfg) {
+                if (!$toUpdate->has($key) || in_array($key, ['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by', 'deleted_time', 'is_deleted'])) continue;
+                if ($toUpdate->{$key} !== $_record->{$key}) {
+                    $changed = true;
+                    $toUpdate->{$key} = $_record->{$key};
+                }
+            }
+            if ($changed) {
+                $ctrl->update($toUpdate);
+            }
+        }
     }
 
     public function fileMessageAttachment($location, $message, $attachment)

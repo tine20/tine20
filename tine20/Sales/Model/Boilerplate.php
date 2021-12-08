@@ -55,6 +55,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
         self::HAS_ATTACHMENTS => false,
         self::HAS_NOTES => false,
         self::HAS_TAGS => false,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         self::EXPOSE_HTTP_API => true,
         self::EXPOSE_JSON_API => true,

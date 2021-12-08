@@ -810,8 +810,17 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' =>
             $category ?: Sales_Config::DOCUMENT_CATEGORY_DEFAULT];
 
-        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' =>
-            $customerId ?: null];
+        if ($customerId) {
+            $filter[] = [
+                'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
+                'filters'   => [
+                    ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => null],
+                    ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => $customerId],
+                ],
+            ];
+        } else {
+            $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => null];
+        }
 
         $result = new Tinebase_Record_RecordSet(Sales_Model_Boilerplate::class);
 
@@ -820,8 +829,15 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Boilerplate::class, $filter))
                  as $boilerplate) {
             if (isset($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}])) {
-                if ($boilerplate->{Sales_Model_Boilerplate::FLD_FROM} ||
-                        $boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL}) {
+                $current = $result->getById($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}]->getId());
+                if ($current->{Sales_Model_Boilerplate::FLD_CUSTOMER} &&
+                        !$boilerplate->{Sales_Model_Boilerplate::FLD_CUSTOMER}) {
+                    continue;
+                }
+                if ((!$current->{Sales_Model_Boilerplate::FLD_CUSTOMER} &&
+                        $boilerplate->{Sales_Model_Boilerplate::FLD_CUSTOMER}) ||
+                        ($boilerplate->{Sales_Model_Boilerplate::FLD_FROM} ||
+                        $boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL})) {
                     $result->removeRecord($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}]);
                 } else {
                     continue;

@@ -110,7 +110,6 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function addCustomField(Tinebase_Model_CustomField_Config $_record)
     {
-
         $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
             try {
