@@ -12,7 +12,8 @@ merge_update_custom_app () {
 merge_trigger_next () {
     MERGE_MAP=${MERGE_MAP:-"{}"}
     
-    if [ -z "$(echo $MERGE_MAP | jq --arg ref CI_COMMIT_REF_NAME -e '.[$ref]' && echo 1 || echo 0)" ]; then
+    if ! echo $MERGE_MAP | jq --arg ref $CI_COMMIT_REF_NAME -e '.[$ref]' > /dev/null; then
+        echo "nothing to trigger"
         return
     fi
 
