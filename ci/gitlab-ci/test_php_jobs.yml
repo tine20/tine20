@@ -58,7 +58,6 @@ php-unit-all-tests-source-matrix:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
-  timeout: 45m
   parallel:
     matrix:
       - PROVIDER:
