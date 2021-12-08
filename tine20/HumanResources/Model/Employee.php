@@ -33,7 +33,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 16,
+        'version'           => 17,
         'recordName'        => 'Employee',
         'recordsName'       => 'Employees', // ngettext('Employee', 'Employees', n)
         'hasRelations'      => TRUE,
@@ -45,6 +45,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
         'containerProperty' => NULL,
         'requiredRight'     => HumanResources_Acl_Rights::MANAGE_EMPLOYEE,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'titleProperty'     => 'n_fn',
         'appName'           => 'HumanResources',
@@ -89,14 +90,6 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'type' => 'user',
                 'group' => 'employee',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'nullable' => true,
-            ),
-            'dfcom_id' => array(
-                'label' => 'Transponder Id', //_('Transponder Id')
-                'type'  => 'string',
-                'length'      => 255,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'shy' => TRUE,
                 'nullable' => true,
             ),
             'description' => array(

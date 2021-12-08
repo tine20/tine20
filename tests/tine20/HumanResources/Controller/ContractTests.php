@@ -104,7 +104,7 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
     {
         $sdate = new Tinebase_DateTime('2013-01-01 00:00:00');
         $employee = $this->_getEmployee('rwright');
-        $employee->dfcom_id = '36118993923739652';
+        //$employee->dfcom_id = '36118993923739652';
         
         $contractController = HumanResources_Controller_Contract::getInstance();
         $employeeController = HumanResources_Controller_Employee::getInstance();

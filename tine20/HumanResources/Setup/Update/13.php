@@ -15,6 +15,7 @@ class HumanResources_Setup_Update_13 extends Setup_Update_Abstract
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -25,6 +26,10 @@ class HumanResources_Setup_Update_13 extends Setup_Update_Abstract
             self::RELEASE013_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE013_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -76,5 +81,13 @@ class HumanResources_Setup_Update_13 extends Setup_Update_Abstract
             HumanResources_Model_MonthlyWTReport::class,
         ]);
         $this->addApplicationUpdate('HumanResources', '13.2', self::RELEASE013_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Employee::class,
+        ]);
+        $this->addApplicationUpdate('HumanResources', '13.3', self::RELEASE013_UPDATE004);
     }
 }
