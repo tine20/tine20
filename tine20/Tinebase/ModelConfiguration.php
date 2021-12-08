@@ -1140,6 +1140,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     Zend_Filter_Input::DEFAULT_VALUE => [],
                     Tinebase_Record_Validator_Json::class,
                 ],
+                self::SYSTEM => true,
             );
         }
         

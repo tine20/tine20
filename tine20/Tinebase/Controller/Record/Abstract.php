@@ -252,7 +252,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $currentUser = Tinebase_Core::getUser();
         if (!$currentUser) {
-            Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
+            Tinebase_Core::setUser(Tinebase_User::getInstance()
                 ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
         }
 
@@ -270,7 +270,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->doContainerACLChecks($oldvalues['containerACLChecks']);
             $this->doRightChecks($oldvalues['rightChecks']);
             if ($oldvalues['currentUser']) {
-                Tinebase_Core::set(Tinebase_Core::USER, $oldvalues['currentUser']);
+                Tinebase_Core::setUser($oldvalues['currentUser']);
             }
             if (isset($oldvalues['doGrantChecks'])) {
                 $this->doGrantChecks($oldvalues['doGrantChecks']);
