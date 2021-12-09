@@ -934,7 +934,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         return $_record->diff($_otherRecord,
             ['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by',
-                'deleted_time', 'is_deleted', TMCC::FLD_LOCALLY_CHANGED]);
+                'deleted_time', 'is_deleted', TMCC::FLD_LOCALLY_CHANGED, TMCC::FLD_ORIGINAL_ID]);
     }
 
     /**
@@ -996,7 +996,7 @@ abstract class Tinebase_Controller_Record_Abstract
                             $nr = $newRecord->{$property}->getById($diff->getId());
                             $cr = $currentRecord->{$property}->getById($diff->getId());
                             $nr->{TMCC::FLD_ORIGINAL_ID} = $cr->{TMCC::FLD_ORIGINAL_ID};
-                            if ($newRecord->{$property}->has(TMCC::FLD_LOCALLY_CHANGED)) {
+                            if ($nr->has(TMCC::FLD_LOCALLY_CHANGED)) {
                                 if (!$cr->{TMCC::FLD_LOCALLY_CHANGED} && !$this->_denormalizedDiff($nr, $cr)->isEmpty()) {
                                     $nr->{TMCC::FLD_LOCALLY_CHANGED} = 1;
                                 } else {

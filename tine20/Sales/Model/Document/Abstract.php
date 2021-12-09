@@ -162,9 +162,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Sales_Model_Document_Boilerplate::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Boilerplate::FLD_DOCUMENT_ID,
                 ],
-                self::VALIDATORS            => [ // only for offers this is allow empty true, by default its false
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
+//                self::INPUT_FILTERS         => [Zend_Filter_Empty::class => []],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    //Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
             self::FLD_CUSTOMER_ID       => [

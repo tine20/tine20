@@ -89,6 +89,23 @@ class Sales_Document_JsonTest extends TestCase
         $this->assertFalse(isset($document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]));
     }
 
+    public function testDeleteDocument()
+    {
+        $boilerplate = Sales_Controller_Boilerplate::getInstance()->create(
+            Sales_BoilerplateControllerTest::getBoilerplate());
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+        $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => '',
+            Sales_Model_Document_Offer::FLD_BOILERPLATES => [
+                $boilerplate->toArray()
+            ]
+        ]);
+        $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+        $this->_instance->deleteDocument_Offers($document['id']);
+    }
+
     public function testOfferDocumentCustomerCopy($noAsserts = false)
     {
         $customer = $this->_createCustomer();
