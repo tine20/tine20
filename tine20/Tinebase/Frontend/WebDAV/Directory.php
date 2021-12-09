@@ -306,4 +306,9 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         return $joinedFile;
     }
+
+    public function getPath()
+    {
+        return $this->_path;
+    }
 }

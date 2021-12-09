@@ -283,6 +283,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         if ($destination) return;
 
+        $this->assertSame('HTTP/1.1 201 Created', $this->response->status);
         $this->assertFalse($fs->isFile($oldPath . '/aTestFile.test'));
         $this->assertTrue($fs->isFile($newPath . '/aTestFile.test'));
         $fs->clearStatCache();
@@ -296,6 +297,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     public function testMove1()
     {
         $this->testMove('/webdav/Filemanager/shared/unittestdirectory1/');
+        $this->assertSame('HTTP/1.1 204 No Content', $this->response->status);
 
         $fs = Tinebase_FileSystem::getInstance();
         $oldPath = 'Filemanager/folders/shared/unittestdirectory/aTestFile.test';
@@ -314,6 +316,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     public function testMove2()
     {
         $this->testMove('/webdav/Filemanager/shared/unittestdirectory1');
+        $this->assertSame('HTTP/1.1 204 No Content', $this->response->status);
 
         $fs = Tinebase_FileSystem::getInstance();
         $oldPath = 'Filemanager/folders/shared/unittestdirectory/aTestFile.test';
@@ -327,6 +330,62 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         $this->assertSame('unittesting',
             file_get_contents('tine20://Filemanager/folders/shared/unittestdirectory1'));
+    }
+
+    public function testMove3()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->createAclNode('Filemanager/folders/shared/foo');
+        $fs->createAclNode('Filemanager/folders/shared/foo/unittestdirectory1');
+
+        $this->testMove('/webdav/Filemanager/shared/foo/unittestdirectory1/aTestFile.test');
+        $this->assertSame('HTTP/1.1 201 Created', $this->response->status);
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $oldPath = 'Filemanager/folders/shared/unittestdirectory/aTestFile.test';
+        $newPath = 'Filemanager/folders/shared/foo/unittestdirectory1/aTestFile.test';
+
+        $this->assertFalse($fs->isFile($oldPath));
+        $this->assertTrue($fs->isFile($newPath));
+        $fs->clearStatCache();
+        $this->assertFalse($fs->isFile($oldPath));
+        $this->assertTrue($fs->isFile($newPath));
+
+        $this->assertSame('unittesting',
+            file_get_contents('tine20://Filemanager/folders/shared/foo/unittestdirectory1/aTestFile.test'));
+    }
+
+    public function testMove4()
+    {
+        $user = Tinebase_Core::getUser();
+        Filemanager_Controller_Node::getInstance()->createNodes(
+            ['/personal/' . $user->getId() . '/home'], Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $this->testMove('/remote.php/webdav/' . (
+            Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME) ? $user->accountLoginName
+                : $user->accountDisplayName) . '/home/aTestFile.test');
+        $this->assertSame('HTTP/1.1 201 Created', $this->response->status);
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $oldPath = 'Filemanager/folders/shared/unittestdirectory/aTestFile.test';
+        $newPath = 'Filemanager/folders/personal/' . $user->getId() . '/home/aTestFile.test';
+
+        $this->assertFalse($fs->isFile($oldPath));
+        $this->assertTrue($fs->isFile($newPath));
+        $fs->clearStatCache();
+        $this->assertFalse($fs->isFile($oldPath));
+        $this->assertTrue($fs->isFile($newPath));
+
+        $this->assertSame('unittesting',
+            file_get_contents('tine20://' . $newPath));
+    }
+
+    public function testMove5()
+    {
+        $user = Tinebase_Core::getUser();
+        $this->testMove('/remote.php/webdav/' . (
+            Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME) ? $user->accountLoginName
+                : $user->accountDisplayName) . '/aTestFile.test');
+        $this->assertSame('HTTP/1.1 403 Forbidden', $this->response->status);
     }
 
     public function testPutWithUrlencode()
