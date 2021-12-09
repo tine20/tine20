@@ -37,12 +37,19 @@ class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\ObjectTree
         } elseif($sourceNode instanceof Tinebase_Frontend_WebDAV_IRenamable) {
             $destinationParent = $this->getNodeForPath($destinationDir);
             if (!$destinationParent instanceof Filemanager_Frontend_WebDAV_Container &&
-                    !$destinationParent instanceof Filemanager_Frontend_WebDAV) {
+                    !$destinationParent instanceof Filemanager_Frontend_WebDAV &&
+                    !$destinationParent instanceof Filemanager_Frontend_WebDAV_Directory) {
                 throw new Tinebase_Exception_UnexpectedValue('node ' . $destinationDir .
                     ' excpected to be instance of ' . Filemanager_Frontend_WebDAV_Container::class . ' or ' .
-                    Filemanager_Frontend_WebDAV::class);
+                    Filemanager_Frontend_WebDAV::class . ' or ' . Filemanager_Frontend_WebDAV_Directory::class);
             }
 
+            $destinationParentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($destinationParent->getPath());
+            if ($destinationParentPath->isSystemPath() || ($destinationParentPath->isToplevelPath() &&
+                    $destinationParentPath->containerType !== Tinebase_FileSystem::FOLDER_TYPE_SHARED &&
+                    explode('/', trim($destinationParentPath->flatpath, '/')) !== 4)) {
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file to: ' . $destinationPath);
+            }
             $sourceNode->rename($destinationParent->getPath() . '/' . $destinationName);
         } else {
             $this->copy($sourcePath,$destinationPath);
