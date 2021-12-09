@@ -118,10 +118,19 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
 
     public function getPath()
     {
-        $this->_pathParts = $this->_getPathParts();
-        return Tinebase_FileSystem::getInstance()->getApplicationBasePath(
-            $this->_pathParts[0],
-            isset($this->_pathParts[1]) ? $this->_pathParts[1] : null
-        ) . (count($this->_pathParts) > 2 ? '/' . implode('/', array_slice($this->_pathParts, 2)) : '' ) . '/';
+        $pathParts = $this->_getPathParts();
+        if ('webdav' === $pathParts[0]) $pathParts = array_slice($pathParts, 1);
+        if (Filemanager_Config::APP_NAME === $pathParts[0]) $pathParts = array_slice($pathParts, 1);
+        if (Tinebase_FileSystem::FOLDER_TYPE_SHARED === $pathParts[0]) {
+            $pathParts = array_slice($pathParts, 1);
+            return Tinebase_FileSystem::getInstance()->getApplicationBasePath(Filemanager_Config::APP_NAME,
+                    Tinebase_FileSystem::FOLDER_TYPE_SHARED) . ($pathParts ? '/' . implode('/', $pathParts) : '');
+        } else {
+            $user = $this->_getUser($pathParts[0]);
+            $pathParts = array_slice($pathParts, 1);
+            return Tinebase_FileSystem::getInstance()->getApplicationBasePath(Filemanager_Config::APP_NAME,
+                    Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) . '/' . $user->getId() .
+                    ($pathParts ? '/' . implode('/', $pathParts) : '');
+        }
     }
 }
