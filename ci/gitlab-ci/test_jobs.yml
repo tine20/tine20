@@ -176,7 +176,7 @@ test-install-demodata:
   variables:
     ARG_IMAGE: test-source
   stage: test
-  timeout: 20m
+  timeout: 35m
   script:
     - test -f ${TINE20ROOT}/scripts/postInstallGitlab.sh && ${TINE20ROOT}/scripts/postInstallGitlab.sh
     - |
