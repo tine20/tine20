@@ -411,7 +411,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_ImapProxy $_imap
      * @param boolean $_updateFolder
-     * @throws Felamimail_Exception
      * @throws Felamimail_Exception_IMAPMessageNotFound
      */
     protected function _updateMessageSequence(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap, $_updateFolder = TRUE)
@@ -433,15 +432,20 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         $latestMessageUid = current($latestMessageUidArray);
 
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $latestMessageId  $latestMessageUid");
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . " $latestMessageId  $latestMessageUid");
                         }
 
                         if ($latestMessageUid === $lastFailedUid) {
-                            throw new Felamimail_Exception('Failed to delete invalid messageuid from cache');
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . ' Failed to delete invalid messageuid from cache: ' . $lastFailedUid
+                                . ' -> Skipping folder atm');
+                            return;
                         }
 
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Check messageUid {$latestMessageUid} in folder " . $_folder->globalname);
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . " Check messageUid {$latestMessageUid} in folder " . $_folder->globalname);
                         }
 
                         try {
@@ -512,7 +516,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * get message with highest messageUid from cache 
      * 
      * @param  mixed  $_folderId
-     * @return Felamimail_Model_Message
+     * @return array|null
      */
     protected function _getLatestMessageUid($_folderId) 
     {
@@ -536,9 +540,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if (count($result) === 0) {
             return null;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Got last message uid: ' . print_r($result, TRUE));
-        
+
         return $result;
     }
     
