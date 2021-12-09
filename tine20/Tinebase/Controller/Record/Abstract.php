@@ -1030,11 +1030,12 @@ abstract class Tinebase_Controller_Record_Abstract
         $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
         // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
         if ((isset($record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) &&
-                $record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) && (!$record->getId() ||
-                ($originalRecord && !$this->_denormalizedDiff($record, $originalRecord)->isEmpty()))) {
-            $record->{TMCC::FLD_LOCALLY_CHANGED} = 1;
-        } else {
-            $record->{TMCC::FLD_LOCALLY_CHANGED} = 0;
+                $record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES])) {
+            if (null === $originalRecord || !$this->_denormalizedDiff($record, $originalRecord)->isEmpty()) {
+                $record->{TMCC::FLD_LOCALLY_CHANGED} = 1;
+            } else {
+                $record->{TMCC::FLD_LOCALLY_CHANGED} = 0;
+            }
         }
         $record->setId(null);
     }
