@@ -33,12 +33,24 @@ Tine.Sales.Model.DocumentPosition_AbstractMixin = {
         this.set('position_discount_percentage', 0);
         this.set('position_discount_sum', 0);
         this.set('unit_price', productData.salesprice||0);
-        this.set('sales_tax', productData.salestax||0);
+        this.set('sales_tax_rate', productData.salestaxrate||0);
         this.set('grouping', productData.default_grouping);
         this.set('sorting', productData.default_sorting);
 
         this.computePrice();
         this.commit();
+    },
+
+    clearPrice() {
+        this.set('unit_price', null);
+        this.set('position_price', null);
+        this.set('position_discount_type', null);
+        this.set('position_discount_sum', null);
+        this.set('position_discount_percentage', null);
+        this.set('net_price', null);
+        this.set('sales_tax_rate', null);
+        this.set('sales_tax', null);
+        this.set('gross_price', null);
     },
 
     computePrice() {
@@ -49,7 +61,7 @@ Tine.Sales.Model.DocumentPosition_AbstractMixin = {
                 (price / 100 * this.get('position_discount_percentage'));
             const net = price - discount;
             this.set('net_price', net);
-            const tax = net / 100 * this.get('sales_tax_rate');
+            const tax = net / 100 * (this.get('sales_tax_rate') || 0);
             this.set('sales_tax', tax);
             this.set('gross_price', net + tax);
         }

@@ -13,13 +13,6 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     initComponent() {
         Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this);
 
-        this.items.get(0).insert(1, new BoilerplatePanel({
-            fixedFields: {
-                model: this.recordClass.getPhpClassName(),
-                customer: '',
-                documentCategory: '',
-                document: ''
-            }
-        }));
+        this.items.get(0).insert(1, new BoilerplatePanel({}));
     }
 });

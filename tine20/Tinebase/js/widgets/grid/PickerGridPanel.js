@@ -559,7 +559,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onRemove: function(button, event) {
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
-            this.store.remove(selectedRows[i]);
+            if (this.fireEvent('beforeremoverecord', selectedRows[i]) !== false) {
+                this.store.remove(selectedRows[i]);
+            }
         }
     },
 
