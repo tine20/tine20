@@ -389,7 +389,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (col.quickaddField && col.quickaddField.rendered) {
                 var wrap = this.getQuickAddWrap(col);
 
-                wrap.appendChild(col.quickaddField.wrap ? col.quickaddField.wrap : col.quickaddField.el);
+                wrap?.appendChild(col.quickaddField.wrap ? col.quickaddField.wrap : col.quickaddField.el);
             }
         }, this);
     },

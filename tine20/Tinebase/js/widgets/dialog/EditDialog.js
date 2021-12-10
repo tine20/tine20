@@ -1023,7 +1023,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         // add current timestamp as id, if this is a dependent record
         if (this.modelConfig && this.modelConfig.isDependent == true && this.record.id == 0) {
-            this.record.set('id', (new Date()).getTime());
+            this.record.setId(Tine.Tinebase.data.Record.generateUID());
+            // this.record.set('id', (new Date()).getTime());
         }
 
         // apply grants to fields with requiredGrant prop

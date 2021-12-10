@@ -164,6 +164,16 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         if (!e.record.isProductType() && ['title'].concat(e.record.get('type') === 'TEXT' ? 'description' : []).indexOf(e.field) < 0 ) {
             e.cancel = true;
         }
+
+        if (e.field === 'title' && Ext.fly(Ext.EventObject.getTarget()).hasClass('sales-document-positiongrid-description')) {
+            e.cancel = true;
+            // const target = Ext.EventObject.getTarget();
+            _.defer(() => {
+                // @TODO start a textarea editor
+                // NOTE: inline might become hard as we need enter key for newlines
+                // what about tab key, shouldn't it switch to description?
+            })
+        }
     },
 
     onAfterEditPosition(e) {
@@ -198,7 +208,7 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         // some adjustments
         Object.assign(this.columns.find((c) => c.dataIndex === 'type'),{ header: '', width: 15, renderer: _.bind(this.typeRenderer, this) });
         // @TODO product_id picker nur sales produkte die noch aktiv
-        Object.assign(this.columns.find((c) => c.dataIndex === 'title'),{ quickaddField: Ext.ComponentMgr.create(fieldMgr('product_id', {blurOnSelect: true})) });
+        Object.assign(this.columns.find((c) => c.dataIndex === 'title'),{ quickaddField: Ext.ComponentMgr.create(fieldMgr('product_id', {blurOnSelect: true})), renderer: _.bind(this.titleRenderer, this) });
         Object.assign(this.columns.find((c) => c.dataIndex === 'unit_price'),{ header: i18n._('Price') });
         Object.assign(this.columns.find((c) => c.dataIndex === 'position_discount_sum'),{ header: i18n._('Discount') });
         Object.assign(this.columns.find((c) => c.dataIndex === 'gross_price'),{ header: i18n._('Total') });
@@ -214,6 +224,14 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         colModel.on('hiddenchange', checkDiscountFieldMode)
 
         return colModel;
+    },
+
+    titleRenderer(value, metadata, record) {
+        let str = '<div class="sales-document-positiongrid-title">' + Tine.Tinebase.EncodingHelper.encode(record.get('title')) + '</div>';
+        if (record.get('description')) {
+            str += '<div class="sales-document-positiongrid-description">' + Tine.Tinebase.EncodingHelper.encode(record.get('description')) + '</div>';
+        }
+        return str;
     },
 
     typeRenderer() {},

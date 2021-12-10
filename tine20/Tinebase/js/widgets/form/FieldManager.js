@@ -9,6 +9,7 @@ Ext.ns('Tine.widgets.form');
 
 import 'widgets/form/JsonField';
 import 'widgets/form/XmlField';
+import 'widgets/form/ModelPicker';
 
 /**
  * central form field manager
@@ -277,19 +278,7 @@ Tine.widgets.form.FieldManager = function() {
                     }
                     break;
                 case 'model':
-                    const availableModels = _.get(fieldDefinition, 'config.availableModels', []);
-                    if (availableModels.length) {
-                        field.xtype = 'combo';
-                        field.forceSelection = true;
-                        field.typeAhead = true;
-                        field.store = _.reduce(availableModels, function(arr, classname) {
-                            var recordClass = Tine.Tinebase.data.RecordMgr.get(classname);
-                            if (recordClass) {
-                                arr.push([classname, recordClass.getRecordName()]);
-                            }
-                            return arr;
-                        }, []);
-                    }
+                    field.xtype = 'tw-modelpicker';
                     break
                 case 'dynamicRecord':
                     // NOTE: this editor depends and the className _data_ and therefore can't be assigned statically

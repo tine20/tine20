@@ -95,7 +95,7 @@ Tine.widgets.grid.RendererManager = function() {
                         renderer = function (value, row, record) {
                             var foreignRecordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
 
-                            if (foreignRecordClass) {
+                            if (foreignRecordClass && value) {
                                 const record = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
                                 const titleProperty = foreignRecordClass.getMeta('titleProperty');
                                 value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
