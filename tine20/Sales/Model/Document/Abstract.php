@@ -40,6 +40,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_POSITIONS_NET_SUM = 'positions_net_sum';
     public const FLD_POSITIONS_DISCOUNT_SUM = 'positions_discount_sum';
 
+    public const FLD_INVOICE_DISCOUNT_TYPE = 'invoice_discount_type'; // PERCENTAGE|SUM
+    public const FLD_INVOICE_DISCOUNT_PERCENTAGE = 'invoice_discount_percentage'; // automatische Berechnung je nach tupe
+    public const FLD_INVOICE_DISCOUNT_SUM = 'invoice_discount_sum'; // automatische Berechnung je nach type
+
     public const FLD_NET_SUM = 'net_sum';
 
     public const FLD_SALES_TAX = 'sales_tax';

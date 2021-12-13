@@ -118,8 +118,9 @@ class Sales_Config extends Tinebase_Config_Abstract
      * 
      * @var string 
      */
-    const DOCUMENT_OFFER_STATUS = 'documentOfferStatus';
-    
+    public const DOCUMENT_OFFER_STATUS = 'documentOfferStatus';
+    public const DOCUMENT_OFFER_STATUS_TRANSITIONS = 'documentOfferStatusTransitions';
+
     /**
      * Invoice Type
      *
@@ -208,6 +209,39 @@ class Sales_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
             ],
         ],
+        self::DOCUMENT_OFFER_STATUS_TRANSITIONS => [
+            //_('Offer Status Transitions')
+            self::LABEL              => 'Offer Status Transitions',
+            //_('Possible Offer Status Transitions')
+            self::DESCRIPTION        => 'Possible Offer Status Transitions',
+            self::TYPE               => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                '' => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_IN_PROCESS
+                    ]
+                ],
+                Sales_Model_Document_Offer::STATUS_IN_PROCESS => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_DELIVERED,
+                        Sales_Model_Document_Offer::STATUS_REJECTED,
+                    ]
+                ],
+                Sales_Model_Document_Offer::STATUS_DELIVERED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_ORDERED
+                    ]
+                ],
+                Sales_Model_Document_Offer::STATUS_ORDERED => [
+                ],
+                Sales_Model_Document_Offer::STATUS_REJECTED => [
+                ],
+            ]
+        ],
+
         self::IGNORE_BILLABLES_BEFORE => array(
             //_('Ignore Billables Before Date')
             'label'                 => 'Ignore Billables Before Date',

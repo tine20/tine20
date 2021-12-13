@@ -3543,8 +3543,6 @@ HumanResources_CliTests.testSetContractsEndDate */
      * validate state
      *
      * @param Tinebase_Record_Interface $_record
-     * @param string $transitionsConfig
-     * @param string $statusField
      * @param Tinebase_Record_Interface|null $_oldRecord
      * @throws Tinebase_Exception_SystemGeneric
      */

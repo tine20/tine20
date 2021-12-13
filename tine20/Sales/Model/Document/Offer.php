@@ -86,22 +86,22 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
 
         $_definition[self::FIELDS] = array_merge($_definition[self::FIELDS], [
             self::FLD_ORDER_ID => [
-                self::TYPE                  => self::TYPE_RECORD,
-                self::DISABLED              => true,
-                self::CONFIG                => [
-                    self::APP_NAME              => Sales_Config::APP_NAME,
-                    self::MODEL_NAME            => Sales_Model_Document_Order::MODEL_NAME_PART,
+                self::TYPE => self::TYPE_RECORD,
+                self::DISABLED => true,
+                self::CONFIG => [
+                    self::APP_NAME => Sales_Config::APP_NAME,
+                    self::MODEL_NAME => Sales_Model_Document_Order::MODEL_NAME_PART,
                 ],
-                self::NULLABLE              => true,
+                self::NULLABLE => true,
             ],
             // OFFER_STATUS keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen),
             //                        Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
             self::FLD_OFFER_STATUS => [
-                self::LABEL                 => 'Status', // _('Status')
-                self::TYPE                  => self::TYPE_KEY_FIELD,
-                self::NAME                  => Sales_Config::DOCUMENT_OFFER_STATUS,
-                self::LENGTH                => 255,
-                self::NULLABLE              => true,
+                self::LABEL => 'Status', // _('Status')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NAME => Sales_Config::DOCUMENT_OFFER_STATUS,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
             ],
         ]);
     }
