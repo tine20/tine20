@@ -129,6 +129,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
+    /**
+     * @var string
+     */
+    const EVENT_HOOK_CLASS = 'eventHookClass';
+
+    /**
+     * @var string
+     */
     const EXTERNAL_DATABASE = 'externalDatabase';
 
     /**
@@ -1808,15 +1816,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
         ),
+        self::EVENT_HOOK_CLASS => array(
+            //_('Custom event handling hook')
+            self::LABEL                 => 'Custom event handling hook',
+            //_('Configure PHP hook class for custom event handling')
+            self::DESCRIPTION           => 'Configure PHP hook class for custom event handling',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => 'CustomEventHooks',
+        ),
         self::SYNC_USER_HOOK_CLASS => array(
                                    //_('Configure hook class for user sync')
-            'label'                 => 'Configure hook class for user sync',
+            self::LABEL                 => 'Configure hook class for user sync',
                                    //_('Allows to change data after fetching user from sync backend')
-            'description'           => 'Allows to change data after fetching user from sync backend',
-            'type'                  => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
+            self::DESCRIPTION           => 'Allows to change data after fetching user from sync backend',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
         ),
         self::SYNC_USER_CONTACT_DATA => array(
             //_('Sync contact data from sync backend')
