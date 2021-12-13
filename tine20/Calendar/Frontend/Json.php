@@ -411,11 +411,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // if there are dependent records, set the timezone of them and add them to a recordSet
         $this->_dependentRecordsFromJson($record);
 
-        if ((empty($record->id))) {
-            $savedRecord = Calendar_Controller_Event::getInstance()->create($record, $checkBusyConflicts, false);
-        } else {
-            $savedRecord = Calendar_Controller_Event::getInstance()->update($record, $checkBusyConflicts, false);
-        }
+        $controller = Calendar_Controller_Event::getInstance();
+        $method = empty($record->id) || empty($controller->has([$record->id], true)) ? 'create' : 'update';
+        $savedRecord = $controller->{$method}($record, $checkBusyConflicts, false);
 
         return $this->_recordToJson($savedRecord);
     }

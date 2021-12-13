@@ -556,12 +556,12 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         Tine.log.warn(e);
     }
 
-    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty'), Tine.Tinebase.data.Record.generateUID());
+    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty')) || Tine.Tinebase.data.Record.generateUID();
 
     if (! record) {
         record = new recordClass({}, recordId);
     }
-    record.id = recordId;
+    record.setId(recordId);
 
     return record;
 };

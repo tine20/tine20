@@ -36,6 +36,7 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 direction: 'ASC'
             }
         });
+        this.store.addSorted = this.store.addSorted.createSequence((pos) => { this.lastAddPos = pos });
 
         this.view = new Ext.grid.GroupingView({
             emptyGroupText: this.app.i18n._('Generic'),
@@ -52,6 +53,7 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.on('beforeedit', this.onBeforeEditPosition, this);
         this.on('afteredit', this.onAfterEditPosition, this);
         this.on('beforeaddrecord', this.onNewProduct, this);
+        this.on('beforeremoverecord', this.onBeforeRemovePosition, this);
 
         this.store.on('add', this.checkGroupingState, this, { buffer: 100 });
         this.store.on('update', this.checkGroupingState, this, { buffer: 100 });
@@ -82,16 +84,30 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             // unfold subproducts
             const positions = [position];
             if (productData.unfold_type) {
+                if (productData.unfold_type === 'SET') {
+                    position.set('unit', null);
+                    position.set('quantity', null);
+                    position.clearPrice();
+                }
                 // Note: subprductMapping / subproducts are not resolved in search -> fetch it
                 productData = await Tine.Sales.getProduct(productData.id);
                 position.get('product_id', productData)
-                _.forEach(productData.subproducts, (subproductMapping) => {
+                _.forEach(productData.subproducts, (subproductMapping, idx) => {
                     const subposition = new this.recordClass({}, Tine.Tinebase.data.Record.generateUID());
                     subposition.setFromProduct(subproductMapping.product_id);
-                    positions.push(subposition);
+                    subposition.set('parent_id', position.id);
+                    // NOTE: sorting of subproductmapping sorts inside subpositions only (atm)
+                    subposition.set('sorting', position.get('sorting') ? position.get('sorting') + 100 * idx : null);
+                    subposition.set('quantity', subproductMapping.quantity);
+                    // @TODO where to store shortcut?
+                    // @TODO where to start unfold_type? do we need to remember?
+                    if (productData.unfold_type === 'BUNDLE') {
+                        subposition.clearPrice();
+                    }
                     if (!subposition.get('grouping')) {
                         subposition.set('grouping', position.get('grouping'));
                     }
+                    positions.push(subposition);
                 });
             }
 
@@ -115,8 +131,6 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 // -> use only if not last!
                 this.applySorting(ownGroup, this.quickaddRecord, 'above');
                 ownGroup.forEach((r) => { this.store.addSorted(r) });
-                this.applySorting([this.quickaddRecord], ownGroup.pop(), 'below');
-
             }
 
             // append remaining groups
@@ -133,6 +147,8 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 }
             });
 
+            this.applySorting([this.quickaddRecord], this.lastAddPos, 'below');
+
             this.store.resumeEvents();
             this.store.applySort();
             this.checkGroupingState();
@@ -145,13 +161,31 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 this.startEditing(row, col);
             }, 100);
 
-            // @TODO pos numbering
+            positions.forEach((pos) => { pos.commit() });
+            this.applyNumbering();
             this.fireEvent('change', this)
         });
         return false;
     },
 
     applySorting: DDSortPlugin.prototype.applySorting,
+
+    applyNumbering() {
+        const counters = {};
+        this.store.each((pos) => {
+            if (pos === this.quickaddRecord) return;
+
+            const rangeKey = `${pos.get('grouping')}_${pos.get('parent_id')}`;
+            counters[rangeKey] = (counters[rangeKey] || 0) + 1;
+
+            // @TODO implement better groupPrefix
+            const groupPrefix = pos.get('grouping') ? pos.get('grouping')[0] : '';
+            const parentPrefix = pos.get('parent_id') ? this.store.getById(pos.get('parent_id')).get('pos_number') : '';
+
+            const posNumber = (parentPrefix ? parentPrefix + '.' : (groupPrefix ? groupPrefix + ' ' : '')) + counters[rangeKey];
+            pos.data.pos_number = posNumber;
+        });
+    },
 
     // checks and applies if grid is grouped
     checkGroupingState: function() {
@@ -184,9 +218,14 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.fireEvent('change', this)
     },
 
+    onBeforeRemovePosition(pos) {
+        return pos === this.quickaddRecord ? false : null;
+    },
+
     onRemovePosition() {
         this.fireEvent('change', this)
     },
+
     getColumnModel() {
         const modelConfig = this.recordClass.getModelConfiguration();
         const colMgr = _.bind(Tine.widgets.grid.ColumnManager.get, Tine.widgets.grid.ColumnManager, this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), _, 'editDialog', _);
@@ -195,7 +234,7 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         // init all columns
         this.columns = Object.keys(modelConfig.fields).reduce((columns, fieldName) => {
-            const col = colMgr(fieldName);
+            const col = colMgr(fieldName, { sortable: false });
             if (col) {
                 if (['type', 'pos_number', 'gross_price'].indexOf(fieldName) < 0) {
                     col.editor = Ext.ComponentMgr.create(fieldMgr(fieldName));
@@ -207,6 +246,7 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         // some adjustments
         Object.assign(this.columns.find((c) => c.dataIndex === 'type'),{ header: '', width: 15, renderer: _.bind(this.typeRenderer, this) });
+        Object.assign(this.columns.find((c) => c.dataIndex === 'pos_number'),{ width: 40 });
         // @TODO product_id picker nur sales produkte die noch aktiv
         Object.assign(this.columns.find((c) => c.dataIndex === 'title'),{ quickaddField: Ext.ComponentMgr.create(fieldMgr('product_id', {blurOnSelect: true})), renderer: _.bind(this.titleRenderer, this) });
         Object.assign(this.columns.find((c) => c.dataIndex === 'unit_price'),{ header: i18n._('Price') });
@@ -248,7 +288,14 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         return Ext.util.Format.money(value) + ' ' + Tine.Tinebase.registry.get('currencySymbol')
     },
 
-    setValue: function(value) {},
+    setValue: function(value) {
+        this.store.loadData(value, false);
+        const last = this.store.getAt(this.store.getCount() -1);
+        if (last) {
+            this.quickaddRecord.set('sorting', last.get('sorting') + this.sortInc);
+        }
+        this.store.add(this.quickaddRecord);
+    },
     getValue: function () {
         const data = [];
         Tine.Tinebase.common.assertComparable(data);
