@@ -781,28 +781,19 @@ class Tinebase_User implements Tinebase_Controller_Interface
     protected static function _syncUserHook(Tinebase_Model_FullUser $user, $userProperties)
     {
         $result = true;
-        $hookClass = Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_HOOK_CLASS);
-        if ($hookClass) {
-            if (! class_exists($hookClass)) {
-                @include($hookClass . '.php');
-            }
+        $hook = Tinebase_Config::getInstance()->getHookClass(Tinebase_Config::SYNC_USER_HOOK_CLASS, 'syncUser');
+        if ($hook) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Calling ' . get_class($hook) . '::syncUser() ...');
 
-            if (class_exists($hookClass)) {
-                $hook = new $hookClass();
-                if (method_exists($hook, 'syncUser')) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Calling ' . $hookClass . '::syncUser() ...');
-
-                    try {
-                        $result = call_user_func_array(array($hook, 'syncUser'), array($user, $userProperties));
-                    } catch (Tinebase_Exception $te) {
-                        Tinebase_Exception::log($te);
-                        return false;
-                    }
-                }
+            try {
+                $result = call_user_func_array(array($hook, 'syncUser'), array($user, $userProperties));
+            } catch (Tinebase_Exception $te) {
+                Tinebase_Exception::log($te);
+                return false;
             }
         }
-        
+
         return $result;
     }
 

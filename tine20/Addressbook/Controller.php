@@ -84,9 +84,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
-        
-        switch(get_class($_eventObject)) {
+        switch (get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;

@@ -78,17 +78,18 @@ class Tinebase_Event
         }
         
         // try custom user defined listeners
-        try {
-            if (@class_exists('CustomEventHooks')) {
-                $methods = get_class_methods('CustomEventHooks');
-                if (in_array('handleEvent', (array)$methods)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' ' . ' about to process user defined event hook for '. get_class($_eventObject));
-                    CustomEventHooks::handleEvent($_eventObject);
-                }
+        $customEventHook = Tinebase_Config::getInstance()->getHookClass(Tinebase_Config::EVENT_HOOK_CLASS,
+            'handleEvent');
+        if ($customEventHook) {
+            try {
+                Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' About to process user defined event hook for ' . get_class($_eventObject));
+                $customEventHook->handleEvent($_eventObject);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                    . ' Failed to process user defined event hook with message: ' . $e);
+                return false;
             }
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' ' . ' failed to process user defined event hook with message: ' . $e);
-            return false;
         }
         
         unset(self::$events[get_class($_eventObject)][$_eventObject->getId()]);
