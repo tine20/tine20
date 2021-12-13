@@ -10,6 +10,7 @@ Ext.ns('Tine.widgets.form');
 import 'widgets/form/JsonField';
 import 'widgets/form/XmlField';
 import 'widgets/form/ModelPicker';
+import 'widgets/form/LanguagePicker';
 
 /**
  * central form field manager
@@ -337,6 +338,9 @@ Tine.widgets.form.FieldManager = function() {
                 case 'hexcolor':
                     field.xtype = 'colorfield';
                     field.width = 80;
+                    break;
+                case 'language':
+                    field.xtype = 'tw-languagepicker';
                     break;
                 case 'label':
                     field.xtype = 'label';

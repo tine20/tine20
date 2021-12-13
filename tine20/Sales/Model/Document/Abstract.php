@@ -20,22 +20,22 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     //const MODEL_NAME_PART = ''; // als konkrete document_types gibt es Offer, Order, DeliveryNote, Invoice (keine Gutschrift!)
 
     const FLD_ID = 'id';
+    const FLD_DOCUMENT_LANGUAGE = 'document_language';
     const FLD_DOCUMENT_CATEGORY = 'document_category'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
     const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
     const FLD_PRECURSOR_DOCUMENTS = 'precursor_documents'; // virtual, link
-    const FLD_NOTE = 'note';
+
     const FLD_BOILERPLATES = 'boilerplates';
     const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
     const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
     // TODO FIXME denormalized.... as json in the document or as copy in the db?
     const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
 
+    const FLD_DOCUMENT_TITLE = 'document_title';
     const FLD_CUSTOMER_REFERENCE = 'customer_reference'; // varchar 255
     const FLD_DOCUMENT_DATE = 'date'; // Belegdatum NICHT Buchungsdatum, das kommt noch unten
     const FLD_PAYMENT_METHOD = 'payment_method'; // Sales_Model_PaymentMethod KeyField
     const FLD_POSITIONS = 'positions'; // virtuell recordSet
-
-
 
     const FLD_POSITIONS_NET_SUM = 'positions_net_sum';
     const FLD_POSITIONS_DISCOUNT_SUM = 'positions_discount_sum';
@@ -52,6 +52,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     const FLD_COST_CENTER_ID = 'cost_center_id';
     const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
+
+    const FLD_NOTE = 'note';
 
     const FLD_BOOKING_DATE = 'booking_date'; // ggf. nur bei Rechnung ud. Storno
 
@@ -121,6 +123,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS                        => [
+            self::FLD_DOCUMENT_LANGUAGE => [
+                self::LABEL                 => 'Language', // _('Language')
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Sales_Config::LANGUAGES_AVAILABLE,
+            ],
             self::FLD_DOCUMENT_CATEGORY => [
                 self::LABEL                 => 'Category', // _('Category')
                 self::TYPE                  => self::TYPE_KEY_FIELD,
@@ -136,6 +143,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ]*/
+            ],
+            self::FLD_DOCUMENT_TITLE => [
+                self::LABEL                         => 'Title', // _('Title')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
             ],
             self::FLD_DOCUMENT_DATE             => [
                 self::LABEL                         => 'Document Date', //_('Document Date')
