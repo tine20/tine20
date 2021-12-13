@@ -369,7 +369,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         try {
             /** @var Tinebase_Model_User $account */
             $account = new $_accountClass(NULL, TRUE);
-            $account->setFromArray($row);
+            $account->hydrateFromBackend($row);
             $account->runConvertToRecord();
         } catch (Tinebase_Exception_Record_Validation $e) {
             $validation_errors = $account->getValidationErrors();
@@ -395,7 +395,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $stmt = $select->query();
         $data = (array) $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $stmt->closeCursor();
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_FullUser', $data, true);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_FullUser');
+        foreach ($data as $row) {
+            $user = new Tinebase_Model_FullUser([], true);
+            $user->hydrateFromBackend($row);
+            $result->addRecord($user);
+        }
         $result->runConvertToRecord();
         return $result;
     }
@@ -1064,6 +1069,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function addUser(Tinebase_Model_FullUser $_user)
     {
         $visibility = $_user->visibility;
+
+        $_user->applyTwigTemplates();
 
         if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $userFromSyncBackend = $this->addUserToSyncBackend($_user);

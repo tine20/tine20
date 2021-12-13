@@ -914,7 +914,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                     case 'accountId':
                         $accountArray[$keyMapping] = $this->_decodeAccountId($value[0]);
                         break;
-                        
+
+                    case 'accountEmailAddress':
+                        if ('' !== trim($value[0])) {
+                            $accountArray[$keyMapping] = $value[0];
+                        }
+                        break;
+
                     default:
                         $accountArray[$keyMapping] = $value[0];
                         break;

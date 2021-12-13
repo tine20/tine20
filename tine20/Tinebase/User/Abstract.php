@@ -20,7 +20,6 @@
  *
  * @method modlogActive($setTo = null)
  * @method updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
- * @method updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
  */
 abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 {
@@ -374,15 +373,20 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function generateUserName($_account, $_schema = 1)
     {
-        if (! empty($_account->accountFirstName) && $_schema > 0 && method_exists($this, '_generateUserWithSchema' . $_schema)) {
-            $userName = call_user_func_array(array($this, '_generateUserWithSchema' . $_schema), array($_account));
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG}->{Tinebase_Config::ACCOUNT_TWIG_LOGIN}) {
+            $userName = $_account->applyAccountTwig('accountLoginName', Tinebase_Config::getInstance()
+                ->{Tinebase_Config::ACCOUNT_TWIG}->{Tinebase_Config::ACCOUNT_TWIG_LOGIN});
         } else {
-            $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountLastName), 0, 10));
-        }
+            if (!empty($_account->accountFirstName) && $_schema > 0 && method_exists($this, '_generateUserWithSchema' . $_schema)) {
+                $userName = call_user_func_array(array($this, '_generateUserWithSchema' . $_schema), array($_account));
+            } else {
+                $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountLastName), 0, 10));
+            }
 
-        if (empty($userName)) {
-            // try email address
-            $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountEmailAddress), 0, 19));
+            if (empty($userName)) {
+                // try email address
+                $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountEmailAddress), 0, 19));
+            }
         }
         
         $userName = $this->_addSuffixToNameIfExists('accountLoginName', $userName);

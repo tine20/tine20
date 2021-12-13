@@ -123,6 +123,14 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         ],
 
         'fields'            => [
+            'accountLoginName'              => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [
+                    Zend_Filter_StringTrim::class => null,
+                    Zend_Filter_StringToLower::class => null,
+                ],
+            ],
             'accountDisplayName'            => [
                 'type'                          => 'string',
                 'validators'                    => ['presence' => 'required'],
@@ -141,10 +149,6 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
             'accountEmailAddress'           => [
                 'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [
-                    Zend_Filter_StringTrim::class => null,
-                    Zend_Filter_StringToLower::class => null,
-                ],
             ],
             'accountFullName'               => [
                 'type'                          => 'string',
@@ -188,26 +192,61 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      */
     public function setFromArray(array &$_data)
     {
-        // always update accountDisplayName and accountFullName
-        if (isset($_data['accountLastName'])) {
-            $_data['accountDisplayName'] = trim($_data['accountLastName']);
-            if (!empty($_data['accountFirstName'])) {
-                $_data['accountDisplayName'] .= ', ' . trim($_data['accountFirstName']);
-            }
-            
-            if (! (isset($_data['accountFullName']) || array_key_exists('accountFullName', $_data))) {
-                $_data['accountFullName'] = trim($_data['accountLastName']);
-                if (!empty($_data['accountFirstName'])) {
-                    $_data['accountFullName'] = trim($_data['accountFirstName']) . ' ' . $_data['accountFullName'];
-                }
-            }
-        }
+        // make sure we run through the setFromArray
+        $bypassFilter = $this->bypassFilters;
+        $this->bypassFilters = true;
 
         if (isset($_data['accountEmailAddress'])) {
-            $_data['accountEmailAddress'] = Tinebase_Helper::convertDomainToPunycode($_data['accountEmailAddress']);
+            $_data['accountEmailAddress'] = Tinebase_Helper::convertDomainToPunycode(mb_strtolower(trim($_data['accountEmailAddress'])));
         }
 
         parent::setFromArray($_data);
+
+        $twigConfig = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
+
+        // only set accountDisplayName and accountFullName if they are not set already
+        if (!isset($_data['accountDisplayName']) || '' === trim($_data['accountDisplayName'])) {
+            $this->accountDisplayName = $this->applyAccountTwig('accountDisplayName',
+                $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_DISPLAYNAME});
+        }
+        if (!isset($_data['accountFullName']) || '' === trim($_data['accountFullName'])) {
+            $this->accountFullName = $this->applyAccountTwig('accountFullName',
+                $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_FULLNAME});
+        }
+
+        if (!$bypassFilter) {
+            $this->bypassFilters = false;
+            $this->isValid(true);
+        }
+    }
+
+    public function applyTwigTemplates()
+    {
+        $twigConfig = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
+
+        // only set properties if they are not set already
+        if (!isset($this->_properties['accountDisplayName']) || '' === trim($this->_properties['accountDisplayName'])) {
+            $this->accountDisplayName = $this->applyAccountTwig('accountDisplayName',
+                $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_DISPLAYNAME});
+        }
+        if (!isset($this->_properties['accountFullName']) || '' === trim($this->_properties['accountFullName'])) {
+            $this->accountFullName = $this->applyAccountTwig('accountFullName',
+                $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_FULLNAME});
+        }
+        // maybe set accountLoginName before setting accountEmailAddress, eventually the latter is based on first one
+        if (!isset($this->_properties['accountLoginName']) || '' === trim($this->_properties['accountLoginName'])) {
+            $this->accountLoginName = $this->applyAccountTwig('accountLoginName',
+                $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_LOGIN});
+        }
+
+        // key does not exist => applyTwig
+        // value !== null && trim(value) evaluates to '' => applyTwig
+        if (!array_key_exists('accountEmailAddress', $this->_properties) ||
+                (null !== $this->_properties['accountEmailAddress'] &&
+                    '' === trim($this->_properties['accountEmailAddress']))) {
+            $this->accountEmailAddress = Tinebase_Helper::convertDomainToPunycode(
+                $this->applyAccountTwig('accountEmailAddress', $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_EMAIL}));
+        }
     }
 
     /**
@@ -223,6 +262,21 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         }
 
         return $result;
+    }
+
+    public function applyAccountTwig($name, $twig)
+    {
+        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(), [
+            Tinebase_Twig::TWIG_LOADER =>
+                new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, function() use($twig) { return $twig; })
+        ]);
+        return $twig->load(__METHOD__ . $name)->render(array_merge(['email' => Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)], static::$twigContext, ['account' => $this]));
+    }
+
+    protected static $twigContext = [];
+    public static function setTwigContext(array $data)
+    {
+        static::$twigContext = $data;
     }
 
     /**
