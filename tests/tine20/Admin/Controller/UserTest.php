@@ -215,8 +215,10 @@ class Admin_Controller_UserTest extends TestCase
 
         $userToCreate = TestCase::getTestUser();
         $email = $userToCreate->accountEmailAddress;
-        unset($userToCreate->accountEmailAddress);
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        unset($user->accountEmailAddress);
+        $user = Admin_Controller_User::getInstance()->update($user);
+        $this->assertEmpty($user->accountEmailAddress);
         $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
 
         $user->accountEmailAddress = $email;

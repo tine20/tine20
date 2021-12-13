@@ -185,7 +185,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
             'emailForwards' => []
         );
         $accountData['emailUser'] = $emailUser;
-        $accountData['accountEmailAddress'] = '';
+        $accountData['accountEmailAddress'] = null;
         $account = $this->_json->saveUser($accountData);
 
         self::assertEmpty($account['accountEmailAddress']);
