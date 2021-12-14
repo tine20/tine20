@@ -111,6 +111,7 @@ class Admin_Import_User_Csv extends Tinebase_Import_Csv_Abstract
                 $this->_options['accountHomeDirectoryPrefix'] = $_recordData['accountHomeDirectoryPrefix'];
             }
 
+            $record->applyTwigTemplates();
             $password = $record->applyOptionsAndGeneratePassword($this->_options, (isset($_recordData['password'])) ? $_recordData['password'] : NULL);
             Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
             

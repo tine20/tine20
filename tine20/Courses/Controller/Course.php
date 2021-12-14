@@ -649,6 +649,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                 'pwdCanChange'  => new Tinebase_DateTime('@1'),
                 'pwdMustChange' => new Tinebase_DateTime('@1')
             ) : array(),
+            'encoding'                      => 'UTF-8'
         );
     }
     
