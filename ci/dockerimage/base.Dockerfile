@@ -125,7 +125,6 @@ RUN apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/main n
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
-RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /usr/bin/php8 /usr/bin/php; fi
 RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /usr/sbin/php-fpm8 /usr/sbin/php-fpm; else ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm; fi
 RUN if [ ${ALPINE_PHP_PACKAGE} == "php8" ]; then ln -s /etc/php8 /etc/php; else ln -s /etc/php7 /etc/php; fi
 
