@@ -27,8 +27,9 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
 
         // init data / translate values
         var data = config.keyFieldConfig && config.keyFieldConfig.value && config.keyFieldConfig.value.records && config.keyFieldConfig.value.records.length ? config.keyFieldConfig.value.records : [];
+        const translationList = Locale.getTranslationList(config?.keyFieldConfig?.definition?.localeTranslationList);
         Ext.each(data, function (d) {
-            d.i18nValue = d.value ? config.app.i18n._hidden(d.value) : "";
+            d.i18nValue = translationList ? translationList[d.id] : (d.value ? config.app.i18n._hidden(d.value) : "");
             d.id = String(d.id);
         });
         config.data = data;

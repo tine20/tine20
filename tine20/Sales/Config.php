@@ -109,6 +109,8 @@ class Sales_Config extends Tinebase_Config_Abstract
 
     const PRODUCT_UNIT = 'productUnit';
 
+    const LANGUAGES_AVAILABLE = 'languagesAvailable';
+
     const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
     
     /**
@@ -221,6 +223,21 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 'EUR'
         ),
+        self::LANGUAGES_AVAILABLE => [
+            self::LABEL                 => 'Languages Available', //_('Languages Available')
+            self::DESCRIPTION           => 'List of languages available in the sales modules.', //_('List of languages available in the sales modules.')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            'localeTranslationList'     => 'Language',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'de', 'value' => 'German'],
+                    ['id' => 'en', 'value' => 'English'],
+                ],
+                self::DEFAULT_STR           => 'en',
+            ],
+        ],
         self::INVOICE_TYPE => array(
                                    //_('Invoice Type')
             'label'                 => 'Invoice Type',
