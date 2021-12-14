@@ -1020,6 +1020,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         $originalRecord = null;
         if ($record->getId()) {
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
             $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
             try {
                 $originalRecord = $ctrl->get($record->getId());
@@ -3447,8 +3448,10 @@ HumanResources_CliTests.testSetContractsEndDate */
             $filter->addFilter(new Tinebase_Model_Filter_Bool(TMCC::FLD_LOCALLY_CHANGED, 'equals', false));
         }
 
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = Tinebase_Core::getApplicationInstance($targetModel);
         /** @var Tinebase_Record_Interface $toUpdate */
-        foreach (($ctrl = Tinebase_Core::getApplicationInstance($targetModel))->search($filter) as $toUpdate) {
+        foreach ($ctrl->search($filter) as $toUpdate) {
             $changed = false;
             foreach ($_record::getConfiguration()->fields as $key => $cfg) {
                 if (!$toUpdate->has($key) || in_array($key, ['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by', 'deleted_time', 'is_deleted'])) continue;
