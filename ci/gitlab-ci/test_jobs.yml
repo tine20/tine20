@@ -72,7 +72,6 @@ phpstan-analysis:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHPSTAN_ANALYSES_SCHEDULE != "false"
     - if: $CI_COMMIT_TAG && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
-    - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: true
 
@@ -108,7 +107,7 @@ parallel-lint-analysis:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PARALLEL_LINT_ANALYSIS_SCHEDULE != "false"
     - if: $CI_COMMIT_TAG && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
       allow_failure: false
-    - if: $CI_COMMIT_TAG    
+    - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: true
 
@@ -148,7 +147,6 @@ phpcs-analysis:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHPCS_ANALYSIS_SCHEDULE != "false"
     - if: $CI_COMMIT_TAG && $PHPCS_ANALYSIS_STRICT == "true"
       allow_failure: false
-    - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: true
 
@@ -195,4 +193,3 @@ test-install-demodata:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $TEST_INSTALL_DEMODATA_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /test-install-demodata/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $TEST_INSTALL_DEMODATA_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
