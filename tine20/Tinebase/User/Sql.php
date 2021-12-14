@@ -366,13 +366,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($row, true));
 
+        $account = null;
         try {
             /** @var Tinebase_Model_User $account */
             $account = new $_accountClass(NULL, TRUE);
             $account->hydrateFromBackend($row);
             $account->runConvertToRecord();
         } catch (Tinebase_Exception_Record_Validation $e) {
-            $validation_errors = $account->getValidationErrors();
+            $validation_errors = $account ? $account->getValidationErrors() : [];
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage() . "\n" .
                 "Tinebase_Model_User::validation_errors: \n" .
                 print_r($validation_errors,true));
