@@ -483,7 +483,9 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        $result = Setup_Controller::getInstance()->updateApplications();
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        $strict = isset($options['strict']) && $options['strict'];
+        $result = Setup_Controller::getInstance()->updateApplications(null, $strict);
         echo "Updated " . $result['updated'] . " application(s).\n";
         if ($_opts->v && count($result['updates']) > 0) {
             print_r($result['updates']);

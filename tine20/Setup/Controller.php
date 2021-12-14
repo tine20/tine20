@@ -14,6 +14,7 @@
 /**
  * php helpers
  */
+
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'Tinebase' . DIRECTORY_SEPARATOR . 'Helper.php';
 
 /**
@@ -537,12 +538,13 @@ class Setup_Controller
      * applications is legacy, we always update all installed applications
      *
      * @param Tinebase_Record_RecordSet $_applications
+     * @param bool $strict
      * @return  array   messages
      * @throws Tinebase_Exception
      *
      * TODO refactor signature ... we dont want that? do we? always all...
      */
-    public function updateApplications(Tinebase_Record_RecordSet $_applications = null)
+    public function updateApplications(Tinebase_Record_RecordSet $_applications = null, $strict = false)
     {
         $this->clearCache();
 
@@ -560,6 +562,9 @@ class Setup_Controller
         $iterationCount = 0;
         do {
             $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
+            if (empty($updatesByPrio) && $iterationCount > 0) {
+                break;
+            }
 
             if (!isset($updatesByPrio[Setup_Update_Abstract::PRIO_TINEBASE_AFTER_STRUCTURE])) {
                 $updatesByPrio[Setup_Update_Abstract::PRIO_TINEBASE_AFTER_STRUCTURE] = [];
@@ -604,6 +609,15 @@ class Setup_Controller
                             throw $e;
                         }
                     }
+                }
+
+                if (Setup_SchemaTool::hasSchemaUpdates()) {
+                    Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                        ' pending schema updates found, this should not happen!');
+                    if ($strict) {
+                        throw new Setup_Backend_Exception_NotImplemented('missing schema updates in update scripts');
+                    }
+                    Setup_SchemaTool::updateAllSchema();
                 }
 
             } finally {
