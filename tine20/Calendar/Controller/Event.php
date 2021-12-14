@@ -1187,7 +1187,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_ids = (array)$_ids->getId();
         }
         
-        $records = $this->_backend->getMultiple((array) $_ids);
+        // make sure we use same grants as search (sql calced grants vs search based grants)
+        $records = $this->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => $_ids)
+        )));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Deleting " . count($records) . ' with range ' . $range . ' ...');
