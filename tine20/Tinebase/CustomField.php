@@ -128,13 +128,13 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $transId = null;
 
             if ($_record->is_system) {
-                $app = Tinebase_Application::getInstance()->getApplicationById($_record->application_id);
+                Tinebase_Application::getInstance()->getApplicationById($_record->application_id);
                 /** @var Tinebase_Record_Interface $model */
                 $model = $_record->model;
                 // clear the MC cache
                 $model::resetConfiguration();
 
-                Setup_SchemaTool::updateAllSchema();
+                Setup_SchemaTool::updateSchema([$model]);
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
