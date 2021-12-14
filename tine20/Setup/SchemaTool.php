@@ -160,6 +160,20 @@ class Setup_SchemaTool
         $tool->updateSchema($classes, true);
     }
 
+    public static function hasSchemaUpdates()
+    {
+        $em = self::getEntityManager();
+        $tool = new SchemaTool($em);
+        $classes = [];
+
+        $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
+        foreach($mappingDriver->getAllClassNames() as $modelName) {
+            $classes[] = $em->getClassMetadata($modelName);
+        }
+
+        return !empty($tool->getUpdateSchemaSql($classes, true));
+    }
+
     /**
      * compare two tine20 databases with each other
      *
