@@ -389,9 +389,6 @@ class Courses_JsonTest extends TestCase
      * test for import of members (4) / json import
      * 
      * @see 0006672: allow to import (csv) files with only CR linebreaks
-     * @group nogitlabci
-     * gitlabci: stream_filter_append(): unable to create or locate filter "convert.iconv.MAC-CENTRALEUROPE/UTF-8//IGNORE"
-     * @group nodockerci
      */
     public function testImportMembersIntoCourse4()
     {
@@ -400,7 +397,7 @@ class Courses_JsonTest extends TestCase
         $this->assertEquals(8, count($result['members']), 'import failed');
         $found = FALSE;
         foreach($result['members'] as $member) {
-            if ($member['name'] === 'Frantasia, Anastasia' && $member['data'] === 'frantasiaan') {
+            if ($member['name'] === 'Frantasia, Anastasia' && $member['data'] === 'afrantasia') {
                 $found = TRUE;
             }
         }
