@@ -114,6 +114,14 @@ class Sales_Config extends Tinebase_Config_Abstract
     const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
     
     /**
+     * offer status
+     * 
+     * @var string 
+     */
+    public const DOCUMENT_OFFER_STATUS = 'documentOfferStatus';
+    public const DOCUMENT_OFFER_STATUS_TRANSITIONS = 'documentOfferStatusTransitions';
+
+    /**
      * Invoice Type
      *
      * @var string
@@ -177,6 +185,63 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 12
         ),
+        self::DOCUMENT_OFFER_STATUS => [
+            //_('Offer Status')
+            self::LABEL              => 'Offer Status',
+            //_('Possible Offer Status')
+            self::DESCRIPTION        => 'Possible Offer Status',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                // OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
+                self::RECORDS => [
+                    ['id' => Sales_Model_Document_Offer::STATUS_IN_PROCESS,   'value' => 'In process (unbooked, open)',
+                        'icon' => null, 'system' => true], //_('In process (unbooked, open)')
+                    ['id' => Sales_Model_Document_Offer::STATUS_DELIVERED,    'value' => 'Delivered (booked, open)',
+                        'icon' => null, 'system' => true], //_('Delivered (booked, open)')
+                    ['id' => Sales_Model_Document_Offer::STATUS_ORDERED, 'value' => 'Ordered (booked, open)',
+                        'icon' => null, 'system' => true], //_('Ordered (booked, open)')
+                    ['id' => Sales_Model_Document_Offer::STATUS_REJECTED,    'value' => 'Rejected (booked, closed)',
+                        'icon' => null, 'system' => true], //_('Rejected (booked, closed)')
+                ],
+                self::DEFAULT_STR => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
+            ],
+        ],
+        self::DOCUMENT_OFFER_STATUS_TRANSITIONS => [
+            //_('Offer Status Transitions')
+            self::LABEL              => 'Offer Status Transitions',
+            //_('Possible Offer Status Transitions')
+            self::DESCRIPTION        => 'Possible Offer Status Transitions',
+            self::TYPE               => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                '' => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_IN_PROCESS
+                    ]
+                ],
+                Sales_Model_Document_Offer::STATUS_IN_PROCESS => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_DELIVERED,
+                        Sales_Model_Document_Offer::STATUS_REJECTED,
+                    ]
+                ],
+                Sales_Model_Document_Offer::STATUS_DELIVERED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_ORDERED
+                    ]
+                ],
+                Sales_Model_Document_Offer::STATUS_ORDERED => [
+                ],
+                Sales_Model_Document_Offer::STATUS_REJECTED => [
+                ],
+            ]
+        ],
+
         self::IGNORE_BILLABLES_BEFORE => array(
             //_('Ignore Billables Before Date')
             'label'                 => 'Ignore Billables Before Date',

@@ -21,6 +21,15 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
     public const TABLE_NAME = 'sales_document_offer';
 
     public const FLD_ORDER_ID = 'order_id';
+    public const FLD_OFFER_STATUS = 'offer_status';
+
+    /**
+     * offer status
+     */
+    public const STATUS_IN_PROCESS = 'IN-PROCESS';
+    public const STATUS_DELIVERED = 'DELIVERED';
+    public const STATUS_ORDERED = 'ORDERED';
+    public const STATUS_REJECTED = 'REJECTED';
 
     /**
      * @param array $_definition
@@ -56,25 +65,45 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
             ]],
         ];
 
-        // on offers customers are optional
+        self::_adaptFields($_definition);
+    }
+
+    /**
+     * @param array $_definition
+     * @return void
+     */
+    protected static function _adaptFields(array &$_definition)
+    {
+        // offer customers are optional
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
 
-        // offers dont have precursor documents, that would be a crm lead or something in the future
+        // offers don't have precursor documents, that would be a crm lead or something in the future
         // TODO for the FE, maybe we make this a virtual field? not present in DB, always of value null?
         unset($_definition[self::FIELDS][self::FLD_PRECURSOR_DOCUMENTS]);
 
-        $_definition[self::FIELDS][self::FLD_ORDER_ID] = [
-            self::TYPE                  => self::TYPE_RECORD,
-            self::DISABLED              => true,
-            self::CONFIG                => [
-                self::APP_NAME              => Sales_Config::APP_NAME,
-                self::MODEL_NAME            => Sales_Model_Document_Order::MODEL_NAME_PART,
-            ],
-            self::NULLABLE              => true,
-        ];
-
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART;
+
+        $_definition[self::FIELDS] = array_merge($_definition[self::FIELDS], [
+            self::FLD_ORDER_ID => [
+                self::TYPE => self::TYPE_RECORD,
+                self::DISABLED => true,
+                self::CONFIG => [
+                    self::APP_NAME => Sales_Config::APP_NAME,
+                    self::MODEL_NAME => Sales_Model_Document_Order::MODEL_NAME_PART,
+                ],
+                self::NULLABLE => true,
+            ],
+            // OFFER_STATUS keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen),
+            //                        Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
+            self::FLD_OFFER_STATUS => [
+                self::LABEL => 'Status', // _('Status')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NAME => Sales_Config::DOCUMENT_OFFER_STATUS,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+            ],
+        ]);
     }
 
     /**

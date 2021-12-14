@@ -227,6 +227,9 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_requiredFilterACLsync  = [Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_ADMIN];
     protected $_requiredFilterACLexport  = [Tinebase_Model_Grants::GRANT_EXPORT, Tinebase_Model_Grants::GRANT_ADMIN];
 
+    protected $_transitionConfig = null;
+    protected $_transitionStatusField = null;
+
     /**
      * returns controller for records of given model
      *
@@ -3534,5 +3537,50 @@ HumanResources_CliTests.testSetContractsEndDate */
         }
 
         return $record;
+    }
+
+    /**
+     * validate state
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface|null $_oldRecord
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _validateState(Tinebase_Record_Interface $_record,
+                                      Tinebase_Record_Interface $_oldRecord = null)
+    {
+        if (! $this->_transitionConfig || ! $this->_transitionStatusField) {
+            throw new Tinebase_Exception_UnexpectedValue('transitions and status field not configured');
+        }
+        $transitions = Tinebase_Config::getAppConfig($this->_applicationName)->get($this->_transitionConfig);
+        $currentStatus = $_record->{$this->_transitionStatusField};
+
+        $oldStatus = $_oldRecord ? $_oldRecord->{$this->_transitionStatusField} : '';
+        $targetStatus = isset($transitions[$oldStatus][Tinebase_Config_Abstract::TRANSITION_TARGET_STATUS]) ?
+            $transitions[$oldStatus][Tinebase_Config_Abstract::TRANSITION_TARGET_STATUS] : null;
+
+        if (!$targetStatus) {
+            throw new Tinebase_Exception_UnexpectedValue('targetStatus in transitions : ' . $oldStatus
+                . ' is not set');
+        }
+
+        if ('' === $currentStatus) {
+            throw new Tinebase_Exception_UnexpectedValue('status is not set');
+        }
+
+        if (!isset($transitions[$currentStatus])) {
+            throw new Tinebase_Exception_UnexpectedValue('status : ' . $currentStatus
+                . ' is not defined in transitions');
+        }
+
+        if ($oldStatus !== $currentStatus) {
+            if (!in_array($currentStatus, $targetStatus)) {
+                $translation = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric(sprintf(
+                    $translation->_('Status %s is not valid.'),
+                    $currentStatus
+                ));
+            }
+        }
     }
 }

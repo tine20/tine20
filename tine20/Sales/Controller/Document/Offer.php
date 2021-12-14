@@ -37,5 +37,20 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         $this->_modelName = Sales_Model_Document_Offer::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+
+        $this->_transitionStatusField = Sales_Model_Document_Offer::FLD_OFFER_STATUS;
+        $this->_transitionConfig = Sales_Config::DOCUMENT_OFFER_STATUS_TRANSITIONS;
+    }
+
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        $this->_validateState($_record);
+        parent::_inspectBeforeCreate($_record);
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        $this->_validateState($_record, $_oldRecord);
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 }

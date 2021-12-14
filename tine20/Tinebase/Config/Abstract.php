@@ -34,6 +34,11 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     const TYPE                  = 'type';
 
     /**
+     * status transitions
+     */
+    public const TRANSITION_TARGET_STATUS = 'targetStatus';
+
+    /**
      * object config type
      * 
      * @var string

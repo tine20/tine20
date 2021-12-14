@@ -19,49 +19,46 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
     //const MODEL_NAME_PART = ''; // als konkrete document_types gibt es Offer, Order, DeliveryNote, Invoice (keine Gutschrift!)
 
-    const FLD_ID = 'id';
-    const FLD_DOCUMENT_LANGUAGE = 'document_language';
-    const FLD_DOCUMENT_CATEGORY = 'document_category'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
-    const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
-    const FLD_PRECURSOR_DOCUMENTS = 'precursor_documents'; // virtual, link
+    public const FLD_ID = 'id';
+    public const FLD_DOCUMENT_LANGUAGE = 'document_language';
+    public const FLD_DOCUMENT_CATEGORY = 'document_category'; // keyfield - per default "standard". brauchen wir z.B. zum filtern, zur Auswahl von Textbausteinen, Templates etc.
+    public const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
+    public const FLD_PRECURSOR_DOCUMENTS = 'precursor_documents'; // virtual, link
 
-    const FLD_BOILERPLATES = 'boilerplates';
-    const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
-    const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
+    public const FLD_BOILERPLATES = 'boilerplates';
+    public const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
+    public const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
     // TODO FIXME denormalized.... as json in the document or as copy in the db?
-    const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
+    public const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
 
-    const FLD_DOCUMENT_TITLE = 'document_title';
-    const FLD_CUSTOMER_REFERENCE = 'customer_reference'; // varchar 255
-    const FLD_DOCUMENT_DATE = 'date'; // Belegdatum NICHT Buchungsdatum, das kommt noch unten
-    const FLD_PAYMENT_METHOD = 'payment_method'; // Sales_Model_PaymentMethod KeyField
-    const FLD_POSITIONS = 'positions'; // virtuell recordSet
+    public const FLD_DOCUMENT_TITLE = 'document_title';
+    public const FLD_CUSTOMER_REFERENCE = 'customer_reference'; // varchar 255
+    public const FLD_DOCUMENT_DATE = 'date'; // Belegdatum NICHT Buchungsdatum, das kommt noch unten
+    public const FLD_PAYMENT_METHOD = 'payment_method'; // Sales_Model_PaymentMethod KeyField
+    public const FLD_POSITIONS = 'positions'; // virtuell recordSet
 
-    const FLD_POSITIONS_NET_SUM = 'positions_net_sum';
-    const FLD_POSITIONS_DISCOUNT_SUM = 'positions_discount_sum';
+    public const FLD_POSITIONS_NET_SUM = 'positions_net_sum';
+    public const FLD_POSITIONS_DISCOUNT_SUM = 'positions_discount_sum';
 
-    const FLD_INVOICE_DISCOUNT_TYPE = 'invoice_discount_type'; // PERCENTAGE|SUM
-    const FLD_INVOICE_DISCOUNT_PERCENTAGE = 'invoice_discount_percentage'; // automatische Berechnung je nach tupe
-    const FLD_INVOICE_DISCOUNT_SUM = 'invoice_discount_sum'; // automatische Berechnung je nach type
+    public const FLD_INVOICE_DISCOUNT_TYPE = 'invoice_discount_type'; // PERCENTAGE|SUM
+    public const FLD_INVOICE_DISCOUNT_PERCENTAGE = 'invoice_discount_percentage'; // automatische Berechnung je nach tupe
+    public const FLD_INVOICE_DISCOUNT_SUM = 'invoice_discount_sum'; // automatische Berechnung je nach type
 
-    const FLD_NET_SUM = 'net_sum';
+    public const FLD_NET_SUM = 'net_sum';
 
-    const FLD_SALES_TAX = 'sales_tax';
-    const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
-    const FLD_GROSS_SUM = 'gross_sum';
+    public const FLD_SALES_TAX = 'sales_tax';
+    public const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
+    public const FLD_GROSS_SUM = 'gross_sum';
 
-    const FLD_COST_CENTER_ID = 'cost_center_id';
-    const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
+    public const FLD_COST_CENTER_ID = 'cost_center_id';
+    public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
 
-    const FLD_NOTE = 'note';
+    public const FLD_NOTE = 'note';
 
-    const FLD_BOOKING_DATE = 'booking_date'; // ggf. nur bei Rechnung ud. Storno
+    public const FLD_BOOKING_DATE = 'booking_date'; // ggf. nur bei Rechnung ud. Storno
 
     // <dokumentenart>_STATUS z.B. Rechnungsstatus (Ungebucht, Gebucht, Verschickt, Bezahlt)
     //   übergänge haben regeln (siehe SAAS mechanik)
-
-    // OFFER:
-    //  - OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
 
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
@@ -69,7 +66,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     //  - INVOICE_STATUS // // keyfield: offen, gebucht; berechnet sich automatisch aus den zug. Rechnungen
     //  - DELIVERY_RECIPIENT_ID // abweichende Lieferadresse, RECIPIENT_ID wenn leer
     //  - DELIVERY_CONTACT_ID // abweichender Lieferkontakt, CONTACT_ID wenn leer
-    //  - DELEVERY_STATUS // keyfield: offen, geliefert; brechnet sich automatisch aus den zug. Lieferungen
+    //  - DELIVERY_STATUS // keyfield: offen, geliefert; brechnet sich automatisch aus den zug. Lieferungen
     //  pro position:
     //    - 1:n lieferpositionen (verknüpfung zu LS positionen)
     //    - zu liefern (automatisch auf anzahl, kann aber geändert werden um anzahl für erzeugten LS zu bestimmen)
