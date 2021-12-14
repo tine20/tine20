@@ -171,7 +171,11 @@ class Setup_SchemaTool
             $classes[] = $em->getClassMetadata($modelName);
         }
 
-        return !empty($tool->getUpdateSchemaSql($classes, true));
+        $sqls = array_filter($tool->getUpdateSchemaSql($classes, true), function ($val) {
+            return strpos($val, "CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL") === false;
+        });
+        
+        return !emptY($sqls);
     }
 
     /**
