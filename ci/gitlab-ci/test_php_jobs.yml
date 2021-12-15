@@ -97,7 +97,6 @@ php-unit-all-tests-source-matrix:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source-postfixmultiinstance/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 php-unit-all-tests-source-postfixmultiinstance-sequential:
   extends: .php-unit-all-tests-source-postfixmultiinstance
   variables:
@@ -114,7 +113,6 @@ php-unit-all-tests-source-postfixmultiinstance-sequential:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source-postfixmultiinstance/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 php-unit-all-tests-source-postfixmultiinstance-parallel:
   extends: .php-unit-all-tests-source-postfixmultiinstance
   timeout: 45m
@@ -130,7 +128,6 @@ php-unit-all-tests-source-postfixmultiinstance-parallel:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source-postfixmultiinstance/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_SOURCE_POSTFIXMULTIINSTANCE_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 
 
 php-unit-setup-tests-source:
@@ -148,7 +145,6 @@ php-unit-setup-tests-source:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_SETUP_TESTS_SOURCE_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-setup-tests-source/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_SETUP_TESTS_SOURCE_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 
 
 php-unit-servertests-source:
@@ -165,7 +161,6 @@ php-unit-servertests-source:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_SERVERTESTS_SOURCE_MERGE_REQUEST != "false"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-servertests-source/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_SERVERTESTS_SOURCE_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 
 
 .php-unit-all-tests-built:
@@ -183,7 +178,6 @@ php-unit-servertests-source:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 php-unit-all-tests-built-sequential:
   extends: .php-unit-all-tests-built
   variables:
@@ -200,7 +194,6 @@ php-unit-all-tests-built-sequential:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
     - when: never
 php-unit-all-tests-built-parallel:
   extends: .php-unit-all-tests-built
@@ -217,7 +210,6 @@ php-unit-all-tests-built-parallel:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_BUILT_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 
 .php-unit-nogitlabci-tests-built:
   extends: .php-unit-all-tests-built
@@ -285,7 +277,6 @@ php-unit-nogitlabci-tests-built-parallel:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 phpunit-all-tests-built-ldap-sequential:
   extends: .php-unit-all-tests-ldap-built
   variables:
@@ -302,7 +293,6 @@ phpunit-all-tests-built-ldap-sequential:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
 php-unit-all-tests-built-ĺdap-parallel:
   extends: .php-unit-all-tests-ldap-built
   timeout: 45m
@@ -318,4 +308,3 @@ php-unit-all-tests-built-ĺdap-parallel:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_SCHEDULE != "false"
-    - if: $CI_COMMIT_TAG
