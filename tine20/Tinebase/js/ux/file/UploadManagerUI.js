@@ -35,7 +35,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         this.app = this.app || Tine.Tinebase.appMgr.get('Filemanager');
         this.totalSize = 0;
         this.window.setTitle(this.app.i18n._('Uploads Monitor'));
-    
+        
         this.postalSubscriptions = [];
         this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
@@ -56,16 +56,51 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
 
         this.clearAllUploadsButton = {
             xtype: 'button',
-            text: this.app.i18n._('Stop and Clear All Uploads'),
-            iconCls: 'action_cancel',
-            minWidth: 120,
+            text: this.app.i18n._('Empty List'),
+            iconCls: 'action_clear',
             scope: this,
-            hidden: true,
+            hidden: false,
             handler: async () => {
-                await Tine.Tinebase.uploadManager.resetUploadChannels();
-                this.uploadStore.removeAll();
-                this.progressBar.show();
-                this.progressBar.update(Tine.ux.file.ProgressRenderer(0, 0, /*use SoftQuota*/ false));
+                // check if there are pending uploads and ask the user 
+                // if he wants to cancel and delete pending uploads or not
+                let hasUnFinishedUploads = false;
+                
+                this.uploadStore.each((r) => {
+                    if (r.data.status === 'pending' || r.data.status === 'uploading' ) {
+                        hasUnFinishedUploads = true;
+                    }
+                });
+
+                const option = hasUnFinishedUploads ? await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                    title: this.app.i18n._('Empty List'),
+                    questionText: this.app.i18n._('Not all uploads are finished yet. What would you to do?') + '</b><br>',
+                    height: 150,
+                    allowCancel: false,
+                    options: [
+                        {text: this.app.i18n._('Remove finished uploads from this list only'), name: 'empty'},
+                        {text: this.app.i18n._('Cancel all unfinished uploads before'), name: 'delete'}
+                    ]
+                }) : 'delete';
+                
+                switch (option) {
+                    case 'empty':
+                        // keep pending and uploading files
+                        this.uploadStore.each((r) => {
+                            if (r.data.status === 'complete' || r.data.status === 'failed') {
+                                this.uploadStore.remove(r);
+                            }
+                        });
+                        await Tine.Tinebase.uploadManager.removeCompleteTasks();
+                        this.updateProgressBar();
+                        break;
+                    case 'delete':
+                        // should delete all uploads
+                        await Tine.Tinebase.uploadManager.resetUploadChannels();
+                        this.uploadStore.removeAll();
+                        this.progressBar.show();
+                        this.progressBar.update(Tine.ux.file.ProgressRenderer(0, 0, /*use SoftQuota*/ false));
+                        break;
+                }
             }
         };
 
@@ -80,6 +115,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                 {id:'last_upload_time',header: 'Upload Date', width: 150, sortable: true, dataIndex: 'last_upload_time',  renderer: Tine.Tinebase.common.dateTimeRenderer},
             ],
             stripeRows: true,
+            autoSizeColumns: false,
             autoExpandColumn: 'name',
             autoExpandMin : 200,
             autoShow: true,
@@ -200,7 +236,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         }
 
         let record = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Filemanager.Model.Node);
-
+        
         if (record && Ext.isFunction(record.copy)) {
             if (record.data.type === 'folder') {
                 return;
@@ -217,6 +253,11 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
 
             if (e.topic.match(/\.update/)) {
                 const existRecord = this.getRecordByData(recordData);
+                
+                if (! existRecord?.id) {
+                    return;
+                }
+                
                 record.data.id = existRecord.id;
                 record.id = existRecord.id;
                 const idx = store.indexOfId(existRecord.id);
@@ -247,15 +288,15 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     updateProgressBar: function () {
         const total = _.sum(_.map(this.uploadStore.data.items, 'data.size'));
         const completedUploads = this.uploadStore.query('status', 'complete');
-
         let current = _.sum(_.map(completedUploads.items, 'data.size'));
         const uploadingFiles = this.uploadStore.query('status', 'uploading');
 
         _.each(uploadingFiles.items, (upload) => {
-            const progress = parseInt(_.last(_.split(upload.data.contenttype, ';')).replace('progress=', ''));
+            let progress = parseInt(_.last(_.split(upload.data.contenttype, ';')).replace('progress=', ''));
+            progress = progress === -1 ? 0 : progress;
             current += upload.data.size * progress / 100;
         });
-
+        
         this.progressBar.update(Tine.ux.file.ProgressRenderer(current, total, /*use SoftQuota*/ false));
         this.progressBar.show();
     },

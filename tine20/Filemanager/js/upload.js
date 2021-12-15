@@ -113,7 +113,8 @@ async function createFolderTask(targetFolderPath, folder, taskIDs, existFileList
         args: _.assign({
             uploadId,
             nodeData,
-            existNode: existNode
+            existNode: existNode,
+            targetFolderPath
         })
     };
 
@@ -138,19 +139,20 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
         const uploadId = file.uploadId;
         const folder = file.fullPath.replace(file.name, '');
         const [existNode] = _.filter(existFileList, {path: uploadId});
+        const targetFolderPath = uploadId.replace(file.name, '');
 
-        const nodeData = Tine.Filemanager.Model.Node.getDefaultData({
+        const nodeData = existNode ?? Tine.Filemanager.Model.Node.getDefaultData({
             name: _.get(file, 'name'),
             type: 'file',
-            status: 'pending',
             path: `${uploadId}`,
-            size: _.get(file, 'size'),
-            progress: 0,
-            contenttype: `vnd.adobe.partial-upload; final_type=${_.get(file, 'type')}`,
             id: Tine.Tinebase.data.Record.generateUID()
         });
     
         nodeData.last_upload_time = nodeData.creation_time;
+        nodeData.status = 'pending';
+        nodeData.size = _.get(file, 'size');
+        nodeData.progress = -1;
+        nodeData.contenttype = `vnd.adobe.partial-upload; final_type=${_.get(file, 'type')}; progress=${nodeData.progress}`;
         
         // monitor UI needs every file node , grid panel will filter itself
         window.postal.publish({
@@ -174,6 +176,7 @@ async function createUploadFileTasks(filesToUpload, taskIDs, existFileList) {
                 nodeData,
                 fileSize: fileObject.size,
                 existNode: existNode ? existNode : null,
+                targetFolderPath
             })
         };
         

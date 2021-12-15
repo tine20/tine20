@@ -443,6 +443,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             console.log(e);
         }
         this.fireEvent('uploadprogress', this, this.fileRecord);
+        this.fireEvent('update', 'uploadprogress', this, this.fileRecord);
         
         if(! this.isHtml5ChunkedUpload()) {
 
@@ -595,11 +596,15 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         if(!this.paused) {
             this.status = 'uploading';
         }
-            
-        this.fileRecord.beginEdit();
-        this.fileRecord.set('status', this.status);
-        this.fileRecord.endEdit();
+        
+        if (this.fileRecord) {
+            this.fileRecord.beginEdit();
+            this.fileRecord.set('status', this.status);
+            this.fileRecord.endEdit();
+        }
+
         this.fireEvent('update', 'uploadpaused', this, this.fileRecord);
+        this.fireEvent('uploadpaused', this, this.fileRecord);
     },
     
     /**

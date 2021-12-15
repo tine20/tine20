@@ -21,7 +21,6 @@ export default class CreateFolderTask {
                             data: task.args.nodeData
                         });
             
-                        Tine.Tinebase.uploadManager.removeVirtualNode(args.uploadId);
                         return resolve(true);
                     }).catch(async (e) => {
                         if (e.message === 'file exists') {
