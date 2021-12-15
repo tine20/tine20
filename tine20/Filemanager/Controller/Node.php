@@ -1408,12 +1408,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _moveFolderNode($source, $destination, $_forceOverwrite = FALSE)
     {
-        $this->_backend->checkPathACL($source, 'get', FALSE);
+        $this->_backend->checkPathACL($source->getParent(), 'delete');
         
         $destinationParentPathRecord = $destination->getParent();
         $destinationNodeName = NULL;
         
-        $this->_backend->checkPathACL($destinationParentPathRecord, 'update');
+        $this->_backend->checkPathACL($destinationParentPathRecord, 'add');
         // TODO do we need this if??
         //if ($source->getParent()->flatpath != $destinationParentPathRecord->flatpath) {
             try {
