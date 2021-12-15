@@ -76,7 +76,10 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $node = Tinebase_FileSystem::getInstance()->get($_record->node_id);
-        if (! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_PUBLISH)) {
+        $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
+            Tinebase_FileSystem::getInstance()->getPathOfNode($node, true, true));
+        if ($path->isSystemPath() || $path->isToplevelPath() ||
+                !Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_PUBLISH)) {
             throw new Tinebase_Exception_AccessDenied('you are not allowed to publish this file');
         }
 
