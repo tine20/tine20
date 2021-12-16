@@ -233,13 +233,6 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
     ];
 
     protected static $_isReplicable = true;
-
-    public static function modelConfigHook(array &$_definition)
-    {
-        // legacy :-/
-        $_definition['is_deleted'][self::NULLABLE] = true;
-        $_definition['is_deleted'][self::UNSIGNED] = true;
-    }
     
     /**
      * converts a string or Addressbook_Model_List to a list id

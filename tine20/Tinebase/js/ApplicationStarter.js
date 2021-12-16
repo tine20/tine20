@@ -40,10 +40,14 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
         'datetime_separated_time': 'date',
         'time':     'date',
         'string':   'string',
+        'stringAutocomplete': 'string',
         'text':     'string',
         'boolean':  'bool',
         'integer':  'int',
-        'float':    'float'
+        'bigint':   'int',
+        'numberableInt': 'int',
+        'float':    'float',
+        'money':    'float'
     },
 
     __applicationStarterInitialized: new Promise( (resolve) => {

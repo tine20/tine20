@@ -87,6 +87,17 @@ Ext.applyIf(Array.prototype, {
      */
     unique: function() {
         return Ext.unique(this);
+    },
+
+    /**
+     * async version of forEach
+     * @param callback
+     * @return {Promise<void>}
+     */
+    asyncForEach: async function (callback) {
+        for (let index = 0; index < this.length; index++) {
+            await callback(this[index], index, this);
+        }
     }
 });
 

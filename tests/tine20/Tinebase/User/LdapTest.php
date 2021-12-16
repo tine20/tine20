@@ -241,7 +241,41 @@ class Tinebase_User_LdapTest extends TestCase
         
         $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
     }
-    
+
+    public function testSyncUsersWithoutEmail()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::LDAP_OVERWRITE_CONTACT_FIELDS, array(
+            'tel_work',
+            'jpegphoto'
+        ));
+
+        // add user in LDAP
+        $user = self::getTestUser();
+        unset($user->accountEmailAddress);
+        $user = $this->_backend->addUserToSyncBackend($user);
+        $this->_usernamesToDelete[] = $user->accountLoginName;
+
+        $syncedUser = Tinebase_User::syncUser($user);
+        $this->assertNull($syncedUser->accountEmailAddress);
+    }
+
+    public function testSyncUsersWithEmptyEmail()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::LDAP_OVERWRITE_CONTACT_FIELDS, array(
+            'tel_work',
+            'jpegphoto'
+        ));
+
+        // add user in LDAP
+        $user = self::getTestUser();
+        $user->accountEmailAddress = '';
+        $user = $this->_backend->addUserToSyncBackend($user);
+        $this->_usernamesToDelete[] = $user->accountLoginName;
+
+        $syncedUser = Tinebase_User::syncUser($user);
+        $this->assertNull($syncedUser->accountEmailAddress);
+    }
+
     /**
      * execute Tinebase_User::syncUser
      *

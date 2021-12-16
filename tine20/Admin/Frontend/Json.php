@@ -356,12 +356,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 return $group['id'];
             }, $recordData['groups']['results']);
         }
-        
-        // always re-evaluate fullname
-        unset($recordData['accountFullName']);
 
         $account = new Tinebase_Model_FullUser();
-
         try {
             $account->setFromJsonInUsersTimezone($recordData);
             if (isset($recordData['sambaSAM'])) {

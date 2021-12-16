@@ -97,6 +97,7 @@
  * @property array      $keyfieldFields
  * @property array      $jsonExpander
  * @property array      $denormalizedFields
+ * @property array      $denormalizationConfig
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -299,6 +300,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_denormalizationOf = null;
 
     protected $_isMetadataModelFor = null;
+
+    protected $_denormalizationConfig = [];
 
     /**
      * If this is true, multiple edit of records of this model is possible.
@@ -1195,6 +1198,39 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     self::MODEL_NAME            => $model,
                 ],
             ];
+            if (isset($this->_denormalizationConfig[self::TRACK_CHANGES]) &&
+                    $this->_denormalizationConfig[self::TRACK_CHANGES]) {
+                $this->_fields[self::FLD_LOCALLY_CHANGED] = [
+                    self::TYPE                  => self::TYPE_BOOLEAN,
+                    self::DEFAULT_VAL           => 0,
+                ];
+            }
+            if (isset($this->_denormalizationConfig[self::CASCADE]) && $this->_denormalizationConfig[self::CASCADE]) {
+                if (null === Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($app, $this->_denormalizationOf, Tinebase_Model_CustomField_Grant::GRANT_READ, true, true)
+                        ->find('name', self::CASCADE . $this->_appName . $this->_modelName)) {
+                    if (true === ($cascade = $this->_denormalizationConfig[self::CASCADE])) {
+                        $cascade = [
+                            self::ON_UPDATE => [Tinebase_Controller_Record_Abstract::class, 'cascadeDenormalization', $this->_appName . '_Model_' . $this->_modelName],
+                        ];
+                    }
+                    Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+                        'is_system' => true,
+                        'name' => self::CASCADE . $this->_appName . $this->_modelName,
+                        'application_id' => Tinebase_Application::getInstance()->getApplicationByName($app)->getId(),
+                        'model' => $this->_denormalizationOf,
+                        'definition' => [
+                            Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS => array_merge(
+                                isset($cascade[self::ON_UPDATE]) ? [
+                                    '_controllerHookBeforeUpdate' => [$cascade[self::ON_UPDATE]]
+                                ] : [],
+                                isset($cascade[self::ON_DELETE]) ? [
+                                    '_controllerHookBeforeDelete' => [$cascade[self::ON_DELETE]]
+                                ] : [],
+                            )
+                        ],
+                    ]));
+                }
+            }
         }
 
         foreach ($hooks as $hook) {

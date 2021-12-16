@@ -160,6 +160,24 @@ class Setup_SchemaTool
         $tool->updateSchema($classes, true);
     }
 
+    public static function hasSchemaUpdates()
+    {
+        $em = self::getEntityManager();
+        $tool = new SchemaTool($em);
+        $classes = [];
+
+        $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
+        foreach($mappingDriver->getAllClassNames() as $modelName) {
+            $classes[] = $em->getClassMetadata($modelName);
+        }
+
+        $sqls = array_filter($tool->getUpdateSchemaSql($classes, true), function ($val) {
+            return strpos($val, "CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL") === false;
+        });
+        
+        return !emptY($sqls);
+    }
+
     /**
      * compare two tine20 databases with each other
      *

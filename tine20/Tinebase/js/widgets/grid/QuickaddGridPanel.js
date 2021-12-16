@@ -218,16 +218,6 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     },
 
     /**
-     * delete event
-     */
-    onDelete: function() {
-        var selectedRows = this.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            this.store.remove(selectedRows[i]);
-        }
-    },
-
-    /**
      * get next available id
      * @return {Number}
      */

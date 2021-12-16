@@ -243,7 +243,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             return record.get('seq') > this.get('seq');
         }
         
-        return (this.constructor.hasField('last_modified_time')) ? record.get('last_modified_time') > this.get('last_modified_time') : false;
+        return record.getMTime() > this.getMTime();
+    },
+
+    getMTime: function() {
+        return this.data.last_modified_time || this.data.creation_time;
     },
 
     /**
@@ -552,12 +556,12 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         Tine.log.warn(e);
     }
 
-    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty'), Tine.Tinebase.data.Record.generateUID());
+    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty')) || Tine.Tinebase.data.Record.generateUID();
 
     if (! record) {
         record = new recordClass({}, recordId);
     }
-    record.id = recordId;
+    record.setId(recordId);
 
     return record;
 };

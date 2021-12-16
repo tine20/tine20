@@ -23,6 +23,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
     const RELEASE014_UPDATE009 = __CLASS__ . '::update009';
     const RELEASE014_UPDATE010 = __CLASS__ . '::update010';
     const RELEASE014_UPDATE011 = __CLASS__ . '::update011';
+    const RELEASE014_UPDATE012 = __CLASS__ . '::update012';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -69,6 +70,10 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
             self::RELEASE014_UPDATE011          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update011',
+            ],
+            self::RELEASE014_UPDATE012          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update012',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE      => [
@@ -298,5 +303,12 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
         };
 
         $this->addApplicationUpdate('Tinebase', '14.11', self::RELEASE014_UPDATE011);
+    }
+
+
+    public function update012()
+    {
+        Setup_SchemaTool::updateSchema([Tinebase_Model_WebauthnPublicKey::class]);
+        $this->addApplicationUpdate('Tinebase', '13.2', self::RELEASE014_UPDATE012); // yes, 13 something, just any old version number works
     }
 }

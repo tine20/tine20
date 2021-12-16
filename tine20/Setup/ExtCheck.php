@@ -443,45 +443,12 @@ class Setup_ExtCheck
                         }
                         break;
                         
-                    case 'PgSQL':
-                        $pgsqlVersion = '0.0.0';
-                        // get setup controller for database connection
-                        if (Setup_Core::configFileExists()) {
-                            $dbConfig = Tinebase_Core::getConfig()->database;
-                            $hostname = $dbConfig->host;
-                            $port = isset($dbConfig->port) ? $dbConfig->port : '5432';
-                            $user = $dbConfig->username;
-                            $password = $dbConfig->password;
-                            $link = @pg_connect("host=$hostname port=$port user=$user password=$password");
-                            if (PGSQL_CONNECTION_BAD === pg_connection_status($link)) {
-                                //die('Could not connect to postgresql database: ' . pg_errormessage());
-                                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                                    . 'Could not connect to postgresql database: ' . pg_errormessage());
-                                Setup_Core::set(Setup_Core::CHECKDB, FALSE);
-                            } else {
-                                $pgsqlVersion = @pg_version($link);
-                                $pgsqlVersion = $pgsqlVersion['server'];
-                            }
-                        }
-                        
-                        $text = $value['attributes']['NAME'];
-                        if (version_compare($value['attributes']['VERSION'], $pgsqlVersion, '<=')) {
-                            $data[] = array($text, 'SUCCESS');
-                        } else {
-                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                                . ' PostgreSQL version incompatible: ' . $pgsqlVersion . ' < ' . $value['attributes']['VERSION']);
-                            $data[] = array($text, 'FAILURE');
-                        }
-                        break;
-                        
                     default:
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
                         break;
                 }
             } else if ($value['tag'] == 'EXTENSION') {
 
-                //print_r($this->loadedExtensions);
-                
                 foreach ($value as $extensionArray) {
                     if (is_array($extensionArray)) {
                         $succeeded = false;

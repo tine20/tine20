@@ -34,7 +34,6 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
     public const FLD_NUMBER = 'number';
     public const FLD_PURCHASEPRICE = 'purchaseprice';
     public const FLD_SALESPRICE = 'salesprice';
-    public const FLD_SALESTAX = 'salestax';
     public const FLD_SALESTAXRATE = 'salestaxrate';
     public const FLD_SHORTCUT = 'shortcut';
     public const FLD_SUBPRODUCTS = 'subproducts'; // -> recordset of Sales_Model_SubProduct dependent records
@@ -195,11 +194,6 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                     self::APP_NAME  => Tinebase_Config::APP_NAME,
                     self::CONFIG => Tinebase_Config::SALES_TAX
                 ],
-                self::NULLABLE => true,
-            ],
-            self::FLD_SALESTAX => [
-                self::LABEL => 'Sales Tax', //_('Sales Tax')
-                self::TYPE => self::TYPE_MONEY,
                 self::NULLABLE => true,
             ],
             self::FLD_MANUFACTURER => [

@@ -27,6 +27,56 @@ class Sales_Document_JsonTest extends TestCase
         $this->_instance = new Sales_Frontend_Json();
     }
 
+    public function testOfferBoilerplates()
+    {
+        $boilerplate = Sales_Controller_Boilerplate::getInstance()->create(
+            Sales_BoilerplateControllerTest::getBoilerplate());
+
+        $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_BOILERPLATES => [
+                $boilerplate->toArray()
+            ],
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS
+        ]);
+        $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+
+        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_BOILERPLATES]);
+        $this->assertCount(1, $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES]);
+        $this->assertNotSame($boilerplate->getId(), $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0]['id']);
+        $this->assertSame('0', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertSame($boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE},
+            $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
+
+        $boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE} = 'cascading changes?';
+        $boilerplate = Sales_Controller_Boilerplate::getInstance()->update($boilerplate);
+        $document = $this->_instance->getDocument_Offer($document['id']);
+
+        $this->assertNotSame($boilerplate->getId(), $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0]['id']);
+        $this->assertSame('0', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertSame($boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE},
+            $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
+
+        $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE] =
+            'local stuff';
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertSame('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+
+        $boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE} = 'not cascading';
+        $boilerplate = Sales_Controller_Boilerplate::getInstance()->update($boilerplate);
+        $document = $this->_instance->getDocument_Offer($document['id']);
+        $this->assertSame('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertNotSame($boilerplate->{Sales_Model_Boilerplate::FLD_BOILERPLATE},
+            $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
+        $this->assertSame('local stuff', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
+
+        $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0] =
+            $boilerplate = Sales_BoilerplateControllerTest::getBoilerplate()->toArray(false);
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertSame('1', $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Document_Abstract::FLD_LOCALLY_CHANGED]);
+        $this->assertSame($boilerplate[Sales_Model_Boilerplate::FLD_BOILERPLATE],
+            $document[Sales_Model_Document_Abstract::FLD_BOILERPLATES][0][Sales_Model_Boilerplate::FLD_BOILERPLATE]);
+    }
+
     public function testOfferDocumentWithoutRecipient()
     {
         $customer = $this->_createCustomer();
@@ -34,10 +84,29 @@ class Sales_Document_JsonTest extends TestCase
         $document = new Sales_Model_Document_Offer([
             Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
             Sales_Model_Document_Offer::FLD_RECIPIENT_ID => '',
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
         ]);
         $document = $this->_instance->saveDocument_Offer($document->toArray(true));
 
         $this->assertFalse(isset($document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]));
+    }
+
+    public function testDeleteDocument()
+    {
+        $boilerplate = Sales_Controller_Boilerplate::getInstance()->create(
+            Sales_BoilerplateControllerTest::getBoilerplate());
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+        $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => '',
+            Sales_Model_Document_Offer::FLD_BOILERPLATES => [
+                $boilerplate->toArray()
+            ],
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
+        ]);
+        $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+        $this->_instance->deleteDocument_Offers($document['id']);
     }
 
     public function testOfferDocumentCustomerCopy($noAsserts = false)
@@ -47,6 +116,7 @@ class Sales_Document_JsonTest extends TestCase
         $document = new Sales_Model_Document_Offer([
             Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
             Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customerData['delivery'][0],
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
         ]);
 
         $document = $this->_instance->saveDocument_Offer($document->toArray(true));
@@ -212,9 +282,10 @@ class Sales_Document_JsonTest extends TestCase
                     Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray()
                 ]
             ],
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
         ]);
 
-        $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+        $this->_instance->saveDocument_Offer($document->toArray(true));
     }
 
     public function testOrderDocument()

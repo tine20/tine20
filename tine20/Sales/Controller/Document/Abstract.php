@@ -33,8 +33,6 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
         }
         parent::_inspectBeforeCreate($_record);
-
-
     }
 
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
@@ -55,5 +53,4 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
-
 }

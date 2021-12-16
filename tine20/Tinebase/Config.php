@@ -129,6 +129,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
+    /**
+     * @var string
+     */
+    const EVENT_HOOK_CLASS = 'eventHookClass';
+
+    /**
+     * @var string
+     */
     const EXTERNAL_DATABASE = 'externalDatabase';
 
     /**
@@ -191,6 +199,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const USERBACKEND = 'Tinebase_User_BackendConfiguration';
+
+    const ACCOUNT_TWIG = 'accountTwig';
+    const ACCOUNT_TWIG_DISPLAYNAME = 'displayname';
+    const ACCOUNT_TWIG_FULLNAME = 'fullname';
+    const ACCOUNT_TWIG_LOGIN = 'login';
+    const ACCOUNT_TWIG_EMAIL = 'email';
 
     /**
      * sync options for user backend
@@ -1324,6 +1338,30 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ],
             'default'                           => [],
         ],
+        self::ACCOUNT_TWIG                 => [
+            self::TYPE                      => self::TYPE_OBJECT,
+            self::CLASSNAME                 => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::CONTENT                   => [
+                self::ACCOUNT_TWIG_DISPLAYNAME     => [
+                    self::TYPE                      => self::TYPE_STRING,
+                    self::DEFAULT_STR               => '{{ account.accountLastName|trim }}{% if account.accountLastName|trim|length > 0 and account.accountFirstName|trim|length > 0 %}, {% endif %}{{ account.accountFirstName|trim }}',
+                ],
+                self::ACCOUNT_TWIG_FULLNAME        => [
+                    self::TYPE                      => self::TYPE_STRING,
+                    self::DEFAULT_STR               => '{{ account.accountFirstName|trim }}{% if account.accountLastName|trim|length > 0 and account.accountFirstName|trim|length > 0 %} {% endif %}{{ account.accountLastName|trim }}',
+                ],
+                self::ACCOUNT_TWIG_LOGIN           => [
+                    self::TYPE                      => self::TYPE_STRING,
+                    self::DEFAULT_STR               => '{{ account.accountFirstName|trim[0:1]|lower }}{{ account.accountLastName|trim|lower }}',
+                ],
+                self::ACCOUNT_TWIG_EMAIL           => [
+                    self::TYPE                      => self::TYPE_STRING,
+                    self::DEFAULT_STR               => '{{ account.accountLoginName }}@{{ email.primarydomain }}',
+                ],
+            ],
+            self::DEFAULT_STR               => [],
+        ],
         self::USERBACKEND => array(
                                    //_('User Configuration')
             'label'                 => 'User Configuration',
@@ -1808,15 +1846,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
         ),
+        self::EVENT_HOOK_CLASS => array(
+            //_('Custom event handling hook')
+            self::LABEL                 => 'Custom event handling hook',
+            //_('Configure PHP hook class for custom event handling')
+            self::DESCRIPTION           => 'Configure PHP hook class for custom event handling',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => 'CustomEventHooks',
+        ),
         self::SYNC_USER_HOOK_CLASS => array(
                                    //_('Configure hook class for user sync')
-            'label'                 => 'Configure hook class for user sync',
+            self::LABEL                 => 'Configure hook class for user sync',
                                    //_('Allows to change data after fetching user from sync backend')
-            'description'           => 'Allows to change data after fetching user from sync backend',
-            'type'                  => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
+            self::DESCRIPTION           => 'Allows to change data after fetching user from sync backend',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
         ),
         self::SYNC_USER_CONTACT_DATA => array(
             //_('Sync contact data from sync backend')

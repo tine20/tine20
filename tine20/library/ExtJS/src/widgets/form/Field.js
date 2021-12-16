@@ -563,6 +563,15 @@ var form = new Ext.form.FormPanel({
         return this;
     },
 
+    setFieldLabel : function(fieldLabel) {
+        this.fieldLabel = fieldLabel;
+        if(this.rendered){
+            const labelEl = this.el.up('.x-form-item').down('label');
+            if (labelEl) {
+                labelEl.dom.innerHTML = fieldLabel;
+            }
+        }
+    },
     // private, does not work for all fields
     append : function(v){
          this.setValue([this.getValue(), v].join(''));

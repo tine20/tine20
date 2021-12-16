@@ -3047,7 +3047,7 @@ class Tinebase_FileSystem implements
      * check acl of path
      *
      * @param Tinebase_Model_Tree_Node_Path $_path
-     * @param string $_action get|add
+     * @param string $_action get|add|delete|update
      * @param boolean $_topLevelAllowed
      * @throws Tinebase_Exception_AccessDenied
      * @return boolean
@@ -3074,25 +3074,35 @@ class Tinebase_FileSystem implements
                     $hasPermission = false;
                     break;
                 }
-                if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
-                        $_path->application->name,
-                        Tinebase_Core::getUser()->getId(),
-                        Tinebase_Acl_Rights::ADMIN
-                    ))) {
-                    // admin, go ahead
-                    break;
-                }
                 if ($_path->isToplevelPath()) {
-                    if ('add' === $_action) {
-                        $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
-                            $_path->application->name,
-                            Tinebase_Core::getUser()->getId(),
-                            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
-                        );
+                    if ('add' === $_action || 'delete' === $_action) {
+                        if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                                $_path->application->name,
+                                Tinebase_Core::getUser()->getId(),
+                                Tinebase_Acl_Rights::ADMIN
+                            ))) {
+                            // admin, go ahead
+                            break;
+                        }
+                        if ('add' === $_action) {
+                            $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                                $_path->application->name,
+                                Tinebase_Core::getUser()->getId(),
+                                Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+                            );
+                        }
                     } else {
                         $hasPermission = 'get' === $_action;
                     }
                 } else {
+                    if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                            $_path->application->name,
+                            Tinebase_Core::getUser()->getId(),
+                            Tinebase_Acl_Rights::ADMIN
+                        ))) {
+                        // admin, go ahead
+                        break;
+                    }
                     $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                 }
                 break;

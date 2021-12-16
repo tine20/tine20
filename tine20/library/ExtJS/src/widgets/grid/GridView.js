@@ -1150,7 +1150,7 @@ viewConfig: {
         var tw = cm.getTotalWidth(false);
         var aw = this.grid.getGridEl().getWidth(true)-this.getScrollOffset();
 
-        if(aw < 20){ // not initialized, so don't screw up the default widths
+        if(aw < 20 * cm.getColumnCount(true)){ // not initialized, so don't screw up the default widths
             return;
         }
         var extra = aw - tw;

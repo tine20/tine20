@@ -100,3 +100,12 @@
 .SalesOffer {
     background-image:url(../../images/icon-set/icon_offer.svg) !important;
 }
+
+.sales-document-positiongrid-title {
+    font-weight: bold;
+}
+
+.sales-document-positiongrid-description {
+    padding-top: 2px;
+    white-space: normal;
+}

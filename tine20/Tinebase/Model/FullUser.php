@@ -121,10 +121,6 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountEmailAddress'           => [
                 'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'inputFilters'                  => [
-                    Zend_Filter_StringTrim::class => null,
-                    Zend_Filter_StringToLower::class => null,
-                ],
             ],
             'accountFullName'               => [
                 'type'                          => 'string',
@@ -253,11 +249,6 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($options, TRUE));
-        
-        if (! isset($this->accountLoginName)) {
-            $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1);
-            $this->accountFullName = Tinebase_User::getInstance()->generateAccountFullName($this);
-        }
         
         if (empty($this->accountPrimaryGroup)) {
             if (! empty($options['group_id'])) {

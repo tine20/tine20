@@ -34,6 +34,11 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     const TYPE                  = 'type';
 
     /**
+     * status transitions
+     */
+    public const TRANSITION_TARGET_STATUS = 'targetStatus';
+
+    /**
      * object config type
      * 
      * @var string
@@ -1008,6 +1013,32 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return $features->{$featureName};
         }
 
+        return false;
+    }
+
+    /**
+     * @param string $configKey
+     * @param string|null $method
+     * @return false|mixed
+     */
+    public function getHookClass(string $configKey, string $method = null)
+    {
+        $hookClass = Tinebase_Config::getInstance()->get($configKey);
+        if ($hookClass) {
+            if (! class_exists($hookClass)) {
+                @include($hookClass . '.php');
+            }
+
+            if (class_exists($hookClass)) {
+                $hook = new $hookClass();
+                if (! method_exists($hook, $method)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Method not found in hook class');
+                    return false;
+                }
+                return $hook;
+            }
+        }
         return false;
     }
 }

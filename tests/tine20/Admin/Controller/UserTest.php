@@ -20,6 +20,12 @@ class Admin_Controller_UserTest extends TestCase
         parent::setUp();
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Tinebase_Config::getInstance()->set(Tinebase_Config::EVENT_HOOK_CLASS, null);
+    }
+
     public function testAddUserWithAlreadyExistingEmailData($mode = 'create')
     {
         $this->_skipWithoutEmailSystemAccountConfig();
@@ -209,8 +215,10 @@ class Admin_Controller_UserTest extends TestCase
 
         $userToCreate = TestCase::getTestUser();
         $email = $userToCreate->accountEmailAddress;
-        unset($userToCreate->accountEmailAddress);
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        unset($user->accountEmailAddress);
+        $user = Admin_Controller_User::getInstance()->update($user);
+        $this->assertEmpty($user->accountEmailAddress);
         $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
 
         $user->accountEmailAddress = $email;
@@ -251,5 +259,17 @@ class Admin_Controller_UserTest extends TestCase
             'smtp user id still set: ' . print_r($updatedUser->toArray(), true));
         self::assertEmpty($updatedUser->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP],
             'imap user id still set ' . print_r($updatedUser->toArray(), true));
+    }
+
+    public function testCustomEventHookUserAdd()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::EVENT_HOOK_CLASS, 'Admin_Controller_CustomEventHook');
+        $pw = Tinebase_Record_Abstract::generateUID(10);
+        $userToCreate = TestCase::getTestUser();
+        $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
+        ob_start();
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        $out = ob_get_clean();
+        self::assertEquals('Handled event Admin_Event_AddAccount', $out);
     }
 }

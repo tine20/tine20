@@ -191,7 +191,17 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return Tinebase_Record_Diff with differences field => different value
      */
     public function diff($_record, $omitFields = array());
-    
+
+    /**
+     * merge given record into $this, only fills so far empty properties with new values from given record
+     * note that 0, '0' are not empty, while null, '' are empty
+     *
+     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Record_Diff $diff
+     * @return Tinebase_Record_Interface
+     */
+    public function merge($record, $diff = null);
+
     /**
      * check if two records are equal
      * 
