@@ -1205,7 +1205,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }, this);
 
-            let template = form.findField('template_id').getValue();
+            let template = form.findField('template_id') ? form.findField('template_id').getValue() : '';
 
             this.vacationRecord.set('contact_ids', contactIds);
             this.vacationRecord.set('template_id', template);
