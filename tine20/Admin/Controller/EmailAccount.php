@@ -433,9 +433,16 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
         foreach ($_records as $_record) {
             if (!isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
-                $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+                try {
+                    $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+                    continue;
+                }
                 if (!isset($user->xprops()[Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP])) {
-                    // still no XPROP_EMAIL_USERID_IMAP ...
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' User has no XPROP_EMAIL_USERID_IMAP ...');
                     continue;
                 }
                 Tinebase_EmailUser_XpropsFacade::setXprops($_record,
