@@ -250,7 +250,7 @@ class Tinebase_Auth
             if (strpos($_username, '@') === false) {
                 foreach (Tinebase_User::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                         Tinebase_Model_FullUser::class, [
-                            ['field' => 'accountEmailAddress', 'operator' => 'startswith', 'value' => $_username . '@']
+                            ['field' => 'email', 'operator' => 'startswith', 'value' => $_username . '@']
                         ])) as $user) {
                     try {
                         $this->_backend->setIdentity($user->accountLoginName);
