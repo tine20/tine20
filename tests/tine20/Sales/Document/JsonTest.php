@@ -36,7 +36,7 @@ class Sales_Document_JsonTest extends TestCase
             Sales_Model_Document_Offer::FLD_BOILERPLATES => [
                 $boilerplate->toArray()
             ],
-            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT
         ]);
         $document = $this->_instance->saveDocument_Offer($document->toArray(true));
 
@@ -84,7 +84,7 @@ class Sales_Document_JsonTest extends TestCase
         $document = new Sales_Model_Document_Offer([
             Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
             Sales_Model_Document_Offer::FLD_RECIPIENT_ID => '',
-            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
         ]);
         $document = $this->_instance->saveDocument_Offer($document->toArray(true));
 
@@ -103,7 +103,7 @@ class Sales_Document_JsonTest extends TestCase
             Sales_Model_Document_Offer::FLD_BOILERPLATES => [
                 $boilerplate->toArray()
             ],
-            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
         ]);
         $document = $this->_instance->saveDocument_Offer($document->toArray(true));
         $this->_instance->deleteDocument_Offers($document['id']);
@@ -116,7 +116,7 @@ class Sales_Document_JsonTest extends TestCase
         $document = new Sales_Model_Document_Offer([
             Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
             Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customerData['delivery'][0],
-            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
         ]);
 
         $document = $this->_instance->saveDocument_Offer($document->toArray(true));
@@ -282,7 +282,7 @@ class Sales_Document_JsonTest extends TestCase
                     Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray()
                 ]
             ],
-            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
         ]);
 
         $this->_instance->saveDocument_Offer($document->toArray(true));

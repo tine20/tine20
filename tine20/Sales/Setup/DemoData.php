@@ -143,8 +143,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'category' => self::$_en ? 'LAN Equipment' : 'Netzwerkausrüstung'
         );
 
-        foreach($products as $product) {
-            $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
+        foreach($products as $key => $product) {
+            $switches[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
 
         $products = array(
@@ -205,6 +205,28 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     ], [
                         Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[3],
                         Sales_Model_SubProductMapping::FLD_SHORTCUT => '6blue',
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
+                    ]
+                ]
+            ], [
+                Sales_Model_Product::FLD_SHORTCUT => 'net-starter',
+                Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
+                'name' => self::$_en ? 'Net-Starter' : 'Netzstarter',
+                'description' => self::$_en ? 'network starter bundle' : 'Netzwerk Starter',
+                'salesprice' => 99.99,
+                Sales_Model_Product::FLD_UNFOLD_TYPE => Sales_Model_Product::UNFOLD_TYPE_BUNDLE,
+                Sales_Model_Product::FLD_SUBPRODUCTS => [
+                    [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $switches[$key],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '10sw',
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 1,
+                    ], [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[0],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '5ared',
+                        Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
+                    ], [
+                        Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProductIds[1],
+                        Sales_Model_SubProductMapping::FLD_SHORTCUT => '5ablue',
                         Sales_Model_SubProductMapping::FLD_QUANTITY => 5,
                     ]
                 ]
