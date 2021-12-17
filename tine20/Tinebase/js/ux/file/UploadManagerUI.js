@@ -60,6 +60,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             iconCls: 'action_cancel',
             minWidth: 120,
             scope: this,
+            hidden: true,
             handler: async () => {
                 await Tine.Tinebase.uploadManager.resetUploadChannels();
                 this.uploadStore.removeAll();
