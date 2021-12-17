@@ -766,21 +766,28 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * fetch suggestions for filing places for given message / recipients / ...
      *
-     * @param array $message
+     * @param array $messages
      * @return array
      */
-    public function getFileSuggestions($message)
+    public function getFileSuggestions($messages)
     {
         $result = [];
-        if ($message) {
-            $record = $this->_jsonToRecord($message, Felamimail_Model_Message::class);
-            $suggestions = Felamimail_Controller_Message_File::getInstance()->getFileSuggestions($record);
-            foreach ($suggestions as $suggestion) {
-                $result[] = [
-                    'type' => $suggestion->type,
-                    'model' => $suggestion->model,
-                    'record' => $this->_recordToJson($suggestion->record),
-                ];
+        
+        if (! array_key_exists(0, $messages)) {
+            $messages = [$messages];
+        }
+
+        foreach ($messages as $message) {
+            if ($message) {
+                $record = $this->_jsonToRecord($message, Felamimail_Model_Message::class);
+                $suggestions = Felamimail_Controller_Message_File::getInstance()->getFileSuggestions($record);
+                foreach ($suggestions as $suggestion) {
+                    $result[] = [
+                        'type' => $suggestion->type,
+                        'model' => $suggestion->model,
+                        'record' => $this->_recordToJson($suggestion->record),
+                    ];
+                }
             }
         }
         return $result;

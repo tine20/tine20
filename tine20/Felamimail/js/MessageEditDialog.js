@@ -9,7 +9,7 @@
 
 const { retryAllRejectedPromises } = require('promises-to-retry');
 
-require('./MessageFileButton');
+require('./MessageFileAction');
 
 Ext.namespace('Tine.Felamimail');
 
@@ -216,10 +216,14 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             handler: this.onSaveInFolder.createDelegate(this, ['templates_folder']),
             iconCls: 'action_saveAsTemplate',
             disabled: false,
-            scope: this
+            scope: this,
+            listeners: {
+                scope: this,
+                selectionchange: this.onFileMessageSelectionChange
+            }
         });
-
-        this.button_fileMessage = new Tine.Felamimail.MessageFileButton({
+        
+        this.action_fileRecord = new Tine.Felamimail.MessageFileAction({
             mode: 'selectOnly',
             composeDialog: this,
             listeners: {
@@ -227,7 +231,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 selectionchange: this.onFileMessageSelectionChange
             }
         });
-
+        
+        this.button_fileMessage = new Ext.SplitButton(this.action_fileRecord);
+        
         this.action_toggleReadingConfirmation = new Ext.Action({
             text: this.app.i18n._('Reading Confirmation'),
             handler: this.onToggleReadingConfirmation,
@@ -1025,7 +1031,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onFileMessageSelectionChange: function(btn, selection) {
         var text = this.app.formatMessage('{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}', {
                 locationCount: selection.length,
-                locationsHtml: Tine.Felamimail.MessageFileButton.getFileLocationText(selection, ', ')
+                locationsHtml: Tine.Felamimail.MessageFileAction.getFileLocationText(selection, ', ')
             });
 
         this.messageFileInfoText.update(text);
@@ -1251,7 +1257,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('account_id', account.get('original_id'));
         
         if (this.button_fileMessage.pressed) {
-            this.record.set('fileLocations', this.button_fileMessage.getSelected());
+            this.record.set('fileLocations', this.action_fileRecord.getSelected());
         }
 
         // need to sync once again to make sure we have the correct recipients
