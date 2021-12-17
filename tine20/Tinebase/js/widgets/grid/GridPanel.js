@@ -1872,7 +1872,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Ext.menu.Menu}
      */
     getContextMenu: function(grid, row, e) {
-
         if (! this.contextMenu) {
             var items = [];
             

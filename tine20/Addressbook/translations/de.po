@@ -1269,3 +1269,9 @@ msgstr "Sprache"
 
 msgid "Select color"
 msgstr "Farbe wählen"
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "It is not allowed to delete email account type contact!"
+msgstr "Es ist nicht erlaubt, einen Kontakte vom Typ E-Mail-Konto zu löschen!"
