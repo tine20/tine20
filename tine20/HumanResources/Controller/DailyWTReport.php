@@ -449,6 +449,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
      */
     protected function _getStartDate($force)
     {
+        $default = Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST);
         $lastClearedReport = HumanResources_Controller_MonthlyWTReport::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_MonthlyWTReport::class, [
                 ['field' => HumanResources_Model_MonthlyWTReport::FLDS_EMPLOYEE_ID, 'operator' => 'equals', 'value' => $this->_employee->getId()],
@@ -461,11 +462,15 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         if ($lastClearedReport) {
             $start_date = (new Tinebase_DateTime($lastClearedReport->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}
                 . '-01 00:00:00'))->addMonth(1);
-        } elseif ($this->_employee->contracts instanceof Tinebase_Record_RecordSet) {
+        } elseif ($this->_employee->contracts instanceof Tinebase_Record_RecordSet && count($this->_employee->contracts) > 0) {
             $this->_employee->contracts->sort('start_date');
-            $start_date = clone $this->_employee->contracts->getFirstRecord()->start_date;
+            if ($this->_employee->contracts->getFirstRecord()->start_date instanceof Tinebase_DateTime) {
+                $start_date = clone $this->_employee->contracts->getFirstRecord()->start_date;
+            } else {
+                return $default;
+            }
         } else {
-            return Tinebase_Model_Filter_Date::getFirstDayOf(Tinebase_Model_Filter_Date::MONTH_LAST);
+            return $default;
         }
 
         if ($force) {
