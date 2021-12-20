@@ -101,6 +101,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onAfterRecordLoad: function() {
         Tine.Felamimail.AccountEditDialog.superclass.onAfterRecordLoad.call(this);
         this.preventCheckboxEvents = false;
+
+        this.loadDefaultAddressbook();
     },
 
     /**
@@ -120,6 +122,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.record.set('grants', this.grantsGrid.getValue());
 
+        this.updateContactAddressbook();
         this.updateEmailQuotas();
 
         if (this.isSystemAccount()) {
@@ -200,6 +203,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'emailMailQuota':
                 case 'emailSieveQuota':
                     item.setDisabled(! this.record.data?.email_imap_user || ! this.hasEditAccountRight);
+                    break;
+                case 'container_id':
+                    item.setDisabled(this.record.get('visibility') === 'hidden');
+                    break;
+                case 'visibility':
+                    item.setDisabled(this.record.get('type') === 'system');
                     break;
                 default:
                     item.setDisabled(! this.asAdminModule && (this.isSystemAccount() || ! this.hasEditAccountRight));
@@ -315,7 +324,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         region: 'north',
                         xtype: 'columnform',
                         formDefaults: commonFormDefaults,
-                        height: 350,
+                        height: 400,
                         items: [[{
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
@@ -382,7 +391,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }], [{
                             fieldLabel: this.app.i18n._('Organization'),
                             name: 'organization'
-                        }], [{
+                        }], Tine.Admin.UserEditDialog.prototype.getSaveInAddessbookFields(this, this.record.get('type') === 'system'),
+                            [{
                             fieldLabel: this.app.i18n._('Signature position'),
                             name: 'signature_position',
                             typeAhead: false,
@@ -397,7 +407,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 ['above', this.app.i18n._('Above the quote')],
                                 ['below', this.app.i18n._('Below the quote')]
                             ]
-                        }]]
+                        }]
+                        ]
                     }, new Tine.Felamimail.SignatureGridPanel({
                         region: 'center',
                         editDialog: this
@@ -843,14 +854,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Tine.Felamimail.handleRequestException(exception);
         }
     },
-    
+
     showPasswordDialog: function(apply) {
         var me = this,
             dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
                 windowTitle: this.app.i18n._('E-Mail account needs a password')
             });
         dialog.openWindow();
-        
+
         // password entered
         dialog.on('apply', function (password) {
             me.getForm().findField('password').setValue(password);
@@ -859,14 +870,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
     },
-    
+
     /**
      * Show window for script reading
      */
     showSieveScriptWindow: async function () {
         const script = await Tine.Admin.getSieveScript(this.record.data.id);
         const windowTitle = this.app.i18n._('Explore Sieve script');
-        
+
         const dialog = new Tine.Tinebase.dialog.Dialog({
             items: [{
                 cls: 'x-ux-display-background-border',
@@ -875,7 +886,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 value: script,
                 listeners: {
                     render: async (cmp) => {
-                        // wait ace editor 
+                        // wait ace editor
                         await waitFor(() => {
                            return cmp.el.child('.ace_content');
                         });
@@ -884,7 +895,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 },
             }],
-            
+
             initComponent: function() {
                 this.fbar = [
                     '->',
@@ -899,7 +910,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 ];
                 Tine.Tinebase.dialog.Dialog.superclass.initComponent.call(this);
             },
-            
+
             /**
              * Creates a new pop up dialog/window (acc. configuration)
              *
@@ -910,7 +921,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 if (this.window) {
                     return this.window;
                 }
-                
+
                 config = config || {};
                 this.window = Tine.WindowFactory.getWindow(Ext.apply({
                     resizable:false,
@@ -922,11 +933,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: [this],
                     fbar: ['->']
                 }, config));
-            
+
                 return this.window;
             },
         });
-    
+
         dialog.openWindow();
     },
 
@@ -1268,6 +1279,41 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.record.data.email_imap_user.emailSieveQuota = this.getForm().findField('emailSieveQuota').getValue();
             }
         }
+    },
+
+    /**
+     * update email_account type contact addressbook
+     *
+     */
+    updateContactAddressbook: function () {
+        if (this.record.get('type') === 'system') {
+            return;
+        }
+
+        if (this.record.data?.visibility === 'displayed') {
+            if (! this.record.data?.contact_id?.container_id) {
+                this.record.data.contact_id = {
+                    'container_id' : this.getForm().findField('container_id').getValue()
+                }
+            } else {
+                this.record.data.contact_id.container_id = this.getForm().findField('container_id').getValue();
+            }
+        }
+    },
+
+    /**
+     * load deafault addressbook from contact
+     *
+     */
+    loadDefaultAddressbook: function () {
+        const item = this.getForm().findField('container_id');
+
+        if (this.record.get('type') === 'system' || ! item) {
+            return;
+        }
+
+        const id = this.record.data?.contact_id?.container_id ?? Tine.Admin.registry.get('defaultInternalAddressbook');
+        item.setValue(id);
     }
 });
 

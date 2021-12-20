@@ -577,4 +577,16 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $account = Admin_Controller_EmailAccount::getInstance()->update($account);
         self::assertEquals('changeOrganization', $account->organization);
     }
+
+    public function testCreateEmailAccountContact()
+    {
+        // change email address and check if email user is updated, too
+        $this->_testNeedsTransaction();
+        $account = $this->_createSharedAccount();
+        $account->visibility = Felamimail_Model_Account::VISIBILITY_DISPLAYED;
+        $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
+        self::assertEquals($account->name, $contact['n_fileas'], 'name was not updated');
+        self::assertEquals($account->email, $contact['email'], 'email was not updated');
+    }
 }

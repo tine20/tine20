@@ -695,8 +695,8 @@ msgstr ""
 #: js/Model.js:270
 msgid "List"
 msgid_plural "Lists"
-msgstr[0] "Gruppenliste"
-msgstr[1] "Gruppenlisten"
+msgstr[0] "Gruppe"
+msgstr[1] "Gruppen"
 
 #: Model/List.php:119
 msgid "Percent"
@@ -723,8 +723,12 @@ msgstr "E-Mail"
 msgid "List type"
 msgstr "Listen Typ"
 
-msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr "Dies ist eine Systemgruppe. Um Änderungen vorzunehmen, benötigen Sie das Recht 'Benutzerkonten verwalten'"
+msgid ""
+"This is a system group. To edit this group you need the Admin.ManageAccounts "
+"right."
+msgstr ""
+"Dies ist eine Systemgruppe. Um Änderungen vorzunehmen, benötigen Sie das "
+"Recht 'Benutzerkonten verwalten'"
 
 #: Setup/Initialize.php:126 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
@@ -1269,3 +1273,9 @@ msgstr "Sprache"
 
 msgid "Select color"
 msgstr "Farbe wählen"
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "It is not allowed to delete email account type contact!"
+msgstr "Es ist nicht erlaubt, einen Kontakte vom Typ E-Mail-Konto zu löschen!"

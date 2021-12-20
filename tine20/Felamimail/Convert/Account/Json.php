@@ -28,7 +28,7 @@ class Felamimail_Convert_Account_Json extends Tinebase_Convert_Json
         // add usernames
         $_record->resolveCredentials(); // imap
         $_record->resolveCredentials(TRUE, FALSE, TRUE); // smtp
-
+        
         $result = parent::fromTine20Model($_record);
         if (isset($result['grants'])) {
             $result['grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($result['grants']);
@@ -66,6 +66,21 @@ class Felamimail_Convert_Account_Json extends Tinebase_Convert_Json
         }
     }
 
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
+    {
+        parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+
+        $expanderDef = [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'signatures' => [],
+                'contact_id'  => []
+            ],
+        ];
+        $expander = new Tinebase_Record_Expander(Felamimail_Model_Account::class, $expanderDef);
+        $expander->expand($records);
+    }
+    
+
     /**
      * resolves child records after converting the record set to an array
      *
@@ -82,6 +97,11 @@ class Felamimail_Convert_Account_Json extends Tinebase_Convert_Json
                 $signature['created_by'] = $signature['created_by']['accountId'] ?? $signature['created_by'];
                 $signature['last_modified_by'] = $signature['last_modified_by']['accountId'] ?? $signature['last_modified_by'];
             }
+        }
+        
+        if (isset($result['contact_id']) && array_key_exists('container_id', $result['contact_id'])) {
+            $addressbookId = $result['contact_id']['container_id'];
+            $result['contact_id']['container_id'] = Tinebase_Container::getInstance()->getContainerById($addressbookId)->toArray();
         }
         
         return parent::_resolveAfterToArray($result, $modelConfiguration, $multiple);
