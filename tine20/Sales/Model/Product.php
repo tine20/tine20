@@ -158,6 +158,13 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Default Sorting', // _('Default Sorting')
                 self::TYPE => self::TYPE_INTEGER,
                 self::NULLABLE => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 0,
+                ],
+                self::INPUT_FILTERS => [
+                    Zend_Filter_Empty::class => 0
+                ],
             ],
             self::FLD_UNIT => [
                 self::LABEL => 'Unit', // _('Unit')
