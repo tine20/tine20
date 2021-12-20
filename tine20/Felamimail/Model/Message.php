@@ -851,8 +851,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                     if (is_array($addresses)) {
                         if (isset($addresses['email'])) {
                             $email = $addresses['email'];
+                        } else if (count($addresses) === 1) {
+                            // the first element could be an email address
+                            $email = array_pop($addresses);
                         } else {
-                            // invalid: skip
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__ . ' Skip recipient - we can\'t handle this: '
+                                . print_r($addresses, true));
                             continue;
                         }
                     } else {
@@ -880,7 +885,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                 }
                 unset($recipient);
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
                 
                 $recordData[$field] = array_unique($recipients);
             }
