@@ -289,7 +289,7 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     },
 
     setValue: function(value) {
-        this.store.loadData(value, false);
+        this.store.loadData(value || [], false);
         const last = this.store.getAt(this.store.getCount() -1);
         if (last) {
             this.quickaddRecord.set('sorting', last.get('sorting') + this.sortInc);

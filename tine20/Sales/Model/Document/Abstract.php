@@ -328,7 +328,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::NULLABLE                      => true,
             ],
             self::FLD_NOTE                      => [
-                self::LABEL                         => 'Note', //_('Note')
+                self::LABEL                         => 'Internal Note', //_('Internal Note')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
             ],

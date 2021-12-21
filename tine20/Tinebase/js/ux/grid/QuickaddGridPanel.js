@@ -199,7 +199,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.quickaddRecord = new this.recordClass(defaultData, Ext.id());
         }
 
-        this.store.insert(idx || this.store.getCount(), [this.quickaddRecord]);
+        this.store.insert(idx || (this.store.getCount() - 1), [this.quickaddRecord]);
     },
 
     onValidateEdit: function(o) {

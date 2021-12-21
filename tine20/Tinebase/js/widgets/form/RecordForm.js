@@ -83,6 +83,26 @@ Tine.widgets.form.RecordForm.getFieldDefinitions = function(recordClass) {
     }, []);
 };
 
+Tine.widgets.form.RecordForm.getFormFields = function(recordClass, configInterceptor) {
+    const fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass);
+    const fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+        Tine.widgets.form.FieldManager, recordClass.getMeta('appName'), recordClass.getMeta('modelName'), _,
+        Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+
+    return _.reduce(Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass), function(formFields, fieldDefinition) {
+        const fieldName = fieldDefinition.fieldName;
+        const config = {};
+        if (configInterceptor) {
+            configInterceptor(fieldName, config, fieldDefinition)
+        }
+        const formFieldDefinition = fieldManager(fieldName, config);
+        if (formFieldDefinition) {
+            formFields[fieldDefinition.fieldName] = Ext.create(formFieldDefinition);
+        }
+        return formFields;
+    }, {});
+};
+
 Tine.widgets.form.RecordForm.getFormHeight = function(recordClass) {
     var dlgConstructor = Tine.widgets.dialog.EditDialog.getConstructor(recordClass),
         fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass),
