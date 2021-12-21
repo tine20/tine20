@@ -12,14 +12,13 @@ Ext.ux.MessageBox = function(){
                 '</div>'].join('');
     }
     return {
-        msg : function(title, format){
-            const timeOut = ! Number.isNaN(Array.prototype.slice.call(arguments, 2)) ? Array.prototype.slice.call(arguments, 2) : 2;
-            
+        msg : function(title, text='', timeOut=3){
+
             if(!msgCt){
                 msgCt = Ext.DomHelper.insertFirst(document.body, {id:'x-ux-messagebox-msg-div'}, true);
             }
             msgCt.alignTo(document, 't-t');
-            var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
+            var s = String.format.apply(String, [text]);
             var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
             m.slideIn('t').pause(timeOut).ghost("t", {remove:true});
         }

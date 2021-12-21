@@ -191,11 +191,14 @@ class Sales_Config extends Tinebase_Config_Abstract
             //_('Possible Offer Status')
             self::DESCRIPTION        => 'Possible Offer Status',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS            => [
+                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_OFFER_STATUS_TRANSITIONS,
+            ],
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => [
-                // OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
+                // OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, geschlossen), Abgelehnt(gebucht, geschlossen)
                 self::RECORDS => [
                     [
                         'id' => Sales_Model_Document_Offer::STATUS_DRAFT,
@@ -219,7 +222,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'value' => 'Ordered (booked, open)',
                         'icon' => null,
                         Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
-                        Sales_Model_Document_OfferStatus::FLD_CLOSED => false,
+                        Sales_Model_Document_OfferStatus::FLD_CLOSED => true,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_REJECTED,
@@ -263,9 +266,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                     ]
                 ],
                 Sales_Model_Document_Offer::STATUS_ORDERED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_REJECTED,
+                    ],
                 ],
                 Sales_Model_Document_Offer::STATUS_REJECTED => [
-                    Sales_Model_Document_Offer::STATUS_ORDERED,
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_ORDERED,
+                    ]
                 ],
             ]
         ],
