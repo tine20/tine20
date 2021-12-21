@@ -22,7 +22,7 @@ class Tinebase_Server_Plugin_Cli implements Tinebase_Server_Plugin_Interface
      * (non-PHPdoc)
      * @see Tinebase_Server_Plugin_Interface::getServer()
      */
-    public static function getServer(\Zend\Http\Request $request)
+    public static function getServer(\Laminas\Http\Request $request)
     {
         /**************************** CLI API *****************************/
         if (php_sapi_name() == 'cli') {

@@ -23,10 +23,10 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         try {
-            $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+            $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
             $this->_body = $this->_getBody($body);
 
             try {
@@ -182,7 +182,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      * @param string $_ipAddress
      * @return bool
      */
-    protected function _authenticate($_username, $_password, \Zend\Http\Request $request)
+    protected function _authenticate($_username, $_password, \Laminas\Http\Request $request)
     {
         $pos = strrchr($_username, '\\');
         

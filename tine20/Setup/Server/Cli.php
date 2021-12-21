@@ -22,7 +22,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         try {
             $opts = new Zend_Console_Getopt(

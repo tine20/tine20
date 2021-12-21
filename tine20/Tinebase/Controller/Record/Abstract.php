@@ -873,10 +873,10 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * get record numberable value for given field
      *
-     * @param $_record
-     * @param $className
-     * @param $fieldName
-     * @param $fieldConfig
+     * @param Tinebase_Record_Interface $_record
+     * @param string $className
+     * @param string $fieldName
+     * @param array $fieldConfig
      * @return Tinebase_Numberable_Abstract
      */
     protected function _getNumberable($_record, $className, $fieldName, $fieldConfig)

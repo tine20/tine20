@@ -21,10 +21,10 @@ interface Tinebase_Server_Interface
     /**
      * handler for tine requests
      * 
-     * @param  \Zend\Http\Request  $request
+     * @param  \Laminas\Http\Request  $request
      * @param  stream|string       $body
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null);
+    public function handle(\Laminas\Http\Request $request = null, $body = null);
     
     /**
      * returns request method

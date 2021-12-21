@@ -76,7 +76,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         $time_start = microtime(true);
         $method = $this->getRequestMethod();

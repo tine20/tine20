@@ -25,5 +25,5 @@ interface Tinebase_Server_Plugin_Interface
      * @param Zend\Http\Request $request
      * @return Tinebase_Server_Interface
      */
-    public static function getServer(\Zend\Http\Request $request);
+    public static function getServer(\Laminas\Http\Request $request);
 }

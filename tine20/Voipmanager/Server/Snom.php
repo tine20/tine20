@@ -21,7 +21,7 @@ class Voipmanager_Server_Snom implements Tinebase_Server_Interface
     /**
      * the request
      *
-     * @var \Zend\Http\Request
+     * @var \Laminas\Http\Request
      */
     protected $_request = NULL;
     
@@ -33,10 +33,10 @@ class Voipmanager_Server_Snom implements Tinebase_Server_Interface
     protected $_body;
     
     /**
-     * @param  \Zend\Http\Request  $request
+     * @param  \Laminas\Http\Request  $request
      * @param  stream|string       $body
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         try {
             Tinebase_Session::setSessionOptions(array(
