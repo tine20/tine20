@@ -448,6 +448,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::INPUT_FILTERS             => [
                     Zend_Filter_Empty::class => null,
                 ],
+                self::NULLABLE                  => true,
             ],
             'smtp_user' => [
                 self::TYPE => self::TYPE_STRING,
@@ -518,6 +519,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
+                self::NULLABLE                  => true,
             ],
             'sieve_notification_move' => [
                 self::TYPE => self::TYPE_BOOLEAN,
@@ -537,6 +539,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
+                self::NULLABLE                  => true,
             ],
             'all_folders_fetched' => [
                 self::TYPE => self::TYPE_BOOLEAN,

@@ -65,6 +65,6 @@ class Felamimail_Setup_Update_14 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([Felamimail_Model_Account::class]);
 
-        $this->addApplicationUpdate('Felamimail', '14.4', self::RELEASE014_UPDATE003);
+        $this->addApplicationUpdate('Felamimail', '14.4', self::RELEASE014_UPDATE004);
     }
 }
