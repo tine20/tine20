@@ -84,6 +84,8 @@ class Sales_Config extends Tinebase_Config_Abstract
     const INVOICE_TYPE = 'invoiceType';
 
     const INVOICE_DISCOUNT_TYPE = 'invoiceDiscountType';
+    const INVOICE_DISCOUNT_PERCENTAGE = 'PERCENTAGE';
+    const INVOICE_DISCOUNT_SUM = 'SUM';
     
     const PAYMENT_METHODS = 'paymentMethods';
 
@@ -367,8 +369,8 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => 'PERCENTAGE', 'value' => 'Percentage', 'system' => true], // _('Percentage')
-                    ['id' => 'SUM', 'value' => 'Sum', 'system' => true], // _('Sum')
+                    ['id' => self::INVOICE_DISCOUNT_PERCENTAGE, 'value' => 'Percentage', 'system' => true], // _('Percentage')
+                    ['id' => self::INVOICE_DISCOUNT_SUM, 'value' => 'Sum', 'system' => true], // _('Sum')
                 ],
             ],
         ],

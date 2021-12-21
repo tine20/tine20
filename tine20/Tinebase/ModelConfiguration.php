@@ -2027,6 +2027,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         return $this->{'_' . $_property};
     }
 
+    public function __isset($name)
+    {
+        return property_exists($this,  '_' . $name);
+    }
+
     /**
      * this is the new resolve function, param $_what can be something like this:
      *
