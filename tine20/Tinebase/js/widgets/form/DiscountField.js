@@ -16,7 +16,7 @@ Tine.widgets.form.DiscountField = Ext.extend(Ext.ux.form.MoneyField, {
 
     /**
      * @cgf {Boolean} singleField
-     * discount is handled with a single field only
+     * discount is handled in UI with a single field only
      */
     singleField: false,
 
@@ -51,6 +51,10 @@ Tine.widgets.form.DiscountField = Ext.extend(Ext.ux.form.MoneyField, {
         if (this.type_field && this.record.get(this.type_field) && this.singleField) {
             this.suffix = ' ' + (this.record.get(this.type_field) === 'PERCENTAGE' ? '%' : Tine.Tinebase.registry.get('currencySymbol'));
             // this.decimalPrecision = this.suffix === ' %' ? 0 : 2;
+            // in single field mode we show percentage here
+            if (this.record.get(this.type_field) === 'PERCENTAGE') {
+                value = this.record.get(this.percentage_field)
+            }
         }
 
         const rtn = Tine.widgets.form.DiscountField.superclass.setValue.call(this, value, record)
@@ -97,7 +101,7 @@ Tine.widgets.form.DiscountField = Ext.extend(Ext.ux.form.MoneyField, {
 
         ['price', 'type', 'sum', 'percentage', 'net'].forEach((fld) => {
             const fieldName = config[`${fld}_field`];
-            const val = (fld === 'sum' && type !== 'SUM' && config.singleField) ? percentage : eval(fld);
+            const val = /*(fld === 'sum' && type !== 'SUM' && config.singleField) ? percentage : */ eval(fld);
             if (fieldName && record.constructor.hasField(fieldName) && record.get(fieldName) !== val) {
                 record.set(fieldName, val);
                 form?.findField(fieldName)?.setValue(val, record);

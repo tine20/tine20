@@ -81,7 +81,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
     
     initTpl: function() {
         if (this.showIcon) {
-            this.tpl = '<tpl for="."><div class="x-combo-list-item"><img src="{icon}" class="tine-keyfield-icon"/>{' + this.displayField + '}</div></tpl>';
+            this.tpl = '<tpl for="."><div class="x-combo-list-item"><tpl if="icon"><img src="{icon}" class="tine-keyfield-icon"/></tpl>{' + this.displayField + '}</div></tpl>';
         }
     },
 

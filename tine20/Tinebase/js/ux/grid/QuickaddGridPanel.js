@@ -191,7 +191,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     // quickaddMode !== 'header'
     renderQuickAddRow(idx) {
-        this.store.remove(this.quickaddRowRecord);
+        this.store.remove(this.quickaddRecord);
 
         if (!this.quickaddRecord) {
             const defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
@@ -199,7 +199,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.quickaddRecord = new this.recordClass(defaultData, Ext.id());
         }
 
-        this.store.insert(idx || (this.store.getCount() - 1), [this.quickaddRecord]);
+        this.store.insert(idx || this.store.getCount(), [this.quickaddRecord]);
     },
 
     onValidateEdit: function(o) {
