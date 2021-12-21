@@ -548,15 +548,12 @@ class Tinebase_EmailUser
 
     /**
      * @param string $_accountId
-     * @param string $_rightToCheck
      * @return Tinebase_RAII|boolean
      */
-    public static function prepareAccountForSieveAdminAccess($_accountId, $_rightToCheck = Admin_Acl_Rights::VIEW_EMAILACCOUNTS)
+    public static function prepareAccountForSieveAdminAccess($_accountId)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
             . __LINE__ . ' Account id: ' . $_accountId);
-
-        Admin_Controller_EmailAccount::getInstance()->checkRight($_rightToCheck);
 
         $oldAccountAcl = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
         $oldSieveAcl = Felamimail_Controller_Sieve::getInstance()->doAclCheck(false);
