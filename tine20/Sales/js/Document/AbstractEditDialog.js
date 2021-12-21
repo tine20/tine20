@@ -25,8 +25,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
         const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
         const sums = positions.reduce((a, pos) => {
-            a['positions_net_sum'] = a['positions_net_sum'] + pos['net_price']
-            a['positions_discount_sum'] = a['positions_discount_sum'] + pos['position_discount_sum']
+            a['positions_net_sum'] = (a['positions_net_sum'] || 0) + (pos['net_price'] || 0)
+            a['positions_discount_sum'] = (a['positions_discount_sum'] || 0) + (pos['position_discount_sum'] || 0)
 
             const rate = pos['sales_tax_rate'] || 0
             a['sales_tax_by_rate'][rate] = (a['sales_tax_by_rate'].hasOwnProperty(rate) ? a['sales_tax_by_rate'][rate] : 0) + (pos['sales_tax'] || 0)
@@ -72,12 +72,12 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [fields.document_number, fields.offer_status, fields.booking_date, fields.document_category, fields.document_language],
                 [fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})],
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
-                [{xtype: 'textarea', name: 'boilerplate_pretext', height: 70, fieldLabel: 'Pretext'}],
+                [{xtype: 'textarea', name: 'boilerplate_pretext', enableKeyEvents: true, height: 70, fieldLabel: 'Pretext'}],
                 [fields.positions],
                 [_.assign({ ...placeholder } , {columnWidth: 3/5}), fields.positions_discount_sum, fields.positions_net_sum],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
                 [fields.payment_method, { ...placeholder }, fields.net_sum, fields.sales_tax, fields.gross_sum],
-                [{xtype: 'textarea', name: 'boilerplate_posttext', height: 70, fieldLabel: 'Posttext'}],
+                [{xtype: 'textarea', name: 'boilerplate_posttext', enableKeyEvents: true, height: 70, fieldLabel: 'Posttext'}],
                 [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})],
                 [fields.note]
             ]
