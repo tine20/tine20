@@ -35,11 +35,11 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         Tinebase_AreaLock::getInstance()->activatedByFE();
 
-        $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+        $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
         
         $server = new Tinebase_Http_Server();

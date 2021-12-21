@@ -49,21 +49,21 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     /**
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
-     * @param \Zend\Http\Request $request
-     * @param $body
+     * @param \Laminas\Http\Request|null $request
+     * @param string|null $body
      * @return void
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         try {
-            $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+            $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
 
             if ($body !== null) {
                 $this->_body = $body;
             } else {
                 if ($this->_request instanceof Tinebase_Http_Request) {
                     $this->_body = $this->_request->getContentStream();
-                } else if ($this->_request instanceof \Zend\Http\Request) {
+                } else if ($this->_request instanceof \Laminas\Http\Request) {
                     $this->_body = fopen('php://temp', 'r+');
                     fwrite($this->_body, $request->getContent());
                     rewind($this->_body);

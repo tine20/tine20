@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
@@ -15,7 +15,7 @@
  * NOTE: ^%*&* Zend\Http\PhpEnvironment\Request can't cope with input streams
  *       which leads to waste of mem e.g. on large file upload via PUT (WebDAV)
  */
-class Tinebase_Http_Request extends Zend\Http\PhpEnvironment\Request
+class Tinebase_Http_Request extends Laminas\Http\PhpEnvironment\Request
 {
     /**
      * @var resource

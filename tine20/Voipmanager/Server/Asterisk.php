@@ -23,7 +23,7 @@ class Voipmanager_Server_Asterisk implements Tinebase_Server_Interface
     /**
      * the request
      *
-     * @var \Zend\Http\Request
+     * @var \Laminas\Http\Request
      */
     protected $_request = NULL;
     
@@ -38,10 +38,10 @@ class Voipmanager_Server_Asterisk implements Tinebase_Server_Interface
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         try {
-            $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+            $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
             $this->_body = $body !== null ? $body : fopen('php://input', 'r');
 
             Tinebase_Core::initFramework();
