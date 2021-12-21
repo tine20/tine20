@@ -195,7 +195,12 @@ class Setup_Frontend_Cli
                     $applicationName = ucfirst(trim($applicationName));
                     try {
                         $controller->getSetupXml($applicationName);
-                        $applications[] = $applicationName;
+                        if (Setup_Controller::getInstance()->isInstalled('Tinebase') &&
+                            Setup_Controller::getInstance()->isInstalled($applicationName)) {
+                            echo "Application $applicationName is already installed.\n";
+                        } else {
+                            $applications[] = $applicationName;
+                        }
                     } catch (Setup_Exception_NotFound $e) {
                         echo "Application $applicationName not found! Skipped...\n";
                     }
