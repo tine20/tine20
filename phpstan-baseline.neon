@@ -3423,26 +3423,6 @@ parameters:
 			path: tine20/Felamimail/Controller/Message/Send.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$location\\)\\: Unexpected token \"\\$location\", expected type at offset 41$#"
-			count: 1
-			path: tine20/Felamimail/Controller/MessageFileLocation.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$message\\)\\: Unexpected token \"\\$message\", expected type at offset 18$#"
-			count: 2
-			path: tine20/Felamimail/Controller/MessageFileLocation.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$node\\)\\: Unexpected token \"\\$node\", expected type at offset 87$#"
-			count: 1
-			path: tine20/Felamimail/Controller/MessageFileLocation.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$record\\)\\: Unexpected token \"\\$record\", expected type at offset 65$#"
-			count: 1
-			path: tine20/Felamimail/Controller/MessageFileLocation.php
-
-		-
 			message: "#^Call to an undefined method object\\:\\:getAliasesAsEmails\\(\\)\\.$#"
 			count: 1
 			path: tine20/Felamimail/Controller/Sieve.php
