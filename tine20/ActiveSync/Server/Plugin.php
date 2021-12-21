@@ -22,7 +22,7 @@ class ActiveSync_Server_Plugin implements Tinebase_Server_Plugin_Interface
      * (non-PHPdoc)
      * @see Tinebase_Server_Plugin_Interface::getServer()
      */
-    public static function getServer(\Zend\Http\Request $request)
+    public static function getServer(\Laminas\Http\Request $request)
     {
         if ((isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') || // legacy
             ($request->getQuery('frontend') === 'activesync')

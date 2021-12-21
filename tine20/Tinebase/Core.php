@@ -279,11 +279,11 @@ class Tinebase_Core
     /**
      * dispatch request
      *
-     * @param \Zend\Http\Request $request
+     * @param \Laminas\Http\Request $request
      * @return null|Tinebase_Server_Interface
      * @throws Tinebase_Exception
      */
-    public static function getDispatchServer(\Zend\Http\Request $request)
+    public static function getDispatchServer(\Laminas\Http\Request $request)
     {
         // Test server conditions from server plugins
         foreach (self::_getServerPlugins() as $serverPlugin){

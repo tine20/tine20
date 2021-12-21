@@ -65,12 +65,12 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
     /**
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
-     * @param  \Zend\Http\Request  $request
+     * @param  \Laminas\Http\Request  $request
      * @param  resource|string     $body
      * @throws Tinebase_Exception_NotImplemented
      * @return boolean
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         Tinebase_AreaLock::getInstance()->activatedByFE();
 

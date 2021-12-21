@@ -581,11 +581,6 @@ parameters:
 			path: tine20/Addressbook/Setup/Initialize.php
 
 		-
-			message: "#^Array has 2 duplicate keys with value 'Addressbook_Setup_Update_14\\:\\:update001' \\(self\\:\\:RELEASE014_UPDATE001, self\\:\\:RELEASE014_UPDATE001\\)\\.$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Update/14.php
-
-		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 5
 			path: tine20/Addressbook/Setup/Update/Release11.php
@@ -5371,11 +5366,6 @@ parameters:
 			path: tine20/Setup/Controller.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$name\\.$#"
-			count: 2
-			path: tine20/Setup/Controller.php
-
-		-
 			message: "#^Call to an undefined method Setup_Backend_Interface\\:\\:execInsertStatement\\(\\)\\.$#"
 			count: 1
 			path: tine20/Setup/Controller.php
@@ -5393,11 +5383,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:deleteAllUsers\\(\\)\\.$#"
 			count: 1
-			path: tine20/Setup/Controller.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:asXML\\(\\)\\.$#"
-			count: 2
 			path: tine20/Setup/Controller.php
 
 		-
@@ -5637,16 +5622,6 @@ parameters:
 			message: "#^Parameter \\$body of method Setup_Server_Cli\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
 			count: 1
 			path: tine20/Setup/Server/Cli.php
-
-		-
-			message: "#^Call to method emit\\(\\) on an unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter\\.$#"
-			count: 1
-			path: tine20/Setup/Server/Http.php
-
-		-
-			message: "#^Instantiated class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter not found\\.$#"
-			count: 1
-			path: tine20/Setup/Server/Http.php
 
 		-
 			message: "#^Parameter \\$body of method Setup_Server_Http\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
@@ -6629,17 +6604,7 @@ parameters:
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 76$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 82$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$className\\)\\: Unexpected token \"\\$className\", expected type at offset 99$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
@@ -6649,17 +6614,7 @@ parameters:
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$fieldConfig\\)\\: Unexpected token \"\\$fieldConfig\", expected type at offset 149$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$fieldDef\\)\\: Unexpected token \"\\$fieldDef\", expected type at offset 131$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$fieldName\\)\\: Unexpected token \"\\$fieldName\", expected type at offset 124$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
@@ -8660,11 +8615,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:search\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Abstract.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:merge\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Import/Abstract.php
 
@@ -11284,57 +11234,12 @@ parameters:
 			path: tine20/Tinebase/Server/Expressive.php
 
 		-
-			message: "#^Call to method emit\\(\\) on an unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Expressive.php
-
-		-
-			message: "#^Call to method emit\\(\\) on an unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Expressive.php
-
-		-
-			message: "#^Instantiated class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Expressive.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$requestFromGlobals$#"
 			count: 1
 			path: tine20/Tinebase/Server/Expressive.php
 
 		-
-			message: "#^Parameter \\$emitter of method Tinebase_Server_Expressive\\:\\:__construct\\(\\) has invalid typehint type Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface\\.$#"
-			count: 2
-			path: tine20/Tinebase/Server/Expressive.php
-
-		-
-			message: "#^Parameter \\$emitter of method Tinebase_Server_Expressive\\:\\:setEmitter\\(\\) has invalid typehint type Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface\\.$#"
-			count: 2
-			path: tine20/Tinebase/Server/Expressive.php
-
-		-
-			message: "#^Property Tinebase_Server_Expressive\\:\\:\\$_emitter has unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface as its type\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Expressive.php
-
-		-
-			message: "#^Return typehint of method Tinebase_Server_Expressive\\:\\:setEmitter\\(\\) has invalid type Zend\\\\HttpHandlerRunner\\\\Emitter\\\\EmitterInterface\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Expressive.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Http.php
-
-		-
-			message: "#^Call to method emit\\(\\) on an unknown class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Http.php
-
-		-
-			message: "#^Instantiated class Zend\\\\HttpHandlerRunner\\\\Emitter\\\\SapiEmitter not found\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/Http.php
 
@@ -11409,6 +11314,11 @@ parameters:
 			path: tine20/Tinebase/Server/Plugin/Cli.php
 
 		-
+			message: "#^PHPDoc tag @param for parameter \\$request with type Zend\\\\Http\\\\Request is incompatible with native type Laminas\\\\Http\\\\Request\\.$#"
+			count: 1
+			path: tine20/Tinebase/Server/Plugin/Interface.php
+
+		-
 			message: "#^Method Tinebase_Server_Plugin_Json\\:\\:getServer\\(\\) should return Tinebase_Server_Interface but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/Plugin/Json.php
@@ -11440,16 +11350,6 @@ parameters:
 
 		-
 			message: "#^Call to method stopBodyLog\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/WebDAV.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$body\\)\\: Unexpected token \"\\$body\", expected type at offset 128$#"
-			count: 1
-			path: tine20/Tinebase/Server/WebDAV.php
-
-		-
-			message: "#^Parameter \\$body of method Tinebase_Server_WebDAV\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/WebDAV.php
 
@@ -12157,11 +12057,6 @@ parameters:
 			message: "#^Constant TINE20_BUILDTYPE not found\\.$#"
 			count: 1
 			path: tine20/Tinebase/Twig.php
-
-		-
-			message: "#^Instantiated class Tinebase_User_Typo3 not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/User.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:addGroupMemberInSyncBackend\\(\\)\\.$#"

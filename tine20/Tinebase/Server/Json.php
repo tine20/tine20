@@ -35,11 +35,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         Tinebase_AreaLock::getInstance()->activatedByFE();
 
-        $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
+        $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
 
         // only for debugging
@@ -92,7 +92,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
                 
                 // check for CORS preflight request
-                if ($this->_request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS &&
+                if ($this->_request->getMethod() == \Laminas\Http\Request::METHOD_OPTIONS &&
                     $this->_request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD')
                 ) {
                     $this->_methods = array('handleCors');

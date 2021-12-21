@@ -24,7 +24,7 @@ class Tinebase_Server_Plugin_Http implements Tinebase_Server_Plugin_Interface
      * (non-PHPdoc)
      * @see Tinebase_Server_Plugin_Interface::getServer()
      */
-    public static function getServer(\Zend\Http\Request $request)
+    public static function getServer(\Laminas\Http\Request $request)
     {
         /**************************** OpenID ****************************
          * RewriteRule ^/users/(.*)                      /index.php?frontend=openid&username=$1 [L,QSA]
