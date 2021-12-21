@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  */
@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_Record_StillInUse extends Tinebase_Exception
+class Tinebase_Exception_Record_StillInUse extends Tinebase_Exception_ProgramFlow
 {
     /**
      * the constructor
