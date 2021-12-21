@@ -138,9 +138,13 @@ Tine.widgets.grid.RendererManager = function() {
                             case 'discount':
                                 if (fieldDefinition.singleField) {
                                     renderer = function (value, cell, record) {
-                                        return !value ? '' : record.get(fieldName.replace(/_sum$/, '_type')) === 'PERCENTAGE' ?
-                                            Tine.Tinebase.common.percentRenderer(value, 'float') :
-                                            Ext.util.Format.money(value);
+                                        const type = record.get(fieldName.replace(/_sum$/, '_type'));
+                                        if (type === 'PERCENTAGE') {
+                                            value = record.get(fieldDefinition.fieldName.replace(/_sum$/, '_percentage'));
+                                            return !value ? '' : Tine.Tinebase.common.percentRenderer(value, 'float');
+                                        } else {
+                                            return !value ? '' : Ext.util.Format.money(value);
+                                        }
                                     }
                                 } else {
                                     renderer = function (value, cell, record) {

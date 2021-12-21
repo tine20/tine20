@@ -15,14 +15,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowHeight: 600,
 
     getRecordFormItems: function() {
-        const fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
-            Tine.widgets.form.FieldManager, 'Sales', 'Product', _,
-            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
-
-        const fields = this.fields = {};
-        _.each(Tine.widgets.form.RecordForm.getFieldDefinitions(this.recordClass), (fieldDefinition) => {
-            const fieldName = fieldDefinition.fieldName
-            const config = {};
+        const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
                 case 'unfold_type':
                     config.checkState = function() {
@@ -37,7 +30,6 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
                     break;
             }
-            this.fields[fieldName] =  Ext.create(fieldManager(fieldName, config));
         });
 
         return [{

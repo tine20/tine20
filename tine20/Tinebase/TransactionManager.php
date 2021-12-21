@@ -186,19 +186,26 @@ class Tinebase_TransactionManager
              $this->_openTransactionables = array();
              $this->_onRollbackCallbacks = array();
 
-             foreach($afterCallbacks as $callable) {
+             foreach ($afterCallbacks as $callable) {
                  try {
                      call_user_func_array($callable[0], $callable[1]);
+                 } catch (Tinebase_Exception_AccessDenied $tead) {
+                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                         __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                 } catch (Tinebase_Exception_NotFound $tenf) {
+                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                         __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
                  } catch (Exception $e) {
-                     // we don't want to fail after we committed. Otherwise a rollback maybe triggered outside which
-                     // actually can't rollback anything anymore as we already committed.
+                     // we don't want to fail after we committed. Otherwise, a rollback maybe triggered outside which
+                     // actually can't roll back anything anymore as we already committed.
                      // So afterCommitCallbacks will fail "silently", they only log and go to sentry
                      Tinebase_Exception::log($e, false);
                  }
              }
 
-         } else {
-             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");
+         } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Commiting deferred, as there are still $numOpenTransactions in the queue");
          }
     }
     

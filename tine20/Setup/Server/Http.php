@@ -22,7 +22,7 @@ class Setup_Server_Http implements Tinebase_Server_Interface
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         Tinebase_Session_Abstract::setSessionEnabled('TINE20SETUPSESSID');
             

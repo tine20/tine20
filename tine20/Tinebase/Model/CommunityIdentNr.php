@@ -82,8 +82,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
         self::FIELDS => [
             self::FLD_SATZ_ART => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'Satzart', // _('Satzart')
                 self::SHY => true,
+                self::DISABLED => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
@@ -91,8 +91,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_TEXTKENNZEICHEN => [
                 self::TYPE => self::TYPE_INTEGER,
+                self::DISABLED => true,
                 self::SHY => true,
-                self::LABEL => 'Textkennzeichen', // _('Textkennzeichen')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -101,7 +101,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_ARS_LAND => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'Land', // _('Land')
+                self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
                 self::VALIDATORS => [
@@ -111,7 +111,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_ARS_RB => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'RB', // _('RB')
+                self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
                 self::VALIDATORS => [
@@ -121,7 +121,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_ARS_KREIS => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'Kreis', // _('Kreis')
+                self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
                 self::VALIDATORS => [
@@ -131,7 +131,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_ARS_VB => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'VB', // _('VB')
+                self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
                 self::VALIDATORS => [
@@ -141,7 +141,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_ARS_GEM => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'Gem', // _('Gem')
+                self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
                 self::VALIDATORS => [

@@ -599,4 +599,102 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "Updated notification script for " . $updated . " email accounts\n";
         return 0;
     }
+
+    /**
+     * removes mailaccounts that are no longer linked to a user
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function cleanupMailaccounts(Zend_Console_Getopt $opts)
+    {
+        $backend = Admin_Controller_EmailAccount::getInstance();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
+        ]);
+        $mailAccounts = $backend->search($filter);
+
+        if (count($mailAccounts) === 0) {
+            return 0;
+        }
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+        echo "Found " . count($mailAccounts) . " system email accounts\n";
+        $missingCount = 0;
+        foreach ($mailAccounts as $account) {
+            try {
+                Tinebase_User::getInstance()->getFullUserById($account->user_id);
+                continue;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // remove mailaccount (fmail + dovecot + smtp)
+                $message = "mail account " . $account->email
+                    . " (account id " . $account->getId()
+                    . " / user id " . $account->user_id
+                    . ")\n";
+                if ($opts->d) {
+                    echo "--DRY RUN-- Found " . $message;
+                } else {
+                    echo "Removing " . $message;
+                    $backend->delete([$account->getId()]);
+                }
+                $missingCount++;
+            }
+        }
+        if ($opts->d) {
+            echo "Found ";
+        } else {
+            echo "Removed ";
+        }
+        echo $missingCount . " system email accounts without linked user account\n";
+
+        // TODO add IMAP backend check?
+        // TODO support other SMTP backends?
+
+        // now we check the smtp tables for smtp_users without linked mailaccounts
+        $missingCount = 0;
+        /** @var Tinebase_EmailUser_Smtp_Postfix $emailUserBackend */
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        $db = $emailUserBackend->getDb();
+        $select = $emailUserBackend->getSmtpUserSelect();
+        $stmt = $db->query($select);
+        $queryResult = $stmt->fetchAll();
+        $stmt->closeCursor();
+        echo "Found " . count($queryResult) . " smtp email accounts\n";
+        foreach ($queryResult as $result) {
+            // print_r($result);
+            // check if we have a fmail account with matching mail-address
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'type', 'operator' => 'in', 'value' => [
+                    Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
+                    Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
+                    Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                    Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,
+                ]],
+                ['field' => 'email', 'operator' => 'equals', 'value' => $result['email']]
+            ]);
+            $mailAccount = $backend->search($filter)->getFirstRecord();
+            if (! $mailAccount) {
+                // remove mailaccount (fmail + dovecot + smtp)
+                $message = "mail account " . $result['email']
+                    . " / user id " . $result['userid']
+                    . ")\n";
+                if ($opts->d) {
+                    echo "--DRY RUN-- Found missing " . $message;
+                } else {
+                    echo "Removing " . $message;
+                    $emailUserBackend->deleteUser($result);
+                }
+                $missingCount++;
+            }
+        }
+        if ($opts->d) {
+            echo "Found ";
+        } else {
+            echo "Removed ";
+        }
+        echo $missingCount . " system email accounts without linked user account\n";
+
+        return 0;
+    }
 }

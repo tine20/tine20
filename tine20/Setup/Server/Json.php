@@ -31,7 +31,7 @@ class Setup_Server_Json extends Tinebase_Server_Json
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Zend\Http\Request $request = null, $body = null)
+    public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         try {
             // init server and request first

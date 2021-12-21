@@ -79,10 +79,14 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             }
             this.assertChangeListener(boilerplate.get('name'), field);
             field.setValue(boilerplate.get('boilerplate'));
+            field.originalValue = boilerplate.get('boilerplate');
             field.setFieldLabel(fieldLabel);
         });
         // remove unused fields
         fields.forEach((field) => { this.remove(field) });
+
+        // show/hide tabstripe
+        this.ownerCt[(this.items.getCount() ? 'un' : '') +'hideTabStripItem'](this);
     },
 
     assertChangeListener(name, field) {

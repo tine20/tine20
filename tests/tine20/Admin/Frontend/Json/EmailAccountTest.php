@@ -235,6 +235,39 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         }
     }
 
+    public function testEmailAccountSaveAsContact()
+    {
+        $this->_testNeedsTransaction();
+        
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $accountData = [
+            'email' => 'test5@mail.test',
+            'type' => Felamimail_Model_Account::TYPE_USER,
+            'password' => $credentials['password'],
+            'user_id' => $this->_personas['sclever']->toArray(),
+            'visibility' => Felamimail_Model_Account::VISIBILITY_DISPLAYED
+        ];
+
+        try {
+            $account = $this->_json->saveEmailAccount($accountData);
+            
+            $contact = Addressbook_Controller_Contact::getInstance()->get($account['contact_id']);
+
+            self::assertEquals($account['user_id']['accountDisplayName'], $contact['n_fileas']);
+            self::assertEquals($account['email'], $contact['email']);
+            self::assertEquals($account['organization'], $contact['org_name']);
+
+            $account['visibility'] = Felamimail_Model_Account::VISIBILITY_HIDDEN;
+            $account = $this->_json->saveEmailAccount($account);
+            self::assertNull($account['contact_id']);
+
+            $this->expectException('Tinebase_Exception_NotFound');
+            $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
+        } finally {
+            $this->_json->deleteEmailAccounts([$account['id']]);
+        }
+    }
+
     public function testUpdateSystemAccount()
     {
         $systemaccount = $this->_getTestUserFelamimailAccount();

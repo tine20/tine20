@@ -197,16 +197,41 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 // OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
                 self::RECORDS => [
-                    ['id' => Sales_Model_Document_Offer::STATUS_IN_PROCESS,   'value' => 'In process (unbooked, open)',
-                        'icon' => null, 'system' => true], //_('In process (unbooked, open)')
-                    ['id' => Sales_Model_Document_Offer::STATUS_DELIVERED,    'value' => 'Delivered (booked, open)',
-                        'icon' => null, 'system' => true], //_('Delivered (booked, open)')
-                    ['id' => Sales_Model_Document_Offer::STATUS_ORDERED, 'value' => 'Ordered (booked, open)',
-                        'icon' => null, 'system' => true], //_('Ordered (booked, open)')
-                    ['id' => Sales_Model_Document_Offer::STATUS_REJECTED,    'value' => 'Rejected (booked, closed)',
-                        'icon' => null, 'system' => true], //_('Rejected (booked, closed)')
+                    [
+                        'id' => Sales_Model_Document_Offer::STATUS_DRAFT,
+                        //_('In process (unbooked, open)')
+                        'value' => 'Draft (unbooked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_OfferStatus::FLD_BOOKED => false,
+                        Sales_Model_Document_OfferStatus::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Offer::STATUS_RELEASED,
+                        //_('Delivered (booked, open)')
+                        'value' => 'Released (booked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
+                        Sales_Model_Document_OfferStatus::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Offer::STATUS_ORDERED,
+                        //_('Ordered (booked, open)')
+                        'value' => 'Ordered (booked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
+                        Sales_Model_Document_OfferStatus::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Offer::STATUS_REJECTED,
+                        //_('Rejected (booked, closed)')
+                        'value' => 'Rejected (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
+                        Sales_Model_Document_OfferStatus::FLD_CLOSED => true,
+                        'system' => true
+                    ],
                 ],
-                self::DEFAULT_STR => Sales_Model_Document_Offer::STATUS_IN_PROCESS,
+                self::DEFAULT_STR => Sales_Model_Document_Offer::STATUS_DRAFT,
             ],
         ],
         self::DOCUMENT_OFFER_STATUS_TRANSITIONS => [
@@ -221,23 +246,26 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 '' => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_Offer::STATUS_IN_PROCESS
+                        Sales_Model_Document_Offer::STATUS_DRAFT
                     ]
                 ],
-                Sales_Model_Document_Offer::STATUS_IN_PROCESS => [
+                Sales_Model_Document_Offer::STATUS_DRAFT => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_Offer::STATUS_DELIVERED,
+                        Sales_Model_Document_Offer::STATUS_RELEASED,
+                        Sales_Model_Document_Offer::STATUS_ORDERED,
                         Sales_Model_Document_Offer::STATUS_REJECTED,
                     ]
                 ],
-                Sales_Model_Document_Offer::STATUS_DELIVERED => [
+                Sales_Model_Document_Offer::STATUS_RELEASED => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_Offer::STATUS_ORDERED
+                        Sales_Model_Document_Offer::STATUS_ORDERED,
+                        Sales_Model_Document_Offer::STATUS_REJECTED,
                     ]
                 ],
                 Sales_Model_Document_Offer::STATUS_ORDERED => [
                 ],
                 Sales_Model_Document_Offer::STATUS_REJECTED => [
+                    Sales_Model_Document_Offer::STATUS_ORDERED,
                 ],
             ]
         ],

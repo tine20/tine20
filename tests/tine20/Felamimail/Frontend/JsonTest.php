@@ -441,6 +441,16 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * test send message with sub-array in recipient-array
+     */
+    public function testSendMessageTooManyArrays()
+    {
+        $messageToSend = $this->_getMessageData();
+        $messageToSend['to'] = [$messageToSend['to']];
+        $this->_sendMessage('INBOX', array(), '', 'test', $messageToSend);
+    }
+
+    /**
      * test mail sanitize
      */
     public function testSanitizeMail()

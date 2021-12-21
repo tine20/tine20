@@ -91,10 +91,12 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 }
                 // Note: subprductMapping / subproducts are not resolved in search -> fetch it
                 productData = await Tine.Sales.getProduct(productData.id);
-                position.get('product_id', productData)
+                position.set('product_id', productData)
                 _.forEach(productData.subproducts, (subproductMapping, idx) => {
                     const subposition = new this.recordClass({}, Tine.Tinebase.data.Record.generateUID());
-                    subposition.setFromProduct(subproductMapping.product_id);
+                    // NOTE: need to create record to do conversions (string -> int) here!
+                    const product = Tine.Tinebase.data.Record.setFromJson(subproductMapping.product_id, Tine.Sales.Model.Product);
+                    subposition.setFromProduct(product.data);
                     subposition.set('parent_id', position.id);
                     // NOTE: sorting of subproductmapping sorts inside subpositions only (atm)
                     subposition.set('sorting', position.get('sorting') ? position.get('sorting') + 100 * idx : null);
@@ -175,7 +177,7 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.store.each((pos) => {
             if (pos === this.quickaddRecord) return;
 
-            const rangeKey = `${pos.get('grouping')}_${pos.get('parent_id')}`;
+            const rangeKey = (pos.get('grouping') || '') + '_' + (pos.get('parent_id') || '');
             counters[rangeKey] = (counters[rangeKey] || 0) + 1;
 
             // @TODO implement better groupPrefix
@@ -196,6 +198,18 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
     onBeforeEditPosition(e) {
         if (!e.record.isProductType() && ['title'].concat(e.record.get('type') === 'TEXT' ? 'description' : []).indexOf(e.field) < 0 ) {
+            e.cancel = true;
+        }
+
+        if (e.record.isProductType() && ['title', 'description', 'quantity', 'unit'].indexOf(e.field) < 0
+            // @FIXME product BUNDLE detection
+            && e.record.get('parent_id') && this.store.getById(e.record.get('parent_id')).get('gross_price')) {
+            e.cancel = true;
+        }
+
+        if (e.record.isProductType() && ['title', 'description'].indexOf(e.field) < 0
+            // @FIXME product SET detection
+            && !e.record.get('gross_price') && this.store.find('pos_number', new RegExp(e.record.get('pos_number') + '\..+')) >= 0) {
             e.cancel = true;
         }
 
@@ -289,7 +303,7 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     },
 
     setValue: function(value) {
-        this.store.loadData(value, false);
+        this.store.loadData(value || [], false);
         const last = this.store.getAt(this.store.getCount() -1);
         if (last) {
             this.quickaddRecord.set('sorting', last.get('sorting') + this.sortInc);

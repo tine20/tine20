@@ -137,15 +137,22 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
     }
 
     /**
-     * @param $message
-     * @param $location
-     * @param $record
-     * @param $node
+     * @param Felamimail_Model_Message $message
+     * @param Felamimail_Model_MessageFileLocation $location
+     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Model_Tree_Node $node
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Db_Statement_Exception
      */
-    public function createMessageLocationForRecord($message, $location, $record, $node)
+    public function createMessageLocationForRecord(Felamimail_Model_Message $message,
+                                                   Felamimail_Model_MessageFileLocation $location,
+                                                   Tinebase_Record_Interface $record,
+                                                   Tinebase_Model_Tree_Node $node)
     {
-        if (! $record || ! $record->getId()) {
+        if (empty($record->getId())) {
             throw new Tinebase_Exception_InvalidArgument('existing record is required');
         }
 
@@ -190,11 +197,11 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
     }
 
     /**
-     * @param $message
+     * @param Felamimail_Model_Message $message
      * @return mixed
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _getMessageId($message)
+    protected function _getMessageId(Felamimail_Model_Message $message)
     {
         if ($message->message_id && ! empty($message->message_id)) {
             $messageId = $message->message_id;

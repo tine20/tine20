@@ -57,6 +57,18 @@
                     <length>255</length>
                 </field>
                 <field>
+                    <name>visibility</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>hidden</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contact_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
                     <name>port</name>
                     <type>integer</type>
                 </field>

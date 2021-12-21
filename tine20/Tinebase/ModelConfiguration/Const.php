@@ -38,6 +38,7 @@ class Tinebase_ModelConfiguration_Const {
     const COPY_OMIT = 'copyOmit';
     const COPY_RELATIONS = 'copyRelations';
     const CREATE_MODULE = 'createModule';
+    const CURRENT_TIMESTAMP = 'CURRENT_TIMESTAMP';
 
     const DB_COLUMNS = 'dbColumns';
     /**

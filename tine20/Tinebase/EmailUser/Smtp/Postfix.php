@@ -168,17 +168,16 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
+        $select = $this->getSmtpUserSelect();
+
+        // Only want 1 user (shouldn't be more than 1 anyway)
+        $select->limit(1);
+
+        // select source from alias table
         // _userTable.emailUserId=_destinationTable.emailUserId
         $userIDMap    = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']);
         $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']);
-        
-        $select = $this->_db->select()
-            ->from($this->_userTable)
-            ->group($this->_userTable . '.userid')
-            // Only want 1 user (shouldn't be more than 1 anyway)
-            ->limit(1);
-            
-        // select source from alias table
+
         $select->joinLeft(
             array('aliases' => $this->_destinationTable), // Table
             '(' . $userIDMap .  ' = ' .  // ON (left)
@@ -196,8 +195,16 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             $this->_db->quoteIdentifier('forwards.' . $this->_propertyMapping['emailAliases']) . ')', // AND ON (right)
             array($this->_propertyMapping['emailForwards'] => $this->_dbCommand->getAggregate('forwards.' . $this->_propertyMapping['emailForwards']))); // Select
 
-        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
+        return $select;
+    }
 
+    public function getSmtpUserSelect()
+    {
+        $select = $this->_db->select()
+            ->from($this->_userTable)
+            ->group($this->_userTable . '.userid');
+
+        $this->_appendDomainOrClientIdOrInstanceToSelect($select);
         return $select;
     }
 
@@ -279,6 +286,16 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                 $this->_removeDestinations($queryResult);
             }
         }
+    }
+
+    public function deleteUser($emailUserData)
+    {
+        return $this->_db->delete($this->_userTable, [
+            $this->_db->quoteInto($this->_db->quoteIdentifier(
+                $this->_userTable . '.' . $this->_propertyMapping['emailUserId'])  . ' = ?',   $emailUserData['userid']),
+            $this->_db->quoteInto($this->_db->quoteIdentifier(
+                $this->_userTable . '.' . $this->_propertyMapping['emailAddress']) . ' = ?',   $emailUserData['email']),
+        ]);
     }
     
     /**

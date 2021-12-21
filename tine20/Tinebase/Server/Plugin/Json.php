@@ -22,13 +22,13 @@ class Tinebase_Server_Plugin_Json implements Tinebase_Server_Plugin_Interface
      * (non-PHPdoc)
      * @see Tinebase_Server_Plugin_Interface::getServer()
      */
-    public static function getServer(\Zend\Http\Request $request)
+    public static function getServer(\Laminas\Http\Request $request)
     {
         /**************************** JSON API *****************************/
         if (($request->getHeaders('X-TINE20-REQUEST-TYPE') && $request->getHeaders('X-TINE20-REQUEST-TYPE')->getFieldValue() === 'JSON')  ||
             ($request->getHeaders('CONTENT-TYPE') && substr($request->getHeaders('CONTENT-TYPE')->getFieldValue(),0,16) === 'application/json') ||
             ($request->getPost('requestType') === 'JSON') ||
-            ($request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD'))
+            ($request->getMethod() == \Laminas\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD'))
         ) {
             return new Tinebase_Server_Json();
         }

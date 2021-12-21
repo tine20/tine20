@@ -40,11 +40,7 @@ class Tinebase_Convert_Factory
                 $recordClass = ($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : $_record;
                 $converterClass = str_replace('Model', 'Convert', $recordClass);
                 $converterClass .= '_Json';
-                
-                $converter = class_exists($converterClass) ? new $converterClass($recordClass) : new Tinebase_Convert_Json($recordClass);
-                return $converter;
-                 
-                break;
+                return class_exists($converterClass) ? new $converterClass($recordClass) : new Tinebase_Convert_Json($recordClass);
             default:
                 throw new Tinebase_Exception_NotImplemented('type ' . $_type . ' not supported yet.');
         }

@@ -20,10 +20,10 @@ class Tinebase_Server_Plugin_Expressive implements Tinebase_Server_Plugin_Interf
     /**
      * (non-PHPdoc)
      * @see Tinebase_Server_Plugin_Interface::getServer()
-     * @param Zend\Http\Request $request
+     * @param Laminas\Http\Request $request
      * @return Tinebase_Server_Interface|null
      */
-    public static function getServer(\Zend\Http\Request $request)
+    public static function getServer(\Laminas\Http\Request $request)
     {
         /**************************** JSON API *****************************/
         if (null !== $request->getQuery(Tinebase_Server_Expressive::QUERY_PARAM_DO_EXPRESSIVE)) {

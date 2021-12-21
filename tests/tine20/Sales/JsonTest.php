@@ -381,30 +381,13 @@ class Sales_JsonTest extends TestCase
     
     /**
      * test product json api
-     *
-     * @todo generalize this
      */
     public function testAddGetSearchDeleteProduct()
     {
-        $savedProduct = $this->_addProduct();
-        $getProduct = $this->_instance->getProduct($savedProduct['id']);
-        $searchProducts = $this->_instance->searchProducts($this->_getProductFilter(), '');
-
-        //print_r($getProduct);
-
-        // assertions
-        $this->assertEquals($getProduct, $savedProduct);
-        $this->assertTrue(count($getProduct['notes']) > 0, 'no notes found');
-        $this->assertEquals('phpunit test note', $getProduct['notes'][0]['note']);
-        $this->assertTrue($searchProducts['totalcount'] > 0);
-        $this->assertEquals($savedProduct['description'], $searchProducts['results'][0]['description']);
-
-        // delete all
-        $this->_instance->deleteProducts($savedProduct['id']);
-
-        // check if delete worked
-        $result = $this->_instance->searchProducts($this->_getProductFilter(), '');
-        $this->assertEquals(0, $result['totalcount']);
+        $this->_testSimpleRecordApi('Product', 'name', 'description', true, [
+            'price' => 10000,
+            'default_sorting' => '',
+        ]);
     }
     
     /**

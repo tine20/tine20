@@ -191,7 +191,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     // quickaddMode !== 'header'
     renderQuickAddRow(idx) {
-        this.store.remove(this.quickaddRowRecord);
+        this.store.remove(this.quickaddRecord);
 
         if (!this.quickaddRecord) {
             const defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?

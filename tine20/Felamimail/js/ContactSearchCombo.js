@@ -210,6 +210,29 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                 store.remove(record);
             }
         });
+    
+        // remove duplicated email addresses in mailingList , 
+        store.each(function(record) {
+            if (record.data.emails !== '') {
+                const idx = store.indexOf(record);
+                let emailArray = _.compact(_.split(record.data.emails, ','));
+                
+                duplicates = store.queryBy(function (contact) {
+                    if (contact.data.email !== '' ) {
+                        return record.id !== contact.id && _.includes(emailArray, contact.data.email);
+                    }
+                });
+    
+                emailArray = _.difference(emailArray, _.map(duplicates.items, 'data.email'));
+                record.data.emails = _.join(emailArray, ',');
+                
+                store.removeAt(idx);
+                
+                if (emailArray.length > 0) {
+                    store.insert(idx, record);
+                }
+            }
+        });
     }    
 });
 Ext.reg('felamimailcontactcombo', Tine.Felamimail.ContactSearchCombo);
