@@ -9,6 +9,7 @@ Ext.ns('Tine.widgets.form');
 
 import 'widgets/form/JsonField';
 import 'widgets/form/XmlField';
+import 'widgets/form/RecordEditField';
 
 /**
  * central form field manager
