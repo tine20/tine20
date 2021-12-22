@@ -588,7 +588,10 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     ],
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_HIDDEN
-                ]
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => self::VISIBILITY_HIDDEN,
+                ],
             ],
             'contact_id'                    => [
                 self::TYPE                      => self::TYPE_RECORD,
