@@ -560,9 +560,9 @@ class Tinebase_Application
     }
 
     /**
-     * @param $_applicationId
-     * @param $_stateName
-     * @param $_state
+     * @param string $_applicationId
+     * @param string $_stateName
+     * @param string $_state
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Db_Adapter_Exception
      */
