@@ -181,7 +181,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function delete($_ids)
     {
-        $this->_deleteEmailAccountContact($_ids);
+        $this->deleteEmailAccountContact($_ids);
         
         parent::delete($_ids);
         $this->_updateDefaultAccountPreference($_ids);
@@ -460,13 +460,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     }
 
     /**
-     * remove one groupmember from the group
+     * delete email account contact
      *
      * @return void
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function _deleteEmailAccountContact($ids)
+    public function deleteEmailAccountContact($ids)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
@@ -645,7 +645,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                         . ' Delete email_account type contact for email account : ' . $_record['id']);
                 };
  
-                $this->_deleteEmailAccountContact([$_record]);
+                $this->deleteEmailAccountContact([$_record]);
                 $_record->contact_id = null;
             }
         }
