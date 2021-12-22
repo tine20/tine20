@@ -49,7 +49,16 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     background-image: none;
     background-color: transparent;
 }
-    /* ----- actions -------------------------------------------------------------*/
+
+.x-combo-list-unselectable-item {
+    color: darken(#d9d9d9, 10);
+    font-style: italic;
+    &.x-combo-selected {
+        background-color: transparent !important;
+    }
+}
+
+/* ----- actions -------------------------------------------------------------*/
 .action_add {
     background-image:url(../../images/icon-set/Icon_add.svg) !important;
 }
