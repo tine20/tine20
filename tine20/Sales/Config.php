@@ -192,6 +192,7 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION        => 'Possible Offer Status',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
             self::OPTIONS            => [
+                self::RECORD_MODEL => Sales_Model_Document_OfferStatus::class,
                 self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_OFFER_STATUS_TRANSITIONS,
             ],
             self::CLIENTREGISTRYINCLUDE => true,
@@ -219,7 +220,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_ORDERED,
                         //_('Ordered (booked, open)')
-                        'value' => 'Ordered (booked, open)',
+                        'value' => 'Ordered (booked, closed)',
                         'icon' => null,
                         Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
                         Sales_Model_Document_OfferStatus::FLD_CLOSED => true,

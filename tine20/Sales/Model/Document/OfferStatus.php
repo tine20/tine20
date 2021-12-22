@@ -17,6 +17,7 @@
  */
 class Sales_Model_Document_OfferStatus extends Tinebase_Config_KeyFieldRecord
 {
+    public const MODEL_NAME_PART = 'Document_OfferStatus';
     public const FLD_BOOKED = 'booked';
     public const FLD_CLOSED = 'closed';
 
