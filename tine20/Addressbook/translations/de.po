@@ -1274,4 +1274,4 @@ msgid "Warning"
 msgstr "Warnung"
 
 msgid "It is not allowed to delete email account type contact!"
-msgstr "Es ist nicht erlaubt, einen Kontakte vom Typ E-Mail-Konto zu löschen!"
+msgstr "Es ist nicht erlaubt, einen Kontakt vom Typ E-Mail-Konto zu löschen!"
