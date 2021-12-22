@@ -10,7 +10,7 @@ Ext.ns('Tine.Sales.Document');
 import './AbstractEditDialog'
 
 Tine.Sales.Document_OfferEditDialog = Ext.extend(Tine.Sales.Document_AbstractEditDialog, {
-
+    statusFieldName: 'offer_status',
 
     initComponent () {
         this.supr().initComponent.call(this)

@@ -13,14 +13,30 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     windowWidth: 1024,
 
     initComponent() {
-        Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this);
+        Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this)
 
+        // add boilerplate panel/management
         this.items.get(0).insert(1, new BoilerplatePanel({}));
+
+        // status handling
+        this.fields[this.statusFieldName].on('beforeselect', this.onBeforeStatusSelect, this)
+    },
+
+    async onBeforeStatusSelect(statusField, status, idx) {
+        if (await Ext.MessageBox.confirm(
+            this.app.i18n._('Confirm Status Change'),
+            this.app.i18n._('Changing this workflow status might not be revertible. Proceed anyway?')
+        ) !== 'yes') {
+            return false;
+        }
+        _.delay(() => {
+            this.onApplyChanges();
+        }, 150);
     },
 
     checkStates () {
         if(this.loadRequest){
-            return _.delay(_.bind(this.checkStates, this), 250);
+            return _.delay(_.bind(this.checkStates, this), 250)
         }
 
         const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
@@ -55,21 +71,30 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
         this.record.set('gross_sum', this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))
         this.getForm().findField('gross_sum')?.setValue(this.record.get('gross_sum'))
+
+        // handle booked state
+        const statusField = this.fields[this.statusFieldName]
+        const booked = statusField.store.getById(statusField.getValue())?.json.booked
+        this.getForm().items.each((field) => {
+            if (['cost_center_id', 'cost_bearer_id', 'note'].indexOf(field.fieldName) < 0) {
+                field.setReadOnly(booked);
+            }
+        });
     },
 
     getRecordFormItems: function() {
-        const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, fieldDefinition) => {
+        const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
 
             }
-        });
+        })
 
         const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
         return [{
             region: 'center',
             xtype: 'columnform',
             items: [
-                [fields.document_number, fields.offer_status, fields.booking_date, fields.document_category, fields.document_language],
+                [fields.document_number, fields.offer_status, { ...placeholder }, fields.document_category, fields.document_language],
                 [fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})],
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_pretext', enableKeyEvents: true, height: 70, fieldLabel: 'Pretext'}],
@@ -82,7 +107,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})],
                 [fields.note]
             ]
-        }];
+        }]
     }
 
 });
