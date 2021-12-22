@@ -127,6 +127,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 if (node.attributes?.status !== 'pending') {
                     Ext.fly(node.ui?.elNode)?.removeClass('x-type-data-pending');
                 }
+    
+                if (pathChange) {
+                    this.onSelectionChange.call(this, node);
+                }
                 
                 // in case of path change we need to reload the node (children) as well
                 // as the path of all children changed as well
