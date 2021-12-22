@@ -17,13 +17,13 @@ then
 fi
 
 echo -e "## Features"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*feature\(" | egrep -v "\(ci"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*feature\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft"
 
 echo -e "\n## Bugfixes"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*fix\(" | egrep -v "\(ci"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*fix\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft"
 
 echo -e "\n## Refactoring"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*refactor\(" | egrep -v "\(ci"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*refactor\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft"
 
 # TODO allow to get all other changes with a param --full
 
@@ -34,5 +34,5 @@ then
     | grep -v "Merge remote" | egrep -v " \"*feature\(" | egrep -v " \"*fix\(" | egrep -v " \"*refactor\(" | egrep -v "\(ci"
 
   echo -e "\n## CI Changes"
-  git log $VERSION1...$VERSION2 --oneline | egrep "\(ci"
+  git log $VERSION1...$VERSION2 --oneline | egrep "\(ci" | egrep -v "fixup"
 fi
