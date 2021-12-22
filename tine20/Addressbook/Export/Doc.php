@@ -34,8 +34,10 @@ class Addressbook_Export_Doc extends Tinebase_Export_Doc
     }
 
     /**
-     * @param $record
+     * @param Addressbook_Model_Contact $record
      * @return array
+     *
+     * @todo move to Addressbook_Model_Contact::getPreferredAddress
      */
     protected function getAddress($record)
     {
