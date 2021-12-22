@@ -584,9 +584,14 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $this->_testNeedsTransaction();
         $account = $this->_createSharedAccount();
         $account->visibility = Felamimail_Model_Account::VISIBILITY_DISPLAYED;
-        $account = Admin_Controller_EmailAccount::getInstance()->update($account);
-        $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
-        self::assertEquals($account->name, $contact['n_fileas'], 'name was not updated');
-        self::assertEquals($account->email, $contact['email'], 'email was not updated');
+        try {
+            $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+            $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
+            self::assertEquals($account->name, $contact['n_fileas'], 'name was not updated');
+            self::assertEquals($account->email, $contact['email'], 'email was not updated');
+        } finally {
+            Felamimail_Controller_Account::getInstance()->deleteEmailAccountContact([$account->getId()]);
+        }
+      
     }
 }
