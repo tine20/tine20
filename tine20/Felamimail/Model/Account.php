@@ -502,6 +502,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_StringTrim::class,
                     Zend_Filter_StringToLower::class
                 ],
+                self::NULLABLE                  => true,
             ],
             'sieve_vacation_active' => [
                 self::TYPE => self::TYPE_BOOLEAN,
