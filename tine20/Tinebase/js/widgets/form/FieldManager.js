@@ -11,6 +11,7 @@ import 'widgets/form/JsonField';
 import 'widgets/form/XmlField';
 import 'widgets/form/ModelPicker';
 import 'widgets/form/LanguagePicker';
+import 'widgets/form/RecordEditField';
 
 /**
  * central form field manager
