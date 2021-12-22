@@ -671,12 +671,18 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     }
                 }
             // resolve virtual field by function
-                // shouldn't really be used, but got used for example in OOI ooi_editors systemCF
+            // shouldn't really be used, but got used for example in OOI ooi_editors systemCF
             } else if ((isset($field['function']) || array_key_exists('function', $field))) {
                 if (is_array($field['function'])) {
                     if (count($field['function']) > 1) { // static method call
                         $class  = $field['function'][0];
                         $method = $field['function'][1];
+                        if (! class_exists($class)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                                __METHOD__ . '::' . __LINE__
+                                . ' Could not find class:' . $class);
+                            continue;
+                        }
                         $resultSet = $class::$method($resultSet);
 
                     } else { // use key as classname and value as method name
@@ -684,6 +690,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                         $class  = array_pop($ks);
                         $vs = array_values($field['function']);
                         $method = array_pop($vs);
+                        if (! class_exists($class)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                                __METHOD__ . '::' . __LINE__
+                                . ' Could not find class:' . $class);
+                            continue;
+                        }
                         $class = $class::getInstance();
                         
                         $resultSet = $class->$method($resultSet);
@@ -733,8 +745,15 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $this->_resolveRecursive($records, $modelConfiguration, $multiple);
 
             if ($expanderDef = $modelConfiguration->jsonExpander) {
-                $expander = new Tinebase_Record_Expander($records->getRecordClassName(), $expanderDef);
-                $expander->expand($records);
+                $modelName = $records->getRecordClassName();
+                try {
+                    $expander = new Tinebase_Record_Expander($modelName, $expanderDef);
+                    $expander->expand($records);
+                } catch (Tinebase_Exception_NotImplemented $teni) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Could not expand ' . $modelName . ': ' . $teni->getMessage());
+                }
             }
         }
     }
@@ -783,8 +802,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     {
         $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
         $result = $this->_resolveBoolFields($result, $modelConfiguration, $multiple);
-        $result = $this->_convertRightToAccountGrants($result, $modelConfiguration, $multiple);
-        return $result;
+        return $this->_convertRightToAccountGrants($result, $modelConfiguration, $multiple);
     }
 
     /**
