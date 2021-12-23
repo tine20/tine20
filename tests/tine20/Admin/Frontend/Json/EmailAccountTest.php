@@ -241,13 +241,14 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         
         $credentials = TestServer::getInstance()->getTestCredentials();
         $accountData = [
-            'email' => 'test5@mail.test',
+            'email' =>  Tinebase_Record_Abstract::generateUID() . '@' . TestServer::getPrimaryMailDomain(),
             'type' => Felamimail_Model_Account::TYPE_USER,
             'password' => $credentials['password'],
             'user_id' => $this->_personas['sclever']->toArray(),
             'visibility' => Felamimail_Model_Account::VISIBILITY_DISPLAYED
         ];
 
+        $account = null;
         try {
             $account = $this->_json->saveEmailAccount($accountData);
             
@@ -264,7 +265,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             $this->expectException('Tinebase_Exception_NotFound');
             $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         } finally {
-            $this->_json->deleteEmailAccounts([$account['id']]);
+            if ($account) {
+                $this->_json->deleteEmailAccounts([$account['id']]);
+            }
         }
     }
 

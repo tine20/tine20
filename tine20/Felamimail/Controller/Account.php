@@ -623,7 +623,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
                 try {
                     if (! $existContact) {
-                        $contact = Addressbook_Controller_Contact::getInstance()->create($contactData);
+                        $contact = Addressbook_Controller_Contact::getInstance()->create($contactData, false);
                     } else {
                         $contact = Addressbook_Controller_Contact::getInstance()->get($existContact['id']);
                         $contact['email']               = $_record['email'];
