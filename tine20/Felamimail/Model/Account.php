@@ -599,6 +599,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_PART_NAME,
                 ],
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NULLABLE => true,
             ]
         ]
     ];
