@@ -316,11 +316,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if ($this->user_type === self::USERTYPE_RESOURCE) {
             $resource = $clone->user_id;
             if (! $resource instanceof Calendar_Model_Resource) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " this: "
-                        . print_r($this->toArray(), true));
-                // TODO is it reasonable to throw here? this breaks for example caldav GET
-                throw new Tinebase_Exception_NotFound('did not get valid resource object');
+                $resource = Calendar_Controller_Resource::getInstance()->get($resource);
             }
             // return pseudo contact with resource data
             $result = new Addressbook_Model_Contact(array(
