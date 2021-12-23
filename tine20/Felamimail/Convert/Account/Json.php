@@ -99,7 +99,7 @@ class Felamimail_Convert_Account_Json extends Tinebase_Convert_Json
             }
         }
         
-        if (isset($result['contact_id']) && array_key_exists('container_id', $result['contact_id'])) {
+        if (isset($result['contact_id']) && is_array($result['contact_id']) && array_key_exists('container_id', $result['contact_id'])) {
             $addressbookId = $result['contact_id']['container_id'];
             $result['contact_id']['container_id'] = Tinebase_Container::getInstance()->getContainerById($addressbookId)->toArray();
         }
