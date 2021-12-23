@@ -713,7 +713,18 @@ class Tinebase_Relations
      */
     public function delete($_id)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Deleting the following relations: ' . print_r($_id, true));
         return $this->_backend->delete($_id);
+    }
+
+    /**
+     * @param array $relationids
+     * @return int
+     */
+    public function deleteByRelIds(array $relationids)
+    {
+        return $this->_backend->deleteByRelIds($relationids);
     }
 
     /**
