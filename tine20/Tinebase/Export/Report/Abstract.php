@@ -14,11 +14,6 @@
 abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
 {
     /**
-     * @var Tinebase_Model_Tree_FileLocation
-     */
-    protected $_fileLocation = null;
-
-    /**
      * @var array
      */
     protected $_downloadFilePaths = [];
@@ -68,8 +63,6 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
         if (! isset($this->_config->sources) || ! isset($this->_config->target)) {
             throw new Tinebase_Exception_InvalidArgument('sources and/or filelocation options missing / invalid');
         }
-
-        $this->_fileLocation = new Tinebase_Model_Tree_FileLocation($this->_config->target->toArray());
     }
 
     /**
@@ -160,6 +153,11 @@ abstract class Tinebase_Export_Report_Abstract extends Tinebase_Export_Abstract
     public function isDownload()
     {
         return parent::isDownload() && $this->_fileLocation->type === Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD;
+    }
+
+    public function writeToFileLocation()
+    {
+        // done that in generate already, nothing to do, do not call parent here
     }
 
     /**
