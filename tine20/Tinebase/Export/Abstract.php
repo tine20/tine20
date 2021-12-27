@@ -169,6 +169,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_specialFields = array();
 
     /**
+     * @var Tinebase_Model_Tree_FileLocation
+     */
+    protected $_fileLocation = null;
+
+    /**
      * if set to true _hasTwig() will return true in any case
      *
      * @var boolean
@@ -315,6 +320,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_modelName = $this->_config->model;
         }
         $this->_exportTimeStamp = Tinebase_DateTime::now();
+
+        if (isset($this->_config->target)) {
+            $this->_fileLocation = new Tinebase_Model_Tree_FileLocation($this->_config->target->toArray());
+        }
 
         if (!empty($this->_config->group)) {
             $this->_groupByProperty = $this->_config->group;
@@ -829,11 +838,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _getLastModifiedTimeStamp()
     {
-        if (is_file($this->_templateFileName)) {
+        return microtime(true); // even with cache off, in phpunit it will be cached in memory otherwise
+        /*if (is_file($this->_templateFileName)) {
             return filemtime($this->_templateFileName);
         } else {
             return time();
-        }
+        }*/
     }
 
     protected function _getCurrentState()
@@ -1655,7 +1665,36 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     public function isDownload()
     {
-        return !$this->_config->returnFileLocation;
+        return (null === $this->_fileLocation ||
+                $this->_fileLocation->type === Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD)
+            && !$this->_config->returnFileLocation;
+    }
+
+    public function writeToFileLocation()
+    {
+        if (!$this->_fileLocation) {
+            return;
+        }
+        switch ($this->_fileLocation->type) {
+            case Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE:
+                $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($this->_fileLocation->fm_path,
+                    Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+                Tinebase_FileSystem::getInstance()->checkPathACL($nodePath, 'add');
+
+                $fileName = $this->getDownloadFilename();
+                $targetPath = $nodePath->statpath . '/' . $fileName;
+                $i = 0;
+                $pInfo = pathinfo($fileName);
+                while (Tinebase_FileSystem::getInstance()->fileExists($targetPath)) {
+                    $targetPath = $nodePath->statpath . '/' . $pInfo['filename'] . '(' . (++$i) . ').' . $pInfo['extension'];
+                }
+
+                $this->save('tine20://' . $targetPath);
+                break;
+            default:
+                throw new Tinebase_Exception_NotImplemented(
+                    'FileLocation type ' . $this->_fileLocation->type . ' not implemented yet');
+        }
     }
 
     /**
@@ -1667,6 +1706,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     public function getTargetFileLocation($filename = null)
     {
+        if ($this->_fileLocation && $this->_fileLocation->type !== Tinebase_Model_Tree_FileLocation::TYPE_DOWNLOAD) {
+            return $this->_fileLocation;
+        }
+
         if ($filename === null) {
             if (method_exists($this, 'write')) {
                 ob_start();

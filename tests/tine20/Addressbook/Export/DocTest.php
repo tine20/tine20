@@ -62,6 +62,42 @@ class Addressbook_Export_DocTest extends TestCase
         static::assertEquals($contentHashToBe, $contentHashIs, 'generated document does not match expectation');
     }
 
+    public function testHttpExport()
+    {
+        Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'adr_one_street'   => 'Montgomery',
+            'n_given'           => 'Paul',
+            'n_family'          => 'test',
+            'email'             => 'tmp@test.de'
+        )));
+        $node = Filemanager_Controller_Node::getInstance()
+            ->createNodes('/shared/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord();
+        $filter = json_encode([['field' => 'adr_one_street', 'operator' => 'contains', 'value' => 'Montgomery']]);
+        $options = json_encode([
+            'definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('adb_doc')->getId(),
+            'target' => [
+                Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
+                Tinebase_Model_Tree_FileLocation::FLD_FM_PATH => '/shared/test'
+            ]
+        ]);
+
+        ob_start();
+        (new Addressbook_Frontend_Http())->exportContacts($filter, $options);
+        $children = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($node->getId());
+        $this->assertSame(1, $children->count());
+        $this->assertSame('export_addressbook_contact_word_details.docx', $children->getFirstRecord()->name);
+
+        (new Addressbook_Frontend_Http())->exportContacts($filter, $options);
+        $children = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($node->getId());
+        $this->assertSame(2, $children->count());
+        foreach ($children as $child) {
+            $this->assertTrue('export_addressbook_contact_word_details.docx' === $child->name ||
+                'export_addressbook_contact_word_details(1).docx' === $child->name, $child->name);
+        }
+
+        ob_end_clean();
+    }
+
     public function testTableWithPOSTPmarkers()
     {
         $this->_genericExportTest(array(

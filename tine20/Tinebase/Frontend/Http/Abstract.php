@@ -210,6 +210,9 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $fileLocation = null;
             $filename = null;
         } else {
+            if (method_exists($export, 'writeToFileLocation')) {
+                $export->writeToFileLocation();
+            }
             $fileLocation = $export->getTargetFileLocation($filename);
         }
 
