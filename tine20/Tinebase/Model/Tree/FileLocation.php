@@ -94,23 +94,23 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
                 $trgtPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($fmCtrl->addBasePath($this
                     ->{self::FLD_FM_PATH}));
                 $fs = Tinebase_FileSystem::getInstance();
-                $fs->checkPathACL($trgtPath->getParent(), 'update', FALSE);
-                if ($fs->fileExists($trgtPath)) {
-                    $trgtNode = $fs->stat($trgtPath);
+                $fs->checkPathACL($trgtPath, 'add', false);
+                if ($fs->fileExists($trgtPath->statpath . '/' . $this->{self::FLD_FILE_NAME})) {
+                    $trgtNode = $fs->stat($trgtPath. '/' . $this->{self::FLD_FILE_NAME});
                 } else {
-                    $trgtNode = $fs->createFileTreeNode($fs->stat($trgtPath->getParent()), $this->{FLD_FILE_NAME});
+                    $trgtNode = $fs->createFileTreeNode($fs->stat($trgtPath->statpath), $this->{self::FLD_FILE_NAME});
                 }
                 $trgtNode->hash = $srcNode->hash;
                 $fs->update($trgtNode);
                 break;
             case self::TYPE_ATTACHMENT:
-                list($record, $ctrl) = $this->_getAttachmentRecordAndCtrl();
+                list($record, $ctrl) = $this->getAttachmentRecordAndCtrl();
                 Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
                 $record->attachments->addRecord($srcNode);
                 $ctrl->update($record);
                 break;
             default:
-                throw new Tinebase_Exception_UnexpectedValue('invalid type: ' . $this->{FLD_TYPE});
+                throw new Tinebase_Exception_UnexpectedValue('invalid type: ' . $this->{self::FLD_TYPE});
         }
     }
 
@@ -142,7 +142,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
         return $node;
     }
 
-    protected function _getAttachmentRecordAndCtrl()
+    public function getAttachmentRecordAndCtrl()
     {
         list($app) = explode('_', $this->{self::FLD_MODEL});
         $recordCtrl = Tinebase_Core::getApplicationInstance($app, $this->{self::FLD_MODEL});
@@ -153,7 +153,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
 
     protected function _getAttachementNode()
     {
-        list($record) = $this->_getAttachmentRecordAndCtrl();
+        list($record) = $this->getAttachmentRecordAndCtrl();
         $fs = Tinebase_FileSystem::getInstance();
         $pNode = $fs->stat(Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($record));
         if (!empty($this->{self::FLD_NODE_ID})) {
