@@ -1675,22 +1675,62 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (!$this->_fileLocation) {
             return;
         }
-        switch ($this->_fileLocation->type) {
+        switch ($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_TYPE}) {
             case Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE:
-                $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($this->_fileLocation->fm_path,
-                    Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
-                Tinebase_FileSystem::getInstance()->checkPathACL($nodePath, 'add');
+                $fmCtrl = Filemanager_Controller_Node::getInstance();
+                $trgtPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($fmCtrl->addBasePath($this->_fileLocation
+                    ->{Tinebase_Model_Tree_FileLocation::FLD_FM_PATH}));
+                $fs = Tinebase_FileSystem::getInstance();
+                $fs->checkPathACL($trgtPath, 'add', false);
 
                 $fileName = $this->getDownloadFilename();
-                $targetPath = $nodePath->statpath . '/' . $fileName;
-                $i = 0;
                 $pInfo = pathinfo($fileName);
+                if (strlen($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME}) > 0) {
+                    $pInfoFL = pathinfo($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
+                    $fileName = $pInfoFL['filename'] . '.' . $pInfo['extension'];
+                    $pInfo['filename'] = $pInfoFL['filename'];
+                }
+                $targetPath = $trgtPath->statpath . '/' . $fileName;
+                $i = 0;
+
                 while (Tinebase_FileSystem::getInstance()->fileExists($targetPath)) {
-                    $targetPath = $nodePath->statpath . '/' . $pInfo['filename'] . '(' . (++$i) . ').' . $pInfo['extension'];
+                    $targetPath = $trgtPath->statpath . '/' . $pInfo['filename'] . '(' . (++$i) . ').' . $pInfo['extension'];
                 }
 
                 $this->save('tine20://' . $targetPath);
                 break;
+
+            case Tinebase_Model_Tree_FileLocation::TYPE_ATTACHMENT:
+                $fileName = $this->getDownloadFilename();
+                $pInfo = pathinfo($fileName);
+                if (strlen($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME}) > 0) {
+                    $pInfo = pathinfo($fileName);
+                    $pInfoFL = pathinfo($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
+                    $fileName = $pInfoFL['filename'] . '.' . $pInfo['extension'];
+                    $pInfo['filename'] = $pInfoFL['filename'];
+                }
+                $targetNode = new Tinebase_Model_Tree_Node([
+                    'name' => $fileName,
+                    'tempFile' => Tinebase_TempFile::getTempPath(),
+                ], true);
+
+                try {
+                    $this->save($targetNode->tempFile);
+
+                    list($record, $ctrl) = $this->_fileLocation->getAttachmentRecordAndCtrl();
+                    Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
+                    $i = 0;
+                    while ($record->attachments->find('name', $fileName)) {
+                        $fileName = $pInfo['filename'] . '(' . (++$i) . ').' . $pInfo['extension'];
+                        $targetNode->name = $fileName;
+                    }
+                    $record->attachments->addRecord($targetNode);
+                    $ctrl->update($record);
+                } finally {
+                    @unlink($targetNode->tempFile);
+                }
+                break;
+
             default:
                 throw new Tinebase_Exception_NotImplemented(
                     'FileLocation type ' . $this->_fileLocation->type . ' not implemented yet');

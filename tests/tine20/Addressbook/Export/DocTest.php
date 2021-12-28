@@ -98,6 +98,42 @@ class Addressbook_Export_DocTest extends TestCase
         ob_end_clean();
     }
 
+    public function testHttpExportAttachement()
+    {
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'adr_one_street'   => 'Montgomery',
+            'n_given'           => 'Paul',
+            'n_family'          => 'test',
+            'email'             => 'tmp@test.de'
+        )));
+        $this->assertEmpty($contact->attachments);
+        $filter = json_encode([['field' => 'adr_one_street', 'operator' => 'contains', 'value' => 'Montgomery']]);
+        $options = json_encode([
+            'definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('adb_doc')->getId(),
+            'target' => [
+                Tinebase_Model_Tree_FileLocation::FLD_TYPE => Tinebase_Model_Tree_FileLocation::TYPE_ATTACHMENT,
+                Tinebase_Model_Tree_FileLocation::FLD_RECORD_ID => $contact->getId(),
+                Tinebase_Model_Tree_FileLocation::FLD_MODEL => Addressbook_Model_Contact::class,
+            ]
+        ]);
+
+        ob_start();
+        (new Addressbook_Frontend_Http())->exportContacts($filter, $options);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
+        $this->assertSame(1, $contact->attachments->count());
+        $this->assertSame('export_addressbook_contact_word_details.docx', $contact->attachments->getFirstRecord()->name);
+
+        (new Addressbook_Frontend_Http())->exportContacts($filter, $options);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
+        $this->assertSame(2, $contact->attachments->count());
+        foreach ($contact->attachments as $attachment) {
+            $this->assertTrue('export_addressbook_contact_word_details.docx' === $attachment->name ||
+                'export_addressbook_contact_word_details(1).docx' === $attachment->name, $attachment->name);
+        }
+
+        ob_end_clean();
+    }
+
     public function testTableWithPOSTPmarkers()
     {
         $this->_genericExportTest(array(
