@@ -101,6 +101,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             'user_id' => [
                 self::TYPE => self::TYPE_USER,
                 self::LABEL => 'User', // _('User')
+                self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null
