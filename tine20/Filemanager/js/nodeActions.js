@@ -8,6 +8,7 @@
 Ext.ns('Tine.Filemanager.nodeActions');
 
 require('Filemanager/js/QuickLookPanel');
+require('Filemanager/js/FileSystemLinkDialog');
 
 /**
  * @singleton
@@ -321,17 +322,10 @@ Tine.Filemanager.nodeActions.SystemLink = {
         var _ = window.lodash,
             app = this.initialConfig.app,
             record = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
-
-        Ext.MessageBox.show({
+    
+        Tine.Filemanager.FileSystemLinkDialog.openWindow({
             title: i18n._('System Link'),
-            // minWidth:
-            maxWidth: screen.availWidth,
-            msg: '<b>' + app.i18n._('Use this link to share the entry with other system users') + ':</b><br>'
-                    + record.getSystemLink(),
-            buttons: Ext.MessageBox.OK,
-            // value: record.getSystemLink(),
-            // prompt: true,
-            icon: Ext.MessageBox.INFO
+            link: record.getSystemLink()
         });
     },
     actionUpdater: Tine.Filemanager.nodeActions.actionUpdater

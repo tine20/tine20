@@ -18,4 +18,6 @@ class FieldClipboardPlugin extends FieldTriggerPlugin {
     }
 }
 
+Ext.preg('ux.fieldclipboardplugin', FieldClipboardPlugin);
+
 export default FieldClipboardPlugin

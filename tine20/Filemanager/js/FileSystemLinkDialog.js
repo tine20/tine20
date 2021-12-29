@@ -2,31 +2,24 @@
  * Tine 2.0
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Michael Spahn <m.spahn@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Ching En Cheng <c.cheng@metaways.de>
+ * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 import "../../Tinebase/js/ux/form/FieldClipboardPlugin";
 
 Ext.ns('Tine.Filemanager');
 
-Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
-    /**
-     * Tine.Filemanager.Model.DownloadLink
-     */
-    record: null,
-
-    /**
-     * Password used to protect downloadlink
-     */
-    password: null,
+Tine.Filemanager.FileSystemLinkDialog = Ext.extend(Ext.FormPanel, {
 
     /**
      * Filemanager
      */
     app: null,
+    link: null,
 
-    windowNamePrefix: 'FilePublishedDialog_',
+    windowNamePrefix: 'FileSystemLinkDialog_',
+    trigger1Class:'x-form-trigger',
     
     cls: 'tw-editdialog',
     layout: 'fit',
@@ -36,13 +29,13 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
     /**
      * Constructor.
      */
-    initComponent: function () {
+    initComponent: async function () {
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
-    
+     
         this.initButtons();
-        
+    
         this.items = [{
             border: false,
             frame: true,
@@ -59,35 +52,23 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
                 },
                 items: [
                     [{
+                        xtype: 'textfield',
                         plugins: [{
-                            ptype: 'ux.fieldclipboardplugin',
+                            ptype: 'ux.fieldclipboardplugin'
                         }],
-                        fieldLabel: this.app.i18n._('URL'),
-                        name: 'url',
-                        value: this.record.get('url'),
+                        columnWidth: 1,
+                        fieldLabel: this.app.i18n._('Use this link to share the entry with other system users'),
+                        name: 'link',
+                        value: this.link,
                         maxLength: 100,
                         allowBlank: true,
                         readOnly: true
-                    }, {
-                        fieldLabel: this.app.i18n._('Password'),
-                        name: 'url',
-                        value: this.password,
-                        xtype: 'tw-passwordTriggerField',
-                        allowBlank: true,
-                        editable: false
-                    }, {
-                        fieldLabel: this.app.i18n._('Valid until'),
-                        name: 'url',
-                        xtype: 'datefield',
-                        editable: false,
-                        readOnly: true,
-                        value: this.record.get('expiry_time')
                     }]
                 ]
             }]
         }];
-
-        Tine.Filemanager.FilePublishedDialog.superclass.initComponent.call(this);
+        
+        Tine.Filemanager.FileSystemLinkDialog.superclass.initComponent.call(this);
     },
     
     initButtons: function () {
@@ -112,11 +93,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
     },
 
     onSendAsMail: function () {
-        let body =  this.app.i18n._("Download") + ": " + this.record.get('url');
-        
-        if (this.password) {
-            body += '<br>' + this.app.i18n._("Password") + ": " + this.password;
-        }
+        let body = `<a href="${this.link}" target="_blank">${Ext.ux.util.urlCoder.decodeURI(this.link)}</a>`;
         
         let defaults = Tine.Felamimail.Model.Message.getDefaultData();
         defaults.body = body + Tine.Felamimail.getSignature();
@@ -129,13 +106,13 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
     }
 });
 
-Tine.Filemanager.FilePublishedDialog.openWindow = function (config) {
+Tine.Filemanager.FileSystemLinkDialog.openWindow = function (config) {
     var id = (config.record && config.record.id) ? config.record.id : 0;
     return Tine.WindowFactory.getWindow({
         width: 350,
-        height: 200,
-        name: Tine.Filemanager.FilePublishedDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Filemanager.FilePublishedDialog',
+        height: 150,
+        name: Tine.Filemanager.FileSystemLinkDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.Filemanager.FileSystemLinkDialog',
         contentPanelConstructorConfig: config,
         modal: true
     });
