@@ -386,7 +386,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     public function __call($method, array $args)
     {
         // provides api for default application methods
-        if (preg_match('/^(export)([a-z0-9]+)/i', $method, $matches)) {
+        if (preg_match('/^(export)([a-z0-9_]+)/i', $method, $matches)) {
             $apiMethod = $matches[1];
             $model = in_array($apiMethod, array('export')) ? substr($matches[2],0,-1) : $matches[2];
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
