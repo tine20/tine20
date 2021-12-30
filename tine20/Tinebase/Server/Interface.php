@@ -21,8 +21,8 @@ interface Tinebase_Server_Interface
     /**
      * handler for tine requests
      * 
-     * @param  \Laminas\Http\Request  $request
-     * @param  stream|string       $body
+     * @param  \Laminas\Http\Request|null $request
+     * @param  resource|string|null $body
      */
     public function handle(\Laminas\Http\Request $request = null, $body = null);
     
