@@ -71,10 +71,11 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         $config = new Zend_Config($configData);
         Tinebase_Core::set(Tinebase_Core::CONFIG, $config);
     }
-    
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_Server_Interface::handle()
+     * @param \Laminas\Http\Request|null $request
+     * @param resource|string|null $body not used
+     * @return void
      */
     public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
@@ -83,8 +84,15 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         
         if (! in_array($method, array('Tinebase.monitoringCheckDB', 'Tinebase.monitoringCheckConfig'))) {
             Tinebase_Core::initFramework();
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                .' Is cli request. method: ' . $method);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Is cli request. method: ' . $method);
+            if (! Tinebase_Application::getInstance()->isInstalled('Tinebase')) {
+                $message = 'Tinebase is not installed';
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $message);
+                echo $message . "\n";
+                exit(1);
+            }
         }
 
         // prevents problems with missing request uri (@see Sabre\HTTP\Request->getUri())
@@ -107,10 +115,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
                 $result = 1;
             }
         } catch (Throwable $e) {
-            if (! preg_match('/Base table or view not found/', $e->getMessage())) {
-                // tine might not be installed yet, don't log exception in that case
-                Tinebase_Exception::log($e);
-            }
+            Tinebase_Exception::log($e);
             echo $e . "\n";
             $result = 1;
         }
