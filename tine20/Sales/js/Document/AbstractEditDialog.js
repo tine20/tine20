@@ -65,7 +65,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum')) * rate / 100
             return a + sums['sales_tax_by_rate'][rate]
         }, 0))
-        this.record.set('sales_tax_by_rate', sums['sales_tax_by_rate'])
+        this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
+            return a.concat(Number(rate) ? [{'tax_rate': Number(rate), 'tax_sum': sums['sales_tax_by_rate'][rate]}] : [])
+        }, Tine.Tinebase.common.assertComparable([])))
         this.getForm().findField('sales_tax_by_rate')?.setValue(this.record.get('sales_tax_by_rate'))
         this.getForm().findField('sales_tax')?.setValue(this.record.get('sales_tax'))
 
@@ -76,7 +78,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const statusField = this.fields[this.statusFieldName]
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
         this.getForm().items.each((field) => {
-            if (['cost_center_id', 'cost_bearer_id', 'note'].indexOf(field.fieldName) < 0) {
+            if (['cost_center_id', 'cost_bearer_id', 'description', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0) {
                 field.setReadOnly(booked);
             }
         });
@@ -104,8 +106,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.net_sum, fields.sales_tax, fields.gross_sum],
                 [fields.payment_method, _.assign({ ...placeholder } , {columnWidth: 4/5})],
                 [{xtype: 'textarea', name: 'boilerplate_posttext', enableKeyEvents: true, height: 70, fieldLabel: 'Posttext'}],
-                [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})],
-                [fields.note]
+                [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})]
             ]
         }]
     }
