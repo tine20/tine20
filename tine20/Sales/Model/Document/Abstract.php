@@ -53,7 +53,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_COST_CENTER_ID = 'cost_center_id';
     public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
-    public const FLD_NOTE = 'note';
+    public const FLD_DESCRIPTION = 'description';
 
     // <dokumentenart>_STATUS z.B. Rechnungsstatus (Ungebucht, Gebucht, Verschickt, Bezahlt)
     //   übergänge haben regeln (siehe SAAS mechanik)
@@ -82,7 +82,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     //  - IS_REVERSED bool // storno
     //  - INVOICE_REPORTING enum (AUTO|MANU) // Rechnungslegung
     //  - INVOICE_TYPE (jetziger TYPE) // Rechnungsart (Rechnung/Storno)
-    //  - INVOICE_STATUS: keyfield: proforma(Ungebucht, offen), gebucht(gebucht, geschlossen)
+    //  - INVOICE_STATUS: keyfield: proforma(Ungebucht, offen), gebucht(gebucht, offen),  Verschickt(gebucht, offen), Bezahlt(gebucht, geschlossen)
     //  obacht: bei storno rechnung wird der betrag (pro zeile) im vorzeichen umgekehrt
 
     // Achtung: Hinter den status keyfields verbergen sich jeweils noch fachliche workflows die jeweils noch (dazu) konfiguiert werden können
@@ -101,6 +101,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::TITLE_PROPERTY                => self::FLD_DOCUMENT_NUMBER,
         self::MODLOG_ACTIVE                 => true,
         self::EXPOSE_JSON_API               => true,
+        self::EXPOSE_HTTP_API               => true,
+
+        self::HAS_ATTACHMENTS => true,
+        self::HAS_CUSTOM_FIELDS => true,
+        self::HAS_NOTES => false,
+        self::HAS_RELATIONS => true,
+        self::HAS_TAGS => true,
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -326,7 +333,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::NULLABLE                      => true,
             ],
-            self::FLD_NOTE                      => [
+            self::FLD_DESCRIPTION                      => [
                 self::LABEL                         => 'Internal Note', //_('Internal Note')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,

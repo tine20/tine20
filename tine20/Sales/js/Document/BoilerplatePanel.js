@@ -59,7 +59,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
     },
 
     onBoilerplatesLoad(editDialog) {
-        const fields = editDialog.getForm().items.items.filter((field) => { return field.name.match(/^boilerplate_/) });
+        const fields = editDialog.getForm().items.items.filter((field) => { return String(field.name).match(/^boilerplate_/) });
         this.store.each((boilerplate, idx) => {
             const name = `boilerplate_${boilerplate.get('name')}`;
             const fieldLabel = Tine.Tinebase.EncodingHelper.encode(boilerplate.getTitle());
