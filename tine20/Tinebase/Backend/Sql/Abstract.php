@@ -1304,6 +1304,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                         
                     $this->_db->delete($this->_tablePrefix . $join['table'], $where);
                 }
+
+                if (! empty($idsToAdd) && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Adding the following foreign IDs: ' . print_r($idsToAdd, true));
+                }
                 
                 foreach ($idsToAdd as $id) {
                     $recordArray = array (
