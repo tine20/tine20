@@ -205,8 +205,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _initImportResult()
     {
-        $this->_importResult['results']     = (! empty($this->_options['model'])) ? new Tinebase_Record_RecordSet($this->_options['model']) : array();
-        $this->_importResult['exceptions']  = new Tinebase_Record_RecordSet('Tinebase_Model_ImportException');
+        $this->_importResult['totalcount'] = 0;
+        $this->_importResult['updatecount'] = 0;
+        $this->_importResult['failcount'] = 0;
+        $this->_importResult['duplicatecount'] = 0;
+        $this->_importResult['results'] = (! empty($this->_options['model'])) ? new Tinebase_Record_RecordSet($this->_options['model']) : array();
+        $this->_importResult['exceptions'] = new Tinebase_Record_RecordSet('Tinebase_Model_ImportException');
     }
     
     /**
@@ -229,7 +233,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * get raw data of a single record
      *
      * @param  mixed $_resource
-     * @return array
+     * @return array|boolean|null
      */
     abstract protected function _getRawData(&$_resource);
 
@@ -246,7 +250,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             . ' Client record data: ' . print_r($clientRecordDatas, TRUE));
         
         $recordIndex = 0;
-        while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
+        while (($recordData = $this->_getRawData($_resource)) !== false) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Importing record ' . $recordIndex . ' ...');
             $recordToImport = null;
@@ -292,7 +296,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * do something with the imported record
      *
-     * @param $importedRecord
+     * @param Tinebase_Record_Interface $importedRecord
      */
     protected function _inspectAfterImport($importedRecord)
     {

@@ -77,15 +77,15 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     /**
      * get (sub) folder and create folders in db backend cache
      *
-     * @param  mixed   $_accountId
-     * @param  string  $_folderName global name
+     * @param  mixed $_accountId
+     * @param  string $_folderName global name
      * @param  boolean $_recursive 
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function update($_accountId, $_folderName = '', $_recursive = FALSE)
+    public function update($_accountId, $_folderName = '', $_recursive = false)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Updating folder cache of parent folder: ' . $_folderName . ')');
+            . ' Updating folder cache of parent folder: ' . $_folderName);
         
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
