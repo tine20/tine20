@@ -3546,18 +3546,13 @@ HumanResources_CliTests.testSetContractsEndDate */
      * @param Tinebase_Record_Interface|null $_oldRecord
      * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _validateState(Tinebase_Record_Interface $_record,
+    protected function _validateTransitionState(string $_field, array $_config, Tinebase_Record_Interface $_record,
                                       Tinebase_Record_Interface $_oldRecord = null)
     {
-        if (! $this->_transitionConfig || ! $this->_transitionStatusField) {
-            throw new Tinebase_Exception_UnexpectedValue('transitions and status field not configured');
-        }
-        $transitions = Tinebase_Config::getAppConfig($this->_applicationName)->get($this->_transitionConfig);
-        $currentStatus = $_record->{$this->_transitionStatusField};
-
-        $oldStatus = $_oldRecord ? $_oldRecord->{$this->_transitionStatusField} : '';
-        $targetStatus = isset($transitions[$oldStatus][Tinebase_Config_Abstract::TRANSITION_TARGET_STATUS]) ?
-            $transitions[$oldStatus][Tinebase_Config_Abstract::TRANSITION_TARGET_STATUS] : null;
+        $currentStatus = $_record->{$_field};
+        $oldStatus = $_oldRecord ? $_oldRecord->{$_field} : '';
+        $targetStatus = isset($_config[$oldStatus][Tinebase_Config_Abstract::TRANSITION_TARGET_STATUS]) ?
+            $_config[$oldStatus][Tinebase_Config_Abstract::TRANSITION_TARGET_STATUS] : null;
 
         if (!$targetStatus) {
             throw new Tinebase_Exception_UnexpectedValue('targetStatus in transitions : ' . $oldStatus
@@ -3568,7 +3563,7 @@ HumanResources_CliTests.testSetContractsEndDate */
             throw new Tinebase_Exception_UnexpectedValue('status is not set');
         }
 
-        if (!isset($transitions[$currentStatus])) {
+        if (!isset($_config[$currentStatus])) {
             throw new Tinebase_Exception_UnexpectedValue('status : ' . $currentStatus
                 . ' is not defined in transitions');
         }
