@@ -1,5 +1,5 @@
 merge_merge_upwards () {
-    if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" customers; then
+    if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" "customers"; then
         ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh "$MATRIX_ROOM" "🔴 Auto merging $1 into $2 failed in $CI_PIPELINE_NAME $CI_JOB_URL."
         return 1
     fi
@@ -7,6 +7,31 @@ merge_merge_upwards () {
 
 merge_update_custom_app () {
     ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh UpdateCustomApp "$1" "$2" || true
+}
+
+merge_merge_mirror () {
+    source_remote="$1"
+    source_branch="$2"
+    destination_remote="$3"
+    destination_branch="$4"
+
+    git fetch "$source_remote" "$source_branch" || return 1
+    git fetch "$destination_remote" "$destination_branch" || return 1
+
+    git checkout "$destination_branch" || return 1
+    git reset --hard "$destination_remote/$destination_branch" || return 1
+    
+    echo "git mergeing $source_remote/$source_branch into $destination_remote/$destination_branch ..."
+
+    if ! git merge "$source_remote/$source_branch"; then
+
+        if ! php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/repairMerge.php "$source_remote/$source_branch" "$destination_branch"; then
+            echo "merging $source_remote/$source_branch into $destination_remote/$destination_branch failed"
+            return 1
+        fi
+    fi
+    
+    git push "$destination_remote" "$destination_branch"
 }
 
 merge_trigger_next () {
