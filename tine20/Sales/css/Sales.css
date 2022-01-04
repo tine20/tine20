@@ -69,10 +69,6 @@
 .preview-panel-customer { margin: 5px 2px 5px 5px; width: 32%; min-width: 200px}
 .preview-panel-description.preview-panel-customer {width: 22%; min-width: 200px}
 
-.clipboard {
-    background-image:url(../../images/icon-set/icon_copy_to_clipboard.svg) !important;
-}
-
 .preview-panel-invoice-default {
     display: block;
     height: 122px;
