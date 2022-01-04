@@ -13,6 +13,9 @@ trait Tinebase_Export_DocumentPdfTrait
 
     public static $previewService = null;
 
+    /**
+     * @var null|string
+     */
     protected $_parentFile;
 
     /**

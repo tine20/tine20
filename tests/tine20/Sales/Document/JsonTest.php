@@ -11,7 +11,7 @@
 /**
  * Test class for Sales_Frontend_Json
  */
-class Sales_Document_JsonTest extends TestCase
+class Sales_Document_JsonTest extends Sales_Document_Abstract
 {
     /**
      * @var Sales_Frontend_Json
@@ -299,47 +299,5 @@ class Sales_Document_JsonTest extends TestCase
             ]
         ]);
         $this->_instance->saveDocument_Order($order->toArray());
-    }
-
-    protected function _createProduct(array $data = []): Sales_Model_Product
-    {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(array_merge([
-            Sales_Model_Product::FLD_NAME => Tinebase_Record_Abstract::generateUID(),
-        ], $data)));
-    }
-
-    protected function _createCustomer(): Sales_Model_Customer
-    {
-        $name = Tinebase_Record_Abstract::generateUID();
-        /** @var Sales_Model_Customer $customer */
-        $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer([
-            'name' => $name,
-            'cpextern_id' => $this->_personas['sclever']->contact_id,
-            'bic' => 'SOMEBIC',
-            'delivery' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
-                'name' => 'some delivery address for ' . $name,
-                'type' => 'delivery'
-            ]]),
-            'billing' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
-                'name' => 'some billing address for ' . $name,
-                'type' => 'billing'
-            ]]),
-            'postal' => new Sales_Model_Address([
-                'name' => 'some postal address for ' . $name,
-                'street' => 'teststreet for ' . $name,
-                'type' => 'postal'
-            ]),
-        ]));
-
-        $expander = new Tinebase_Record_Expander(Sales_Model_Customer::class, [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'delivery' => [],
-                'billing' => [],
-                'postal' => [],
-            ]
-        ]);
-        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Customer::class, [$customer]));
-        return $customer;
     }
 }
