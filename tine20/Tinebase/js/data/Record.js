@@ -470,6 +470,38 @@ Tine.Tinebase.data.Record.generateUID = function(length) {
     return uuid.join('');
 };
 
+Tine.Tinebase.data.Record.getDefaultData = function(recordClass) {
+    var modelConfig = recordClass.getModelConfiguration(),
+        appName = modelConfig.appName,
+        modelName = modelConfig.modelName;
+    
+    // if default data is empty, it will be resolved to an array
+    if (Ext.isArray(modelConfig.defaultData)) {
+        modelConfig.defaultData = {};
+    }
+    
+    if (! dd) {
+        var dd = Ext.decode(Ext.encode(modelConfig.defaultData));
+    }
+
+    // find container by selection or use defaultContainer by registry
+    if (modelConfig.containerProperty) {
+        if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
+            var app = Tine.Tinebase.appMgr.get(appName),
+                registry = app.getRegistry(),
+                ctp = app.getMainScreen().getWestPanel().getContainerTreePanel();
+
+            var container = (ctp && Ext.isFunction(ctp.getDefaultContainer) ? ctp.getDefaultContainer() : null)
+                || (registry ? registry.get("default" + modelName + "Container") : null);
+
+            if (container) {
+                dd[modelConfig.containerProperty] = container;
+            }
+        }
+    }
+    return dd;
+};
+
 Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     add: function(record) {
         if (! Ext.isFunction(record.getMeta)) {

@@ -396,6 +396,12 @@ Ext.Msg.show({
             if(opt.wait === true){
                 progressBar.wait(opt.waitConfig);
             }
+            if (! opt.fn) {
+                return new Promise((resolve) => {
+                    opt.fn = resolve;
+                })
+
+            }
             return this;
         },
 
@@ -442,7 +448,7 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         progress : function(title, msg, progressText){
-            this.show({
+            return this.show({
                 title : title,
                 msg : msg,
                 buttons: false,
@@ -451,7 +457,6 @@ Ext.MessageBox.ERROR
                 minWidth: this.minProgressWidth,
                 progressText: progressText
             });
-            return this;
         },
 
         /**
@@ -464,7 +469,7 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         wait : function(msg, title, config){
-            this.show({
+            return this.show({
                 title : title,
                 msg : msg,
                 buttons: false,
@@ -474,7 +479,6 @@ Ext.MessageBox.ERROR
                 minWidth: this.minProgressWidth,
                 waitConfig: config
             });
-            return this;
         },
 
         /**
@@ -489,7 +493,7 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         alert : function(title, msg, fn, scope){
-            this.show({
+            return this.show({
                 title : title,
                 msg : msg,
                 buttons: this.OK,
@@ -497,7 +501,6 @@ Ext.MessageBox.ERROR
                 scope : scope,
                 minWidth: this.minWidth
             });
-            return this;
         },
 
         /**
@@ -512,7 +515,7 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         confirm : function(title, msg, fn, scope){
-            this.show({
+            return this.show({
                 title : title,
                 msg : msg,
                 buttons: this.YESNO,
@@ -521,7 +524,6 @@ Ext.MessageBox.ERROR
                 icon: this.QUESTION,
                 minWidth: this.minWidth
             });
-            return this;
         },
 
         /**
@@ -539,7 +541,7 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         prompt : function(title, msg, fn, scope, multiline, value){
-            this.show({
+            return this.show({
                 title : title,
                 msg : msg,
                 buttons: this.OKCANCEL,
@@ -550,7 +552,6 @@ Ext.MessageBox.ERROR
                 multiline: multiline,
                 value: value
             });
-            return this;
         },
 
         /**

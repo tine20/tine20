@@ -953,12 +953,13 @@ var menu = new Ext.menu.Menu({
     },
 
     // private
-    onSelect : function(record, index){
-        if(this.fireEvent('beforeselect', this, record, index) !== false){
+    onSelect : async function(record, index){
+        this.fireAsyncEvent('beforeselect', this, record, index).then(() => {
+        // if(this.fireEvent('beforeselect', this, record, index) !== false){
             this.setValue(record.data[this.valueField || this.displayField]);
             this.collapse();
             this.fireEvent('select', this, record, index);
-        }
+        }).catch(e => {});
     },
 
     // inherit docs
@@ -1051,12 +1052,12 @@ var menu = new Ext.menu.Menu({
     },
 
     // private
-    onViewClick : function(doFocus){
+    onViewClick : async function(doFocus){
         var index = this.view.getSelectedIndexes()[0],
             s = this.store,
             r = s.getAt(index);
         if(r){
-            this.onSelect(r, index);
+            await this.onSelect(r, index);
         }else {
             this.collapse();
         }

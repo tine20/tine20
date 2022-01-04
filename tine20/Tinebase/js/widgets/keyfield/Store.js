@@ -18,7 +18,7 @@ Ext.ns('Tine.Tinebase.widgets.keyfield');
 Tine.Tinebase.widgets.keyfield.Store = function(config) {
     // init app
     config.app = Ext.isString(config.app) ? Tine.Tinebase.appMgr.get(config.app) : config.app;
-    
+
     // get keyField config
     if (config.app.getRegistry()) {
         if (! config.keyFieldConfig) {
@@ -49,6 +49,7 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
 
     // add 'virtual' field
     fields.push({name: 'i18nValue'});
+    fields.push({name: '_itemCls'});
     this.recordClass = Ext.data.Record.create(fields);
 
     config.fields = this.recordClass;

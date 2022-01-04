@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_Document_Offer</model>
+    <name>document_offer_pdf</name>
+    <type>export</type>
+    <plugin>Sales_Export_Document</plugin>
+    <description>Offer PDF</description>
+    <template>tine20:///Tinebase/folders/shared/export/templates/Sales/sales_document_offer.docx</template>
+</config>

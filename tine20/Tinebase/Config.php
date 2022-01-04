@@ -2384,7 +2384,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom weburl for branding.')
             'description'           => 'Custom weburl for branding.',
             'type'                  => 'string',
-            'default'               => 'https://github.com/tine-groupware/tine',
+            'default'               => 'https://github.com/tine20/tine20',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE

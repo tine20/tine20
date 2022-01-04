@@ -365,7 +365,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
     protected function _getStructureCacheId($structure = [])
     {
         $partId = ! empty($structure['partId']) ? $structure['partId'] : 0;
-        return 'messageStructure' . $this->folder_id . '_' . $this->messageuid . '_' . $partId;
+        return Tinebase_Helper::convertCacheId(
+            'messageStructure' . $this->folder_id . '_' . $this->messageuid . '_' . $partId);
     }
     
     /**
@@ -380,7 +381,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
 
         $cacheId = $this->_getStructureCacheId($structure);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Caching message structure: ' . $cacheId);
         Tinebase_Core::getCache()->save($structure, $cacheId, array('messageStructure'), 86400); // 24 hours
         
         $this->structure = $structure;
@@ -407,7 +407,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
             $this->headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($this->getId(), NULL, TRUE);
         }
         
-        if ((isset($this->headers['disposition-notification-to']) || array_key_exists('disposition-notification-to', $this->headers)) && $this->headers['disposition-notification-to']) {
+        if ((isset($this->headers['disposition-notification-to'])
+                || array_key_exists('disposition-notification-to', $this->headers))
+            && $this->headers['disposition-notification-to']
+        ) {
             $translate = Tinebase_Translation::getTranslation($this->_application);
             $from = Felamimail_Controller_Account::getInstance()->get($this->account_id);
             

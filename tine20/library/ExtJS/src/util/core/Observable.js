@@ -163,7 +163,10 @@ EXTUTIL.Observable.prototype = {
     },
 
     fireAsyncEvent: async function() {
+        const ce = this.events[arguments[0]] || {};
+        ce.isAsync = true;
         const r = this.fireEvent.apply(this, arguments);
+        ce.isAsync = false;
         return !r || r === true ? Promise.resolve() : (Ext.isFunction(r.then) ? r : Promise.reject());
     },
     
@@ -405,7 +408,7 @@ EXTUTIL.Event = function(obj, name){
     this.name = name;
     this.obj = obj;
     this.listeners = [];
-    this.isAsync = null;
+    this.isAsync = false;
 };
 
 EXTUTIL.Event.prototype = {
@@ -415,9 +418,6 @@ EXTUTIL.Event.prototype = {
         scope = scope || me.obj;
         if(!me.isListening(fn, scope)){
             l = me.createListener(fn, scope, options);
-            if (fn && fn.constructor.name === "AsyncFunction" && ! Ext.isBoolean(me.isAsync)) {
-                me.isAsync = true;
-            }
             if(me.firing){ // if we are currently firing this event, don't disturb the listener loop
                 me.listeners = me.listeners.slice(0);
             }
@@ -508,35 +508,49 @@ EXTUTIL.Event.prototype = {
     },
 
     fire : function(){
+        if (this.isAsync) return this.fireAsync.apply(this, arguments);
+
         var me = this,
             args = TOARRAY(arguments),
             listeners = me.listeners,
             len = listeners.length,
             i = 0,
-            l,
-            r,
-            pms = [];
+            l;
 
         if(len > 0){
             me.firing = TRUE;
             for (; i < len; i++) {
                 l = listeners[i];
-                if(l) {
-                    r = l.fireFn.apply(l.scope || me.obj || window, args);
-                    if (r === FALSE) {
-                        if (! me.isAsync) {
-                            return (me.firing = FALSE);
-                        }
-                        r = Promise.reject(l.name + ' returned false');
-                    }
-                    if (r && Ext.isFunction(r.then)) {
-                        pms.push(r);
-                    }
+                if(l && l.fireFn.apply(l.scope || me.obj || window, args) === FALSE) {
+                    return (me.firing = FALSE);
                 }
             }
         }
         me.firing = FALSE;
-        return pms.length || me.isAsync ? Promise.all(pms) : TRUE;
+        return TRUE;
+    },
+
+    fireAsync : async function() {
+        const args = TOARRAY(arguments);
+        let result = Promise.resolve();
+
+        if (this.listeners.length) {
+            this.firing = TRUE;
+
+            for (let listener of this.listeners) {
+                try {
+                    if( await listener.fireFn.apply(listener.scope || this.obj || window, args) === false) {
+                        throw null; // non async event listener returned false
+                    }
+                } catch (e) {
+                    result = Promise.reject();
+                    break;
+                }
+            }
+
+            this.firing = FALSE;
+        }
+        return result;
     }
 };
 })();

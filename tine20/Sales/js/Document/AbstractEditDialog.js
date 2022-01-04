@@ -13,14 +13,30 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     windowWidth: 1024,
 
     initComponent() {
-        Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this);
+        Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this)
 
+        // add boilerplate panel/management
         this.items.get(0).insert(1, new BoilerplatePanel({}));
+
+        // status handling
+        this.fields[this.statusFieldName].on('beforeselect', this.onBeforeStatusSelect, this)
+    },
+
+    async onBeforeStatusSelect(statusField, status, idx) {
+        if (await Ext.MessageBox.confirm(
+            this.app.i18n._('Confirm Status Change'),
+            this.app.i18n._('Changing this workflow status might not be revertible. Proceed anyway?')
+        ) !== 'yes') {
+            return false;
+        }
+        _.delay(() => {
+            this.onApplyChanges();
+        }, 150);
     },
 
     checkStates () {
         if(this.loadRequest){
-            return _.delay(_.bind(this.checkStates, this), 250);
+            return _.delay(_.bind(this.checkStates, this), 250)
         }
 
         const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
@@ -49,39 +65,50 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum')) * rate / 100
             return a + sums['sales_tax_by_rate'][rate]
         }, 0))
-        this.record.set('sales_tax_by_rate', sums['sales_tax_by_rate'])
+        this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
+            return a.concat(Number(rate) ? [{'tax_rate': Number(rate), 'tax_sum': sums['sales_tax_by_rate'][rate]}] : [])
+        }, Tine.Tinebase.common.assertComparable([])))
         this.getForm().findField('sales_tax_by_rate')?.setValue(this.record.get('sales_tax_by_rate'))
         this.getForm().findField('sales_tax')?.setValue(this.record.get('sales_tax'))
 
         this.record.set('gross_sum', this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))
         this.getForm().findField('gross_sum')?.setValue(this.record.get('gross_sum'))
+
+        // handle booked state
+        const statusField = this.fields[this.statusFieldName]
+        const booked = statusField.store.getById(statusField.getValue())?.json.booked
+        this.getForm().items.each((field) => {
+            if (['cost_center_id', 'cost_bearer_id', 'description', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0) {
+                field.setReadOnly(booked);
+            }
+        });
     },
 
     getRecordFormItems: function() {
-        const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, fieldDefinition) => {
+        const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
 
             }
-        });
+        })
 
         const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
         return [{
             region: 'center',
             xtype: 'columnform',
             items: [
-                [fields.document_number, fields.offer_status, fields.booking_date, fields.document_category, fields.document_language],
+                [fields.document_number, fields.offer_status, { ...placeholder }, fields.document_category, fields.document_language],
                 [fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})],
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_pretext', enableKeyEvents: true, height: 70, fieldLabel: 'Pretext'}],
                 [fields.positions],
                 [_.assign({ ...placeholder } , {columnWidth: 3/5}), fields.positions_discount_sum, fields.positions_net_sum],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
-                [fields.payment_method, { ...placeholder }, fields.net_sum, fields.sales_tax, fields.gross_sum],
+                [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.net_sum, fields.sales_tax, fields.gross_sum],
+                [fields.payment_method, _.assign({ ...placeholder } , {columnWidth: 4/5})],
                 [{xtype: 'textarea', name: 'boilerplate_posttext', enableKeyEvents: true, height: 70, fieldLabel: 'Posttext'}],
-                [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})],
-                [fields.note]
+                [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})]
             ]
-        }];
+        }]
     }
 
 });

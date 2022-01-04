@@ -269,7 +269,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         }
                     }
 
-                    $relations->delete($toDelete);
+                    $relations->deleteByRelIds($toDelete);
                     $totalCount += count($toDelete);
                 }
             }

@@ -84,6 +84,8 @@ class Sales_Config extends Tinebase_Config_Abstract
     const INVOICE_TYPE = 'invoiceType';
 
     const INVOICE_DISCOUNT_TYPE = 'invoiceDiscountType';
+    const INVOICE_DISCOUNT_PERCENTAGE = 'PERCENTAGE';
+    const INVOICE_DISCOUNT_SUM = 'SUM';
     
     const PAYMENT_METHODS = 'paymentMethods';
 
@@ -191,11 +193,15 @@ class Sales_Config extends Tinebase_Config_Abstract
             //_('Possible Offer Status')
             self::DESCRIPTION        => 'Possible Offer Status',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS            => [
+                self::RECORD_MODEL => Sales_Model_Document_OfferStatus::class,
+                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_OFFER_STATUS_TRANSITIONS,
+            ],
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => [
-                // OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, offen), Abgelehnt(gebucht, geschlossen)
+                // OFFER_STATUS // keyfield: In Bearbeitung(ungebucht, offen), Zugestellt(gebucht, offen), Beauftragt(gebucht, geschlossen), Abgelehnt(gebucht, geschlossen)
                 self::RECORDS => [
                     [
                         'id' => Sales_Model_Document_Offer::STATUS_DRAFT,
@@ -216,10 +222,10 @@ class Sales_Config extends Tinebase_Config_Abstract
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_ORDERED,
                         //_('Ordered (booked, open)')
-                        'value' => 'Ordered (booked, open)',
+                        'value' => 'Ordered (booked, closed)',
                         'icon' => null,
                         Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
-                        Sales_Model_Document_OfferStatus::FLD_CLOSED => false,
+                        Sales_Model_Document_OfferStatus::FLD_CLOSED => true,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_REJECTED,
@@ -263,9 +269,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                     ]
                 ],
                 Sales_Model_Document_Offer::STATUS_ORDERED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_REJECTED,
+                    ],
                 ],
                 Sales_Model_Document_Offer::STATUS_REJECTED => [
-                    Sales_Model_Document_Offer::STATUS_ORDERED,
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Offer::STATUS_ORDERED,
+                    ]
                 ],
             ]
         ],
@@ -358,8 +369,8 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => 'PERCENTAGE', 'value' => 'Percentage', 'system' => true], // _('Percentage')
-                    ['id' => 'SUM', 'value' => 'Sum', 'system' => true], // _('Sum')
+                    ['id' => self::INVOICE_DISCOUNT_PERCENTAGE, 'value' => 'Percentage', 'system' => true], // _('Percentage')
+                    ['id' => self::INVOICE_DISCOUNT_SUM, 'value' => 'Sum', 'system' => true], // _('Sum')
                 ],
             ],
         ],

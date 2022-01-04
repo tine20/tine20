@@ -1190,18 +1190,26 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 unlink($pathWithMessageId);
             }
 
-            mkdir($pathWithMessageId);
+            try {
+                $mkdirResult = mkdir($pathWithMessageId);
+            } catch (ErrorException $ee) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' another process already created the dir? ee: '
+                    . $ee->getMessage());
+                $mkdirResult = true;
+            }
 
-            $part = $this->getMessagePart($messageId, $partId);
+            if ($mkdirResult) {
+                $part = $this->getMessagePart($messageId, $partId);
 
-            $datFile = $pathWithMessageId . '/winmail.dat';
+                $datFile = $pathWithMessageId . '/winmail.dat';
 
-            $stream = $part->getDecodedStream();
-            $tmpFile = fopen($datFile, 'w');
-            stream_copy_to_stream($stream, $tmpFile);
-            fclose($tmpFile);
-
-            $this->_extractWinMailDatToDir($datFile, $pathWithMessageId);
+                $stream = $part->getDecodedStream();
+                $tmpFile = fopen($datFile, 'w');
+                stream_copy_to_stream($stream, $tmpFile);
+                fclose($tmpFile);
+                $this->_extractWinMailDatToDir($datFile, $pathWithMessageId);
+            }
         }
 
         $dir = new DirectoryIterator($pathWithMessageId);
@@ -1215,8 +1223,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         ksort($files);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Winmail contents:  ' . print_r($files, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Winmail contents:  ' . print_r($files, true));
 
         return $files;
     }

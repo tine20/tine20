@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -273,10 +273,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $name = $name . ' (' . $translation->_('Group') . ')';
                 }
                 return $name;
-                break;
             default:
                 throw new Tinebase_Exception_InvalidArgument("type " . $this->user_type . " not yet supported");
-                break;
         }
     }
 
@@ -318,7 +316,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if ($this->user_type === self::USERTYPE_RESOURCE) {
             $resource = $clone->user_id;
             if (! $resource instanceof Calendar_Model_Resource) {
-                throw new Tinebase_Exception_NotFound('did not get valid resource object');
+                $resource = Calendar_Controller_Resource::getInstance()->get($resource);
             }
             // return pseudo contact with resource data
             $result = new Addressbook_Model_Contact(array(
@@ -401,7 +399,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_implicitAddMissingContacts = TRUE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " list of new attendees " . print_r($_emails, true));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " list of new attendees " . print_r($_emails, true));
         
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');

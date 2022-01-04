@@ -59,7 +59,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
             options = definition && definition.options || {};
 
         this.parentField = options.parentField;
-
+        this.transitions = this.app.getRegistry().get('config')[definition?.options?.transitionsConfig];
 
         if (! this.value && ! this.parentField && (this.keyFieldConfig && Ext.isObject(this.keyFieldConfig.value) && this.keyFieldConfig.value.hasOwnProperty('default'))) {
             this.value = this.keyFieldConfig.value['default'];
@@ -76,13 +76,38 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         this.initTpl();
 
         this.on('afterrender', this.onAfterRender, this, {buffer: 50});
+        this.on('beforeselect', this.onBeforeSelect, this);
+
         Tine.Tinebase.widgets.keyfield.ComboBox.superclass.initComponent.call(this);
     },
     
     initTpl: function() {
         if (this.showIcon) {
-            this.tpl = '<tpl for="."><div class="x-combo-list-item"><tpl if="icon"><img src="{icon}" class="tine-keyfield-icon"/></tpl>{' + this.displayField + '}</div></tpl>';
+            this.tpl = '<tpl for="."><div class="x-combo-list-item {_itemCls}"><tpl if="icon"><img src="{icon}" class="tine-keyfield-icon"/></tpl>{' + this.displayField + '}</div></tpl>';
         }
+    },
+
+    setValue(value, record) {
+        const allowedTargetStatus = this.transitions ? this.transitions.value[value || '']?.targetStatus : null;
+
+        this.store.each((record) => {
+            const selectable = allowedTargetStatus ? record.id === value || allowedTargetStatus.indexOf(record.id) >= 0 : true;
+            record.set('_itemCls', selectable ? '' : 'x-combo-list-unselectable-item');
+        });
+
+        return Tine.Tinebase.widgets.keyfield.ComboBox.superclass.setValue.apply(this, arguments);
+    },
+
+    onBeforeSelect(combo, record) {
+        const transistionAllowed = record.get('_itemCls') !== 'x-combo-list-unselectable-item';
+        if (! transistionAllowed) {
+            const msg = this.app.formatMessage('Transition from {current} to {target} is not allowed.', {
+                current: this.store.getById(this.getValue()).get(this.displayField),
+                target: record.get(this.displayField)
+            });
+            Ext.ux.MessageBox.msg(this.app.i18n._('Not Allowed'), msg);
+        }
+        return transistionAllowed
     },
 
     onAfterRender: function() {

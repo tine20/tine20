@@ -102,6 +102,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             'user_id' => [
                 self::TYPE => self::TYPE_USER,
                 self::LABEL => 'User', // _('User')
+                self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null
@@ -449,6 +450,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::INPUT_FILTERS             => [
                     Zend_Filter_Empty::class => null,
                 ],
+                self::NULLABLE                  => true,
             ],
             'smtp_user' => [
                 self::TYPE => self::TYPE_STRING,
@@ -502,6 +504,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_StringTrim::class,
                     Zend_Filter_StringToLower::class
                 ],
+                self::NULLABLE                  => true,
             ],
             'sieve_vacation_active' => [
                 self::TYPE => self::TYPE_BOOLEAN,
@@ -519,6 +522,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
+                self::NULLABLE                  => true,
             ],
             'sieve_notification_move' => [
                 self::TYPE => self::TYPE_BOOLEAN,
@@ -538,6 +542,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
+                self::NULLABLE                  => true,
             ],
             'all_folders_fetched' => [
                 self::TYPE => self::TYPE_BOOLEAN,
@@ -584,7 +589,10 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     ],
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_HIDDEN
-                ]
+                ],
+                self::INPUT_FILTERS             => [
+                    Zend_Filter_Empty::class => self::VISIBILITY_HIDDEN,
+                ],
             ],
             'contact_id'                    => [
                 self::TYPE                      => self::TYPE_RECORD,
@@ -593,6 +601,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_PART_NAME,
                 ],
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NULLABLE => true,
             ]
         ]
     ];

@@ -512,8 +512,14 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         Calendar_Model_Attender::resolveAttendee($event->attendee, FALSE, $event);
 
         /** @var Calendar_Model_Attender $eventAttendee */
-        foreach($event->attendee as $eventAttendee) {
-            $attendeeEmail = $eventAttendee->getEmail();
+        foreach ($event->attendee as $eventAttendee) {
+            try {
+                $attendeeEmail = $eventAttendee->getEmail();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Attender not found (skipping): ' . $tenf->getMessage());
+                continue;
+            }
 
             $role = in_array($eventAttendee->role, ['REQ', 'OPT']) ? $eventAttendee->role : 'REQ';
             $parameters = array(

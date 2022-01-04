@@ -31,14 +31,13 @@ merge:
   stage: merge1
   extends: .abstract.merge
   script:
-    - merge_merge_upwards 2019.11 2020.11
     - merge_merge_upwards 2020.11 2021.11
     - merge_merge_upwards 2021.11 2022.11
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
       when: never
-    - if: $CI_COMMIT_REF_NAME == "2019.11" || $CI_COMMIT_REF_NAME == "2020.11" || $CI_COMMIT_REF_NAME == "2021.11"
+    - if: $CI_COMMIT_REF_NAME == "2020.11" || $CI_COMMIT_REF_NAME == "2021.11"
       variables:
         AUTO_MERGE_VAR: "true"
       when: on_success

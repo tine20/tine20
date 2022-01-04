@@ -329,21 +329,31 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  string $_ownModel 
      * @param  string $_ownBackend
      * @param  string $_ownId
-     * @return void
+     * @return int
      * 
      * @todo should this function only purge deleted/broken relations?
      */
     public function purgeAllRelations($_ownModel, $_ownBackend, $_ownId)
     {
         $relationIds = $this->getAllRelations($_ownModel, $_ownBackend, $_ownId, NULL, array(), true)->getArrayOfIds();
-        
+        return $this->deleteByRelIds($relationIds);
+    }
+
+    /**
+     * @param array $relationIds
+     * @return int
+     */
+    public function deleteByRelIds(array $relationIds)
+    {
         if (!empty($relationIds)) {
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('rel_id') . ' IN (?)', $relationIds)
             );
-        
-            $this->_dbTable->delete($where);
+
+            return $this->_dbTable->delete($where);
         }
+
+        return 0;
     }
     
     /**
