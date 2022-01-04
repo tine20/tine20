@@ -47,7 +47,7 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         // when booked and no document_date set, set it to now
         if (Sales_Config::getInstance()->{Sales_Config::DOCUMENT_OFFER_STATUS}->records
                 ->getById($_record->{Sales_Model_Document_Offer::FLD_OFFER_STATUS})
-                    ->{Sales_Model_Document_OfferStatus::FLD_BOOKED} &&
+                    ->{Sales_Model_Document_Status::FLD_BOOKED} &&
                     ! $_record->{Sales_Model_Document_Offer::FLD_DOCUMENT_DATE}) {
             $_record->{Sales_Model_Document_Offer::FLD_DOCUMENT_DATE} = Tinebase_DateTime::now();
         }
@@ -64,7 +64,7 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         if ($_oldRecord->{Sales_Model_Document_Offer::FLD_OFFER_STATUS} &&
                 Sales_Config::getInstance()->{Sales_Config::DOCUMENT_OFFER_STATUS}->records
                     ->getById($_oldRecord->{Sales_Model_Document_Offer::FLD_OFFER_STATUS})
-                        ->{Sales_Model_Document_OfferStatus::FLD_BOOKED}) {
+                        ->{Sales_Model_Document_Status::FLD_BOOKED}) {
             foreach ($_record->getConfiguration()->fields as $field => $fConf) {
                 if (in_array($field, [
                     Sales_Model_Document_Offer::FLD_OFFER_STATUS,
@@ -79,7 +79,7 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         // when booked and no document_date set, set it to now
         if (Sales_Config::getInstance()->{Sales_Config::DOCUMENT_OFFER_STATUS}->records
                 ->getById($_record->{Sales_Model_Document_Offer::FLD_OFFER_STATUS})
-                    ->{Sales_Model_Document_OfferStatus::FLD_BOOKED} &&
+                    ->{Sales_Model_Document_Status::FLD_BOOKED} &&
                     ! $_record->{Sales_Model_Document_Offer::FLD_DOCUMENT_DATE}) {
             $_record->{Sales_Model_Document_Offer::FLD_DOCUMENT_DATE} = Tinebase_DateTime::now();
         }
@@ -93,7 +93,7 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         foreach ($this->getMultiple($_ids) as $record) {
             if (Sales_Config::getInstance()->{Sales_Config::DOCUMENT_OFFER_STATUS}->records
                     ->getById($record->{Sales_Model_Document_Offer::FLD_OFFER_STATUS})
-                    ->{Sales_Model_Document_OfferStatus::FLD_BOOKED}) {
+                    ->{Sales_Model_Document_Status::FLD_BOOKED}) {
                 unset($_ids[array_search($record->getId(), $_ids)]);
             }
         }

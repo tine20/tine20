@@ -20,6 +20,8 @@
 
 class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter_Interface
 {
+    public const REFID = 'refId';
+
     protected $_property;
     protected $_persistent;
 
@@ -40,7 +42,7 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
     public function convertToRecord($record, $key, $blob)
     {
         $model = $record->{$this->_property};
-        if ($this->_persistent) {
+        if (true === $this->_persistent) {
             $blob = json_decode($blob, true);
         }
         if (!empty($model) && is_array($blob) && strpos($model, '_Model_') && class_exists($model)) {
@@ -48,7 +50,7 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
             $newRecord->runConvertToRecord();
             return $newRecord;
         }
-        return null;
+        return $blob;
     }
 
     /**
@@ -57,18 +59,20 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
      */
     public function convertToData($record, $key, $fieldValue)
     {
-        $result = null;
         if ($fieldValue instanceof Tinebase_Record_Interface) {
-            $fieldValue->runConvertToData();
-            $result = $fieldValue->toArray();
-        } elseif (is_array($fieldValue)) {
-            $result = $fieldValue;
+            if (true === $this->_persistent) {
+                $fieldValue->runConvertToData();
+                $fieldValue = $fieldValue->toArray();
+            } elseif (self::REFID === $this->_persistent) {
+                $fieldValue = $fieldValue->getId();
+            }
+        }
+        if (true === $this->_persistent) {
+            $fieldValue = json_encode($fieldValue);
+        } elseif (self::REFID === $this->_persistent && is_array($fieldValue) && isset($fieldValue['id'])) {
+            $fieldValue = $fieldValue['id'];
         }
 
-        if ($this->_persistent) {
-            $result = json_encode($result);
-        }
-
-        return $result;
+        return $fieldValue;
     }
 }

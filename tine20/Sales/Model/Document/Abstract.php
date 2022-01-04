@@ -55,9 +55,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
     public const FLD_DESCRIPTION = 'description';
 
-    // <dokumentenart>_STATUS z.B. Rechnungsstatus (Ungebucht, Gebucht, Verschickt, Bezahlt)
-    //   übergänge haben regeln (siehe SAAS mechanik)
-
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
     //  - INVOICE_CONTACT_ID // abweichender Rechnungskontakt, CONTACT_ID wenn leer
@@ -146,15 +143,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_KEY_FIELD,
                 self::NAME                  => Sales_Config::DOCUMENT_CATEGORY,
             ],
-
             self::FLD_PRECURSOR_DOCUMENTS => [
-                // needs to be set by concret implementation
-                self::TYPE => self::TYPE_RECORDS,
-                self::CONFIG => [
-                    self::APP_NAME              => Sales_Config::APP_NAME,
-                    //self::MODEL_NAME            => Sales_Model_SubProductMapping::MODEL_NAME_PART,
-                    // ? self::REF_ID_FIELD          => Sales_Model_SubProductMapping::FLD_PARENT_ID,
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::STORAGE                   => self::TYPE_JSON,
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => Tinebase_Model_DynamicRecordWrapper::MODEL_NAME_PART,
                 ],
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             self::FLD_BOILERPLATES      => [
                 self::TYPE                  => self::TYPE_RECORDS,

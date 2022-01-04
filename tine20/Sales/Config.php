@@ -124,6 +124,31 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const DOCUMENT_OFFER_STATUS_TRANSITIONS = 'documentOfferStatusTransitions';
 
     /**
+     * order status
+     *
+     * @var string
+     */
+    public const DOCUMENT_ORDER_STATUS = 'documentOrderStatus';
+    public const DOCUMENT_ORDER_STATUS_TRANSITIONS = 'documentOrderStatusTransitions';
+
+    /**
+     * deliveryNote status
+     *
+     * @var string
+     */
+    public const DOCUMENT_DELIVERY_NOTE_STATUS = 'documentDeliveryNoteStatus';
+    public const DOCUMENT_DELIVERY_NOTE_STATUS_TRANSITIONS = 'documentDeliveryNoteStatusTransitions';
+
+    /**
+     * invoice status
+     *
+     * @var string
+     */
+    public const DOCUMENT_INVOICE_STATUS = 'documentInvoiceStatus';
+    public const DOCUMENT_INVOICE_STATUS_TRANSITIONS = 'documentInvoiceStatusTransitions';
+
+
+    /**
      * Invoice Type
      *
      * @var string
@@ -194,7 +219,7 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION        => 'Possible Offer Status',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
             self::OPTIONS            => [
-                self::RECORD_MODEL => Sales_Model_Document_OfferStatus::class,
+                self::RECORD_MODEL => Sales_Model_Document_Status::class,
                 self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_OFFER_STATUS_TRANSITIONS,
             ],
             self::CLIENTREGISTRYINCLUDE => true,
@@ -205,35 +230,35 @@ class Sales_Config extends Tinebase_Config_Abstract
                 self::RECORDS => [
                     [
                         'id' => Sales_Model_Document_Offer::STATUS_DRAFT,
-                        //_('In process (unbooked, open)')
+                        //_('Draft (unbooked, open)')
                         'value' => 'Draft (unbooked, open)',
                         'icon' => null,
-                        Sales_Model_Document_OfferStatus::FLD_BOOKED => false,
-                        Sales_Model_Document_OfferStatus::FLD_CLOSED => false,
+                        Sales_Model_Document_Status::FLD_BOOKED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_RELEASED,
-                        //_('Delivered (booked, open)')
+                        //_('Released (booked, open)')
                         'value' => 'Released (booked, open)',
                         'icon' => null,
-                        Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
-                        Sales_Model_Document_OfferStatus::FLD_CLOSED => false,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_ORDERED,
-                        //_('Ordered (booked, open)')
+                        //_('Ordered (booked, closed)')
                         'value' => 'Ordered (booked, closed)',
                         'icon' => null,
-                        Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
-                        Sales_Model_Document_OfferStatus::FLD_CLOSED => true,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_REJECTED,
                         //_('Rejected (booked, closed)')
                         'value' => 'Rejected (booked, closed)',
                         'icon' => null,
-                        Sales_Model_Document_OfferStatus::FLD_BOOKED => true,
-                        Sales_Model_Document_OfferStatus::FLD_CLOSED => true,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
                         'system' => true
                     ],
                 ],
@@ -277,6 +302,228 @@ class Sales_Config extends Tinebase_Config_Abstract
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_Offer::STATUS_ORDERED,
                     ]
+                ],
+            ]
+        ],
+
+        self::DOCUMENT_ORDER_STATUS => [
+            //_('Order Status')
+            self::LABEL              => 'Order Status',
+            //_('Possible Order Status')
+            self::DESCRIPTION        => 'Possible Order Status',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS            => [
+                self::RECORD_MODEL => Sales_Model_Document_Status::class,
+                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_ORDER_STATUS_TRANSITIONS,
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                // ORDER_STATUS // keyfield: eingegangen (order änderbar, nicht erledigt), angenommen (nicht mehr änderbar (AB ist raus), nicht erledigt), abgeschlossen(nicht mehr änderbar, erledigt) -> feld berechnet sich automatisch! (ggf. lassen wir das abschließen doch zu aber mit confirm)
+                self::RECORDS => [
+                    [
+                        'id' => Sales_Model_Document_Order::STATUS_RECEIVED,
+                        //_('Received (unbooked, open)')
+                        'value' => 'Received (unbooked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Order::STATUS_ACCEPTED,
+                        //_('Accepted (booked, open)')
+                        'value' => 'Accepted (booked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Order::STATUS_DONE,
+                        //_('Done (booked, closed)')
+                        'value' => 'Done (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
+                        'system' => true
+                    ],
+                ],
+                self::DEFAULT_STR => Sales_Model_Document_Order::STATUS_RECEIVED,
+            ],
+        ],
+        self::DOCUMENT_ORDER_STATUS_TRANSITIONS => [
+            //_('Order Status Transitions')
+            self::LABEL              => 'Order Status Transitions',
+            //_('Possible Order Status Transitions')
+            self::DESCRIPTION        => 'Possible Order Status Transitions',
+            self::TYPE               => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                '' => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Order::STATUS_RECEIVED
+                    ]
+                ],
+                Sales_Model_Document_Order::STATUS_RECEIVED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Order::STATUS_ACCEPTED,
+                        Sales_Model_Document_Order::STATUS_DONE,
+                    ]
+                ],
+                Sales_Model_Document_Order::STATUS_ACCEPTED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Order::STATUS_DONE,
+                    ]
+                ],
+            ]
+        ],
+
+        self::DOCUMENT_DELIVERY_NOTE_STATUS => [
+            //_('Delivery Note Status')
+            self::LABEL              => 'Delivery Note Status',
+            //_('Possible Delivery Note Status')
+            self::DESCRIPTION        => 'Possible Delivery Note Status',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS            => [
+                self::RECORD_MODEL => Sales_Model_Document_Status::class,
+                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_DELIVERY_NOTE_STATUS_TRANSITIONS,
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                // - DELIVERY_STATUS // keyfield erstellt(Ungebucht, offen), geliefert(gebucht, abgeschlossen)
+                //    NOTE: man könnte einen ungebuchten Status als Packliste einführen z.B. Packliste(ungebucht, offen)
+                self::RECORDS => [
+                    [
+                        'id' => Sales_Model_Document_DeliveryNote::STATUS_CREATED,
+                        //_('Created (unbooked, open)')
+                        'value' => 'Created (unbooked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_DeliveryNote::STATUS_DELIVERED,
+                        //_('Done (booked, closed)')
+                        'value' => 'Done (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
+                        'system' => true
+                    ]
+                ],
+                self::DEFAULT_STR => Sales_Model_Document_DeliveryNote::STATUS_CREATED,
+            ],
+        ],
+        self::DOCUMENT_DELIVERY_NOTE_STATUS_TRANSITIONS => [
+            //_('Delivery Note Status Transitions')
+            self::LABEL              => 'Delivery Note Status Transitions',
+            //_('Possible Delivery Note Status Transitions')
+            self::DESCRIPTION        => 'Possible Delivery Note Status Transitions',
+            self::TYPE               => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                '' => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_DeliveryNote::STATUS_CREATED
+                    ]
+                ],
+                Sales_Model_Document_DeliveryNote::STATUS_CREATED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_DeliveryNote::STATUS_DELIVERED,
+                    ]
+                ]
+            ]
+        ],
+
+        self::DOCUMENT_INVOICE_STATUS => [
+            //_('Invoice Status')
+            self::LABEL              => 'Invoice Status',
+            //_('Possible Invoice Status')
+            self::DESCRIPTION        => 'Possible Invoice Status',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS            => [
+                self::RECORD_MODEL => Sales_Model_Document_Status::class,
+                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_INVOICE_STATUS_TRANSITIONS,
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                // INVOICE_STATUS proforma(Ungebucht, offen), gebucht(gebucht, offen),  Verschickt(gebucht, offen), Bezahlt(gebucht, geschlossen)
+                self::RECORDS => [
+                    [
+                        'id' => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+                        //_('Proforma (unbooked, open)')
+                        'value' => 'Proforma (unbooked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Invoice::STATUS_BOOKED,
+                        //_('Booked (booked, open)')
+                        'value' => 'Booked (booked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Invoice::STATUS_SHIPPED,
+                        //_('Shipped (booked, closed)')
+                        'value' => 'Shipped (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Invoice::STATUS_PAID,
+                        //_('Paid (booked, closed)')
+                        'value' => 'Paid (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
+                        'system' => true
+                    ],
+                ],
+                self::DEFAULT_STR => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+            ],
+        ],
+        self::DOCUMENT_INVOICE_STATUS_TRANSITIONS => [
+            //_('Invoice Status Transitions')
+            self::LABEL              => 'Invoice Status Transitions',
+            //_('Possible Invoice Status Transitions')
+            self::DESCRIPTION        => 'Possible Invoice Status Transitions',
+            self::TYPE               => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                '' => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Invoice::STATUS_PROFORMA
+                    ]
+                ],
+                Sales_Model_Document_Invoice::STATUS_PROFORMA => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Invoice::STATUS_BOOKED,
+                        Sales_Model_Document_Invoice::STATUS_SHIPPED,
+                    ]
+                ],
+                Sales_Model_Document_Invoice::STATUS_BOOKED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Invoice::STATUS_SHIPPED,
+                    ]
+                ],
+                Sales_Model_Document_Invoice::STATUS_SHIPPED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Invoice::STATUS_PAID,
+                    ],
                 ],
             ]
         ],

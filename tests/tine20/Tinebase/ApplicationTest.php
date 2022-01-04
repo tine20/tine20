@@ -32,7 +32,7 @@ class Tinebase_ApplicationTest extends TestCase
     }
 
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
 
         Tinebase_Application::getInstance()->resetClassCache();
@@ -386,13 +386,17 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_CostCenter::class,
                 Sales_Model_Customer::class,
                 Sales_Model_Division::class,
+                Sales_Model_DocumentPosition_DeliveryNote::class,
+                Sales_Model_DocumentPosition_Invoice::class,
                 Sales_Model_DocumentPosition_Offer::class,
                 Sales_Model_DocumentPosition_Order::class,
                 Sales_Model_Document_Address::class,
                 Sales_Model_Document_Boilerplate::class,
                 Sales_Model_Document_Customer::class,
+                Sales_Model_Document_DeliveryNote::class,
+                Sales_Model_Document_Invoice::class,
+                Sales_Model_Document_Status::class,
                 Sales_Model_Document_Offer::class,
-                Sales_Model_Document_OfferStatus::class,
                 Sales_Model_Document_Order::class,
                 Sales_Model_Invoice::class,
                 Sales_Model_InvoiceCleared::class,
@@ -445,6 +449,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_CustomField_Grant::class,
                 Tinebase_Model_CustomField_Value::class,
                 Tinebase_Model_Department::class,
+                Tinebase_Model_DynamicRecordWrapper::class,
                 Tinebase_Model_EmailUser::class,
                 Tinebase_Model_EmailUser_Alias::class,
                 Tinebase_Model_EmailUser_Forward::class,
