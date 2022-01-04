@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -164,7 +164,13 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete directory: ' . $this->_path);
     
         foreach ($this->getChildren() as $child) {
-            $child->delete();
+            try {
+                $child->delete();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Child already deleted: '
+                        . $tenf->getMessage());
+            }
         }
     
         if (!Tinebase_FileSystem::getInstance()->rmdir($this->_path, /* $recursive */ true)) {
