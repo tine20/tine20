@@ -204,6 +204,51 @@
           git clone ${CI_REPOSITORY_URL} --branch ${CI_COMMIT_REF_NAME} --depth 1 --single-branch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
       }
 
+      # lib/github.sh
+      github_get_release_by_tag() {
+          owner=$1
+          repo=$2
+          tag=$3
+      
+          curl -s \
+              -H "accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/$owner/$repo/releases/tags/$tag"
+      }
+      
+      github_create_release() {
+          owner=$1
+          repo=$2
+          tag=$3
+          user=$4
+          token=$5
+      
+          curl -s \
+              -X POST \
+              -u "$user:$token" \
+              -H "accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/$owner/$repo/releases" \
+              -d '{"tag_name":"'"$tag"'"}'
+      }
+      
+      github_release_add_asset() {
+          release_json=$1
+          name=$2
+          path_to_asset=$3
+          user=$4
+          token=$5
+      
+          upload_url=$(echo $release_json | jq -r '.upload_url')
+          upload_url="${upload_url%\{*}"
+      
+          curl -s \
+              -X POST \
+              -u "$user:$token" \
+              -T "$path_to_asset" \
+              -H "accept: application/vnd.github.v3+json" \
+              -H "content-type: $(file -b --mime-type $path_to_asset)" \
+              "$upload_url?name=$name.tar.gz"
+      }
+
       # lib/merge.sh
       merge_merge_upwards () {
           if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" customers; then
@@ -239,6 +284,146 @@
           done
       }
 
+      # lib/packaging.sh
+      packaging_build_packages() {
+          version=$1
+          release=$2
+      
+          CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+          MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
+      
+          CACHE_IMAGE="${REGISTRY}/packages:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
+          MAJOR_CACHE_IMAGE="${REGISTRY}/packages:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}"
+      
+          if echo "$CI_COMMIT_TAG" | grep '/'; then
+              echo "Error: CI_COMMIT_TAG must not contain a /"
+              exit 1
+          fi
+      
+          # config via env
+          export PHP_VERSION=${PHP_VERSION}
+          export BASE_IMAGE="${REGISTRY}/base-commit:${IMAGE_TAG}"
+          export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
+          export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
+          export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
+          export BUILT_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
+          export REVISION=0
+          export CODENAME="${CODENAME}"
+          export VERSION=$version
+          export RELEASE=$release
+      
+          cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+          # create archives
+          ./ci/dockerimage/make.sh -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" packages
+      
+          # add current.map
+          echo "currentPackage ${RELEASE}/tine20-allinone_${RELEASE}.tar.bz2" >> current.map
+          tar -rf "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" current.map
+      }
+      
+      packaging_extract_all_package_tar() {
+          cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/"
+          tar -xf "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar"
+      }
+      
+      packaging_push_packages_to_gitlab() {
+          version=$1
+          release=$2
+      
+          customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+      
+          curl \
+              --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+              --upload-file "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" \
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+          echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+      
+          cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/"
+      
+          for f in *; do
+              curl \
+              --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+              --upload-file "$f" \
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$(echo "$f" | sed sI~I-Ig)"
+          done
+      }
+      
+      packaging_gitlab_set_current_link() {
+          version=$1
+      
+          curl \
+              --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+              -XPUT --data "${version}" \
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
+      }
+      
+      packaging_push_package_to_github() {
+          version=$1
+          release=$2
+      
+          cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
+          asset_name="$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
+      
+          release_json=$(github_create_release "$GITHUB_RELEASE_REPO_OWNER" "$GITHUB_RELEASE_REPO" "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
+          if [ "$?" != "0" ]; then
+              echo "$release_json"
+              return 1
+          fi
+      
+          echo "$release"
+      
+          github_release_add_asset "$release_json" "$asset_name" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+      }
+      
+      packaging() {
+          version=${CI_COMMIT_TAG:-nightly-$(date '+%Y.%m.%d.%H.%M')}
+          release=$(echo "${version}" | sed sI-I~Ig)
+      
+          if ! repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME}; then
+              echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
+              return 1
+          fi
+      
+          echo "building packages ..."
+          if ! packaging_build_packages $version $release; then
+              echo "Failed to build packages."
+              return 1
+          fi
+      
+          if ! packaging_extract_all_package_tar; then
+              echo "Failed to extract tar archive."
+              return 1
+          fi
+      
+          if [ "$MAJOR_COMMIT_REF_NAME" == "main" ]; then
+              echo "pushing packages to github ..."
+              if ! packaging_push_package_to_github $version $release; then
+                  echo "Failed to push to github."
+                  return 1
+              fi
+          else
+              echo "pushing packages to gitlab ..."
+              if ! packaging_push_packages_to_gitlab $version $release; then
+                  echo "Failed to push to gitlab."
+                  return 1
+              fi
+      
+              echo "setting current link"
+              if ! echo "$version" | grep "nightly"; then
+                  if ! packaging_gitlab_set_current_link $version; then
+                      echo "Failed to set current link."
+                      return 1
+                  fi
+              fi
+          fi
+      
+          ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "🟢 Package build for ${version} finished."
+      }
+      
+      
+      
+
+
       # lib/pipeline_status.sh
       pipeline_status_send () {
           errors=$(curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/test_report" | jq -c '.test_suites[] | select((.error_count>0) or .failed_count>0)| {name,error_count,failed_count}')
@@ -266,7 +451,11 @@
       repo_get_customer_for_branch () {
           branch=$1
       
-          cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+          if [ "${branch}" == "main" ]; then
+              echo main
+              return
+          fi
+      
           if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then
               return 1
           fi

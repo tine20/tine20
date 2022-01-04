@@ -109,6 +109,10 @@ docker_build_source:
     - if: $CI_COMMIT_TAG
       variables:
         REUSE_IMAGES: "false"
+    # from docker build packages:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
+      variables:
+          REUSE_IMAGES: "false"
     # 
     # run for any merge request or schedule
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -149,6 +153,8 @@ docker_build_built:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_SCHEDULE != "false"
     # from deploy-images-to-dockerhub:
     - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
+    # from docker build packages:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
   timeout: 120m
   interruptible: true
 
@@ -175,11 +181,12 @@ docker_build_packages:
   extends: .abstract_jobs.docker
   stage: build3
   script:
-    - apk add bash util-linux tar
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/packaging.sh
+    - apk add bash util-linux tar git file
+    - !reference [.lib, script]
+    - packaging
   rules:
     - if: $CI_COMMIT_TAG
-      when: on_success
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
     - when: never
   timeout: 120m
   interruptible: true
