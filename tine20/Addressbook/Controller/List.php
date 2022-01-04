@@ -846,11 +846,19 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             return $contactIds;
         }
 
+        $contactBackend = new Addressbook_Backend_Sql();
+
         foreach ($_userIds as $userId) {
             try {
                 $user = Tinebase_User::getInstance()->getUserByPropertyFromBackend('accountId', $userId);
                 if (!empty($user->contact_id)) {
-                    $contactIds[] = $user->contact_id;
+                    try {
+                        $contact = $contactBackend->get($user->contact_id);
+                        $contactIds[] = $contact->getId();
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' Removing member from list: ' . $tenf->getMessage());
+                    }
                 }
             } catch (Tinebase_Exception_NotFound $tenf) {}
         }

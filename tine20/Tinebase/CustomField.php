@@ -267,9 +267,6 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 . ' Got ' . count($result) . ' uncached custom fields for app id ' . $applicationId . ' (cacheid: ' . $cacheId . ')');
             
             $cache->save($result, $cacheId, array('customfields'));
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Got ' . count($result) . ' cached custom fields for app id ' . $applicationId . ' (cacheid: ' . $cacheId . ')');
         }
         
         $this->_cfByApplicationCache[$cfIndex] = $result;
