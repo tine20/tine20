@@ -1,7 +1,11 @@
 repo_get_customer_for_branch () {
     branch=$1
 
-    cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+    if [ "${branch}" == "main" ]; then
+        echo main
+        return
+    fi
+
     if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then
         return 1
     fi
