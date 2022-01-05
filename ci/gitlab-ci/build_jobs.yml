@@ -13,7 +13,6 @@ docker_build_source:
   variables:
     GIT_STRATEGY: none
   script:
-    - apk add git
     - !reference [.lib, script]
     - git_repo_clone
     - docker_build_image base $(docker_image_hash base)
@@ -181,7 +180,6 @@ docker_build_packages:
   extends: .abstract_jobs.docker
   stage: build3
   script:
-    - apk add bash util-linux tar git file
     - !reference [.lib, script]
     - packaging
   rules:
