@@ -277,8 +277,12 @@
           git fetch "$source_remote" "$source_branch" || return 1
           git fetch "$destination_remote" "$destination_branch" || return 1
       
-          git checkout "$destination_branch" || return 1
-          git reset --hard "$destination_remote/$destination_branch" || return 1
+          if git rev-parse --quiet --verify $destination_branch > /dev/null; then
+              git checkout "$destination_branch"
+              git reset --hard "$destination_remote/$destination_branch"
+          else
+              git checkout --track "$destination_remote/$destination_branch" || return 1
+          fi
           
           echo "git mergeing $source_remote/$source_branch into $destination_remote/$destination_branch ..."
       
