@@ -6,6 +6,6 @@ RUN wget -O /usr/local/bin/docker-credential-ecr-login https://amazon-ecr-creden
     chmod +x /usr/local/bin/docker-credential-ecr-login && \
     mkdir ~/.docker/
 
-RUN apk add curl jq bash util-linux tar
+RUN apk add curl jq bash util-linux tar git composer coreutils util-linux file
 
 RUN echo \{\"credHelpers\": \{\"${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com\": \"ecr-login\"\}\} >> ~/.docker/config.json
