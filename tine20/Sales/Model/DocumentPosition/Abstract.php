@@ -27,6 +27,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
     // guess this is not necessary const FLD_SUBPRODUCT_MAPPING = 'subproduct_mapping'; // "kreuztabelle" Sales_Model_SubproductMapping (nur für bundles nicht für set's?)
 
+    const FLD_PRECURSOR_POSITION_MODEL = 'precursor_position_model'; // z.B. angebotsposition bei auftragsposition (virtual, link?)
     const FLD_PRECURSOR_POSITION = 'precursor_position'; // z.B. angebotsposition bei auftragsposition (virtual, link?)
 
     const FLD_POS_NUMBER = 'pos_number';
@@ -223,13 +224,17 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::NULLABLE                      => true,
                 self::SHY                           => true,
             ],
-            self::FLD_PRECURSOR_POSITION        => [
-                // needs to be set by concrete implementation
-                self::TYPE                          => self::TYPE_RECORD,
+            self::FLD_PRECURSOR_POSITION_MODEL  => [
+                self::TYPE                          => self::TYPE_STRING,
                 self::SHY                           => true,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_PRECURSOR_POSITION        => [
+                self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
+                self::SHY                           => true,
+                self::NULLABLE                      => true,
                 self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    //self::MODEL_NAME                  => Sales_Model_DocumentPosition_Abstract::MODEL_NAME_PART,
+                    self::REF_MODEL_FIELD               => self::FLD_PRECURSOR_POSITION_MODEL,
                 ],
             ],
             self::FLD_TITLE                     => [
