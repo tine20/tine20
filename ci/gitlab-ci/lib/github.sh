@@ -41,3 +41,10 @@ github_release_add_asset() {
         -H "content-type: $(file -b --mime-type $path_to_asset)" \
         "$upload_url?name=$name.tar.gz"
 }
+
+github_get_latest_release_tag_name() {
+    owner=$1
+    repo=$2
+
+    curl https://api.github.com/repos/$1/$2/releases | jq -r '.[0].tag_name'
+}

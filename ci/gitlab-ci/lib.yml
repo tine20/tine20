@@ -248,10 +248,17 @@
               -H "content-type: $(file -b --mime-type $path_to_asset)" \
               "$upload_url?name=$name.tar.gz"
       }
+      
+      github_get_latest_release_tag_name() {
+          owner=$1
+          repo=$2
+      
+          curl https://api.github.com/repos/$1/$2/releases | jq -r '.[0].tag_name'
+      }
 
       # lib/merge.sh
       merge_merge_upwards () {
-          if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" customers; then
+          if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" "customers"; then
               ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh "$MATRIX_ROOM" "🔴 Auto merging $1 into $2 failed in $CI_PIPELINE_NAME $CI_JOB_URL."
               return 1
           fi
@@ -259,6 +266,31 @@
       
       merge_update_custom_app () {
           ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh UpdateCustomApp "$1" "$2" || true
+      }
+      
+      merge_merge_mirror () {
+          source_remote="$1"
+          source_branch="$2"
+          destination_remote="$3"
+          destination_branch="$4"
+      
+          git fetch "$source_remote" "$source_branch" || return 1
+          git fetch "$destination_remote" "$destination_branch" || return 1
+      
+          git checkout "$destination_branch" || return 1
+          git reset --hard "$destination_remote/$destination_branch" || return 1
+          
+          echo "git mergeing $source_remote/$source_branch into $destination_remote/$destination_branch ..."
+      
+          if ! git merge "$source_remote/$source_branch"; then
+      
+              if ! php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/repairMerge.php "$source_remote/$source_branch" "$destination_branch"; then
+                  echo "merging $source_remote/$source_branch into $destination_remote/$destination_branch failed"
+                  return 1
+              fi
+          fi
+          
+          git push "$destination_remote" "$destination_branch"
       }
       
       merge_trigger_next () {
@@ -445,6 +477,49 @@
           echo "$message"
       
           ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "$message"
+      }
+
+      # lib/release.sh
+      release_tag_main_if_needed() {
+          if [ "$RELEASE_CE_TO_GITHUB" != "true" ]; then
+              echo "'RELEASE_CE_TO_GITHUB=$RELEASE_CE_TO_GITHUB' => do not tag main."
+              return
+          fi
+      
+          last_release_tag=$(github_get_latest_release_tag_name "$GITHUB_RELEASE_REPO_OWNER" "$GITHUB_RELEASE_REPO")
+          if [ $? != 0 ]; then
+              return 1
+          fi
+      
+          git fetch origin main || return 1
+      
+          commit_diff_count=$(git rev-list "$last_release_tag..origin/main" --count)
+          if [ $? != 0 ]; then
+              return 1
+          fi
+      
+          echo "origin/main and $last_release_tag differ in $commit_diff_count commits"
+      
+          if [ $commit_diff_count = 0 ]; then
+              echo "No difference, no new tag is created."
+              return 0
+          fi
+      
+          tag="$(date '+%Y.%m.%d.')$commit_diff_count"
+          echo "tagging origin/main as $tag"
+      
+          if ! git tag $tag; then
+              if [ "$(git rev-parse "$tag")" != "$(git rev-parse origin/main)" ]; then
+                  echo "tag $tag already exits, but it is ponting to a different commit."
+                  return 1
+              fi
+      
+              echo "Tag $tag already exits, for this commit. Using it..."
+          fi
+      
+          # "tag push" triggers tag pipeline which publishes the release
+          git push origin $tag || return 1
+          git push github $tag
       }
 
       # lib/repo.sh
