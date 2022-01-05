@@ -304,7 +304,7 @@
   services:
     - name: ${UTIL_REGISTRY}/docker:19.03.1-dind-r2
       alias: docker
-  image: ${UTIL_REGISTRY}/docker:19.03.1-r2
+  image: ${UTIL_REGISTRY}/docker:19.03.1-r3
   before_script:
     - export DOCKER_BUILDKIT=0
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
