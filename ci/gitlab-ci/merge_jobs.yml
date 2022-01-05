@@ -33,6 +33,7 @@ merge:
   script:
     - merge_merge_upwards 2020.11 2021.11
     - merge_merge_upwards 2021.11 2022.11
+    - merge_merge_upwards 2022.11 main
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
@@ -47,7 +48,6 @@ mergemain:
   stage: merge2
   extends: .abstract.merge
   script:
-    - merge_merge_upwards 2022.11 main
     - merge_merge_mirror origin main github main
     - merge_merge_mirror github main origin main
     - release_tag_main_if_needed
