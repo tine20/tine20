@@ -1665,7 +1665,8 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     {
         $folderName = ($_folderName !== null) ? $_folderName : $this->_testFolderName;
         $account = ($_account !== NULL) ? $_account : $this->_account;
-        
+        Felamimail_Controller_Cache_Folder::getInstance()->update($account);
+
         $filter = new Felamimail_Model_FolderFilter(array(
             array('field' => 'globalname', 'operator' => 'equals', 'value' => '',),
             array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())
@@ -1673,12 +1674,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $result = Felamimail_Controller_Folder::getInstance()->search($filter);
         $folder = $result->filter('localname', $folderName)->getFirstRecord();
         if (empty($folder)) {
-            try {
-                $folder = Felamimail_Controller_Folder::getInstance()->create($account, $_folderName);
-            } catch (Tinebase_Exception_SystemGeneric $tesg) {
-                // ignore for the moment - folder cache might not be update2date
-                return null;
-            }
+            $folder = Felamimail_Controller_Folder::getInstance()->create($account, $_folderName);
         }
 
         return $folder;

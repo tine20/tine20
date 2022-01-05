@@ -272,5 +272,14 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         }
     }
 
-    protected function _getRawData(&$_resource) {}
+    /**
+     * function is not used
+     *
+     * @param  mixed $_resource
+     * @return array|boolean|null
+     */
+    protected function _getRawData(&$_resource)
+    {
+        return null;
+    }
 }

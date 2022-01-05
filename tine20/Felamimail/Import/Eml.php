@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Christian Feitl<c.feitl@metaways.de>
+ * @author      Christian Feitl <c.feitl@metaways.de>
  * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
@@ -17,8 +17,6 @@
  */
 class Felamimail_Import_Eml
 {
-
-
     public function importEmlEmail($password = null)
     {
         $importDir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR
