@@ -184,6 +184,7 @@ class Sales_BoilerplateControllerTest extends TestCase
             Sales_Model_Boilerplate::FLD_NAME           => Tinebase_Record_Abstract::generateUID(),
             Sales_Model_Boilerplate::FLD_MODEL          => Sales_Model_Document_Offer::class,
             Sales_Model_Boilerplate::FLD_BOILERPLATE    => 'lorem boiler ipsum plate',
+            Sales_Model_Boilerplate::FLD_LANGUAGE       => 'en',
         ], $data));
     }
 }
