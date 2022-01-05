@@ -125,6 +125,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_DOCUMENT_NUMBER => [
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING, // @TODO nummerkreise sollen zentral confbar sein!!!
                 self::LABEL                     => 'Document Number', //_('Document Number')
+                self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
 
                 ],
@@ -174,6 +175,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
+                self::QUERY_FILTER              => true,
             ],
             self::FLD_DOCUMENT_DATE             => [
                 self::LABEL                         => 'Document Date', //_('Document Date')
@@ -185,11 +187,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
             ],
 
             self::FLD_CUSTOMER_ID       => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Customer', // _('Customer')
+                self::QUERY_FILTER          => true,
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Customer::MODEL_NAME_PART,
@@ -335,6 +339,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Internal Note', //_('Internal Note')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
             ],
         ]
     ];

@@ -1,0 +1,111 @@
+model,name,boilerplate,documentCategory,language
+Sales_Model_Document_Offer,pretext,"Sehr geehrte Damen und Herren,
+
+vielen Dank für Ihre Anfrage und dem damit verbundenen Interesse an unseren Produkten und Dienstleistungen.
+Gern unterbreiten wir Ihnen folgendes Angebot:",STANDARD,de
+Sales_Model_Document_Offer,posttext,"Wir würden uns sehr über eine zukünftige Zusammenarbeit freuen und hoffen, dieses Angebot findet Ihre Zustimmung.
+Für Rückfragen und weitere Informationen stehen wir jederzeit zur Verfügung.
+
+Dieses Angebot ist freibleibend und unverbindlich und wurde auf Basis der uns vorliegenden Informationen erstellt. 
+Es gelten unsere gültigen allgemeinen Geschäftsbedingungen (AGB).
+
+Alle Preise verstehen sich zzgl. der gesetzlich gültigen Mehrwertsteuer.
+
+Mit freundlichen Grüßen
+Ihr tine Team",STANDARD,de
+Sales_Model_Document_Order,pretext,"Sehr geehrte Damen und Herren,
+
+wir danken Ihnen für Ihre Bestellung und bestätigen Ihnen gern Ihren Auftrag wie folgt:",STANDARD,de
+Sales_Model_Document_Order,posttext,"Bei Fragen stehen wir Ihnen jederzeit gern zur Verfügung.
+
+Es gelten unsere gültigen allgemeinen Geschäftsbedingungen (AGB).
+
+Alle Preise verstehen sich zzgl. der gesetzlich gültigen Mehrwertsteuer.
+
+Mit freundlichen Grüßen
+Ihr tine Team",STANDARD,de
+Sales_Model_Document_DeliveryNote,pretext,"Sehr geehrte Damen und Heren,
+
+wir bedanken uns für die vertrauensvolle Zusammenarbeit und liefern Ihnen vereinbarungsgemäß folgende Waren:",STANDARD,de
+Sales_Model_Document_DeliveryNote,posttext,"Bitte bestätigen Sie den Erhalt der Ware mit Datum und Unterschrift:
+
+
+Vielen Dank
+Ihr tine Team",STANDARD,de
+Sales_Model_Document_DeliveryNote,pretext PACKAGING_LIST,"Lieber Mitarbeiter/Dienstleister,
+
+wir bitten folgende Waren zu prüfen und für den Versand zusammenzustellen:",STANDARD,de
+Sales_Model_Document_DeliveryNote,posttext PACKAGING_LIST,"Bitte allgemeine Hinweise und Notizen hier vermerken:
+
+Vielen Dank
+Ihr tine Team",STANDARD,de
+Sales_Model_Document_Invoice,pretext,"Sehr geehrte Damen und Herren,
+
+für unsere Leistungen berechnen wir Ihnen folgende Lieferungen und Leistungen:",STANDARD,de
+Sales_Model_Document_Invoice,posttext,"Wir danken Ihnen für Ihr Vertrauen und die gute Zusammenarbeit und freuen uns über Ihre Weiterempfehlung.
+
+Mit freundlichen Grüßen
+Ihr tine Team",STANDARD,de
+Sales_Model_Document_Invoice,pretext REVERSAL,"Sehr geerhte Damen und Herren,
+
+gemäß unserer Absprache/Vereinbarung schreiben wir Ihnen folgenden Betrag gut:",STANDARD,de
+Sales_Model_Document_Invoice,posttext REVERSAL,"Für Rückfragen stehen wir Ihnen selbstverständlich zur Verfügung.
+
+Mit freundlichen Grüßen
+Ihr tine Team",STANDARD,de
+Sales_Model_Document_Offer,pretext,"Dear Sir or Madam,
+
+Thank you for your inquiry and the related interest in our products and services.
+We are pleased to submit the following offer to you:",STANDARD,en
+Sales_Model_Document_Offer,posttext,"We would be very pleased about a future cooperation and hope this offer meets your approval.
+For questions and further information, we are available at any time.
+
+This offer is subject to change and non-binding and was prepared on the basis of the information available to us. 
+Our valid general terms and conditions (GTC) apply.
+
+All prices are exclusive of the legally valid value added tax.
+
+With kind regards
+Your tine Team
+
+Translated with www.DeepL.com/Translator (free version)",STANDARD,en
+Sales_Model_Document_Order,pretext,"Dear Sir or Madam,
+
+thank you for your order and we are pleased to confirm your order as follows:",STANDARD,en
+Sales_Model_Document_Order,posttext,"If you have any questions, please do not hesitate to contact us.
+
+Our valid general terms and conditions (GTC) apply.
+
+All prices are exclusive of the legally valid value added tax.
+
+With kind regards
+Your tine Team",STANDARD,en
+Sales_Model_Document_DeliveryNote,pretext,"Dear Sir or Madam,
+
+we thank you for the trustful cooperation and deliver the following goods as agreed:",STANDARD,en
+Sales_Model_Document_DeliveryNote,posttext,"Please confirm receipt of the goods with date and signature:
+
+
+Thank you
+Your tine team",STANDARD,en
+Sales_Model_Document_DeliveryNote,pretext PACKAGING_LIST,"Dear Employee/Service Provider,
+
+we kindly ask you to check and assemble the following goods for shipment:",STANDARD,en
+Sales_Model_Document_DeliveryNote,posttext PACKAGING_LIST,"Please note any general comments or notes here:
+
+Thank you
+Your tine Team",STANDARD,en
+Sales_Model_Document_Invoice,pretext,"Dear Sir or Madam,
+
+for our services we charge you the following supplies and services:",STANDARD,en
+Sales_Model_Document_Invoice,posttext,"We thank you for your trust and the good cooperation and are pleased about your recommendation.
+
+With kind regards
+Your tine Team",STANDARD,en
+Sales_Model_Document_Invoice,pretext REVERSAL,"Dear Sir or Madam,
+
+according to our arrangement/agreement we will credit you the following amount:",STANDARD,en
+Sales_Model_Document_Invoice,posttext REVERSAL,"Please do not hesitate to contact us if you have any questions.
+
+With kind regards
+Your tine Team",STANDARD,en

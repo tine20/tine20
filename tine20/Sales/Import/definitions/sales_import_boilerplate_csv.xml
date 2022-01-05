@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>sales_import_boilerplate_csv</name>
+    <model>Sales_Model_Boilerplate</model>
+    <plugin>Tinebase_Import_Csv_Generic</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>model</source>
+            <destination>model</destination>
+        </field>
+        <field>
+            <source>name</source>
+            <destination>name</destination>
+        </field>
+        <field>
+            <source>boilerplate</source>
+            <destination>boilerplate</destination>
+        </field>
+        <field>
+            <source>documentCategory</source>
+            <destination>documentCategory</destination>
+        </field>
+        <field>
+            <source>language</source>
+            <destination>language</destination>
+        </field>
+    </mapping>
+</config>
+

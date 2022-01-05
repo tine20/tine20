@@ -106,7 +106,8 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             record.constructor.getPhpClassName(),
             record.get('date')?.format ? record.get('date').format(Date.patterns.ISO8601Long) : null,
             record.get('customer_id')?.original_id || record.get('customer_id')?.id,
-            record.get('document_category')
+            record.get('document_category'),
+            record.get('document_language')
         ]);
 
         if (String(this.gabpArgs) !== String(gabpArgs)) {
