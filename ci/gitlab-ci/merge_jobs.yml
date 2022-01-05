@@ -3,10 +3,9 @@
     GIT_STRATEGY: none
     MERGENONINTERACTIVE: "true" # "false" is also true! Runs not interactive if the variable exists.
     pushOptSkipCi: "true" # "false" is also true! Runs not interactive if the variable exists.
-  image: ${UTIL_REGISTRY}/docker:19.03.1-r2 # dose not need docker. But the docker image should already exist on the runners.
+  image: ${UTIL_REGISTRY}/docker:19.03.1-r3 # dose not need docker. But the docker image should already exist on the runners.
   needs: []
   before_script:
-    - apk add git composer
     - !reference [.lib, script]
     - cp $DOCKER_GIT_CONFIG ~/.gitconfig
     - git_repo_clone
@@ -41,10 +40,8 @@ merge:
     - if: $CI_COMMIT_REF_NAME == "2020.11" || $CI_COMMIT_REF_NAME == "2021.11"
       variables:
         AUTO_MERGE_VAR: "true"
-      when: on_success
     - if: $AUTO_MERGE == "true"
-      when: on_success
-    - when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /auto_merge/
 
 mergemain:
   stage: merge2
