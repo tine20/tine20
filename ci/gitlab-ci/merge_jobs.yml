@@ -19,6 +19,7 @@
     - git config merge.pofile.driver "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge-po-files %A %O %B"
     - git config merge.pofile.recursive "binary"
     - git remote add customers https://gitlab.metaways.net/tine20/tine20.git
+    - git remote add github https://github.com/tine20/tine20.git
     - cd ${CI_BUILDS_DIR}/merge/tine20
     
 .abstract.merge_on_source_image:
@@ -44,3 +45,16 @@ merge:
     - if: $AUTO_MERGE == "true"
       when: on_success
     - when: never
+
+mergemain:
+  stage: merge2
+  extends: .abstract.merge
+  script:
+    - merge_merge_upwards 2022.11 main
+    - merge_merge_mirror origin main github main
+    - merge_merge_mirror github main origin main
+    - release_tag_main_if_needed
+    - merge_trigger_next
+  rules:
+    - if: $AUTO_MERGE_MAIN == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /auto_merge_main/
