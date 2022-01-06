@@ -147,6 +147,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_PRECURSOR_DOCUMENTS => [
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::NULLABLE                  => true,
+                self::DISABLED                  => true,
                 self::CONFIG                    => [
                     self::STORAGE                   => self::TYPE_JSON,
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,

@@ -35,7 +35,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Customer', // gettext('GENDER_Customer)
+        'recordName'        => 'Customer', // gettext('GENDER_Customer')
         'recordsName'       => 'Customers', // ngettext('Customer', 'Customers', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,

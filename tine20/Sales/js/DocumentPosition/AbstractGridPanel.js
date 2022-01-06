@@ -6,10 +6,10 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import './PositionEditDialog';
+import './AbstractEditDialog';
 import DDSortPlugin from 'ux/grid/DDSortPlugin';
 
-const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
+const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     quickaddMode: 'sorted',
     autoExpandColumn: 'title',
     quickaddMandatory: 'title',
@@ -331,12 +331,4 @@ const PositionGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     validate: function() { return true; }
 });
 
-Ext.reg('sales-position-gridpanel', PositionGridPanel)
-
-Tine.widgets.form.FieldManager.register('Sales', 'Document_Offer', 'positions', {
-    xtype: 'sales-position-gridpanel',
-    recordClass: 'Sales.DocumentPosition_Offer',
-    height: 500
-}, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
-
-export default PositionGridPanel;
+export default AbstractGridPanel;
