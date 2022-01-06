@@ -895,7 +895,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onFilesSelect: function (fileSelector, event) {
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = this,
-            targetNode = grid.currentFolderNode ? grid.currentFolderNode : _.get(this.getFilteredContainers(),'0'),
+            targetNode = _.get(this.getFilteredContainers(),'0'),
             gridStore = grid.store,
             rowIndex = false,
             me = this,
