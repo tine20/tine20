@@ -800,6 +800,16 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, Sales_Controller_PurchaseInvoice::getInstance());
     }
 
+    public function trackDocument(string $documentModel, string $documentId)
+    {
+        $resolvedIds = [];
+        return Sales_Controller_Document_Abstract::createPrecursorTree($documentModel, [$documentId], $resolvedIds, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    Sales_Model_Document_Abstract::FLD_POSITIONS => [],
+                ],
+            ])->toArray();
+    }
+
     public function getApplicableBoilerplates(string $type, string $date = null, string $customerId = null, string $category = null, string $language = null)
     {
         $defaultLang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
