@@ -58,6 +58,17 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
         parent::_onBeforeExportRecords();
     }
 
+    /**
+     * @param Tinebase_Record_Interface|null $_record
+     */
+    protected function _renderTwigTemplate($_record = null)
+    {
+        if (null === $_record) {
+            $_record = $this->_records['PREPOSITIONS']->getFirstRecord();
+        }
+        parent::_renderTwigTemplate($_record);
+    }
+
    /* protected function _getOldFormat()
     {
         return 'docx';
