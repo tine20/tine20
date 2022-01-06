@@ -10,15 +10,15 @@
  */
 
 /**
- * Order DocumentPosition Model
+ * DeliveryNote DocumentPosition Model
  *
  * @package     Sales
  * @subpackage  Model
  */
-class Sales_Model_DocumentPosition_Offer extends Sales_Model_DocumentPosition_Abstract
+class Sales_Model_DocumentPosition_DeliveryNote extends Sales_Model_DocumentPosition_Abstract
 {
-    public const MODEL_NAME_PART = 'DocumentPosition_Offer';
-    public const TABLE_NAME = 'sales_document_position_offer';
+    public const MODEL_NAME_PART = 'DocumentPosition_DeliveryNote';
+    public const TABLE_NAME = 'sales_document_position_delivery_note';
 
     /**
      * @param array $_definition
@@ -41,7 +41,9 @@ class Sales_Model_DocumentPosition_Offer extends Sales_Model_DocumentPosition_Ab
         $_definition[self::FIELDS][self::FLD_PARENT_ID][self::CONFIG][self::MODEL_NAME] = self::MODEL_NAME_PART;
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_Document_Offer::MODEL_NAME_PART;
+            Sales_Model_Document_DeliveryNote::MODEL_NAME_PART;
+
+        // @TODO remove financial fields?
     }
 
     /**
@@ -51,3 +53,4 @@ class Sales_Model_DocumentPosition_Offer extends Sales_Model_DocumentPosition_Ab
      */
     protected static $_configurationObject = NULL;
 }
+

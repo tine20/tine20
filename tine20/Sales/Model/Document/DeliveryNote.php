@@ -10,24 +10,23 @@
  */
 
 /**
- * Order Document Model
+ * DeliveryNote Document Model
  *
  * @package     Sales
  * @subpackage  Model
  */
-class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
+class Sales_Model_Document_DeliveryNote extends Sales_Model_Document_Abstract
 {
-    public const MODEL_NAME_PART = 'Document_Order';
-    public const TABLE_NAME = 'sales_document_order';
+    public const MODEL_NAME_PART = 'Document_DeliveryNote';
+    public const TABLE_NAME = 'sales_document_delivery_note';
 
-    public const FLD_ORDER_STATUS = 'order_status';
+    public const FLD_DELIVERY_NOTE_STATUS = 'delivery_note_status';
 
     /**
-     * order status
+     * deliveryNote status
      */
-    public const STATUS_RECEIVED = 'RECEIVED';
-    public const STATUS_ACCEPTED = 'ACCEPTED';
-    public const STATUS_DONE = 'DONE';
+    public const STATUS_CREATED = 'CREATED';
+    public const STATUS_DELIVERED = 'DELIVERED';
 
     /**
      * @param array $_definition
@@ -37,9 +36,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
         parent::inheritModelConfigHook($_definition);
 
         $_definition[self::CREATE_MODULE] = true;
-        $_definition[self::RECORD_NAME] = 'Order'; // gettext('GENDER_Order')
-        $_definition[self::RECORDS_NAME] = 'Orders'; // ngettext('Order', 'Orders', n)
-        
+        $_definition[self::RECORD_NAME] = 'Delivery Note'; // gettext('GENDER_Delivery Note')
+        $_definition[self::RECORDS_NAME] = 'Delivery Notes'; // ngettext('Delivery Note', 'Delivery Notes', n)
+
         $_definition[self::VERSION] = 1;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
@@ -51,15 +50,15 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             ]*/
         ];
 
-        // order positions
+        // deliveryNote positions
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_DocumentPosition_Order::MODEL_NAME_PART;
+            Sales_Model_DocumentPosition_DeliveryNote::MODEL_NAME_PART;
 
-        // order status
-        $_definition[self::FIELDS][self::FLD_ORDER_STATUS] = [
+        // deliveryNote status
+        $_definition[self::FIELDS][self::FLD_DELIVERY_NOTE_STATUS] = [
             self::LABEL => 'Status', // _('Status')
             self::TYPE => self::TYPE_KEY_FIELD,
-            self::NAME => Sales_Config::DOCUMENT_ORDER_STATUS,
+            self::NAME => Sales_Config::DOCUMENT_DELIVERY_NOTE_STATUS,
             self::LENGTH => 255,
             self::NULLABLE => true,
         ];

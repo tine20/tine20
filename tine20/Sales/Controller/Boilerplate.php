@@ -71,6 +71,7 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
             ['field' => Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' => $boilerplate->{Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY}],
             ['field' => Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => $boilerplate->{Sales_Model_Boilerplate::FLD_CUSTOMER}],
             ['field' => Sales_Model_Boilerplate::FLD_MODEL, 'operator' => 'equals', 'value' => $boilerplate->{Sales_Model_Boilerplate::FLD_MODEL}],
+            ['field' => Sales_Model_Boilerplate::FLD_LANGUAGE, 'operator' => 'equals', 'value' => $boilerplate->{Sales_Model_Boilerplate::FLD_LANGUAGE}],
         ];
 
         if ($boilerplate->getId()) {

@@ -147,7 +147,6 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 filter.defaultValue = false;
                 break;
             case 'record':
-                filterconfig.options.modelName = filterconfig.options.modelName.replace(/_/, '');
                 var foreignApp = filterconfig.options.appName;
                 var foreignModel = filterconfig.options.modelName;
                 

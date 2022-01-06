@@ -23,13 +23,14 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
 {
+    public const FLD_BOILERPLATE = 'boilerplate';
+    public const FLD_CUSTOMER = 'customer';
+    public const FLD_DOCUMENT_CATEGORY = 'documentCategory';
+    public const FLD_FROM = 'from';
+    public const FLD_LANGUAGE = 'language';
     public const FLD_MODEL = 'model';
     public const FLD_NAME = 'name';
-    public const FLD_FROM = 'from';
     public const FLD_UNTIL = 'until';
-    public const FLD_DOCUMENT_CATEGORY = 'documentCategory';
-    public const FLD_CUSTOMER = 'customer';
-    public const FLD_BOILERPLATE = 'boilerplate';
 
     public const MODEL_NAME_PART = 'Boilerplate';
     public const TABLE_NAME = 'sales_boilerplate';
@@ -146,7 +147,16 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
-            ]
+            ],
+            self::FLD_LANGUAGE          => [
+                self::LABEL                 => 'Language', // _('Language')
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Sales_Config::LANGUAGES_AVAILABLE,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+            ],
         ]
     ];
 

@@ -1,0 +1,22 @@
+Received-SPF: pass (mail-3.metaways.net: domain of
+	gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org designates
+	208.92.234.80 as permitted sender)
+Received: from lists.gentoo.org (pigeon.gentoo.org [208.92.234.80])
+	by mail3.metaways.net (Postfix) with ESMTPS id D02561AAA
+	for <lars@kneschke.de>; Mon, 13 Apr 2009 14:46:08 +0200 (MEST)
+X-Original-To: gentoo-dev@lists.gentoo.org
+Delivered-To: gentoo-dev@lists.gentoo.org
+Message-ID: <49E32E51.60204@hartwork.org>
+Date: Mon, 13 Apr 2009 14:21:37 +0200
+From: some, guy (Luxembourg) <webmaster@guy.org>
+MIME-Version: 1.0
+X-Tine20TestMessage: import_contact.eml
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+{
+    "salutation": "MS",
+    "n_prefix": "Dr,",
+    "n_family": "Setz",
+    "n_middle": ""
+}

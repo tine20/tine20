@@ -796,11 +796,26 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($ids, Sales_Controller_PurchaseInvoice::getInstance());
     }
 
-    public function getApplicableBoilerplates(string $type, string $date = null, string $customerId = null, string $category = null)
+    public function getApplicableBoilerplates(string $type, string $date = null, string $customerId = null, string $category = null, string $language = null)
     {
+        $defaultLang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
         $filter = [
-            ['field' => \Sales_Model_Boilerplate::FLD_MODEL, 'operator' => 'equals', 'value' => $type]
+            ['field' => \Sales_Model_Boilerplate::FLD_MODEL,    'operator' => 'equals', 'value' => $type],
         ];
+
+        if (null === $language || $language === $defaultLang) {
+            $language = $defaultLang;
+            $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_LANGUAGE, 'operator' => 'equals', 'value' => $language];
+        } else {
+            $filter[] = [
+                'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
+                'filters'   => [
+                    ['field' => \Sales_Model_Boilerplate::FLD_LANGUAGE, 'operator' => 'equals', 'value' => $language],
+                    ['field' => \Sales_Model_Boilerplate::FLD_LANGUAGE, 'operator' => 'equals', 'value' => $defaultLang],
+                ],
+            ];
+        }
+
         
         if (!$date) {
             $date = Tinebase_DateTime::now();
@@ -829,20 +844,25 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         foreach (Sales_Controller_Boilerplate::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Boilerplate::class, $filter))
                  as $boilerplate) {
-            if (isset($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}])) {
-                $current = $result->getById($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}]->getId());
+            while (isset($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}])) {
+                $current = $names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}];
+                if ($language === $boilerplate->{Sales_Model_Boilerplate::FLD_LANGUAGE} &&
+                        $language !== $current->{Sales_Model_Boilerplate::FLD_LANGUAGE}) {
+                    $result->removeRecord($current);
+                    break;
+                }
                 if ($current->{Sales_Model_Boilerplate::FLD_CUSTOMER} &&
                         !$boilerplate->{Sales_Model_Boilerplate::FLD_CUSTOMER}) {
-                    continue;
+                    continue 2;
                 }
                 if ((!$current->{Sales_Model_Boilerplate::FLD_CUSTOMER} &&
                         $boilerplate->{Sales_Model_Boilerplate::FLD_CUSTOMER}) ||
                         ($boilerplate->{Sales_Model_Boilerplate::FLD_FROM} ||
                         $boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL})) {
-                    $result->removeRecord($names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}]);
-                } else {
-                    continue;
+                    $result->removeRecord($current);
+                    break;
                 }
+                continue 2;
             }
             $names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}] = $boilerplate;
             $result->addRecord($boilerplate);

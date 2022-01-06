@@ -77,10 +77,6 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         // offer customers are optional
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
 
-        // offers don't have precursor documents, that would be a crm lead or something in the future
-        // TODO for the FE, maybe we make this a virtual field? not present in DB, always of value null?
-        unset($_definition[self::FIELDS][self::FLD_PRECURSOR_DOCUMENTS]);
-
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART;
 

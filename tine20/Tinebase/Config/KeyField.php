@@ -94,7 +94,8 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      * @param  string $_keyFieldRecordModel
      * @return Tinebase_Config_KeyField $this
      */
-    public function setKeyFieldRecordModel($_keyFieldRecordModel) {
+    public function setKeyFieldRecordModel($_keyFieldRecordModel)
+    {
         $this->_keyFieldRecordModel = $_keyFieldRecordModel;
 
         return $this;
@@ -106,7 +107,8 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      * @param  string $_appName
      * @return Tinebase_Config_KeyField $this
      */
-    public function setAppName($_appName) {
+    public function setAppName($_appName)
+    {
         $this->_appName = $_appName;
 
         return $this;
@@ -118,9 +120,9 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      * @param string $_value
      * @return Tinebase_Config_KeyFieldRecord
      */
-    public function getKeyfieldRecordByValue($_value) {
-        $record = $this->records->filter('value', $_value);
-        return $record->getFirstRecord();
+    public function getKeyfieldRecordByValue($_value)
+    {
+        return $this->records->find('value', $_value);
     }
     
     /**
@@ -128,10 +130,10 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      *
      * @return Tinebase_Config_KeyFieldRecord
      */
-    public function getKeyfieldDefault() {
+    public function getKeyfieldDefault()
+    {
         if (!empty($this->default) && $this->records instanceof Tinebase_Record_RecordSet) {
-            $record = $this->records->filter('id', $this->default);
-            return $record->getFirstRecord();
+            return $this->records->find('id', $this->default);
         }
         return null;
     }

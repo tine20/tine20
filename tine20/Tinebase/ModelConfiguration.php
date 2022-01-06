@@ -886,6 +886,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'numberableStr'         => Tinebase_Model_Filter_Text::class,
         'numberableInt'         => Tinebase_Model_Filter_Int::class,
         'hexcolor'              => Tinebase_Model_Filter_Text::class,
+        self::TYPE_MODEL        => Tinebase_Model_Filter_Text::class,
     );
 
     /**
@@ -1792,7 +1793,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_DynamicRecord(
                         $fieldDef[self::CONFIG][self::REF_MODEL_FIELD],
                         isset($fieldDef[self::CONFIG][self::PERSISTENT]) ?
-                            (bool)$fieldDef[self::CONFIG][self::PERSISTENT] : false
+                            $fieldDef[self::CONFIG][self::PERSISTENT] : false
                     )];
                 }
                 break;
