@@ -886,6 +886,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'numberableStr'         => Tinebase_Model_Filter_Text::class,
         'numberableInt'         => Tinebase_Model_Filter_Int::class,
         'hexcolor'              => Tinebase_Model_Filter_Text::class,
+        self::TYPE_MODEL        => Tinebase_Model_Filter_Text::class,
     );
 
     /**
