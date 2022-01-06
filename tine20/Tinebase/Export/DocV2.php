@@ -46,7 +46,7 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
     {
         // mean hack... this gets called after processing of records is done
         $t = $this;
-        $this->_docTemplate->forEachDocument(function(&$xml) use($t) {
+        $this->_docTemplate->forEachDocument(function(&$xml) use($t, $_record) {
             static $a = 0;
             $a += 1;
             $t->_twigSource = $xml;
@@ -54,7 +54,7 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
             ['</w:t><w:br/><w:t>', '', '&apos;', '</w:t><w:br/><w:t>'],
                 // the uniqid is a cache bust
                 $this->_twig->load($t->_templateFileName . '#~#' . $t->_docTemplate->getTwigName() . uniqid($a))
-                    ->render($t->_getTwigContext(['record' => null])));
+                    ->render($t->_getTwigContext(['record' => $_record])));
         });
     }
 
