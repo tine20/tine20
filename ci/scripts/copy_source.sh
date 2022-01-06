@@ -4,7 +4,9 @@ set -e
 echo $0 init git submodules ...
 
 cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+
 git submodule init
+git submodule update
 
 echo $0 copying ...
 
@@ -26,7 +28,7 @@ rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/nginx/c
 rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/nginx/snippets/ /etc/nginx/snippets
 rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/ ${TINE20ROOT}/scripts/;
 rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/ ${TINE20ROOT}/tests/;
-rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' --exclude 'images/icon-set' ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/ ${TINE20ROOT}/tine20/;
+rsync -a -I --delete --exclude 'vendor' --exclude 'Tinebase/js/node_modules' ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/ ${TINE20ROOT}/tine20/;
 rm -r ${TINE20ROOT}/tine20/vendor/metaways || true
 cd ${TINE20ROOT}/tine20;
 
