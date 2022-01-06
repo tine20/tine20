@@ -90,7 +90,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'email',
                                 vtype: 'email',
                                 maxLength: 255,
-                                allowBlank: false,
+                                allowBlank: true,
                                 disabled: ! Tine.Tinebase.common.hasRight('manage', 'Addressbook', 'list_email_options')
                             }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
                                 columnWidth: 0.75,
