@@ -882,8 +882,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         if (strpos($id, 'fakeid') === 0) {
             if (is_array($record)) {
-                $record = new Calendar_Model_Event(null, true);
-                $record->setFromJsonInUsersTimezone($record);
+                $newRecord = new Calendar_Model_Event(null, true);
+                $newRecord->setFromJsonInUsersTimezone($record);
+                $record = $newRecord;
             }
             if (!$record instanceof Calendar_Model_Event) {
                 $record = Calendar_Controller_Event::getInstance()->get($id);
