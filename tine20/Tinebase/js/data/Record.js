@@ -18,6 +18,9 @@ Ext.ns('Tine.Tinebase', 'Tine.Tinebase.data');
 Tine.Tinebase.data.Record = function(data, id) {
     if (id || id === 0) {
         this.id = id;
+        if (!data[this.idProperty]) {
+            data[this.idProperty] = this.id
+        }
     } else if (data[this.idProperty]) {
         this.id = data[this.idProperty];
     } else {
