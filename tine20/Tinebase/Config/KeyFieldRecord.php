@@ -46,7 +46,7 @@ class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
         'value'                => array('allowEmpty' => false         ),
         'icon'                 => array('allowEmpty' => true          ),
         'color'                => array('allowEmpty' => true          ),
-        'system'               => array('allowEmpty' => true,  'Int'  ),
+        'system'               => array('allowEmpty' => true          ),
     );
     
     /**
