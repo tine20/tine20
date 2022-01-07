@@ -44,7 +44,8 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
 
             // disable fields unless product is chosen
-            field.setDisabled(isProductType && !productId && ['type', 'product_id'].indexOf(field.name) < 0);
+            field.setDisabled(this.fixedFields.get(field.name) ||
+                (isProductType && !productId && ['type', 'product_id'].indexOf(field.name) < 0));
         });
         if (isProductType) {
             this.record.computePrice();

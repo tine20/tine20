@@ -658,8 +658,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         if (editDialogClass) {
             editDialogClass.openWindow(_.assign({
-                record: record,
+                record: JSON.stringify(record.data),
                 recordId: record.getId(),
+                fixedFields: this.readOnly ? JSON.stringify(Object.assign(Object.fromEntries(record.constructor.getFieldNames().map((k, i) => [k, null])), record.data)) : null,
                 listeners: {
                     scope: me,
                     'update': function (updatedRecord) {
