@@ -227,7 +227,7 @@ Tine.widgets.form.FieldManager = function() {
                         if (fieldDefinition.config.additionalFilterSpec) {
                             field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
                         }
-                        field.fieldLabel = fieldDefinition.fieldLabel ? field.fieldLabel :
+                        field.fieldLabel = field.fieldLabel ? field.fieldLabel :
                             Tine.Tinebase.data.RecordMgr.get(fieldDefinition.config.appName, fieldDefinition.config.modelName)?.getRecordName();
 
                         // @TODO: denormalizationOf should have an edit plugin
