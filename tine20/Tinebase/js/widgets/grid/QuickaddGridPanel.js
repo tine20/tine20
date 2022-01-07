@@ -87,6 +87,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             'onRemove',
             'actionRemoveUpdater',
             'onRowDblClick'
+            // 'setReadOnly' // see setReadOnly above
         ]);
 
         this.modelConfig = this.modelConfig ||
@@ -131,6 +132,11 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
 
         this.on('newentry', this.onNewentry, this);
+    },
+
+    setReadOnly: function(readOnly) {
+        Tine.widgets.grid.PickerGridPanel.prototype.setReadOnly.apply(this, arguments);
+        Tine.widgets.grid.QuickaddGridPanel.superclass.setReadOnly.apply(this, arguments);
     },
 
     /**
