@@ -446,6 +446,9 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.getModelConfiguration = function() {
         return p.modelConfiguration;
     };
+    f.getProxy = function() {
+        return _.get(window, `Tine.${p.appName}.${p.modelName.toLowerCase()}Backend`);
+    }
 
     // sanitize containerProperty label
     var containerProperty = f.getMeta('containerProperty');
