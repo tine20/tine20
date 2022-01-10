@@ -49,6 +49,9 @@ Tine.widgets.relation.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridP
     suspendRelationStoreEvents: false,
 
     initComponent: function () {
+        if (Ext.isString(this.app)) {
+            this.app = Tine.Tinebase.appMgr.get(this.app);
+        }
         if (!this.app && this.recordClass) {
             this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         }
@@ -60,7 +63,7 @@ Tine.widgets.relation.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridP
     },
 
     asyncInit: async function() {
-        await waitFor(() => { return this.editDialog.relationsPanel });
+        await waitFor(() => { return this.editDialog?.relationsPanel });
 
         this.store.on('add', this.onOwnStoreAdd, this);
         this.store.on('update', this.onOwnStoreUpdate, this);
@@ -71,8 +74,7 @@ Tine.widgets.relation.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridP
         this.editDialog.relationsPanel.store.on('remove', this.onRelationStoreRemove, this);
 
         // question: are related record updates persistent before dlg is saved?
-        // changes are reflected immediately
-        // new record are created after record save // this might be hard to implement?
+        // answer: yes - we killed all related record saveing
     },
 
     onOwnStoreAdd: function(store, records, idx) {
@@ -94,7 +96,12 @@ Tine.widgets.relation.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridP
         }
     },
 
-    onOwnStoreUpdate: function(store, record, operation) {
+    onOwnStoreUpdate: async function(store, record, operation) {
+        // inline editing - dialog edits are remove/add
+        const proxy = this.recordClass.getProxy();
+        record = await proxy.promiseSaveRecord(record);
+        this.onEditDialogRecordUpdate(record);
+
         // NOTE: we're dealing with relations - we don't want to have the relation of the relations!
         record.data.relations = null;
         delete record.data.relations;
@@ -108,9 +115,28 @@ Tine.widgets.relation.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridP
         }
     },
 
-    onOwnStoreRemove: function(store, record, idx) {
+    onOwnStoreRemove: async function(store, record, idx) {
         if (! this.suspendOwnStoreEvents) {
-            this.editDialog.relationsPanel.store.remove(this.getRelation(record));
+            const names = { ownRecordName: this.recordClass.getRecordName(), relatedRecordName: this.editDialog.recordClass.getRecordName() }
+            const option = await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                title: this.app.formatMessage('Delete { ownRecordName }?', names),
+                questionText: this.app.formatMessage('What do you want to delete?'),
+                height: 150,
+                allowCancel: false,
+                options: [
+                    { text: this.app.formatMessage('Delete { ownRecordName }', names), name:  'delete'},
+                    { text: this.app.formatMessage('Remove { ownRecordName } relation to this { relatedRecordName } only', names), name:  'unlink'}
+                ]
+            });
+
+            switch (option) {
+                case 'delete':
+                    const proxy = this.recordClass.getProxy();
+                    await proxy.promiseDeleteRecords(record);
+                    // fallthrough
+                case 'unlink':
+                    this.editDialog.relationsPanel.store.remove(this.getRelation(record));
+            }
         }
     },
 
@@ -194,6 +220,14 @@ Tine.widgets.relation.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridP
         });
 
         return this.editDialog.relationsPanel.store.getAt(idx);
+    },
+    afterRender: function() {
+        if (! this.editDialog) {
+            this.editDialog = this.findParentBy(function (c) {
+                return c instanceof Tine.widgets.dialog.EditDialog
+            });
+        }
+        this.supr().afterRender.call(this);
     }
 
 });
