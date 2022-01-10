@@ -155,7 +155,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         
         var p = options.params;
         p.method = this.appName + '.get' + this.modelName;
-        p.id = Ext.isString(record) ? record : record.get(this.idProperty);
+        p.id = Ext.isFunction(record?.get) ? record.get(this.idProperty) : record;
         
         return this.doXHTTPRequest(options);
     },
