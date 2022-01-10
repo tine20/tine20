@@ -851,21 +851,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
 
+        if (!Ext.isFunction(this.record.beginEdit)) {
+            this.record = this.recordProxy.recordReader({responseText: this.record});
+        }
+
         // Mode local means, that the record is not supposed to be loaded from server and saved to server.
         // So if mode !== local, the record would be always loaded from the server and discard all data passed as record before
         // To bypass this you can set recordFromJson === true, then the dialog wouldn't load the record from server!
         // But to make this work you need to pass a json encoded record to the editdialog as string!
-        if (this.mode !== 'local' && this.recordFromJson !== true) {
-            if (this.record && this.record.id) {
-                this.loadRemoteRecord();
-            } else {
-                this.onRecordLoad.defer(10, this);
-            }
+        // NOTE: we only load records with id from remote, new records (id === 0/null/undefined) are local
+        if (this.mode !== 'local' && this.recordFromJson !== true && this.record?.id) {
+            this.loadRemoteRecord();
         } else {
-            // note: in local mode we expect a valid record
-            if (!Ext.isFunction(this.record.beginEdit)) {
-                this.record = this.recordProxy.recordReader({responseText: this.record});
-            }
             this.onRecordLoad.defer(10, this);
         }
     },

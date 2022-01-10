@@ -483,9 +483,7 @@ Tine.Tinebase.data.Record.getDefaultData = function(recordClass) {
         modelConfig.defaultData = {};
     }
     
-    if (! dd) {
-        var dd = Ext.decode(Ext.encode(modelConfig.defaultData));
-    }
+    const dd = Ext.decode(Ext.encode(modelConfig.defaultData));
 
     // find container by selection or use defaultContainer by registry
     if (modelConfig.containerProperty) {
@@ -591,7 +589,7 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         Tine.log.warn(e);
     }
 
-    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty')) || Tine.Tinebase.data.Record.generateUID();
+    var recordId = _.get(record, 'data.' + _.get(record, 'idProperty')) ?? Tine.Tinebase.data.Record.generateUID();
 
     if (! record) {
         record = new recordClass({}, recordId);
