@@ -54,6 +54,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
         Sales_Model_Document_Order::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
+        Sales_Model_Document_DeliveryNote::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_DeliveryNote::MODEL_NAME_PART,
+        Sales_Model_Document_Invoice::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
         'Contract',
         'Division',
         'CostCenter',
@@ -794,6 +798,16 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deletePurchaseInvoices($ids)
     {
         return $this->_delete($ids, Sales_Controller_PurchaseInvoice::getInstance());
+    }
+
+    public function trackDocument(string $documentModel, string $documentId)
+    {
+        $resolvedIds = [];
+        return Sales_Controller_Document_Abstract::createPrecursorTree($documentModel, [$documentId], $resolvedIds, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    Sales_Model_Document_Abstract::FLD_POSITIONS => [],
+                ],
+            ])->toArray();
     }
 
     public function getApplicableBoilerplates(string $type, string $date = null, string $customerId = null, string $category = null, string $language = null)

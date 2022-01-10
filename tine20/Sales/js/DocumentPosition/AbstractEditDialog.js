@@ -7,9 +7,9 @@
  */
 Ext.ns('Tine.Sales');
 
-Tine.Sales.PositionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initComponent() {
-        Tine.Sales.PositionEditDialog.superclass.initComponent.call(this);
+        Tine.Sales.AbstractEditDialog.superclass.initComponent.call(this);
         
         // @TODO add filter for product_id
         
@@ -25,7 +25,7 @@ Tine.Sales.PositionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.loadRequest) {
             return _.delay(_.bind(this.checkStates, this), 250);
         }
-        Tine.Sales.PositionEditDialog.superclass.checkStates.call(this);
+        Tine.Sales.AbstractEditDialog.superclass.checkStates.call(this);
 
         const type = this.record.get('type');
         const isProductType = this.record.isProductType();
@@ -44,7 +44,8 @@ Tine.Sales.PositionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
 
             // disable fields unless product is chosen
-            field.setDisabled(isProductType && !productId && ['type', 'product_id'].indexOf(field.name) < 0);
+            field.setDisabled(this.fixedFields.get(field.name) ||
+                (isProductType && !productId && ['type', 'product_id'].indexOf(field.name) < 0));
         });
         if (isProductType) {
             this.record.computePrice();
@@ -57,6 +58,6 @@ Tine.Sales.PositionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 });
 
 
-Tine.Sales.DocumentPosition_OfferEditDialog = Ext.extend(Tine.Sales.PositionEditDialog, {
+Tine.Sales.DocumentPosition_OfferEditDialog = Ext.extend(Tine.Sales.AbstractEditDialog, {
 
 });

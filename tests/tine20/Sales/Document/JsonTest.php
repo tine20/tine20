@@ -300,4 +300,106 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         ]);
         $this->_instance->saveDocument_Order($order->toArray());
     }
+
+    protected function getTrackingTestData()
+    {
+        $testData = [];
+        $customer = $this->_createCustomer();
+
+        $offer1 = Sales_Controller_Document_Offer::getInstance()->create(new Sales_Model_Document_Offer([
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+        ]));
+        $testData[$offer1->getId()] = $offer1;
+
+        $offer2 = Sales_Controller_Document_Offer::getInstance()->create(new Sales_Model_Document_Offer([
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+        ]));
+        $testData[$offer2->getId()] = $offer2;
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(
+                Tinebase_Model_DynamicRecordWrapper::class, [
+                    new Tinebase_Model_DynamicRecordWrapper([
+                        Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Sales_Model_Document_Offer::class,
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => $offer1->getId(),
+                    ]),
+                    new Tinebase_Model_DynamicRecordWrapper([
+                        Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Sales_Model_Document_Offer::class,
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => $offer2->getId(),
+                    ])
+                ]
+            ),
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_ACCEPTED,
+        ]));
+        $testData[$order->getId()] = $order;
+
+        $delivery1 = Sales_Controller_Document_DeliveryNote::getInstance()->create(new Sales_Model_Document_DeliveryNote([
+            Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(
+                Tinebase_Model_DynamicRecordWrapper::class, [
+                    new Tinebase_Model_DynamicRecordWrapper([
+                        Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Sales_Model_Document_Order::class,
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => $order->getId(),
+                    ])
+                ]
+            ),
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_DeliveryNote::FLD_DELIVERY_NOTE_STATUS => Sales_Model_Document_DeliveryNote::STATUS_CREATED,
+        ]));
+        $testData[$delivery1->getId()] = $delivery1;
+
+        $delivery2 = Sales_Controller_Document_DeliveryNote::getInstance()->create(new Sales_Model_Document_DeliveryNote([
+            Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(
+                Tinebase_Model_DynamicRecordWrapper::class, [
+                    new Tinebase_Model_DynamicRecordWrapper([
+                        Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Sales_Model_Document_Order::class,
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => $order->getId(),
+                    ])
+                ]
+            ),
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_DeliveryNote::FLD_DELIVERY_NOTE_STATUS => Sales_Model_Document_DeliveryNote::STATUS_CREATED,
+        ]));
+        $testData[$delivery2->getId()] = $delivery2;
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(
+                Tinebase_Model_DynamicRecordWrapper::class, [
+                    new Tinebase_Model_DynamicRecordWrapper([
+                        Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Sales_Model_Document_Order::class,
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => $order->getId(),
+                    ])
+                ]
+            ),
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_BOOKED,
+        ]));
+        $testData[$invoice->getId()] = $invoice;
+
+        return $testData;
+    }
+
+    public function testTrackDocument()
+    {
+        $testData = $this->getTrackingTestData();
+        $order = null;
+        foreach ($testData as $document) {
+            if ($document instanceof Sales_Model_Document_Order) {
+                $order = $document;
+                break;
+            }
+        }
+        $documents = $this->_instance->trackDocument(Sales_Model_Document_Order::class, $order->getId());
+        $this->assertSame(count($testData), count($documents));
+
+        foreach ($documents as $wrapper) {
+            $id = $wrapper[Tinebase_Model_DynamicRecordWrapper::FLD_RECORD]['id'];
+            $this->assertArrayHasKey($id, $testData);
+            $this->assertSame(get_class($testData[$id]), $wrapper[Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME]);
+            unset($testData[$id]);
+        }
+        $this->assertEmpty($testData);
+    }
 }

@@ -10,8 +10,11 @@ Ext.ns('Tine.Sales');
 import { BoilerplatePanel } from './BoilerplatePanel'
 
 Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    windowWidth: 1024,
+    windowWidth: 1240,
+    windowHeight: 1300,
 
+    statusFieldName: null,
+    
     initComponent() {
         Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this)
 
@@ -96,7 +99,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             region: 'center',
             xtype: 'columnform',
             items: [
-                [fields.document_number, fields.offer_status, { ...placeholder }, fields.document_category, fields.document_language],
+                [fields.document_number, fields[this.statusFieldName], { ...placeholder }, fields.document_category, fields.document_language],
                 [fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})],
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_pretext', enableKeyEvents: true, height: 70, fieldLabel: 'Pretext'}],

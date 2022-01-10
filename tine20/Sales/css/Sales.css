@@ -37,7 +37,7 @@
     background-image:url(../../images/icon-set/icon_addressbook.svg) !important;
 }
 
-.SalesInvoice {
+.SalesDocument_Invoice, .SalesInvoice {
     background-image:url(../../images/icon-set/icon_invoice.svg) !important;
 }
 
@@ -89,12 +89,16 @@
     color: #404040;
 }
 
-.SalesOrderConfirmation {
+.SalesDocument_Order, .SalesOrderConfirmation {
     background-image:url(../../images/icon-set/icon_order_confirmation.svg) !important;
 }
 
-.SalesOffer {
+.SalesDocument_Offer, .SalesOffer {
     background-image:url(../../images/icon-set/icon_offer.svg) !important;
+}
+
+.SalesDocument_DeliveryNote {
+    background-image:url(../../images/icon-set/icon_delivery_note.svg) !important;
 }
 
 .sales-document-positiongrid-title {
