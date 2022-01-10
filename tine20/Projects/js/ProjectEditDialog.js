@@ -71,7 +71,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         relations = _.concat(relations, this.contactLinkPanel.getData());
         this.record.set('relations', relations);
     },
-    
+
     /**
      * returns dialog
      * 
@@ -207,7 +207,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 layout: 'border',
                 items: [{
                     region: 'center',
-                    layout: 'hfit',
+                    layout: 'vbox',
                     border: false,
                     items: [{
                         xtype: 'fieldset',
@@ -273,6 +273,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                         xtype: 'tabpanel',
+                        flex: 1,
                         deferredRender: false,
                         activeTab: 0,
                         border: false,
@@ -283,6 +284,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ]
                     }, {
                         xtype: 'tabpanel',
+                        flex: 1,
                         deferredRender: false,
                         activeTab: 0,
                         border: false,
