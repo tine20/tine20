@@ -87,7 +87,9 @@ Tine.Tasks.Model.Task.getDefaultData = function() {
         'class': 'PUBLIC',
         percent: 0,
         organizer: Tine.Tinebase.registry.get('currentAccount'),
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer()
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
+        status: 'NEEDS-ACTION',
+        priority: 200
     };
 
     if (prefs.get('defaultalarmenabled')) {
