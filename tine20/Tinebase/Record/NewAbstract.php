@@ -412,14 +412,18 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         // convert data to record(s)
         foreach(static::$_configurationObject->_fields as $fieldName => $config) {
             if (isset($_data[$fieldName]) && is_array($_data[$fieldName])) {
-                $config = $config['type'] === 'virtual' && isset($config['config']['type']) ? $config['config'] :
-                    $config;
-                if (in_array($config['type'], ['record', 'records']) && isset($config['config']['appName']) &&
-                    isset($config['config']['modelName'])) {
-                    $modelName = $config['config']['appName'] . '_Model_' . $config['config']['modelName'];
-                    $this->{$fieldName} = $config['type'] == 'record' ?
+                $config = $config[self::TYPE] === self::TYPE_VIRTUAL && isset($config[self::CONFIG][self::TYPE]) ?
+                    $config[self::CONFIG] : $config;
+                if (in_array($config[self::TYPE], [self::TYPE_RECORD, self::TYPE_RECORDS]) &&
+                        isset($config[self::CONFIG][self::APP_NAME]) && isset($config[self::CONFIG][self::MODEL_NAME])) {
+                    $modelName = $config[self::CONFIG]['appName'] . '_Model_' . $config[self::CONFIG][self::MODEL_NAME];
+                    $this->{$fieldName} = $config[self::TYPE] === self::TYPE_RECORD ?
                         new $modelName($_data[$fieldName], $this->bypassFilters, true) :
                         new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters, true);
+                    $this->{$fieldName}->runConvertToRecord();
+                } elseif (self::TYPE_DYNAMIC_RECORD === $config[self::TYPE]) {
+                    $modelName = $this->{$config[self::CONFIG][self::REF_MODEL_FIELD]};
+                    $this->{$fieldName} = new $modelName($_data[$fieldName], $this->bypassFilters, true);
                     $this->{$fieldName}->runConvertToRecord();
                 }
             }

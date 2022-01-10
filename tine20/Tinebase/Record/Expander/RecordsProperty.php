@@ -24,8 +24,12 @@ class Tinebase_Record_Expander_RecordsProperty extends Tinebase_Record_Expander_
         if (!empty($ids) || !empty($this->_subExpanders)) {
             $ids = array_unique($ids);
             $self = $this;
+            $ctrl = null;
+            try {
+                $ctrl = Tinebase_Core::getApplicationInstance($this->_model, '', true);
+            } catch (Tinebase_Exception_NotFound $tenf) {}
             $this->_rootExpander->_registerDataToFetch(new Tinebase_Record_Expander_DataRequest(
-                $this->_prio, Tinebase_Core::getApplicationInstance($this->_model, '', true), $ids,
+                $this->_prio, $ctrl, $ids,
                 // workaround: [$this, '_setData'] doesn't work, even so it should!
                 function ($_data) use ($self) {
                     $self->_setData($_data);

@@ -842,7 +842,17 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /*************************** offer functions *****************************/
-    
+
+    public function createFollowupDocument(array $documentTransition): array
+    {
+        /** @var Sales_Model_Document_Transition $documentTransition */
+        $documentTransition = $this->_jsonToRecord($documentTransition, Sales_Model_Document_Transition::class);
+
+        return $this->_recordToJson(
+            Sales_Controller_Document_Abstract::executeTransition($documentTransition)
+        );
+    }
+
     /**
      * Search for records matching given arguments
      *

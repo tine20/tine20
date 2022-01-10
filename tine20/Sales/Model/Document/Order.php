@@ -109,5 +109,61 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function transitionFrom(Sales_Model_Document_Transition $transition)
+    {
+        $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} = 0;
+
+        parent::transitionFrom($transition);
+
+        // see AbstractMixin.computePrice
+        // Sales/js/Model/DocumentPosition/AbstractMixin.js
+
+        // see Tine.Sales.Document_AbstractEditDialog.checkStates
+        // Sales/js/Document/AbstractEditDialog.js
+
+        $this->{self::FLD_POSITIONS_NET_SUM} = 0;
+        $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = 0;
+        $this->{self::FLD_SALES_TAX_BY_RATE} = [];
+        $this->{self::FLD_NET_SUM} = 0;
+        $netSumByTaxRate = [];
+        $salesTaxByRate = [];
+        /** @var Sales_Model_DocumentPosition_Abstract $position */
+        foreach ($this->{self::FLD_POSITIONS} as $position) {
+            $this->{self::FLD_POSITIONS_NET_SUM} = $this->{self::FLD_POSITIONS_NET_SUM}
+                + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
+            $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = $this->{self::FLD_POSITIONS_DISCOUNT_SUM}
+                + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_SUM});
+
+            $taxRate = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} || 0;
+            if (!isset($salesTaxByRate[$taxRate])) {
+                $salesTaxByRate[$taxRate] = 0;
+            }
+            $salesTaxByRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX});
+            if (!isset($netSumByTaxRate[$taxRate])) {
+                $netSumByTaxRate[$taxRate] = 0;
+            }
+            $netSumByTaxRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
+        }
+
+        $this->{self::FLD_SALES_TAX} =
+            array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
+                $this->xprops(Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE)[$taxRate] =
+                    ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
+                    $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM})
+                    * $taxRate / 100;
+                return $carry + $netSumByTaxRate[$taxRate];
+            }, 0);
+
+        foreach ($salesTaxByRate as $rate => $tax) {
+            $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                'tax_rate' => $rate,
+                'tax_sum' => $tax,
+            ];
+        }
+
+        $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_NET_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM}
+            + $this->{self::FLD_SALES_TAX};
+    }
 }
 

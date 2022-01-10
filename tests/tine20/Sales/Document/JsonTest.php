@@ -295,6 +295,46 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->_instance->saveDocument_Offer($document->toArray(true));
     }
 
+    public function testOfferToOrderTransition()
+    {
+        $customer = $this->_createCustomer();
+        $subProduct = $this->_createProduct();
+        $product = $this->_createProduct([
+            Sales_Model_Product::FLD_SUBPRODUCTS => [(new Sales_Model_SubProductMapping([
+                Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $subProduct,
+                Sales_Model_SubProductMapping::FLD_SHORTCUT => 'lorem',
+                Sales_Model_SubProductMapping::FLD_QUANTITY => 1,
+            ], true))->toArray()]
+        ]);
+
+        $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_POSITIONS => [
+                [
+                    Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
+                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray(),
+                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX_RATE => 19,
+                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX => 100 * 19 / 100,
+                    Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE => 100,
+                ]
+            ],
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer->toArray(),
+        ]);
+
+        $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
+
+        $result = $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL => Sales_Model_Document_Offer::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $savedDocument,
+                ]),
+            ],
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE =>
+                Sales_Model_Document_Order::class,
+        ]))->toArray());
+    }
+
     public function testOrderDocument()
     {
         $offer = $this->testOfferDocumentCustomerCopy(true);

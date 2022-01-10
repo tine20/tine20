@@ -396,4 +396,32 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         }
         return '';
     }
+
+    public function transitionFrom(Sales_Model_DocumentPosition_TransitionSource $transition)
+    {
+        $this->{self::FLD_PRECURSOR_POSITION_MODEL} =
+            $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL};
+        $this->{self::FLD_PRECURSOR_POSITION} =
+            $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+        foreach ([
+                    self::FLD_TITLE,
+                    self::FLD_DESCRIPTION,
+                    self::FLD_TYPE,
+                    self::FLD_QUANTITY,
+                    self::FLD_PRODUCT_ID,
+                    self::FLD_COST_BEARER_ID,
+                    self::FLD_COST_CENTER_ID,
+                    self::FLD_POSITION_DISCOUNT_PERCENTAGE,
+                    self::FLD_POSITION_DISCOUNT_TYPE,
+                    self::FLD_POSITION_DISCOUNT_SUM,
+                    self::FLD_POSITION_PRICE,
+                    self::FLD_GROSS_PRICE,
+                    self::FLD_NET_PRICE,
+                    self::FLD_UNIT_PRICE,
+                 ] as $property) {
+            if ($this->{self::FLD_PRECURSOR_POSITION}->has($property) && $this->has($property)) {
+                $this->{$property} = $this->{self::FLD_PRECURSOR_POSITION}->{$property};
+            }
+        }
+    }
 }

@@ -14,6 +14,8 @@
  *
  * @package     Sales
  * @subpackage  Model
+ *
+ * @property Tinebase_Record_RecordSet $positions
  */
 abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
@@ -349,10 +351,60 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         ]
     ];
 
-    /**
-     * holds the configuration object (must be declared in the concrete class)
-     *
-     * @var Tinebase_ModelConfiguration
-     */
-    protected static $_configurationObject = NULL;
+    public function transitionFrom(Sales_Model_Document_Transition $transition)
+    {
+        if (!preg_match('/^(Sales_Model_Document)(_.*)$/', static::class, $m)) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('unexpected class name ' . static::class);
+        }
+        $positionClass = $m[1] . 'Position' . $m[2];
+        if (!class_exists($positionClass)) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('position class name ' . $positionClass . ' doesn\'t exist');
+        }
+
+        $this->{self::FLD_PRECURSOR_DOCUMENTS} = new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, []);
+        $this->{self::FLD_POSITIONS} = new Tinebase_Record_RecordSet($positionClass, []);
+
+        /** @var Sales_Model_Document_TransitionSource $record */
+        foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS} as $record) {
+            $this->{self::FLD_PRECURSOR_DOCUMENTS}->addRecord(new Tinebase_Model_DynamicRecordWrapper([
+                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME =>
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL},
+                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD =>
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->getId(),
+            ]));
+
+            // if the positions for this document are not specified, we take all of them
+            if (empty($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS})) {
+                $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} =
+                    new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_TransitionSource::class, []);
+                foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                             ->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->addRecord(
+                        new Sales_Model_DocumentPosition_TransitionSource([
+                            Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position),
+                            Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
+                        ]));
+                }
+            }
+            foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} as $sourcePosition) {
+                /** @var Sales_Model_DocumentPosition_Abstract $position */
+                $position = new $positionClass([], true);
+                $position->transitionFrom($sourcePosition);
+                $this->{self::FLD_POSITIONS}->addRecord($position);
+            }
+
+            //$this->{self::FLD_TAGS} = array_merge($this->{self::FLD_TAGS}, $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->{self::FLD_TAGS});
+        }
+
+        // for the time being we keep this simple, this is a TODO FIXME!!!
+        if ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->count() === 1) {
+            $sourceDocument = $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
+            $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_SUM};
+            $this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE};
+            $this->{self::FLD_INVOICE_DISCOUNT_TYPE} = $sourceDocument->{self::FLD_INVOICE_DISCOUNT_TYPE};
+            $this->{self::FLD_CUSTOMER_ID} = $sourceDocument->{self::FLD_CUSTOMER_ID};
+        }
+
+        $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::now();
+    }
 }

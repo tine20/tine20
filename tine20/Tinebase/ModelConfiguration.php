@@ -1750,6 +1750,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     return $this->_recordFields[$field][self::CONFIG][self::RECORD_CLASS_NAME];
                 case 'records':
                     return $this->_recordsFields[$field][self::CONFIG][self::RECORD_CLASS_NAME];
+                case self::TYPE_DYNAMIC_RECORD:
+                    return self::TYPE_DYNAMIC_RECORD;
                 case self::TYPE_VIRTUAL:
                     if (isset($this->_fields[$field][self::CONFIG][self::TYPE]) && (self::TYPE_RELATION ===
                             $this->_fields[$field][self::CONFIG][self::TYPE] || self::TYPE_RELATIONS ===

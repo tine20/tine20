@@ -123,4 +123,47 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             Sales_Model_Document_Order::class,
         ];
     }
+
+    public static function executeTransition(Sales_Model_Document_Transition $transition): Sales_Model_Document_Abstract
+    {
+        $transactionRAII = Tinebase_RAII::getTransactionManagerRAII();
+
+        // TODO FIXME
+        // we need to make sure that we actually reload all transition data (documents, positions, etc.) from the db
+        /*******************************/
+        // ... or maybe we can do that outside ... but somebody has to do it
+
+        (new Tinebase_Record_Expander(Sales_Model_Document_Transition::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => [],
+                                Sales_Model_Document_Abstract::FLD_POSITIONS => [],
+                            ],
+                        ],
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => []
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]))->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Transition::class, [
+            $transition
+        ]));
+
+        /** @var Sales_Model_Document_Abstract $targetDocument */
+        $targetDocument = new $transition->{Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE}([], true);
+        $targetDocument->transitionFrom($transition);
+
+        /** @var Sales_Model_Document_Abstract $result */
+        $result = Tinebase_Core::getApplicationInstance(get_class($targetDocument))->create($targetDocument);
+
+        $transactionRAII->release();
+
+        return $result;
+    }
 }
