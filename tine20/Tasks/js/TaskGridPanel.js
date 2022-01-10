@@ -84,17 +84,24 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             {id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer}
         ];
         
-        if (Tine.hasOwnProperty('Crm') && Tine.Tinebase.common.hasRight('run', 'Crm')) {
-            columns.push({
-                id: 'lead',
-                header: this.app.i18n._('Lead name'),
-                width: 150,
-                dataIndex: 'relations',
-                renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'lead'),
-                sortable: false
-            });
-        }
-        
+        // if (Tine.hasOwnProperty('Crm') && Tine.Tinebase.common.hasRight('run', 'Crm')) {
+        //     columns.push({
+        //         id: 'lead',
+        //         header: this.app.i18n._('Lead name'),
+        //         width: 150,
+        //         dataIndex: 'relations',
+        //         renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'lead'),
+        //         sortable: false
+        //     });
+        // }
+        columns.push({
+            id: 'source',
+            header: this.app.i18n._('Source'),
+            width: 150,
+            dataIndex: 'relations',
+            renderer: new Tine.widgets.relation.GridRenderer({appName: 'Tasks', type: 'TASK'}).getRenderer(),
+            sortable: false
+        });
         columns = columns.concat([{
             id: 'summary',
             header: this.app.i18n._("Summary"),
