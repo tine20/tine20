@@ -27,8 +27,6 @@ class Calendar_Import_ResourceTest extends TestCase
 
     public function testImportDemoData()
     {
-        self::markTestSkipped('FIXME: this fails in UPDATE test');
-
         $importer = new Tinebase_Setup_DemoData_Import('Calendar_Model_Resource', [
             'definition' => 'cal_import_resource_csv',
             'file' => 'resource.csv',
