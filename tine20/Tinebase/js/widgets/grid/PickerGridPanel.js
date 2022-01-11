@@ -669,25 +669,28 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 fixedFields: this.readOnly ? JSON.stringify(Object.assign(Object.fromEntries(record.constructor.getFieldNames().map((k, i) => [k, null])), record.data)) : null,
                 listeners: {
                     scope: me,
-                    'update': function (updatedRecord) {
-                        if (!updatedRecord.data) {
-                            updatedRecord = Tine.Tinebase.data.Record.setFromJson(updatedRecord, me.recordClass)
-                        }
-
-                        var idx = me.store.indexOfId(updatedRecord.id),
-                            isSelected = me.getSelectionModel().isSelected(idx);
-
-                        me.getStore().removeAt(idx);
-                        me.getStore().insert(idx, [updatedRecord]);
-                        if (isSelected) {
-                            me.getSelectionModel().selectRow(idx, true);
-                        }
-
-                        me.fireEvent('update', this, updatedRecord);
-                    }
+                    update: me.onEditDialogRecordUpdate
                 }
             }, this.editDialogConfig || {}));
         }
+    },
+    
+    // recordChange from editDialog
+    onEditDialogRecordUpdate: function(updatedRecord) {
+        if (!updatedRecord.data) {
+            updatedRecord = Tine.Tinebase.data.Record.setFromJson(updatedRecord, this.recordClass)
+        }
+
+        var idx = this.store.indexOfId(updatedRecord.id),
+            isSelected = this.getSelectionModel().isSelected(idx);
+
+        this.getStore().removeAt(idx);
+        this.getStore().insert(idx, [updatedRecord]);
+        if (isSelected) {
+            this.getSelectionModel().selectRow(idx, true);
+        }
+
+        this.fireEvent('update', this, updatedRecord);
     }
 });
 

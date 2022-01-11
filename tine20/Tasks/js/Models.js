@@ -156,7 +156,7 @@ Tine.Tasks.Model.Task.getClosedStatus = function() {
 /**
  * default tasks backend
  */
-Tine.Tasks.JsonBackend = new Tine.Tinebase.data.RecordProxy({
+Tine.Tasks.taskBackend = Tine.Tasks.JsonBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Tasks',
     modelName: 'Task',
     recordClass: Tine.Tasks.Model.Task

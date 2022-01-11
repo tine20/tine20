@@ -45,24 +45,20 @@ Ext.extend(Tine.widgets.relation.GridRenderer, Ext.Component, {
             return '';
         }
         
-        if (! this.recordClass) {
-            if (! Tine[this.foreignApp] || ! Tine[this.foreignApp].Model) {
-                Tine.log.warn('Tine.widgets.relation.GridRenderer::render - ForeignApp not found: ' + this.foreignApp);
-                return '';
-            }
-            
-            this.recordClass = Tine[this.foreignApp].Model[this.foreignModel];
-        }
-        
         for (var index = 0; index < relations.length; index++) {
             var el = relations[index];
-            if (el.type == this.type && el.related_model == this.relModel) {
-                if (!el.related_record) {
-                    return i18n._('No Access');
-                }
-                var record = new this.recordClass(el.related_record);
-                return Ext.util.Format.htmlEncode(record.getTitle());
+            if (el.type == this.type && (!this.foreignModel || (el.related_model == this.relModel))) {
+                const recordClass = Tine.Tinebase.data.RecordMgr.get(el.related_model);
+                if (! recordClass) return '';
+                if (!el.related_record) return i18n._('No Access');
+
+                var record = new recordClass(el.related_record);
+                return `${Ext.util.Format.htmlEncode(record.getTitle())} (${recordClass.getModuleName()})`;
             }
         }
+    },
+
+    getRenderer() {
+        return _.bind(this.render, this);
     }
 });

@@ -151,6 +151,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 self::UNSIGNED => true,
                 'shy'     => TRUE,
                 self::NULLABLE => true,
+                'inputFilters' => array('Zend_Filter_Empty' => null),
             ),
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
@@ -167,6 +168,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'shy'     => TRUE,
                 self::NULLABLE => true,
                 self::UNSIGNED => true, // TODO FIXME doesnt work?!
+                'inputFilters' => array('Zend_Filter_Empty' => null),
             ),
             'iban' => array (
                 'label'   => 'IBAN',
@@ -186,6 +188,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'group'   => 'accounting',
                 self::NULLABLE => true,
                 self::UNSIGNED => true, // TODO FIXME doesnt work?!
+                'inputFilters' => array('Zend_Filter_Empty' => null),
             ),
             'delivery' => array (
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
