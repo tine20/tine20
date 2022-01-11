@@ -222,12 +222,26 @@
           user=$4
           token=$5
       
+          body="$(github_create_release_body $owner $repo $tag | jq -Rs .)"
+      
           curl -s \
               -X POST \
               -u "$user:$token" \
               -H "accept: application/vnd.github.v3+json" \
               "https://api.github.com/repos/$owner/$repo/releases" \
-              -d '{"tag_name":"'"$tag"'"}'
+              -d '{"tag_name":"'"$tag"'", "body":'"$body"'}'
+      }
+      
+      github_create_release_body() {
+          owner=$1
+          repo=$2
+          tag=$3
+      
+          previous_tag=$(github_get_latest_release_tag_name "$owner" "$repo")
+      
+          echo '# Releasenotes'
+          echo '# Changelog'
+          ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
       }
       
       github_release_add_asset() {
