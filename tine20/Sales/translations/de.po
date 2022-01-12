@@ -1692,7 +1692,7 @@ msgstr "Rabatt"
 
 #: js/DocumentPosition/AbstractGridPanel.js:268
 msgid "Total"
-msgstr "Gesammt"
+msgstr "Gesamt"
 
 #: js/CostCenterEditDialog.js:67
 msgid "Add New Cost Center"
