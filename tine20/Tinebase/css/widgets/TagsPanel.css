@@ -39,6 +39,7 @@
     font-size: 11px;
     font-weight: normal;
     font-style: italic;
+    overflow: hidden;
 }
 
 .x-widget-tag-tagitem-over {
