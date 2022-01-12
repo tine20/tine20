@@ -508,6 +508,12 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $return = '';
             foreach ($diff->diff as $attribute => $value) {
 
+                if (isset($mc->fields[$attribute]['specialType']) && $mc->fields[$attribute]['specialType'] === "password") {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' hidden value from password field: ' . $attribute);
+                    $value = '********';
+                }
+
                 if (is_array($value) && isset($value['model']) && isset($value['added'])) {
                     $tmpDiff = new Tinebase_Record_RecordSetDiff($value);
 
