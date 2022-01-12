@@ -952,7 +952,7 @@ msgstr "MwSt nach Satz"
 
 #: Model/Document/Abstract.php:306
 msgid "Gross Sum"
-msgstr "Brutto"
+msgstr "Endbetrag"
 
 #: Model/Document/Abstract.php:340
 msgid "Internal Note"
