@@ -79,14 +79,15 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @private
      */
     initComponent: function() {
-        Ext.copyTo(this, Tine.widgets.grid.PickerGridPanel.prototype, [
+        Ext.copyTo(Tine.widgets.grid.QuickaddGridPanel.prototype, Tine.widgets.grid.PickerGridPanel.prototype, [
             'initActionsAndToolbars',
             'onRowContextMenu',
             'onCreate',
             'getRecordDefaults',
             'onRemove',
             'actionRemoveUpdater',
-            'onRowDblClick'
+            'onRowDblClick',
+            'onEditDialogRecordUpdate'
             // 'setReadOnly' // see setReadOnly above
         ]);
 
