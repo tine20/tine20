@@ -924,7 +924,7 @@ msgstr "Ansprechpartner"
 
 #: Model/Document/Abstract.php:240
 msgid "Positions Net Sum"
-msgstr "Positions-Netto-Summe"
+msgstr "Zwischensumme"
 
 #: Model/Document/Abstract.php:248
 msgid "Positions Discount Sum"
