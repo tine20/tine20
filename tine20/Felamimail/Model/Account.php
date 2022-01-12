@@ -198,6 +198,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::SYSTEM => true, // ?
                 self::IS_VIRTUAL => true,
+                self::SPECIAL_TYPE => self::SPECIAL_TYPE_PASSWORD,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
