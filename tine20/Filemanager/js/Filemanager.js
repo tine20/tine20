@@ -44,31 +44,29 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
         const isFile = type(path) === 'file';
         const dir = isFile ? dirname(path) : path;
         
-        (function() {
-            var cp = this.getMainScreen().getCenterPanel(),
-                grid = cp.getGrid(),
-                store = cp.getStore(),
-                ftb = cp.filterToolbar,
-                highlight = function() {
-                    var sm = grid.getSelectionModel(),
-                        idx = store.findExact('path', path);
-                    if (idx >= 0) {
-                        sm.clearSelections();
-                        const row = grid.getView().getRow(idx);
-                        Ext.fly(row).highlight('#ffffff', {easing: 'bounceOut', duration: 1, endColor: '#dbecf4'});
-                        _.delay(() => { sm.selectRow(idx); }, 1000);
-                    }
-                };
+        var cp = this.getMainScreen().getCenterPanel(),
+            grid = cp.getGrid(),
+            store = cp.getStore(),
+            ftb = cp.filterToolbar,
+            highlight = function() {
+                var sm = grid.getSelectionModel(),
+                    idx = store.findExact('path', path);
+                if (idx >= 0) {
+                    sm.clearSelections();
+                    const row = grid.getView().getRow(idx);
+                    Ext.fly(row).highlight('#ffffff', {easing: 'bounceOut', duration: 1, endColor: '#dbecf4'});
+                    _.delay(() => { sm.selectRow(idx); }, 1000);
+                }
+            };
 
-            store.on('load', highlight, this, {single: true});
-            
-            const currentValue = ftb.getValue();
-            if (! (currentValue.length ===1 && currentValue[0].field === 'path' && currentValue[0].operator === 'equals'
-                && sanitize(currentValue[0].value) === dir)) {
-                ftb.setValue([{field: 'path', operator: 'equals', value: dir}]);
-                ftb.onFiltertrigger();
-            }
-        }).defer(500, this);
+        store.on('load', highlight, this, {single: true});
+
+        const currentValue = ftb.getValue();
+        if (! (currentValue.length ===1 && currentValue[0].field === 'path' && currentValue[0].operator === 'equals'
+            && sanitize(currentValue[0].value) === dir)) {
+            ftb.setValue([{field: 'path', operator: 'equals', value: dir}]);
+            ftb.onFiltertrigger();
+        }
     },
 
     getRoute(path) {
