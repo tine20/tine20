@@ -91,11 +91,6 @@ parameters:
 			path: tine20/ActiveSync/Server/Http.php
 
 		-
-			message: "#^Parameter \\$body of method ActiveSync_Server_Http\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Server/Http.php
-
-		-
 			message: "#^Method ActiveSync_Server_Plugin\\:\\:getServer\\(\\) should return Tinebase_Server_Interface but return statement is missing\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Server/Plugin.php
@@ -3917,6 +3912,16 @@ parameters:
 			path: tine20/Felamimail/Model/Sieve/Vacation.php
 
 		-
+			message: "#^Class Tinebase_Core referenced with incorrect case\\: Tinebase_core\\.$#"
+			count: 1
+			path: tine20/Felamimail/Setup/Update/13.php
+
+		-
+			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			count: 2
+			path: tine20/Felamimail/Setup/Update/13.php
+
+		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 1
 			path: tine20/Felamimail/Setup/Update/14.php
@@ -5738,21 +5743,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$otherDbName\\)\\: Unexpected token \"\\$otherDbName\", expected type at offset 77$#"
 			count: 1
 			path: tine20/Setup/SchemaTool.php
-
-		-
-			message: "#^Parameter \\$body of method Setup_Server_Cli\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/Setup/Server/Cli.php
-
-		-
-			message: "#^Parameter \\$body of method Setup_Server_Http\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/Setup/Server/Http.php
-
-		-
-			message: "#^Parameter \\$body of method Setup_Server_Json\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/Setup/Server/Json.php
 
 		-
 			message: "#^Parameter \\$_options of method Setup_Uninitialize\\:\\:_uninitialize\\(\\) has invalid typehint type optional\\.$#"
@@ -11375,11 +11365,6 @@ parameters:
 			path: tine20/Tinebase/Server/Cli.php
 
 		-
-			message: "#^Parameter \\$body of method Tinebase_Server_Cli\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Cli.php
-
-		-
 			message: "#^Access to an undefined property Tinebase_Server_Expressive\\:\\:\\$_requestFromGlobals\\.$#"
 			count: 2
 			path: tine20/Tinebase/Server/Expressive.php
@@ -11393,16 +11378,6 @@ parameters:
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/Http.php
-
-		-
-			message: "#^Parameter \\$body of method Tinebase_Server_Http\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Http.php
-
-		-
-			message: "#^Parameter \\$body of method Tinebase_Server_Interface\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Interface.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:DEBUG\\(\\)\\.$#"
@@ -11441,11 +11416,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$request\\)\\: Unexpected token \"\\$request\", expected type at offset 100$#"
-			count: 1
-			path: tine20/Tinebase/Server/Json.php
-
-		-
-			message: "#^Parameter \\$body of method Tinebase_Server_Json\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/Json.php
 
@@ -12770,11 +12740,6 @@ parameters:
 
 		-
 			message: "#^Method Tinebase_Controller\\:\\:logout\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: tine20/Voipmanager/Server/Asterisk.php
-
-		-
-			message: "#^Parameter \\$body of method Voipmanager_Server_Asterisk\\:\\:handle\\(\\) has invalid typehint type stream\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Server/Asterisk.php
 
