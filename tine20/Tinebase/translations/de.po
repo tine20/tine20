@@ -5052,6 +5052,9 @@ msgstr "Registrieren des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es e
 msgid "FIDO2 WebAuthn authentication failed. Try again?"
 msgstr "Authentifikation des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es erneut versuchen?"
 
+msgid "Please open the following URL in your Browser for more security key options"
+msgstr "Bitte öffnen sie die folgende URL in ihrem Browser um den Sicherheitsschlüssel zu verwalten"
+
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr ""
 "{gender, select, male {alle von} female {alle von} other {alle von}}"
