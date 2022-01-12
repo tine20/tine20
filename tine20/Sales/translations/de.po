@@ -563,7 +563,7 @@ msgstr "Einheit"
 
 #: Model/DocumentPosition/Abstract.php:278
 msgid "Unit price"
-msgstr "Preis pro Einheit"
+msgstr "Einzelpreis"
 
 #: Model/DocumentPosition/Abstract.php:283
 #: js/DocumentPosition/AbstractGridPanel.js:266
