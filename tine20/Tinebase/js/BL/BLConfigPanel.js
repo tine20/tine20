@@ -77,7 +77,6 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
         _.assign(this, Tine.widgets.grid.GridPanel.prototype.initGenericColumnModel.call(this));
         
         this.on('beforeaddrecord', this.onBeforeAddBLElementRecord, this);
-        this.on('celldblclick', this.onCellDoubleClick, this);
 
         this.supr().initComponent.call(this);
     },
@@ -114,7 +113,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
         return false;
     },
 
-    onCellDoubleClick: function(grid, row, col) {
+    onRowDblClick: function(grid, row, col) {
         if (! this.readOnly) {
             var configWrapper = this.store.getAt(row);
 
