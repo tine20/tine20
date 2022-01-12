@@ -30,6 +30,13 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      * @staticvar string
      */
     const RUN = 'run';
+
+    /**
+     * the right to see an application in the FE
+     *
+     * @staticvar string
+     */
+    const MAINSCREEN = 'mainscreen';
     
     /**
      * the right to manage shared folders of an application
@@ -60,9 +67,7 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      */
     public function getAllApplicationRights()
     {
-        $allRights = array ( self::RUN, self::ADMIN );
-        
-        return $allRights;
+        return [self::RUN, self::MAINSCREEN, self::ADMIN];
     }
 
     /**
@@ -83,6 +88,10 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
             self::RUN                   => array(
                 'text'          => $translate->_('run'),
                 'description'   => $translate->_('run right description'),
+            ),
+            self::MAINSCREEN            => array(
+                'text'          => $translate->_('mainscreen'),
+                'description'   => $translate->_('mainscreen right description'),
             ),
             self::USE_PERSONAL_TAGS     => array(
                 'text'          => $translate->_('Personal tags'),
