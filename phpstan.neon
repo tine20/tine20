@@ -1,6 +1,8 @@
 includes:
     - phpstan-baseline.neon
 parameters:
+    bootstrapFiles:
+        - ci/phpstan/bootstrap.php
     universalObjectCratesClasses:
       - Tinebase_Config_Abstract
       - Tinebase_Config_Struct

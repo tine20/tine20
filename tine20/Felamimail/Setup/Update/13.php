@@ -148,7 +148,7 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
         foreach (Tinebase_Core::getDb()->query('SELECT id,note FROM ' .
             SQL_TABLE_PREFIX . 'notes WHERE record_model = "Felamimail_Model_Account" and note like "%password%"')->fetchAll() as $row) {
 
-            Tinebase_core::getDB()->update(SQL_TABLE_PREFIX . 'notes', [
+            Tinebase_Core::getDB()->update(SQL_TABLE_PREFIX . 'notes', [
                 'note' => preg_replace('/password \( -> .*\) /','password ( -> ********)', $row['note'])
             ] , 'id = '. Tinebase_Core::getDb()->quote($row['id']));
         }
