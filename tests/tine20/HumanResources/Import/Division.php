@@ -11,7 +11,7 @@
 /**
  * Test class for Sales
  */
-class Sales_Import_Division extends TestCase
+class HumanResources_Import_Division extends TestCase
 {
     /**
      * @var Tinebase_Model_Container
@@ -21,22 +21,22 @@ class Sales_Import_Division extends TestCase
     protected function tearDown(): void
 {
         parent::tearDown();
-        self::clear('Sales','Division');
+        self::clear(HumanResources_Config::APP_NAME, HumanResources_Model_Division::MODEL_NAME_PART);
     }
 
     public function testImportDemoData()
     {
-        $this->clear('Sales','Division');
+        $this->clear(HumanResources_Config::APP_NAME, HumanResources_Model_Division::MODEL_NAME_PART);
         $now = Tinebase_DateTime::now();
-        $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_Division', [
-            'definition' => 'sales_import_division_csv',
+        $importer = new Tinebase_Setup_DemoData_Import(HumanResources_Model_Division::class, [
+            'definition' => 'hr_import_division_csv',
             'file' => 'division.csv'
         ]);
         $importer->importDemodata();
-        $filter = Sales_Model_DivisionFilter::getFilterForModel('Sales_Model_Division', [
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Division::class, [
             ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
-        $result = Sales_Controller_Division::getInstance()->search($filter);
+        $result = HumanResources_Controller_Division::getInstance()->search($filter);
         self::assertEquals(4, count($result));
     }
 }

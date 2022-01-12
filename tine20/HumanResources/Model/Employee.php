@@ -280,8 +280,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'label' => 'Division', //_('Division')
                 'type'  => 'record',
                 'config' => array(
-                    'appName'     => 'Sales',
-                    'modelName'   => 'Division',
+                    'appName'     => HumanResources_Config::APP_NAME,
+                    'modelName'   => HumanResources_Model_Division::MODEL_NAME_PART,
                     'idProperty'  => 'id'
                 )
             ),

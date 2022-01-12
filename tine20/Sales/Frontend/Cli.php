@@ -36,7 +36,6 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         'Sales_Model_Invoice' => 'sales_import_invoice_csv',
         'Sales_Model_PurchaseInvoice' => 'sales_import_purchaseinvoice_csv',
         'Sales_Model_CostCenter' => 'sales_import_costcenter_csv',
-        'Sales_Model_Division' => 'sales_import_division_csv', 
         'Sales_Model_Offer' => 'sales_import_offer_csv',
         'Sales_Model_OrderConfirmation' => 'sales_import_orderconfirmation'
     ];

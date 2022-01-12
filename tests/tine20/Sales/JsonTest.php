@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -709,39 +709,6 @@ class Sales_JsonTest extends TestCase
         
         $this->assertEquals(1, $result->count());
         $this->assertEquals(1, $result->getFirstRecord()->is_deleted);
-    }
-    
-    /**
-     * tests crud methods of division
-     */
-    public function testAllDivisionMethods()
-    {
-        $title = Tinebase_Record_Abstract::generateUID(10);
-        $d = $this->_instance->saveDivision(
-            array('title' => $title)
-        );
-        
-        $this->assertEquals(40, strlen($d['id']));
-        $this->assertEquals($title, $d['title']);
-        
-        $d = $this->_instance->getDivision($d['id']);
-        
-        $this->assertEquals(40, strlen($d['id']));
-        $this->assertEquals($title, $d['title']);
-        
-        $title = Tinebase_Record_Abstract::generateUID(10);
-        $d['title'] = $title;
-        
-        $d = $this->_instance->saveDivision($d);
-        
-        $this->assertEquals(40, strlen($d['id']));
-        $this->assertEquals($title, $d['title']);
-        
-        $this->_instance->deleteDivisions(array($d['id']));
-        
-        $this->expectException('Exception');
-        
-        $d = $this->_instance->getDivision($d['id']);
     }
     
     /**

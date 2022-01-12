@@ -43,6 +43,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::MODEL_NAME_PART,
         'Contract',
         'CostCenter',
+        HumanResources_Model_Division::MODEL_NAME_PART,
         'Employee',
         'Account',
         HumanResources_Model_FreeTimeType::MODEL_NAME_PART,

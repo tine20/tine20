@@ -216,10 +216,10 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @var string
      */
-    const ACTION_GET = 'get';
-    const ACTION_CREATE = 'create';
-    const ACTION_UPDATE = 'update';
-    const ACTION_DELETE = 'delete';
+    public const ACTION_GET = 'get';
+    public const ACTION_CREATE = 'create';
+    public const ACTION_UPDATE = 'update';
+    public const ACTION_DELETE = 'delete';
 
     protected $_getMultipleGrant = Tinebase_Model_Grants::GRANT_READ;
     protected $_requiredFilterACLget = [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADMIN];
@@ -2065,7 +2065,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     . ' of ' . count((array)$ids) . ' records exist.');
             }
 
-            if (empty($records)) {
+            if ($records->count() === 0) {
                 $raii->release();
                 return $records;
             }
