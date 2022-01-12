@@ -6,11 +6,6 @@ parameters:
 			path: tine20/ActiveSync/Controller.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 5
-			path: tine20/ActiveSync/Controller.php
-
-		-
 			message: "#^Parameter \\$_class of method ActiveSync_Controller_Device\\:\\:setDeviceContentFilter\\(\\) has invalid typehint type unknown_type\\.$#"
 			count: 1
 			path: tine20/ActiveSync/Controller/Device.php
@@ -396,11 +391,6 @@ parameters:
 			path: tine20/Addressbook/Convert/List/Json.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$record\\)\\: Unexpected token \"\\$record\", expected type at offset 18$#"
-			count: 1
-			path: tine20/Addressbook/Export/Doc.php
-
-		-
 			message: "#^Variable \\$listRolesResultSet might not be defined\\.$#"
 			count: 1
 			path: tine20/Addressbook/Export/List/Doc.php
@@ -449,11 +439,6 @@ parameters:
 			message: "#^Return typehint of method Addressbook_Frontend_CardDAV_AllContacts\\:\\:getChildren\\(\\) has invalid type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Addressbook/Frontend/CardDAV/AllContacts.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Addressbook/Frontend/Cli.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_opts\\)\\: Unexpected token \"\\$_opts\", expected type at offset 335$#"
@@ -574,11 +559,6 @@ parameters:
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$application$#"
 			count: 1
 			path: tine20/Addressbook/Setup/Initialize.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 5
-			path: tine20/Addressbook/Setup/Update/Release11.php
 
 		-
 			message: "#^Method Addressbook_Setup_Update_Release11\\:\\:update_15\\(\\) should return Set but return statement is missing\\.$#"
@@ -1951,11 +1931,6 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Convert_Interface\\:\\:toTine20RecordSet\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/Cli.php
@@ -2119,11 +2094,6 @@ parameters:
 			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getEmail\\(\\)\\.$#"
 			count: 2
 			path: tine20/Calendar/Frontend/iMIP.php
-
-		-
-			message: "#^Method Calendar_Import_Abstract\\:\\:_getRawData\\(\\) should return array but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Calendar/Import/Abstract.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$event\\)\\: Unexpected token \"\\$event\", expected type at offset 18$#"
@@ -3791,21 +3761,6 @@ parameters:
 			path: tine20/Felamimail/Model/Sieve/Vacation.php
 
 		-
-			message: "#^Class Tinebase_Core referenced with incorrect case\\: Tinebase_core\\.$#"
-			count: 1
-			path: tine20/Felamimail/Setup/Update/13.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Felamimail/Setup/Update/13.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Felamimail/Setup/Update/14.php
-
-		-
 			message: "#^Call to method update_2\\(\\) on an unknown class Felamimail_Setup_Update_Release9\\.$#"
 			count: 1
 			path: tine20/Felamimail/Setup/Update/Release10.php
@@ -4526,16 +4481,6 @@ parameters:
 			path: tine20/HumanResources/Setup/DemoData.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 4
-			path: tine20/HumanResources/Setup/Update/12.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 7
-			path: tine20/HumanResources/Setup/Update/13.php
-
-		-
 			message: "#^Call to method update_0\\(\\) on an unknown class HumanResources_Setup_Update_Release9\\.$#"
 			count: 1
 			path: tine20/HumanResources/Setup/Update/Release10.php
@@ -4552,11 +4497,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Phone_Backend_Asterisk\\:\\:\\$_db\\.$#"
-			count: 1
-			path: tine20/Phone/Backend/Asterisk.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
 			count: 1
 			path: tine20/Phone/Backend/Asterisk.php
 
@@ -4626,11 +4566,6 @@ parameters:
 			path: tine20/Phone/Frontend/Snom.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Phone/Setup/Update/12.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the accountd object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
 			count: 1
 			path: tine20/Projects/Controller.php
@@ -4666,23 +4601,8 @@ parameters:
 			path: tine20/SSO/Facade/SAML/Session.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Sales/Backend/Address.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Sales/Backend/Contract.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:getAll\\(\\)\\.$#"
 			count: 2
-			path: tine20/Sales/Backend/Number.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
 			path: tine20/Sales/Backend/Number.php
 
 		-
@@ -5081,11 +5001,6 @@ parameters:
 			path: tine20/Sales/Setup/DemoData.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Sales/Setup/Update/14.php
-
-		-
 			message: "#^Call to an undefined static method Sales_Setup_Update_Release12\\:\\:createDefaultFavoritesForContracts\\(\\)\\.$#"
 			count: 1
 			path: tine20/Sales/Setup/Update/Release12.php
@@ -5098,11 +5013,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Setup_Backend_Schema_Table_Abstract\\:\\:\\$requirements\\.$#"
 			count: 1
-			path: tine20/Setup/Backend/Abstract.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 20
 			path: tine20/Setup/Backend/Abstract.php
 
 		-
@@ -5158,11 +5068,6 @@ parameters:
 		-
 			message: "#^Binary operation \"\\.\" between '\\(`' and array results in an error\\.$#"
 			count: 1
-			path: tine20/Setup/Backend/Mysql.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 14
 			path: tine20/Setup/Backend/Mysql.php
 
 		-
@@ -5251,11 +5156,6 @@ parameters:
 			path: tine20/Setup/Backend/Schema/Index/Mysql.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Setup/Backend/Schema/Index/Mysql.php
-
-		-
 			message: "#^Access to an undefined property Setup_Backend_Schema_Index_Oracle\\:\\:\\$autoincrement\\.$#"
 			count: 1
 			path: tine20/Setup/Backend/Schema/Index/Oracle.php
@@ -5311,11 +5211,6 @@ parameters:
 			path: tine20/Setup/Backend/Schema/Index/Pgsql.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Setup/Backend/Schema/Index/Pgsql.php
-
-		-
 			message: "#^Access to an undefined property Setup_Backend_Schema_Index_Xml\\:\\:\\$referenceField\\.$#"
 			count: 1
 			path: tine20/Setup/Backend/Schema/Index/Xml.php
@@ -5324,11 +5219,6 @@ parameters:
 			message: "#^Access to an undefined property Setup_Backend_Schema_Index_Xml\\:\\:\\$referenceTable\\.$#"
 			count: 1
 			path: tine20/Setup/Backend/Schema/Index/Xml.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 3
-			path: tine20/Setup/Backend/Schema/Table/Abstract.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_declaration$#"
@@ -5388,11 +5278,6 @@ parameters:
 		-
 			message: "#^Constant MAXLOOPCOUNT not found\\.$#"
 			count: 4
-			path: tine20/Setup/Controller.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
 			path: tine20/Setup/Controller.php
 
 		-
@@ -5534,11 +5419,6 @@ parameters:
 			path: tine20/Setup/Frontend/Cli.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 4
-			path: tine20/Setup/Frontend/Cli.php
-
-		-
 			message: "#^Constant TINE20_BUILDTYPE not found\\.$#"
 			count: 1
 			path: tine20/Setup/Frontend/Cli.php
@@ -5609,11 +5489,6 @@ parameters:
 			path: tine20/Setup/Import/Abstract.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Setup/SchemaTool.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$otherDbName\\)\\: Unexpected token \"\\$otherDbName\", expected type at offset 77$#"
 			count: 1
 			path: tine20/Setup/SchemaTool.php
@@ -5636,11 +5511,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getUserByPropertyFromSqlBackend\\(\\)\\.$#"
 			count: 1
-			path: tine20/Setup/Update/Abstract.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 8
 			path: tine20/Setup/Update/Abstract.php
 
 		-
@@ -5814,11 +5684,6 @@ parameters:
 			path: tine20/Tasks/Setup/MigrateFromEgw14.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tasks/Setup/MigrateFromEgw14.php
-
-		-
 			message: "#^Return typehint of method Tasks_Setup_MigrateFromTine14\\:\\:getClass\\(\\) has invalid type id\\.$#"
 			count: 1
 			path: tine20/Tasks/Setup/MigrateFromEgw14.php
@@ -5832,11 +5697,6 @@ parameters:
 			message: "#^Variable \\$Task20 might not be defined\\.$#"
 			count: 1
 			path: tine20/Tasks/Setup/MigrateFromEgw14.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tasks/Setup/Update/Release11.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_db$#"
@@ -5969,11 +5829,6 @@ parameters:
 			path: tine20/Tinebase/Acl/Roles.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 16
-			path: tine20/Tinebase/Acl/Roles.php
-
-		-
 			message: "#^Method Tinebase_Backend_Interface\\:\\:getMultiple\\(\\) invoked with 4 parameters, 1\\-2 required\\.$#"
 			count: 1
 			path: tine20/Tinebase/Acl/Roles.php
@@ -6084,11 +5939,6 @@ parameters:
 			path: tine20/Tinebase/ActionQueue/Worker.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 9
-			path: tine20/Tinebase/Application.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_applicationId\\)\\: Unexpected token \"\\$_applicationId\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/Application.php
@@ -6159,11 +6009,6 @@ parameters:
 			path: tine20/Tinebase/Auth/CredentialCache.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Auth/CredentialCache.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_data\\)\\: Unexpected token \"\\$_data\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/Auth/CredentialCache.php
@@ -6172,11 +6017,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_key\\)\\: Unexpected token \"\\$_key\", expected type at offset 39$#"
 			count: 1
 			path: tine20/Tinebase/Auth/CredentialCache.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 3
-			path: tine20/Tinebase/Auth/Factory.php
 
 		-
 			message: "#^Constructor of class Tinebase_Auth_MFA_HTOTPAdapter has an unused parameter \\$_config\\.$#"
@@ -6244,11 +6084,6 @@ parameters:
 			path: tine20/Tinebase/Backend/Sql/Abstract.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Backend/Sql/Abstract.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_bool\\)\\: Unexpected token \"\\$_bool\", expected type at offset 57$#"
 			count: 1
 			path: tine20/Tinebase/Backend/Sql/Abstract.php
@@ -6284,11 +6119,6 @@ parameters:
 			path: tine20/Tinebase/Backend/Sql/Adapter/Pdo/Mysql.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tinebase/Backend/Sql/Adapter/Pdo/Mysql.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$dbConfigArray\\)\\: Unexpected token \"\\$dbConfigArray\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/Backend/Sql/Adapter/Pdo/Mysql.php
@@ -6317,11 +6147,6 @@ parameters:
 			message: "#^Access to an undefined static property Tinebase_Backend_Sql_Factory_Abstract\\:\\:\\$_db\\.$#"
 			count: 1
 			path: tine20/Tinebase/Backend/Sql/Factory/Abstract.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 6
-			path: tine20/Tinebase/Backend/Sql/Grants.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_bool\\)\\: Unexpected token \"\\$_bool\", expected type at offset 56$#"
@@ -6411,11 +6236,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getUserByPropertyFromSqlBackend\\(\\)\\.$#"
 			count: 2
-			path: tine20/Tinebase/Container.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 17
 			path: tine20/Tinebase/Container.php
 
 		-
@@ -6849,11 +6669,6 @@ parameters:
 			path: tine20/Tinebase/Core.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Core.php
-
-		-
 			message: "#^Constant TINE20_CODENAME not found\\.$#"
 			count: 1
 			path: tine20/Tinebase/Core.php
@@ -6919,11 +6734,6 @@ parameters:
 			path: tine20/Tinebase/CustomField.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/CustomField/Config.php
-
-		-
 			message: "#^Variable \\$record in PHPDoc tag @var does not match assigned variable \\$model\\.$#"
 			count: 1
 			path: tine20/Tinebase/CustomField/Config.php
@@ -6962,11 +6772,6 @@ parameters:
 			message: "#^Variable \\$date might not be defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/DateTime.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tinebase/Db/Table.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_User_Plugin_Abstract\\:\\:emailAddressExists\\(\\)\\.$#"
@@ -7634,11 +7439,6 @@ parameters:
 			path: tine20/Tinebase/FileSystem.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 4
-			path: tine20/Tinebase/FileSystem.php
-
-		-
 			message: "#^Method Tinebase_Lock_Interface\\:\\:tryAcquire\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: tine20/Tinebase/FileSystem.php
@@ -7891,11 +7691,6 @@ parameters:
 		-
 			message: "#^Call to static method getInstance\\(\\) on an unknown class Tinebase_Tinemachine_ModificationLog\\.$#"
 			count: 1
-			path: tine20/Tinebase/Frontend/Cli.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 8
 			path: tine20/Tinebase/Frontend/Cli.php
 
 		-
@@ -8279,11 +8074,6 @@ parameters:
 			path: tine20/Tinebase/Frontend/WebDAV/Record.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 3
-			path: tine20/Tinebase/Fulltext/Indexer.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Group_Abstract&Tinebase_Group_Interface_SyncAble\\:\\:addGroupInSqlBackend\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Group.php
@@ -8411,11 +8201,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getUsersByPrimaryGroup\\(\\)\\.$#"
 			count: 1
-			path: tine20/Tinebase/Group/Sql.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 21
 			path: tine20/Tinebase/Group/Sql.php
 
 		-
@@ -8605,11 +8390,6 @@ parameters:
 
 		-
 			message: "#^Method Tinebase_Import_Abstract\\:\\:_addData\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$importedRecord\\)\\: Unexpected token \"\\$importedRecord\", expected type at offset 70$#"
 			count: 1
 			path: tine20/Tinebase/Import/Abstract.php
 
@@ -8862,11 +8642,6 @@ parameters:
 			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:rawCommand\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Lock/Redis.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Log.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$loggerConfig\\)\\: Unexpected token \"\\$loggerConfig\", expected type at offset 78$#"
@@ -9369,19 +9144,9 @@ parameters:
 			path: tine20/Tinebase/Model/Filter/CustomField.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/CustomField.php
-
-		-
 			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/Date.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/ExternalFullText.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_filterData\\)\\: Unexpected token \"\\$_filterData\", expected type at offset 98$#"
@@ -9402,11 +9167,6 @@ parameters:
 			message: "#^Method Tinebase_Model_Filter_ForeignRecord\\:\\:_setFilterGroup\\(\\) should return Tinebase_Model_Filter_FilterGroup but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/ForeignRecord.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/GrantsFilterGroup.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(Zend_Db_Select\\|\\|Tinebase_Backend_Sql_Filter_GroupSelect \\$select\\)\\: Unexpected token \"\\|\", expected type at offset 96$#"
@@ -9437,11 +9197,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$condition\\)\\: Unexpected token \"\\$condition\", expected type at offset 113$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/Query.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/Tag.php
 
 		-
 			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime          created\\)\\: Unexpected token \"created\", expected variable at offset 297$#"
@@ -9959,11 +9714,6 @@ parameters:
 			path: tine20/Tinebase/Model/Pagination.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 5
-			path: tine20/Tinebase/Model/Pagination.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(Zend_Db_Select\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 103$#"
 			count: 1
 			path: tine20/Tinebase/Model/Pagination.php
@@ -10149,19 +9899,9 @@ parameters:
 			path: tine20/Tinebase/Model/SchedulerTask.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 2
-			path: tine20/Tinebase/Model/TagFilter.php
-
-		-
 			message: "#^Method Zend_Db_Select\\:\\:order\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Tinebase/Model/TagFilter.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/TagRight.php
 
 		-
 			message: "#^PHPDoc tag @property has invalid value \\(int     size\\)\\: Unexpected token \"size\", expected variable at offset 233$#"
@@ -10414,11 +10154,6 @@ parameters:
 			path: tine20/Tinebase/Model/Tree/Node.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Tree/Node/Filter.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getUserByPropertyFromSqlBackend\\(\\)\\.$#"
 			count: 6
 			path: tine20/Tinebase/Model/Tree/Node/Path.php
@@ -10571,11 +10306,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Zend_Translate\\:\\:_\\(\\)\\.$#"
 			count: 2
-			path: tine20/Tinebase/Notes.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 8
 			path: tine20/Tinebase/Notes.php
 
 		-
@@ -10849,11 +10579,6 @@ parameters:
 			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$config\\)\\: Unexpected token \"\\$config\", expected type at offset 70$#"
 			count: 1
 			path: tine20/Tinebase/Record/DoctrineMappingDriver.php
@@ -11014,11 +10739,6 @@ parameters:
 			path: tine20/Tinebase/Record/PersistentObserver.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Record/PersistentObserver.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$identifier\\)\\: Unexpected token \"\\$identifier\", expected type at offset 67$#"
 			count: 1
 			path: tine20/Tinebase/Record/PersistentObserver.php
@@ -11081,11 +10801,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:get\\(\\)\\.$#"
 			count: 2
-			path: tine20/Tinebase/Relation/Backend/Sql.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 4
 			path: tine20/Tinebase/Relation/Backend/Sql.php
 
 		-
@@ -11564,21 +11279,6 @@ parameters:
 			path: tine20/Tinebase/Setup/Import/Egw14/Abstract.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 5
-			path: tine20/Tinebase/Setup/Update/12.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 14
-			path: tine20/Tinebase/Setup/Update/13.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 5
-			path: tine20/Tinebase/Setup/Update/14.php
-
-		-
 			message: "#^Call to method update_11\\(\\) on an unknown class Tinebase_Setup_Update_Release9\\.$#"
 			count: 1
 			path: tine20/Tinebase/Setup/Update/Release10.php
@@ -11616,11 +11316,6 @@ parameters:
 		-
 			message: "#^Comparison operation \"\\>\" between SimpleXMLElement and 19 results in an error\\.$#"
 			count: 1
-			path: tine20/Tinebase/Setup/Update/Release10.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 33
 			path: tine20/Tinebase/Setup/Update/Release10.php
 
 		-
@@ -11674,11 +11369,6 @@ parameters:
 			path: tine20/Tinebase/Setup/Update/Release11.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 8
-			path: tine20/Tinebase/Setup/Update/Release11.php
-
-		-
 			message: "#^Instantiated class Tinebase_Setup_Update_Release9 not found\\.$#"
 			count: 4
 			path: tine20/Tinebase/Setup/Update/Release11.php
@@ -11697,11 +11387,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$state\\)\\: Unexpected token \"\\$state\", expected type at offset 18$#"
 			count: 1
 			path: tine20/Tinebase/State.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 24
-			path: tine20/Tinebase/Tags.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:DEBUG\\(\\)\\.$#"
@@ -11934,11 +11619,6 @@ parameters:
 			path: tine20/Tinebase/Timemachine/ModificationLog.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/Timemachine/ModificationLog.php
-
-		-
 			message: "#^Instantiated class Tinebase_Exception_InvalidArgurment not found\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/ModificationLog.php
@@ -11989,11 +11669,6 @@ parameters:
 			path: tine20/Tinebase/Tree.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 9
-			path: tine20/Tinebase/Tree/FileObject.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getTitle\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Twig.php
@@ -12039,19 +11714,9 @@ parameters:
 			path: tine20/Tinebase/User/ActiveDirectory.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/User/ActiveDirectory.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$timestamp\\)\\: Unexpected token \"\\$timestamp\", expected type at offset 206$#"
 			count: 1
 			path: tine20/Tinebase/User/ActiveDirectory.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/User/Ldap.php
 
 		-
 			message: "#^Variable \\$accountArray might not be defined\\.$#"
@@ -12096,11 +11761,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
 			count: 7
-			path: tine20/Tinebase/User/Sql.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 25
 			path: tine20/Tinebase/User/Sql.php
 
 		-
@@ -12309,11 +11969,6 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/Inverse.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Tinebase/WebDav/Plugin/LockBackend.php
-
-		-
 			message: "#^Call to an undefined method DOMNode\\:\\:getElementsByTagName\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/PrincipalSearch.php
@@ -12444,11 +12099,6 @@ parameters:
 			path: tine20/Voipmanager/Backend/Snom/Xml.php
 
 		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 8
-			path: tine20/Voipmanager/Backend/Snom/Xml.php
-
-		-
 			message: "#^Parameter \\$_db of method Voipmanager_Backend_Snom_Xml\\:\\:__construct\\(\\) has invalid typehint type optional\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Backend/Snom/Xml.php
@@ -12551,11 +12201,6 @@ parameters:
 			message: "#^Return typehint of method Voipmanager_Frontend_Json\\:\\:updatePropertiesAsteriskSipPeer\\(\\) has invalid type updated\\.$#"
 			count: 1
 			path: tine20/Voipmanager/Frontend/Json.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/Voipmanager/Frontend/Snom/Abstract.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_phoneSettingId$#"
