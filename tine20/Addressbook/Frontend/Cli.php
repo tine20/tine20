@@ -544,6 +544,67 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * @param Zend_Console_Getopt $opts
+     * usage: method=Addressbook.importGroupMailingList csv="verteilerliste.csv" list="TestList" containerId="5c3906b5976985252145b25d7f6f4afe279d1993" duplicate=false
+     * csv file
+     * liste string
+     * containerId string
+     * duplicate bool
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function importGroupMailingList(Zend_Console_Getopt $opts)
+    {
+        $args = $this->_parseArgs($opts);
+        $csv = $args['csv'];
+        $listName = $args['list'];
+        $containerId = $args['containerId'];
+        $duplicate = ($args['duplicate']) ? $args['duplicate'] : true;
+
+        if (!$csv || !$containerId || !$listName) {
+            return 2;
+        }
+
+        $stream = fopen($csv, 'r');
+        if (!$stream) {
+            echo "file could not be opened: " . $csv . "\n";
+            return 2;
+        }
+
+        $list = Addressbook_Controller_List::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_List::class, [
+            ['field' => 'name', 'operator' => 'equals', 'value' => $listName]]))
+            ->getFirstRecord();
+
+        if(!$list) {
+            $list = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List(
+                ['name' => $listName]));
+        }
+
+        while ($line = fgetcsv($stream, 0, ';')) {
+            $contact = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Addressbook_Model_Contact::class, [
+                ['field' => 'n_fileas', 'operator' => 'equals', 'value' => $line[0]]]))
+                ->getFirstRecord();
+            if (!$contact) {
+                    $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(
+                    ['n_fileas' => $line[0],
+                        'email' => $line[1],
+                        'container_id' => $containerId]
+                ), false);
+            }
+            Addressbook_Controller_List::getInstance()->addListMember($list, $contact, $duplicate);
+        }
+
+        fclose($stream);
+        return 0;
+    }
+
+    /**
      *    -d (dry run)
      *    e.g. php tine20.php --method=Addressbook.clearUserContactsWithoutUser -d
      * @param Zend_Console_Getopt $opts
