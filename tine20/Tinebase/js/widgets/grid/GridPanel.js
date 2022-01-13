@@ -601,7 +601,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 appName = this.recordClass.getMeta('appName'),
                 modelName = this.recordClass.getMeta('modelName');
 
-            Ext.each(this.modelConfig.fieldKeys, function(key) {
+            Ext.each(this.columns || this.modelConfig.fieldKeys, function(key) {
+                if (! Ext.isString(key)) {
+                    columns.push(key);
+                    return;
+                }
                 var config = Tine.widgets.grid.ColumnManager.get(appName, modelName, key, 'mainScreen');
                 
                 // @todo thats just a hotfix!
