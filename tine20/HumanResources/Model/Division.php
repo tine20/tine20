@@ -35,6 +35,7 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
         self::CREATE_MODULE             => true,
+        self::EXPOSE_JSON_API           => true,
         self::TITLE_PROPERTY            => self::FLD_TITLE,
 
         self::TABLE                     => [
