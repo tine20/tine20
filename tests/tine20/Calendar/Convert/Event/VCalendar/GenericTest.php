@@ -70,6 +70,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         
         $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
         $this->assertEquals('Hamburg',                           $event->location);
+        $this->assertEquals('https://www.test.com',              $event->url);
         $this->assertEquals('Europe/Berlin',                     $event->originator_tz);
         $this->assertEquals("2011-10-04 10:00:00",               (string)$event->dtend);
         $this->assertEquals("2011-10-04 08:00:00",               (string)$event->dtstart);
