@@ -285,7 +285,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             ], $adminGrants);
         }
 
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grants,true);
+        return new Tinebase_Record_RecordSet(static::class, $grants, true);
     }
 
     /**
@@ -307,7 +307,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             Tinebase_Model_Grants::GRANT_ADMIN     => true,
         );
         $grants = array_merge($grants, $_additionalGrants);
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array_merge(array(
+        return new Tinebase_Record_RecordSet(static::class, array(array_merge(array(
             'account_id'     => $accountId,
             'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
         ), $grants)));
@@ -396,9 +396,9 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      */
     public static function recordSetDiff(Tinebase_Record_RecordSet $_recordSetOne, Tinebase_Record_RecordSet $_recordSetTwo)
     {
-        $shallowCopyTwo = new Tinebase_Record_RecordSet(self::class);
-        $removed = new Tinebase_Record_RecordSet(self::class);
-        $added = new Tinebase_Record_RecordSet(self::class);
+        $shallowCopyTwo = new Tinebase_Record_RecordSet(static::class);
+        $removed = new Tinebase_Record_RecordSet(static::class);
+        $added = new Tinebase_Record_RecordSet(static::class);
         $modified = new Tinebase_Record_RecordSet('Tinebase_Record_Diff');
 
         foreach ($_recordSetTwo as $grantTwo) {
@@ -441,7 +441,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         }
 
         $result = new Tinebase_Record_RecordSetDiff(array(
-            'model'    => self::class,
+            'model'    => static::class,
             'added'    => $added,
             'removed'  => $removed,
             'modified' => $modified,
