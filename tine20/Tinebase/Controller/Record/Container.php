@@ -189,7 +189,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      */
     public function getGrantsOfAccount($_accountId, $_record, $_ignoreAcl = FALSE)
     {
-        $record = ($_record instanceof Tinebase_Record_Interface) ? $_record : Tinebase_Controller_Record_Container::getInstance()->get($_record);
+        $record = ($_record instanceof Tinebase_Record_Interface) ? $_record : $this->get($_record);
         $container = Tinebase_Container::getInstance()->getContainerById($record->container_id);
         $cache = Tinebase_Core::getCache();
         $cacheId = Tinebase_Helper::convertCacheId(__METHOD__
