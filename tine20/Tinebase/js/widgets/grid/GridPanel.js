@@ -1821,7 +1821,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.actionToolbar.on('resize', this.onActionToolbarResize, this, {buffer: 250});
             this.actionToolbar.on('show', this.onActionToolbarResize, this);
 
-            if (this.filterToolbar && typeof this.filterToolbar.getQuickFilterField == 'function') {
+            if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }
             
