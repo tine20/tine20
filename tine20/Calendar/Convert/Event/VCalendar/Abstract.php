@@ -1226,7 +1226,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'EXDATE':
                     // ignore this, we dont want it to land in default -> imipProps!
                     break;
-
+                case 'URL':
+                    $event->url = $property->getValue();
+                    break;
                 default:
                     // thunderbird saves snooze time for recurring event occurrences in properties with names like this -
                     // we just assume that the event/recur series has only one snooze time 

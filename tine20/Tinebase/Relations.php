@@ -345,6 +345,22 @@ class Tinebase_Relations
     }
 
     /**
+     * @param Tinebase_Model_Relation $relation
+     * @param Tinebase_Record_Interface $record
+     * @return void
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    public function addRelation(Tinebase_Model_Relation $relation, Tinebase_Record_Interface $record)
+    {
+        $model = get_class($record);
+        // TODO allow different backends?
+        $backend = 'Sql';
+        $relations = $this->getRelations($model, $backend, $record->getId() /* ignore acl? ... ? */);
+        $relations->addRecord($relation);
+        $this->setRelations($model, $backend, $record->getId(), $relations);
+    }
+
+    /**
      * validate constraints from the own and the other side.
      * this may be very expensive, if there are many constraints to check.
      *

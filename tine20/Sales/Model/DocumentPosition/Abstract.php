@@ -275,7 +275,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::NAME                          => Sales_Config::PRODUCT_UNIT,
             ],
             self::FLD_UNIT_PRICE                => [
-                self::LABEL                         => 'Unit price', // _('Unit price')
+                self::LABEL                         => 'Unit Price', // _('Unit Price')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::NULLABLE                      => true,
             ],

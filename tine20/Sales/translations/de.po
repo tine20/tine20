@@ -544,7 +544,7 @@ msgstr "Sortierung"
 
 #: Model/DocumentPosition/Abstract.php:241
 msgid "Product / Service"
-msgstr "Produkt/Service"
+msgstr "Produkt / Service"
 
 #: Model/DocumentPosition/Abstract.php:261 Model/ProductAggregate.php:82
 #: Model/InvoicePosition.php:98 js/ProductAggregateGridPanel.js:160
@@ -562,7 +562,7 @@ msgid "Unit"
 msgstr "Einheit"
 
 #: Model/DocumentPosition/Abstract.php:278
-msgid "Unit price"
+msgid "Unit Price"
 msgstr "Einzelpreis"
 
 #: Model/DocumentPosition/Abstract.php:283

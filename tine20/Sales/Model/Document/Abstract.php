@@ -49,7 +49,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
     public const FLD_GROSS_SUM = 'gross_sum';
 
-    public const FLD_PAYMENT_METHOD = 'payment_method'; // Sales_Model_PaymentMethod KeyField
+    public const FLD_PAYMENT_TERMS = 'credit_term';
 
     public const FLD_COST_CENTER_ID = 'cost_center_id';
     public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
@@ -311,9 +311,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
             ],
 
-            self::FLD_PAYMENT_METHOD            => [
-                self::LABEL                         => 'Payment Method', //_('Payment Method')
-                self::TYPE                          => self::TYPE_KEY_FIELD,
+            self::FLD_PAYMENT_TERMS             => [
+                self::LABEL                         => 'Credit Term (days)', // _('Credit Term (days)')
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::UNSIGNED                      => true,
+                self::SHY                           => TRUE,
                 self::NAME                          => Sales_Config::PAYMENT_METHODS,
                 self::NULLABLE                      => true,
             ],
