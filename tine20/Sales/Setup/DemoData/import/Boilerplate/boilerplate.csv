@@ -24,18 +24,18 @@ Alle Preise verstehen sich zzgl. der gesetzlich gültigen Mehrwertsteuer.
 
 Mit freundlichen Grüßen
 Ihr tine Team",STANDARD,de
-Sales_Model_Document_DeliveryNote,pretext,"Sehr geehrte Damen und Heren,
+Sales_Model_Document_Delivery,pretext,"Sehr geehrte Damen und Heren,
 
 wir bedanken uns für die vertrauensvolle Zusammenarbeit und liefern Ihnen vereinbarungsgemäß folgende Waren:",STANDARD,de
-Sales_Model_Document_DeliveryNote,posttext,"Bitte bestätigen Sie den Erhalt der Ware mit Datum und Unterschrift:
+Sales_Model_Document_Delivery,posttext,"Bitte bestätigen Sie den Erhalt der Ware mit Datum und Unterschrift:
 
 
 Vielen Dank
 Ihr tine Team",STANDARD,de
-Sales_Model_Document_DeliveryNote,pretext PACKAGING_LIST,"Lieber Mitarbeiter/Dienstleister,
+Sales_Model_Document_Delivery,pretext PACKAGING_LIST,"Lieber Mitarbeiter/Dienstleister,
 
 wir bitten folgende Waren zu prüfen und für den Versand zusammenzustellen:",STANDARD,de
-Sales_Model_Document_DeliveryNote,posttext PACKAGING_LIST,"Bitte allgemeine Hinweise und Notizen hier vermerken:
+Sales_Model_Document_Delivery,posttext PACKAGING_LIST,"Bitte allgemeine Hinweise und Notizen hier vermerken:
 
 Vielen Dank
 Ihr tine Team",STANDARD,de
@@ -80,18 +80,18 @@ All prices are exclusive of the legally valid value added tax.
 
 With kind regards
 Your tine Team",STANDARD,en
-Sales_Model_Document_DeliveryNote,pretext,"Dear Sir or Madam,
+Sales_Model_Document_Delivery,pretext,"Dear Sir or Madam,
 
 we thank you for the trustful cooperation and deliver the following goods as agreed:",STANDARD,en
-Sales_Model_Document_DeliveryNote,posttext,"Please confirm receipt of the goods with date and signature:
+Sales_Model_Document_Delivery,posttext,"Please confirm receipt of the goods with date and signature:
 
 
 Thank you
 Your tine team",STANDARD,en
-Sales_Model_Document_DeliveryNote,pretext PACKAGING_LIST,"Dear Employee/Service Provider,
+Sales_Model_Document_Delivery,pretext PACKAGING_LIST,"Dear Employee/Service Provider,
 
 we kindly ask you to check and assemble the following goods for shipment:",STANDARD,en
-Sales_Model_Document_DeliveryNote,posttext PACKAGING_LIST,"Please note any general comments or notes here:
+Sales_Model_Document_Delivery,posttext PACKAGING_LIST,"Please note any general comments or notes here:
 
 Thank you
 Your tine Team",STANDARD,en
