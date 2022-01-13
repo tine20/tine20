@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <name>sales_import_division_csv</name>
-    <model>Sales_Model_Division</model>
+    <name>hr_import_division_csv</name>
+    <model>HumanResources_Model_Division</model>
     <plugin>Tinebase_Import_Csv_Generic</plugin>
     <type>import</type>
     <headline>1</headline>

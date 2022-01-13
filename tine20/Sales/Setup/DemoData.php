@@ -705,26 +705,15 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
         ;
 
-        $be = new Sales_Backend_CostCenter();
-        $be->setModlogActive(FALSE);
-        $allCC = $be->getAll();
-
         $id = 1;
         foreach($ccs as $title) {
             $cc = new Sales_Model_CostCenter(
                 array('remark' => $title, 'number' => $id)
             );
             try {
-                $record = $controller->create($cc);
-                $this->_costCenters->addRecord($record);
+                $controller->create($cc);
             } catch (Zend_Db_Statement_Exception $e) {
-                $cc = $allCC->filter('number', $id)->getFirstRecord();
-                $cc->is_deleted = 0;
-                $this->_costCenters->addRecord($be->update($cc));
             } catch (Tinebase_Exception_Duplicate $e) {
-                $cc = $allCC->filter('number', $e->getClientRecord()->number)->getFirstRecord();
-                $cc->is_deleted = 0;
-                $this->_costCenters->addRecord($be->update($cc));
             }
 
             $id++;
@@ -736,7 +725,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ;
 
         foreach($divisionsArray as $divisionName) {
-            Sales_Controller_Division::getInstance()->create(new Sales_Model_Division(array('title' => $divisionName)));
+            try {
+                HumanResources_Controller_Division::getInstance()->create(new HumanResources_Model_Division(array('title' => $divisionName)));
+            } catch (Zend_Db_Statement_Exception $e) {
+            } catch (Tinebase_Exception_Duplicate $e) {}
         }
 
         $this->_loadCostCentersAndDivisions();

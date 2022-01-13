@@ -7,7 +7,11 @@
  * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
+.HumanResourcesDivision {
+    background-image:url(../../images/icon-set/icon_department.svg) !important;
+}
+
 .HumanResourcesEmployee, .HumanResourcesIconCls {
     background-image:url(../../images/icon-set/icon_human_resources.svg) !important;
 }

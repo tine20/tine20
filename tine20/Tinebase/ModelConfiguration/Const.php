@@ -88,11 +88,14 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER_MODEL = 'filterModel';
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
+    const FLD_CONTAINER_ID = 'container_id';
     const FLD_DELETED_TIME = 'deleted_time';
     const FLD_LOCALLY_CHANGED = 'locally_changed';
     const FLD_ORIGINAL_ID = 'original_id';
     const FORCE_VALUES = 'forceValues';
     const FUNCTION = 'function';
+
+    const GRANTS_MODEL = 'grantsModel';
 
     const HAS_ATTACHMENTS = 'hasAttachments';
     const HAS_CUSTOM_FIELDS = 'hasCustomFields';

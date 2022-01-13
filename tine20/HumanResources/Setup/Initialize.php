@@ -46,17 +46,24 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         ))));
         
         // Accounts
-        $commonValues = array(
-            'account_id'        => NULL,
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('HumanResources')->getId(),
-            'model'             => 'HumanResources_Model_AccountFilter',
-        );
+        $commonValues['model'] = 'HumanResources_Model_AccountFilter';
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => $translate->_("All accounts"),
             'description'       => $translate->_("All available accounts"),
             'filters'           => array(),
         ))));
+
+        // Divisions
+        $commonValues['model'] = HumanResources_Model_Division::class . 'Filter';
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name' => "All Divisions", // _('All Divisions')
+                'description' => "All division records", // _('All division records')
+                'filters' => array(),
+            ))
+        ));
     }
 
     /**

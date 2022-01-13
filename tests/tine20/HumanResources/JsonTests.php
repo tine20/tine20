@@ -5,7 +5,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -1059,7 +1059,40 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable, $e->getMessage());
         }
     }
-    
+
+    /**
+     * tests crud methods of division
+     */
+    public function testAllDivisionMethods()
+    {
+        $title = Tinebase_Record_Abstract::generateUID(10);
+        $d = $this->_json->saveDivision(
+            array('title' => $title)
+        );
+
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+
+        $d = $this->_json->getDivision($d['id']);
+
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+
+        $title = Tinebase_Record_Abstract::generateUID(10);
+        $d['title'] = $title;
+
+        $d = $this->_json->saveDivision($d);
+
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+
+        $this->_json->deleteDivisions(array($d['id']));
+
+        $this->expectException('Exception');
+
+        $d = $this->_json->getDivision($d['id']);
+    }
+
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10122
      */

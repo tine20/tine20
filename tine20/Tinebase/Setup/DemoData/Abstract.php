@@ -527,9 +527,8 @@ abstract class Tinebase_Setup_DemoData_Abstract
             }
             $this->_costCenterKeys[] = $cc->getId();
         }
-        
-        $filter = new Sales_Model_DivisionFilter(array());
-        $this->_divisions  = Sales_Controller_Division::getInstance()->search($filter)->sort('number');
+
+        $this->_divisions  = HumanResources_Controller_Division::getInstance()->search();
         
         return $this->_costCenters;
     }

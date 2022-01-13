@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  *
  * @package     HumanResources
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -16,68 +16,37 @@
  */
 class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * the right to show private data of the employee records
      * @static string
      */
-    const MANAGE_PRIVATE = 'manage_private';
+    public const MANAGE_PRIVATE = 'manage_private';
 
     /**
      * the right to show and edit working streams
      * @static string
      */
-    const MANAGE_STREAMS = 'manage_streams';
+    public const MANAGE_STREAMS = 'manage_streams';
 
     /**
      * the right to show and edit working times
      * @static string
      */
-    const MANAGE_WORKINGTIME = 'manage_workingtime';
+    public const MANAGE_WORKINGTIME = 'manage_workingtime';
 
     /**
      * the right to show and edit employee and free time data
      * @static string
      */
-    const MANAGE_EMPLOYEE = 'manage_employee';
+    public const MANAGE_EMPLOYEE = 'manage_employee';
 
     /**
-     * holds the instance of the singleton
-     *
-     * @var HumanResources_Acl_Rights
+     * the right to add, edit and delete division data
+     * @static string
      */
-    private static $_instance = NULL;
-
-    /**
-     * the clone function
-     *
-     * disabled. use the singleton
-     */
-    private function __clone()
-    {
-    }
-
-    /**
-     * the constructor
-     *
-     */
-    private function __construct()
-    {
-
-    }
-
-    /**
-     * the singleton pattern
-     *
-     * @return HumanResources_Acl_Rights
-     */
-    public static function getInstance()
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new HumanResources_Acl_Rights;
-        }
-
-        return self::$_instance;
-    }
+    public const MANAGE_DIVISIONS = 'manage_divisions';
 
     /**
      * get all possible application rights
@@ -86,18 +55,13 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     public function getAllApplicationRights()
     {
-
-        $allRights = parent::getAllApplicationRights();
-
-        $addRights = array (
+        return array_merge(parent::getAllApplicationRights(), [
+            self::MANAGE_DIVISIONS,
+            self::MANAGE_EMPLOYEE,
             self::MANAGE_PRIVATE,
             self::MANAGE_STREAMS,
             self::MANAGE_WORKINGTIME,
-            self::MANAGE_EMPLOYEE
-        );
-        $allRights = array_merge($allRights, $addRights);
-
-        return $allRights;
+        ]);
     }
 
     /**
@@ -110,6 +74,14 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('HumanResources');
 
         $rightDescriptions = array(
+            self::MANAGE_DIVISIONS => array(
+                'text'          => $translate->_('edit division data'),
+                'description'   => $translate->_('Add, edit and delete division data'),
+            ),
+            self::MANAGE_EMPLOYEE => array(
+                'text'          => $translate->_('edit employee data'),
+                'description'   => $translate->_('Show and edit employee data and free time management'),
+            ),
             self::MANAGE_PRIVATE => array(
                 'text'          => $translate->_('edit private employee data'),
                 'description'   => $translate->_('Edit birthday, account data and other private information of employee records'),
@@ -122,10 +94,6 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('edit working times'),
                 'description'   => $translate->_('Show and edit working time reports'),
             ),
-            self::MANAGE_EMPLOYEE => array(
-                'text'          => $translate->_('edit employee data'),
-                'description'   => $translate->_('Show and edit employee data and free time management'),
-            )
         );
 
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());

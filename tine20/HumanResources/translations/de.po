@@ -69,6 +69,28 @@ msgstr ""
 msgid "Could not book as vacation"
 msgstr "Konnte nicht als Urlaub gebucht werden"
 
+#: Model/Division.php:33
+msgid "GENDER_Division"
+msgstr "female"
+
+#: Model/Division.php:34
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Abteilung"
+msgstr[1] "Abteilungen"
+
+#: Acl/Rights.php:220
+msgid "Manage Divisions"
+msgstr "Abteilungen Verwalten"
+
+#: Acl/Rights.php:221
+msgid "Add, edit and delete divisions."
+msgstr "Abteilungen hinzufügen, bearbeiten und löschen."
+
+#: Setup/Initialize.php:251
+msgid "All Divisions"
+msgstr "Alle Abteilungen"
+
 #: js/FreeTimeGridPanel.js:136
 msgid ""
 "The unexcused sickness days could not be booked as vacation. There are not "
@@ -410,10 +432,6 @@ msgstr "Geben Sie eine Beschreibung an"
 #: js/EmployeeEditDialog.js:106
 msgid "Account is disabled or deleted!"
 msgstr "Benutzer nicht mehr vorhanden!"
-
-#: js/EmployeeEditDialog.js:141 Model/Employee.php:278
-msgid "Division"
-msgstr "Abteilung"
 
 #: js/EmployeeEditDialog.js:148 Model/Employee.php:287
 msgid "Health Insurance"
