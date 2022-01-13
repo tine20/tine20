@@ -13,7 +13,7 @@ Ext.namespace('Tine.Sales');
 import './Model/DocumentPosition';
 import './Document/OfferEditDialog';
 import './Document/OrderEditDialog';
-import './Document/DeliveryNoteEditDialog';
+import './Document/DeliveryEditDialog';
 import './Document/InvoiceEditDialog';
 
 /**
@@ -41,8 +41,8 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         // new documents
         {modelName: 'Document_Offer', requiredRight: 'manage_offers', singularContainerMode: true},
         {modelName: 'Document_Order', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
-        {modelName: 'Document_DeliveryNote', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
-        {modelName: 'Document_Invoice', requiredRight: 'manage_orderconfirmations', singularContainerMode: true}
+        {modelName: 'Document_Delivery', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
+        {modelName: 'Document_Invoice', requiredRight: 'manage_invoices', singularContainerMode: true}
     ]
 });
 

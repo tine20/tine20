@@ -117,7 +117,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     public static function getDocumentModels(): array
     {
         return [
-            Sales_Model_Document_DeliveryNote::class,
+            Sales_Model_Document_Delivery::class,
             Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,
