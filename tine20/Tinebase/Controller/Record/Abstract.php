@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -2416,9 +2416,20 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.',
         /** @noinspection PhpUnusedParameterInspection */ $_oldRecord = NULL)
     {
-        if (   ! $this->_doContainerACLChecks
-            || ! $_record->has('container_id')) {
+        if (! $this->_doContainerACLChecks
+            || (! $_record->has('container_id') && (!($mc = $_record->getConfiguration()) || !$mc->delegateAclField))) {
             return TRUE;
+        }
+
+        if (($mc = $_record->getConfiguration()) && $mc->delegateAclField) {
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
+            $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
+            return $ctrl::getInstance()->checkGrant(
+                $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
+                    $_record->{$mc->delegateAclField} :
+                    $ctrl->get($_record->{$mc->delegateAclField}),
+                $_action, $_throw, $_errorMessage, $_oldRecord
+            );
         }
         
         if (! is_object(Tinebase_Core::getUser())) {
@@ -2427,10 +2438,8 @@ abstract class Tinebase_Controller_Record_Abstract
         
         // admin grant includes all others
         if (Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
-            return TRUE;
+            return true;
         }
-        
-        $hasGrant = FALSE;
         
         switch ($_action) {
             case self::ACTION_GET:
@@ -2445,6 +2454,8 @@ abstract class Tinebase_Controller_Record_Abstract
             case self::ACTION_DELETE:
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE);
                 break;
+            default:
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, $_action);
         }
 
         if (! $hasGrant) {
@@ -2530,7 +2541,6 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
 
-
         if ($_filter->getCondition() !== Tinebase_Model_Filter_FilterGroup::CONDITION_AND) {
             $_filter->andWrapItself();
         }
@@ -2540,8 +2550,21 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! $aclFilters) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Force a standard containerFilter (specialNode = all) as ACL filter.');
-            
-            $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all');
+
+            $containerFilter = null;
+            if (($mc = ($this->_modelName)::getConfiguration())) {
+                if ($containerProp = $mc->{Tinebase_ModelConfiguration::DELEGATED_ACL_FIELD}) {
+                    $containerFilter = new Tinebase_Model_Filter_DelegatedAcl($containerProp, null, null,
+                        array_merge($_filter->getOptions(),[
+                            'modelName' => $this->_modelName
+                        ]));
+                } elseif ($containerProp = $mc->{Tinebase_ModelConfiguration::CONTAINER_PROPERTY}) {
+                    $containerFilter = $_filter->createFilter($containerProp, 'specialNode', 'all');
+                }
+            }
+            if (null === $containerFilter) {
+                $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all');
+            }
             $_filter->addFilter($containerFilter);
         } else {
             /** @var Tinebase_Model_Filter_Abstract $filter */

@@ -355,6 +355,7 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_CostCenter::class,
                 HumanResources_Model_DailyWTReport::class,
                 HumanResources_Model_Division::class,
+                HumanResources_Model_DivisionGrants::class,
                 HumanResources_Model_Employee::class,
                 HumanResources_Model_FreeDay::class,
                 HumanResources_Model_FreeTime::class,

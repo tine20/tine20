@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,6 +18,8 @@
  */
 class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * duplicate check fields / if this is NULL -> no duplicate check
      *
@@ -53,41 +55,70 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         'employment_end',
         'contracts'
     );
+
+    /**
+     * TODO FIXME set these properly
+     * protected $_getMultipleGrant = Tinebase_Model_Grants::GRANT_READ;
+    protected $_requiredFilterACLget = [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADMIN];
+    protected $_requiredFilterACLupdate  = [Tinebase_Model_Grants::GRANT_EDIT, Tinebase_Model_Grants::GRANT_ADMIN];
+    protected $_requiredFilterACLsync  = [Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_ADMIN];
+    protected $_requiredFilterACLexport  = [Tinebase_Model_Grants::GRANT_EXPORT, Tinebase_Model_Grants::GRANT_ADMIN];
+     */
     
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_applicationName = 'HumanResources';
         $this->_backend = new HumanResources_Backend_Employee();
         $this->_modelName = 'HumanResources_Model_Employee';
-        $this->_purgeRecords = FALSE;
-        // activate this if you want to use containers
-        $this->_doContainerACLChecks = FALSE;
+        $this->_purgeRecords = false;
+        $this->_doContainerACLChecks = true;
     }
 
     /**
-     * holds the instance of the singleton
+     * Removes containers where current user has no access to
      *
-     * @var HumanResources_Controller_Employee
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
      */
-    private static $_instance = NULL;
-
-    /**
-     * the singleton pattern
-     *
-     * @return HumanResources_Controller_Employee
-     */
-    public static function getInstance()
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
-        if (static::$_instance === NULL) {
-            static::$_instance = new static();
+        // if we have manage_employee right, we need no acl filter
+        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
+            return;
+        }
+        parent::checkFilterACL($_filter, $_action);
+    }
+
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    {
+        // if we have manage_employee right, we have all grants
+        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
+            return true;
         }
 
-        return static::$_instance;
+        switch ($_action) {
+            case self::ACTION_GET:
+                if ($_record->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
+                    try {
+                        if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, $_throw, $_errorMessage, $_oldRecord)) {
+                            return true;
+                        }
+                    } catch (Exception $e) {}
+                }
+                $_action = HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA;
+                break;
+            case self::ACTION_CREATE:
+            case self::ACTION_UPDATE:
+            case self::ACTION_DELETE:
+                $_action = HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA;
+                break;
+        }
+        return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
 
     /**

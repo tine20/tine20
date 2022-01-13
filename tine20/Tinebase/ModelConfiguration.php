@@ -98,6 +98,7 @@
  * @property array      $jsonExpander
  * @property array      $denormalizedFields
  * @property array      $denormalizationConfig
+ * @property string     $delegateAclField
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -750,6 +751,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var boolean
      */
     protected $_isDependent = FALSE;
+
+    /**
+     * if the records acl are delegated to an other record, that field holds the alcs record id
+     *
+     * @var string|null
+     */
+    protected $_delegateAclField = null;
     
     /**
      * input filters (will be set by field configuration)

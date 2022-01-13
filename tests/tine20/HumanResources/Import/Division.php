@@ -2,14 +2,14 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  *
- * @package     Sales
+ * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Christian Feitl<c.feitl@metawas.de>
  */
 
 /**
- * Test class for Sales
+ * Test class for HumanResources
  */
 class HumanResources_Import_Division extends TestCase
 {
@@ -19,7 +19,7 @@ class HumanResources_Import_Division extends TestCase
     protected $_importContainer = null;
 
     protected function tearDown(): void
-{
+    {
         parent::tearDown();
         self::clear(HumanResources_Config::APP_NAME, HumanResources_Model_Division::MODEL_NAME_PART);
     }
