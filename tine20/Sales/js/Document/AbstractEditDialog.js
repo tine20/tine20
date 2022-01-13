@@ -107,13 +107,13 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [fields.document_number, fields[this.statusFieldName], { ...placeholder }, fields.document_category, fields.document_language],
                 [fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})],
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
-                [{xtype: 'textarea', name: 'boilerplate_pretext', enableKeyEvents: true, height: 70, fieldLabel: 'Pretext'}],
+                [{xtype: 'textarea', name: 'boilerplate_Pretext', enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
                 [fields.positions],
                 [_.assign({ ...placeholder } , {columnWidth: 3/5}), fields.positions_discount_sum, fields.positions_net_sum],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.net_sum, fields.sales_tax, fields.gross_sum],
                 [fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 4/5})],
-                [{xtype: 'textarea', name: 'boilerplate_posttext', enableKeyEvents: true, height: 70, fieldLabel: 'Posttext'}],
+                [{xtype: 'textarea', name: 'boilerplate_Posttext', enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
                 [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})]
             ]
         }]

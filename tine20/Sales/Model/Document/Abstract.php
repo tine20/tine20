@@ -316,8 +316,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::UNSIGNED                      => true,
                 self::SHY                           => TRUE,
-                self::NAME                          => Sales_Config::PAYMENT_METHODS,
                 self::NULLABLE                      => true,
+                self::INPUT_FILTERS                 => [
+                    Zend_Filter_Empty::class => null,
+                ],
             ],
 
             self::FLD_COST_CENTER_ID            => [
