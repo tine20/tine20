@@ -1812,7 +1812,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @param Zend_Console_Getopt $opts
      * @return int
-     * @throws ReflectionException
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_Validation
@@ -1837,6 +1836,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $counter++;
         }
         echo "repaired $counter nodes" . PHP_EOL;
+
+        $sharedCounter = $fs->repairSharedAclOfNode($opts->d);
+
+        echo "repaired $sharedCounter shared nodes" . PHP_EOL;
 
         return 0;
     }
