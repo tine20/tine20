@@ -77,7 +77,7 @@ msgstr "female"
 msgid "Division"
 msgid_plural "Divisions"
 msgstr[0] "Abteilung"
-msgstr[1] "Abteilung"
+msgstr[1] "Abteilungen"
 
 #: Acl/Rights.php:220
 msgid "Manage Divisions"
@@ -432,10 +432,6 @@ msgstr "Geben Sie eine Beschreibung an"
 #: js/EmployeeEditDialog.js:106
 msgid "Account is disabled or deleted!"
 msgstr "Benutzer nicht mehr vorhanden!"
-
-#: js/EmployeeEditDialog.js:141 Model/Employee.php:278
-msgid "Division"
-msgstr "Abteilung"
 
 #: js/EmployeeEditDialog.js:148 Model/Employee.php:287
 msgid "Health Insurance"
