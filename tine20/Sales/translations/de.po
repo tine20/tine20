@@ -563,7 +563,7 @@ msgstr "Einheit"
 
 #: Model/DocumentPosition/Abstract.php:278
 msgid "Unit price"
-msgstr "Preis pro Einheit"
+msgstr "Einzelpreis"
 
 #: Model/DocumentPosition/Abstract.php:283
 #: js/DocumentPosition/AbstractGridPanel.js:266
@@ -924,7 +924,7 @@ msgstr "Ansprechpartner"
 
 #: Model/Document/Abstract.php:240
 msgid "Positions Net Sum"
-msgstr "Positions-Netto-Summe"
+msgstr "Zwischensumme"
 
 #: Model/Document/Abstract.php:248
 msgid "Positions Discount Sum"
@@ -952,7 +952,7 @@ msgstr "MwSt nach Satz"
 
 #: Model/Document/Abstract.php:306
 msgid "Gross Sum"
-msgstr "Brutto"
+msgstr "Endbetrag"
 
 #: Model/Document/Abstract.php:340
 msgid "Internal Note"
@@ -1692,7 +1692,7 @@ msgstr "Rabatt"
 
 #: js/DocumentPosition/AbstractGridPanel.js:268
 msgid "Total"
-msgstr "Gesammt"
+msgstr "Gesamt"
 
 #: js/CostCenterEditDialog.js:67
 msgid "Add New Cost Center"

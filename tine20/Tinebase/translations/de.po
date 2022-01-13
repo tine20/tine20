@@ -2569,7 +2569,7 @@ msgstr ""
 #: js/widgets/grid/FileUploadGrid.js:254 js/widgets/ActivitiesGridPanel.js:274
 #, python-brace-format
 msgid "Remove {0}"
-msgstr "{0} entfernen"
+msgstr "Entferne {0}"
 
 #: js/widgets/grid/FileUploadGrid.js:262 js/widgets/tree/ContextMenu.js:112
 msgid "Pause upload"
@@ -5168,6 +5168,12 @@ msgstr "Sie sind nicht berechtigt System Tags zu löschen"
 
 msgid "Confirmation is required"
 msgstr "Bestätigung ist erforderlich"
+
+msgid ""
+"Please open the following URL in your Browser for more security key options"
+msgstr ""
+"Bitte öffnen sie die folgende URL in ihrem Browser um den "
+"Sicherheitsschlüssel zu verwalten"
 
 msgid "Create {0}"
 msgstr "{0} erstellen"

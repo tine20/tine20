@@ -40,6 +40,8 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
     enableHdMenu: false,
     recordClass: 'Sales.ProductAggregate',
     validate: true,
+    enableBbar: true,
+    editDialogConfig: { mode: 'local' },
 
     /*
      * public

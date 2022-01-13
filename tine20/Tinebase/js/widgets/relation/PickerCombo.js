@@ -169,7 +169,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
                 related_model: this.fullModelName,
                 type: this.relationType,
                 related_degree: this.relationDegree
-            }), `${recordToAdd.id}-${this.relationType}`);
+            }), Tine.Tinebase.data.Record.generateUID());
 
             this.combo.startRecord = recordToAdd;
             this.store.add(relationRecord);
