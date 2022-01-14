@@ -117,6 +117,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 self::LABEL                 => 'Language', // _('Language')
                 self::TYPE                  => self::TYPE_KEY_FIELD,
                 self::NAME                  => Sales_Config::LANGUAGES_AVAILABLE,
+                self::NULLABLE              => true,
             ],
             'cpextern_id'       => array(
                 'label'   => 'Contact Person (external)',    // _('Contact Person (external)')
