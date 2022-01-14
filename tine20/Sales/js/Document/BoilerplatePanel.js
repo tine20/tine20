@@ -25,7 +25,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
     initComponent () {
         this.app = Tine.Tinebase.appMgr.get('Sales');
         this.recordClass = Tine.Tinebase.data.RecordMgr.get('Sales.Document_Boilerplate');
-        this.title = this.recordClass.getRecordsName();
+        this.title = this.app.i18n._('More Boilerplates');
 
         // selected boilerplates -> shown in dialog
         this.store = new Ext.data.JsonStore({
@@ -62,7 +62,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
         const fields = editDialog.getForm().items.items.filter((field) => { return String(field.name).match(/^boilerplate_/) });
         this.store.each((boilerplate, idx) => {
             const name = `boilerplate_${boilerplate.get('name')}`;
-            const fieldLabel = Tine.Tinebase.EncodingHelper.encode(boilerplate.getTitle());
+            const fieldLabel = `${this.app.i18n._('Boilerplate')}: ${Tine.Tinebase.EncodingHelper.encode(boilerplate.getTitle())}`;
             let field = editDialog.getForm().findField(name);
             if (field) {
                 fields.remove(field);
@@ -93,7 +93,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
         const flagName = `bp-${this.id}-listener`;
         if (!field[flagName]) {
             field.on('keyup', () => {
-                const boilerplate = this.store.getAt(this.store.find('name', name));
+                const boilerplate = this.store.getAt(this.store.findExact('name', name));
                 boilerplate.set('locally_changed', field.getValue() !== field.originalValue);
                 field.setFieldLabel(Tine.Tinebase.EncodingHelper.encode(boilerplate.getTitle()));
             });
@@ -109,28 +109,30 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             record.get('document_category'),
             record.get('document_language')
         ]);
+        const statusField = this.editDialog.fields[this.editDialog.statusFieldName]
+        const booked = statusField.store.getById(statusField.getValue())?.json.booked
 
-        if (String(this.gabpArgs) !== String(gabpArgs)) {
+        if (String(this.gabpArgs) !== String(gabpArgs) && !booked) {
             this.gabpArgs = gabpArgs;
             const { results } = await Tine.Sales.getApplicableBoilerplates(...gabpArgs);
             this.applicableBoilerplatesData = results;
 
             await this.applicableBoilerplatesData.asyncForEach(async (applicableBoilerplateData) => {
                 const applicableBoilerplate = Tine.Tinebase.data.Record.setFromJson(applicableBoilerplateData, this.recordClass);
-                const existingBoilerplate = this.store.getAt(this.store.find('name', applicableBoilerplate.get('name')));
+                const existingBoilerplate = this.store.getAt(this.store.findExact('name', applicableBoilerplate.get('name')));
 
                 if (! existingBoilerplate) {
                     applicableBoilerplate.data.original_id = applicableBoilerplate.id; // don't modify
                     this.store.addSorted(applicableBoilerplate);
                 } else {
-                    //@TODO: don't replace when docuemtn is in closed state -> even don't ask!
+                    //@TODO: don't replace when document is in closed state -> even don't ask!
                     const isEqual = existingBoilerplate.get('boilerplate') === applicableBoilerplate.get('boilerplate');
                     const existingIsLocallyChanged = !!+existingBoilerplate.get('locally_changed');
                     const applicableIsNewer = applicableBoilerplate.getMTime() > existingBoilerplate.getMTime();
 
                     let option = isEqual || (existingIsLocallyChanged && !applicableIsNewer) ? 'existing' : 'applicable';
 
-                    if (option === 'applicable' && (existingIsLocallyChanged || !applicableIsNewer)) {
+                    if (option === 'applicable' && existingIsLocallyChanged) {
                         // ask before replace locally changed!
                         const name = Tine.Tinebase.EncodingHelper.encode(existingBoilerplate.get('name'));
                         option = await Tine.widgets.dialog.MultiOptionsDialog.getOption({

@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 /**
- * DeliveryNote Document controller for Sales application
+ * Delivery DocumentPosition controller for Sales application
  *
  * @package     Sales
  * @subpackage  Controller
@@ -12,12 +12,12 @@
  */
 
 /**
- * DeliveryNote Document controller class for Sales application
+ * Delivery DocumentPosition controller class for Sales application
  *
  * @package     Sales
  * @subpackage  Controller
  */
-class Sales_Controller_Document_DeliveryNote extends Sales_Controller_Document_Abstract
+class Sales_Controller_DocumentPosition_Delivery extends Sales_Controller_DocumentPosition_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
 
@@ -30,11 +30,11 @@ class Sales_Controller_Document_DeliveryNote extends Sales_Controller_Document_A
     {
         $this->_applicationName = Sales_Config::APP_NAME;
         $this->_backend = new Tinebase_Backend_Sql([
-            Tinebase_Backend_Sql_Abstract::MODEL_NAME => Sales_Model_Document_DeliveryNote::class,
-            Tinebase_Backend_Sql_Abstract::TABLE_NAME => Sales_Model_Document_DeliveryNote::TABLE_NAME,
+            Tinebase_Backend_Sql_Abstract::MODEL_NAME => Sales_Model_DocumentPosition_Delivery::class,
+            Tinebase_Backend_Sql_Abstract::TABLE_NAME => Sales_Model_DocumentPosition_Delivery::TABLE_NAME,
             Tinebase_Backend_Sql_Abstract::MODLOG_ACTIVE => true,
         ]);
-        $this->_modelName = Sales_Model_Document_DeliveryNote::class;
+        $this->_modelName = Sales_Model_DocumentPosition_Delivery::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
     }

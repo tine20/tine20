@@ -115,7 +115,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         Tine.Tinebase.appMgr.isInitialised('Felamimail')
             .then(_.bind(async function() {
                 this.initAccountModel();
-
+                this.initGridPanelHooks();
                 await this.initAccountStore();
 
                 if (window.isMainWindow) {
@@ -126,7 +126,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     }
 
                     this.showActiveVacation();
-                    this.initGridPanelHooks();
                     this.registerProtocolHandler();
                     this.registerQuickLookPanel();
                 }

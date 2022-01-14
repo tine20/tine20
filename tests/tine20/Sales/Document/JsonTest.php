@@ -336,7 +336,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         ]));
         $testData[$order->getId()] = $order;
 
-        $delivery1 = Sales_Controller_Document_DeliveryNote::getInstance()->create(new Sales_Model_Document_DeliveryNote([
+        $delivery1 = Sales_Controller_Document_Delivery::getInstance()->create(new Sales_Model_Document_Delivery([
             Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(
                 Tinebase_Model_DynamicRecordWrapper::class, [
                     new Tinebase_Model_DynamicRecordWrapper([
@@ -346,11 +346,11 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 ]
             ),
             Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
-            Sales_Model_Document_DeliveryNote::FLD_DELIVERY_NOTE_STATUS => Sales_Model_Document_DeliveryNote::STATUS_CREATED,
+            Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS => Sales_Model_Document_Delivery::STATUS_CREATED,
         ]));
         $testData[$delivery1->getId()] = $delivery1;
 
-        $delivery2 = Sales_Controller_Document_DeliveryNote::getInstance()->create(new Sales_Model_Document_DeliveryNote([
+        $delivery2 = Sales_Controller_Document_Delivery::getInstance()->create(new Sales_Model_Document_Delivery([
             Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(
                 Tinebase_Model_DynamicRecordWrapper::class, [
                     new Tinebase_Model_DynamicRecordWrapper([
@@ -360,7 +360,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 ]
             ),
             Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
-            Sales_Model_Document_DeliveryNote::FLD_DELIVERY_NOTE_STATUS => Sales_Model_Document_DeliveryNote::STATUS_CREATED,
+            Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS => Sales_Model_Document_Delivery::STATUS_CREATED,
         ]));
         $testData[$delivery2->getId()] = $delivery2;
 
