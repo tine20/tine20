@@ -94,6 +94,11 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     config.listeners = config.listeners || {}
                     config.listeners.select = (combo, record, index) => {
                         fields['credit_term'].setValue(record.get('credit_term'))
+                        fields['document_language'].setValue(record.get('language'))
+                        if (record.get('discount')) {
+                            fields['invoice_discount_type'].setValue('PERCENTAGE')
+                            fields['invoice_discount_percentage'].setValue(record.get('discount'))
+                        }
                     }
                     break;
             }
