@@ -242,7 +242,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
     getSelectedDays: function() {
         let me = this;
-        return _.map(_.map(_.map(me.selectionModel.getSelections(), 1), _.bind(_.get, me, me.getColumns())), 'day');
+        return _.map(_.map(_.map(me.selectionModel.getSelections(), 1), _.bind(_.get, me, me.grid.colModel.columns)), 'day');
     },
 
     getSelectedFreeTimes: function() {
