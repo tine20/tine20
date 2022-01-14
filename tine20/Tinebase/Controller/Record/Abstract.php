@@ -2389,6 +2389,11 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
 
+
+        if ($_filter->getCondition() !== Tinebase_Model_Filter_FilterGroup::CONDITION_AND) {
+            $_filter->andWrapItself();
+        }
+
         $aclFilters = $_filter->getAclFilters();
 
         if (! $aclFilters) {
@@ -2397,6 +2402,13 @@ abstract class Tinebase_Controller_Record_Abstract
             
             $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all');
             $_filter->addFilter($containerFilter);
+        } else {
+            /** @var Tinebase_Model_Filter_Abstract $filter */
+            foreach ($aclFilters as $filter) {
+                if ($filter instanceof Tinebase_Model_Filter_Abstract && strpos($filter->getOperator(), 'not') === 0) {
+                    throw new Tinebase_Exception_Backend('acl filters musn\'t be "not[...]"');
+                }
+            }
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
