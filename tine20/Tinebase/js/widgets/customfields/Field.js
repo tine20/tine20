@@ -65,10 +65,22 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                 readOnly: cfConfig.get('account_grants').indexOf('writeGrant') < 0,
                 requiredGrant: 'editGrant'
             };
-            
+
+        if (def.length) {
+            fieldDef.maxLength = def.length;
+        }
+
+        if (def.required) {
+            fieldDef.allowBlank = false;
+        }
+
+        // custom code overrides
+        var overwritesKey = cfConfig.get('model').replace(/_/g, '.') + '.' + cfConfig.get('name');
+        var overwrites = _.get(Tine, overwritesKey, {});
+        fieldDef = _.assign(fieldDef, config, overwrites);
+
             // auto xtype per data type
             // @todo support array of scalars
-            // @todo suppot recordSets of model
             if (! uiConfig.xtype && def.type && ! def.value_search) {
                 switch (Ext.util.Format.lowercase(def.type)) {
                     case 'keyfield':
@@ -86,15 +98,14 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                         var options = def.options ? def.options : {},
                            recordConfig = def.recordConfig ? def.recordConfig : null;
                         if(!_.get(window, recordConfig.value.records)) return Ext.ComponentMgr.create({xtype: 'hidden'});
-                        Ext.apply(fieldDef, {
-                            xtype: 'tinerecordpickercombobox',
-                            app: options.app ? options.app : app,
+                        const recordClass = eval(recordConfig.value.records);
+                        const appName = recordClass.getMeta('appName');
+                        return Tine.widgets.form.RecordPickerManager.get(appName, recordClass, Ext.apply(fieldDef, {
                             resizable: true,
-                            recordClass: eval(recordConfig.value.records),
                             allowLinkingItself: false,
                             editDialog: editDialog,
                             additionalFilterSpec: recordConfig.additionalFilterSpec
-                        });
+                        }));
                         break;
                     case 'recordlist':
                         var options = def.options ? def.options : {},
@@ -144,20 +155,9 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                 }
             }
             
-        if (def.length) {
-            fieldDef.maxLength = def.length;
-        }
-        
-        if (def.required) {
-            fieldDef.allowBlank = false;
-        }
 
-        // custom code overrides
-        var overwritesKey = cfConfig.get('model').replace(/_/g, '.') + '.' + cfConfig.get('name');
-        var overwrites = _.get(Tine, overwritesKey, {});
 
         try {
-            fieldDef = _.assign(fieldDef, config, overwrites);
             return Ext.ComponentMgr.create(fieldDef);
         } catch (e) {
             Tine.log.debug(e);
