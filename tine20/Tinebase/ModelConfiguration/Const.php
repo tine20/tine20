@@ -53,6 +53,7 @@ class Tinebase_ModelConfiguration_Const {
      */
     const DEFAULT_VAL_CONFIG = 'defaultValConfig';
     const DEGREE = 'degree';
+    const DELEGATED_ACL_FIELD = 'delegateAclField';
     const DENORMALIZATION_CONFIG = 'denormalizationConfig';
     const DENORMALIZATION_OF = 'denormalizationOf';
     const DEPENDENT_RECORDS = 'dependentRecords';

@@ -37,6 +37,9 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
         self::CREATE_MODULE             => true,
         self::EXPOSE_JSON_API           => true,
         self::TITLE_PROPERTY            => self::FLD_TITLE,
+        self::CONTAINER_PROPERTY        => self::FLD_CONTAINER_ID,
+        self::GRANTS_MODEL              => HumanResources_Model_DivisionGrants::class,
+        //'requiredRight'     => 'manage',
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
