@@ -245,6 +245,18 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
     }
 
+    public function andWrapItself()
+    {
+        $class = static::class;
+        $children = new $class([], $this->_concatenationCondition);
+        foreach($this->_filterObjects as $idx => $filter) {
+            $children->addFilter($this->_filterObjects[$idx]);
+        }
+        $this->_filterObjects = [];
+        $this->_concatenationCondition = self::CONDITION_AND;
+        $this->addFilterGroup($children);
+    }
+
     /**
      * @param bool|null $bool
      * @return bool
