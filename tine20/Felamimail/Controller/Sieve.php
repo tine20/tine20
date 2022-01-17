@@ -115,7 +115,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $script = $this->getSieveScript($_accountId);
         $vacation = ($script !== NULL) ? $script->getVacation() : NULL;
-        
+
         $result = new Felamimail_Model_Sieve_Vacation(array(
             'id'    => ($_accountId instanceOf Felamimail_Model_Account) ? $_accountId->getId() : $_accountId
         ));
@@ -123,7 +123,6 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if ($vacation !== NULL) {
             $result->setFromFSV($vacation);
         }
-        
         return $result;
     }
     
@@ -221,40 +220,6 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $this->_backend = Felamimail_Backend_SieveFactory::factory($_accountId);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' sieve server capabilities: ' . print_r($this->_backend->capability(), TRUE));
-    }
-    
-    /**
-     * set vacation for account
-     * 
-     * @param Felamimail_Model_Sieve_Vacation $_vacation
-     * @return Felamimail_Model_Sieve_Vacation
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
-    {
-        $account = Felamimail_Controller_Account::getInstance()->get($_vacation->getId());
-        $this->_checkAccountEditGrant($account);
-
-        $this->_setSieveBackendAndAuthenticate($account);
-        $this->_addVacationUserData($_vacation, $account);
-        $this->_checkCapabilities($_vacation);
-        $this->_addVacationSubject($_vacation);
-        
-        $fsv = $_vacation->getFSV();
-        
-        $script = $this->getSieveScript($account);
-        if ($script === NULL) {
-            $script = $this->_createNewSieveScript($account);
-        }
-        $script->setVacation($fsv);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
-        
-        $this->_putScript($account, $script);
-        Felamimail_Controller_Account::getInstance()->setVacationActive($account, $_vacation->enabled);
-        
-        return $this->getVacation($account);
     }
 
     /**
@@ -519,37 +484,62 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         return $result;
     }
-    
+
     /**
-     * set rules for account
-     * 
+     * set sieve rules + vacation
+     *
      * @param string|Felamimail_Model_Account $_accountId $_accountId
-     * @param Tinebase_Record_RecordSet $_rules (Felamimail_Model_Sieve_Rule)
-     * @return Tinebase_Record_RecordSet
+     * @param Felamimail_Model_Sieve_Vacation|null $_vacation
+     * @param Tinebase_Record_RecordSet|null $_rules (Felamimail_Model_Sieve_Rule)
+     * @return string
+     * @throws Felamimail_Exception
+     * @throws Felamimail_Exception_Sieve
+     * @throws Felamimail_Exception_SievePutScriptFail
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function setRules($_accountId, Tinebase_Record_RecordSet $_rules)
+    public function setSieveScript($_accountId, Felamimail_Model_Sieve_Vacation $_vacation = null, Tinebase_Record_RecordSet $_rules = null)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
-        $this->_checkAccountEditGrant($account);
-        $script = $this->getSieveScript($_accountId);
         
+        $this->_checkAccountEditGrant($account);
+        $this->_setSieveBackendAndAuthenticate($account);
+        
+        $script = $this->getSieveScript($account);
+        
+        if ($_vacation) {
+            $this->_addVacationUserData($_vacation, $account);
+            $this->_checkCapabilities($_vacation);
+            $this->_addVacationSubject($_vacation);
+
+            $fsv = $_vacation->getFSV();
+            $script->setVacation($fsv);
+
+            Felamimail_Controller_Account::getInstance()->setVacationActive($account, $_vacation->enabled);
+        }
+
         if ($script === NULL) {
             $script = $this->_createNewSieveScript($_accountId);
         } else {
-            $script->clearRules();
+            if ($_rules) {
+                $script->clearRules();
+            }
         }
-        
-        foreach ($_rules as $rule) {
-            $this->_checkRule($rule, $_accountId);
-            $fsr = $rule->getFSR();
-            $script->addRule($fsr);
+
+        if ($_rules) {
+            foreach ($_rules as $rule) {
+                $this->_checkRule($rule, $_accountId);
+                $fsr = $rule->getFSR();
+                $script->addRule($fsr);
+            }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Put updated SIEVE script ' . $this->_scriptName);
+
+        $this->_putScript($account, $script);
+        $script = $this->getSieveScript($account);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated rules SIEVE script ' . $this->_scriptName);
-        
-        $this->_putScript($_accountId, $script);
-        
-        return $this->getRules($_accountId);
+        return $script->getSieve();
     }
     
     /**
