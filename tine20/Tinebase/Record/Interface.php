@@ -400,4 +400,6 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param array $data
      */
     public function hydrateFromBackend(array &$_data);
+
+    public function aclProtect();
 }

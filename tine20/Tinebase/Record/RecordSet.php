@@ -22,6 +22,7 @@
  * @method setId($_id) - see \Tinebase_Record_Abstract::setId
  * @method setConvertDates($_bool) - see \Tinebase_Record_Abstract::setConvertDates
  * @method runConvertToRecord() - see \Tinebase_Record_Abstract::runConvertToRecord
+ * @method aclProtect() - see \Tinebase_Record_Abstract::aclProtect
  */
 class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
 {

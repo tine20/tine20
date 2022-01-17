@@ -105,42 +105,60 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'default' => 'Germany', // _('Germany')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'locality' => array(
                 'label' => 'Locality', //_('Locality')
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'postalcode' => array(
                 'label' => 'Postalcode', //_('Postalcode')
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'region' => array(
                 'label' => 'Region', //_('Region')
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'street' => array(
                 'label' => 'Street', //_('Street')
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'street2' => array(
                 'label' => 'Street 2', //_('Street 2')
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'email' => array(
                 'label' => 'E-Mail', //_('E-Mail')
@@ -154,14 +172,20 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'tel_cell' => array(
                 'label' => 'Cell Phone Number', //_('Cell Phone Number')
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'title' => array(
                 'label' => 'Title', //_('Title')
@@ -196,13 +220,19 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'bank_account_holder' => array(
                 'label' => 'Account Holder', //_('Account Holder')
                 'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'bank_account_number' => array(
                 'label' => 'Account Number', //_('Account Number')
@@ -210,7 +240,10 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'iban' => array(
                 'label' => 'IBAN',
@@ -218,7 +251,10 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'bic' => array(
                 'label' => 'BIC',
@@ -226,14 +262,20 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'bank_name' => array(
                 'label' => 'Bank Name', //_('Bank Name')
                 'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'bank_code_number' => array(
                 'label' => 'Code Number', //_('Code Number')
@@ -241,7 +283,10 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'employment_begin' => array(
                 'label' => 'Employment begin', //_('Employment begin')
@@ -262,7 +307,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                         Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
                         Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
                     ]
-                ]
+                ],
             ),
             'supervisor_id' => array(
                 'label' => 'Supervisor', //_('Supervisor')
@@ -290,7 +335,10 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'label' => 'Health Insurance', //_('Health Insurance')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                'shy'   => TRUE
+                'shy'   => TRUE,
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'profession' => array(
                 'label' => 'Profession', //_('Profession')
@@ -315,6 +363,9 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     'dependentRecords' => TRUE,
                 ),
                 'group' => 'private',
+                self::ACL_PROTECTED => [
+                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                ],
             ),
             'costcenters' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -353,5 +404,14 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         }
 
         return null;
+    }
+
+    public function aclProtect()
+    {
+        if (Tinebase_Core::getUser()
+                ->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
+            return;
+        }
+        parent::aclProtect();
     }
 }

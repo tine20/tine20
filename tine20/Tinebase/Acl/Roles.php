@@ -1001,9 +1001,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
-        $result = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        $result = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
         $modelName = $this->_modelName;
         /** @noinspection PhpUndefinedMethodInspection */
         $modelConf = $modelName::getConfiguration();

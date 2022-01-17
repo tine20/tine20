@@ -1793,4 +1793,27 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $this->setFromArray($_data);
         $this->runConvertToRecord();
     }
+
+    public function aclProtect()
+    {
+        $mc = static::getConfiguration();
+        if (!$mc || empty($aclProtectedFields = $mc->aclProtectedFields)) {
+            return;
+        }
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = Tinebase_Core::getApplicationInstance(static::class);
+
+        $access = [];
+        $deny = [];
+        foreach ($aclProtectedFields as $acl => $fields) {
+            if ($ctrl->checkGrant($this, $acl, false)) {
+                $access = array_unique(array_merge($access, $fields));
+            } else {
+                $deny = array_unique(array_merge($deny, $fields));
+            }
+        }
+        foreach (array_intersect($deny, $access) as $denyProperty) {
+            $this->{$denyProperty} = null;
+        }
+    }
 }

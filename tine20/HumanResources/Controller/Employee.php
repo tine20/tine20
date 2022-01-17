@@ -28,42 +28,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     protected $_duplicateCheckFields = array(array('account_id'), array('number'));
     protected $_resolveCustomFields = TRUE;
 
-    /**
-     * values which will be removed if the user doesn't have the see private right
-     * @deprecated this will be removed if the modelconfiguration can handle this
-     * 
-     * @var array
-     */
-    protected $_privateFields = array(
-        'countryname',
-        'locality',
-        'postalcode',
-        'region',
-        'street',
-        'street2',
-        'email',
-        'tel_home',
-        'tel_cell',
-        'bday',
-        'bank_account_holder',
-        'bank_account_number',
-        'bank_name',
-        'bank_code_number',
-        'iban',
-        'bic',
-        'employment_begin',
-        'employment_end',
-        'contracts'
-    );
-
-    /**
-     * TODO FIXME set these properly
-     * protected $_getMultipleGrant = Tinebase_Model_Grants::GRANT_READ;
-    protected $_requiredFilterACLget = [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADMIN];
-    protected $_requiredFilterACLupdate  = [Tinebase_Model_Grants::GRANT_EDIT, Tinebase_Model_Grants::GRANT_ADMIN];
-    protected $_requiredFilterACLsync  = [Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_ADMIN];
-    protected $_requiredFilterACLexport  = [Tinebase_Model_Grants::GRANT_EXPORT, Tinebase_Model_Grants::GRANT_ADMIN];
-     */
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
     
     /**
      * the constructor
@@ -169,76 +138,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        $this->_doRightsCleanup($_record);
-        $this->_doPrivateCleanup($_record);
         $this->_checkContractsOverlap($_record);
         $this->_recordArraysToId($_record);
-    }
-
-    
-    /**
-     * removes private information from the Employee if user is no admin and hasn't the
-     * EDIT_PRIVATE rights on this application.
-     * if the second parameter $oldData is given, the fields won't be set to null
-     * but to the values of the old record
-     * 
-     * @param mixed Tinebase_Record_Interface/Tinebase_Record_RecordSet $data
-     * @param Tinebase_Record_Interface $oldData
-     */
-    protected function _doPrivateCleanup($data, $oldData = NULL)
-    {
-        $user = Tinebase_Core::getUser();
-        if ($user instanceof Tinebase_Model_FullUser) {
-            // no private cleanup with admin rights
-            if ($user->hasRight('HumanResources', HumanResources_Acl_Rights::ADMIN) ||
-                $user->hasRight('Tinebase', Tinebase_Acl_Rights_Abstract::ADMIN) ||
-                $user->hasRight('HumanResources', HumanResources_Acl_Rights::MANAGE_PRIVATE)) {
-                return;
-            } else {
-                // if oldData is given, this is a update operation,
-                // so copy old properties to new to ensure no new data will be written
-                if ($oldData) {
-                    foreach($this->_privateFields as $field) {
-                        $data->{$field} = $oldData->{$field};
-                    }
-                } else {
-                    foreach($this->_privateFields as $field) {
-                        $data->{$field} = NULL;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * @param mixed Tinebase_Record_Interface/Tinebase_Record_RecordSet $data
-     * @return mixed
-     * @throws Tinebase_Exception
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    protected function _doRightsCleanup(&$data)
-    {
-        if ($this->checkRight(HumanResources_Acl_Rights::MANAGE_EMPLOYEE, FALSE)) {
-            return $data;
-        }
-
-        $whitelist = ['id', 'title', 'salutation', 'n_family', 'n_given', 'n_fn', 'supervisor_id', 'division_id', 'contracts',
-                      'is_deleted', 'employee_id', 'costcenters', 'relations', 'seq', 'account_id', 'email', 'position',
-                      'employment_begin', 'employment_end', 'profession',
-                      'number', 'dfcom_id', 'description', 'tags', 'attachments', 'notes', 'created_by',
-                      'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by', 'deleted_time', 'customfields'
-            ];
-        $fields = $data->getFields();
-        if (get_class($data) === 'Tinebase_Record_RecordSetFast') {
-            $fields = $fields[0];
-        }
-
-        foreach ($fields as $field) {
-            if (!in_array($field, $whitelist)) {
-                $data->{$field} = null;
-            }
-        }
-        return $data;
     }
 
     /**
@@ -306,9 +207,6 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $this->_duplicateCheck($_record);
-
-        $this->_doRightsCleanup($_record, $_oldRecord);
-        $this->_doPrivateCleanup($_record, $_oldRecord);
         $this->_checkContractsOverlap($_record);
         $this->_recordArraysToId($_record);
     }
@@ -331,58 +229,6 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         parent::_deleteLinkedObjects($_record);
     }
 
-
-    /**
-     * Returns a set of records identified by their id's
-     *
-     * @param   array $_ids array of record identifiers
-     * @param   bool $_ignoreACL don't check acl grants
-     * @param null|Tinebase_Record_Expander $_expander
-     * @param bool $_getDeleted
-     * @return Tinebase_Record_RecordSet of $this->_modelName
-     */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
-    {
-        $records = parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
-        $this->_doRightsCleanup($records);
-        $this->_doPrivateCleanup($records);
-        return $records;
-    }
-    
-    /**
-     * Gets all entries
-     *
-     * @param string $_orderBy Order result by
-     * @param string $_orderDirection Order direction - allowed are ASC and DESC
-     * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_RecordSet
-     */
-    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
-    {
-        $records = parent::getAll($_orderBy, $_orderDirection);
-        $this->_doRightsCleanup($records);
-        $this->_doPrivateCleanup($records);
-        return $records;
-    }
-
-
-    /**
-     * get by id
-     *
-     * @param string $_id
-     * @param int $_containerId
-     * @param bool         $_getRelatedData
-     * @param bool $_getDeleted
-     * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
-    {
-        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
-        $this->_doRightsCleanup($record);
-        $this->_doPrivateCleanup($record);
-        return $record;
-    }
     /**
      * returns the highest employee number of all employees
      * 
@@ -589,13 +435,5 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             'working_time_scheme'=> $workingTimeModel->getId(),
             'start_date'         => $contractData['startDate']
         );
-    }
-
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = null, Tinebase_Model_Pagination $_pagination = null, $_getRelations = false, $_onlyIds = false, $_action = self::ACTION_GET)
-    {
-        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-        if ($_onlyIds) { return $result; }
-
-        return $this->_doRightsCleanup($result);
     }
 }

@@ -74,7 +74,7 @@ class Voipmanager_Controller_Snom_Phone extends Voipmanager_Controller_Abstract
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $phone = $this->_backend->get($_id);
         $this->_resolveRightsAndLines($phone);

@@ -358,10 +358,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::get()
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false, $_aclProtect = true)
     {
         /** @var Tinebase_Model_Tree_Node $record */
-        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
 
         if ($record->is_quarantined) {
             throw new Filemanager_Exception_Quarantined('File is quarantined');

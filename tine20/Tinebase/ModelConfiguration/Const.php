@@ -17,6 +17,7 @@
  */
 
 class Tinebase_ModelConfiguration_Const {
+    const ACL_PROTECTED = 'aclProtected';
     const ADD_FILTERS = 'addFilters';
     const APPLICATION = 'application';
     const APP_NAME = 'appName';
