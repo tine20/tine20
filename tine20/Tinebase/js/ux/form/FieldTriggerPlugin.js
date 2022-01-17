@@ -24,16 +24,18 @@ class FieldTriggerPlugin {
         await field.afterIsRendered()
         const wrap = field.el.parent('.x-form-element') ||
             field.el.parent('.x-grid-editor')
-        this.#trigger = wrap.createChild(this.triggerConfig ||
-            {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin " + this.triggerClass})
-        this.setVisible(this.visible)
-        if (this.qtip) {
-            this.setQtip(this.qtip)
-        }
+        if (wrap) {
+            this.#trigger = wrap.createChild(this.triggerConfig ||
+                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin " + this.triggerClass})
+            this.setVisible(this.visible)
+            if (this.qtip) {
+                this.setQtip(this.qtip)
+            }
 
-        field.mon(this.#trigger, 'click', this.onTriggerClick, this, {preventDefault:true});
-        this.#trigger.addClassOnOver('x-form-trigger-over');
-        this.#trigger.addClassOnClick('x-form-trigger-click');
+            field.mon(this.#trigger, 'click', this.onTriggerClick, this, {preventDefault:true});
+            this.#trigger.addClassOnOver('x-form-trigger-over');
+            this.#trigger.addClassOnClick('x-form-trigger-click');
+        }
     }
 
     setVisible(visible) {
