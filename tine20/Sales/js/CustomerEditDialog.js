@@ -234,8 +234,16 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'name',
                                 xtype: 'tine.widget.field.AutoCompleteField',
                                 recordClass: this.recordClass
-                            }], [Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                    columnWidth: 1/2,
+                            }], [{
+                                xtype: 'widget-keyfieldcombo',
+                                app:   'Sales',
+                                keyFieldName: 'languagesAvailable',
+                                columnWidth: .250,
+                                fieldLabel: this.app.i18n._('Language'),
+                                name: 'language',
+                                requiredGrant: 'editGrant'
+                            }, Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                    columnWidth: .75/2,
                                     blurOnSelect: true,
                                     name: 'cpextern_id',
                                     allowBlank: true,
@@ -245,7 +253,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         select: this.onSelectContactPerson
                                     }
                             }), Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                    columnWidth: 1/2,
+                                    columnWidth: .75/2,
                                     blurOnSelect: true,
                                     name: 'cpintern_id',
                                     allowBlank: true,

@@ -17,7 +17,7 @@
  */
 abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
-    //const MODEL_NAME_PART = ''; // als konkrete document_types gibt es Offer, Order, DeliveryNote, Invoice (keine Gutschrift!)
+    //const MODEL_NAME_PART = ''; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
 
     public const FLD_ID = 'id';
     public const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
@@ -49,7 +49,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
     public const FLD_GROSS_SUM = 'gross_sum';
 
-    public const FLD_PAYMENT_METHOD = 'payment_method'; // Sales_Model_PaymentMethod KeyField
+    public const FLD_PAYMENT_TERMS = 'credit_term';
 
     public const FLD_COST_CENTER_ID = 'cost_center_id';
     public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
@@ -71,7 +71,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     //    - berechnet (s.o.)
     //  - ORDER_STATUS // keyfield: eingegangen (order änderbar, nicht erledigt), angenommen (nicht mehr änderbar (AB ist raus), nicht erledigt), abgeschlossen(nicht mehr änderbar, erledigt) -> feld berechnet sich automatisch! (ggf. lassen wir das abschließen doch zu aber mit confirm)
 
-    // DELIVERY_NOTE
+    // DELIVERY
     // - DELIVERY_STATUS // keyfield erstellt(Ungebucht, offen), geliefert(gebucht, abgeschlossen)
     //    NOTE: man könnte einen ungebuchten Status als Packliste einführen z.B. Packliste(ungebucht, offen)
 
@@ -311,11 +311,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
             ],
 
-            self::FLD_PAYMENT_METHOD            => [
-                self::LABEL                         => 'Payment Method', //_('Payment Method')
-                self::TYPE                          => self::TYPE_KEY_FIELD,
-                self::NAME                          => Sales_Config::PAYMENT_METHODS,
+            self::FLD_PAYMENT_TERMS             => [
+                self::LABEL                         => 'Credit Term (days)', // _('Credit Term (days)')
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::UNSIGNED                      => true,
+                self::SHY                           => TRUE,
                 self::NULLABLE                      => true,
+                self::INPUT_FILTERS                 => [
+                    Zend_Filter_Empty::class => null,
+                ],
             ],
 
             self::FLD_COST_CENTER_ID            => [

@@ -20,6 +20,8 @@
 
 class Sales_Model_Customer extends Tinebase_Record_Abstract
 {
+    public const FLD_LANGUAGE = 'language';
+
     public const MODEL_NAME_PART = 'Customer';
 
     /**
@@ -111,6 +113,12 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'shy'         => TRUE,
                 self::NULLABLE => true,
             ),
+            self::FLD_LANGUAGE => [
+                self::LABEL                 => 'Language', // _('Language')
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Sales_Config::LANGUAGES_AVAILABLE,
+                self::NULLABLE              => true,
+            ],
             'cpextern_id'       => array(
                 'label'   => 'Contact Person (external)',    // _('Contact Person (external)')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),

@@ -322,6 +322,36 @@ class Tinebase_FileSystem implements
     }
 
     /**
+     * Repair acl of shared nodes on level 0
+     * @param boolean $dryrun
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function repairSharedAclOfNode($dryrun = false)
+    {
+        $counter = 0;
+        $sharedNodes = Tinebase_FileSystem::getInstance()->getSharedContainer(Tinebase_Core::getUser(),
+            'Filemanager_Model_Node', null, true);
+
+        foreach ($sharedNodes as $sharedNode) {
+            if ($sharedNode['id'] != $sharedNode['acl_node'] && $sharedNode['acl_node'] == $sharedNode['parent_id']) {
+                if ($dryrun) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                        . __LINE__ . ' repairing acl of node id  ' . $sharedNode['id']);
+                } else {
+                    $node = $this->get($sharedNode, true);
+                    $node['acl_node'] = $node['id'];
+                    $this->_getTreeNodeBackend()->update($node);
+                    $counter++;
+                }
+            }
+        }
+        return $counter;
+    }
+
+    /**
      * Get multiple tree nodes identified by id
      *
      * @param string|array $_id Ids

@@ -132,12 +132,12 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const DOCUMENT_ORDER_STATUS_TRANSITIONS = 'documentOrderStatusTransitions';
 
     /**
-     * deliveryNote status
+     * delivery status
      *
      * @var string
      */
-    public const DOCUMENT_DELIVERY_NOTE_STATUS = 'documentDeliveryNoteStatus';
-    public const DOCUMENT_DELIVERY_NOTE_STATUS_TRANSITIONS = 'documentDeliveryNoteStatusTransitions';
+    public const DOCUMENT_DELIVERY_STATUS = 'documentDeliveryStatus';
+    public const DOCUMENT_DELIVERY_STATUS_TRANSITIONS = 'documentDeliveryStatusTransitions';
 
     /**
      * invoice status
@@ -380,15 +380,15 @@ class Sales_Config extends Tinebase_Config_Abstract
             ]
         ],
 
-        self::DOCUMENT_DELIVERY_NOTE_STATUS => [
-            //_('Delivery Note Status')
-            self::LABEL              => 'Delivery Note Status',
-            //_('Possible Delivery Note Status')
-            self::DESCRIPTION        => 'Possible Delivery Note Status',
+        self::DOCUMENT_DELIVERY_STATUS => [
+            //_('Delivery Status')
+            self::LABEL              => 'Delivery Status',
+            //_('Possible Delivery Status')
+            self::DESCRIPTION        => 'Possible Delivery Status',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
             self::OPTIONS            => [
                 self::RECORD_MODEL => Sales_Model_Document_Status::class,
-                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_DELIVERY_NOTE_STATUS_TRANSITIONS,
+                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_DELIVERY_STATUS_TRANSITIONS,
             ],
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
@@ -398,7 +398,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                 //    NOTE: man könnte einen ungebuchten Status als Packliste einführen z.B. Packliste(ungebucht, offen)
                 self::RECORDS => [
                     [
-                        'id' => Sales_Model_Document_DeliveryNote::STATUS_CREATED,
+                        'id' => Sales_Model_Document_Delivery::STATUS_CREATED,
                         //_('Created (unbooked, open)')
                         'value' => 'Created (unbooked, open)',
                         'icon' => null,
@@ -406,7 +406,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         Sales_Model_Document_Status::FLD_CLOSED => false,
                         'system' => true
                     ], [
-                        'id' => Sales_Model_Document_DeliveryNote::STATUS_DELIVERED,
+                        'id' => Sales_Model_Document_Delivery::STATUS_DELIVERED,
                         //_('Done (booked, closed)')
                         'value' => 'Done (booked, closed)',
                         'icon' => null,
@@ -415,14 +415,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'system' => true
                     ]
                 ],
-                self::DEFAULT_STR => Sales_Model_Document_DeliveryNote::STATUS_CREATED,
+                self::DEFAULT_STR => Sales_Model_Document_Delivery::STATUS_CREATED,
             ],
         ],
-        self::DOCUMENT_DELIVERY_NOTE_STATUS_TRANSITIONS => [
-            //_('Delivery Note Status Transitions')
-            self::LABEL              => 'Delivery Note Status Transitions',
-            //_('Possible Delivery Note Status Transitions')
-            self::DESCRIPTION        => 'Possible Delivery Note Status Transitions',
+        self::DOCUMENT_DELIVERY_STATUS_TRANSITIONS => [
+            //_('Delivery Status Transitions')
+            self::LABEL              => 'Delivery Status Transitions',
+            //_('Possible Delivery Status Transitions')
+            self::DESCRIPTION        => 'Possible Delivery Status Transitions',
             self::TYPE               => self::TYPE_ARRAY,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
@@ -430,12 +430,12 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 '' => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_DeliveryNote::STATUS_CREATED
+                        Sales_Model_Document_Delivery::STATUS_CREATED
                     ]
                 ],
-                Sales_Model_Document_DeliveryNote::STATUS_CREATED => [
+                Sales_Model_Document_Delivery::STATUS_CREATED => [
                     self::TRANSITION_TARGET_STATUS => [
-                        Sales_Model_Document_DeliveryNote::STATUS_DELIVERED,
+                        Sales_Model_Document_Delivery::STATUS_DELIVERED,
                     ]
                 ]
             ]

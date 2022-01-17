@@ -842,16 +842,16 @@ msgstr ""
 msgid "Lifespan end"
 msgstr ""
 
-#: Model/Document/DeliveryNote.php:39
-msgid "GENDER_Delivery Note"
+#: Model/Document/Delivery.php:39
+msgid "GENDER_Delivery"
 msgstr ""
 
-#: Model/Document/DeliveryNote.php:40
-msgid "Delivery Note"
-msgid_plural "Delivery Notes"
+#: Model/Document/Delivery.php:40
+msgid "Delivery"
+msgid_plural "Deliveries"
 msgstr[0] ""
 
-#: Model/Document/DeliveryNote.php:59 Model/Document/Order.php:60
+#: Model/Document/Delivery.php:59 Model/Document/Order.php:60
 #: Model/Document/Offer.php:96 Model/Document/Invoice.php:62
 msgid "Status"
 msgstr ""
@@ -1124,11 +1124,11 @@ msgid "Possible Order Status Transitions"
 msgstr ""
 
 #: Config.php:384
-msgid "Delivery Note Status"
+msgid "Delivery Status"
 msgstr ""
 
 #: Config.php:386
-msgid "Possible Delivery Note Status"
+msgid "Possible Delivery Status"
 msgstr ""
 
 #: Config.php:402
@@ -1136,11 +1136,11 @@ msgid "Created (unbooked, open)"
 msgstr ""
 
 #: Config.php:422
-msgid "Delivery Note Status Transitions"
+msgid "Delivery Status Transitions"
 msgstr ""
 
 #: Config.php:424
-msgid "Possible Delivery Note Status Transitions"
+msgid "Possible Delivery Status Transitions"
 msgstr ""
 
 #: Config.php:445

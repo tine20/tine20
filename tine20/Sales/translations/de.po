@@ -571,7 +571,7 @@ msgstr "Sortierung"
 
 #: Model/DocumentPosition/Abstract.php:241
 msgid "Product / Service"
-msgstr "Produkt/Service"
+msgstr "Produkt / Service"
 
 #: Model/DocumentPosition/Abstract.php:261 Model/ProductAggregate.php:82
 #: Model/InvoicePosition.php:98 js/ProductAggregateGridPanel.js:160
@@ -902,6 +902,7 @@ msgstr[1] "Lieferscheine"
 
 #: Model/Document/DeliveryNote.php:59 Model/Document/Order.php:60
 #: Model/Document/Offer.php:96 Model/Document/Invoice.php:62
+#: Model/Document/Delivery.php:59
 msgid "Status"
 msgstr "Status"
 
@@ -951,7 +952,7 @@ msgstr "Ansprechpartner"
 
 #: Model/Document/Abstract.php:240
 msgid "Positions Net Sum"
-msgstr "Positions-Netto-Summe"
+msgstr "Zwischensumme"
 
 #: Model/Document/Abstract.php:248
 msgid "Positions Discount Sum"
@@ -979,7 +980,7 @@ msgstr "MwSt nach Satz"
 
 #: Model/Document/Abstract.php:306
 msgid "Gross Sum"
-msgstr "Brutto"
+msgstr "Endbetrag"
 
 #: Model/Document/Abstract.php:340
 msgid "Internal Note"
@@ -1878,3 +1879,33 @@ msgstr "ohne Vertrag"
 #: js/DivisionEditDialog.js:52
 msgid "Add New Division"
 msgstr "Neue Abteilung hinzufügen"
+
+#: Model/DocumentPosition/Abstract.php:278
+msgid "Unit Price"
+msgstr "Einzelpreis"
+
+#: Model/Document/Delivery.php:39
+msgid "GENDER_Delivery"
+msgstr "male"
+
+#: Model/Document/Delivery.php:40
+msgid "Delivery"
+msgid_plural "Deliveries"
+msgstr[0] "Lieferung"
+msgstr[1] "Lieferungen"
+
+#: Config.php:384
+msgid "Delivery Status"
+msgstr "Lieferstatus"
+
+#: Config.php:386
+msgid "Possible Delivery Status"
+msgstr "Mögliche Lieferstatus"
+
+#: Config.php:422
+msgid "Delivery Status Transitions"
+msgstr "Lieferstatus-Übergänge"
+
+#: Config.php:424
+msgid "Possible Delivery Status Transitions"
+msgstr "Mögliche Lieferstatus-Übergänge"
