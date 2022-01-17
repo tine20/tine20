@@ -298,6 +298,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             disabled: !this.isSystemAccount()
         });
 
+        if (this.asAdminModule) {
+            this.saveInAdbFields = Tine.Admin.UserEditDialog.prototype.getSaveInAddessbookFields(this, this.record.get('type') === 'system');
+        } else {
+            this.saveInAdbFields = [];
+        }
+        
         var commonFormDefaults = {
             xtype: 'textfield',
             anchor: '100%',
@@ -390,8 +396,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }, {
                             fieldLabel: this.app.i18n._('Organization'),
                             name: 'organization'
-                        }, Tine.Admin.UserEditDialog.prototype.getSaveInAddessbookFields(this, this.record.get('type') === 'system'), 
-                            {
+                        }], this.saveInAdbFields, [{
                             fieldLabel: this.app.i18n._('Signature position'),
                             name: 'signature_position',
                             typeAhead: false,
