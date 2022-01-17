@@ -21,6 +21,7 @@ require('../../library/ExtJS/ext-custom');
 
 // include traditional stuff as defined in jsb2
 require('./../../Tinebase/Tinebase.jsb2');
+require('./CommunityIdentNr/model');
 require('./CommunityIdentNr/explainer');
 require('./CommunityIdentNr/picker');
 require('./CommunityIdentNr/grid');

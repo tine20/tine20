@@ -150,3 +150,7 @@ Tine.widgets.form.FieldManager.register('Tinebase', 'CommunityIdentNr', 'arsComb
     xtype: 'ars-explain-field',
     height: 75
 }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+
+export {
+    template
+}

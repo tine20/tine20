@@ -1,4 +1,5 @@
 @borderColor: lightgray;
+@selectedBorderColor: darken(@borderColor, 10);
 
 table.x-ars-xplain, .x-ars-xplain table {
   border-spacing: 0px;
@@ -40,7 +41,6 @@ table.x-ars-xplain, .x-ars-xplain table {
   min-width: 10px;
 }
 
-
 .x-ars-xplain-data {
   max-width: 46px;
 }
@@ -67,4 +67,48 @@ table.x-ars-xplain, .x-ars-xplain table {
 
 .TinebaseCommunityIdentNr {
   background-image:url(../../images/icon-set/icon_file_spreadsheet.svg) !important;
+}
+
+.x-tip-body,
+.x-ars-xplain-search-item {
+  .search-item {
+    background-color: darken(white, 3);
+  }
+  .x-ars-xplain-data.x-ars-xplain-col.x-ars-xplain-value-stand,
+  .x-ars-xplain-data.x-ars-xplain-col.x-ars-xplain-show-original-btn {
+    display: none;
+  }
+  .x-ars-xplain-search-item-text {
+    vertical-align: bottom;
+  }
+  .x-ars-xplain {
+    padding-right: 5px;
+  }
+  .x-ars-xplain-search-item-text {
+    font-weight: bold;
+  }
+  .x-ars-xplain-data {
+    padding: 1px 1px;
+  }
+  .x-combo-selected {
+    .x-ars-xplain-label-land {
+      border-left: 1px solid @selectedBorderColor;
+    }
+
+    .x-ars-xplain-label-gem {
+      border-right: 1px solid @selectedBorderColor;
+    }
+
+    .x-ars-xplain-leftcorner {
+      border-left: 1px solid @selectedBorderColor;
+      border-top: 1px solid @selectedBorderColor;
+      min-width: 10px;
+    }
+
+    .x-ars-xplain-rightcorner {
+      border-right: 1px solid @selectedBorderColor;
+      border-top: 1px solid @selectedBorderColor;
+      min-width: 10px;
+    }
+  }
 }
