@@ -344,6 +344,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::LABEL => 'E-Mail', // _('E-Mail')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER              => true,
             ],
             // sql: from_email + from_name
             'from' => [
