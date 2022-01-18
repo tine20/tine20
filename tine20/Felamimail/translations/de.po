@@ -2033,3 +2033,6 @@ msgstr "Persönliche Konten hinzufügen"
 #: Acl/Rights.php:111
 msgid "Create new personal email accounts"
 msgstr "Neue persönliche Konten hinzufügen"
+
+msgid "It is not possible to file the message in this record (might be a recurring event)."
+msgstr "Es ist nicht nöglich, die Nachricht hier abzulegen (es könnte sich um einen Wiederholungstermin handeln)."

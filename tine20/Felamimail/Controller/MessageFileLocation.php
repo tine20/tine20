@@ -157,10 +157,13 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
         }
 
         if (strlen($record->getId()) > 40) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' record: ' . print_r($record->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' record: ' . print_r($record->toArray(), true));
             }
-            throw new Tinebase_Exception_InvalidArgument('record id is too long: ' . $record->getId());
+            // TODO allow to file messages in recurring events
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+            $message = $translation->_('It is not possible to file the message in this record (might be a recurring event).');
+            throw new Tinebase_Exception_SystemGeneric($message);
         }
 
         $messageId = $this->_getMessageId($message);
