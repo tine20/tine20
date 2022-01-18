@@ -99,10 +99,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @return Addressbook_Model_List
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $result = new Tinebase_Record_RecordSet('Addressbook_Model_List',
-            array(parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted)));
+            array(parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect)));
         $this->_removeHiddenListMembers($result);
         $this->_setAccountOnly($result);
         /** @noinspection PhpIncompatibleReturnTypeInspection */

@@ -327,15 +327,10 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
 
-            $result = $this->_doRightsCleanup($result);
+            $result->aclProtect();
         }
         
         return $result;
-    }
-
-    protected function _doRightsCleanup(&$data)
-    {
-        return $data;
     }
     
     /**
@@ -521,11 +516,12 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param int $_containerId
      * @param bool         $_getRelatedData
      * @param bool $_getDeleted
+     * @param bool $_aclProtect
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, bool $_aclProtect = true)
     {
         $this->_checkRight(self::ACTION_GET);
         
@@ -548,6 +544,10 @@ abstract class Tinebase_Controller_Record_Abstract
             // get related data only on request (defaults to TRUE)
             if ($_getRelatedData) {
                 $this->_getRelatedData($record);
+            }
+
+            if ($_aclProtect) {
+                $record->aclProtect();
             }
         }
         
@@ -658,6 +658,8 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
 
+        $records->aclProtect();
+
         return $records;
     }
 
@@ -678,6 +680,8 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($this->resolveCustomfields()) {
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
+
+        $records->aclProtect();
 
         return $records;
     }
@@ -1318,7 +1322,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($this->_backend instanceof Tinebase_Backend_Sql_Abstract) {
                 $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
             }
-            $currentRecord = $this->get($_record->getId(), null, true, $_updateDeleted);
+            $currentRecord = $this->get($_record->getId(), null, true, $_updateDeleted, false);
             unset($raii);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

@@ -99,6 +99,7 @@
  * @property array      $denormalizedFields
  * @property array      $denormalizationConfig
  * @property string     $delegateAclField
+ * @property array|null $aclProtectedFields
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -350,6 +351,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
      */
     protected $_defaultSortInfo = NULL;
+
+    /**
+     * @var null|array<string, array<string>>
+     */
+    protected $_aclProtectedFields = null;
 
     /**
      * Defines the right to see this model
@@ -1688,6 +1694,14 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected function _populateProperties($fieldKey, &$fieldDef)
     {
+        if (isset($fieldDef[self::ACL_PROTECTED]) && is_array($fieldDef[self::ACL_PROTECTED])) {
+            foreach ($fieldDef[self::ACL_PROTECTED] as $acl) {
+                if (!isset($this->_aclProtectedFields[$acl])) {
+                    $this->_aclProtectedFields[$acl] = [];
+                }
+                $this->_aclProtectedFields[$acl][] = $fieldKey;
+            }
+        }
         switch ($fieldDef[self::TYPE]) {
             case self::TYPE_JSON:
             case self::TYPE_MODEL:

@@ -86,7 +86,7 @@ class Voipmanager_Controller_Snom_Line extends Voipmanager_Controller_Abstract
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $id = Voipmanager_Model_Snom_Line::convertSnomLineIdToInt($_id);
         if (($result = $this->_cache->load('snomPhoneLine_' . $id)) === false) {

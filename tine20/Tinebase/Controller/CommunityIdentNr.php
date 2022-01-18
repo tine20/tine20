@@ -46,9 +46,9 @@ class Tinebase_Controller_CommunityIdentNr extends Tinebase_Controller_Record_Ab
      * @see Tinebase_Controller_Record_Abstract::get()
      * @return Tinebase_Model_CommunityIdentNr
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
-        $communityNumber = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        $communityNumber = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
         return $this->aggregatePopulation($communityNumber);
     }
 
