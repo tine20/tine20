@@ -6,6 +6,7 @@
   image: ${UTIL_REGISTRY}/docker:19.03.1-r3 # dose not need docker. But the docker image should already exist on the runners.
   needs: []
   before_script:
+    - apk add gettext
     - !reference [.lib, script]
     - cp $DOCKER_GIT_CONFIG ~/.gitconfig
     - git_repo_clone
