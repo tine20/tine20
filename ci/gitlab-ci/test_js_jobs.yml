@@ -1,11 +1,74 @@
 js-e2e-tests-source:
-  extends: .abstract_jobs.e2e_test
+  extends: .abstract_jobs.test
   stage: test
   needs:
     - docker_build_source
   variables:
+    KUBERNETES_CPU_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_CPU_REQUEST
+    KUBERNETES_CPU_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_CPU_LIMIT
+    KUBERNETES_MEMORY_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_MEMORY_REQUEST
+    KUBERNETES_MEMORY_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_MEMORY_LIMIT
+    KUBERNETES_HELPER_CPU_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_HELPER_CPU_REQUEST
+    KUBERNETES_HELPER_CPU_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_HELPER_CPU_LIMIT
+    KUBERNETES_HELPER_MEMORY_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_HELPER_MEMORY_REQUEST
+    KUBERNETES_HELPER_MEMORY_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_HELPER_MEMORY_LIMIT
+    KUBERNETES_SERVICE_CPU_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_SERVICE_CPU_REQUEST
+    KUBERNETES_SERVICE_CPU_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_SERVICE_CPU_LIMIT
+    KUBERNETES_SERVICE_MEMORY_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_SERVICE_MEMORY_REQUEST
+    KUBERNETES_SERVICE_MEMORY_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_SERVICE_MEMORY_LIMIT
+    TEST_DOCKER: "true"
+    TEST_BROWSER_LANGUAGE: en
+    TINE20_INSTALL_LANG: de
     ARG_COPY_SOURCE: "true"
     ARG_IMAGE: test-source
+  services:
+    - !reference [.lib-services, db_service]
+    - !reference [.lib-services, redis_service]
+    - !reference [.lib-services, mail_service]
+    - name: ${REGISTRY}/${ARG_IMAGE}-commit:${IMAGE_TAG}
+      alias: tine
+      entrypoint:
+        !reference [.lib, entry_points, tine_as_a_service]
+  image:
+    name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.4
+  before_script:
+    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; fi
+    - printf "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}\nCUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}\nCUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}\nCUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" > /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_as_service.env
+    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20
+    - if test "COMPOSER_LOCK_REWRITE" == "true"; then php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/packaging/composer/composerLockRewrite.php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/composer.lock satis.default.svc.cluster.local; fi
+    - composer install --no-ansi --no-progress --no-suggest --no-scripts --ignore-platform-reqs
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/install_custom_app.sh
+    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/e2etests
+    - echo no cp -r /root/node_modules .
+    - npm install
+    - while [ ! -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID ]; do sleep 1; done
+    - if [ -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/setup_failed_$CI_JOB_ID ]; then exit 1; fi
+    - echo "%%%% ready to start with tests" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+  script:
+    - env
+    - |
+      if [ "${TINE20_BUILDTYPE}" == "DEVELOPMENT" ]; then
+        export TEST_URL=http://tine:10443;
+      else
+        export TEST_URL=http://tine:80;
+      fi
+    - while ! wget $TEST_URL; do echo; done
+    - echo TEST_URL=${TEST_URL}
+    - export TEST_ENVIROMENT=""
+    - echo "%%%% tests ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+    - npm test -- $JS_E2E_TEST_FILTER --reporters=default --reporters=jest-junit
+    - echo "%%%% tests ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+  after_script:
+    - cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/e2etests/junit.xml ${CI_PROJECT_DIR}/junit.xml
+    - cat ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog
+  artifacts:
+    when: always
+    reports:
+      junit: ${CI_PROJECT_DIR}/junit.xml
+    paths:
+      - ${CI_PROJECT_DIR}/tine20.log
+      - ${CI_PROJECT_DIR}/phpunit-report.xml
+    expire_in: 7 day
   interruptible: true
   rules:
     - if: $RUN_NO_TESTS == "true"
@@ -17,3 +80,5 @@ js-e2e-tests-source:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /js-e2e-tests-source/
     - if: $CI_PIPELINE_SOURCE == "schedule" && $JS_E2E_TESTS_SOURCE_SCHEDULE != "false"
     - if: $CI_COMMIT_TAG
+  
+  
