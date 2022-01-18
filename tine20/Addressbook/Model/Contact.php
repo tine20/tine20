@@ -100,6 +100,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      */
     const SMALL_PHOTO_SIZE = 36000;
 
+    public const TABLE_NAME = 'addressbook';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *

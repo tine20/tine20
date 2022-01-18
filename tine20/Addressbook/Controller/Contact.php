@@ -553,6 +553,11 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if (true === $updateSyncBackendIds) {
             $this->_backend->updateSyncBackendIds($_createdRecord->getId(), $_createdRecord->syncBackendIds);
         }
+
+        $event = new Addressbook_Event_CreateContact();
+        $event->createdContact = $_createdRecord;
+        $event->record = $_record;
+        Tinebase_Event::fireEvent($event);
     }
 
     public function resetSyncBackends()
@@ -911,7 +916,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $nominatim = new Zend_Service_Nominatim(/* url */ null, $httpClient);
         return $nominatim;
     }
-    
+
     /**
      * _applyNominatimPlaceToRecord
      * 
