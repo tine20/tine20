@@ -28,11 +28,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     protected $_duplicateCheckFields = array(array('account_id'), array('number'));
     protected $_resolveCustomFields = TRUE;
 
-    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
     protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
-    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
     
     /**
      * the constructor
@@ -61,6 +61,32 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             return;
         }
         parent::checkFilterACL($_filter, $_action);
+
+        // for GET we also allow HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA
+        if (self::ACTION_GET !== $_action) {
+            return;
+        }
+
+        $orWrapper = new Tinebase_Model_Filter_FilterGroup([], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+        $andWrapper = new Tinebase_Model_Filter_FilterGroup();
+        $filters = $_filter->getAclFilters();
+        foreach ($filters as $filter) {
+            $_filter->removeFilter($filter);
+            $andWrapper->addFilter($filter);
+        }
+        $orWrapper->addFilterGroup($andWrapper);
+
+        $andWrapper = new Tinebase_Model_Filter_FilterGroup();
+        $containerFilter = new Tinebase_Model_Filter_DelegatedAcl('division_id', null, null,
+            array_merge($_filter->getOptions(), [
+                'modelName' => $this->_modelName
+            ]));
+        $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA]);
+        $andWrapper->addFilter($containerFilter);
+        $andWrapper->addFilter(new Tinebase_Model_Filter_Text('account_id', 'equals', Tinebase_Core::getUser()->getId()));
+        $orWrapper->addFilterGroup($andWrapper);
+
+        $_filter->addFilterGroup($orWrapper);
     }
 
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
@@ -73,11 +99,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         switch ($_action) {
             case self::ACTION_GET:
                 if ($_record->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
-                    try {
-                        if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, $_throw, $_errorMessage, $_oldRecord)) {
-                            return true;
-                        }
-                    } catch (Exception $e) {}
+                    if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, false, $_errorMessage, $_oldRecord)) {
+                        return true;
+                    }
                 }
                 $_action = HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA;
                 break;

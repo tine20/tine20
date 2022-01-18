@@ -99,7 +99,7 @@
  * @property array      $denormalizedFields
  * @property array      $denormalizationConfig
  * @property string     $delegateAclField
- * @property array|null $aclProtectedFields
+ * @property array|null $grantProtectedFields
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -355,7 +355,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     /**
      * @var null|array<string, array<string>>
      */
-    protected $_aclProtectedFields = null;
+    protected $_grantProtectedFields = null;
 
     /**
      * Defines the right to see this model
@@ -1694,12 +1694,18 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected function _populateProperties($fieldKey, &$fieldDef)
     {
-        if (isset($fieldDef[self::ACL_PROTECTED]) && is_array($fieldDef[self::ACL_PROTECTED])) {
-            foreach ($fieldDef[self::ACL_PROTECTED] as $acl) {
-                if (!isset($this->_aclProtectedFields[$acl])) {
-                    $this->_aclProtectedFields[$acl] = [];
+        if (isset($fieldDef[self::REQUIRED_GRANTS]) && is_array($fieldDef[self::REQUIRED_GRANTS])) {
+            foreach ($fieldDef[self::REQUIRED_GRANTS] as $key => $acl) {
+                if (is_int($key)) {
+                    $key = Tinebase_Controller_Record_Abstract::ACTION_ALL;
                 }
-                $this->_aclProtectedFields[$acl][] = $fieldKey;
+                if (!isset($this->_grantProtectedFields[$key])) {
+                    $this->_grantProtectedFields[$key] = [];
+                }
+                if (!isset($this->_grantProtectedFields[$key][$acl])) {
+                    $this->_grantProtectedFields[$key][$acl] = [];
+                }
+                $this->_grantProtectedFields[$key][$acl][] = $fieldKey;
             }
         }
         switch ($fieldDef[self::TYPE]) {

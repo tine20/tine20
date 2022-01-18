@@ -216,6 +216,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @var string
      */
+    public const ACTION_ALL = 'all';
     public const ACTION_GET = 'get';
     public const ACTION_CREATE = 'create';
     public const ACTION_UPDATE = 'update';
@@ -327,7 +328,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
 
-            $result->aclProtect();
+            $result->applyFieldGrants($_action);
         }
         
         return $result;
@@ -547,7 +548,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
 
             if ($_aclProtect) {
-                $record->aclProtect();
+                $record->applyFieldGrants(self::ACTION_GET);
             }
         }
         
@@ -658,7 +659,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
 
-        $records->aclProtect();
+        $records->applyFieldGrants(self::ACTION_GET);
 
         return $records;
     }
@@ -681,7 +682,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
 
-        $records->aclProtect();
+        $records->applyFieldGrants(self::ACTION_GET);
 
         return $records;
     }
@@ -720,6 +721,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $this->_setContainer($_record);
 
+            $_record->applyFieldGrants(self::ACTION_CREATE);
             $_record->isValid(TRUE);
 
             $this->_checkGrant($_record, self::ACTION_CREATE);
@@ -1319,18 +1321,22 @@ abstract class Tinebase_Controller_Record_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             $_record->isValid(TRUE);
+
             if ($this->_backend instanceof Tinebase_Backend_Sql_Abstract) {
                 $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
             }
             $currentRecord = $this->get($_record->getId(), null, true, $_updateDeleted, false);
             unset($raii);
-            
+
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
             
             // add _doForceModlogInfo behavior
             $origRecord = clone ($_record);
             $this->_updateACLCheck($_record, $currentRecord);
+
+            $_record->applyFieldGrants(self::ACTION_UPDATE, $currentRecord);
+
             $this->_concurrencyManagement($_record, $currentRecord);
             $this->_forceModlogInfo($_record, $origRecord, self::ACTION_UPDATE);
             $this->_inspectBeforeUpdate($_record, $currentRecord);
@@ -2428,7 +2434,8 @@ abstract class Tinebase_Controller_Record_Abstract
         if (($mc = $_record->getConfiguration()) && $mc->delegateAclField) {
             /** @var Tinebase_Controller_Record_Abstract $ctrl */
             $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
-            return $ctrl::getInstance()->checkGrant(
+            $ctrl = $ctrl::getInstance();
+            return $ctrl->checkGrant(
                 $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
                     $_record->{$mc->delegateAclField} :
                     $ctrl->get($_record->{$mc->delegateAclField}),

@@ -106,7 +106,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'     => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -116,7 +116,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -126,7 +126,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -136,7 +136,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -146,7 +146,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -156,7 +156,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -173,7 +173,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -183,7 +183,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -220,7 +220,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -230,7 +230,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -241,7 +241,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -252,7 +252,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -263,7 +263,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -273,7 +273,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -284,7 +284,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -336,7 +336,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -363,7 +363,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     'dependentRecords' => TRUE,
                 ),
                 'group' => 'private',
-                self::ACL_PROTECTED => [
+                self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
                 ],
             ),
@@ -406,12 +406,12 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         return null;
     }
 
-    public function aclProtect()
+    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null)
     {
         if (Tinebase_Core::getUser()
                 ->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
             return;
         }
-        parent::aclProtect();
+        parent::applyFieldGrants($action, $oldRecord);
     }
 }

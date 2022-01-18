@@ -62,7 +62,7 @@ class Tinebase_Model_Filter_DelegatedAcl extends Tinebase_Model_Filter_Abstract 
         } elseif($refMC->{Tinebase_ModelConfiguration::CONTAINER_PROPERTY}) {
 
             $this->_subFilter = new Tinebase_Model_Filter_Container(
-                $refMC->{Tinebase_ModelConfiguration::CONTAINER_PROPERTY}, null, null, $options);
+                $refMC->{Tinebase_ModelConfiguration::CONTAINER_PROPERTY}, null, '/', $options);
 
         } else {
             throw new Tinebase_Exception_Record_DefinitionFailure($refModel . ' doesn\'t have neither ' .

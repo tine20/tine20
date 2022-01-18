@@ -1624,26 +1624,53 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     {
     }
 
-    public function aclProtect()
+    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null)
     {
         $mc = static::getConfiguration();
-        if (empty($aclProtectedFields = $mc->aclProtectedFields)) {
+        if (!$mc || empty($grantProtectedFields = $mc->grantProtectedFields)) {
             return;
+        }
+        if (!isset($grantProtectedFields[$action])) {
+            if (!isset($grantProtectedFields[Tinebase_Controller_Record_Abstract::ACTION_ALL])) {
+                return;
+            }
+            $grantProtectedFields = $grantProtectedFields[Tinebase_Controller_Record_Abstract::ACTION_ALL];
+        } else {
+            $grantProtectedFields = $grantProtectedFields[$action];
         }
         /** @var Tinebase_Controller_Record_Abstract $ctrl */
         $ctrl = Tinebase_Core::getApplicationInstance(static::class);
 
         $access = [];
         $deny = [];
-        foreach ($aclProtectedFields as $acl => $fields) {
+        foreach ($grantProtectedFields as $acl => $fields) {
             if ($ctrl->checkGrant($this, $acl, false)) {
                 $access = array_unique(array_merge($access, $fields));
             } else {
                 $deny = array_unique(array_merge($deny, $fields));
             }
         }
-        foreach (array_intersect($deny, $access) as $denyProperty) {
-            $this->{$denyProperty} = null;
+        if (empty($denyProperties = array_intersect($deny, $access))) {
+            return;
+        }
+
+        if (null === $oldRecord) {
+            $bypassFilters = $this->bypassFilters;
+            $this->bypassFilters = true;
+            try {
+                foreach ($denyProperties as $denyProperty) {
+                    unset($this->{$denyProperty});
+                }
+            } finally {
+                $this->bypassFilters = $bypassFilters;
+            }
+            if (true !== $this->bypassFilters) {
+                $this->isValid(true);
+            }
+        } else {
+            foreach ($denyProperties as $denyProperty) {
+                $this->{$denyProperty} = $oldRecord->{$denyProperty};
+            }
         }
     }
 }
