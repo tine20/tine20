@@ -1041,7 +1041,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * get attachment defined by temp file
      *
-     * @param $attachment
+     * @param mixed $attachment
      * @return null|Zend_Mime_Part
      * @throws Tinebase_Exception_NotFound
      */
@@ -1052,8 +1052,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             return null;
         }
 
-        if (! $tempFile->path) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
+        if (! $tempFile->path || ! file_exists($tempFile->path)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' Could not find attachment - tempfile: '
+                . print_r($tempFile->toArray(), true));
             return null;
         }
 
@@ -1077,7 +1079,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     }
 
     /**
-     * @param $attachment
+     * @param mixed $attachment
      * @return null|Tinebase_Model_TempFile|Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
@@ -1086,7 +1088,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $tempFileBackend = Tinebase_TempFile::getInstance();
         $tempFile = ($attachment instanceof Tinebase_Model_TempFile)
             ? $attachment
-            : (((isset($attachment['tempFile']) || array_key_exists('tempFile', $attachment))) ? $tempFileBackend->get($attachment['tempFile']['id']) : NULL);
+            : (((isset($attachment['tempFile']) || array_key_exists('tempFile', $attachment)))
+                ? $tempFileBackend->get($attachment['tempFile']['id'])
+                : NULL);
 
         return $tempFile;
     }
