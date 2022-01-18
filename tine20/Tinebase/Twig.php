@@ -146,6 +146,14 @@ class Tinebase_Twig
 
         $locale = $this->_locale;
         $translate = $this->_translate;
+
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('removeSpace', function($str) {
+            return str_replace(' ', '', $str);
+        }));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', function($str) {
+            return transliterator_transliterate('Any-Latin; Latin-ASCII', $str);
+        }));
+
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
             function ($str) use($locale, $translate) {
                 $translatedStr = $translate->translate($str, $locale);

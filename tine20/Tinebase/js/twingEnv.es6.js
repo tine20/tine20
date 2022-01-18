@@ -6,8 +6,9 @@
  * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import { TwingEnvironment, TwingLoaderArray } from 'twing'
+import { TwingEnvironment, TwingLoaderArray, TwingFilter } from 'twing'
 import { TwingExtensionIntl } from 'twing-intl'
+import transliterate from 'util/transliterate'
 
 let twingEnv
 
@@ -28,6 +29,14 @@ export default function getTwingEnv () {
     })
 
     twingEnv.addExtension(new TwingExtensionIntl())
+
+    twingEnv.addFilter(new TwingFilter('removeSpace', function (string) {
+      return string.replaceAll(' ', '')
+    }))
+
+    twingEnv.addFilter(new TwingFilter('transliterate', function (string) {
+      return transliterate(string)
+    }))
   }
 
   return twingEnv
