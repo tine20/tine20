@@ -5,8 +5,7 @@
 .lib:
   script:
     - |
-      # ci/gitlab-ci/lib.yml:script
-      # lib/docker_build_image.sh
+      # lib/scripts/docker_build_image.sh
       docker_build_image() {
           local target=$1;
           local hash=$2
@@ -28,7 +27,7 @@
           fi;
       }
 
-      # lib/docker_hub.sh
+      # lib/scripts/docker_hub.sh
       docker_hub_deploy () {
           set -e
           name=$1
@@ -63,7 +62,7 @@
           docker_hub_deploy $1 $2 $(echo $CI_COMMIT_TAG | cut -d '.' -f 1)
       }
 
-      # lib/docker_image_hash.sh
+      # lib/scripts/docker_image_hash.sh
       _longest_common_prefix() {
           declare -a names;
           declare -a parts;
@@ -150,7 +149,7 @@
           esac
       }
 
-      # lib/docker_layer_cache.sh
+      # lib/scripts/docker_layer_cache.sh
       docker_layer_cache_populat_with_hash_image() {
           target=$1;
           hash=$2;
@@ -158,7 +157,7 @@
           docker_registry_rename_remote $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY $target $hash $target $(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-$PHP_VERSION;
       }
 
-      # lib/docker_registry.sh
+      # lib/scripts/docker_registry.sh
       docker_registry_image_exists() {
           local image=$1;
           local tag=$2;
@@ -199,12 +198,12 @@
           docker_registry_rename_remote $REGISTRY_USER $REGISTRY_PASSWORD $REGISTRY $source $hash ${target}-commit ${IMAGE_TAG};
       }
 
-      # lib/git_repo.sh
+      # lib/scripts/git_repo.sh
       git_repo_clone () {
           git clone ${CI_REPOSITORY_URL} --branch ${CI_COMMIT_REF_NAME} --depth 1 --single-branch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
       }
 
-      # lib/github.sh
+      # lib/scripts/github.sh
       github_get_release_by_tag() {
           owner=$1
           repo=$2
@@ -270,7 +269,7 @@
           curl https://api.github.com/repos/$1/$2/releases | jq -r '.[0].tag_name'
       }
 
-      # lib/merge.sh
+      # lib/scripts/merge.sh
       merge_merge_upwards () {
           if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" "customers"; then
               ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh "$MATRIX_ROOM" "🔴 Auto merging $1 into $2 failed in $CI_PIPELINE_NAME $CI_JOB_URL."
@@ -334,7 +333,7 @@
           done
       }
 
-      # lib/packaging.sh
+      # lib/scripts/packaging.sh
       packaging_build_packages() {
           version=$1
           release=$2
@@ -474,7 +473,7 @@
       
 
 
-      # lib/pipeline_status.sh
+      # lib/scripts/pipeline_status.sh
       pipeline_status_send () {
           errors=$(curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/test_report" | jq -c '.test_suites[] | select((.error_count>0) or .failed_count>0)| {name,error_count,failed_count}')
       
@@ -497,7 +496,7 @@
           ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/send_matrix_message.sh $MATRIX_ROOM "$message"
       }
 
-      # lib/release.sh
+      # lib/scripts/release.sh
       release_tag_main_if_needed() {
           if [ "$RELEASE_CE_TO_GITHUB" != "true" ]; then
               echo "'RELEASE_CE_TO_GITHUB=$RELEASE_CE_TO_GITHUB' => do not tag main."
@@ -540,7 +539,7 @@
           git push github $tag
       }
 
-      # lib/repo.sh
+      # lib/scripts/repo.sh
       repo_get_customer_for_branch () {
           branch=$1
       
@@ -569,4 +568,60 @@
               return
           fi
       }
+
+  entry_points:
+    tine_as_a_service:
+      - bash
+      - -c
+      - |
+        # lib/entry_points/tine_as_a_service.sh
+        if test "${ARG_COPY_SOURCE}" == "true"; then
+            echo "copy src to container ...";
+            apk add rsync;
+        
+            echo "wait for mount"; date;
+            while [ ! -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_as_service.env ]; do
+                echo "Waiting for tine20...";
+                sleep 1; 
+            done;
+            sleep 10;
+            echo "tine20 dir available";
+            echo "loading additional env variable from /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_as_service.env";
+            source /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_as_service.env;
+            echo "%%%% befor source copy" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+            ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh;
+            echo "%%%% after source copy" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        fi
+        echo "%%%% setup ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        /usr/sbin/confd -onetime -backend env;
+        
+        tine20_await_db;
+        mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot";
+        mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS postfix";
+        mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';";
+        mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON postfix.* TO '$MYSQL_USER'@'%'";
+        mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON dovecot.* TO '$MYSQL_USER'@'%'";
+        mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/sql/dovecot_tables.sql;
+        mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < /config/sql/postfix_tables.sql;
+        
+        touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAMESPACE}/tine20.log
+        echo "%%%% setup ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        chown tine20:tine20 ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAMESPACE}/tine20.log
+        echo "%%%% tine install ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        cp /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/tine20/conf.d/disableMapPanel.inc.php /etc/tine20/conf.d/disableMapPanel.inc.php
+        
+        tine20_install;
+        echo "%%%% tine install ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        
+        echo "%%%% tine demodata ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        if [ -z "$TINE_DEMODATASET" ]; then
+            su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}" || touch /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/setup_failed_$CI_JOB_ID
+        else
+            su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}" -- demodata=set set=$TINE_DEMODATASET || touch /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/setup_failed_$CI_JOB_ID
+        fi;
+        
+        echo "%%%% tine demodata ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID;
+        echo "%%%% tine supervisord start" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        supervisord --nodaemon
 
