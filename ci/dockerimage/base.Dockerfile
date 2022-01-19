@@ -161,7 +161,10 @@ RUN addgroup -S -g 150 tine20 && \
 COPY ci/dockerimage/confd/conf.d /etc/confd/conf.d
 COPY ci/dockerimage/confd/templates/ /etc/confd/templates
 COPY etc/tine20/config.inc.php.tmpl /etc/confd/templates/config.inc.php.tmpl
+COPY etc/tine20/conf.d/logger.inc.php.tmpl /etc/confd/templates/logger.inc.php.tmpl
 COPY etc/nginx/sites-available/tine20.conf.tmpl /etc/confd/templates/nginx-vhost.conf.tmpl
+COPY etc/tine20/conf.d/*.inc.php.dist /etc/tine20/conf.d
+COPY etc/tine20/conf.d/*.inc.php /etc/tine20/conf.d
 COPY etc/nginx/conf.d/ /etc/nginx/conf.d
 COPY etc/nginx/snippets /etc/nginx/snippets
 COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/

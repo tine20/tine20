@@ -15,16 +15,18 @@ Then you need to download the current docker-compose.yaml. And save it in the fo
 ```
 wget http://packages.tine20.com/maintenance/docker/current/quickstart/docker-compose.yaml
 ```
-Next, you must accept the tine20 license. One way to do this is by setting the TINE20_ACCEPTED_TERMS_VERSION environment variable to the current or a newer version e.g 1000. This can be done in the .env file or in the docker-compose yaml.
-```
-echo "TINE20_ACCEPTED_TERMS_VERSION=1000" > .env
-```
 Now you can start the docker-compose.
 ```
 docker-compose up
 ```
 
-Wait a moment until the web container logs `web_1    | 2027-11-23 19:59:07,137 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)` Tine2.0 is now reachable under http://127.0.0.1:4000.
+Wait for the database to become available. If it is, the web container will log `web_1    | DB available`. Now open another terminal and start the tine installer. There you need to accept the tine-license and Privacy policy and you will be able to set the initial admin password.
+
+```
+docker-compose exec web tine20_install
+```
+
+Tine2.0 is now reachable under http://127.0.0.1:4000.
 
 ##### Cleanup
 Use the following to stop and delete all containers, networks and volumes created by this compose.

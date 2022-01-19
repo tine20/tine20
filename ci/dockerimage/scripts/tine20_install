@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TINE20_APPLICATION_TO_INSTALL=${TINE20_APPLICATION_TO_INSTALL:-'ActiveSync,Calendar,Felamimail,CoreData,Filemanager,Sales,Timetracker,Tasks,Crm,HumanResources,Inventory'}
+TINE20_APPLICATION_TO_INSTALL=${TINE20_APPLICATION_TO_INSTALL:-'ActiveSync,Calendar,Felamimail,CoreData,Filemanager,Sales,Timetracker,Tasks,Crm,HumanResources,Inventory,UserManual'}
 TINE20_CONFIG_PATH=${TINE20_CONFIG_PATH:-'/etc/tine20/config.inc.php'}
 
 cmd="php /usr/share/tine20/setup.php --install --config ${TINE20_CONFIG_PATH} ${TINE20_APPLICATION_TO_INSTALL} --"

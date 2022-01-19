@@ -6,7 +6,6 @@ owner = "root"
 mode = "0644"
 keys = [
     "/buildtype",
-    "/logger/priority",
     "/filesdir",
     "/tmpdir",
     "/database/host",
@@ -33,7 +32,4 @@ keys = [
     "/session/path",
     "/credentialcachesharedkey",
     "/filesystem/index_content",
-    "/logger/filename",
-    "/logger/additionalwriters/filename",
-    "/logger/additionalwriters/priority"
 ]
