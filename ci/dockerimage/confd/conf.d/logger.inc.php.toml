@@ -1,0 +1,12 @@
+[template]
+prefix = "/tine20"
+src = "logger.inc.php.tmpl"
+dest = "/etc/tine20/conf.d/logger.inc.php"
+owner = "root"
+mode = "0644"
+keys = [
+    "/logger/priority",
+    "/logger/filename",
+    "/logger/additionalwriters/filename",
+    "/logger/additionalwriters/priority"
+]

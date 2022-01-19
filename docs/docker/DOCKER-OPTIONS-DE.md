@@ -5,7 +5,6 @@ Tine 2.0 Business Edition Docker Optionen
 #### Optionen
 | Option | Wert | Beschreibung |
 |---|---|---|
-| TINE20_ACCEPTED_TERMS_VERSION | __0__ | Die Version der akzeptierten Begriffe muss die aktuelle oder neuere Version sein.
 | TINE20_ BUILDTYPE | __PRODUCTION__, DEVELOMENT | Muss auf DEVELOMENT eingestellt sein, damit das Webpack ordnungsgemäß funktioniert.
 | TINE20_LOGGER_PRIORITY | __5__,0-7 |
 | TINE20_FILESDIR | `/var/lib/tine20/files` |
