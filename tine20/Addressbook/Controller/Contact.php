@@ -453,6 +453,11 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if (true === $updateSyncBackendIds) {
             $this->_backend->updateSyncBackendIds($updatedRecord->getId(), $updatedRecord->syncBackendIds);
         }
+
+        $event = new Addressbook_Event_InspectContactAfterUpdate();
+        $event->updatedContact = $updatedRecord;
+        $event->record = $record;
+        Tinebase_Event::fireEvent($event);
     }
 
     protected function _updateMailinglistsOnEmailChange($updatedRecord, $currentRecord)
