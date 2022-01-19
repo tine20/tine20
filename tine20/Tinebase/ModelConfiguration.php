@@ -1764,12 +1764,26 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     unset($fieldDef[self::CONFIG][self::DENORMALIZATION_OF]);
                     static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]] = false;
                 }
+                $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
+                $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
                 if ($deNormOf) {
                     $fieldDef[self::CONFIG][self::DEPENDENT_RECORDS] = true;
                     $fieldDef[self::DOCTRINE_IGNORE] = true;
+                    if (self::TYPE_RECORD === $fieldDef[self::TYPE] && !isset($fieldDef[self::FILTER_DEFINITION])) {
+                        $fieldDef[self::FILTER_DEFINITION] = [
+                            self::FILTER                => Tinebase_Model_Filter_ForeignRecords::class,
+                            self::OPTIONS => [
+                                self::APP_NAME              => $fieldDef[self::CONFIG][self::APP_NAME],
+                                self::MODEL_NAME            => $fieldDef[self::CONFIG][self::MODEL_NAME],
+                                self::REF_ID_FIELD          => $fieldDef[self::CONFIG][self::REF_ID_FIELD],
+                                self::CONTROLLER            => $fieldDef[self::CONFIG][self::CONTROLLER_CLASS_NAME],
+                                self::RECORD_CLASS_NAME     => $fieldDef[self::CONFIG][self::RECORD_CLASS_NAME],
+                            ],
+                        ];
+                        unset($this->_filterModel[$fieldKey]);
+                        $this->_setFieldFilterModel($fieldDef, $fieldKey);
+                    }
                 }
-                $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
-                $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
                 $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
                 if ($fieldDef[self::TYPE] == 'record') {
                     $fieldDef['config']['length'] = 40;
