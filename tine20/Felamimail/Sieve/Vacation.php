@@ -364,6 +364,7 @@ class Felamimail_Sieve_Vacation
             'mime'                  => $this->_mime,
             'start_date'            => $this->_startdate,
             'end_date'              => $this->_enddate,
+            'date_enabled'          => $this->_dateEnabled
         );
     }
 }

@@ -93,7 +93,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         this.loadEmailQuotas();
-        this.disableSieveTabs();
         this.disableFormFields();
     },
 
@@ -103,6 +102,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.preventCheckboxEvents = false;
 
         this.loadDefaultAddressbook();
+        this.disableSieveTabs();
+        this.loadSieve();
     },
 
     /**
@@ -126,7 +127,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.updateEmailQuotas();
 
         if (this.isSystemAccount()) {
-            this.updateVacationRecord();
+            this.updateSieve();
         }
     },
 
@@ -241,13 +242,15 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     disableSieveTabs() {
-        if (this.asAdminModule && !Tine.Admin.registry.get('masterSieveAccess')) {
-            this.vacationPanel.setDisabled(true);
-            this.rulesGridPanel.setDisabled(true);
+        if (this.asAdminModule) {
+            if (!Tine.Admin.registry.get('masterSieveAccess')) {
+                this.vacationPanel.setDisabled(true);
+                this.rulesGridPanel.setDisabled(true);
+            }
         } else {
-            if (this.isSystemAccount()) {
-                this.loadVacationRecord();
-                this.loadRuleRecord();
+            if (! this.isSystemAccount()) {
+                this.vacationPanel.setDisabled(true);
+                this.rulesGridPanel.setDisabled(true);
             }
         }
     },
@@ -687,12 +690,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     checkState: function() {
                         this.setDisabled(! me.isSystemAccount());
                     }
-                }], [this.sieveExploreScriptButton = new Ext.Button({
+                }], [new Ext.Button({
                     text: this.app.i18n._('Explore Sieve script'),
                     handler: async () => {
                         await this.showSieveScriptWindow();
                     },
-                    disabled: false
+                    hidden: ! this.asAdminModule
                 })]
                 ]
             }, {
@@ -1025,9 +1028,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
         } else {
             if (this.isSystemAccount()) {
-                await this.updateVacationRecord();
-                await this.saveVacationRecord();
-                await this.saveRuleRecord();
+                await this.updateSieve();
             }
             Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
         }
@@ -1116,79 +1117,34 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * load vacation record
      *
      */
-    loadVacationRecord: async function() {
+    loadSieve: function() {
+        if (! this.isSystemAccount()) {
+            return ;
+        }
+        
         let me = this;
+        
+        me.vacationRecord = Tine.Tinebase.data.Record.setFromJson(this.record.data?.sieve_vacation, Tine.Felamimail.Model.Vacation);
 
-        if (!me.record.id) {
-            return;
+        // mime type is always multipart/alternative
+        me.vacationRecord.set('mime', 'multipart/alternative');
+        if (me.record && me.record.get('signature')) {
+            me.vacationRecord.set('signature', me.record.get('signature'));
         }
-
-        if (!me.vacationRecordProxy) {
-            me.vacationRecordProxy = new Tine.Tinebase.data.RecordProxy({
-                appName: me.asAdminModule ? 'Admin' : 'Felamimail',
-                modelName: me.asAdminModule ? 'SieveVacation' : 'Vacation',
-                recordClass: Tine.Felamimail.Model.Vacation,
-                idProperty: 'id'
-            });
-        }
-
-        try {
-            me.vacationRecord = await me.vacationRecordProxy.promiseLoadRecord(me.record);
-            await me.afterIsRendered();
-
-            // mime type is always multipart/alternative
-            me.vacationRecord.set('mime', 'multipart/alternative');
-            if (me.record && me.record.get('signature')) {
-                me.vacationRecord.set('signature', me.record.get('signature'));
-            }
-
-            me.getForm().loadRecord(me.vacationRecord);
-            me.record.set('vacation',me.vacationRecord.data);
-
-            this.checkStates();
-        } catch (e) {
-            //deactivate the panel
-            me.vacationPanel.setDisabled(true);
-        }
-    },
-
-
-    /*
-     * load rule record
-     *
-     */
-    loadRuleRecord: function() {
-        let me = this;
-        if (!me.record.id) {
-            return;
-        }
-
-        if (!me.ruleRecordProxy) {
-            me.ruleRecordProxy = me.asAdminModule ? new Tine.Felamimail.RulesBackend({
-                appName: 'Admin',
-                modelName: 'SieveRule'
-            }) : Tine.Felamimail.rulesBackend;
-        }
-
-        me.ruleRecord = me.ruleRecordProxy.searchRecords(me.record.id, null, {
-            scope: me,
-            success: function(response) {
-                if (Ext.isArray(response.records)) {
-                    Ext.each(response.records, function(item) {
-                        let record = me.ruleRecordProxy.recordReader({responseText: Ext.encode(item)});
-                        me.rulesGridPanel.store.addSorted(record);
-                    });
-                }
-                me.ruleRecord = response.records;
-            },
-            failure: function (exception) {
-                Tine.Felamimail.handleRequestException(exception);
-            },
+    
+        me.getForm().loadRecord(me.vacationRecord);
+    
+        me.ruleRecords = this.record.data?.sieve_rules === '' ? [] : this.record.data?.sieve_rules;
+        Ext.each(me.ruleRecords, function(item) {
+            const record = Tine.Tinebase.data.Record.setFromJson(item, Tine.Felamimail.Model.Rule);
+            me.rulesGridPanel.store.addSorted(record);
         });
-
-        me.getForm().loadRecord(me.ruleRecord);
+        
+        me.getForm().loadRecord(me.ruleRecords);
+        //me.record.set('vacation',me.vacationRecord.data);
+        this.checkStates();
     },
-
+    
     /**
      * load email quotas
      *
@@ -1208,13 +1164,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * update vacation record
      *
      */
-    updateVacationRecord: async function() {
+    updateSieve: async function() {
         if (this.record.id && this.vacationRecord && this.vacationPanel) {
             let form = this.getForm();
             const contactIds = [];
-
+    
             form.updateRecord(this.vacationRecord);
-
+            
             Ext.each(['contact_id1', 'contact_id2'], function (field) {
                 if (form.findField(field) && form.findField(field).getValue() !== '') {
                     contactIds.push(form.findField(field).getValue());
@@ -1229,50 +1185,23 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (template !== '') {
                 try {
                     const response = await Tine.Felamimail.getVacationMessage(this.vacationRecord.data);
-                    this.vacationPanel.reasonEditor.setValue(response.message);
+                    this.vacationPanel.reasonEditor.setValue(response?.message);
                 } catch (e) {
                     Tine.Felamimail.handleRequestException(e);
                 }
             }
         }
-    },
-
-    /**
-     * update rule record
-     *
-     */
-    saveVacationRecord: async function () {
-        if (this.record.id && this.vacationRecord && this.vacationPanel) {
-            await this.vacationRecordProxy.saveRecord(this.vacationRecord);
-        }
-    },
-
-    /**
-     * update rule record
-     *
-     */
-    saveRuleRecord: async function () {
-        if (!this.ruleRecordProxy || !this.record.id) {
-            return;
-        }
-
+    
         let rules = [];
+      
         this.rulesGridPanel.store.each(function (record) {
             rules.push(record.data);
         });
-
-        await this.ruleRecordProxy.saveRules(this.record.id, rules, {
-            scope: this,
-            success: function (record) {
-                this.purgeListeners();
-            },
-            failure: Tine.Felamimail.handleRequestException.createSequence(function () {
-                this.hideLoadMask();
-            }, this),
-            timeout: 150000 // 3 minutes
-        });
+    
+        this.record.set('sieve_rules', rules);
+        this.record.set('sieve_vacation', this.vacationRecord);
     },
-
+    
     /**
      * update email quotas
      *

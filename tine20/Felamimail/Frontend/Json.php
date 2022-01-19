@@ -557,7 +557,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getAccount($id)
     {
-        return $this->_get($id, Felamimail_Controller_Account::getInstance());
+        $result = $this->_get($id, Felamimail_Controller_Account::getInstance());
+        
+        if (isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER) {
+            $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
+            $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);
+
+            $records = Felamimail_Controller_Sieve::getInstance()->getRules($id);
+            $result['sieve_rules'] =  $this->_multipleRecordsToJson($records);
+        }
+        
+        return $result;
     }
     
     /**
@@ -638,9 +648,11 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $record = new Felamimail_Model_Sieve_Vacation(array(), TRUE);
         $record->setFromJsonInUsersTimezone($recordData);
         
-        $record = Felamimail_Controller_Sieve::getInstance()->setVacation($record);
+        $account = Felamimail_Controller_Account::getInstance()->get($record->getId());
+        $record = Felamimail_Controller_Sieve::getInstance()->setSieveScript($account->getId(), $record);
+        $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($account->getId());
         
-        return $this->_recordToJson($record);
+        return $this->_recordToJson($vacation);
     }
     
     /**
@@ -669,9 +681,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveRules($accountId, $rulesData)
     {
         $records = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_Rule', $rulesData);
-        $records = Felamimail_Controller_Sieve::getInstance()->setRules($accountId, $records);
+        $records = Felamimail_Controller_Sieve::getInstance()->setSieveScript($accountId, null, $records);
+        $rules = Felamimail_Controller_Sieve::getInstance()->getRules($accountId);
         
-        return $this->_multipleRecordsToJson($records);
+        return $this->_multipleRecordsToJson($rules);
     }
 
     /**

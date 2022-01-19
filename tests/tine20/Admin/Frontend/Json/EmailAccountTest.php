@@ -414,9 +414,37 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $account = $this->testEmailAccountApiSharedAccount(false);
 
         // set vacation for account via admin fe
-        $vacation = Felamimail_Frontend_JsonTest::getVacationData($account);
-        $result = $this->_json->saveSieveVacation($vacation);
-        self::assertEquals($vacation['subject'], $result['subject']);
+        $vacationData = Felamimail_Frontend_JsonTest::getVacationData($account);
+        $vacationData['start_date'] = '2012-04-18';
+        $vacationData['end_date'] = '2012-04-20';
+        
+        $result = $this->_json->saveSieveVacation($vacationData);
+        $script = $this->_json->getSieveScript($account->getId());
+        self::assertEquals($vacationData['subject'], $result['subject']);
+        $this->assertStringContainsString('currentdate', $script);
+    }
+
+    public function testSaveEmailAccountWithSieveScript()
+    {
+        $this->_checkMasterUserTable();
+        $account = $this->testEmailAccountApiSharedAccount(false);
+        
+        // set vacation and rule for account via admin fe
+        $vacationData = Felamimail_Frontend_JsonTest::getVacationData($account);
+        $vacationData['start_date'] = '2012-04-18';
+        $vacationData['end_date'] = '2012-04-20';
+        
+        $account->sieve_rules = [];
+        $account->sieve_vacation = $vacationData;
+        
+        $result = $this->_json->saveEmailAccount($account->toArray());
+        $script = $this->_json->getSieveScript($account->getId());
+        $this->assertStringContainsString('currentdate', $script);
+
+        $account->sieve_rules = $this->_getSieveRuleData();
+        $result = $this->_json->saveEmailAccount($account->toArray());
+        $script = $this->_json->getSieveScript($account->getId());
+        $this->assertStringContainsString('currentdate', $script);
     }
 
     public function testSetSieveRules()

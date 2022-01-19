@@ -1315,7 +1315,24 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getEmailAccount($id)
     {
-        return $this->_get($id, Admin_Controller_EmailAccount::getInstance());
+        $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($id);
+        try {
+            $result = $this->_get($id, Admin_Controller_EmailAccount::getInstance());
+            
+            if (isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER) {
+                $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
+                $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);
+
+                $records = Felamimail_Controller_Sieve::getInstance()->getRules($id);
+                $result['sieve_rules'] = $this->_multipleRecordsToJson($records);
+            }
+        } finally {
+            Tinebase_EmailUser::removeSieveAdminAccess();
+        }
+//for unused variable check
+        unset($raii);
+        
+        return $result;
     }
 
     /**
@@ -1825,7 +1842,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * get sieve rules for account
+     * get sieve script for account
      *
      * @param  string $accountId
      * @return string

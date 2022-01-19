@@ -165,7 +165,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         /** @var Felamimail_Model_Account $record */
         $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
-
+        
         if ($record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->addSystemAccountConfigValues($record);
         }
@@ -966,6 +966,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'sieve_notification_email',
             'sieve_notification_move',
             'sieve_notification_move_folder',
+            'sieve_vacation',
+            'sieve_rules',
             'sent_folder',
             'trash_folder',
             'drafts_folder',
@@ -1187,16 +1189,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             case Felamimail_Model_Account::TYPE_SYSTEM:
             case Felamimail_Model_Account::TYPE_SHARED:
             case Felamimail_Model_Account::TYPE_USER_INTERNAL:
-                $this->_afterUpdateSetSieve($updatedRecord, $currentRecord);
+                $this->_afterUpdateSetSieve($updatedRecord, $record, $currentRecord);
                 break;
         }
     }
 
     /**
      * @param Felamimail_Model_Account $updatedRecord
+     * @param Felamimail_Model_Account $record
      * @param Felamimail_Model_Account $currentRecord
      */
-    protected function _afterUpdateSetSieve($updatedRecord, $currentRecord)
+    protected function _afterUpdateSetSieve($updatedRecord, $record, $currentRecord)
     {
         if (empty($updatedRecord->sieve_hostname)) {
             return;
@@ -1214,6 +1217,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $currentRecord->sieve_notification_move_folder
             ) {
                 Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
+            }
+            
+            // update sieve script too
+            if (is_array($record->sieve_vacation) && is_array($record->sieve_rules)) {
+                $sieveRecord = new Felamimail_Model_Sieve_Vacation($record->sieve_vacation, TRUE);
+                $ruleRecords = new Tinebase_Record_RecordSet(Felamimail_Model_Sieve_Rule::class, array_values($record->sieve_rules));
+
+                $record = Felamimail_Controller_Sieve::getInstance()->setSieveScript($updatedRecord->getId(), $sieveRecord, $ruleRecords);
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Update sieve script : ' . print_r($record, true));
             }
         } catch (Felamimail_Exception_SievePutScriptFail $fespsf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
@@ -1683,10 +1697,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             // skip all special update handling
             $account = $this->_backend->update($account);
         }
-
+        
         return $account;
     }
-
+    
     /**
      * @param Tinebase_Model_User|string|null $_accountId
      * @return Felamimail_Model_Account|null
