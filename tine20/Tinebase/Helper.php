@@ -560,4 +560,13 @@ class Tinebase_Helper
     {
         return self::convertDomain($domain, 'idn_to_utf8');
     }
+
+    /**
+     * Returns true if shell_exec() is available for use
+     */
+    public static function hasShellExec(): bool
+    {
+        $disabledFunctions = strtolower((string) ini_get('disable_functions'));
+        return strpos($disabledFunctions, 'shell_exec') === false;
+    }
 }
