@@ -17,7 +17,6 @@
  */
 
 class Tinebase_ModelConfiguration_Const {
-    const ACL_PROTECTED = 'aclProtected';
     const ADD_FILTERS = 'addFilters';
     const APPLICATION = 'application';
     const APP_NAME = 'appName';
@@ -163,6 +162,7 @@ class Tinebase_ModelConfiguration_Const {
     const RECORD_NAME = 'recordName';
     const RECORDS_NAME = 'recordsName';
     const RECURSIVE_RESOLVING = 'recursiveResolving';
+    const REQUIRED_GRANTS = 'requiredGrants';
     const RESOLVE_DELETED = 'resolveDeleted';
     const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 

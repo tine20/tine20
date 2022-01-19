@@ -401,5 +401,5 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      */
     public function hydrateFromBackend(array &$_data);
 
-    public function aclProtect();
+    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null);
 }

@@ -18,43 +18,100 @@
  */
 class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+
     protected $_contractController = NULL;
-    
+
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_applicationName = 'HumanResources';
         $this->_backend = new HumanResources_Backend_Account();
         $this->_modelName = 'HumanResources_Model_Account';
         $this->_purgeRecords = FALSE;
         // activate this if you want to use containers
-        $this->_doContainerACLChecks = FALSE;
+        $this->_doContainerACLChecks = true;
         $this->_contractController = HumanResources_Controller_Contract::getInstance();
     }
 
     /**
-     * holds the instance of the singleton
+     * Removes containers where current user has no access to
      *
-     * @var HumanResources_Controller_Account
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
      */
-    private static $_instance = NULL;
-
-    /**
-     * the singleton pattern
-     *
-     * @return HumanResources_Controller_Account
-     */
-    public static function getInstance()
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
-        if (static::$_instance === NULL) {
-            static::$_instance = new static();
+        // if we have manage_employee right, we need no acl filter
+        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
+            return;
+        }
+        parent::checkFilterACL($_filter, $_action);
+
+        // for GET we also allow HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA
+        if (self::ACTION_GET !== $_action) {
+            return;
         }
 
-        return static::$_instance;
+        $orWrapper = new Tinebase_Model_Filter_FilterGroup([], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+        $andWrapper = new Tinebase_Model_Filter_FilterGroup();
+        $filters = $_filter->getAclFilters();
+        foreach ($filters as $filter) {
+            $_filter->removeFilter($filter);
+            $andWrapper->addFilter($filter);
+        }
+        $orWrapper->addFilterGroup($andWrapper);
+
+        $andWrapper = new Tinebase_Model_Filter_FilterGroup();
+        $containerFilter = new Tinebase_Model_Filter_DelegatedAcl('employee_id', null, null,
+            array_merge($_filter->getOptions(), [
+                'modelName' => $this->_modelName
+            ]));
+        $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA]);
+        $andWrapper->addFilter($containerFilter);
+        $andWrapper->addFilter(new Tinebase_Model_Filter_ForeignId('employee_id', 'definedBy', [
+            ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+        ]));
+        $orWrapper->addFilterGroup($andWrapper);
+
+        $_filter->addFilterGroup($orWrapper);
+    }
+
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    {
+        // if we have manage_employee right, we have all grants
+        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
+            return true;
+        }
+
+        switch ($_action) {
+            case self::ACTION_GET:
+                if ($_record->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
+                    try {
+                        if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, $_throw, $_errorMessage, $_oldRecord)) {
+                            return true;
+                        }
+                    } catch (Exception $e) {}
+                }
+                $_action = HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA;
+                break;
+            case self::ACTION_CREATE:
+            case self::ACTION_UPDATE:
+            case self::ACTION_DELETE:
+                $_action = HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA;
+                break;
+        }
+        return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
 
     /**
