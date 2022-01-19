@@ -102,8 +102,20 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
             $middleWarePipe->pipe(new Tinebase_Expressive_Middleware_RoutePipeInject());
             $middleWarePipe->pipe(new Tinebase_Expressive_Middleware_Dispatch());
 
-
-            $response = $middleWarePipe->handle($this->_request);
+            try {
+                $response = $middleWarePipe->handle($this->_request);
+            } catch (ErrorException $ee) {
+                if (preg_match('/route\.cache\.[0-9a-f]+\): failed to open stream: No such file or directory/', $ee->getMessage())) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Routing cache not ready - clearing stat cache and trying again'
+                        . ' (' . $ee->getMessage() . ')');
+                    clearstatcache();
+                    $response = $middleWarePipe->handle($this->_request);
+                } else {
+                    throw $ee;
+                }
+            }
 
             if (null === $this->_emitter) {
                 $emitter = new SapiEmitter();
