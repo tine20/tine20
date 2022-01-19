@@ -1708,13 +1708,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         // fetch all applications and check if required are installed, otherwise remove app from array
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
-        foreach($applications as $appName) {
+        foreach ($applications as $appName) {
             echo 'Searching for DemoData in application "' . $appName . '"...' . PHP_EOL;
             $className = $appName.'_Setup_DemoData';
             if (class_exists($className)) {
                 echo 'DemoData in application "' . $appName . '" found!' . PHP_EOL;
                 $required = $className::getRequiredApplications();
-                foreach($required as $requiredApplication) {
+                foreach ($required as $requiredApplication) {
                     if (! Tinebase_Helper::in_array_case($applications, $requiredApplication)) {
                         echo 'Creating DemoData for Application ' . $appName . ' is impossible, because application "' . $requiredApplication . '" is not installed.' . PHP_EOL;
                         continue 2;
@@ -1727,7 +1727,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         unset($applications);
         
-        foreach($this->_applicationsToWorkOn as $app => $cfg) {
+        foreach ($this->_applicationsToWorkOn as $app => $cfg) {
             $this->_createDemoDataRecursive($app, $cfg, $_opts);
         }
 
