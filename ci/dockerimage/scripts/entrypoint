@@ -25,7 +25,7 @@ set -e
 # await database availability
 su tine20 -c "/usr/local/bin/tine20_await_db"
 
-if test "$TINE20_INSTALL" != false; then
+if test "$TINE20_INSTALL" == "true"; then
     # install tine20 if it is not installed or update it and 
     if su tine20 -c "php /usr/share/tine20/setup.php --config ${TINE20_CONFIG_PATH:-"/etc/tine20/config.inc.php"} --is_installed"; then
       # load config from env vars TINE20__<app>_<property>
