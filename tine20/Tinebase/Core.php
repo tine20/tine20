@@ -2054,10 +2054,13 @@ class Tinebase_Core
      */
     public static function systemCommandExists($name)
     {
+        if (! Tinebase_Helper::hasShellExec()) {
+            return false;
+        }
         $ret = shell_exec('which ' . $name);
         return ! empty($ret);
     }
-    
+
     /**
      * calls a system command with escapeshellcmd
      * 
@@ -2066,6 +2069,9 @@ class Tinebase_Core
      */
     public static function callSystemCommand($cmd)
     {
+        if (! Tinebase_Helper::hasShellExec()) {
+            throw new Tinebase_Exception('shell_exec is disabled on this server');
+        }
         return shell_exec(escapeshellcmd($cmd));
     }
 
