@@ -32,9 +32,7 @@ github_create_release_body() {
 
     previous_tag=$(github_get_latest_release_tag_name "$owner" "$repo")
 
-    echo '# Releasenotes'
-    echo '# Changelog'
-    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
+    repo_release_notesh "$tag" "$previous_tag"
 }
 
 github_release_add_asset() {

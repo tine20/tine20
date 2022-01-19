@@ -71,3 +71,22 @@ deploy-built-image-to-dockerhub:
     - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: false
+
+release-to-gitlab:
+  extends: .abstract_jobs.docker
+  stage: deploy
+  needs:
+    - docker_build_packages
+  before_script:
+    # todo move to docker image
+    - wget https://gitlab.com/api/v4/projects/16573099/packages/generic/release-cli/v0.10.0/release-cli-linux-amd64
+    - mv release-cli-linux-amd64 /usr/local/bin/release-cli
+    - chmod +x /usr/local/bin/release-cli
+  script:
+    - !reference [.lib, script]
+    - release_to_gitlab
+  rules:
+    - if: $CI_COMMIT_TAG
+    - when: never
+  timeout: 20m
+  interruptible: true
