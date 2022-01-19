@@ -1006,8 +1006,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     } elseif (preg_match('/mailto:(?P<email>.*)/i', $property->getValue(), $matches)) {
                         $email = $matches['email'];
                     }
+                    if (($email !== null) && is_string($email)) {
+                        $email = trim($email);
+                    }
                     
-                    if ($email !== null) {
+                    if (!empty($email)) {
                         // it's not possible to change the organizer by spec
                         if (empty($event->organizer)) {
                             $name = isset($property['CN']) ? $property['CN']->getValue() : $email;
