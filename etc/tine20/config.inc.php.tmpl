@@ -4,20 +4,6 @@ return array(
     'buildtype' => '{{getv "/buildtype" "RELEASE"}}',
     'confdfolder' => '/etc/tine20/conf.d',
 
-    'logger' => array (
-        'active' => true,
-        'filename' => '{{getv "/logger/filename" "/var/log/tine20/tine20.log"}}',
-        'priority' => {{getv "/logger/priority" "5"}},
-        'logruntime' => true,
-        'logdifftime' => true,
-        'traceQueryOrigins' => true,
-        'additionalWriters' => array(array(
-            'active' => true,
-            'filename' => '{{getv "/logger/additionalwriters/filename" "php://stdout"}}',
-            'priority' => {{getv "/logger/additionalwriters/priority" "5"}},
-        )),
-    ),
-
     'filesdir'  => '{{getv "/filesdir" "/var/lib/tine20/files"}}',
     'tmpdir' => '{{getv "/tmpdir" "/var/lib/tine20/tmp"}}',
 
@@ -46,10 +32,6 @@ return array(
         {{if exists "/login/password"}}
         'password' => '{{getv "/login/password"}}',
         {{end}}
-    ),
-
-    'fulltext' => array(
-        'tikaJar' => '/usr/local/bin/tika.jar',
     ),
 
     'caching' => array (
