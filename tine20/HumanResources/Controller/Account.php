@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -19,6 +19,7 @@
 class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
+    use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 
     protected $_contractController = NULL;
 
@@ -44,51 +45,12 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
         $this->_contractController = HumanResources_Controller_Contract::getInstance();
     }
 
-    /**
-     * Removes containers where current user has no access to
-     *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string $_action get|update
-     */
-    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
-    {
-        // if we have manage_employee right, we need no acl filter
-        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
-            return;
-        }
-        parent::checkFilterACL($_filter, $_action);
-
-        // for GET we also allow HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA
-        if (self::ACTION_GET !== $_action) {
-            return;
-        }
-
-        $orWrapper = new Tinebase_Model_Filter_FilterGroup([], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
-        $andWrapper = new Tinebase_Model_Filter_FilterGroup();
-        $filters = $_filter->getAclFilters();
-        foreach ($filters as $filter) {
-            $_filter->removeFilter($filter);
-            $andWrapper->addFilter($filter);
-        }
-        $orWrapper->addFilterGroup($andWrapper);
-
-        $andWrapper = new Tinebase_Model_Filter_FilterGroup();
-        $containerFilter = new Tinebase_Model_Filter_DelegatedAcl('employee_id', null, null,
-            array_merge($_filter->getOptions(), [
-                'modelName' => $this->_modelName
-            ]));
-        $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA]);
-        $andWrapper->addFilter($containerFilter);
-        $andWrapper->addFilter(new Tinebase_Model_Filter_ForeignId('employee_id', 'definedBy', [
-            ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
-        ]));
-        $orWrapper->addFilterGroup($andWrapper);
-
-        $_filter->addFilterGroup($orWrapper);
-    }
-
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
+        if (!$this->_doContainerACLChecks) {
+            return true;
+        }
+
         // if we have manage_employee right, we have all grants
         if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
             return true;

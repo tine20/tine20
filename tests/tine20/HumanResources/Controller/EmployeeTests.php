@@ -13,7 +13,48 @@
  */
 class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
 {
-    public function testAcls()
+    public function testAccountGrants()
+    {
+        $employeeController = HumanResources_Controller_Employee::getInstance();
+
+        $employee1 = $this->_getEmployee('pwulf');
+        $employee1->health_insurance = 'TKK';
+        $employee1 = $employeeController->create($employee1);
+        $division1 = HumanResources_Controller_Division::getInstance()->get($employee1->division_id);
+
+        $employee2 = $this->_getEmployee('rwright');
+        $employeeController->create($employee2);
+
+        $accountController = HumanResources_Controller_Account::getInstance();
+        $year = date('Y');
+
+        $result = $accountController->search(new HumanResources_Model_AccountFilter([
+            ['field' => 'year', 'operator' => 'equals', 'value' => $year],
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employee1->getId()],
+        ]));
+        $this->assertEquals(1, $result->count());
+
+        $result = $accountController->search(new HumanResources_Model_AccountFilter([
+            ['field' => 'year', 'operator' => 'equals', 'value' => $year],
+        ]));
+        $this->assertEquals(2, $result->count());
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $result = $accountController->search(new HumanResources_Model_AccountFilter([
+            ['field' => 'year', 'operator' => 'equals', 'value' => $year],
+        ]));
+        $this->assertEquals(0, $result->count());
+
+        Tinebase_Container::getInstance()->addGrants($division1->container_id, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA], true);
+
+        $result = $accountController->search(new HumanResources_Model_AccountFilter([
+            ['field' => 'year', 'operator' => 'equals', 'value' => $year],
+        ]));
+        $this->assertEquals(1, $result->count());
+    }
+
+    public function testGrants()
     {
         $employeeController = HumanResources_Controller_Employee::getInstance();
 
@@ -73,6 +114,9 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
         ]);
         $result = $employeeController->search($filter);
         $this->assertEquals(0, $result->count());
+
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $employeeController->update($employee1);
     }
 
     /**

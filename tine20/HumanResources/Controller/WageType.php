@@ -72,10 +72,8 @@ class HumanResources_Controller_WageType extends Tinebase_Controller_Record_Abst
             return;
         }
 
-        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_EMPLOYEE, FALSE);
-
-        if (! $hasRight) {
-            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' wage type.');
+        if (self::ACTION_GET !== $_action && !$this->checkRight(HumanResources_Acl_Rights::ADMIN, FALSE)) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' free time type.');
         }
         parent::_checkRight($_action);
     }
