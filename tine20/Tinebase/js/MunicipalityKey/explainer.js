@@ -5,7 +5,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-require('../../css/communityIdentExplainer.less');
+require('../../css/municipalityKeyExplainer.less');
 
 const qtipSatzart = Ext.util.Format.nl2br(`10=Land
 20=Regierungsbezirk
@@ -146,7 +146,7 @@ const ExplainForm = Ext.extend(Ext.form.Field, {
 });
 Ext.reg('ars-explain-field', ExplainForm)
 
-Tine.widgets.form.FieldManager.register('Tinebase', 'CommunityIdentNr', 'arsCombined', {
+Tine.widgets.form.FieldManager.register('Tinebase', 'MunicipalityKey', 'arsCombined', {
     xtype: 'ars-explain-field',
     height: 75
 }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <name>tinebase_import_communityidentnr</name>
-    <model>Tinebase_Model_CommunityIdentNr</model>
-    <plugin>Tinebase_Import_CommunityIdentNr</plugin>
+    <name>tinebase_import_municipalitykey</name>
+    <model>Tinebase_Model_MunicipalityKey</model>
+    <plugin>Tinebase_Import_MunicipalityKey</plugin>
     <type>import</type>
     <dryrun>0</dryrun>
     <headline>0</headline>
     <description>Import Community identification Numbers</description>
     <!-- _("Import Community identification Numbers") -->
     <extension>xlsx</extension>
-    <label>Community Identification Number Import</label>
-    <!-- _("Community Identification Number Import") -->
+    <label>Municipality Key Import</label>
+    <!-- _("Municipality Key Import") -->
     <sheet>1</sheet>
     <startRow>7</startRow>
     <endRow></endRow>

@@ -21,11 +21,11 @@ require('../../library/ExtJS/ext-custom');
 
 // include traditional stuff as defined in jsb2
 require('./../../Tinebase/Tinebase.jsb2');
-require('./CommunityIdentNr/model');
-require('./CommunityIdentNr/explainer');
-require('./CommunityIdentNr/picker');
-require('./CommunityIdentNr/grid');
-require('./CommunityIdentNr/editDialog');
+require('./MunicipalityKey/model');
+require('./MunicipalityKey/explainer');
+require('./MunicipalityKey/picker');
+require('./MunicipalityKey/grid');
+require('./MunicipalityKey/editDialog');
 
 
 // UI style >= 2019

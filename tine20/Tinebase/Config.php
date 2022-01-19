@@ -292,7 +292,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * Community identification Number
      * 
      */
-    const FEATURE_COMMUNITY_IDENT_NR = 'communityIdentNr';
+    const FEATURE_COMMUNITY_IDENT_NR = 'municipalityKey';
 
     const IMPORT_EXPORT_DEFAULT_CONTAINER = 'importExportDefaultContainer';
 
@@ -857,7 +857,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const COMMUNITYIDENTNR_DUP_FIELDS = 'communityIdentNrDupFields';
+    const MUNICIPALITYKEY_DUP_FIELDS = 'municipalityKeyDupFields';
     
     /**
      * (non-PHPdoc)
@@ -1591,10 +1591,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR           => true,
                 ],
                 self::FEATURE_COMMUNITY_IDENT_NR  => [
-                    self::LABEL                 => 'Community Identification Number',
-                    //_('Community Identification Number')
-                    self::DESCRIPTION           => 'Show the Community Identification Number in the Coredata',
-                    //_('Show the Community Identification Number in the Coredata')
+                    self::LABEL                 => 'Municipality Key',
+                    //_('Municipality Key')
+                    self::DESCRIPTION           => 'Show the Municipality Key in the Coredata',
+                    //_('Show the Municipality Key in the Coredata')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
@@ -3026,11 +3026,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 )
             )
         ),
-        self::COMMUNITYIDENTNR_DUP_FIELDS => array(
-            //_('Community Identification Number duplicate check fields')
-            'label'                 => 'Community Identification Number duplicate check fields',
-            //_('These fields are checked when a new Community Identification Number is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
-            'description'           => 'These fields are checked when a new Community Identification Number is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
+        self::MUNICIPALITYKEY_DUP_FIELDS => array(
+            //_('Municipality Key duplicate check fields')
+            'label'                 => 'Municipality Key duplicate check fields',
+            //_('These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
+            'description'           => 'These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
             'type'                  => 'array',
             'contents'              => 'array',
             'clientRegistryInclude' => TRUE,
