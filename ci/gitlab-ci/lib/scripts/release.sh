@@ -39,3 +39,12 @@ release_tag_main_if_needed() {
     git push origin $tag || return 1
     git push github $tag
 }
+
+release_to_gitlab() {
+    tag="${CI_COMMIT_TAG}"
+    customer="$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})"
+    previous_tag="$(git describe --abbrev=0 --tags)"
+
+    release-cli create --description "$(repo_release_notes "$tag" "$previous_tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
+        --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${tag}/all.tar\"}"
+}
