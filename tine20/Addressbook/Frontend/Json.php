@@ -125,7 +125,10 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $results = array();
         $contactPaging = $this->_preparePaginationParameter($paging);
-        $contactPaging->sort = "n_fn"; // Field are not named the same for contacts and lists
+        // type user should have higher priority than type contact
+        $contactPaging->sort = ['type', 'n_fn']; // Field are not named the same for contacts and lists
+        $contactPaging->dir = ['DESC', 'ASC']; 
+        
         $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
 
         $emailFields = ['n_fileas', 'email', 'email_home'];
