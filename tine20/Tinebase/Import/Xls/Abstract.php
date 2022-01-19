@@ -249,7 +249,7 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
                         'type' => 'IMPORTFILE'
                     )
                 );
-                Tinebase_Relations::getInstance()->setRelations(Tinebase_Model_CommunityIdentNr::class, Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND, $importedRecord->id, $relationData);
+                Tinebase_Relations::getInstance()->setRelations(Tinebase_Model_MunicipalityKey::class, Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND, $importedRecord->id, $relationData);
             }
         }
     }

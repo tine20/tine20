@@ -46,7 +46,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_MFA_SmsUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_WebAuthnUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_YubicoOTPUserConfig::MODEL_NAME_PART,
-        Tinebase_Model_CommunityIdentNr::MODEL_NAME_PART,
+        Tinebase_Model_MunicipalityKey::MODEL_NAME_PART,
         Tinebase_Model_AuthToken::MODEL_NAME_PART,
         Tinebase_Model_DynamicRecordWrapper::MODEL_NAME_PART,
     ];
@@ -57,7 +57,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR)
         ) {
             $this->_configuredModels = array_diff($this->_configuredModels, [
-                Tinebase_Model_CommunityIdentNr::MODEL_NAME_PART
+                Tinebase_Model_MunicipalityKey::MODEL_NAME_PART
             ]);
         }
     }
@@ -1762,7 +1762,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function aggregatePopulation(array $_communityNumber)
     {
-        $result = Tinebase_Controller_CommunityIdentNr::getInstance()->aggregatePopulation(new Tinebase_Model_CommunityIdentNr($_communityNumber));
+        $result = Tinebase_Controller_MunicipalityKey::getInstance()->aggregatePopulation(new Tinebase_Model_MunicipalityKey($_communityNumber));
         return $result->toArray();
     }
 }

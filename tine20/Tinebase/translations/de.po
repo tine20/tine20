@@ -5073,19 +5073,19 @@ msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
 
 #, fuzzy
-msgid "Community Identification Number"
-msgid_plural "Community Identification Numbers"
-msgstr[0] "Gemeindeschlüssel"
-msgstr[1] "Gemeindeschlüssel"
+msgid "Municipality Key"
+msgid_plural "Municipality Keys"
+msgstr[0] "Amtlicher Regionalschlüssel"
+msgstr[1] "Amtlicher Regionalschlüssel"
 
-msgid "Show the Community Identification Number in the Coredata"
-msgstr "Zeigt den Gemeindeschlüssel in den Stammdaten an"
+msgid "Show the Municipality Key in the Coredata"
+msgstr "Zeigt den Amtlicher Regionalschlüssel in den Stammdaten an"
 
 msgid "Import Community identification Numbers"
-msgstr "Importiert Gemeindeschlüssel"
+msgstr "Importiert Amtlicher Regionalschlüssel"
 
-msgid "Community Identification Number Import"
-msgstr "Gemeindeschlüssel Import"
+msgid "Municipality Key Import"
+msgstr "Amtlicher Regionalschlüssel Import"
 
 msgid "PIN"
 msgid_plural "PINs"
@@ -5122,8 +5122,8 @@ msgstr "MFA Gerätekonfiguration"
 msgid "Invalid authentication"
 msgstr "Authentifikation fehlgeschlagen"
 
-msgid "Community Identification Numbers"
-msgstr "Gemeindeschlüssel"
+msgid "Municipality Keys"
+msgstr "Amtlicher Regionalschlüssel"
 
 msgid "Private"
 msgstr "Privat"
@@ -5151,8 +5151,8 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token vom "
 "Gerät {mfaDevice.device_name} eingeben."
 
-msgid "Search for Community Identification Numbers ..."
-msgstr "Suche nach Gemeindeschlüsseln ..."
+msgid "Search for Municipality Keys ..."
+msgstr "Suche nach Amtlichen Regionalschlüsseln ..."
 
 msgid "Create Contact"
 msgstr "Kontakt erstellen"

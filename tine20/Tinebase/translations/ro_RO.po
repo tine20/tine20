@@ -3428,15 +3428,15 @@ msgstr ""
 msgid "Autodiscover mail config"
 msgstr ""
 
-#: Config.php:1476 Controller.php:1694 Model/CommunityIdentNr.php:59
-msgid "Community Identification Number"
-msgid_plural "Community Identification Numbers"
+#: Config.php:1476 Controller.php:1694 Model/MunicipalityKey.php:59
+msgid "Municipality Key"
+msgid_plural "Municipality Keys"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
 #: Config.php:1478
-msgid "Show the Community Identification Number in the Coredata"
+msgid "Show the Municipality Key in the Coredata"
 msgstr ""
 
 #: Config.php:1486
@@ -4175,7 +4175,7 @@ msgstr ""
 msgid "shared credential cache cryptographic key"
 msgstr ""
 
-#: Config.php:2823 Model/CommunityIdentNr.php:252
+#: Config.php:2823 Model/MunicipalityKey.php:252
 msgid "Grad der Verstädterung"
 msgstr ""
 
@@ -4192,11 +4192,11 @@ msgid "gering besiedelt"
 msgstr ""
 
 #: Config.php:2840
-msgid "Community Identification Number duplicate check fields"
+msgid "Municipality Key duplicate check fields"
 msgstr ""
 
 #: Config.php:2842
-msgid "These fields are checked when a new Community Identification Number is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 #: Controller.php:521
@@ -4297,12 +4297,12 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: Import/definitions/tinebase_import_communityidentnr.xml:10
+#: Import/definitions/tinebase_import_municipalitykey.xml:10
 msgid "Import Community identification Numbers"
 msgstr ""
 
-#: Import/definitions/tinebase_import_communityidentnr.xml:13
-msgid "Community Identification Number Import"
+#: Import/definitions/tinebase_import_municipalitykey.xml:13
+msgid "Municipality Key Import"
 msgstr ""
 
 #: Model/MFA/PinUserConfig.php:36
@@ -4436,75 +4436,75 @@ msgstr ""
 msgid "UUID"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:83
+#: Model/MunicipalityKey.php:83
 msgid "Satzart"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:93
+#: Model/MunicipalityKey.php:93
 msgid "Textkennzeichen"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:102
+#: Model/MunicipalityKey.php:102
 msgid "Land"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:112
+#: Model/MunicipalityKey.php:112
 msgid "RB"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:122
+#: Model/MunicipalityKey.php:122
 msgid "Kreis"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:132
+#: Model/MunicipalityKey.php:132
 msgid "VB"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:142
+#: Model/MunicipalityKey.php:142
 msgid "Gem"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:152
+#: Model/MunicipalityKey.php:152
 msgid "Amtlicher Regionalschlüssel"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:161
+#: Model/MunicipalityKey.php:161
 msgid "Gemeindename"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:169
+#: Model/MunicipalityKey.php:169
 msgid "Fläche"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:178
+#: Model/MunicipalityKey.php:178
 msgid "Bevölkerung insgesamt"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:187
+#: Model/MunicipalityKey.php:187
 msgid "Bevölkerung männlich"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:196
+#: Model/MunicipalityKey.php:196
 msgid "Bevölkerung weiblich"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:205
+#: Model/MunicipalityKey.php:205
 msgid "Bevölkerung je quadrat km"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:214
+#: Model/MunicipalityKey.php:214
 msgid "plz"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:223
+#: Model/MunicipalityKey.php:223
 msgid "Längengrad"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:232
+#: Model/MunicipalityKey.php:232
 msgid "Breitengrad"
 msgstr ""
 
-#: Model/CommunityIdentNr.php:242
+#: Model/MunicipalityKey.php:242
 msgid "Reisegebiet"
 msgstr ""
 

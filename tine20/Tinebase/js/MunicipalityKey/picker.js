@@ -8,7 +8,7 @@
 import { template } from './explainer'
 Ext.ns('Tine.Tinebase');
 
-Tine.Tinebase.CommunityIdentNrPicker = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
+Tine.Tinebase.MunicipalityKeyPicker = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     
     allowBlank: true,
     itemSelector: 'div.search-item',
@@ -19,11 +19,11 @@ Tine.Tinebase.CommunityIdentNrPicker = Ext.extend(Tine.Tinebase.widgets.form.Rec
     // private
     initComponent: function(){
         this.app = Tine.Tinebase.appMgr.get('Tinebase');
-        this.recordClass = Tine.Tinebase.Model.CommunityIdentNr;
-        this.emptyText = this.app.i18n._('Search for Community Identification Numbers ...');
+        this.recordClass = Tine.Tinebase.Model.MunicipalityKey;
+        this.emptyText = this.app.i18n._('Search for Municipality Keys ...');
 
         this.initTemplate();
-        Tine.Tinebase.CommunityIdentNrPicker.superclass.initComponent.call(this);
+        Tine.Tinebase.MunicipalityKeyPicker.superclass.initComponent.call(this);
     },
 
     /**
@@ -32,7 +32,7 @@ Tine.Tinebase.CommunityIdentNrPicker = Ext.extend(Tine.Tinebase.widgets.form.Rec
      * @param {Event} qevent
      */
     onBeforeQuery: function(qevent){
-        Tine.Tinebase.CommunityIdentNrPicker.superclass.onBeforeQuery.apply(this, arguments);
+        Tine.Tinebase.MunicipalityKeyPicker.superclass.onBeforeQuery.apply(this, arguments);
 
         const filter = this.store.baseParams.filter;
         const queryFilter = _.find(filter, {field: 'query'});
@@ -50,7 +50,7 @@ Tine.Tinebase.CommunityIdentNrPicker = Ext.extend(Tine.Tinebase.widgets.form.Rec
     },
 
     setValue : function(v){
-        const ret = Tine.Tinebase.CommunityIdentNrPicker.superclass.setValue.apply(this, arguments);
+        const ret = Tine.Tinebase.MunicipalityKeyPicker.superclass.setValue.apply(this, arguments);
         var el = this.getEl();
         if (el && this.selectedRecord) {
             el.set({qtip: Ext.util.Format.htmlEncode(`${this.selectedRecord.data.gemeindenamen} (${this.recordClass.satzArt2Text(this.selectedRecord.data.satzArt)})`) +
@@ -89,5 +89,5 @@ Tine.Tinebase.CommunityIdentNrPicker = Ext.extend(Tine.Tinebase.widgets.form.Rec
     }
 });
 
-Ext.reg('communityidentnrpicker', Tine.Tinebase.CommunityIdentNrPicker);
-Tine.widgets.form.RecordPickerManager.register('Tinebase', 'CommunityIdentNr', Tine.Tinebase.CommunityIdentNrPicker);
+Ext.reg('municipalitykeypicker', Tine.Tinebase.MunicipalityKeyPicker);
+Tine.widgets.form.RecordPickerManager.register('Tinebase', 'MunicipalityKey', Tine.Tinebase.MunicipalityKeyPicker);

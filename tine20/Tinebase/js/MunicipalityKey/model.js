@@ -1,4 +1,4 @@
-Tine.Tinebase.Model.CommunityIdentNrMixin = {
+Tine.Tinebase.Model.MunicipalityKeyMixin = {
     statics: {
         satzArt2Text(satzArt) {
             switch (satzArt) {

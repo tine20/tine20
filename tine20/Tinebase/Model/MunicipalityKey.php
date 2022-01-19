@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  * @package     Tinebase
  * @subpackage  Model
  */
-class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
+class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
 {
     public const FLD_SATZ_ART = 'satzArt';
     public const FLD_TEXTKENNZEICHEN = 'textkenzeichen';
@@ -39,7 +39,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
     public const FLD_REISEGEBIET = 'reisegebiet';
     public const FLD_GRAD_DER_VERSTAEDTERUNG = 'gradDerVerstaedterung';
 
-    public const MODEL_NAME_PART = 'CommunityIdentNr';
+    public const MODEL_NAME_PART = 'MunicipalityKey';
     public const TABLE_NAME = 'cinumber';
 
     /**
@@ -55,8 +55,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
         self::APP_NAME => Tinebase_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
-        self::RECORD_NAME => 'Community Identification Number', 
-        self::RECORDS_NAME => 'Community Identification Numbers', // ngettext('Community Identification Number', 'Community Identification Numbers', n)
+        self::RECORD_NAME => 'Municipality Key', // _('GENDER_Municipality Key')
+        self::RECORDS_NAME => 'Municipality Keys', // ngettext('Municipality Key', 'Municipality Keys', n)
         self::TITLE_PROPERTY => self::FLD_ARS_COMBINED,
         
         self::HAS_RELATIONS => true,
