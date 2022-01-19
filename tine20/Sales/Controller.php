@@ -16,7 +16,7 @@
  * @package Sales
  * @subpackage  Controller
  */
-class Sales_Controller extends Tinebase_Controller_Abstract
+class Sales_Controller extends Tinebase_Controller_Event
 {
     /**
      * application name (is needed in checkRight())
@@ -154,5 +154,51 @@ class Sales_Controller extends Tinebase_Controller_Abstract
         )));
 
         return $result;
+    }
+
+    /**
+     * event handler function
+     *
+     * all events get routed through this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject the eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        switch (get_class($_eventObject)) {
+            case Addressbook_Event_InspectContactAfterUpdate::class:
+                $contact = $_eventObject->updatedContact;
+                $relations = Tinebase_Relations::getInstance()->getRelations(Addressbook_Model_Contact::class,'Sql', $contact->getId());
+                $customer = $relations->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
+
+                if ($customer) {
+                    $postal = Sales_Controller_Address::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, [
+                        ['field' => Sales_Model_Address::FLD_CUSTOMER_ID, 'operator' => 'equals', 'value' => $customer->related_id],
+                        ['field' => Sales_Model_Address::FLD_TYPE, 'operator' => 'equals', 'value' => 'postal'],
+                    ]))->getFirstRecord();
+
+                    if ($postal) {
+                        $postal->street = $contact->adr_one_street;
+                        $postal->postalcode  = $contact->adr_one_postalcode;
+                        $postal->locality = $contact->adr_one_locality;
+                        $postal->region = $contact->adr_one_region;
+                        $postal->countryname = $contact->adr_one_countryname;
+
+                        Sales_Controller_Address::getInstance()->update($postal);
+                    } else {
+                        $postal = new Sales_Model_Address(array(
+                            'customer_id' => $customer->related_id,
+                            'street' =>  $contact->adr_one_street,
+                            'postalcode' => $contact->adr_one_postalcode,
+                            'locality' => $contact->adr_one_locality,
+                            'countryname' => $contact->adr_one_countryname
+                        ));
+
+                        Sales_Controller_Address::getInstance()->create($postal);
+                    }
+                }
+
+                break;
+        }
     }
 }

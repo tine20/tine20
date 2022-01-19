@@ -297,4 +297,50 @@ class Sales_ControllerTest extends \PHPUnit\Framework\TestCase
         $this->_decreaseNumber();
         $prodTest->getUit()->delete(array($productOne->getId(), $productTwo->getId()));
     }
+
+    /**
+     * Creates a contact and relates it to the customer. Checks if updating the contact address also updates the Customer postal Address
+     */
+    public function testContactUpdatesCustomerPostal()
+    {
+        $adbController = Addressbook_Controller_Contact::getInstance();
+        
+        $contact = $adbController->create(new Addressbook_Model_Contact(array(
+            'n_family' => 'test customer contact',
+            'adr_one_street' => 'test Str. 1',
+            'adr_one_postalcode' => '1234',
+            'adr_one_locality' => 'Test City'
+        )));
+        
+        $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(array(
+            'name' => Tinebase_Record_Abstract::generateUID(),
+        )));
+
+        $relationData = [
+            'own_model'         => Addressbook_Model_Contact::class,
+            'own_id'            => $contact->getId(),
+            'related_degree'    => Tinebase_Model_Relation::DEGREE_CHILD,
+            'related_model'     => Sales_Model_Customer::class,
+            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+            'related_id'        => $customer->getId(),
+            'type'              => 'CONTACTCUSTOMER'
+        ];
+        Tinebase_Relations::getInstance()->addRelation(new Tinebase_Model_Relation($relationData), $contact);
+        $contact = $adbController->get($contact->getId());
+        
+        $contact->adr_one_locality = 'Foobar';
+        $contact = $adbController->update($contact);
+        
+        $relations = Tinebase_Relations::getInstance()->getRelations(Addressbook_Model_Contact::class,'Sql', $contact->getId());
+        $customerRelation = $relations->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
+        
+        self::assertEquals($customer->getId(), $customerRelation->related_id);
+        
+        $postal = Sales_Controller_Address::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, [
+            ['field' => Sales_Model_Address::FLD_CUSTOMER_ID, 'operator' => 'equals', 'value' => $customerRelation->related_id],
+            ['field' => Sales_Model_Address::FLD_TYPE, 'operator' => 'equals', 'value' => 'postal'],
+        ]))->getFirstRecord();
+        
+        self::assertEquals($contact->adr_one_locality, $postal->locality);
+    }
 }
