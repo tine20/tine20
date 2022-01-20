@@ -63,11 +63,10 @@ class HumanResources_TestCase extends TestCase
     }
 
 
-    protected function _createBasicData()
+    protected function _createBasicData($account = null)
     {
         // create employee & contract
-        // @todo generalize?
-        $this->employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
+        $this->employee = $this->_getEmployee($account ?: Tinebase_Core::getUser()->accountLoginName);
         //$this->employee->dfcom_id = '36118993923739652';
 
         $contractController = HumanResources_Controller_Contract::getInstance();

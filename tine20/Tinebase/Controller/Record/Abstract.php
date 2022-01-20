@@ -2432,6 +2432,10 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (($mc = $_record->getConfiguration()) && $mc->delegateAclField) {
+            if (empty($_record->{$mc->delegateAclField})) {
+                throw new Tinebase_Exception_AccessDenied('acl delegation field ' . $mc->delegateAclField .
+                    ' must not be empty');
+            }
             /** @var Tinebase_Controller_Record_Abstract $ctrl */
             $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
             $ctrl = $ctrl::getInstance();
