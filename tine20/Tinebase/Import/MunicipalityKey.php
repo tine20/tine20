@@ -15,7 +15,7 @@
  * @package     Crm
  * @subpackage  Import
  */
-class Tinebase_Import_CommunityIdentNr extends Tinebase_Import_Xls_Abstract
+class Tinebase_Import_MunicipalityKey extends Tinebase_Import_Xls_Abstract
 {
     /**
      * constructs a new importer from given config

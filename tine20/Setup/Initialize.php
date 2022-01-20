@@ -183,7 +183,7 @@ class Setup_Initialize
      *          'cfields' => [
      *              [
      *                  'name' => 'community_ident_nr',
-     *                  'label' => 'Gemeindeschlüssel',
+     *                  'label' => 'Amtlicher Regionalschlüssel',
      *                  'uiconfig' => [
      *                      'order' => '',
      *                      'group' => '',

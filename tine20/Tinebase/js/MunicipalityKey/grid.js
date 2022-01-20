@@ -11,20 +11,20 @@
 Ext.ns('Tine.Tinebase');
 
 /**
- * CommunityIdentNrGridPanel
+ * MunicipalityKeyGridPanel
  * 
  * @namespace   Tine.Tinebase
- * @class       Tine.Tinebase.CommunityIdentNrGridPanel
+ * @class       Tine.Tinebase.MunicipalityKeyGridPanel
  * @extends     Tine.widgets.grid.GridPanel
  * 
- * <p>CommunityIdentNr Grid Panel</p>
+ * <p>MunicipalityKey Grid Panel</p>
  *
  * @param       {Object} config
  * @constructor
- * Create a new Tine.Tinebase.CommunityIdentNrGridPanel
+ * Create a new Tine.Tinebase.MunicipalityKeyGridPanel
  */
-Tine.Tinebase.CommunityIdentNrGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-    recordClass: Tine.Tinebase.Model.CommunityIdentNr,
+Tine.Tinebase.MunicipalityKeyGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+    recordClass: Tine.Tinebase.Model.MunicipalityKey,
     copyEditAction: false,
     multipleEdit: false,
     moveAction: false,
@@ -41,11 +41,11 @@ Tine.Tinebase.CommunityIdentNrGridPanel = Ext.extend(Tine.widgets.grid.GridPanel
      */
     initComponent: function () {
 
-        Tine.Tinebase.CommunityIdentNrGridPanel.superclass.initComponent.call(this);
+        Tine.Tinebase.MunicipalityKeyGridPanel.superclass.initComponent.call(this);
     },
     
     initActions: function() {
-        Tine.Tinebase.CommunityIdentNrGridPanel.superclass.initActions.apply(this, arguments);
+        Tine.Tinebase.MunicipalityKeyGridPanel.superclass.initActions.apply(this, arguments);
         this.action_addInNewWindow.hide();
         this.action_editInNewWindow.hide();
         this.action_deleteRecord.hide();

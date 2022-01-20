@@ -440,7 +440,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_AuthToken::class,
                 Tinebase_Model_AuthTokenChannelConfig::class,
                 Tinebase_Model_BLConfig::class,
-                Tinebase_Model_CommunityIdentNr::class,
+                Tinebase_Model_MunicipalityKey::class,
                 Tinebase_Model_Config::class,
                 Tinebase_Model_Container::class,
                 Tinebase_Model_ContainerContent::class,
