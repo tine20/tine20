@@ -25,7 +25,12 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
     protected static $_configurationObject;
 
     public const FLD_CUSTOMER_ID = 'customer_id';
+
+    public const FLD_SHORTHAND = 'name_shorthand';
+    public const FLD_LANGUAGE = 'language';
     public const FLD_NAME = 'name';
+    public const FLD_PREFIX1 = 'prefix1';
+    public const FLD_PREFIX2 = 'prefix2';
     public const FLD_EMAIL = 'email';
     public const FLD_STREET = 'street';
     public const FLD_POBOX = 'pobox';
@@ -33,9 +38,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
     public const FLD_LOCALITY = 'locality';
     public const FLD_REGION = 'region';
     public const FLD_COUNTRYNAME = 'countryname';
-    public const FLD_PREFIX1 = 'prefix1';
-    public const FLD_PREFIX2 = 'prefix2';
-    public const FLD_CUSTOM1 = 'custom1';
+    public const FLD_CUSTOM1 = 'custom1'; // debit nr - WTF?
     public const FLD_TYPE = 'type';
     public const FLD_FULLTEXT = 'fulltext';
     
@@ -89,12 +92,17 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                     'isParent'    => TRUE
                 ]
             ],
-            self::FLD_NAME => [
-                self::LABEL => 'Name', // _('Name')
+            self::FLD_SHORTHAND => [
+                self::LABEL      => 'Name shorthand', // _('Name shorthand')
                 self::NULLABLE => true,
                 self::TYPE => self::TYPE_STRING,
-                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER => true,
+            ],
+            self::FLD_LANGUAGE => [
+                self::LABEL                 => 'Language', // _('Language')
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Sales_Config::LANGUAGES_AVAILABLE,
+                self::NULLABLE              => true,
             ],
             self::FLD_EMAIL => [
                 self::LABEL => 'Email', // _('Email')
@@ -102,6 +110,27 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_STRING,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER => true,
+            ],
+            self::FLD_NAME => [
+                self::LABEL => 'Name', // _('Name')
+                self::NULLABLE => true,
+                self::TYPE => self::TYPE_STRING,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER => true,
+            ],
+            self::FLD_PREFIX1 => [
+                self::LABEL   => 'Prefix', //_('Prefix')
+                self::NULLABLE => TRUE,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE => self::TYPE_STRING,
+                self::QUERY_FILTER => TRUE
+            ],
+            self::FLD_PREFIX2 => [
+                self::LABEL   => 'Additional Prefix', //_('Additional Prefix')
+                self::NULLABLE => TRUE,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::TYPE => self::TYPE_STRING,
+                self::QUERY_FILTER => TRUE
             ],
             self::FLD_STREET => [
                 self::TYPE => self::TYPE_STRING,
@@ -145,20 +174,6 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER => TRUE,
                 self::NULLABLE => TRUE,
-            ],
-            self::FLD_PREFIX1 => [
-                self::LABEL   => 'Prefix', //_('Prefix')
-                self::NULLABLE => TRUE,
-                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::TYPE => self::TYPE_STRING,
-                self::QUERY_FILTER => TRUE
-            ],
-            self::FLD_PREFIX2 => [
-                self::LABEL   => 'Additional Prefix', //_('Additional Prefix')
-                self::NULLABLE => TRUE,
-                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::TYPE => self::TYPE_STRING,
-                self::QUERY_FILTER => TRUE
             ],
             self::FLD_CUSTOM1 => [
                 self::LABEL => 'Number Debit', //_('Number Debit')
