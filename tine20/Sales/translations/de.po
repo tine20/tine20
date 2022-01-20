@@ -252,7 +252,7 @@ msgstr "Name"
 
 #: Model/Customer.php:92 js/CustomerEditDialog.js:316
 msgid "Name shorthand"
-msgstr "Kunden Kürzel"
+msgstr "Kürzel"
 
 #: Model/Customer.php:100 Model/Supplier.php:75 js/SupplierEditDialog.js:322
 #: js/SupplierDetailsPanel.js:127 js/CustomerDetailsPanel.js:127

@@ -31,7 +31,7 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     windowWidth: 700,
-    windowHeight: 400,
+    windowHeight: 500,
 
     displayNotes: true,
     
@@ -135,6 +135,22 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var items = [
             [{
+                name: 'name_shorthand',
+                columnWidth: .2,
+                fieldLabel: this.app.i18n._('Name shorthand')
+            }, {
+                xtype: 'widget-keyfieldcombo',
+                columnWidth: .2,
+                app:   'Sales',
+                keyFieldName: 'languagesAvailable',
+                fieldLabel: this.app.i18n._('Language'),
+                name: 'language',
+                requiredGrant: 'editGrant'
+            }, {
+                name: 'email',
+                fieldLabel: this.app.i18n._('Email'),
+                columnWidth: .6
+            }/*, this.clipboardButton*/],[{
                columnWidth: .045,
                xtype:'button',
                iconCls: 'applyContactData',
@@ -155,12 +171,17 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                }
             }, {
-                columnWidth: 0.455,
+                columnWidth: .95,
                 name: 'name',
                 fieldLabel: this.app.i18n._('Name')
-            }, {
-                name: 'email',
-                fieldLabel: this.app.i18n._('Email')
+            }], [{
+                columnWidth: 1,
+                name: 'prefix1',
+                fieldLabel: this.app.i18n._('Prefix')
+            }], [{
+                columnWidth: 1,
+                name: 'prefix2',
+                fieldLabel: this.app.i18n._('Additional Prefix')
             }], [{
                 name: 'street',
                 fieldLabel: this.app.i18n._('Street')
@@ -180,12 +201,6 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 xtype: 'widget-countrycombo',
                 name: 'countryname',
                 fieldLabel: this.app.i18n._('Country')
-            }], [{
-                name: 'prefix1',
-                fieldLabel: this.app.i18n._('Prefix')
-            }, {
-                name: 'prefix2',
-                fieldLabel: this.app.i18n._('Additional Prefix')
             }]
         ];
         
