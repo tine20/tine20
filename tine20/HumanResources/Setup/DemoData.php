@@ -178,7 +178,9 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             try {
                 HumanResources_Controller_Division::getInstance()->create(new HumanResources_Model_Division(array('title' => $divisionName)));
             } catch (Zend_Db_Statement_Exception $e) {
-            } catch (Tinebase_Exception_Duplicate $e) {}
+            } catch (Tinebase_Exception_Duplicate $e) {
+            } catch (Tinebase_Exception_SystemGeneric $e) {
+            }
         }
 
         $this->_loadCostCentersAndDivisions();

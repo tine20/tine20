@@ -47,6 +47,7 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
         'appName'           => 'HumanResources',
         'modelName'         => 'FreeDay',
         'requiredRight'     => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
+        self::DELEGATED_ACL_FIELD => 'freetime_id',
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [

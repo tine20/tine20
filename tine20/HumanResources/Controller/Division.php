@@ -59,6 +59,10 @@ class HumanResources_Controller_Division extends Tinebase_Controller_Record_Cont
 
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
+        if (!$this->_doContainerACLChecks) {
+            return true;
+        }
+
         // standard actions are use for the division itself. everybody can GET, anything else needs MANAGE_DIVISIONS which is checked in _checkRight, so nothing to do here, do not call parent!
         if (in_array($_action, [self::ACTION_GET, self::ACTION_CREATE, self::ACTION_UPDATE, self::ACTION_DELETE])) {
             return true;
