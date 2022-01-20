@@ -138,6 +138,13 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertArrayHasKey('fulltext', $document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]);
         $this->assertStringContainsString('delivery', $document[Sales_Model_Document_Offer::FLD_RECIPIENT_ID]['fulltext']);
 
+        $this->assertSame(1, Sales_Controller_Document_Offer::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Offer::class, [
+                ['field' => 'customer_id', 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'name', 'operator' => 'equals', 'value' => $customer->name],
+                ]],
+            ]))->count());
+
         $customerCopy = Sales_Controller_Document_Customer::getInstance()->get($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
         $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
