@@ -224,6 +224,10 @@ class Tinebase_Twig
                             $record->{$property}->{$subProperty} === $value;
                     }, null) : null;
             }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('formatMessage',
+            function(string $msg, array $data) use($locale, $translate) {
+                return msgfmt_format_message((string)$locale, $translate->translate($msg, $locale), $data);
+            }));
     }
 
     public function addExtension(Twig_ExtensionInterface $extension)
