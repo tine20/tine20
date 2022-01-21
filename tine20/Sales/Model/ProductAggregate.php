@@ -49,7 +49,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
 
         'exposeHttpApi'     => true,
         
-        'titleProperty'     => 'product_id.name',
+        'titleProperty'     => 'product_id.getTitle()',
         'appName'           => 'Sales',
         'modelName'         => 'ProductAggregate',
         
@@ -305,8 +305,13 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      public function getTitle()
      {
          $p = Sales_Controller_Product::getInstance()->get($this->product_id);
-         
-         return $p->name;
+         (new Tinebase_Record_Expander(Sales_Model_Product::class, [
+             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                 Sales_Model_Product::FLD_NAME => [],
+             ],
+         ]))->expand(new Tinebase_Record_RecordSet(Sales_Model_Product::class, [$p]));
+
+         return $p->name->getFirstRecord()->text;
      }
 
     /**

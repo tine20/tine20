@@ -247,4 +247,17 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
             Tinebase_Exception::log($e, /* $suppressTrace = */ false);
         }
     }
+
+    protected function _getRelationData($record, $field, $data, $value)
+    {
+        if (isset($field['related_model']) && Sales_Model_Product::class === $field['related_model']) {
+            $value = [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => Sales_Config::getInstance()
+                    ->{Sales_Config::LANGUAGES_AVAILABLE}->default,
+                Sales_Model_ProductLocalization::FLD_TEXT => $value,
+            ]];
+        }
+
+        return parent::_getRelationData($record, $field, $data, $value);
+    }
 }

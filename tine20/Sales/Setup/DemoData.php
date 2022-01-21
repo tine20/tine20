@@ -144,6 +144,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         foreach($products as $key => $product) {
+            $product['name'] = [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
+                Sales_Model_ProductLocalization::FLD_TEXT => $product['name'],
+            ]];
             $switches[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
 
@@ -178,6 +182,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $subProductIds = [];
 
         foreach($products as $key => $product) {
+            $product['name'] = [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
+                Sales_Model_ProductLocalization::FLD_TEXT => $product['name'],
+            ]];
             $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
 
@@ -234,6 +242,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ];
 
         foreach($products as $product) {
+            $product['name'] = [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
+                Sales_Model_ProductLocalization::FLD_TEXT => $product['name'],
+            ]];
             $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
 
@@ -263,6 +275,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $subProductIds = [];
 
         foreach($products as $key => $product) {
+            $product['name'] = [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
+                Sales_Model_ProductLocalization::FLD_TEXT => $product['name'],
+            ]];
             $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)))->getId();
         }
 
@@ -321,6 +337,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         foreach($products as $product) {
+            $product['name'] = [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
+                Sales_Model_ProductLocalization::FLD_TEXT => $product['name'],
+            ]];
             $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
     }
@@ -480,7 +500,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
 
         $timeaccoountProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product([
-            'name' => 'Timetracker Product',
+            'name' => [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
+                Sales_Model_ProductLocalization::FLD_TEXT => 'Timetracker Product',
+            ]],
             'description' => 'this is a generic timetracker used in demo data',
             'salesprice' => 100,
             'accountable' => 'TimetrackerTimeaccount'
@@ -574,13 +597,16 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $relations[] = $timeaccountRelation;
             }
 
-            $genericProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(
-                self::$_de
-                    ?
-                    array('name' => 'Generisches Produkt', 'description' => 'ein generisches produkt aus den demo daten', 'salesprice' => 100)
-                    :
-                    array('name' => 'Generic Product', 'description' => 'this is a generic product used in demo data', 'salesprice' => 100)
-            ));
+            $genericProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product([
+                'name' => [[
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_ProductLocalization::FLD_TEXT => 'Generic Product',
+                ], [
+                    Sales_Model_ProductLocalization::FLD_LANGUAGE => 'de',
+                    Sales_Model_ProductLocalization::FLD_TEXT => 'Generisches Produkt',
+                ]],
+                'description' => 'ein generisches produkt aus den demo daten', 'salesprice' => 100,
+            ]));
 
             $contract->products = [
                 [

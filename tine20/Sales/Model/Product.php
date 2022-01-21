@@ -76,6 +76,14 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
 
         self::DEFAULT_SORT_INFO => ['field' => 'number', 'direction' => 'DESC'],
 
+        self::LANGUAGES_AVAILABLE => [
+            self::TYPE => self::TYPE_KEY_FIELD,
+            self::CONFIG => [
+                self::APP_NAME => Sales_Config::APP_NAME,
+                self::NAME => Sales_Config::LANGUAGES_AVAILABLE,
+            ],
+        ],
+
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
             self::INDEXES       => [
@@ -130,10 +138,13 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::NULLABLE => true,
             ],
             self::FLD_NAME => [
-                self::TYPE => self::TYPE_STRING,
+                self::TYPE => self::TYPE_LOCALIZED_STRING,
+                self::CONFIG => [
+                    self::TYPE => self::TYPE_STRING,
+                    self::LENGTH => 255,
+                ],
                 self::QUERY_FILTER => true,
                 self::LABEL => 'Name', // _('Name')
-                self::LENGTH => 255,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
@@ -290,4 +301,16 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function getTitle()
+    {
+        if (!$this->name) {
+            (new Tinebase_Record_Expander(Sales_Model_Product::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    Sales_Model_Product::FLD_NAME => [],
+                ],
+            ]))->expand(new Tinebase_Record_RecordSet(static::class, [$this]));
+        }
+        return $this->name->getFirstRecord()->text;
+    }
 }

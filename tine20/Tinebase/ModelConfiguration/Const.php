@@ -132,6 +132,7 @@ class Tinebase_ModelConfiguration_Const {
     const JSON_EXPANDER = 'jsonExpander';
 
     const LABEL = 'label';
+    const LANGUAGES_AVAILABLE = 'languagesAvailable';
     const LENGTH = 'length';
 
     const MAPPED_BY = 'mappedBy';
@@ -214,6 +215,10 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_JSON = 'json';
     const TYPE_KEY_FIELD = 'keyfield';
     const TYPE_LABEL = 'label';
+    /**
+     * TODO comment
+     */
+    const TYPE_LOCALIZED_STRING = 'localizedString';
     const TYPE_MODEL = 'model';
     const TYPE_MONEY = 'money';
     const TYPE_NOTE = 'note';

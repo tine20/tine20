@@ -35,12 +35,26 @@ class Sales_ProductControllerTest extends TestCase
     public function testCreateProduct()
     {
         $product = $this->getUit()->create(new Sales_Model_Product(array(
-            'name' => 'A new product'
+            'name' => [[
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'en',
+                Tinebase_Record_PropertyLocalization::FLD_TEXT => 'A new product',
+            ]],
         )));
         
         $this->assertNotEmpty($product->number);
         
         return $product;
+    }
+
+    public function testQueryFilterReLocalitation()
+    {
+        $product = $this->testCreateProduct();
+        $result = $this->getUit()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Product::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'product']
+            ]));
+        $this->assertSame(1, $result->count());
+        $this->assertSame($product->getId(), $result->getFirstRecord()->getId());
     }
     
     /**

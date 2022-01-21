@@ -28,6 +28,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
     const TYPE_PROJECTTIME = 'PZ';
 
     /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
