@@ -44,6 +44,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Contract',
         'CostCenter',
         HumanResources_Model_Division::MODEL_NAME_PART,
+        HumanResources_Model_DivisionGrants::MODEL_NAME_PART,
         'Employee',
         'Account',
         HumanResources_Model_FreeTimeType::MODEL_NAME_PART,

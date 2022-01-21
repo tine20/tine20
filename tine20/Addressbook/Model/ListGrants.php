@@ -18,5 +18,12 @@
  */
 class Addressbook_Model_ListGrants extends Addressbook_Model_ContactGrants
 {
- 
+    protected static $_modelConfiguration = null;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
 }

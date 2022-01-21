@@ -22,6 +22,8 @@
  */
 class Felamimail_Model_AccountGrants extends Tinebase_Model_Grants
 {
+    protected $_application = 'Felamimail';
+
     /**
      * get all possible grants
      *
@@ -115,4 +117,13 @@ class Felamimail_Model_AccountGrants extends Tinebase_Model_Grants
     {
         return true;
     }
+
+    protected static $_modelConfiguration = null;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
 }
