@@ -80,8 +80,12 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $i18n = Tinebase_Translation::getTranslation($this->_applicationName)->getAdapter();
         $type = $address['type'];
         
+        $ft .= !empty($address['name_shorthand']) ? $address['name_shorthand'] : '';
+        $ft .= !empty($address['name_shorthand']) ? ' => ' : '';
         $ft .= !empty($address['name']) ? $address['name'] : '';
+        $ft .= !empty($address['name']) ? ' ' : '';
         $ft .= !empty($address['email']) ? $address['email'] : '';
+        $ft .= !empty($address['email']) ? ' ' : '';
         $ft .= !empty($address['prefix1']) ? $address['prefix1'] : '';
         $ft .= !empty($address['prefix1']) && !empty($address['prefix2']) ? ' ' : '';
         $ft .= !empty($address['prefix2']) ? $address['prefix2'] : '';

@@ -77,8 +77,7 @@ describe('editDialog', () => {
 
     test('new event', async () => {
         await page.waitForTimeout(3000);
-        await expect(page).toClick('button', {text: 'Termin hinzufügen'});
-        newPage = await lib.getNewWindow();
+        newPage = await lib.getEditDialog('Termin hinzufügen');
         await newPage.waitForTimeout(5000);
         await newPage.type('input[name=summary]', 'Test Event');
         await newPage.screenshot({path: 'screenshots/Kalender/6_kalender_neuer_termin.png'});

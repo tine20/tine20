@@ -234,16 +234,8 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'name',
                                 xtype: 'tine.widget.field.AutoCompleteField',
                                 recordClass: this.recordClass
-                            }], [{
-                                xtype: 'widget-keyfieldcombo',
-                                app:   'Sales',
-                                keyFieldName: 'languagesAvailable',
-                                columnWidth: .250,
-                                fieldLabel: this.app.i18n._('Language'),
-                                name: 'language',
-                                requiredGrant: 'editGrant'
-                            }, Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                    columnWidth: .75/2,
+                            }], [Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                    columnWidth: .5,
                                     blurOnSelect: true,
                                     name: 'cpextern_id',
                                     allowBlank: true,
@@ -253,7 +245,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         select: this.onSelectContactPerson
                                     }
                             }), Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                                    columnWidth: .75/2,
+                                    columnWidth: .5,
                                     blurOnSelect: true,
                                     name: 'cpintern_id',
                                     allowBlank: true,
@@ -319,9 +311,6 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 allowDecimals : true,
                                 decimalPrecision: 1,
                                 decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
-                            }, {
-                                name: 'name_shorthand',
-                                fieldLabel: this.app.i18n._('Name shorthand')
                             }
                         ]]
                     }]
@@ -336,51 +325,63 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [
                             [{
-                                name: 'adr_name',
-                                fieldLabel: this.app.i18n._('Name'),
-                                columnWidth: 47/100
+                                name: 'adr_name_shorthand',
+                                columnWidth: .2,
+                                fieldLabel: this.app.i18n._('Name shorthand')
+                            }, {
+                                xtype: 'widget-keyfieldcombo',
+                                columnWidth: .2,
+                                app:   'Sales',
+                                keyFieldName: 'languagesAvailable',
+                                fieldLabel: this.app.i18n._('Language'),
+                                name: 'adr_language',
+                                requiredGrant: 'editGrant'
                             }, {
                                 name: 'adr_email',
                                 fieldLabel: this.app.i18n._('Email'),
-                                columnWidth: 47/100
-                            }, {
+                                columnWidth: .55
+                            }, this.clipboardButton],[{
+                                name: 'adr_name',
+                                fieldLabel: this.app.i18n._('Name'),
+                                columnWidth: 1
+                            }], [{
+                                name: 'adr_prefix1',
+                                fieldLabel: this.app.i18n._('Prefix'),
+                                columnWidth: 1
+                            }], [{
+                                name: 'adr_prefix2',
+                                fieldLabel: this.app.i18n._('Additional Prefix'),
+                                columnWidth: 1
+                            }, ], [{
                                 name: 'adr_street',
                                 fieldLabel: this.app.i18n._('Street'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }, {
                                 name: 'adr_pobox',
                                 fieldLabel: this.app.i18n._('Postbox'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                                 
                             }], [{
                                 name: 'adr_postalcode',
                                 allowBlank: false,
                                 fieldLabel: this.app.i18n._('Postalcode'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }, {
                                 name: 'adr_locality',
                                 allowBlank: false,
                                 fieldLabel: this.app.i18n._('Locality'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }], [{
                                 name: 'adr_region',
                                 fieldLabel: this.app.i18n._('Region'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }, {
                                 xtype: 'widget-countrycombo',
                                 name: 'adr_countryname',
                                 fieldLabel: this.app.i18n._('Country'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }
-                            ], [{
-                                name: 'adr_prefix1',
-                                fieldLabel: this.app.i18n._('Prefix'),
-                                columnWidth: 47/100
-                            }, {
-                                name: 'adr_prefix2',
-                                fieldLabel: this.app.i18n._('Additional Prefix'),
-                                columnWidth: 48/100
-                            }, this.clipboardButton]
+                            ]
                         ]
                     }]
                 }, {
@@ -394,7 +395,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [[
                             {
-                                columnWidth: 1/3,
+                                columnWidth: 1,
                                 fieldLabel: this.app.i18n._('Web'),
                                 xtype: 'mirrortextfield',
                                 name: 'url',
