@@ -90,7 +90,7 @@ Tine.Sales.renderAddress = function(record, companyName) {
     lines += (record.get((fieldPrefix + 'postalcode')) ? (record.get((fieldPrefix + 'postalcode')) + ' ') : '') + (record.get((fieldPrefix + 'locality')) ? record.get((fieldPrefix + 'locality')) : '');
 
     if (record.get('countryname')) {
-        lines += "\n" + record.get('countryname');
+        lines += "\n" + Locale.getTranslationList('CountryList')[record.get('countryname')];
     }
 
     return lines;

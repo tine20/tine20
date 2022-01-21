@@ -28,9 +28,10 @@ Ext.ns('Tine.Sales');
  */
 Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
 
-    minListWidth: 200,
+    minListWidth: 400,
     sortBy: 'locality',
     recordClass: 'Sales.Model.Document_Address',
+    resizable: true,
 
     checkState: function(editDialog, record) {
         const mc = editDialog?.recordClass?.getModelConfiguration();
@@ -50,7 +51,7 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
             if (typeRecord) {
                 const address = Tine.Tinebase.data.Record.setFromJson(typeRecord, this.recordClass);
                 this.setValue(address);
-                this.fireEvent('select')
+                this.fireEvent('select', this, address);
             }
         }
         this.customer_id = customer_id;
