@@ -128,7 +128,9 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
     {
         $account = $this->_createSharedAccount();
         $vacationData = Felamimail_Frontend_JsonTest::getVacationData($account);
-        $vacation = Felamimail_Controller_Sieve::getInstance()->setVacation(new Felamimail_Model_Sieve_Vacation($vacationData));
+        $script = Felamimail_Controller_Sieve::getInstance()->setSieveScript($account->getId(), new Felamimail_Model_Sieve_Vacation($vacationData));
+        $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($account->getId());
+        
         self::assertEquals(true, $vacation->enabled);
     }
 }

@@ -13,14 +13,14 @@
  */
 
 /**
- * Test class for Tinebase_CommunityIdentNr_ControllerTest
+ * Test class for Tinebase_MunicipalityKey_ControllerTest
  */
-class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
+class Tinebase_MunicipalityKey_ControllerTest extends TestCase
 {
     /**
-     * @var Tinebase_Controller_CommunityIdentNr
+     * @var Tinebase_Controller_MunicipalityKey
      */
-    protected $_communityIdentNrController = array();
+    protected $_municipalityKeyController = array();
     
     /**
      * Sets up the fixture.
@@ -32,7 +32,7 @@ class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
 {
         parent::setUp();
         
-        $this->_communityIdentNrController = Tinebase_Controller_CommunityIdentNr::getInstance();
+        $this->_municipalityKeyController = Tinebase_Controller_MunicipalityKey::getInstance();
     }
     
     
@@ -44,15 +44,15 @@ class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
      */
     public function testAggregatePopulation()
     {
-        $this->_createTestCommunityIdentNumbers();
-        $schleswigHolstein = $this->_communityIdentNrController->get(1);
+        $this->_createTestMunicipalityKeys();
+        $schleswigHolstein = $this->_municipalityKeyController->get(1);
         $this->assertEquals(168991, $schleswigHolstein->bevoelkerungGesamt,
             'Schleswig-Holstein = Kreis Flensburg + Stadt Flensburg + Stadt Neumünster');
 
-        $kreisFlesburg = $this->_communityIdentNrController->get(2);
+        $kreisFlesburg = $this->_municipalityKeyController->get(2);
         $this->assertEquals(89504, $kreisFlesburg->bevoelkerungGesamt, 'Kreis Flensburg = Stadt Flensburg');
 
-        $stadtNeumuenster = $this->_communityIdentNrController->get(4);
+        $stadtNeumuenster = $this->_municipalityKeyController->get(4);
         $this->assertEquals(79487, $stadtNeumuenster->bevoelkerungGesamt, ('Stadt Neumünster = Stadt Neumünster'));
 
         // check if json function also works
@@ -67,11 +67,11 @@ class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
     /**
      * get a Community Identification Number
      * @param array $data
-     * @return Tinebase_Model_CommunityIdentNr
+     * @return Tinebase_Model_MunicipalityKey
      */
-    protected function _getCommunityIdentNumber($data = array())
+    protected function _getMunicipalityKey($data = array())
     {
-        return new Tinebase_Model_CommunityIdentNr(array_merge(array(
+        return new Tinebase_Model_MunicipalityKey(array_merge(array(
             'satzArt'         => '10',
             'textkenzeichen'   => '',
             'arsLand'       => '01',
@@ -88,11 +88,11 @@ class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
     /**
      * creates some different Community Identification Numbers for testing
      * @param array $data
-     * @return Tinebase_Model_CommunityIdentNr
+     * @return Tinebase_Model_MunicipalityKey
      */
-    protected function _createTestCommunityIdentNumbers()
+    protected function _createTestMunicipalityKeys()
     {
-        $this->_communityIdentNrController->create($this->_getCommunityIdentNumber(array(
+        $this->_municipalityKeyController->create($this->_getMunicipalityKey(array(
             'id'            => 1,
             'satzArt'         => '10',
             'textkenzeichen'   => '',
@@ -105,7 +105,7 @@ class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
             'gemeindenamen'      => 'Schleswig-Holstein',
             'bevoelkerungGesamt'      => null
         )));
-        $this->_communityIdentNrController->create($this->_getCommunityIdentNumber(array(
+        $this->_municipalityKeyController->create($this->_getMunicipalityKey(array(
             'id'            => 2,
             'satzArt'         => '50',
             'textkenzeichen'   => '50',
@@ -118,7 +118,7 @@ class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
             'gemeindenamen'      => 'Flensburg, Stadt',
             'bevoelkerungGesamt'      => null
         )));
-        $this->_communityIdentNrController->create($this->_getCommunityIdentNumber(array(
+        $this->_municipalityKeyController->create($this->_getMunicipalityKey(array(
             'id'            => 3,
             'satzArt'         => '60',
             'textkenzeichen'   => '61',
@@ -131,7 +131,7 @@ class Tinebase_CommunityIdentNr_ControllerTest extends TestCase
             'gemeindenamen'      => 'Flensburg, Stadt',
             'bevoelkerungGesamt'      => 89504
         )));
-        $this->_communityIdentNrController->create($this->_getCommunityIdentNumber(array(
+        $this->_municipalityKeyController->create($this->_getMunicipalityKey(array(
             'id'            => 4,
             'satzArt'         => '60',
             'textkenzeichen'   => '61',

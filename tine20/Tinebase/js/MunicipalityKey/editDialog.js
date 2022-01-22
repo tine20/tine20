@@ -1,13 +1,13 @@
 Ext.ns('Tine.Tinebase');
 
-Tine.Tinebase.CommunityIdentNrEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Tinebase.MunicipalityKeyEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
      * @private
      */
-    windowNamePrefix: 'CommunityIdentNrEditWindow_',
+    windowNamePrefix: 'MunicipalityKeyEditWindow_',
     appName: 'Tinebase',
-    modelName: 'CommunityIdentNr',
+    modelName: 'MunicipalityKey',
 
 
     windowHeight: 600,
@@ -17,8 +17,8 @@ Tine.Tinebase.CommunityIdentNrEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
      * inits the component
      */
     initComponent: function () {
-        this.recordClass = Tine.Tinebase.Model.CommunityIdentNr;
-        Tine.Tinebase.CommunityIdentNrEditDialog.superclass.initComponent.call(this);
+        this.recordClass = Tine.Tinebase.Model.MunicipalityKey;
+        Tine.Tinebase.MunicipalityKeyEditDialog.superclass.initComponent.call(this);
     },
 
     /**
@@ -28,7 +28,7 @@ Tine.Tinebase.CommunityIdentNrEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
      */
     
     onAfterRecordLoad: function (jsonData) {
-        Tine.Tinebase.CommunityIdentNrEditDialog.superclass.onAfterRecordLoad.call(this);
+        Tine.Tinebase.MunicipalityKeyEditDialog.superclass.onAfterRecordLoad.call(this);
         //It should not be possible to edit COmmunity Ident Nrs via Edit Dialog
         this.btnSaveAndClose.hide(true);
     }

@@ -542,6 +542,24 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::DEFAULT_VALUE => false,
                 ],
             ],
+            'sieve_vacation' => [
+                self::TYPE => self::TYPE_VIRTUAL,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ],
+                self::OMIT_MOD_LOG              => true,
+                self::SYSTEM                    => true,
+                self::SHY => true,
+            ],
+            'sieve_rules' => [
+                self::TYPE => self::TYPE_VIRTUAL,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ],
+                self::OMIT_MOD_LOG              => true,
+                self::SYSTEM                    => true,
+                self::SHY => true,
+            ],
             'sieve_notification_move_folder' => [
                 self::TYPE => self::TYPE_STRING,
                 self::LABEL => 'Auto-move notifications folder', // _('Auto-move notifications folder')

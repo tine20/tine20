@@ -28,13 +28,17 @@ mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/sql/do
 mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < /config/sql/postfix_tables.sql;
 
 touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAMESPACE}/tine20.log
-echo "%%%% setup ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
 chown tine20:tine20 ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAMESPACE}/tine20.log
+
 echo "%%%% tine install ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
-cp /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/tine20/conf.d/disableMapPanel.inc.php /etc/tine20/conf.d/disableMapPanel.inc.php
+cp /etc/tine20/conf.d/disableMapPanel.inc.php.dist /etc/tine20/conf.d/disableMapPanel.inc.php
 
 tine20_install;
-echo "%%%% tine install ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+
+echo "%%%% tine post install ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+if [ -f ${TINE20ROOT}/scripts/postInstallGitlab.sh ]; then
+    ${TINE20ROOT}/scripts/postInstallGitlab.sh;
+fi;
 
 echo "%%%% tine demodata ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
 if [ -z "$TINE_DEMODATASET" ]; then
@@ -43,7 +47,6 @@ else
     su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}" -- demodata=set set=$TINE_DEMODATASET || touch /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/setup_failed_$CI_JOB_ID
 fi;
 
-echo "%%%% tine demodata ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
-touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID;
 echo "%%%% tine supervisord start" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID;
 supervisord --nodaemon

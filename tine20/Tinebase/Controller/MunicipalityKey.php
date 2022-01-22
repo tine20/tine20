@@ -11,12 +11,12 @@
  */
 
 /**
- * controller for CommunityIdentNr
+ * controller for MunicipalityKey
  *
  * @package     Tinebase
  * @subpackage  Controller
  */
-class Tinebase_Controller_CommunityIdentNr extends Tinebase_Controller_Record_Abstract
+class Tinebase_Controller_MunicipalityKey extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
     
@@ -29,14 +29,14 @@ class Tinebase_Controller_CommunityIdentNr extends Tinebase_Controller_Record_Ab
     {
         $this->_doContainerACLChecks = false;
         $this->_applicationName = Tinebase_Config::APP_NAME;
-        $this->_modelName = Tinebase_Model_CommunityIdentNr::class;
+        $this->_modelName = Tinebase_Model_MunicipalityKey::class;
         $this->_backend = new Tinebase_Backend_Sql([
-            Tinebase_Backend_Sql::TABLE_NAME        => Tinebase_Model_CommunityIdentNr::TABLE_NAME,
-            Tinebase_Backend_Sql::MODEL_NAME        => Tinebase_Model_CommunityIdentNr::class,
+            Tinebase_Backend_Sql::TABLE_NAME        => Tinebase_Model_MunicipalityKey::TABLE_NAME,
+            Tinebase_Backend_Sql::MODEL_NAME        => Tinebase_Model_MunicipalityKey::class,
             Tinebase_Backend_Sql::MODLOG_ACTIVE     => true,
         ]);
 
-        $this->_duplicateCheckFields = Tinebase_Config::getInstance()->get(Tinebase_Config::COMMUNITYIDENTNR_DUP_FIELDS, array(
+        $this->_duplicateCheckFields = Tinebase_Config::getInstance()->get(Tinebase_Config::MUNICIPALITYKEY_DUP_FIELDS, array(
             array('arsCombined')
         ));
     }
@@ -44,7 +44,7 @@ class Tinebase_Controller_CommunityIdentNr extends Tinebase_Controller_Record_Ab
     /**
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::get()
-     * @return Tinebase_Model_CommunityIdentNr
+     * @return Tinebase_Model_MunicipalityKey
      */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
@@ -61,7 +61,7 @@ class Tinebase_Controller_CommunityIdentNr extends Tinebase_Controller_Record_Ab
     {
         if (!$_communityNumber->bevoelkerungGesamt) {
             $population = 0;
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CommunityIdentNr::class, [
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_MunicipalityKey::class, [
                 ['field' => 'arsCombined', 'operator' => 'startswith', 'value' => $_communityNumber->arsCombined]
             ]);
             $relatedCommunitys = $this->search($filter);

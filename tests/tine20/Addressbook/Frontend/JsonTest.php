@@ -116,6 +116,10 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     protected function tearDown(): void
     {
+        if ($this->_originalTestUser instanceof Tinebase_Model_User) {
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
 
         if ($this->_uit) {
@@ -212,6 +216,26 @@ class Addressbook_Frontend_JsonTest extends TestCase
         } else {
             self::assertTrue($list['account_only']);
         }
+    }
+
+    public function testContainerAcls()
+    {
+        $contact = $this->_addContact();
+        $result = $this->_uit->searchContacts([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $contact['container_id']]
+        ], []);
+        $this->assertCount(1, $result['results']);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $result = $this->_uit->searchContacts([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $contact['container_id']]
+        ], []);
+        $this->assertCount(0, $result['results']);
+
+        $this->expectException(Tinebase_Exception_Backend::class);
+        $this->_uit->searchContacts([
+            ['field' => 'container_id', 'operator' => 'not',    'value' => 'asdf....'],
+        ], []);
     }
 
     /**

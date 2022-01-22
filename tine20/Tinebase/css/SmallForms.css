@@ -65,7 +65,6 @@
     border-left: 17px solid transparent;
     box-sizing: border-box;
     text-overflow: ellipsis;
-    width: 100%;
     display: inline-block;
     overflow: hidden;
     margin-left: 0;

@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  * @package     Tinebase
  * @subpackage  Model
  */
-class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
+class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
 {
     public const FLD_SATZ_ART = 'satzArt';
     public const FLD_TEXTKENNZEICHEN = 'textkenzeichen';
@@ -39,8 +39,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
     public const FLD_REISEGEBIET = 'reisegebiet';
     public const FLD_GRAD_DER_VERSTAEDTERUNG = 'gradDerVerstaedterung';
 
-    public const MODEL_NAME_PART = 'CommunityIdentNr';
-    public const TABLE_NAME = 'cinumber';
+    public const MODEL_NAME_PART = 'MunicipalityKey';
+    public const TABLE_NAME = 'municipalitykeys';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -55,8 +55,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
         self::APP_NAME => Tinebase_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
-        self::RECORD_NAME => 'Community Identification Number', 
-        self::RECORDS_NAME => 'Community Identification Numbers', // ngettext('Community Identification Number', 'Community Identification Numbers', n)
+        self::RECORD_NAME => 'Municipality Key', // _('GENDER_Municipality Key')
+        self::RECORDS_NAME => 'Municipality Keys', // ngettext('Municipality Key', 'Municipality Keys', n)
         self::TITLE_PROPERTY => self::FLD_ARS_COMBINED,
         
         self::HAS_RELATIONS => true,
@@ -81,7 +81,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
 
         self::FIELDS => [
             self::FLD_SATZ_ART => [
-                self::TYPE => self::TYPE_INTEGER,
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 2,
                 self::SHY => true,
                 self::DISABLED => true,
                 self::VALIDATORS => [
@@ -90,7 +91,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_TEXTKENNZEICHEN => [
-                self::TYPE => self::TYPE_INTEGER,
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 2,
                 self::DISABLED => true,
                 self::SHY => true,
                 self::NULLABLE => true,
@@ -100,7 +102,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_LAND => [
-                self::TYPE => self::TYPE_INTEGER,
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 2,
                 self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
@@ -110,7 +113,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_RB => [
-                self::TYPE => self::TYPE_INTEGER,
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 1,
                 self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
@@ -120,7 +124,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_KREIS => [
-                self::TYPE => self::TYPE_INTEGER,
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 2,
                 self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
@@ -130,7 +135,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_VB => [
-                self::TYPE => self::TYPE_INTEGER,
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 4,
                 self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
@@ -140,7 +146,8 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null]
             ],
             self::FLD_ARS_GEM => [
-                self::TYPE => self::TYPE_INTEGER,
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 3,
                 self::DISABLED => true,
                 self::NULLABLE => true,
                 self::SHY => true,
@@ -151,6 +158,7 @@ class Tinebase_Model_CommunityIdentNr extends Tinebase_Record_NewAbstract
             ],
             self::FLD_ARS_COMBINED => [
                 self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 12,
                 self::LABEL => 'Amtlicher Regionalschlüssel', // _('Amtlicher Regionalschlüssel')
                 self::NULLABLE => false,
                 self::QUERY_FILTER => true,

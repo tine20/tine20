@@ -42,7 +42,7 @@ js-e2e-tests-source:
     - echo no cp -r /root/node_modules .
     - npm install
     - while [ ! -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID ]; do sleep 1; done
-    - if [ -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/setup_failed_$CI_JOB_ID ]; then exit 1; fi
+    - if [ -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/setup_failed_$CI_JOB_ID ]; then echo "tine setup failed"; exit 1; fi
     - echo "%%%% ready to start with tests" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
   script:
     - env

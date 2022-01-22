@@ -1121,11 +1121,11 @@ msgstr "Ihr Container wurde von %1$s geändert %2$sNotiz: %3$s"
 
 #: Controller/User.php:287
 msgid "Password is needed for system account creation"
-msgstr ""
+msgstr "Passwort wird für die Erstellung eines E-Mail-Kontos benötigt"
 
 #: Frontend/Cli.php:339
 msgid "Notifications"
-msgstr ""
+msgstr "Notifizierungen"
 
 #: Acl/Rights.php:251
 msgid "Manage access log"

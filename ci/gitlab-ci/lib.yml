@@ -238,9 +238,7 @@
       
           previous_tag=$(github_get_latest_release_tag_name "$owner" "$repo")
       
-          echo '# Releasenotes'
-          echo '# Changelog'
-          ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
+          repo_release_notesh "$tag" "$previous_tag"
       }
       
       github_release_add_asset() {
@@ -538,6 +536,16 @@
           git push origin $tag || return 1
           git push github $tag
       }
+      
+      release_to_gitlab() {
+          tag="${CI_COMMIT_TAG}"
+          customer="$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})"
+          previous_tag="$(git describe --abbrev=0 --tags HEAD~1)"
+      
+          release-cli create --description "$(repo_release_notes "$tag" "$previous_tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
+              --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${tag}/all.tar\"}"
+      }
+
 
       # lib/scripts/repo.sh
       repo_get_customer_for_branch () {
@@ -567,6 +575,15 @@
               echo "${branch}" | cut -d '/' -f1
               return
           fi
+      }
+      
+      repo_release_notes() {
+          tag=$1
+          previous_tag=$2
+      
+          echo '# Releasenotes'
+          echo '# Changelog'
+          ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
       }
 
   entry_points:
@@ -605,13 +622,17 @@
         mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < /config/sql/postfix_tables.sql;
         
         touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAMESPACE}/tine20.log
-        echo "%%%% setup ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
         chown tine20:tine20 ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAMESPACE}/tine20.log
+        
         echo "%%%% tine install ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
-        cp /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/tine20/conf.d/disableMapPanel.inc.php /etc/tine20/conf.d/disableMapPanel.inc.php
+        cp /etc/tine20/conf.d/disableMapPanel.inc.php.dist /etc/tine20/conf.d/disableMapPanel.inc.php
         
         tine20_install;
-        echo "%%%% tine install ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        
+        echo "%%%% tine post install ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        if [ -f ${TINE20ROOT}/scripts/postInstallGitlab.sh ]; then
+            ${TINE20ROOT}/scripts/postInstallGitlab.sh;
+        fi;
         
         echo "%%%% tine demodata ..." >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
         if [ -z "$TINE_DEMODATASET" ]; then
@@ -620,8 +641,7 @@
             su tine20 -c "tine20.php --method Tinebase.createAllDemoData  --username=${TINE20_LOGIN_USERNAME} --password=${TINE20_LOGIN_PASSWORD}" -- demodata=set set=$TINE_DEMODATASET || touch /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/setup_failed_$CI_JOB_ID
         fi;
         
-        echo "%%%% tine demodata ... done" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
-        touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID;
         echo "%%%% tine supervisord start" >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog; date >> ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/timelog;
+        touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_ready_$CI_JOB_ID;
         supervisord --nodaemon
 

@@ -1703,8 +1703,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $result->addRecord(new CoreData_Model_CoreData(array(
                 'id' => 'cs_community_identification_number',
                 'application_id' => $application,
-                'model' => 'Tinebase_Model_CommunityIdentNr',
-                'label' => 'Community Identification Number' // _('Community Identification Number')
+                'model' => 'Tinebase_Model_MunicipalityKey',
+                'label' => 'Municipality Key' // _('Municipality Key')
             )));
         }
 

@@ -101,6 +101,14 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         }
                     }
                     break;
+                case 'recipient_id':
+                    config.listeners = config.listeners || {}
+                    config.listeners.select = (combo, record, index) => {
+                        if (record?.get && record?.get('language')) {
+                            fields['document_language'].setValue(record?.get('language'))
+                        }
+                    }
+                    break;
             }
         })
 

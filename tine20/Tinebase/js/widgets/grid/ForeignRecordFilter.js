@@ -111,7 +111,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         if (this.ownField) {
             this.field = this.ownField;
         }
-        
+
+        if (_.get(this.foreignRecordClass?.getModelConfiguration(), 'denormalizationOf')) {
+            this.foreignRefIdField = 'original_id';
+        }
+
         this['init' + (this.isGeneric ? 'Generic' : 'Explicit')]();
         Tine.widgets.grid.ForeignRecordFilter.superclass.initComponent.call(this);
     },

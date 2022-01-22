@@ -1863,9 +1863,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $vacationData['start_date'] = '2012-04-18';
         $vacationData['end_date'] = '2012-04-20';
         $result = $this->_sieveTestHelper($vacationData);
+        $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
+        $sieveScriptRules = $sieveBackend->getScript($this->_testSieveScriptName);
 
         $this->assertStringContainsString($vacationData['start_date'], $result['start_date']);
-        $this->assertStringContainsString($vacationData['end_date'], $result['end_date']);
+        $this->assertStringContainsString('currentdate', $sieveScriptRules);
     }
 
     /**
