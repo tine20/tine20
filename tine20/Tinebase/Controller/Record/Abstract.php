@@ -2567,13 +2567,13 @@ abstract class Tinebase_Controller_Record_Abstract
                 . ' Force a standard containerFilter (specialNode = all) as ACL filter.');
 
             $containerFilter = null;
-            if (($mc = ($this->_modelName)::getConfiguration())) {
+            if (($mc = ($this->_modelName)::getConfiguration())) { /** @var Tinebase_ModelConfiguration $mc */
                 if ($containerProp = $mc->{Tinebase_ModelConfiguration::DELEGATED_ACL_FIELD}) {
                     $containerFilter = new Tinebase_Model_Filter_DelegatedAcl($containerProp, null, null,
                         array_merge($_filter->getOptions(),[
                             'modelName' => $this->_modelName
                         ]));
-                } elseif ($containerProp = $mc->{Tinebase_ModelConfiguration::CONTAINER_PROPERTY}) {
+                } elseif ($containerProp = $mc->getContainerProperty()) {
                     $containerFilter = $_filter->createFilter($containerProp, 'specialNode', 'all');
                 }
             }

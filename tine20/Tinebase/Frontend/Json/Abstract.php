@@ -135,7 +135,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 Tinebase_Container::getInstance()->getGrantsOfRecords(
                     $_records,
                     Tinebase_Core::getUser(),
-                    $modelConfiguration ? $modelConfiguration->containerProperty : 'container_id'
+                    $modelConfiguration ? $modelConfiguration->getContainerProperty() : 'container_id'
                 );
             }
 

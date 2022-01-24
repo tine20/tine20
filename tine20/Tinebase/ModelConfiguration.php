@@ -168,6 +168,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_containerProperty = NULL;
 
     /**
+     * The property of the container, if any
+     *
+     * @var string
+     */
+    protected $_extendsContainer = NULL;
+
+    /**
      * The grants model of containers, if any
      *
      * @var string
@@ -819,7 +826,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
     */
     protected $_frontendProperties = array(
-        'containerProperty', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
+        'containerProperty', 'extendsContainer', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
@@ -1096,6 +1103,19 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
         if ($this->_containerProperty) {
             $this->_fields[$this->_containerProperty] = array(
+                'nullable'         => true,
+                self::LENGTH       => 40,
+                'label'            => $this->_containerUsesFilter ? $this->_containerName : NULL,
+                'shy'              => true,
+                'type'             => 'container',
+                'validators'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'filterDefinition' => array(
+                    'filter'  => $this->_filterModelMapping['container'],
+                    'options' => array('modelName' => $recordClass)
+                )
+            );
+        } elseif ($this->_extendsContainer) {
+            $this->_fields[$this->_extendsContainer] = array(
                 'nullable'         => true,
                 self::LENGTH       => 40,
                 'label'            => $this->_containerUsesFilter ? $this->_containerName : NULL,
@@ -1635,7 +1655,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     public function getContainerProperty()
     {
-        return $this->_containerProperty;
+        return $this->_containerProperty ?: $this->_extendsContainer;
     }
 
     public function getTable()
