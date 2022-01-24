@@ -330,7 +330,7 @@ msgstr "Sortierung"
 
 #: js/container/EditDialog.js:209
 msgid "Container Hierarchy/Name"
-msgstr "Kalender Hierarchie/Name"
+msgstr "Ordner Hierarchie/Name"
 
 #: js/container/EditDialog.js:216
 msgid "Note for Owner"

@@ -144,13 +144,16 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                             Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE
                         ))),
                     ],
+                    'account_name' => [
+                        self::TYPE      => self::TYPE_VIRTUAL,
+                    ],
                 ],
             ];
 
             $allGrantsMC = static::getAllGrantsMC();
             foreach (static::getAllGrants() as $grant) {
                 static::$_modelConfiguration[self::FIELDS][$grant] = array_merge([
-                    self::TYPE      => self::TYPE_STRING,
+                    self::TYPE      => self::TYPE_BOOLEAN,
                     self::VALIDATORS => array(
                         new Zend_Validate_InArray(array(true, false), true),
                         'default' => false,

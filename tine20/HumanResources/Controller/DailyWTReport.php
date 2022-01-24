@@ -54,11 +54,11 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
     public $lastReportCalculationResult = null;
 
-    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_TIME_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_TIME_DATA];
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
     protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA];
-    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_TIME_DATA];
-    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_TIME_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
 
     /**
      * the constructor

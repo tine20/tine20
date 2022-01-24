@@ -117,7 +117,7 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
         Tinebase_Container::getInstance()->addGrants(
             HumanResources_Controller_Division::getInstance()->get($this->employee->division_id)->container_id,
             Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $this->_personas['pwulf']->getId(),
-            [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA], true);
+            [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
 
         Tinebase_Core::setUser($this->_personas['pwulf']);
 

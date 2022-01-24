@@ -107,7 +107,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'     => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'locality' => array(
@@ -117,7 +117,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'postalcode' => array(
@@ -127,7 +127,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'region' => array(
@@ -137,7 +137,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'street' => array(
@@ -147,7 +147,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'street2' => array(
@@ -157,7 +157,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'email' => array(
@@ -174,7 +174,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'tel_cell' => array(
@@ -184,7 +184,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'title' => array(
@@ -221,7 +221,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'bank_account_holder' => array(
@@ -231,7 +231,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'bank_account_number' => array(
@@ -242,7 +242,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'iban' => array(
@@ -253,7 +253,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'bic' => array(
@@ -264,7 +264,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'bank_name' => array(
@@ -274,7 +274,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'bank_code_number' => array(
@@ -285,7 +285,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'employment_begin' => array(
@@ -337,7 +337,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'profession' => array(
@@ -364,7 +364,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 ),
                 'group' => 'private',
                 self::REQUIRED_GRANTS => [
-                    HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
                 ],
             ),
             'costcenters' => array(
