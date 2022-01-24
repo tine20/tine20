@@ -30,3 +30,9 @@
 .x-item-disabled + .x-form-trigger.x-form-trigger-plugin {
     opacity: .6;
 }
+
+.x-form-trigger.x-form-trigger-plugin.info {
+    background-position: 0 !important;
+    background-size: contain;
+}
+
