@@ -47,8 +47,8 @@ class HumanResources_Controller_Division extends Tinebase_Controller_Record_Cont
 
         parent::_checkRight($_action);
 
-        // everybody can GET, anything else needs MANAGE_DIVISIONS
-        if (self::ACTION_GET !== $_action) {
+        // create needs MANAGE_DIVISIONS
+        if (self::ACTION_CREATE === $_action) {
             if (!Tinebase_Core::getUser()
                     ->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_DIVISIONS)) {
                 throw new Tinebase_Exception_AccessDenied(HumanResources_Acl_Rights::MANAGE_DIVISIONS .
@@ -63,10 +63,22 @@ class HumanResources_Controller_Division extends Tinebase_Controller_Record_Cont
             return true;
         }
 
-        // standard actions are use for the division itself. everybody can GET, anything else needs MANAGE_DIVISIONS which is checked in _checkRight, so nothing to do here, do not call parent!
-        if (in_array($_action, [self::ACTION_GET, self::ACTION_CREATE, self::ACTION_UPDATE, self::ACTION_DELETE])) {
+        // standard actions are use for the division itself.
+        // everybody can GET, create needs MANAGE_DIVISIONS which is checked in _checkRight, so nothing to do here, do not call parent!
+        if (self::ACTION_GET === $_action || self::ACTION_CREATE === $_action) {
             return true;
         }
+        // this needs admin
+        if (self::ACTION_UPDATE === $_action || self::ACTION_DELETE === $_action) {
+            if (Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
+                return true;
+            } elseif ($_throw) {
+                throw new Tinebase_Exception_AccessDenied($_errorMessage);
+            } else {
+                return false;
+            }
+        }
+
         // delegated acl checks from employee, wtr, etc. come in here with non standard actions
         return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
