@@ -178,20 +178,16 @@ class Sales_Controller extends Tinebase_Controller_Event
                     ]))->getFirstRecord();
 
                     if ($postal) {
-                        $postal->street = $contact->adr_one_street;
-                        $postal->postalcode  = $contact->adr_one_postalcode;
-                        $postal->locality = $contact->adr_one_locality;
-                        $postal->region = $contact->adr_one_region;
-                        $postal->countryname = $contact->adr_one_countryname;
-
-                        Sales_Controller_Address::getInstance()->update($postal);
+                        Sales_Controller_Address::getInstance()->contactToCustomerAddress($postal, $contact);
                     } else {
                         $postal = new Sales_Model_Address(array(
                             'customer_id' => $customer->related_id,
+                            'name' => $customer->related_record->name,
                             'street' =>  $contact->adr_one_street,
                             'postalcode' => $contact->adr_one_postalcode,
                             'locality' => $contact->adr_one_locality,
-                            'countryname' => $contact->adr_one_countryname
+                            'countryname' => $contact->adr_one_countryname,
+                            'prefix1' => $customer->related_record->name == $contact->n_fn ? '' : $contact->n_fn,
                         ));
 
                         Sales_Controller_Address::getInstance()->create($postal);

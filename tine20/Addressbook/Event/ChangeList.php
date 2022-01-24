@@ -21,6 +21,13 @@ class Addressbook_Event_ChangeList extends Tinebase_Event_Abstract
     public $list;
 
     /**
+     * the list object
+     *
+     * @var Addressbook_Model_List
+     */
+    public $listRecord;
+
+    /**
      * the current list object (pre-update)
      *
      * @var Addressbook_Model_List
