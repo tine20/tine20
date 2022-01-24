@@ -112,7 +112,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
         $this->server->exec();
         
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertStringContainsString('<roles><ObjectViewer/><ObjectCreator/><ObjectEditor/><ObjectEraser/><PrivateViewer/></roles>', $this->response->body);
+        $this->assertStringContainsString('<roles><ObjectCreator/><ObjectEraser/><ObjectEditor/><PrivateViewer/><ObjectViewer/></roles>', $this->response->body);
     }
     
     /**

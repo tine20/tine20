@@ -1611,6 +1611,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 /** @var Tinebase_Record_Abstract $recordClass */
                 $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
                 $modelName = preg_replace('/^.+_Model_/', '', $modelName);
+                // ... well, need to run through the Tinebase_Model_Grants constructor magic at least once for each Grant Model...
+                new $recordClass([], true);
                 $config = $recordClass::getConfiguration();
                 if ($config) {
                     $modelconfig[$modelName] = $config->getFrontendConfiguration();

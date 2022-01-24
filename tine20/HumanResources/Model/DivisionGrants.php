@@ -17,6 +17,8 @@
  *  */
 class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
 {
+    public const MODEL_NAME_PART    = 'DivisionGrants';
+
     /**
      * read only access to own: simplyfied employee, hr account, wtr, freetime
      */
@@ -86,6 +88,16 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
             self::ACCESS_CHANGE_REQUEST,
             self::CREATE_CHANGE_REQUEST,
             self::UPDATE_CHANGE_REQUEST,
+            self::GRANT_ADMIN,
         ];
     }
+
+    protected static $_modelConfiguration = null;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
 }
