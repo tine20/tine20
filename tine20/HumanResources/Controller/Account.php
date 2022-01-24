@@ -23,11 +23,11 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
 
     protected $_contractController = NULL;
 
-    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
     protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
-    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
 
     /**
      * the constructor
@@ -60,12 +60,12 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
             case self::ACTION_GET:
                 if ($_record->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
                     try {
-                        if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, $_throw, $_errorMessage, $_oldRecord)) {
+                        if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::READ_OWN_DATA, $_throw, $_errorMessage, $_oldRecord)) {
                             return true;
                         }
                     } catch (Exception $e) {}
                 }
-                $_action = HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA;
+                $_action = HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA;
                 break;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:

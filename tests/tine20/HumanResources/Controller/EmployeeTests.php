@@ -46,7 +46,7 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
         $this->assertEquals(0, $result->count());
 
         Tinebase_Container::getInstance()->addGrants($division1->container_id, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA], true);
+            $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
 
         $result = $accountController->search(new HumanResources_Model_AccountFilter([
             ['field' => 'year', 'operator' => 'equals', 'value' => $year],
@@ -99,7 +99,7 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
         $this->assertEquals(0, $result->count());
 
         Tinebase_Container::getInstance()->addGrants($division1->container_id, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA], true);
+            $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
 
         Tinebase_Core::setUser($this->_personas['pwulf']);
         $filter = new HumanResources_Model_EmployeeFilter([

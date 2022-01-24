@@ -33,7 +33,7 @@ trait HumanResources_Controller_CheckFilterACLEmployeeTrait
         }
         parent::checkFilterACL($_filter, $_action);
 
-        // for GET we also allow HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA
+        // for GET we also allow HumanResources_Model_DivisionGrants::READ_OWN_DATA
         if (self::ACTION_GET !== $_action) {
             return;
         }
@@ -52,7 +52,7 @@ trait HumanResources_Controller_CheckFilterACLEmployeeTrait
             array_merge($_filter->getOptions(), [
                 'modelName' => $this->_modelName
             ]));
-        $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA]);
+        $containerFilter->setRequiredGrants([HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
         $andWrapper->addFilter($containerFilter);
         $andWrapper->addFilter($this->_getCheckFilterACLTraitFilter());
         $orWrapper->addFilterGroup($andWrapper);

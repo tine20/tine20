@@ -29,11 +29,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     protected $_duplicateCheckFields = array(array('account_id'), array('number'));
     protected $_resolveCustomFields = TRUE;
 
-    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
     protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
-    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
     
     /**
      * the constructor
@@ -69,11 +69,11 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         switch ($_action) {
             case self::ACTION_GET:
                 if ($_record->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
-                    if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::ACCESS_OWN_DATA, false, $_errorMessage, $_oldRecord)) {
+                    if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::READ_OWN_DATA, false, $_errorMessage, $_oldRecord)) {
                         return true;
                     }
                 }
-                $_action = HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA;
+                $_action = HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA;
                 break;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:

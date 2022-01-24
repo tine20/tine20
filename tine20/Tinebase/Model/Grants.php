@@ -144,19 +144,23 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                             Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE
                         ))),
                     ],
+                    'account_name' => [
+                        self::TYPE      => self::TYPE_VIRTUAL,
+                    ],
                 ],
             ];
 
-            foreach ($this->getAllGrants() as $grant) {
-                static::$_modelConfiguration[self::FIELDS][$grant] = [
-                    self::TYPE      => self::TYPE_STRING,
+            $allGrantsMC = static::getAllGrantsMC();
+            foreach (static::getAllGrants() as $grant) {
+                static::$_modelConfiguration[self::FIELDS][$grant] = array_merge([
+                    self::TYPE      => self::TYPE_BOOLEAN,
                     self::VALIDATORS => array(
                         new Zend_Validate_InArray(array(true, false), true),
                         'default' => false,
                         'presence' => 'required',
                         'allowEmpty' => true
                     ),
-                ];
+                ], isset($allGrantsMC[$grant]) ? $allGrantsMC[$grant] : []);
             }
         }
 
@@ -192,6 +196,15 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         );
     
         return $allGrants;
+    }
+
+    public static function getAllGrantsMC(): array
+    {
+        return [
+            self::GRANT_READ    => [
+                self::LABEL         => 'read',
+            ],
+        ];
     }
 
     public function appliesToUser(Tinebase_Model_FullUser $user): bool

@@ -21,11 +21,11 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
     use Tinebase_Controller_SingletonTrait;
     use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 
-    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
     protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
-    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
 
     /**
      * the constructor

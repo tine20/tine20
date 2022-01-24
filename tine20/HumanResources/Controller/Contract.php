@@ -27,11 +27,11 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected $_useSales = NULL;
 
-    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
     protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
-    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
-    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
     
     /**
      * the constructor
@@ -77,7 +77,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
 
         switch ($_action) {
             case self::ACTION_GET:
-                $_action = HumanResources_Model_DivisionGrants::ACCESS_EMPLOYEE_DATA;
+                $_action = HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA;
                 break;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:

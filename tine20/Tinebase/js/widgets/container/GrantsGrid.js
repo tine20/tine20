@@ -106,7 +106,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
                 // set all grants and mask other checkboxes
                 Ext.each(this.getColumnModel().columns, function(col, colIdx) {
                     var matches;
-                    if (col.dataIndex && (matches = col.dataIndex.match(/^([a-z]+)Grant$/)) && matches[1] != 'admin') {
+                    if (col.dataIndex && (matches = col.dataIndex.match(/^([a-zA-Z]+)Grant$/)) && matches[1] != 'admin') {
                         record.set(col.dataIndex, true);
                     }
                 }, this);
@@ -145,19 +145,22 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
             grants = Tine.widgets.container.GrantsManager.getByContainer(this.grantContainer);
         }
 
-        if (this.recordClass.hasField('adminGrant') && (this.alwaysShowAdminGrant || (me.grantContainer && me.grantContainer.type == 'shared'))) {
+        if (_.indexOf(grants, 'admin') < 0 && this.recordClass.hasField('adminGrant') && (this.alwaysShowAdminGrant || (me.grantContainer && me.grantContainer.type == 'shared'))) {
             grants.push('admin');
         }
         
         this.configColumns = [];
         
         Ext.each(grants, function(grant) {
-            var header = getTranslation(this[grant + 'GrantTitle']);
+            const fieldName = `${grant}Grant`
+            const fieldDefinition = this.recordClass.getField(fieldName)?.fieldDefinition
+            const header = getTranslation(_.get(fieldDefinition, 'label', this[grant + 'GrantTitle']))
+
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 id: grant,
-                header: String(header).replace(/\s+/, '<br>'),
-                tooltip: '<b>' + header + '</b><br>' + getTranslation(this[grant + 'GrantDescription']),
-                dataIndex: grant + 'Grant',
+                header: header,
+                tooltip: '<b>' + header + '</b><br>' + getTranslation(_.get(fieldDefinition, 'description', this[grant + 'GrantDescription'])),
+                dataIndex: fieldName,
                 width: 55,
                 onBeforeCheck: this.onBeforeCheck.createDelegate(this)
             }));

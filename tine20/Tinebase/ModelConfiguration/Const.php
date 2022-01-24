@@ -57,6 +57,7 @@ class Tinebase_ModelConfiguration_Const {
     const DENORMALIZATION_CONFIG = 'denormalizationConfig';
     const DENORMALIZATION_OF = 'denormalizationOf';
     const DEPENDENT_RECORDS = 'dependentRecords';
+    const DESCRIPTION = 'description'; // e.g. Tinebase_Model_Grants
     /**
      * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
      */
