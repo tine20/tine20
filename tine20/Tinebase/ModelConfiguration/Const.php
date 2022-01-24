@@ -66,6 +66,7 @@ class Tinebase_ModelConfiguration_Const {
     const EXPORT = 'export';
     const EXPOSE_HTTP_API = 'exposeHttpApi';
     const EXPOSE_JSON_API = 'exposeJsonApi';
+    const EXTENDS_CONTAINER = 'extendsContainer';
 
     const FIELDS = 'fields';
     const FIELD_NAME = 'fieldName';
