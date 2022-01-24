@@ -201,7 +201,8 @@ Tine.Felamimail.Model.Message.getFilterModel = function() {
         {label: app.i18n._('Flags'),       field: 'flags',         filtertype: 'tinebase.multiselect', app: app, multiselectFieldConfig: {
             valueStore: Tine.Felamimail.loadFlagsStore()
         }},
-        {label: app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true}
+        {label: app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true},
+        {label: app.i18n._('Size'),        field: 'size',          valueType: 'number'}
     ];
 };
 
