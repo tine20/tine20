@@ -201,10 +201,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const USERBACKEND = 'Tinebase_User_BackendConfiguration';
 
     const ACCOUNT_TWIG = 'accountTwig';
-    const ACCOUNT_TWIG_DISPLAYNAME = 'displayname';
-    const ACCOUNT_TWIG_FULLNAME = 'fullname';
-    const ACCOUNT_TWIG_LOGIN = 'login';
-    const ACCOUNT_TWIG_EMAIL = 'email';
+    const ACCOUNT_TWIG_DISPLAYNAME = 'accountDisplayName';
+    const ACCOUNT_TWIG_FULLNAME = 'accountFullName';
+    const ACCOUNT_TWIG_LOGIN = 'accountLoginName';
+    const ACCOUNT_TWIG_EMAIL = 'accountEmailAddress';
 
     /**
      * sync options for user backend
@@ -1353,7 +1353,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
                 self::ACCOUNT_TWIG_LOGIN           => [
                     self::TYPE                      => self::TYPE_STRING,
-                    self::DEFAULT_STR               => '{{ account.accountFirstName|trim[0:1]|lower }}{{ account.accountLastName|trim|lower }}',
+                    self::DEFAULT_STR               => '{{ account.accountFirstName|transliterate|removeSpace|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|lower }}',
                 ],
                 self::ACCOUNT_TWIG_EMAIL           => [
                     self::TYPE                      => self::TYPE_STRING,

@@ -8,6 +8,12 @@
  
 /*global Ext, Tine*/
 
+// @see https://github.com/ericmorand/twing/issues/332
+// #if process.env.NODE_ENV !== 'unittest'
+import getTwingEnv from "twingEnv";
+// #endif
+import FieldInfoPlugin from "ux/form/FieldInfoPlugin";
+
 Ext.ns('Tine.Admin.user');
 
 import MFAPanel from 'MFA/UserConfigPanel';
@@ -48,6 +54,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initComponent: function () {
         var accountBackend = Tine.Tinebase.registry.get('accountBackend');
         this.ldapBackend = (accountBackend === 'Ldap' || accountBackend === 'ActiveDirectory');
+
+        this.twingEnv = getTwingEnv();
+        const loader = this.twingEnv.getLoader();
+        for (const [fieldName, template] of Object.entries(Tine.Tinebase.configManager.get('accountTwig'))) {
+            loader.setTemplate(fieldName, template);
+        }
 
         Tine.Admin.UserEditDialog.superclass.initComponent.call(this);
     },
@@ -887,8 +899,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('First name'),
                         name: 'accountFirstName',
                         columnWidth: 0.5,
-                        tabIndex: 1,
+                        enableKeyEvents: true,
                         listeners: {
+                            scope: this,
+                            keyup: this.suggestNameBasedProps,
                             render: function (field) {
                                 field.focus(false, 250);
                                 field.selectText();
@@ -898,13 +912,27 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('Last name'),
                         name: 'accountLastName',
                         allowBlank: false,
-                        tabIndex: 2,
+                        columnWidth: 0.5,
+                        enableKeyEvents: true,
+                        listeners: {
+                            scope: this,
+                            keyup: this.suggestNameBasedProps
+                        }
+                    }], [{
+                        fieldLabel: this.app.i18n.gettext('Display name'),
+                        name: 'accountDisplayName',
+                        allowBlank: false,
                         columnWidth: 0.5
+                    }, {
+                        fieldLabel: this.app.i18n.gettext('Full name'),
+                        name: 'accountFullName',
+                        allowBlank: false,
+                        columnWidth: 0.5,
+                        plugins: [new FieldInfoPlugin({qtip: this.app.i18n._('Full name is used to create the distinguishedName (DN) in AD integration')})]
                     }], [{
                         fieldLabel: this.app.i18n.gettext('Login name'),
                         name: 'accountLoginName',
                         allowBlank: false,
-                        tabIndex: 3,
                         columnWidth: 0.5
                     }, {
                         fieldLabel: this.app.i18n.gettext('Password'),
@@ -914,7 +942,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         locked: true,
                         autocomplete: 'new-password',
                         columnWidth: 0.5,
-                        tabIndex: 4,
                         passwordsMatch: true,
                         enableKeyEvents: true,
                         listeners: {
@@ -952,7 +979,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }],  [{
                         vtype: 'email',
                         fieldLabel: this.app.i18n.gettext('E-mail'),
-                        tabIndex: 5,
                         name: 'accountEmailAddress',
                         id: 'accountEmailAddress',
                         columnWidth: 0.5
@@ -960,13 +986,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         //vtype: 'email',
                         fieldLabel: this.app.i18n.gettext('OpenID'),
                         emptyText: '(' + this.app.i18n.gettext('Login name') + ')',
-                        tabIndex: 6,
                         name: 'openid',
                         columnWidth: 0.5
                     }], [{
                         xtype: 'tinerecordpickercombobox',
                         fieldLabel: this.app.i18n.gettext('Primary group'),
-                        tabIndex: 7,
                         listWidth: 250,
                         name: 'accountPrimaryGroup',
                         blurOnSelect: true,
@@ -988,7 +1012,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         mode: 'local',
                         triggerAction: 'all',
                         allowBlank: false,
-                        tabIndex: 8,
                         editable: false,
                         store: [
                             ['enabled',  this.app.i18n.gettext('enabled')],
@@ -1026,7 +1049,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype: 'extuxclearabledatefield',
                         fieldLabel: this.app.i18n.gettext('Expires'),
                         name: 'accountExpires',
-                        tabIndex: 9,
                         emptyText: this.app.i18n.gettext('never')
                     }], this.saveInaddressbookFields
                     ]
@@ -1111,6 +1133,23 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return config;
     },
 
+    suggestNameBasedProps: function(field, e) {
+        // suggest for new users only!
+        if (!this.record.id) {
+            // accountFullName (cn im AD) + accountDisplayName(displayname im AD) + accountLoginName + accountEmailAddress
+            for (const [fieldName, template] of Object.entries(Tine.Tinebase.configManager.get('accountTwig'))) {
+                const field = this.getForm().findField(fieldName);
+                // suggest for unchanged fields only
+                if (field && (!field.suggestedValue || field.getValue() === field.suggestedValue)) {
+                    this.onRecordUpdate();
+                    const suggestion = this.twingEnv.render(fieldName, {account: this.record.data, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}});
+                    field.setValue(suggestion);
+                    field.suggestedValue = suggestion;
+                }
+            }
+        }
+    },
+
     /**
      * @param value
      * @return boolean
@@ -1127,7 +1166,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: this.app.i18n.gettext('Visibility'),
             name: 'visibility',
             mode: 'local',
-            tabIndex: 10,
             triggerAction: 'all',
             allowBlank: false,
             editable: false,
@@ -1150,7 +1188,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fieldLabel: this.app.i18n.gettext('Saved in Addressbook'),
             name: 'container_id',
             blurOnSelect: true,
-            tabIndex: 11,
             allowBlank: false,
             forceSelection: true,
             listWidth: 250,
