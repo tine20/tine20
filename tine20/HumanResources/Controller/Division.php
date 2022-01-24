@@ -91,4 +91,59 @@ class HumanResources_Controller_Division extends Tinebase_Controller_Record_Cont
         }
         parent::checkFilterACL($_filter, $_action);
     }
+
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        $updateObserver = new Tinebase_Model_PersistentObserver(array(
+            'observable_model'      => Tinebase_Model_Container::class,
+            'observable_identifier' => $_createdRecord->{HumanResources_Model_Division::FLD_CONTAINER_ID},
+            'observer_model'        => HumanResources_Model_Division::class,
+            'observer_identifier'   => $_createdRecord->getId(),
+            'observed_event'        => Tinebase_Event_Record_Update::class,
+        ));
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver($updateObserver);
+
+        $deleteObserver = new Tinebase_Model_PersistentObserver(array(
+            'observable_model'      => Tinebase_Model_Container::class,
+            'observable_identifier' => $_createdRecord->{HumanResources_Model_Division::FLD_CONTAINER_ID},
+            'observer_model'        => HumanResources_Model_Division::class,
+            'observer_identifier'   => $_createdRecord->getId(),
+            'observed_event'        => Tinebase_Event_Record_Delete::class,
+        ));
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver($deleteObserver);
+    }
+
+    /**
+     * implement logic for each controller in this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        if ($_eventObject instanceof Tinebase_Event_Observer_Abstract && $_eventObject->persistentObserver
+                ->observable_model === Tinebase_Model_Container::class) {
+            switch (get_class($_eventObject)) {
+                case Tinebase_Event_Record_Update::class:
+                    if ($_eventObject->observable->is_deleted) {
+                        break;
+                    }
+                    try {
+                        $division = $this->get($_eventObject->persistentObserver->observer_identifier);
+                    } catch(Tinebase_Exception_NotFound $tenf) {
+                        break;
+                    }
+                    if ($division->{HumanResources_Model_Division::FLD_TITLE} !== $_eventObject->observable->name) {
+                        $division->{HumanResources_Model_Division::FLD_TITLE} = $_eventObject->observable->name;
+                        $this->update($division);
+                    }
+                    break;
+
+                case Tinebase_Event_Record_Delete::class:
+                    $this->delete($_eventObject->persistentObserver->observer_identifier);
+                    break;
+            }
+        }
+    }
 }
