@@ -172,7 +172,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
 
         $match = [];
 
-        if (!preg_match('/mirall\/(\d\.\d\.\d)/', $useragent, $match)) {
+        if (!preg_match('/mirall\/(\d+\.\d+\.\d+)/', $useragent, $match)) {
             return null;
         }
 
