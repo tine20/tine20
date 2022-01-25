@@ -6,7 +6,7 @@
  * @subpackage  Initialize
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -23,7 +23,8 @@ class Setup_Initialize
      * @var array
      */
     static protected $_userRoleRights = array(
-        Tinebase_Acl_Rights::RUN
+        Tinebase_Acl_Rights::RUN,
+        Tinebase_Acl_Rights::MAINSCREEN,
     );
     
     /**
