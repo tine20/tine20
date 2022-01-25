@@ -68,7 +68,6 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             'number' => array(
                 'label' => 'Number', //_('Number')
                 'duplicateCheckGroup' => 'number',
-                'group' => 'employee',
                 'type'  => 'integer',
                 'nullable'     => true,
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE,  'presence' => 'required'),
@@ -77,7 +76,6 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'label' => 'Account', //_('Account')
                 'duplicateCheckGroup' => 'account',
                 'type' => 'user',
-                'group' => 'employee',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
             ),
@@ -86,93 +84,100 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'type'    => 'text',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
+                self::REQUIRED_GRANTS => [
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
+                ],
             ),
             'countryname' => array(
                 'label'   => 'Country', //_('Country')
-                'group'   => 'private',
                 'default' => 'Germany', // _('Germany')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'     => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'locality' => array(
                 'label' => 'Locality', //_('Locality')
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'postalcode' => array(
                 'label' => 'Postalcode', //_('Postalcode')
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'region' => array(
                 'label' => 'Region', //_('Region')
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'street' => array(
                 'label' => 'Street', //_('Street')
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'street2' => array(
                 'label' => 'Street 2', //_('Street 2')
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'email' => array(
                 'label' => 'E-Mail', //_('E-Mail')
-                'group' => 'private',
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'nullable' => true,
-                'shy'   => TRUE
-            ),
-            'tel_home' => array(
-                'label' => 'Telephone Number', //_('Telephone Number')
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
+                ],
+            ),
+            'tel_home' => array(
+                'label' => 'Telephone Number', //_('Telephone Number')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'nullable' => true,
+                'shy'   => TRUE,
+                self::REQUIRED_GRANTS => [
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'tel_cell' => array(
                 'label' => 'Cell Phone Number', //_('Cell Phone Number')
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'title' => array(
@@ -205,88 +210,90 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             'bday' => array(
                 'label' => 'Birthday', //_('Birthday')
                 'type'  => 'datetime',
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'bank_account_holder' => array(
                 'label' => 'Account Holder', //_('Account Holder')
-                'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'bank_account_number' => array(
                 'label' => 'Account Number', //_('Account Number')
                 'duplicateCheckGroup' => 'bankaccount',
-                'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'iban' => array(
                 'label' => 'IBAN',
                 'duplicateCheckGroup' => 'iban',
-                'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'bic' => array(
                 'label' => 'BIC',
                 'duplicateCheckGroup' => 'bic',
-                'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'bank_name' => array(
                 'label' => 'Bank Name', //_('Bank Name')
-                'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'bank_code_number' => array(
                 'label' => 'Code Number', //_('Code Number')
                 'duplicateCheckGroup' => 'bankaccount',
-                'group' => 'banking',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'employment_begin' => array(
                 'label' => 'Employment begin', //_('Employment begin')
                 'type'  => 'date',
-                'group' => 'private',
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE,  'presence' => 'required'),
                 'nullable' => true,
+                self::REQUIRED_GRANTS => [
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
+                ],
             ),
             'employment_end' => array(
                 'label' => 'Employment end', //_('Employment end')
                 'type'  => 'date',
-                'group' => 'private',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'filterDefinition'  => [
@@ -295,6 +302,10 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                         Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
                         Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
                     ]
+                ],
+                self::REQUIRED_GRANTS => [
+                    HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'supervisor_id' => array(
@@ -326,6 +337,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'shy'   => TRUE,
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'profession' => array(
@@ -350,9 +362,9 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     'paging'      => array('sort' => 'start_date', 'dir' => 'ASC'),
                     'dependentRecords' => TRUE,
                 ),
-                'group' => 'private',
                 self::REQUIRED_GRANTS => [
                     HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA,
+                    HumanResources_Model_DivisionGrants::READ_OWN_DATA,
                 ],
             ),
             'costcenters' => array(
