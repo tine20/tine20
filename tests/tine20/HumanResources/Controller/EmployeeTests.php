@@ -99,6 +99,18 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
         $this->assertEquals(0, $result->count());
 
         Tinebase_Container::getInstance()->addGrants($division1->container_id, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['rwright']->getId(), [HumanResources_Model_DivisionGrants::READ_BASIC_EMPLOYEE_DATA], true);
+
+        Tinebase_Core::setUser($this->_personas['rwright']);
+
+        $filter = new HumanResources_Model_EmployeeFilter([
+            ['field' => 'n_given', 'operator' => 'equals', 'value' => $employee1->n_given],
+        ]);
+        $result = $employeeController->search($filter);
+        $this->assertEquals(1, $result->count());
+        $this->assertNull($result->getFirstRecord()->health_insurance);
+
+        Tinebase_Container::getInstance()->addGrants($division1->container_id, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
 
         Tinebase_Core::setUser($this->_personas['pwulf']);
@@ -107,7 +119,7 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
         ]);
         $result = $employeeController->search($filter);
         $this->assertEquals(1, $result->count());
-        $this->assertNull($result->getFirstRecord()->health_insurance);
+        $this->assertSame($employee1->health_insurance, $result->getFirstRecord()->health_insurance);
 
         $filter = new HumanResources_Model_EmployeeFilter([
             ['field' => 'n_given', 'operator' => 'equals', 'value' => $employee2->n_given],

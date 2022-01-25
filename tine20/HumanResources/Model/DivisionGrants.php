@@ -20,14 +20,19 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
     public const MODEL_NAME_PART    = 'DivisionGrants';
 
     /**
-     * read only access to own: simplyfied employee, hr account, wtr, freetime
+     * read only access to own: employee, hr account, contract, wtr, freetime
      */
     public const READ_OWN_DATA = 'readOwnDataGrant';
 
     /**
-     * read only access to all employee / hr account
+     * read only access to all employee, hr account, contract
      */
     public const READ_EMPLOYEE_DATA = 'readEmployeeDataGrant';
+
+    /**
+     * read only access to all basic employee data
+     */
+    public const READ_BASIC_EMPLOYEE_DATA = 'readBasicEmployeeDataGrant';
 
     /**
      * write access to all employee / hr account
@@ -81,6 +86,7 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
         return [
             self::READ_OWN_DATA,
             self::READ_EMPLOYEE_DATA,
+            self::READ_BASIC_EMPLOYEE_DATA,
             self::UPDATE_EMPLOYEE_DATA,
             self::READ_TIME_DATA,
             self::UPDATE_TIME_DATA,
@@ -111,6 +117,10 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
             self::READ_EMPLOYEE_DATA => [
                 self::LABEL         => 'Read employee',  // _('Read employee')
                 self::DESCRIPTION   => 'The grant to read full employees data, accounts, contracts and free times for all employees in this division.',  // _('The grant to read full employees data, accounts, contracts and free times for all employees in this division.')
+            ],
+            self::READ_BASIC_EMPLOYEE_DATA => [
+                self::LABEL         => 'Read basic employee',  // _('Read basic employee')
+                self::DESCRIPTION   => 'The grant to read basic employees data for all employees in this division.',  // _('The grant to read basic employees data for all employees in this division.')
             ],
             self::UPDATE_EMPLOYEE_DATA => [
                 self::LABEL         => 'Update employee', // _('Update employee')
