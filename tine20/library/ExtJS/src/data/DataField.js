@@ -60,13 +60,13 @@ Ext.data.Field = function(config){
             case "int":
                 cv = function(v){
                     return v !== undefined && v !== null && v !== '' ?
-                        parseInt(String(v).replace(stripRe, ""), 10) : '';
+                        parseInt(String(v).replace(stripRe, ""), 10) : null;
                     };
                 break;
             case "float":
                 cv = function(v){
                     return v !== undefined && v !== null && v !== '' ?
-                        parseFloat(String(v).replace(stripRe, ""), 10) : '';
+                        parseFloat(String(v).replace(stripRe, ""), 10) : null;
                     };
                 break;
             case "bool":

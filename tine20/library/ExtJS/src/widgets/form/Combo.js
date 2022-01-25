@@ -974,7 +974,7 @@ var menu = new Ext.menu.Menu({
      */
     getValue : function(){
         if(this.valueField){
-            return Ext.isDefined(this.value) ? this.value : '';
+            return Ext.isDefined(this.value) ? this.value : this.emptyValue;
         }else{
             return Ext.form.ComboBox.superclass.getValue.call(this);
         }
