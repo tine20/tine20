@@ -33,6 +33,27 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->_uit = $this->_json = new HumanResources_Frontend_Json();
     }
 
+    public function testGetFeastAndFreeDaysWithGrants()
+    {
+        $date = new Tinebase_DateTime();
+        $date->subYear(1);
+        $date->setDate($date->format('Y'), 2, 1);
+
+        $costCenter1 = $this->_getCostCenter($date);
+        $savedEmployee = $this->_saveEmployee($costCenter1, null, 'pwulf');
+
+        $freeTimesAdmin = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date->format('Y'));
+        $division = HumanResources_Controller_Division::getInstance()->get($savedEmployee['division_id']);
+        Tinebase_Container::getInstance()->addGrants($division->container_id, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date->format('Y'));
+
+        $this->assertNotEmpty($freeTimesAdmin['results']['contracts']);
+        $this->assertEmpty($freeTimes['results']['contracts']);
+    }
+
     /**
      * Creates an employee with contracts and contact, account etc.
      * tests auto end_date of old contract
@@ -167,9 +188,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * @param HumanResources_Model_CostCenter $costCenter
      * @return array
      */
-    protected function _saveEmployee($costCenter = null, $firstDate = NULL)
+    protected function _saveEmployee($costCenter = null, $firstDate = NULL, $loginName = null)
     {
-        $e = $this->_getEmployee();
+        $e = $this->_getEmployee($loginName);
         $e->contracts = array($this->_getContract($firstDate)->toArray());
         
         if ($costCenter) {
