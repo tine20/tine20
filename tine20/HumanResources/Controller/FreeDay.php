@@ -67,7 +67,15 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
 
         switch ($_action) {
             case self::ACTION_GET:
-                HumanResources_Controller_FreeTime::getInstance()->get($_record->getIdFromProperty('freetime_id'));
+                try {
+                    HumanResources_Controller_FreeTime::getInstance()->get($_record->getIdFromProperty('freetime_id'));
+                } catch (Tinebase_Exception_AccessDenied $e) {
+                    if ($_throw) {
+                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
+                    } else {
+                        return false;
+                    }
+                }
                 return true;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:

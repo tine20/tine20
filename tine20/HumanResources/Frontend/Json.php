@@ -519,7 +519,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $aController = HumanResources_Controller_Account::getInstance();
         $ftController = HumanResources_Controller_FreeTime::getInstance();
         $fdController = HumanResources_Controller_FreeDay::getInstance();
-        $wtsController = HumanResources_Controller_WorkingTimeScheme::getInstance();
         
         // validate employeeId
         $employee = $eController->get($_employeeId);
@@ -540,16 +539,11 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $maxDate = clone $minDate;
         $maxDate->addYear(1)->subSecond(1);
 
-        $oldValue = $cController->doContainerACLChecks(false);
-        try {
-            // find contracts of the year in which the vacation days will be taken
-            $contracts = $cController->getValidContracts([
-                'from' => $minDate,
-                'until' => $maxDate
-            ], $_employeeId);
-        } finally {
-            $cController->doContainerACLChecks($oldValue);
-        }
+        // find contracts of the year in which the vacation days will be taken
+        $contracts = $cController->getValidContracts([
+            'from' => $minDate,
+            'until' => $maxDate
+        ], $_employeeId);
         $excludeDates = array();
         
         if ($contracts->count() < 1) {
@@ -564,12 +558,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // find out disabled days for the different contracts
         foreach ($contracts as $contract) {
-            $oldValue = $wtsController->doContainerACLChecks(false);
-            try {
-                $json = $contract->getWorkingTimeJson();
-            } finally {
-                $wtsController->doContainerACLChecks($oldValue);
-            }
+            $json = $contract->getWorkingTimeJson();
             $startDay = ($contract->start_date == NULL) ? $minDate : (($contract->start_date < $minDate) ? $minDate : $contract->start_date);
             $stopDay  = ($contract->end_date == NULL)   ? $maxDate : (($contract->end_date > $maxDate)   ? $maxDate : $contract->end_date);
 
@@ -628,11 +617,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'allFreeTimes'      => $allFreeTimes->toArray(),
                 'allFreeDays'       => $allFreeDays->toArray(),
                 'feastDays'         => $feastDays,
-                'contracts'         => $cController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                    HumanResources_Model_Contract::class, [
-                        ['field' => 'id', 'operator' => 'in', 'value' => $contracts->getArrayOfIds()]
-                    ]
-                ))->toArray(),
+                'contracts'         => $contracts->toArray(),
                 'employee'          => $employee->toArray(),
                 'firstDay'          => $firstDay,
                 'lastDay'           => $stopDay,

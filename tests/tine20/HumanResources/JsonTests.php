@@ -51,7 +51,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date->format('Y'));
 
         $this->assertNotEmpty($freeTimesAdmin['results']['contracts']);
-        $this->assertEmpty($freeTimes['results']['contracts']);
+        $this->assertNotEmpty($freeTimes['results']['contracts']);
     }
 
     /**

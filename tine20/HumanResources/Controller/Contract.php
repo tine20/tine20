@@ -19,6 +19,7 @@
 class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
+    use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 
     /**
      * true if sales is installed
@@ -49,21 +50,6 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $this->_doContainerACLChecks = true;
     }
 
-    /**
-     * Removes containers where current user has no access to
-     *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string $_action get|update
-     */
-    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
-    {
-        // if we have manage_employee right, we need no acl filter
-        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
-            return;
-        }
-        parent::checkFilterACL($_filter, $_action);
-    }
-
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
         if (!$this->_doContainerACLChecks) {
@@ -77,8 +63,16 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
 
         switch ($_action) {
             case self::ACTION_GET:
-                $_action = HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA;
-                break;
+                try {
+                    HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty('employee_id'));
+                } catch (Tinebase_Exception_AccessDenied $e) {
+                    if ($_throw) {
+                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
+                    } else {
+                        return false;
+                    }
+                }
+                return true;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:
             case self::ACTION_DELETE:
