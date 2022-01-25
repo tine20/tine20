@@ -17,13 +17,13 @@ then
 fi
 
 echo -e "### Features"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*feature\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*feature\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft" | sed -E ':a;N;$!ba;s/\n/  \n/g'
 
 echo -e "\n### Bugfixes"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*fix\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*fix\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft" | sed -E ':a;N;$!ba;s/\n/  \n/g'
 
 echo -e "\n### Refactoring"
-git log $VERSION1...$VERSION2 --oneline | egrep " \"*refactor\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft"
+git log $VERSION1...$VERSION2 --oneline | egrep " \"*refactor\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft" | sed -E ':a;N;$!ba;s/\n/  \n/g'
 
 # TODO allow to get all other changes with a param --full
 
@@ -31,8 +31,8 @@ if [ "$3" = "--full" ]
 then
   echo -e "\n### Other Changes"
   git log $VERSION1...$VERSION2 --oneline | grep -v "Merge branch" \
-    | grep -v "Merge remote" | egrep -v " \"*feature\(" | egrep -v " \"*fix\(" | egrep -v " \"*refactor\(" | egrep -v "\(ci"
+    | grep -v "Merge remote" | egrep -v " \"*feature\(" | egrep -v " \"*fix\(" | egrep -v " \"*refactor\(" | egrep -v "\(ci" | sed -E ':a;N;$!ba;s/\n/  \n/g'
 
   echo -e "\n### CI Changes"
-  git log $VERSION1...$VERSION2 --oneline | egrep "\(ci" | egrep -v "fixup"
+  git log $VERSION1...$VERSION2 --oneline | egrep "\(ci" | egrep -v "fixup" | sed -E ':a;N;$!ba;s/\n/  \n/g'
 fi
