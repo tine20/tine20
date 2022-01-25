@@ -16,7 +16,7 @@ FROM ${SOURCE_IMAGE} as test-source
 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG TINE20ROOT=/usr/share
 
-RUN apk add mysql-client jq rsync
+RUN apk add mysql-client jq rsync coreutils
 
 COPY ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/webpack.ini
 COPY etc /config
