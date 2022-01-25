@@ -93,10 +93,16 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
 
         $response = $client->request();
         if (200 === $response->getStatus()) {
-            Tinebase_Session::getSessionNamespace()->{static::class} = [
-                'pin' => $pin,
-                'ttl' => time() + (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_TTL}
-            ];
+            try {
+                Tinebase_Session::getSessionNamespace()->{static::class} = [
+                    'pin' => $pin,
+                    'ttl' => time() + (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_TTL}
+                ];
+            } catch (Zend_Session_Exception $zse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage()) ;
+                return false;
+            }
 
             return true;
         }
