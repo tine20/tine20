@@ -981,7 +981,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('E-mail'),
                         name: 'accountEmailAddress',
                         id: 'accountEmailAddress',
-                        columnWidth: 0.5
+                        columnWidth: 0.5,
+                        getValue: function() {
+                            const value = Ext.form.TextField.prototype.getValue.apply(this, arguments)
+                            return value || null
+                        }
                     }, {
                         //vtype: 'email',
                         fieldLabel: this.app.i18n.gettext('OpenID'),
