@@ -86,7 +86,16 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         
         Tinebase_FileSystem::getInstance()->unlink($this->_path);
     }
-    
+
+    /**
+     * @param mixed $data
+     * @return string|null
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_NotFound
+     * @throws \Sabre\DAV\Exception\Forbidden
+     * @throws \Sabre\DAV\Exception\NotFound
+     */
     public function put($data)
     {
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
@@ -111,8 +120,12 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         }
 
         // save file object
-        if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
-            throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $this->_path);
+        try {
+            if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
+                throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $this->_path);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
 
         // refetch data
