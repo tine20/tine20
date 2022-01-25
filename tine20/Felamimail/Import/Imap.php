@@ -148,7 +148,7 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
             $this->_importedMessages->addRecord($message);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
-                __LINE__ . ' No valid JSON body found in message ' . print_r($message, true));
+                __LINE__ . ' No valid JSON body found in message ' . print_r($message->toArray(), true));
             return null;
         }
         return $content;

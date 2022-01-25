@@ -51,18 +51,6 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'appName'           => 'HumanResources',
         'modelName'         =>  self::MODEL_NAME_PART,
 
-        'fieldGroups'       => array(
-            'banking' => 'Banking Information',    // _('Banking Information')
-            'private' => 'Private Information',    // _('Private Information')
-        ),
-        'fieldGroupRights'  => array(
-            'private' => array(
-                // TODO: handle see right
-                'see'  => HumanResources_Acl_Rights::MANAGE_PRIVATE,
-                'edit' => HumanResources_Acl_Rights::MANAGE_PRIVATE,
-            )
-        ),
-
         'filterModel' => array(
             'is_employed' => array(
                 'label' => 'Is employed',    // _('Is employed')

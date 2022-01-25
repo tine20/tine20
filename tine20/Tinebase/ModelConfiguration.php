@@ -56,11 +56,7 @@
  * @property array      $recordFields holds all field definitions of type record (foreignId fields)
  * @property boolean    $resolveRelated if this is set to true, related data will be fetched on fetching dependent records by frontend json
  * @property array      $virtualFields holds virtual field definitions used for non-persistent fields getting calculated on each call of the record
- * @property array      $fieldGroups maps fieldgroup keys to their names
- * @property array      $fieldGroupRights here you can define one right (Tinebase_Acl_Rights_Abstract) for each field
- * @property array      $fieldGroupFeDefaults every field group will be nested into a fieldset, here you can define the defaults (Ext.Container.defaults)
  * @property boolean    $createModule
- * @property boolean    $useGroups If any field has a group, this will be set to true (autoset by the constructor)
  * @property string     $appName the application this configuration belongs to (if the class has the name "Calendar_Model_Event", this will be resolved to "Calendar")
  * @property string     $application legacy
  * @property string     $applicationName legacy
@@ -598,59 +594,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
      */
     protected $_virtualFields = [];
-    
-    /**
-     * maps fieldgroup keys to their names
-     * Add translation information in comments like: // _('Banking Information')
-     * 
-     * array(
-     *     'banking' => 'Banking Information',    // _('Banking Information')
-     *     'private' => 'Private Information',    // _('Private Information')
-     *     )
-     * 
-     * @var array
-     */
-    protected $_fieldGroups = NULL;
-    
-    /**
-     * here you can define one right (Tinebase_Acl_Rights_Abstract) for each field
-     * group ('group'-property of a field definition of this._fields), the user must
-     * have to see/edit this group, otherwise the fields of the edit dialog will be disabled/readOnly
-     *
-     * array(
-     *     'private' => array(
-     *         'see'  => HumanResources_Acl_Rights::SEE_PRIVATE,
-     *         'edit' => HumanResources_Acl_Rights::EDIT_PRIVATE,
-     *     ),
-     *     'banking' => array(
-     *         'see'  => HumanResources_Acl_Rights::SEE_BANKING,
-     *         'edit' => HumanResources_Acl_Rights::EDIT_BANKING,
-     *     )
-     * );
-     *
-     * @var array
-     */
-    protected $_fieldGroupRights = array();
-
-    /**
-     * every field group will be nested into a fieldset, here you can define the defaults (Ext.Container.defaults)
-     *
-     * @var array
-    */
-    protected $_fieldGroupFeDefaults = array();
 
     protected $_createModule = FALSE;
     
     /*
      * auto set by the constructor
     */
-
-    /**
-     * If any field has a group, this will be set to true (autoset by the constructor)
-     *
-     * @var boolean
-    */
-    protected $_useGroups = FALSE;
 
     /**
      * the application this configuration belongs to (if the class has the name "Calendar_Model_Event", this will be resolved to "Calendar")
@@ -807,7 +756,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_frontendProperties = array(
         'containerProperty', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
-        'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
+        'multipleEdit', 'multipleEditRequiredRight',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms',
         'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
@@ -1273,11 +1222,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
             // the property name
             $fieldDef['key'] = $fieldKey;
-
-            // if any field has a group set, enable grouping globally
-            if (! $this->_useGroups && (isset($fieldDef['group']) || array_key_exists('group', $fieldDef))) {
-                $this->_useGroups = TRUE;
-            }
 
             if ($fieldDef[self::TYPE] === 'keyfield') {
                 $fieldDef['length'] = 40;
