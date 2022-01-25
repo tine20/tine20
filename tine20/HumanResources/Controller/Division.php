@@ -141,7 +141,9 @@ class HumanResources_Controller_Division extends Tinebase_Controller_Record_Cont
                     break;
 
                 case Tinebase_Event_Record_Delete::class:
-                    $this->delete($_eventObject->persistentObserver->observer_identifier);
+                    if (static::$_deletingRecordId !== $_eventObject->persistentObserver->observer_identifier) {
+                        $this->delete($_eventObject->persistentObserver->observer_identifier);
+                    }
                     break;
             }
         }
