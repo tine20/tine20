@@ -93,6 +93,7 @@ class Tinebase_ModelConfiguration_Const {
     const FLAGS = 'flags';
     const FLD_CONTAINER_ID = 'container_id';
     const FLD_DELETED_TIME = 'deleted_time';
+    const FLD_GRANTS = 'grants';
     const FLD_LOCALLY_CHANGED = 'locally_changed';
     const FLD_ORIGINAL_ID = 'original_id';
     const FORCE_VALUES = 'forceValues';

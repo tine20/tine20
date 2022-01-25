@@ -1127,6 +1127,17 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     'options' => array('modelName' => $recordClass)
                 )
             );
+            if (!array_key_exists(self::FLD_GRANTS, $this->_fields) &&
+                    class_exists($this->_appName . '_Model_' . $this->_modelName . 'Grants')) {
+                $this->_fields[self::FLD_GRANTS] = [
+                    self::TYPE          => self::TYPE_RECORDS,
+                    self::CONFIG        => [
+                        self::APP_NAME      => $this->_appName,
+                        self::MODEL_NAME    => $this->_modelName . 'Grants'
+                    ],
+                    self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                ];
+            }
         } else {
             $this->_singularContainerMode = true;
         }

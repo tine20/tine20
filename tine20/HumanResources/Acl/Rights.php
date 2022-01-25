@@ -19,12 +19,6 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     use Tinebase_Controller_SingletonTrait;
 
     /**
-     * the right to show private data of the employee records
-     * @static string
-     */
-    public const MANAGE_PRIVATE = 'manage_private';
-
-    /**
      * the right to show and edit working streams
      * @static string
      */
@@ -58,7 +52,6 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         return array_merge(parent::getAllApplicationRights(), [
             self::MANAGE_DIVISIONS,
             self::MANAGE_EMPLOYEE,
-            self::MANAGE_PRIVATE,
             self::MANAGE_STREAMS,
             self::MANAGE_WORKINGTIME,
         ]);
@@ -81,10 +74,6 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_EMPLOYEE => array(
                 'text'          => $translate->_('edit employee data'),
                 'description'   => $translate->_('Show and edit employee data and free time management'),
-            ),
-            self::MANAGE_PRIVATE => array(
-                'text'          => $translate->_('edit private employee data'),
-                'description'   => $translate->_('Edit birthday, account data and other private information of employee records'),
             ),
             self::MANAGE_STREAMS => array(
                 'text'          => $translate->_('edit stream data'),

@@ -1072,6 +1072,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
         $this->assertEquals(40, strlen($d['id']));
         $this->assertEquals($title, $d['title']);
+        $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_GRANTS, $d);
+        $this->assertIsArray($d[Tinebase_ModelConfiguration::FLD_GRANTS]);
+        $this->assertCount(1, $d[Tinebase_ModelConfiguration::FLD_GRANTS]);
 
         $d = $this->_json->getDivision($d['id']);
 
