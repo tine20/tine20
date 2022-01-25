@@ -44,7 +44,6 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-        'requiredRight'     => HumanResources_Acl_Rights::MANAGE_EMPLOYEE,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         self::DELEGATED_ACL_FIELD => 'division_id',
 

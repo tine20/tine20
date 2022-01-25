@@ -40,7 +40,7 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * the right to add, edit and delete division data
      * @static string
      */
-    public const MANAGE_DIVISIONS = 'manage_divisions';
+    public const ADD_DIVISIONS = 'add_divisions';
 
     /**
      * get all possible application rights
@@ -50,7 +50,7 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     public function getAllApplicationRights()
     {
         return array_merge(parent::getAllApplicationRights(), [
-            self::MANAGE_DIVISIONS,
+            self::ADD_DIVISIONS,
             self::MANAGE_EMPLOYEE,
             self::MANAGE_STREAMS,
             self::MANAGE_WORKINGTIME,
@@ -67,21 +67,21 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $translate = Tinebase_Translation::getTranslation('HumanResources');
 
         $rightDescriptions = array(
-            self::MANAGE_DIVISIONS => array(
-                'text'          => $translate->_('edit division data'),
-                'description'   => $translate->_('Add, edit and delete division data'),
+            self::ADD_DIVISIONS => array(
+                'text'          => $translate->_('Add Divisions'),
+                'description'   => $translate->_('Add, new divisions'),
             ),
             self::MANAGE_EMPLOYEE => array(
-                'text'          => $translate->_('edit employee data'),
-                'description'   => $translate->_('Show and edit employee data and free time management'),
+                'text'          => $translate->_('Manage all Employee'),
+                'description'   => $translate->_('Manage all employee regardless configured division grants.'),
             ),
             self::MANAGE_STREAMS => array(
-                'text'          => $translate->_('edit stream data'),
+                'text'          => $translate->_('Manage Streams'),
                 'description'   => $translate->_('Show and edit working streams'),
             ),
             self::MANAGE_WORKINGTIME => array(
-                'text'          => $translate->_('edit working times'),
-                'description'   => $translate->_('Show and edit working time reports'),
+                'text'          => $translate->_('Manage working times'),
+                'description'   => $translate->_('Manage all working times regardless configured division grants.'),
             ),
         );
 

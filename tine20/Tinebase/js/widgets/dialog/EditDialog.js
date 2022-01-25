@@ -415,6 +415,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initAttachmentsPanel();
         // init notes panel
         this.initNotesPanel();
+        this.initGrantsPanel();
 
         // apply generic tab sorting
         if (this.items.xtype == 'tabpanel') {
@@ -1027,6 +1028,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // apply grants to fields with requiredGrant prop
         if (this.evalGrants) {
             this.getForm().items.each(function (f) {
+                // @TODO: cope with configured grants
+                // const requiredGrants = _.get(this.modelConfig, `fields[${f.fieldName}].requiredGrants`)
+
+                // NOTE: requiredGrant is UI only property
                 if (f.isFormField && f.requiredGrant !== undefined) {
                     var hasRequiredGrant = _.get(this.record, this.recordClass.getMeta('grantsPath') + '.' + f.requiredGrant);
                     f.setDisabled(!hasRequiredGrant);
@@ -1426,6 +1431,26 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 anchor: '100% 100%',
                 editDialog: this
             }));
+        }
+    },
+
+    initGrantsPanel() {
+        if (this.recordClass?.getModelConfiguration()?.extendsContainer) {
+            this.grantsGrid = new Tine.widgets.container.GrantsGrid({
+                title:  i18n._('Permissions'),
+                alwaysShowAdminGrant: true,
+                hasAccountPrefix: true,
+                recordClass: Tine.Tinebase.data.RecordMgr.get(this.recordClass.getModelConfiguration().grantsModel)
+            });
+            this.items.items.push(this.grantsGrid);
+            this.on('load', (me, record) => {
+                const grants = Tine.Tinebase.common.assertComparable(record.get('grants') || []);
+                this.grantsGrid.getStore().loadData({results: grants});
+            });
+            this.on('recordUpdate', (me, record) => {
+                const grants = Tine.Tinebase.common.assertComparable(_.map(this.grantsGrid.getStore().data.items, 'data'));
+                record.set('grants', grants);
+            });
         }
     },
 

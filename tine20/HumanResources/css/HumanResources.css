@@ -16,6 +16,10 @@
     background-image:url(../../images/icon-set/icon_human_resources.svg) !important;
 }
 
+.x-tree-node-icon.HumanResourcesTimetrackerHooks {
+    background-image:url(../../images/icon-set/icon_human_resources.svg) !important;
+}
+
 .HumanResourcesAccount {
     background-image:url(../../images/icon-set/icon_timeaccount.svg) !important;
 }

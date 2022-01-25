@@ -29,6 +29,8 @@ Tine.Tinebase.Application = function(config) {
         (this.getMainScreen != Tine.Tinebase.Application.prototype.getMainScreen ||
         typeof Tine[this.appName].MainScreen === 'function');
 
+    this.hasMainScreen = this.hasMainScreen && Tine.Tinebase.common.hasRight('mainscreen', this.appName);
+
     this.i18n = new Locale.Gettext();
     this.i18n.textdomain(this.appName);
 

@@ -167,6 +167,10 @@ class Tinebase_ModelConfiguration_Const {
     const RECORDS_NAME = 'recordsName';
     const RECURSIVE_RESOLVING = 'recursiveResolving';
     const REQUIRED_GRANTS = 'requiredGrants';
+    /**
+     * UI only -> required right to see/use module
+     */
+    const REQUIRED_RIGHT = 'requiredRight';
     const RESOLVE_DELETED = 'resolveDeleted';
     const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
