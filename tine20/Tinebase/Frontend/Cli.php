@@ -1684,8 +1684,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         echo 'id ' . $modlog->record_id . ' UNDELETE' . PHP_EOL;
                     } else {
                         $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value));
-                        foreach($diff->diff as $key => $val) {
-                            echo 'id ' . $modlog->record_id . ' [' . $key . ']: ' . $val . ' -> ' . $diff->oldData[$key] . PHP_EOL;
+                        if (is_array($diff->diff)) {
+                            foreach ($diff->diff as $key => $val) {
+                                echo 'id ' . $modlog->record_id . ' [' . $key . ']: ' . $val . ' -> ' . $diff->oldData[$key] . PHP_EOL;
+                            }
                         }
                     }
                 }
