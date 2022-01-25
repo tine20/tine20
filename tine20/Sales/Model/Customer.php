@@ -51,12 +51,6 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         'titleProperty'     => 'name',
         'appName'           => 'Sales',
         'modelName'         => self::MODEL_NAME_PART,
-        
-        'fieldGroups'       => array(
-            'core'       => 'Core Data',     // _('Core Data')
-            'accounting' => 'Accounting',    // _('Accounting')
-            'misc'       => 'Miscellaneous',    // _('Miscellaneous')
-        ),
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
 

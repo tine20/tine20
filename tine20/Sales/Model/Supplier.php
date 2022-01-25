@@ -48,12 +48,6 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
         'modelName'         => 'Supplier',
 
         'exposeHttpApi'     => true,
-        
-        'fieldGroups'       => array(
-            'core'       => 'Core Data',     // _('Core Data')
-            'accounting' => 'Accounting',    // _('Accounting')
-            'misc'       => 'Miscellaneous',    // _('Miscellaneous')
-        ),
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
         
