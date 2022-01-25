@@ -141,6 +141,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             xtype: 'textarea',
                             name: 'description',
                             hideLabel: true,
+                            maxLength: 255,
                             grow: false,
                             preventScrollbars: false,
                             anchor: '100% 100%',
