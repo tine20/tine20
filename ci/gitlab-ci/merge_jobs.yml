@@ -3,7 +3,7 @@
     GIT_STRATEGY: none
     MERGENONINTERACTIVE: "true" # "false" is also true! Runs not interactive if the variable exists.
     pushOptSkipCi: "true" # "false" is also true! Runs not interactive if the variable exists.
-  image: ${UTIL_REGISTRY}/docker:19.03.1-r3 # dose not need docker. But the docker image should already exist on the runners.
+  image: ${UTIL_REGISTRY}/docker:19.03.1-r3 # dose not need docker. But the docker image should already exist on the runners. But it needs coreutils which is installed
   needs: []
   before_script:
     - apk add gettext
