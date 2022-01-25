@@ -32,7 +32,7 @@ github_create_release_body() {
 
     previous_tag=$(github_get_latest_release_tag_name "$owner" "$repo")
 
-    repo_release_notesh "$tag" "$previous_tag"
+    repo_release_notes "$tag" "$previous_tag"
 }
 
 github_release_add_asset() {
