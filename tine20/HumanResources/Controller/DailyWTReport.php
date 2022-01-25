@@ -94,7 +94,15 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
         switch ($_action) {
             case self::ACTION_GET:
-                HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty(HumanResources_Model_DailyWTReport::FLDS_EMPLOYEE_ID));
+                try {
+                    HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty(HumanResources_Model_DailyWTReport::FLDS_EMPLOYEE_ID));
+                } catch (Tinebase_Exception_AccessDenied $e) {
+                    if ($_throw) {
+                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
+                    } else {
+                        return false;
+                    }
+                }
                 return true;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:

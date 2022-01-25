@@ -63,7 +63,15 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
 
         switch ($_action) {
             case self::ACTION_GET:
-                HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty('employee_id'));
+                try {
+                    HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty('employee_id'));
+                } catch (Tinebase_Exception_AccessDenied $e) {
+                    if ($_throw) {
+                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
+                    } else {
+                        return false;
+                    }
+                }
                 return true;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:
