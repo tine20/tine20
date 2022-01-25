@@ -200,4 +200,29 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         
         return $_record;
     }
+
+    /**
+     * Update a Sales Address with data from a Contact
+     * 
+     * @param Sales_Model_Address $address
+     * @param Addressbook_Model_Contact $contact
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function contactToCustomerAddress(Sales_Model_Address $address, Addressbook_Model_Contact $contact)
+    {
+        $customer = Sales_Controller_Customer::getInstance()->get($address->customer_id);
+        //Update Address
+        $address->name =  $customer->name;
+        $address->street = $contact->adr_one_street;
+        $address->postalcode  = $contact->adr_one_postalcode;
+        $address->locality = $contact->adr_one_locality;
+        $address->region = $contact->adr_one_region;
+        $address->countryname = $contact->adr_one_countryname;
+        $address->prefix1 = $customer->name == $contact->n_fn ? '' : $contact->n_fn;
+        $address->language = $contact->language;
+
+        return Sales_Controller_Address::getInstance()->update($address);
+    }
 }

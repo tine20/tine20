@@ -402,7 +402,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         /** @var Addressbook_Model_List $_createdRecord */
-        $this->_fireChangeListeEvent($_createdRecord);
+        $this->_fireChangeListeEvent($_createdRecord, $_record);
 
         if (isset($_createdRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $_createdRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
@@ -615,7 +615,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        $this->_fireChangeListeEvent($updatedRecord, $currentRecord);
+        $this->_fireChangeListeEvent($updatedRecord, $record, $currentRecord);
 
         if (isset($updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
                 $updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
@@ -666,10 +666,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param Addressbook_Model_List $list
      * @param Addressbook_Model_List|null $currentList
      */
-    protected function _fireChangeListeEvent(Addressbook_Model_List $list, Addressbook_Model_List $currentList = null)
+    protected function _fireChangeListeEvent(Addressbook_Model_List $list, Addressbook_Model_List $record = null, Addressbook_Model_List $currentList = null)
     {
         $event = new Addressbook_Event_ChangeList();
         $event->list = $list;
+        $event->listRecord = $record;
         $event->currentList = $currentList;
         Tinebase_Event::fireEvent($event);
     }
