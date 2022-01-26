@@ -1096,6 +1096,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_GRANTS, $d);
         $this->assertIsArray($d[Tinebase_ModelConfiguration::FLD_GRANTS]);
         $this->assertCount(1, $d[Tinebase_ModelConfiguration::FLD_GRANTS]);
+        $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS, $d);
+        $this->assertIsArray($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS]);
+        $this->assertSame(Tinebase_Core::getUser()->getId(), $d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS]['account_id']);
+        $this->assertTrue($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][Tinebase_Model_Grants::GRANT_ADMIN]);
 
         $d = $this->_json->getDivision($d['id']);
 

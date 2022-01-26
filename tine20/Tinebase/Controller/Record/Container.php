@@ -78,6 +78,10 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
                 ($this->_hasManageRight() || $this->hasGrant($record, Tinebase_Model_Grants::GRANT_ADMIN))) {
             $record->{$record::FLD_GRANTS} = $this->getRecordGrants($record);
         }
+        if ($record->has($record::FLD_ACCOUNT_GRANTS)) {
+            $record->{$record::FLD_ACCOUNT_GRANTS} = Tinebase_Container::getInstance()
+                ->getGrantsOfAccount(Tinebase_Core::getUser(), $record->container_id);
+        }
         parent::_getRelatedData($record);
     }
 

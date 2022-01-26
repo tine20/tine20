@@ -91,6 +91,7 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER_MODEL = 'filterModel';
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
+    const FLD_ACCOUNT_GRANTS = 'account_grants';
     const FLD_CONTAINER_ID = 'container_id';
     const FLD_DELETED_TIME = 'deleted_time';
     const FLD_GRANTS = 'grants';
