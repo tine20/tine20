@@ -220,6 +220,20 @@ class Addressbook_Controller_ListTest extends TestCase
         return $list;
     }
 
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function testDeleteMailingList() {
+        $this->_skipIfXpropsUserIdDeactivated();
+
+        $list = $this->_createAdbMailingList();
+        $mailAccount = $this->_searchMailinglistAccount($list);
+        Admin_Controller_EmailAccount::getInstance()->delete($mailAccount);
+        $list = Addressbook_Controller_List::getInstance()->get($list->getId());
+        self::assertNull($list->email, 'email not remove');
+        self::assertEquals($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST], false, 'xpros doesn´t change to false');
+    }
+
     protected function _createAdbMailingList(): Addressbook_Model_List
     {
         $this->_testNeedsTransaction();

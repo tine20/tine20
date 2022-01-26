@@ -19,6 +19,12 @@
  */
 class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 {
+    /**
+     * application backend class
+     *
+     * @var Felamimail_Controller_Account
+     */
+    protected $_backend;
 
     /**
      * the constructor
@@ -244,9 +250,16 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function delete($_ids)
     {
         $this->_checkRight('delete');
-        
+
         $this->_deleteEmailAccountContact($_ids);
-        $this->_backend->delete($_ids);
+        $records = $this->_backend->delete($_ids);
+        foreach ($records as $record) {
+            if ($record->type === Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST) {
+                $event = new Admin_Event_DeleteMailingList();
+                $event->listId = $record->user_id;
+                Tinebase_Event::fireEvent($event);
+            }
+        }
     }
 
     /**
@@ -356,18 +369,18 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function _deleteEmailAccountContact($ids)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-   
+
         try {
-            $ids = is_array($ids) ? $ids : [$ids]; 
-            
+            $ids = is_array($ids) ? $ids : [$ids];
+
             foreach ($ids as $id) {
                 $emailAccount = $id instanceof Felamimail_Model_Account ? $id : $this->get($id);
-                
+
                 if ($emailAccount->type === Felamimail_Model_Account::TYPE_SHARED ||
                     $emailAccount->type === Felamimail_Model_Account::TYPE_USER ||
                     $emailAccount->type === Felamimail_Model_Account::TYPE_USER_INTERNAL ||
                     $emailAccount->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
-    
+
                     if (!empty($emailAccount->contact_id)) {
                         try {
                             $contact = Addressbook_Controller_Contact::getInstance()->get($emailAccount->contact_id);
@@ -380,7 +393,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
                     }
                 }
             }
-    
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
         } finally {
