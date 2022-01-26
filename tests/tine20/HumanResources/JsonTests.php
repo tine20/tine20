@@ -1098,7 +1098,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     {
         $title = Tinebase_Record_Abstract::generateUID(10);
         $d = $this->_json->saveDivision(
-            array('title' => $title)
+            array('title' => $title, 'grants' => [[
+                'id' => 'asdfa',
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_type' => Tinebase_Model_Grants::TYPE_USER,
+                'adminGrant' => true,
+                HumanResources_Model_DivisionGrants::READ_OWN_DATA => true,
+            ]], 'account_grants' => ['adminGrant' => true])
         );
 
         $this->assertEquals(40, strlen($d['id']));
@@ -1110,6 +1116,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertIsArray($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS]);
         $this->assertSame(Tinebase_Core::getUser()->getId(), $d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS]['account_id']);
         $this->assertTrue($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][Tinebase_Model_Grants::GRANT_ADMIN]);
+        $this->assertTrue($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
+        $this->assertFalse($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA]);
 
         $d = $this->_json->getDivision($d['id']);
 
