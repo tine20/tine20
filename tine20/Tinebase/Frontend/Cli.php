@@ -2151,6 +2151,80 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * utility function to be adjusted for the needs at hand at the time of usage
+     */
+    public function restoreOrDiffEtcFileTreeFromBackupDB(Zend_Console_Getopt $opts)
+    {
+        $this->_checkAdminRight();
+
+        $data = $this->_parseArgs($opts);
+        if (!isset($data['dbname']) || empty($data['dbname'])) {
+            echo 'mandatory argument "dbname" missing' . PHP_EOL;
+            return 1;
+        }
+        if (!isset($data['rootNodeId']) || empty($data['rootNodeId'])) {
+            echo 'mandatory argument "rootNodeId" missing' . PHP_EOL;
+            return 1;
+        }
+
+        $config = Tinebase_Core::getConfig();
+        $oldDbName = $config->database->dbname;
+        $config->database->dbname = $data['dbname'];
+        Tinebase_Core::set(Tinebase_Core::DB, null);
+        Tinebase_Core::getDb();
+        Tinebase_FileSystem::getInstance()->resetBackends();
+
+        $records = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class);
+        $func = function($id, $func) use($records) {
+            foreach (Tinebase_FileSystem::getInstance()->getTreeNodeChildren($id) as $node) {
+                $records->addRecord($node);
+                $func($node->getId(), $func);
+            }
+        };
+        $func($data['rootNodeId'], $func);
+
+        $config->database->dbname = $oldDbName;
+        Tinebase_Core::set(Tinebase_Core::DB, null);
+        Tinebase_Core::getDb();
+        Tinebase_FileSystem::getInstance()->resetBackends();
+
+        $newRecords = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class);
+        $func = function($id, $func) use($newRecords) {
+            foreach (Tinebase_FileSystem::getInstance()->getTreeNodeChildren($id) as $node) {
+                $newRecords->addRecord($node);
+                $func($node->getId(), $func);
+            }
+        };
+        $func($data['rootNodeId'], $func);
+
+        $func = function($record, $msg) {
+            echo $record->getId() . ' ' . $record->name . ' ' . $msg . PHP_EOL;
+        };
+
+        /** @var Tinebase_Model_Tree_Node $record */
+        foreach ($records as $record) {
+
+            $records->removeRecord($record);
+            if (false === ($newRecord = $newRecords->getById($record->getId()))) {
+                $func($record, 'missing in current db');
+                continue;
+            }
+            $newRecords->removeRecord($newRecord);
+            if ($record->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER && $newRecord->hash !== $record->hash) {
+                $func($record, 'hash changed to ' . $newRecord->hash);
+            }
+            if ($newRecord->name !== $record->name) {
+                $func($record, 'changed to ' . $newRecord->name);
+            }
+        }
+
+        foreach ($newRecords as $newRecord) {
+            $func($newRecord, 'is new in current db');
+        }
+        return 0;
+    }
+
+    /**
      * re-adds all scheduler tasks (if they are missing)
      *
      * @param Zend_Console_Getopt $opts
