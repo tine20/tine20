@@ -16,12 +16,17 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE015_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE015_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -60,5 +65,24 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
             'filters'           => [],
         ]));
         $this->addApplicationUpdate('HumanResources', '15.2', self::RELEASE015_UPDATE002);
+    }
+
+    // this is a app struct prio task too, we better get it done asap after update001 / division table is right
+    // otherwise divisions lack their container, can't have that
+    public function update003()
+    {
+        $divisionCtrl = HumanResources_Controller_Division::getInstance();
+        $oldValue = $divisionCtrl->doContainerACLChecks(false);
+        try {
+            $setContainerMethod = new ReflectionMethod(HumanResources_Controller_Division::class, '_setContainer');
+            $setContainerMethod->setAccessible(true);
+            foreach ($divisionCtrl->getAll() as $division) {
+                $setContainerMethod->invoke($divisionCtrl, $division);
+                $divisionCtrl->getBackend()->update($division);
+            }
+            $this->addApplicationUpdate('HumanResources', '15.3', self::RELEASE015_UPDATE003);
+        } finally {
+            $divisionCtrl->doContainerACLChecks($oldValue);
+        }
     }
 }
