@@ -169,7 +169,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if ($record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->addSystemAccountConfigValues($record);
         }
-        
+
         return $record;
     }
 
@@ -177,14 +177,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * Deletes a set of records.
      *
      * @param array $_ids array of record identifiers
-     * @return void
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_NotFound
      */
     public function delete($_ids)
     {
         $this->deleteEmailAccountContact($_ids);
-        
-        parent::delete($_ids);
+
+        $records = parent::delete($_ids);
         $this->_updateDefaultAccountPreference($_ids);
+        return $records;
     }
 
     /**
@@ -257,7 +259,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         }
 
         $this->_checkSignature($_record);
-        
+
         switch ($_record->type) {
             case Felamimail_Model_Account::TYPE_SYSTEM:
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
@@ -502,7 +504,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             }
         }
     }
-    
+
 
     /**
      * delete linked objects (notes, relations, attachments, alarms) of record
@@ -599,13 +601,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $_record->type === Felamimail_Model_Account::TYPE_USER ||
             $_record->type === Felamimail_Model_Account::TYPE_USER_INTERNAL ||
             $_record->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
-            
+
             $filter = new Addressbook_Model_ContactFilter([
                 ['field'    => 'email', 'operator' => 'equals', 'value'    => $_record->email]
             ]);
 
             $existContact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-            
+
             if ($_record->visibility === Tinebase_Model_User::VISIBILITY_DISPLAYED) {
                 $name = $_record['name'];
 
@@ -613,7 +615,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     $record = Tinebase_User::getInstance()->getFullUserById($_record['user_id']);
                     $name = $record['accountDisplayName'];
                 }
-                
+
                 $contactData = new Addressbook_Model_Contact([
                     'container_id'      => $_record['contact_id']['container_id'] ?? Admin_Controller_User::getInstance()->getDefaultInternalAddressbook(),
                     'type'              => Addressbook_Model_Contact::CONTACTTYPE_EMAIL_ACCOUNT,
@@ -644,7 +646,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Delete email_account type contact for email account : ' . $_record['id']);
                 };
- 
+
                 $this->deleteEmailAccountContact([$_record]);
                 $_record->contact_id = null;
             }

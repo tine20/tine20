@@ -121,6 +121,13 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             case 'Tinebase_Event_Container_BeforeCreate':
                 $this->_handleContainerBeforeCreateEvent($_eventObject);
                 break;
+            case 'Admin_Event_DeleteMailingList':
+                $list = Addressbook_Controller_List::getInstance()->get($_eventObject->listId);
+                $list->email = null;
+                $list->type = Addressbook_Model_List::LISTTYPE_GROUP;
+                $list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] = false;
+                Addressbook_Controller_List::getInstance()->update($list);
+                break;
         }
     }
         
