@@ -1154,6 +1154,40 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             }
         } else {
             $this->_singularContainerMode = true;
+            while ($this->_delegateAclField) {
+                if (!array_key_exists(self::FLD_ACCOUNT_GRANTS, $this->_fields)) {
+                    $this->_fields[self::FLD_ACCOUNT_GRANTS] = [
+                        self::TYPE          => self::TYPE_VIRTUAL,
+                        /*self::DOCTRINE_IGNORE => true,
+                        self::OMIT_MOD_LOG  => true,
+                        self::NORESOLVE     => true,
+                        self::CONFIG        => [
+                            self::APP_NAME      => $this->_appName,
+                            self::MODEL_NAME    => $this->_modelName . 'Grants'
+                        ],
+                        self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],*/
+                    ];
+                }
+                // you can null everything below here to prevent it from being writte to
+                if (!array_key_exists(self::JSON_EXPANDER, $modelClassConfiguration) && !is_array($this->_jsonExpander)) {
+                    $this->_jsonExpander = [];
+                }
+                if (!is_array($this->_jsonExpander)) {
+                    break;
+                }
+                if (!array_key_exists(Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES, $this->_jsonExpander)) {
+                    $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES] = [];
+                }
+                if (!is_array($this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES])) {
+                    break;
+                }
+                if (!array_key_exists(Tinebase_Record_Expander::PROPERTY_CLASS_GRANTS,
+                        $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES])) {
+                    $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES]
+                        [Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS] = [];
+                }
+                break;
+            }
         }
 
         // quick hack ('key')

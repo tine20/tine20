@@ -891,6 +891,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     public function testSearchForEmptyEmploymentEnd()
     {
         $savedEmployee = $this->_saveEmployee();
+        $this->assertArrayHasKey(Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS, $savedEmployee);
+        $this->assertIsArray($savedEmployee[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]);
+        $this->assertArrayHasKey('account_id', $savedEmployee[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]);
+        $this->assertSame(Tinebase_Core::getUser()->getID(), $savedEmployee[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]['account_id']);
         
         $result = $this->_json->searchEmployees(array(array(
             'field' => 'employment_end',
@@ -899,6 +903,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         )), array());
         
         $this->assertGreaterThan(0, $result['totalcount'], 'should find employee with no employment_end');
+
+        $result0 = $result['results'][0];
+        $this->assertArrayHasKey(Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS, $result0);
+        $this->assertIsArray($result0[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]);
+        $this->assertArrayHasKey('account_id', $result0[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]);
+        $this->assertSame(Tinebase_Core::getUser()->getID(), $result0[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]['account_id']);
     }
 
     public function testSearchFreeTimeTypes()
@@ -1113,6 +1123,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
         $this->assertEquals(40, strlen($d['id']));
         $this->assertEquals($title, $d['title']);
+
+        $result = $this->_json->searchDivisions([['field' => 'id', 'operator' => 'equals', 'value' => $d['id']]]);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($d['id'], $result['results'][0]['id']);
+        $this->assertSame(Tinebase_Core::getUser()->getId(), $result['results'][0][Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS]['account_id']);
+        $this->assertCount(1, $result['results'][0][Tinebase_ModelConfiguration::FLD_GRANTS]);
 
         $this->_json->deleteDivisions(array($d['id']));
 
