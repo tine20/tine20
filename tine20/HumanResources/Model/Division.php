@@ -41,7 +41,8 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
         self::GRANTS_MODEL              => HumanResources_Model_DivisionGrants::class,
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
-                Tinebase_Record_Expander::PROPERTY_CLASS_GRANTS     => [],
+                Tinebase_Record_Expander::PROPERTY_CLASS_GRANTS         => [],
+                Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
             ]
         ],
         //'requiredRight'     => 'manage',

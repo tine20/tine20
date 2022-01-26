@@ -22,25 +22,17 @@ class Tinebase_Record_Expander_PropertyClass_Grants extends Tinebase_Record_Expa
             throw new Tinebase_Exception_InvalidArgument($_model . ' doesn\'t have a modelconfig');
         }
 
-        $model = null;
-        $this->_propertiesToProcess = [];
-        foreach ($mc->recordFields as $property => $recordField) {
-            if (isset($recordField['type']) && 'user' === $recordField['type']) {
-                $this->_propertiesToProcess[] = $property;
-                if (null === $model) {
-                    $model = $mc->getFieldModel($property);
-                }
-            }
-        }
-
-        parent::__construct($model, $_expanderDefinition, $_rootExpander);
+        parent::__construct($mc->grantsModel, $_expanderDefinition, $_rootExpander);
     }
 
     // TODO this should use the defered _setData / DataRequest scheme to improve drastically in performance
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
         foreach ($_records as $record) {
-            if (!$record->{Tinebase_Record_Abstract::FLD_GRANTS}) continue;
+            if (!$record->{Tinebase_Record_Abstract::FLD_GRANTS}) {
+                $record->{Tinebase_Record_Abstract::FLD_GRANTS} = Tinebase_Container::getInstance()
+                    ->getGrantsOfContainer($record->{$record::getConfiguration()->getContainerProperty()});
+            }
             foreach ($record->{Tinebase_Record_Abstract::FLD_GRANTS} as $grant) {
                 switch ($grant->account_type) {
                     case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
