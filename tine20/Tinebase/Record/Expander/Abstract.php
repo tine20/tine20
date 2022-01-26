@@ -18,6 +18,7 @@ abstract class Tinebase_Record_Expander_Abstract
     const GET_DELETED = 'getDeleted';
 
     const PROPERTY_CLASS_USER = 'user';
+    const PROPERTY_CLASS_GRANTS = 'grants';
 
     const DATA_FETCH_PRIO_DEPENDENTRECORD = 100;
     const DATA_FETCH_PRIO_CONTAINER = 950;
