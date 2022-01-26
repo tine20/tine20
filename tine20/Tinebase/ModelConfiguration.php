@@ -1138,6 +1138,20 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 ];
             }
+            if (!array_key_exists(self::FLD_ACCOUNT_GRANTS, $this->_fields) &&
+                    class_exists($this->_appName . '_Model_' . $this->_modelName . 'Grants')) {
+                $this->_fields[self::FLD_ACCOUNT_GRANTS] = [
+                    self::TYPE          => self::TYPE_VIRTUAL,
+                    /*self::DOCTRINE_IGNORE => true,
+                    self::OMIT_MOD_LOG  => true,
+                    self::NORESOLVE     => true,
+                    self::CONFIG        => [
+                        self::APP_NAME      => $this->_appName,
+                        self::MODEL_NAME    => $this->_modelName . 'Grants'
+                    ],
+                    self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],*/
+                ];
+            }
         } else {
             $this->_singularContainerMode = true;
         }
