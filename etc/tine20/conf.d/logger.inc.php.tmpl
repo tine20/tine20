@@ -2,15 +2,17 @@
 return [
     'logger' => array (
         'active' => true,
-        'filename' => '{{getv "/logger/filename" "/var/log/tine20/tine20.log"}}',
+        'filename' => '{{getv "/logger/filename" "php://stdout"}}',
         'priority' => {{getv "/logger/priority" "5"}},
         'logruntime' => true,
         'logdifftime' => true,
         'traceQueryOrigins' => true,
+        {{if exists "/logger/additionalwriters/filename"}}
         'additionalWriters' => array(array(
             'active' => true,
-            'filename' => '{{getv "/logger/additionalwriters/filename" "php://stdout"}}',
+            'filename' => '{{getv "/logger/additionalwriters/filename"}}',
             'priority' => {{getv "/logger/additionalwriters/priority" "5"}},
         )),
+        {{end}}
     ),
 ];

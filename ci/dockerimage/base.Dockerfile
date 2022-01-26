@@ -169,7 +169,6 @@ COPY etc/nginx/conf.d/ /etc/nginx/conf.d
 COPY etc/nginx/snippets /etc/nginx/snippets
 COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/
-COPY ci/dockerimage/supervisor.d/tail.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/crond.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/
 COPY ci/dockerimage/scripts/* /usr/local/bin/
