@@ -155,7 +155,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                 northHeight = this.layout.north ? this.layout.north.panel.getHeight() + 1 : 0,
                 eastHeight = this.layout.east && this.layout.east.panel.getEl().child('ul') ? ((this.layout.east.panel.getEl().child('ul').getHeight()) + 29) : 0,
                 maxHeight = Math.round(this.findParentBy((c) => {return c.recordClass}).getHeight() / 4),
-                height = Math.min(Math.max(eastHeight, tbHeight + northHeight), maxHeight);
+                height = Math.min(Math.max(eastHeight, tbHeight + northHeight), maxHeight, Ext.isNumber(this.maxHeight) ? this.maxHeight : Infinity);
             
             this.setHeight(height);
 
