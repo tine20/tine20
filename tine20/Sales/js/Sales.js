@@ -10,7 +10,10 @@
 
 Ext.namespace('Tine.Sales');
 
-import './Model/DocumentPosition';
+import './Model/DocumentPosition/Offer';
+import './Model/DocumentPosition/Order';
+import './Model/DocumentPosition/Delivery';
+import './Model/DocumentPosition/Invoice';
 import './Document/OfferEditDialog';
 import './Document/OrderEditDialog';
 import './Document/DeliveryEditDialog';

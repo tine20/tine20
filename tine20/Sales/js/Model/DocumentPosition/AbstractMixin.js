@@ -3,11 +3,10 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Ext.ns('Tine.Sales.Model');
 
-Tine.Sales.Model.DocumentPosition_AbstractMixin = {
+const AbstractMixin = {
     parentOnly() {
         console.error('parentOnly');
     },
@@ -81,16 +80,4 @@ Tine.Sales.Model.DocumentPosition_AbstractMixin = {
     }
 }
 
-Tine.Sales.Model.DocumentPosition_OfferMixin = {
-    parent() {
-        console.error('child');
-    },
-    statics: {
-        parent() {
-            console.error('childStatic');
-        },
-    }
-};
-
-// @TODO this should be done by modelConfig!
-_.defaultsDeep(Tine.Sales.Model.DocumentPosition_OfferMixin, Tine.Sales.Model.DocumentPosition_AbstractMixin);
+export default AbstractMixin
