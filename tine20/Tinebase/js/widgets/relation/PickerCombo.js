@@ -74,6 +74,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
     store: null,
     combo: null,
     layout: 'fit',
+    cls: 'tw-relpickercombocmp',
 
     /**
      * initializes the component
