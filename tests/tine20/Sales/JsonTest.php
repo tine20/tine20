@@ -384,14 +384,18 @@ class Sales_JsonTest extends TestCase
      */
     public function testAddGetSearchDeleteProduct()
     {
-        $this->_testSimpleRecordApi('Product', null, 'description', true, [
+        $this->_testSimpleRecordApi('Product', null, null, true, [
             'name' => [[
                 Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
                 Sales_Model_ProductLocalization::FLD_TEXT => 'test name',
             ]],
+            'description' => [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                Sales_Model_ProductLocalization::FLD_TEXT => 'test desc',
+            ]],
             'price' => 10000,
             'default_sorting' => '',
-        ]);
+        ], false);
     }
     
     /**
@@ -645,7 +649,10 @@ class Sales_JsonTest extends TestCase
                 Sales_Model_ProductLocalization::FLD_TEXT => 'PHPUnit test product',
             ]],
             'price'         => 10000,
-            'description'   => 'test product description'
+            'description'   => [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                Sales_Model_ProductLocalization::FLD_TEXT => 'test product description',
+            ]],
         ));
     }
 

@@ -468,6 +468,9 @@ class Sales_InvoiceTestCase extends TestCase
             if (!is_array($product['name'])) {
                 $product['name'] = [['language' => 'en', 'text' => $product['name']]];
             }
+            if (!is_array($product['description'])) {
+                $product['description'] = [['language' => 'en', 'text' => $product['description']]];
+            }
             $p = new Sales_Model_Product(array_merge($product, $default));
             $p->setTimezone('UTC');
             $this->_productRecords->addRecord($productController->create($p));
@@ -475,6 +478,7 @@ class Sales_InvoiceTestCase extends TestCase
         (new Tinebase_Record_Expander(Sales_Model_Product::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 Sales_Model_Product::FLD_NAME => [],
+                Sales_Model_Product::FLD_DESCRIPTION => [],
             ],
         ]))->expand($this->_productRecords);
     }

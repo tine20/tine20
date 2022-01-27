@@ -86,12 +86,6 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
 
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
-            self::INDEXES       => [
-                self::FLD_DESCRIPTION => [
-                    self::COLUMNS               => [self::FLD_DESCRIPTION],
-                    self::FLAGS                 => [self::TYPE_FULLTEXT],
-                ],
-            ],
         ],
 
         self::ASSOCIATIONS              => [
@@ -151,10 +145,12 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 ]
             ],
             self::FLD_DESCRIPTION => [
-                self::TYPE => self::TYPE_FULLTEXT,
+                self::TYPE => self::TYPE_LOCALIZED_STRING,
+                self::CONFIG => [
+                    self::TYPE => self::TYPE_FULLTEXT,
+                ],
                 self::QUERY_FILTER => true,
                 self::LABEL => 'Description', // _('Description')
-                self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ]
