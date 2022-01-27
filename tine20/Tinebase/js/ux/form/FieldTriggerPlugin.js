@@ -38,6 +38,14 @@ class FieldTriggerPlugin {
         }
     }
 
+    setTriggerClass(triggerClass) {
+        if (this.#trigger) {
+            this.#trigger.removeClass(this.triggerClass);
+            this.#trigger.addClass(triggerClass);
+            this.triggerClass = triggerClass;
+        }
+    }
+
     setVisible(visible) {
         this.visible = visible
         if (this.#trigger) {

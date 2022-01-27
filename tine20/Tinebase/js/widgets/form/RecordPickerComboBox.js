@@ -316,10 +316,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
             // value is a record
             if (typeof(value.get) === 'function') {
-                // if (this.store.indexOf(value) < 0) {
-                if (! this.store.getById(value.get(this.recordClass.getMeta('idProperty')))) {
-                    this.store.addSorted(value);
+                const existingRecord = this.store.getById(value.get(this.recordClass.getMeta('idProperty')))
+                if (existingRecord) {
+                    this.store.remove(existingRecord);
                 }
+                this.store.addSorted(value);
+
                 value = value.get(this.valueField);
             }
 

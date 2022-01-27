@@ -34,6 +34,8 @@ Ext.ns('Tine.Addressbook');
  * 
  * TODO         add     forceSelection: true ?
  */
+import RecordEditFieldTriggerPlugin from "../../Tinebase/js/widgets/form/RecordEditFieldTriggerPlugin";
+
 Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     
     /**
@@ -73,6 +75,11 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
             this.app.i18n._('Search for users ...') :
             this.app.i18n._('Search for Contacts ...')
         ));
+
+        this.plugins = this.plugins || [];
+        if (! this.useAccountRecord) {
+            this.plugins.push(new RecordEditFieldTriggerPlugin({}));
+        }
 
         this.initTemplate();
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
