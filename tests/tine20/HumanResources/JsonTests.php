@@ -41,17 +41,43 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 
         $costCenter1 = $this->_getCostCenter($date);
         $savedEmployee = $this->_saveEmployee($costCenter1, null, 'pwulf');
+        $accountInstance = HumanResources_Controller_Account::getInstance();
+        $accountInstance->createMissingAccounts((int) $date->format('Y'));
+        $myAccount = $accountInstance->search(new HumanResources_Model_AccountFilter([
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id']]
+        ]))->getFirstRecord();
+        $vacation = new HumanResources_Model_FreeTime(array(
+            'status'        => 'ACCEPTED',
+            'employee_id'   => $savedEmployee['id'],
+            'account_id'    => $myAccount->getId(),
+            'type'          => 'vacation',
+            'freedays'      => array(
+                array('date' => $date->getClone()->addDay(60), 'duration' => 1),
+            )
+        ));
+        HumanResources_Controller_FreeTime::getInstance()->create($vacation);
 
         $freeTimesAdmin = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date->format('Y'));
-        $division = HumanResources_Controller_Division::getInstance()->get($savedEmployee['division_id']);
-        Tinebase_Container::getInstance()->addGrants($division->container_id, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+        $division = $this->_json->getDivision($savedEmployee['division_id']);
+        Tinebase_Container::getInstance()->addGrants($division['container_id'], Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
+        Tinebase_Container::getInstance()->addGrants($division['container_id'], Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Core::getUser()->getId(), [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
+        $division = $this->_json->getDivision($savedEmployee['division_id']);
+        $result = $this->_json->searchFreeTimes([['field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id']]], []);
+        $this->assertCount(1, $result['results']);
+        $this->assertFalse($result['results'][0]['account_grants'][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
+        $this->assertTrue($division['account_grants'][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
 
         Tinebase_Core::setUser($this->_personas['pwulf']);
         $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date->format('Y'));
 
         $this->assertNotEmpty($freeTimesAdmin['results']['contracts']);
         $this->assertNotEmpty($freeTimes['results']['contracts']);
+
+        $result = $this->_json->searchFreeTimes([['field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id']]], []);
+        $this->assertGreaterThanOrEqual(1, count($result['results']));
+        $this->assertTrue($result['results'][0]['account_grants'][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
     }
 
     /**

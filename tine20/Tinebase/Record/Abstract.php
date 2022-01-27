@@ -1843,4 +1843,9 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             }
         }
     }
+
+    public function setAccountGrants(Tinebase_Record_Interface $grants)
+    {
+        $this->{self::FLD_ACCOUNT_GRANTS} = $grants;
+    }
 }
