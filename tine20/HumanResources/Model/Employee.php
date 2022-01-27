@@ -414,4 +414,13 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         }
         parent::applyFieldGrants($action, $oldRecord);
     }
+
+    public function setAccountGrants(Tinebase_Record_Interface $grants)
+    {
+        if ($grants->{HumanResources_Model_DivisionGrants::READ_OWN_DATA} &&
+                $this->getIdFromProperty('account_id') !== Tinebase_Core::getUser()->getId()) {
+            $grants->{HumanResources_Model_DivisionGrants::READ_OWN_DATA} = false;
+        }
+        parent::setAccountGrants($grants);
+    }
 }

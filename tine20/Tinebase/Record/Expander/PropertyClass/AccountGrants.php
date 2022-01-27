@@ -40,19 +40,26 @@ class Tinebase_Record_Expander_PropertyClass_AccountGrants extends Tinebase_Reco
                         $funcCache[$delegateRecord] = $mc->fields[$mc->delegateAclField][Tinebase_Record_Abstract::CONFIG][Tinebase_Record_Abstract::CONTROLLER_CLASS_NAME]::getInstance()->get($delegateRecord);
                     }
                     $delegateRecord = $funcCache[$delegateRecord];
+                } elseif (!isset($funcCache[$delegateRecord->getId()])) {
+                    $funcCache[$delegateRecord->getId()] = $delegateRecord;
                 }
-                return $func($delegateRecord, $func);
+                // see comment below
+                $record->setAccountGrants($func($delegateRecord, $func));
             } else {
-                return Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $record->{$mc->getContainerProperty()});
+                // this is important, we allow the record to process the account grants here and then inherit that processed grants down the line
+                // the model down the line do not need to know how to process the grants. HR: Division -> Employee (process grants) -> FreeTime (does not need to know!)
+                $record->setAccountGrants(Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $record->{$mc->getContainerProperty()}));
             }
+            return $record->{Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS};
         };
+        /** @var Tinebase_Record_Interface $record */
         foreach ($_records as $record) {
             if (!$record->{Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS}) {
                 $containerId = $record->getIdFromProperty($this->parentMC->getContainerProperty());
                 if (!isset($containerCache[$containerId])) {
                     $containerCache[$containerId] = $func($record, $func);
                 }
-                $record->{Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS} = $containerCache[$containerId];
+                $record->setAccountGrants($containerCache[$containerId]);
             }
         }
 
