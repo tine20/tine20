@@ -1133,7 +1133,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     self::TYPE          => self::TYPE_RECORDS,
                     self::CONFIG        => [
                         self::APP_NAME      => $this->_appName,
-                        self::MODEL_NAME    => $this->_modelName . 'Grants'
+                        self::MODEL_NAME    => $this->_modelName . 'Grants',
+//                        self::DEPENDENT_RECORDS => true, // breaks create + update
                     ],
                     self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 ];

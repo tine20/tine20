@@ -45,7 +45,6 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
                 Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
             ]
         ],
-        //'requiredRight'     => 'manage',
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,

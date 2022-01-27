@@ -19,54 +19,16 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
 {
     public const MODEL_NAME_PART    = 'DivisionGrants';
 
-    /**
-     * read only access to own: employee, hr account, contract, wtr, freetime
-     */
+
     public const READ_OWN_DATA = 'readOwnDataGrant';
-
-    /**
-     * read only access to all employee, hr account, contract
-     */
-    public const READ_EMPLOYEE_DATA = 'readEmployeeDataGrant';
-
-    /**
-     * read only access to all basic employee data
-     */
     public const READ_BASIC_EMPLOYEE_DATA = 'readBasicEmployeeDataGrant';
-
-    /**
-     * write access to all employee / hr account
-     */
+    public const READ_EMPLOYEE_DATA = 'readEmployeeDataGrant';
     public const UPDATE_EMPLOYEE_DATA = 'updateEmployeeDataGrant';
-
-    /**
-     * read only access to all hr account / wtr / freetime
-     */
     public const READ_TIME_DATA = 'readTimeDataGrant';
-
-    /**
-     * write access to all hr account / wtr / freetime
-     */
     public const UPDATE_TIME_DATA = 'updateTimeDataGrant';
-
-    /**
-     * create change request for own user
-     */
     public const CREATE_OWN_CHANGE_REQUEST = 'createOwnChangeRequestGrant';
-
-    /**
-     * read only access to all change request
-     */
     public const READ_CHANGE_REQUEST = 'readChangeRequestGrant';
-
-    /**
-     * create change request for all user
-     */
     public const CREATE_CHANGE_REQUEST = 'createChangeRequestGrant';
-
-    /**
-     * write access to all change request
-     */
     public const UPDATE_CHANGE_REQUEST = 'updateChangeRequestGrant';
 
     /**
@@ -85,8 +47,8 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
     {
         return [
             self::READ_OWN_DATA,
-            self::READ_EMPLOYEE_DATA,
             self::READ_BASIC_EMPLOYEE_DATA,
+            self::READ_EMPLOYEE_DATA,
             self::UPDATE_EMPLOYEE_DATA,
             self::READ_TIME_DATA,
             self::UPDATE_TIME_DATA,
@@ -114,13 +76,13 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
                 self::LABEL         => 'Read own data', // _('Read own data')
                 self::DESCRIPTION   => 'The grant to read own basic employee data, accounts, free times and working time reports.', // _('The grant to read own basic employee data, accounts, free times and working time reports.')
             ],
-            self::READ_EMPLOYEE_DATA => [
-                self::LABEL         => 'Read employee',  // _('Read employee')
-                self::DESCRIPTION   => 'The grant to read full employees data, accounts, contracts and free times for all employees in this division.',  // _('The grant to read full employees data, accounts, contracts and free times for all employees in this division.')
-            ],
             self::READ_BASIC_EMPLOYEE_DATA => [
                 self::LABEL         => 'Read basic employee',  // _('Read basic employee')
                 self::DESCRIPTION   => 'The grant to read basic employees data for all employees in this division.',  // _('The grant to read basic employees data for all employees in this division.')
+            ],
+            self::READ_EMPLOYEE_DATA => [
+                self::LABEL         => 'Read employee',  // _('Read employee')
+                self::DESCRIPTION   => 'The grant to read full employees data, accounts, contracts and free times for all employees in this division.',  // _('The grant to read full employees data, accounts, contracts and free times for all employees in this division.')
             ],
             self::UPDATE_EMPLOYEE_DATA => [
                 self::LABEL         => 'Update employee', // _('Update employee')

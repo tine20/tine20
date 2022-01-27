@@ -35,7 +35,7 @@ class HumanResources_Controller_Division extends Tinebase_Controller_Record_Cont
         ]);
 
         $this->_grantsModel = HumanResources_Model_DivisionGrants::class;
-        $this->_manageRight = HumanResources_Acl_Rights::MANAGE_DIVISIONS;
+        $this->_manageRight = HumanResources_Acl_Rights::ADD_DIVISIONS;
         $this->_purgeRecords = false;
     }
 
@@ -47,11 +47,11 @@ class HumanResources_Controller_Division extends Tinebase_Controller_Record_Cont
 
         parent::_checkRight($_action);
 
-        // create needs MANAGE_DIVISIONS
+        // create needs ADD_DIVISIONS
         if (self::ACTION_CREATE === $_action) {
             if (!Tinebase_Core::getUser()
-                    ->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_DIVISIONS)) {
-                throw new Tinebase_Exception_AccessDenied(HumanResources_Acl_Rights::MANAGE_DIVISIONS .
+                    ->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::ADD_DIVISIONS)) {
+                throw new Tinebase_Exception_AccessDenied(HumanResources_Acl_Rights::ADD_DIVISIONS .
                     ' right required to ' . $_action);
             }
         }
@@ -64,7 +64,7 @@ class HumanResources_Controller_Division extends Tinebase_Controller_Record_Cont
         }
 
         // standard actions are use for the division itself.
-        // everybody can GET, create needs MANAGE_DIVISIONS which is checked in _checkRight, so nothing to do here, do not call parent!
+        // everybody can GET, create needs ADD_DIVISIONS which is checked in _checkRight, so nothing to do here, do not call parent!
         if (self::ACTION_GET === $_action || self::ACTION_CREATE === $_action) {
             return true;
         }

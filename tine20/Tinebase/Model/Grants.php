@@ -121,6 +121,9 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             static::$_modelConfiguration = [
                 self::APP_NAME => $this->_application,
                 self::MODEL_NAME => $model,
+                self::TITLE_PROPERTY => 'account_id',
+                self::RECORD_NAME => 'Grant', // gettext('GENDER_Grant')
+                self::RECORDS_NAME => 'Grants', // ngettext('Grant', 'Grants', n)
 
                 self::FIELDS => [
                     'record_id'     => [

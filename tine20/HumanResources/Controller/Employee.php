@@ -78,6 +78,14 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                 }
                 $_action = HumanResources_Model_DivisionGrants::READ_BASIC_EMPLOYEE_DATA;
                 break;
+            case HumanResources_Model_DivisionGrants::READ_OWN_DATA:
+                if ($_record->getIdFromProperty('account_id') !== Tinebase_Core::getUser()->getId()) {
+                    if ($_throw) {
+                        throw new Tinebase_Exception_AccessDenied($_errorMessage . ' read own data');
+                    }
+                    return false;
+                }
+                break;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:
             case self::ACTION_DELETE:

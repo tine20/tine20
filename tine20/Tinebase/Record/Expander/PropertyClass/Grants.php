@@ -38,27 +38,27 @@ class Tinebase_Record_Expander_PropertyClass_Grants extends Tinebase_Record_Expa
                     case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                         try {
                             /** @phpstan-ignore-next-line */
-                            $grant->account_id = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
+                            $grant->account_name = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
                         } catch (Tinebase_Exception_NotFound $e) {
-                            $grant->account_id = Tinebase_User::getInstance()->getNonExistentUser();
+                            $grant->account_name = Tinebase_User::getInstance()->getNonExistentUser();
                         }
                         break;
                     case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                         try {
-                            $grant->account_id = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
+                            $grant->account_name = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
                         } catch (Tinebase_Exception_Record_NotDefined $e) {
-                            $grant->account_id = Tinebase_Group::getInstance()->getNonExistentGroup();
+                            $grant->account_name = Tinebase_Group::getInstance()->getNonExistentGroup();
                         }
                         break;
                     case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
                         try {
-                            $grant->account_id = Tinebase_Acl_Roles::getInstance()->getRoleById($grant->account_id);
+                            $grant->account_name = Tinebase_Acl_Roles::getInstance()->getRoleById($grant->account_id);
                         } catch(Tinebase_Exception_NotFound $tenf) {
-                            $grant->account_id = Tinebase_Acl_Roles::getInstance()->getNonExistentRole();
+                            $grant->account_name = Tinebase_Acl_Roles::getInstance()->getNonExistentRole();
                         }
                         break;
                     case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
-                        $grant->account_id = new Tinebase_Model_FullUser(['accountDisplayName' => Tinebase_Translation::getTranslation('Tinebase')->_('Anyone')], true);
+                        $grant->account_name = new Tinebase_Model_FullUser(['accountDisplayName' => Tinebase_Translation::getTranslation('Tinebase')->_('Anyone')], true);
                         break;
                     default:
                         throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');

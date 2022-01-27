@@ -58,15 +58,16 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
 
         switch ($_action) {
             case self::ACTION_GET:
-                if ($_record->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
-                    try {
-                        if (parent::_checkGrant($_record, HumanResources_Model_DivisionGrants::READ_OWN_DATA, $_throw, $_errorMessage, $_oldRecord)) {
-                            return true;
-                        }
-                    } catch (Exception $e) {}
+                try {
+                    HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty('employee_id'));
+                } catch (Tinebase_Exception_AccessDenied $e) {
+                    if ($_throw) {
+                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
+                    } else {
+                        return false;
+                    }
                 }
-                $_action = HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA;
-                break;
+                return true;
             case self::ACTION_CREATE:
             case self::ACTION_UPDATE:
             case self::ACTION_DELETE:
