@@ -33,7 +33,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
     }
     
     assertState() {
-        this.setVisible(!!this.field.selectedRecord || this.allowCreateNew);
+        this.setVisible((!!this.field.selectedRecord || this.allowCreateNew) && !this.field.readOnly && !this.field.disabled);
         this.setTriggerClass(!!this.field.selectedRecord ? 'action_edit' : 'action_add');
     }
 
