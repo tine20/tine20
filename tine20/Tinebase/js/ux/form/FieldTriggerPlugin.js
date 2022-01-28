@@ -22,8 +22,10 @@ class FieldTriggerPlugin {
         this.field = field
 
         await field.afterIsRendered()
-        const wrap = field.el.parent('.x-form-element') ||
+        const wrap = field.el.parent('.tw-relpickercombocmp') ||
+            field.el.parent('.x-form-element') ||
             field.el.parent('.x-grid-editor')
+        
         if (wrap) {
             this.#trigger = wrap.createChild(this.triggerConfig ||
                 {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin " + this.triggerClass})
@@ -35,6 +37,14 @@ class FieldTriggerPlugin {
             field.mon(this.#trigger, 'click', this.onTriggerClick, this, {preventDefault:true});
             this.#trigger.addClassOnOver('x-form-trigger-over');
             this.#trigger.addClassOnClick('x-form-trigger-click');
+        }
+    }
+
+    setTriggerClass(triggerClass) {
+        if (this.#trigger) {
+            this.#trigger.removeClass(this.triggerClass);
+            this.#trigger.addClass(triggerClass);
+            this.triggerClass = triggerClass;
         }
     }
 
