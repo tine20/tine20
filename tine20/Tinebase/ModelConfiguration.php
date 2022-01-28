@@ -1363,6 +1363,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if (!isset($fieldDef[self::CONFIG])) {
                     $fieldDef[self::CONFIG] = [];
                 }
+                $fieldDef[self::CONFIG][self::SPECIAL_TYPE] = self::TYPE_LOCALIZED_STRING;
                 if (!array_key_exists(self::APP_NAME, $fieldDef[self::CONFIG])) {
                     $fieldDef[self::CONFIG][self::APP_NAME] = $this->_appName;
                 }
@@ -1386,9 +1387,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     $fieldDef[self::CONFIG][self::FORCE_VALUES] = [
                         Tinebase_Record_PropertyLocalization::FLD_TYPE => $fieldKey,
                     ];
-                }
-                if (!array_key_exists(self::RECURSIVE_RESOLVING, $fieldDef)) {
-                    $fieldDef[self::RECURSIVE_RESOLVING] = true;
                 }
                 if (!array_key_exists(self::JSON_EXPANDER, $modelClassConfiguration) && !is_array($this->_jsonExpander)) {
                     $this->_jsonExpander = [];

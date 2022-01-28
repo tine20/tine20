@@ -46,6 +46,7 @@ abstract class Tinebase_Record_PropertyLocalization extends Tinebase_Record_NewA
             self::FLD_RECORD_ID                 => [
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [],
+                self::DISABLED                      => true,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
@@ -54,6 +55,7 @@ abstract class Tinebase_Record_PropertyLocalization extends Tinebase_Record_NewA
             self::FLD_TYPE                      => [
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 100,
+                self::DISABLED                      => true,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
@@ -104,7 +106,15 @@ abstract class Tinebase_Record_PropertyLocalization extends Tinebase_Record_NewA
             throw new Tinebase_Exception_Record_DefinitionFailure('MODEL_NAME_PART ' . static::MODEL_NAME_PART
                 . ' is not ' . $m[3] . 'Localization');
         }
+        $_definition[self::APP_NAME] = $m[2];
         $_definition[self::MODEL_NAME] = static::MODEL_NAME_PART;
+        if (!array_key_exists(self::RECORD_NAME, $_definition)) {
+            $_definition[self::RECORD_NAME] = 'Text'; // _('GENDER_Text')
+            $_definition[self::RECORDS_NAME] = 'Texts'; // ngettext('Text', 'Texts', n)
+        }
+        if (!array_key_exists(self::TITLE_PROPERTY, $_definition)) {
+            $_definition[self::TITLE_PROPERTY] = self::FLD_LANGUAGE;
+        }
         if (empty($_definition[self::TABLE][self::NAME])) {
             $_definition[self::TABLE][self::NAME] = $model::getConfiguration()->getTableName() . '_localization';
         }

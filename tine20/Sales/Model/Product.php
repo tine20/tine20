@@ -78,9 +78,9 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
 
         self::LANGUAGES_AVAILABLE => [
             self::TYPE => self::TYPE_KEY_FIELD,
+            self::NAME => Sales_Config::LANGUAGES_AVAILABLE,
             self::CONFIG => [
                 self::APP_NAME => Sales_Config::APP_NAME,
-                self::NAME => Sales_Config::LANGUAGES_AVAILABLE,
             ],
         ],
 

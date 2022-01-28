@@ -384,7 +384,7 @@ class Sales_JsonTest extends TestCase
      */
     public function testAddGetSearchDeleteProduct()
     {
-        $this->_testSimpleRecordApi('Product', null, null, true, [
+        $product = $this->_testSimpleRecordApi('Product', null, null, true, [
             'name' => [[
                 Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
                 Sales_Model_ProductLocalization::FLD_TEXT => 'test name',
@@ -396,6 +396,8 @@ class Sales_JsonTest extends TestCase
             'price' => 10000,
             'default_sorting' => '',
         ], false);
+        $this->assertArrayHasKey(Sales_Model_ProductLocalization::FLD_RECORD_ID, $product['name'][0]);
+        $this->assertSame($product['id'], $product['name'][0][Sales_Model_ProductLocalization::FLD_RECORD_ID]);
     }
     
     /**

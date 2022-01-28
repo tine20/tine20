@@ -244,6 +244,25 @@ Tine.widgets.grid.RendererManager = function() {
                         return Tine.Tinebase.data.Record.setFromJson(configRecord, configRcordClass).getTitle();
                     };
                     break;
+                case 'localizedString':
+                    const type = _.get(fieldDefinition, 'config.type')
+                    const languagesAvailableDef = _.get(recordClass.getModelConfiguration(), 'languagesAvailable')
+                    const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', appName), languagesAvailableDef.name)
+                    const translationList = Locale.getTranslationList('Language')
+
+                    renderer = function renderer(value, metaData, record, rowIndex, colIndex, store) {
+                        const lang = store.localizedLang || keyFieldDef.default
+                        const localized = _.find(value, { language: lang })
+                        const text = Ext.util.Format.htmlEncode(_.get(localized, 'text', ''));
+                        const langCode = lang.toUpperCase();
+                        const qtip = i18n._('This is a multilingual field:') + '<br />' + _.reduce(value, (text, localized) => {
+                            return text + '<br />' + translationList[localized.language] + ': ' + Ext.util.Format.htmlEncode(localized.text)
+                        }, '')
+
+                        metaData.css = 'tine-grid-cell-action-wrap'
+                        return  `${text}<div ext:qtip="${Ext.util.Format.htmlEncode(qtip)}" class="tine-grid-cell-action tine-grid-cell-localized">${langCode}</div>`
+                    }
+                    break;
                 case 'records':
                 case 'recodList':
                     //@Todo add records/list renderer!

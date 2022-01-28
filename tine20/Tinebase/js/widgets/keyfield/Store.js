@@ -117,3 +117,17 @@ Tine.Tinebase.widgets.keyfield.StoreMgr = function(){
         }
     };
 }();
+
+Tine.Tinebase.widgets.keyfield.getDefinition = function (appName, configName) {
+    const rawDef = Tine.Tinebase.appMgr.get(appName).getRegistry().get('config')[configName];
+    return Object.assign({ ... rawDef.definition }, {... rawDef.value });
+}
+
+Tine.Tinebase.widgets.keyfield.getDefinitionFromMC = function (recordClass, fieldName) {
+    const fieldDef = Tine.Tinebase.data.RecordMgr.get(recordClass).getField(fieldName).fieldDefinition;
+    return Tine.Tinebase.widgets.keyfield.getDefinition(
+        _.get(fieldDef, 'config.appName', recordClass.getMeta('appName')),
+        _.get(fieldDef, 'name')
+    );
+
+}

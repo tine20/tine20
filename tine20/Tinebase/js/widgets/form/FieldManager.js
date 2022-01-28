@@ -12,6 +12,7 @@ import 'widgets/form/XmlField';
 import 'widgets/form/ModelPicker';
 import 'widgets/form/LanguagePicker';
 import 'widgets/form/RecordEditField';
+import 'widgets/form/LocalizedField';
 
 /**
  * central form field manager
@@ -93,6 +94,10 @@ Tine.widgets.form.FieldManager = function() {
             if (fieldType === 'virtual' && fieldDefinition.config) {
                 fieldType = fieldDefinition.config.type || 'textfield';
                 fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);
+            }
+
+            if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
+                fieldType = fieldDefinition.type = 'localizedString';
             }
 
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
@@ -249,7 +254,7 @@ Tine.widgets.form.FieldManager = function() {
                 case 'records':
                     if (category === 'editDialog') {
                         field.xtype = 'wdgt.pickergrid';
-                        field.fieldLabel = fieldDefinition.fieldLabel ? field.fieldLabel :
+                        field.fieldLabel = field.fieldLabel ? field.fieldLabel :
                             Tine.Tinebase.data.RecordMgr.get(fieldDefinition.config.appName, fieldDefinition.config.modelName)?.getRecordsName();
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
                         field.isFormField = true;
@@ -278,6 +283,11 @@ Tine.widgets.form.FieldManager = function() {
                         );
                         field = picker;
                     }
+                    break;
+                case 'localizedString':
+                    field.xtype = field.type === 'string' ?
+                        'tw-localized-string-text-field' :
+                        'tw-localized-string-text-area';
                     break;
                 case 'model':
                     field.xtype = 'tw-modelpicker';

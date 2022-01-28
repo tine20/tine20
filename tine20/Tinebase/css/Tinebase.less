@@ -262,6 +262,10 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     background-image:url(../../images/icon-set/icon_info.svg) !important;
 }
 
+.info-multilang {
+    background-image:url(../../images/icon-set/icon_flag_full.svg) !important;
+}
+
 .action_printPreview {
     background-image:url(../../images/icon-set/icon_print_peview.svg) !important;
 }
@@ -727,6 +731,43 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
     background-repeat: no-repeat;
     height: 16px;
     margin: -2px;
+}
+
+.tine-grid-cell-action-wrap {
+    position: relative;
+}
+
+.tine-grid-cell-action {
+    position: absolute;
+    right: 4px;
+    top: 2px;
+    display: inline;
+}
+
+.tine-grid-cell-localized {
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    color: lightgrey;
+    background-color: white;
+    //background: linear-gradient(darken(lightgrey, 10), lightgrey);
+    &:hover {
+        border-color: grey;
+        color: gray;
+    }
+}
+
+.x-form-trigger.x-form-localized-field {
+    background-image: none !important;
+    height: 14px;
+    right: 2px;
+    cursor: pointer;
+}
+
+.x-form-trigger.x-form-localized-field.x-form-localized-picker {
+    height: 14px !important;
+    border: 1px solid lightgray !important;
+    top: 0px;
+    right: 2px;
 }
 
 /******* grid cell classes *********/

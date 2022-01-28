@@ -19,6 +19,8 @@ Ext.ns('Tine.widgets.dialog');
  * @param {Object} config The configuration options.
  */
 
+import { getLocalizedLangPicker } from '../form/LocalizedLangPicker'
+
 Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
      * @cfg {Tine.Tinebase.Application} app
@@ -251,9 +253,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
          * @param {Funciton} fn check state function
          */
         registerCheckStateProvider: function(field, fn) {
-            arguments.callee.__providers = arguments.callee.__providers || {};
-            arguments.callee.__providers[field] = arguments.callee.__providers[field] || [];
-            arguments.callee.__providers[field].push(fn);
+            this.registerCheckStateProvider.__providers = this.registerCheckStateProvider.__providers || {}
+            this.registerCheckStateProvider.__providers[field] = this.registerCheckStateProvider.__providers[field] || []
+            this.registerCheckStateProvider.__providers[field].push(fn)
         },
         getCheckStateProviders(field) {
             return _.get(this, `registerCheckStateProvider.__providers.${field}`, []);
@@ -417,6 +419,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initNotesPanel();
         this.initGrantsPanel();
 
+
         // apply generic tab sorting
         if (this.items.xtype == 'tabpanel') {
             this.items.plugins = this.items.plugins || [];
@@ -515,13 +518,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     getEastPanel: function() {
         var items = [];
         if (this.recordClass.hasField('description')) {
+            const field = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'description', 'editDialog');
+
             items.push(new Ext.Panel({
-                title: i18n._('Description'),
+                title: field.fieldLabel, //i18n._('Description'),
                 iconCls: 'descriptionIcon',
                 layout: 'form',
                 labelAlign: 'top',
                 border: false,
-                items: [{
+                items: [Object.assign({
                     style: 'margin-top: -4px; border 0px;',
                     labelSeparator: '',
                     xtype: 'textarea',
@@ -532,7 +537,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     anchor: '100% 100%',
                     emptyText: i18n._('Enter description'),
                     requiredGrant: 'editGrant'
-                }]
+                }, field)]
             }));
         }
 
@@ -732,6 +737,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.action_cancel,
             this.action_delete
         ]);
+
+        if (this.recordClass) {
+            this.localizedLangPicker = getLocalizedLangPicker(this.recordClass);
+            if (this.localizedLangPicker) {
+                this.tbarItems = this.tbarItems || [];
+                if (this.tbarItems.indexOf('->') <= 0) {
+                    this.tbarItems.push('->');
+                }
+                this.tbarItems.push(this.localizedLangPicker);
+            }
+        }
     },
 
     /**

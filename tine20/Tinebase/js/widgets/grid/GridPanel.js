@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import {getLocalizedLangPicker} from "../form/LocalizedLangPicker";
+
 Ext.ns('Tine.widgets.grid');
 
 /**
@@ -1571,6 +1573,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.pagingToolbar.on('beforechange', function() {
                 this.grid.getView().isPagingRefresh = true;
             }, this);
+
+            if (this.recordClass) {
+                this.localizedLangPicker = getLocalizedLangPicker(this.recordClass)
+                if (this.localizedLangPicker) {
+                    this.pagingToolbar.insert(10, this.localizedLangPicker)
+                    this.store.localizedLang = this.localizedLangPicker.getValue()
+                    this.localizedLangPicker.on('change', (picker, lang) => {
+                        this.store.localizedLang = lang
+                        this.grid.getView().refresh()
+                    })
+                }
+            }
         }
 
         // which grid to use?
