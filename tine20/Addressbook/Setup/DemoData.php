@@ -122,10 +122,10 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $c = Addressbook_Controller_Contact::getInstance();
         
         $f = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'url', 'operator' => 'contains', 'value' => 'brillenstobercstober.com'),
+            array('field' => 'url', 'operator' => 'contains', 'value' => 'doublefitladyfitness'),
         ), 'AND');
         
-        return ($c->search($f)->count() > 50) ? true : false;
+        return ($c->search($f)->count() > 5) ? true : false;
     }
     
     /**
