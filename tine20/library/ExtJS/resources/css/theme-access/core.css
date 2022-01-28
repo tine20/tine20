@@ -22,7 +22,7 @@ body {
     background-color: #232d38;
     border-color:#556;
     color:#fff;
-    font:normal 14px tahoma, arial, helvetica, sans-serif;
+    font:normal 14px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-mask-loading div {

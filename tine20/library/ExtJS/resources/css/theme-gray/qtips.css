@@ -13,19 +13,19 @@
 }
 
 .x-tip .x-tip-mc {
-    font: normal 11px tahoma,arial,helvetica,sans-serif;
+    font: normal 11px arial,tahoma,helvetica,sans-serif;
 }
 .x-tip .x-tip-ml {
 	background-color: #fff;
 }
 
 .x-tip .x-tip-header-text {
-    font: bold 11px tahoma,arial,helvetica,sans-serif;
+    font: bold 11px arial,tahoma,helvetica,sans-serif;
     color:#444;
 }
 
 .x-tip .x-tip-body {
-    font: normal 11px tahoma,arial,helvetica,sans-serif;
+    font: normal 11px arial,tahoma,helvetica,sans-serif;
     color:#444;
 }
 

@@ -5,7 +5,7 @@
  * http://www.extjs.com/license
  */
 .x-form-field {
-    font:normal 15px tahoma, arial, helvetica, sans-serif;
+    font:normal 15px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-form-text, textarea.x-form-field{
@@ -123,16 +123,16 @@
 }
 
 .x-form-grow-sizer {
-	font:normal 15px tahoma, arial, helvetica, sans-serif;
+	font:normal 15px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-form-item {
-    font:normal 15px tahoma, arial, helvetica, sans-serif;
+    font:normal 15px arial, tahoma, helvetica, sans-serif;
 }
 
 .x-form-invalid-msg {
     color:#c0272b;
-    font:normal 14px tahoma, arial, helvetica, sans-serif;
+    font:normal 14px arial, tahoma, helvetica, sans-serif;
     background-image:url(../images/default/shared/warning.gif);
 }
 
@@ -164,6 +164,6 @@
 }
 
 .x-fieldset legend {
-    font:bold 14px tahoma, arial, helvetica, sans-serif;
+    font:bold 14px arial, tahoma, helvetica, sans-serif;
     color:fff;
 }
