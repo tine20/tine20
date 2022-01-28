@@ -27,14 +27,14 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
     async init (field) {
         this.visible = this.allowCreateNew
         await super.init(field)
-        field.setValue = field.setValue.createSequence((value) => {
-            this.setVisible(!!field.selectedRecord || this.allowCreateNew);
-            this.setTriggerClass(!!field.selectedRecord ? 'action_edit' : 'action_add');
-        })
-        field.clearValue = field.clearValue.createSequence(() => {
-            this.setVisible(this.allowCreateNew);
-            this.setTriggerClass('action_add');
-        })
+        this.assertState()
+        field.setValue = field.setValue.createSequence(_.bind(this.assertState, this))
+        field.clearValue = field.clearValue.createSequence(_.bind(this.assertState, this))
+    }
+    
+    assertState() {
+        this.setVisible(!!this.field.selectedRecord || this.allowCreateNew);
+        this.setTriggerClass(!!this.field.selectedRecord ? 'action_edit' : 'action_add');
     }
 
     // allow to configure defaults from outside
