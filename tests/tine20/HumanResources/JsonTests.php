@@ -1117,6 +1117,35 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         }
     }
 
+    public function testSearchDivisionWithoutGrants()
+    {
+        $title = Tinebase_Record_Abstract::generateUID(10);
+        $d = $this->_json->saveDivision(['title' => $title]);
+
+        $result = $this->_json->searchDivisions([['field' => 'id', 'operator' => 'equals', 'value' => $d['id']]]);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($d['id'], $result['results'][0]['id']);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+
+        $result = $this->_json->searchDivisions([['field' => 'id', 'operator' => 'equals', 'value' => $d['id']]]);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($d['id'], $result['results'][0]['id']);
+        $this->assertArrayNotHasKey(Tinebase_ModelConfiguration::FLD_GRANTS, $result['results'][0]);
+        $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS, $result['results'][0]);
+        foreach (HumanResources_Model_DivisionGrants::getAllGrants() as $grant) {
+            $this->assertFalse($result['results'][0][Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][$grant]);
+        }
+
+        $result = $this->_json->getDivision($d['id']);
+        $this->assertSame($d['id'], $result['id']);
+        $this->assertArrayNotHasKey(Tinebase_ModelConfiguration::FLD_GRANTS, $result);
+        $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS, $result);
+        foreach (HumanResources_Model_DivisionGrants::getAllGrants() as $grant) {
+            $this->assertFalse($result[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][$grant]);
+        }
+    }
+
     /**
      * tests crud methods of division
      */

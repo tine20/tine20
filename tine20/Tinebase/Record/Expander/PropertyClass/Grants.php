@@ -30,8 +30,12 @@ class Tinebase_Record_Expander_PropertyClass_Grants extends Tinebase_Record_Expa
     {
         foreach ($_records as $record) {
             if (!$record->{Tinebase_Record_Abstract::FLD_GRANTS}) {
-                $record->{Tinebase_Record_Abstract::FLD_GRANTS} = Tinebase_Container::getInstance()
-                    ->getGrantsOfContainer($record->{$record::getConfiguration()->getContainerProperty()});
+                try {
+                    $record->{Tinebase_Record_Abstract::FLD_GRANTS} = Tinebase_Container::getInstance()
+                        ->getGrantsOfContainer($record->{$record::getConfiguration()->getContainerProperty()});
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    continue;
+                }
             }
             foreach ($record->{Tinebase_Record_Abstract::FLD_GRANTS} as $grant) {
                 switch ($grant->account_type) {
