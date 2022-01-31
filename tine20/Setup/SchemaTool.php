@@ -174,8 +174,11 @@ class Setup_SchemaTool
         $sqls = array_filter($tool->getUpdateSchemaSql($classes, true), function ($val) {
             return strpos($val, "CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL") === false;
         });
-        
-        return !emptY($sqls);
+
+        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' pending schema updates found: ' . print_r($sqls, true));
+
+        return !empty($sqls);
     }
 
     /**
