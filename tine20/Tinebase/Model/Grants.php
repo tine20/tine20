@@ -85,6 +85,15 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      */
     protected $_application = 'Tinebase';
 
+    protected static $_modelConfiguration = null;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
     /**
      * constructor
      * 
@@ -94,32 +103,78 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      */
     public function __construct($_data = null, $_bypassFilters = false, $_convertDates = null)
     {
-        $this->_validators = array(
-            'id'            => array('Alnum', 'allowEmpty' => true),
-            'record_id'     => array('allowEmpty' => true),
-            'account_grant' => array('allowEmpty' => true),
-            'account_id'    => array('presence' => 'required', 'allowEmpty' => true, 'default' => '0'),
-            'account_type'  => array('presence' => 'required', array('InArray', array(
-                Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-                Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE
-            ))),
-        );
-        
-        foreach ($this->getAllGrants() as $grant) {
-            $this->_validators[$grant] = array(
-                new Zend_Validate_InArray(array(true, false), true), 
-                'default' => false,
-                'presence' => 'required',
-                'allowEmpty' => true
-            );
-            
-            // initialize in case validators are switched off
-            $this->{$grant} = false;
+        // sadly we need this outside the "null ===" if below as Tinebase_Model_Grants will be initialized most probably already
+        if (static::class !== (new ReflectionProperty(static::class, '_modelConfiguration'))->getDeclaringClass()->getName()) {
+            throw new Tinebase_Exception_Record_DefinitionFailure(static::class . ' doesn\'t declare _modelConfiguration');
         }
-        
+        if (null === static::$_modelConfiguration) {
+            if (static::class !== (new ReflectionProperty(static::class, '_configurationObject'))->getDeclaringClass()->getName()) {
+                throw new Tinebase_Exception_Record_DefinitionFailure(static::class . ' doesn\'t declare _configurationObject');
+            }
+            preg_match('/^([^_]+)_Model_(.*)$/', static::class, $m);
+            $application = $m[1];
+            $model = $m[2];
+            if ($this->_application !== $application) {
+                throw new Tinebase_Exception_Record_DefinitionFailure(static::class . ' declares wrong application: ' .
+                    $this->_application . ' !== ' . $application);
+            }
+            static::$_modelConfiguration = [
+                self::APP_NAME => $this->_application,
+                self::MODEL_NAME => $model,
+                self::TITLE_PROPERTY => 'account_id',
+                self::RECORD_NAME => 'Grant', // gettext('GENDER_Grant')
+                self::RECORDS_NAME => 'Grants', // ngettext('Grant', 'Grants', n)
+
+                self::FIELDS => [
+                    'record_id'     => [
+                        self::TYPE      => self::TYPE_STRING,
+                        self::VALIDATORS => array('allowEmpty' => true),
+                    ],
+                    'account_grant' => [
+                        self::TYPE      => self::TYPE_STRING,
+                        self::VALIDATORS => array('allowEmpty' => true),
+                    ],
+                    'account_id'    => [
+                        self::TYPE      => self::TYPE_STRING,
+                        self::VALIDATORS => array('presence' => 'required', 'allowEmpty' => true, 'default' => '0'),
+                    ],
+                    'account_type'  => [
+                        self::TYPE      => self::TYPE_STRING,
+                        self::VALIDATORS => array('presence' => 'required', array('InArray', array(
+                            Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                            Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                            Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE
+                        ))),
+                    ],
+                    'account_name' => [
+                        self::TYPE      => self::TYPE_VIRTUAL,
+                    ],
+                ],
+            ];
+
+            $allGrantsMC = static::getAllGrantsMC();
+            foreach (static::getAllGrants() as $grant) {
+                static::$_modelConfiguration[self::FIELDS][$grant] = array_merge([
+                    self::TYPE      => self::TYPE_BOOLEAN,
+                    self::VALIDATORS => array(
+                        new Zend_Validate_InArray(array(true, false), true),
+                        'default' => false,
+                        'presence' => 'required',
+                        'allowEmpty' => true
+                    ),
+                ], isset($allGrantsMC[$grant]) ? $allGrantsMC[$grant] : []);
+            }
+        }
+
         parent::__construct($_data, $_bypassFilters, $_convertDates);
+
+        foreach ($this->getAllGrants() as $grant) {
+            if (! $this->__isset($grant)) {
+                // initialize in case validators are switched off
+                $this->{$grant} = false;
+            }
+        }
     }
     
     /**
@@ -144,6 +199,15 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         );
     
         return $allGrants;
+    }
+
+    public static function getAllGrantsMC(): array
+    {
+        return [
+            self::GRANT_READ    => [
+                self::LABEL         => 'read',
+            ],
+        ];
     }
 
     public function appliesToUser(Tinebase_Model_FullUser $user): bool

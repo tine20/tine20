@@ -42,7 +42,7 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
             }
         }
         If (!empty($result['division'])) {
-            foreach (Sales_Controller_Division::getInstance()->getAll() as $division) {
+            foreach (HumanResources_Controller_Division::getInstance()->getAll() as $division) {
                 if ($result['division'] == $division['title']) {
                     $result['division_id'] = $division['id'];
                 }

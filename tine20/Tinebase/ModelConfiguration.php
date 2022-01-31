@@ -94,6 +94,8 @@
  * @property array      $jsonExpander
  * @property array      $denormalizedFields
  * @property array      $denormalizationConfig
+ * @property string     $delegateAclField
+ * @property array|null $grantProtectedFields
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -160,6 +162,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var string
      */
     protected $_containerProperty = NULL;
+
+    /**
+     * The property of the container, if any
+     *
+     * @var string
+     */
+    protected $_extendsContainer = NULL;
 
     /**
      * The grants model of containers, if any
@@ -345,6 +354,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
      */
     protected $_defaultSortInfo = NULL;
+
+    /**
+     * @var null|array<string, array<string>>
+     */
+    protected $_grantProtectedFields = null;
 
     /**
      * Defines the right to see this model
@@ -699,6 +713,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var boolean
      */
     protected $_isDependent = FALSE;
+
+    /**
+     * if the records acl are delegated to an other record, that field holds the alcs record id
+     *
+     * @var string|null
+     */
+    protected $_delegateAclField = null;
     
     /**
      * input filters (will be set by field configuration)
@@ -754,7 +775,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
     */
     protected $_frontendProperties = array(
-        'containerProperty', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
+        'containerProperty', 'extendsContainer', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'multipleEdit', 'multipleEditRequiredRight',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
@@ -1042,8 +1063,81 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     'options' => array('modelName' => $recordClass)
                 )
             );
+        } elseif ($this->_extendsContainer) {
+            $this->_fields[$this->_extendsContainer] = array(
+                'nullable'         => true,
+                self::LENGTH       => 40,
+                'label'            => $this->_containerUsesFilter ? $this->_containerName : NULL,
+                'shy'              => true,
+                'type'             => 'container',
+                'validators'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'filterDefinition' => array(
+                    'filter'  => $this->_filterModelMapping['container'],
+                    'options' => array('modelName' => $recordClass)
+                )
+            );
+            if (!array_key_exists(self::FLD_GRANTS, $this->_fields) &&
+                    class_exists($this->_appName . '_Model_' . $this->_modelName . 'Grants')) {
+                $this->_fields[self::FLD_GRANTS] = [
+                    self::TYPE          => self::TYPE_RECORDS,
+                    self::CONFIG        => [
+                        self::APP_NAME      => $this->_appName,
+                        self::MODEL_NAME    => $this->_modelName . 'Grants',
+//                        self::DEPENDENT_RECORDS => true, // breaks create + update
+                    ],
+                    self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                ];
+            }
+            if (!array_key_exists(self::FLD_ACCOUNT_GRANTS, $this->_fields) &&
+                    class_exists($this->_appName . '_Model_' . $this->_modelName . 'Grants')) {
+                $this->_fields[self::FLD_ACCOUNT_GRANTS] = [
+                    self::TYPE          => self::TYPE_VIRTUAL,
+                    /*self::DOCTRINE_IGNORE => true,
+                    self::OMIT_MOD_LOG  => true,
+                    self::NORESOLVE     => true,
+                    self::CONFIG        => [
+                        self::APP_NAME      => $this->_appName,
+                        self::MODEL_NAME    => $this->_modelName . 'Grants'
+                    ],
+                    self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],*/
+                ];
+            }
         } else {
             $this->_singularContainerMode = true;
+            while ($this->_delegateAclField) {
+                if (!array_key_exists(self::FLD_ACCOUNT_GRANTS, $this->_fields)) {
+                    $this->_fields[self::FLD_ACCOUNT_GRANTS] = [
+                        self::TYPE          => self::TYPE_VIRTUAL,
+                        /*self::DOCTRINE_IGNORE => true,
+                        self::OMIT_MOD_LOG  => true,
+                        self::NORESOLVE     => true,
+                        self::CONFIG        => [
+                            self::APP_NAME      => $this->_appName,
+                            self::MODEL_NAME    => $this->_modelName . 'Grants'
+                        ],
+                        self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],*/
+                    ];
+                }
+                // you can null everything below here to prevent it from being writte to
+                if (!array_key_exists(self::JSON_EXPANDER, $modelClassConfiguration) && !is_array($this->_jsonExpander)) {
+                    $this->_jsonExpander = [];
+                }
+                if (!is_array($this->_jsonExpander)) {
+                    break;
+                }
+                if (!array_key_exists(Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES, $this->_jsonExpander)) {
+                    $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES] = [];
+                }
+                if (!is_array($this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES])) {
+                    break;
+                }
+                if (!array_key_exists(Tinebase_Record_Expander::PROPERTY_CLASS_GRANTS,
+                        $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES])) {
+                    $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES]
+                        [Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS] = [];
+                }
+                break;
+            }
         }
 
         // quick hack ('key')
@@ -1541,6 +1635,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 /** @var Tinebase_Record_Abstract $recordClass */
                 $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
                 $modelName = preg_replace('/^.+_Model_/', '', $modelName);
+                // ... well, need to run through the Tinebase_Model_Grants constructor magic at least once for each Grant Model...
+                new $recordClass([], true);
                 $config = $recordClass::getConfiguration();
                 if ($config) {
                     $modelconfig[$modelName] = $config->getFrontendConfiguration();
@@ -1563,7 +1659,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
     public function getContainerProperty()
     {
-        return $this->_containerProperty;
+        return $this->_containerProperty ?: $this->_extendsContainer;
     }
 
     public function getTable()
@@ -1624,6 +1720,20 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected function _populateProperties($fieldKey, &$fieldDef)
     {
+        if (isset($fieldDef[self::REQUIRED_GRANTS]) && is_array($fieldDef[self::REQUIRED_GRANTS])) {
+            foreach ($fieldDef[self::REQUIRED_GRANTS] as $key => $acl) {
+                if (is_int($key)) {
+                    $key = Tinebase_Controller_Record_Abstract::ACTION_ALL;
+                }
+                if (!isset($this->_grantProtectedFields[$key])) {
+                    $this->_grantProtectedFields[$key] = [];
+                }
+                if (!isset($this->_grantProtectedFields[$key][$acl])) {
+                    $this->_grantProtectedFields[$key][$acl] = [];
+                }
+                $this->_grantProtectedFields[$key][$acl][] = $fieldKey;
+            }
+        }
         switch ($fieldDef[self::TYPE]) {
             case self::TYPE_JSON:
             case self::TYPE_MODEL:

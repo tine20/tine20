@@ -56,6 +56,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 {
     const MODEL_NAME_PART = 'DailyWTReport';
 
+    const FLDS_EMPLOYEE_ID = 'employee_id';
     const FLDS_MONTHLYWTREPORT = 'monthlywtreport';
     const FLDS_WORKING_TIMES = 'working_times';
 
@@ -88,7 +89,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 
         'appName' => 'HumanResources',
         'modelName' => self::MODEL_NAME_PART,
-        'requiredRight' => HumanResources_Acl_Rights::MANAGE_WORKINGTIME,
+        self::DELEGATED_ACL_FIELD => 'employee_id',
 
         self::TITLE_PROPERTY=> "{# {{date - sorting! #}{% if working_time_actual %}{{ working_time_actual |date('H:i', 'GMT')}}{% else %}00:00{% endif %} - {{ date | localizeddate('full', 'none', app.request.locale ) }}",
 

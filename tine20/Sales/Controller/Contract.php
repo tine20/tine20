@@ -84,11 +84,11 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      * @param bool $_getDeleted
      * @return Tinebase_Record_Interface
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false, $_aclProtect = true)
     {
         $containerId = $_containerId !== null ? $_containerId : $this->getSharedContractsContainer();
         
-        return parent::get($_id, $containerId, $_getRelatedData, $_getDeleted);
+        return parent::get($_id, $containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
     }
     
 

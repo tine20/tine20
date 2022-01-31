@@ -124,9 +124,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         return $result;
     }
 
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
-        $contact = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        $contact = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
 
         if($_id) {
             $listController = Addressbook_Controller_List::getInstance();

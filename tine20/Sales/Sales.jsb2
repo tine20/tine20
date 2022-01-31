@@ -44,10 +44,6 @@
           "path": "js/"
         },
         {
-          "text": "DivisionEditDialog.js",
-          "path": "js/"
-        },
-        {
           "text": "CostCenterGridPanel.js",
           "path": "js/"
         },
@@ -57,10 +53,6 @@
         },
         {
           "text": "ContractProductFilterModel.js",
-          "path": "js/"
-        },
-        {
-          "text": "DivisionEditDialog.js",
           "path": "js/"
         },
         {

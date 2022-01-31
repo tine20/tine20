@@ -1741,7 +1741,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             foreach ($_grants as $recordGrants) {
                 $data = array(
                     'container_id' => $containerId,
-                    'account_id' => $recordGrants['account_id'],
+                    'account_id' => is_array($recordGrants['account_id']) ?
+                        (isset($recordGrants['account_id']['id']) ? $recordGrants['account_id']['id'] : $recordGrants['account_id']['accountId']) : $recordGrants['account_id'],
                     'account_type' => $recordGrants['account_type'],
                 );
 

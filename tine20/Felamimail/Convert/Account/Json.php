@@ -73,7 +73,7 @@ class Felamimail_Convert_Account_Json extends Tinebase_Convert_Json
         $expanderDef = [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'signatures' => [],
-                'contact_id'  => []
+                'contact_id'  => [],
             ],
         ];
         $expander = new Tinebase_Record_Expander(Felamimail_Model_Account::class, $expanderDef);

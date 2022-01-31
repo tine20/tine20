@@ -181,7 +181,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
     getAppItems: function() {
         var appItems = [];
         Tine.Tinebase.appMgr.getAll().each(function(app) {
-            if (app.hasMainScreen) {
+            if (Tine.Tinebase.common.hasRight('mainscreen', app.appName) && app.hasMainScreen) {
                 appItems.push({
                     text: app.getTitle(),
                     iconCls: app.getIconCls(),

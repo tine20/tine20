@@ -92,4 +92,13 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
             'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
         ), $grants)));
     }
+
+    protected static $_modelConfiguration = null;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
 }

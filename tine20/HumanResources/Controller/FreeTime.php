@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,41 +18,61 @@
  */
 class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+    use HumanResources_Controller_CheckFilterACLEmployeeTrait;
+
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA];
+
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {
+    protected function __construct() {
         $this->_applicationName = 'HumanResources';
         $this->_backend = new HumanResources_Backend_FreeTime();
-        $this->_modelName = 'HumanResources_Model_FreeTime';
+        $this->_modelName = HumanResources_Model_FreeTime::class;
         $this->_purgeRecords = TRUE;
         // activate this if you want to use containers
-        $this->_doContainerACLChecks = FALSE;
+        $this->_doContainerACLChecks = true;
     }
 
-    /**
-     * holds the instance of the singleton
-     *
-     * @var HumanResources_Controller_FreeTime
-     */
-    private static $_instance = NULL;
-
-    /**
-     * the singleton pattern
-     *
-     * @return HumanResources_Controller_FreeTime
-     */
-    public static function getInstance()
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        if (self::$_instance === NULL) {
-            self::$_instance = new HumanResources_Controller_FreeTime();
+        if (!$this->_doContainerACLChecks) {
+            return true;
         }
 
-        return self::$_instance;
+        // if we have manage_employee right, we have all grants
+        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {
+            return true;
+        }
+
+        switch ($_action) {
+            case self::ACTION_GET:
+                try {
+                    HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty('employee_id'));
+                } catch (Tinebase_Exception_AccessDenied $e) {
+                    if ($_throw) {
+                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
+                    } else {
+                        return false;
+                    }
+                }
+                return true;
+            case self::ACTION_CREATE:
+            case self::ACTION_UPDATE:
+            case self::ACTION_DELETE:
+                $_action = HumanResources_Model_DivisionGrants::UPDATE_EMPLOYEE_DATA;
+                break;
+        }
+        return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
-    
+
     /**
      * returns remaining vacation days for given employee (mixed accounts)
      * 

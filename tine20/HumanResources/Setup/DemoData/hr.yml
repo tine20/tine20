@@ -15,9 +15,9 @@ files:
 #$app,$model,$definition,$file
 - Addressbook/Contact/adb_tine_import_csv/*
 - Admin/User/admin_user_import_csv/*
-- Sales/Division/sales_import_division_csv/*
 - Sales/CostCenter/sales_import_costcenter_csv/*
 - HumanResources/Employee/hr_demodata_employee_import_csv/*
+- HumanResources/Division/sales_import_division_csv/*
 
 
 # this set could contain other sets:

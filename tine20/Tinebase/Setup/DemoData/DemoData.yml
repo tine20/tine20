@@ -21,7 +21,7 @@ files:
   - Calendar/Event/cal_import_event_csv/*
   - Inventory/InventroyItem/inv_tine_import_csv/*
   - Tasks/Task/task_import_demo_csv/*
-  - Sales/Division/sales_import_division_csv/*
+  - HumanResources/Division/hr_import_division_csv/*
   - Sales/CostCenter/sales_import_costcenter_csv/*
   - Sales/Product/sales_import_product_csv/*
   - Crm/Lead/crm_demo_import_csv/*

@@ -17,7 +17,6 @@ files:
 - Sales/Boilerplate/sales_import_boilerplate_csv/*
 - Sales/CostCenter/sales_import_costcenter_csv/*
 - Addressbook/Contact/addressbook_tine_import_csv/*
-- Sales/Division/sales_import_division_csv/*
 - Sales/Customer/sales_import_customer_csv/*
 - Sales/Supplier/sales_import_supplier_csv/* # maybe field address import?'
 - Sales/Product/sales_import_product_csv/*

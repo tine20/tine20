@@ -400,4 +400,8 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param array $data
      */
     public function hydrateFromBackend(array &$_data);
+
+    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null);
+
+    public function setAccountGrants(Tinebase_Record_Interface $grants);
 }

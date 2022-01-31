@@ -32,8 +32,7 @@ class Sales_Import_DemoDataTest
         $suite->addTestSuite('Sales_Import_CustomerTest'); 
         $suite->addTestSuite('Sales_Import_OrderConfirmationTest'); 
         $suite->addTestSuite('Sales_Import_PurchaseInvoiceTest'); 
-        $suite->addTestSuite('Sales_Import_InvoiceTest');  
-        $suite->addTestSuite('Sales_Import_Division');
+        $suite->addTestSuite('Sales_Import_InvoiceTest');
         
         return $suite;
     }

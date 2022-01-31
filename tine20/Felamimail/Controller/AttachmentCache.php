@@ -39,11 +39,11 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         $this->_doContainerACLChecks = false;
     }
 
-    public function get($_id, $_containerId = null, $_getRelatedData = true, $_getDeleted = false)
+    public function get($_id, $_containerId = null, $_getRelatedData = true, $_getDeleted = false, $_aclProtect = true)
     {
         try {
             /** @var Felamimail_Model_AttachmentCache $record */
-            $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+            $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
             if ($record->isFSNode()) {
                 $node = $this->getSourceRecord($record);
                 if ($node->hash !== $record->{Felamimail_Model_AttachmentCache::FLD_HASH}) {

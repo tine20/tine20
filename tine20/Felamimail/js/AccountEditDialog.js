@@ -100,7 +100,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onAfterRecordLoad: function() {
         Tine.Felamimail.AccountEditDialog.superclass.onAfterRecordLoad.call(this);
         this.preventCheckboxEvents = false;
-
         this.loadDefaultAddressbook();
         this.disableSieveTabs();
         this.loadSieve();
@@ -987,6 +986,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 fields: Tine.Tinebase.Model.Grant
             });
         }
+        
         return this.grantsStore;
     },
 
@@ -1141,8 +1141,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         me.getForm().loadRecord(me.ruleRecords);
-        //me.record.set('vacation',me.vacationRecord.data);
-        this.checkStates();
     },
     
     /**

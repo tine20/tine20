@@ -138,7 +138,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
     protected function _importRecord($_record, $_resolveStrategy = null, $_recordData = array())
     {
         // can resolve the container the record is supposed to be imported into, therefore a file can container multiple records for multiple containers
-        if ($this->_retrieveContainerFromData && $containerName = $_record->{$_record::getConfiguration()->containerProperty}) {
+        if ($this->_retrieveContainerFromData && $containerName = $_record->{$_record::getConfiguration()->getContainerProperty()}) {
             $container = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter([
                 'name' => $containerName,
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId()

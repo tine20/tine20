@@ -5,7 +5,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -31,6 +31,53 @@ class HumanResources_JsonTests extends HumanResources_TestCase
 {
         parent::setUp();
         $this->_uit = $this->_json = new HumanResources_Frontend_Json();
+    }
+
+    public function testGetFeastAndFreeDaysWithGrants()
+    {
+        $date = new Tinebase_DateTime();
+        $date->subYear(1);
+        $date->setDate($date->format('Y'), 2, 1);
+
+        $costCenter1 = $this->_getCostCenter($date);
+        $savedEmployee = $this->_saveEmployee($costCenter1, $date->getClone(), 'pwulf');
+        $accountInstance = HumanResources_Controller_Account::getInstance();
+        $accountInstance->createMissingAccounts((int) $date->format('Y'));
+        $myAccount = $accountInstance->search(new HumanResources_Model_AccountFilter([
+            ['field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id']]
+        ]))->getFirstRecord();
+        $vacation = new HumanResources_Model_FreeTime(array(
+            'status'        => 'ACCEPTED',
+            'employee_id'   => $savedEmployee['id'],
+            'account_id'    => $myAccount->getId(),
+            'type'          => 'vacation',
+            'freedays'      => array(
+                array('date' => $date->getClone()->addDay(60), 'duration' => 1),
+            )
+        ));
+        HumanResources_Controller_FreeTime::getInstance()->create($vacation);
+
+        $freeTimesAdmin = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date->format('Y'));
+        $division = $this->_json->getDivision($savedEmployee['division_id']);
+        Tinebase_Container::getInstance()->addGrants($division['container_id'], Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['pwulf']->getId(), [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
+        Tinebase_Container::getInstance()->addGrants($division['container_id'], Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Core::getUser()->getId(), [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
+        $division = $this->_json->getDivision($savedEmployee['division_id']);
+        $result = $this->_json->searchFreeTimes([['field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id']]], []);
+        $this->assertCount(1, $result['results']);
+        $this->assertFalse($result['results'][0]['account_grants'][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
+        $this->assertTrue($division['account_grants'][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date->format('Y'));
+
+        $this->assertNotEmpty($freeTimesAdmin['results']['contracts']);
+        $this->assertNotEmpty($freeTimes['results']['contracts']);
+
+        $result = $this->_json->searchFreeTimes([['field' => 'employee_id', 'operator' => 'equals', 'value' => $savedEmployee['id']]], []);
+        $this->assertGreaterThanOrEqual(1, count($result['results']));
+        $this->assertTrue($result['results'][0]['account_grants'][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
     }
 
     /**
@@ -167,9 +214,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * @param HumanResources_Model_CostCenter $costCenter
      * @return array
      */
-    protected function _saveEmployee($costCenter = null, $firstDate = NULL)
+    protected function _saveEmployee($costCenter = null, $firstDate = NULL, $loginName = null)
     {
-        $e = $this->_getEmployee();
+        $e = $this->_getEmployee($loginName);
         $e->contracts = array($this->_getContract($firstDate)->toArray());
         
         if ($costCenter) {
@@ -870,6 +917,10 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     public function testSearchForEmptyEmploymentEnd()
     {
         $savedEmployee = $this->_saveEmployee();
+        $this->assertArrayHasKey(Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS, $savedEmployee);
+        $this->assertIsArray($savedEmployee[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]);
+        $this->assertArrayHasKey('account_id', $savedEmployee[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]);
+        $this->assertSame(Tinebase_Core::getUser()->getID(), $savedEmployee[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]['account_id']);
         
         $result = $this->_json->searchEmployees(array(array(
             'field' => 'employment_end',
@@ -878,6 +929,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         )), array());
         
         $this->assertGreaterThan(0, $result['totalcount'], 'should find employee with no employment_end');
+
+        $result0 = $result['results'][0];
+        $this->assertArrayHasKey(Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS, $result0);
+        $this->assertIsArray($result0[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]);
+        $this->assertArrayHasKey('account_id', $result0[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]);
+        $this->assertSame(Tinebase_Core::getUser()->getID(), $result0[Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS]['account_id']);
     }
 
     public function testSearchFreeTimeTypes()
@@ -1059,7 +1116,90 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable, $e->getMessage());
         }
     }
-    
+
+    public function testSearchDivisionWithoutGrants()
+    {
+        $title = Tinebase_Record_Abstract::generateUID(10);
+        $d = $this->_json->saveDivision(['title' => $title]);
+
+        $result = $this->_json->searchDivisions([['field' => 'id', 'operator' => 'equals', 'value' => $d['id']]]);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($d['id'], $result['results'][0]['id']);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+
+        $result = $this->_json->searchDivisions([['field' => 'id', 'operator' => 'equals', 'value' => $d['id']]]);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($d['id'], $result['results'][0]['id']);
+        $this->assertArrayNotHasKey(Tinebase_ModelConfiguration::FLD_GRANTS, $result['results'][0]);
+        $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS, $result['results'][0]);
+        foreach (HumanResources_Model_DivisionGrants::getAllGrants() as $grant) {
+            $this->assertFalse($result['results'][0][Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][$grant]);
+        }
+
+        $result = $this->_json->getDivision($d['id']);
+        $this->assertSame($d['id'], $result['id']);
+        $this->assertArrayNotHasKey(Tinebase_ModelConfiguration::FLD_GRANTS, $result);
+        $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS, $result);
+        foreach (HumanResources_Model_DivisionGrants::getAllGrants() as $grant) {
+            $this->assertFalse($result[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][$grant]);
+        }
+    }
+
+    /**
+     * tests crud methods of division
+     */
+    public function testAllDivisionMethods()
+    {
+        $title = Tinebase_Record_Abstract::generateUID(10);
+        $d = $this->_json->saveDivision(
+            array('title' => $title, 'grants' => [[
+                'id' => 'asdfa',
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                'account_type' => Tinebase_Model_Grants::TYPE_USER,
+                'adminGrant' => true,
+                HumanResources_Model_DivisionGrants::READ_OWN_DATA => true,
+            ]], 'account_grants' => ['adminGrant' => true])
+        );
+
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+        $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_GRANTS, $d);
+        $this->assertIsArray($d[Tinebase_ModelConfiguration::FLD_GRANTS]);
+        $this->assertCount(1, $d[Tinebase_ModelConfiguration::FLD_GRANTS]);
+        $this->assertArrayHasKey(Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS, $d);
+        $this->assertIsArray($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS]);
+        $this->assertSame(Tinebase_Core::getUser()->getId(), $d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS]['account_id']);
+        $this->assertTrue($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][Tinebase_Model_Grants::GRANT_ADMIN]);
+        $this->assertTrue($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
+        $this->assertFalse($d[Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS][HumanResources_Model_DivisionGrants::READ_EMPLOYEE_DATA]);
+
+        $d = $this->_json->getDivision($d['id']);
+
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+
+        $title = Tinebase_Record_Abstract::generateUID(10);
+        $d['title'] = $title;
+
+        $d = $this->_json->saveDivision($d);
+
+        $this->assertEquals(40, strlen($d['id']));
+        $this->assertEquals($title, $d['title']);
+
+        $result = $this->_json->searchDivisions([['field' => 'id', 'operator' => 'equals', 'value' => $d['id']]]);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($d['id'], $result['results'][0]['id']);
+        $this->assertSame(Tinebase_Core::getUser()->getId(), $result['results'][0][Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS]['account_id']);
+        $this->assertCount(1, $result['results'][0][Tinebase_ModelConfiguration::FLD_GRANTS]);
+
+        $this->_json->deleteDivisions(array($d['id']));
+
+        $this->expectException('Exception');
+
+        $d = $this->_json->getDivision($d['id']);
+    }
+
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10122
      */

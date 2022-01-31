@@ -32,4 +32,13 @@ class Tinebase_Model_PersistentFilterGrant extends Tinebase_Model_Grants
     
         return $allGrants;
     }
+
+    protected static $_modelConfiguration = null;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
 }

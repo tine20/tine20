@@ -41,6 +41,9 @@ class HumanResources_TestCase extends TestCase
     /** @var HumanResources_Model_Employee */
     protected $employee;
 
+    /** @var HumanResources_Model_Division */
+    protected $division;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -60,11 +63,10 @@ class HumanResources_TestCase extends TestCase
     }
 
 
-    protected function _createBasicData()
+    protected function _createBasicData($account = null)
     {
         // create employee & contract
-        // @todo generalize?
-        $this->employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
+        $this->employee = $this->_getEmployee($account ?: Tinebase_Core::getUser()->accountLoginName);
         //$this->employee->dfcom_id = '36118993923739652';
 
         $contractController = HumanResources_Controller_Contract::getInstance();
@@ -244,6 +246,15 @@ class HumanResources_TestCase extends TestCase
         return $c;
     }
 
+    protected function _getDivision($name = 'unittest'): HumanResources_Model_Division
+    {
+        if (null === $this->division) {
+            $this->division = HumanResources_Controller_Division::getInstance()->create(
+                new HumanResources_Model_Division(['title' => $name]));
+        }
+        return $this->division;
+    }
+
     /**
      * returns an employee with account_id
      * @return HumanResources_Model_Employee
@@ -264,7 +275,8 @@ class HumanResources_TestCase extends TestCase
             'n_family'   => $a->accountLastName,
             'account_id' => $a->getId(),
             'position'   => 'Photographer',
-            'employment_begin' => $sdate
+            'employment_begin' => $sdate,
+            'division_id' => $this->_getDivision()->getId(),
             
         );
 

@@ -46,9 +46,9 @@ class Tinebase_Controller_MunicipalityKey extends Tinebase_Controller_Record_Abs
      * @see Tinebase_Controller_Record_Abstract::get()
      * @return Tinebase_Model_MunicipalityKey
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
-        $communityNumber = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        $communityNumber = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
         return $this->aggregatePopulation($communityNumber);
     }
 

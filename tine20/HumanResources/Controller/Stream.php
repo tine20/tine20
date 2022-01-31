@@ -59,10 +59,10 @@ class HumanResources_Controller_Stream extends Tinebase_Controller_Record_Abstra
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         /** @var HumanResources_Model_Stream $record */
-        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
 
         if ($_getRelatedData) {
             $expander = new Tinebase_Record_Expander(HumanResources_Model_Stream::class, [

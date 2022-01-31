@@ -111,4 +111,13 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
             $anyoneSelect . ' ) AND ' . $db->quoteIdentifier('container_acl.account_grant') . $db->quoteInto(' LIKE ?', Calendar_Model_ResourceGrants::EVENTS_FREEBUSY)
         );
     }
+
+    protected static $_modelConfiguration = null;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
 }

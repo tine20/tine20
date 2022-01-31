@@ -26,7 +26,7 @@ Ext.ns('Tine.HumanResources');
  * Create a new Tine.HumanResources.EmployeeGridPanel
  */
 Tine.HumanResources.EmployeeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-    
+    evalGrants: false,
     renderSalutation: function(value, row, record) {
             if (! this.salutationRenderer) {
                 this.salutationRenderer = Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation');

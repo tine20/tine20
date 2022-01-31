@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -216,10 +216,11 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @var string
      */
-    const ACTION_GET = 'get';
-    const ACTION_CREATE = 'create';
-    const ACTION_UPDATE = 'update';
-    const ACTION_DELETE = 'delete';
+    public const ACTION_ALL = 'all';
+    public const ACTION_GET = 'get';
+    public const ACTION_CREATE = 'create';
+    public const ACTION_UPDATE = 'update';
+    public const ACTION_DELETE = 'delete';
 
     protected $_getMultipleGrant = Tinebase_Model_Grants::GRANT_READ;
     protected $_requiredFilterACLget = [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADMIN];
@@ -327,15 +328,10 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
 
-            $result = $this->_doRightsCleanup($result);
+            $result->applyFieldGrants($_action);
         }
         
         return $result;
-    }
-
-    protected function _doRightsCleanup(&$data)
-    {
-        return $data;
     }
     
     /**
@@ -521,11 +517,12 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param int $_containerId
      * @param bool         $_getRelatedData
      * @param bool $_getDeleted
+     * @param bool $_aclProtect
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, bool $_aclProtect = true)
     {
         $this->_checkRight(self::ACTION_GET);
         
@@ -548,6 +545,10 @@ abstract class Tinebase_Controller_Record_Abstract
             // get related data only on request (defaults to TRUE)
             if ($_getRelatedData) {
                 $this->_getRelatedData($record);
+            }
+
+            if ($_aclProtect) {
+                $record->applyFieldGrants(self::ACTION_GET);
             }
         }
         
@@ -658,6 +659,8 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
 
+        $records->applyFieldGrants(self::ACTION_GET);
+
         return $records;
     }
 
@@ -678,6 +681,8 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($this->resolveCustomfields()) {
             Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($records);
         }
+
+        $records->applyFieldGrants(self::ACTION_GET);
 
         return $records;
     }
@@ -716,6 +721,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $this->_setContainer($_record);
 
+            $_record->applyFieldGrants(self::ACTION_CREATE);
             $_record->isValid(TRUE);
 
             $this->_checkGrant($_record, self::ACTION_CREATE);
@@ -1315,18 +1321,22 @@ abstract class Tinebase_Controller_Record_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
             $_record->isValid(TRUE);
+
             if ($this->_backend instanceof Tinebase_Backend_Sql_Abstract) {
                 $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
             }
-            $currentRecord = $this->get($_record->getId(), null, true, $_updateDeleted);
+            $currentRecord = $this->get($_record->getId(), null, true, $_updateDeleted, false);
             unset($raii);
-            
+
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
             
             // add _doForceModlogInfo behavior
             $origRecord = clone ($_record);
             $this->_updateACLCheck($_record, $currentRecord);
+
+            $_record->applyFieldGrants(self::ACTION_UPDATE, $currentRecord);
+
             $this->_concurrencyManagement($_record, $currentRecord);
             $this->_forceModlogInfo($_record, $origRecord, self::ACTION_UPDATE);
             $this->_inspectBeforeUpdate($_record, $currentRecord);
@@ -2065,7 +2075,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     . ' of ' . count((array)$ids) . ' records exist.');
             }
 
-            if (empty($records)) {
+            if ($records->count() === 0) {
                 $raii->release();
                 return $records;
             }
@@ -2416,9 +2426,25 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.',
         /** @noinspection PhpUnusedParameterInspection */ $_oldRecord = NULL)
     {
-        if (   ! $this->_doContainerACLChecks
-            || ! $_record->has('container_id')) {
+        if (! $this->_doContainerACLChecks
+            || (! $_record->has('container_id') && (!($mc = $_record->getConfiguration()) || !$mc->delegateAclField))) {
             return TRUE;
+        }
+
+        if (($mc = $_record->getConfiguration()) && $mc->delegateAclField) {
+            if (empty($_record->{$mc->delegateAclField})) {
+                throw new Tinebase_Exception_AccessDenied('acl delegation field ' . $mc->delegateAclField .
+                    ' must not be empty');
+            }
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
+            $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
+            $ctrl = $ctrl::getInstance();
+            return $ctrl->checkGrant(
+                $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
+                    $_record->{$mc->delegateAclField} :
+                    $ctrl->get($_record->{$mc->delegateAclField}),
+                $_action, $_throw, $_errorMessage, $_oldRecord
+            );
         }
         
         if (! is_object(Tinebase_Core::getUser())) {
@@ -2427,10 +2453,8 @@ abstract class Tinebase_Controller_Record_Abstract
         
         // admin grant includes all others
         if (Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
-            return TRUE;
+            return true;
         }
-        
-        $hasGrant = FALSE;
         
         switch ($_action) {
             case self::ACTION_GET:
@@ -2445,6 +2469,8 @@ abstract class Tinebase_Controller_Record_Abstract
             case self::ACTION_DELETE:
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE);
                 break;
+            default:
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, $_action);
         }
 
         if (! $hasGrant) {
@@ -2530,7 +2556,6 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
 
-
         if ($_filter->getCondition() !== Tinebase_Model_Filter_FilterGroup::CONDITION_AND) {
             $_filter->andWrapItself();
         }
@@ -2540,8 +2565,21 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! $aclFilters) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Force a standard containerFilter (specialNode = all) as ACL filter.');
-            
-            $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all');
+
+            $containerFilter = null;
+            if (($mc = ($this->_modelName)::getConfiguration())) { /** @var Tinebase_ModelConfiguration $mc */
+                if ($containerProp = $mc->{Tinebase_ModelConfiguration::DELEGATED_ACL_FIELD}) {
+                    $containerFilter = new Tinebase_Model_Filter_DelegatedAcl($containerProp, null, null,
+                        array_merge($_filter->getOptions(),[
+                            'modelName' => $this->_modelName
+                        ]));
+                } elseif ($containerProp = $mc->getContainerProperty()) {
+                    $containerFilter = $_filter->createFilter($containerProp, 'specialNode', 'all');
+                }
+            }
+            if (null === $containerFilter) {
+                $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all');
+            }
             $_filter->addFilter($containerFilter);
         } else {
             /** @var Tinebase_Model_Filter_Abstract $filter */

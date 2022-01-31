@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -40,9 +40,9 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
+        self::DELEGATED_ACL_FIELD => 'employee_id',
         
         'createModule'      => TRUE,
-        'containerProperty' => NULL,
         
         'titleProperty'     => 'year',
         'appName'           => 'HumanResources',
