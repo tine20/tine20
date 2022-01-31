@@ -31,28 +31,46 @@ msgid "Invoice is cleared already"
 msgstr "Rechnung ist bereits gebucht"
 
 #: Exception/InvoiceAlreadyClearedDelete.php:31
-msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
-msgstr "Die Rechnung die Sie löschen wollten, ist bereits gebucht und kann nicht mehr gelöscht werden!"
+msgid ""
+"The Invoice you tried to delete is cleared already, so deleting is not "
+"possible anymore!"
+msgstr ""
+"Die Rechnung die Sie löschen wollten, ist bereits gebucht und kann nicht "
+"mehr gelöscht werden!"
 
 #: Exception/DeleteUsedBillingAddress.php:26
 msgid "Address as Billing Address in Use"
 msgstr "Adresse als Rechnungsadresse in Benutzung"
 
 #: Exception/DeleteUsedBillingAddress.php:31
-msgid "The Address you tried to delete is used in one or more contract(s) as Billing Address. Please assign another Billing Address to these contracts or change this one and do not delete."
-msgstr "Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
+msgid ""
+"The Address you tried to delete is used in one or more contract(s) as "
+"Billing Address. Please assign another Billing Address to these contracts or "
+"change this one and do not delete."
+msgstr ""
+"Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen "
+"als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere "
+"Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
 
 #: Exception/DeletePreviousInvoice.php:26
 msgid "Following Invoices Found"
 msgstr "Nachfolgende Rechnungen gefunden"
 
 #: Exception/DeletePreviousInvoice.php:31
-msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
-msgstr "Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
+msgid ""
+"There is an invoice for the same contract after this one. Please delete the "
+"following invoice(s) before deleting this one!"
+msgstr ""
+"Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte "
+"löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
 
 #: Exception/InvoiceAlreadyClearedEdit.php:31
-msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
-msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits gebucht und kann nicht weiter bearbeitet werden!"
+msgid ""
+"The Invoice you tried to edit is cleared already, so no editing is possible "
+"anymore!"
+msgstr ""
+"Die Rechnung die Sie bearbeiten wollten, ist bereits gebucht und kann nicht "
+"weiter bearbeitet werden!"
 
 #: Exception/AlterOCNumberForbidden.php:26
 msgid "No Right to alter the Number"
@@ -67,16 +85,25 @@ msgid "Number duplicate"
 msgstr "Mehrfach vergebene Nummer"
 
 #: Exception/DuplicateNumber.php:31
-msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
-msgstr "Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits vergeben. Bitte versuchen Sie es mit einer anderen, oder lassen das Feld leer, um die nächst freie Nummer zu verwenden."
+msgid ""
+"The number you tried to use has been taken already. Please use another one "
+"leave the field blank to take the next free number."
+msgstr ""
+"Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits "
+"vergeben. Bitte versuchen Sie es mit einer anderen, oder lassen das Feld "
+"leer, um die nächst freie Nummer zu verwenden."
 
 #: Exception/UnknownCurrencyCode.php:26
 msgid "Unknown Currency Code"
 msgstr "Unbekannter Währungscode"
 
 #: Exception/UnknownCurrencyCode.php:31
-msgid "The Currency Code you tried to use is not valid. Please use a valid Currency Code as defined in ISO 4217."
-msgstr "Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig. Bitte verwenden Sie einen gültigen Währungscode nach ISO 4217."
+msgid ""
+"The Currency Code you tried to use is not valid. Please use a valid Currency "
+"Code as defined in ISO 4217."
+msgstr ""
+"Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig. "
+"Bitte verwenden Sie einen gültigen Währungscode nach ISO 4217."
 
 #: Acl/Rights.php:196
 msgid "Manage Products"
@@ -252,7 +279,7 @@ msgstr "Name"
 
 #: Model/Customer.php:92 js/CustomerEditDialog.js:316
 msgid "Name shorthand"
-msgstr "Kürzel"
+msgstr "Kunden Kürzel"
 
 #: Model/Customer.php:100 Model/Supplier.php:75 js/SupplierEditDialog.js:322
 #: js/SupplierDetailsPanel.js:127 js/CustomerDetailsPanel.js:127
@@ -875,6 +902,7 @@ msgstr[1] "Lieferungen"
 
 #: Model/Document/Delivery.php:59 Model/Document/Order.php:60
 #: Model/Document/Offer.php:96 Model/Document/Invoice.php:62
+#: Model/Document/DeliveryNote.php:59
 msgid "Status"
 msgstr "Status"
 
@@ -1214,7 +1242,8 @@ msgstr "Vertragsnummer-Erstellung"
 
 #: Config.php:544
 msgid "Should the contract number be set manually or be auto-created?"
-msgstr "Soll die Vertragsnummer manuell gesetzt oder autmatisch erstellt werden?"
+msgstr ""
+"Soll die Vertragsnummer manuell gesetzt oder autmatisch erstellt werden?"
 
 #: Config.php:547 Config.php:726
 msgid "automatically"
@@ -1241,8 +1270,12 @@ msgid "Own Currency"
 msgstr "Eigene Währung"
 
 #: Config.php:570
-msgid "The currency defined here is used as default currency in the customerd edit dialog."
-msgstr "Die hier definierte Währung wird als standard Währung für den Kunden bearbeiten Dialog verwendet."
+msgid ""
+"The currency defined here is used as default currency in the customerd edit "
+"dialog."
+msgstr ""
+"Die hier definierte Währung wird als standard Währung für den Kunden "
+"bearbeiten Dialog verwendet."
 
 #: Config.php:578
 msgid "Languages Available"
@@ -1333,7 +1366,9 @@ msgid "Sub-Product Variable Position Flag"
 msgstr ""
 
 #: Config.php:705
-msgid "Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document."
+msgid ""
+"Accounting for the sub-product is variable and each same sub-product gets on "
+"own or a common shared position in a document."
 msgstr ""
 
 #: Config.php:713
@@ -1671,16 +1706,24 @@ msgid "No customer assigned"
 msgstr "Kein Kunde zugeordnet"
 
 #: js/InvoiceEditDialog.js:333
-msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
-msgstr "Dem ausgewählten Vertrag ist bisher kein Kunde zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einem Kunden."
+msgid ""
+"The selected contract doesn't have a customer assigned, yet. Add a customer "
+"to the contract with the contract edit dialog."
+msgstr ""
+"Dem ausgewählten Vertrag ist bisher kein Kunde zugeordnet worden. Bitte "
+"verknüpfen Sie den Vertrag mit einem Kunden."
 
 #: js/InvoiceEditDialog.js:344
 msgid "No cost center assigned"
 msgstr "Keine Kostenstelle zugeordnet"
 
 #: js/InvoiceEditDialog.js:345
-msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
-msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einer Kostenstelle."
+msgid ""
+"The selected contract doesn't have a cost center assigned, yet. Add a cost "
+"center to the contract with the contract edit dialog."
+msgstr ""
+"Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worden. "
+"Bitte verknüpfen Sie den Vertrag mit einer Kostenstelle."
 
 #: js/DocumentPosition/AbstractGridPanel.js:42
 msgid "Generic"
@@ -1765,7 +1808,9 @@ msgstr "Statusübergang Bestätigen"
 
 #: js/Document/AbstractEditDialog.js:31
 msgid "Changing this workflow status might not be revertible. Proceed anyway?"
-msgstr "Die Änderung des Status im Arbeitsablauf ist ggf. nicht umkehrbar. Trotzdem fortfahren?"
+msgstr ""
+"Die Änderung des Status im Arbeitsablauf ist ggf. nicht umkehrbar. Trotzdem "
+"fortfahren?"
 
 #: js/Document/BoilerplatePanel.js:137
 msgid "Choose Boilerplate"
@@ -1773,7 +1818,9 @@ msgstr "Textbaustein auswählen"
 
 #: js/Document/BoilerplatePanel.js:138
 msgid "Please choose which boilerplate you want to use as { name }"
-msgstr "Bitte wählen sie aus welcher Textbaustein soll als { name } genutzt werden soll"
+msgstr ""
+"Bitte wählen sie aus welcher Textbaustein soll als { name } genutzt werden "
+"soll"
 
 #: js/Document/BoilerplatePanel.js:142
 msgid "Existing:"
@@ -1832,3 +1879,33 @@ msgstr "ohne Vertrag"
 #: js/DivisionEditDialog.js:52
 msgid "Add New Division"
 msgstr "Neue Abteilung hinzufügen"
+
+#: Model/DocumentPosition/Abstract.php:278
+msgid "Unit price"
+msgstr "Einzelpreis"
+
+#: Model/Document/DeliveryNote.php:39
+msgid "GENDER_Delivery Note"
+msgstr "male"
+
+#: Model/Document/DeliveryNote.php:40
+msgid "Delivery Note"
+msgid_plural "Delivery Notes"
+msgstr[0] "Lieferschein"
+msgstr[1] "Lieferscheine"
+
+#: Config.php:384
+msgid "Delivery Note Status"
+msgstr "Lieferscheinstatus"
+
+#: Config.php:386
+msgid "Possible Delivery Note Status"
+msgstr "Mögliche Lieferscheinstatus"
+
+#: Config.php:422
+msgid "Delivery Note Status Transitions"
+msgstr "Lieferscheinstatus-Übergänge"
+
+#: Config.php:424
+msgid "Possible Delivery Note Status Transitions"
+msgstr "Mögliche Lieferscheinstatus-Übergänge"

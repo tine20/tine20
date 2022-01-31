@@ -24,17 +24,12 @@ Ext.ns('Tine.HumanResources');
  */
 Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
-    /**
-     * @private
-     */
-    evalGrants: false,
-    
     windowWidth: 800,
     windowHeight: 670,
-    
+
     /**
      * show private Information (autoset due to rights)
-     * 
+     *
      * @type {Boolean}
      */
     showPrivateInformation: null,
@@ -42,7 +37,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * inits the component
      */
     initComponent: function() {
-        this.showPrivateInformation = (Tine.Tinebase.common.hasRight('manage_private','HumanResources')) ? true : false;
         this.useSales = Tine.Tinebase.appMgr.get('Sales') ? true : false;
         Tine.HumanResources.EmployeeEditDialog.superclass.initComponent.call(this);
         this.on('updateDependent', function() {
@@ -99,6 +93,14 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     onAfterRecordLoad: function() {
         Tine.HumanResources.EmployeeEditDialog.superclass.onAfterRecordLoad.call(this);
+        const recordGrants = _.get(this.record, this.recordClass.getMeta('grantsPath'));
+        this.showPrivateInformation = ['readEmployeeDataGrant', 'readOwnDataGrant'].some((requiredGrant) => { return recordGrants[requiredGrant] });
+        ['contractGridPanel', 'costCenterGridPanel', 'attachmentsPanel', 'notesGridPanel', 'activitiesTabPanel'].forEach((cmp) => {
+            if (this[cmp]?.setDisabled) {
+                this[cmp].setDisabled(!this.showPrivateInformation);
+            }
+        })
+
         this.disableFreetimes();
         if (this.record.get('id') && this.record.get('account_id') && (! Ext.isObject(this.record.get('account_id')))) {
             var f = this.getForm().findField('account_id');
@@ -136,7 +138,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         )];
             
         if (this.useSales) {
-            firstRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Division', {
+            firstRow.push(Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Division', {
                     name: 'division_id',
                     fieldLabel: this.app.i18n._('Division'),
                     allowBlank: true
@@ -145,6 +147,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         firstRow.push({
             name: 'health_insurance',
+            fieldName: 'health_insurance',
             fieldLabel: this.app.i18n._('Health Insurance'),
             allowBlank: true,
             maxLength: 128
@@ -153,7 +156,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.contractGridPanel = new Tine.HumanResources.ContractGridPanel({
             app: this.app,
             editDialog: this,
-            disabled: ! this.showPrivateInformation,
             frame: false,
             border: true,
             autoScroll: true,
@@ -332,15 +334,15 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     layout: 'hfit',
                     autoHeight: true,
                     title: this.app.i18n._('Personal Information'),
-                    disabled: ! this.showPrivateInformation,
                     items: [{
                         xtype: 'columnform',
                         labelAlign: 'top',
-                        formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
+                        formDefaults: { ...formFieldDefaults },
                         items: [
                             [{
                                 xtype: 'widget-countrycombo',
                                 name: 'countryname',
+                                fieldName: 'countryname',
                                 fieldLabel: this.app.i18n._('Country')
                             }, Tine.widgets.form.FieldManager.get(
                                 this.appName,
@@ -385,6 +387,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             )], [{
                                 xtype: 'extuxclearabledatefield',
                                 name: 'bday',
+                                fieldName: 'bday',
                                 fieldLabel: this.app.i18n._('Birthday')
                             }
                         ]]
@@ -443,11 +446,10 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     layout: 'hfit',
                     autoHeight: true,
                     title: this.app.i18n._('Banking Information'),
-                    disabled: ! this.showPrivateInformation,
                     items: [{
                         xtype: 'columnform',
                         labelAlign: 'top',
-                        formDefaults: Ext.apply(Ext.decode(Ext.encode(formFieldDefaults)), {disabled: ! this.showPrivateInformation, readOnly: ! this.showPrivateInformation}),
+                        formDefaults: { ...formFieldDefaults },
                         items: [
                             [Tine.widgets.form.FieldManager.get(
                                 this.appName,
@@ -531,7 +533,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.costCenterGridPanel = new Tine.HumanResources.CostCenterGridPanel({
                 app: this.app,
                 editDialog: this,
-                disabled: ! this.showPrivateInformation
             });
             tabs.push(this.costCenterGridPanel);
         }
@@ -540,7 +541,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.contractGridPanel,
             this.vacationGridPanel,
             this.sicknessGridPanel,
-            new Tine.widgets.activities.ActivitiesTabPanel({
+            this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: 'HumanResources_Model_Employee'

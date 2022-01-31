@@ -8,7 +8,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,6 +37,8 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      */
     protected $_manageRight = null;
 
+    protected static $_deletingRecordId = null;
+
     /**
      * sets personal container id if container id is missing in record - can be overwritten to set a different container
      *
@@ -64,6 +66,23 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
         }
 
         return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
+    }
+
+    /**
+     * @param Tinebase_Record_Abstract $record
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _getRelatedData($record)
+    {
+        if ($record->has($record::FLD_GRANTS) &&
+                ($this->_hasManageRight() || $this->hasGrant($record, Tinebase_Model_Grants::GRANT_ADMIN))) {
+            $record->{$record::FLD_GRANTS} = $this->getRecordGrants($record);
+        }
+        if ($record->has($record::FLD_ACCOUNT_GRANTS)) {
+            $record->{$record::FLD_ACCOUNT_GRANTS} = Tinebase_Container::getInstance()
+                ->getGrantsOfAccount(Tinebase_Core::getUser(), $record->container_id);
+        }
+        parent::_getRelatedData($record);
     }
 
     /**
@@ -296,7 +315,12 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
     {
         parent::_deleteLinkedObjects($_record);
 
-        Tinebase_Container::getInstance()->deleteContainer($_record->container_id, true);
+        try {
+            static::$_deletingRecordId = $_record->getId();
+            Tinebase_Container::getInstance()->deleteContainer($_record->container_id, true);
+        } finally {
+            static::$_deletingRecordId = null;
+        }
     }
 
     /**

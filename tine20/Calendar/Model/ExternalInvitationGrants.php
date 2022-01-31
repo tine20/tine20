@@ -42,4 +42,13 @@ class Calendar_Model_ExternalInvitationGrants extends Tinebase_Model_Grants
         $_select->where($_select->getAdapter()->quoteIdentifier('container.xprops') . ' NOT LIKE "%' .
             Calendar_Controller::XPROP_EXTERNAL_INVITATION_CALENDAR . '%"');
     }
+
+    protected static $_modelConfiguration = null;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
 }

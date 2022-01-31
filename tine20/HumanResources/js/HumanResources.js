@@ -14,16 +14,15 @@ require('./DailyWTReportGridPanel');
 require('./MonthlyWTReportGridPanel');
 require('./MonthlyWTReportEditDialog');
 require('./FreeTimePlanningPanel');
+import './DivisionEditDialog'
+import './Timetracker/hooks'
 
 Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 
     hasMainScreen: true,
 
     init: function() {
-        if (
-            this.featureEnabled(('workingTimeAccounting')) &&
-            Tine.Tinebase.common.hasRight('manage_employee', 'HumanResources', 'account')
-        ) {
+        if (this.featureEnabled(('workingTimeAccounting'))) {
             Tine.widgets.MainScreen.registerContentType('HumanResources', {
                 contentType: 'FreeTimePlanning',
                 text: this.i18n._('Free Time Planning'),

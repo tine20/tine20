@@ -199,7 +199,8 @@ msgstr "Gruppenmitglieder"
 
 #: js/GroupEditDialog.js:178 js/user/EditDialog.js:210
 msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
+msgstr ""
+"Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
 
 #: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
 msgid "Confirm"
@@ -330,7 +331,7 @@ msgstr "Sortierung"
 
 #: js/container/EditDialog.js:209
 msgid "Container Hierarchy/Name"
-msgstr "Kalender Hierarchie/Name"
+msgstr "Ordner Hierarchie/Name"
 
 #: js/container/EditDialog.js:216
 msgid "Note for Owner"
@@ -580,7 +581,9 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:527
 msgid "Customfield already exists. Please choose another name."
-msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
+msgstr ""
+"Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen "
+"anderen Namen."
 
 #: js/user/GridPanel.js:51
 msgid "Enable Account"
@@ -815,16 +818,28 @@ msgstr "Domäne nicht erlaubt"
 
 #: js/user/EditDialog.js:705
 #, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr "Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits konfiguriert ist."
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup. Please add this "
+"domain to the secondary domains in SMTP setup or use another domain which is "
+"configured already."
+msgstr ""
+"Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre "
+"Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre "
+"Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits "
+"konfiguriert ist."
 
 #: js/user/EditDialog.js:731
 msgid "Forwarding to self"
 msgstr "Weiterleitung zu sich selbst"
 
 #: js/user/EditDialog.js:732
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr "Sie dürfen keine E-Mail-Adresse zur Weiterleitung festlegen, die mit der primären E-Mail-Adresse des Benutzers oder einem seiner Aliase identisch ist."
+msgid ""
+"You are not allowed to set a forwarding e-mail address that is identical to "
+"the users primary e-mail or one of his aliases."
+msgstr ""
+"Sie dürfen keine E-Mail-Adresse zur Weiterleitung festlegen, die mit der "
+"primären E-Mail-Adresse des Benutzers oder einem seiner Aliase identisch ist."
 
 #: js/user/EditDialog.js:741
 msgid "E-mail Forward"
@@ -879,8 +894,13 @@ msgid "Invalid Status"
 msgstr "Ungültiger Status"
 
 #: js/user/EditDialog.js:994
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr ""
+"Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit "
+"falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu "
+"setzten."
 
 #: js/user/EditDialog.js:1094 js/user/EditDialog.js:1098
 msgid "don't know"
@@ -1109,7 +1129,9 @@ msgstr "Vermeiden Sie Sonderzeichen im Anmeldenamen"
 
 #: Config.php:97 Config.php:103
 msgid "Force retype of new password in user edit dialog"
-msgstr "Erzwinge die erneute Eingabe des neuen Passworts im Benutzer-Bearbeitungsdialog"
+msgstr ""
+"Erzwinge die erneute Eingabe des neuen Passworts im Benutzer-"
+"Bearbeitungsdialog"
 
 #: Controller/Container.php:207
 msgid "Your container has been changed"
@@ -1140,8 +1162,11 @@ msgid "Manage accounts"
 msgstr "Benutzerkonten verwalten"
 
 #: Acl/Rights.php:256
-msgid "Add and edit users and groups, add group members, change user passwords."
-msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, Passwörter zurücksetzen."
+msgid ""
+"Add and edit users and groups, add group members, change user passwords."
+msgstr ""
+"Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, "
+"Passwörter zurücksetzen."
 
 #: Acl/Rights.php:259
 msgid "Manage e-mail accounts"
@@ -1164,8 +1189,12 @@ msgid "Manage roles"
 msgstr "Rollen verwalten"
 
 #: Acl/Rights.php:268
-msgid "Add and edit roles, add new members to roles, add application rights to roles."
-msgstr "Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen Anwendungs-Rechte zuweisen."
+msgid ""
+"Add and edit roles, add new members to roles, add application rights to "
+"roles."
+msgstr ""
+"Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen "
+"Anwendungs-Rechte zuweisen."
 
 #: Acl/Rights.php:271
 msgid "Manage shared tags"
@@ -1189,7 +1218,8 @@ msgstr "Container verwalten"
 
 #: Acl/Rights.php:280
 msgid "Add, delete and edit containers and manage container grants."
-msgstr "Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
+msgstr ""
+"Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
 
 #: Acl/Rights.php:283
 msgid "Manage customfields"
@@ -1311,8 +1341,12 @@ msgstr "E-Mail-Konto nicht gefunden."
 msgid "It is not allowed to manage total Quota."
 msgstr "Es ist nicht erlaubt, die Gesamte Quota zu verwalten."
 
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr "Das Löschen des Benutzers wird die mit [V] markierten Aktionen auslösen, wollen Sie das Löschen durchführen?"
+msgid ""
+"Delete user will trigger the [V] events, do you still want to execute this "
+"action?"
+msgstr ""
+"Das Löschen des Benutzers wird die mit [V] markierten Aktionen auslösen, "
+"wollen Sie das Löschen durchführen?"
 
 msgid "Delete personal containers"
 msgstr "Persönliche Ordner löschen"
@@ -1321,7 +1355,8 @@ msgid "Keep account as contact in the Addressbook"
 msgstr "Als Kontakt im Adressbuch behalten"
 
 msgid "Keep accounts organizer events as external events in the Calendar"
-msgstr "Organisator-Termine der Benutzer:in als externe Termine im Kalender behalten"
+msgstr ""
+"Organisator-Termine der Benutzer:in als externe Termine im Kalender behalten"
 
 msgid "Keep accounts Calendar event attendee as external attender"
 msgstr "Termine der Benutzer:in als externe Termine im Kalender behalten"
@@ -1332,191 +1367,209 @@ msgstr "Dateiordner und Dateien löschen"
 msgid "Delete Email accounts"
 msgstr "E-Mail-Konten löschen"
 
-#~ msgid "enable application"
-#~ msgstr "Anwendung aktivieren"
+msgid "enable application"
+msgstr "Anwendung aktivieren"
 
-#~ msgid "disable application"
-#~ msgstr "Anwendung deaktivieren"
+msgid "disable application"
+msgstr "Anwendung deaktivieren"
 
-#~ msgid "settings"
-#~ msgstr "Einstellungen"
+msgid "settings"
+msgstr "Einstellungen"
 
-#~ msgid "unknown status ({0})"
-#~ msgstr "unbekannter Status ({0})"
+msgid "unknown status ({0})"
+msgstr "unbekannter Status ({0})"
 
-#~ msgid "Source"
-#~ msgstr "Quelle"
+msgid "Source"
+msgstr "Quelle"
 
-#~ msgid "Logon Time"
-#~ msgstr "Einlogzeit"
+msgid "Logon Time"
+msgstr "Einlogzeit"
 
-#~ msgid "Logoff Time"
-#~ msgstr "Auslogzeit"
+msgid "Logoff Time"
+msgstr "Auslogzeit"
 
-#~ msgid "Email Alias"
-#~ msgstr "E-Mail-Alias"
+msgid "Email Alias"
+msgstr "E-Mail-Alias"
 
-#~ msgid "You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases."
-#~ msgstr "Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-Mail-Adresse oder eines Alias des Benutzers ist."
+msgid ""
+"You are not allowed to set a forward email address that is identical to "
+"the users primary email or one of his aliases."
+msgstr ""
+"Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-"
+"Mail-Adresse oder eines Alias des Benutzers ist."
 
-#~ msgid "Email Forward"
-#~ msgstr "E-Mail-Weiterleitung"
+msgid "Email Forward"
+msgstr "E-Mail-Weiterleitung"
 
-#~ msgid "Add a forward address..."
-#~ msgstr "Eine Weiterleitungs-Adresse hinzufügen..."
+msgid "Add a forward address..."
+msgstr "Eine Weiterleitungs-Adresse hinzufügen..."
 
-#~ msgid "Email"
-#~ msgstr "E-Mail"
+msgid "Email"
+msgstr "E-Mail"
 
-#~ msgid "Reset Pin"
-#~ msgstr "PIN zurücksetzen"
+msgid "Reset Pin"
+msgstr "PIN zurücksetzen"
 
-#~ msgid "Email usage"
-#~ msgstr "E-Mail Nutzung"
+msgid "Email usage"
+msgstr "E-Mail Nutzung"
 
-#~ msgid "Set new pin"
-#~ msgstr "Neuen PIN setzen"
+msgid "Set new pin"
+msgstr "Neuen PIN setzen"
 
-#~ msgid "Please enter the new pin:"
-#~ msgstr "Bitte geben Sie den neuen PIN ein:"
+msgid "Please enter the new pin:"
+msgstr "Bitte geben Sie den neuen PIN ein:"
 
-#~ msgid "Could not save group."
-#~ msgstr "Konnte Gruppe nicht speichern."
+msgid "Could not save group."
+msgstr "Konnte Gruppe nicht speichern."
 
-#~ msgid "Add new group"
-#~ msgstr "Neue Gruppe erstellen"
+msgid "Add new group"
+msgstr "Neue Gruppe erstellen"
 
-#~ msgid "Edit Group \"{0}\""
-#~ msgstr "Gruppe \"{0}\" bearbeiten"
+msgid "Edit Group \"{0}\""
+msgstr "Gruppe \"{0}\" bearbeiten"
 
-#~ msgid "manage access log"
-#~ msgstr "Zugriffsprotokoll bearbeiten"
+msgid "manage access log"
+msgstr "Zugriffsprotokoll bearbeiten"
 
-#~ msgid "delete access log entries"
-#~ msgstr "Zugriffsprotokoll-Einträge löschen"
+msgid "delete access log entries"
+msgstr "Zugriffsprotokoll-Einträge löschen"
 
-#~ msgid "manage accounts"
-#~ msgstr "Benutzerkonten verwalten"
+msgid "manage accounts"
+msgstr "Benutzerkonten verwalten"
 
-#~ msgid "add and edit users and groups, add group members, change user passwords"
-#~ msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, Passwörter zurücksetzen"
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr ""
+"Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen "
+"zuordnen, Passwörter zurücksetzen"
 
-#~ msgid "manage applications"
-#~ msgstr "Anwendungen verwalten"
+msgid "manage applications"
+msgstr "Anwendungen verwalten"
 
-#~ msgid "enable and disable applications, edit application settings"
-#~ msgstr "Anwendungen bearbeiten, aktivieren und deaktivieren"
+msgid "enable and disable applications, edit application settings"
+msgstr "Anwendungen bearbeiten, aktivieren und deaktivieren"
 
-#~ msgid "manage roles"
-#~ msgstr "Rollen verwalten"
+msgid "manage roles"
+msgstr "Rollen verwalten"
 
-#~ msgid "add and edit roles, add new members to roles, add application rights to roles"
-#~ msgstr "Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen Anwendungs-Rechte zuweisen"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr ""
+"Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen "
+"Anwendungs-Rechte zuweisen"
 
-#~ msgid "manage shared tags"
-#~ msgstr "Gemeinsame Tags verwalten"
+msgid "manage shared tags"
+msgstr "Gemeinsame Tags verwalten"
 
-#~ msgid "view shared tags"
-#~ msgstr "Gemeinsame Tags ansehen"
+msgid "view shared tags"
+msgstr "Gemeinsame Tags ansehen"
 
-#~ msgid "add, delete and edit shared tags"
-#~ msgstr "Gemeinsame Tags anlegen, bearbeiten und löschen"
+msgid "add, delete and edit shared tags"
+msgstr "Gemeinsame Tags anlegen, bearbeiten und löschen"
 
-#~ msgid "view shared tags list and details"
-#~ msgstr "Gemeinsame Tags ansehen (Liste und Details)"
+msgid "view shared tags list and details"
+msgstr "Gemeinsame Tags ansehen (Liste und Details)"
 
-#~ msgid "manage computers"
-#~ msgstr "Computer verwalten"
+msgid "manage computers"
+msgstr "Computer verwalten"
 
-#~ msgid "add, delete and edit (samba) computers"
-#~ msgstr "Computer anlegen, bearbeiten und löschen"
+msgid "add, delete and edit (samba) computers"
+msgstr "Computer anlegen, bearbeiten und löschen"
 
-#~ msgid "manage containers"
-#~ msgstr "Container verwalten"
+msgid "manage containers"
+msgstr "Container verwalten"
 
-#~ msgid "add, delete and edit containers and manage container grants"
-#~ msgstr "Container anlegen, löschen und ändern, sowie die Container-Rechte setzen"
+msgid "add, delete and edit containers and manage container grants"
+msgstr ""
+"Container anlegen, löschen und ändern, sowie die Container-Rechte setzen"
 
-#~ msgid "manage customfields"
-#~ msgstr "Zusatzfelder verwalten"
+msgid "manage customfields"
+msgstr "Zusatzfelder verwalten"
 
-#~ msgid "add and edit customfields"
-#~ msgstr "Zusatzfelder anlegen und editieren"
+msgid "add and edit customfields"
+msgstr "Zusatzfelder anlegen und editieren"
 
-#~ msgid "view access log"
-#~ msgstr "Zugriffsprotokoll ansehen"
+msgid "view access log"
+msgstr "Zugriffsprotokoll ansehen"
 
-#~ msgid "view access log list"
-#~ msgstr "Zugriffsprotokoll-Liste ansehen"
+msgid "view access log list"
+msgstr "Zugriffsprotokoll-Liste ansehen"
 
-#~ msgid "view accounts"
-#~ msgstr "Benutzerkonten ansehen"
+msgid "view accounts"
+msgstr "Benutzerkonten ansehen"
 
-#~ msgid "view accounts list and details"
-#~ msgstr "Benutzerkonten ansehen (Liste und Details)"
+msgid "view accounts list and details"
+msgstr "Benutzerkonten ansehen (Liste und Details)"
 
-#~ msgid "view applications"
-#~ msgstr "Anwendungen ansehen"
+msgid "view applications"
+msgstr "Anwendungen ansehen"
 
-#~ msgid "view applications list and details"
-#~ msgstr "Anwendungen ansehen (Liste und Details)"
+msgid "view applications list and details"
+msgstr "Anwendungen ansehen (Liste und Details)"
 
-#~ msgid "view roles"
-#~ msgstr "Rollen ansehen"
+msgid "view roles"
+msgstr "Rollen ansehen"
 
-#~ msgid "view roles list and details"
-#~ msgstr "Rollen ansehen (Liste und Details)"
+msgid "view roles list and details"
+msgstr "Rollen ansehen (Liste und Details)"
 
-#~ msgid "view computers"
-#~ msgstr "Computer ansehen"
+msgid "view computers"
+msgstr "Computer ansehen"
 
-#~ msgid "view computers list and details"
-#~ msgstr "Computerliste und -details ansehen"
+msgid "view computers list and details"
+msgstr "Computerliste und -details ansehen"
 
-#~ msgid "view containers"
-#~ msgstr "Container ansehen"
+msgid "view containers"
+msgstr "Container ansehen"
 
-#~ msgid "view personal and shared containers"
-#~ msgstr "Persönlichen und gemeinsame Container ansehen"
+msgid "view personal and shared containers"
+msgstr "Persönlichen und gemeinsame Container ansehen"
 
-#~ msgid "view customfields"
-#~ msgstr "Zusatzfelder ansehen"
+msgid "view customfields"
+msgstr "Zusatzfelder ansehen"
 
-#~ msgid "view customfields list"
-#~ msgstr "Zusatzfelderliste ansehen"
+msgid "view customfields list"
+msgstr "Zusatzfelderliste ansehen"
 
-#~ msgid "view serverinfo"
-#~ msgstr "Serverinformationen ansehen"
+msgid "view serverinfo"
+msgstr "Serverinformationen ansehen"
 
-#~ msgid "view serverinfo list"
-#~ msgstr "Serverinformationen ansehen"
+msgid "view serverinfo list"
+msgstr "Serverinformationen ansehen"
 
-#~ msgid "view quota usage"
-#~ msgstr "Quota Nutzung ansehen"
+msgid "view quota usage"
+msgstr "Quota Nutzung ansehen"
 
-#~ msgid "IMAP Quota (MB)"
-#~ msgstr "IMAP Kontingent (MB)"
+msgid "IMAP Quota (MB)"
+msgstr "IMAP Kontingent (MB)"
 
-#~ msgid "Sieve Quota (MB)"
-#~ msgstr "Sieve Kontingent (MB)"
+msgid "Sieve Quota (MB)"
+msgstr "Sieve Kontingent (MB)"
 
-#~ msgid "Restart application to apply new customfields?"
-#~ msgstr "Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
+msgid "Restart application to apply new customfields?"
+msgstr ""
+"Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
 
-#~ msgid "Default"
-#~ msgstr "Standard"
+msgid "Default"
+msgstr "Standard"
 
-#~ msgid "view email accounts"
-#~ msgstr "E-Mail-Konten ansehen"
+msgid "view email accounts"
+msgstr "E-Mail-Konten ansehen"
 
-#~ msgid "manage email accounts"
-#~ msgstr "E-Mail-Konten verwalten"
+msgid "manage email accounts"
+msgstr "E-Mail-Konten verwalten"
 
-#~ msgid "You are not allowed to set a forward e-mail address that is identical to the users primary e-mail or one of his aliases."
-#~ msgstr "Sie dürfen keine E-Mail-Adresse zur Weiterleitung festlegen, die mit der primären E-Mail-Adresse des Benutzers oder einem seiner Aliase identisch ist."
+msgid ""
+"You are not allowed to set a forward e-mail address that is identical to "
+"the users primary e-mail or one of his aliases."
+msgstr ""
+"Sie dürfen keine E-Mail-Adresse zur Weiterleitung festlegen, die mit der "
+"primären E-Mail-Adresse des Benutzers oder einem seiner Aliase identisch "
+"ist."
 
-#~ msgid "E-Mail"
-#~ msgstr "E-Mail"
+msgid "E-Mail"
+msgstr "E-Mail"
 
-#~ msgid "E-Mail Accounts"
-#~ msgstr "E-Mail Konten"
+msgid "E-Mail Accounts"
+msgstr "E-Mail Konten"

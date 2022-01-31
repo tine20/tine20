@@ -1793,4 +1793,59 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $this->setFromArray($_data);
         $this->runConvertToRecord();
     }
+
+    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null)
+    {
+        $mc = static::getConfiguration();
+        if (!$mc || empty($grantProtectedFields = $mc->grantProtectedFields)) {
+            return;
+        }
+        if (!isset($grantProtectedFields[$action])) {
+            if (!isset($grantProtectedFields[Tinebase_Controller_Record_Abstract::ACTION_ALL])) {
+                return;
+            }
+            $grantProtectedFields = $grantProtectedFields[Tinebase_Controller_Record_Abstract::ACTION_ALL];
+        } else {
+            $grantProtectedFields = $grantProtectedFields[$action];
+        }
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = Tinebase_Core::getApplicationInstance(static::class);
+
+        $access = [];
+        $deny = [];
+        foreach ($grantProtectedFields as $grant => $fields) {
+            if ($ctrl->checkGrant($this, $grant, false)) {
+                $access = array_unique(array_merge($access, $fields));
+            } else {
+                $deny = array_unique(array_merge($deny, $fields));
+            }
+        }
+        if (empty($denyProperties = array_diff($deny, $access))) {
+            return;
+        }
+
+        if (null === $oldRecord) {
+            $bypassFilters = $this->bypassFilters;
+            $this->bypassFilters = true;
+            try {
+                foreach ($denyProperties as $denyProperty) {
+                    unset($this->{$denyProperty});
+                }
+            } finally {
+                $this->bypassFilters = $bypassFilters;
+            }
+            if (true !== $this->bypassFilters) {
+                $this->isValid(true);
+            }
+        } else {
+            foreach ($denyProperties as $denyProperty) {
+                $this->{$denyProperty} = $oldRecord->{$denyProperty};
+            }
+        }
+    }
+
+    public function setAccountGrants(Tinebase_Record_Interface $grants)
+    {
+        $this->{self::FLD_ACCOUNT_GRANTS} = $grants;
+    }
 }

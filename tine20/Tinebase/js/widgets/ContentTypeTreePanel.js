@@ -142,13 +142,13 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
 
             var contentType = ct.contentType ? ct.contentType : recordClass.getMeta('modelName');
             
-            var group = recordClass ? recordClass.getMeta('group') : false;
+            var group = ct.group || (recordClass ? recordClass.getMeta('group') : false);
             
             if (group) {
                 if(! groupNodes[group]) {
                     groupNodes[group] = new Ext.tree.TreeNode({
                         id : 'modulenode-' + group,
-                        iconCls: modelApp.appName + modelName,
+                        iconCls: ct.groupIconCls || (modelApp.appName + modelName),
                         text: modelApp.i18n._hidden(group),
                         leaf : false,
                         expanded: false

@@ -67,6 +67,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
         self::EXPOSE_JSON_API           => true,
         self::EXPOSE_HTTP_API           => true,
         self::HAS_PERSONAL_CONTAINER    => false,
+        self::DELEGATED_ACL_FIELD       => self::FLDS_EMPLOYEE_ID,
 
         self::APP_NAME                  => HumanResources_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,

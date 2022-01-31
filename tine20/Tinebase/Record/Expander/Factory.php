@@ -123,7 +123,16 @@ class Tinebase_Record_Expander_Factory
                 // we pass here exceptionally the model of the parent class, the constructor will resolve that
                 // and pass along the model of the properties (tinebase_model_[full]user)
                 return new Tinebase_Record_Expander_PropertyClass_User($_model, $_definition, $_rootExpander);
-                break;
+
+            case Tinebase_Record_Expander_Abstract::PROPERTY_CLASS_GRANTS:
+                // we pass here exceptionally the model of the parent class, the constructor will resolve that
+                // and pass along the model of the properties (tinebase_model_[full]user)
+                return new Tinebase_Record_Expander_PropertyClass_Grants($_model, $_definition, $_rootExpander);
+
+            case Tinebase_Record_Expander_Abstract::PROPERTY_CLASS_ACCOUNT_GRANTS:
+                // we pass here exceptionally the model of the parent class, the constructor will resolve that
+                // and pass along the model of the properties (tinebase_model_[full]user)
+                return new Tinebase_Record_Expander_PropertyClass_AccountGrants($_model, $_definition, $_rootExpander);
         }
 
         throw new Tinebase_Exception_InvalidArgument($_class . ' is not supported');

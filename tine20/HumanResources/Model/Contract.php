@@ -53,6 +53,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'appName'         => 'HumanResources',
         'modelName'       => 'Contract',
         'requiredRight'   => HumanResources_Acl_Rights::MANAGE_EMPLOYEE,
+        self::DELEGATED_ACL_FIELD => 'employee_id',
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [

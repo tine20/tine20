@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -36,6 +36,22 @@ class HumanResources_Controller_FreeTimeType extends Tinebase_Controller_Record_
         $this->_modelName = HumanResources_Model_FreeTimeType::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+    }
+
+    protected function _checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.', $_oldRecord = null)
+    {
+        if (!$this->_doContainerACLChecks) {
+            return true;
+        }
+
+        // everybody can see freetimetypes, only admins can do more
+        if (self::ACTION_GET === $_action || Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::ADMIN)) {
+            return true;
+        }
+        if ($_throw) {
+            throw new Tinebase_Exception_AccessDenied($_errorMessage);
+        }
+        return false;
     }
 
     /**
@@ -72,9 +88,7 @@ class HumanResources_Controller_FreeTimeType extends Tinebase_Controller_Record_
             return;
         }
 
-        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_EMPLOYEE, FALSE);
-
-        if (! $hasRight) {
+        if (self::ACTION_GET !== $_action && !$this->checkRight(HumanResources_Acl_Rights::ADMIN, FALSE)) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' free time type.');
         }
         parent::_checkRight($_action);

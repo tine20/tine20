@@ -161,11 +161,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @param int $_containerId
      * @return Felamimail_Model_Account
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = true, $_getDeleted = false, $_aclProtect = true)
     {
         /** @var Felamimail_Model_Account $record */
-        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
-        
+        $record = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
         if ($record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             $this->addSystemAccountConfigValues($record);
         }

@@ -82,6 +82,9 @@ class Timetracker_Convert_Timeaccount_Json extends Tinebase_Convert_Json
                 $timeaccountGrantsArray = [];
                 $modifyGrant = $manageAllRight;
             } else {
+                if ($timeaccountGrantsArray instanceof Tinebase_Model_Grants) {
+                    $timeaccountGrantsArray = $timeaccountGrantsArray->toArray();
+                }
                 $modifyGrant = $manageAllRight || $timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::GRANT_ADMIN];
             }
 

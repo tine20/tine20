@@ -89,13 +89,6 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const SET_INVOICE_NUMBER = 'set_invoice_number';
     
     /**
-     * the right to manage divisions
-     *
-     * @staticvar string
-     */
-    const MANAGE_DIVISIONS = 'manage_divisions';
-    
-    /**
      * the right to manage invoices
      * 
      * @staticvar string
@@ -155,7 +148,6 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CONTRACTS,
             self::MANAGE_COSTCENTERS,
             self::MANAGE_CUSTOMERS,
-            self::MANAGE_DIVISIONS,
         );
         
         // add rights dependent on feature switches
@@ -215,10 +207,6 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_INVOICES => array(
                 'text'          => $translate->_('manage invoices'),
                 'description'   => $translate->_('Add, edit and delete invoices.'),
-            ),
-            self::MANAGE_DIVISIONS => array(
-                'text'          => $translate->_('Manage Divisions'),
-                'description'   => $translate->_('Add, edit and delete divisions.'),
             ),
             self::MANAGE_ORDERCONFIRMATIONS => array(
                 'text'          => $translate->_('Manage Order Confirmations'),

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -19,8 +19,15 @@
 class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
+    use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 
     const RC_JSON_REQUEST = 'jsonRequest';
+
+    protected $_getMultipleGrant = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
+    protected $_requiredFilterACLget = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
+    protected $_requiredFilterACLupdate  = [HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA];
+    protected $_requiredFilterACLsync  = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
+    protected $_requiredFilterACLexport  = [HumanResources_Model_DivisionGrants::READ_TIME_DATA];
 
     /**
      * the constructor
@@ -39,7 +46,40 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
 
         $this->_purgeRecords = false;
         $this->_resolveCustomFields = true;
-        $this->_doContainerACLChecks = false;
+        $this->_doContainerACLChecks = true;
+        $this->_traitCheckFilterACLRight = HumanResources_Acl_Rights::MANAGE_WORKINGTIME;
+    }
+
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    {
+        if (!$this->_doContainerACLChecks) {
+            return true;
+        }
+        
+        // if we have manage_employee right, we have all grants
+        if (Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_WORKINGTIME)) {
+            return true;
+        }
+
+        switch ($_action) {
+            case self::ACTION_GET:
+                try {
+                    HumanResources_Controller_Employee::getInstance()->get($_record->getIdFromProperty('employee_id'));
+                } catch (Tinebase_Exception_AccessDenied $e) {
+                    if ($_throw) {
+                        throw new Tinebase_Exception_AccessDenied($_errorMessage);
+                    } else {
+                        return false;
+                    }
+                }
+                return true;
+            case self::ACTION_CREATE:
+            case self::ACTION_UPDATE:
+            case self::ACTION_DELETE:
+                $_action = HumanResources_Model_DivisionGrants::UPDATE_TIME_DATA;
+                break;
+        }
+        return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
 
     /**
@@ -263,26 +303,5 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
                 $dailyCtrl->setRequestContext([]);
             }
         }
-    }
-
-    /**
-     * check rights
-     *
-     * @param string $_action {get|create|update|delete}
-     * @return void
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    protected function _checkRight($_action)
-    {
-        if (! $this->_doRightChecks) {
-            return;
-        }
-
-        $hasRight = $this->checkRight(HumanResources_Acl_Rights::MANAGE_WORKINGTIME, FALSE);
-
-        if (! $hasRight) {
-            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' monthly WT report.');
-        }
-        parent::_checkRight($_action);
     }
 }

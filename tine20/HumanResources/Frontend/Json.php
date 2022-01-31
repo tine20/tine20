@@ -43,6 +43,8 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::MODEL_NAME_PART,
         'Contract',
         'CostCenter',
+        HumanResources_Model_Division::MODEL_NAME_PART,
+        HumanResources_Model_DivisionGrants::MODEL_NAME_PART,
         'Employee',
         'Account',
         HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
@@ -95,32 +97,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 HumanResources_Model_Stream::MODEL_NAME_PART,
                 HumanResources_Model_StreamModality::MODEL_NAME_PART,
                 HumanResources_Model_StreamModalReport::MODEL_NAME_PART
-            ]);
-        }
-
-        if (!Tinebase_Acl_Roles::getInstance()->hasRight(
-            $this->_applicationName, Tinebase_Core::getUser()->getId(), HumanResources_Acl_Rights::MANAGE_EMPLOYEE)
-        ) {
-            $this->_configuredModels = array_diff($this->_configuredModels, [
-                HumanResources_Model_FreeTimeType::MODEL_NAME_PART,
-                'ExtraFreeTime',
-                'FreeDay',
-                'FreeTime',
-                'Account',
-                'FreeTimePlanning'
-            ]);
-        }
-
-        if (!Tinebase_Acl_Roles::getInstance()->hasRight(
-            $this->_applicationName, Tinebase_Core::getUser()->getId(), HumanResources_Acl_Rights::MANAGE_WORKINGTIME)
-        ) {
-            $this->_configuredModels = array_diff($this->_configuredModels, [
-                HumanResources_Model_BLDailyWTReport_BreakTimeConfig::MODEL_NAME_PART,
-                HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::MODEL_NAME_PART,
-                HumanResources_Model_BLDailyWTReport_WorkingTime::MODEL_NAME_PART,
-                HumanResources_Model_DailyWTReport::MODEL_NAME_PART,
-                HumanResources_Model_MonthlyWTReport::MODEL_NAME_PART,
-                HumanResources_Model_WageType::MODEL_NAME_PART,
             ]);
         }
     }
@@ -536,7 +512,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $maxDate = clone $minDate;
         $maxDate->addYear(1)->subSecond(1);
-        
+
         // find contracts of the year in which the vacation days will be taken
         $contracts = $cController->getValidContracts([
             'from' => $minDate,

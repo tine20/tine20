@@ -27,6 +27,7 @@ class HumanResources_AllTests
         $suite->addTestSuite(HumanResources_Controller_StreamTests::class);
         $suite->addTestSuite(HumanResources_Export_MonthlyWTReportTest::class);
         $suite->addTestSuite(HumanResources_Import_DemoDataTest::class);
+        $suite->addTestSuite(HumanResources_Import_Division::class);
         $suite->addTestSuite(HumanResources_JsonTests::class);
         $suite->addTestSuite(HumanResources_Json_StreamTests::class);
         $suite->addTestSuite(HumanResources_ModelConfigurationTest::class);

@@ -53,9 +53,11 @@ class Tinebase_ModelConfiguration_Const {
      */
     const DEFAULT_VAL_CONFIG = 'defaultValConfig';
     const DEGREE = 'degree';
+    const DELEGATED_ACL_FIELD = 'delegateAclField';
     const DENORMALIZATION_CONFIG = 'denormalizationConfig';
     const DENORMALIZATION_OF = 'denormalizationOf';
     const DEPENDENT_RECORDS = 'dependentRecords';
+    const DESCRIPTION = 'description'; // e.g. Tinebase_Model_Grants
     /**
      * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
      */
@@ -65,6 +67,7 @@ class Tinebase_ModelConfiguration_Const {
     const EXPORT = 'export';
     const EXPOSE_HTTP_API = 'exposeHttpApi';
     const EXPOSE_JSON_API = 'exposeJsonApi';
+    const EXTENDS_CONTAINER = 'extendsContainer';
 
     const FIELDS = 'fields';
     const FIELD_NAME = 'fieldName';
@@ -88,8 +91,10 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER_MODEL = 'filterModel';
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
+    const FLD_ACCOUNT_GRANTS = 'account_grants';
     const FLD_CONTAINER_ID = 'container_id';
     const FLD_DELETED_TIME = 'deleted_time';
+    const FLD_GRANTS = 'grants';
     const FLD_LOCALLY_CHANGED = 'locally_changed';
     const FLD_ORIGINAL_ID = 'original_id';
     const FORCE_VALUES = 'forceValues';
@@ -161,6 +166,11 @@ class Tinebase_ModelConfiguration_Const {
     const RECORD_NAME = 'recordName';
     const RECORDS_NAME = 'recordsName';
     const RECURSIVE_RESOLVING = 'recursiveResolving';
+    const REQUIRED_GRANTS = 'requiredGrants';
+    /**
+     * UI only -> required right to see/use module
+     */
+    const REQUIRED_RIGHT = 'requiredRight';
     const RESOLVE_DELETED = 'resolveDeleted';
     const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 

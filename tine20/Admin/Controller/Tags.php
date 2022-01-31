@@ -103,7 +103,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $tag = Tinebase_Tags::getInstance()->getTagById($_id, /* ignoreAcl = */ true);
         

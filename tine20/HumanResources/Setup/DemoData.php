@@ -152,23 +152,19 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
             : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
         ;
-        
+
         $id = 1;
-        
-        // will throw duplicate exception, so it has been run already
-        try {
-            foreach($ccs as $title) {
-                $cc = new Sales_Model_CostCenter(
-                    array('remark' => $title, 'number' => $id)
-                );
-                
-                $record = $controller->create($cc);
-                $this->_costcenters->addRecord($record);
-    
-                $id++;
+        foreach($ccs as $title) {
+            $cc = new Sales_Model_CostCenter(
+                array('remark' => $title, 'number' => $id)
+            );
+            try {
+                $controller->create($cc);
+            } catch (Zend_Db_Statement_Exception $e) {
+            } catch (Tinebase_Exception_Duplicate $e) {
             }
-        } catch (Exception $e) {
-            $this->_costcenters = $controller->search(new Sales_Model_CostCenterFilter(array()));
+
+            $id++;
         }
         
         $divisionsArray = (static::$_de)
@@ -176,11 +172,18 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             : array('Management', 'IT', 'Marketing', 'Public Relations', 'Production', 'Administration')
         ;
         
-        $this->_divisions = new Tinebase_Record_RecordSet('Sales_Model_Division');
-        
+        $this->_divisions = new Tinebase_Record_RecordSet(HumanResources_Model_Division::class);
+
         foreach($divisionsArray as $divisionName) {
-            $this->_divisions->addRecord(Sales_Controller_Division::getInstance()->create(new Sales_Model_Division(array('title' => $divisionName))));
+            try {
+                HumanResources_Controller_Division::getInstance()->create(new HumanResources_Model_Division(array('title' => $divisionName)));
+            } catch (Zend_Db_Statement_Exception $e) {
+            } catch (Tinebase_Exception_Duplicate $e) {
+            } catch (Tinebase_Exception_SystemGeneric $e) {
+            }
         }
+
+        $this->_loadCostCentersAndDivisions();
     }
     
     /**

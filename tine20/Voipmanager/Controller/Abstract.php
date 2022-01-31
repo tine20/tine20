@@ -69,7 +69,7 @@ abstract class Voipmanager_Controller_Abstract extends Tinebase_Controller_Recor
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $id = Tinebase_Record_Abstract::convertId($_id, $this->_modelName);
         if ($this->_cacheIdPrefix && $this->_cache) {

@@ -59,7 +59,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Document_Invoice::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
         'Contract',
-        'Division',
         'CostCenter',
         'Customer',
         'Offer',
@@ -317,53 +316,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteCostCenters($ids)
     {
         return $this->_delete($ids, Sales_Controller_CostCenter::getInstance());
-    }
-    
-    // division functions
-    
-    /**
-     * Return a single record
-     *
-     * @param   string $id
-     * @return  array record data
-     */
-    public function getDivision($id)
-    {
-        return $this->_get($id, Sales_Controller_Division::getInstance());
-    }
-    
-    /**
-     * creates/updates a record
-     *
-     * @param  array $recordData
-     * @return array created/updated record
-     */
-    public function saveDivision($recordData)
-    {
-        return $this->_save($recordData, Sales_Controller_Division::getInstance(), 'Division');
-    }
-    
-    /**
-     * deletes existing records
-     *
-     * @param  array $ids
-     * @return string
-     */
-    public function deleteDivisions($ids)
-    {
-        return $this->_delete($ids, Sales_Controller_Division::getInstance());
-    }
-    
-    /**
-     * Search for records matching given arguments
-     *
-     * @param  array $filter
-     * @param  array $paging
-     * @return array
-     */
-    public function searchDivisions($filter, $paging)
-    {
-        return $this->_search($filter, $paging, Sales_Controller_Division::getInstance(), 'Sales_Model_DivisionFilter');
     }
 
     // customer methods

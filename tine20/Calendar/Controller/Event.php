@@ -1688,7 +1688,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @see Tinebase_Controller_Record_Abstract::get()
      * @return Calendar_Model_Event
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         if (preg_match('/^fakeid(.*)\/(.*)/', $_id, $matches)) {
             $baseEvent = $this->get($matches[1]);
@@ -1701,7 +1701,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return $exdate !== false ? $exceptions[$exdate] :
                 Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, $originalDtStart);
         } else {
-            return parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+            return parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
         }
     }
     

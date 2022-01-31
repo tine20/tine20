@@ -993,10 +993,14 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         
         return $result;
     }
-    
+
+    public function getOptions()
+    {
+        return $this->_options;
+    }
+
     /************************ protected functions *****************************/
-    
-    
+
     /**
      * set options 
      *

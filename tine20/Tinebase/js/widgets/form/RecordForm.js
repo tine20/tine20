@@ -69,7 +69,7 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
 Tine.widgets.form.RecordForm.getFieldDefinitions = function(recordClass) {
     var fieldNames = recordClass.getFieldNames(),
         modelConfig = recordClass.getModelConfiguration(),
-        fieldsToExclude = ['description', 'tags', 'notes', 'attachments', 'relations', 'customfields'];
+        fieldsToExclude = ['description', 'tags', 'notes', 'attachments', 'relations', 'customfields', 'account_grants', 'grants'];
 
     Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
     fieldsToExclude.push(recordClass.getMeta('idProperty'));

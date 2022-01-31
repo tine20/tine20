@@ -243,17 +243,6 @@ class Sales_Setup_Initialize extends Setup_Initialize
             ))
         ));
 
-        // Divisions
-        $commonValues['model'] = 'Sales_Model_DivisionFilter';
-
-        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
-            array_merge($commonValues, array(
-                'name' => "All Divisions", // _('All Divisions')
-                'description' => "All division records", // _('All division records')
-                'filters' => array(),
-            ))
-        ));
-
         // OrderConfirmations
         $commonValues['model'] = 'Sales_Model_OrderConfirmationFilter';
 
