@@ -40,7 +40,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $date->setDate($date->format('Y'), 2, 1);
 
         $costCenter1 = $this->_getCostCenter($date);
-        $savedEmployee = $this->_saveEmployee($costCenter1, null, 'pwulf');
+        $savedEmployee = $this->_saveEmployee($costCenter1, $date->getClone(), 'pwulf');
         $accountInstance = HumanResources_Controller_Account::getInstance();
         $accountInstance->createMissingAccounts((int) $date->format('Y'));
         $myAccount = $accountInstance->search(new HumanResources_Model_AccountFilter([
