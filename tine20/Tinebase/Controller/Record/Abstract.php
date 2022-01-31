@@ -2075,6 +2075,8 @@ abstract class Tinebase_Controller_Record_Abstract
                     . ' of ' . count((array)$ids) . ' records exist.');
             }
 
+            $this->_checkRight(self::ACTION_DELETE);
+
             if ($records->count() === 0) {
                 $raii->release();
                 return $records;
@@ -2082,8 +2084,6 @@ abstract class Tinebase_Controller_Record_Abstract
         
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Deleting ' . count($records) . ' of ' . $this->_modelName . ' records ...');
-
-            $this->_checkRight(self::ACTION_DELETE);
             
             foreach ($records as $record) {
                 $this->_getRelatedData($record);
