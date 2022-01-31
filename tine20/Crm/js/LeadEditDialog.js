@@ -68,14 +68,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initComponent: function() {
         this.tbarItems = [new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Crm').i18n._(
-                this.record.get('mute') === '1' ?
+                !!+this.record.get('mute') ?
                     'Notifications are disabled' : 'Notifications are enabled'),
             handler: this.onMuteNotificationOnce,
             iconCls: 'action_mute_noteification',
             disabled: false,
             scope: this,
             enableToggle: true,
-            pressed: this.record.get('mute') === '1',
+            pressed: !!+this.record.get('mute'),
         }))];
         Tine.Crm.LeadEditDialog.superclass.initComponent.call(this);
         this.on('recordUpdate', this.onAfterRecordUpdate, this);
@@ -243,7 +243,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Boolean} closeWindow
      */
     onApplyChanges: function(closeWindow) {
-        if (this.app.featureEnabled('featureLeadNotificationConfirmation') && !this.record.get('mute')) {
+        if (this.app.featureEnabled('featureLeadNotificationConfirmation') && !+this.record.get('mute')) {
             Ext.MessageBox.confirm(
                 this.app.i18n._('Send Notification?'),
                 this.app.i18n._('Changes to this lead might send notifications. Press the button "Notifcation are enabled" to switch to "Notification are disabled"'),
