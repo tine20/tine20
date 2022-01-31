@@ -16,6 +16,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -27,6 +28,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE015_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -61,5 +66,11 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                 Tinebase_Record_Abstract::generateUID() . '"');
         }
         $this->addApplicationUpdate('Tinebase', '15.2', self::RELEASE015_UPDATE002);
+    }
+
+    public function update003()
+    {
+        Setup_SchemaTool::updateSchema([Tinebase_Model_MunicipalityKey::class]);
+        $this->addApplicationUpdate('Tinebase', '15.3', self::RELEASE015_UPDATE003);
     }
 }
