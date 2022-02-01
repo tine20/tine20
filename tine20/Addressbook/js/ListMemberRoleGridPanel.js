@@ -140,10 +140,12 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             baseCols = Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n);
 
         // NOTE: contact grid basecols have memberroles with different data layout
-        baseCols = _.filter(baseCols, function(c) {return c.id != 'memberroles'});
+        baseCols = _.filter(baseCols, function(c) {return c.id !== 'memberroles'});
+        baseCols = _.filter(baseCols, function(c) {return c.id !== 'email'});
 
         return baseCols.concat([
-            { id: 'memberroles', header: this.app.i18n._('List Roles'), dataIndex: 'memberroles', renderer: this.listMemberRoleRenderer }
+            { id: 'memberroles', header: this.app.i18n._('List Roles'), dataIndex: 'memberroles', renderer: this.listMemberRoleRenderer },
+            { id: 'email', header: this.app.i18n._('Email'), dataIndex: 'email', renderer: this.preferredEmailRenderer }
         ]);
     },
 
@@ -168,6 +170,9 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         return '';
     },
 
+    preferredEmailRenderer : function(value,metadata,record) {
+        return record.getPreferredEmail();
+    },
 
     onRecordLoad: function(editDialog, record) {
         var _ = window.lodash,
