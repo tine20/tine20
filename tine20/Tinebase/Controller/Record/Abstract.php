@@ -868,10 +868,11 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * allows to override default autoincrement handling
      *
-     * @param $_record
-     * @param $numberable
-     * @param $fieldDef
-     * @param $createNewValue
+     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_oldRecord
+     * @param Tinebase_Numberable_Abstract $numberable
+     * @param array $fieldDef
+     * @param boolean $createNewValue
      * @return mixed
      */
     protected function _inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue)

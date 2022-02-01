@@ -3242,12 +3242,7 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$attachment\\)\\: Unexpected token \"\\$attachment\", expected type at offset 18$#"
-			count: 3
-			path: tine20/Felamimail/Controller/Message/Send.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$attachment\\)\\: Unexpected token \"\\$attachment\", expected type at offset 68$#"
-			count: 1
+			count: 2
 			path: tine20/Felamimail/Controller/Message/Send.php
 
 		-
@@ -6409,21 +6404,6 @@ parameters:
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 82$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$createNewValue\\)\\: Unexpected token \"\\$createNewValue\", expected type at offset 155$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$fieldDef\\)\\: Unexpected token \"\\$fieldDef\", expected type at offset 131$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$foreignModel\\)\\: Unexpected token \"\\$foreignModel\", expected type at offset 226$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
@@ -6435,11 +6415,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$idProp\\)\\: Unexpected token \"\\$idProp\", expected type at offset 280$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$numberable\\)\\: Unexpected token \"\\$numberable\", expected type at offset 105$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
@@ -6480,11 +6455,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property object\\:\\:\\$account_grants\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Container.php
-
-		-
-			message: "#^Cannot call abstract static method Tinebase_Controller_Interface\\:\\:getInstance\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Container.php
 
