@@ -164,8 +164,8 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @param {} options
      */
     onStoreLoad: function(store, records, options) {
-        this.addAlternativeEmail(store, records);
         this.removeDuplicates(store);
+        this.addAlternativeEmail(store, records);
     },
     
     /**
@@ -225,7 +225,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     
                 emailArray = _.difference(emailArray, _.map(duplicates.items, 'data.email'));
                 record.data.emails = _.join(emailArray, ',');
-                
+                Tine.log.debug('remove duplicate: ' + Tine.Felamimail.getEmailStringFromContact(record));
                 store.removeAt(idx);
                 
                 if (emailArray.length > 0) {
