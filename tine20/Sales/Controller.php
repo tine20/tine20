@@ -155,6 +155,36 @@ class Sales_Controller extends Tinebase_Controller_Event
 
         return $result;
     }
+    
+    public function createUpdatePostalAddress($contact)
+    {
+        $relations = Tinebase_Relations::getInstance()->getRelations(Addressbook_Model_Contact::class,'Sql', $contact->getId());
+        $customer = $relations->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
+
+        if ($customer) {
+            $postal = Sales_Controller_Address::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, [
+                ['field' => Sales_Model_Address::FLD_CUSTOMER_ID, 'operator' => 'equals', 'value' => $customer->related_id],
+                ['field' => Sales_Model_Address::FLD_TYPE, 'operator' => 'equals', 'value' => 'postal'],
+            ]))->getFirstRecord();
+
+            if ($postal) {
+                Sales_Controller_Address::getInstance()->contactToCustomerAddress($postal, $contact);
+            } else {
+                $postal = new Sales_Model_Address(array(
+                    'customer_id' => $customer->related_id,
+                    'name' => $customer->related_record->name,
+                    'street' =>  $contact->adr_one_street,
+                    'postalcode' => $contact->adr_one_postalcode,
+                    'locality' => $contact->adr_one_locality,
+                    'countryname' => $contact->adr_one_countryname,
+                    'prefix1' => $customer->related_record->name == $contact->n_fn ? '' : $contact->n_fn,
+                    'language' => $contact->language,
+                ));
+
+                Sales_Controller_Address::getInstance()->create($postal);
+            }
+        }
+    }
 
     /**
      * event handler function
@@ -166,34 +196,11 @@ class Sales_Controller extends Tinebase_Controller_Event
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         switch (get_class($_eventObject)) {
+            case Addressbook_Event_CreateContact::class:
+                $this->createUpdatePostalAddress($_eventObject->createdContact);
+                break;
             case Addressbook_Event_InspectContactAfterUpdate::class:
-                $contact = $_eventObject->updatedContact;
-                $relations = Tinebase_Relations::getInstance()->getRelations(Addressbook_Model_Contact::class,'Sql', $contact->getId());
-                $customer = $relations->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
-
-                if ($customer) {
-                    $postal = Sales_Controller_Address::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, [
-                        ['field' => Sales_Model_Address::FLD_CUSTOMER_ID, 'operator' => 'equals', 'value' => $customer->related_id],
-                        ['field' => Sales_Model_Address::FLD_TYPE, 'operator' => 'equals', 'value' => 'postal'],
-                    ]))->getFirstRecord();
-
-                    if ($postal) {
-                        Sales_Controller_Address::getInstance()->contactToCustomerAddress($postal, $contact);
-                    } else {
-                        $postal = new Sales_Model_Address(array(
-                            'customer_id' => $customer->related_id,
-                            'name' => $customer->related_record->name,
-                            'street' =>  $contact->adr_one_street,
-                            'postalcode' => $contact->adr_one_postalcode,
-                            'locality' => $contact->adr_one_locality,
-                            'countryname' => $contact->adr_one_countryname,
-                            'prefix1' => $customer->related_record->name == $contact->n_fn ? '' : $contact->n_fn,
-                        ));
-
-                        Sales_Controller_Address::getInstance()->create($postal);
-                    }
-                }
-
+                $this->createUpdatePostalAddress($_eventObject->updatedContact);
                 break;
         }
     }
