@@ -74,6 +74,8 @@ deploy-built-image-to-dockerhub:
 
 release-to-gitlab:
   extends: .abstract_jobs.docker
+  variables:
+    GIT_DEPTH: 100
   stage: deploy
   needs:
     - docker_build_packages
