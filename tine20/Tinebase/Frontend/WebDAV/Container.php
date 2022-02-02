@@ -220,8 +220,13 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         $children = array();
         
+        try {
+            $childNodes = Tinebase_FileSystem::getInstance()->scanDir($this->_path);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $this->_path . ' not found');
+        }
         // Loop through the directory, and create objects for each node
-        foreach (Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
+        foreach ($childNodes as $node) {
             try {
                 if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)) {
                     $children[] = $this->getChild($node->name);

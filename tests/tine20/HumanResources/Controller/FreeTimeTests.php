@@ -21,19 +21,19 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
         parent::tearDown();
     }
 
-    protected function _getAccount2018()
+    protected function _getAccount2018($user = null)
     {
         if (null === $this->_account2018) {
-            $this->_createBasicData('pwulf');
+            $this->_createBasicData($user ?: 'pwulf');
             HumanResources_Controller_Account::getInstance()->createMissingAccounts(2018, $this->employee->getId());
             $this->_account2018 = HumanResources_Controller_Account::getInstance()->getByEmployeeYear($this->employee->getId(), 2018);
         }
         return $this->_account2018;
     }
 
-    protected function _createFreeTime()
+    protected function _createFreeTime($user = null)
     {
-        $accountId = $this->_getAccount2018()->getId();
+        $accountId = $this->_getAccount2018($user)->getId();
 
         return HumanResources_Controller_FreeTime::getInstance()->create(
             new HumanResources_Model_FreeTime([
@@ -65,7 +65,8 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
 
     public function testFreeDaysGrantFail()
     {
-        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Tinebase_Core::setUser($this->_personas['jsmith']);
+
         $this->expectException(Tinebase_Exception_AccessDenied::class);
         $this->expectExceptionMessage('acl delegation field freetime_id must not be empty');
         HumanResources_Controller_FreeDay::getInstance()->create(new HumanResources_Model_FreeDay([]));
@@ -73,9 +74,9 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
 
     public function testFreeDaysGrant1Fail()
     {
-        $freeTime = $this->_createFreeTime();
+        $freeTime = $this->_createFreeTime('jsmith');
 
-        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Tinebase_Core::setUser($this->_personas['jsmith']);
         $this->expectException(Tinebase_Exception_AccessDenied::class);
         $this->expectExceptionMessage('No Permission.');
         HumanResources_Controller_FreeDay::getInstance()->create(new HumanResources_Model_FreeDay([
@@ -85,14 +86,14 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
 
     public function testFreeDaysGrantAccessFail()
     {
-        $freeTime = $this->_createFreeTime();
+        $freeTime = $this->_createFreeTime('jsmith');
 
         $freeDay = HumanResources_Controller_FreeDay::getInstance()->search(new HumanResources_Model_FreeDayFilter([
             ['field' => 'freetime_id', 'operator' => 'equals', 'value' => $freeTime->getId()]
         ]))->getFirstRecord();
         $this->assertNotNull($freeDay);
 
-        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Tinebase_Core::setUser($this->_personas['jsmith']);
         $this->expectException(Tinebase_Exception_AccessDenied::class);
         $this->expectExceptionMessage('No Permission.');
         HumanResources_Controller_FreeDay::getInstance()->get($freeDay->getId());
@@ -100,9 +101,9 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
 
     public function testFreeDaysGrantAccessFail1()
     {
-        $freeTime = $this->_createFreeTime();
+        $freeTime = $this->_createFreeTime('jsmith');
 
-        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Tinebase_Core::setUser($this->_personas['jsmith']);
 
         $this->assertSame(0, HumanResources_Controller_FreeDay::getInstance()
             ->search(new HumanResources_Model_FreeDayFilter([
@@ -112,14 +113,14 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
 
     public function testAccessOwnDataGrant()
     {
-        $freeTime = $this->_createFreeTime();
+        $freeTime = $this->_createFreeTime('jsmith');
 
         Tinebase_Container::getInstance()->addGrants(
             HumanResources_Controller_Division::getInstance()->get($this->employee->division_id)->container_id,
-            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $this->_personas['pwulf']->getId(),
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $this->_personas['jsmith']->getId(),
             [HumanResources_Model_DivisionGrants::READ_OWN_DATA], true);
 
-        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Tinebase_Core::setUser($this->_personas['jsmith']);
 
         $freeDays = HumanResources_Controller_FreeDay::getInstance()->search(new HumanResources_Model_FreeDayFilter([
             ['field' => 'freetime_id', 'operator' => 'equals', 'value' => $freeTime->getId()]
