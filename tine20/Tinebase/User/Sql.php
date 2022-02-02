@@ -504,9 +504,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 )
             );
 
-        if (!$this->isHardDeleteEnabled()) {
             $select->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.is_deleted') . ' = 0');
-        }
 
         return $select;
     }
