@@ -211,9 +211,9 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
             }
         });
     
-        // remove duplicated email addresses in mailingList , 
+        // only remove duplicated email addresses with type mailingList , 
         store.each(function(record) {
-            if (record.data.emails !== '') {
+            if (record.data.emails !== '' && record.data.type === 'useAsMailinglist') {
                 const idx = store.indexOf(record);
                 let emailArray = _.compact(_.split(record.data.emails, ','));
                 
@@ -222,10 +222,10 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                         return record.id !== contact.id && _.includes(emailArray, contact.data.email);
                     }
                 });
-    
+                
                 emailArray = _.difference(emailArray, _.map(duplicates.items, 'data.email'));
                 record.data.emails = _.join(emailArray, ',');
-                
+                Tine.log.debug('remove duplicate email from mailing list: ' + Tine.Felamimail.getEmailStringFromContact(record));
                 store.removeAt(idx);
                 
                 if (emailArray.length > 0) {
