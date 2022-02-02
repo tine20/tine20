@@ -69,6 +69,7 @@ class Tinebase_ModelConfiguration_Const {
     const EXPOSE_JSON_API = 'exposeJsonApi';
     const EXTENDS_CONTAINER = 'extendsContainer';
 
+    const FIELD = 'field';
     const FIELDS = 'fields';
     const FIELD_NAME = 'fieldName';
     const FILTER = 'filter';

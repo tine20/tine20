@@ -34,8 +34,7 @@ class Sales_Import_Product_Csv extends Tinebase_Import_Csv_Generic
         $mc = Sales_Model_Product::getConfiguration();
         /** @var Tinebase_Config_KeyField $kFld */
         $kFld = Tinebase_Config::factory($mc->{Sales_Model_Product::LANGUAGES_AVAILABLE}[Sales_Model_Product::CONFIG]
-            [Sales_Model_Product::APP_NAME])->{$mc->{Sales_Model_Product::LANGUAGES_AVAILABLE}
-            [Sales_Model_Product::CONFIG][Sales_Model_Product::NAME]};
+            [Sales_Model_Product::APP_NAME])->{$mc->{Sales_Model_Product::LANGUAGES_AVAILABLE}[Sales_Model_Product::NAME]};
         $this->defaultLanguage = $kFld->default;
 
         foreach ($mc->fields as $key => $field) {

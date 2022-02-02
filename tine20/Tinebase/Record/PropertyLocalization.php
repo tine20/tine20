@@ -18,6 +18,9 @@ abstract class Tinebase_Record_PropertyLocalization extends Tinebase_Record_NewA
         self::VERSION                       => 1,
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
+        self::DEFAULT_SORT_INFO             => [
+            self::FIELD                         => self::FLD_TEXT,
+        ],
 
         self::TABLE                         => [
             self::NAME                          => '',

@@ -30,6 +30,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
     protected $_field;
     protected $_value;
     protected $_operator;
+    protected $_clientOptions;
 
     /**
      * constructs a new filter group
@@ -61,6 +62,9 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
         }
         if (isset($_data['label'])) {
             $this->setLabel($_data['label']);
+        }
+        if (isset($_data['clientOptions'])) {
+            $this->_clientOptions = $_data['clientOptions'];
         }
 
         $this->_field = $_data['field'];
@@ -118,7 +122,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
     {
         $subGroup = new Tinebase_Model_Filter_FilterGroup(array(), $condition);
         foreach ($this->_options['fields'] as $field) {
-            $filter = $parentFilterGroup->createFilter($field, $this->_operator, $query);
+            $filter = $parentFilterGroup->createFilter(['field' => $field, 'operator' => $this->_operator, 'value' => $query, 'clientOptions' => $this->_clientOptions]);
             $this->_addFilterToGroup($subGroup, $filter);
         }
 
@@ -137,7 +141,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
         Tinebase_Model_Filter_FilterGroup $innerGroup)
     {
         foreach ($this->_options['fields'] as $field) {
-            $filter = $parentFilterGroup->createFilter($field, $this->_operator, $queries);
+            $filter = $parentFilterGroup->createFilter(['field' => $field, 'operator' => $this->_operator, 'value' => $queries, 'clientOptions' => $this->_clientOptions]);
             $this->_addFilterToGroup($innerGroup, $filter);
         }
     }
