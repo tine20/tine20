@@ -131,7 +131,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
 
-        $emailFields = ['n_fileas', 'email', 'email_home'];
+        $emailFields = ['n_fileas', 'email', 'email_home', 'type'];
         foreach ($contacts["results"] as $contact) {
             $emailData = [];
             foreach ($emailFields as $field) {
@@ -174,9 +174,17 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     if (isset($list['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
                         && $list['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] == 1
                     ) {
-                        array_push($results, array("n_fileas" => $list["name"], "emails" => [$list['email']]));
+                        array_push($results, array(
+                            "n_fileas" => $list["name"], 
+                            "emails" => [$list['email']], 
+                            "type" => Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST,
+                        ));
                     } else if (! empty($list["emails"])) {
-                        array_push($results, array("n_fileas" => $list["name"], "emails" => $list["emails"]));
+                        array_push($results, array(
+                            "n_fileas" => $list["name"], 
+                            "emails" => $list["emails"],  
+                            "type" => $list["type"]
+                        ));
                     }
                 }
             }
