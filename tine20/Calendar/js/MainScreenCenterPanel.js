@@ -73,6 +73,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     stateful: true,
     stateId: 'cal-mainscreen',
     stateEvents: ['changeview'],
+    hasQuickSearchFilterToolbarPlugin: true,
     
     getState: function () {
         return Ext.copyTo({}, this, 'activeView');
