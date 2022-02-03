@@ -5177,3 +5177,8 @@ msgstr ""
 
 msgid "Create {0}"
 msgstr "{0} erstellen"
+
+#: Model/MunicipalityKey.php:214
+msgid "plz"
+msgstr "PLZ"
+
