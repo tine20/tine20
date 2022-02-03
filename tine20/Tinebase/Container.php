@@ -476,6 +476,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     {
         // legacy handling
         $meta = $this->_resolveRecordClassArgument($recordClass);
+        $recordClass = $meta['recordClass'];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' app: ' . $meta['appName'] . ' / account: ' . $accountId . ' / grant:' . implode('/', (array)$grant));
