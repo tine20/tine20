@@ -32,5 +32,13 @@
             <source>email</source>
             <destination>accountEmailAddress</destination>
         </field>
+        <field>
+            <source>primary_group_id</source>
+            <destination>accountPrimaryGroup</destination>
+        </field>
+        <field>
+            <source>additional_groups</source>
+            <destination>groups</destination>
+        </field>
     </mapping>
 </config>
