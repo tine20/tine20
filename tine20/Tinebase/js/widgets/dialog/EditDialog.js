@@ -251,9 +251,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
          * @param {Funciton} fn check state function
          */
         registerCheckStateProvider: function(field, fn) {
-            arguments.callee.__providers = arguments.callee.__providers || {};
-            arguments.callee.__providers[field] = arguments.callee.__providers[field] || [];
-            arguments.callee.__providers[field].push(fn);
+            this.registerCheckStateProvider.__providers = this.registerCheckStateProvider.__providers || {}
+            this.registerCheckStateProvider.__providers[field] = this.registerCheckStateProvider.__providers[field] || []
+            this.registerCheckStateProvider.__providers[field].push(fn)
         },
         getCheckStateProviders(field) {
             return _.get(this, `registerCheckStateProvider.__providers.${field}`, []);

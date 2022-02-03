@@ -206,4 +206,14 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
 
         parent::hydrateFromBackend($data);
     }
+
+    /**
+     * @see Tinebase_Record_Abstract
+     */
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'CONTACTADDRESS', 'degree' => 'sibling', 'text' => 'Contact Address', 'max' => '0:0'), // _('Invoice Item')
+        ), 'defaultType' => 'CONTACTADDRESS'
+        ),
+    );
 }

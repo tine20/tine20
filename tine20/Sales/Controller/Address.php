@@ -150,6 +150,37 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
     
         return $_ids;
     }
+    
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        //Do not update Address Records with a relation to a contact from type CONTACTADDRESS
+        $addressFields = [
+            'name',
+            'street',
+            'postalcode',
+            'locality',
+            'countryname',
+            'prefix1',
+            'language',
+        ];
+        $relations = $_record->relations;
+
+        if (!$relations) {
+            return;
+        }
+        foreach ($relations as $relation) {
+            if ($relation['type'] == 'CONTACTADDRESS') {
+                $diff = $_record->diff($_oldRecord)->diff;
+                foreach ($diff as $key => $value) {
+                    if (in_array($key, $addressFields) && $value !== null) {
+                        throw new Tinebase_Exception_AccessDenied('It is not allowed to change an address that is linked to a contact.');
+                    }
+                }
+            }
+        }
+    }
 
 
     /**
