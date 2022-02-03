@@ -192,6 +192,12 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             }
 
             return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data);
+        } else if (_.get(this.fields.get(this.titleProperty), 'fieldDefinition.config.specialType') === 'localizedString') {
+            // const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(this.constructor, this.titleProperty);
+            const languagesAvailableDef = _.get(this.constructor.getModelConfiguration(), 'languagesAvailable')
+            const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', this.appName), languagesAvailableDef.name)
+            const value = this.get(this.titleProperty);
+            return _.get(_.find(value, { language: keyFieldDef.default }) || _.get(value, '[0]'), 'text', '');
         } else {
             var s = this.titleProperty ? this.titleProperty.split('.') : [null];
             return (s.length > 0 && this.get(s[0]) && this.get(s[0])[s[1]]) ? this.get(s[0])[s[1]] : s[0] ? this.get(this.titleProperty) : '';

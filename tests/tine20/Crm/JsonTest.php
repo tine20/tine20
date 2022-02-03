@@ -150,7 +150,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertFalse(is_array($relatedTask), 'task must not be found');
         
         $this->assertTrue(isset($relatedProduct), 'product not found');
-        $this->assertEquals($this->_getProduct()->name, $relatedProduct['name'], 'product name does not match');
+        $this->assertEquals($this->_getProduct()->name[0]['text'], $relatedProduct['name'][0]['text'], 'product name does not match');
         
         // delete all
         $this->_getUit()->deleteLeads($savedLead['id']);

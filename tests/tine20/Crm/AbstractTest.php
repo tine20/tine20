@@ -222,7 +222,10 @@ class Crm_AbstractTest extends TestCase
     protected function _getProduct()
     {
         return new Sales_Model_Product(array(
-            'name'  => 'PHPUnit test product',
+            'name'  => [[
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'en',
+                Tinebase_Record_PropertyLocalization::FLD_TEXT => 'PHPUnit test product'
+            ]],
             'price' => 10000,
             'gtin'  => 1234
         ));

@@ -46,6 +46,8 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
     protected $_recordFields = null;
 
+    protected $_recordsFields = null;
+
     /**
      * validators
      * 
@@ -70,6 +72,8 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         'model'                => array('allowEmpty'    => true,
                                         'default'       => NULL         ),
     );
+
+    protected static $context = [];
 
     /**
      * @return array
@@ -117,6 +121,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 }
                 $this->_virtualFields = $mc->getVirtualFields();
                 $this->_recordFields = $mc->recordFields;
+                $this->_recordsFields = $mc->recordsFields;
             } else {
                 $this->_identifier = (new $model([], true))->getIdProperty();
             }
@@ -165,9 +170,11 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
             }
             $virtualFields = [];
             $recordFields = [];
+            $recordsFields = [];
         } else {
             $virtualFields = $this->_virtualFields;
             $recordFields = $this->_recordFields;
+            $recordsFields = $this->_recordsFields;
         }
         $mapping = $this->_externalSortMapping;
         $customfields = $this->_customFields;
@@ -280,6 +287,71 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                     []
                 );
                 $field = $relatedTableName . '.' . $relatedField;
+            } elseif (isset($recordsFields[$field]) && isset($recordsFields[$field]['config']) &&
+                    isset($recordsFields[$field]['config']['appName']) &&
+                    isset($recordsFields[$field]['config']['modelName']) &&
+                    isset($recordsFields[$field]['config'][Tinebase_Record_Abstract::SPECIAL_TYPE]) &&
+                    Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING === $recordsFields[$field]['config'][Tinebase_Record_Abstract::SPECIAL_TYPE]) {
+                /** @var Tinebase_Record_Interface $relatedModel */
+                $relatedModel = $recordsFields[$field]['config'][Tinebase_Record_Abstract::RECORD_CLASS_NAME];
+                if (null === ($relatedMC = $relatedModel::getConfiguration())) {
+                    $e = new Tinebase_Exception_InvalidArgument('related model not a modelconfig model in pagination: '
+                        . $relatedModel);
+                    Tinebase_Exception::log($e);
+                    continue;
+                }
+
+                if (is_array($relatedMC->defaultSortInfo) && isset($relatedMC->defaultSortInfo['field'])) {
+                    $relatedField = $relatedMC->defaultSortInfo['field'];
+                } else {
+                    if (is_array($relatedMC->titleProperty)) {
+                        $relatedField = $relatedMC->titleProperty[1][0];
+                    } else {
+                        $relatedField = $relatedMC->titleProperty;
+                    }
+                }
+
+                $db = $_select->getAdapter();
+                $correlationName = null;
+                $tableName = SQL_TABLE_PREFIX . $relatedMC->getTableName();
+                foreach ($_select->getPart(Zend_Db_Select::FROM) as $cName => $fromConfig) {
+                    if ($tableName === $fromConfig['tableName']) {
+                        $correlationName = $cName;
+                    }
+                }
+                if (null === $correlationName) {
+                    ++$joinCount;
+                    $correlationName = $relatedMC->getTableName() . '_recPagi' . $joinCount;
+                    $refIdField = $recordsFields[$field]['config'][Tinebase_Record_Abstract::REF_ID_FIELD];
+                    $forcedValues = '';
+                    $cfg = Tinebase_Config_Abstract::factory($mc->{Tinebase_Record_Abstract::LANGUAGES_AVAILABLE}
+                        [Tinebase_Record_Abstract::CONFIG][Tinebase_Record_Abstract::APP_NAME]);
+                    $defaultLang = $cfg->{$mc->{Tinebase_Record_Abstract::LANGUAGES_AVAILABLE}[Tinebase_Record_Abstract::NAME]}->default;
+                    if (isset(static::$context[Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING][$relatedModel]['language'])) {
+                        $defaultLang = static::$context[Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING][$relatedModel]['language'];
+                        unset(static::$context[Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING][$relatedModel]['language']);
+                    }
+                    foreach ($recordsFields[$field]['config'][Tinebase_Record_Abstract::FORCE_VALUES] as $f => $v) {
+                        $forcedValues .= ' AND ' . $db->quoteIdentifier([$correlationName, $f])
+                            . $db->quoteInto(' = ?', $v);
+                    }
+                    $_select->joinLeft(
+                        [$correlationName => $tableName],
+                        $db->quoteIdentifier([$mc->getTableName(), $relatedMC->getIdProperty()]) . ' = ' .
+                        $db->quoteIdentifier([$correlationName, $refIdField]) .
+                        ($relatedMC->modlogActive && ! $_getDeleted ?
+                            ' AND ' . $db->quoteIdentifier([$correlationName, 'is_deleted']) . ' = 0': '')
+                        . $forcedValues . ' AND '
+                        . $db->quoteIdentifier([$correlationName, Tinebase_Record_PropertyLocalization::FLD_LANGUAGE])
+                        . $db->quoteInto(' = ?', $defaultLang),
+                        []
+                    );
+                    if (empty($_select->getPart(Zend_Db_Select::GROUP))) {
+                        $_select->group($mc->getTableName() . '.' . $mc->getIdProperty());
+                    }
+                }
+                $field = $correlationName . '.' . $relatedField;
+
             } elseif (null !== ($cfCfg = $customfields->find('name', $field))) {
                 ++$joinCount;
                 $db = $_select->getAdapter();
@@ -400,5 +472,15 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                     );
         }
         return $order;
+    }
+
+    public static function setContext(array $context)
+    {
+        static::$context = $context;
+    }
+
+    public static function getContext(): array
+    {
+        return static::$context;
     }
 }

@@ -384,10 +384,20 @@ class Sales_JsonTest extends TestCase
      */
     public function testAddGetSearchDeleteProduct()
     {
-        $this->_testSimpleRecordApi('Product', 'name', 'description', true, [
+        $product = $this->_testSimpleRecordApi('Product', null, null, true, [
+            'name' => [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                Sales_Model_ProductLocalization::FLD_TEXT => 'test name',
+            ]],
+            'description' => [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                Sales_Model_ProductLocalization::FLD_TEXT => 'test desc',
+            ]],
             'price' => 10000,
             'default_sorting' => '',
-        ]);
+        ], false);
+        $this->assertArrayHasKey(Sales_Model_ProductLocalization::FLD_RECORD_ID, $product['name'][0]);
+        $this->assertSame($product['id'], $product['name'][0][Sales_Model_ProductLocalization::FLD_RECORD_ID]);
     }
     
     /**
@@ -445,20 +455,20 @@ class Sales_JsonTest extends TestCase
         );
         $savedProduct = $this->_instance->saveProduct($savedProduct);
         
-        $savedProduct['name'] = 'changed name';
+        $savedProduct['name'][0][Sales_Model_ProductLocalization::FLD_TEXT] = 'changed name';
         $savedProductNameChanged = $this->_instance->saveProduct($savedProduct);
         
-        $savedProductNameChanged['name'] = 'PHPUnit test product';
+        $savedProductNameChanged['name'][0][Sales_Model_ProductLocalization::FLD_TEXT] = 'PHPUnit test product';
         $savedProductNameChangedAgain = $this->_instance->saveProduct($savedProductNameChanged);
         
-        $this->assertEquals('PHPUnit test product', $savedProductNameChangedAgain['name']);
+        $this->assertEquals('PHPUnit test product', $savedProductNameChangedAgain['name'][0][Sales_Model_ProductLocalization::FLD_TEXT]);
     }
 
     public function testSubProducts()
     {
         $product = $this->_getProduct();
         $subProduct1 = $this->_getProduct();
-        $subProduct1->name = 'sub1';
+        $subProduct1->name[0][Sales_Model_ProductLocalization::FLD_TEXT] = 'sub1';
         $savedSubProduct1 = $this->_instance->saveProduct($subProduct1->toArray());
         $subMapping1 = new Sales_Model_SubProductMapping([
             Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $savedSubProduct1,
@@ -466,7 +476,7 @@ class Sales_JsonTest extends TestCase
             Sales_Model_SubProductMapping::FLD_QUANTITY => 1,
         ], true);
         $subProduct2 = $this->_getProduct();
-        $subProduct2->name = 'sub2';
+        $subProduct2->name[0][Sales_Model_ProductLocalization::FLD_TEXT] = 'sub2';
         $savedSubProduct2 = $this->_instance->saveProduct($subProduct2->toArray());
         $subMapping2 = new Sales_Model_SubProductMapping([
             Sales_Model_SubProductMapping::FLD_PRODUCT_ID => $savedSubProduct2,
@@ -636,9 +646,15 @@ class Sales_JsonTest extends TestCase
     protected function _getProduct()
     {
         return new Sales_Model_Product(array(
-            'name'          => 'PHPUnit test product',
+            'name'          => [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                Sales_Model_ProductLocalization::FLD_TEXT => 'PHPUnit test product',
+            ]],
             'price'         => 10000,
-            'description'   => 'test product description'
+            'description'   => [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                Sales_Model_ProductLocalization::FLD_TEXT => 'test product description',
+            ]],
         ));
     }
 

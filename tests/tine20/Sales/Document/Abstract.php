@@ -17,7 +17,10 @@ class Sales_Document_Abstract extends TestCase
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(array_merge([
-            Sales_Model_Product::FLD_NAME => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Product::FLD_NAME => [[
+                Sales_Model_ProductLocalization::FLD_LANGUAGE => 'en',
+                Sales_Model_ProductLocalization::FLD_TEXT => Tinebase_Record_Abstract::generateUID(),
+            ]],
         ], $data)));
     }
 

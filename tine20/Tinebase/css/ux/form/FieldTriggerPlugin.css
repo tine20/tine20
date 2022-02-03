@@ -36,3 +36,7 @@
     background-size: contain;
 }
 
+.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap > .x-form-trigger-plugin {
+    right: 32px;
+    top: 0px;
+}
