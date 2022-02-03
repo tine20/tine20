@@ -520,7 +520,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         // any account should have at least one personal folder
         // @todo add test for empty case
         if (empty($result)) {
-            $personalContainer = $this->getDefaultContainer($recordClass, $accountId);
+            /** @var Tinebase_Record_Interface $recordClass */
+            if (!($mc = $recordClass::getConfiguration()) || $mc->hasPersonalContainer) {
+                $personalContainer = $this->getDefaultContainer($recordClass, $accountId);
+            } else {
+                $personalContainer = null;
+            }
             if ($personalContainer instanceof Tinebase_Model_Container) {
                 $result = ($onlyIds) ? 
                     array($personalContainer->getId()) : 
@@ -1212,11 +1217,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
             }
 
-            // get personal container
-            $personalContainer = $this->getDefaultContainer($container->model, Tinebase_Core::getUser());
-            if ((string)($personalContainer->getId()) === (string)$containerId) {
-                // _('You are not allowed to delete your default container!')
-                throw new Tinebase_Exception_SystemGeneric('You are not allowed to delete your default container!');
+            if ($container->type === Tinebase_Model_Container::TYPE_PERSONAL) {
+                // get personal container
+                $personalContainer = $this->getDefaultContainer($container->model, Tinebase_Core::getUser());
+                if ((string)($personalContainer->getId()) === (string)$containerId) {
+                    // _('You are not allowed to delete your default container!')
+                    throw new Tinebase_Exception_SystemGeneric('You are not allowed to delete your default container!');
+                }
             }
         }
 
