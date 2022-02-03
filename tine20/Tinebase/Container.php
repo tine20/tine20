@@ -1956,9 +1956,19 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     'time'         => Tinebase_DateTime::now(),
                     'content_seq'  => $newContentSeq,
                 ));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__
                     . ' Creating "' . $action . '" action content history record for record id ' . $recordId);
-                $this->getContentBackend()->create($contentRecord);
+                try {
+                    $this->getContentBackend()->create($contentRecord);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                    } else {
+                        throw $zdse;
+                    }
+                }
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
