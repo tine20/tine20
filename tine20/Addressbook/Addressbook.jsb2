@@ -40,23 +40,7 @@
           "path": "js/"
         },
         {
-          "text": "AddressRenderer.js",
-          "path": "js/"
-        },
-        {
-          "text": "CountryRenderer.js",
-          "path": "js/"
-        },
-        {
-          "text": "MailAddressRenderer.js",
-          "path": "js/"
-        },
-        {
-          "text": "ImageRenderer.js",
-          "path": "js/"
-        },
-        {
-          "text": "UrlRenderer.js",
+          "text": "renderers.js",
           "path": "js/"
         },
         {
