@@ -578,18 +578,26 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     protected function _getConfdFileData($filename)
     {
-        $result = @shell_exec("php -l $filename");
-        if (preg_match('/parse error/i', $result)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' PHP syntax check failed for ' . $filename . ': ' . $result);
-            return false;
+        if (Tinebase_Helper::hasShellExec()) {
+            $result = @shell_exec("php -l $filename");
+            if (preg_match('/parse error/i', $result)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' PHP syntax check failed for ' . $filename . ': ' . $result);
+                return false;
+            }
         }
 
-        // check first chars to prevent leading spaces
-        $content = file_get_contents($filename, false, null, 0, 200);
-        if (strpos($content, '<?php') !== 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not find leading PHP open tag in ' . $filename);
+        if (file_exists($filename) && is_readable($filename)) {
+            // check first chars to prevent leading spaces
+            $content = file_get_contents($filename, false, null, 0, 200);
+            if (strpos($content, '<?php') !== 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not find leading PHP open tag in ' . $filename);
+                return false;
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' File not readable: ' . $filename);
             return false;
         }
 
