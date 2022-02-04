@@ -1909,3 +1909,6 @@ msgstr "Lieferscheinstatus-Übergänge"
 #: Config.php:424
 msgid "Possible Delivery Note Status Transitions"
 msgstr "Mögliche Lieferscheinstatus-Übergänge"
+
+msgid "More Boilerplates"
+msgstr "Weitere Textbausteine"

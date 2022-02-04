@@ -58,7 +58,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         // add specific search combo to be able to switch "userOnly" for system groups
         this.searchCombo = new Tine.Addressbook.SearchCombo({
             accountsStore: this.store,
-            emptyText: i18n._('Search for members ...'),
+            emptyText: this.app.i18n._('Search for members ...'),
             newRecordClass: this.recordClass,
             newRecordDefaults: this.recordDefaults,
             recordPrefix: this.recordPrefix,
