@@ -399,4 +399,12 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         Sales_Controller_Contract::getInstance()->updateLastAutobillOfProductAggregates();
     }
+
+    /**
+     * try to import demodata files from APP/Setup/DemoData/import
+     */
+    protected function _createImportDemoData()
+    {
+        $this->_createImportDemoDataFromSet('Sales.yml');
+    }
 }

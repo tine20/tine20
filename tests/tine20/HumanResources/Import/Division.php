@@ -37,6 +37,6 @@ class HumanResources_Import_Division extends TestCase
             ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
         ]);
         $result = HumanResources_Controller_Division::getInstance()->search($filter);
-        self::assertEquals(4, count($result));
+        self::assertEquals(3, count($result));
     }
 }
