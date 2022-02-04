@@ -106,8 +106,27 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         ksort($apps);
         $appsHash = Tinebase_Helper::arrayHash($apps, true);
 
-        // TODO add base path in case tine20 was not installed in /
-        // TODO if we do that, the base path needs to be in the cache key $appsHash too!
+        try {
+            $cachedDispatcher = $this->_getCachedDispatcher($enabledApplications, $appsHash);
+        } catch (RuntimeException $runtimeException) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' Got exception: ' . $runtimeException->getMessage() . ' - clear cache & trying again');
+            clearstatcache();
+            $cachedDispatcher = $this->_getCachedDispatcher($enabledApplications, $appsHash);
+        }
+        return $cachedDispatcher;
+    }
+
+    /**
+     * TODO add base path in case tine20 was not installed in /
+     * TODO if we do that, the base path needs to be in the cache key $appsHash too!
+     *
+     * @param Tinebase_Record_RecordSet $enabledApplications
+     * @param string $appsHash
+     * @return \FastRoute\Dispatcher
+     */
+    protected function _getCachedDispatcher(Tinebase_Record_RecordSet $enabledApplications, string $appsHash)
+    {
         return \FastRoute\cachedDispatcher(function (\FastRoute\RouteCollector $r) use ($enabledApplications) {
             /** @var Tinebase_Model_Application $application */
             foreach ($enabledApplications as $application) {
