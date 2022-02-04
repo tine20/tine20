@@ -155,6 +155,10 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $id = 1;
         foreach($ccs as $title) {
+            if ($controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_CostCenter::class,
+                    [['field' => 'remark', 'operator' => 'equals', 'value' => $title]]))->count() > 0) {
+                continue;
+            }
             $cc = new Sales_Model_CostCenter(
                 array('remark' => $title, 'number' => $id)
             );
@@ -173,10 +177,15 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ;
         
         $this->_divisions = new Tinebase_Record_RecordSet(HumanResources_Model_Division::class);
+        $divisionCtrl = HumanResources_Controller_Division::getInstance();
 
         foreach($divisionsArray as $divisionName) {
+            if ($divisionCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Division::class,
+                    [['field' => 'title', 'operator' => 'equals', 'value' => $divisionName]]))->count() > 0) {
+                continue;
+            }
             try {
-                HumanResources_Controller_Division::getInstance()->create(new HumanResources_Model_Division(array('title' => $divisionName)));
+                $divisionCtrl->create(new HumanResources_Model_Division(array('title' => $divisionName)));
             } catch (Zend_Db_Statement_Exception $e) {
             } catch (Tinebase_Exception_Duplicate $e) {
             } catch (Tinebase_Exception_SystemGeneric $e) {

@@ -48,9 +48,28 @@ class Sales_Import_Invoice_Csv extends Tinebase_Import_Csv_Abstract
     {
         $result = parent::_doConversions($_data);
 
+        $result = $this->_setCustomer($result);
         $result = $this->_setRelation($result);
         $result = $this->_setCostCenter($result);
 
+        return $result;
+    }
+
+    protected function _setCustomer($result)
+    {
+        static $customers;
+        if (!$customers) {
+            $customers = Sales_Controller_Customer::getInstance()->getAll();
+            (new Tinebase_Record_Expander(Sales_Model_Customer::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['postal' => []]
+            ]))->expand($customers);
+        }
+        if (!empty($result['customer']) && $customer = $customers->find('name', $result['customer'])) {
+            $result['customer'] = $customer->getId();
+            if (!isset($result['address_id'])) {
+                $result['address_id'] = $customer->postal->getId();
+            }
+        }
         return $result;
     }
 
@@ -62,8 +81,11 @@ class Sales_Import_Invoice_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _setRelation($result)
     {
+        static $contracts, $addresses;
+
         if (!empty($result['contract'])) {
-            $contracts = Sales_Controller_Contract::getInstance()->getAll();
+            if (!$contracts)
+                $contracts = Sales_Controller_Contract::getInstance()->getAll();
             foreach ($contracts as $contract) {
                 if ($contract['title'] == $result['contract']) {
                     $result['relations'] = array(
@@ -80,7 +102,10 @@ class Sales_Import_Invoice_Csv extends Tinebase_Import_Csv_Abstract
                     $result['address_id'] = $contract['billing_address_id'];
                 }
             }
-            $addresses = Sales_Controller_Address::getInstance()->getAll();
+        }
+        if (!empty($result['address_id'])) {
+            if (!$addresses)
+                $addresses = Sales_Controller_Address::getInstance()->getAll();
             foreach ($addresses as $address) {
                 if ($address['id'] == $result['address_id']) {
                     $result['relations'][] = array(
@@ -107,8 +132,10 @@ class Sales_Import_Invoice_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _setCostCenter($result)
     {
+        static $costCenters;
         if (!empty($result['costcenter'])) {
-            $costCenters = Sales_Controller_CostCenter::getInstance()->getAll();
+            if (!$costCenters)
+                $costCenters = Sales_Controller_CostCenter::getInstance()->getAll();
             foreach ($costCenters as $costCenter) {
                 if ($costCenter['remark'] == $result['costcenter']) {
                     $result['costcenter_id'] = $costCenter['id'];
