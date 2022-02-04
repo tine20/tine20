@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -904,7 +904,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _handleRecordCreateOrUpdateException(Exception $e)
     {
-        if ($e instanceof Tinebase_Exception_ProgramFlow) {
+        if ($e instanceof Tinebase_Exception_ProgramFlow || Tinebase_Exception::isDbDuplicate($e)) {
             // log as ERROR? or better INFO? NOTICE?
             Tinebase_Exception::logExceptionToLogger($e);
         } else {

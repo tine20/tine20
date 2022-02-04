@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -258,12 +258,12 @@ class Tinebase_Exception extends Exception
     }
 
     /**
-     * @param Zend_Db_Statement_Exception $zdse
+     * @param Exception $e
      * @return bool
      */
-    public static function isDbDuplicate(Zend_Db_Statement_Exception $zdse)
+    public static function isDbDuplicate(Exception $e)
     {
-        if (preg_match('/Duplicate entry/', $zdse->getMessage())) {
+        if ($e instanceof Zend_Db_Statement_Exception && preg_match('/Duplicate entry/', $e->getMessage())) {
             return true;
         }
         return false;
