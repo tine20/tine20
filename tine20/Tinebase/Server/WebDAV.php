@@ -214,9 +214,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 }
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " headers: " . print_r($hdrs, true));
                 $contentType = self::$_server->httpRequest->getHeader('Content-Type');
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $this->_request->getMethod());
+                $method = strtoupper($this->_request->getMethod());
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $method);
 
-                if (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false) {
+                if ('PUT' !== $method && 'PATCH' !== $method) {
                     // NOTE inputstream can not be rewinded
                     $debugStream = fopen('php://temp', 'r+');
                     stream_copy_to_stream($this->_body, $debugStream);

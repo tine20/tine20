@@ -89,8 +89,11 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
                 return $this->_root->getChild($name);
             } catch (\Sabre\DAV\Exception\NotFound $e) {}
         }
-
-        return parent::getChild($name);
+        if (2 === count($this->_getPathParts())) {
+            return new Filemanager_Frontend_WebDAV_Directory($this->getPath() . '/' . $name);
+        } else {
+            return parent::getChild($name);
+        }
     }
 
     /**
